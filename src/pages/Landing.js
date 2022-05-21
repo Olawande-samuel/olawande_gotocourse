@@ -1,6 +1,10 @@
 import React from 'react'
 import Becoming from '../components/Becoming'
 import Career from '../components/Career'
+import Degree from '../components/Degree'
+import End from '../components/End'
+import Faq from '../components/Faq'
+import Footer from '../components/Footer'
 import Learn from '../components/Learn'
 import Navbar from '../components/Navbar'
 import Serivces from '../components/Serivces'
@@ -17,6 +21,10 @@ const Landing = () => {
         <Becoming />
         <Career />
         <Testimonials />
+        <Degree />
+        <Faq />
+        <Footer />
+        <End />
     </div>
   )
 }

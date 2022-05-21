@@ -348,3 +348,21 @@ export const Risk = ()=>{
 
   )
 }
+export const Right = ()=>{
+  return(
+    <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.30939 17.7202L10.3698 9.65979L2.30939 1.59936" stroke="#3D3D3D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+
+  )
+}
+export const Left = ()=>{
+  return(
+    <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.69006 1.59961L1.62964 9.66004L9.69006 17.7205" stroke="#3D3D3D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+  )
+}
+
