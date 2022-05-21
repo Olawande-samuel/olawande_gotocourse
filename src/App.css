@@ -1,20 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,700;1,400&display=swap");
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
 }
-
+body {
+  font-family: "Poppins", sans-serif !important;
+}
 :root {
-  --primary: #F5F5F5;
-  --black:rgba(0, 0, 0, 1);
-  --text-color-dark:rgba(65, 65, 65, 1);
-  --text-color-light:rgba(94, 91, 91, 1);
+  --primary: #f5f5f5;
+  --black: rgba(0, 0, 0, 1);
+  --obsidian: #070f18;
+  --text-color-dark: rgba(65, 65, 65, 1);
+  --text-color-light: rgba(94, 91, 91, 1);
   --btn-color: rgba(12, 33, 145, 1);
 }
 
+.mt-mid {
+  margin-top: 2.0625rem !important;
+}
 
-.nav{
+.btn {
+  border: 1px #fff;
+  outline: none;
+  border-radius: 10px;
+  background-color: var(--btn-color);
+  color: white;
+  font-size: 0.875rem;
+  line-height: 2rem;
+}
+.button-lg {
+  padding: 0.875rem 3.0625rem !important;
+}
+
+.title {
+  color: var(--text-color-dark) !important;
+  font-size: 2.25rem;
+  font-weight: 600;
+}
+.text-dark {
+  color: var(--text-color-dark) !important;
+}
+.text {
+  color: var(--text-color-light) !important;
+}
+.paragraph {
+  margin-bottom: 2rem;
+  font-weight: 500;
+  line-height: 28px;
+}
+.nav {
   padding: 1.2rem 0;
 }
 .nav .link {
@@ -35,9 +71,159 @@
   /* border-bottom: 1px solid; */
 }
 
-
 /* **********************SERVICES******************************* */
+.wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+.services,
+.becoming {
+  padding: 7.0625rem 0;
+}
 
+.services .title {
+  line-height: 72px;
+}
+
+.content-wrapper {
+  padding-left: 5.565rem;
+}
+.content {
+  width: 100%;
+}
+
+.right {
+  margin-left: 5.375rem;
+}
+
+.right .title {
+  font-size: 2.25rem;
+}
 .right p i {
   margin-right: 1.15rem;
+}
+
+/* *********************LEARNING*************************** */
+.learning {
+  position: relative;
+  background: #ffffff;
+  padding: 7.0625rem 0;
+}
+.learning .card {
+  position: absolute;
+  z-index: 1000;
+  width: 50%;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 1.5625rem 2.625rem 1.5625rem 3.1875rem !important;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  border: none !important;
+}
+
+.learning .content {
+  position: relative;
+}
+
+.learning .background {
+  position: relative;
+  max-width: 100%;
+}
+/* *********************Transition*************************** */
+.transition {
+  position: relative;
+  background: #ffffff;
+  padding: 7.0625rem 0;
+}
+.transition .card {
+  position: absolute;
+  z-index: 1000;
+  width: 50%;
+  right: 3%;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 1.5625rem 2.625rem 1.5625rem 3.1875rem !important;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  border: none !important;
+}
+
+.transition .content {
+  position: relative;
+}
+
+.transition .background {
+  position: relative;
+  max-width: 100%;
+}
+
+/* ****************************CAREERS************************************ */
+.career {
+  padding: 7.0625rem 3.625rem;
+}
+.career_title {
+  margin-bottom: 1.625rem;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 30px;
+  color: var(--obsidian);
+}
+.career .sub-title {
+  margin-bottom: 6.125rem;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 32px;
+  color: var(--text-color-light);
+  width: 60%;
+  margin: 0 auto 6.125rem auto;
+}
+.career .list-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  justify-content: center;
+}
+.career .list-section .careerBox_title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 30px;
+  color: var(--obsidian);
+}
+.career_box {
+  gap: 1.5rem;
+}
+.career_box .details {
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--text-color-light);
+}
+
+/* ***********************TESTIMONIALS******************************* */
+
+.testimonials {
+  margin: 7.0625rem 0;
+}
+
+.testimonials .testimonials_title {
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 72px;
+  text-align: center;
+  color: var(--text-color-light);
+}
+
+.slide_container {
+  background: url(./images/blob.png) no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: min(100% - 2rem, 80%);
+  margin: auto;
+  padding: 7rem;
+  border: 1px solid;
+}
+
+.slides {
+  width: min(100% - 2rem, 38.25rem );
 }
