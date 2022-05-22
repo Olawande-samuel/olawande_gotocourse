@@ -5,6 +5,7 @@ import Degree from '../components/Degree'
 import End from '../components/End'
 import Faq from '../components/Faq'
 import Footer from '../components/Footer'
+import Hero from '../components/Hero'
 import Learn from '../components/Learn'
 import Navbar from '../components/Navbar'
 import Serivces from '../components/Serivces'
@@ -15,6 +16,7 @@ const Landing = () => {
   return (
     <div>
         <Navbar />
+        <Hero />
         <Serivces />
         <Learn />
         <Transition />

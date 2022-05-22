@@ -4,7 +4,7 @@ const Degree = () => {
   return (
     <section className="wrapper degree">
       <div className="container">
-        <div className="degree_content d-flex">
+        <div className="degree_content d-flex flex-wrap">
           <div className="degree_left">
             <header>
               <h2 className="title">Do I need a degree in Tech?</h2>

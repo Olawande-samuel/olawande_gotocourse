@@ -5,7 +5,7 @@ const Serivces = () => {
   return (
     <section className="wrapper services">
       <div className="container content-wrapper d-flex justify-content-end">
-        <div className="d-flex content justify-content-between">
+        <div className="d-flex flex-column flex-md-row content justify-content-between">
           <div className="left">
             <img src={Service} alt="sideview of hands typing on a Laptop" />
           </div>

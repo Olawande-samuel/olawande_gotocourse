@@ -2,7 +2,7 @@ import React from 'react'
 
 const End = () => {
   return (
-    <div className="end">End</div>
+    <div className="end"></div>
   )
 }
 

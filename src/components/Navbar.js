@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Search } from "../images/components/svgs";
-import Logo from "../images/Logo.png"
+import Logo from "../images/Logo.png";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 const Navbar = () => {
   const [show, setShow] = useState(false);
   const toggleNav = () => {
@@ -15,38 +16,27 @@ const Navbar = () => {
         <button type="button" className="navbar-toggler" onClick={toggleNav}>
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className={`collapse navbar-collapse justify-content-end ${show ? "show" : ""}`} id="navbarNav">
-          <ul className="navbar-nav">
+        <div
+          className={`collapse navbar-collapse justify-content-end ${
+            show ? "show" : ""
+          }`}
+          id="navbarNav"
+        >
+          <ul className="navbar-nav me-5">
             <li className="nav-item">
-              <a href="/" className=" link nav-link">Home</a>
-            </li>
-            <li className="nav-item">
-              <a href="/" className=" link nav-link">Work</a>
-            </li>
-            <li className="nav-item">
-              <a href="/" className=" link nav-link">Service</a>
-            </li>
-            <li className="nav-item">
-              <a href="/" className=" link nav-link">Our Customer</a>
-            </li>
-            <li className="nav-item">
-              <a href="/" className=" link nav-link">Team</a>
-            </li>
-            <li className="nav-item">
-              <a href="/" className=" link nav-link">Career</a>
-            </li>
-            <li className="nav-item">
-              <a href="/" className=" link nav-link">Contact</a>
+              <button type="button" className="link nav-link">
+                Courses{" "}
+                <span>
+                  <i>
+                    <MdOutlineKeyboardArrowDown style={{ fontSize: "20px" }} />
+                  </i>
+                </span>
+              </button>
             </li>
           </ul>
-          <button type="button" className="btn">
-              <span>
-                  <i>
-                    <Search />
-                  </i>
-              </span>
+          <button type="button" className="btn-plain button-md">
+            <span>Go to Dashboard</span>
           </button>
-
         </div>
       </div>
     </nav>

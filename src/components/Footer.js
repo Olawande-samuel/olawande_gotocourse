@@ -5,7 +5,7 @@ import { BsEnvelope } from "react-icons/bs";
 const Footer = () => {
   return (
     <footer className="footer wrapper">
-      <div className="container d-flex justify-content-between">
+      <div className="container footer_container d-flex flex-wrap justify-content-between">
         <div className="footer_left">
           <header>
             <h3 className="footer_title">Reach out today</h3>
@@ -43,7 +43,7 @@ const Footer = () => {
             </div>
           </form>
         </div>
-        <div className="footer_right d-flex justify-content-around">
+        <div className="footer_right d-flex flex-wrap justify-content-between">
           <div className="first">
             <header>
               <h3 className="footer_title">Company</h3>
