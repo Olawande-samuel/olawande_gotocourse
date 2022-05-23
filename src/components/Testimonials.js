@@ -39,7 +39,7 @@ const Testimonials = () => {
   return (
     <section className="testimonials">
       <div className="container testimonial_content">
-        <h3 className="testimonials_title">Testimonials</h3>
+        <h3 className="testimonials_title">Testimonial</h3>
         <div className="slide_container">
           <button
             type="button"

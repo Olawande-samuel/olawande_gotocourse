@@ -1,9 +1,10 @@
 import React from "react";
-import Learning from "../images/helplearn.png";
+import Learning from "../images/learn.png";
+import {motion} from 'framer-motion'
 const Learn = () => {
   return (
     <section className="wrapper learning">
-      <div className="container content-wrapper justify-content-end">
+      <div className="sides  justify-content-end">
         <div className="d-flex content justify-content-end">
             <div className="card border-none">
               <div className="card-body">
@@ -15,9 +16,15 @@ const Learn = () => {
                   with learning partners, take quizzes, and build work related
                   portfolio
                 </p>
-                <button className="btn button-lg" type="button">
+                <motion.button 
+                className="button button-lg" type="button"
+                whileHover={{ 
+                  boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                  textShadow:"0px 0px 8px rgb(255, 255, 255)"
+                }}
+                >
                   REGISTER NOW TO START
-                </button>
+                </motion.button>
               </div>
             </div>
           <img

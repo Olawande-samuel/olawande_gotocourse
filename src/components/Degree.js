@@ -1,5 +1,6 @@
 import React from "react";
 import degree from "../images/nodegree.png";
+import {motion} from "framer-motion"
 const Degree = () => {
   return (
     <section className="wrapper degree">
@@ -16,7 +17,12 @@ const Degree = () => {
               No degree or prior tech experience required. You can start your
               learning here today!
             </p>
-            <button className="btn button-md">START NOW</button>
+            <motion.button 
+            whileHover={{
+              boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+              textShadow: "0px 0px 8px rgb(255, 255, 255)"
+            }}
+            className="button button-md">START NOW</motion.button>
           </div>
         </div>
       </div>

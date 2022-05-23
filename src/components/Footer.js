@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import { BsEnvelope } from "react-icons/bs";
+import {motion} from "framer-motion"
 const Footer = () => {
   return (
     <footer className="footer wrapper">
@@ -71,7 +72,15 @@ const Footer = () => {
               <h3 className="footer_title">Contact Us</h3>
             </header>
             <ul>
-              <li>
+              <motion.li
+              whileHover={{
+                scale:1.2,
+                originX: 0
+              }}
+              transition={{
+                stiffness:300
+              }}
+              >
                 <Link to="/">
                   <span>
                     <i>
@@ -80,8 +89,16 @@ const Footer = () => {
                   </span>
                   Join us on facebook
                 </Link>
-              </li>
-              <li>
+              </motion.li>
+              <motion.li
+              whileHover={{
+                scale:1.2,
+                originX: 0
+              }}
+              transition={{
+                stiffness:300
+              }}
+              >
                 <Link to="/">
                   <span>
                     <i>
@@ -90,8 +107,16 @@ const Footer = () => {
                   </span>
                   Follow us on Instagram
                 </Link>
-              </li>
-              <li>
+              </motion.li>
+              <motion.li
+              whileHover={{
+                scale:1.2,
+                originX: 0
+              }}
+              transition={{
+                stiffness:300
+              }}
+              >
                 <Link to="/">
                   <span>
                     <i>
@@ -100,7 +125,7 @@ const Footer = () => {
                   </span>
                   GotoCourse@gmail.com
                 </Link>
-              </li>
+              </motion.li>
             </ul>
           </div>
         </div>

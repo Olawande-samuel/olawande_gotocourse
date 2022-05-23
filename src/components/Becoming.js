@@ -1,6 +1,8 @@
+import { motion } from "framer-motion";
 import React from "react";
 import Teacher from "../images/teacher.png";
 const Becoming = () => {
+  
   return (
     <section className="wrapper becoming">
       <div className="container content-wrapper d-flex justify-content-end">
@@ -9,7 +11,7 @@ const Becoming = () => {
             <img src={Teacher} alt="sideview of hands typing on a Laptop" />
           </div>
           <div className="right">
-            <header >
+            <header>
               <h2 className="title">Become a teacher on Gotocourse</h2>
             </header>
             <main className="mt-mid">
@@ -18,9 +20,14 @@ const Becoming = () => {
                 professionals? Collaborate with us. We provide you the platform
                 and tools to teach what you love
               </p>
-              <button type="button" className=" btn button-lg ">
+              <motion.button
+              whileHover={{ 
+                boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                textShadow: "0px 0px 8px rgb(255, 255, 255)",
+              }}
+              type="button" className="button button-lg ">
                 START TEACHING TODAY
-              </button>
+              </motion.button>
             </main>
           </div>
         </div>

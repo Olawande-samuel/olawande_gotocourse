@@ -88,6 +88,29 @@ const careers = [
   },
 ];
 
+const test = [
+  {name:"How far"},
+  {name:"Hoofar"},
+  {name:"Hofar"},
+  {name:"Howryfar"},
+  {name:"Howar"},
+  {name:"Hora"},
+  {name:"Howfar"},
+  {name:"Howra"},
+  {name:"Howr"},
+  {name:"Howdy"},
+  {name:"How"},
+]
+
+const arr = []
+careers.forEach((item, index)=>{
+  let merged = Object.assign(item, test[index])
+
+  arr.push(merged)
+})
+
+console.log(arr)
+
 const Career = () => {
   return (
     <section className="career">
