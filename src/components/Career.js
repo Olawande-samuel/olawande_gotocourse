@@ -115,7 +115,7 @@ const Career = () => {
   return (
     <section className="career">
       <header className="text-center">
-        <h2 className="career_title">START OUT IN YOUR CAREER NICHE</h2>
+        <h2 className="career_title">STAND OUT IN YOUR CAREER NICHE</h2>
         <p className="sub-title">
           We are committed to helping you kickstart and build a great career in
           technology by providing you access to quality technical education by

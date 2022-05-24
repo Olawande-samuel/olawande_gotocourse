@@ -1,6 +1,8 @@
 import React from "react";
-import Learning from "../images/learn.png";
+import Learning from "../images/cohort.png";
 import {motion} from 'framer-motion'
+import Image from "./Image";
+import { Link } from "react-router-dom";
 const Learn = () => {
   return (
     <section className="wrapper learning">
@@ -9,13 +11,12 @@ const Learn = () => {
             <div className="card border-none">
               <div className="card-body">
                 <header>
-                  <h2 className="title">How We help you learn?</h2>
+                  <h2 className="title">Learn with a cohort.</h2>
                 </header>
                 <p className="card-text">
-                  Join a classroom to take instructor led training, do projects
-                  with learning partners, take quizzes, and build work related
-                  portfolio
+                Join a classroom to take instructor led training, do projects with learning partners, take quizzes, and build work related portfolio
                 </p>
+                <Link to="/signup">
                 <motion.button 
                 className="button button-lg" type="button"
                 whileHover={{ 
@@ -25,13 +26,16 @@ const Learn = () => {
                 >
                   REGISTER NOW TO START
                 </motion.button>
+                  </Link>
               </div>
             </div>
-          <img
+            <Image image={Learning} alt="man pointing at screen containing code" className="background" effect="blur" />
+           
+          {/* <img
             src={Learning}
             alt="man pointing at screen containing code"
-            className="background "
-          />
+            className="background"
+          /> */}
         </div>
       </div>
     </section>

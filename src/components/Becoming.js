@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React from "react";
+import { Link } from "react-router-dom";
 import Teacher from "../images/teacher.png";
 const Becoming = () => {
   
@@ -20,6 +21,8 @@ const Becoming = () => {
                 professionals? Collaborate with us. We provide you the platform
                 and tools to teach what you love
               </p>
+              <Link to="/admin/signup">
+
               <motion.button
               whileHover={{ 
                 boxShadow: "0px 0px 8px rgb(0, 0, 0)",
@@ -28,6 +31,7 @@ const Becoming = () => {
               type="button" className="button button-lg ">
                 START TEACHING TODAY
               </motion.button>
+                </Link>
             </main>
           </div>
         </div>

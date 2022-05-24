@@ -9,12 +9,10 @@ const Faq = () => {
           <Accordion defaultActiveKey="0" flush>
             <Accordion.Item eventKey="0" className="my-4">
               <Accordion.Header className="faq_acc">
-                How long is each course on Gotocourse?
+              How relevant is each course on Gotocourse?
               </Accordion.Header>
               <Accordion.Body className="faq_acc_text">
-                Each course program runs between 2 weeks to 8 weeks. while some
-                short classes run beween 1hour and several hours. Ask your
-                course advisor for more information.
+              Each course is relevant to skillls highly needed at the work place.
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="1" className="my-4">

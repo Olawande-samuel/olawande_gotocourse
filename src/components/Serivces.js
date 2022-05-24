@@ -1,5 +1,5 @@
 import React from "react";
-import { Android, Certificate, Skill } from "../images/components/svgs";
+import { Android, Certificate, Cohort, Self, Skill } from "../images/components/svgs";
 import Service from "../images/services.png";
 const Serivces = () => {
   return (
@@ -26,20 +26,36 @@ const Serivces = () => {
                 you need to succeed. We have programs that meet all levels of
                 experience.
               </p>
-              <p>
+              <ul className="services_list">
+
+              <li>
                 <i><Android /></i>
                 <span className="text-dark fw-bold"> Learn from Industry Experts</span>
-              </p>
-              <p>
+              </li>
+              <li>
                 <i><Skill /></i>
                 <span className="text-dark fw-bold"> Skill-based Learning</span>
-              </p>
-              <p>
+              </li>
+              <li>
                 <i><Certificate /></i>
                 <span className="text-dark fw-bold">
                   Completion certificate awarded on every course completion
                 </span>
-              </p>
+              </li>
+              <li>
+                <i><Self /></i>
+                <span className="text-dark fw-bold">
+                Self paced learning
+                </span>
+              </li>
+              <li>
+                <i><Cohort /></i>
+                <span className="text-dark fw-bold">
+                Learning with a cohort
+                </span>
+              </li>
+              </ul>
+
             </main>
           </div>
         </div>

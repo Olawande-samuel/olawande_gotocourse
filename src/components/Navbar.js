@@ -60,13 +60,13 @@ const Navbar = () => {
   };
 
   const dropRef = useRef(null);
-  const status = OutsideClick(dropRef);
   
+  const status = OutsideClick(dropRef);
   useEffect(() => {
-    if (drop === true) {
+    if (status === true) {
       setDrop(false);
     }
-  }, [status]);
+  }, [drop,status]);
   
   return (
     <nav className="nav navbar navbar-expand-lg navbar-light">
@@ -76,7 +76,7 @@ const Navbar = () => {
         <a href="/" className="logo navbar-brand">
           <img src={Logo} alt="Brand Name" />
         </a>
-        <button type="button" className="navbar-toggler d-block d-md-none" onClick={toggleNav}>
+        <button type="button" className="navbar-toggler " onClick={toggleNav}>
           <span className="navbar-toggler-icon"></span>
         </button>
         <div
@@ -92,7 +92,7 @@ const Navbar = () => {
                 className="link nav-link"
                 onClick={toggleDrop}
               >
-                Courses{" "}
+                Courses
                 <span>
                   <i>
                     <MdOutlineKeyboardArrowDown

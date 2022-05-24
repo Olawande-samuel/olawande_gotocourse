@@ -3,6 +3,17 @@ import { Link } from "react-router-dom";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import { BsEnvelope } from "react-icons/bs";
 import {motion} from "framer-motion"
+
+const hover = {
+  hover: {
+    scale:1.2,
+    originX: 0
+  },
+  transition:{
+    stiffness: 300
+  }
+}
+
 const Footer = () => {
   return (
     <footer className="footer wrapper">
@@ -38,7 +49,7 @@ const Footer = () => {
                 name="message"
                 id=""
                 cols="30"
-                rows="4"
+                rows="3"
                 className="form-control footer_input"
               ></textarea>
             </div>
@@ -50,21 +61,50 @@ const Footer = () => {
               <h3 className="footer_title">Company</h3>
             </header>
             <ul>
-              <li>
-                <Link to="/">Realztech</Link>
-              </li>
-              <li>
-                <Link to="/">Dashboard</Link>
-              </li>
-              <li>
-                <Link to="/">Login/Sign up</Link>
-              </li>
-              <li>
-                <Link to="/">About us</Link>
-              </li>
-              <li>
-                <Link to="/">Help and support</Link>
-              </li>
+              <Link to="/">
+                <motion.li
+                whileHover={{
+                  scale:1.1,
+                  originX: 0
+                }}
+                >
+                    Realztech
+                </motion.li>
+              </Link>
+                <Link to="/"><motion.li
+                 whileHover={{
+                  scale:1.1,
+                  originX: 0
+                }}
+                >Dashboard</motion.li></Link>
+              
+                <Link to="/">
+              <motion.li
+              variants={hover}
+              whileHover="hover"
+              transition="transition"
+              >
+                  Login/Sign up
+              </motion.li>
+                  </Link>
+                <Link to="/">
+              <motion.li
+              variants={hover}
+              whileHover="hover"
+              transition="transition"
+              >
+                  About us
+              </motion.li>
+                  </Link>
+                <Link to="/">
+              <motion.li
+              variants={hover}
+              whileHover="hover"
+              transition="transition"
+              >
+                  Help and support
+              </motion.li>
+                  </Link>
             </ul>
           </div>
           <div className="second">

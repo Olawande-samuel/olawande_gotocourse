@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import React from "react";
 import Tech from "../images/fast.png";
+import Image from "./Image";
+import { Link } from "react-router-dom";
+
 const Transition = () => {
   
   return (
@@ -11,12 +14,13 @@ const Transition = () => {
           >
             <div className="card-body">
               <header>
-                <h2 className="title">Want to transition to tech?</h2>
+                <h2 className="title">Do you prefer self paced learning?</h2>
               </header>
               <p className="card-text">
-                We are here for you! To help you grow your tech skills so that
-                you can have a tech career you are most proud of.
+              Take  self-paced courses that  allow you to complete assignments at your own pace, making it easier to balance coursework with your other personal and professional responsibilities while you connect with your instructor  for any questions you have regarding course expectations, assignments, and discussions.
               </p>
+              <Link to="/login">
+
               <motion.button 
               className="button button-lg" type="button"
               whileHover={{ 
@@ -26,13 +30,16 @@ const Transition = () => {
               >
                 START NOW
               </motion.button>
+                </Link>
             </div>
           </motion.div>
-          <img
+          <Image  image={Tech} alt="man pointing at screen containing code" className="background" effect="blur"/>
+
+          {/* <img
             src={Tech}
             alt="man pointing at screen containing code"
             className="background "
-          />
+          /> */}
         </div>
       </div>
     </section>

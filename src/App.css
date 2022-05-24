@@ -51,7 +51,7 @@ a {
 }
 .title {
   color: var(--text-color-dark) !important;
-  font-size: 2.25rem;
+  font-size: clamp(1.8rem, -0.875rem + 8.333vw, 2.25rem);
   font-weight: 600;
 }
 .text-dark {
@@ -61,7 +61,7 @@ a {
   color: var(--text-color-light) !important;
 }
 .paragraph {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   font-weight: 500;
   line-height: 28px;
 }
@@ -161,13 +161,33 @@ a {
   padding: 4.0625rem 0;
 }
 
+
+.services .left, .services .right {
+  flex: 50%;
+}
 .services img {
   height: 100%;
+  width: 100%;
 }
 .services .title {
   line-height: 72px;
 }
 
+.services_list {
+  line-height:  15px;
+  list-style: none;
+  padding-left: 0;
+}
+.services_list li {
+  line-height:  32px;
+  display: flex;
+  /* align-items: center; */
+  justify-content:flex-start;
+}
+
+.services_list li i {
+  margin-right: 1rem; 
+}
 .content-wrapper {
   padding-left: 5.565rem;
 }
@@ -176,11 +196,11 @@ a {
 }
 
 .right {
-  margin-left: 5.375rem;
+  padding-left: 5.375rem;
 }
 
 .right .title {
-  font-size: 2.25rem;
+  font-size:clamp(1.8rem, -0.875rem + 8.333vw, 2.25rem);
 }
 .right p i {
   margin-right: 1.15rem;
@@ -190,7 +210,7 @@ a {
 .learning {
   position: relative;
   background: #ffffff;
-  padding: 4.0625rem 0;
+  padding: 5.0625rem 0;
 }
 .learning .card {
   position: absolute;
@@ -217,15 +237,21 @@ a {
   /* border: 1px solid tomato; */
 }
 
+
 .learning .background {
   position: relative;
   max-width: 100%;
 }
+.learning .background img {
+  max-width: 100%;
+
+}
+
 /* *********************Transition*************************** */
 .transition {
   position: relative;
   background: #ffffff;
-  padding: 4.0625rem 0;
+  padding: 5.0625rem 0;
   /* border:1px solid; */
 }
 .transition .card {
@@ -250,6 +276,9 @@ a {
   position: relative;
   max-width: 100%;
 }
+.transition .background img{
+  max-width: 100%;
+}
 
 /* ****************************CAREERS************************************ */
 .career {
@@ -258,7 +287,7 @@ a {
 .career_title {
   margin-bottom: 1.625rem;
   font-weight: 600;
-  font-size: 20px;
+  font-size: clamp(1.8rem, -0.875rem + 8.333vw, 2.25rem);
   line-height: 30px;
   color: var(--obsidian);
 }
@@ -301,7 +330,7 @@ a {
 
 .testimonials .testimonials_title {
   font-weight: 600;
-  font-size: 36px;
+  font-size:clamp(1.8rem, -0.875rem + 8.333vw, 2.25rem);
   line-height: 72px;
   text-align: center;
   color: var(--text-color-light);
@@ -488,11 +517,12 @@ a {
   background: #ffffff;
   border: 2px solid #c4c4c4;
   border-radius: 10px;
+  resize: none;
 }
 .footer_left {
   padding-right: 5rem;
 }
-.footer li a {
+.footer a  li{
   font-weight: 500;
   font-size: 14px;
   line-height: 32px;
@@ -619,19 +649,16 @@ a {
   color: var(--accent-color);
 }
 @media screen and (max-width: 777px) {
-  .hero_left,
-  .hero_right {
-    flex: 100%;
+  .mt-mid {
+    margin-top: 1.0625rem !important;
   }
 
-  .hero img {
-    max-width: 100%;
-  }
-.hero_text {
-  text-align: center;
-}
-  .hero_wrapper{
-    flex-direction: column-reverse;
+  .learning .button,
+  .transition .button,
+  .services .button,
+  .becoming .button,
+  .degree .button {
+    width: 100%;
   }
   .content-wrapper {
     justify-content: center !important;
@@ -642,14 +669,17 @@ a {
     /* justify-content: flex-end; */
   }
   .right {
-    margin-left: unset;
+    padding-left: unset;
+  }
+ .becoming .right {
+    padding-top: 1rem;
   }
   /* .title {
     text-align: center;
   } */
-.card-body{
-  padding: 0;
-}
+  .card-body{
+    padding: 0;
+  }
   .learning .content,
   .transition .content {
     flex-direction: column-reverse;
@@ -678,6 +708,7 @@ a {
   .learning img,
   .transition img {
     flex: 100%;
+    border-radius: 10px;
   }
   .career .list-section {
     grid-template-columns: repeat(2, 1fr);
@@ -716,6 +747,23 @@ a {
     line-height: 20px;
   } */
 
+
+
+  .hero_left,
+  .hero_right {
+    flex: 100%;
+  }
+
+  .hero img {
+    width: 100%;
+  }
+.hero_text {
+  text-align: center;
+}
+  .hero_wrapper{
+    flex-direction: column-reverse;
+  }
+
   .content-wrapper {
     padding-left: unset;
   }
@@ -744,6 +792,18 @@ a {
     padding: 3.0625rem 0;
   }
 
+  .learning .card,
+  .transition .card {
+    padding: 1rem !important;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    border: none !important;
+  }
+
+  .learning .sides, .transition .sides {
+    width: 98%;
+   
+  }
   .testimonials {
     margin: 0;
   }
