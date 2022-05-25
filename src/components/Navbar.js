@@ -73,7 +73,7 @@ const Navbar = () => {
       {/* <div className="holder"> */}
 
       <div className="container navbar-container align-items-center">
-        <a href="/" className="logo navbar-brand d-lg-none">
+        <a href="/" className="logo navbar-brand ">
           <img src={Logo} alt="Brand Name" />
         </a>
         <button type="button" className="navbar-toggler " onClick={toggleNav}>
@@ -89,7 +89,7 @@ const Navbar = () => {
             <li className="nav-item holder">
               <button
                 type="button"
-                className="link nav-link"
+                className="link nav-link courses"
                 onClick={toggleDrop}
               >
                 Courses
@@ -104,8 +104,20 @@ const Navbar = () => {
               </button>
               {drop ? <NavList dropRef={dropRef} /> : null}
             </li>
-            <li><a href="https://gotocourse.com/dashboard" className="link d-md-none">Go to Dashboard</a></li>
+            <li className="nav-item d-flex align-items-center nav_link me-2"><a href="https://gotocourse.com/dashboard" className="link">Go to Dashboard</a></li>
+            <li className="nav-item d-flex align-items-center nav_link"><a href="https://gotocourse.com/dashboard" className="link">Become a Teacher</a></li>
           </ul>
+          <motion.button type="button" className="button button-md d-none d-md-block signup"
+          whileHover={{
+            // scale:1.1,
+            textShadow: "0px 0px 8px rgb(255, 255, 255)",
+            boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+          }}
+          transition={{duration: 0.1}}
+          
+          >
+            <span>Sign in</span>
+          </motion.button>
           <motion.button type="button" className="btn-plain d-none d-md-block"
           whileHover={{
             // scale:1.1,
@@ -115,7 +127,7 @@ const Navbar = () => {
           transition={{duration: 0.1}}
           
           >
-            <span>Login</span>
+            <span>Register</span>
           </motion.button>
         </div>
       </div>

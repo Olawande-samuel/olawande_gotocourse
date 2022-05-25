@@ -16,6 +16,7 @@ body {
   --text-color-light: rgba(94, 91, 91, 1);
   --btn-color: rgb(12, 33, 145);
   --accent-color: #023047;
+  --text-blue: #0C2191;
 }
 a {
   text-decoration: none;
@@ -74,12 +75,16 @@ a {
 }
 .nav .link {
   position: relative;
-  color: var(--black) !important;
+  color: var(--btn-color) !important;
   font-size: 14px;
   font-weight: 500;
   outline: none;
   border: none;
   background: #fff;
+}
+
+.nav .courses{
+  color: #191046 !important; ;
 }
 .holder {
   position: relative;
@@ -117,6 +122,21 @@ a {
   list-style-type: disc;
 }
 
+.navbar .button {
+  border: 1px solid var(--obsidian);
+  outline: none;
+  background-color: var(--btn-color);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1.125rem;
+  line-height: 1rem;
+  padding: 0.9375rem 1.5rem !important
+}
+.navbar .signup{
+  margin-right: 10px;
+}
+
+
 /* .link::after {
   position: absolute;
   right: 0;
@@ -133,19 +153,21 @@ a {
 
 /* *********************HERO************************* */
 .hero {
-  background: rgba(248, 248, 248, 1);
+  background: #F1F8FF;
 }
 .hero_logo {
   margin-top: .3rem;
   margin-bottom: 2.5rem;
 }
-.hero_content {
-  padding: 0 0 85px 0;
+.hero_content  .hero_left{
+  padding: 85px 0;
 }
 .hero_text {
   font-weight: 800;
-  font-size: 45px;
-line-height: 64px;
+  font-size: 50px;
+  line-height: 64px;
+  color: var(--text-blue);
+  text-transform: capitalize;
   margin-bottom: 2.5375rem;
 }
 
@@ -155,6 +177,34 @@ line-height: 64px;
 .hero_right,
 .hero_left {
   flex: 50%;
+}
+.hero input {
+  border-radius: 10px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+padding: 17px 0 13px 0 ;
+}
+.hero .search_btn {
+  background: var(--btn-color);
+  color: white;
+  border-radius: 10px;
+  padding: 17px 29px 13px 28px ;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.hero span {
+  color: var(--btn-color);
+}
+.hero .pill {
+  border: 1px solid var(--btn-color);
+  color: var(--btn-color);
+  outline: none;
+  padding: 2px 13px;
+  font-size: 14px;
+line-height: 24px;
+margin: 0 .8rem;
+border-radius: 10px;
+background-color: #F1F8FF;
 }
 /* **********************SERVICES******************************* */
 .wrapper {
