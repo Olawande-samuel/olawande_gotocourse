@@ -73,7 +73,7 @@ const Navbar = () => {
       {/* <div className="holder"> */}
 
       <div className="container navbar-container align-items-center">
-        <a href="/" className="logo navbar-brand">
+        <a href="/" className="logo navbar-brand d-lg-none">
           <img src={Logo} alt="Brand Name" />
         </a>
         <button type="button" className="navbar-toggler " onClick={toggleNav}>
@@ -104,7 +104,7 @@ const Navbar = () => {
               </button>
               {drop ? <NavList dropRef={dropRef} /> : null}
             </li>
-            <li><a href="/" className="link d-md-none">Go to Dashboard</a></li>
+            <li><a href="https://gotocourse.com/dashboard" className="link d-md-none">Go to Dashboard</a></li>
           </ul>
           <motion.button type="button" className="btn-plain d-none d-md-block"
           whileHover={{
@@ -115,7 +115,7 @@ const Navbar = () => {
           transition={{duration: 0.1}}
           
           >
-            <span>Go to Dashboard</span>
+            <span>Login</span>
           </motion.button>
         </div>
       </div>

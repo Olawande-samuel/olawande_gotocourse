@@ -17,7 +17,7 @@ const Transition = () => {
                 <h2 className="title">Do you prefer self paced learning?</h2>
               </header>
               <p className="card-text">
-              Take  self-paced courses that  allow you to complete assignments at your own pace, making it easier to balance coursework with your other personal and professional responsibilities while you connect with your instructor  for any questions you have regarding course expectations, assignments, and discussions.
+                Take  self-paced courses that  allow you to complete assignments at your own pace, making it easier to balance coursework with your other personal and professional responsibilities while you connect with your instructor  for any questions you have regarding course expectations, assignments, and discussions.
               </p>
               <Link to="/login">
 

@@ -7,6 +7,7 @@ import Faq from '../components/Faq'
 import Footer from '../components/Footer'
 import Hero from '../components/Hero'
 import Learn from '../components/Learn'
+import Mentors from '../components/Mentors'
 import Navbar from '../components/Navbar'
 import Serivces from '../components/Serivces'
 import Testimonials from '../components/Testimonials'
@@ -22,6 +23,7 @@ const Landing = () => {
         <Transition />
         <Becoming />
         <Career />
+        <Mentors />
         <Testimonials />
         <Degree />
         <Faq />

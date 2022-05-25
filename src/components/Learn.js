@@ -16,7 +16,7 @@ const Learn = () => {
                 <p className="card-text">
                 Join a classroom to take instructor led training, do projects with learning partners, take quizzes, and build work related portfolio
                 </p>
-                <Link to="/signup">
+                <a href="https://goto-course.com/dashboard">
                 <motion.button 
                 className="button button-lg" type="button"
                 whileHover={{ 
@@ -26,7 +26,7 @@ const Learn = () => {
                 >
                   REGISTER NOW TO START
                 </motion.button>
-                  </Link>
+                  </a>
               </div>
             </div>
             <Image image={Learning} alt="man pointing at screen containing code" className="background" effect="blur" />
