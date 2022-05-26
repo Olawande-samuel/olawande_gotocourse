@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "../images/Logo.png";
-import Log from "../images/hands.png";
+import Log from "../images/hands.webp";
 import Input from "./Input";
 import Password from "./Password";
 import { Link } from "react-router-dom";

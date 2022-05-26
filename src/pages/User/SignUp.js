@@ -15,20 +15,21 @@ const SignUp = () => {
   const handleChange=(e)=>{
     setData({...data, [e.target.name]:e.target.value})
   }
-  const dat = JSON.stringify(data)
-  console.log(dat)
 
   const onSubmit =async(e)=>{
     e.preventDefault()
     setLoading(true)
     try{
-      const response = await axios.post("http://gotocourse.loftywebtech.com:9000/user/signup", dat, {
+      const response = await axios.post("http://gotocourse.loftywebtech.com:9000/v1/user/signup", JSON.stringify(data), {
         headers:{
           "content-type": "application/json"
       }
       
     })
-    navigate("https://gotocourse.com/dashboard")
+
+  console.log(response)
+
+    // window("https://gotocourse.com/dashboard")
     toast.success(response.data.message, {
       position: "top-right",
       autoClose: 4000,
@@ -39,7 +40,9 @@ const SignUp = () => {
       progress: undefined,
     });
     setLoading(false)
-    console.log(response)
+  //   if(response.data.statusCode !== 0){
+  //     window.location.replace("https://gotocourse.com/dashboard")
+  // }
   } catch(err){
     setLoading(false)
     console.error(err)
@@ -111,8 +114,8 @@ const SignUp = () => {
                 </div>
                 {loading ? 
                 <button className="button button-lg log_btn w-100">
-                  <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
+                  <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
               </div>
               </button>
                 :

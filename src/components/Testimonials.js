@@ -8,20 +8,24 @@ const witnesses = [
   {
     id: 1,
     content:
-      "Realztech Institute did not only help me level up my tech skills but they also helped me get my dream job",
+      "Gotocourse did not only help me level up my tech skills but they also helped me get my dream job",
     profile: user,
+    name:"Cynthia | Houston"
+
   },
   {
     id: 2,
     content:
-      "I’m a successful graduate of Realtech Institute and I can tell you that it’s a place of knowledge and success",
+      "I’m a successful graduate of Gotocourse Institute and I can tell you that it’s a place of knowledge and success",
     profile: lere,
+    name:"James | Canada"
   },
   {
     id: 3,
     content:
-      "I had a wonderful experience and can confidently say that Realztech is the place to be to get all your I.T. certification",
+      "I had a wonderful experience and can confidently say that Gotocourse is the place to be to get all your I.T. certification",
     profile: ola,
+    name:"Bola | Nigeria"
   },
 ];
 const Testimonials = () => {
@@ -39,7 +43,7 @@ const Testimonials = () => {
   return (
     <section className="testimonials">
       <div className="container testimonial_content">
-        <h3 className="testimonials_title">Testimonial</h3>
+        <h3 className="testimonials_title">Join thousands of learners who are achieving their goals with Go2Course</h3>
         <div className="slide_container">
           <button
             type="button"
@@ -63,9 +67,11 @@ const Testimonials = () => {
               .map((witness, index) => (
                 <div className="card slides ">
                   <div className="card-body">
-                    <div className="avatar d-flex justify-content-center">
+                    <div className="avatar d-flex justify-content-center align-items-center">
                       <img src={witness.profile} alt="testimonies" />
+                      <span className="text-center testimonials_name">{witness.name}</span>
                     </div>
+                    
                     <p className="testimonials_text">
                       &ldquo; {witness.content} &rdquo;
                     </p>

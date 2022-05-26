@@ -11,8 +11,8 @@ import "react-multi-carousel/lib/styles.css";
 const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-    slidesToSlide: 3, // optional, default to 1.
+    items: 4,
+    slidesToSlide: 4, // optional, default to 1.
   },
   tablet: {
     breakpoint: { max: 1024, min: 604 },
@@ -40,35 +40,35 @@ const witnesses = [
     content:
       "I will teach you UIUX in 4 weeks",
     profile: mentor2,
-    location: "Peter Southampton . London",
+    location: "Cassandra Geoffrey . Atlanta",
   },
   {
     id: 3,
     content:
       "I had a wonderful experience",
     profile: mentor3,
-    location: "Peter Southampton . London",
+    location: "Niyi Adegoke . Lagos ",
   },
   {
     id: 4,
     content:
-      "I had a wonderful experience",
-    profile: mentor2,
+      "I will teach you PowerBi in 8 weeks",
+    profile: mentor,
     location: "Peter Southampton . London",
   },
   {
     id: 5,
     content:
       "I will teach you UIUX in 2 weeks",
-    profile: mentor3,
-    location: "Peter Southampton . London",
+    profile: mentor2,
+    location: "Cassandra Geoffrey . Atlanta",
   },
   {
     id: 6,
     content:
       "I will teach you web development in 4 weeks",
-    profile: mentor,
-    location: "Peter Southampton . London",
+    profile: mentor3,
+    location: "Niyi Adegoke . Lagos",
   },
 ];
 const Mentors = () => {
@@ -110,13 +110,13 @@ const Mentors = () => {
 
 const Card = ({item}) => {
   return (
-    <div className="px-1 px-md-3">
+    <div className="px-1">
 
     <div className="card">
       <img src={item.profile} alt="" className="card-img-top mentor_image" />
       <div className="card-body">
         <h5 className="card-title">{item.content}</h5>
-        <p className="card-text">Peter Southampton . London</p>
+        <p className="card-text">{item.location}</p>
       </div>
     </div>
     </div>

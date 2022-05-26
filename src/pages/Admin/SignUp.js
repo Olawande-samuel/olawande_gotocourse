@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import Input from '../../components/Input'
 import Password from '../../components/Password'
 import SignInWrapper from '../../components/SignInWrapper'
-import Admin from "../../images/Admin.png"
+import Admin from "../../images/Admin.webp"
 
 const AdminSignup = () => {
   return (

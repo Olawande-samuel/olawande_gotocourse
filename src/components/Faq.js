@@ -5,7 +5,10 @@ const Faq = () => {
   return (
     <section className="faq">
       <div className="container ">
-        <div className="faq-wrapper">
+        <header className="text-center mb-4">
+          <h2 className="title">Frequently Asked Questions</h2>
+        </header>
+        <div className="faq-wrapper"> 
           <Accordion defaultActiveKey="0" flush>
             <Accordion.Item eventKey="0" className="my-4">
               <Accordion.Header className="faq_acc">

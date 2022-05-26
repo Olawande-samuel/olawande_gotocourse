@@ -21,7 +21,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://gotocourse.loftywebtech.com:9000/user/signin",
+        "http://gotocourse.loftywebtech.com:9000/v1/user/signin",
         JSON.stringify(data),
         {
           headers: {
@@ -29,6 +29,11 @@ const Login = () => {
           },
         }
       );
+
+      console.log(response)
+    //   if(response.data.statusCode !== 0){
+    //     window.location.replace("https://gotocourse.com/dashboard")
+    // }
       toast.success(response.data.message, {
         position: "top-right",
         autoClose: 4000,
@@ -38,7 +43,6 @@ const Login = () => {
         draggable: true,
         progress: undefined,
       });
-    navigate("https://gotocourse.com/dashboard")
 
       setLoading(false);
     } catch (err) {
@@ -104,7 +108,7 @@ const Login = () => {
               value="student"
               onChange={handleChange}
             />
-            <label className="form-check-label" for="flexRadioDefault1">
+            <label className="form-check-label" htmlFor="flexRadioDefault1">
               Student
             </label>
           </div>
@@ -117,14 +121,14 @@ const Login = () => {
               value="teacher"
               onChange={handleChange}
             />
-            <label className="form-check-label" for="flexRadioDefault2">
+            <label className="form-check-label" htmlFor="flexRadioDefault2">
               Teacher
             </label>
           </div>
           {loading ? (
             <button className="button button-lg log_btn w-100">
-              <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
+              <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
               </div>
             </button>
           ) : (
