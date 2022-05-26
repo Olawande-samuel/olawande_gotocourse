@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import React from "react";
-import Tech from "../images/fast.png";
+import Tech from "../images/fast.webp";
 import Image from "./Image";
 import { Link } from "react-router-dom";
 
@@ -33,7 +33,7 @@ const Transition = () => {
                 </Link>
             </div>
           </motion.div>
-          <Image  image={Tech} alt="man pointing at screen containing code" className="background" effect="blur"/>
+          <Image  image={Tech} alt="Young woman smiling while working on laptop" className="background" effect="blur"/>
 
           {/* <img
             src={Tech}

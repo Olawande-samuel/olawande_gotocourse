@@ -8,7 +8,7 @@ import Login from "./pages/User/Login";
 import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
-
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   return (
     <Routes>

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Logo from "../images/Logo.png";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import {motion} from 'framer-motion'
+import {Link} from "react-router-dom"
 const navList = [
   {
     id: 1,
@@ -105,11 +106,14 @@ const Navbar = () => {
               {drop ? <NavList dropRef={dropRef} /> : null}
             </li>
             <li className="nav-item d-flex align-items-center nav_link me-2"><a href="https://gotocourse.com/dashboard" className="link">Go to Dashboard</a></li>
-            <li className="nav-item d-flex align-items-center nav_link"><a href="https://gotocourse.com/dashboard" className="link">Become a Teacher</a></li>
+            <li className="nav-item d-flex align-items-center nav_link"><Link to="/signup" className="link">Become a Teacher</Link></li>
+            <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/login" className="link">Sign In</Link></li>
+            <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/signup" className="link">Register</Link></li>
           </ul>
-          <motion.button type="button" className="button button-md d-none d-md-block signup"
+          <Link to="/login">
+
+          <motion.button type="button" className="button button-md d-none d-lg-block signup"
           whileHover={{
-            // scale:1.1,
             textShadow: "0px 0px 8px rgb(255, 255, 255)",
             boxShadow: "0px 0px 8px rgb(0, 0, 0)",
           }}
@@ -118,7 +122,10 @@ const Navbar = () => {
           >
             <span>Sign in</span>
           </motion.button>
-          <motion.button type="button" className="btn-plain d-none d-md-block"
+          </Link>
+
+          <Link to="/signup">
+          <motion.button type="button" className="btn-plain d-none d-lg-block"
           whileHover={{
             // scale:1.1,
             textShadow: "0px 0px 8px rgb(255, 255, 255)",
@@ -129,9 +136,9 @@ const Navbar = () => {
           >
             <span>Register</span>
           </motion.button>
+          </Link>
         </div>
       </div>
-      {/* </div> */}
     </nav>
   );
 };

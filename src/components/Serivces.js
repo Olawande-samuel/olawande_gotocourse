@@ -1,6 +1,7 @@
 import React from "react";
 import { Android, Certificate, Cohort, Self, Skill } from "../images/components/svgs";
 import Service from "../images/services.png";
+import {FaUsers} from "react-icons/fa"
 const Serivces = () => {
   return (
     <section className="wrapper services">
@@ -49,7 +50,7 @@ const Serivces = () => {
                 </span>
               </li>
               <li>
-                <i><Cohort /></i>
+                <i><FaUsers color="black" /></i>
                 <span className="text-dark fw-bold">
                 Learning with a cohort
                 </span>

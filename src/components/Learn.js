@@ -1,5 +1,5 @@
 import React from "react";
-import Learning from "../images/cohort.png";
+import Learning from "../images/cohort.webp";
 import {motion} from 'framer-motion'
 import Image from "./Image";
 import { Link } from "react-router-dom";
@@ -16,7 +16,7 @@ const Learn = () => {
                 <p className="card-text">
                 Join a classroom to take instructor led training, do projects with learning partners, take quizzes, and build work related portfolio
                 </p>
-                <a href="https://goto-course.com/dashboard">
+                <Link to="/signup">
                 <motion.button 
                 className="button button-lg" type="button"
                 whileHover={{ 
@@ -26,10 +26,10 @@ const Learn = () => {
                 >
                   REGISTER NOW TO START
                 </motion.button>
-                  </a>
+                  </Link>
               </div>
             </div>
-            <Image image={Learning} alt="man pointing at screen containing code" className="background" effect="blur" />
+            <Image image={Learning} alt="Group of people in an online meeting room" className="background" effect="blur" />
            
           {/* <img
             src={Learning}
