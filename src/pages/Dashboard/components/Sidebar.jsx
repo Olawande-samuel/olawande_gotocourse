@@ -1,6 +1,6 @@
 import {useEffect, useRef} from "react";
 import {MdPerson, MdMessage} from "react-icons/md";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useLocation, Link} from "react-router-dom";
 
 
 
@@ -27,17 +27,18 @@ function SidebarItem({icon: Icon, title, clsx, isMobile, ...props}){
 
 const Sidebar = ({isMobile}) => {
     const clsx = useStyles();
+    const location = useLocation();
     const navigate = useNavigate();
     // const sidebarItemRef = useRef(null);
     const data = [
         {
             icon: MdPerson,
-            path: "profile",
+            path: "",
             title: "My Profile"
         },
         {
             icon: MdMessage,
-            path: "message",
+            path: "classes",
             title: "My Classes"
         }
     ]
@@ -64,12 +65,6 @@ const Sidebar = ({isMobile}) => {
         return () => console.log("Sidebar is unmounted");
     }, [])
 
-    function gotoPage(page){
-        navigate(page, {
-
-        })
-    }
-
 
     return (
         <div style={clsx['sidebar']}>
@@ -77,10 +72,12 @@ const Sidebar = ({isMobile}) => {
             <div style={clsx["sidebar_items"]}>
                 {
                     data.map(({icon, path, title}, i) => (
-                        <SidebarItem onClick={() => gotoPage(path)} 
-                        key={i}
-                        isMobile={isMobile} clsx={clsx} icon={icon} 
-                        title={title} path={path} />
+                        <Link to={`/students/${path}`}>
+                            <SidebarItem 
+                            key={i}
+                            isMobile={isMobile} clsx={clsx} icon={icon} 
+                            title={title} path={path} />
+                        </Link>
                     ))
                 }
             </div>
