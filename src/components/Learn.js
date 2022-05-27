@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const Learn = () => {
   return (
     <section className="wrapper learning">
-      <div className="sides  justify-content-end">
+      <div className="container  justify-content-end">
         <div className="d-flex content justify-content-end">
             <div className="card border-none">
               <div className="card-body">

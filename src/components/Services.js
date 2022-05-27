@@ -1,5 +1,5 @@
 import React from "react";
-import { Learn, Certificate, Cohort,Ml, Support, Skill } from "../images/components/svgs";
+import { Learn, Certificate, Cohort,Ml, Support, Skill, Self } from "../images/components/svgs";
 import Service from "../images/services.png";
 import {FaUsers} from "react-icons/fa";
 
@@ -46,19 +46,32 @@ const serviceList=[
     text:"Questions? Our round-the-clock support teams is available to help anytime, anywhere."
   
   }, 
+  {
+    id: 7,
+    icon: <Learn />,
+    title:"Borderless training",
+    text:"Take classes from anywhere, anytime"
+  
+  }, 
+  {
+    id: 8,
+    icon: <Cohort  />,
+    title:"Assessment",
+    text:"Take assessments to test your understanding"
+  
+  }, 
 ]
 
 
-const Serivces = () => {
+const Services = () => {
   return (
     <section className="wrapper services">
       <div className="container">
-            <header>
+            <header >
               <h2 className="title text-center">Learn with Go2Course</h2>
             </header>
-        <div className="service_box_wrapper">
+        <div className="service_box_wrapper d-flex flex-wrap justify-content-center px-lg-5 mt-5">
             {serviceList.map(service =>(
-              
             <div className="services_box d-flex flex-column align-items-center justify-content-center">
               <div className="service_icon">
                 <i>{service.icon}</i>
@@ -76,4 +89,4 @@ const Serivces = () => {
 
 
 
-export default Serivces;
+export default Services;

@@ -9,16 +9,16 @@ import Hero from '../components/Hero'
 import Learn from '../components/Learn'
 import Mentors from '../components/Mentors'
 import Navbar from '../components/Navbar'
-import Serivces from '../components/Serivces'
+import Services from '../components/Services'
 import Testimonials from '../components/Testimonials'
 import Transition from '../components/Transition'
-
+import Join from "../components/Join"
 const Landing = () => {
   return (
     <div>
         <Navbar />
         <Hero />
-        <Serivces />
+        <Services />
         <Learn />
         <Transition />
         <Becoming />
@@ -27,6 +27,7 @@ const Landing = () => {
         <Testimonials />
         <Degree />
         <Faq />
+        <Join />
         <Footer />
         <End />
     </div>

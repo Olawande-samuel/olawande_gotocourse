@@ -8,7 +8,7 @@ const Transition = () => {
   
   return (
     <section className="wrapper transition">
-      <div className="sides">
+      <div className="container">
         <div className="d-flex content justify-content-start">
           <motion.div className="card border-none"
           >
