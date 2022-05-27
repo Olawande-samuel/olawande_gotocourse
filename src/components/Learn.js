@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const Learn = () => {
   return (
     <section className="wrapper learning">
-      <div className="sides  justify-content-end">
+      <div className="container  justify-content-end">
         <div className="d-flex content justify-content-end">
             <div className="card border-none">
               <div className="card-body">
@@ -29,7 +29,7 @@ const Learn = () => {
                   </Link>
               </div>
             </div>
-            <Image image={Learning} alt="Group of people in an online meeting room" className="background" effect="blur" />
+            <Image width="720px" height="452"  image={Learning} alt="Group of people in an online meeting room" className="background" effect="blur" />
            
           {/* <img
             src={Learning}

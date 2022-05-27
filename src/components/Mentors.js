@@ -77,6 +77,7 @@ const Mentors = () => {
       <div className=" mentors_content">
         <header className="text-center">
           <h3 className="title">Choose a mentor</h3>
+          <p className="sub_title">One of the best ways to break into I.T or learn more about becoming a top tech professional is to find someone that has gone before you and gained success at the same goal. This persn has the ability to provide valuable advice, coaching and encouragement as a mentor. Choose from our A-list and screened mentors to learn and grow your capabilities </p>
         </header>
         <Carousel
           swipeable={true}

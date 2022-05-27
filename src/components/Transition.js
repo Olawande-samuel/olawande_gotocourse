@@ -8,7 +8,7 @@ const Transition = () => {
   
   return (
     <section className="wrapper transition">
-      <div className="sides">
+      <div className="container">
         <div className="d-flex content justify-content-start">
           <motion.div className="card border-none"
           >
@@ -33,13 +33,7 @@ const Transition = () => {
                 </Link>
             </div>
           </motion.div>
-          <Image  image={Tech} alt="Young woman smiling while working on laptop" className="background" effect="blur"/>
-
-          {/* <img
-            src={Tech}
-            alt="man pointing at screen containing code"
-            className="background "
-          /> */}
+          <Image width="720px" height="452"  image={Tech} alt="Young woman smiling while working on laptop" className="background" effect="blur"/>
         </div>
       </div>
     </section>
