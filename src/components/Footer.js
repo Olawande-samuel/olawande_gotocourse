@@ -82,13 +82,19 @@ const rightLink = [
 const Footer = () => {
   return (
     <footer className="footer wrapper">
-      <div className="container footer_container d-flex flex-wrap justify-content-between">
-        {/* <div className="footer_left">
-          <header>
-            <h3 className="footer_title">Reach out today</h3>
-          </header>
+      <div className="container footer_container d-flex  justify-content-between">
+        <div className="footer_left">
+            <div className="footer_top">
+              <p className="footer_title">VISIT US</p>
+              <p className="footer_text" >VISIT US 9898 Bissonnet Street, Suite 270 , Houston, TX 77036, USA. </p>
+            </div>
+            <div className="footer_bottom">
+            <p className="footer_title">REACH OUT</p>
+              <a  className="footer_text" href="tel: +17136363221"> +1 713 636 3221</a>
+              <a  className="footer_text" href="mailto:Gotocourse@gmail.com">Gotocourse@gmail.com </a>
+            </div>
           
-        </div> */}
+        </div>
         <div className="footer_right d-flex flex-wrap justify-content-around">
           <div className="first">
             <ul>
