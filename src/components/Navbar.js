@@ -71,7 +71,6 @@ const Navbar = () => {
   
   return (
     <nav className="nav navbar navbar-expand-lg navbar-light">
-      {/* <div className="holder"> */}
 
       <div className="container navbar-container align-items-center">
         <a href="/" className="logo navbar-brand ">
@@ -127,7 +126,6 @@ const Navbar = () => {
           <Link to="/signup">
           <motion.button type="button" className="btn-plain d-none d-lg-block"
           whileHover={{
-            // scale:1.1,
             textShadow: "0px 0px 8px rgb(255, 255, 255)",
             boxShadow: "0px 0px 8px rgb(0, 0, 0)",
           }}

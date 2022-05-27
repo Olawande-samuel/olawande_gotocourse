@@ -82,7 +82,28 @@ const Footer = () => {
             </i>
             </div>
         </div>
-        <div className="footer_right d-flex flex-wrap justify-content-around">
+        <div className="footer_right">
+        <div className="box mb-5">
+            <p className="text-center mb-4">
+              Join Gotocourse to unleash untapped opportunities in borderless
+              knowledge sharing across the world! We are ready to serve you
+              anywhere you are
+            </p>
+          <div className="join_button_wrapper justify-content-center align-items-center d-flex">
+            <Link to="/signup">
+              <button type="button" className="btn btn-light">
+                Join as a student
+              </button>
+            </Link>
+            <small>OR</small>
+            <Link to="/admin/login">
+              <button type="button" className="btn btn-outline-light">
+                Apply to teach
+              </button>
+            </Link>
+          </div>
+        </div>
+        <div className=" d-flex flex-wrap justify-content-around">
           <div className="first">
             <ul>
             
@@ -91,6 +112,7 @@ const Footer = () => {
               {leftLink.map(link=>(
               <Link to={link.path}>
                 <motion.li
+                
                 whileHover={{
                   scale:1.2,
                   originX: 0
@@ -126,6 +148,8 @@ const Footer = () => {
               ))}
               
             </ul>
+        </div>
+
           </div>
         </div>
       </div>

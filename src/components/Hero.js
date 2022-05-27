@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import hero from "../images/NewHero.png";
-// import hero from "../images/hero2.jpg";
 import Image from "./Image";
+import {FaSearch} from "react-icons/fa"
 const Hero = () => {
   return (
     <section className="wrapper hero px-2 p-sm-0">
@@ -17,7 +17,7 @@ const Hero = () => {
           transition={{ delay: 0.2, duration: 1.5 }}
         >
           <h1 className="hero_text">
-            We make Teaching and learning Tech skills Accessible.
+            We make Teaching and learning Tech skills Accessible
           </h1>
           <div className="d-flex pe-lg-5">
             <input
@@ -26,7 +26,9 @@ const Hero = () => {
               id="search"
               className="form-control"
             />
-            <button className="btn search_btn">Search</button>
+            <button className="btn search_btn">
+              <FaSearch />
+            </button>
           </div>
           <div className="d-flex  keyword_wrapper  mt-4">
             <span>Popular: </span>
@@ -49,8 +51,6 @@ const Hero = () => {
           }}
         >
           <Image image={hero} alt="Testing" effect="blur" />
-
-          {/* <img src={hero} alt="" /> */}
         </motion.div>
       </div>
       <p className="hero_subtext">Join hundreds of people that trust Gotocourse to teach and learn in-demand tech skills</p>
