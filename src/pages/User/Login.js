@@ -3,32 +3,36 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
-import axios from "axios";
 
+
+
+import { useAuth } from "../../contexts/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 const Login = () => {
   const navigate = useNavigate()
+  const {authFunctions: {login}} = useAuth();
 
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    email: "",
+    password: ""
+  });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
+    const {name, value} = e.target;
+    setData(old => {
+      return {
+        ...old,
+        [name]: value
+      }
+    })
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://gotocourse.loftywebtech.com:9000/v1/user/signin",
-        JSON.stringify(data),
-        {
-          headers: {
-            "content-type": "application/json",
-          },
-        }
-      );
+      const response = await login(data);
 
       console.log(response)
     //   if(response.data.statusCode !== 0){
