@@ -3,13 +3,19 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
-import axios from 'axios'
 import { toast, ToastContainer } from "react-toastify";
+import { useAuth } from "../../contexts/AuthContext";
 
 const SignUp = () => {
   const [data, setData]= useState({
-    lastName:"Doe"
+    firstName: "",
+    lastName:"",
+    phone: "",
+    email: "",
+    password: "",
+    retype_password: ""
   })
+  const {authFunctions: {register}} = useAuth();
   const [loading, setLoading]= useState(false)
   const navigate = useNavigate()
   const handleChange=(e)=>{
@@ -20,12 +26,8 @@ const SignUp = () => {
     e.preventDefault()
     setLoading(true)
     try{
-      const response = await axios.post("http://gotocourse.loftywebtech.com:9000/v1/user/signup", JSON.stringify(data), {
-        headers:{
-          "content-type": "application/json"
-      }
-      
-    })
+      let {retype_password, ...others} = data;
+      const response = await register(others);
 
   console.log(response)
 
@@ -90,8 +92,9 @@ const SignUp = () => {
           <Password label="Password" name="password" password="password" value={data.password} handleChange={handleChange}   />
           <Password
             label="Confirm Password"
-            name="Confirm Password"
+            name="retype_password"
             password="password"
+            value={data.retype_password}
           />
           <div>
           <div className="form-check ">
