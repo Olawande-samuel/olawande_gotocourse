@@ -300,8 +300,9 @@ gap: 1rem;
 
 
 .services .services_box {
-  flex: 33.33% 0;
-  margin-bottom:1.5rem;
+  /* flex: 33.33% 0; */
+  max-width:20rem;
+  margin:1.7rem;
 }
 
 .services .services_box h4 {
@@ -310,18 +311,18 @@ gap: 1rem;
   line-height: 27px;
   text-align: center;
   color:var(--text-color-light);
-  margin-bottom: 13px;
+  margin-top: .8rem;
+  margin-bottom: 0;
 }
 
 .services .services_box p {
   text-align: center;
   color: rgba(0, 0, 0, 1);
   font-size:16px;
+  margin-top: .8rem;
+  margin-bottom: 0
+}
 
-}
-.services .services_box  .service_icon {
-  margin-bottom: 20px;
-}
 
 
 /* *********************LEARNING*************************** */
@@ -409,6 +410,17 @@ gap: 1rem;
   color: var(--text-color-lighter);
 }
 
+
+/* ****************************Becoming************************************ */
+.becoming .right,
+.becoming .left {
+  flex: 50%;
+}
+
+.becoming .left {
+  display: flex;
+  justify-content:center
+}
 /* ****************************CAREERS************************************ */
 .career,
 .mentors {
@@ -728,6 +740,7 @@ font-size: 18px;
 }
 .footer p {
   margin-bottom: 0;
+  font-size: 1.3rem;
 }
 
 .footer .footer_title {
@@ -946,7 +959,8 @@ line-height: 45px;
     text-align: center;
   }
   .learning .content,
-  .transition .content {
+  .transition .content,
+  .becoming .content {
     flex-direction: column-reverse;
   }
 

@@ -24,6 +24,7 @@ export const authFunctions = () => {
                 }
             }
         },
+        
         register: async function(data){
             try{
                 const res = await axios.post(`${baseURL}/user/signup`,

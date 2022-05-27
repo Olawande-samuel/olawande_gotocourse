@@ -74,7 +74,29 @@ const rightLink = [
 const Footer = () => {
   return (
     <footer className="footer wrapper">
-      <div className="container footer_container d-flex  justify-content-between">
+      <div className="container ">
+      <div className="box mb-5">
+            <p className="text-center mb-4">
+              Join Gotocourse to unleash untapped opportunities in borderless
+              knowledge sharing across the world! We are ready to serve you
+              anywhere you are
+            </p>
+          <div className="join_button_wrapper justify-content-center align-items-center d-flex">
+            <Link to="/signup">
+              <button type="button" className="btn btn-light px-lg-4 py-lg-3">
+                Join as a student
+              </button>
+            </Link>
+            <small>OR</small>
+            <Link to="/admin/login">
+              <button type="button" className="btn btn-outline-light px-lg-4 py-lg-3">
+                Apply to teach
+              </button>
+            </Link>
+          </div>
+        </div>
+        <div className="footer_container d-flex justify-content-between">
+
         <div className="footer_left">
             <div className="footer_top pt-2">
             <i>
@@ -83,26 +105,6 @@ const Footer = () => {
             </div>
         </div>
         <div className="footer_right">
-        <div className="box mb-5">
-            <p className="text-center mb-4">
-              Join Gotocourse to unleash untapped opportunities in borderless
-              knowledge sharing across the world! We are ready to serve you
-              anywhere you are
-            </p>
-          <div className="join_button_wrapper justify-content-center align-items-center d-flex">
-            <Link to="/signup">
-              <button type="button" className="btn btn-light">
-                Join as a student
-              </button>
-            </Link>
-            <small>OR</small>
-            <Link to="/admin/login">
-              <button type="button" className="btn btn-outline-light">
-                Apply to teach
-              </button>
-            </Link>
-          </div>
-        </div>
         <div className=" d-flex flex-wrap justify-content-around">
           <div className="first">
             <ul>
@@ -151,6 +153,7 @@ const Footer = () => {
         </div>
 
           </div>
+        </div>
         </div>
       </div>
     </footer>

@@ -56,7 +56,7 @@ const Testimonials = () => {
     <section className="testimonials">
       <div className="container testimonial_content">
         <h3 className="testimonials_title">Real Stories from Real Customers</h3>
-        <p className="sub_title text-center">Join Our Group of Satisfied Customers</p>
+        <p className="sub_title text-center">Join thousands of people who are achieving their goals on Gotocourse</p>
         <Carousel
           swipeable={true}
           draggable={false}
