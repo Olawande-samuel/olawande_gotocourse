@@ -12,18 +12,15 @@ export const colors = {
   greenish: "#023047",
   secondary: "#2F80ED",
   gray: "#9DA6BA",
-  info: "#5A63F7"
+  info: "#5A63F7",
+  green: "#037615"
 }
 
 export const breakpoints = {
-    mobileSm: '320px',
-    mobileMd: '375px',
     mobileLg: '425px',
     tablet: '768px',
     laptop: '1024px',
-    laptopLg: '1440px',
-    desktop: '2560px'
 }
 
 
-export const baseURL = "http://gotocourse.loftywebtech.com:9000/v1";
+export const baseURL = "https://loftywebtech.com/gotocourse/api/v1";

@@ -10,16 +10,23 @@ const SignUp = () => {
   const [data, setData]= useState({
     firstName: "",
     lastName:"",
-    phone: "",
+    phoneNumber: "",
     email: "",
     password: "",
-    retype_password: ""
+    retype_password: "",
+    userType: ""
   })
   const {authFunctions: {register}} = useAuth();
   const [loading, setLoading]= useState(false)
   const navigate = useNavigate()
   const handleChange=(e)=>{
-    setData({...data, [e.target.name]:e.target.value})
+    const {name, value} = e.target;
+    setData(old => {
+      return {
+        ...old,
+        [name]: value
+      }
+    })
   }
 
   const onSubmit =async(e)=>{
@@ -27,6 +34,7 @@ const SignUp = () => {
     setLoading(true)
     try{
       let {retype_password, ...others} = data;
+      console.log(others)
       const response = await register(others);
 
   console.log(response)
@@ -86,7 +94,8 @@ const SignUp = () => {
           </span>
         </div>
         <form action="" className="form">
-          <Input label="Fullname" name="firstName" value={data.firstName}  handleChange={handleChange}  />
+          <Input label="Firstname" name="firstName" value={data.firstName}  handleChange={handleChange}  />
+          <Input label="Lastname" name="lastName" value={data.lastName}  handleChange={handleChange}  />
           <Input label="Email" name="email" type="email" value={data.email} handleChange={handleChange}   />
           <Input label="Phone" name="phoneNumber" type="phone" value={data.phoneNumber} handleChange={handleChange}   />
           <Password label="Password" name="password" password="password" value={data.password} handleChange={handleChange}   />

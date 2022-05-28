@@ -1,3 +1,4 @@
+import {Link} from "react-router-dom";
 import src from "../images/Logo.png";
 
 
@@ -12,9 +13,11 @@ const Logo = () => {
         }
     }
     return (
-        <div style={clsx['logo']}>
-           <img src={src} width="100%" alt="logo" />
-        </div>
+        <Link to="/">
+            <div style={clsx['logo']}>
+            <img src={src} width="100%" alt="logo" />
+            </div>
+        </Link>
     )
 }
 

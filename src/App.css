@@ -11,14 +11,19 @@ body {
 :root {
   --primary: #f5f5f5;
   --black: rgba(0, 0, 0, 1);
+  --white: #fff;
   --obsidian: #070f18;
-  --text-color-dark: #414141;
-  --text-color-light: #5e5b5b;
-  --text-color-lighter: #9F9F9F;
-  --btn-color: rgb(12, 33, 145);
-  --accent-color: #023047;
-  --text-blue: #0C2191;
+  --textColorDark: #081131;
+  --textColorLight: #5e5b5b;
+  --textColorLighter: #9F9F9F;
+  --btnColor: rgb(12, 33, 145);
+  --accentColor: #023047;
+  --textBlue: #0C2191;
   --greenish: #023047;
+  --secondary: #2F80ED;
+  --gray: #9DA6BA;
+  --info: #5A63F7;
+  --green: #037615;
 }
 a {
   text-decoration: none;
@@ -1165,3 +1170,45 @@ line-height: 45px;
     align-items: center;
   }
 }
+
+
+/* OTHER STYLES */
+#sidebar__items .active {
+  background-color: var(--secondary);
+  color: var(--white);
+}
+
+#sidebar__items .active div {
+  color: var(--white);
+}
+#sidebar__items .active div svg{
+  color: var(--white);
+}
+
+#sidebar__items a {
+  margin: 5px 0px;
+  padding: 5px;
+  border-radius: 0px 10px 10px 0px;
+  width: 90%;
+}
+
+#sidebar__items a:hover {
+  color: var(--white);
+  background-color: var(--secondary);
+}
+
+#sidebar__items a:hover div {
+  color: var(--white);
+}
+
+#sidebar__items a:hover div svg {
+  color: var(--white);
+}
+
+#sidebar__items a div svg {
+  margin-right: 20px;
+  font-size: 1.3rem;
+  color: var(--gray);
+}
+
+

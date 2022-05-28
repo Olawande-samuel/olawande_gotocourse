@@ -1,19 +1,18 @@
-import { MdSearch } from "react-icons/md";
+import { IoIosSearch } from "react-icons/io";
+import { colors } from "../../../constants";
 
 
-
-import useStyles from "./styles";
+import clsx from "./styles.module.css";
 
 
 
 const Searchbar = ({showIcon, placeholder="", changeHandler, value}) => {
-    const clsx = useStyles();
 
     return (
-        <div style={clsx['searchbar']}>
-            {showIcon && <MdSearch />}
+        <div className={clsx.searchbar}>
+            {showIcon && <IoIosSearch />}
             <input type="text" placeholder={placeholder} onChange={changeHandler}
-            value={value} style={clsx["searchbar_input"]} />
+            value={value} className={clsx.searchbar_input} />
         </div>
     )
 }
