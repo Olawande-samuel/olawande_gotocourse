@@ -49,7 +49,7 @@ a {
   background-color: #fff;
   border-radius: 10px;
   color: black;
-  font-size: 1.125rem;
+  font-size: 1.1rem;
   line-height: 1rem;
   padding: 0.9375rem 1.5rem !important;
 }
@@ -63,10 +63,13 @@ a {
   line-height: 2rem;
 }
 .button-lg {
-  padding: 0.875rem 3.0625rem !important;
+  padding: 0.875rem 3rem !important;
 }
 .button-md {
   padding: 0.6875rem 3rem !important;
+}
+.sub_title {
+  font-size: 15px;
 }
 .title {
   color: var(--text-color-dark) !important;
@@ -81,12 +84,12 @@ a {
 }
 .paragraph {
   margin-bottom: 1rem;
-  font-weight: 500;
   line-height: 28px;
+  font-size: 14px;
 }
-/* .content-wrapper {
-  padding-left: 5.565rem;
-} */
+.card-body header {
+  margin-bottom: 1.5rem;
+}
 /* ******************************Nav****************************** */
 .nav {
   padding: 1.2rem 0;
@@ -95,19 +98,23 @@ a {
 .nav .navbar-toggler {
   border: none;
 }
+
+.nav .nav_link  {
+  margin: .5rem 0;
+}
 .nav .link {
   position: relative;
   color: var(--btn-color) !important;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 450;
   outline: none;
   border: none;
   background: #fff;
 }
 
-.nav .courses{
+/* .nav .courses{
   color: #191046 !important; ;
-}
+} */
 .nav .holder {
   position: relative;
 }
@@ -147,7 +154,7 @@ a {
   background-color: var(--btn-color);
   border-radius: 10px;
   color: #fff;
-  font-size: 1.125rem;
+  font-size: 1.1rem;
   line-height: 1rem;
   padding: 0.9375rem 1.5rem !important
 }
@@ -324,7 +331,7 @@ gap: 1rem;
 .services .services_box p {
   text-align: center;
   color: rgba(0, 0, 0, 1);
-  font-size:16px;
+  font-size:14px;
   margin-top: .8rem;
   margin-bottom: 0
 }
@@ -411,7 +418,8 @@ gap: 1rem;
 .learning .card-text,
 .transition .card-text {
   /* font-weight: 500; */
-  font-size: 18px;
+  margin-bottom: 1.5rem;
+  font-size: 14px;
   line-height: 24px;
   color: var(--text-color-lighter);
 }
@@ -530,6 +538,9 @@ gap: 1rem;
   color: var(--text-color-light);
 }
 
+.testimonials header {
+  margin-bottom: 4rem;
+}
 .testimonials .testimonials_title {
   font-weight: 600;
   font-size: clamp(1.8rem, -0.875rem + 8.333vw, 2.25rem);
@@ -543,8 +554,8 @@ gap: 1rem;
 .testimonials .testimonials_text {
   font-family: "Lato", sans-serif;
   font-weight: 400;
-  font-size:  clamp(20px, 3vw, 25px);
-  line-height: 34px;
+  font-size:  clamp(14px, 18px, 19px);
+  line-height: 30px;
   /* margin-bottom: 3.125rem; */
 }
 .testimonials .testimonials_name {
@@ -558,7 +569,6 @@ color: var(--text-color-light);
 
 .testimonials .location {
   font-family: "Lato", sans-serif;
-
   font-weight: 300;
 font-size:  clamp(16px, 21px, 21px);
 line-height: 25px;
@@ -588,37 +598,16 @@ line-height: 25px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-.testimonials .prev {
-  left: 0;
-}
-.testimonials .next {
-  right: 0;
-}
+
 .testimonials .slides {
   width: 100%;
   line-height:37px;
-  height: 451px;
+  height: 300px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   padding: 2rem 1rem;
   
 }
-
-/* .testimonials .dot {
-  cursor: pointer;
-  height: 10px;
-  width: 10px;
-  margin: 0 2px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.6s ease;
-} */
-
-/* .testimonials .active,
-.testimonials .dot:hover {
-  background-color: #717171;
-} */
 
 /* ****************DEGREE****************************** */
 .degree_content {
@@ -630,6 +619,7 @@ line-height: 25px;
   background: var(--btn-color);
   color: #fff;
   padding: 49px 0 79px 0;
+  /* line-height:34px */
 }
 /* .degree img {
   max-width: 100%;
@@ -643,6 +633,9 @@ line-height: 25px;
   display:flex;
   justify-content:flex-end;
 }
+/* .degree header {
+  margin-bottom: 20px;
+} */
 .degree .title {
   font-weight: 700;
   font-size:  clamp(20px, 3vw + 1 , 34px);
@@ -651,15 +644,15 @@ line-height: 25px;
 }
 .degree  .degree_text {
   font-weight: 400;
-  font-size: clamp(14px, 3vw, 20px);
-line-height: 34px;
-  margin-bottom: 20px;
+  font-size: 14px;
+line-height: 28px;
+  margin-bottom: 30px;
 }
 .degree .button {
   background-color:#fff; 
   color: var(--btn-color);
   font-weight: 600;
-font-size: 18px;
+font-size: 16px;
 }
 /* ****************ACCORDION***************************************** */
 
@@ -675,17 +668,17 @@ font-size: 18px;
   color: var(--text-color-light) !important;
 }
 .faq  .faq_acc button {
-  font-weight: 600;
-  font-size: clamp(14px,  18px, 19px);
+  font-weight: 500;
+  font-size: clamp(15px,  2.5vw, 19px);
   line-height: 38px;
   background-color: var(--btn-color) !important;
   color: white;
   border-radius: 10px !important;
-  padding: 16px 40px 28px 40px !important;
+  padding: 14px 40px !important;
 }
 .faq  .faq_acc_text {
   font-weight: 400;
-  font-size: clamp(14px,  16px, 17px);
+  font-size: clamp(14px,  15px, 17px);
   line-height: 38px;
   width: 70%;
 }
@@ -747,7 +740,7 @@ font-size: 18px;
 }
 .footer p {
   margin-bottom: 0;
-  font-size: 1.3rem;
+  font-size: 1rem;
 }
 
 .footer .footer_title {
@@ -771,8 +764,8 @@ font-size: 18px;
   margin-bottom: 20px;
 }
 .footer a li {
-  font-weight: 500;
-  font-size: 14px;
+  font-weight: 300;
+  font-size: 13px;
   line-height: 32px;
   text-decoration: none;
   color: #fff;
@@ -792,7 +785,11 @@ font-size: 18px;
 }
 
 .footer ul:first-child {
- font-size: 1.3rem;
+ font-size: 1.5rem;
+}
+.footer .box {
+  width: min(100% - 1rem, 700px);
+  margin: auto;
 }
 
 .end {
@@ -816,7 +813,7 @@ font-size: 18px;
   margin-right: .3rem;
 }
 .end .box span {
-  font-size: 14px;
+  font-size: 12px;
 line-height: 45px;
 }
 /* ********************SIGNUP/LOGIN************************** */
@@ -972,6 +969,9 @@ line-height: 45px;
     flex-direction: column-reverse;
   }
 
+  .services .title {
+    line-height: 42px;
+  }
   .learning .sides,
   .transition .sides {
     width: 100%;
@@ -1012,12 +1012,18 @@ line-height: 45px;
   .degree_left,.degree_right {
     flex: 100%;
   }
+  .degree_left {
+    margin-top: 2rem;
+  }
+  .degree_left header {
+    margin-bottom: 1rem;
+  }
   .degree_right .background {
     justify-content:center;
   }
 
   .testimonials .slides {
-    height: auto !important;
+    height: 250px !important;
     
   }
   .footer_container {
@@ -1197,8 +1203,7 @@ line-height: 45px;
   }
   .faq .faq_acc_text {
     font-weight: 400;
-    font-size: 18px;
-    line-height: 38px;
+    line-height: 30px;
     width: 100%;
   }
   .faq .accordion-button::after {

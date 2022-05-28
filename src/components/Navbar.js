@@ -80,7 +80,7 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div
-          className={`collapse navbar-collapse  justify-content-end  align-items-center ${
+          className={`collapse navbar-collapse  justify-content-end  align-items-center mt-3 mt-lg-0 ${
             show ? "show" : ""
           }`}
           id="navbarNav"
@@ -92,7 +92,7 @@ const Navbar = () => {
                 className="link nav-link courses"
                 onClick={toggleDrop}
               >
-                Courses
+                Categories
                 <span>
                   <i>
                     <MdOutlineKeyboardArrowDown
@@ -124,7 +124,7 @@ const Navbar = () => {
           </Link>
 
           <Link to="/signup">
-          <motion.button type="button" className="btn-plain d-none d-lg-block"
+          <motion.button type="button" className=" btn-plain d-none d-lg-block"
           whileHover={{
             textShadow: "0px 0px 8px rgb(255, 255, 255)",
             boxShadow: "0px 0px 8px rgb(0, 0, 0)",

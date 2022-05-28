@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import user from "../images/user.png";
 import lere from "../images/lere.png";
 import ola from "../images/ola.png";
-import { Left, Right } from "../images/components/svgs";
-import Carousel from "react-multi-carousel";
+
 
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -38,32 +37,17 @@ const witnesses = [
   },
 ];
 
-const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-    slidesToSlide: 3, // optional, default to 1.
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 604 },
-    items: 2,
-    slidesToSlide: 2, // optional, default to 1.
-  },
-  mobile: {
-    breakpoint: { max: 604, min: 0 },
-    items: 1,
-    slidesToSlide: 1, // optional, default to 1.
-  },
-};
+
 const Testimonials = () => {
   
   return (
     <section className="testimonials">
       <div className="container-lg testimonial_content">
+        <header>
         <h3 className="testimonials_title">Real Stories from Real Customers</h3>
         <p className="sub_title text-center">Join thousands of people who are achieving their goals on Gotocourse</p>
+        </header>
         <div>
-
         <Swiper
       // install Swiper modules
       modules={[Navigation, Pagination, Scrollbar, A11y]}

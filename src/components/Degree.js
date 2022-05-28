@@ -17,7 +17,7 @@ const Degree = () => {
             <Link to="/login">
             <motion.button 
             whileHover={{
-              boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+              boxShadow: "0px 0px 8px rgb(255, 255, 255)",
               textShadow: "0px 0px 8px rgb(255, 255, 255)"
             }}
             className="button button-md">START NOW</motion.button>
