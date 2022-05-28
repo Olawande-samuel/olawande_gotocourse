@@ -76,12 +76,12 @@ const Footer = () => {
     <footer className="footer wrapper">
       <div className="container ">
       <div className="box mb-5">
-            <p className="text-center mb-4">
+            <p className="text-center mb-5">
               Join Gotocourse to unleash untapped opportunities in borderless
               knowledge sharing across the world! We are ready to serve you
               anywhere you are
             </p>
-          <div className="join_button_wrapper justify-content-center align-items-center d-flex">
+          <div className="join_button_wrapper justify-content-center align-items-center d-flex mb-3">
             <Link to="/signup">
               <button type="button" className="btn btn-light px-lg-4 py-lg-3">
                 Join as a student
@@ -120,7 +120,9 @@ const Footer = () => {
                 
                 whileHover={{
                   scale:1.2,
-                  originX: 0
+                  originX: 0,
+                  color: "#F75C4E"
+
                 }}
                 transition={{
                   stiffness:300
@@ -141,7 +143,8 @@ const Footer = () => {
                 <motion.li
                 whileHover={{
                   scale:1.2,
-                  originX: 0
+                  originX: 0,
+                  color: "#F75C4E"
                 }}
                 transition={{
                   stiffness:300
