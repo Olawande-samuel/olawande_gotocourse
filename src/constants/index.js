@@ -26,4 +26,4 @@ export const breakpoints = {
 }
 
 
-export const baseURL = "http://gotocourse.loftywebtech.com:9000/v1";
+export const baseURL = "https://loftywebtech.com/gotocourse/api";

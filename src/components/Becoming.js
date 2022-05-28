@@ -7,10 +7,7 @@ const Becoming = () => {
   return (
     <section className="wrapper becoming">
       <div className="container content-wrapper d-flex justify-content-end">
-        <div className="d-flex flex-column flex-md-row content justify-content-between">
-          <div className="left">
-            <img src={Teacher} alt="sideview of hands typing on a Laptop" />
-          </div>
+        <div className="d-flex flex-column-reverse flex-md-row content justify-content-between">
           <div className="right">
             <header>
               <h2 className="title">Become a teacher on Gotocourse</h2>
@@ -33,6 +30,9 @@ const Becoming = () => {
               </motion.button>
                 </Link>
             </main>
+          </div>
+          <div className="left">
+            <img src={Teacher} alt="sideview of hands typing on a Laptop" />
           </div>
         </div>
       </div>

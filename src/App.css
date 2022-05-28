@@ -185,11 +185,11 @@ a {
     letter-spacing: .25px;
 }
 .hero_left {
-  flex: 50%;
+  flex: 40%;
   padding-right:1rem;
 }
 .hero_right {
-  flex: 50%;
+  flex: 60%;
   display: grid;
   place-items:center;
 }
@@ -197,18 +197,19 @@ a {
   border-radius: 10px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
-padding: 17px 0 13px 0 ;
+padding: 13px 0 ;
 }
 .hero .search_btn {
   background: var(--btn-color);
   color: white;
   border-radius: 10px;
-  padding: 17px 29px 13px 28px ;
+  padding: 13px 29px 13px 28px ;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
 .hero span {
   color: var(--btn-color);
+  font-size: 14px;
 }
 .hero .keyword_wrapper {
   line-height:32px;
@@ -231,8 +232,8 @@ padding: 17px 0 13px 0 ;
   border: 1px solid var(--btn-color);
   color: var(--btn-color);
   outline: none;
-  padding: 2px 13px;
-  font-size: 14px;
+  padding: 2px 5px;
+  font-size: 12px;
 line-height: 24px;
 margin: 0 .38rem;
 border-radius: 10px;
@@ -299,8 +300,9 @@ gap: 1rem;
 
 
 .services .services_box {
-  flex: 33.33% 0;
-  margin-bottom:1.5rem;
+  /* flex: 33.33% 0; */
+  max-width:20rem;
+  margin:1.7rem;
 }
 
 .services .services_box h4 {
@@ -309,18 +311,18 @@ gap: 1rem;
   line-height: 27px;
   text-align: center;
   color:var(--text-color-light);
-  margin-bottom: 13px;
+  margin-top: .8rem;
+  margin-bottom: 0;
 }
 
 .services .services_box p {
   text-align: center;
   color: rgba(0, 0, 0, 1);
   font-size:16px;
+  margin-top: .8rem;
+  margin-bottom: 0
+}
 
-}
-.services .services_box  .service_icon {
-  margin-bottom: 20px;
-}
 
 
 /* *********************LEARNING*************************** */
@@ -408,6 +410,17 @@ gap: 1rem;
   color: var(--text-color-lighter);
 }
 
+
+/* ****************************Becoming************************************ */
+.becoming .right,
+.becoming .left {
+  flex: 50%;
+}
+
+.becoming .left {
+  display: flex;
+  justify-content:center
+}
 /* ****************************CAREERS************************************ */
 .career,
 .mentors {
@@ -718,12 +731,16 @@ font-size: 18px;
 .footer .footer_right {
   flex: 50%;
 }
-
+.footer .footer_left {
+  display: grid;
+  place-items: center;
+}
 .footer a {
   color: #fff;
 }
 .footer p {
   margin-bottom: 0;
+  font-size: 1.3rem;
 }
 
 .footer .footer_title {
@@ -942,7 +959,8 @@ line-height: 45px;
     text-align: center;
   }
   .learning .content,
-  .transition .content {
+  .transition .content,
+  .becoming .content {
     flex-direction: column-reverse;
   }
 

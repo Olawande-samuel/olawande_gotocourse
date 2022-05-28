@@ -30,12 +30,7 @@ const Learn = () => {
               </div>
             </div>
             <Image width="720px" height="452"  image={Learning} alt="Group of people in an online meeting room" className="background" effect="blur" />
-           
-          {/* <img
-            src={Learning}
-            alt="man pointing at screen containing code"
-            className="background"
-          /> */}
+         
         </div>
       </div>
     </section>

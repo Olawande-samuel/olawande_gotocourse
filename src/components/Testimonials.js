@@ -51,42 +51,29 @@ const witnesses = [
   },
 ];
 const Testimonials = () => {
-  const [current, setCurrent] = useState(0);
-  const handlePrev = () => {
-    if (current > 0) {
-      setCurrent(current - 1);
-    }
-  };
-  const handleNext = () => {
-    if (current < witnesses.length - 1) {
-      setCurrent(current + 1);
-    }
-  };
+  
   return (
     <section className="testimonials">
       <div className="container testimonial_content">
-        <h3 className="testimonials_title">Join thousands of learners who are achieving their goals with Go2Course</h3>
+        <h3 className="testimonials_title">Real Stories from Real Customers</h3>
+        <p className="sub_title text-center">Join thousands of people who are achieving their goals on Gotocourse</p>
         <Carousel
           swipeable={true}
           draggable={false}
           showDots={true}
           responsive={responsive}
-          ssr={true} // means to render carousel on server-side.
-          // infinite={true}
-          // autoPlay={this.props.deviceType !== "mobile" ? true : false}
           autoPlaySpeed={3000}
           keyBoardControl={true}
           customTransition="all .5"
           transitionDuration={500}
           containerClass="carousel-container"
           removeArrowOnDeviceType={["desktop","tablet", "mobile"]}
-          // deviceType={this.props.deviceType}
           dotListClass="custom-dot-list-style"
           itemClass="carousel-item-padding-40-px"
         >
           {witnesses
               .map((witness, index) => (
-                <div className="px-1">
+                <div className="px-1" key={index}>
                 <div className="card slides">
                   <div className="card-body">
                     <div className="avatar d-flex justify-content-center align-items-center">
@@ -104,61 +91,6 @@ const Testimonials = () => {
                   </div>
               ))}
         </Carousel>
-        {/* <div className="slide_container">
-          <button
-            type="button"
-            className={`prev ${current === 0 ? "d-none" : ""}`}
-            onClick={handlePrev}
-          >
-            <i>
-              <Left />
-            </i>
-          </button>
-          <button
-            type="button"
-            className={`next ${current === 2 ? "d-none" : ""}`}
-            onClick={handleNext}
-          >
-            <Right />
-          </button>
-          <div className="slide_wrapper d-flex justify-content-center">
-            {witnesses
-              .filter((witness, index) => index === current)
-              .map((witness, index) => (
-                <div className="card slides ">
-                  <div className="card-body">
-                    <div className="avatar d-flex justify-content-center align-items-center">
-                      <img src={witness.profile} alt="testimonies" />
-                      <span className="text-center testimonials_name">{witness.name}</span>
-                    </div>
-                    <p className="testimonials_text">
-                      &ldquo; {witness.content} &rdquo;
-                    </p>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div> */}
-        {/* <div className="text-center">
-          <span
-            className={`dot ${current === 0 ? "active" : ""}`}
-            onClick={() => {
-              setCurrent(0);
-            }}
-          ></span>
-          <span
-            className={`dot ${current === 1 ? "active" : ""}`}
-            onClick={() => {
-              setCurrent(1);
-            }}
-          ></span>
-          <span
-            className={`dot ${current === 2 ? "active" : ""}`}
-            onClick={() => {
-              setCurrent(2);
-            }}
-          ></span>
-        </div> */}
       </div>
     </section>
   );

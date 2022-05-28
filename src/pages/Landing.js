@@ -27,7 +27,6 @@ const Landing = () => {
         <Testimonials />
         <Degree />
         <Faq />
-        <Join />
         <Footer />
         <End />
     </div>
