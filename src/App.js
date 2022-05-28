@@ -11,6 +11,8 @@ import AdminSignup from "./pages/Admin/SignUp"
 import Students from "./pages/Dashboard/Students";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/AuthContext";
+import "react-multi-carousel/lib/styles.css";
+
 function App() {
   return (
     <AuthContextProvider>

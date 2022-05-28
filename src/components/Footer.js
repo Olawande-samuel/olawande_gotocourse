@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import {motion} from "framer-motion"
-import {Logo} from "../images/components/svgs"
+import {Logo, Logosm} from "../images/components/svgs"
 
 const hover = {
   hover: {
@@ -99,8 +99,11 @@ const Footer = () => {
 
         <div className="footer_left">
             <div className="footer_top pt-2">
-            <i>
+            <i className="d-none d-lg-block">
               <Logo />
+            </i>
+            <i className="d-lg-none">
+              <Logosm />
             </i>
             </div>
         </div>

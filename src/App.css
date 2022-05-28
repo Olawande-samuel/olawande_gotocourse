@@ -491,10 +491,12 @@ gap: 1rem;
   padding: 3rem 0rem;
 }
 .mentors .card-body {
-  padding-top: 1.875rem;
-  padding-left: 2.1875rem;
+  padding: 1.875rem;
+  height: 200px;
   /* padding-right: 4.1875rem; */
   background-color: var(--btn-color);
+  display: grid;
+  place-items:center;
 }
 
 .mentors .card-title {
@@ -504,7 +506,7 @@ gap: 1rem;
   line-height: 30px;
   color: #fff;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -535,7 +537,7 @@ gap: 1rem;
 .testimonials .testimonials_text {
   font-family: "Lato", sans-serif;
   font-weight: 400;
-  font-size:  clamp(20px, 4vw, 25px);
+  font-size:  clamp(20px, 3vw, 25px);
   line-height: 34px;
   /* margin-bottom: 3.125rem; */
 }
@@ -592,9 +594,8 @@ line-height: 25px;
   height: 451px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
-  padding: 2rem 2rem;
-  padding-right: 41px;
-  padding-left: 2rem;
+  padding: 2rem 1rem;
+  
 }
 
 /* .testimonials .dot {
@@ -994,10 +995,7 @@ line-height: 45px;
     grid-template-columns: repeat(2, 1fr);
     padding: 1.5rem;
   }
-  .testimonials .slides {
-    height: auto;
-    
-  }
+  
   .degree_content {
     justify-content: center;
   }
@@ -1009,6 +1007,11 @@ line-height: 45px;
   }
   .degree_right .background {
     justify-content:center;
+  }
+
+  .testimonials .slides {
+    height: auto !important;
+    
   }
   .footer_container {
     align-items:unset;
@@ -1109,7 +1112,10 @@ line-height: 45px;
   .testimonials {
     margin: 0;
   }
-
+  .testimonials .slides {
+    height: 300px;
+    
+  }
   .career {
     padding: 3.0625rem 0;
   }
@@ -1178,17 +1184,17 @@ line-height: 45px;
   .faq_wrapper {
     width: 80%;
   }
-  .faq_acc button {
+  .faq .faq_acc button {
     line-height: 28px;
     padding: 16px !important;
   }
-  .faq_acc_text {
+  .faq .faq_acc_text {
     font-weight: 400;
     font-size: 18px;
     line-height: 38px;
     width: 100%;
   }
-  .accordion-button::after {
+  .faq .accordion-button::after {
     flex-shrink: 0;
     width: 1.25rem rem;
     height: 1.25rem;
@@ -1272,8 +1278,10 @@ line-height: 45px;
 
   .testimonials .slides {
     height: auto;
-    
   }
+  /* .testimonials .react-multi-carousel-item {
+    width: 100% !important;
+  } */
   .log_left {
     display: none;
   }
