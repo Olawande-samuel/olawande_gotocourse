@@ -7,6 +7,7 @@ const Image = ({ image, alt, height, width }) => (
       alt={alt}
       height={height}
       src={image} // use normal <img> attributes as props
+      visibleByDefault={true}
       width={width} />
   </div>
 );

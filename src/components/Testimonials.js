@@ -4,25 +4,12 @@ import lere from "../images/lere.png";
 import ola from "../images/ola.png";
 import { Left, Right } from "../images/components/svgs";
 import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
 
-const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-    slidesToSlide: 3, // optional, default to 1.
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 604 },
-    items: 2,
-    slidesToSlide: 2, // optional, default to 1.
-  },
-  mobile: {
-    breakpoint: { max: 603, min: 0 },
-    items: 1,
-    slidesToSlide: 1, // optional, default to 1.
-  },
-};
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
 const witnesses = [
   {
     id: 1,
@@ -50,29 +37,64 @@ const witnesses = [
     location:"Lagos, Nigeria"
   },
 ];
+
+const responsive = {
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 3,
+    slidesToSlide: 3, // optional, default to 1.
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 604 },
+    items: 2,
+    slidesToSlide: 2, // optional, default to 1.
+  },
+  mobile: {
+    breakpoint: { max: 604, min: 0 },
+    items: 1,
+    slidesToSlide: 1, // optional, default to 1.
+  },
+};
 const Testimonials = () => {
   
   return (
     <section className="testimonials">
-      <div className="container testimonial_content">
+      <div className="container-lg testimonial_content">
         <h3 className="testimonials_title">Real Stories from Real Customers</h3>
         <p className="sub_title text-center">Join thousands of people who are achieving their goals on Gotocourse</p>
-        <Carousel
-          swipeable={true}
-          draggable={false}
-          showDots={true}
-          responsive={responsive}
-          autoPlaySpeed={3000}
-          keyBoardControl={true}
-          customTransition="all .5"
-          transitionDuration={500}
-          containerClass="carousel-container"
-          removeArrowOnDeviceType={["desktop","tablet", "mobile"]}
-          dotListClass="custom-dot-list-style"
-          itemClass="carousel-item-padding-40-px"
-        >
+        <div>
+
+        <Swiper
+      // install Swiper modules
+      modules={[Navigation, Pagination, Scrollbar, A11y]}
+      spaceBetween={0}
+      slidesPerView={1}
+      navigation
+      pagination={{ clickable: true }}
+      scrollbar={{ draggable: true }}
+      onSwiper={(swiper) => console.log(swiper)}
+      onSlideChange={() => console.log('slide change')}
+      breakpoints= {{
+        // when window width is >= 320px
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 5
+        },
+        // when window width is >= 640px
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 5
+        }, 
+        1024: { 
+          slidesPerView: 3,
+          spaceBetween: 5
+        }
+      }}
+    >
+
           {witnesses
               .map((witness, index) => (
+                <SwiperSlide>
                 <div className="px-1" key={index}>
                 <div className="card slides">
                   <div className="card-body">
@@ -89,8 +111,12 @@ const Testimonials = () => {
                   </div>
                 </div>
                   </div>
+                  
+                </SwiperSlide>
               ))}
-        </Carousel>
+    </Swiper>
+        </div>
+
       </div>
     </section>
   );

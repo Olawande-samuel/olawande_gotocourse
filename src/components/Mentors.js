@@ -3,26 +3,13 @@ import React from "react";
 import mentor from "../images/mentor1.png";
 import mentor2 from "../images/mentor3.png";
 import mentor3 from "../images/mentor2.png";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+import mentor4 from "../images/mentor4.png";
 
-const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 4,
-    slidesToSlide: 4, // optional, default to 1.
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 604 },
-    items: 2,
-    slidesToSlide: 2, // optional, default to 1.
-  },
-  mobile: {
-    breakpoint: { max: 603, min: 0 },
-    items: 1,
-    slidesToSlide: 1, // optional, default to 1.
-  },
-};
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
 
 const witnesses = [
   {
@@ -51,8 +38,8 @@ const witnesses = [
     id: 4,
     content:
       "I will teach you PowerBi in 8 weeks",
-    profile: mentor,
-    location: "Peter Southampton . London",
+    profile: mentor4,
+    location: "Patrick Quinn . London",
   },
   {
     id: 5,
@@ -77,29 +64,46 @@ const Mentors = () => {
           <h3 className="title">Choose a mentor</h3>
           <p className="sub_title">One of the best ways to break into I.T or learn more about becoming a top tech professional is to find someone that has gone before you and gained success at the same goal. This persn has the ability to provide valuable advice, coaching and encouragement as a mentor. Choose from our A-list and screened mentors to learn and grow your capabilities </p>
         </header>
-        <Carousel
-          swipeable={true}
-          draggable={false}
-          showDots={true}
-          responsive={responsive}
-          ssr={true} // means to render carousel on server-side.
-          // infinite={true}
-          // autoPlay={this.props.deviceType !== "mobile" ? true : false}
-          autoPlaySpeed={3000}
-          keyBoardControl={true}
-          customTransition="all .5"
-          transitionDuration={500}
-          containerClass="carousel-container"
-          removeArrowOnDeviceType={["desktop","tablet", "mobile"]}
-          dotListClass="custom-dot-list-style"
-          itemClass="carousel-item-padding-40-px"
-        >
+        <Swiper
+      // install Swiper modules
+      modules={[Navigation, Pagination, Scrollbar, A11y]}
+      spaceBetween={0}
+      slidesPerView={1}
+      navigation
+      pagination={{ clickable: true }}
+      scrollbar={{ draggable: true }}
+      onSwiper={(swiper) => console.log(swiper)}
+      onSlideChange={() => console.log('slide change')}
+      breakpoints= {{
+        // when window width is >= 320px
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 0
+        },
+        // when window width is >= 640px
+        575: {
+          slidesPerView: 2,
+          spaceBetween: 0
+        }, 
+        700: {
+          slidesPerView: 3,
+          spaceBetween: 0
+        }, 
+        1024: { 
+          slidesPerView: 4,
+          spaceBetween: 5
+        }
+      }}
+    >
+
 
           {witnesses.map(item =>(
-           <Card item={item} />
+            <SwiperSlide>
+              <Card item={item} />
+            </SwiperSlide>
           ))}
           
-        </Carousel>
+          </Swiper>
         
       </div>
     </section>
