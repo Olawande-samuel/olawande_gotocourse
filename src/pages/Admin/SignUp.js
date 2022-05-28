@@ -19,13 +19,14 @@ const AdminSignup = () => {
           </span>
         </div>
         <form action="" className="form">
-          <Input label="Fullname" name="Fullname" />
-          <Input label="Email" name="Email" type="email" />
-          <Password label="Password" name="Password" password="password" />
+          <Input label="Fullname" name="Fullname" placeholder="Fullname" />
+          <Input label="Email" name="Email" type="email" placeholder="Email" />
+          <Password label="Password" name="Password" password="password" placeholder="Password" />
           <Password
             label="Confirm Password"
             name="Confirm Password"
             password="password"
+            placeholder="Confirm Password"
           />
           <div>
             <button className="button button-lg log_btn w-100">Register</button>

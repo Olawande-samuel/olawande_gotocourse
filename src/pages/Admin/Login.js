@@ -19,8 +19,8 @@ const AdminLogin = () => {
           </span>
         </div>
         <form action="" className="form">
-          <Input label="Email" name="Email" type="email" />
-          <Password label="Password" name="Password" password="password" />
+          <Input label="Email" name="Email" type="email" placeholder="Email" />
+          <Password label="Password" name="Password" password="password" placeholder="Password" />
           <button className="button button-lg log_btn w-100 mb-4">
             Log in
           </button>

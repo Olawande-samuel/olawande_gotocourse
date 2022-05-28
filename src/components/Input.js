@@ -1,6 +1,6 @@
 import React from "react";
 
-const Input = ({ label, type, name, handleChange, value }) => {
+const Input = ({ label, type, name, handleChange, value,placeholder }) => {
   return (
     <div className="form-group mb-3">
       <label htmlFor={name} className="form-label generic_label">
@@ -12,7 +12,7 @@ const Input = ({ label, type, name, handleChange, value }) => {
           id={name}
           name={name}
           className="form-control generic_input"
-          placeholder={name}
+          placeholder={placeholder}
           onChange={handleChange}
           value={value}
         />

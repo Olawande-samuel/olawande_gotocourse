@@ -892,6 +892,7 @@ line-height: 45px;
 .generic_input {
   border-radius: 5px !important;
   padding: 1rem 3rem;
+  font-size: 14px;
 }
 .generic_label {
   font-weight: 400;
