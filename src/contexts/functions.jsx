@@ -32,6 +32,8 @@ export const authFunctions = {
             {
                 headers: {
                     "Content-Type": "application/json"
+
+        
                 }
             })
             console.log(res); 
