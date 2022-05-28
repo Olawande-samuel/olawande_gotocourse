@@ -1,0 +1,141 @@
+:root {
+    --primary: #f5f5f5;
+    --black: rgba(0, 0, 0, 1);
+    --white: #fff;
+    --obsidian: #070f18;
+    --textColorDark: #081131;
+    --textColorLight: #5e5b5b;
+    --textColorLighter: #9F9F9F;
+    --btnColor: rgb(12, 33, 145);
+    --accentColor: #023047;
+    --textBlue: #0C2191;
+    --greenish: #023047;
+    --secondary: #2F80ED;
+    --gray: #9DA6BA;
+    --info: #5A63F7;
+    --green: #037615;
+    --mobile: 425px;
+    --tablet: 768px;
+    --laptop: 1024px;
+}
+
+
+.admin {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.admin_main {
+    height: 100vh;
+    flex: 1;
+    background-color: var(--primary);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.admin_topbar {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.admin_profile_main h1 {
+    margin: 30px 0px;
+    font-size: 1.5rem;
+}
+
+
+.admin_topbar h1 {
+    font-size: 1.8rem
+}
+.admin_profile {
+    background-color:var(--white);
+    min-height: 70vh;
+    padding: 40px;
+    border-radius: 10px;
+    width: 100%;
+}
+.admin_profile_top {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20;
+}
+.admin_profile_top_img {
+    width: 120px;
+    height: 120px;
+    margin-right: 40px;
+}
+.admin_profile_top_button {
+    background-color:var(--info);
+    color: var(--white);
+    border: none;
+    padding: 10px 30px;
+    border-radius: 10px;
+}
+.admin__header {
+    font-size: 1.5rem;
+    color: var(--textColorDark);
+}
+.admin__paragraph {
+    line-height: 2;
+    font-size: 1.2rem;
+    letter-spacing: 0.6px;
+}
+.classes_card {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 20px;
+    width: 100%;
+}
+.classes_card_first {
+    display: flex;
+    align-items: center;
+}
+.first_avatar {
+    padding: 10px 5px;
+    margin-right: 20px;
+    border-radius: 10px;
+    color: var(--white);
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.first_meta {
+    display: flex;
+    padding-top: "1rem";
+    flex-direction: column;
+    letter-spacing: 0.6px;
+    justify-content: 'center'
+}
+.classes_card_second {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 250px;
+    font-size: 1.2rem;
+}
+.classes_card_third {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 15rem;
+}
+.third_btn {
+    border:1px solid var(--info);
+    color: var(--secondary);
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-size: 0.7rem;
+    background-color: var(--white);
+    width: 6rem;
+}
+.third_btn_live {
+    background-color: var(--green);
+    color: var(--white);
+}

@@ -104,7 +104,7 @@ const Navbar = () => {
               </button>
               {drop ? <NavList dropRef={dropRef} /> : null}
             </li>
-            <li className="nav-item d-flex align-items-center nav_link me-2"><Link to="/user/dashboard" className="link">Go to Dashboard</Link></li>
+            <li className="nav-item d-flex align-items-center nav_link me-2"><Link to="/students" className="link">Go to Dashboard</Link></li>
             <li className="nav-item d-flex align-items-center nav_link"><Link to="/signup" className="link">Become a Teacher</Link></li>
             <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/login" className="link">Sign In</Link></li>
             <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/signup" className="link">Register</Link></li>

@@ -5,16 +5,18 @@ import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
 
 
-
+import { useCookie } from "../../hooks";
 import { useAuth } from "../../contexts/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 const Login = () => {
   const navigate = useNavigate()
-  const {authFunctions: {login}} = useAuth();
+  const {authFunctions: {login}, setGeneralState} = useAuth();
+  const {saveCookie} = useCookie();
 
   const [data, setData] = useState({
     email: "",
-    password: ""
+    password: "",
+    userType: ""
   });
   const [loading, setLoading] = useState(false);
 
@@ -34,7 +36,32 @@ const Login = () => {
     try {
       const response = await login(data);
 
-      console.log(response)
+      console.log(response.data)
+      const {success} = response;
+      if(success) {
+        const {data, message, statusCode} = response.data;
+        //before navigating
+        //save some thing to cookie and state
+        saveCookie('gotocourse-token', data.token);
+        setGeneralState(oldstate => {
+          let {token, ...userdata} = data;
+          return {
+            ...oldstate,
+            userdata
+          }
+        })
+        navigate("/students");
+      }else {
+        toast.error(response.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      }
     //   if(response.data.statusCode !== 0){
     //     window.location.replace("https://gotocourse.com/dashboard")
     // }

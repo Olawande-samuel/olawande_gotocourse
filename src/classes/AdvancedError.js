@@ -1,6 +1,6 @@
 class AdvancedError extends Error {
-    constructor(msg, statusCode){
-        super(msg);
+    constructor(message, statusCode){
+        super(message);
         this.statusCode = statusCode;
     }
 

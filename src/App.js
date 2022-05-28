@@ -8,10 +8,12 @@ import Login from "./pages/User/Login";
 import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
-import Students from "./pages/Dashboard/Students";
+import {Profile, Classes} from "./pages/Dashboard/Students";
+import {Dashboard} from "./pages/Dashboard/Admin";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/AuthContext";
 import "react-multi-carousel/lib/styles.css";
+
 
 function App() {
   return (
@@ -21,7 +23,13 @@ function App() {
           <Route index element={<Landing />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
-            <Route path="/students" element={<Students />} />
+            <Route path="students" element={<Out />}>
+              <Route path="" element={<Profile  />} />
+              <Route path="classes" element={<Classes  />} />
+            </Route>
+            <Route path="admin">
+              <Route path="" element={<Dashboard />} />
+            </Route>
             <Route path="admin" element={<Out />}>
               <Route path="login" element={<AdminLogin />} />
               <Route path="signup" element={<AdminSignup />} />

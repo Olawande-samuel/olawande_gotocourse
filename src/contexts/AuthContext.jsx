@@ -1,4 +1,4 @@
-import {createContext, useContext} from "react";
+import {createContext, useContext, useEffect, useState} from "react";
 
 import { authFunctions } from "./functions";
 
@@ -8,8 +8,18 @@ export const useAuth = () => useContext(AuthContext);
 
 
 const AuthContextProvider = ({children}) => {
+    const [generalState, setGeneralState] = useState({
+        userdata: {},
+        token: null,
+        isMobile: false,
+        theme: "light"
+    })
+    useEffect(() => {
+        console.log("Rendering");
+        return () => console.log("Rerendering");
+    }, [generalState])
     return (
-        <AuthContext.Provider value={{authFunctions}}>
+        <AuthContext.Provider value={{authFunctions, generalState, setGeneralState}}>
             {children}
         </AuthContext.Provider>
     )
