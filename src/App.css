@@ -40,6 +40,10 @@ a {
   text-decoration: none;
   color: var(--text-color-dark);
 }
+
+td {
+  min-width: 9rem;
+}
 .mt-mid {
   margin-top: 2.0625rem !important;
 }

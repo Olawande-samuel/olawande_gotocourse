@@ -12,7 +12,8 @@ const AuthContextProvider = ({children}) => {
         userdata: {},
         token: null,
         isMobile: false,
-        theme: "light"
+        theme: "light",
+        showSidebar: false,
     })
     useEffect(() => {
         console.log("Rendering");
