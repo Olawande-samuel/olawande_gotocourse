@@ -99,16 +99,18 @@ const SignUp = () => {
             <Link to="/login">Log in</Link>
           </span>
         </div>
+
         <form action="" className="form" onSubmit={onSubmit}>
-          <Input label="Firstname" name="firstName" value={data.firstName}  handleChange={handleChange}  />
-          <Input label="Lastname" name="lastName" value={data.lastName}  handleChange={handleChange}  />
-          <Input label="Email" name="email" type="email" value={data.email} handleChange={handleChange}   />
-          <Input label="Phone" name="phoneNumber" type="phone" value={data.phoneNumber} handleChange={handleChange}   />
-          <Password label="Password" name="password" password="password" value={data.password} handleChange={handleChange}   />
+          <Input label="Firstname" name="firstName" value={data.firstName}  handleChange={handleChange}  placeholder="Firstname" />
+          <Input label="Lastname" name="lastName" value={data.lastName}  handleChange={handleChange}  placeholder="Lastname" />
+          <Input label="Email" name="email" type="email" value={data.email} handleChange={handleChange}    placeholder="Email"/>
+          <Input label="Phone" name="phoneNumber" type="phone" value={data.phoneNumber} handleChange={handleChange}  placeholder="Phone Number"  />
+          <Password label="Password" name="password" password="password" value={data.password} handleChange={handleChange}  placeholder="Password"  />
           <Password
             label="Confirm Password"
             name="retype_password"
             password="password"
+            placeholder="Confirm Password"
             value={data.retype_password}
             handleChange={handleChange}
           />

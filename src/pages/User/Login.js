@@ -112,6 +112,7 @@ const Login = () => {
             type="email"
             handleChange={handleChange}
             value={data.email}
+            placeholder="Email"
           />
           <Password
             label="Password"
@@ -119,6 +120,7 @@ const Login = () => {
             password="password"
             handleChange={handleChange}
             value={data.password}
+            placeholder="Password"
           />
           <div className="form-check ">
             <input

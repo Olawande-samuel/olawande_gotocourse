@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BsEyeSlash, BsEye } from "react-icons/bs";
-const Password = ({ label, password, name, handleChange, value }) => {
+const Password = ({ label, password, name, handleChange, value, placeholder }) => {
   const [type, setType] = useState(false);
   return (
     <div className="form-group mb-3">
@@ -13,7 +13,7 @@ const Password = ({ label, password, name, handleChange, value }) => {
           id={name}
           name={name}
           className="form-control generic_input"
-          placeholder={name}
+          placeholder={placeholder}
           onChange={handleChange}
           value={value}
         />

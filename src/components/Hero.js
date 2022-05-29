@@ -1,12 +1,15 @@
 import React from "react";
-import { Play } from "../images/components/svgs";
 import { motion } from "framer-motion";
-import hero from "../images/hero.webp";
+import hero from "../images/NewHero.png";
 import Image from "./Image";
+import {FaSearch} from "react-icons/fa"
 const Hero = () => {
   return (
     <section className="wrapper hero px-2 p-sm-0">
-      <div className="container  hero_wrapper d-flex  hero_content">
+      <div className="container">
+
+      <div className=" hero_wrapper d-flex  hero_content">
+
         <motion.div
           className="hero_left"
           initial={{ opacity: 0 }}
@@ -14,26 +17,18 @@ const Hero = () => {
           transition={{ delay: 0.2, duration: 1.5 }}
         >
           <h1 className="hero_text">
-            We make Teaching and learning Tech skills Accessible.
+            We make Teaching and learning Tech skills Accessible
           </h1>
-          {/* <div className="d-flex">
-            <span className="hero_play">
-              <i>
-                <Play />
-              </i>
-            </span>
-            <p>
-              A one stop place that connects teachers and students in one platform for learning practical tech skills and collaborations.
-            </p>
-          </div> */}
-          <div className="d-flex">
+          <div className="d-flex pe-lg-5">
             <input
               type="search"
               name="search"
               id="search"
               className="form-control"
             />
-            <button className="btn search_btn">Search</button>
+            <button className="btn search_btn">
+              <FaSearch />
+            </button>
           </div>
           <div className="d-flex  keyword_wrapper  mt-4">
             <span>Popular: </span>
@@ -43,7 +38,6 @@ const Hero = () => {
               <button className="pill">Cybersecurity</button>
             </div>
           </div>
-          {/* <button type="button" className="button button-md">GET STARTED FOR FREE</button> */}
         </motion.div>
         <motion.div
           className="hero_right"
@@ -57,9 +51,10 @@ const Hero = () => {
           }}
         >
           <Image image={hero} alt="Testing" effect="blur" />
-
-          {/* <img src={hero} alt="" /> */}
         </motion.div>
+      </div>
+      <p className="hero_subtext">Join hundreds of people that trust Gotocourse to teach and learn in-demand tech skills</p>
+
       </div>
     </section>
   );

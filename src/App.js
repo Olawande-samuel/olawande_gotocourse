@@ -12,7 +12,7 @@ import {Profile, Classes} from "./pages/Dashboard/Students";
 import {Dashboard, Student, Fees, Teachers} from "./pages/Dashboard/Admin";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/AuthContext";
-
+import "react-multi-carousel/lib/styles.css";
 
 
 function App() {

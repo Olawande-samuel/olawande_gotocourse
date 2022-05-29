@@ -4,7 +4,7 @@ import {MdAlternateEmail} from "react-icons/md"
 const End = () => {
   return (
     <div className="end">
-      <div className="box d-flex  mx-auto text-light">
+      <div className="container box d-flex  mx-auto text-light">
         <div className="end_left">
           <span> All rights reserved |</span>
           <span>&copy; 2022 Gotocourse Inc.</span>
