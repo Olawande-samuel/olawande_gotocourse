@@ -36,7 +36,7 @@ function App() {
             <Route path="admin" element={<Out />}>
               <Route path="login" element={<AdminLogin />} />
               <Route path="signup" element={<AdminSignup />} />
-            </Route>
+            </Route> 
         </Route>
         <Route path="*" element={<h1 className="text-center">Page Not Found</h1>} />
       </Routes>

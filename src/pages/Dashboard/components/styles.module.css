@@ -56,6 +56,7 @@
 
 
 
+
 /* SEARCHBAR */
 .searchbar {
     background-color: var(--white);
@@ -64,7 +65,7 @@
     display: flex;
     align-items: center;
     width: 50%;
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
 }
 
 
@@ -210,3 +211,31 @@
                     opacity: 1;
                     transform: translateY(12px);
 } */
+
+
+@media screen and (max-width: 767px){
+    .sidebar {
+        position: absolute;
+        left: 0;
+        z-index: 1000;
+        padding: 10px;
+        padding-left: 0px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--white);
+        width: 15rem;
+        transition: all .3s  ease;
+    }
+    .open {
+        left: 0;
+    }
+    .close {
+        left: -1000px
+    }
+
+    .searchbar {
+        width: 80%;
+        /* margin-bottom: 30px; */
+    }
+}

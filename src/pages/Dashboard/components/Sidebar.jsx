@@ -1,5 +1,6 @@
-import {useEffect, useRef} from "react";
+import {useEffect, useState,useRef} from "react";
 import {MdMessage} from "react-icons/md";
+import {AiOutlineClose} from "react-icons/ai";
 import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash} from "react-icons/io";
 import {useNavigate, useLocation, NavLink} from "react-router-dom";
 
@@ -9,6 +10,7 @@ import {useNavigate, useLocation, NavLink} from "react-router-dom";
 import clsx from "./styles.module.css";
 import Logo from "../../../components/Logo";
 import { colors } from "../../../constants";
+import { useAuth } from "../../../contexts/AuthContext";
 
 
 
@@ -28,6 +30,8 @@ function SidebarItem({icon: Icon, title, isMobile, path, ...props}){
 
 const Sidebar = ({isMobile}) => {
     const location = useLocation();
+    const {generalState,  setGeneralState} = useAuth();
+
     // const sidebarItemRef = useRef(null);
 
     const data = location.pathname.includes("admin") ? [
@@ -70,9 +74,14 @@ const Sidebar = ({isMobile}) => {
         return () => console.log("Sidebar is unmounted");
     }, [])
 
-
+const toggleSidebar = ()=>{
+    setGeneralState({...generalState, showSidebar:!generalState.showSidebar})
+}
     return (
-        <div className={clsx.sidebar}>
+        <div className={`${generalState.showSidebar ? clsx.open :clsx.close}  ${clsx.sidebar}`}>
+                <i className="d-md-none" style={{fontSize:"24px", position:"absolute", right:"-30px", color:"#0C2191"}} onClick={toggleSidebar}>
+                    <AiOutlineClose />
+                </i>
             <Logo />
             <div className={clsx.sidebar_items} id="sidebar__items">
                 {

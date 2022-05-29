@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import {MdEdit} from "react-icons/md"
-
+import {AiOutlineMenu} from "react-icons/ai"
 
 
 import { Sidebar, Searchbar } from "../components";
@@ -102,18 +102,27 @@ function ClassesCard({numberOfLessons, title, date, time, isLive, color}){
 
 
 const Students = ({children, isMobile, userdata}) => {
+    const {generalState: {showSidebar}, generalState, setGeneralState} = useAuth();
+
     useEffect(() => {
         console.log("Students component is mounted")
         return () => console.log("Students component is unmounted");
     }, [])
 
-
+    const toggleSidebar = ()=> {
+        setGeneralState({...generalState, showSidebar: !showSidebar})
+    }
 
     return (
         <div className={clsx.students}>
             <Sidebar isMobile={isMobile} />
             <div className={clsx.students_main}>
-                <div className={clsx.students_topbar}>
+                <div className={`align-items-center ${clsx.students_topbar}`}>
+                <div className="d-md-none">
+                        <i>
+                            <AiOutlineMenu style={{fontSize:"24px", color:"#0C2191"}} onClick={toggleSidebar} />
+                        </i>
+                    </div>
                     <h1 className={clsx.students__header}>{userdata?.firstName} {userdata?.lastName}</h1>
                     <Searchbar showIcon={true} placeholder="Search" />
                 </div>

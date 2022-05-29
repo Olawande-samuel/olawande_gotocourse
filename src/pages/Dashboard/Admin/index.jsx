@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import {MdEdit} from "react-icons/md";
-
+import {AiOutlineMenu} from "react-icons/ai";
 
 
 import { Sidebar, Searchbar, Toggle } from "../components";
@@ -24,7 +24,7 @@ export function Dashboard(){
                         <img src={avatar} style={{borderRadius: 10}} width="100%" alt="Avatar" />
                     </div>
                     <button className={clsx["admin_profile_top_button"]}>
-                        <MdEdit style={{marginRight: 15}} />    Edit
+                        <MdEdit style={{marginRight: 15}} />  <span>Edit</span>  
                     </button>
                 </div>
                 <div className={clsx["admin_profile_main"]}>
@@ -133,9 +133,8 @@ export function Teachers({}){
             <div className={clsx['admin_profile']}>
                 <div className={clsx.admin__student}>
                     <h1>All Mentors</h1>
-
-                    <div className={clsx.admin__student_main}>
-                        <table className={clsx.admin__student_table}>
+                    <div className={`table-responsive ${clsx.admin__student_main}`}>
+                        <table className={`${clsx.admin__student_table}`}>
                             <thead>
                                 {
                                     tableHeaders.map((el, i) => (
@@ -304,7 +303,7 @@ export function Student({}){
                 <div className={clsx.admin__student}>
                     <h1>All Students</h1>
 
-                    <div className={clsx.admin__student_main}>
+                    <div className={`table-responsive ${clsx.admin__student_main}`}>
                         <table className={clsx.admin__student_table}>
                             <thead>
                                 {
@@ -333,20 +332,27 @@ export function Student({}){
 
 
 const Admin = ({children, header}) => {
-    const {generalState: {isMobile}} = useAuth();
+    const {generalState: {isMobile, showSidebar}, generalState, setGeneralState} = useAuth();
     useEffect(() => {
         console.log("Admin component is mounted")
         return () => console.log("Admin component is unmounted");
     }, [])
 
 
-
+const toggleSidebar = ()=> {
+    setGeneralState({...generalState, showSidebar: !showSidebar})
+}
     return (
         <div className={clsx['admin']}>
             <Sidebar isMobile={isMobile} />
             <div className={clsx['admin_main']}>
-                <div className={clsx['admin_topbar']}>
-                    <h1>{header}</h1>
+                <div className={`align-items-center ${clsx['admin_topbar']}`}>
+                    <div className="d-md-none">
+                        <i>
+                            <AiOutlineMenu style={{fontSize:"24px", color:"#0C2191"}} onClick={toggleSidebar} />
+                        </i>
+                    </div>
+                    <h1 className="d-none d-md-block">{header}</h1>
                     <Searchbar showIcon={true} placeholder="Search" />
                 </div>
                 {children}
