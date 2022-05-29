@@ -12,12 +12,14 @@ export const authFunctions = {
             JSON.stringify(_data), {
                 headers: {
                     "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
                 }
             })
-            if(res.statusCode === 0) throw new AdvancedError(res.message, res.statusCode);
-            return {...res, success: true};
+            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {...res.data, success: true};
         }catch(err){
-            console.log(err.message);
             return {
                 success: false,
                 message: err.message,
@@ -27,24 +29,26 @@ export const authFunctions = {
     },
     register: async function(_data){
         try{
+            console.log(_data)
             const res = await axios.post(`${baseURL}/user/signup`,
             JSON.stringify(_data),
             {
                 headers: {
                     "Content-Type": "application/json"
-
-        
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
                 }
             })
-            console.log(res); 
-            if(res.statusCode === 0) throw new AdvancedError(res.message, res.statusCode);
+            console.log(res);
+
+            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
-                ...res,
+                ...res.data,
                 success: true
             }
             
         }catch(err){
-            console.log(err.message);
             return {
                 success: false,
                 message: err.message,

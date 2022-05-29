@@ -5,6 +5,7 @@ import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
 import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../contexts/AuthContext";
+import { AdvancedError } from "../../classes";
 
 const SignUp = () => {
   const [data, setData]= useState({
@@ -34,41 +35,46 @@ const SignUp = () => {
     setLoading(true)
     try{
       let {retype_password, ...others} = data;
+      if(others.firstName.trim() === "" || others.lastName.trim() === "" || others.email.trim() === "" || others.phoneNumber.trim() === "" || others.password.trim() === "") return;
+      if(others.userType.trim() === "") throw new AdvancedError("User type is required", 0);
+      if(retype_password !== others.password) throw new AdvancedError("Passwords don't match", 0);
       console.log(others)
       const response = await register(others);
 
-  console.log(response)
+      console.log(response)
+      let {success, message, statusCode} = response;
+      if(!success) throw new AdvancedError(message, statusCode);
+      else {
+        //successfully done
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        navigate("/login");
+      }
 
-    // window("https://gotocourse.com/dashboard")
-    toast.success(response.data.message, {
-      position: "top-right",
-      autoClose: 4000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-    setLoading(false)
-  //   if(response.data.statusCode !== 0){
-  //     window.location.replace("https://gotocourse.com/dashboard")
-  // }
-  } catch(err){
-    setLoading(false)
-    console.error(err)
-    if (err.response.data.statusCode === 0) {
-      toast.error(err.response.data.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+    } catch(err){
+      console.error(err.message, err.statusCode);
+      if (err.statusCode === 0) {
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+
+    }finally{
+      setLoading(false);
     }
-
-  }
   }
   return (
     <SignInWrapper>
@@ -93,7 +99,8 @@ const SignUp = () => {
             <Link to="/login">Log in</Link>
           </span>
         </div>
-        <form action="" className="form">
+
+        <form action="" className="form" onSubmit={onSubmit}>
           <Input label="Firstname" name="firstName" value={data.firstName}  handleChange={handleChange}  placeholder="Firstname" />
           <Input label="Lastname" name="lastName" value={data.lastName}  handleChange={handleChange}  placeholder="Lastname" />
           <Input label="Email" name="email" type="email" value={data.email} handleChange={handleChange}    placeholder="Email"/>
@@ -105,6 +112,7 @@ const SignUp = () => {
             password="password"
             placeholder="Confirm Password"
             value={data.retype_password}
+            handleChange={handleChange}
           />
           <div>
           <div className="form-check ">

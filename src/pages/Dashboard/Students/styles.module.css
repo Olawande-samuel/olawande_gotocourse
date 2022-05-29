@@ -30,6 +30,7 @@
     flex: 1;
     background-color: var(--primary);
     padding: 30px;
+    overflow-y: hidden;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -50,10 +51,11 @@
 }
 .students_profile {
     background-color:var(--white);
-    min-height: 70vh;
+    height: 80vh;
     padding: 40px;
     border-radius: 10px;
     width: 100%;
+    overflow-y: scroll;
 }
 .students_profile_top {
     display: flex;

@@ -1,6 +1,6 @@
 import {useEffect, useRef} from "react";
 import {MdMessage} from "react-icons/md";
-import {IoIosHome, IoIosPerson, IoIosChatboxes, IoIosCash} from "react-icons/io";
+import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash} from "react-icons/io";
 import {useNavigate, useLocation, NavLink} from "react-router-dom";
 
 
@@ -17,7 +17,7 @@ function SidebarItem({icon: Icon, title, isMobile, path, ...props}){
     return (
         <div className={clsx.sidebar_item} {...props}>
             <Icon className={clsx.sidebar_icon} />
-            {!isMobile && <span className={clsx.sidebar_item_title}>
+            {isMobile && <span className={clsx.sidebar_item_title}>
                 {title}
             </span>}
         </div>
@@ -42,7 +42,7 @@ const Sidebar = ({isMobile}) => {
             title: "Students"
         },
         {
-            icon: IoIosChatboxes,
+            icon: IoIosChatbubbles,
             path: "teachers",
             title: "Mentors/Teachers"
         },
@@ -79,7 +79,7 @@ const Sidebar = ({isMobile}) => {
                     data.map(({icon, path, title}, i) => (
                         <NavLink to={`${location.pathname.includes("admin") ? '/admin' : '/students'}${'/'+path}`}  key={i}>
                             <SidebarItem location={location}
-                            isMobile={isMobile} icon={icon} 
+                            isMobile={!isMobile} icon={icon} 
                             title={title} path={path} />
                         </NavLink>
                     ))
