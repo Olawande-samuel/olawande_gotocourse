@@ -13,12 +13,12 @@ body {
   --black: rgba(0, 0, 0, 1);
   --white: #fff;
   --obsidian: #070f18;
-  --textColorDark: #081131;
-  --textColorLight: #5e5b5b;
-  --textColorLighter: #9F9F9F;
-  --btnColor: rgb(12, 33, 145);
-  --accentColor: #023047;
-  --textBlue: #0C2191;
+  --text-color-dark: #081131;
+  --text-color-light: #5e5b5b;
+  --text-color-lighter: #9F9F9F;
+  --btn-color: rgb(12, 33, 145);
+  --accent-color: #023047;
+  --text-blue: #0C2191;
   --greenish: #023047;
   --secondary: #2F80ED;
   --gray: #9DA6BA;

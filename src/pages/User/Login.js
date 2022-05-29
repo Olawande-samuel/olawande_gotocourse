@@ -8,6 +8,7 @@ import SignInWrapper from "../../components/SignInWrapper";
 import { useCookie } from "../../hooks";
 import { useAuth } from "../../contexts/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
+import { AdvancedError } from "../../classes";
 const Login = () => {
   const navigate = useNavigate()
   const {authFunctions: {login}, setGeneralState} = useAuth();
@@ -33,13 +34,15 @@ const Login = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    if(data.email.trim() === "" || data.password.trim() === "") return;
     try {
+      if(data.userType.trim() === "") throw new AdvancedError("Missing user type", 0);
       const response = await login(data);
 
-      console.log(response.data)
-      const {success} = response;
+      console.log(response)
+      const {success, statusCode, message} = response;
       if(success) {
-        const {data, message, statusCode} = response.data;
+        const {data} = response;
         //before navigating
         //save some thing to cookie and state
         saveCookie('gotocourse-token', data.token);
@@ -51,8 +54,7 @@ const Login = () => {
           }
         })
         navigate("/students");
-      }else {
-        toast.error(response.message, {
+        toast.success(response.message, {
           position: "top-right",
           autoClose: 4000,
           hideProgressBar: true,
@@ -60,27 +62,13 @@ const Login = () => {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        })
-      }
-    //   if(response.data.statusCode !== 0){
-    //     window.location.replace("https://gotocourse.com/dashboard")
-    // }
-      toast.success(response.data.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+        });
+      }else throw new AdvancedError(message, statusCode);
 
-      setLoading(false);
     } catch (err) {
-      setLoading(false);
       console.error(err);
-      if (err.response.data.statusCode === 0) {
-        toast.error(err.response.data.message, {
+      if (err.statusCode === 0) {
+        toast.error(err.message, {
           position: "top-right",
           autoClose: 4000,
           hideProgressBar: true,
@@ -90,6 +78,8 @@ const Login = () => {
           progress: undefined,
         });
       }
+    }finally{
+      setLoading(false);
     }
   };
   return (
