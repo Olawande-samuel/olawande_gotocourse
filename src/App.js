@@ -9,7 +9,7 @@ import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
 import {Profile, Classes} from "./pages/Dashboard/Students";
-import {Dashboard} from "./pages/Dashboard/Admin";
+import {Dashboard, Student, Fees, Teachers} from "./pages/Dashboard/Admin";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/AuthContext";
 
@@ -29,6 +29,9 @@ function App() {
             </Route>
             <Route path="admin">
               <Route path="" element={<Dashboard />} />
+              <Route path="students" element={<Student />} />
+              <Route path="fees" element={<Fees />} />
+              <Route path="teachers" element={<Teachers />} />
             </Route>
             <Route path="admin" element={<Out />}>
               <Route path="login" element={<AdminLogin />} />
