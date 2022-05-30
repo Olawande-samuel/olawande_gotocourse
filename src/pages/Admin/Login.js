@@ -3,11 +3,20 @@ import { Link } from "react-router-dom";
 import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
-import Admin from "../../images/Admin.webp";
 
+
+import avif from "../../images/alogin.avif"
+import webp from "../../images/alogin.webp"
+import png from "../../images/alogin.png"
 const AdminLogin = () => {
+
+  const image ={
+    avif,
+    webp,
+    png
+  }
   return (
-    <SignInWrapper image={Admin}>
+    <SignInWrapper image={image}>
       <div className="form-wrapper">
         <div className="log_navigate">
           <span>

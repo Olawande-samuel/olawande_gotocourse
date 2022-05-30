@@ -5,9 +5,17 @@ import Password from '../../components/Password'
 import SignInWrapper from '../../components/SignInWrapper'
 import Admin from "../../images/Admin.webp"
 
+import avif from "../../images/asignup.avif"
+import webp from "../../images/asignup.webp"
+import png from "../../images/asignup.png"
 const AdminSignup = () => {
+  const image ={
+    avif,
+    webp,
+    png
+  }
   return (
-    <SignInWrapper image={Admin}>
+    <SignInWrapper image={image}>
       <div className="form-wrapper">
         <div className="log_navigate">
           <span className="selected">
