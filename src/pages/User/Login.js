@@ -9,6 +9,10 @@ import { useCookie } from "../../hooks";
 import { useAuth } from "../../contexts/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import { AdvancedError } from "../../classes";
+
+import avif from "../../images/login.avif"
+import webp from "../../images/login.webp"
+import png from "../../images/login.png"
 const Login = () => {
   const navigate = useNavigate()
   const {authFunctions: {login}, setGeneralState} = useAuth();
@@ -19,6 +23,11 @@ const Login = () => {
     password: "",
     userType: ""
   });
+  const image ={
+    avif,
+    webp,
+    png
+  }
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -74,7 +83,7 @@ const Login = () => {
     }
   };
   return (
-    <SignInWrapper>
+    <SignInWrapper image={image}>
       <ToastContainer
         position="top-right"
         autoClose={5000}

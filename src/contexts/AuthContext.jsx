@@ -14,7 +14,8 @@ const AuthContextProvider = ({children}) => {
         userdata: null,
         userType: null,
         isMobile: false,
-        theme: "light"
+        theme: "light",
+        showSidebar: false,
     })
     const {fetchCookie} = useCookie();
     useEffect(() => {

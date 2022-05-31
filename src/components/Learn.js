@@ -29,7 +29,7 @@ const Learn = () => {
                   </Link>
               </div>
             </div>
-            <Image width="720px" height="452"  image={Learning} alt="Group of people in an online meeting room" className="background" effect="blur" />
+            <Image width="720px" height="452px"  image={Learning} alt="Group of people in an online meeting room" className="background" effect="blur" />
          
         </div>
       </div>

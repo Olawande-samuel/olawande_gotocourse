@@ -9,9 +9,11 @@ import { useAuth } from "../../contexts/AuthContext";
 import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
-import Admin from "../../images/Admin.webp";
 
 
+import avif from "../../images/alogin.avif"
+import webp from "../../images/alogin.webp"
+import png from "../../images/alogin.png"
 const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
   const {authFunctions: {login}} = useAuth();
@@ -19,6 +21,12 @@ const AdminLogin = () => {
     email: "",
     password: ""
   })
+
+  const image ={
+    avif,
+    webp,
+    png
+  }
 
   async function submitHandler(e){
     console.log(e);
@@ -54,8 +62,10 @@ const AdminLogin = () => {
       }
     })
   }
+  
+ 
   return (
-    <SignInWrapper image={Admin}>
+    <SignInWrapper image={image}>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -67,6 +77,7 @@ const AdminLogin = () => {
         draggable
         pauseOnHover
       />
+
       <div className="form-wrapper">
         <div className="log_navigate">
           <span>

@@ -65,7 +65,7 @@
 .admin_profile_top {
     display: flex;
     align-items: center;
-    margin-bottom: 20;
+    margin-bottom: 20px;
 }
 .admin_profile_top_img {
     width: 120px;
@@ -85,7 +85,7 @@
 }
 .admin__paragraph {
     line-height: 2;
-    font-size: 1.2rem;
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
     letter-spacing: 0.6px;
 }
 .classes_card {
@@ -149,7 +149,7 @@
 }
 
 .admin__student h1{
-    font-size: 1.8rem;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
     font-weight: 400;
     margin-bottom: 30px;
 }
@@ -196,3 +196,37 @@
     align-self: center;
 }
 
+
+@media screen and (max-width: 390px){
+    .admin_profile_top {
+        align-items: flex-start;
+    }
+
+    .admin_profile_top span {
+        display: none;
+    }
+    .admin_profile_top_button {
+        display: grid;
+        place-items:center;
+        /* padding: 10px 15px; */
+        
+    }
+
+    .admin_profile_top_button svg {
+        margin-right: unset !important;
+    }
+}
+@media screen and (max-width: 767px){
+    .admin_topbar {
+        width: 100%;
+        
+    }
+    
+
+    .admin_main {
+        
+        padding: 12px;
+       
+    }
+
+}
