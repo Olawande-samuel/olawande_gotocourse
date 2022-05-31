@@ -13,6 +13,7 @@ import Services from '../components/Services'
 import Testimonials from '../components/Testimonials'
 import Transition from '../components/Transition'
 import Join from "../components/Join"
+import Classroom from '../components/Classroom'
 const Landing = () => {
   return (
     <div>
@@ -22,6 +23,7 @@ const Landing = () => {
         <Learn />
         <Transition />
         <Becoming />
+        <Classroom />
         <Career />
         <Mentors />
         <Testimonials />
