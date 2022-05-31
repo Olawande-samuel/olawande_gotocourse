@@ -1,13 +1,65 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
+import {ToastContainer, toast} from "react-toastify";
+import { AdvancedError } from "../../classes";
+
+
 import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
 import Admin from "../../images/Admin.webp";
 
+
 const AdminLogin = () => {
+  const [loading, setLoading] = useState(false);
+  const [formstate, setFormstate] = useState({
+    email: "",
+    password: ""
+  })
+
+  async function submitHandler(e){
+    e.preventDefault();
+    setLoading(_ => true);
+    try{
+      if(formstate.email.trim() === "" || formstate.password.trim() === "") throw new AdvancedError("Both email and password are required fields", 0);
+      //do some code
+    }catch(err){
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }finally{
+      setLoading(_ => false);
+    }
+  }
+
+  function changeHandler(e){
+    const {name, value} = e.target;
+    setFormstate(old => {
+      return {
+        ...old,
+        [name]: value
+      }
+    })
+  }
   return (
     <SignInWrapper image={Admin}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="form-wrapper">
         <div className="log_navigate">
           <span>
@@ -18,12 +70,23 @@ const AdminLogin = () => {
             <Link to="/admin/login">Log in</Link>
           </span>
         </div>
-        <form action="" className="form">
-          <Input label="Email" name="Email" type="email" placeholder="Email" />
-          <Password label="Password" name="Password" password="password" placeholder="Password" />
-          <button className="button button-lg log_btn w-100 mb-4">
-            Log in
-          </button>
+        <form className="form" onSubmit={submitHandler}>
+          <Input label="Email" name="email" type="email" value={formstate.email} placeholder="Email" onChange={changeHandler} />
+          <Password label="Password" name="password" value={formstate.password} password="password" placeholder="Password" onChange={changeHandler} />
+          {loading ? (
+            <button className="button button-lg log_btn w-100">
+              <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </button>
+          ) : (
+            <button
+              className="button button-lg log_btn w-100"
+              type="button"
+            >
+              Log in
+            </button>
+          )}
           <div className="forgot">
             <p>
               Forget password?{" "}

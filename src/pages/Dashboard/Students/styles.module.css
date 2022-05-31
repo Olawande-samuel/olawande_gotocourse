@@ -74,20 +74,25 @@
     padding: 10px 30px;
     border-radius: 10px;
 }
+
+.students_profile_top_button svg {
+    /* margin-right: 5px; */
+}
 .students__header {
     font-size: 1.5rem;
     color: var(--textColorDark);
 }
 .students__paragraph {
     line-height: 2;
-    font-size: 1.2rem;
+    font-size: 1rem;
     letter-spacing: 0.6px;
+    margin-top: 20px;
 }
 .classes_card {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px;
+    padding: 20px 0px;
     width: 100%;
 }
 .classes_card_first {
@@ -108,33 +113,143 @@
     display: flex;
     padding-top: "1rem";
     flex-direction: column;
-    letter-spacing: 0.6px;
     justify-content: 'center'
+}
+
+.first_meta h5 {
+    font-weight: normal;
 }
 .classes_card_second {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 13rem;
     font-size: 1.2rem;
 }
+
+.classes_card_second span {
+    margin: 0px 10px
+}
+
 .classes_card_third {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 15rem;
 }
 .third_btn {
     border:1px solid var(--info);
     color: var(--secondary);
     border-radius: 10px;
-    padding: 5px 10px;
+    margin: 0px 15px;
+    padding: 5px 20px;
     font-size: 0.7rem;
     background-color: var(--white);
-    width: 6rem;
 }
 .third_btn_live {
     background-color: var(--green);
     color: var(--white);
+    border: none;
+}
+
+
+
+@media(max-width: 400px) {
+    .students_topbar h1 {
+        display: none;
+    }
+}
+
+.edit__profile {
+    max-width: 80%
+}
+
+.edit__profile h2 {
+    font-weight: normal;
+    font-size: 1.5rem;
+    margin-bottom: 50px;
+}
+
+.edit__picture {
+    margin: 20px 0px;
+    display: flex;
+    align-items: center;
+}
+
+.edit__picture span {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(217, 217, 217, 0.39);
+    border-radius: 50%;
+    margin-right: 1rem
+}
+
+.edit__picture span svg {
+    font-size: 3rem;
+    color: var(--white);
+}
+
+.edit__picture p {
+    color: var(--textBlue);
+}
+
+.form_group {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 20px 0px;
+}
+
+.form_group label {
+    margin-bottom: 10px;
+    color: var(--textBlue)
+}
+
+.form_group textarea{
+    outline: none;
+    border: 1px solid rgba(208, 204, 204, 0.5);
+    padding: 4px;
+    border-radius: 10px;
+    text-indent: 40px;
+    background-color: var(--primary);
+}
+
+.edit__profile form div {
+    margin: 20px 0px;
+}
+
+.edit__profile form div label {
+    color: var(--textBlue);
+}
+
+.edit__profile form div input {
+    border: 1px solid rgba(208, 204, 204, 0.5);;
+    background-color: var(--primary);
+}
+
+
+.student_table {
+    width: 100%
+}
+
+/* .admin__student h1{
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 30px;
+} */
+
+.student_table {
+    border: none;
+}
+
+.student_table thead {
+    height: 70px;
+    text-align: center;
+}
+
+.student_table tbody{
+    width: 100%;
     border: none;
 }

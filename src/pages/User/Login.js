@@ -37,32 +37,23 @@ const Login = () => {
     if(data.email.trim() === "" || data.password.trim() === "") return;
     try {
       if(data.userType.trim() === "") throw new AdvancedError("Missing user type", 0);
-      const response = await login(data);
+      const response = await login(data, "user");
 
       console.log(response)
       const {success, statusCode, message} = response;
       if(success) {
-        const {data} = response;
+        const {data: d} = response;
         //before navigating
         //save some thing to cookie and state
-        saveCookie('gotocourse-token', data.token);
-        setGeneralState(oldstate => {
-          let {token, ...userdata} = data;
+        saveCookie('gotocourse-userdata', d);
+        saveCookie('gotocourse-usertype', data.userType);
+        setGeneralState(old => {
           return {
-            ...oldstate,
-            userdata
+            ...old,
+            notification: response.message
           }
         })
-        navigate("/students");
-        toast.success(response.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        data.userType === "student" ? navigate("/students") : navigate("/teachers");
       }else throw new AdvancedError(message, statusCode);
 
     } catch (err) {
@@ -105,7 +96,7 @@ const Login = () => {
             <Link to="/login">Log in</Link>
           </span>
         </div>
-        <form className="form">
+        <form className="form" onSubmit={onSubmit}>
           <Input
             label="Email"
             name="email"
@@ -157,7 +148,7 @@ const Login = () => {
           ) : (
             <button
               className="button button-lg log_btn w-100"
-              onClick={onSubmit}
+              type="button"
             >
               Log in
             </button>

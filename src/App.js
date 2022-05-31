@@ -8,8 +8,8 @@ import Login from "./pages/User/Login";
 import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
-import {Profile, Classes} from "./pages/Dashboard/Students";
-import {Dashboard, Student, Fees, Teachers} from "./pages/Dashboard/Admin";
+import {Profile, Classes, Edit, Courses as StudentCourses} from "./pages/Dashboard/Students";
+import {Dashboard, Student, Fees, Teachers, Courses} from "./pages/Dashboard/Admin";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/AuthContext";
 import "react-multi-carousel/lib/styles.css";
@@ -26,12 +26,15 @@ function App() {
             <Route path="students" element={<Out />}>
               <Route path="" element={<Profile  />} />
               <Route path="classes" element={<Classes  />} />
+              <Route path="profile/edit" element={<Edit  />} />
+              <Route path="courses" element={<StudentCourses />} />
             </Route>
             <Route path="admin">
               <Route path="" element={<Dashboard />} />
               <Route path="students" element={<Student />} />
               <Route path="fees" element={<Fees />} />
               <Route path="teachers" element={<Teachers />} />
+              <Route path="courses" element={<Courses />} />
             </Route>
             <Route path="admin" element={<Out />}>
               <Route path="login" element={<AdminLogin />} />

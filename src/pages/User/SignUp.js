@@ -6,6 +6,7 @@ import SignInWrapper from "../../components/SignInWrapper";
 import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../contexts/AuthContext";
 import { AdvancedError } from "../../classes";
+import {useCookie} from "../../hooks";
 
 const SignUp = () => {
   const [data, setData]= useState({
@@ -17,7 +18,8 @@ const SignUp = () => {
     retype_password: "",
     userType: ""
   })
-  const {authFunctions: {register}} = useAuth();
+  const {saveCookie} = useCookie();
+  const {authFunctions: {register}, setGeneralState} = useAuth();
   const [loading, setLoading]= useState(false)
   const navigate = useNavigate()
   const handleChange=(e)=>{
@@ -39,23 +41,24 @@ const SignUp = () => {
       if(others.userType.trim() === "") throw new AdvancedError("User type is required", 0);
       if(retype_password !== others.password) throw new AdvancedError("Passwords don't match", 0);
       console.log(others)
-      const response = await register(others);
+      const response = await register(others, "user");
 
       console.log(response)
       let {success, message, statusCode} = response;
       if(!success) throw new AdvancedError(message, statusCode);
       else {
         //successfully done
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        navigate("/login");
+        //update the cookie
+        const {data} = response;
+        saveCookie('gotocourse-userdata', data);
+        saveCookie('gotocourse-usertype', others.userType);
+        setGeneralState(old => {
+          return {
+            ...old,
+            notification: message
+          }
+        })
+        others.userType === "student" ? navigate("/students") : navigate("/teachers");
       }
 
     } catch(err){
@@ -140,7 +143,7 @@ const SignUp = () => {
               </div>
               </button>
                 :
-              <button className="button button-lg log_btn w-100" onClick={onSubmit}>Register</button>
+              <button className="button button-lg log_btn w-100" type="button">Register</button>
               }
           </div>
         </form>
