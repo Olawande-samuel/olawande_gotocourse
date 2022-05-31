@@ -1,9 +1,11 @@
 import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import {ToastContainer, toast} from "react-toastify";
+
+
+
 import { AdvancedError } from "../../classes";
-
-
+import { useAuth } from "../../contexts/AuthContext";
 import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
@@ -12,17 +14,22 @@ import Admin from "../../images/Admin.webp";
 
 const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
+  const {authFunctions: {login}} = useAuth();
   const [formstate, setFormstate] = useState({
     email: "",
     password: ""
   })
 
   async function submitHandler(e){
+    console.log(e);
     e.preventDefault();
     setLoading(_ => true);
     try{
       if(formstate.email.trim() === "" || formstate.password.trim() === "") throw new AdvancedError("Both email and password are required fields", 0);
       //do some code
+      console.log(formstate);
+      const res = await login(formstate, "admin");
+      console.log(res);
     }catch(err){
       toast.error(err.message, {
         position: "top-right",
@@ -71,8 +78,8 @@ const AdminLogin = () => {
           </span>
         </div>
         <form className="form" onSubmit={submitHandler}>
-          <Input label="Email" name="email" type="email" value={formstate.email} placeholder="Email" onChange={changeHandler} />
-          <Password label="Password" name="password" value={formstate.password} password="password" placeholder="Password" onChange={changeHandler} />
+          <Input label="Email" name="email" type="email" value={formstate.email} placeholder="Email" handleChange={changeHandler} />
+          <Password label="Password" name="password" value={formstate.password} password="password" placeholder="Password" handleChange={changeHandler} />
           {loading ? (
             <button className="button button-lg log_btn w-100">
               <div className="spinner-border" role="status">
@@ -82,7 +89,7 @@ const AdminLogin = () => {
           ) : (
             <button
               className="button button-lg log_btn w-100"
-              type="button"
+              type="submit"
             >
               Log in
             </button>

@@ -148,7 +148,7 @@ const Login = () => {
           ) : (
             <button
               className="button button-lg log_btn w-100"
-              type="button"
+              type="submit"
             >
               Log in
             </button>
