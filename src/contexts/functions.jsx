@@ -6,9 +6,9 @@ import { baseURL } from "../constants";
 
 
 export const authFunctions = {
-    login: async function (_data){
+    login: async function (_data, type){
         try{
-            const res = await axios.post(`${baseURL}/user/signin`, 
+            const res = await axios.post(type !== "admin" ? `${baseURL}/user/signin` : `${baseURL}/admin/signin`, 
             JSON.stringify(_data), {
                 headers: {
                     "Content-Type": "application/json"
@@ -27,10 +27,10 @@ export const authFunctions = {
             }
         }
     },
-    register: async function(_data){
+    register: async function(_data, type){
         try{
             console.log(_data)
-            const res = await axios.post(`${baseURL}/user/signup`,
+            const res = await axios.post(type !== "admin" ? `${baseURL}/user/signup` : `${baseURL}/admin/signin`,
             JSON.stringify(_data),
             {
                 headers: {

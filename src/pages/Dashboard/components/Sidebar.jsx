@@ -3,7 +3,7 @@ import {MdMessage} from "react-icons/md";
 import {AiOutlineClose} from "react-icons/ai";
 import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash} from "react-icons/io";
 import {useNavigate, useLocation, NavLink} from "react-router-dom";
-
+import {FiGift, FiSend} from "react-icons/fi";
 
 
 
@@ -46,7 +46,7 @@ const Sidebar = ({isMobile}) => {
             title: "Students"
         },
         {
-            icon: IoIosChatbubbles,
+            icon: FiSend,
             path: "teachers",
             title: "Mentors/Teachers"
         },
@@ -54,7 +54,12 @@ const Sidebar = ({isMobile}) => {
             icon: IoIosCash,
             path: "fees",
             title: "Fees"
-        }
+        },
+        {
+            icon: FiGift,
+            path: "courses",
+            title: "Courses"
+        },
     ] : [
         {
             icon: IoIosPerson,
@@ -65,7 +70,12 @@ const Sidebar = ({isMobile}) => {
             icon: MdMessage,
             path: "classes",
             title: "My Classes"
-        }
+        },
+        {
+            icon: FiGift,
+            path: "courses",
+            title: "Courses"
+        },
     ]
 
     useEffect(() => {

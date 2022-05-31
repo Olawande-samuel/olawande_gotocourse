@@ -6,6 +6,7 @@ import SignInWrapper from "../../components/SignInWrapper";
 import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../contexts/AuthContext";
 import { AdvancedError } from "../../classes";
+import {useCookie} from "../../hooks";
 
 import avif from "../../images/signup.avif";
 import webp from "../../images/signup.webp";
@@ -18,23 +19,22 @@ const SignUp = () => {
     email: "",
     password: "",
     retype_password: "",
-    userType: "",
-  });
+    userType: ""
+  })
 
-  const image = {
-    avif,
-    webp,
-    png,
-  };
-  const {
-    authFunctions: { register },
-  } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData((old) => {
-      return {
+const image = {
+  avif,
+  webp,
+  png,
+};
+const {saveCookie} = useCookie();
+  const {authFunctions: {register}, setGeneralState} = useAuth();
+  const [loading, setLoading]= useState(false)
+  const navigate = useNavigate()
+  const handleChange=(e)=>{
+    const {name, value} = e.target;
+    setData(old => {      
+return {
         ...old,
         [name]: value,
       };
@@ -59,23 +59,24 @@ const SignUp = () => {
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
       console.log(others);
-      const response = await register(others);
+      const response = await register(others, "user");
 
       console.log(response);
       let { success, message, statusCode } = response;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         //successfully done
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        navigate("/login");
+        //update the cookie
+        const {data} = response;
+        saveCookie('gotocourse-userdata', data);
+        saveCookie('gotocourse-usertype', others.userType);
+        setGeneralState(old => {
+          return {
+            ...old,
+            notification: message
+          }
+        })
+        others.userType === "student" ? navigate("/students") : navigate("/teachers");
       }
     } catch (err) {
       console.error(err.message, err.statusCode);
@@ -233,6 +234,7 @@ const SignUp = () => {
               <button
                 className="button button-md log_btn w-100"
                 onClick={onSubmit}
+                type="submit"
               >
                 Register
               </button>

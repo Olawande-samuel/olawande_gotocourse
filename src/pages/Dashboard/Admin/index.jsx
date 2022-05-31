@@ -1,15 +1,18 @@
 import {useEffect} from "react";
 import {MdEdit} from "react-icons/md";
+
+
+import {Switch} from "@mui/material";
 import {AiOutlineMenu} from "react-icons/ai";
 
-
-import { Sidebar, Searchbar, Toggle } from "../components";
+import { Sidebar, Searchbar } from "../components";
 import clsx from "./styles.module.css";
 import { colors } from "../../../constants";
 import avatar from "../../../images/teacher.png"
 import { useAuth } from "../../../contexts/AuthContext";
 import img01 from "../../../images/mentor1.png";
 import img02 from "../../../images/mentor2.png";
+import { GuardedRoute } from "../../../hoc";
 
 
 
@@ -40,32 +43,65 @@ export function Dashboard(){
 }
 
 
-export function UserInfoCard({img, name, date, email, isActive, paid, header}){
+export function UserInfoCard({img, name, date, email, isActive, paid, comp, num, course, pack, rating}){
     return (
         // <div>
             <tr className={clsx.user__info_card}>
-                <td className={clsx.user__details}>
+
+                <td className={clsx.user__info}>
+                    {num + 1}.
+                </td>
+                {img && (<td className={clsx.user__details}>
                     <img src={img} alt="avatar" />
                     <span>{name}</span>
-                </td>
-                <td className={clsx.user__date}>
+                </td>)}
+
+                {    comp === "Courses" && (
+                        <td className={clsx.user__info}>
+                            {course}
+                        </td>
+                    )
+                }
+
+                {    comp === "Courses" && (
+                        <td className={clsx.user__info}>
+                            {name}
+                        </td>
+                    )
+                }
+
+                
+
+                {date && (<td className={clsx.user__date}>
                     <span>{date}</span>
-                </td>
-                <td className={clsx.user__email}>
+                </td>)}
+                
+                {
+                    pack && (
+                        <td className={clsx.user__date}>
+                            <span>{pack}</span>
+                        </td>
+                    )
+                }
+                {email && <td className={clsx.user__email}>
                     <span>{email}</span>
-                </td>
-                {paid ? 
+                </td>}
+                {rating && <td className={clsx.user__email}>
+                    <span>{rating}</span>
+                </td>}
+                {paid && 
                     (
                     <td className={clsx.user__button}>
                         <span>
-                            {paid}
+                            {new Intl.NumberFormat('en-us', {style: 'currency', currency: 'USD'}).format(paid)}
                         </span>
                     </td>
                     ) 
-                    :
+                }
+                {isActive &&
                     (<td className={clsx.user__button}>
                         <span>
-                            <Toggle />
+                            <Switch checked={isActive} />
                         </span>
                     </td>)
                 }
@@ -75,8 +111,8 @@ export function UserInfoCard({img, name, date, email, isActive, paid, header}){
 }
 
 
-export function Teachers({}){
-    const tableHeaders = ["Name", "Date", "Email", "Approve"]
+export function Teachers(){
+    const tableHeaders = ["No", "Name", "Date", "Email", "Approve"]
     const tableContents = [
         {
             name: "Melanie Grutt",
@@ -90,7 +126,21 @@ export function Teachers({}){
             img: img02,
             date: "Mar 23",
             email: "kiera@gmail.com",
+            approve: false
+        },
+        {
+            name: "Melanie Grutt",
+            img: img01,
+            date: "Feb 24",
+            email: "melanie@gmail.com",
             approve: true
+        },
+        {
+            name: "Kiera Danlop",
+            img: img02,
+            date: "Mar 23",
+            email: "kiera@gmail.com",
+            approve: false
         },
         {
             name: "Melanie Grutt",
@@ -111,21 +161,7 @@ export function Teachers({}){
             img: img01,
             date: "Feb 24",
             email: "melanie@gmail.com",
-            approve: true
-        },
-        {
-            name: "Kiera Danlop",
-            img: img02,
-            date: "Mar 23",
-            email: "kiera@gmail.com",
-            approve: true
-        },
-        {
-            name: "Melanie Grutt",
-            img: img01,
-            date: "Feb 24",
-            email: "melanie@gmail.com",
-            approve: true
+            approve: false
         },
     ]
     return (
@@ -145,7 +181,7 @@ export function Teachers({}){
                             <tbody>
                                 {
                                     tableContents.map(({img, email, date, name, approve}, i) => (
-                                        <UserInfoCard key={i} name={name} img={img}
+                                        <UserInfoCard key={i} name={name} img={img} num={i}
                                         date={date} email={email} isActive={approve} />
                                     ))
                                 }
@@ -159,8 +195,76 @@ export function Teachers({}){
 }
 
 
-export function Fees({}){
-    const tableHeaders = ["Name", "Date", "Email", "Paid"]
+export function Courses(){
+    const tableHeaders = ["No", "Courses", "Name", "Date", "Package", "Rating", "Approval"]
+    const tableContents = [
+        {
+            name: "Melanie Grutt",
+            course: "Cybersecurity",
+            date: "Feb 24",
+            package: "Cohort",
+            rating: "Bronze",
+            approve: true
+        },
+        {
+            name: "Keira Danlop",
+            course: "UI/UX",
+            date: "Feb 24",
+            package: "Cohort",
+            rating: "Silver",
+            approve: true
+        },
+        {
+            name: "Diop Grutt",
+            course: "HTML",
+            date: "Apr 1",
+            package: "One on One",
+            rating: "Gold",
+            approve: false
+        },
+        {
+            name: "Diop Grutt",
+            course: "Data Analytics",
+            date: "Sept 1",
+            package: "Self paced",
+            rating: "Diamond",
+            approve: false
+        },
+    ]
+    return (
+        <Admin header={"Courses"}>
+            <div className={clsx['admin_profile']}>
+                <div className={clsx.admin__student}>
+                    <h1>All Courses</h1>
+
+                    <div className={clsx.admin__student_main}>
+                        <table className={clsx.admin__student_table}>
+                            <thead>
+                                {
+                                    tableHeaders.map((el, i) => (
+                                        <td key={i}>{el}</td>
+                                    ))
+                                } 
+                            </thead>
+                            <tbody>
+                                {
+                                    tableContents.map(({img, email, date, name, approve, package: p, course, rating}, i) => (
+                                        <UserInfoCard key={i} name={name} num={i} comp={"Courses"} rating={rating}
+                                        date={date} email={email} isActive={approve} pack={p} course={course} />
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </Admin>
+    )
+}
+
+
+export function Fees(){
+    const tableHeaders = ["No", "Name", "Date", "Email", "Paid"]
     const tableContents = [
         {
             name: "Melanie Grutt",
@@ -210,7 +314,7 @@ export function Fees({}){
                                 {
                                     tableContents.map(({img, email, date, name, paid}, i) => (
                                         <UserInfoCard key={i} name={name} img={img} paid={paid}
-                                        date={date} email={email} isActive={false} />
+                                        date={date} email={email} isActive={false} num={i} />
                                     ))
                                 }
                             </tbody>
@@ -223,8 +327,8 @@ export function Fees({}){
 }
 
 
-export function Student({}){
-    const tableHeaders = ["Name", "Date", "Email", "Approve"]
+export function Student(){
+    const tableHeaders = ["No", "Name", "Date", "Email", "Approve"]
     const tableContents = [
         {
             name: "Melanie Grutt",
@@ -316,7 +420,7 @@ export function Student({}){
                                 {
                                     tableContents.map(({img, email, date, name, approve}, i) => (
                                         <UserInfoCard key={i} name={name} img={img}
-                                        date={date} email={email} isActive={approve} />
+                                        date={date} email={email} num={i} isActive={approve} />
                                     ))
                                 }
                             </tbody>
@@ -343,20 +447,24 @@ const toggleSidebar = ()=> {
     setGeneralState({...generalState, showSidebar: !showSidebar})
 }
     return (
-        <div className={clsx['admin']}>
-            <Sidebar isMobile={isMobile} />
-            <div className={clsx['admin_main']}>
-                <div className={`align-items-center ${clsx['admin_topbar']}`}>
-                    <div className="d-md-none">
-                        <i>
-                            <AiOutlineMenu style={{fontSize:"24px", color:"#0C2191"}} onClick={toggleSidebar} />
-                        </i>
+
+        <GuardedRoute>
+            <div className={clsx['admin']}>
+                <Sidebar isMobile={isMobile} />
+                <div className={clsx['admin_main']}>
+                    <div className={`align-items-center ${clsx['admin_topbar']}`}>
+                        <div className="d-md-none">
+                            <i>
+                                <AiOutlineMenu style={{fontSize:"24px", color:"#0C2191"}} onClick={toggleSidebar} />
+                            </i>
+                        </div>
+                        <h1 className="d-none d-md-block">{header}</h1>
+                        <Searchbar showIcon={true} placeholder="Search" />
+
                     </div>
-                    <h1 className="d-none d-md-block">{header}</h1>
-                    <Searchbar showIcon={true} placeholder="Search" />
+                    {children}
                 </div>
-                {children}
             </div>
-        </div>
+        </GuardedRoute>
     )
 }
