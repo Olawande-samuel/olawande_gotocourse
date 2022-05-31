@@ -26,6 +26,14 @@
     height: 100%;
   }
   
+
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: url(./images/bread.png) !important;
+}
+.active {
+  color: var(--btn-color) !important;
 }
 /* end */
 * {
@@ -438,6 +446,14 @@ gap: 1rem;
   display: flex;
   justify-content:center
 }
+
+/* ********************************Classroom******************************* */
+.classroom .btn-plain {
+  border: 1px solid var(--btn-color);
+
+  color: var(--btn-color);
+}
+
 /* ****************************CAREERS************************************ */
 .career,
 .mentors {
@@ -474,7 +490,19 @@ gap: 1rem;
   color: var(--obsidian);
 }
 .career .career_box {
+  transition: all .3s ease;
   gap: 1.5rem;
+  padding: 0.8rem;
+  border-radius: 10px;
+}
+.career .career_box:hover {
+  background: var(--btn-color);
+  color: #fff !important;
+
+}
+.career .career_box:hover .details, .career .career_box:hover .careerBox_title {
+  color: #fff !important;
+
 }
 .career .career_box .details {
   font-size: 15px;
@@ -933,7 +961,8 @@ line-height: 45px;
   .transition .button,
   .services .button,
   .becoming .button,
-  .degree .button {
+  .degree .button,
+  .classroom .btn-plain {
     width: 100%;
   }
   .content-wrapper {
@@ -970,7 +999,9 @@ line-height: 45px;
   }
   .learning .content,
   .transition .content,
-  .becoming .content {
+  .becoming .content ,
+  .classroom .content
+  {
     flex-direction: column-reverse;
   }
 
@@ -1114,7 +1145,9 @@ line-height: 45px;
     padding-left: unset;
   }
   .content-wrapper .left,
-  .content-wrapper img {
+  .content-wrapper img,
+  .classroom .class_right,
+  .classroom .class_right img {
     width: 100%;
   }
   .content-wrapper .card-body {
@@ -1135,7 +1168,8 @@ line-height: 45px;
   .services,
   .becoming,
   .career,
-  .mentors
+  .mentors,
+  .classroom
   {
     padding: 3.0625rem 0;
   }

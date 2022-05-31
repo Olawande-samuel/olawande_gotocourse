@@ -1,4 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+
+
 import {
   Cyber,
   Data,
@@ -8,13 +12,14 @@ import {
   Project,
   Risk,
 } from "../images/components/svgs.js";
-const careers = [
+export const careers = [
   {
     id: 1,
     title: "Cybersecurity",
     details:
       "This is the practice ofprotecting critical systems and sensitive information from digital attacks.",
     logo: <Cyber />,
+    link: "categories/cybersecurity"
   },
   {
     id: 2,
@@ -22,6 +27,7 @@ const careers = [
     details:
       "Risk management is the process of assessing and controlling threats to an organization's capital and earnings.",
     logo: <Risk />,
+    link: "categories/risk-management"
   },
   {
     id: 3,
@@ -29,6 +35,7 @@ const careers = [
     details:
       "Data science refers to the process of extracting clean information to formulate actionable insights",
     logo: <Data />,
+    link: "categories/data-science"
   },
   {
     id: 4,
@@ -36,6 +43,7 @@ const careers = [
     details:
       "the process of leading the work of a team to achieve all project goals within the given constraints.",
     logo: <Project />,
+    link: "categories/project-management"
   },
   {
     id: 5,
@@ -43,6 +51,7 @@ const careers = [
     details:
       "IT compliance refers to businesses meeting all legal requirements,  and regulations for the software of company.",
     logo: <IT />,
+    link: "categories/it-compliance"
   },
   {
     id: 6,
@@ -50,6 +59,7 @@ const careers = [
     details:
       "It is the process of evaluating evidence to determine whether a computer system safeguards assets",
     logo: <Audit />,
+    link: "categories/it-audit"
   },
   {
     id: 7,
@@ -57,6 +67,7 @@ const careers = [
     details:
       "Business analysis is a strategy for initiating and managing change in organisations.",
     logo: <Cyber />,
+    link: "categories/business-analysis"
   },
   {
     id: 8,
@@ -64,6 +75,7 @@ const careers = [
     details:
       "the process of identifying a market opportunity, clearly defining the problem, developing a proper solution for that",
     logo: <Product />,
+    link: "categories/product-design"
   },
   {
     id: 9,
@@ -71,6 +83,7 @@ const careers = [
     details:
       "Web design encompasses many different skills and disciplines in the production and maintenance of websites.",
     logo: <Project />,
+    link: "categories/web-design"
   },
   {
     id: 10,
@@ -78,6 +91,7 @@ const careers = [
     details:
       "Software developers are the creative, brainstorming masterminds behind computer programs of all sorts.",
     logo: <Risk />,
+    link: "categories/software-developement"
   },
   {
     id: 11,
@@ -85,6 +99,7 @@ const careers = [
     details:
       "all the activities involved in designing, creating, delivering, supporting and managing the lifecycle of IT",
     logo: <IT />,
+    link: "categories/it-service-management"
   },
 ];
 
@@ -125,18 +140,26 @@ const Career = () => {
       <div className="list-section">
         {careers.map((career) => (
           <CareerBox
-            logo={career.logo}
-            title={career.title}
-            details={career.details}
+            {...career}
           />
         ))}
+        <Link to="/categories">
+          <div className="h-100 d-flex align-items-center justify-content-center">
+            <motion.p
+            whileHover={{
+              boxShadow: "0px 0px 8px rgb(0,0,0)"
+            }}
+            className="">Learn More</motion.p>       
+          </div>
+        </Link>
       </div>
     </section>
   );
 };
 
-const CareerBox = ({ logo, title, details }) => {
+const CareerBox = ({ logo, title, details, link }) => {
   return (
+    <Link to={link}>
     <div className="career_box d-flex ">
       <div className="career_box_left">
         <i>{logo}</i>
@@ -144,10 +167,11 @@ const CareerBox = ({ logo, title, details }) => {
       <div className="career_box_right">
         <header>
           <h3 className="careerBox_title">{title}</h3>
-          <p className="details">{details}</p>
         </header>
+          <p className="details">{details}</p>
       </div>
     </div>
+    </Link>
   );
 };
 export default Career;
