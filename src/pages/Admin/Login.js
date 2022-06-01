@@ -79,18 +79,18 @@ const AdminLogin = () => {
       />
 
       <div className="form-wrapper">
-        <div className="log_navigate">
-          <span>
-            <Link to="/admin/signup">Sign Up</Link>
-          </span>
-          <span>|</span>
-          <span className="selected">
-            <Link to="/admin/login">Log in</Link>
-          </span>
-        </div>
+      <header>
+          <h3 className="title">
+          Sign In
+          </h3>
+        </header>
         <form className="form" onSubmit={submitHandler}>
           <Input label="Email" name="email" type="email" value={formstate.email} placeholder="Email" handleChange={changeHandler} />
           <Password label="Password" name="password" value={formstate.password} password="password" placeholder="Password" handleChange={changeHandler} />
+          <p className="mt-3">
+             <span>Forgot password? </span>
+             <Link to="/reset-password">Click here to reset</Link>
+            </p>
           {loading ? (
             <button className="button button-lg log_btn w-100">
               <div className="spinner-border" role="status">
@@ -99,19 +99,16 @@ const AdminLogin = () => {
             </button>
           ) : (
             <button
-              className="button button-lg log_btn w-100"
+              className="button button-md log_btn w-100"
               type="submit"
             >
-              Log in
+              Sign In
             </button>
           )}
-          <div className="forgot">
-            <p>
-              Forget password?{" "}
-              <span>
-                <Link to="/">Click here to reset password</Link>
-              </span>{" "}
-            </p>
+          <div className="forgot my-4">
+          <p className="mt-5">
+          <span>Do not have an account? </span>
+        <Link to="/admin/signup"> Register</Link></p>
           </div>
         </form>
       </div>

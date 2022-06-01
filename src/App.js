@@ -13,7 +13,7 @@ import {Dashboard, Student, Fees, Teachers, Courses} from "./pages/Dashboard/Adm
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/AuthContext";
 import "react-multi-carousel/lib/styles.css";
-import { Categories, CourseList } from "./pages/Courses";
+import { Categories, CourseDetail, CourseList, CourseProfile } from "./pages/Courses";
 
 
 function App() {
@@ -32,8 +32,9 @@ function App() {
             </Route>
             <Route path="categories" element={<Out />}>
               <Route path="" element={<Categories  />} />
-              <Route path=":id" element={<p>before</p>} />
+              <Route path=":id" element={<CourseDetail />} />
               <Route path=":id/:path" element={<CourseList />} />
+              <Route path=":id/:path/:profile" element={<CourseProfile />} />
             </Route>
             <Route path="admin">
               <Route path="" element={<Dashboard />} />
