@@ -17,15 +17,11 @@ const AdminSignup = () => {
   return (
     <SignInWrapper image={image}>
       <div className="form-wrapper">
-        <div className="log_navigate">
-          <span className="selected">
-            <Link to="/admin/signup">Sign Up</Link>
-          </span>
-          <span>|</span>
-          <span className="">
-            <Link to="/admin/login">Log in</Link>
-          </span>
-        </div>
+      <header>
+          <h3 className="title">
+          Register
+          </h3>
+        </header>
         <form action="" className="form">
           <Input label="Fullname" name="Fullname" placeholder="Fullname" />
           <Input label="Email" name="Email" type="email" placeholder="Email" />
@@ -37,9 +33,12 @@ const AdminSignup = () => {
             placeholder="Confirm Password"
           />
           <div>
-            <button className="button button-lg log_btn w-100">Register</button>
+            <button className="button button-md log_btn w-100">Register</button>
           </div>
         </form>
+        <p className="mt-4">
+          <span>Already have an account? </span>
+        <Link to="/admin/login"> Sign in</Link></p>
       </div>
     </SignInWrapper>
   )

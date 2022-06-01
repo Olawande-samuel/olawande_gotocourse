@@ -17,6 +17,8 @@
   --gray: #9DA6BA;
   --info: #5A63F7;
   --green: #037615;
+  --lime: #F1F8FF;
+  --primary-dark: #023047;
 }
 /* override bootstrap */
 
@@ -850,87 +852,54 @@ line-height: 45px;
 /* ********************SIGNUP/LOGIN************************** */
 
 .signWrapper {
-  height: 100vh;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  background-color: var(--lime) ;
   
 }
-.log_header {
-  padding: 1rem 5.725rem;
-}
 .signWrapper main {
-  height: calc(100% - 4rem);
+  width: min(100% - 2rem, 600px);
+  margin: auto;
+  border-radius:20px;
+  background-color: #fff;
+  box-shadow: -3px 14px 20px 5px rgba(218, 213, 213, 0.25);
+}
+
+.form-wrapper {
+  padding: 32px 82px;
 }
 .log_btn {
   font-weight: 700;
-  font-size: 21px;
+  font-size: 18px;
   line-height: 150%;
 }
-.log_left,
-.log_right {
-  flex: 50%;
-  height: calc(100vh - 4.2rem);
-}
-.log_left{
-  display: flex;
-}
-.log_left picture {
-  margin-inline: auto;
-}
-.log_left img {
-  height: 100%;
-  max-width: 100%;
-  object-position: center;
-  border-radius: 10px;
-
-}
-.log_right {
-  padding: 0 4.4rem 1rem 4.4rem;
-  overflow-y: scroll;
-
-}
-.log_top {
-  margin-bottom:1.4375rem;
-}
-
-.log_top a {
-  text-decoration: underline;
-  color: var(--accent-color) !important;
-  margin-left: 0.09rem;
-}
-.log_title {
+.form-wrapper .title{
+  color: var(--btn-color) !important;
   font-weight: 400;
-  font-size: clamp(1.3rem, -0.875rem + 8.333vw, 1.5em);
+  font-size: 24px;
+  margin-bottom: 24px;
   line-height: 120%;
-  color: var(--accent-color);
-}
-.log_navigate {
-  margin-bottom: 1.475rem;
-}
-.log_navigate span {
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 120%;
-  margin-right: 0.5em;
 }
 
-.log_navigate span:nth-child(odd):hover {
-  cursor: pointer;
-  color: var(--btn-color);
+.form-wrapper span,.form-wrapper a {
+  color: var(--primary-dark);
+  font-size: 14px;
 }
 
-.log_navigate .selected a {
-  color: var(--btn-color);
-}
+
+
 .input_wrapper {
   position: relative;
 }
 .generic_input {
   border-radius: 5px !important;
-  padding: 0.8rem 1rem;
-  font-size: 14px;
+  padding: 0.6rem 1rem;
+  font-size: 12px;
 }
 .generic_label {
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
   color: rgba(103, 131, 145, 1);
 }
 .eye {
@@ -944,6 +913,9 @@ line-height: 45px;
 .form-check-input:checked {
   background-color: var(--obsidian);
   border-color: var(--obsidian);
+}
+.form-wrapper label {
+  font-size: 14px;
 }
 
 .forgot {
@@ -1094,14 +1066,12 @@ line-height: 45px;
   }
 
   .signWrapper {
-    height: 100%;
     min-height: 100vh;
-    
   }
-  .signWrapper main {
-    height: calc(100% - 4rem);
-    overflow-y: unset;
+  .form-wrapper {
+    padding: 16px 50px;
   }
+  
   .log_header {
     padding: 1rem;
     text-align:center;
@@ -1294,9 +1264,7 @@ line-height: 45px;
     color: #fff;
   }
 
-  .signWrapper main {
-    height: min(100% - 5rem, 90%);
-  }
+  
 
   .log_left,
   .log_right {
@@ -1416,6 +1384,9 @@ line-height: 45px;
 
     .join_button_wrapper {
       flex-direction: column;
+    }
+    .form-wrapper {
+      padding: 16px 20px;
     }
 }
 

@@ -145,11 +145,11 @@ const Career = () => {
         ))}
         <Link to="/categories">
           <div className="h-100 d-flex align-items-center justify-content-center">
-            <motion.p
+            <motion.button
             whileHover={{
               boxShadow: "0px 0px 8px rgb(0,0,0)"
             }}
-            className="">Learn More</motion.p>       
+            className="btn-plain">Learn More</motion.button>       
           </div>
         </Link>
       </div>

@@ -42,8 +42,8 @@ const Login = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     if(data.email.trim() === "" || data.password.trim() === "") return;
+    setLoading(true);
     try {
       if(data.userType.trim() === "") throw new AdvancedError("Missing user type", 0);
       const response = await login(data, "user");
@@ -95,16 +95,13 @@ const Login = () => {
         draggable
         pauseOnHover
       />
-      <div className="form-wrapper">
-        <div className="log_navigate">
-          <span>
-            <Link to="/signup">Sign Up</Link>
-          </span>
-          <span>|</span>
-          <span className="selected">
-            <Link to="/login">Log in</Link>
-          </span>
-        </div>
+      
+      <div className="form-wrapper w-100">
+        <header>
+          <h3 className="title">
+          Sign In
+          </h3>
+        </header>
         <form className="form" onSubmit={onSubmit}>
           <Input
             label="Email"
@@ -122,7 +119,11 @@ const Login = () => {
             value={data.password}
             placeholder="Password"
           />
-          <div className="form-check ">
+          <p className="mt-3">
+             <span>Forgot password? </span>
+             <Link to="/reset-password">Click here to reset</Link>
+            </p>
+          {/* <div className="form-check ">
             <input
               className="form-check-input me-4"
               type="radio"
@@ -147,7 +148,7 @@ const Login = () => {
             <label className="form-check-label" htmlFor="flexRadioDefault2">
               Teacher
             </label>
-          </div>
+          </div> */}
           {loading ? (
             <button className="button button-lg log_btn w-100">
               <div className="spinner-border" role="status">
@@ -156,13 +157,16 @@ const Login = () => {
             </button>
           ) : (
             <button
-              className="button button-lg log_btn w-100"
+              className="button button-md log_btn w-100"
               type="submit"
             >
               Log in
             </button>
           )}
         </form>
+        <p className="mt-5">
+          <span>Do not have an account? </span>
+        <Link to="/signup"> Register</Link></p>
       </div>
     </SignInWrapper>
     // <div>Login</div>
