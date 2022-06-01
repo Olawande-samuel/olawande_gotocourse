@@ -2,6 +2,9 @@ import { motion } from "framer-motion";
 import React from "react";
 import { Link } from "react-router-dom";
 import Teacher from "../images/teacher.png";
+
+
+
 const Becoming = () => {
   
   return (
@@ -25,7 +28,7 @@ const Becoming = () => {
                 boxShadow: "0px 0px 8px rgb(0, 0, 0)",
                 textShadow: "0px 0px 8px rgb(255, 255, 255)",
               }}
-              type="button" className="button button-lg ">
+              type="button" className="button button-lg">
                 START TEACHING TODAY
               </motion.button>
                 </Link>
