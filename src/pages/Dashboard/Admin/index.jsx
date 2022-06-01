@@ -8,7 +8,7 @@ import {AiOutlineMenu} from "react-icons/ai";
 
 import { Sidebar, Searchbar } from "../components";
 import clsx from "./styles.module.css";
-import { colors } from "../../../constants";
+
 import avatar from "../../../images/teacher.png"
 import { useAuth } from "../../../contexts/AuthContext";
 import img01 from "../../../images/mentor1.png";

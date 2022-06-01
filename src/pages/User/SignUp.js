@@ -108,40 +108,20 @@ return {
         draggable
         pauseOnHover
       />
-      <div className="form-wrapper">
-        <div className="log_navigate">
-          <span className="selected">
-            <Link to="/signup">Sign Up</Link>
-          </span>
-          <span>|</span>
-          <span className="">
-            <Link to="/login">Log in</Link>
-          </span>
-        </div>
-
-        <form action="" className="form" onSubmit={onSubmit}>
-          <div className="row">
-            <div className="col-sm-6">
+      <div className="form-wrapper w-100">
+      <header>
+          <h3 className="title">
+          Register
+          </h3>
+        </header>
+      <form action="" className="form" onSubmit={onSubmit}>
               <Input
-                label="Firstname"
-                name="firstName"
-                value={data.firstName}
+                label="Fullname"
+                name="fullname"
+                value={data.fullname}
                 handleChange={handleChange}
-                placeholder="Firstname"
+                placeholder="Fullname"
               />
-            </div>
-            <div className="col-sm-6">
-              <Input
-                label="Lastname"
-                name="lastName"
-                value={data.lastName}
-                handleChange={handleChange}
-                placeholder="Lastname"
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-sm-8">
               <Input
                 label="Email"
                 name="email"
@@ -150,20 +130,6 @@ return {
                 handleChange={handleChange}
                 placeholder="Email"
               />
-            </div>
-            <div className="col-sm-4">
-              <Input
-                label="Phone"
-                name="phoneNumber"
-                type="phone"
-                value={data.phoneNumber}
-                handleChange={handleChange}
-                placeholder="Phone Number"
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-sm-6">
               <Password
                 label="Password"
                 name="password"
@@ -172,8 +138,6 @@ return {
                 handleChange={handleChange}
                 placeholder="Password"
               />
-            </div>
-            <div className="col-sm-6">
               <Password
                 label="Confirm Password"
                 name="retype_password"
@@ -182,10 +146,7 @@ return {
                 value={data.retype_password}
                 handleChange={handleChange}
               />
-            </div>
-          </div>
-          <div>
-            <div className="form-check ">
+            {/* <div className="form-check ">
               <input
                 className="form-check-input me-4"
                 type="radio"
@@ -222,25 +183,28 @@ return {
               />
               <label className="form-check-label" for="flexRadioDefault2">
                 Mentor
-              </label>
+              </label> 
             </div>
+              */}
             {loading ? (
-              <button className="button button-lg log_btn w-100">
+              <button className="button button-lg log_btn w-100 mt-3">
                 <div className="spinner-border" role="status">
                   <span className="visually-hidden">Loading...</span>
                 </div>
               </button>
             ) : (
               <button
-                className="button button-md log_btn w-100"
+                className="button button-md log_btn w-100 mt-3"
                 onClick={onSubmit}
                 type="submit"
               >
                 Register
               </button>
             )}
-          </div>
         </form>
+        <p className="mt-4">
+          <span>Already have an account? </span>
+        <Link to="/login"> Sign in</Link></p>
       </div>
     </SignInWrapper>
   );
