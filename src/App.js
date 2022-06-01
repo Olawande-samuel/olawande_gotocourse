@@ -8,8 +8,9 @@ import Login from "./pages/User/Login";
 import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
-import {Profile, Classes, Edit, Courses as StudentCourses} from "./pages/Dashboard/Students";
-import {Dashboard, Student, Fees, Teachers, Courses} from "./pages/Dashboard/Admin";
+import {Profile as StudentProfile, Classes as StudentClasses, Edit as StudentEdit, Courses as StudentCourses} from "./pages/Dashboard/Students";
+import {Dashboard, Student, Fees, Teachers, Courses, Approve} from "./pages/Dashboard/Admin";
+import {Profile as TeacherProfile, Classes as TeacherClasses, Edit as TeacherEdit, Courses as TeacherCourses, CreateCourse} from "./pages/Dashboard/Teachers";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/AuthContext";
 import "react-multi-carousel/lib/styles.css";
@@ -25,10 +26,17 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="students" element={<Out />}>
-              <Route path="" element={<Profile  />} />
-              <Route path="classes" element={<Classes  />} />
-              <Route path="profile/edit" element={<Edit  />} />
+              <Route path="" element={<StudentProfile  />} />
+              <Route path="classes" element={<StudentClasses  />} />
+              <Route path="profile/edit" element={<StudentEdit  />} />
               <Route path="courses" element={<StudentCourses />} />
+            </Route>
+            <Route path="teachers" element={<Out />}>
+              <Route path="" element={<TeacherProfile  />} />
+              <Route path="classes" element={<TeacherClasses  />} />
+              <Route path="profile/edit" element={<TeacherEdit  />} />
+              <Route path="courses" element={<TeacherCourses />} />
+              <Route path="courses/create" element={<CreateCourse />} />
             </Route>
             <Route path="categories" element={<Out />}>
               <Route path="" element={<Categories  />} />
@@ -42,6 +50,7 @@ function App() {
               <Route path="fees" element={<Fees />} />
               <Route path="teachers" element={<Teachers />} />
               <Route path="courses" element={<Courses />} />
+              <Route path="teachers/approve" element={<Approve />} />
             </Route>
             <Route path="admin" element={<Out />}>
               <Route path="login" element={<AdminLogin />} />
