@@ -32,11 +32,29 @@ export function Profile(){
             })
         }, 5000)
     })
+    const info = [
+        {
+            title: "Brief Introduction",
+            content: "Enjoys writing and playing video games"
+        },
+        {
+            title: "Location",
+            content: "Lagos, Nigeria"
+        },
+        {
+            title: "Courses",
+            content: "UX Designer"
+        },
+        {
+            title: "Category",
+            content: "Cybersecurity, UX, Data Analysis"
+        },
+    ]
     function editProfileHandler(e){
-        navigate("/students/profile/edit");
+        navigate("/teachers/profile/edit");
     }
     return (  
-        <Students isMobile={isMobile} userdata={userdata} notification={notification}>
+        <Teachers isMobile={isMobile} userdata={userdata} notification={notification}>
             <ToastContainer
                 position="top-right"
                 autoClose={5000}
@@ -48,24 +66,156 @@ export function Profile(){
                 draggable
                 pauseOnHover
             />              
-            <div className={clsx.students_profile}>
-                <div className={clsx.students_profile_top}>
-                    <div className={clsx.students_profile_top_img}>
+            <div className={clsx.teachers_profile}>
+                <div className={clsx.teachers_profile_top}>
+                    <div className={clsx.teachers_profile_top_img}>
                         <img src={avatar} style={{borderRadius: 10}} width="100%" alt="Avatar" />
                     </div>
-                    <button className={clsx.students_profile_top_button} onClick={editProfileHandler}>
+                    <button className={clsx.teachers_profile_top_button} onClick={editProfileHandler}>
                         <MdEdit />  &nbsp;   Edit
                     </button>
                 </div>
-                <div className={clsx.students_profile_main}>
-                    <h1 className={clsx.students__header} style={{marginTop: 20}}>{userdata?.firstName} {userdata?.lastName}</h1>
-                    <p className={clsx.students__paragraph}>Enjoys writing and playing video games. <br />
-                    I joined Gotocourse to make friends connect with people virtually
-                    </p>
+                <div className={clsx.teachers_profile_main}>
+                    <h1 className={clsx.teachers__header} style={{marginTop: 20}}>{userdata?.firstName} {userdata?.lastName}</h1>
+
+                    <div className={clsx.teachers__profile_info}>
+                        {
+                            info.map(({title, content}, i) => (
+                                <Info title={title} content={content} key={i} />
+                            ))
+                        }
+                    </div>
 
                 </div>
             </div>
-        </Students>
+        </Teachers>
+    )
+}
+
+function Info({title, content}){
+    return(
+        <div className={clsx.teachers__info}>
+            <span className={clsx.teachers__info_title}>{title}</span>
+            <span className={clsx.teachers__info_content}>{content}</span>
+        </div>
+    )
+}
+
+
+export function CreateCourse(){
+    const [formstate, setFormstate] = useState({
+        name: "",
+        brief: "",
+        price: "",
+        package: ""
+    })
+    const [loading, setLoading] = useState(false);
+    const packages = [
+        {
+            value: "cohort",
+            name: "Cohort"
+        },
+        {
+            value: "self-paced",
+            name: "Self paced"
+        },
+        {
+            value: "one-one",
+            name: "One-One Mentorship"
+        },
+    ]
+
+    function changeHandler(e){
+        const {name, value} = e.target;
+        setFormstate(old => {
+            return {
+                ...old,
+                [name]: value
+            }
+        })
+    }
+
+    async function submitHandler(e){
+        e.preventDefault();
+        setLoading(_ => true);
+        try{
+            if(formstate.name === "" || formstate.brief === "" || formstate.price === "" || formstate.package === "") throw new AdvancedError("All fields are required", 0);
+            //submit updated profile
+            setTimeout(() => {}, 2000);
+        }catch(err){
+            toast.error(err.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }finally{
+            setLoading(_ => false);
+        }
+    }
+    return (
+        <Teachers>
+          <div className={clsx.teachers_profile}>
+            <div className={clsx.edit__profile}>
+                <h2>Create a new course</h2>
+                <form className="form" onSubmit={submitHandler}>
+                    <Input
+                        label="Name of course"
+                        name="name"
+                        type="text"
+                        handleChange={changeHandler}
+                        value={formstate.name}
+                    />
+
+                    <div className={clsx.form_group}>
+                        <label htmlFor={"brief"}>Brief Description of course content</label>
+                        <textarea rows="5" name="brief" value={formstate.brief} onChange={changeHandler}></textarea>
+                    </div>
+
+
+                    <div className={clsx.form_group}>
+                        <label htmlFor={"package"}>Package</label>
+                        <select rows="5" name="package" value={formstate.package} onChange={changeHandler}>
+                            <option value="">Choose a package</option>
+                            {
+                                packages.map(({name, value}, i) => (<option value={value} key={i}>{name}</option>))
+                            }
+                        </select>
+                    </div>
+
+
+
+                    <Input
+                        label="Price"
+                        name="price"
+                        type="text"
+                        handleChange={changeHandler}
+                        value={formstate.price}
+                    />
+
+
+                    {loading ? (
+                        <button className="button button-lg log_btn w-100 mt-3">
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                        </button>
+                    ) : (
+                        <button
+                        className="button button-lg log_btn w-100 mt-3"
+                        type="submit"
+                        >
+                        Save
+                        </button>
+                    )}
+
+                </form>
+            </div>
+          </div>
+        </Teachers>
     )
 }
 
@@ -78,14 +228,16 @@ export function Edit(){
         firstname: userdata?.firstName ?? "",
         lastname: userdata?.lastName ?? "",
         brief_intro: "",
-        goals: ""
+        location: "",
+        profession: "",
+        category: ""
     })
 
     async function submitHandler(e){
         e.prevetDefault();
         setLoading(_ => true);
         try{
-            if(formstate.firstname === "" || formstate.lastname === "" || formstate.brief_intro === "" || formstate.goals === "") throw new AdvancedError("All fields are required", 0);
+            if(formstate.firstname === "" || formstate.lastname === "" || formstate.brief_intro === "" || formstate.location === "" || formstate.profession === "") throw new AdvancedError("All fields are required", 0);
             //submit updated profile
             setTimeout(() => {}, 2000);
         }catch(err){
@@ -116,8 +268,8 @@ export function Edit(){
     }
 
     return (
-        <Students>
-          <div className={clsx.students_profile}>
+        <Teachers>
+          <div className={clsx.teachers_profile}>
             <div className={clsx.edit__profile}>
                 <h2>Update Profile</h2>
                 <div className={clsx.edit__picture}>
@@ -147,10 +299,29 @@ export function Edit(){
                         <textarea rows="5" name="brief_intro" value={formstate.brief_intro} onChange={changeHandler}></textarea>
                     </div>
 
-                    <div className={clsx.form_group}>
-                        <label htmlFor={"goals"}>What are your goals</label>
-                        <textarea rows="5" name="goals" value={formstate.goals} onChange={changeHandler}></textarea>
-                    </div>
+                    <Input
+                        label="Location"
+                        name="location"
+                        type="text"
+                        handleChange={changeHandler}
+                        value={formstate.location}
+                    />
+
+                    <Input
+                        label="Profession"
+                        name="profession"
+                        type="text"
+                        handleChange={changeHandler}
+                        value={formstate.profession}
+                    />
+
+                    <Input
+                        label="Category"
+                        name="category"
+                        type="text"
+                        handleChange={changeHandler}
+                        value={formstate.category}
+                    />
 
                     {loading ? (
                         <button className="button button-lg log_btn w-100 mt-3">
@@ -161,7 +332,7 @@ export function Edit(){
                     ) : (
                         <button
                         className="button button-lg log_btn w-100 mt-3"
-                        type="button"
+                        type="submit"
                         >
                         Save
                         </button>
@@ -170,7 +341,7 @@ export function Edit(){
                 </form>
             </div>
           </div>
-        </Students>
+        </Teachers>
     )
 }
 
@@ -196,8 +367,8 @@ export function Classes(){
         },
     ]
     return ( 
-        <Students isMobile={isMobile} userdata={userdata}>               
-            <div className={clsx.students_profile}>
+        <Teachers isMobile={isMobile} userdata={userdata}>               
+            <div className={clsx.teachers_profile}>
                 <div className={clsx.classes}>
                     {
                         data.map(({numberOfLessons, title, date, time, isLive, color}, i) => (
@@ -207,13 +378,14 @@ export function Classes(){
                     }
                 </div>
             </div>
-        </Students>
+        </Teachers>
     )
 }
 
 
 export function Courses(){
     const {generalState: {isMobile, userdata}} = useAuth();
+    const navigate = useNavigate();
     const tableHeaders = ["No", "Courses", "Name", "Package", "Rating"]
     const tableContents = [
         {
@@ -241,10 +413,21 @@ export function Courses(){
             rating: "Diamond",
         },
     ]
+
+    function createCourseHandler(e){
+        navigate('create');
+    }
     return ( 
-        <Students isMobile={isMobile} userdata={userdata}>               
-            <div className={clsx.students_profile}>
-                <table className={clsx.student_table}>
+        <Teachers isMobile={isMobile} userdata={userdata}>               
+            <div className={clsx.teachers_profile}>
+                <button
+                className="button button-md log_btn w-30 mb-5"
+                type="button"
+                onClick={createCourseHandler}
+                >
+                Create Course
+                </button>
+                <table className={clsx.teachers_table}>
                     <thead>
                         {
                             tableHeaders.map((el, i) => (
@@ -262,7 +445,7 @@ export function Courses(){
                     </tbody>
                 </table>
             </div>
-        </Students>
+        </Teachers>
     )
 }
 
@@ -292,10 +475,10 @@ function ClassesCard({numberOfLessons, title, date, time, isLive, color}){
 }
 
 
-const Students = ({children, isMobile, userdata, notification}) => {
+const Teachers = ({children, isMobile, userdata, notification}) => {
     const {generalState: {showSidebar}, generalState, setGeneralState} = useAuth();
     useEffect(() => {
-        console.log("Students component is mounted")
+        console.log("Teachers component is mounted")
         if(notification){
             toast.success(notification, {
                 position: "top-right",
@@ -307,7 +490,7 @@ const Students = ({children, isMobile, userdata, notification}) => {
                 progress: undefined,
             });
         }
-        return () => console.log("Students component is unmounted");
+        return () => console.log("Teachers component is unmounted");
     }, [])
 
     const toggleSidebar = ()=> {
@@ -316,16 +499,16 @@ const Students = ({children, isMobile, userdata, notification}) => {
 
     return (
         <GuardedRoute>
-            <div className={clsx.students}>
+            <div className={clsx.teachers}>
             <Sidebar isMobile={isMobile} />
-            <div className={clsx.students_main}>
-                <div className={`align-items-center ${clsx.students_topbar}`}>
+            <div className={clsx.teachers_main}>
+                <div className={`align-items-center ${clsx.teachers_topbar}`}>
                 <div className="d-md-none">
                         <i>
                             <AiOutlineMenu style={{fontSize:"24px", color:"#0C2191"}} onClick={toggleSidebar} />
                         </i>
                     </div>
-                    <h1 className={clsx.students__header}>{userdata?.firstName} {userdata?.lastName}</h1>
+                    <h1 className={clsx.teachers__header}>{userdata?.firstName} {userdata?.lastName}</h1>
                     <Searchbar showIcon={true} placeholder="Search" />
                 </div>
 

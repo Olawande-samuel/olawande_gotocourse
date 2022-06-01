@@ -1,5 +1,6 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {MdEdit} from "react-icons/md";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 import {Switch} from "@mui/material";
@@ -13,6 +14,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import img01 from "../../../images/mentor1.png";
 import img02 from "../../../images/mentor2.png";
 import { GuardedRoute } from "../../../hoc";
+
 
 
 
@@ -42,11 +44,106 @@ export function Dashboard(){
     )
 }
 
+function Info({title, content}){
+    return(
+        <div className={clsx.admin__info}>
+            <span className={clsx.admin__info_title}>{title}</span>
+            <span className={clsx.admin__info_content}>{content}</span>
+        </div>
+    )
+}
 
-export function UserInfoCard({img, name, date, email, isActive, paid, comp, num, course, pack, rating}){
+
+export function Approve(){
+    const location = useLocation();
+    const [data, setData] = useState(null);
+    const info = [
+        {
+            title: "Brief Introduction",
+            content: "Enjoys writing and playing video games"
+        },
+        {
+            title: "Location",
+            content: "Lagos, Nigeria"
+        },
+        {
+            title: "Courses",
+            content: "UX Designer"
+        },
+        {
+            title: "Category",
+            content: "Cybersecurity, UX, Data Analysis"
+        },
+    ]
+    const tableContents = [
+        {
+            name: "Melanie Grutt",
+            img: img01,
+            date: "Feb 24",
+            email: "melanie@gmail.com",
+            approve: true
+        },
+        {
+            name: "Kiera Danlop",
+            img: img02,
+            date: "Mar 23",
+            email: "kiera@gmail.com",
+            approve: false
+        },
+        {
+            name: "Melanie Grutt",
+            img: img01,
+            date: "Feb 24",
+            email: "melanie@gmail.com",
+            approve: true
+        },
+    ]
+    useEffect(() => {
+        const email = location.search.split("=")[1];
+        console.log(email);
+
+        setData(_ => {
+            return tableContents.find(t => t.email === email);
+        })
+    }, [])
+    return (  
+        <Admin header="Approval">              
+            <div className={clsx['admin_profile']}>
+                <div className={clsx["admin_profile_top"]}>
+                    <div className={clsx['admin_profile_top_img']}>
+                        <img src={data ? data.img : avatar} style={{borderRadius: 10}} width="100%" alt="Avatar" />
+                    </div>
+                </div>
+                <div className={clsx["admin_profile_main"]}>
+                    <h1>{data ? data.name : "Olu Jacobs"}</h1>
+
+                    <div className={clsx.admin__profile_info}>
+                        {
+                            info.map(({title, content}, i) => (
+                                <Info title={title} content={content} key={i} />
+                            ))
+                        }
+
+                        <button
+                        className="button button-lg log_btn w-50 mt-3"
+                        style={{backgroundColor: data?.approve && "red"}}
+                        type="submit"
+                        >
+                        {data?.approve ? "Revoke" : "Approve"}
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </Admin>
+    )
+}
+
+
+export function UserInfoCard({img, name, date, email, isActive=null, paid, comp, num, course, pack, rating, approveHandler=() => {return}}){
     return (
         // <div>
-            <tr className={clsx.user__info_card}>
+            <tr className={clsx.user__info_card} onClick={(e) => approveHandler(e, email)}>
 
                 <td className={clsx.user__info}>
                     {num + 1}.
@@ -98,7 +195,7 @@ export function UserInfoCard({img, name, date, email, isActive, paid, comp, num,
                     </td>
                     ) 
                 }
-                {isActive &&
+                {isActive !== null  &&
                     (<td className={clsx.user__button}>
                         <span>
                             <Switch checked={isActive} />
@@ -112,6 +209,7 @@ export function UserInfoCard({img, name, date, email, isActive, paid, comp, num,
 
 
 export function Teachers(){
+    const navigate = useNavigate();
     const tableHeaders = ["No", "Name", "Date", "Email", "Approve"]
     const tableContents = [
         {
@@ -164,6 +262,12 @@ export function Teachers(){
             approve: false
         },
     ]
+
+    function approveHandler(e, email){
+        console.log(e.target, email);
+
+        if(email) navigate(`approve?email=${email}`);
+    }
     return (
         <Admin header={"Mentors/Teachers"}>
             <div className={clsx['admin_profile']}>
@@ -182,7 +286,7 @@ export function Teachers(){
                                 {
                                     tableContents.map(({img, email, date, name, approve}, i) => (
                                         <UserInfoCard key={i} name={name} img={img} num={i}
-                                        date={date} email={email} isActive={approve} />
+                                        date={date} email={email} isActive={approve} approveHandler={approveHandler} />
                                     ))
                                 }
                             </tbody>

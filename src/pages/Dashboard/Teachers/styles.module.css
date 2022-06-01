@@ -20,12 +20,12 @@
 }
 
 
-.students {
+.teachers {
     display: flex;
     align-items: center;
     width: 100%;
 }
-.students_main {
+.teachers_main {
     height: 100vh;
     flex: 1;
     background-color: var(--primary);
@@ -36,7 +36,7 @@
     width: 100%;
 }
 
-.students_topbar {
+.teachers_topbar {
     width: 80%;
     display: flex;
     align-items: center;
@@ -44,12 +44,12 @@
     margin-bottom: 30px;
 }
 
-.students_header {
+.teachers_header {
     /* display: flex;
     align-items: center;
     margin-bottom: 20px; */
 }
-.students_profile {
+.teachers_profile {
     background-color:var(--white);
     height: 80vh;
     padding: 40px;
@@ -57,17 +57,17 @@
     width: 100%;
     overflow-y: scroll;
 }
-.students_profile_top {
+.teachers_profile_top {
     display: flex;
     align-items: center;
     margin-bottom: 20;
 }
-.students_profile_top_img {
+.teachers_profile_top_img {
     width: 120px;
     height: 120px;
     margin-right: 40px;
 }
-.students_profile_top_button {
+.teachers_profile_top_button {
     background-color:var(--info);
     color: var(--white);
     border: none;
@@ -75,14 +75,14 @@
     border-radius: 10px;
 }
 
-.students_profile_top_button svg {
+.teachers_profile_top_button svg {
     /* margin-right: 5px; */
 }
-.students__header {
+.teachers__header {
     font-size: 1.5rem;
     color: var(--textColorDark);
 }
-.students__paragraph {
+.teachers__paragraph {
     line-height: 2;
     font-size: 1rem;
     letter-spacing: 0.6px;
@@ -153,7 +153,7 @@
 
 
 @media(max-width: 400px) {
-    .students_topbar h1 {
+    .teachers_topbar h1 {
         display: none;
     }
 }
@@ -207,6 +207,15 @@
     color: var(--textBlue)
 }
 
+.form_group select {
+    outline: none;
+    padding: 12px;
+    border: 1px solid rgba(208, 204, 204, 0.5);
+    border-radius: 5px;
+    text-indent: 40px;
+    background-color: var(--primary);
+}
+
 .form_group textarea{
     outline: none;
     border: 1px solid rgba(208, 204, 204, 0.5);
@@ -222,7 +231,7 @@
 
 .edit__profile form div label {
     color: var(--textBlue);
-    margin-bottom: 5px;
+    margin: 5px;
 }
 
 .edit__profile form div input {
@@ -231,28 +240,51 @@
 }
 
 
-.student_table {
+.teachers_table {
     width: 100%
 }
 
-/* .admin__student h1{
+/* .admin__teachers h1{
     font-size: 1.8rem;
     font-weight: 400;
     margin-bottom: 30px;
 } */
 
-.student_table {
+.teachers_table {
     border: none;
 }
 
-.student_table thead {
+.teachers_table thead {
     height: 70px;
     text-align: center;
 }
 
-.student_table tbody{
+.teachers_table tbody{
     width: 100%;
     border: none;
+}
+
+.teachers__profile_info {
+    margin: 30px 0px;
+    width: 100%;
+}
+
+.teachers__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 25px 0px;
+    letter-spacing: 0.4px;
+}
+
+.teachers__info_title {
+    color: var(--textColorLighter);
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.teachers__info_content {
+    font-size: 1.15rem;
 }
 
 @media screen and (max-width: 767px){

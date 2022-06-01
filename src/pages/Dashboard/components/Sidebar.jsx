@@ -31,10 +31,11 @@ function SidebarItem({icon: Icon, title, isMobile, path, ...props}){
 const Sidebar = ({isMobile}) => {
     const location = useLocation();
     const {generalState,  setGeneralState} = useAuth();
+    const route = location.pathname.split("/")[1];
 
     // const sidebarItemRef = useRef(null);
 
-    const data = location.pathname.includes("admin") ? [
+    const data =  route === "admin" ? [
         {
             icon: IoIosHome,
             path: "",
@@ -60,6 +61,22 @@ const Sidebar = ({isMobile}) => {
             path: "courses",
             title: "Courses"
         },
+    ] : route === "students" ?  [
+        {
+            icon: IoIosPerson,
+            path: "",
+            title: "My Profile"
+        },
+        {
+            icon: MdMessage,
+            path: "classes",
+            title: "My Classes"
+        },
+        {
+            icon: FiGift,
+            path: "courses",
+            title: "Courses"
+        },
     ] : [
         {
             icon: IoIosPerson,
@@ -76,7 +93,7 @@ const Sidebar = ({isMobile}) => {
             path: "courses",
             title: "Courses"
         },
-    ]
+    ];
 
     useEffect(() => {
         console.log("Sidebar is mounted");
@@ -96,7 +113,7 @@ const toggleSidebar = ()=>{
             <div className={clsx.sidebar_items} id="sidebar__items">
                 {
                     data.map(({icon, path, title}, i) => (
-                        <NavLink to={`${location.pathname.includes("admin") ? '/admin' : '/students'}${'/'+path}`}  key={i}>
+                        <NavLink to={`${route === "admin" ? '/admin' : route === 'students' ? '/students' : '/teachers'}${'/'+path}`}  key={i}>
                             <SidebarItem location={location}
                             isMobile={!isMobile} icon={icon} 
                             title={title} path={path} />

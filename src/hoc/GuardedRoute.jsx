@@ -15,9 +15,9 @@ const GuardedRoute = ({children}) => {
     if(isCookie('gotocourse-userdata')){
         if(userdata.token){
             console.log(userdata);
-            if(route === "admin" && userType !== "admin") {
-                navigate(`/${userType}s`);
-            } 
+            // if(route === "admin" && userType !== "admin") {
+            //     navigate(`/${userType}s`);
+            // } 
             // else if(route === "students" && userType !== "students"){
             //     navigate(userType === "admin" ? `/${userType}` : `/${userType}s`);
             // } else if(route === "teachers" && userType !== "teachers"){
