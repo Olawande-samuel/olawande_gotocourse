@@ -9,9 +9,9 @@ const Classroom = () => {
         <div className="d-flex content">
           <div className="class_left">
             <i className="icon">
-              <Class />
+              <Class style={{marginBottom:"18px"}}/>
             </i>
-            <header>
+            <header style={{marginBlock:"18px"}}>
               <h3 className="title">Classroom Management</h3>
             </header>
             <p className="paragraph">
