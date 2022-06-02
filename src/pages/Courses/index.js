@@ -22,7 +22,7 @@ export function ScrollToTop() {
 
   return null;
 }
-const courseList = [
+export const courseList = [
   {
     id: 1,
     title: "Cybersecurity",
@@ -189,7 +189,7 @@ const Card = ({ logo, title, details }) => {
   );
 };
 
-const CourseCard = ({ img, title, details, subtitle, author }) => {
+export const CourseCard = ({ img, title, details, subtitle, author }) => {
   return (
     <div className="card">
       <img src={img} alt="" className="card-img-top mentor_image" />
@@ -535,53 +535,7 @@ export const CourseProfile = () => {
             </div>
           </div>
         </section>
-        <section id="review" className={style.review}>
-          <h3 className={style.header}>Reviews</h3>
-          <p className={`subtitle ${style.subtitle}`}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus
-            ridiculus nunc adipiscing justo.
-          </p>
-          <div className={style.review_main}>
-            <Swiper
-              // install Swiper modules
-              modules={[Navigation, Pagination, Scrollbar, A11y]}
-              spaceBetween={30}
-              slidesPerView={1}
-              navigation
-              pagination={{ clickable: true }}
-              scrollbar={{ draggable: true }}
-              onSwiper={(swiper) => console.log(swiper)}
-              onSlideChange={() => console.log("slide change")}
-              breakpoints={{
-                // when window width is >= 320px
-                320: {
-                  slidesPerView: 1,
-                  spaceBetween: 3,
-                },
-                // when window width is >= 640px
-                575: {
-                  slidesPerView: 2,
-                  spaceBetween: 3,
-                },
-                700: {
-                  slidesPerView: 2,
-                  spaceBetween: 3,
-                },
-                1024: {
-                  slidesPerView: 2,
-                  spaceBetween: 30,
-                },
-              }}
-            >
-              <SwiperSlide>
-                <ReviewCard />
-              </SwiperSlide>
-              <SwiperSlide>
-                <ReviewCard />
-              </SwiperSlide>
-            </Swiper>
-          </div>
-        </section>
+        <ReviewSection />
         <section id="others" className={style.other_courses}>
           <h3 className={style.header}>Other Courses By Teachers</h3>
           <div className={style.other_main}>
@@ -699,7 +653,7 @@ export const ReviewCard = () => {
 
 export const OtherCard = () => {
   return (
-    <div className={`card ${style.package_card}`}>
+    <div className={`card ${style.package_card, style.othercard}`}>
       <div className="card-body">
         <p className={style.package_price}>Introduction to SQL</p>
         <p className={style.subtext}>Data Science</p>
@@ -718,3 +672,55 @@ export const OtherCard = () => {
     </div>
   );
 };
+
+export const ReviewSection = ()=> {
+  return (
+    <section id="review" className={style.review}>
+    <h3 className={style.header}>Reviews</h3>
+    <p className={`subtitle ${style.subtitle}`}>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus
+      ridiculus nunc adipiscing justo.
+    </p>
+    <div className={style.review_main}>
+      <Swiper
+        // install Swiper modules
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        spaceBetween={30}
+        slidesPerView={1}
+        navigation
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+        onSwiper={(swiper) => console.log(swiper)}
+        onSlideChange={() => console.log("slide change")}
+        breakpoints={{
+          // when window width is >= 320px
+          320: {
+            slidesPerView: 1,
+            spaceBetween: 3,
+          },
+          // when window width is >= 640px
+          575: {
+            slidesPerView: 2,
+            spaceBetween: 3,
+          },
+          700: {
+            slidesPerView: 2,
+            spaceBetween: 3,
+          },
+          1024: {
+            slidesPerView: 2,
+            spaceBetween: 30,
+          },
+        }}
+      >
+        <SwiperSlide>
+          <ReviewCard />
+        </SwiperSlide>
+        <SwiperSlide>
+          <ReviewCard />
+        </SwiperSlide>
+      </Swiper>
+    </div>
+  </section>
+  )
+}

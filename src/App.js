@@ -10,12 +10,14 @@ import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
 import {Profile as StudentProfile, Classes as StudentClasses, Edit as StudentEdit, Courses as StudentCourses} from "./pages/Dashboard/Students";
 import {Dashboard, Student, Fees, Teachers, Courses, Approve} from "./pages/Dashboard/Admin";
-import {Profile as TeacherProfile, Classes as TeacherClasses, Edit as TeacherEdit, Courses as TeacherCourses, CreateCourse} from "./pages/Dashboard/Teachers";
+import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, Courses as TeacherCourses, CreateCourse} from "./pages/Dashboard/Teachers";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/AuthContext";
 import "react-multi-carousel/lib/styles.css";
 import { Categories, CourseDetail, CourseList, CourseProfile } from "./pages/Courses";
 import {Home as BecomeATeacher, Profile} from "./pages/Teacher";
+import All from "./pages/Teacher/Teachers";
+import TeacherProfile from "./pages/Teacher/TeacherProfile";
 
 
 
@@ -28,18 +30,19 @@ function App() {
           <Route index element={<Landing />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
+            <Route path="become-a-teacher" element={<BecomeATeacher />} />
             <Route path="students" element={<Out />}>
               <Route path="" element={<StudentProfile  />} />
               <Route path="classes" element={<StudentClasses  />} />
               <Route path="profile/edit" element={<StudentEdit  />} />
               <Route path="courses" element={<StudentCourses />} />
             </Route>
-            <Route path="teacher" element={<Out/>}>
-              <Route path="" element={<BecomeATeacher />} />
-              <Route path="profile" element={<Profile />} />
+            <Route path="teachers" element={<Out/>}>
+              <Route index element={<All />} />
+              <Route path=":id" element={<TeacherProfile />} />
             </Route>
-            <Route path="teachers" element={<Out />}>
-              <Route path="" element={<TeacherProfile  />} />
+            <Route path="teacher" element={<Out />}>
+              <Route path="" element={<TeacherDashboard  />} />
               <Route path="classes" element={<TeacherClasses  />} />
               <Route path="profile/edit" element={<TeacherEdit  />} />
               <Route path="courses" element={<TeacherCourses />} />
