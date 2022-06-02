@@ -37,6 +37,10 @@
 .active {
   color: var(--btn-color) !important;
 }
+.backgroundColor{
+  background: var(--btn-color);
+  color: #fff !important;
+}
 /* end */
 * {
   margin: 0;

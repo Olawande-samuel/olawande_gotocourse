@@ -57,7 +57,7 @@
 .breadcrumbs_wrapper li {
   font-size: 0.9rem;
   font-weight: 500;
-  color: grey;
+  color: #9F9F9F;
 }
 .top h3 {
   flex: 50%;
@@ -153,7 +153,7 @@
 .course_subtitle {
   font-size: 12px;
   margin-bottom: 1rem;
-  color: lightgray;
+  color: #9f9f9f;
 }
 
 /* *************************DETAILS****************************************** */
@@ -190,7 +190,8 @@
 
 .details_main li,
 .profile_section li,
-.syllabus li {
+.syllabus li,
+.button_card li{
   background: url(../../images/list.png) no-repeat left;
   background-position-y: 7px;
   padding: 5px 10px 5px 35px;
@@ -342,6 +343,13 @@
 .review_text {
   text-align:left
 }
+
+
+.subtext {
+  font-size: 14px;
+  color:#9F9F9F;
+}
+
 .profile_info {
 margin-left: 1.375rem;
 }
@@ -367,9 +375,90 @@ margin-left: 1.375rem;
   margin-left: .3rem;
 }
 
+.othercard:hover {
+  background: var(--btn-color);
+  color: white;
+}
 .other_main {
   margin-top: 2rem;
 }
 /* .card:hover .button {
     background-color:var(--btn-color)
 } */
+
+.teacher_profile_wrapper {
+  margin-block: 3rem;
+}
+
+.teacher_profile_options {
+  padding: 10px 35px !important;
+}
+
+
+.teacher_card_right {
+    padding-inline: 0.3rem;
+    width: min(100%, 60%);
+}
+.button_card {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.button_group label  {
+  border: 1px solid var(--btn-color) !important;
+  color: var(--btn-color);
+}
+.btn_check:checked + .teacher_profile_options , .button_group label:hover{
+  background-color: var(--btn-color) !important;
+}
+
+.teacher_card_right small {
+    font-size: 12px;
+  }
+
+.teacher_profile_options:last-child {
+  border-bottom-right-radius: 0 !important;
+  border-top-right-radius: 10px !important;
+}
+
+
+.teacher_profile_options:nth-child(1) {
+  border-top-left-radius: 10px !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.teacher_img_wrapper, .teacher_image {
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
+}
+
+.teacher_image {
+  object-fit: cover;
+  object-position: top;
+}
+
+.teacher_name {
+  color: var(--text-blue);
+  font-weight: 700;
+  margin-bottom: 3px;
+  font-size: 18px;
+}
+.teacher_occupation, .teacher_rating {
+  display: block;
+  font-size:15px;
+  margin-bottom: 1rem;
+}
+.teacher_rating {
+  margin-right: 1rem;
+}
+.teacher_article h5 {
+  font-size: 1.2rem
+}
+.teacher_paragraph {
+  font-size: 15px;
+}
+
+.teacher_profile_wrapper ul li {
+  font-size: 15px;
+
+}
