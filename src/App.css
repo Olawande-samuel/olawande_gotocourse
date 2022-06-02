@@ -1430,3 +1430,8 @@ line-height: 45px;
     }
 }
 
+
+
+.frequent_answer, .expand__less {
+  display: none;
+}

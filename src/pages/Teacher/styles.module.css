@@ -1,0 +1,361 @@
+:root {
+    --primary: #f5f5f5;
+    --black: rgba(0, 0, 0, 1);
+    --white: #fff;
+    --obsidian: #070f18;
+    --textColorDark: #081131;
+    --textColorLight: #5e5b5b;
+    --textColorLighter: rgb(159, 159, 159);
+    --btnColor: rgb(12, 33, 145);
+    --accentColor: #023047;
+    --textBlue: #0C2191;
+    --greenish: #023047;
+    --secondary: #2F80ED;
+    --gray: #9DA6BA;
+    --info: #5A63F7;
+    --green: #037615;
+    --mobile: 425px;
+    --tablet: 768px;
+    --laptop: 1024px;
+    --letterSpacing: 0.6px;
+}
+
+
+.jumbotron {
+    background-image: url("../../images/become_teacher.png");
+    height: 100vh;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    background-position: center;
+}
+
+
+.jumbotron__absolute {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.3);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 300px;
+    align-items: flex-start;
+}
+
+.jumbotron__absolute h1 {
+    width: 60%;
+    text-align: left;
+    line-height: 1.5;
+    font-weight: 600;
+    color: var(--textBlue);
+    margin-bottom: 30px;
+}
+
+.jumbotron__absolute p {
+    line-height: 2;
+    letter-spacing: 0.4px;
+    width: 60%;
+    margin-bottom: 40px;
+}
+
+.jumbotron__absolute button {
+    border: none;
+    border-radius: 5px;
+    padding: 20px 40px;
+    color: var(--white);
+    background-color: var(--textBlue);
+}
+
+
+.frequently_asked_questions {
+    background-color: #F1F8FF;
+}
+
+.how_it_works, .best_features, .frequently_asked_questions, .reviews {
+    padding: 50px;
+    margin-bottom: 30px;
+}
+
+.how_it_works h1, .best_features h1, .frequently_asked_questions h1, .reviews h1{
+    color: var(--textBlue);
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.how_it_works > p, .best_features > p, .frequently_asked_questions > p, .reviews > p {
+    text-align: center;
+    color: var(--textColorLighter);
+    margin: 30px auto;
+    /* line */
+    margin-bottom: 30px;
+    width: 60%;
+}
+
+
+.how_it_works_container {
+    padding: 30px;
+}
+
+.paper, .best__features_card {
+    padding: 20px;
+    text-align: left;
+}
+
+.paper span {
+    background-color: var(--textBlue);
+    padding: 16px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.best__features_card span {
+    background-color: var(--textBlue);
+    padding: 16px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.paper span svg, .best__features_card span svg{
+    font-size: 1.5rem;
+    color: var(--white);
+}
+
+.paper h4{
+    font-size: 1.3rem;
+}
+
+.best__features_card h4 {
+    font-size: 1.5rem;
+    margin-bottom: 20px
+}
+
+.best__features_card p {
+    font-size: 1.1rem;
+    line-height: 2;
+    color: var(--textColorLight)
+}
+
+.paper p{
+    font-size: 0.9rem;
+    color: var(--textColorLight)
+}
+
+.rectangle {
+    height: 120px;
+    width: 200px;
+    background-color: var(--textBlue);
+    position: absolute;
+    left: -50px;
+    z-index: -10;
+    top: calc((100% - 60%) - 120px);
+}
+
+.rectangle_2 {
+    height: 120px;
+    width: 200px;
+    background-color: var(--textBlue);
+    position: absolute;
+    right: 0px;
+    z-index: -10;
+    top: calc((100% - 60%) - 120px);
+}
+
+.best__features_img {
+    background-image: url("../../images/classroom_management.png");
+    width: 100%;
+    height: 400px;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.best__features_img_live {
+    background-image: url("../../images/live_class.png");
+    width: 85%;
+    height: 400px;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.best__features_creator {
+    background-image: url("../../images/creator_suite.png");
+    width: 100%;
+    height: 400px;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.best__features_img_custom {
+    background-image: url("../../images/customization.png");
+    width: 85%;
+    height: 400px;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+
+.frequently_asked_questions_container {
+    padding: 30px;
+}
+
+
+.frequently_asked_questions_paper {
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.question > p{
+    margin: 0px;
+    font-weight: 500;
+}
+
+.question > span {
+    cursor: pointer;
+}
+
+.question > span svg {
+    font-size: 1.5rem;
+}
+
+
+.answer {
+    color: var(--textColorLight);
+    padding: 20px 0px;
+    padding-left: 20px;
+    font-size: 0.9rem;
+    letter-spacing: 0.4px;
+    line-height: 2;
+}
+
+
+.reviews {
+    overflow: hidden;
+    width: 100%;
+}
+
+
+.reviews__container {
+    overflow: scroll;
+    /* display: flex; */
+}
+
+
+.reviews_paper {
+    width: 530px;
+    padding: 40px 20px;
+    border-radius: 20px;
+    margin: 20px;
+}
+
+.reviews_paper q {
+    font-size: 0.9rem;
+    color: var(--textColorLight);
+}
+
+
+.reviews_info {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.reviews_info > div {
+    display: flex;
+    width: 70%;
+    align-items: center;
+}
+
+.reviews_info > div img {
+    margin-right: 20px;
+}
+
+.reviews_info > div > div h5 {
+    font-weight: 600;
+}
+
+.reviews_info > div > div span {
+    font-weight: 400;
+    font-size: 0.8rem;
+    letter-spacing: 0.4px;
+    color: var(--textColorLight);
+}
+
+
+.breadcrumb {
+    padding: 30px 50px;
+    text-indent: 20px;
+}
+
+.profile_navigation {
+    padding: 20px;
+    padding-left: 0px;
+    border-bottom: 1px solid rgba(159, 159, 159, .3);
+    margin: 0px auto;
+    margin-bottom: 50px;
+    width: 90%;
+}
+
+.breadcrumb_link {
+    color: var(--textColorLighter);
+    font-weight: 300;
+}
+
+.breadcrumb_main_page {
+    color: var(--textBlue);
+    font-weight: 500;
+}
+
+.profile_navigation span {
+    margin: 10px 20px;
+    cursor: pointer;
+    color: var(--textColorLighter);
+    padding: 20px 0px;
+    font-weight: 300;
+}
+
+.profile_navigation span:hover, .profile_navigation span.active {
+    margin: 10px 20px;
+    cursor: pointer;
+    color: var(--textBlue);
+    font-weight: 500;
+    border-bottom: 2px solid var(--textBlue);
+}
+
+
+
+@media screen and (max-width: 560px){
+    .jumbotron__absolute h1 {
+        width: 80%;
+    }
+    
+    .jumbotron__absolute p {
+        width: 80%;
+    }
+
+    .how_it_works_container {
+        padding: 10px
+    }
+}
+
+@media screen and (max-width: 890px){
+    .rectangle_2 {
+        top: calc((100% - 60%) + 120px);
+    }
+}

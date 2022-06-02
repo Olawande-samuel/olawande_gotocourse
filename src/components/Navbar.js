@@ -81,7 +81,7 @@ const Navbar = () => {
   }, [drop,status]);
   
   return (
-    <nav className="nav navbar navbar-expand-lg navbar-light">
+    <nav className="nav navbar navbar-expand-lg navbar-light" style={{borderBottom: "1px solid rgba(159, 159, 159, .3)"}}>
 
       <div className="container navbar-container align-items-center">
         <a href="/" className="logo navbar-brand ">
