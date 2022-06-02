@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/AuthContext";
 import "react-multi-carousel/lib/styles.css";
 import { Categories, CourseDetail, CourseList, CourseProfile } from "./pages/Courses";
+import {Home as BecomeATeacher, Profile} from "./pages/Teacher";
 
 
 function App() {
@@ -30,6 +31,10 @@ function App() {
               <Route path="classes" element={<StudentClasses  />} />
               <Route path="profile/edit" element={<StudentEdit  />} />
               <Route path="courses" element={<StudentCourses />} />
+            </Route>
+            <Route path="teacher" element={<Out/>}>
+              <Route path="" element={<BecomeATeacher />} />
+              <Route path="profile" element={<Profile />} />
             </Route>
             <Route path="teachers" element={<Out />}>
               <Route path="" element={<TeacherProfile  />} />
