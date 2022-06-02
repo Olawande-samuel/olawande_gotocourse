@@ -1,0 +1,25 @@
+.main {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    /* padding-block: 4.375rem; */
+}
+.navigation {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit,  1fr);
+  gap: 1rem;
+  border-bottom: 1px solid rgba(217, 217, 217, 0.4);
+  margin-bottom: 2rem;
+}
+.navigation label, .navigation a {
+  font-size: 14px;
+  white-space: nowrap;
+}
+/* .navigation label input {
+  opacity: 0;
+} */
+
+/* .navigation :active {
+  border-bottom: 2px solid var(--text-blue);
+} */
