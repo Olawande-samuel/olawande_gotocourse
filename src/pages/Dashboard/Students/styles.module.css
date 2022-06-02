@@ -75,9 +75,7 @@
     border-radius: 10px;
 }
 
-.students_profile_top_button svg {
-    /* margin-right: 5px; */
-}
+
 .students__header {
     font-size: 1.5rem;
     color: var(--textColorDark);
@@ -256,5 +254,8 @@
 }
 
 @media screen and (max-width: 767px){
-    
+    .students_topbar {
+        width: 100%;
+       
+    }
 }

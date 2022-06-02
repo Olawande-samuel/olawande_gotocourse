@@ -234,8 +234,11 @@
         left: -1000px
     }
 
+    
+}
+
+@media screen and (max-width:570px){
     .searchbar {
-        width: 80%;
-        /* margin-bottom: 30px; */
+        width: 20%;
     }
 }

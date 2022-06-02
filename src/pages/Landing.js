@@ -23,7 +23,7 @@ const Landing = () => {
         <Learn />
         <Transition />
         <Becoming />
-        <Classroom />
+        {/* <Classroom /> */}
         <Career />
         <Mentors />
         <Testimonials />

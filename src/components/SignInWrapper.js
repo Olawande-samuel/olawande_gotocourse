@@ -4,7 +4,7 @@ import Logo from "../images/Logo.png";
 const SignInWrapper = ({ image, children }) => {
   return (
     <section className="signWrapper">
-      <div style={{display:"grid", placeItems:"center", width:"min(100% - 2rem, 600px)"}}>
+      <div style={{display:"grid", placeItems:"center", width:"min(100% - .5rem, 600px)"}}>
         <header>
           <Link to="/" >
           <img src={Logo} alt="" />
