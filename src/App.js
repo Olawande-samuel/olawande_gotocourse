@@ -18,6 +18,8 @@ import { Categories, CourseDetail, CourseList, CourseProfile } from "./pages/Cou
 import {Home as BecomeATeacher, Profile} from "./pages/Teacher";
 
 
+
+
 function App() {
   return (
     <AuthContextProvider>

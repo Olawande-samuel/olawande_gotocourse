@@ -38,6 +38,15 @@ const AdminLogin = () => {
       console.log(formstate);
       const res = await login(formstate, "admin");
       console.log(res);
+      const {message, success, statusCode} = res;
+      if(!success) throw new AdvancedError(message, statusCode);
+      else {
+        const {data} = res;
+
+        //check if the keys gotocourse-userdata gotocourse-usertype exists then clear them
+
+        console.log(data);
+      }
     }catch(err){
       toast.error(err.message, {
         position: "top-right",
