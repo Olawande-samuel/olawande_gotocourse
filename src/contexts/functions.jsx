@@ -30,7 +30,7 @@ export const authFunctions = {
     register: async function(_data, type){
         try{
             console.log(_data)
-            const res = await axios.post(type !== "admin" ? `${baseURL}/user/signup` : `${baseURL}/admin/signin`,
+            const res = await axios.post(type !== "admin" ? `${baseURL}/user/signup` : `${baseURL}/admin/signup`,
             JSON.stringify(_data),
             {
                 headers: {
