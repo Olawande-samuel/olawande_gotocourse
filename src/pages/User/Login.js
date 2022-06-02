@@ -45,24 +45,26 @@ const Login = () => {
     if(data.email.trim() === "" || data.password.trim() === "") return;
     setLoading(true);
     try {
-      if(data.userType.trim() === "") throw new AdvancedError("Missing user type", 0);
+      // if(data.userType.trim() === "") throw new AdvancedError("Missing user type", 0);
       const response = await login(data, "user");
 
       console.log(response)
       const {success, statusCode, message} = response;
+      
       if(success) {
         const {data: d} = response;
+
         //before navigating
         //save some thing to cookie and state
         saveCookie('gotocourse-userdata', d);
-        saveCookie('gotocourse-usertype', data.userType);
+        saveCookie('gotocourse-usertype', d.userType);
         setGeneralState(old => {
           return {
             ...old,
             notification: response.message
           }
         })
-        data.userType === "student" ? navigate("/students") : navigate("/teachers");
+        d.userType === "student" ? navigate("/students") : navigate("/teachers");
       }else throw new AdvancedError(message, statusCode);
 
     } catch (err) {
@@ -160,7 +162,7 @@ const Login = () => {
               className="button button-md log_btn w-100"
               type="submit"
             >
-              Log in
+              Sign In
             </button>
           )}
         </form>

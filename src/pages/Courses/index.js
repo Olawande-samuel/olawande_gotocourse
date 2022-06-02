@@ -392,7 +392,7 @@ export const CourseProfile = () => {
               </div>
             </div>
             <div className="col-md-6">
-              <img src={details} alt="laptop" />
+              <img src={details} alt="laptop" style={{maxWidth:"100%"}} />
             </div>
           </div>
           <header>
