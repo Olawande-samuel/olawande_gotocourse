@@ -7,46 +7,57 @@ const navList = [
   {
     id: 1,
     title: "Cybersecurity",
+    link: "/categories/cybersecurity"
   },
   {
     id: 2,
     title: "Risk Management",
+    link: "/categories/risk-management"
   },
   {
     id: 3,
     title: "Data Science",
+    link: "/categories/data-science"
   },
   {
     id: 4,
     title: "Project Management",
+    link: "/categories/project-management"
   },
   {
     id: 5,
     title: "IT compliance",
+    link: "/categories/it-compliance"
   },
   {
     id: 6,
     title: "IT Audit",
+    link: "/categories/it-audit"
   },
   {
     id: 7,
     title: "Business Analysis",
+    link: "/categories/business-analysis"
   },
   {
     id: 8,
     title: "Product Design",
+    link: "/categories/product-design"
   },
   {
     id: 9,
     title: "Web Design",
+    link: "/categories/web-design"
   },
   {
     id: 10,
     title: "Software Development",
+    link: "/categories/software-development"
   },
   {
     id: 11,
     title: "IT Service Management",
+    link: "/categories/it-service-management"
   },
 ];
 const Navbar = () => {
@@ -104,8 +115,8 @@ const Navbar = () => {
               </button>
               {drop ? <NavList dropRef={dropRef} /> : null}
             </li>
-            <li className="nav-item d-flex align-items-center nav_link me-2"><Link to="/students" className="link">Go to Dashboard</Link></li>
-            <li className="nav-item d-flex align-items-center nav_link"><Link to="/admin/signup" className="link">Become a Teacher</Link></li>
+            {/* <li className="nav-item d-flex align-items-center nav_link me-2"><Link to="/students" className="link">Go to Dashboard</Link></li> */}
+            <li className="nav-item d-flex align-items-center nav_link"><Link to="/become-a-teacher" className="link">Become a Teacher</Link></li>
             <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/login" className="link">Sign In</Link></li>
             <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/signup" className="link">Register</Link></li>
           </ul>
@@ -151,8 +162,9 @@ const NavList = ({ dropRef }) => {
     >
       <ul>
         {navList.map((list) => (
-          <li>
-            <a href="/">{list.title}</a>
+          <li key={list.id}>
+            <Link to={list.link}>{list.title}</Link>
+           
           </li>
         ))}
       </ul>

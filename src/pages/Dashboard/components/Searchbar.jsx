@@ -12,7 +12,7 @@ const Searchbar = ({showIcon, placeholder="", changeHandler, value}) => {
         <div className={clsx.searchbar}>
             {showIcon && <IoIosSearch />}
             <input type="text" placeholder={placeholder} onChange={changeHandler}
-            value={value} className={clsx.searchbar_input} />
+            value={value} className={`d-none d-sm-block ${clsx.searchbar_input}`} />
         </div>
     )
 }
