@@ -20,6 +20,8 @@ import All from "./pages/Teacher/Teachers";
 import TeacherProfile from "./pages/Teacher/TeacherProfile";
 
 
+
+
 function App() {
   return (
     <AuthContextProvider>
