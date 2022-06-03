@@ -1,6 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
 
-import { authFunctions } from "./functions";
+import { authFunctions, studentFunctions, adminFunctions, teacherFunctions } from "./functions";
 import { useCookie } from "../hooks";
 
 const AuthContext = createContext();
@@ -34,7 +34,7 @@ const AuthContextProvider = ({children}) => {
         return () => console.log("Rerendering");
     }, [])
     return (
-        <AuthContext.Provider value={{authFunctions, generalState, setGeneralState}}>
+        <AuthContext.Provider value={{authFunctions, teacherFunctions, studentFunctions, adminFunctions, generalState, setGeneralState}}>
             {children}
         </AuthContext.Provider>
     )

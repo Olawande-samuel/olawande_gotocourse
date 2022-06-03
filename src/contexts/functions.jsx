@@ -243,12 +243,13 @@ export const adminStudentFunctions = {
 
 
 export const adminFunctions = {
-    updateAvatar: async function(formdata){
+    updateAvatar: async function(formdata, token){
         try{
             const res = await axios.post(`${baseURL}/admin/profile/avatar/update`,
             JSON.stringify(formdata),
             {
                 headers: {
+                    "Token": token,
                     "Content-Type": "multipart/form-data"
                 },
                 validateStatus: status => {
@@ -271,7 +272,7 @@ export const adminFunctions = {
             }
         }
     },
-    updateProfile: async function(_data){
+    updateProfile: async function(_data, token){
         try{
             const res = await axios.patch(`${baseURL}/admin/profile/update`,
             JSON.stringify(_data),
@@ -439,12 +440,13 @@ export const adminFunctions = {
 
 
 export const studentFunctions = {
-    updateAvatar: async function(formdata){
+    updateAvatar: async function(formdata, token){
         try{
             const res = await axios.post(`${baseURL}/user/profile/avatar/update`,
             JSON.stringify(formdata),
             {
                 headers: {
+                    "Token": token,
                     "Content-Type": "multipart/form-data"
                 },
                 validateStatus: status => {
@@ -526,12 +528,13 @@ export const studentFunctions = {
 
 
 export const teacherFunctions = {
-    updateAvatar: async function(formdata){
+    updateAvatar: async function(formdata, token){
         try{
             const res = await axios.post(`${baseURL}/user/profile/avatar/update`,
             JSON.stringify(formdata),
             {
                 headers: {
+                    "Token": token,
                     "Content-Type": "multipart/form-data"
                 },
                 validateStatus: status => {
