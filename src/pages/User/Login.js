@@ -58,7 +58,7 @@ const Login = () => {
             notification: response.message
           }
         })
-        d.userType === "student" ? navigate("/students") : navigate("/teachers");
+        d.userType === "student" ? navigate("/students") : navigate("/teacher");
       }else throw new AdvancedError(message, statusCode);
 
     } catch (err) {

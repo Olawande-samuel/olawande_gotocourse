@@ -113,7 +113,7 @@ const toggleSidebar = ()=>{
             <div className={clsx.sidebar_items} id="sidebar__items">
                 {
                     data.map(({icon, path, title}, i) => (
-                        <NavLink to={`${route === "admin" ? '/admin' : route === 'students' ? '/students' : '/teachers'}${'/'+path}`}  key={i}>
+                        <NavLink to={`${route === "admin" ? '/admin' : route === 'students' ? '/students' : '/teacher'}${'/'+path}`}  key={i}>
                             <SidebarItem location={location}
                             isMobile={!isMobile} icon={icon} 
                             title={title} path={path} />

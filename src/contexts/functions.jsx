@@ -531,12 +531,13 @@ export const studentFunctions = {
 
 export const teacherFunctions = {
     updateAvatar: async function(formdata, token){
+
         try{
             const res = await axios.post(`${baseURL}/user/profile/avatar/update`,
             JSON.stringify(formdata),
             {
                 headers: {
-                    "Bearer-Token": token,
+                    "Token": token,
                     "Content-Type": "multipart/form-data"
                 },
                 validateStatus: status => {
@@ -559,13 +560,14 @@ export const teacherFunctions = {
             }
         }
     },
-    updateProfile: async function(_data){
+    updateProfile: async function(_data, token){
         try{
             const res = await axios.patch(`${baseURL}/user/profile/update`,
             JSON.stringify(_data),
             {
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Token": token
                 },
                 validateStatus: status => {
                     return status >= 200 && status <= 505;
