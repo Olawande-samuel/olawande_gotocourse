@@ -9,12 +9,14 @@ import { useAuth } from "../../contexts/AuthContext";
 import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
+import { useCookie } from "../../hooks";
 
 
 
 const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
-  const {authFunctions: {login}} = useAuth();
+  const {authFunctions: {login}, setGeneralState} = useAuth();
+  const {saveCookie, removeCookie, isCookie} = useCookie();
   const [formstate, setFormstate] = useState({
     email: "",
     password: ""
@@ -35,11 +37,22 @@ const AdminLogin = () => {
       const {message, success, statusCode} = res;
       if(!success) throw new AdvancedError(message, statusCode);
       else {
-        const {data} = res;
-
-        //check if the keys gotocourse-userdata gotocourse-usertype exists then clear them
-
-        console.log(data);
+          const {data: d} = res;
+  
+          //before navigating
+          //save some thing to cookie and state
+          if(isCookie('gotocourse-userdata') || isCookie('gotocourse-usertype')){
+            removeCookie('gotocourse-userdata');
+            removeCookie('gotocourse-usertype');
+          }
+          saveCookie('gotocourse-userdata', d);
+          saveCookie('gotocourse-usertype', d.userType);
+          setGeneralState(old => {
+            return {
+              ...old,
+              notification: res.message
+            }
+          })
       }
     }catch(err){
       toast.error(err.message, {

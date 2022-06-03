@@ -14,7 +14,7 @@ import { AdvancedError } from "../../classes";
 const Login = () => {
   const navigate = useNavigate()
   const {authFunctions: {login}, setGeneralState} = useAuth();
-  const {saveCookie} = useCookie();
+  const {saveCookie, removeCookie, isCookie} = useCookie();
 
   const [data, setData] = useState({
     email: "",
@@ -50,6 +50,10 @@ const Login = () => {
 
         //before navigating
         //save some thing to cookie and state
+        if(isCookie('gotocourse-userdata') || isCookie('gotocourse-usertype')){
+          removeCookie('gotocourse-userdata');
+          removeCookie('gotocourse-usertype');
+        }
         saveCookie('gotocourse-userdata', d);
         saveCookie('gotocourse-usertype', d.userType);
         setGeneralState(old => {

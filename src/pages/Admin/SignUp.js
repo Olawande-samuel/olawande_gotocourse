@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 
 
@@ -8,13 +8,18 @@ import Input from '../../components/Input'
 import Password from '../../components/Password'
 import SignInWrapper from '../../components/SignInWrapper';
 import {useAuth} from "../../contexts/AuthContext";
-
+import { useCookie } from "../../hooks";
 
 
 
 
 const AdminSignup = () => {
-  const {authFunctions: {register}} = useAuth();
+  const navigate = useNavigate();
+  const { saveCookie, isCookie, removeCookie } = useCookie();
+  const {
+    authFunctions: { register },
+    setGeneralState,
+  } = useAuth();
   const [loading, setLoading] = useState(false)
   const [formstate, setFormstate] = useState({
     fullname: "",
@@ -47,7 +52,19 @@ const AdminSignup = () => {
       else {
         const {data} = res;
         //do some stuffs like clear the cookie gotocourse-userdata gotocourse-usertype
-        console.log(data); 
+        if(isCookie('gotocourse-userdata') || isCookie('gotocourse-usertype')){
+          removeCookie('gotocourse-userdata');
+          removeCookie('gotocourse-usertype');
+        }
+        saveCookie("gotocourse-userdata", data);
+        saveCookie("gotocourse-usertype", data.userType);
+        setGeneralState((old) => {
+          return {
+            ...old,
+            notification: message,
+          };
+        });
+        navigate("/admin");
       }
     }catch(err){
       toast.error(err.message, {
