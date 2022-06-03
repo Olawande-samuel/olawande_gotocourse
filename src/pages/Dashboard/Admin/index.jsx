@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react";
 import {MdEdit} from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+
 
 
 import {Switch} from "@mui/material";
@@ -14,6 +16,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import img01 from "../../../images/mentor1.png";
 import img02 from "../../../images/mentor2.png";
 import { GuardedRoute } from "../../../hoc";
+import { AdvancedError } from "../../../classes";
 
 
 
@@ -109,7 +112,18 @@ export function Approve(){
         })
     }, [])
     return (  
-        <Admin header="Approval">              
+        <Admin header="Approval">  
+            {/* <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />              */}
             <div className={clsx['admin_profile']}>
                 <div className={clsx["admin_profile_top"]}>
                     <div className={clsx['admin_profile_top_img']}>
@@ -212,6 +226,32 @@ export function UserInfoCard({img, name, date, email, isActive=null, paid, comp,
 
 export function Teachers(){
     const navigate = useNavigate();
+    const {adminTeacherFunctions: {fetch}, generalState: {userdata}} = useAuth();
+    useEffect(() => {
+        (async () => {
+            try{
+                const res = await fetch(userdata?.token);
+                console.log(res);
+                const {message, success, statusCode} = res;
+                if(!success) throw new AdvancedError(message, statusCode);
+                else {
+                    const {data} = res;
+                    //do somethings
+                    console.log(data);
+                }
+            }catch(err){
+                toast.error(err.message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        })()
+    }, [])
     const tableHeaders = ["No", "Name", "Date", "Email", "Approve"]
     const tableContents = [
         {
@@ -434,6 +474,32 @@ export function Fees(){
 
 
 export function Student(){
+    const {adminStudentFunctions: {fetch}, generalState: {userdata}} = useAuth();
+    useEffect(() => {
+        (async () => {
+            try{
+                const res = await fetch(userdata?.token);
+                console.log(res);
+                const {message, success, statusCode} = res;
+                if(!success) throw new AdvancedError(message, statusCode);
+                else {
+                    const {data} = res;
+                    //do somethings
+                    console.log(data);
+                }
+            }catch(err){
+                toast.error(err.message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        })()
+    }, [])
     const tableHeaders = ["No", "Name", "Date", "Email", "Approve"]
     const tableContents = [
         {
@@ -556,6 +622,17 @@ const toggleSidebar = ()=> {
 
         <GuardedRoute>
             <div className={clsx['admin']}>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                /> 
                 <Sidebar isMobile={isMobile} />
                 <div className={clsx['admin_main']}>
                     <div className={`align-items-center ${clsx['admin_topbar']}`}>

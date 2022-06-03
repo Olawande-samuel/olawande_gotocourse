@@ -14,7 +14,7 @@ const GuardedRoute = ({children}) => {
 
     if(isCookie('gotocourse-userdata')){
         if(userdata.token){
-            console.log(userdata);
+            console.log(userdata.token);
             // if(route === "admin" && userType !== "admin") {
             //     navigate(`/${userType}s`);
             // } 
