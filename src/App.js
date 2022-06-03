@@ -18,6 +18,7 @@ import { Categories, CourseDetail, CourseList, CourseProfile } from "./pages/Cou
 import {Home as BecomeATeacher, Profile} from "./pages/Teacher";
 import All, {Payment} from "./pages/Teacher/Teachers";
 import TeacherProfile from "./pages/Teacher/TeacherProfile";
+import TeacherSignup from "./pages/User/TeacherSignup";
 
 
 
@@ -45,9 +46,9 @@ function App() {
               </Route>
             </Route>
             <Route path="teacher" element={<Out />}>
-              <Route path="" element={<TeacherDashboard  />} />
-              <Route path="login" element={<AdminLogin />} />
-              <Route path="signup" element={<AdminSignup />} />
+              <Route path="" element={<TeacherDashboard  />} /> 
+              <Route path="login" element={<Login />} />
+              <Route path="signup" element={<TeacherSignup />} />
               <Route path="classes" element={<TeacherClasses  />} />
               <Route path="profile/edit" element={<TeacherEdit  />} />
               <Route path="courses" element={<TeacherCourses />} />
@@ -71,7 +72,7 @@ function App() {
             </Route>
             <Route path="admin" element={<Out />}>
               <Route path="login" element={<AdminLogin />} />
-              {/* <Route path="signup" element={<AdminSignup />} /> */}
+              <Route path="signup" element={<AdminSignup />} />
             </Route> 
         </Route>
         <Route path="*" element={<h1 className="text-center">Page Not Found</h1>} />

@@ -51,7 +51,7 @@ export function Profile(){
         },
     ]
     function editProfileHandler(e){
-        navigate("/teachers/profile/edit");
+        navigate("/teacher/profile/edit");
     }
     return (  
         <Teachers isMobile={isMobile} userdata={userdata} notification={notification}>
@@ -222,12 +222,12 @@ export function CreateCourse(){
 
 
 export function Edit(){
-    const {generalState: {isMobile, userdata}, teacherFunctions: {updateAvatar}} = useAuth();
+    const {generalState: {isMobile, userdata}, teacherFunctions: {updateAvatar, updateProfile}} = useAuth();
     const [imageUrl, setImageUrl] = useState(null);
     const [isUplaoding, setIsUploading] = useState(false);
     const [file, setFile] = useState(null);
     console.log(userdata);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [formstate, setFormstate] = useState({
         firstname: userdata?.firstName ?? "",
         lastname: userdata?.lastName ?? "",
@@ -239,11 +239,26 @@ export function Edit(){
 
     async function submitHandler(e){
         e.prevetDefault();
-        setLoading(_ => true);
+        setLoading(true);
         try{
             if(formstate.firstname === "" || formstate.lastname === "" || formstate.brief_intro === "" || formstate.location === "" || formstate.profession === "") throw new AdvancedError("All fields are required", 0);
             //submit updated profile
-            setTimeout(() => {}, 2000);
+            const res = await updateProfile(formstate, userdata.token)
+            console.log(res)
+            const {success, message, statusCode} = res
+            if(!success) throw new AdvancedError(message, statusCode)
+                else {
+                    toast.success(message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    })
+                }
+            // setTimeout(() => {}, 2000);
         }catch(err){
             toast.error(err.message, {
                 position: "top-right",
@@ -291,12 +306,19 @@ export function Edit(){
             formdata.append('image', file, file.name);
             
             const res = await updateAvatar(formdata, userdata.token);
-            console.log(res);
             const {success, message, statusCode} = res;
             if(!success) throw new AdvancedError(message, statusCode);
             else {
                 const {data} = res;
-                //updated successfully
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
         }catch(err){
             toast.error(err.message, {
