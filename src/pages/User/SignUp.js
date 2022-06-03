@@ -6,11 +6,8 @@ import SignInWrapper from "../../components/SignInWrapper";
 import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../contexts/AuthContext";
 import { AdvancedError } from "../../classes";
-import {useCookie} from "../../hooks";
+import { useCookie } from "../../hooks";
 
-import avif from "../../images/signup.avif";
-import webp from "../../images/signup.webp";
-import png from "../../images/signup.png";
 const SignUp = () => {
   const [data, setData] = useState({
     firstName: "",
@@ -19,22 +16,31 @@ const SignUp = () => {
     email: "",
     password: "",
     retype_password: "",
-    userType: ""
-  })
+    userType: "student",
+    fullname: "",
+  });
+  useEffect(() => {
+    if (data.fullname !== "") {
+      const name = data.fullname.split(" ");
+      setData((old) => {
+        return { ...old, firstName: name[0], lastName: name[1] };
+      });
+    }
+  }, [data.fullname]);
 
-const image = {
-  avif,
-  webp,
-  png,
-};
-const {saveCookie} = useCookie();
-  const {authFunctions: {register}, setGeneralState} = useAuth();
-  const [loading, setLoading]= useState(false)
-  const navigate = useNavigate()
-  const handleChange=(e)=>{
-    const {name, value} = e.target;
-    setData(old => {      
-return {
+  console.log(data);
+
+  const { saveCookie } = useCookie();
+  const {
+    authFunctions: { register },
+    setGeneralState,
+  } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData((old) => {
+      return {
         ...old,
         [name]: value,
       };
@@ -42,20 +48,12 @@ return {
   };
 
   const onSubmit = async (e) => {
+    console.log("clicked");
     e.preventDefault();
     setLoading(true);
     try {
       let { retype_password, ...others } = data;
-      if (
-        others.firstName.trim() === "" ||
-        others.lastName.trim() === "" ||
-        others.email.trim() === "" ||
-        others.phoneNumber.trim() === "" ||
-        others.password.trim() === ""
-      )
-        return;
-      if (others.userType.trim() === "")
-        throw new AdvancedError("User type is required", 0);
+      if (others.email.trim() === "" || others.password.trim() === "") return;
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
       console.log(others);
@@ -67,16 +65,18 @@ return {
       else {
         //successfully done
         //update the cookie
-        const {data} = response;
-        saveCookie('gotocourse-userdata', data);
-        saveCookie('gotocourse-usertype', others.userType);
-        setGeneralState(old => {
+        const { data } = response;
+        saveCookie("gotocourse-userdata", data);
+        saveCookie("gotocourse-usertype", data.userType);
+        setGeneralState((old) => {
           return {
             ...old,
-            notification: message
-          }
-        })
-        others.userType === "student" ? navigate("/students") : navigate("/teachers");
+            notification: message,
+          };
+        });
+        data.userType === "student"
+          ? navigate("/students")
+          : navigate("/teachers");
       }
     } catch (err) {
       console.error(err.message, err.statusCode);
@@ -96,7 +96,7 @@ return {
     }
   };
   return (
-    <SignInWrapper image={image}>
+    <SignInWrapper>
       <ToastContainer
         position="top-right"
         autoClose={4000}
@@ -109,44 +109,42 @@ return {
         pauseOnHover
       />
       <div className="form-wrapper w-100">
-      <header>
-          <h3 className="title">
-          Register
-          </h3>
+        <header>
+          <h3 className="title">Register</h3>
         </header>
-      <form action="" className="form" onSubmit={onSubmit}>
-              <Input
-                label="Fullname"
-                name="fullname"
-                value={data.fullname}
-                handleChange={handleChange}
-                placeholder="Fullname"
-              />
-              <Input
-                label="Email"
-                name="email"
-                type="email"
-                value={data.email}
-                handleChange={handleChange}
-                placeholder="Email"
-              />
-              <Password
-                label="Password"
-                name="password"
-                password="password"
-                value={data.password}
-                handleChange={handleChange}
-                placeholder="Password"
-              />
-              <Password
-                label="Confirm Password"
-                name="retype_password"
-                password="password"
-                placeholder="Confirm Password"
-                value={data.retype_password}
-                handleChange={handleChange}
-              />
-            {/* <div className="form-check ">
+        <form className="form" onSubmit={onSubmit}>
+          <Input
+            label="Fullname"
+            name="fullname"
+            value={data.fullname}
+            handleChange={handleChange}
+            placeholder="Fullname"
+          />
+          <Input
+            label="Email"
+            name="email"
+            type="email"
+            value={data.email}
+            handleChange={handleChange}
+            placeholder="Email"
+          />
+          <Password
+            label="Password"
+            name="password"
+            password="password"
+            value={data.password}
+            handleChange={handleChange}
+            placeholder="Password"
+          />
+          <Password
+            label="Confirm Password"
+            name="retype_password"
+            password="password"
+            placeholder="Confirm Password"
+            value={data.retype_password}
+            handleChange={handleChange}
+          />
+          {/* <div className="form-check ">
               <input
                 className="form-check-input me-4"
                 type="radio"
@@ -160,6 +158,20 @@ return {
               </label>
             </div>
             <div className="form-check">
+            <input
+            className="form-check-input me-4"
+            type="radio"
+            name="userType"
+            id="flexRadioDefault2"
+            value="mentor"
+            onChange={handleChange}
+            />
+            <label className="form-check-label" for="flexRadioDefault2">
+            Mentor
+            </label> 
+            </div> */}
+          {/*
+            <div className="form-check">
               <input
                 className="form-check-input me-4"
                 type="radio"
@@ -172,39 +184,27 @@ return {
                 Teacher
               </label>
             </div>
-            <div className="form-check">
-              <input
-                className="form-check-input me-4"
-                type="radio"
-                name="userType"
-                id="flexRadioDefault2"
-                value="mentor"
-                onChange={handleChange}
-              />
-              <label className="form-check-label" for="flexRadioDefault2">
-                Mentor
-              </label> 
-            </div>
               */}
-            {loading ? (
-              <button className="button button-lg log_btn w-100 mt-3">
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </button>
-            ) : (
-              <button
-                className="button button-md log_btn w-100 mt-3"
-                onClick={onSubmit}
-                type="submit"
-              >
-                Register
-              </button>
-            )}
+          {loading ? (
+            <button className="button button-md log_btn w-100 mt-3">
+              <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </button>
+          ) : (
+            <button
+              className="button button-md log_btn w-100 mt-3"
+              onClick={onSubmit}
+              type="submit"
+            >
+              Register
+            </button>
+          )}
         </form>
         <p className="mt-4">
           <span>Already have an account? </span>
-        <Link to="/login"> Sign in</Link></p>
+          <Link to="/login"> Sign in</Link>
+        </p>
       </div>
     </SignInWrapper>
   );

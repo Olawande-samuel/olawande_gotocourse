@@ -72,7 +72,11 @@ export function Profile(){
 
 
 export function Edit(){
-    const {generalState: {isMobile, userdata}} = useAuth();
+    const {generalState: {isMobile, userdata}, studentFunctions: {updateAvatar}} = useAuth();
+    const [imageUrl, setImageUrl] = useState(null);
+    const [isUplaoding, setIsUploading] = useState(false);
+    const [file, setFile] = useState(null);
+    console.log(userdata);
     const [loading, setLoading] = useState(false);
     const [formstate, setFormstate] = useState({
         firstname: userdata?.firstName ?? "",
@@ -80,6 +84,8 @@ export function Edit(){
         brief_intro: "",
         goals: ""
     })
+
+    useEffect(() => {}, [userdata])
 
     async function submitHandler(e){
         e.prevetDefault();
@@ -115,16 +121,71 @@ export function Edit(){
         })
     }
 
+    function uploadPicture(){
+        let input = document.getElementById("imageUpload");
+        input.click();
+    }
+
+
+    function changeImageHandler(e){
+        let file = e.target.files[0];
+        let url = URL.createObjectURL(file);
+        setImageUrl(_ => url);
+        setFile(_ => file);
+    }
+
+    async function changeProfilePictureHandler(e){
+        setIsUploading(_ => true);
+        try{
+            let formdata = new FormData();
+            formdata.append('image', file, file.name);
+            
+            const res = await updateAvatar(formdata, userdata.token);
+            console.log(res);
+            const {success, message, statusCode} = res;
+            if(!success) throw new AdvancedError(message, statusCode);
+            else {
+                const {data} = res;
+                //updated successfully
+            }
+        }catch(err){
+            toast.error(err.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }finally{
+          setIsUploading(_ => false);
+        }
+    }
+
+
     return (
         <Students>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />    
           <div className={clsx.students_profile}>
             <div className={clsx.edit__profile}>
                 <h2>Update Profile</h2>
                 <div className={clsx.edit__picture}>
-                    <span>
+                    {userdata?.profileImg ? (<img src={userdata.profileImg} alt="Avatar" />) : !imageUrl ? (<span>
                         <MdPersonAdd />
-                    </span>
-                    <p>Upload Photo</p>
+                    </span>) : (<img src={imageUrl} alt="Avatar" />)}
+                    <input id="imageUpload" type="file" style={{display: 'none'}} onChange={changeImageHandler} />
+                    {imageUrl ? (<p style={{cursor: isUplaoding && 'not-allowed'}} onClick={changeProfilePictureHandler}>Change Picture</p>) : (<p onClick={uploadPicture}>Upload Photo</p>)}
                 </div>
                 <form className="form" onSubmit={submitHandler}>
                     <Input

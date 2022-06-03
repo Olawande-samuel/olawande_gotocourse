@@ -189,17 +189,17 @@ const Card = ({ logo, title, details }) => {
   );
 };
 
-export const CourseCard = ({ img, title, details, subtitle, author }) => {
+export const CourseCard = ({ img, title, details, subtitle, author, color, background, show }) => {
   return (
-    <div className="card">
+    <div className={`card ${style.course_card}`} style={{background:background, color:color}}>
       <img src={img} alt="" className="card-img-top mentor_image" />
       <div className={`card-body ${style.course_Card_body}`}>
-        <Link to={title.replace(/\s+/g, '-').toLowerCase()}>
-          <h5 className={`card-title ${style.course_title}`}>{title}</h5>
+        <Link to={show === true ?  `courses/${title.replace(/\s+/g, '-').toLowerCase()}`:`${title.replace(/\s+/g, '-').toLowerCase()} `}>
+          <h5 className={`card-title ${style.course_title}`} style={{ color:color}}>{title}</h5>
         </Link> 
         <h6 className={`card-subtitle ${style.course_subtitle}`}>{subtitle}</h6>
         <p className={`card-text ${style.course_text}`}>{details}</p>
-        <p className={`text-end ${style.course_author}`}>{author}</p>
+        <p className={`text-end ${style.course_author}`} style={{ color:color}}>{author}</p>
       </div>
     </div>
   );
@@ -342,7 +342,7 @@ export const CourseDetail = () => {
             </header>
             <div className={style.main}>
               {courseList.slice(0, 6).map((course) => (
-                <CourseCard {...course} />
+                <CourseCard {...course} show={true} />
               ))}
             </div>
             <div className={`text-end ${style.more}`}>

@@ -3,6 +3,8 @@
 :root {
   --primary: #f5f5f5;
   --black: rgba(0, 0, 0, 1);
+  --theme-orange: #F75C4E;
+  --theme-blue: #0C2191;
 
   --white: #fff;
   --obsidian: #000;
@@ -186,7 +188,10 @@ td {
 
 /* *********************HERO************************* */
 
-
+/* .hero {
+  height: calc(100vh - 5.62rem);
+  border: 1px solid yellow;
+} */
 
 .hero .hero_logo {
   margin-top: .3rem;
@@ -881,11 +886,18 @@ line-height: 45px;
 }
 .register_title {
   font-weight: 800;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 54px;
+  color:var(--theme-blue);
+  text-transform: uppercase;
 }
-.register_subtitle {
 
+.register_subtitle {
+font-size:12px;
+display:block;
+/* text-transform: uppercase; */
+margin-bottom: 1.5rem;
+line-height: 16px;
 }
 .log_btn {
   font-weight: 700;
@@ -895,7 +907,7 @@ line-height: 45px;
 .form-wrapper .title{
   color: var(--btn-color) !important;
   font-weight: 400;
-  font-size: 24px;
+  font-size: 20px;
   margin-bottom: 24px;
   line-height: 120%;
 }
@@ -905,6 +917,12 @@ line-height: 45px;
   font-size: 14px;
 }
 
+.register_title span {
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 54px;
+  color: var(--theme-orange);
+}
 
 
 .input_wrapper {
