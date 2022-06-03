@@ -115,13 +115,13 @@ const TeacherProfile = ({}) => {
               <div className={`card ${style.button_card}`}>
                     <div className={`btn-group w-100 ${style.button_group}`}>
                         <input type="radio" className={`btn-check ${style.btn_check}`} name="btnradio" id="btnradio1" autocomplete="off" checked />
-                        <label style={{borderTopLeftRadius:"10px"}}  className={`btn btn-outline-primary ${style.teacher_profile_options}`} for="btnradio1">Radio 1</label>
+                        <label style={{borderTopLeftRadius:"10px"}}  className={`btn btn-outline-primary generic_label ${style.teacher_profile_options}`} for="btnradio1">Cohort</label>
 
                         <input type="radio" className={`btn-check ${style.btn_check}`} name="btnradio" id="btnradio2" autocomplete="off" />
-                        <label className={`btn btn-outline-primary ${style.teacher_profile_options}`} for="btnradio2">Radio 2</label>
+                        <label className={`btn btn-outline-primary generic_label ${style.teacher_profile_options}`} for="btnradio2">Self-paced</label>
 
                         <input type="radio" className={`btn-check ${style.btn_check}`} name="btnradio" id="btnradio3" autocomplete="off" />
-                        <label className={`btn btn-outline-primary ${style.teacher_profile_options}`} for="btnradio3">Radio 3</label>
+                        <label className={`btn btn-outline-primary generic_label ${style.teacher_profile_options}`} for="btnradio3">One-on-One</label>
                     </div>
                   <div className="card-body">
                   <h5 className={`my-4 ${style.title}`}>Cohort Course</h5>
