@@ -1,8 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+
+import {Link, useNavigate} from "react-router-dom"
+
 
 import Courses, { CourseCard } from "../Courses";
 import { courseList } from "../Courses";
+import { useAuth } from "../../contexts/AuthContext";
 import style from "./teacher.module.css";
 import lere from "../../images/lere.png";
 const nav = [
@@ -26,6 +29,9 @@ const All = () => {
     setSearch(e.target.value);
   }
 
+  const {setGeneralState} = useAuth();
+  const navigate = useNavigate()
+    
   return (
     <Courses>
       <div className="container">
@@ -36,17 +42,23 @@ const All = () => {
           ))}
         </section>
         <main className={style.main}>
-          {courseList.filter(item=>item.title.toLowerCase().match(search.toLowerCase()) ||item.subtitle.toLowerCase().match(search.toLowerCase()) ).map((item) => (
-            <Link to={item.author.split(" ").join("-").toLowerCase()}>
-              <CourseCard
-                img={item.img}
-                title={item.title}
-                subtitle={item.subtitle}
-                author={item.author}
-                background="var(--text-blue)"
-                color="#fff"
-              />
-            </Link>
+          {courseList.map((item) => (
+            <div style={{cursor: 'pointer'}} onClick={() => {
+              setGeneralState(old => {
+                return {
+                  ...old,
+                  teacherProfile: {
+                    profile: item.img,
+                    location: `${item.author} . ${item.details}`,
+                    content: item.title,
+                    id: item.id
+                  }
+                }
+              })
+              navigate(item.author.split(" ").join("-"))
+            }}>
+              <CourseCard img={item.img} title={item.title} subtitle={item.subtitle} author={item.author} backgroundColor="backgroundColor" />
+            </div>
           ))}
         </main>
       </div>
