@@ -73,8 +73,8 @@ const AdminSignup = () => {
       />
       <div className="form-wrapper">
       <header>
-          <h2 className="register_title">Become a <span>GO2COURSE</span>mentor</h2>
-          <small className="register_subtitle">Become a part of a supportive community, creative course and earn while at it</small>
+          <h2 className="register_title">Become a GO<span>2</span>COURSE teacher</h2>
+          <small className="register_subtitle">Become a part of a supportive community, creative course and earn while at it. To join our growing trainers community, turn your passion to courses and we'll make earning easier</small>
           <h3 className="title">
           Register
           </h3>

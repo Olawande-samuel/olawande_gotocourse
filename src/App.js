@@ -16,7 +16,7 @@ import AuthContextProvider from "./contexts/AuthContext";
 import "react-multi-carousel/lib/styles.css";
 import { Categories, CourseDetail, CourseList, CourseProfile } from "./pages/Courses";
 import {Home as BecomeATeacher, Profile} from "./pages/Teacher";
-import All from "./pages/Teacher/Teachers";
+import All, {Payment} from "./pages/Teacher/Teachers";
 import TeacherProfile from "./pages/Teacher/TeacherProfile";
 
 
@@ -39,10 +39,15 @@ function App() {
             </Route>
             <Route path="teachers" element={<Out/>}>
               <Route index element={<All />} />
-              <Route path=":id" element={<TeacherProfile />} />
+              <Route path=":id" element={<Out />} >
+              ` <Route index element={<TeacherProfile />} />
+                <Route path="payment" element={<Payment />} />
+              </Route>
             </Route>
             <Route path="teacher" element={<Out />}>
               <Route path="" element={<TeacherDashboard  />} />
+              <Route path="login" element={<AdminLogin />} />
+              <Route path="signup" element={<AdminSignup />} />
               <Route path="classes" element={<TeacherClasses  />} />
               <Route path="profile/edit" element={<TeacherEdit  />} />
               <Route path="courses" element={<TeacherCourses />} />
@@ -50,9 +55,11 @@ function App() {
             </Route>
             <Route path="categories" element={<Out />}>
               <Route path="" element={<Categories  />} />
-              <Route path=":id" element={<CourseDetail />} />
-              <Route path=":id/:path" element={<CourseList />} />
-              <Route path=":id/:path/:profile" element={<CourseProfile />} />
+              <Route path=":id" element={<Out />}  >
+                <Route index element={<CourseDetail />} />
+                <Route path="courses/:profile" element={<CourseProfile />} />
+                <Route path="courses" element={<CourseList />} />
+              </Route>
             </Route>
             <Route path="admin">
               <Route path="" element={<Dashboard />} />
@@ -64,7 +71,7 @@ function App() {
             </Route>
             <Route path="admin" element={<Out />}>
               <Route path="login" element={<AdminLogin />} />
-              <Route path="signup" element={<AdminSignup />} />
+              {/* <Route path="signup" element={<AdminSignup />} /> */}
             </Route> 
         </Route>
         <Route path="*" element={<h1 className="text-center">Page Not Found</h1>} />

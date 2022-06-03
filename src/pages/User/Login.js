@@ -10,9 +10,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import { AdvancedError } from "../../classes";
 
-import avif from "../../images/login.avif"
-import webp from "../../images/login.webp"
-import png from "../../images/login.png"
+
 const Login = () => {
   const navigate = useNavigate()
   const {authFunctions: {login}, setGeneralState} = useAuth();
@@ -23,11 +21,7 @@ const Login = () => {
     password: "",
     userType: ""
   });
-  const image ={
-    avif,
-    webp,
-    png
-  }
+  
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -69,7 +63,7 @@ const Login = () => {
 
     } catch (err) {
       console.error(err);
-      if (err.statusCode === 0) {
+      if (err.statusCode === 0 || err.statusCode === undefined) {
         toast.error(err.message, {
           position: "top-right",
           autoClose: 4000,
@@ -85,7 +79,7 @@ const Login = () => {
     }
   };
   return (
-    <SignInWrapper image={image}>
+    <SignInWrapper>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -152,7 +146,7 @@ const Login = () => {
             </label>
           </div> */}
           {loading ? (
-            <button className="button button-lg log_btn w-100">
+            <button className="button button-md log_btn w-100">
               <div className="spinner-border" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
