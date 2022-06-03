@@ -84,14 +84,17 @@ export function Edit(){
         brief_intro: "",
         goals: ""
     })
+ 
 
+    
     useEffect(() => {}, [userdata])
 
     async function submitHandler(e){
+        console.log(e)
         e.prevetDefault();
         setLoading(_ => true);
         try{
-            if(formstate.firstname === "" || formstate.lastname === "" || formstate.brief_intro === "" || formstate.goals === "") throw new AdvancedError("All fields are required", 0);
+            if(formstate.firstname === "" || formstate.lastname === "" || formstate.bio === "" || formstate.goals === "") throw new AdvancedError("All fields are required", 0);
             //submit updated profile
             setTimeout(() => {}, 2000);
         }catch(err){
@@ -202,10 +205,31 @@ export function Edit(){
                         handleChange={changeHandler}
                         value={formstate.lastname}
                     />
+                    <Input
+                        label="Occupation"
+                        name="work"
+                        type="text"
+                        handleChange={changeHandler}
+                        value={formstate.work}
+                    />
+                    <Input
+                        label="Location"
+                        name="location"
+                        type="text"
+                        handleChange={changeHandler}
+                        value={formstate.location}
+                    />
+                    <Input
+                        label="Category"
+                        name="category"
+                        type="text"
+                        handleChange={changeHandler}
+                        value={formstate.category}
+                    />
 
                     <div className={clsx.form_group}>
-                        <label htmlFor={"brief_intro"}>Brief Introduction</label>
-                        <textarea rows="5" name="brief_intro" value={formstate.brief_intro} onChange={changeHandler}></textarea>
+                        <label htmlFor={"brief_intro"}>Bio</label>
+                        <textarea rows="5" name="bio" value={formstate.bio} onChange={changeHandler}></textarea>
                     </div>
 
                     <div className={clsx.form_group}>
@@ -214,14 +238,15 @@ export function Edit(){
                     </div>
 
                     {loading ? (
-                        <button className="button button-lg log_btn w-100 mt-3">
+                        <button className="button button-md log_btn w-100 mt-3">
                         <div className="spinner-border" role="status">
                             <span className="visually-hidden">Loading...</span>
                         </div>
                         </button>
                     ) : (
                         <button
-                        className="button button-lg log_btn w-100 mt-3"
+                        // type="submit"
+                        className="button button-md log_btn w-100 mt-3"
                         type="button"
                         >
                         Save
