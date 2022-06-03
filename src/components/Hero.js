@@ -46,7 +46,7 @@ const Hero = () => {
     background: "#F1F8FF",
 
     
-  };
+  }; 
 
   return (
     <section className="hero">
