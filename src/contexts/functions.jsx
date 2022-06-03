@@ -543,12 +543,15 @@ export const studentFunctions = {
 
 export const teacherFunctions = {
     updateAvatar: async function(formdata, token){
+
         try{
             const res = await axios.post(`${baseURL}/user/profile/avatar/update`,
             JSON.stringify(formdata),
             {
                 headers: {
+
                     "Authorization": `Bearer ${token}`,
+
                     "Content-Type": "multipart/form-data"
                 },
                 validateStatus: status => {

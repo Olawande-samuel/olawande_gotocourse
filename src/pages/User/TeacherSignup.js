@@ -13,20 +13,18 @@ import { useCookie } from "../../hooks";
 
 
 
-const AdminSignup = () => {
-  const navigate = useNavigate();
-  const { saveCookie, isCookie, removeCookie } = useCookie();
-  const {
-    authFunctions: { register },
-    setGeneralState,
-  } = useAuth();
+
+const TeacherSignup = () => {
+    const {authFunctions: {register},setGeneralState } = useAuth();
   const [loading, setLoading] = useState(false)
   const [formstate, setFormstate] = useState({
     fullname: "",
     email: "",
     password: "",
     retype_password: "",
+    userType: "teacher",
   })
+  const navigate = useNavigate();
 
   function changeHandler(e){
     const {name, value} = e.target;
@@ -37,25 +35,36 @@ const AdminSignup = () => {
       }
     })
   }
+  const { saveCookie } = useCookie();
+
+  React.useEffect(() => {
+    if (formstate.fullname !== "") {
+      const name = formstate.fullname.split(" ");
+      setFormstate((old) => {
+        return { ...old, firstName: name[0], lastName: name[1] };
+      });
+    }
+  }, [formstate.fullname]);
 
   async function submitHandler(e){
     e.preventDefault();
     setLoading(_ => true);
     try{
-      if(formstate.password !== formstate.retype_password) throw new Error("Passwords don't match", 0);
-      if(formstate.email.trim() === "" || formstate.fullname === "" || formstate.password === "") throw new AdvancedError("All fields are required", 0);
-      const {retype_password, ...data} = formstate;
-      const res = await register({...data, userType: 'admin'}, 'admin');
-      console.log(res);
-      const {success, message, statusCode} = res;
-      if(!success) throw new AdvancedError(message, statusCode);
+      let { retype_password, ...others } = formstate;
+      if (others.email.trim() === "" || others.password.trim() === "") throw new AdvancedError("Fields cannot be empty", 0);
+      ;
+      if (retype_password !== others.password)
+        throw new AdvancedError("Passwords don't match", 0);
+      console.log(others);
+      const response = await register(others, "user");
+
+      console.log(response);
+      let { success, message, statusCode } = response;
+      if (!success) throw new AdvancedError(message, statusCode);
       else {
-        const {data} = res;
-        //do some stuffs like clear the cookie gotocourse-userdata gotocourse-usertype
-        if(isCookie('gotocourse-userdata') || isCookie('gotocourse-usertype')){
-          removeCookie('gotocourse-userdata');
-          removeCookie('gotocourse-usertype');
-        }
+        //successfully done
+        //update the cookie
+        const { data } = response;
         saveCookie("gotocourse-userdata", data);
         saveCookie("gotocourse-usertype", data.userType);
         setGeneralState((old) => {
@@ -64,7 +73,7 @@ const AdminSignup = () => {
             notification: message,
           };
         });
-        navigate("/admin");
+         navigate("/teacher");
       }
     }catch(err){
       toast.error(err.message, {
@@ -106,13 +115,14 @@ const AdminSignup = () => {
         <form action="" className="form" onSubmit={submitHandler}>
           <Input label="Fullname" handleChange={changeHandler} value={formstate.fullname} name="fullname" placeholder="Fullname" />
           <Input label="Email" handleChange={changeHandler} value={formstate.email} name="email" type="email" placeholder="Email" />
-          <Password label="Password" handleChange={changeHandler} value={formstate.password} name="password" placeholder="Password" />
+          <Password label="Password" handleChange={changeHandler} value={formstate.password} name="password" placeholder="Password"  password="password"/>
           <Password
             label="Confirm Password" 
             handleChange={changeHandler} 
             value={formstate.retype_password}
             name="retype_password"
             placeholder="Confirm Password"
+            password="password"
           />
           {loading ? (
             <button className="button button-lg log_btn w-100">
@@ -134,4 +144,4 @@ const AdminSignup = () => {
   )
 }
 
-export default AdminSignup
+export default TeacherSignup

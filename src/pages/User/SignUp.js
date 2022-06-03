@@ -48,7 +48,6 @@ const SignUp = () => {
   };
 
   const onSubmit = async (e) => {
-    console.log("clicked");
     e.preventDefault();
     setLoading(true);
     try {
