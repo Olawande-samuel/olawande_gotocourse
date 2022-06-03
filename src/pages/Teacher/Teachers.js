@@ -1,12 +1,14 @@
 import React from "react";
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 
 import Courses, { CourseCard } from "../Courses";
 import { courseList } from "../Courses";
+import { useAuth } from "../../contexts/AuthContext";
 import style from "./teacher.module.css";
 const nav = ["All Courses", "Business Analysis", "Cybersecurity", "Data Science", "IT Compliance", "IT Audit", "Product Design","Risk Management", "Project Management", "Software Development", "IT Service Management"]
 const All = () => {
-
+  const {setGeneralState} = useAuth();
+  const navigate = useNavigate()
     
   return (
     <Courses>
@@ -18,9 +20,22 @@ const All = () => {
         </section>
         <main className={style.main}>
           {courseList.map((item) => (
-            <Link to={item.author.split(" ").join("-")}>
+            <div style={{cursor: 'pointer'}} onClick={() => {
+              setGeneralState(old => {
+                return {
+                  ...old,
+                  teacherProfile: {
+                    profile: item.img,
+                    location: `${item.author} . ${item.details}`,
+                    content: item.title,
+                    id: item.id
+                  }
+                }
+              })
+              navigate(item.author.split(" ").join("-"))
+            }}>
               <CourseCard img={item.img} title={item.title} subtitle={item.subtitle} author={item.author} backgroundColor="backgroundColor" />
-            </Link>
+            </div>
           ))}
         </main>
       </div>

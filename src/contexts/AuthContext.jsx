@@ -16,6 +16,7 @@ const AuthContextProvider = ({children}) => {
         isMobile: false,
         theme: "light",
         showSidebar: false,
+        teacherProfile: null
     })
     const {fetchCookie} = useCookie();
     useEffect(() => {

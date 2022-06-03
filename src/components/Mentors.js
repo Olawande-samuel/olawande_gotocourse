@@ -10,6 +10,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const witnesses = [
   {
@@ -107,8 +109,21 @@ const Mentors = () => {
 };
 
 const Card = ({ item }) => {
+  const navigate = useNavigate();
+  const {setGeneralState} = useAuth()
+  function gotoMentorPage(){
+    setGeneralState(old => {
+      return {
+        ...old,
+        teacherProfile: item
+      }
+    })
+    let meta = item.location.split(" ");
+    let name = meta[0] + "-" + meta[1]; 
+    navigate("/teachers/"+name);
+  }
   return (
-    <div className="px-1">
+    <div className="px-1" style={{cursor: "pointer"}} onClick={gotoMentorPage}>
       <div className="card">
         <img src={item.profile} alt="" className="card-img-top mentor_image" />
         <div className="card-body">

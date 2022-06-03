@@ -5,13 +5,25 @@ import Algo from "../../images/algo.png";
 import Courses, { OtherCard, ReviewSection } from "../Courses";
 import style from "../Courses/courses.module.css";
 import { useLocation } from "react-router-dom";
+import {useAuth} from "../../contexts/AuthContext";
 // USING STYLES FROM COURSES.MODULE.CSS
 
-const TeacherProfile = () => {
+
+
+const TeacherProfile = ({}) => {
 
   const {pathname} = useLocation()
-  const  path = useLocation()
-  console.log(path)
+  const {generalState: {teacherProfile}} = useAuth();
+  let name;
+  if(teacherProfile){
+    let meta = teacherProfile.location.split(" ");
+    name = meta[0] + " " + meta[1]; 
+  }else {
+    let meta = pathname.split("/").reverse()[0];
+    name = `${meta.split("-")[0]} ${meta.split("-")[1]}`
+  }
+
+  console.log(teacherProfile)
   return (
     <Courses>
         <div className="container">
@@ -59,12 +71,12 @@ const TeacherProfile = () => {
               <div className="g-3">
                 <div className={style.teacher_image}>
                   <div className={style.teacher_img_wrapper}>
-                    <img src={Algo} alt="" className={style.teacher_image} />
+                    <img src={teacherProfile ? teacherProfile.profile : Algo} alt="" className={style.teacher_image} />
                   </div>
                 </div>
 
                 <div className={` mt-lg-3 ${style.teacher_card_right}`}>
-                  <p className={style.teacher_name}>Niyi Adegoke</p>
+                  <p className={style.teacher_name}>{name}</p>
                   <span className={style.teacher_occupation}>
                     Data science
                   </span>
@@ -128,7 +140,7 @@ const TeacherProfile = () => {
             </div>
          </section>
          <div id="syllabus" className={style.block}>
-            <AllCourses />
+            <AllCourses pathname={pathname} />
          </div>
          <div className={style.block}>
             <ReviewSection />
@@ -140,10 +152,12 @@ const TeacherProfile = () => {
 
 export default TeacherProfile;
 
-const AllCourses = ({teacher})=> {
+const AllCourses = ({teacher, pathname})=> {
+  const name = pathname.split("/").reverse()[0];
+
     return (
         <section>
-            <h3 className={`text-center ${style.header}`}>Courses By Niyi Adegoke</h3>
+            <h3 className={`text-center ${style.header}`}>Courses By {`${name.split("-")[0]} ${name.split("-")[1]}`}</h3>
             <p className={`subtitle ${style.subtitle}`}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus
                 ridiculus nunc adipiscing justo.
