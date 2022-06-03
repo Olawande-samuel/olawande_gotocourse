@@ -30,7 +30,7 @@ const SignUp = () => {
 
   console.log(data);
 
-  const { saveCookie } = useCookie();
+  const { saveCookie, isCookie, removeCookie } = useCookie();
   const {
     authFunctions: { register },
     setGeneralState,
@@ -65,6 +65,10 @@ const SignUp = () => {
         //successfully done
         //update the cookie
         const { data } = response;
+        if(isCookie('gotocourse-userdata') || isCookie('gotocourse-usertype')){
+          removeCookie('gotocourse-userdata');
+          removeCookie('gotocourse-usertype');
+        }
         saveCookie("gotocourse-userdata", data);
         saveCookie("gotocourse-usertype", data.userType);
         setGeneralState((old) => {

@@ -72,31 +72,48 @@ export function Profile(){
 
 
 export function Edit(){
-    const {generalState: {isMobile, userdata}, studentFunctions: {updateAvatar}} = useAuth();
+    const navigate = useNavigate();
+    const {generalState: {isMobile, userdata}, studentFunctions: {updateAvatar, updateProfile}, setGeneralState} = useAuth();
     const [imageUrl, setImageUrl] = useState(null);
     const [isUplaoding, setIsUploading] = useState(false);
     const [file, setFile] = useState(null);
-    console.log(userdata);
     const [loading, setLoading] = useState(false);
     const [formstate, setFormstate] = useState({
         firstname: userdata?.firstName ?? "",
         lastname: userdata?.lastName ?? "",
+        occupation: "",
+        location: "",
+        category: "",
         brief_intro: "",
         goals: ""
     })
  
-
     
     useEffect(() => {}, [userdata])
 
     async function submitHandler(e){
         console.log(e)
-        e.prevetDefault();
+        e.preventDefault();
         setLoading(_ => true);
         try{
-            if(formstate.firstname === "" || formstate.lastname === "" || formstate.bio === "" || formstate.goals === "") throw new AdvancedError("All fields are required", 0);
+            if(formstate.firstname === "" || formstate.lastname === "" || formstate.bio === "" || formstate.goals === "" || formstate.occupation === "" || formstate.location === "" || formstate.category === "") throw new AdvancedError("All fields are required", 0);
             //submit updated profile
-            setTimeout(() => {}, 2000);
+            const res = await updateProfile(formstate, userdata.token);
+            console.log(res);
+            const {success, statusCode, message} = res;
+            if(!success) throw new AdvancedError(message, statusCode);
+            else {
+                const {data} = res;
+                console.log(data);
+                setGeneralState(old => {
+                    return {
+                        ...old,
+                        userdata: data,
+                        notification: message
+                    }
+                })
+                navigate("/students/");
+            }
         }catch(err){
             toast.error(err.message, {
                 position: "top-right",
@@ -115,7 +132,6 @@ export function Edit(){
 
     function changeHandler(e){
         const {name, value} = e.target;
-        console.log({name, value});
         setFormstate(old => {
             return {
                 ...old,
@@ -150,6 +166,23 @@ export function Edit(){
             else {
                 const {data} = res;
                 //updated successfully
+                setGeneralState(old => {
+                    return {
+                        ...old,
+                        userdata: data
+                    }
+                })
+                setImageUrl(_ => null);
+                setFile(_ => null);
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
         }catch(err){
             toast.error(err.message, {
@@ -184,7 +217,7 @@ export function Edit(){
             <div className={clsx.edit__profile}>
                 <h2>Update Profile</h2>
                 <div className={clsx.edit__picture}>
-                    {userdata?.profileImg ? (<img src={userdata.profileImg} alt="Avatar" />) : !imageUrl ? (<span>
+                    {userdata?.profileImg ? (<img src={imageUrl ?? userdata.profileImg} alt="Avatar" />) : !imageUrl ? (<span>
                         <MdPersonAdd />
                     </span>) : (<img src={imageUrl} alt="Avatar" />)}
                     <input id="imageUpload" type="file" style={{display: 'none'}} onChange={changeImageHandler} />
@@ -207,10 +240,10 @@ export function Edit(){
                     />
                     <Input
                         label="Occupation"
-                        name="work"
+                        name="occupation"
                         type="text"
                         handleChange={changeHandler}
-                        value={formstate.work}
+                        value={formstate.occupation}
                     />
                     <Input
                         label="Location"
@@ -247,7 +280,7 @@ export function Edit(){
                         <button
                         // type="submit"
                         className="button button-md log_btn w-100 mt-3"
-                        type="button"
+                        type="submit"
                         >
                         Save
                         </button>

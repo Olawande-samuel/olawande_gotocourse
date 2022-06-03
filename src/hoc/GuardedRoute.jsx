@@ -1,15 +1,28 @@
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { useCookie } from "../hooks"; 
+import { useAuth } from "../contexts/AuthContext";
+import { useEffect } from "react";
 
 
 const GuardedRoute = ({children}) => {
     const {fetchCookie, isCookie} = useCookie();
+    const {setGeneralState} = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const route = location.pathname.split("/")[1];
     const userdata = fetchCookie('gotocourse-userdata');
     const userType = fetchCookie('gotocourse-usertype');
+    useEffect(() => {
+        setGeneralState(old => {
+            return {
+                ...old,
+                userdata,
+                userType
+            }
+        })
+    }, [])
+    
 
 
     if(isCookie('gotocourse-userdata')){

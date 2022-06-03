@@ -67,7 +67,7 @@ export const adminTeacherFunctions = {
             const res = await axios.get(`${baseURL}/admin/teachers/fetch`,
             {
                 headers: {
-                    "Bearer-Token": token,
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -90,13 +90,14 @@ export const adminTeacherFunctions = {
             }
         }
     },
-    verify: async function(_data){
+    verify: async function(_data, token){
         try{
             console.log(_data)
             const res = await axios.patch(`${baseURL}/admin/teacher/verify`,
             JSON.stringify(_data),
             {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -119,13 +120,14 @@ export const adminTeacherFunctions = {
             }
         }
     },
-    verify_pledre: async function(_data){
+    verify_pledre: async function(_data, token){
         try{
             console.log(_data)
             const res = await axios.patch(`${baseURL}/admin/teacher/pledre/toggle`,
             JSON.stringify(_data),
             {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -158,7 +160,7 @@ export const adminStudentFunctions = {
             const res = await axios.get(`${baseURL}/admin/students/fetch`,
             {
                 headers: {
-                    "Bearer-Token": token,
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -181,13 +183,14 @@ export const adminStudentFunctions = {
             }
         }
     },
-    verify: async function(_data){
+    verify: async function(_data, token){
         try{
             console.log(_data)
             const res = await axios.post(`${baseURL}/admin/student/verify`,
             JSON.stringify(_data),
             {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -210,13 +213,14 @@ export const adminStudentFunctions = {
             }
         }
     },
-    verify_pledre: async function(_data){
+    verify_pledre: async function(_data, token){
         try{
             console.log(_data)
             const res = await axios.patch(`${baseURL}/admin/student/pledre/toggle`,
             JSON.stringify(_data),
             {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -251,7 +255,7 @@ export const adminFunctions = {
             JSON.stringify(formdata),
             {
                 headers: {
-                    "Token": token,
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"
                 },
                 validateStatus: status => {
@@ -280,6 +284,7 @@ export const adminFunctions = {
             JSON.stringify(_data),
             {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -302,11 +307,12 @@ export const adminFunctions = {
             }
         }
     },
-    fetchProfile: async function(){
+    fetchProfile: async function(token){
         try{
             const res = await axios.get(`${baseURL}/user/profile`,
             {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -329,12 +335,13 @@ export const adminFunctions = {
             }
         }
     },
-    addCategory: async function(_data){
+    addCategory: async function(_data, token){
         try{
             const res = await axios.post(`${baseURL}/admin/category/add`,
             JSON.stringify(_data),
             {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -357,11 +364,12 @@ export const adminFunctions = {
             }
         }
     },
-    fetchCategory: async function(id){
+    fetchCategory: async function(id, token){
         try{
             const res = await axios.get(`${baseURL}/admin/category/${id}`,
             {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -384,11 +392,12 @@ export const adminFunctions = {
             }
         }
     },
-    fetchCategories: async function(){
+    fetchCategories: async function(token){
         try{
             const res = await axios.get(`${baseURL}/admin/categories`,
             {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -411,11 +420,12 @@ export const adminFunctions = {
             }
         }
     },
-    fetchCourses: async function(){
+    fetchCourses: async function(token){
         try{
             const res = await axios.get(`${baseURL}/admin/courses/fetch`,
             {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -445,10 +455,10 @@ export const studentFunctions = {
     updateAvatar: async function(formdata, token){
         try{
             const res = await axios.post(`${baseURL}/user/profile/avatar/update`,
-            JSON.stringify(formdata),
+            formdata,
             {
                 headers: {
-                    "Bearer-Token": token,
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"
                 },
                 validateStatus: status => {
@@ -471,12 +481,13 @@ export const studentFunctions = {
             }
         }
     },
-    updateProfile: async function(_data){
+    updateProfile: async function(_data, token){
         try{
             const res = await axios.patch(`${baseURL}/user/profile/update`,
             JSON.stringify(_data),
             {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -499,11 +510,12 @@ export const studentFunctions = {
             }
         }
     },
-    fetchProfile: async function(){
+    fetchProfile: async function(token){
         try{
             const res = await axios.get(`${baseURL}/user/profile`,
             {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -537,7 +549,9 @@ export const teacherFunctions = {
             JSON.stringify(formdata),
             {
                 headers: {
-                    "Token": token,
+
+                    "Authorization": `Bearer ${token}`,
+
                     "Content-Type": "multipart/form-data"
                 },
                 validateStatus: status => {
@@ -566,34 +580,7 @@ export const teacherFunctions = {
             JSON.stringify(_data),
             {
                 headers: {
-                    "Content-Type": "application/json",
-                    "Token": token
-                },
-                validateStatus: status => {
-                    return status >= 200 && status <= 505;
-                }
-            })
-            console.log(res);
-
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
-            return {
-                ...res.data,
-                success: true
-            }
-            
-        }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
-        }
-    },
-    fetchProfile: async function(){
-        try{
-            const res = await axios.get(`${baseURL}/user/profile`,
-            {
-                headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -616,12 +603,41 @@ export const teacherFunctions = {
             }
         }
     },
-    addCourse: async function(_data){
+    fetchProfile: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/user/profile`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log(res);
+
+            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    addCourse: async function(_data, token){
         try{
             const res = await axios.post(`${baseURL}/teacher/course/add`,
             JSON.stringify(_data),
             {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -644,11 +660,12 @@ export const teacherFunctions = {
             }
         }
     },
-    fetchCourse: async function(_id){
+    fetchCourse: async function(_id, token){
         try{
             const res = await axios.get(`${baseURL}/user/course/${_id}`,
             {
                 headers: {
+                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
