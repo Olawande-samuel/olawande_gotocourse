@@ -7,8 +7,8 @@ import { motion } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
 
 import hero from "../images/NewHero.png";
-import teach from "../images/teachertp.png";
-import stu from "../images/studenttp.png";
+import teach from "../images/newTeach.png";
+import stu from "../images/newLearn.png";
 import gen from "../images/generaltp.png";
 import Image from "./Image";
 
@@ -18,29 +18,34 @@ import "swiper/css/effect-creative";
 const Hero = () => {
   SwiperCore.use([Autoplay]);
   const teacher = {
-    title: "We teach the world relevant skills",
+    title: "Endless Possibilities With Borderless Learning",
     subtitle:
-      "An all in one platform to grow your tech skils for real career growth.",
-    image: teach,
-    link: "/become-a-teacher",
-    background: "#0C2191",
-    color: "#fff",
+    "Enabling students to learn and  benefit from a global network of highly skilled professionals by increased access to quality learning and mentorship from domain experts",
+    image: stu,
+    link: "/categories",
+    background: "#F1F8FF",
+    color: "#F75C4E",
+    btn: "Explore Courses",
   };
   const student = {
-    title: "Find the perfect course for you.",
+    title: "Explore Wide Range Of Tech Skills To Develop Your Professional Career",
     subtitle:
-      "We provide you an all-in-one platform to help learn high in demand tech skills from industry experts.",
-    image: stu,
+    "Endless Possibilities With Borderless Learning",
+    image: teach,
     link: "/signup",
-    btn: "Explore Courses",
-    background: "#F75C4E",
-    color: "#fff",
+  background: "#F1F8FF",
+  color: "#0C2191",
+  btn: "Get Started",
+
   };
   const general = {
     title: "We make Teaching and learning Tech skills  Accessible.",
     subtitle: "",
     image: gen,
     link: "/signup",
+    background: "#F1F8FF",
+
+    
   };
 
   return (
@@ -60,7 +65,6 @@ const Hero = () => {
         modules={[EffectCreative]}
         spaceBetween={0}
         slidesPerView={1}
-        navigation
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
         onSwiper={(swiper) => {
@@ -86,9 +90,9 @@ const Hero = () => {
 
 export default Hero;
 
-export const Generic = ({ image }) => {
+export const Generic = ({ image, background}) => {
   return (
-    <div className="" style={{ background: "" }}>
+    <div className="" style={{ background:background }}>
       <div className="container">
         <div className="row hero_row w-100 py-5">
           <motion.div
@@ -150,7 +154,7 @@ export const Generic = ({ image }) => {
     </div>
   );
 };
-export const Others = ({ title, image, subtitle, background, link, color }) => {
+export const Others = ({ title, image, subtitle, background,btn, link, color }) => {
   return (
     <div
       className=""
@@ -165,15 +169,15 @@ export const Others = ({ title, image, subtitle, background, link, color }) => {
             transition={{ delay: 0.2, duration: 1.5 }}
           >
             <div>
-              <h1 className="hero_text  text-center">{title}</h1>
-              <p className="hero_subtext  text-center">{subtitle}</p>
-              <div className="text-center">
+              <h1 className="hero_text  ">{title}</h1>
+              <p className="hero_subtext text-center text-lg-start ">{subtitle}</p>
+              <div className="text-center text-lg-start">
                 <Link
                   to={link}
-                  className="btn-plain"
-                  style={{ color: background }}
+                  className="button button-lg"
+                  style={{ color: "#fff", background:color}}
                 >
-                  Get Started
+                 {btn}
                 </Link>
               </div>
             </div>

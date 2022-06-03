@@ -11,9 +11,7 @@ import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
 
 
-import avif from "../../images/alogin.avif"
-import webp from "../../images/alogin.webp"
-import png from "../../images/alogin.png"
+
 const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
   const {authFunctions: {login}} = useAuth();
@@ -22,11 +20,7 @@ const AdminLogin = () => {
     password: ""
   })
 
-  const image ={
-    avif,
-    webp,
-    png
-  }
+  
 
   async function submitHandler(e){
     console.log(e);
@@ -74,7 +68,7 @@ const AdminLogin = () => {
   
  
   return (
-    <SignInWrapper image={image}>
+    <SignInWrapper>
       <ToastContainer
         position="top-right"
         autoClose={5000}

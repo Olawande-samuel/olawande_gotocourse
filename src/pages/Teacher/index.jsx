@@ -4,7 +4,8 @@ import { Grid, Paper, Breadcrumbs } from "@mui/material";
 import {BiChalkboard, BiEditAlt, BiDollar} from "react-icons/bi";
 import { MdPictureAsPdf, MdExpandMore, MdExpandLess } from "react-icons/md";
 import { Rating } from "react-simple-star-rating";
-
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 import Layout from "../../components/Layout";
 import { Jumbotron } from "./components";
@@ -220,8 +221,41 @@ export const Home = () => {
                 <h1>Reviews</h1>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo.</p>
                 <div className={clsx.reviews__container}>
-                    {
+                    <Swiper
+                        // install Swiper modules
+                        modules={[Navigation, Pagination, Scrollbar, A11y]}
+                        spaceBetween={30}
+                        slidesPerView={1}
+                        navigation
+                        pagination={{ clickable: true }}
+                        scrollbar={{ draggable: true }}
+                        onSwiper={(swiper) => console.log(swiper)}
+                        onSlideChange={() => console.log("slide change")}
+                        breakpoints={{
+                        // when window width is >= 320px
+                        320: {
+                            slidesPerView: 1,
+                            spaceBetween: 3,
+                        },
+                        // when window width is >= 640px
+                        575: {
+                            slidesPerView: 2,
+                            spaceBetween: 3,
+                        },
+                        700: {
+                            slidesPerView: 2,
+                            spaceBetween: 3,
+                        },
+                        1024: {
+                            slidesPerView: 2,
+                            spaceBetween: 30,
+                        },
+                        }}
+                    >
+                        {
                         reviews.map(({review, avatar, name, location}, i) => (
+                            <SwiperSlide>
+                            
                             <Paper className={clsx.reviews_paper} key={i}>
                                 <q>{review}</q>
                                 <div className={clsx.reviews_info}>
@@ -235,8 +269,12 @@ export const Home = () => {
                                     <Rating ratingValue={100} size={20} allowHover={false} readonly={true} />
                                 </div>
                             </Paper>
+                            </SwiperSlide>
                         ))
                     }
+                       
+                    </Swiper> 
+                    
                 </div>
             </div>
         </Layout>
