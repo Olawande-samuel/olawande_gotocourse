@@ -42,6 +42,13 @@ const AdminSignup = () => {
       const {retype_password, ...data} = formstate;
       const res = await register({...data, userType: 'admin'}, 'admin');
       console.log(res);
+      const {success, message, statusCode} = res;
+      if(!success) throw new AdvancedError(message, statusCode);
+      else {
+        const {data} = res;
+        //do some stuffs like clear the cookie gotocourse-userdata gotocourse-usertype
+        console.log(data); 
+      }
     }catch(err){
       toast.error(err.message, {
         position: "top-right",

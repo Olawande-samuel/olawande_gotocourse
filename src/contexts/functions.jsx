@@ -62,11 +62,12 @@ export const authFunctions = {
 
 
 export const adminTeacherFunctions = {
-    fetch: async function (){
+    fetch: async function (token){
         try{
             const res = await axios.get(`${baseURL}/admin/teachers/fetch`,
             {
                 headers: {
+                    "Bearer-Token": token,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -152,11 +153,12 @@ export const adminTeacherFunctions = {
 
 
 export const adminStudentFunctions = {
-    fetch: async function (){
+    fetch: async function (token){
         try{
             const res = await axios.get(`${baseURL}/admin/students/fetch`,
             {
                 headers: {
+                    "Bearer-Token": token,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {
@@ -446,7 +448,7 @@ export const studentFunctions = {
             JSON.stringify(formdata),
             {
                 headers: {
-                    "Token": token,
+                    "Bearer-Token": token,
                     "Content-Type": "multipart/form-data"
                 },
                 validateStatus: status => {
@@ -534,7 +536,7 @@ export const teacherFunctions = {
             JSON.stringify(formdata),
             {
                 headers: {
-                    "Token": token,
+                    "Bearer-Token": token,
                     "Content-Type": "multipart/form-data"
                 },
                 validateStatus: status => {
