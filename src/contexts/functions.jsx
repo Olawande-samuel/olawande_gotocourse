@@ -546,7 +546,7 @@ export const teacherFunctions = {
 
         try{
             const res = await axios.post(`${baseURL}/user/profile/avatar/update`,
-            JSON.stringify(formdata),
+            formdata,
             {
                 headers: {
 

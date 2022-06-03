@@ -138,7 +138,7 @@ const TeacherSignup = () => {
         </form>
         <p className="mt-4">
           <span>Already have an account? </span>
-        <Link to="/admin/login"> Sign in</Link></p>
+        <Link to="/login"> Sign in</Link></p>
       </div>
     </SignInWrapper>
   )
