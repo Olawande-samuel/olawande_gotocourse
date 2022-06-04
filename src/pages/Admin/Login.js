@@ -14,9 +14,10 @@ import { useCookie } from "../../hooks";
 
 
 const AdminLogin = () => {
+  const navigate = useNavigate()
+
   const [loading, setLoading] = useState(false);
   const {authFunctions: {login}, setGeneralState} = useAuth();
-  const navigate = useNavigate();
 
   const {saveCookie, removeCookie, isCookie} = useCookie();
   const [formstate, setFormstate] = useState({
