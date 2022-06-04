@@ -16,8 +16,11 @@ import { AdvancedError } from "../../../classes";
 import { UserInfoCard } from "../Admin";
 import { useCookie } from "../../../hooks";
 
+
+
+
 export function Profile() {
-  const { saveCookie, removeCookie, isCookie } = useCookie();
+  const { saveCookie, updateCookie, isCookie } = useCookie();
   const {
     generalState: { isMobile, notification, userdata },
     setGeneralState,
@@ -33,22 +36,40 @@ export function Profile() {
         };
       });
     }, 5000);
-  });
+  }, []);
 
   useEffect(() => {
     if (userdata) {
       async function get() {
         try {
           let data = await fetchProfile(userdata?.token);
-          saveCookie("gotocourse-profiledata", data.data);
-          setGeneralState((old) => {
-            return {
-              ...old,
-              userdata:{...old.userdata, userdata: data.data},
-            };
+          const key = "gotocourse-profiledata";
+          const {success, message, statusCode} = data;
+          if(!success) throw new Error(message, statusCode);
+          else {
+            const {data: d} = data;
+            if(isCookie(key)){
+              updateCookie(key, d);
+            }else {
+              saveCookie(key, d);
+            }
+            setGeneralState((old) => {
+              return {
+                ...old,
+                userdata:{...old.userdata, ...d},
+              };
+            });
+          }
+        } catch (err) {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
           });
-        } catch (error) {
-          console.log(error);
         }
       }
       get();
@@ -203,8 +224,6 @@ export function CreateCourse() {
           progress: undefined,
         });
       }
-      //submit updated profile
-      setTimeout(() => {}, 2000);
     } catch (err) {
       toast.error(err.message, {
         position: "top-right",
@@ -588,7 +607,7 @@ export function Edit() {
           <h2>Update Profile</h2>
           <div className={clsx.edit__picture}>
             {userdata?.profileImg ? (
-              <img src={userdata.profileImg} alt="Avatar" />
+              <img src={imageUrl ?? userdata.profileImg} alt="Avatar" />
             ) : !imageUrl ? (
               <span>
                 <MdPersonAdd />
@@ -610,7 +629,7 @@ export function Edit() {
                 Change Picture
               </p>
             ) : (
-              <p onClick={uploadPicture}>Upload Photo</p>
+              <p onClick={uploadPicture} style={{cursor: "pointer"}}>Upload Photo</p>
             )}
           </div>
           <form className="form" onSubmit={submitHandler}>

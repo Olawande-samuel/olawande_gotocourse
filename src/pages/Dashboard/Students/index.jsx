@@ -15,12 +15,16 @@ import {GuardedRoute} from "../../../hoc";
 import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
 import { UserInfoCard } from "../Admin";
+import { useCookie } from "../../../hooks";
 
 
 
 
 export function Profile(){
-    const {generalState: {isMobile, notification, userdata}, setGeneralState} = useAuth();
+    const {generalState: {isMobile, notification, userdata}, 
+    setGeneralState, 
+    studentFunctions: {fetchProfile}} = useAuth();
+    const {updateCookie, isCookie, saveCookie} = useCookie();
     const navigate = useNavigate();
     useEffect(() => {
         setTimeout(() => {
@@ -31,23 +35,51 @@ export function Profile(){
                 }
             })
         }, 5000)
-    })
+    }, [])
+
+    console.log(userdata);
+
+    useEffect(() => {
+        if(userdata){
+            (async () => {
+                try{
+                    const res = await fetchProfile(userdata?.token);
+                    const {success, message, statusCode} = res;
+                    if(!success) throw new AdvancedError(message, statusCode);
+                    else {
+                        const {data} = res;
+                        const key = 'gotocourse-profiledata';
+                        if(isCookie(key)){
+                            updateCookie(key, data);
+                        }else {
+                            saveCookie(key, data);
+                        }
+                        setGeneralState((old) => {
+                            return {
+                              ...old,
+                              userdata:{...old.userdata, ...data.data},
+                            };
+                        });
+                    }
+                }catch(err){
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+            })()
+        }
+    }, [userdata?.token])
     function editProfileHandler(e){
         navigate("/students/profile/edit");
     }
     return (  
-        <Students isMobile={isMobile} userdata={userdata} notification={notification}>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />              
+        <Students isMobile={isMobile} userdata={userdata} notification={notification}>            
             <div className={clsx.students_profile}>
                 <div className={clsx.students_profile_top}>
                     <div className={clsx.students_profile_top_img}>
@@ -73,6 +105,7 @@ export function Profile(){
 
 export function Edit(){
     const navigate = useNavigate();
+    const {updateCookie} = useCookie();
     const {generalState: {isMobile, userdata}, studentFunctions: {updateAvatar, updateProfile}, setGeneralState} = useAuth();
     const [imageUrl, setImageUrl] = useState(null);
     const [isUplaoding, setIsUploading] = useState(false);
@@ -160,18 +193,24 @@ export function Edit(){
             formdata.append('image', file, file.name);
             
             const res = await updateAvatar(formdata, userdata.token);
-            console.log(res);
             const {success, message, statusCode} = res;
             if(!success) throw new AdvancedError(message, statusCode);
             else {
                 const {data} = res;
+                const {profileImg} = data;
+                console.log(data);
                 //updated successfully
                 setGeneralState(old => {
                     return {
                         ...old,
-                        userdata: data
+                        userdata: {
+                            ...old.userdata,
+                            profileImg
+                        }
                     }
                 })
+                //set the cookie here
+                
                 setImageUrl(_ => null);
                 setFile(_ => null);
                 toast.success(message, {
@@ -201,18 +240,7 @@ export function Edit(){
 
 
     return (
-        <Students>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />    
+        <Students>  
           <div className={clsx.students_profile}>
             <div className={clsx.edit__profile}>
                 <h2>Update Profile</h2>
@@ -332,7 +360,41 @@ export function Classes(){
 
 
 export function Courses(){
-    const {generalState: {isMobile, userdata}} = useAuth();
+    const {generalState: {isMobile, userdata}, studentFunctions: {fetchCourses}} = useAuth();
+    const [courses, setCourses] = useState([]);
+    useEffect(() => {
+        (async() => {
+            try{
+                const res = await fetchCourses(userdata?.token);
+                console.log(res);
+                const {success, message, statusCode} = res;
+                if(!success) throw new AdvancedError(message, statusCode);
+                else {
+                    const {data} = res;
+                    setCourses(_ => data);
+                    toast.success(message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+            }catch(err){
+                toast.error(err.message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        })()
+    }, [])
     const tableHeaders = ["No", "Courses", "Name", "Package", "Rating"]
     const tableContents = [
         {
@@ -436,6 +498,7 @@ const Students = ({children, isMobile, userdata, notification}) => {
     return (
         <GuardedRoute>
             <div className={clsx.students}>
+            <ToastContainer />  
             <Sidebar isMobile={isMobile} />
             <div className={clsx.students_main}>
                 <div className={`align-items-center ${clsx.students_topbar}`}>
