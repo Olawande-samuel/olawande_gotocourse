@@ -194,6 +194,13 @@
     color: var(--textBlue);
 }
 
+.edit__picture img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 1rem;
+}
+
 .form_group {
     width: 100%;
     display: flex;
