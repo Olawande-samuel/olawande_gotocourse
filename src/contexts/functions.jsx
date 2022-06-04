@@ -537,7 +537,92 @@ export const studentFunctions = {
                 statusCode: err.statusCode
             }
         }
-    }
+    },
+    fetchCourses: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/user/courses/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log(res);
+
+            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchEnrollments: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/user/course/enrollments/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log(res);
+
+            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    addCourse: async function(_data, token){
+        try{
+            const res = await axios.post(`${baseURL}/user/course/add`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log(res);
+
+            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
 }
 
 
@@ -615,7 +700,7 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
+        
 
             if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -663,6 +748,62 @@ export const teacherFunctions = {
     fetchCourse: async function(_id, token){
         try{
             const res = await axios.get(`${baseURL}/user/course/${_id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log(res);
+
+            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchApplications: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/user/course/applications/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log(res);
+
+            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchCourseStudents: async function(_id, token){
+        try{
+            const res = await axios.get(`${baseURL}/user/course/students/${_id}`,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,

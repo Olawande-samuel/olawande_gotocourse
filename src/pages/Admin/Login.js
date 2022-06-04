@@ -18,6 +18,8 @@ const AdminLogin = () => {
 
   const [loading, setLoading] = useState(false);
   const {authFunctions: {login}, setGeneralState} = useAuth();
+  const navigate = useNavigate();
+
   const {saveCookie, removeCookie, isCookie} = useCookie();
   const [formstate, setFormstate] = useState({
     email: "",
@@ -52,10 +54,11 @@ const AdminLogin = () => {
           setGeneralState(old => {
             return {
               ...old,
-              notification: res.message
+              notification: res.message,
             }
           })
-          navigate("/admin")
+          navigate("/admin");
+
       }
     }catch(err){
       toast.error(err.message, {

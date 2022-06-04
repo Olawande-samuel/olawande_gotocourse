@@ -26,6 +26,7 @@ const AdminSignup = () => {
     email: "",
     password: "",
     retype_password: "",
+    type:"admin"
   })
 
   function changeHandler(e){
@@ -45,7 +46,7 @@ const AdminSignup = () => {
       if(formstate.password !== formstate.retype_password) throw new Error("Passwords don't match", 0);
       if(formstate.email.trim() === "" || formstate.fullname === "" || formstate.password === "") throw new AdvancedError("All fields are required", 0);
       const {retype_password, ...data} = formstate;
-      const res = await register({...data, userType: 'admin'}, 'admin');
+      const res = await register({...data, userType: 'student'}, 'admin');
       console.log(res);
       const {success, message, statusCode} = res;
       if(!success) throw new AdvancedError(message, statusCode);
@@ -62,6 +63,7 @@ const AdminSignup = () => {
           return {
             ...old,
             notification: message,
+            userdata: data
           };
         });
         navigate("/admin");
@@ -97,22 +99,24 @@ const AdminSignup = () => {
       />
       <div className="form-wrapper">
       <header>
-          <h2 className="register_title">Become a GO<span>2</span>COURSE teacher</h2>
-          <small className="register_subtitle">Become a part of a supportive community, creative course and earn while at it. To join our growing trainers community, turn your passion to courses and we'll make earning easier</small>
+          {/* <h2 className="register_title">Become a GO<span>2</span>COURSE teacher</h2>
+          <small className="register_subtitle">Become a part of a supportive community, creative course and earn while at it. To join our growing trainers community, turn your passion to courses and we'll make earning easier</small> */}
           <h3 className="title">
-          Register
+          Register 
           </h3>
         </header>
         <form action="" className="form" onSubmit={submitHandler}>
           <Input label="Fullname" handleChange={changeHandler} value={formstate.fullname} name="fullname" placeholder="Fullname" />
           <Input label="Email" handleChange={changeHandler} value={formstate.email} name="email" type="email" placeholder="Email" />
-          <Password label="Password" handleChange={changeHandler} value={formstate.password} name="password" placeholder="Password" />
+          <Password label="Password" handleChange={changeHandler} value={formstate.password} name="password" placeholder="Password"
+          password="password" />
           <Password
             label="Confirm Password" 
             handleChange={changeHandler} 
             value={formstate.retype_password}
             name="retype_password"
             placeholder="Confirm Password"
+            password="password"
           />
           {loading ? (
             <button className="button button-lg log_btn w-100">
