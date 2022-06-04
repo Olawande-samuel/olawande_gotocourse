@@ -17,6 +17,7 @@ import img01 from "../../../images/mentor1.png";
 import img02 from "../../../images/mentor2.png";
 import { GuardedRoute } from "../../../hoc";
 import { AdvancedError } from "../../../classes";
+import useCookies from "../../../hooks/useCookie";
 
 
 
@@ -24,6 +25,47 @@ import { AdvancedError } from "../../../classes";
 
 
 export function Dashboard(){
+    const { saveCookie , isCookie, removeCookie} = useCookies();
+    const { generalState: { isMobile, notification, userdata }, setGeneralState, adminFunctions: { fetchProfile }, } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      setTimeout(() => {
+        setGeneralState((old) => {
+          return {
+            ...old,
+            notification: null,
+          };
+        });
+      }, 5000);
+    });
+  
+    // useEffect(() => {
+    //   if (userdata) {
+    //     async function get() {
+    //       try {
+    //         let data = await fetchProfile(userdata?.token);
+    //         if(isCookie('gotocourse-userdata') || isCookie('gotocourse-usertype')){
+    //             removeCookie('gotocourse-userdata');
+    //             removeCookie('gotocourse-usertype');
+    //           }
+    //         saveCookie("gotocourse-userdata", data.data);
+    //         saveCookie('gotocourse-usertype', data.data.userType);
+
+    //         setGeneralState((old) => {
+    //           return {
+    //             ...old,
+    //             userdata:{...old.userdata, userdata: data.data},
+    //           };
+    //         });
+    //       } catch (error) {
+    //         console.log(error);
+    //       }
+    //     }
+    //     get();
+    //   }
+    // }, [userdata?.token]);
+
     return (  
         <Admin header="Dashboard">              
             <div className={clsx['admin_profile']}>
