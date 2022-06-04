@@ -16,6 +16,26 @@ const useCookies = () => {
         return value ? JSON.parse(value) : value;
     }
 
+    function updateCookie(key, newdata){
+        if(!isCookie(key)) return;
+        else {
+            //first we fetch the cookie
+            let cookie = fetchCookie(key);
+            let newCookie;
+            if(typeof cookie === 'object'){
+                newCookie = {
+                    ...cookie,
+                    ...newdata
+                }
+                
+            }else newCookie = newdata;
+            //then we remove the cookie
+            removeCookie(key);
+            //then we save it 
+            saveCookie(key, newCookie);
+        }
+    }
+
     function saveCookie(key, value){
         //save the cookie
         if(!key || !value) throw new AdvancedError("Key and Value must have a value", 402);
@@ -54,7 +74,8 @@ const useCookies = () => {
         saveCookie,
         removeCookie,
         clearCookie,
-        isCookie
+        isCookie,
+        updateCookie
     }
 }
 
