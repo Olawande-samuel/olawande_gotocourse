@@ -9,7 +9,7 @@ import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
 import {Profile as StudentProfile, Classes as StudentClasses, Edit as StudentEdit, Courses as StudentCourses} from "./pages/Dashboard/Students";
-import {Dashboard, Student, Fees, Teachers, Courses, Approve} from "./pages/Dashboard/Admin";
+import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit} from "./pages/Dashboard/Admin";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, Courses as TeacherCourses, CreateCourse} from "./pages/Dashboard/Teachers";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/AuthContext";
@@ -69,6 +69,7 @@ function App() {
               <Route path="teachers" element={<Teachers />} />
               <Route path="courses" element={<Courses />} />
               <Route path="teachers/approve" element={<Approve />} />
+              <Route path="profile/edit" element={<AdminEdit />} />
             </Route>
             <Route path="admin" element={<Out />}>
               <Route path="login" element={<AdminLogin />} />
