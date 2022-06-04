@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {ToastContainer, toast} from "react-toastify";
 
 
@@ -14,6 +14,8 @@ import { useCookie } from "../../hooks";
 
 
 const AdminLogin = () => {
+  const navigate = useNavigate()
+
   const [loading, setLoading] = useState(false);
   const {authFunctions: {login}, setGeneralState} = useAuth();
   const {saveCookie, removeCookie, isCookie} = useCookie();
@@ -53,6 +55,7 @@ const AdminLogin = () => {
               notification: res.message
             }
           })
+          navigate("/admin")
       }
     }catch(err){
       toast.error(err.message, {
