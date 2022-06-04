@@ -14,6 +14,7 @@ import Image from "./Image";
 
 import "swiper/css";
 import "swiper/css/effect-creative";
+import { useAuth } from "../contexts/AuthContext";
 
 const Hero = () => {
   SwiperCore.use([Autoplay]);
@@ -26,16 +27,18 @@ const Hero = () => {
     background: "#F1F8FF",
     color: "#F75C4E",
     btn: "Explore Courses",
+    colorSwap:"#0C2191"
   };
   const student = {
     title: "Explore Wide Range Of Tech Skills To Develop Your Professional Career",
     subtitle:
-    "Endless Possibilities With Borderless Learning",
+    "Learn from top industry experts or less",
     image: teach,
     link: "/signup",
   background: "#F1F8FF",
   color: "#0C2191",
   btn: "Get Started",
+  colorSwap:"#F75C4E"
 
   };
   const general = {
@@ -154,13 +157,15 @@ export const Generic = ({ image, background}) => {
     </div>
   );
 };
-export const Others = ({ title, image, subtitle, background,btn, link, color }) => {
+export const Others = ({ title, image, subtitle, background,btn, link, color, colorSwap }) => {
+  const {  generalState: { navHeight }, } = useAuth();
+
   return (
     <div
-      className=""
-      style={{ paddingBottom: "5rem", background: background, color: color }}
+      className="hero_container_wrapper"
+      style={{ background: background, color: colorSwap }}
     >
-      <div className="container">
+      <div className="container hero_container" style={{height: `calc(100vh - ${navHeight}px)` }}>
         <div className="row hero_row w-100">
           <motion.div
             className={`col-md-6 hero_left`}

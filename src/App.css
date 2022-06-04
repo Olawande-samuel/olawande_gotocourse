@@ -198,7 +198,8 @@ td {
   margin-bottom: 2.5rem;
 }
 .hero_row {
-  padding-top: 3.5rem;
+  height: 100%;
+  /* padding-top: 3.5rem; */
 }
 .hero .hero_content  .hero_left{
   padding-top: 6.5rem;
@@ -206,7 +207,7 @@ td {
 }
 .hero .hero_text {
   font-weight: 800;
-  font-size: clamp(34px, 4vw,44px);
+  font-size: clamp(34px, 5vw,60px);
   line-height: 64px;
   /* color: var(--text-blue); */
   text-transform: capitalize;
@@ -215,7 +216,7 @@ td {
 
 .hero_subtext {
   margin-block: 1.875rem;
-  font-size: 14px;
+  font-size: 16px;
     font-weight: 500;
     line-height: 24px;
     letter-spacing: .25px;
@@ -223,9 +224,11 @@ td {
 
 .hero_left, .hero_right {
   display: grid;
-  place-content:center;
+  /* place-content:center; */
 }
-/* .hero_right */
+.hero_left{
+  place-items: center;
+}
 
 .hero input {
   border-radius: 10px;
@@ -867,11 +870,17 @@ line-height: 45px;
 /* ********************SIGNUP/LOGIN************************** */
 
 .signWrapper {
+  position: relative;
   display: grid;
   place-items: center;
   min-height: 100vh;
   background-color: var(--lime) ;
   
+}
+.signWrapper .back {
+  position: absolute;
+  top: 5%;
+  left: 3%;
 }
 .signWrapper main {
   width: min(100% - 2rem, 600px);
@@ -1131,6 +1140,13 @@ line-height: 16px;
 @media screen and (max-width: 995px) {
   .hero, .hero_row {
     flex-direction: column-reverse;
+  }
+  .hero_container_wrapper {
+    min-height: 100vh;
+    padding-bottom: 1.5rem;
+  }
+  .hero_container {
+    height: 100% !important;
   }
   /* .hero_item {
     flex-direction: column-reverse;
