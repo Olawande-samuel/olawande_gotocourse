@@ -114,7 +114,7 @@ export const Home = () => {
                     <Grid container spacing={4}>
                         {
                             data.map(({icon: Icon, title, content}, i) => (
-                                <Grid item xs={12} sm={8} md={6} lg={4} key={i}>
+                                <Grid item xs={12} sm={12} md={6} lg={4} key={i}>
                                     <Paper elevation={1} className={clsx.paper}>
                                         <span>
                                             <Icon />
@@ -131,8 +131,8 @@ export const Home = () => {
             <div className={clsx.best_features}>
                 <h1>Our Best Features</h1>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo.</p>
-                <Grid container spacing={6} sx={{margin: "30px 0px", position: "relative"}}>
-                    <Grid item sm={12} md={6} sx={{marginBottom: "30px"}}>
+                <Grid container spacing={6} sx={{position: "relative", marginBottom: 5}}>
+                    <Grid item xs={12} sm={12} md={6}>
                         <div className={clsx.rectangle}></div>
                         <div className={clsx.best__features_img}></div>
                     </Grid>
@@ -147,7 +147,7 @@ export const Home = () => {
                     </Grid>
                 </Grid>
 
-                <Grid container spacing={6} sx={{margin: "30px 0px", position: "relative"}}>
+                <Grid container spacing={6} sx={{position: "relative", marginBottom: 5}}>
                     <Grid item sm={12} md={6}>
                         <div className={clsx.best__features_card}>
                             <span>
@@ -157,14 +157,14 @@ export const Home = () => {
                             <p>We use an efficient classroom management tool that helps track student progress and optimise learning for both teachers and students.</p>
                         </div>
                     </Grid>
-                    <Grid item sm={12} md={6} sx={{marginBottom: "30px"}}>
+                    <Grid item xs={12} sm={12} md={6}>
                         <div className={clsx.rectangle_2}></div>
                         <div className={clsx.best__features_img_live}></div>
                     </Grid>
                 </Grid>
                 
-                <Grid container spacing={6} sx={{margin: "30px 0px", position: "relative"}}>
-                    <Grid item sm={12} md={6} sx={{marginBottom: "30px"}}>
+                <Grid container spacing={4} sx={{position: "relative", marginBottom: 5}}>
+                    <Grid item xs={12} sm={12} md={6}>
                         <div className={clsx.rectangle}></div>
                         <div className={clsx.best__features_creator}></div>
                     </Grid>
@@ -179,7 +179,7 @@ export const Home = () => {
                     </Grid>
                 </Grid>
 
-                <Grid container spacing={6} sx={{margin: "30px 0px", position: "relative"}}>
+                <Grid container spacing={6} sx={{position: "relative", marginBottom: 5}}>
                     <Grid item sm={12} md={6}>
                         <div className={clsx.best__features_card}>
                             <span>
@@ -189,7 +189,7 @@ export const Home = () => {
                             <p>We use an efficient classroom management tool that helps track student progress and optimise learning for both teachers and students.</p>
                         </div>
                     </Grid>
-                    <Grid item sm={12} md={6} sx={{marginBottom: "30px"}}>
+                    <Grid item xs={12} sm={12} md={6}>
                         <div className={clsx.rectangle_2}></div>
                         <div className={clsx.best__features_img_custom}></div>
                     </Grid>
@@ -224,9 +224,10 @@ export const Home = () => {
                     <Swiper
                         // install Swiper modules
                         modules={[Navigation, Pagination, Scrollbar, A11y]}
-                        spaceBetween={30}
+                        spaceBetween={50}
                         slidesPerView={1}
                         navigation
+                        style={{padding: "20px 0px"}}
                         pagination={{ clickable: true }}
                         scrollbar={{ draggable: true }}
                         onSwiper={(swiper) => console.log(swiper)}

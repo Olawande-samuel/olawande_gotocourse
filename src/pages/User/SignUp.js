@@ -52,34 +52,29 @@ const SignUp = () => {
     setLoading(true);
     try {
       let { retype_password, ...others } = data;
-      if (others.email.trim() === "" || others.password.trim() === "") return;
+      if (others.email.trim() === "" || others.password.trim() === "") throw new AdvancedError("Fields cannot be empty", 0);
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
-      console.log(others);
       const response = await register(others, "user");
 
-      console.log(response);
       let { success, message, statusCode } = response;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         //successfully done
         //update the cookie
         const { data } = response;
-        if(isCookie('gotocourse-userdata') || isCookie('gotocourse-usertype')){
-          removeCookie('gotocourse-userdata');
-          removeCookie('gotocourse-usertype');
+        const key = 'gotocourse-profiledata';
+        if(isCookie(key)){
+          removeCookie(key);
         }
-        saveCookie("gotocourse-userdata", data);
-        saveCookie("gotocourse-usertype", data.userType);
+        saveCookie(key, data);
         setGeneralState((old) => {
           return {
             ...old,
             notification: message,
           };
         });
-        data.userType === "student"
-          ? navigate("/students")
-          : navigate("/teachers");
+        navigate("/students");
       }
     } catch (err) {
       console.error(err.message, err.statusCode);

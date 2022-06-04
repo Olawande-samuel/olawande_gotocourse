@@ -123,7 +123,7 @@ const TeacherProfile = ({}) => {
                         <input type="radio" className={`btn-check ${style.btn_check}`} name="btnradio" id="btnradio3" autocomplete="off" />
                         <label className={`btn btn-outline-primary generic_label ${style.teacher_profile_options}`} for="btnradio3">One-on-One</label>
                     </div>
-                  <div className="card-body">
+                  <div className="card-body p-2">
                   <h5 className={`my-4 ${style.title}`}>Cohort Course</h5>
                   <p className={style.teacher_paragraph}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo. Proin fermentum ipsum a non tellus tincidunt feugiat laoreet laoreet. </p>
                   <ul>

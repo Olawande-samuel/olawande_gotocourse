@@ -47,22 +47,21 @@ const Login = () => {
       
       if(success) {
         const {data: d} = response;
+        const key = 'gotocourse-profiledata';
 
         //before navigating
         //save some thing to cookie and state
-        if(isCookie('gotocourse-userdata') || isCookie('gotocourse-usertype')){
-          removeCookie('gotocourse-userdata');
-          removeCookie('gotocourse-usertype');
+        if(isCookie(key)){
+          removeCookie(key);
         }
-        saveCookie('gotocourse-userdata', d);
-        saveCookie('gotocourse-usertype', d.userType);
+        saveCookie(key, d);
         setGeneralState(old => {
           return {
             ...old,
             notification: response.message
           }
         })
-        d.userType === "student" ? navigate("/students") : navigate("/teacher");
+        navigate("/students");
       }else throw new AdvancedError(message, statusCode);
 
     } catch (err) {

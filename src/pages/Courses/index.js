@@ -618,7 +618,7 @@ export const PackageCard = () => {
 
 export const ReviewCard = () => {
   return (
-    <div className={`card ${style.review_card}`}>
+    <div className={`card ${style.review_card} w-100`}>
       <div className="card-body">
         <p className={style.review_text}>
           “I had a wonderful experience and can confidently say that GotoCourse
@@ -653,7 +653,7 @@ export const ReviewCard = () => {
 
 export const OtherCard = () => {
   return (
-    <div className={`card ${style.package_card, style.othercard}`}>
+    <div className={`card ${style.package_card, style.othercard} p-2`}>
       <div className="card-body">
         <p className={style.package_price}>Introduction to SQL</p>
         <p className={style.subtext}>Data Science</p>
@@ -685,7 +685,7 @@ export const ReviewSection = ()=> {
       <Swiper
         // install Swiper modules
         modules={[Navigation, Pagination, Scrollbar, A11y]}
-        spaceBetween={30}
+        spaceBetween={50}
         slidesPerView={1}
         navigation
         pagination={{ clickable: true }}
