@@ -252,7 +252,7 @@ export const adminFunctions = {
     updateAvatar: async function(formdata, token){
         try{
             const res = await axios.post(`${baseURL}/admin/profile/avatar/update`,
-            JSON.stringify(formdata),
+        formdata,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,
