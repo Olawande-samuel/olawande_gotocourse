@@ -11,21 +11,20 @@ const GuardedRoute = ({children}) => {
     const navigate = useNavigate();
     const location = useLocation();
     const route = location.pathname.split("/")[1];
-    const userdata = fetchCookie('gotocourse-userdata');
-    const userType = fetchCookie('gotocourse-usertype');
+    const key = 'gotocourse-profiledata';
+    const userdata = fetchCookie(key);
     useEffect(() => {
         setGeneralState(old => {
             return {
                 ...old,
                 userdata,
-                userType
             }
         })
     }, [])
     
 
 
-    if(isCookie('gotocourse-userdata')){
+    if(isCookie(key)){
         if(userdata.token){
             console.log(userdata.token);
             // if(route === "admin" && userType !== "admin") {

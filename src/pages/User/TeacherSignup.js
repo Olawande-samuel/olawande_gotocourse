@@ -35,7 +35,7 @@ const TeacherSignup = () => {
       }
     })
   }
-  const { saveCookie } = useCookie();
+  const { saveCookie, removeCookie, isCookie } = useCookie();
 
   React.useEffect(() => {
     if (formstate.fullname !== "") {
@@ -65,15 +65,18 @@ const TeacherSignup = () => {
         //successfully done
         //update the cookie
         const { data } = response;
-        saveCookie("gotocourse-userdata", data);
-        saveCookie("gotocourse-usertype", data.userType);
+        const key = "gotocourse-profiledata";
+        if(isCookie(key)){
+          removeCookie(key);
+        }
+        saveCookie(key, data);
         setGeneralState((old) => {
           return {
             ...old,
             notification: message,
           };
         });
-         navigate("/teacher");
+        navigate("/teacher");
       }
     }catch(err){
       toast.error(err.message, {
