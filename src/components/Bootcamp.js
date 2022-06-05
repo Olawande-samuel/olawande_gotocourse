@@ -13,7 +13,7 @@ const Bootcamp = () => {
       <div className=" container-lg bootcamp_content">
         <header className="text-center">
           <h3 className="title">TECH IMMERSION TRAININGS AND BOOTCAMPS</h3>
-          <p className="sub_title mx-auto" style={{ width: "min(100% - 1rem, 500px)" }}>
+          <p className="sub_title mx-auto" style={{ width: "min(100% - 1rem, 700px)" }}>
             {/* GotoCourse trainings and bootcamps have helped thousands of students
             launch new careers in the tech industry. We want to improve the
             quality of life by helping people lean workplace relevant skillsets.
@@ -29,6 +29,7 @@ const Bootcamp = () => {
         <div className="my-5">
           <Swiper
             // install Swiper modules
+            modules={[Navigation]}
             spaceBetween={0}
             slidesPerView={1}
             navigation
