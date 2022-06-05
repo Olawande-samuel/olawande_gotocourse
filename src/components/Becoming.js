@@ -21,7 +21,7 @@ const Becoming = () => {
                 professionals? Collaborate with us. We provide you the platform
                 and tools to teach what you love
               </p>
-              <Link to="/admin/signup">
+              <Link to="/become-a-teacher">
 
               <motion.button
               whileHover={{ 
