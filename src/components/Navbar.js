@@ -3,6 +3,7 @@ import Logo from "../images/Logo.png";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import {motion} from 'framer-motion'
 import {Link} from "react-router-dom"
+import { useAuth } from "../contexts/AuthContext";
 const navList = [
   {
     id: 1,
@@ -61,6 +62,9 @@ const navList = [
   },
 ];
 const Navbar = () => {
+  const { setGeneralState } = useAuth();
+
+
   const [show, setShow] = useState(false);
   const [drop, setDrop] = useState(false);
   const toggleNav = () => {
@@ -72,16 +76,23 @@ const Navbar = () => {
   };
 
   const dropRef = useRef(null);
+  const heightRef = useRef(null);
   
   const status = OutsideClick(dropRef);
   useEffect(() => {
     if (status === true) {
       setDrop(false);
     }
+    let navbarHeight = heightRef.current.clientHeight
+    setGeneralState((old) => {
+      return {
+        ...old,
+        navHeight: navbarHeight
+      };
+    });
   }, [drop,status]);
-  
   return (
-    <nav className="nav navbar navbar-expand-lg navbar-light" style={{borderBottom: "1px solid rgba(159, 159, 159, .3)"}}>
+    <nav ref={heightRef} className="nav navbar navbar-expand-lg navbar-light" style={{borderBottom: "1px solid rgba(159, 159, 159, .3)"}}>
 
       <div className="container navbar-container align-items-center">
         <a href="/" className="logo navbar-brand ">

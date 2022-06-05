@@ -5,15 +5,24 @@ import SwiperCore, { Autoplay, EffectCreative } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { motion } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import hero from "../images/NewHero.png";
 import teach from "../images/newTeach.png";
 import stu from "../images/newLearn.png";
 import gen from "../images/generaltp.png";
+
+import tentative from "../images/tentative_hero.png";
+import Border from "../images/hero_border.png";
+import br from "../images/br.svg"
+import tl from "../images/tl.svg"
+import square from "../images/square.svg"
+
 import Image from "./Image";
 
 import "swiper/css";
 import "swiper/css/effect-creative";
+import { useAuth } from "../contexts/AuthContext";
 
 const Hero = () => {
   SwiperCore.use([Autoplay]);
@@ -26,16 +35,18 @@ const Hero = () => {
     background: "#F1F8FF",
     color: "#F75C4E",
     btn: "Explore Courses",
+    colorSwap:"#0C2191"
   };
   const student = {
     title: "Explore Wide Range Of Tech Skills To Develop Your Professional Career",
     subtitle:
-    "Endless Possibilities With Borderless Learning",
+    "Learn from top industry experts or less",
     image: teach,
     link: "/signup",
   background: "#F1F8FF",
   color: "#0C2191",
   btn: "Get Started",
+  colorSwap:"#F75C4E"
 
   };
   const general = {
@@ -47,10 +58,26 @@ const Hero = () => {
 
     
   }; 
+  const New = {
+    title: "Learn from Experts.",
+    title2: "Learn from Anywhere.",
+    title3: "Learn More for Less.",
+    subtitle: "GotoCourse helps you achieve your tech career goals by connecting you to a global network of highly skilled professionals and domain experts.",
+    image: tentative,
+    link: "/categories",
+    background: "#F1F8FF",
+    color: "#0C2191",
+    btn: "Explore Courses",
+    colorSwap:"#F75C4E"
+
+    
+  }; 
 
   return (
     <section className="hero">
-      <Swiper
+          <Others {...New} />
+
+      {/* <Swiper
         creativeEffect={{
           prev: {
             shadow: true,
@@ -83,7 +110,7 @@ const Hero = () => {
         <SwiperSlide>
           <Others {...teacher} />
         </SwiperSlide>
-      </Swiper>
+      </Swiper> */}
     </section>
   );
 };
@@ -91,9 +118,11 @@ const Hero = () => {
 export default Hero;
 
 export const Generic = ({ image, background}) => {
+  const {  generalState: { navHeight }, } = useAuth();
+
   return (
-    <div className="" style={{ background:background }}>
-      <div className="container">
+    <div className="hero_container_wrapper" style={{ background:background }}>
+      <div className="container hero_container" style={{height: `calc(100vh - ${navHeight}px)` }}>
         <div className="row hero_row w-100 py-5">
           <motion.div
             className={`col-md-4 hero_left`}
@@ -154,22 +183,30 @@ export const Generic = ({ image, background}) => {
     </div>
   );
 };
-export const Others = ({ title, image, subtitle, background,btn, link, color }) => {
+export const Others = ({ title, image, title2, title3, subtitle, background,btn, link, color, colorSwap }) => {
+  const {  generalState: { navHeight }, } = useAuth();
+
   return (
     <div
-      className=""
-      style={{ paddingBottom: "5rem", background: background, color: color }}
+      className="hero_container_wrapper"
+      style={{ background: background, color: colorSwap }}
     >
-      <div className="container">
+      <div className="container hero_container" style={{height: `calc(100vh - ${navHeight}px)` }}>
         <div className="row hero_row w-100">
           <motion.div
-            className={`col-md-6 hero_left`}
+            className={`col-md-7 hero_left`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2, duration: 1.5 }}
           >
             <div>
-              <h1 className="hero_text  ">{title}</h1>
+              <div className="hero_text_group">
+              <h1 className="hero_text">{title}</h1>
+              {/* new */}
+              <h1 className="hero_text">{title2}</h1>
+              <h1 className="hero_text">{title3}</h1>
+              </div>
+
               <p className="hero_subtext text-center text-lg-start ">{subtitle}</p>
               <div className="text-center text-lg-start">
                 <Link
@@ -183,7 +220,7 @@ export const Others = ({ title, image, subtitle, background,btn, link, color }) 
             </div>
           </motion.div>
           <motion.div
-            className={`col-md-6 hero_right `}
+            className={`col-md-5 hero_right `}
             initial={{ x: 800 }}
             animate={{ x: 0 }}
             transition={{
@@ -193,11 +230,26 @@ export const Others = ({ title, image, subtitle, background,btn, link, color }) 
               duration: 0.8,
             }}
           >
-            <Image
+            {/* <Image
               image={image}
               alt="woman on a laptop smiling"
               effect="blur"
-            />
+            /> */}
+              <div className="" style={{position:"relative", border:"1px solid red"}}>
+
+                  <img src={Border} alt="" className="hero_img_border position-absolute" height="300" />
+                  <img src={tl} alt=""  className="position-absolute top_left"/>
+                  <img src={br} alt=""  className="position-absolute bottom_right" />
+                  <img src={square} alt=""  className="position-absolute right_square" />
+                  <img src={square} alt="" className="position-absolute bottom_square"  />
+
+                  <LazyLoadImage
+                    alt="Woman holding laptop "
+                    src={image} // use normal <img> attributes as props
+                    visibleByDefault={true}
+                    className="new_hero_image position-absolute"
+                     />
+                </div>
           </motion.div>
         </div>
         <div></div>

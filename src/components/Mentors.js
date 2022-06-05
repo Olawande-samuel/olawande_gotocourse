@@ -127,8 +127,10 @@ const Card = ({ item }) => {
       <div className="card">
         <img src={item.profile} alt="" className="card-img-top mentor_image" />
         <div className="card-body">
-          <h5 className="card-title">{item.content}</h5>
-          <p className="card-text">{item.location}</p>
+          <h5 className="card-title">{item.content}.
+          
+          <span className="card-text ms-2">{item.location}</span></h5>
+          {/* <p className="card-text">{item.location}</p> */}
         </div>
       </div>
     </div>

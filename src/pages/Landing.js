@@ -14,23 +14,24 @@ import Testimonials from '../components/Testimonials'
 import Transition from '../components/Transition'
 import Join from "../components/Join"
 import Classroom from '../components/Classroom'
+import Layout from '../components/Layout'
+import Bootcamp from '../components/Bootcamp'
 const Landing = () => {
   return (
     <div>
-        <Navbar />
+        <Layout>
         <Hero />
+        <Bootcamp />
         <Services />
         <Learn />
         <Transition />
         <Becoming />
-        {/* <Classroom /> */}
         <Career />
         <Mentors />
         <Testimonials />
         <Degree />
         <Faq />
-        <Footer />
-        <End />
+        </Layout>
     </div>
   )
 }
