@@ -6,7 +6,7 @@ import { MdPictureAsPdf, MdExpandMore, MdExpandLess } from "react-icons/md";
 import { Rating } from "react-simple-star-rating";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-
+import {motion} from "framer-motion"
 import Layout from "../../components/Layout";
 import { Jumbotron } from "./components";
 import clsx from "./styles.module.css";
@@ -187,6 +187,18 @@ export const Home = () => {
                             </span>
                             <h4>Customization</h4>
                             <p>We use an efficient classroom management tool that helps track student progress and optimise learning for both teachers and students.</p>
+                            <Link to="/teacher/signup">
+                            <motion.button
+                            className="button button-md"
+                            transition={{
+                                ease: 'easeInOut',
+                                duration: 0.5
+                                }}
+                            whileHover={{
+                                scale: 1.1,
+                                textShadow: "0px 0px 8px rgb(255, 255, 255)"
+                            }}  >Become a teacher</motion.button>
+                            </Link>
                         </div>
                     </Grid>
                     <Grid item xs={12} sm={12} md={6}>

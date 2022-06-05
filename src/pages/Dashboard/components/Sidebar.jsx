@@ -105,15 +105,16 @@ const toggleSidebar = ()=>{
     setGeneralState({...generalState, showSidebar:!generalState.showSidebar})
 }
     return (
-        <div className={`${generalState.showSidebar ? clsx.open :clsx.close}  ${clsx.sidebar}`}>
-                <i className="d-md-none" style={{fontSize:"24px", position:"absolute", right:"-30px", color:"#0C2191"}} onClick={toggleSidebar}>
+        <>
+        <div className={` ${generalState.showSidebar ? clsx.open :clsx.close}  ${clsx.sidebar}`}>
+                <i className="d-md-none" style={{fontSize:"24px", position:"absolute", right:"-30px", color:"#0C2191", cursor:"pointer", zIndex:"3000"}} onClick={toggleSidebar}>
                     <AiOutlineClose />
                 </i>
             <Logo />
             <div className={clsx.sidebar_items} id="sidebar__items">
                 {
                     data.map(({icon, path, title}, i) => (
-                        <NavLink to={`${route === "admin" ? '/admin' : route === 'students' ? '/students' : '/teacher'}${'/'+path}`}  key={i}>
+                        <NavLink onClick={toggleSidebar} to={`${route === "admin" ? '/admin' : route === 'students' ? '/students' : '/teacher'}${'/'+path}`}  key={i}>
                             <SidebarItem location={location}
                             isMobile={!isMobile} icon={icon} 
                             title={title} path={path} />
@@ -122,6 +123,8 @@ const toggleSidebar = ()=>{
                 }
             </div>
         </div>
+        <div onClick={toggleSidebar} className={`d-lg-none ${clsx.overlay} ${generalState.showSidebar ? clsx.overlayopen :clsx.overlayclose}`}></div>
+        </>
     )
 } 
 

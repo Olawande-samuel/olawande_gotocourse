@@ -186,7 +186,7 @@ export const adminStudentFunctions = {
     verify: async function(_data, token){
         try{
             console.log(_data)
-            const res = await axios.post(`${baseURL}/admin/student/verify`,
+            const res = await axios.patch(`${baseURL}/admin/student/verify`,
             JSON.stringify(_data),
             {
                 headers: {
@@ -252,7 +252,7 @@ export const adminFunctions = {
     updateAvatar: async function(formdata, token){
         try{
             const res = await axios.post(`${baseURL}/admin/profile/avatar/update`,
-            JSON.stringify(formdata),
+        formdata,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,
