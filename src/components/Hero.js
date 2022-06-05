@@ -235,7 +235,7 @@ export const Others = ({ title, image, title2, title3, subtitle, background,btn,
               alt="woman on a laptop smiling"
               effect="blur"
             /> */}
-              <div className="" style={{position:"relative", border:"1px solid red"}}>
+              <div className="background" style={{position:"relative", border:"1px solid red"}}>
 
                   <img src={Border} alt="" className="hero_img_border position-absolute" height="300" />
                   <img src={tl} alt=""  className="position-absolute top_left"/>
