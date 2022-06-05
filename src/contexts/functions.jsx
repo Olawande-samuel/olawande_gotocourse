@@ -186,7 +186,7 @@ export const adminStudentFunctions = {
     verify: async function(_data, token){
         try{
             console.log(_data)
-            const res = await axios.post(`${baseURL}/admin/student/verify`,
+            const res = await axios.patch(`${baseURL}/admin/student/verify`,
             JSON.stringify(_data),
             {
                 headers: {

@@ -18,6 +18,7 @@ import { AdvancedError } from "../../../classes";
 import useCookies from "../../../hooks/useCookie";
 
 import Input from "../../../components/Input";
+import Loader from "../../../components/Loader";
 
 const key = "gotocourse-profiledata";
 
@@ -214,6 +215,8 @@ export function UserInfoCard({
   lastName,
   user,
   accessPledre,
+  handleVerification,
+  handlePledreAccess,
   approveHandler = () => { return; },
 }) {
   return (
@@ -268,14 +271,14 @@ export function UserInfoCard({
       {isActive !== null && (
         <td className={clsx.user__button}>
           <span>
-            <Switch checked={isActive} />
+            <Switch onClick={handleVerification} checked={isActive} />
           </span>
         </td>
       )}
       {accessPledre !== null && (
         <td className={clsx.user__button}>
           <span>
-            <Switch checked={accessPledre} />
+            <Switch onClick={handlePledreAccess} checked={accessPledre} />
           </span>
         </td>
       )}
@@ -570,7 +573,7 @@ export function Fees() {
 }
 
 export function Student() {
-  const { adminStudentFunctions: { fetch }, generalState: { userdata }, } = useAuth();
+  const { adminStudentFunctions: { fetch, verify }, generalState: { userdata, loading },setGeneralState } = useAuth();
   const [studentList, setStudentList] = useState([])
   useEffect(() => {
       if(userdata) {
@@ -583,6 +586,7 @@ export function Student() {
               else if (statusCode === 1) {
                 const { data } = res;
                 //do somethings
+
                 setStudentList(data)
                 console.log(data);
               } else {
@@ -602,6 +606,57 @@ export function Student() {
           })();
       }
   }, [userdata]);
+
+  async function handleVerification (id){
+    setGeneralState((old)=>{
+      return {
+        ...old,
+        loading:true
+      }
+    })
+      let item = {
+        userId: id
+      } 
+      try {
+        const res = await verify(item, userdata?.token);
+        
+          let item = {
+            userId: id
+          } 
+        console.log(res);
+        const { message, success, statusCode } = res;
+        console.log(res);
+
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          const { data } = res;
+          //do somethings
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          console.log(data);
+        } 
+      } catch (error) {
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } 
+  }
+  async function handlePledreAccess (){
+
+  }
   const tableHeaders = ["No", "Name", "Email", "Approve", "Access Pledre"];
   
   return (
@@ -618,7 +673,7 @@ export function Student() {
                 ))}
               </thead>
               <tbody>
-                {studentList.length > 0 && studentList.map(({ profileImg,accessPledre, email, date, name, isVerified, firstName, lastName }, i) => (
+                {studentList.length > 0 && studentList.map(({ userId, profileImg,accessPledre, email, date, name, isVerified, firstName, lastName }, i) => (
                   <UserInfoCard
                     key={i}
                     name={name}
@@ -631,6 +686,8 @@ export function Student() {
                     isActive={isVerified}
                     accessPledre={accessPledre}
                     user={true}
+                    handleVerification={()=>handleVerification(userId)}
+                    handlePledreAccess={()=>handlePledreAccess(userId)}
                   />
                 ))}
               </tbody>
@@ -638,6 +695,7 @@ export function Student() {
           </div>
         </div>
       </div>
+      {/* <Loader /> */}
     </Admin>
   );
 }

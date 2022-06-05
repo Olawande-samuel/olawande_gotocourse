@@ -11,7 +11,8 @@ const GuardedRoute = ({children}) => {
     const navigate = useNavigate();
     const location = useLocation();
     const route = location.pathname.split("/")[1];
-    const key = 'gotocourse-profiledata';
+// changed to userdata. profiledata casuing user to login twice 
+    const key = 'gotocourse-userdata';
     const userdata = fetchCookie(key);
     useEffect(() => {
         setGeneralState(old => {

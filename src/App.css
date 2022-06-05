@@ -114,6 +114,12 @@ td {
 /* ******************************Nav****************************** */
 .nav {
   padding: 1.2rem 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: white;
+  width: 100%;
+  z-index: 2000;
 }
 
 .nav .navbar-toggler {
@@ -205,13 +211,16 @@ td {
   padding-top: 6.5rem;
   /* padding-right: 4rem; */
 }
+.hero_text_group {
+  margin-bottom: 2.5375rem;
+
+}
 .hero .hero_text {
   font-weight: 800;
   font-size: clamp(34px, 5vw,60px);
   line-height: 64px;
   /* color: var(--text-blue); */
   text-transform: capitalize;
-  margin-bottom: 2.5375rem;
 }
 
 .hero_subtext {
@@ -280,17 +289,53 @@ padding: 13px 0 ;
   outline: none;
   padding: 2px 5px;
   font-size: 12px;
-line-height: 24px;
-margin: 0 .38rem;
-border-radius: 10px;
-background-color: #F1F8FF;
-gap: 1rem;
+  line-height: 24px;
+  margin: 0 .38rem;
+  border-radius: 10px;
+  background-color: #F1F8FF;
+  gap: 1rem;
 }
 
 .hero .form-control:focus {
   border-color:#fff !important;
   box-shadow: 0 0 0 0.05rem rgb(255,255,255);
 }
+
+/* ***********************BOOTCAMP******************************* */
+
+.bootcamp .swiper-button-next {
+  background-image: url(./images/next.svg);
+  background-color:var(--theme-orange);
+  background-position: center;
+  background-repeat: no-repeat;
+  padding:25px;
+  border-radius:50%;
+  z-index: 2000;
+  opacity: 0.8;
+}
+.bootcamp .swiper-button-prev {
+  background-image: url(./images/prev.svg);
+  background-color:var(--theme-orange);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding:25px;
+  border-radius:50%;
+  z-index: 1100;
+  opacity: 0.8;
+}
+.bootcamp .swiper-button-prev::after, 
+.bootcamp .swiper-button-next::after {
+  display: none;
+}
+.bootcamp .bootcampBox_title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 30px;
+  color: var(--obsidian);
+}
+
 /* **********************SERVICES******************************* */
 .wrapper {
   display: flex;
@@ -476,7 +521,8 @@ gap: 1rem;
 
 /* ****************************CAREERS************************************ */
 .career,
-.mentors {
+.mentors,
+.bootcamp {
   padding: 4.0625rem 3.625rem;
   color: var(--text-color-light);
 }
@@ -556,8 +602,7 @@ gap: 1rem;
   padding: 3rem 0rem;
 }
 .mentors .card-body {
-  padding: 1.875rem;
-  height: 200px;
+  height: 130px;
   /* padding-right: 4.1875rem; */
   background-color: var(--btn-color);
   display: grid;
@@ -1397,9 +1442,7 @@ line-height: 16px;
   .testimonials .slides {
     height: auto;
   }
-  /* .testimonials .react-multi-carousel-item {
-    width: 100% !important;
-  } */
+ 
   
 .end_left {
   text-align:center;

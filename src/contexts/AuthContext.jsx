@@ -17,7 +17,8 @@ const AuthContextProvider = ({children}) => {
         theme: "light",
         showSidebar: false,
         teacherProfile: null,
-        navHeight: ""
+        navHeight: "",
+        loading: false
     })
     const {fetchCookie} = useCookie();
     useEffect(() => {

@@ -50,10 +50,26 @@ const Hero = () => {
 
     
   }; 
+  const New = {
+    title: "Learn from Experts.",
+    title2: "Learn from Anywhere.",
+    title3: "Learn More for Less.",
+    subtitle: "GotoCourse helps you achieve your tech career goals by connecting you to a global network of highly skilled professionals and domain experts.",
+    image: teach,
+    link: "/categories",
+    background: "#F1F8FF",
+    color: "#0C2191",
+    btn: "Explore Courses",
+    colorSwap:"#F75C4E"
+
+    
+  }; 
 
   return (
     <section className="hero">
-      <Swiper
+          <Others {...New} />
+
+      {/* <Swiper
         creativeEffect={{
           prev: {
             shadow: true,
@@ -86,7 +102,7 @@ const Hero = () => {
         <SwiperSlide>
           <Others {...teacher} />
         </SwiperSlide>
-      </Swiper>
+      </Swiper> */}
     </section>
   );
 };
@@ -94,9 +110,11 @@ const Hero = () => {
 export default Hero;
 
 export const Generic = ({ image, background}) => {
+  const {  generalState: { navHeight }, } = useAuth();
+
   return (
-    <div className="" style={{ background:background }}>
-      <div className="container">
+    <div className="hero_container_wrapper" style={{ background:background }}>
+      <div className="container hero_container" style={{height: `calc(100vh - ${navHeight}px)` }}>
         <div className="row hero_row w-100 py-5">
           <motion.div
             className={`col-md-4 hero_left`}
@@ -157,7 +175,7 @@ export const Generic = ({ image, background}) => {
     </div>
   );
 };
-export const Others = ({ title, image, subtitle, background,btn, link, color, colorSwap }) => {
+export const Others = ({ title, image, title2, title3, subtitle, background,btn, link, color, colorSwap }) => {
   const {  generalState: { navHeight }, } = useAuth();
 
   return (
@@ -168,13 +186,19 @@ export const Others = ({ title, image, subtitle, background,btn, link, color, co
       <div className="container hero_container" style={{height: `calc(100vh - ${navHeight}px)` }}>
         <div className="row hero_row w-100">
           <motion.div
-            className={`col-md-6 hero_left`}
+            className={`col-md-7 hero_left`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2, duration: 1.5 }}
           >
             <div>
-              <h1 className="hero_text  ">{title}</h1>
+              <div className="hero_text_group">
+              <h1 className="hero_text">{title}</h1>
+              {/* new */}
+              <h1 className="hero_text">{title2}</h1>
+              <h1 className="hero_text">{title3}</h1>
+              </div>
+
               <p className="hero_subtext text-center text-lg-start ">{subtitle}</p>
               <div className="text-center text-lg-start">
                 <Link
@@ -188,7 +212,7 @@ export const Others = ({ title, image, subtitle, background,btn, link, color, co
             </div>
           </motion.div>
           <motion.div
-            className={`col-md-6 hero_right `}
+            className={`col-md-5 hero_right `}
             initial={{ x: 800 }}
             animate={{ x: 0 }}
             transition={{
