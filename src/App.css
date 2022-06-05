@@ -199,6 +199,42 @@ td {
   border: 1px solid yellow;
 } */
 
+.hero .hero_img_border {
+  z-index: 1500;
+  right: 0;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 440px;
+}
+.hero .new_hero_image {
+  left: 5%;
+    top: 17%;
+    z-index: 1800;
+}
+
+.hero .right_square {
+  top: 13%;
+  right: 25%;
+}
+
+.hero .top_left {
+  left: 13%;
+  top: 7%;
+}
+.hero .bottom_right {
+  right: 17%;
+  bottom: 9%;
+}
+.hero .bottom_square {
+  bottom: 9%;
+  left: 2%;
+}
+
+
+
+
+
 .hero .hero_logo {
   margin-top: .3rem;
   margin-bottom: 2.5rem;
@@ -281,7 +317,7 @@ padding: 13px 0 ;
 
 .hero img {
   max-width: 100%;
-  height: 440px;
+  /* height: 440px; */
 }
 .hero .pill {
   border: 1px solid var(--btn-color);

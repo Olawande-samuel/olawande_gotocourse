@@ -413,15 +413,18 @@ export function Teachers() {
 }
 
 export function Courses() {
+  const {generalState: {loading, userdata},  setGeneralState, adminFunctions: { fetchCourses} } = useAuth();
+const [courseList, setCourseList] = useState([])
   const tableHeaders = [
     "No",
-    "Courses",
+    "Course",
     "Category",
-    "Name",
+    "Description",
     "Type",
     "Price",
-    "Rating",
+    "Action",
   ];
+
   const tableContents = [
     {
       name: "Melanie Grutt",
@@ -432,11 +435,50 @@ export function Courses() {
       approve: true,
     },
   ];
+
+  async function getCourses(){
+
+    if (userdata) {
+      
+      try {
+        const res = await fetchCourses(userdata?.token);
+        console.log(res);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else if (statusCode === 1) {
+          const { data } = res;
+          //do somethings
+
+          setCourseList(data);
+          console.log(data);
+        } else {
+          throw new AdvancedError(message, statusCode);
+        }
+      } catch (err) {
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+  }
+  }
+  useEffect(()=>{
+        getCourses()
+
+  },[userdata])
   return (
     <Admin header={"Courses"}>
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <h1>All Courses</h1>
+              <h1>All Courses</h1>
+          {/* <div className="d-flex justify-content-between align-items-center">
+              <button type="button" className="btn btn-primary">Add Course</button>
+          </div> */}
 
           <div className={clsx.admin__student_main}>
             <table className={clsx.admin__student_table}>
@@ -446,15 +488,15 @@ export function Courses() {
                 ))}
               </thead>
               <tbody>
-                {tableContents.map(
+                {courseList.length > 0 && courseList.map(
                   (
                     {
-                      img,
-                      email,
-                      date,
+                      category,
                       name,
+                      description,
+                      price,
+                      type,
                       approve,
-                      package: p,
                       course,
                       rating,
                     },
@@ -462,15 +504,15 @@ export function Courses() {
                   ) => (
                     <UserInfoCard
                       key={i}
-                      name={name}
-                      num={i}
                       comp={"Courses"}
-                      rating={rating}
-                      date={date}
-                      email={email}
+                      num={i}
+                      name={category}
+                      course={name}
+                      date={description}
+                      pack={type}
+                      email={price}
+
                       isActive={approve}
-                      pack={p}
-                      course={course}
                     />
                   )
                 )}
