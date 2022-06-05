@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
+import Learning from "../images/cohort.webp";
 
 import {
   Cyber,
@@ -12,6 +13,7 @@ import {
   Project,
   Risk,
 } from "../images/components/svgs.js";
+import Image from "./Image.js";
 export const careers = [
   {
     id: 1,
@@ -129,19 +131,26 @@ console.log(arr)
 const Career = () => {
   return (
     <section className="career">
+      <div className="container">
+
       <header className="text-center">
         <h2 className="career_title">STAND OUT IN YOUR CAREER NICHE</h2>
         <p className="sub-title">
-        Choose a niche and enroll in certificate courses online or in-person that will help you kickstart your career within 3-6months.With GotoCourses cutting-edge curriculum and Instructors, we are committed to help you kickstart and build a great career in technology by providing you access to quality technical education by real world experts.
+        Choose a niche and enroll in certificate courses online or in-person that will help you kickstart yuor career within 3-6 months. We are committed to help you kickstart and build a great career in technology.
         </p>
       </header>
-      <div className="list-section">
-        {careers.map((career) => (
+      <div className="row align-items-center">
+        <div className="col-lg-6">
+        <Image width="580px" height="452px"  image={Learning} alt="Group of people in an online meeting room" className="background" effect="blur" />
+        </div>
+        <div className="col-lg-6">
+      <div className="new_list_section">
+        {careers.slice(0, 6).map((career) => (
           <CareerBox
             {...career}
           />
         ))}
-        <Link to="/categories">
+        {/* <Link to="/categories">
           <div className="h-100 d-flex align-items-center justify-content-center">
             <motion.button
             whileHover={{
@@ -149,8 +158,13 @@ const Career = () => {
             }}
             className="btn-plain">Learn More</motion.button>       
           </div>
-        </Link>
+        </Link> */}
       </div>
+
+        </div>
+      </div>
+      </div>
+
     </section>
   );
 };
@@ -158,7 +172,7 @@ const Career = () => {
 export const CareerBox = ({ logo, title, details, link }) => {
   return (
     <Link to={link}>
-    <div className="career_box d-flex ">
+    <div className="career_box d-flex flex-column">
       <div className="career_box_left">
         <i>{logo}</i>
       </div>

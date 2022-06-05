@@ -22,9 +22,9 @@ const Landing = () => {
         <Layout>
         <Hero />
         <Bootcamp />
-        <Services />
         <Learn />
         <Transition />
+        <Services />
         <Becoming />
         <Career />
         <Mentors />

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:ital,wght@0,400;0,500;0,700;1,400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:ital,wght@0,400;0,500;0,700;1,400&family=Raleway:wght@600;700;800&display=swap');
 
 :root {
   --primary: #f5f5f5;
@@ -252,6 +252,7 @@ td {
 
 }
 .hero .hero_text {
+  font-family: 'Raleway', sans-serif;
   font-weight: 800;
   font-size: clamp(34px, 5vw,60px);
   line-height: 64px;
@@ -339,9 +340,14 @@ padding: 13px 0 ;
 
 /* ***********************BOOTCAMP******************************* */
 
+.bootcamp .card {
+  height: 290px;
+  /* width: min(100% - .5rem, 320px); */
+  margin-block: auto;
+}
 .bootcamp .swiper-button-next {
   background-image: url(./images/next.svg);
-  background-color:var(--theme-orange);
+  background-color:var(--white);
   background-position: center;
   background-repeat: no-repeat;
   padding:25px;
@@ -351,7 +357,7 @@ padding: 13px 0 ;
 }
 .bootcamp .swiper-button-prev {
   background-image: url(./images/prev.svg);
-  background-color:var(--theme-orange);
+  background-color:var(--white);
   background-repeat: no-repeat;
   background-position: center;
   background-repeat: no-repeat;
@@ -365,13 +371,14 @@ padding: 13px 0 ;
   display: none;
 }
 .bootcamp .bootcampBox_title {
-  font-style: normal;
   font-weight: 600;
-  font-size: 28px;
+  font-size: 20px;
   line-height: 30px;
   color: var(--obsidian);
 }
-
+.bootcamp .bootcamp_box_left svg {
+  width: 35px;
+}
 /* **********************SERVICES******************************* */
 .wrapper {
   display: flex;
@@ -521,8 +528,8 @@ padding: 13px 0 ;
   position: relative;
   max-width: 100%;
 }
-.transition .background img {
-  max-width: 100%;
+.transition .background img , .career .background img {
+  width: 100%;
   object-fit:cover;
   object-position: center;
 }
@@ -612,6 +619,10 @@ padding: 13px 0 ;
   color: var(--text-color-light);
 }
 
+.career .new_list_section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+}
 /* ****************************MENTORS***************************** */
 
 .mentors .card-img-top {
@@ -1082,6 +1093,7 @@ line-height: 16px;
   } */
   .card-body {
     padding: 0;
+    padding-inline: 3px;
   }
 
   .services .services_box {
@@ -1282,7 +1294,8 @@ line-height: 16px;
   .becoming,
   .career,
   .mentors,
-  .classroom
+  .classroom,
+  .bootcamp
   {
     padding: 3.0625rem 0;
   }
