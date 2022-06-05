@@ -217,7 +217,9 @@ export function UserInfoCard({
   accessPledre,
   handleVerification,
   handlePledreAccess,
-  approveHandler = () => { return; },
+  approveHandler = () => {
+    return;
+  },
 }) {
   return (
     // <div>
@@ -228,7 +230,7 @@ export function UserInfoCard({
       <td className={clsx.user__info}>{num + 1}.</td>
       {user && (
         <td className={clsx.user__details}>
-        {img &&  <img src={img} alt="avatar" />}
+          {img && <img src={img} alt="avatar" />}
           <span>{`${firstName} ${lastName}`}</span>
         </td>
       )}
@@ -414,11 +416,11 @@ export function Courses() {
   const tableHeaders = [
     "No",
     "Courses",
+    "Category",
     "Name",
-    "Date",
-    "Package",
+    "Type",
+    "Price",
     "Rating",
-    "Approval",
   ];
   const tableContents = [
     {
@@ -428,30 +430,6 @@ export function Courses() {
       package: "Cohort",
       rating: "Bronze",
       approve: true,
-    },
-    {
-      name: "Keira Danlop",
-      course: "UI/UX",
-      date: "Feb 24",
-      package: "Cohort",
-      rating: "Silver",
-      approve: true,
-    },
-    {
-      name: "Diop Grutt",
-      course: "HTML",
-      date: "Apr 1",
-      package: "One on One",
-      rating: "Gold",
-      approve: false,
-    },
-    {
-      name: "Diop Grutt",
-      course: "Data Analytics",
-      date: "Sept 1",
-      package: "Self paced",
-      rating: "Diamond",
-      approve: false,
     },
   ];
   return (
@@ -573,65 +551,29 @@ export function Fees() {
 }
 
 export function Student() {
-  const { adminStudentFunctions: { fetch, verify }, generalState: { userdata, loading },setGeneralState } = useAuth();
-  const [studentList, setStudentList] = useState([])
-  useEffect(() => {
-      if(userdata) {
-          (async () => {
-            try {
-              const res = await fetch(userdata?.token);
-              console.log(res);
-              const { message, success, statusCode } = res;
-              if (!success) throw new AdvancedError(message, statusCode);
-              else if (statusCode === 1) {
-                const { data } = res;
-                //do somethings
+  const [studentList, setStudentList] = useState([]);
 
-                setStudentList(data)
-                console.log(data);
-              } else {
-                  throw new AdvancedError(message, statusCode)
-              }
-            } catch (err) {
-              toast.error(err.message, {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-            }
-          })();
-      }
-  }, [userdata]);
+  const { adminStudentFunctions: { fetch, verify, verify_pledre }, generalState: { userdata, loading }, setGeneralState, } = useAuth();
 
-  async function handleVerification (id){
-    setGeneralState((old)=>{
-      return {
-        ...old,
-        loading:true
-      }
-    })
-      let item = {
-        userId: id
-      } 
-      try {
-        const res = await verify(item, userdata?.token);
-        
-          let item = {
-            userId: id
-          } 
-        console.log(res);
-        const { message, success, statusCode } = res;
-        console.log(res);
+  async function fetchStudents(){
+    if (userdata) {
+      
+        try {
+          const res = await fetch(userdata?.token);
+          console.log(res);
+          const { message, success, statusCode } = res;
+          if (!success) throw new AdvancedError(message, statusCode);
+          else if (statusCode === 1) {
+            const { data } = res;
+            //do somethings
 
-        if (!success) throw new AdvancedError(message, statusCode);
-        else {
-          const { data } = res;
-          //do somethings
-          toast.success(message, {
+            setStudentList(data);
+            console.log(data);
+          } else {
+            throw new AdvancedError(message, statusCode);
+          }
+        } catch (err) {
+          toast.error(err.message, {
             position: "top-right",
             autoClose: 4000,
             hideProgressBar: true,
@@ -640,10 +582,39 @@ export function Student() {
             draggable: true,
             progress: undefined,
           });
-          console.log(data);
-        } 
-      } catch (error) {
-        toast.error(error.message, {
+        }
+    }
+  }
+  useEffect(() => {
+    fetchStudents()
+  }, [userdata]);
+
+  async function handleVerification(id) {
+    let item = {
+      userId: id,
+    };
+    try {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: true,
+        };
+      });
+
+      const res = await verify(item, userdata?.token);
+      const { message, success, statusCode } = res;
+
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: false,
+        };
+      });
+
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        //do somethings
+        toast.success(message, {
           position: "top-right",
           autoClose: 4000,
           hideProgressBar: true,
@@ -652,13 +623,79 @@ export function Student() {
           draggable: true,
           progress: undefined,
         });
-      } 
+        // reload student list
+        fetchStudents()   
+      }
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   }
-  async function handlePledreAccess (){
 
+
+
+  async function handlePledreAccess(id) {
+    let item = {
+      userId: id,
+    };
+
+    try {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: true,
+        };
+      });
+
+      const res = await verify_pledre(item, userdata?.token);
+      const { message, success, statusCode } = res;
+
+
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: false,
+        };
+      });
+
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        //do somethings
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        fetchStudents()
+      }
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   }
+
+
+
   const tableHeaders = ["No", "Name", "Email", "Approve", "Access Pledre"];
-  
+
   return (
     <Admin header={"Student"}>
       <div className={clsx["admin_profile"]}>
@@ -673,29 +710,45 @@ export function Student() {
                 ))}
               </thead>
               <tbody>
-                {studentList.length > 0 && studentList.map(({ userId, profileImg,accessPledre, email, date, name, isVerified, firstName, lastName }, i) => (
-                  <UserInfoCard
-                    key={i}
-                    name={name}
-                    firstName={firstName}
-                    lastName={lastName}
-                    img={profileImg}
-                    date={date}
-                    email={email}
-                    num={i}
-                    isActive={isVerified}
-                    accessPledre={accessPledre}
-                    user={true}
-                    handleVerification={()=>handleVerification(userId)}
-                    handlePledreAccess={()=>handlePledreAccess(userId)}
-                  />
-                ))}
+                {studentList.length > 0 &&
+                  studentList.map(
+                    (
+                      {
+                        userId,
+                        profileImg,
+                        accessPledre,
+                        email,
+                        date,
+                        name,
+                        isVerified,
+                        firstName,
+                        lastName,
+                      },
+                      i
+                    ) => (
+                      <UserInfoCard
+                        key={i}
+                        name={name}
+                        firstName={firstName}
+                        lastName={lastName}
+                        img={profileImg}
+                        date={date}
+                        email={email}
+                        num={i}
+                        isActive={isVerified}
+                        accessPledre={accessPledre}
+                        user={true}
+                        handleVerification={() => handleVerification(userId)}
+                        handlePledreAccess={() => handlePledreAccess(userId)}
+                      />
+                    )
+                  )}
               </tbody>
             </table>
           </div>
         </div>
       </div>
-      {/* <Loader /> */}
+      {loading && <Loader />}
     </Admin>
   );
 }
@@ -822,16 +875,16 @@ export function Edit() {
       else {
         const { data } = res;
         if (isCookie(key)) {
-            updateCookie(key, data);
-          } else {
-            saveCookie(key, data);
-          }
-          setGeneralState((old) => {
-            return {
-              ...old,
-              userdata: { ...old.userdata, ...data },
-            };
-          });
+          updateCookie(key, data);
+        } else {
+          saveCookie(key, data);
+        }
+        setGeneralState((old) => {
+          return {
+            ...old,
+            userdata: { ...old.userdata, ...data },
+          };
+        });
         toast.success(message, {
           position: "top-right",
           autoClose: 4000,
@@ -857,7 +910,7 @@ export function Edit() {
     }
   }
 
-  console.log("user", userdata)
+  console.log("user", userdata);
   return (
     <Admin header="ADMIN">
       <ToastContainer

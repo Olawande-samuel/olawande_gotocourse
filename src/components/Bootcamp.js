@@ -22,6 +22,8 @@ const Bootcamp = () => {
             needed skillsets to launch a new career in tech.
           </p>
         </header>
+        <div className="my-5">
+
         <Swiper
           // install Swiper modules
           modules={[Navigation, Scrollbar, A11y]}
@@ -62,6 +64,7 @@ const Bootcamp = () => {
                 ))}
             </div>
         </Swiper>
+        </div>
       </div>
     </section>
   );
