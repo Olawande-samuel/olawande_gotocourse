@@ -5,7 +5,7 @@ import {ToastContainer, toast} from "react-toastify";
 
 
 import { AdvancedError } from "../../classes";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/Auth";
 import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";

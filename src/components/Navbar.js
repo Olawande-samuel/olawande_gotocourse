@@ -3,7 +3,7 @@ import Logo from "../images/Logo.png";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import {motion} from 'framer-motion'
 import {Link} from "react-router-dom"
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/Auth";
 const navList = [
   {
     id: 1,

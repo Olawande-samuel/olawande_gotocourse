@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { useCookie } from "../hooks"; 
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/Auth";
 import { useEffect } from "react";
 
 

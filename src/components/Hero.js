@@ -22,7 +22,7 @@ import Image from "./Image";
 
 import "swiper/css";
 import "swiper/css/effect-creative";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/Auth";
 
 const Hero = () => {
   SwiperCore.use([Autoplay]);

@@ -5,7 +5,7 @@ import Algo from "../../images/mentor2.png";
 import Courses, { OtherCard, ReviewSection } from "../Courses";
 import style from "../Courses/courses.module.css";
 import { useLocation } from "react-router-dom";
-import {useAuth} from "../../contexts/AuthContext";
+import {useAuth} from "../../contexts/Auth";
 // USING STYLES FROM COURSES.MODULE.CSS
 
 
