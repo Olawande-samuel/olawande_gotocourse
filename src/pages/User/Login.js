@@ -6,7 +6,7 @@ import SignInWrapper from "../../components/SignInWrapper";
 
 
 import { useCookie } from "../../hooks";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/Auth";
 import { ToastContainer, toast } from "react-toastify";
 import { AdvancedError } from "../../classes";
 
@@ -47,7 +47,7 @@ const Login = () => {
       
       if(success) {
         const {data: d} = response;
-        const key = 'gotocourse-profiledata';
+        const key = 'gotocourse-userdata';
 
         //before navigating
         //save some thing to cookie and state
@@ -61,7 +61,7 @@ const Login = () => {
             notification: response.message
           }
         })
-        navigate("/students");
+        navigate(`${d.userType === 'student' ? "/students" : "/teacher"}`);
       }else throw new AdvancedError(message, statusCode);
 
     } catch (err) {

@@ -4,7 +4,7 @@ import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
 import { toast, ToastContainer } from "react-toastify";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/Auth";
 import { AdvancedError } from "../../classes";
 import { useCookie } from "../../hooks";
 
@@ -63,7 +63,7 @@ const SignUp = () => {
         //successfully done
         //update the cookie
         const { data } = response;
-        const key = 'gotocourse-profiledata';
+        const key = 'gotocourse-userdata';
         if(isCookie(key)){
           removeCookie(key);
         }

@@ -12,20 +12,21 @@ import {Profile as StudentProfile, Classes as StudentClasses, Edit as StudentEdi
 import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit} from "./pages/Dashboard/Admin";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, Courses as TeacherCourses, CreateCourse} from "./pages/Dashboard/Teachers";
 import 'react-toastify/dist/ReactToastify.css';
-import AuthContextProvider from "./contexts/AuthContext";
+import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
 import { Categories, CourseDetail, CourseList, CourseProfile } from "./pages/Courses";
 import {Home as BecomeATeacher, Profile} from "./pages/Teacher";
 import All, {Payment} from "./pages/Teacher/Teachers";
 import TeacherProfile from "./pages/Teacher/TeacherProfile";
 import TeacherSignup from "./pages/User/TeacherSignup";
-
+import SyllabusContextProvider from "./contexts/Syllabus";
 
 
 
 function App() {
   return (
     <AuthContextProvider>
+      <SyllabusContextProvider>
       <Routes>
         <Route path="/" element={<Out />}>
           <Route index element={<Landing />} />
@@ -78,6 +79,7 @@ function App() {
         </Route>
         <Route path="*" element={<h1 className="text-center">Page Not Found</h1>} />
       </Routes>
+      </SyllabusContextProvider>
     </AuthContextProvider>
   );
 }

@@ -5,7 +5,7 @@ import {Link, useNavigate} from "react-router-dom"
 
 import Courses, { CourseCard } from "../Courses";
 import { courseList } from "../Courses";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/Auth";
 import style from "./teacher.module.css";
 import lere from "../../images/lere.png";
 const nav = [

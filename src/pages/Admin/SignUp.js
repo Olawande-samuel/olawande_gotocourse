@@ -7,7 +7,7 @@ import { AdvancedError } from '../../classes'
 import Input from '../../components/Input'
 import Password from '../../components/Password'
 import SignInWrapper from '../../components/SignInWrapper';
-import {useAuth} from "../../contexts/AuthContext";
+import {useAuth} from "../../contexts/Auth";
 import { useCookie } from "../../hooks";
 
 

@@ -10,7 +10,7 @@ import { Sidebar, Searchbar } from "../components";
 import clsx from "./styles.module.css";
 
 import avatar from "../../../images/teacher.png";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/Auth";
 import img01 from "../../../images/mentor1.png";
 import img02 from "../../../images/mentor2.png";
 import { GuardedRoute } from "../../../hoc";
@@ -20,7 +20,7 @@ import useCookies from "../../../hooks/useCookie";
 import Input from "../../../components/Input";
 import Loader from "../../../components/Loader";
 
-const key = "gotocourse-profiledata";
+const key = "gotocourse-userdata";
 
 export function Dashboard() {
   const { updateCookie, fetchCookie } = useCookies();
@@ -214,7 +214,7 @@ export function UserInfoCard({
   firstName,
   lastName,
   user,
-  accessPledre,
+  accessPledre=null,
   handleVerification,
   handlePledreAccess,
   approveHandler = () => {

@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from "./Navbar"
 import Footer from "./Footer"
 import End from "./End"
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../contexts/Auth'
 const Layout = ({children}) => {
   const {generalState: { navHeight },}= useAuth()
   return (
