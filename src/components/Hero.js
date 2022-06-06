@@ -17,6 +17,7 @@ import Border from "../images/hero_border.png";
 import br from "../images/br.svg"
 import tl from "../images/tl.svg"
 import square from "../images/square.svg"
+import place from "../images/placehero.png"
 
 import Image from "./Image";
 
@@ -63,12 +64,12 @@ const Hero = () => {
     title2: "Learn from Anywhere.",
     title3: "Learn More for Less.",
     subtitle: "GotoCourse helps you achieve your tech career goals by connecting you to a global network of highly skilled professionals and domain experts.",
-    image: tentative,
+    image: place,
     link: "/categories",
     background: "#F1F8FF",
-    color: "#0C2191",
+    color: "#F75C4E",
     btn: "Explore Courses",
-    colorSwap:"#F75C4E"
+    colorSwap:"#0C2191"
 
     
   }; 
@@ -189,9 +190,9 @@ export const Others = ({ title, image, title2, title3, subtitle, background,btn,
   return (
     <div
       className="hero_container_wrapper"
-      style={{ background: background, color: colorSwap }}
+      style={{ background: "#fff", color: colorSwap }}
     >
-      <div className="container hero_container" style={{height: `calc(100vh - ${navHeight}px)` }}>
+      <div className="container hero_container" style={{minHeight: `calc(100vh - ${navHeight}px )`,display:"grid", placeItems:"center" }}>
         <div className="row hero_row w-100">
           <motion.div
             className={`col-md-7 hero_left`}
@@ -230,12 +231,12 @@ export const Others = ({ title, image, title2, title3, subtitle, background,btn,
               duration: 0.8,
             }}
           >
-            {/* <Image
+            <Image
               image={image}
               alt="woman on a laptop smiling"
               effect="blur"
-            /> */}
-              <div className="" style={{position:"relative", border:"1px solid red"}}>
+            />
+              {/* <div className="background" style={{position:"relative", border:"1px solid red"}}>
 
                   <img src={Border} alt="" className="hero_img_border position-absolute" height="300" />
                   <img src={tl} alt=""  className="position-absolute top_left"/>
@@ -249,7 +250,7 @@ export const Others = ({ title, image, title2, title3, subtitle, background,btn,
                     visibleByDefault={true}
                     className="new_hero_image position-absolute"
                      />
-                </div>
+                </div> */}
           </motion.div>
         </div>
         <div></div>

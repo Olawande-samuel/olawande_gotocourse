@@ -16,39 +16,54 @@ import { useAuth } from "../contexts/Auth";
 const witnesses = [
   {
     id: 1,
-    content: "I will teach you PowerBi in 8 weeks",
+    title:"Product Designer",
+    content: "Discuss how to kickstart your career as a product designer",
     profile: mentor,
-    location: "Peter Southampton . London",
+    location: "Sarah Grace",
+    other:"11 years work experience"
+
   },
   {
     id: 2,
-    content: "I will teach you UIUX in 4 weeks",
+    title:"Product Manager",
+    content: "Discuss how to kickstart your career as a product manager",
     profile: mentor2,
-    location: "Cassandra Geoffrey . Atlanta",
+    location: "Amanda George",
+    other:"11 years work experience"
+
   },
   {
     id: 3,
-    content: "I had a wonderful experience",
+    title:"Business Analyst",
+    content: "Discuss how to kickstart your career as a business analyst",
     profile: mentor3,
-    location: "Niyi Adegoke . Lagos ",
+    location: "Cassandra Geoffrey",
+    other:"11 years work experience"
   },
   {
     id: 4,
-    content: "I will teach you PowerBi in 8 weeks",
+    title:"Data Scientist",
+    content: "Discuss how to kickstart your career as a data scientist",
     profile: mentor4,
-    location: "Patrick Quinn . London",
+    location: "Patrick Quinn",
+    other:"11 years work experience"
+
   },
   {
     id: 5,
     content: "I will teach you UIUX in 2 weeks",
     profile: mentor2,
-    location: "Cassandra Geoffrey . Atlanta",
+    location: "Cassandra Geoffrey",
+    other:"11 years work experience"
+
   },
   {
     id: 6,
     content: "I will teach you web development in 4 weeks",
     profile: mentor3,
-    location: "Niyi Adegoke . Lagos",
+    location: "Niyi Adegoke",
+    other:"13 years work experience"
+
   },
 ];
 const Mentors = () => {
@@ -56,8 +71,8 @@ const Mentors = () => {
     <section className="mentors">
       <div className=" mentors_content">
         <header className="text-center">
-          <h3 className="title">Choose a mentor</h3>
-          <p className="sub_title">
+          <h3 className="title" style={{marginBottom:"1.625rem"}}>Find Your Mentor, Accelerate Your Success</h3>
+          <p className="sub_title mx-auto" style={{width:"min(100% - 1rem, 800px)"}}>
             One of the best ways to break into I.T or learn more about becoming
             a top tech professional is to find someone that has gone before you
             and gained success at the same goal. This person has the ability to
@@ -71,7 +86,7 @@ const Mentors = () => {
           modules={[Navigation, Pagination, Scrollbar, A11y]}
           spaceBetween={0}
           slidesPerView={1}
-          navigation
+          // navigation
           pagination={{ clickable: true }}
           scrollbar={{ draggable: true }}
           onSwiper={(swiper) => console.log(swiper)}
@@ -92,7 +107,7 @@ const Mentors = () => {
               spaceBetween: 0,
             },
             1024: {
-              slidesPerView: 4,
+              slidesPerView: 3.5,
               spaceBetween: 5,
             },
           }}
@@ -125,12 +140,19 @@ const Card = ({ item }) => {
   return (
     <div className="px-1" style={{cursor: "pointer"}} onClick={gotoMentorPage}>
       <div className="card">
-        <img src={item.profile} alt="" className="card-img-top mentor_image" />
         <div className="card-body">
-          <h5 className="card-title">{item.content}.
-          
-          <span className="card-text ms-2">{item.location}</span></h5>
-          {/* <p className="card-text">{item.location}</p> */}
+        <div className="mentors_card_top" style={{background:`url(${item.profile}), rgba(0, 0, 0, 0.5)`}}>
+        {/* <img src={item.profile} alt="" className="card-img-top mentor_image" /> */}
+        
+          <div>
+           <h5>{item.title}</h5>
+            <p>{item.content}</p>
+          </div>
+        </div>
+        <div className="text-dark w-100 px-2">
+          <h5 className="">{item.location}</h5>
+          <small className="">{item.other}</small>
+        </div>
         </div>
       </div>
     </div>
