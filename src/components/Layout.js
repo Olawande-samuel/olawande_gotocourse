@@ -8,7 +8,7 @@ const Layout = ({children}) => {
   return (
     <>
     <Navbar />
-    <section className="layout_main" style={{marginTop: `${navHeight}px`}}>
+    <section className="layout_main" style={{marginTop: `${navHeight + 1}px`}}>
         {children}
     </section>
     <Footer />
