@@ -9,12 +9,13 @@ import { Sidebar, Searchbar } from "../components";
 import clsx from "./styles.module.css";
 import { colors } from "../../../constants";
 import avatar from "../../../images/teacher.png";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/Auth";
 import { GuardedRoute } from "../../../hoc";
 import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
 import { UserInfoCard } from "../Admin";
 import { useCookie } from "../../../hooks";
+import {useSyllabus} from "../../../contexts/Syllabus"; 
 
 
 
@@ -43,11 +44,12 @@ export function Profile() {
       async function get() {
         try {
           let data = await fetchProfile(userdata?.token);
-          const key = "gotocourse-profiledata";
+          const key = "gotocourse-userdata";
           const {success, message, statusCode} = data;
-          if(!success) throw new Error(message, statusCode);
+          if(!success) throw new AdvancedError(message, statusCode);
           else {
             const {data: d} = data;
+            console.log(d);
             if(isCookie(key)){
               updateCookie(key, d);
             }else {
@@ -146,23 +148,36 @@ function Info({ title, content }) {
   );
 }
 
+const Syllabus = ({title, description}) => {
+  return(
+    <div className={clsx.syllabus_container}>
+      <h5>{title}</h5>
+      <p>{description}</p>
+    </div>
+  )
+}
+
 export function CreateCourse() {
   const {
     generalState: { isMobile, notification, userdata },
     setGeneralState,
     teacherFunctions: { addCourse },
   } = useAuth();
-
+  const {syllabuses, addtoSyllabus} = useSyllabus();
   const [formstate, setFormstate] = useState({
     name: "",
     categoryName: "",
-    brief: "",
-    price: "",
-    package: "",
-    syllabus: [],
+    description: "",
+    faqs: [],
   });
+  const [packageState, setPackageState] = useState({
+    title: "",
+    description: "",
+    price: ""
+  })
 
   const [open, setOpen] = useState(false);
+
 
   const [loading, setLoading] = useState(false);
   const packages = [
@@ -178,14 +193,6 @@ export function CreateCourse() {
       value: "one-one",
       name: "One-One Mentorship",
     },
-    // {
-    //     value: "FLAT",
-    //     name: "Flat"
-    // },
-    // {
-    //     value: "PACKAGE",
-    //     name: "Package"
-    // },
   ];
 
   function changeHandler(e) {
@@ -198,20 +205,33 @@ export function CreateCourse() {
     });
   }
 
+  function changePackageStateHandler(e){
+    const {name, value} = e.target;
+    setPackageState(old => {
+      return{
+        ...old,
+        [name]: value
+      }
+    })
+  }
+
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
+    console.log([{...formstate, syllabus: [...syllabuses], packages: [packageState]}]);
     try {
       if (
         formstate.name === "" ||
-        formstate.brief === "" ||
-        formstate.price === "" ||
-        formstate.package === ""
+        formstate.categoryName === "" ||
+        formstate.description === "" ||
+        packageState.price === "" ||
+        packageState.title === ""
       )
         throw new AdvancedError("All fields are required", 0);
-
-      const res = await addCourse(formstate, userdata.token);
+      const res = await addCourse({...formstate, syllabus: [...syllabuses], packages: [packageState]}, userdata.token);
       const { success, message, statusCode } = res;
+      console.log(res);
+
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         toast.success(message, {
@@ -283,8 +303,8 @@ export function CreateCourse() {
               </label>
               <textarea
                 rows="5"
-                name="brief"
-                value={formstate.brief}
+                name="description"
+                value={formstate.description}
                 onChange={changeHandler}
                 className="generic_input"
               ></textarea>
@@ -308,9 +328,9 @@ export function CreateCourse() {
               <label htmlFor={"package"}>Package</label>
               <select
                 rows="5"
-                name="package"
-                value={formstate.package}
-                onChange={changeHandler}
+                name="title"
+                value={packageState.title}
+                onChange={changePackageStateHandler}
                 className="form-select generic_input"
               >
                 <option value="">Choose a package</option>
@@ -322,13 +342,25 @@ export function CreateCourse() {
               </select>
             </div>
 
+
             <Input
               label="Price"
               name="price"
               type="text"
-              handleChange={changeHandler}
-              value={formstate.price}
+              handleChange={changePackageStateHandler}
+              value={packageState.price}
             />
+
+
+              <div className={clsx.form_group}>
+              <label>Syllabus</label>
+              {
+                syllabuses.length !== 0 ? syllabuses.map(({title, description}, i) => (
+                  <Syllabus title={title} description={description} />
+                )) : <h4>No syllabus!</h4>
+              }
+            </div>
+
             <button
               className="btn btn-primary my-3"
               style={{ backgroundColor: "var(--theme-blue)" }}
@@ -357,8 +389,7 @@ export function CreateCourse() {
       </div>
       <AddSyllabus
         open={open}
-        setFormstate={setFormstate}
-        formstate={formstate}
+        addSyllabus={addtoSyllabus}
         setOpen={setOpen}
         handleClose={handleClose}
       />
@@ -380,38 +411,38 @@ const style = {
   padding: "4rem 2rem",
 };
 
-function AddSyllabus({ open, handleClose, setFormstate, formstate }) {
+function AddSyllabus({ open, handleClose, addSyllabus }) {
   const [newSyllabus, setNewSyllabus] = useState({
     title: "",
     description: "",
   });
-  const addSyllabus = (e) => {
-    e.preventDefault();
-    setFormstate((old) => {
+  function handleChange(e) {
+    const {name, value} = e.target;
+    setNewSyllabus(old => {
       return {
         ...old,
-        syllabus: [...old.syllabus, newSyllabus],
-      };
-    });
-    setNewSyllabus({
-      title: "",
-      description: "",
-    });
-    if (formstate.syllabus.length > 0) {
-      toast.success("Syllabus added successfully", {
+        [name]: value
+      }
+    })
+  }
+
+  function addSyllabusHandler(){
+    const {title, description} = newSyllabus;
+    if(!title || !description) {
+      toast.error("Title and Description are required", {
         position: "top-right",
-        autoClose: 2500,
+        autoClose: 4000,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
       });
+    }else {
+      addSyllabus(newSyllabus);
     }
-  };
-  function handleChange(e) {
-    setNewSyllabus({ ...newSyllabus, [e.target.name]: e.target.value });
   }
+
   return (
     <Modal
       open={open}
@@ -459,7 +490,7 @@ function AddSyllabus({ open, handleClose, setFormstate, formstate }) {
         </div>
         <button
           className="btn btn-primary my-3"
-          onClick={addSyllabus}
+          onClick={addSyllabusHandler}
           style={{ backgroundColor: "var(--theme-blue)" }}
         >
           Add
@@ -472,8 +503,10 @@ function AddSyllabus({ open, handleClose, setFormstate, formstate }) {
 export function Edit() {
   const {
     generalState: { isMobile, userdata },
+    setGeneralState,
     teacherFunctions: { updateAvatar, updateProfile },
   } = useAuth();
+  const navigate = useNavigate();
   const [imageUrl, setImageUrl] = useState(null);
   const [isUplaoding, setIsUploading] = useState(false);
   const [file, setFile] = useState(null);
@@ -504,17 +537,18 @@ export function Edit() {
       const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        const {data} = res;
+        console.log(data);
+        setGeneralState(old => {
+            return {
+                ...old,
+                userdata: data,
+                notification: message
+            }
+        })
+        navigate("/teacher/");
       }
-      // setTimeout(() => {}, 2000);
+      
     } catch (err) {
       toast.error(err.message, {
         position: "top-right",
@@ -563,6 +597,22 @@ export function Edit() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         const { data } = res;
+        const {profileImg} = data;
+        console.log(data);
+        //updated successfully
+        setGeneralState(old => {
+            return {
+                ...old,
+                userdata: {
+                    ...old.userdata,
+                    profileImg
+                }
+            }
+        })
+        //set the cookie here
+        
+        setImageUrl(_ => null);
+        setFile(_ => null);
 
         toast.success(message, {
           position: "top-right",
@@ -704,6 +754,8 @@ export function Edit() {
   );
 }
 
+
+
 export function Classes() {
   const {
     generalState: { isMobile, userdata },
@@ -723,6 +775,22 @@ export function Classes() {
       date: "Apr 5",
       time: "5pm",
       isLive: true,
+      color: colors.greenish,
+    },
+    {
+      title: "UI/UX",
+      numberOfLessons: 10,
+      date: "Apr 5",
+      time: "5pm",
+      isLive: true,
+      color: colors.greenish,
+    },
+    {
+      title: "Data Science",
+      numberOfLessons: 10,
+      date: "Apr 5",
+      time: "5pm",
+      isLive: false,
       color: colors.greenish,
     },
   ];
@@ -749,43 +817,57 @@ export function Classes() {
   );
 }
 
+
+
 export function Courses() {
   const {
     generalState: { isMobile, userdata },
-    teacherFunctions: { fetchCourse },
+    teacherFunctions: { fetchCourse, fetchApplications },
   } = useAuth();
   const { fetchCookie } = useCookie();
+  const [courses, setCourses] = useState([]);
 
   console.log(userdata);
 
-  async function fetchCourses(params) {
-    const { userId } = fetchCookie("gotocourse-profiledata");
-    try {
-      const response = await fetchCourse(userId, userdata.token);
-      console.log(response);
-      const {success, statusCode, message} = response;
-
-      if(!success) {
-        throw new AdvancedError(message, statusCode);
-      } 
-    } catch (error) {
-      toast.error(error.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-  }
-}
   useEffect(() => {
-    fetchCourses();
+
+    //fetch courses
+    (async() => {
+      try{
+        console.log(userdata);
+        const res = await fetchApplications(userdata?.token);
+        const {success, message, statusCode} = res;
+        if(!success) throw new AdvancedError(message, statusCode);
+        else {
+          const {data} = res;
+          console.log(data);
+          setCourses(_ => data);
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      }catch(err){
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    })()
   }, []);
   const navigate = useNavigate();
   const tableHeaders = ["No", "Courses", "Name", "Package", "Rating"];
-  const tableContents = [
+  const tableContents = !courses?.length ? [
     {
       name: "Melanie Grutt",
       course: "Cybersecurity",
@@ -810,7 +892,7 @@ export function Courses() {
       package: "Self paced",
       rating: "Diamond",
     },
-  ];
+  ] : courses;
 
   function createCourseHandler(e) {
     navigate("create");
@@ -849,6 +931,7 @@ export function Courses() {
                 name={name}
                 num={i}
                 comp={"Courses"}
+                // approveHandler=
                 rating={rating}
                 pack={p}
                 course={course}
@@ -947,5 +1030,6 @@ const Teachers = ({ children, isMobile, userdata, notification }) => {
         </div>
       </div>
     </GuardedRoute>
+    
   );
 };

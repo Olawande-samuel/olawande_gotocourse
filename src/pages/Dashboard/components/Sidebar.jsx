@@ -10,7 +10,7 @@ import {FiGift, FiSend} from "react-icons/fi";
 import clsx from "./styles.module.css";
 import Logo from "../../../components/Logo";
 import { colors } from "../../../constants";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/Auth";
 
 
 

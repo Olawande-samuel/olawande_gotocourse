@@ -10,7 +10,7 @@ import { Sidebar, Searchbar } from "../components";
 import clsx from "./styles.module.css";
 import { colors } from "../../../constants";
 import avatar from "../../../images/teacher.png"
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/Auth";
 import {GuardedRoute} from "../../../hoc";
 import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
@@ -48,7 +48,7 @@ export function Profile(){
                     if(!success) throw new AdvancedError(message, statusCode);
                     else {
                         const {data} = res;
-                        const key = 'gotocourse-profiledata';
+                        const key = 'gotocourse-userdata';
                         if(isCookie(key)){
                             updateCookie(key, data);
                         }else {
