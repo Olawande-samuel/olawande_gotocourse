@@ -22,6 +22,47 @@ import Loader from "../../../components/Loader";
 
 const key = "gotocourse-userdata";
 
+
+export function Category(){
+  const [categories, setCategories] = useState([])
+  const {adminFunctions: {addCategory, fetchCategories}, generalState: {userdata}} = useAuth();
+  useEffect(() => {
+    (async () => {
+      try{
+        const res = await fetchCategories(userdata?.token);
+        const {success, statusCode, message} = res;
+        if(!success) throw new AdvancedError(statusCode, message);
+        else {
+          const {data} = res;
+          setCategories(_ => data);
+        }
+      }catch(err){
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    })()
+  })
+  return (
+    <Admin header="Course Categories">
+      <div className={clsx.admin__profile}>
+        <div className={clsx.admin__profile_main}>
+          <div className={clsx.admin__categories}>
+            <h1>Course Categories</h1>
+          </div>
+        </div>
+      </div>
+    </Admin>
+  )
+}
+
+
 export function Dashboard() {
   const { updateCookie, fetchCookie } = useCookies();
   const {
@@ -155,17 +196,6 @@ export function Approve() {
   }, []);
   return (
     <Admin header="Approval">
-      {/* <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />              */}
       <div className={clsx["admin_profile"]}>
         <div className={clsx["admin_profile_top"]}>
           <div className={clsx["admin_profile_top_img"]}>
