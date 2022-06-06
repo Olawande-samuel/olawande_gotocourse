@@ -4,65 +4,70 @@ import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import { motion } from "framer-motion";
+
+import Coding from "../images/coding.png";
+import Cyber from "../images/cyber.png";
+import Marketing from "../images/marketing.png";
+import Tech from "../images/tech_audit.png";
+import Ui from "../images/ui.png";
+
 import { CareerBox, careers } from "./Career";
 import { Link } from "react-router-dom";
+
+const bootcamps = [
+  {
+    title: "CyberSecurity Bootcamp",
+    content: "Launch into cybersecurity with an intensive training",
+    image: Cyber,
+    link:"/categories/cybersecurity"
+  },
+  {
+    title: "Coding Bootcamp",
+    content: "Launch into world of coding with an intensive training",
+    image: Coding,
+    link:"/categories/web-development"
+  },
+  {
+    title: "UI/UX Desing Bootcamp",
+    content: "Launch into UI/UX design with an intensive training",
+    image: Ui,
+    link:"/categories/web-design"
+  },
+  {
+    title: "Technology Audit Bootcamp",
+    content: "Launch into technology audit with an intensive training",
+    image: Tech,
+    link:"/categories/it-audit"
+  },
+  {
+    title: "Digital Marketing Bootcamp",
+    content: "Launch into digital marketing with an intensive training",
+    image: Marketing,
+    link:"/categories/digital-marketing"
+  },
+];
 
 const Bootcamp = () => {
   return (
     <section className="bootcamp">
       <div className=" container-lg bootcamp_content">
         <header className="text-center">
-          <h3 className="title">TECH IMMERSION TRAININGS AND BOOTCAMPS</h3>
-          <p className="sub_title mx-auto" style={{ width: "min(100% - 1rem, 700px)" }}>
-            {/* GotoCourse trainings and bootcamps have helped thousands of students
-            launch new careers in the tech industry. We want to improve the
-            quality of life by helping people lean workplace relevant skillsets.
-            We do this by helping you learn from experts, enabling learning from
-            anywhere, and making sure that our platform is affordable. Gain the
-            needed skillsets to launch a new career in tech. */}
+          <h3 className="title text-capitalize" style={{marginBottom:"1.625rem"}}>Tech Immersion Trainings and bootcamps</h3>
+          <p
+            className="sub_title mx-auto"
+            style={{ width: "min(100% - 1rem, 700px)" }}
+          >
             GotoCourse training and bootcamps has helped thousand of students
             launch new careers in the tech industry. We want to improve the
             quality of life by helping people learn workplace relevant
             skillsets.
           </p>
         </header>
-        <div className="my-5">
-          <Swiper
-            // install Swiper modules
-            modules={[Navigation]}
-            spaceBetween={0}
-            slidesPerView={1}
-            navigation
-            pagination={{ clickable: true }}
-            scrollbar={{ draggable: true }}
-            onSwiper={(swiper) => console.log(swiper)}
-            onSlideChange={() => console.log('slide change')}
-            breakpoints={{
-              // when window width is >= 320px
-              320: {
-                slidesPerView: 1,
-                spaceBetween: 0,
-              },
-              // when window width is >= 640px
-              575: {
-                slidesPerView: 2,
-                spaceBetween: 0,
-              },
-              1024: {
-                slidesPerView: 3.5,
-                spaceBetween: 5,
-              },
-            }}
-          >
-            <div className="my-5">
-              {careers.slice(0, 6).map((career) => (
-                <SwiperSlide>
+        <div className="bootcamp_list">
+              {bootcamps.map((career) => (
                   <BootcampBox {...career} />
-                </SwiperSlide>
               ))}
             </div>
-          </Swiper>
-        </div>
       </div>
     </section>
   );
@@ -70,23 +75,21 @@ const Bootcamp = () => {
 
 export default Bootcamp;
 
-export const BootcampBox = ({ logo, title, details, link }) => {
+export const BootcampBox = ({ image, title, content, link }) => {
   return (
-    <div className="card">
+    <div className="card bootcamp_card">
       <div className="card-body bg-white d-flex flex-column justify-content-around">
         <div className="bootcamp_box_left">
-          <i>{logo}</i>
+          <img src={image} alt={title} className="img-fluid" />
         </div>
-        <div className="career_box_right d-flex flex-column">
+        <div className="career_box_right d-flex flex-column mt-4">
           <header style={{ marginBottom: ".5rem" }}>
-            <h3 className="bootcampBox_title">{title} Bootcamp</h3>
+            <h3 className="bootcampBox_title">{title}</h3>
           </header>
-          <p className="details">
-            Launch into {title.toLowerCase()} with an intensive training
-          </p>
+          <p className="details">{content}</p>
           <div className="text-end">
             <Link to={link}>
-              <button className="btn-plain">Learn More</button>
+              <button className="btn-plain" style={{border:"1px solid var(--theme-blue)"}}>Learn More</button>
             </Link>
           </div>
         </div>

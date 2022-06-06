@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
-import Learning from "../images/cohort.webp";
+import Learning from "../images/newCareer.png";
 
 import {
   Cyber,

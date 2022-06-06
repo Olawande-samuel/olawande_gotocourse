@@ -15,7 +15,8 @@ import Transition from '../components/Transition'
 import Join from "../components/Join"
 import Classroom from '../components/Classroom'
 import Layout from '../components/Layout'
-import Bootcamp from '../components/Bootcamp'
+import Bootcamp from '../components/Bootcamp';
+import Development from "../components/Development"
 const Landing = () => {
   return (
     <div>
@@ -23,6 +24,7 @@ const Landing = () => {
         <Hero />
         <Bootcamp />
         <Learn />
+        <Development />
         <Transition />
         <Services />
         <Becoming />

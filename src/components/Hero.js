@@ -190,7 +190,7 @@ export const Others = ({ title, image, title2, title3, subtitle, background,btn,
   return (
     <div
       className="hero_container_wrapper"
-      style={{ background: background, color: colorSwap }}
+      style={{ background: "#fff", color: colorSwap }}
     >
       <div className="container hero_container" style={{minHeight: `calc(100vh - ${navHeight}px )`,display:"grid", placeItems:"center" }}>
         <div className="row hero_row w-100">

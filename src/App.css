@@ -341,10 +341,14 @@ padding: 13px 0 ;
 /* ***********************BOOTCAMP******************************* */
 
 .bootcamp .card {
-  height: 290px;
-  /* width: min(100% - .5rem, 320px); */
   margin-block: auto;
+  border-radius: .9rem;
+  border: none;
 }
+.bootcamp .card .card-body {
+  border-radius:.9rem;
+}
+
 .bootcamp .swiper-button-next {
   background-image: url(./images/next.svg);
   background-color:var(--white);
@@ -378,6 +382,22 @@ padding: 13px 0 ;
 }
 .bootcamp .bootcamp_box_left svg {
   width: 35px;
+}
+
+.bootcamp_list {
+  display: grid;
+  grid-template-columns:repeat(auto-fit, minmax(min(289px, 100%), 1fr));
+  gap: 2rem;
+  row-gap: 2.5rem;
+}
+
+.bootcamp_list img  {
+  width: 100%;
+}
+.bootcamp_card .details {
+  font-size: 16px;
+  line-height: 32px;
+  font-weight: 300;
 }
 /* **********************SERVICES******************************* */
 .wrapper {
@@ -632,9 +652,10 @@ padding: 13px 0 ;
 .mentors header {
   margin-bottom: 3.375rem;
 }
-/* .mentors .card {
-  height: 600px;
-} */
+.mentors .card {
+  border-radius:1rem;
+
+}
 
 .mentors .card:nth-child(even) {
   height: 490px;
@@ -649,13 +670,35 @@ padding: 13px 0 ;
   padding: 3rem 0rem;
 }
 .mentors .card-body {
-  height: 130px;
-  /* padding-right: 4.1875rem; */
-  background-color: var(--btn-color);
+  padding: 0 .4rem;
+  height: 350px;
   display: grid;
   place-items:center;
+  border-radius: 1rem;
+  color: #fff;
 }
 
+
+.mentors .mentors_card_top {
+  width: 100%;
+  height: 250px;
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: top;
+  border-radius:1rem;
+  background-blend-mode: multiply;
+  
+}
+
+.mentors .mentors_card_top > div {
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+  width: 80%;
+}
+.mentors .mentors_card_top > div p {
+  font-weight:200;
+}
 .mentors .card-title {
   margin-bottom: 1.0125rem;
   font-weight: 600;

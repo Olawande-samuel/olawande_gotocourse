@@ -1,5 +1,5 @@
 import React from "react";
-import { Learn, Certificate, Cohort,Ml, Support, Skill } from "../images/components/svgs";
+import { Learn, Certificate, Cohort,Ml, Support, InPerson } from "../images/components/svgs";
 
 
 const serviceList=[
@@ -35,7 +35,7 @@ const serviceList=[
  
   {
     id: 7,
-    icon: <Support />,
+    icon: <InPerson />,
     title:"In-person training",
     text:"Do you enjoy hand holding in person training ? Some of our trainings are available at our physical locations."
   
