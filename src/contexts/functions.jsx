@@ -249,6 +249,31 @@ export const adminStudentFunctions = {
 
 
 export const adminFunctions = {
+    uploadFile: async function(_data, token){
+        try{
+            const res = await axios.post(`https://loftywebtech.com/gotocourse/api/v1/file/upload`, _data, {
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "multipart/form-data"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status < 505;
+                }
+            })
+            console.log(res.data);
+            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+        }catch(err){
+            return {
+                message: err.message,
+                statusCode: 0,
+                success: false
+            }
+        }
+    },
     updateAvatar: async function(formdata, token){
         try{
             const res = await axios.post(`${baseURL}/admin/profile/avatar/update`,
@@ -406,7 +431,7 @@ export const adminFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true

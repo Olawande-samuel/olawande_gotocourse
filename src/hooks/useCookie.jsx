@@ -54,8 +54,22 @@ const useCookies = () => {
     async function clearCookie(){
         //clear all cookies
         return new Promise(resolve => {
-            document.cookie = '';
-            resolve(true);
+        //    console.log(document.cookie.split(";").map(i => {
+        //         let cookies = i.trim();
+        //         for(let i = 0; i < cookies.length; i++){
+        //             let [key, _] = cookies.split("=")
+        //             document.cookie = key+ "=";
+        //         }
+        //         console.log(document.cookie);
+        //    }))
+        document.cookie.replace(
+            /(?<=^|;).+?(?=\=|;|$)/g, 
+            name => window.location.hostname
+              .split(/\.(?=[^\.]+\.)/)
+              .reduceRight((acc, val, i, arr) => i ? arr[i]='.'+val+acc : (arr[i]='', arr), '')
+              .map(domain => document.cookie=`${name}=;max-age=0;path=/;domain=${domain}`)
+        )
+        console.log(document.cookie);
         })
     }
 

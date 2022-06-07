@@ -41,15 +41,13 @@ const AdminLogin = () => {
       if(!success) throw new AdvancedError(message, statusCode);
       else {
           const {data: d} = res;
-  
+          const key = 'gotocourse-userdata';
           //before navigating
           //save some thing to cookie and state
-          if(isCookie('gotocourse-userdata') || isCookie('gotocourse-usertype')){
-            removeCookie('gotocourse-userdata');
-            removeCookie('gotocourse-usertype');
+          if(isCookie(key)){
+            removeCookie(key);
           }
-          saveCookie('gotocourse-userdata', d);
-          saveCookie('gotocourse-usertype', d.userType);
+          saveCookie(key, d);
           setGeneralState(old => {
             return {
               ...old,
