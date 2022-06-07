@@ -98,7 +98,7 @@ const Testimonials = () => {
           {witnesses
               .map((witness, index) => (
                 <SwiperSlide>
-                <div className="px-1 testimonials_card_wrapper" key={index} style={{height:"400px", width:"min(100% - 1rem, 350px)", marginInline:"auto"}}>
+                <div className="px-1 testimonials_card_wrapper" key={index} style={{height:"350px", width:"min(100% - 1rem, 350px)", marginInline:"auto"}}>
                 <div className="card slides">
                   <div className="card-body">
                     <div className="avatar d-flex justify-content-center align-items-center">

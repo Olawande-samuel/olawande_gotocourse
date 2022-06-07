@@ -135,7 +135,7 @@ const Career = () => {
 
       <header className="text-center">
         <h2 className="career_title text-capitalize">learn online or on campus</h2>
-        <p className="sub-title">
+        <p className="sub-title mx-auto" style={{width:"min(100% - 1rem, 900px)"}}>
         Choose a niche and enroll in certificate courses online or in-person that will help you kickstart yuor career within 3-6 months. We are committed to help you kickstart and build a great career in technology.
         </p>
       </header>

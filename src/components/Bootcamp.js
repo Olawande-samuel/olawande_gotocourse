@@ -55,7 +55,7 @@ const Bootcamp = () => {
           <h3 className="title text-capitalize" style={{marginBottom:"1.625rem"}}>Tech Immersion Trainings and bootcamps</h3>
           <p
             className="sub_title mx-auto"
-            style={{ width: "min(100% - 1rem, 700px)" }}
+            style={{ width: "min(100% - 1rem, 900px)" }}
           >
             GotoCourse training and bootcamps has helped thousand of students
             launch new careers in the tech industry. We want to improve the
