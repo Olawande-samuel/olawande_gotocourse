@@ -4,7 +4,7 @@ import lere from "../images/lere.png";
 import ola from "../images/ola.png";
 
 
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import SwiperCore, { Navigation, Autoplay, Pagination, Scrollbar, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
@@ -35,11 +35,27 @@ const witnesses = [
     name:"Bola",
     location:"Lagos, Nigeria"
   },
+  {
+    id: 4,
+    content:
+      "I had a wonderful experience and can confidently say that Gotocourse is the place to be to get all your I.T. certification",
+    profile: user,
+    name:"Francine",
+    location:"Abuja, Nigeria"
+  },
+  {
+    id: 5,
+    content:
+      "I had a wonderful experience and can confidently say that Gotocourse is the place to be to get all your I.T. certification",
+    profile: lere,
+    name:"Jacob",
+    location:"London, England"
+  },
 ];
 
 
 const Testimonials = () => {
-  
+  SwiperCore.use([Autoplay])
   return (
     <section className="testimonials">
       <div className="container-lg testimonial_content">
@@ -51,6 +67,9 @@ const Testimonials = () => {
         <Swiper
       // install Swiper modules
       modules={[Navigation, Pagination, Scrollbar, A11y]}
+      loop={true}
+      speed={1000}
+      autoplay={{delay:2500}}
       spaceBetween={0}
       slidesPerView={1}
       navigation
@@ -79,7 +98,7 @@ const Testimonials = () => {
           {witnesses
               .map((witness, index) => (
                 <SwiperSlide>
-                <div className="px-1" key={index}>
+                <div className="px-1 testimonials_card_wrapper" key={index} style={{height:"350px", width:"min(100% - 1rem, 350px)", marginInline:"auto"}}>
                 <div className="card slides">
                   <div className="card-body">
                     <div className="avatar d-flex justify-content-center align-items-center">
