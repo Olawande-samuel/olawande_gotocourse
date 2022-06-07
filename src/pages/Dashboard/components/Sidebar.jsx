@@ -1,7 +1,7 @@
 import {useEffect, useState,useRef} from "react";
 import {MdMessage} from "react-icons/md";
 import {AiOutlineClose} from "react-icons/ai";
-import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash} from "react-icons/io";
+import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash, IoIosHelpBuoy} from "react-icons/io";
 import {useNavigate, useLocation, NavLink} from "react-router-dom";
 import {FiGift, FiSend} from "react-icons/fi";
 
@@ -60,6 +60,11 @@ const Sidebar = ({isMobile}) => {
             icon: FiGift,
             path: "courses",
             title: "Courses"
+        },
+        {
+            icon: IoIosHelpBuoy,
+            path: "courses-categories",
+            title: "Course Catgories"
         },
     ] : route === "students" ?  [
         {

@@ -3,7 +3,7 @@ import { MdEdit } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
-import { Switch } from "@mui/material";
+import { Grid, Switch, Paper } from "@mui/material";
 import { AiOutlineMenu } from "react-icons/ai";
 
 import { Sidebar, Searchbar } from "../components";
@@ -19,8 +19,309 @@ import useCookies from "../../../hooks/useCookie";
 
 import Input from "../../../components/Input";
 import Loader from "../../../components/Loader";
+import LogoutButton from "../../../components/LogoutButton";
+import UploadForm from "../../../components/UploadForm";
+import img from "../../../images/coding.png";
 
 const key = "gotocourse-userdata";
+
+
+function CategoryInterface({name, bannerImg, description}){
+  return (
+    <Grid item xs={12} sm={12} md={6} lg={6}>
+      <Paper className={clsx.catergory__interface}>
+        <div className={clsx.category__image}>
+          <img src={img} alt="Banner" />
+        </div>
+        <h5>{name}</h5>
+        <p>{description}</p>
+        <div className={clsx.category_more__info}>
+          <button>Expand</button>
+        </div>
+      </Paper>
+    </Grid>
+  )
+}
+
+export function Category(){
+  const navigate = useNavigate();
+  const [categories, setCategories] = useState([])
+  const [open, setOpen] = useState(false);
+  const {adminFunctions: {addCategory, fetchCategories}, generalState: {userdata}} = useAuth();
+  useEffect(() => {
+    (async () => {
+      try{
+        const res = await fetchCategories(userdata?.token);
+        const {success, statusCode, message} = res;
+        console.log(res);
+        if(!success) throw new AdvancedError(statusCode, message);
+        else {
+          if(res?.data){
+            const {data} = res;
+            console.log(data);
+            toast.success(message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            setCategories(_ => data);
+          }
+        }
+      }catch(err){
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    })()
+  }, [])
+  return (
+    <Admin header="Course Categories">
+      <UploadForm isOpen={open} setIsOpen={setOpen} />
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+            <button onClick={() => setOpen(_ => true)}>Upload File</button>
+            <button onClick={(e) => navigate("new")}>Create Category</button>
+            <Grid container spacing={4}>
+              {
+                categories ? categories.map((
+                {bannerImg, careerDescription, careerList, 
+                  name, description, iconImg, categoryId, 
+                  niche: nicheTitle, nicheDescription, 
+                  nicheItems
+                }, i) => (
+                  <CategoryInterface key={i} name={name} bannerImg={bannerImg} description={description} />
+                )) : <h3>No categories found</h3>
+              }
+            </Grid>
+          </div>
+        {/* </div> */}
+      </div>
+    </Admin>
+  )
+}
+
+
+
+export function CreateCourseCategory(){
+  const {generalState: {userdata}, adminFunctions: {addCategory}} = useAuth();
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formstate, setFormstate] = useState({
+    name: "",
+    description: "",
+    niche: "",
+    nicheDescription: "",
+    careerDescription: "",
+    bannerImg: "",
+    iconImg: ""
+  });
+  
+  const [nichelist, setNichelist] = useState({
+    name: "",
+    description: ""
+  })
+  const [nichelists, setNichelists] = useState([]);
+  const [careerlist, setCareerlist] = useState({
+    name: "",
+  })
+  const [careerlists, setCareerlists] = useState([]);
+
+  async function submitHandler(e){
+    e.preventDefault();
+    try{
+      const data = {
+        ...formstate,
+        nicheItems: [...nichelists],
+        careeerList: [...careerlists]
+      }
+      const res = await addCategory(data, userdata?.token);
+      const {success, message, statusCode} = res;
+      if(!success) throw new AdvancedError(message, statusCode);
+      else {
+        if(res?.data){
+          const {data} = res;
+          console.log(data);
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      }
+    }catch(err){
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
+
+  function changeHandler(e){
+    const {name, value} = e.target;
+    setFormstate(old => {
+      return {
+        ...old,
+        [name]: value
+      }
+    })
+  }
+
+
+  function changeNicheHandler(e){
+    const {name, value} = e.target;
+    setNichelist(old => {
+      return {
+        ...old,
+        [name]: value
+      }
+    })
+  }
+
+
+  function changeCareerHandler(e){
+    const {name, value} = e.target;
+    setCareerlist(old => {
+      return {
+        ...old,
+        [name]: value
+      }
+    })
+  }
+
+
+  return(
+    <Admin header="Create Category">
+       <UploadForm isOpen={open} setIsOpen={setOpen} />
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+            <button onClick={() => setOpen(_ => true)}>Upload File</button> 
+            <form className="form" onSubmit={submitHandler}>
+            <Input
+              label="Name of category"
+              name="name"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.name}
+            />
+            <Input
+              label="Description"
+              name="description"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.description}
+            />
+            <Input
+              label="Niche"
+              name="niche"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.niche}
+            />
+
+            <div className={clsx.form_group}>
+              <label htmlFor={"brief"}>
+                Niche Description
+              </label>
+              <textarea
+                rows="5"
+                name="description"
+                value={formstate.nicheDescription}
+                onChange={changeHandler}
+                className="generic_input"
+              ></textarea>
+            </div>
+            {/* <button>Add Niche Items</button> */}
+
+            <div className={clsx.form_group}>
+              <label htmlFor={"brief"}>
+                Career Description
+              </label>
+              <textarea
+                rows="5"
+                name="careerDescription"
+                value={formstate.careerDescription}
+                onChange={changeHandler}
+                className="generic_input"
+              ></textarea>
+            </div>
+
+            <Input
+              label="Banner Image Name"
+              name="description"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.bannerImg}
+            />
+
+            <Input
+              label="Icon Image Name"
+              name="niche"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.iconImg}
+            />
+            <i className="text-danger">Make sure to upload the files and get the file name</i>
+
+
+
+              {/* <div className={clsx.form_group}>
+              <label>Syllabus</label>
+              {
+                syllabuses.length !== 0 ? syllabuses.map(({title, description}, i) => (
+                  <Syllabus title={title} description={description} />
+                )) : <h4>No syllabus!</h4>
+              }
+            </div> */}
+
+            {/* <button
+              className="btn btn-primary my-3"
+              style={{ backgroundColor: "var(--theme-blue)" }}
+              type="button"
+              onClick={openModal}
+            >
+              Add Syllabus
+            </button> */}
+
+            {loading ? (
+              <button className="button button-lg log_btn w-100 mt-3">
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </button>
+            ) : (
+              <button
+                className="button button-lg log_btn w-100 mt-3"
+                type="submit"
+              >
+                Save
+              </button>
+            )}
+          </form>
+        </div>
+      </div>
+    </Admin>
+  )
+}
+
 
 export function Dashboard() {
   const { updateCookie, fetchCookie } = useCookies();
@@ -155,17 +456,6 @@ export function Approve() {
   }, []);
   return (
     <Admin header="Approval">
-      {/* <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />              */}
       <div className={clsx["admin_profile"]}>
         <div className={clsx["admin_profile_top"]}>
           <div className={clsx["admin_profile_top_img"]}>
@@ -1077,6 +1367,8 @@ export function Edit() {
   );
 }
 
+
+
 const Admin = ({ children, header }) => {
   const {
     generalState: { isMobile, showSidebar },
@@ -1094,17 +1386,8 @@ const Admin = ({ children, header }) => {
   return (
     <GuardedRoute>
       <div className={clsx["admin"]}>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
+        <LogoutButton />
+        <ToastContainer />
         <Sidebar isMobile={isMobile} />
         <div className={clsx["admin_main"]}>
           <div className={`align-items-center ${clsx["admin_topbar"]}`}>
