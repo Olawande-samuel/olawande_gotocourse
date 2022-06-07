@@ -289,12 +289,12 @@ export function Edit(){
                     />
 
                     <div className={clsx.form_group}>
-                        <label htmlFor={"brief_intro"}>Bio</label>
+                        <label htmlFor={"brief_intro"} className="form-label generic_label">Bio</label>
                         <textarea rows="5" name="bio" value={formstate.bio} onChange={changeHandler}></textarea>
                     </div>
 
                     <div className={clsx.form_group}>
-                        <label htmlFor={"goals"}>What are your goals</label>
+                        <label htmlFor={"goals"} className="form-label generic_label">What are your goals</label>
                         <textarea rows="5" name="goals" value={formstate.goals} onChange={changeHandler}></textarea>
                     </div>
 

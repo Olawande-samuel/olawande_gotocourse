@@ -1,16 +1,16 @@
 import React from "react";
+import {GoChevronRight} from "react-icons/go"
 
-import mentor from "../images/mentor1.png";
+import mentor from "../images/productDesigner.png";
 import mentor2 from "../images/mentor3.png";
-import mentor3 from "../images/mentor2.png";
+import mentor3 from "../images/businessAnalyst.png";
 import mentor4 from "../images/mentor4.png";
-
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import SwiperCore, { Navigation, Autoplay, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/Auth";
 
 const witnesses = [
@@ -44,14 +44,15 @@ const witnesses = [
     id: 4,
     title:"Data Scientist",
     content: "Discuss how to kickstart your career as a data scientist",
-    profile: mentor4,
+    profile: mentor2,
     location: "Patrick Quinn",
     other:"11 years work experience"
 
   },
   {
     id: 5,
-    content: "I will teach you UIUX in 2 weeks",
+    title:"Web Designer",
+    content: "Discuss how to kickstart your career web designer",
     profile: mentor2,
     location: "Cassandra Geoffrey",
     other:"11 years work experience"
@@ -59,7 +60,8 @@ const witnesses = [
   },
   {
     id: 6,
-    content: "I will teach you web development in 4 weeks",
+    title:"Software Developer",
+    content: "Discuss how to kickstart your career as a software development",
     profile: mentor3,
     location: "Niyi Adegoke",
     other:"13 years work experience"
@@ -67,6 +69,7 @@ const witnesses = [
   },
 ];
 const Mentors = () => {
+  SwiperCore.use([Autoplay])
   return (
     <section className="mentors">
       <div className=" mentors_content">
@@ -83,7 +86,10 @@ const Mentors = () => {
         </header>
         <Swiper
           // install Swiper modules
-          modules={[Navigation, Pagination, Scrollbar, A11y]}
+          modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+          loop={true}
+      speed={1500}
+      autoplay={{delay:2500}}
           spaceBetween={0}
           slidesPerView={1}
           // navigation
@@ -118,6 +124,9 @@ const Mentors = () => {
             </SwiperSlide>
           ))}
         </Swiper>
+        <div className="text-end w-100 my-4 ">
+        <Link to="/teachers" className="text-end text-secondary">Learn more <i><GoChevronRight /></i></Link>
+        </div>
       </div>
     </section>
   );

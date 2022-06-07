@@ -22,8 +22,8 @@ const data = [
 
 export default function Development(){
     return (
-        <section className="bootcamp">
-            <div className=" container-lg bootcamp_content">
+        <section className="wrapper degree">
+            <div className=" container-lg degree_wrapper bootcamp_content">
             <header className="text-center my-4">
                 <h3 className="title">Career development</h3>
                 <p
@@ -46,16 +46,16 @@ export default function Development(){
 function DevelopmentBox({image, title, text, link}){
 
     return (
-        <div className="card bootcamp_card border-none">
-            <div className="card-body bg-white d-flex flex-column justify-content-around">
-                <div className="bootcamp_box_left w-50" >
-                <img src={image} alt={title} className="img-fluid" style={{height:"100px"}} />
+        <div className="card bootcamp_card dev_card border-none text-dark">
+            <div className="card-body d-flex justify-content-around">
+                <div className="bootcamp_box_left me-1" >
+                <img src={image} alt={title} className="img-fluid" />
                 </div>
-                <div className="career_box_right d-flex flex-column mt-4">
-                <header style={{ marginBottom: ".5rem" }}>
-                    <h3 className="bootcampBox_title">{title}</h3>
+                <div className="career_box_right d-flex flex-column ">
+                <header style={{ marginBottom: "0.1rem" }}>
+                    <h3 className="bootcampBox_title" style={{lineHeight:"24px"}}>{title}</h3>
                 </header>
-                <p className="details">{text}</p>
+                <p className="details" style={{fontSize:"14px", lineHeight:"unset"}}>{text}</p>
                 </div>
             </div>
          </div>
