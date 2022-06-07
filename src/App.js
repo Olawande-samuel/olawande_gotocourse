@@ -9,7 +9,7 @@ import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
 import {Profile as StudentProfile, Classes as StudentClasses, Edit as StudentEdit, Courses as StudentCourses} from "./pages/Dashboard/Students";
-import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories} from "./pages/Dashboard/Admin";
+import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CreateCourseCategory} from "./pages/Dashboard/Admin";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, Courses as TeacherCourses, CreateCourse} from "./pages/Dashboard/Teachers";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
@@ -70,6 +70,7 @@ function App() {
               <Route path="teachers" element={<Teachers />} />
               <Route path="courses" element={<Courses />} />
               <Route path="courses-categories" element={<AdminCategories />} />
+              <Route path="courses-categories/new" element={<CreateCourseCategory />} />
               <Route path="teachers/approve" element={<Approve />} />
               <Route path="profile/edit" element={<AdminEdit />} />
             </Route>

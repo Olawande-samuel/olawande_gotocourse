@@ -1,0 +1,100 @@
+:root {
+    --textBlue: #0C2191;
+    --mainBg: rgba(100, 149, 237, .6);
+}
+
+.general_logout__button {
+    position: fixed;
+    top: 50px;
+    right: 0px;
+    background-color: var(--mainBg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+
+
+.general_logout__button button {
+    border: none;
+    color: whitesmoke;
+    background-color: var(--mainBg);
+    padding: 10px 20px;
+    font-size: 0.5rem;
+}
+
+.upload_file__background {
+    background-color: rgba(0,0,0,.3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.uploda_file__container {
+    min-width: 300px;
+    min-height: 300px;
+    background-color:rgb(100, 149, 237);
+    padding: 20px;
+    border-radius: 10px;
+    cursor:pointer
+}
+
+.upload_file {
+    width: 300px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.upload_file:hover {
+    background-color: rgba(0, 0, 0, .1);
+}
+
+.upload_file img {
+    width: 250px;
+    height: 250px;
+}
+ 
+.upload_final {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.upload_final button {
+    padding: 8px 16px;
+    border: none;
+    font-size: 0.8rem;
+    letter-spacing:0.4px;
+    text-transform: uppercase;
+}
+
+
+.upload_file h5 {
+    font-size: 1rem;
+    letter-spacing: 0.6px;
+}
+
+.upload_file p {
+    font-size: 0.8rem;
+    color: whitesmoke;
+    letter-spacing: 0.4px;
+    text-align: center;
+}
+
+
+.upload_file input {
+    display: none;
+}

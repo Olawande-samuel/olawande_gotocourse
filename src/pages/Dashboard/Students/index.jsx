@@ -57,7 +57,7 @@ export function Profile(){
                         setGeneralState((old) => {
                             return {
                               ...old,
-                              userdata:{...old.userdata, ...data.data},
+                              userdata:{...old.userdata, ...data?.data},
                             };
                         });
                     }
