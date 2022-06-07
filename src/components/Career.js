@@ -134,8 +134,8 @@ const Career = () => {
       <div className="container">
 
       <header className="text-center">
-        <h2 className="career_title">STAND OUT IN YOUR CAREER NICHE</h2>
-        <p className="sub-title">
+        <h2 className="career_title text-capitalize">learn online or on campus</h2>
+        <p className="sub-title mx-auto" style={{width:"min(100% - 1rem, 900px)"}}>
         Choose a niche and enroll in certificate courses online or in-person that will help you kickstart yuor career within 3-6 months. We are committed to help you kickstart and build a great career in technology.
         </p>
       </header>
@@ -150,15 +150,15 @@ const Career = () => {
             {...career}
           />
         ))}
-        {/* <Link to="/categories">
-          <div className="h-100 d-flex align-items-center justify-content-center">
+        <Link to="/categories" className="mt-3">
+          <div className="h-100 d-flex align-items-center">
             <motion.button
             whileHover={{
               boxShadow: "0px 0px 8px rgb(0,0,0)"
             }}
             className="btn-plain">Learn More</motion.button>       
           </div>
-        </Link> */}
+        </Link>
       </div>
 
         </div>

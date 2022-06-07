@@ -50,7 +50,7 @@ const Services = () => {
       <div className="container">
             <header >
               <h2 className="title text-center">Benefits Of Learning At GotoCourse</h2>
-              {/* <p className="sub_title text-center">Whether you're just starting out in the IT field, or ready to advance your career, Gotocourse can help you gain the expertise you need to succeed. </p> */}
+              <p className="sub_title text-center mx-auto" style={{width:"min(100% - 1rem, 900px)"}}>Whether you're just starting out in the IT field, or ready to advance your career, Gotocourse can help you gain the expertise you need to succeed. </p>
             </header>
         <div className="service_box_wrapper d-flex flex-wrap justify-content-center px-lg-5 mt-5">
             {serviceList.map(service =>(

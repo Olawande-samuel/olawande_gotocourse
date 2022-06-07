@@ -9,7 +9,7 @@ const Faq = () => {
           <h2 className="title">Frequently Asked Questions</h2>
         </header>
         <div className="faq-wrapper"> 
-          <Accordion defaultActiveKey="0" flush>
+          <Accordion  flush>
             <Accordion.Item eventKey="0" className="my-4">
               <Accordion.Header className="faq_acc">
               How relevant is each course on Gotocourse?

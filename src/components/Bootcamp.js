@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 
 const bootcamps = [
   {
-    title: "CyberSecurity Bootcamp",
+    title: "CyberSecurity Certificate Course",
     content: "Launch into cybersecurity with an intensive training",
     image: Cyber,
     link:"/categories/cybersecurity"
@@ -34,7 +34,7 @@ const bootcamps = [
     link:"/categories/web-design"
   },
   {
-    title: "Technology Audit Bootcamp",
+    title: "Technology Audit Certificate Course",
     content: "Launch into technology audit with an intensive training",
     image: Tech,
     link:"/categories/it-audit"
@@ -55,7 +55,7 @@ const Bootcamp = () => {
           <h3 className="title text-capitalize" style={{marginBottom:"1.625rem"}}>Tech Immersion Trainings and bootcamps</h3>
           <p
             className="sub_title mx-auto"
-            style={{ width: "min(100% - 1rem, 700px)" }}
+            style={{ width: "min(100% - 1rem, 900px)" }}
           >
             GotoCourse training and bootcamps has helped thousand of students
             launch new careers in the tech industry. We want to improve the
@@ -89,7 +89,13 @@ export const BootcampBox = ({ image, title, content, link }) => {
           <p className="details">{content}</p>
           <div className="text-end">
             <Link to={link}>
-              <button className="btn-plain" style={{border:"1px solid var(--theme-blue)"}}>Learn More</button>
+              <motion.button 
+              whileHover={{
+                backgroundColor:"#0C2191",
+                color:"#fff"
+              }}
+              transition={{duration: 0.1}}
+              className="btn-plain" style={{backgroundColor:"#fff",border:"1px solid var(--theme-blue)"}}>Learn More</motion.button>
             </Link>
           </div>
         </div>
