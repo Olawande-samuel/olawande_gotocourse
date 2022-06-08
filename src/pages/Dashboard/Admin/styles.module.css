@@ -392,3 +392,29 @@
 .admin__student form i {
     font-size: 0.6rem;
 }
+
+
+.addniche_button, .addcareer_button {
+    font-size: 0.8rem;
+    background-color:rgba(208, 204, 204, 0.5);
+
+}
+
+.syllabus_container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(100, 149, 237, .2);
+}
+
+.syllabus_container h5 {
+    font-size: 0.9rem;
+}
+
+.syllabus_container p {
+    font-size: 0.7rem;
+    letter-spacing: 0.4px;
+    color: var(--textColorLight);
+}

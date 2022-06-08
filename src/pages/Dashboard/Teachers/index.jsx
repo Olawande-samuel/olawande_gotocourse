@@ -356,7 +356,7 @@ export function CreateCourse() {
               <label>Syllabus</label>
               {
                 syllabuses.length !== 0 ? syllabuses.map(({title, description}, i) => (
-                  <Syllabus title={title} description={description} />
+                  <Syllabus title={title} key={i} description={description} />
                 )) : <h4>No syllabus!</h4>
               }
             </div>
@@ -451,7 +451,7 @@ function AddSyllabus({ open, handleClose, addSyllabus }) {
       aria-describedby="modal-modal-description"
     >
       <Box style={style}>
-        <ToastContainer
+        {/* <ToastContainer
           position="top-right"
           autoClose={2500}
           hideProgressBar={false}
@@ -461,7 +461,7 @@ function AddSyllabus({ open, handleClose, addSyllabus }) {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-        />
+        /> */}
         <h5
           className="lead text-primary"
           style={{ color: "var(--theme-blue)" }}
