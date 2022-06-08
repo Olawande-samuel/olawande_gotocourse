@@ -2,10 +2,10 @@ import {useEffect, useState} from "react";
 import {MdEdit, MdPersonAdd} from "react-icons/md"
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-
+import {motion} from "framer-motion"
 import {AiOutlineMenu} from "react-icons/ai"
 
-
+import Loader from "../../../components/Loader"
 import { Sidebar, Searchbar } from "../components";
 import clsx from "./styles.module.css";
 import { colors } from "../../../constants";
@@ -17,14 +17,14 @@ import { AdvancedError } from "../../../classes";
 import { UserInfoCard } from "../Admin";
 import { useCookie } from "../../../hooks";
 
-
+const KEY = "gotocourse-userdata"
 
 
 export function Profile(){
-    const {generalState: {isMobile, notification, userdata}, 
+    const {generalState: {isMobile, notification, userdata}, generalState,
     setGeneralState, 
     studentFunctions: {fetchProfile}} = useAuth();
-    const {updateCookie, isCookie, saveCookie} = useCookie();
+    const {updateCookie, isCookie, saveCookie, fetchCookie} = useCookie();
     const navigate = useNavigate();
     useEffect(() => {
         setTimeout(() => {
@@ -37,29 +37,28 @@ export function Profile(){
         }, 5000)
     }, [])
 
-    console.log(userdata);
+    console.log(generalState);
 
     useEffect(() => {
+        const token = fetchCookie(KEY)
         if(userdata){
             (async () => {
                 try{
-                    const res = await fetchProfile(userdata?.token);
+                    const res = await fetchProfile(token?.token);
                     const {success, message, statusCode} = res;
-                    if(!success) throw new AdvancedError(message, statusCode);
+                    if(!success ) throw new AdvancedError(message, statusCode);
                     else {
                         const {data} = res;
+                        console.log(data);
+                        setGeneralState({...generalState, userdata:{...generalState.userdata, ...data},
+                        });
+
                         const key = 'gotocourse-userdata';
                         if(isCookie(key)){
                             updateCookie(key, data);
                         }else {
                             saveCookie(key, data);
                         }
-                        setGeneralState((old) => {
-                            return {
-                              ...old,
-                              userdata:{...old.userdata, ...data?.data},
-                            };
-                        });
                     }
                 }catch(err){
                     toast.error(err.message, {
@@ -83,7 +82,7 @@ export function Profile(){
             <div className={clsx.students_profile}>
                 <div className={clsx.students_profile_top}>
                     <div className={clsx.students_profile_top_img}>
-                        <img src={avatar} style={{borderRadius: 10}} width="100%" alt="Avatar" />
+                        <img src={userdata?.profileImg ? userdata.profileImg : avatar} style={{borderRadius: 10}} width="100%" alt="Avatar" />
                     </div>
                     <button className={clsx.students_profile_top_button} onClick={editProfileHandler}>
                         <MdEdit />  &nbsp;   Edit
@@ -91,8 +90,8 @@ export function Profile(){
                 </div>
                 <div className={clsx.students_profile_main}>
                     <h1 className={clsx.students__header} style={{marginTop: 20}}>{userdata?.firstName} {userdata?.lastName}</h1>
-                    <p className={clsx.students__paragraph}>Enjoys writing and playing video games. <br />
-                    I joined Gotocourse to make friends connect with people virtually
+                    <p className={clsx.students__paragraph}>{userdata?.bio ? userdata?.bio : "I'm a mysterious person"} <br />
+                    {userdata?.goals ? userdata?.goals : "I'm yet to decide what I want to achieve here"}
                     </p>
 
                 </div>
@@ -104,25 +103,34 @@ export function Profile(){
 
 
 export function Edit(){
+    
     const navigate = useNavigate();
-    const {updateCookie} = useCookie();
-    const {generalState: {isMobile, userdata}, studentFunctions: {updateAvatar, updateProfile}, setGeneralState} = useAuth();
+    const {updateCookie, fetchCookie, isCookie,saveCookie} = useCookie();
+    const {generalState: {isMobile, userdata}, studentFunctions: {updateAvatar, fetchProfile, updateProfile}, setGeneralState} = useAuth();
+
     const [imageUrl, setImageUrl] = useState(null);
     const [isUplaoding, setIsUploading] = useState(false);
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [formstate, setFormstate] = useState({
-        firstname: userdata?.firstName ?? "",
-        lastname: userdata?.lastName ?? "",
-        occupation: "",
-        location: "",
-        category: "",
-        brief_intro: "",
-        goals: ""
+        firstName: userdata?.firstName ?? "",
+        lastName: userdata?.lastName ?? "",
+        work: userdata?.work ??"",
+        location:userdata?.location ?? "",
+        category: userdata?.category ??"",
+        bio:userdata?.bio ?? "",
+        goals:userdata?.goals ?? ""
     })
  
     
-    useEffect(() => {}, [userdata])
+
+    useEffect(() => {
+            // to prevent data from disappearing on page reload
+        const previousData = fetchCookie(KEY)
+        setFormstate({...formstate, ...previousData})
+        console.log("formstate",formstate)
+        console.log("previous",previousData)
+    }, [])
 
     async function submitHandler(e){
         console.log(e)
@@ -191,7 +199,6 @@ export function Edit(){
         try{
             let formdata = new FormData();
             formdata.append('image', file, file.name);
-            
             const res = await updateAvatar(formdata, userdata.token);
             const {success, message, statusCode} = res;
             if(!success) throw new AdvancedError(message, statusCode);
@@ -210,7 +217,12 @@ export function Edit(){
                     }
                 })
                 //set the cookie here
-                
+                if (isCookie(KEY)) {
+                    updateCookie(KEY, data);
+                  } else {
+                    saveCookie(KEY, data);
+                }
+                  
                 setImageUrl(_ => null);
                 setFile(_ => null);
                 toast.success(message, {
@@ -254,24 +266,24 @@ export function Edit(){
                 <form className="form" onSubmit={submitHandler}>
                     <Input
                         label="First name"
-                        name="firstname"
+                        name="firstName"
                         type="text"
                         handleChange={changeHandler}
-                        value={formstate.firstname}
+                        value={formstate.firstName}
                     />
                     <Input
                         label="Last name"
-                        name="lastname"
+                        name="lastName"
                         type="text"
                         handleChange={changeHandler}
-                        value={formstate.lastname}
+                        value={formstate.lastName}
                     />
                     <Input
                         label="Occupation"
-                        name="occupation"
+                        name="work"
                         type="text"
                         handleChange={changeHandler}
-                        value={formstate.occupation}
+                        value={formstate.work}
                     />
                     <Input
                         label="Location"
@@ -290,19 +302,19 @@ export function Edit(){
 
                     <div className={clsx.form_group}>
                         <label htmlFor={"brief_intro"} className="form-label generic_label">Bio</label>
-                        <textarea rows="5" name="bio" value={formstate.bio} onChange={changeHandler}></textarea>
+                        <textarea rows="5" name="bio"  className="form-control generic_input" value={formstate.bio} onChange={changeHandler}></textarea>
                     </div>
 
                     <div className={clsx.form_group}>
                         <label htmlFor={"goals"} className="form-label generic_label">What are your goals</label>
-                        <textarea rows="5" name="goals" value={formstate.goals} onChange={changeHandler}></textarea>
+                        <textarea rows="5" name="goals" className="form-control generic_input" value={formstate.goals} onChange={changeHandler}></textarea>
                     </div>
 
                     {loading ? (
                         <button className="button button-md log_btn w-100 mt-3">
-                        <div className="spinner-border" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
+                            <div className="spinner-border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
                         </button>
                     ) : (
                         <button
@@ -368,7 +380,7 @@ export function Courses(){
                 const res = await fetchCourses(userdata?.token);
                 console.log(res);
                 const {success, message, statusCode} = res;
-                if(!success) throw new AdvancedError(message, statusCode);
+                if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
                 else {
                     const {data} = res;
                     setCourses(_ => data);
@@ -425,6 +437,11 @@ export function Courses(){
     return ( 
         <Students isMobile={isMobile} userdata={userdata}>               
             <div className={clsx.students_profile}>
+
+                {courses.length === 0 ?         
+                               <NoDetail text="You haven't registered for any course" />
+
+                :
                 <table className={clsx.student_table}>
                     <thead>
                         {
@@ -442,11 +459,119 @@ export function Courses(){
                         }
                     </tbody>
                 </table>
+
+        }
             </div>
         </Students>
     )
 }
-
+export function History(){
+    const {generalState: {isMobile, userdata,},generalState, setGeneralState, studentFunctions: {fetchEnrollments}} = useAuth();
+    const [courses, setCourses] = useState([]);
+    useEffect(() => {
+        if(userdata){
+            (async() => {
+                setGeneralState({...generalState, loading: true})
+                try{
+                    const res = await fetchEnrollments(userdata?.token);
+                    setGeneralState({...generalState, loading: false})
+                    console.log(res);
+                    const {success, message, statusCode} = res;
+                    if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+                    else {
+                        const {data} = res;
+                        setCourses(_ => data);
+                        toast.success(message, {
+                            position: "top-right",
+                            autoClose: 4000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+                }catch(err){
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+            })()
+        }
+    }, [userdata])
+    const tableHeaders = ["No", "Courses", "Status", "Date", "Amount"]
+    const tableContents = [
+        {
+            status: "Approved",
+            course: "Cybersecurity",
+            date: "12/03/2022",
+            amount: 3000,
+        },
+        {
+            status: "Approved",
+            course: "UI/UX",
+            date: "12/03/2022",
+            amount: 3000,
+        },
+        {
+            status: "Approved",
+            course: "HTML",
+            date: "12/03/2022",
+            amount: 3000,
+        },
+        {
+            status: "Approved",
+            course: "Data Analytics",
+            date: "12/03/2022",
+            amount: 3000,
+        },
+    ]
+    return ( 
+        <Students isMobile={isMobile} userdata={userdata}>               
+            <div className={clsx.students_profile}>
+                
+                {courses.length === 0 ? 
+                
+                <NoDetail text="Nothing to See here" />
+                 :
+                <table className={clsx.student_table}>
+                    <thead>
+                        <tr>
+                            {
+                                tableHeaders.map((el, i) => (
+                                    <th key={i}>{el}</th>
+                                    ))
+                            } 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            tableContents.map(({status, date, package: p, course, amount}, i) => (
+                                <UserInfoCard key={i} status={status} num={i} comp={"History"} date={date} amount={amount}
+                                pack={p} course={course} />
+                            ))
+                        }
+                    </tbody>
+                </table>
+                }
+            
+        </div>
+        </Students>
+    )
+}
+export function NoDetail({text}){
+    return (
+        <div className="h-100" style={{display:"grid", placeItems:"center"}}>
+            <p className="text-center lead text-secondary">{text}</p> 
+        </div>
+    )
+}
 
 function ClassesCard({numberOfLessons, title, date, time, isLive, color}){
     return (
@@ -474,7 +599,7 @@ function ClassesCard({numberOfLessons, title, date, time, isLive, color}){
 
 
 const Students = ({children, isMobile, userdata, notification}) => {
-    const {generalState: {showSidebar}, generalState, setGeneralState} = useAuth();
+    const {generalState: {showSidebar, loading}, generalState, setGeneralState} = useAuth();
     useEffect(() => {
         console.log("Students component is mounted")
         if(notification){
@@ -502,18 +627,29 @@ const Students = ({children, isMobile, userdata, notification}) => {
             <Sidebar isMobile={isMobile} />
             <div className={clsx.students_main}>
                 <div className={`align-items-center ${clsx.students_topbar}`}>
-                <div className="d-md-none">
+                    <div className="d-md-none">
                         <i>
                             <AiOutlineMenu style={{fontSize:"24px", color:"#0C2191"}} onClick={toggleSidebar} />
                         </i>
                     </div>
                     <h1 className={clsx.students__header}>{userdata?.firstName} {userdata?.lastName}</h1>
                     <Searchbar showIcon={true} placeholder="Search" />
+                    <div className="button_wrapper text-center d-none d-lg-block">
+                <motion.a 
+                whileHover={{
+                    // boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                    textShadow: "0px 0px 8px rgb(255, 255, 255)"
+                }}
+                href="https://gotocourse.com/dashboard" className="btn btn-primary" style={{padding:"10px 28px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}>Go to Class</motion.a>
+            </div>
                 </div>
 
                 {children}
 
             </div>
+            {loading && 
+            <Loader />
+            }
             </div>
         </GuardedRoute>
     )

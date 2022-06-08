@@ -687,6 +687,8 @@ export function UserInfoCard({
   firstName,
   lastName,
   user,
+  status,
+  amount,
   accessPledre=null,
   handleVerification,
   handlePledreAccess,
@@ -708,13 +710,19 @@ export function UserInfoCard({
         </td>
       )}
 
-      {comp === "Courses" && <td className={clsx.user__info}>{course}</td>}
+      {(comp === "Courses" ||comp === "History") && <td className={clsx.user__info}>{course}</td>}
+      {comp === "History" && <td className={clsx.user__info}>{status}</td>}
 
       {comp === "Courses" && <td className={clsx.user__info}>{name}</td>}
 
       {date && (
         <td className={clsx.user__date}>
           <span>{date}</span>
+        </td>
+      )}
+      {comp === "History" && (
+        <td className={clsx.user__date}>
+          <span>{amount}</span>
         </td>
       )}
 

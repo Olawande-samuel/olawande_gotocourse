@@ -4,7 +4,7 @@ import {AiOutlineClose} from "react-icons/ai";
 import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash, IoIosHelpBuoy} from "react-icons/io";
 import {useNavigate, useLocation, NavLink} from "react-router-dom";
 import {FiGift, FiSend} from "react-icons/fi";
-
+import {motion} from "framer-motion"
 
 
 import clsx from "./styles.module.css";
@@ -82,6 +82,11 @@ const Sidebar = ({isMobile}) => {
             path: "courses",
             title: "Courses"
         },
+        {
+            icon: IoIosHelpBuoy,
+            path: "history",
+            title: "History"
+        },
     ] : [
         {
             icon: IoIosPerson,
@@ -126,6 +131,14 @@ const toggleSidebar = ()=>{
                         </NavLink>
                     ))
                 }
+            </div>
+            <div className="button_wrapper text-center" style={{marginTop:"4rem"}}>
+                <motion.a 
+                whileHover={{
+                    // boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                    textShadow: "0px 0px 8px rgb(255, 255, 255)"
+                }}
+                href="https://gotocourse.com/dashboard" className="btn btn-primary" style={{padding:"10px 28px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}>Go to Class</motion.a>
             </div>
         </div>
         <div onClick={toggleSidebar} className={`d-lg-none ${clsx.overlay} ${generalState.showSidebar ? clsx.overlayopen :clsx.overlayclose}`}></div>
