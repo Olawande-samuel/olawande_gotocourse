@@ -8,7 +8,7 @@ import Login from "./pages/User/Login";
 import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
-import {Profile as StudentProfile, Classes as StudentClasses, Edit as StudentEdit, Courses as StudentCourses} from "./pages/Dashboard/Students";
+import {Profile as StudentProfile, Classes as StudentClasses, Edit as StudentEdit, Courses as StudentCourses, History as StudentHistory} from "./pages/Dashboard/Students";
 import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CreateCourseCategory} from "./pages/Dashboard/Admin";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, Courses as TeacherCourses, CreateCourse} from "./pages/Dashboard/Teachers";
 import 'react-toastify/dist/ReactToastify.css';
@@ -33,12 +33,15 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="become-a-teacher" element={<BecomeATeacher />} />
+
             <Route path="students" element={<Out />}>
               <Route path="" element={<StudentProfile  />} />
               <Route path="classes" element={<StudentClasses  />} />
               <Route path="profile/edit" element={<StudentEdit  />} />
               <Route path="courses" element={<StudentCourses />} />
+              <Route path="history" element={<StudentHistory />} />
             </Route>
+
             <Route path="teachers" element={<Out/>}>
               <Route index element={<All />} />
               <Route path=":id" element={<Out />} >
