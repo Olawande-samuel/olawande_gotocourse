@@ -98,3 +98,15 @@
 .upload_file input {
     display: none;
 }
+
+
+.uploda_file__container input {
+    padding: 8px;
+    border: none;
+    font-size: 0.8rem;
+}
+
+
+.uploda_file__container input:hover {
+    background-color: rgba(0, 0, 0, .2);
+}

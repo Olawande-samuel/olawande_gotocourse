@@ -20,7 +20,7 @@ const UploadForm = ({isOpen, setIsOpen}) => {
     async function uploadFileHandler(e){
         try{
             const formdata = new FormData();
-            formdata.append('image', file, file.name);
+            formdata.append('file', file, file.name);
             const res = await uploadFile(formdata, userdata?.token);
             console.log(res);   
             const {success, message, statusCode} = res;
