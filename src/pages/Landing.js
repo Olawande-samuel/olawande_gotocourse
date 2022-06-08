@@ -30,8 +30,8 @@ const Landing = () => {
         <Becoming />
         <Career />
         <Mentors />
-        <Testimonials />
         <Degree />
+        <Testimonials />
         <Faq />
         </Layout>
     </div>
