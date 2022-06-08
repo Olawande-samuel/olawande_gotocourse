@@ -251,7 +251,7 @@ export const adminStudentFunctions = {
 export const adminFunctions = {
     uploadFile: async function(_data, token){
         try{
-            const res = await axios.post(`https://loftywebtech.com/gotocourse/api/v1/file/upload`, _data, {
+            const res = await axios.post(`${baseURL}/file/upload`, _data, {
                 headers: {
                     "Authorization": "Bearer " + token,
                     "Content-Type": "multipart/form-data"
@@ -362,6 +362,7 @@ export const adminFunctions = {
     },
     addCategory: async function(_data, token){
         try{
+            console.log(_data)
             const res = await axios.post(`${baseURL}/admin/category/add`,
             JSON.stringify(_data),
             {
