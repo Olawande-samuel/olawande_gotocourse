@@ -15,7 +15,7 @@ import img01 from "../../../images/mentor1.png";
 import img02 from "../../../images/mentor2.png";
 import { GuardedRoute } from "../../../hoc";
 import { AdvancedError } from "../../../classes";
-import useCookies from "../../../hooks/useCookie";
+import {useCookie} from "../../../hooks";
 
 import Input from "../../../components/Input";
 import Loader from "../../../components/Loader";
@@ -435,10 +435,10 @@ export function CreateCourseCategory(){
               {
                 nichelists.length !== 0 ? nichelists.map(({name, description}, i) => (
                   <Syllabus key={i} title={name} description={description} />
-                )) : <h4>No Niche(s)!</h4>
+                )) : <h5>No Niche(s)!</h5>
               }
             </div>
-            <button className={clsx.addniche_button}  onClick={e => setShowNicheModal(_ => true)}>Add Niche Items</button>
+            <button style={{background:"var(--secondary"}} className={`btn btn-primary ${clsx.addniche_button}`}  onClick={e => setShowNicheModal(_ => true)}>Add Niche Items</button>
             <NicheModal open={showNicheModal} newNiche={nichelist} setOpen={setShowNicheModal}
             handleChange={nicheChangeHandler} updateNiche={updateNicheHandler} />
 
@@ -459,10 +459,10 @@ export function CreateCourseCategory(){
               {
                 careerlists.length !== 0 ? careerlists.map(({name}, i) => (
                   <Syllabus key={i} title={name} />
-                )) : <h4>No Career(s)!</h4>
+                )) : <h5>No Career(s)!</h5>
               }
             </div>
-            <button className={clsx.addcareer_button} onClick={e => setShowCareerModal(_ => true)}>Add Career List</button>
+            <button style={{background:"var(--secondary"}} className={`btn btn-primary ${clsx.addcareer_button}`} onClick={e => setShowCareerModal(_ => true)}>Add Career List</button>
             <CareerModal open={showCareerModal} newCareer={careerlist} setOpen={setShowCareerModal}
             handleChange={careerChangeHandler} updateCareer={updateCareerHandler} />
 
@@ -507,24 +507,27 @@ export function CreateCourseCategory(){
 
 
 export function Dashboard() {
-  const { updateCookie, fetchCookie } = useCookies();
+  const { updateCookie, fetchCookie } = useCookie();
   const {
     generalState: { userdata },
     setGeneralState,
+    generalState,
     adminFunctions: { fetchProfile },
   } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
-    if (userdata) {
-      async function get() {
+    const token = fetchCookie(key)
+
+      async function get(){
         try {
           let { data, message, success, statusCode } = await fetchProfile(
-            userdata?.token
+            token?.token
           );
           if (success) {
             updateCookie("gotocourse-userdata", data);
+            setGeneralState({...generalState, userdata: {...generalState.userdata, ...data}})
           } else throw new AdvancedError(message, statusCode);
-        } catch (error) {
+          } catch (error) {
           toast.error(error.message, {
             position: "top-right",
             autoClose: 4000,
@@ -537,8 +540,7 @@ export function Dashboard() {
         }
       }
       get();
-    }
-  }, [userdata?.token]);
+  }, []);
 
   function editProfileHandler(e) {
     navigate("/admin/profile/edit");
@@ -771,15 +773,20 @@ export function UserInfoCard({
 }
 
 export function Teachers() {
+  const { fetchCookie} = useCookie();
   const navigate = useNavigate();
   const {
     adminTeacherFunctions: { fetch },
     generalState: { userdata },
   } = useAuth();
   useEffect(() => {
+    // const token = fetchCookie(key)
+    console.log(fetchCookie);
     (async () => {
       try {
-        const res = await fetch(userdata?.token);
+        const token = fetchCookie(key)
+        console.log(token)
+        const res = await fetch(token.token);
         console.log(res);
         const { message, success, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
@@ -1086,12 +1093,15 @@ export function Student() {
   const [studentList, setStudentList] = useState([]);
 
   const { adminStudentFunctions: { fetch, verify, verify_pledre }, generalState: { userdata, loading }, setGeneralState, } = useAuth();
+  const {fetchCookie} = useCookie()
 
   async function fetchStudents(){
+    const token = fetchCookie(key)
     if (userdata) {
+      console.log("2",userdata)
       
         try {
-          const res = await fetch(userdata?.token);
+          const res = await fetch(token.token); 
           console.log(res);
           const { message, success, statusCode } = res;
           if (!success) throw new AdvancedError(message, statusCode);
@@ -1291,7 +1301,7 @@ export function Edit() {
     setGeneralState,
     adminFunctions: { updateAvatar, updateProfile },
   } = useAuth();
-  const { updateCookie, isCookie, saveCookie } = useCookies();
+  const { updateCookie, isCookie, saveCookie } = useCookie();
   const [imageUrl, setImageUrl] = useState(null);
   const [isUplaoding, setIsUploading] = useState(false);
   const [file, setFile] = useState(null);
@@ -1586,7 +1596,6 @@ const Admin = ({ children, header }) => {
   return (
     <GuardedRoute>
       <div className={clsx["admin"]}>
-        <LogoutButton />
         <ToastContainer />
         <Sidebar isMobile={isMobile} />
         <div className={clsx["admin_main"]}>
