@@ -11,6 +11,7 @@ import clsx from "./styles.module.css";
 import Logo from "../../../components/Logo";
 import { colors } from "../../../constants";
 import { useAuth } from "../../../contexts/Auth";
+import LogoutButton from "../../../components/LogoutButton";
 
 
 
@@ -72,11 +73,11 @@ const Sidebar = ({isMobile}) => {
             path: "",
             title: "My Profile"
         },
-        {
-            icon: MdMessage,
-            path: "classes",
-            title: "My Classes"
-        },
+        // {
+        //     icon: MdMessage,
+        //     path: "classes",
+        //     title: "My Classes"
+        // },
         {
             icon: FiGift,
             path: "courses",
@@ -132,7 +133,7 @@ const toggleSidebar = ()=>{
                     ))
                 }
             </div>
-            <div className="button_wrapper text-center" style={{marginTop:"4rem"}}>
+            <div className="button_wrapper text-center" style={{marginTop:"3rem"}}>
                 <motion.a 
                 whileHover={{
                     // boxShadow: "0px 0px 8px rgb(0, 0, 0)",
@@ -140,6 +141,8 @@ const toggleSidebar = ()=>{
                 }}
                 href="https://gotocourse.com/dashboard" className="btn btn-primary" style={{padding:"10px 28px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}>Go to Class</motion.a>
             </div>
+            {/* <LogoutButton /> */}
+
         </div>
         <div onClick={toggleSidebar} className={`d-lg-none ${clsx.overlay} ${generalState.showSidebar ? clsx.overlayopen :clsx.overlayclose}`}></div>
         </>

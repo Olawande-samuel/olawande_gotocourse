@@ -4,10 +4,10 @@
 }
 
 .general_logout__button {
-    position: fixed;
+    /* position: fixed;
     top: 50px;
-    right: 0px;
-    background-color: var(--mainBg);
+    right: 0px; */
+    /* background-color: var(--mainBg); */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -19,9 +19,10 @@
 .general_logout__button button {
     border: none;
     color: whitesmoke;
-    background-color: var(--mainBg);
+    background-color: var(--theme-orange);
     padding: 10px 20px;
     font-size: 0.5rem;
+    border-radius: 8px;
 }
 
 .upload_file__background {

@@ -1,6 +1,6 @@
 import {toast} from "react-toastify";
 import {motion} from "framer-motion";
-
+import {useNavigate} from "react-router-dom"
 
 import clsx from "./globalStyles.module.css";
 import  {useCookie} from "../hooks";
@@ -10,6 +10,7 @@ import  {useCookie} from "../hooks";
 
 
 const LogoutButton = () => {
+    const navigate = useNavigate()
     const {clearCookie} = useCookie();
 
 
@@ -24,6 +25,7 @@ const LogoutButton = () => {
         try{
             const res = await clearCookie();
             console.log(res);
+            navigate("/")
             toast.success("Logout out successfully",{
                 position:"top-right",
                 autoClose: 5000,
