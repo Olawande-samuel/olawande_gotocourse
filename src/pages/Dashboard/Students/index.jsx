@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import {motion} from "framer-motion"
 import {AiOutlineMenu} from "react-icons/ai"
-
+import {Rating} from 'react-simple-star-rating'
 import Loader from "../../../components/Loader"
 import { Sidebar, Searchbar } from "../components";
 import clsx from "./styles.module.css";
@@ -16,6 +16,7 @@ import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
 import { UserInfoCard } from "../Admin";
 import { useCookie } from "../../../hooks";
+import useLocalStorage from "../../../hooks/useLocalStorage";
 
 const KEY = "gotocourse-userdata"
 
@@ -24,6 +25,8 @@ export function Profile(){
     const {generalState: {isMobile, notification, userdata}, generalState,
     setGeneralState, 
     studentFunctions: {fetchProfile}} = useAuth();
+
+
     const {updateCookie, isCookie, saveCookie, fetchCookie} = useCookie();
     const navigate = useNavigate();
     useEffect(() => {
@@ -50,6 +53,7 @@ export function Profile(){
                     else {
                         const {data} = res;
                         console.log(data);
+
                         setGeneralState({...generalState, userdata:{...generalState.userdata, ...data},
                         });
 
@@ -103,7 +107,6 @@ export function Profile(){
 
 
 export function Edit(){
-    
     const navigate = useNavigate();
     const {updateCookie, fetchCookie, isCookie,saveCookie} = useCookie();
     const {generalState: {isMobile, userdata}, studentFunctions: {updateAvatar, fetchProfile, updateProfile}, setGeneralState} = useAuth();
@@ -112,6 +115,7 @@ export function Edit(){
     const [isUplaoding, setIsUploading] = useState(false);
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
+
     const [formstate, setFormstate] = useState({
         firstName: userdata?.firstName ?? "",
         lastName: userdata?.lastName ?? "",
@@ -128,8 +132,6 @@ export function Edit(){
             // to prevent data from disappearing on page reload
         const previousData = fetchCookie(KEY)
         setFormstate({...formstate, ...previousData})
-        console.log("formstate",formstate)
-        console.log("previous",previousData)
     }, [])
 
     async function submitHandler(e){
@@ -137,7 +139,7 @@ export function Edit(){
         e.preventDefault();
         setLoading(_ => true);
         try{
-            if(formstate.firstname === "" || formstate.lastname === "" || formstate.bio === "" || formstate.goals === "" || formstate.occupation === "" || formstate.location === "" || formstate.category === "") throw new AdvancedError("All fields are required", 0);
+            if(formstate.firstName === "" || formstate.lastName === "" || formstate.bio === "" || formstate.goals === "" || formstate.work === "" || formstate.location === "" || formstate.category === "") throw new AdvancedError("All fields are required", 0);
             //submit updated profile
             const res = await updateProfile(formstate, userdata.token);
             console.log(res);
@@ -407,54 +409,69 @@ export function Courses(){
             }
         })()
     }, [])
-    const tableHeaders = ["No", "Courses", "Name", "Package", "Rating"]
+    const tableHeaders = ["No", "Courses", "Tutor's Name", "Teaching Model", "Course Fee", "Rating"]
     const tableContents = [
         {
             name: "Melanie Grutt",
             course: "Cybersecurity",
             package: "Cohort",
             rating: "Bronze",
+            amount:"3000"
         },
         {
             name: "Keira Danlop",
             course: "UI/UX",
             package: "Cohort",
             rating: "Silver",
+            amount:"3000"
         },
         {
             name: "Diop Grutt",
             course: "HTML",
             package: "One on One",
             rating: "Gold",
+            amount:"3000"
         },
         {
             name: "Diop Grutt",
             course: "Data Analytics",
             package: "Self paced",
             rating: "Diamond",
+            amount:"3000"
         },
     ]
+
+    const [rating, setRating] = useState(0) // initial rating value
+
+  // Catch Rating value
+  const handleRating = (rate) => {
+      console.log(rate)
+    setRating(rate)
+    // other logic
+  }
     return ( 
         <Students isMobile={isMobile} userdata={userdata}>               
             <div className={clsx.students_profile}>
 
-                {courses.length === 0 ?         
+                {/* {courses.length === 0 ?         
                                <NoDetail text="You haven't registered for any course" />
 
-                :
+                : */}
+                {
                 <table className={clsx.student_table}>
                     <thead>
+                        <tr>
                         {
                             tableHeaders.map((el, i) => (
-                                <td key={i}>{el}</td>
-                            ))
-                        } 
+                                <th key={i}>{el}</th>
+                                ))
+                            } 
+                        </tr>
                     </thead>
                     <tbody>
                         {
-                            tableContents.map(({name, package: p, course, rating}, i) => (
-                                <UserInfoCard key={i} name={name} num={i} comp={"Courses"} rating={rating}
-                                pack={p} course={course} />
+                            tableContents.map(({name,amount, package: p, course, rating}, i) => (
+                                <UserInfoCard key={i} amount={amount} model={p} name={name} num={i} comp={"Courses"} rating={rating} handleRating={()=>handleRating("courseID")} course={course} />
                             ))
                         }
                     </tbody>
@@ -505,7 +522,7 @@ export function History(){
             })()
         }
     }, [userdata])
-    const tableHeaders = ["No", "Courses", "Status", "Date", "Amount"]
+    const tableHeaders = ["No", "Courses", "Status", "Date", "Amount Paid"]
     const tableContents = [
         {
             status: "Approved",
@@ -536,10 +553,11 @@ export function History(){
         <Students isMobile={isMobile} userdata={userdata}>               
             <div className={clsx.students_profile}>
                 
-                {courses.length === 0 ? 
+                {/* {courses.length === 0 ? 
                 
                 <NoDetail text="Nothing to See here" />
-                 :
+                 : */}
+                 {
                 <table className={clsx.student_table}>
                     <thead>
                         <tr>

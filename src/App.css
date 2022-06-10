@@ -593,11 +593,11 @@ padding: 13px 0 ;
 .career,
 .mentors,
 .bootcamp {
-  padding: 4.0625rem 3.625rem;
+  padding: 3.0625rem 3.625rem;
   color: var(--text-color-light);
 }
 .career .career_title {
-  margin-bottom: 1.625rem;
+  margin-bottom: 0.525rem;
   font-weight: 600;
   font-size: clamp(1.8rem, -0.875rem + 8.333vw, 2.25rem);
   line-height: 30px;
@@ -607,7 +607,7 @@ padding: 13px 0 ;
   margin-bottom: 6.125rem;
   font-weight: 400;
   font-size: 16px;
-  line-height: 32px;
+  line-height: 24px;
   color: var(--text-color-light);
   width: 60%;
   margin: 0 auto 4.125rem auto;
@@ -1637,4 +1637,43 @@ line-height: 16px;
 
 .frequent_answer, .expand__less {
   display: none;
+}
+
+.earnings_card {
+  width: min(100% - 1rem, 250px);
+  display: flex;
+  flex-direction: column;
+  justify-content:space-between
+}
+.earnings_card .text {
+  color: #454256 !important;
+}
+.earnings_card select {
+  border: none !important;
+  outline: none !important;
+  font-size: 12px;
+  padding: 0.15rem;
+  color: var(--theme-orange);
+}
+.earnings_card .card {
+  border: none;
+}
+.earnings_card .card-body {
+  padding: 8px 20px;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.04);
+  border-radius: 12px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+}
+.earnings_card .card-body .earnings_card_total {
+  font-weight: 800;
+  color: #454256;
+
+}
+.earnings_card .card-body .earnings_card_total small {
+  font-size: 18px;
 }

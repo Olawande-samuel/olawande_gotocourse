@@ -52,10 +52,10 @@ const Bootcamp = () => {
     <section className="bootcamp">
       <div className=" container-lg bootcamp_content">
         <header className="text-center">
-          <h3 className="title text-capitalize" style={{marginBottom:"1.625rem"}}>Tech Immersion Trainings and bootcamps</h3>
+          <h3 className="title text-capitalize" style={{marginBottom:"0.525rem"}}>Tech Immersion Trainings and bootcamps</h3>
           <p
             className="sub_title mx-auto"
-            style={{ width: "min(100% - 1rem, 900px)" }}
+            style={{ width: "min(100% - 1rem, 980px)" }}
           >
             GotoCourse training and bootcamps has helped thousand of students
             launch new careers in the tech industry. We want to improve the

@@ -20,8 +20,8 @@
     border: none;
     color: whitesmoke;
     background-color: var(--theme-orange);
-    padding: 10px 20px;
-    font-size: 0.5rem;
+    padding: 10px 30px;
+    font-size: 1rem;
     border-radius: 8px;
 }
 
