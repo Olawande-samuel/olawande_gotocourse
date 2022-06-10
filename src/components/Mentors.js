@@ -74,8 +74,8 @@ const Mentors = () => {
     <section className="mentors">
       <div className=" mentors_content">
         <header className="text-center">
-          <h3 className="title" style={{marginBottom:"1.625rem"}}>Find Your Mentor, Accelerate Your Success</h3>
-          <p className="sub_title mx-auto" style={{width:"min(100% - 1rem, 1200px)"}}>
+          <h3 className="title" style={{marginBottom:"0.525rem"}}>Find Your Mentor, Accelerate Your Success</h3>
+          <p className="sub_title mx-auto" style={{width:"min(100% - 1rem, 1300px)"}}>
             One of the best ways to break into I.T or learn more about becoming
             a top tech professional is to find someone that has gone before you
             and gained success at the same goal. This person has the ability to

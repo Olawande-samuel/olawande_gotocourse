@@ -73,18 +73,13 @@ const Sidebar = ({isMobile}) => {
             path: "",
             title: "My Profile"
         },
-        // {
-        //     icon: MdMessage,
-        //     path: "classes",
-        //     title: "My Classes"
-        // },
         {
             icon: FiGift,
             path: "courses",
-            title: "Courses"
+            title: "My Courses"
         },
         {
-            icon: IoIosHelpBuoy,
+            icon: MdMessage,
             path: "history",
             title: "History"
         },
@@ -95,14 +90,19 @@ const Sidebar = ({isMobile}) => {
             title: "My Profile"
         },
         {
-            icon: MdMessage,
-            path: "classes",
-            title: "My Classes"
-        },
-        {
             icon: FiGift,
             path: "courses",
             title: "Courses"
+        },
+        {
+            icon: MdMessage,
+            path: "classes",
+            title: "Classes"
+        },
+        {
+            icon: IoIosCash,
+            path: "earnings",
+            title: "Earnings"
         },
     ];
 
@@ -117,7 +117,7 @@ const toggleSidebar = ()=>{
 }
     return (
         <>
-        <div className={` ${generalState.showSidebar ? clsx.open :clsx.close}  ${clsx.sidebar}`}>
+        <div className={`${generalState.showSidebar ? clsx.open :clsx.close}  ${clsx.sidebar}`}>
                 <i className="d-md-none" style={{fontSize:"24px", position:"absolute", right:"-30px", color:"#0C2191", cursor:"pointer", zIndex:"3000"}} onClick={toggleSidebar}>
                     <AiOutlineClose />
                 </i>
@@ -141,7 +141,7 @@ const toggleSidebar = ()=>{
                 }}
                 href="https://gotocourse.com/dashboard" className="btn btn-primary" style={{padding:"10px 28px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}>Go to Class</motion.a>
             </div>
-            {/* <LogoutButton /> */}
+            <LogoutButton />
 
         </div>
         <div onClick={toggleSidebar} className={`d-lg-none ${clsx.overlay} ${generalState.showSidebar ? clsx.overlayopen :clsx.overlayclose}`}></div>
