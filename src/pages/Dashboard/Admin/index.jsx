@@ -54,7 +54,10 @@ export function Category(){
         const res = await fetchCategories(userdata?.token);
         const {success, statusCode, message} = res;
         console.log(res);
-        if(!success) throw new AdvancedError(statusCode, message);
+        // if(statusCode === 2) {
+        //   navigate("/login");
+        // }
+        if(!success) throw new AdvancedError(message, statusCode);
         else {
           if(res?.data){
             const {data} = res;
@@ -89,7 +92,7 @@ export function Category(){
       <UploadForm isOpen={open} setIsOpen={setOpen} />
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-            <button onClick={() => setOpen(_ => true)}>Upload File</button>
+            {/* <button onClick={() => setOpen(_ => true)}>Upload File</button> */}
             <button onClick={(e) => navigate("new")}>Create Category</button>
             <Grid container spacing={4}>
               {
@@ -267,6 +270,7 @@ export function CreateCourseCategory(){
 
   async function submitHandler(e){
     e.preventDefault();
+    setLoading(_ => true);
     try{
       const data = {
         ...formstate,
@@ -301,6 +305,8 @@ export function CreateCourseCategory(){
         draggable: true,
         progress: undefined,
       });
+    }finally {
+      setLoading(_ => false);
     }
   }
 
@@ -338,6 +344,13 @@ export function CreateCourseCategory(){
       setNichelists(old => {
         return [...old, nichelist]
       })
+      setNichelist(_ => {
+        return {
+          name: "",
+          description: ""
+        }
+      })
+      setShowNicheModal(_ => false);
       toast.success("Niche added successfully", {
         position: "top-right",
         autoClose: 4000,
@@ -366,6 +379,12 @@ export function CreateCourseCategory(){
       setCareerlists(old => {
         return [...old, careerlist]
       })
+      setCareerlist(_ => {
+        return {
+          name: "",
+        }
+      })
+      setShowCareerModal(_ => false);
       toast.success("Career added successfully", {
         position: "top-right",
         autoClose: 4000,
@@ -438,7 +457,7 @@ export function CreateCourseCategory(){
                 )) : <h5>No Niche(s)!</h5>
               }
             </div>
-            <button style={{background:"var(--secondary"}} className={`btn btn-primary ${clsx.addniche_button}`}  onClick={e => setShowNicheModal(_ => true)}>Add Niche Items</button>
+            <button type="button" style={{background:"var(--secondary"}} className={`btn btn-primary ${clsx.addniche_button}`}  onClick={e => setShowNicheModal(_ => true)}>Add Niche Items</button>
             <NicheModal open={showNicheModal} newNiche={nichelist} setOpen={setShowNicheModal}
             handleChange={nicheChangeHandler} updateNiche={updateNicheHandler} />
 
@@ -462,7 +481,7 @@ export function CreateCourseCategory(){
                 )) : <h5>No Career(s)!</h5>
               }
             </div>
-            <button style={{background:"var(--secondary"}} className={`btn btn-primary ${clsx.addcareer_button}`} onClick={e => setShowCareerModal(_ => true)}>Add Career List</button>
+            <button type="button" style={{background:"var(--secondary"}} className={`btn btn-primary ${clsx.addcareer_button}`} onClick={e => setShowCareerModal(_ => true)}>Add Career List</button>
             <CareerModal open={showCareerModal} newCareer={careerlist} setOpen={setShowCareerModal}
             handleChange={careerChangeHandler} updateCareer={updateCareerHandler} />
 
@@ -775,13 +794,12 @@ export function UserInfoCard({
 export function Teachers() {
   const { fetchCookie} = useCookie();
   const navigate = useNavigate();
+  const [teachers, setTeachers] = useState([]);
   const {
     adminTeacherFunctions: { fetch },
     generalState: { userdata },
   } = useAuth();
   useEffect(() => {
-    // const token = fetchCookie(key)
-    console.log(fetchCookie);
     (async () => {
       try {
         const token = fetchCookie(key)
@@ -794,6 +812,16 @@ export function Teachers() {
           const { data } = res;
           //do somethings
           console.log(data);
+          setTeachers(_=>  data);
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         }
       } catch (err) {
         toast.error(err.message, {
@@ -808,58 +836,7 @@ export function Teachers() {
       }
     })();
   }, []);
-  const tableHeaders = ["No", "Name", "Date", "Email", "Approve"];
-  const tableContents = [
-    {
-      name: "Melanie Grutt",
-      img: img01,
-      date: "Feb 24",
-      email: "melanie@gmail.com",
-      approve: true,
-    },
-    {
-      name: "Kiera Danlop",
-      img: img02,
-      date: "Mar 23",
-      email: "kiera@gmail.com",
-      approve: false,
-    },
-    {
-      name: "Melanie Grutt",
-      img: img01,
-      date: "Feb 24",
-      email: "melanie@gmail.com",
-      approve: true,
-    },
-    {
-      name: "Kiera Danlop",
-      img: img02,
-      date: "Mar 23",
-      email: "kiera@gmail.com",
-      approve: false,
-    },
-    {
-      name: "Melanie Grutt",
-      img: img01,
-      date: "Feb 24",
-      email: "melanie@gmail.com",
-      approve: true,
-    },
-    {
-      name: "Kiera Danlop",
-      img: img02,
-      date: "Mar 23",
-      email: "kiera@gmail.com",
-      approve: true,
-    },
-    {
-      name: "Melanie Grutt",
-      img: img01,
-      date: "Feb 24",
-      email: "melanie@gmail.com",
-      approve: false,
-    },
-  ];
+  const tableHeaders = ["No", "Name", "Email", "Access Pledre", "Verified"];
 
   function approveHandler(e, email) {
     console.log(e.target, email);
@@ -879,18 +856,20 @@ export function Teachers() {
                 ))}
               </thead>
               <tbody>
-                {tableContents.map(({ img, email, date, name, approve }, i) => (
+                {teachers.length > 0 ? teachers.map(({ profileImg, email, firstName, lastName, accessPledre, isVerified }, i) => (
                   <UserInfoCard
                     key={i}
-                    name={name}
-                    img={img}
+                    user={true}
+                    firstName={firstName}
+                    lastName={lastName}
+                    img={profileImg}
                     num={i}
-                    date={date}
                     email={email}
-                    isActive={approve}
+                    isActive={isVerified}
                     approveHandler={approveHandler}
+                    accessPledre={accessPledre}
                   />
-                ))}
+                )) : <h5 style={{textAlign:'center'}}>No Teachers found</h5>}
               </tbody>
             </table>
           </div>
@@ -1105,14 +1084,21 @@ export function Student() {
           console.log(res);
           const { message, success, statusCode } = res;
           if (!success) throw new AdvancedError(message, statusCode);
-          else if (statusCode === 1) {
+          else {
             const { data } = res;
             //do somethings
 
             setStudentList(data);
             console.log(data);
-          } else {
-            throw new AdvancedError(message, statusCode);
+            toast.success(message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
           }
         } catch (err) {
           toast.error(err.message, {
