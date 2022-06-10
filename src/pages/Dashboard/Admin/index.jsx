@@ -22,6 +22,7 @@ import Loader from "../../../components/Loader";
 import LogoutButton from "../../../components/LogoutButton";
 import UploadForm from "../../../components/UploadForm";
 import img from "../../../images/coding.png";
+import { Rating } from "react-simple-star-rating";
 
 const key = "gotocourse-userdata";
 
@@ -703,6 +704,7 @@ export function UserInfoCard({
   comp,
   num,
   course,
+  model,
   pack,
   rating,
   firstName,
@@ -713,6 +715,11 @@ export function UserInfoCard({
   accessPledre=null,
   handleVerification,
   handlePledreAccess,
+  handleRating,
+  starRating,
+  start_date,
+  course_status,
+  enrolled,
   approveHandler = () => {
     return;
   },
@@ -731,7 +738,8 @@ export function UserInfoCard({
         </td>
       )}
 
-      {(comp === "Courses" ||comp === "History") && <td className={clsx.user__info}>{course}</td>}
+      {(comp === "Courses" ||comp === "History" || comp === "Teacher") && <td className={clsx.user__info}>{course}</td>}
+      {enrolled && <td className={clsx.user__info}>{enrolled}</td>}
       {comp === "History" && <td className={clsx.user__info}>{status}</td>}
 
       {comp === "Courses" && <td className={clsx.user__info}>{name}</td>}
@@ -741,7 +749,17 @@ export function UserInfoCard({
           <span>{date}</span>
         </td>
       )}
-      {comp === "History" && (
+      {(comp === "History" ) && (
+        <td className={clsx.user__date}>
+          <span>{amount}</span>
+        </td>
+      )}
+      {(comp === "Courses") && (
+        <td className={clsx.user__date}>
+          <span>{model}</span>
+        </td>
+      )}
+      {(comp === "Courses") && (
         <td className={clsx.user__date}>
           <span>{amount}</span>
         </td>
@@ -752,6 +770,12 @@ export function UserInfoCard({
           <span>{pack}</span>
         </td>
       )}
+      {start_date && (
+        <td className={clsx.user__date}>
+          <span>{start_date}</span>
+        </td>
+      )}
+
       {email && (
         <td className={clsx.user__email}>
           <span>{email}</span>
@@ -759,9 +783,15 @@ export function UserInfoCard({
       )}
       {rating && (
         <td className={clsx.user__email}>
-          <span>{rating}</span>
+          <Rating onClick={handleRating} ratingValue={starRating} size={18} initialValue={0} />
         </td>
       )}
+      {course_status && (
+        <td className={clsx.user__email}>
+          <span>{course_status}</span>
+        </td>
+      )}
+
       {paid && (
         <td className={clsx.user__button}>
           <span>

@@ -15,7 +15,6 @@ const LogoutButton = () => {
 
 
     function mouseOverHandler(e){
-        console.log(e.currentTarget);
         e.currentTarget.width = 50;
     }
 
@@ -54,6 +53,7 @@ const LogoutButton = () => {
 
     return (
         <motion.span
+        style={{marginTop:"auto"}}
         transition={{
             delay: 1,
             x: {type: "spring", stiffness: 20},
@@ -63,7 +63,7 @@ const LogoutButton = () => {
         }}
         //  animate={{ x: 100, y: 100, opacity: 1 }}
         //  whileHover={{}}
-         className={clsx.general_logout__button} onMouseOver={mouseOverHandler} onClick={logout}>
+         className={clsx.general_logout__button} onMouseOver={mouseOverHandler} onClick={logout}> 
             <motion.button>
                 Logout
             </motion.button>

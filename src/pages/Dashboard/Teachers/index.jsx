@@ -16,17 +16,33 @@ import { AdvancedError } from "../../../classes";
 import { UserInfoCard } from "../Admin";
 import { useCookie } from "../../../hooks";
 import {useSyllabus} from "../../../contexts/Syllabus"; 
+import { Chart as ChartLogo} from "../../../images/components/svgs";
+import Chart from "../../../components/Chart";
 
 
-
+const KEY = "gotocourse-userdata"
 
 export function Profile() {
+  const { generalState: { isMobile, notification, userdata }, setGeneralState, teacherFunctions: { fetchProfile }, } = useAuth();
+  const [userInfo, setUserInfo]= useState([
+    {
+      title: "Brief Introduction",
+      content: userdata?.bio ?? "",
+    },
+    {
+      title: "Location",
+      content: userdata?.location ?? "",
+    },
+    {
+      title: "Courses",
+      content: "UX Designer",
+    },
+    {
+      title: "Category",
+      content: "Cybersecurity, UX, Data Analysis",
+    },
+  ])
   const { saveCookie, updateCookie, isCookie } = useCookie();
-  const {
-    generalState: { isMobile, notification, userdata },
-    setGeneralState,
-    teacherFunctions: { fetchProfile },
-  } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
     setTimeout(() => {
@@ -46,7 +62,7 @@ export function Profile() {
           let data = await fetchProfile(userdata?.token);
           const key = "gotocourse-userdata";
           const {success, message, statusCode} = data;
-          if(!success) throw new AdvancedError(message, statusCode);
+          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
           else {
             const {data: d} = data;
             console.log(d);
@@ -78,24 +94,7 @@ export function Profile() {
     }
   }, [userdata?.token]);
 
-  const info = [
-    {
-      title: "Brief Introduction",
-      content: "Enjoys writing and playing video games",
-    },
-    {
-      title: "Location",
-      content: "Lagos, Nigeria",
-    },
-    {
-      title: "Courses",
-      content: "UX Designer",
-    },
-    {
-      title: "Category",
-      content: "Cybersecurity, UX, Data Analysis",
-    },
-  ];
+ 
   function editProfileHandler(e) {
     navigate("/teacher/profile/edit");
   }
@@ -129,9 +128,10 @@ export function Profile() {
           </h1>
 
           <div className={clsx.teachers__profile_info}>
-            {info.map(({ title, content }, i) => (
-              <Info title={title} content={content} key={i} />
-            ))}
+              <Info title="Brief Introduction" content={userdata?.bio}  />
+              <Info title="Location" content={userdata?.location}  />
+              <Info title="Courses" content={userdata?.courses}  />
+              <Info title="Category" content={userdata?.category}  />
           </div>
         </div>
       </div>
@@ -501,32 +501,39 @@ function AddSyllabus({ open, handleClose, addSyllabus }) {
 }
 
 export function Edit() {
-  const {
-    generalState: { isMobile, userdata },
-    setGeneralState,
-    teacherFunctions: { updateAvatar, updateProfile },
-  } = useAuth();
+  const { generalState: { isMobile, userdata }, setGeneralState, teacherFunctions: { updateAvatar, updateProfile }, } = useAuth();
+  const {fetchCookie} = useCookie()
   const navigate = useNavigate();
   const [imageUrl, setImageUrl] = useState(null);
   const [isUplaoding, setIsUploading] = useState(false);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formstate, setFormstate] = useState({
-    firstname: userdata?.firstName ?? "",
-    lastname: userdata?.lastName ?? "",
-    brief_intro: "",
-    location: "",
-    profession: "",
-    category: "",
+    firstName: userdata?.firstName ?? "",
+    lastName: userdata?.lastName ?? "",
+    work: userdata?.work ??"",
+    location:userdata?.location ?? "",
+    category: userdata?.category ??"",
+    bio:userdata?.bio ?? "",
+    goals:userdata?.goals ?? ""
   });
 
+  
+  useEffect(() => {
+    // to prevent data from disappearing on page reload
+    const previousData = fetchCookie(KEY)
+    setFormstate({...formstate, ...previousData})
+  }, [])
+
+
+  console.log(formstate)
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
     try {
       if (
-        formstate.firstname === "" ||
-        formstate.lastname === "" ||
+        formstate.firstName === "" ||
+        formstate.lastName === "" ||
         formstate.brief_intro === "" ||
         formstate.location === "" ||
         formstate.profession === ""
@@ -685,25 +692,25 @@ export function Edit() {
           <form className="form" onSubmit={submitHandler}>
             <Input
               label="First name"
-              name="firstname"
+              name="firstName"
               type="text"
               handleChange={changeHandler}
-              value={formstate.firstname}
+              value={formstate.firstName}
             />
             <Input
               label="Last name"
-              name="lastname"
+              name="lastName"
               type="text"
               handleChange={changeHandler}
-              value={formstate.lastname}
+              value={formstate.lastName}
             />
 
             <div className={clsx.form_group}>
-              <label htmlFor={"brief_intro"}>Brief Introduction</label>
+              <label htmlFor={"bio"}>Brief Introduction</label>
               <textarea
                 rows="5"
-                name="brief_intro"
-                value={formstate.brief_intro}
+                name="bio"
+                value={formstate.bio}
                 onChange={changeHandler}
                 className="form-control generic_input"
               ></textarea>
@@ -719,10 +726,10 @@ export function Edit() {
 
             <Input
               label="Profession"
-              name="profession"
+              name="work"
               type="text"
               handleChange={changeHandler}
-              value={formstate.profession}
+              value={formstate.work}
             />
 
             <Input
@@ -757,67 +764,147 @@ export function Edit() {
 
 
 export function Classes() {
-  const {
-    generalState: { isMobile, userdata },
-  } = useAuth();
+  const navigate = useNavigate();
+  const { generalState: { isMobile, userdata }, } = useAuth();
+  const tableHeaders = ["No", "Course Name", "Number Enrolled","Teaching Model", "Status"];
   const data = [
     {
       title: "CyberSecurity",
-      numberOfLessons: 10,
+      enrolled: 10,
       date: "Apr 5",
-      time: "5pm",
-      isLive: false,
-      color: colors.info,
+      model: "cohort",
+      status: "live",
     },
     {
       title: "Branding",
-      numberOfLessons: 10,
+      enrolled: 15,
       date: "Apr 5",
-      time: "5pm",
-      isLive: true,
-      color: colors.greenish,
+      model: "cohort",
+      status: "Completed",
     },
     {
       title: "UI/UX",
-      numberOfLessons: 10,
+      enrolled: 19,
       date: "Apr 5",
-      time: "5pm",
-      isLive: true,
-      color: colors.greenish,
+      model: "cohort",
+      status: "live",
     },
     {
       title: "Data Science",
-      numberOfLessons: 10,
+      enrolled: 8,
       date: "Apr 5",
-      time: "5pm",
-      isLive: false,
-      color: colors.greenish,
+      model: "One-on-One",
+      status: "Completed",
     },
   ];
+  
   return (
     <Teachers isMobile={isMobile} userdata={userdata}>
       <div className={clsx.teachers_profile}>
-        <div className={clsx.classes}>
-          {data.map(
-            ({ numberOfLessons, title, date, time, isLive, color }, i) => (
-              <ClassesCard
-                numberOfLessons={numberOfLessons}
+        <table className={clsx.teachers_table}>
+          <thead>
+            <tr>
+            {tableHeaders.map((el, i) => (
+              <th key={i}>{el}</th>
+            ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map(({ title, enrolled, model, status }, i) => (
+              <UserInfoCard
                 key={i}
-                title={title}
-                date={date}
-                time={time}
-                isLive={isLive}
-                color={color}
+                num={i}
+                comp={"Teacher"}
+                course={title}
+                enrolled={enrolled}
+                pack={model}
+                course_status={status}
               />
-            )
-          )}
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </Teachers>
+  );
+}
+export function Earnings() {
+  const navigate = useNavigate();
+  const { generalState: { isMobile, userdata }, } = useAuth();
+  const tableHeaders = ["No", "Course Name", "Number Enrolled","Teaching Model", "Status"];
+  const data = [
+    {
+      title: "CyberSecurity",
+      enrolled: 10,
+      date: "Apr 5",
+      model: "cohort",
+      status: "live",
+    },
+    {
+      title: "Branding",
+      enrolled: 15,
+      date: "Apr 5",
+      model: "cohort",
+      status: "Completed",
+    },
+    {
+      title: "UI/UX",
+      enrolled: 19,
+      date: "Apr 5",
+      model: "cohort",
+      status: "live",
+    },
+    {
+      title: "Data Science",
+      enrolled: 8,
+      date: "Apr 5",
+      model: "One-on-One",
+      status: "Completed",
+    },
+  ];
+  function createCourseHandler(e) {
+    navigate("create");
+  }
+  return (
+    <Teachers isMobile={isMobile} userdata={userdata}>
+      <div className={clsx.teachers_profile}>
+        <div className="d-flex flex-wrap justify-content-center justify-content-lg-start" style={{ gap:"1.5rem"}}>
+          <EarningsCard title="Teaching Model" type="COHORT" value="12,923" />
+          <EarningsCard title="Per Course" type="Cybersecurity" value="2,923" />
+          <EarningsCard total={true} value="100,000" />
         </div>
+        <Chart />
       </div>
     </Teachers>
   );
 }
 
 
+export function EarningsCard({title, type, options=[], total, value}){
+  return (
+    <div className="earnings_card">
+      <p className="text">{title}</p> 
+      <div className="card">
+        <div className="card-body">
+          <div>
+            {total ? 
+          <h3>TOTAL</h3>   :
+          <select name="model" id="model" className="form-select w-75">
+            <option defaultValue>{type}</option>
+            <option defaultValue>COHORT</option>
+            <option defaultValue>COHORT</option>
+            <option defaultValue>COHORT</option>
+          </select>
+          }
+          </div>
+          <div className="d-flex align-items-center justify-content-around">
+            <h1 className="earnings_card_total"> <small>$</small>{value}</h1>
+              <i><ChartLogo /></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export function Courses() {
   const {
@@ -866,7 +953,7 @@ export function Courses() {
     })()
   }, []);
   const navigate = useNavigate();
-  const tableHeaders = ["No", "Courses", "Name", "Package", "Rating"];
+  const tableHeaders = ["No", "Courses", "Teaching Model", "Starting Date", "Status"];
   const tableContents = !courses?.length ? [
     {
       name: "Melanie Grutt",
@@ -920,19 +1007,22 @@ export function Courses() {
         </button>
         <table className={clsx.teachers_table}>
           <thead>
+            <tr>
             {tableHeaders.map((el, i) => (
-              <td key={i}>{el}</td>
+              <th key={i}>{el}</th>
             ))}
+            </tr>
           </thead>
           <tbody>
-            {tableContents.map(({ name, package: p, course, rating }, i) => (
+            {tableContents.map(({ name, package: p, course, rating, status }, i) => (
               <UserInfoCard
                 key={i}
-                name={name}
+                // name={name}
                 num={i}
-                comp={"Courses"}
+                comp={"Teacher"}
                 // approveHandler=
-                rating={rating}
+                start_date="1/12/20"
+                course_status={rating}
                 pack={p}
                 course={course}
               />
