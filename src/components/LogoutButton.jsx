@@ -22,9 +22,9 @@ const LogoutButton = () => {
     async function logout(){
         //clear everything
         try{
+            navigate("/")
             const res = await clearCookie();
             console.log(res);
-            navigate("/")
             toast.success("Logout out successfully",{
                 position:"top-right",
                 autoClose: 5000,
