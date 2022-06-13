@@ -31,7 +31,7 @@ import {
     },
   };
   
-  const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', "August", "September", "October", "November", "December"];
+  const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', "Aug", "Sep", "Oct", "Nov", "Dec"];
   
   export const data = {
     labels,
@@ -47,7 +47,7 @@ import {
   
 const Chart = () => {
     return (
-       <Bar options={options} data={data} />
+       <Bar options={options} data={data} width={200} />
   )
 }
 
