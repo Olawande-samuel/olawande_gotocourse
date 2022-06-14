@@ -8,12 +8,13 @@ import Input from '../../components/Input'
 import Password from '../../components/Password'
 import SignInWrapper from '../../components/SignInWrapper';
 import {useAuth} from "../../contexts/Auth";
-import { useCookie } from "../../hooks";
+import { useLocalStorage } from "../../hooks";
 
 
 
 
 
+const KEY = 'gotocourse-userdata';
 const TeacherSignup = () => {
     const {authFunctions: {register},setGeneralState } = useAuth();
   const [loading, setLoading] = useState(false)
@@ -35,7 +36,7 @@ const TeacherSignup = () => {
       }
     })
   }
-  const { saveCookie, removeCookie, isCookie } = useCookie();
+  const { getItem, removeItem } = useLocalStorage();
 
   React.useEffect(() => {
     if (formstate.fullname !== "") {
@@ -63,13 +64,10 @@ const TeacherSignup = () => {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         //successfully done
-        //update the cookie
+        //update the localStorage
         const { data } = response;
-        const key = "gotocourse-userdata";
-        if(isCookie(key)){
-          removeCookie(key);
-        }
-        saveCookie(key, data);
+        removeItem(KEY);
+        getItem(KEY, data);
         setGeneralState((old) => {
           return {
             ...old,

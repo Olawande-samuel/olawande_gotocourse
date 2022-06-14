@@ -9,23 +9,24 @@ import { useAuth } from "../../contexts/Auth";
 import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
-import { useCookie } from "../../hooks";
+import { useLocalStorage } from "../../hooks";
 
 
 
+const KEY = 'gotocourse-userdata';
 const AdminLogin = () => {
   const navigate = useNavigate()
 
   const [loading, setLoading] = useState(false);
   const {authFunctions: {login}, setGeneralState} = useAuth();
-
-  const {saveCookie, removeCookie, isCookie} = useCookie();
+  const {getItem, removeItem} = useLocalStorage();
   const [formstate, setFormstate] = useState({
     email: "",
     password: ""
   })
 
   
+
 
   async function submitHandler(e){
     console.log(e);
@@ -41,13 +42,10 @@ const AdminLogin = () => {
       if(!success) throw new AdvancedError(message, statusCode);
       else {
           const {data: d} = res;
-          const key = 'gotocourse-userdata';
           //before navigating
-          //save some thing to cookie and state
-          if(isCookie(key)){
-            removeCookie(key);
-          }
-          saveCookie(key, d);
+          //save some thing to localStorage and state
+          removeItem(KEY);
+          getItem(KEY, {...d, userType: 'admin'});
           setGeneralState(old => {
             return {
               ...old,
@@ -55,7 +53,6 @@ const AdminLogin = () => {
             }
           })
           navigate("/admin");
-
       }
     }catch(err){
       toast.error(err.message, {

@@ -5,6 +5,8 @@ import { AdvancedError } from "../classes";
 import { baseURL } from "../constants";
 
 
+
+
 export const authFunctions = {
     login: async function (_data, type){
         try{

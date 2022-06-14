@@ -4,13 +4,16 @@ import {toast} from "react-toastify";
 import clsx from "./globalStyles.module.css";
 import {useAuth} from "../contexts/Auth";
 import { AdvancedError } from "../classes";
+import { useLocalStorage } from "../hooks";
 
 
 
 
-
+const KEY = 'gotocourse-userdata';
 const UploadForm = ({isOpen, setIsOpen}) => {
-    const {adminFunctions: {uploadFile}, generalState: {userdata}} = useAuth();
+    const {adminFunctions: {uploadFile}} = useAuth();
+    const {getItem} = useLocalStorage();
+    const value = getItem(KEY);
     const [imageUrl, setImageUrl] = useState(null);
     const [file, setFile] = useState(null);
     const [data, setData] = useState(null);
@@ -21,7 +24,7 @@ const UploadForm = ({isOpen, setIsOpen}) => {
         try{
             const formdata = new FormData();
             formdata.append('file', file, file.name);
-            const res = await uploadFile(formdata, userdata?.token);
+            const res = await uploadFile(formdata, value?.token);
             console.log(res);   
             const {success, message, statusCode} = res;
             if(!success) throw new AdvancedError(message, statusCode);

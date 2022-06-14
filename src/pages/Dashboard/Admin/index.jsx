@@ -15,7 +15,7 @@ import img01 from "../../../images/mentor1.png";
 import img02 from "../../../images/mentor2.png";
 import { GuardedRoute } from "../../../hoc";
 import { AdvancedError } from "../../../classes";
-import {useCookie} from "../../../hooks";
+import {useLocalStorage} from "../../../hooks";
 
 import Input from "../../../components/Input";
 import Loader from "../../../components/Loader";
@@ -24,9 +24,10 @@ import UploadForm from "../../../components/UploadForm";
 import img from "../../../images/coding.png";
 import { Rating } from "react-simple-star-rating";
 
-const key = "gotocourse-userdata";
 
 
+
+const KEY = "gotocourse-userdata";
 function CategoryInterface({name, bannerImg, description}){
   return (
     <Grid item xs={12} sm={12} md={6} lg={6}>
@@ -48,7 +49,9 @@ export function Category(){
   const navigate = useNavigate();
   const [categories, setCategories] = useState([])
   const [open, setOpen] = useState(false);
-  const {adminFunctions: {addCategory, fetchCategories}, generalState: {userdata}} = useAuth();
+  const {adminFunctions: {addCategory, fetchCategories}} = useAuth();
+  const {getItem} = useLocalStorage();
+  const userdata = getItem(KEY)
   useEffect(() => {
     (async () => {
       try{
@@ -244,7 +247,9 @@ const Syllabus = ({title, description}) => {
 
 
 export function CreateCourseCategory(){
-  const {generalState: {userdata}, adminFunctions: {addCategory}} = useAuth();
+  const {adminFunctions: {addCategory}} = useAuth();
+  const {getItem} = useLocalStorage();
+  const userdata = getItem(KEY);
   const [open, setOpen] = useState(false);
   const [showCareerModal, setShowCareerModal] = useState(false);
   const [showNicheModal, setShowNicheModal] = useState(false);
@@ -527,28 +532,27 @@ export function CreateCourseCategory(){
 
 
 export function Dashboard() {
-  const { updateCookie, fetchCookie } = useCookie();
-  const {
-    generalState: { userdata },
-    setGeneralState,
-    generalState,
-    adminFunctions: { fetchProfile },
-  } = useAuth();
+  const { getItem, updateItem } = useLocalStorage();
+  const {adminFunctions: { fetchProfile }} = useAuth();
+  let userdata = getItem(KEY);
   const navigate = useNavigate();
   useEffect(() => {
-    const token = fetchCookie(key)
+    const token = userdata?.token;
 
       async function get(){
         try {
           let { data, message, success, statusCode } = await fetchProfile(
-            token?.token
+            token
           );
           if (success) {
-            updateCookie("gotocourse-userdata", data);
-            setGeneralState({...generalState, userdata: {...generalState.userdata, ...data}})
+            let newValue = {
+              ...userdata,
+              ...data
+            }
+            userdata = updateItem(KEY, newValue);
           } else throw new AdvancedError(message, statusCode);
-          } catch (error) {
-          toast.error(error.message, {
+          } catch (err) {
+          toast.error(err.message, {
             position: "top-right",
             autoClose: 4000,
             hideProgressBar: true,
@@ -822,19 +826,19 @@ export function UserInfoCard({
 }
 
 export function Teachers() {
-  const { fetchCookie} = useCookie();
+  const { getItem } = useLocalStorage();
+  let userdata = getItem(KEY);
   const navigate = useNavigate();
   const [teachers, setTeachers] = useState([]);
   const {
-    adminTeacherFunctions: { fetch },
-    generalState: { userdata },
+    adminTeacherFunctions: { fetch }
   } = useAuth();
   useEffect(() => {
     (async () => {
       try {
-        const token = fetchCookie(key)
+        const token = userdata?.token;
         console.log(token)
-        const res = await fetch(token.token);
+        const res = await fetch(token);
         console.log(res);
         const { message, success, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
@@ -865,7 +869,7 @@ export function Teachers() {
         });
       }
     })();
-  }, []);
+  }, [teachers]);
   const tableHeaders = ["No", "Name", "Email", "Access Pledre", "Verified"];
 
   function approveHandler(e, email) {
@@ -910,8 +914,10 @@ export function Teachers() {
 }
 
 export function Courses() {
-  const {generalState: {loading, userdata},  setGeneralState, adminFunctions: { fetchCourses} } = useAuth();
-const [courseList, setCourseList] = useState([])
+  const {adminFunctions: { fetchCourses} } = useAuth();
+  const {getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
+  const [courseList, setCourseList] = useState([])
   const tableHeaders = [
     "No",
     "Course",
@@ -975,7 +981,6 @@ const [courseList, setCourseList] = useState([])
   }
   useEffect(()=>{
         getCourses()
-
   },[userdata])
   return (
     <Admin header={"Courses"}>
@@ -1100,17 +1105,17 @@ export function Fees() {
 
 export function Student() {
   const [studentList, setStudentList] = useState([]);
+  const {getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
 
-  const { adminStudentFunctions: { fetch, verify, verify_pledre }, generalState: { userdata, loading }, setGeneralState, } = useAuth();
-  const {fetchCookie} = useCookie()
+  const { adminStudentFunctions: { fetch, verify, verify_pledre }, generalState: { loading }, setGeneralState, } = useAuth();
 
   async function fetchStudents(){
-    const token = fetchCookie(key)
     if (userdata) {
       console.log("2",userdata)
       
         try {
-          const res = await fetch(token.token); 
+          const res = await fetch(userdata?.token); 
           console.log(res);
           const { message, success, statusCode } = res;
           if (!success) throw new AdvancedError(message, statusCode);
@@ -1313,11 +1318,10 @@ export function Student() {
 
 export function Edit() {
   const {
-    generalState: { isMobile, userdata },
-    setGeneralState,
     adminFunctions: { updateAvatar, updateProfile },
   } = useAuth();
-  const { updateCookie, isCookie, saveCookie } = useCookie();
+  const {updateItem, getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
   const [imageUrl, setImageUrl] = useState(null);
   const [isUplaoding, setIsUploading] = useState(false);
   const [file, setFile] = useState(null);
@@ -1331,17 +1335,17 @@ export function Edit() {
     category: userdata?.category ?? "",
   });
   useEffect(() => {
-    if (userdata) {
-      setFormstate({
-        firstName: userdata.firstName,
-        lastName: userdata.lastName,
-        bio: userdata.bio,
-        location: userdata.location,
-        phoneNumber: userdata.phoneNumber,
-        work: userdata.work,
-        categoty: userdata.category,
-      });
-    }
+    // if (userdata) {
+    //   setFormstate({
+    //     firstName: userdata.firstName,
+    //     lastName: userdata.lastName,
+    //     bio: userdata.bio,
+    //     location: userdata.location,
+    //     phoneNumber: userdata.phoneNumber,
+    //     work: userdata.work,
+    //     categoty: userdata.category,
+    //   });
+    // }
   }, [userdata]);
 
   async function submitHandler(e) {
@@ -1362,17 +1366,11 @@ export function Edit() {
       const { success, message, statusCode, data } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        if (isCookie(key)) {
-          updateCookie(key, data);
-        } else {
-          saveCookie(key, data);
+        const newItem = {
+          ...userdata,
+          ...data
         }
-        setGeneralState((old) => {
-          return {
-            ...old,
-            userdata: { ...old.userdata, ...data },
-          };
-        });
+        userdata = updateItem(KEY, newItem);
         toast.success(message, {
           position: "top-right",
           autoClose: 4000,
@@ -1383,7 +1381,6 @@ export function Edit() {
           progress: undefined,
         });
       }
-      // setTimeout(() => {}, 2000);
     } catch (err) {
       toast.error(err.message, {
         position: "top-right",
@@ -1432,17 +1429,12 @@ export function Edit() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         const { data } = res;
-        if (isCookie(key)) {
-          updateCookie(key, data);
-        } else {
-          saveCookie(key, data);
+        console.log(data);
+        const newValue = {
+          ...userdata,
+          ...data
         }
-        setGeneralState((old) => {
-          return {
-            ...old,
-            userdata: { ...old.userdata, ...data },
-          };
-        });
+        userdata = updateItem(KEY, newValue);
         toast.success(message, {
           position: "top-right",
           autoClose: 4000,
