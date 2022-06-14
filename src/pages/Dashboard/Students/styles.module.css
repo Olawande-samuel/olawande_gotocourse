@@ -52,7 +52,7 @@
 .students_profile {
     background-color:var(--white);
     height: 80vh;
-    padding: 40px;
+    padding: min(1rem, 40px);
     border-radius: 10px;
     width: 100%;
     overflow-y: scroll;
@@ -157,7 +157,7 @@
 }
 
 .edit__profile {
-    max-width: 80%
+    width: min(100% - .8rem, 800px)
 }
 
 .edit__profile h2 {
@@ -261,9 +261,31 @@
     border: none;
 }
 
+
+.students_wishlist {
+    display: grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap: 1rem;
+}
+
+
+
+@media screen and (max-width:997px){
+  .students_wishlist {
+
+    grid-template-columns: repeat(2, 1fr);
+    /* padding-block: 4.375rem; */
+}
+}
 @media screen and (max-width: 767px){
     .students_topbar {
         width: 100%;
        
     }
+}
+@media screen and (max-width:670px){
+  .students_wishlist {
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+    /* padding-block: 4.375rem; */
+}
 }

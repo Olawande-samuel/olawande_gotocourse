@@ -1677,3 +1677,10 @@ line-height: 16px;
 .earnings_card .card-body .earnings_card_total small {
   font-size: 18px;
 }
+
+.wishlist_cards {
+  display: grid;
+  grid-template-columns:repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: 1rem;
+  row-gap: 1.5rem;
+}
