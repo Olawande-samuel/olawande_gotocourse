@@ -875,7 +875,7 @@ export function Earnings() {
   return (
     <Teachers isMobile={isMobile} userdata={userdata}>
       <div className={clsx.teachers_profile}>
-        <div className="d-flex flex-wrap justify-content-center justify-content-lg-start" style={{ gap:"1.5rem"}}>
+        <div className="d-flex flex-wrap justify-content-center justify-content-md-start" style={{ gap:"1.5rem"}}>
           <EarningsCard title="Teaching Model" type="COHORT" value="12,923" />
           <EarningsCard title="Per Course" type="Cybersecurity" value="2,923" />
           <EarningsCard total={true} value="100,000" />
