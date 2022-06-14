@@ -1,9 +1,9 @@
 import {useEffect, useState,useRef} from "react";
-import {MdMessage} from "react-icons/md";
+import {MdMessage, MdHistory} from "react-icons/md";
 import {AiOutlineClose} from "react-icons/ai";
 import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash, IoIosHelpBuoy} from "react-icons/io";
 import {useNavigate, useLocation, NavLink} from "react-router-dom";
-import {FiGift, FiSend} from "react-icons/fi";
+import {FiGift, FiSend, FiBookOpen} from "react-icons/fi";
 import {motion} from "framer-motion"
 
 
@@ -74,12 +74,17 @@ const Sidebar = ({isMobile}) => {
             title: "My Profile"
         },
         {
-            icon: FiGift,
+            icon: FiBookOpen,
             path: "courses",
             title: "My Courses"
         },
         {
-            icon: MdMessage,
+            icon: FiGift,
+            path: "wishlist",
+            title: "Wishlist"
+        },
+        {
+            icon: MdHistory,
             path: "history",
             title: "History"
         },

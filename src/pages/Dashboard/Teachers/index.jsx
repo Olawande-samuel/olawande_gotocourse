@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Modal, Box, Typography } from "@mui/material";
 import { AiOutlineMenu } from "react-icons/ai";
-
+import {FiFilter} from "react-icons/fi"
 import { Sidebar, Searchbar } from "../components";
 import clsx from "./styles.module.css";
 import { colors } from "../../../constants";
@@ -17,7 +17,8 @@ import { UserInfoCard } from "../Admin";
 import { useCookie } from "../../../hooks";
 import {useSyllabus} from "../../../contexts/Syllabus"; 
 import { Chart as ChartLogo} from "../../../images/components/svgs";
-import Chart from "../../../components/Chart";
+import MyChart from "../../../components/Chart";
+
 
 
 const KEY = "gotocourse-userdata"
@@ -361,29 +362,32 @@ export function CreateCourse() {
               }
             </div>
 
-            <button
-              className="btn btn-primary my-3"
-              style={{ backgroundColor: "var(--theme-blue)" }}
-              type="button"
-              onClick={openModal}
-            >
-              Add Syllabus
-            </button>
+                <button
+                  className="btn btn-primary my-3"
+                  style={{ backgroundColor: "var(--theme-blue)" }}
+                  type="button"
+                  onClick={openModal}
+                >
+                  Add Syllabus
+                </button>
 
-            {loading ? (
-              <button className="button button-lg log_btn w-100 mt-3">
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </button>
-            ) : (
-              <button
-                className="button button-lg log_btn w-100 mt-3"
-                type="submit"
-              >
-                Save
-              </button>
-            )}
+              <div className="d-flex flex-wrap mt-3" style={{gap:"1rem "}}>
+                {loading ? (
+                  <button className="button log_btn" style={{padding:"10px 44px", borderRadius:"8px", fontSize:"16px", fontWeight:"600"}}>
+                    <div className="spinner-border" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  </button>
+                ) : (
+                  <button
+                    className="button log_btn" style={{padding:"10px 44px", borderRadius:"8px", fontSize:"16px", fontWeight:"600"}}
+                    type="submit"
+                  >
+                    Save
+                  </button>
+                )}
+                <button className="btn btn-outline" style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)", padding:"10px 44px", borderRadius:"8px", fontSize:"16px", fontWeight:"600"}}>Preview</button>
+              </div>
           </form>
         </div>
       </div>
@@ -828,56 +832,66 @@ export function Classes() {
   );
 }
 export function Earnings() {
-  const navigate = useNavigate();
-  const { generalState: { isMobile, userdata }, } = useAuth();
-  const tableHeaders = ["No", "Course Name", "Number Enrolled","Teaching Model", "Status"];
   const data = [
     {
-      title: "CyberSecurity",
-      enrolled: 10,
-      date: "Apr 5",
-      model: "cohort",
-      status: "live",
+      id:1,
+      title: "Day"
     },
     {
-      title: "Branding",
-      enrolled: 15,
-      date: "Apr 5",
-      model: "cohort",
-      status: "Completed",
+      id:2,
+      title: "Week"
     },
     {
-      title: "UI/UX",
-      enrolled: 19,
-      date: "Apr 5",
-      model: "cohort",
-      status: "live",
+      id:3,
+      title: "1 month" 
     },
     {
-      title: "Data Science",
-      enrolled: 8,
-      date: "Apr 5",
-      model: "One-on-One",
-      status: "Completed",
+      id:4,
+      title: "3 months"
     },
-  ];
-  function createCourseHandler(e) {
-    navigate("create");
-  }
+    {
+      id:5,
+      title: "6 months"
+    },
+    {
+      id:6,
+      title: "1 year"
+    },
+  ]
+  const { generalState: { isMobile, userdata }, } = useAuth();
   return (
     <Teachers isMobile={isMobile} userdata={userdata}>
       <div className={clsx.teachers_profile}>
+        <div className="d-flex align-items-center mt-3 mb-5" style={{gap:"1rem"}}>
+          <i><FiFilter /></i>
+          <span>Filter by: </span>
+          {data.map(date=>(
+            <FilterButton  title={date.title} />
+          ))}
+        </div>
         <div className="d-flex flex-wrap justify-content-center justify-content-md-start" style={{ gap:"1.5rem"}}>
           <EarningsCard title="Teaching Model" type="COHORT" value="12,923" />
           <EarningsCard title="Per Course" type="Cybersecurity" value="2,923" />
           <EarningsCard total={true} value="100,000" />
         </div>
-        <Chart />
+        <MyChart />
       </div>
     </Teachers>
   );
 }
 
+function FilterButton({title}){
+  return (
+    <button style={{
+        background:"#FFFFFF",
+       border:"1px solid #9F9F9F",
+       borderRadius:"10px",
+       padding:"3px 13px"
+    }}
+    value={title}
+    >{title}</button>
+  )
+}
 
 export function EarningsCard({title, type, options=[], total, value}){
   return (
@@ -959,25 +973,25 @@ export function Courses() {
       name: "Melanie Grutt",
       course: "Cybersecurity",
       package: "Cohort",
-      rating: "Bronze",
+      rating: "Approved",
     },
     {
       name: "Keira Danlop",
       course: "UI/UX",
       package: "Cohort",
-      rating: "Silver",
+      rating: "Pending",
     },
     {
       name: "Diop Grutt",
       course: "HTML",
       package: "One on One",
-      rating: "Gold",
+      rating: "Approved",
     },
     {
       name: "Diop Grutt",
       course: "Data Analytics",
       package: "Self paced",
-      rating: "Diamond",
+      rating: "Not Approved",
     },
   ] : courses;
 

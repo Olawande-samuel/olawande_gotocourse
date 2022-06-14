@@ -5,6 +5,10 @@ import { ToastContainer, toast } from "react-toastify";
 import {motion} from "framer-motion"
 import {AiOutlineMenu} from "react-icons/ai"
 import {Rating} from 'react-simple-star-rating'
+
+
+import trello from "../../../images/trello.png"
+import {Product} from "../../../images/components/svgs"
 import Loader from "../../../components/Loader"
 import { Sidebar, Searchbar } from "../components";
 import clsx from "./styles.module.css";
@@ -369,6 +373,45 @@ export function Classes(){
                 </div>
             </div>
         </Students>
+    )
+}
+export function Wishlist(){
+    const {generalState: {isMobile, userdata}} = useAuth();
+    
+    return ( 
+        <Students isMobile={isMobile} userdata={userdata}>               
+            <div className={clsx.students_profile}>
+                <header className="mb-4">
+                    <h3>My wishlist</h3>
+                </header>
+                <div className={clsx.classes}>
+                    <div className={clsx.students_wishlist}>
+                        <WishCard />
+                        <WishCard />
+                        <WishCard />
+                        <WishCard />
+                        <WishCard />
+                    </div>
+                </div>
+            </div>
+        </Students>
+    )
+}
+
+function WishCard(){
+    return(
+        <div className="card wish">
+            <div className="card-body wish-card-body">
+                <div style={{width:"50px", height:"50px", borderRadius:"50%"}}>
+                    <img src={trello} alt="icon" className="img-fluid" />
+                </div>
+            <h5 className="fw-bold">Project Management</h5>
+            <p className="">the process of leading the work of a team to achieve all project goals within the given constraints.</p>
+            <div>
+                <button className="btn btn-plain" style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)", fontWeight:"bold"}}>Register today</button>
+            </div>
+            </div>
+        </div>
     )
 }
 
