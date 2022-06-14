@@ -839,7 +839,6 @@ export function Classes() {
 
 export function Earnings() {
 
-  const { generalState: { isMobile }, } = useAuth();
   const {getItem} = useLocalStorage();
   let userdata = getItem(KEY);
   const data = [
@@ -868,7 +867,7 @@ export function Earnings() {
       title: "1 year"
     },
   ]
-  const { generalState: { isMobile, userdata }, } = useAuth();
+  const { generalState: { isMobile }, } = useAuth();
   return (
     <Teachers isMobile={isMobile} userdata={userdata}>
       <div className={clsx.teachers_profile}>
