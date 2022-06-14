@@ -8,14 +8,15 @@ import Input from '../../components/Input'
 import Password from '../../components/Password'
 import SignInWrapper from '../../components/SignInWrapper';
 import {useAuth} from "../../contexts/Auth";
-import { useCookie } from "../../hooks";
+import { useLocalStorage } from "../../hooks";
 
 
 
 
+const KEY = 'gotocourse-userdata'
 const AdminSignup = () => {
   const navigate = useNavigate();
-  const { saveCookie, isCookie, removeCookie } = useCookie();
+  const {getItem, removeItem} = useLocalStorage();
   const {
     authFunctions: { register },
     setGeneralState,
@@ -26,7 +27,6 @@ const AdminSignup = () => {
     email: "",
     password: "",
     retype_password: "",
-    type:"admin"
   })
 
   function changeHandler(e){
@@ -52,18 +52,13 @@ const AdminSignup = () => {
       if(!success) throw new AdvancedError(message, statusCode);
       else {
         const {data} = res;
-        //do some stuffs like clear the cookie gotocourse-userdata gotocourse-usertype
-        if(isCookie('gotocourse-userdata') || isCookie('gotocourse-usertype')){
-          removeCookie('gotocourse-userdata');
-          removeCookie('gotocourse-usertype');
-        }
-        saveCookie("gotocourse-userdata", data);
-        saveCookie("gotocourse-usertype", data.userType);
+        //do some stuffs like clear the localStorage
+        removeItem(KEY);
+        getItem(KEY, {...data, userType: 'admin'});
         setGeneralState((old) => {
           return {
             ...old,
             notification: message,
-            userdata: data
           };
         });
         navigate("/admin");

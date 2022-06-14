@@ -5,16 +5,17 @@ import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
 
 
-import { useCookie } from "../../hooks";
+import { useLocalStorage } from "../../hooks";
 import { useAuth } from "../../contexts/Auth";
 import { ToastContainer, toast } from "react-toastify";
 import { AdvancedError } from "../../classes";
 
 
+const KEY = 'gotocourse-userdata';
 const Login = () => {
   const navigate = useNavigate()
   const {authFunctions: {login}, setGeneralState} = useAuth();
-  const {saveCookie, removeCookie, isCookie} = useCookie();
+  const {getItem, removeItem} = useLocalStorage();
 
   const [data, setData] = useState({
     email: "",
@@ -39,7 +40,6 @@ const Login = () => {
     if(data.email.trim() === "" || data.password.trim() === "") return;
     setLoading(true);
     try {
-      // if(data.userType.trim() === "") throw new AdvancedError("Missing user type", 0);
       const response = await login(data, "user");
 
       console.log(response)
@@ -47,14 +47,11 @@ const Login = () => {
       
       if(success) {
         const {data: d} = response;
-        const key = 'gotocourse-userdata';
 
         //before navigating
-        //save some thing to cookie and state
-        if(isCookie(key)){
-          removeCookie(key);
-        }
-        saveCookie(key, d);
+        //save some thing to localStorage and state
+        removeItem(KEY);
+        getItem(KEY, d);
         setGeneralState(old => {
           return {
             ...old,

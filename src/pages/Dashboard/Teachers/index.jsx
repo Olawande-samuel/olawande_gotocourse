@@ -14,7 +14,7 @@ import { GuardedRoute } from "../../../hoc";
 import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
 import { UserInfoCard } from "../Admin";
-import { useCookie } from "../../../hooks";
+import { useLocalStorage } from "../../../hooks";
 import {useSyllabus} from "../../../contexts/Syllabus"; 
 import { Chart as ChartLogo} from "../../../images/components/svgs";
 import MyChart from "../../../components/Chart";
@@ -24,7 +24,7 @@ import MyChart from "../../../components/Chart";
 const KEY = "gotocourse-userdata"
 
 export function Profile() {
-  const { generalState: { isMobile, notification, userdata }, setGeneralState, teacherFunctions: { fetchProfile }, } = useAuth();
+  const { generalState: { isMobile, notification }, setGeneralState, teacherFunctions: { fetchProfile }, } = useAuth();
   const [userInfo, setUserInfo]= useState([
     {
       title: "Brief Introduction",
@@ -43,7 +43,8 @@ export function Profile() {
       content: "Cybersecurity, UX, Data Analysis",
     },
   ])
-  const { saveCookie, updateCookie, isCookie } = useCookie();
+  const { updateItem, getItem } = useLocalStorage();
+  let userdata = getItem(KEY);
   const navigate = useNavigate();
   useEffect(() => {
     setTimeout(() => {
@@ -61,17 +62,16 @@ export function Profile() {
       async function get() {
         try {
           let data = await fetchProfile(userdata?.token);
-          const key = "gotocourse-userdata";
           const {success, message, statusCode} = data;
           if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
           else {
             const {data: d} = data;
             console.log(d);
-            if(isCookie(key)){
-              updateCookie(key, d);
-            }else {
-              saveCookie(key, d);
+            const newValue = {
+              ...userdata,
+              ...d
             }
+            userdata = updateItem(KEY, newValue);
             setGeneralState((old) => {
               return {
                 ...old,
@@ -160,10 +160,12 @@ const Syllabus = ({title, description}) => {
 
 export function CreateCourse() {
   const {
-    generalState: { isMobile, notification, userdata },
-    setGeneralState,
+    // generalState: { isMobile, notification },
+    // setGeneralState,
     teacherFunctions: { addCourse },
   } = useAuth();
+  const {getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
   const {syllabuses, addtoSyllabus} = useSyllabus();
   const [formstate, setFormstate] = useState({
     name: "",
@@ -505,8 +507,9 @@ function AddSyllabus({ open, handleClose, addSyllabus }) {
 }
 
 export function Edit() {
-  const { generalState: { isMobile, userdata }, setGeneralState, teacherFunctions: { updateAvatar, updateProfile }, } = useAuth();
-  const {fetchCookie} = useCookie()
+  const { generalState: {  }, setGeneralState, teacherFunctions: { updateAvatar, updateProfile }, } = useAuth();
+  const {updateItem, getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
   const navigate = useNavigate();
   const [imageUrl, setImageUrl] = useState(null);
   const [isUplaoding, setIsUploading] = useState(false);
@@ -525,8 +528,7 @@ export function Edit() {
   
   useEffect(() => {
     // to prevent data from disappearing on page reload
-    const previousData = fetchCookie(KEY)
-    setFormstate({...formstate, ...previousData})
+    // setFormstate({...formstate, ...userdata})
   }, [])
 
 
@@ -542,7 +544,7 @@ export function Edit() {
         formstate.location === "" ||
         formstate.profession === ""
       )
-        throw new AdvancedError("All fields are required", 0);
+      throw new AdvancedError("All fields are required", 0);
       //submit updated profile
       const res = await updateProfile(formstate, userdata.token);
       const { success, message, statusCode } = res;
@@ -550,10 +552,14 @@ export function Edit() {
       else {
         const {data} = res;
         console.log(data);
+        const newValue = {
+          ...userdata,
+          ...data
+        }
+        userdata = updateItem(KEY, newValue);
         setGeneralState(old => {
             return {
                 ...old,
-                userdata: data,
                 notification: message
             }
         })
@@ -611,16 +617,12 @@ export function Edit() {
         const {profileImg} = data;
         console.log(data);
         //updated successfully
-        setGeneralState(old => {
-            return {
-                ...old,
-                userdata: {
-                    ...old.userdata,
-                    profileImg
-                }
-            }
-        })
-        //set the cookie here
+        //set the localStorage here
+        const newValue = {
+          ...userdata,
+          profileImg
+        }
+        userdata = updateItem(KEY, newValue);
         
         setImageUrl(_ => null);
         setFile(_ => null);
@@ -769,7 +771,9 @@ export function Edit() {
 
 export function Classes() {
   const navigate = useNavigate();
-  const { generalState: { isMobile, userdata }, } = useAuth();
+  const { generalState: { isMobile }, } = useAuth();
+  const {getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
   const tableHeaders = ["No", "Course Name", "Number Enrolled","Teaching Model", "Status"];
   const data = [
     {
@@ -831,7 +835,13 @@ export function Classes() {
     </Teachers>
   );
 }
+
+
 export function Earnings() {
+
+  const { generalState: { isMobile }, } = useAuth();
+  const {getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
   const data = [
     {
       id:1,
@@ -922,10 +932,11 @@ export function EarningsCard({title, type, options=[], total, value}){
 
 export function Courses() {
   const {
-    generalState: { isMobile, userdata },
+    generalState: { isMobile },
     teacherFunctions: { fetchCourse, fetchApplications },
   } = useAuth();
-  const { fetchCookie } = useCookie();
+  const {getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
   const [courses, setCourses] = useState([]);
 
   console.log(userdata);

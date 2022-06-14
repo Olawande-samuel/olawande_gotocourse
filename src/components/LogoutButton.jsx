@@ -3,7 +3,7 @@ import {motion} from "framer-motion";
 import {useNavigate} from "react-router-dom"
 
 import clsx from "./globalStyles.module.css";
-import  {useCookie} from "../hooks";
+import  {useLocalStorage} from "../hooks";
 
 
 
@@ -11,7 +11,7 @@ import  {useCookie} from "../hooks";
 
 const LogoutButton = () => {
     const navigate = useNavigate()
-    const {clearCookie} = useCookie();
+    const {removeItem} = useLocalStorage();
 
 
     function mouseOverHandler(e){
@@ -22,9 +22,9 @@ const LogoutButton = () => {
     async function logout(){
         //clear everything
         try{
-            navigate("/")
-            const res = await clearCookie();
-            console.log(res);
+            const key = 'gotocourse-userdata';
+            removeItem(key);
+            navigate("/login");
             toast.success("Logout out successfully",{
                 position:"top-right",
                 autoClose: 5000,
