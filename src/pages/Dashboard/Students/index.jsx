@@ -15,19 +15,19 @@ import {GuardedRoute} from "../../../hoc";
 import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
 import { UserInfoCard } from "../Admin";
-import { useCookie } from "../../../hooks";
-import useLocalStorage from "../../../hooks/useLocalStorage";
-
-const KEY = "gotocourse-userdata"
+import { useLocalStorage } from "../../../hooks";
 
 
+
+const KEY = 'gotocourse-userdata';
 export function Profile(){
-    const {generalState: {isMobile, notification, userdata}, generalState,
+    const {generalState: {isMobile, notification},
     setGeneralState, 
     studentFunctions: {fetchProfile}} = useAuth();
 
 
-    const {updateCookie, isCookie, saveCookie, fetchCookie} = useCookie();
+    const {updateItem, getItem} = useLocalStorage();
+    let userdata = getItem(KEY);
     const navigate = useNavigate();
     useEffect(() => {
         setTimeout(() => {
@@ -40,29 +40,23 @@ export function Profile(){
         }, 5000)
     }, [])
 
-    console.log(generalState);
 
     useEffect(() => {
-        const token = fetchCookie(KEY)
         if(userdata){
+            const token = userdata.token;
             (async () => {
                 try{
-                    const res = await fetchProfile(token?.token);
+                    const res = await fetchProfile(token);
                     const {success, message, statusCode} = res;
                     if(!success ) throw new AdvancedError(message, statusCode);
                     else {
                         const {data} = res;
                         console.log(data);
-
-                        setGeneralState({...generalState, userdata:{...generalState.userdata, ...data},
-                        });
-
-                        const key = 'gotocourse-userdata';
-                        if(isCookie(key)){
-                            updateCookie(key, data);
-                        }else {
-                            saveCookie(key, data);
+                        const newValue = {
+                            ...userdata,
+                            ...data
                         }
+                        userdata = updateItem(KEY, newValue);
                     }
                 }catch(err){
                     toast.error(err.message, {
@@ -108,8 +102,9 @@ export function Profile(){
 
 export function Edit(){
     const navigate = useNavigate();
-    const {updateCookie, fetchCookie, isCookie,saveCookie} = useCookie();
-    const {generalState: {isMobile, userdata}, studentFunctions: {updateAvatar, fetchProfile, updateProfile}, setGeneralState} = useAuth();
+    const {updateItem, getItem} = useLocalStorage();
+    let userdata = getItem(KEY);
+    const {generalState: {}, studentFunctions: {updateAvatar, fetchProfile, updateProfile}, setGeneralState} = useAuth();
 
     const [imageUrl, setImageUrl] = useState(null);
     const [isUplaoding, setIsUploading] = useState(false);
@@ -129,9 +124,8 @@ export function Edit(){
     
 
     useEffect(() => {
-            // to prevent data from disappearing on page reload
-        const previousData = fetchCookie(KEY)
-        setFormstate({...formstate, ...previousData})
+        // to prevent data from disappearing on page reload
+        // setFormstate({...formstate, ...userdata})
     }, [])
 
     async function submitHandler(e){
@@ -148,10 +142,14 @@ export function Edit(){
             else {
                 const {data} = res;
                 console.log(data);
+                const newValue = {
+                    ...userdata,
+                    ...data
+                };
+                userdata = updateItem(KEY, newValue);
                 setGeneralState(old => {
                     return {
                         ...old,
-                        userdata: data,
                         notification: message
                     }
                 })
@@ -209,21 +207,12 @@ export function Edit(){
                 const {profileImg} = data;
                 console.log(data);
                 //updated successfully
-                setGeneralState(old => {
-                    return {
-                        ...old,
-                        userdata: {
-                            ...old.userdata,
-                            profileImg
-                        }
-                    }
-                })
-                //set the cookie here
-                if (isCookie(KEY)) {
-                    updateCookie(KEY, data);
-                  } else {
-                    saveCookie(KEY, data);
+                //set the localStorage here
+                const newValue = {
+                    ...userdata,
+                    profileImg
                 }
+                userdata = updateItem(KEY, newValue);
                   
                 setImageUrl(_ => null);
                 setFile(_ => null);
@@ -337,7 +326,9 @@ export function Edit(){
 
 
 export function Classes(){
-    const {generalState: {isMobile, userdata}} = useAuth();
+    const {generalState: {isMobile}} = useAuth();
+    const {getItem} = useLocalStorage();
+    let userdata = getItem(KEY);
     const data = [
         {
             title: "CyberSecurity",
@@ -374,7 +365,9 @@ export function Classes(){
 
 
 export function Courses(){
-    const {generalState: {isMobile, userdata}, studentFunctions: {fetchCourses}} = useAuth();
+    const {generalState: {isMobile}, studentFunctions: {fetchCourses}} = useAuth();
+    const {getItem} = useLocalStorage();
+    let userdata = getItem(KEY);
     const [courses, setCourses] = useState([]);
     useEffect(() => {
         (async() => {
@@ -483,7 +476,9 @@ export function Courses(){
     )
 }
 export function History(){
-    const {generalState: {isMobile, userdata,},generalState, setGeneralState, studentFunctions: {fetchEnrollments}} = useAuth();
+    const {generalState: {isMobile},generalState, setGeneralState, studentFunctions: {fetchEnrollments}} = useAuth();
+    const {getItem} = useLocalStorage();
+    let userdata = getItem(KEY);
     const [courses, setCourses] = useState([]);
     useEffect(() => {
         if(userdata){
@@ -521,7 +516,9 @@ export function History(){
                 }
             })()
         }
-    }, [userdata])
+    }, [])
+
+    
     const tableHeaders = ["No", "Courses", "Status", "Date", "Amount Paid"]
     const tableContents = [
         {
@@ -616,10 +613,10 @@ function ClassesCard({numberOfLessons, title, date, time, isLive, color}){
 }
 
 
-const Students = ({children, isMobile, userdata, notification}) => {
+const Students = ({children, isMobile, notification, userdata}) => {
     const {generalState: {showSidebar, loading}, generalState, setGeneralState} = useAuth();
     useEffect(() => {
-        console.log("Students component is mounted")
+        console.log("Students component is mounted", userdata);
         if(notification){
             toast.success(notification, {
                 position: "top-right",

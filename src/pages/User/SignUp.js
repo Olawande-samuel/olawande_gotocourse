@@ -6,8 +6,12 @@ import SignInWrapper from "../../components/SignInWrapper";
 import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../contexts/Auth";
 import { AdvancedError } from "../../classes";
-import { useCookie } from "../../hooks";
+import { useLocalStorage } from "../../hooks";
 
+
+
+
+const KEY = 'gotocourse-userdata';
 const SignUp = () => {
   const [data, setData] = useState({
     firstName: "",
@@ -30,7 +34,7 @@ const SignUp = () => {
 
   console.log(data);
 
-  const { saveCookie, isCookie, removeCookie } = useCookie();
+  const { getItem, removeItem } = useLocalStorage();
   const {
     authFunctions: { register },
     setGeneralState,
@@ -61,13 +65,10 @@ const SignUp = () => {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         //successfully done
-        //update the cookie
+        //update the localStorage
         const { data } = response;
-        const key = 'gotocourse-userdata';
-        if(isCookie(key)){
-          removeCookie(key);
-        }
-        saveCookie(key, data);
+        removeItem(KEY);
+        getItem(KEY, data);
         setGeneralState((old) => {
           return {
             ...old,

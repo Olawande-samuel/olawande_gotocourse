@@ -1,32 +1,41 @@
-import {useState, useEffect} from 'react';
+import {useEffect} from 'react';
 
 
 
 
-const useLocalStorage = (key, defaultValue) => {
-    const [value, setValue] = useState(null);
-    function getItem(){
+const useLocalStorage = () => {
+    function getItem(key, defaultValue) {
+        //first we get the item
         let item = localStorage.getItem(key);
         if(!item) {
-            //set the item;
+            //if it doesn't exist then we set the item;
             localStorage.setItem(key, JSON.stringify(defaultValue))
         }
-
-        //then get the item
-        item = localStorage.getItem(key);
-
-        return JSON.parse(item);
+        return item ? JSON.parse(item) : defaultValue
     }
 
     function removeItem(key){
         localStorage.removeItem(key);
     }
 
-    useEffect(() => {
-        setValue(_ => getItem());
-    }, [value])
 
-    return {value, removeItem};
+    function updateItem(key, newValue){
+        //first we delete the old item
+        removeItem(key);
+
+        //then we set the item
+        localStorage.setItem(key, JSON.stringify(newValue))
+
+        return newValue;
+    }
+    
+
+    useEffect(() => {
+        console.log("Rendering");
+        return () => console.log("Rerendering");
+    }, [])
+
+    return {removeItem, updateItem, getItem};
 }
 
 
