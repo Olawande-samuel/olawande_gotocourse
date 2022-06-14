@@ -1,54 +1,61 @@
-import React from 'react'
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend,
-  } from 'chart.js';
-  import { Bar } from 'react-chartjs-2';
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend
-  );
+import React, {useState} from 'react'
+import Chart from "react-apexcharts"
   
-  export const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
+  
+  
+  
+  
+const MyChart = () => {
+  const [options, setOptions] = useState({
+    options: {
+        chart: {
+          id: "basic-bar"
+        },
+        xaxis: {
+          categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          title: {
+            text: 'Timeline',
+          },
+        },
+        yaxis: {
+            categories: [1000,5000, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000],
+            title: {
+                text: 'Earnings (USD)',
+              },
+        },
+        legend: {
+            position: "top",
+            horizontalAlign: "center"
+        },
+        colors: ["#FF5B5A"],
+        plotOptions: {
+            bar: {
+              dataLabels: {
+                enabled: false,
+                position: 'top', 
+              },
+              
+              // columnWidth: ["35%"],
+            },
+            
+        }
       },
-      title: {
-        display: true,
-        text: 'My Earnings'
-      },
-    },
-  };
-  
-  const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', "Aug", "Sep", "Oct", "Nov", "Dec"];
-  
-  export const data = {
-    labels,
-    datasets: [
-      {
-        label: 'Earnings',
-        data: [1000, 2200, 3000, 1500, 20000, 25000, 40000, 25000, 100000, 90000, 85000, 98000], 
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      }
-    ],
-  };
-  
-  
-const Chart = () => {
+      series: [
+        {
+          name: "Total Earnings",
+          data: [1500,  5000, 15000, 30000, 60000, 80000, 75000, 100000, 90000,80000, 98000, 99000]
+        }
+      ]
+})
     return (
-       <Bar options={options} data={data} width={200} />
+      <Chart
+      options={options.options}
+      series={options.series}
+      type="bar"
+      width="100%"
+      // height="250"
+    />
   )
 }
 
-export default Chart
+export default MyChart

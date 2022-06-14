@@ -42,7 +42,7 @@ const All = () => {
           ))}
         </section>
         <main className={style.main}>
-          {courseList.map((item) => (
+          {courseList.filter(item=> item.subtitle.includes(search)).map((item) => (
             <div style={{cursor: 'pointer'}} onClick={() => {
               setGeneralState(old => {
                 return {
@@ -97,28 +97,9 @@ export const Payment = () => {
   return (
     <Courses>
       <div className="container">
-        <section>
-          <div className={style.payment_top}>
-            <button type="button">
-              <span className={style.payment_number}>1</span>
-              <span className={style.payment_text}>Confirm &amp; Pay</span>
-            </button>
-            <button type="button">
-              <span className={style.payment_number}>2</span>
-              <span className={style.payment_text}>Confirm &amp; Pay</span>
-            </button>
-          </div>
-        </section>
         <section
-          className={`row justify-content-between ${style.paymeny_main}`}
+          className={`row justify-content-center align-items-center ${style.paymeny_main}`}
         >
-          <div className="col-md-6">
-            <header>
-              <h5>Payment Options</h5>
-            </header>
-            <div className={style.payment_options_main}></div>
-          </div>
-
           <div className="col-md-5">
             <div className={` card ${style.payment_details_card}`}>
               <div className="card-body">
@@ -159,6 +140,10 @@ export const Payment = () => {
                   <p className={style.payment_total}>$105</p>
                 </div>
                 <button className="button w-100 button-md">Checkout</button>
+                <div className="cancel w-100 text-center my-3">
+                  <button className="" style={{ color:"var(--theme-blue)", border:"none", outline:"none", fontSize:"14px"}}>Cancel</button>
+                </div>
+
               </div>
             </div>
           </div>

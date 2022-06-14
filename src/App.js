@@ -8,7 +8,7 @@ import Login from "./pages/User/Login";
 import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
-import {Profile as StudentProfile, Classes as StudentClasses, Edit as StudentEdit, Courses as StudentCourses, History as StudentHistory} from "./pages/Dashboard/Students";
+import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Courses as StudentCourses, History as StudentHistory} from "./pages/Dashboard/Students";
 import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CreateCourseCategory} from "./pages/Dashboard/Admin";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, Courses as TeacherCourses, CreateCourse, Earnings} from "./pages/Dashboard/Teachers";
 import 'react-toastify/dist/ReactToastify.css';
@@ -39,6 +39,7 @@ function App() {
               <Route path="classes" element={<StudentClasses  />} />
               <Route path="profile/edit" element={<StudentEdit  />} />
               <Route path="courses" element={<StudentCourses />} />
+              <Route path="wishlist" element={<Wishlist />} />
               <Route path="history" element={<StudentHistory />} />
             </Route>
 
