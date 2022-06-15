@@ -4,14 +4,16 @@ import {useEffect} from 'react';
 
 
 const useLocalStorage = () => {
-    function getItem(key, defaultValue) {
+    function getItem(key, defaultValue={}) {
         //first we get the item
         let item = localStorage.getItem(key);
         if(!item) {
             //if it doesn't exist then we set the item;
-            localStorage.setItem(key, JSON.stringify(defaultValue))
+            let def = JSON.stringify(defaultValue);
+            localStorage.setItem(key, def);
+            item = def;
         }
-        return item ? JSON.parse(item) : defaultValue
+        return JSON.parse(item);
     }
 
     function removeItem(key){
