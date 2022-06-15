@@ -55,7 +55,6 @@ export function Profile(){
                     if(!success ) throw new AdvancedError(message, statusCode);
                     else {
                         const {data} = res;
-                        console.log(data);
                         const newValue = {
                             ...userdata,
                             ...data
@@ -133,19 +132,16 @@ export function Edit(){
     }, [])
 
     async function submitHandler(e){
-        console.log(e)
         e.preventDefault();
         setLoading(_ => true);
         try{
             if(formstate.firstName === "" || formstate.lastName === "" || formstate.bio === "" || formstate.goals === "" || formstate.work === "" || formstate.location === "" || formstate.category === "") throw new AdvancedError("All fields are required", 0);
             //submit updated profile
             const res = await updateProfile(formstate, userdata.token);
-            console.log(res);
             const {success, statusCode, message} = res;
             if(!success) throw new AdvancedError(message, statusCode);
             else {
                 const {data} = res;
-                console.log(data);
                 const newValue = {
                     ...userdata,
                     ...data
@@ -209,7 +205,6 @@ export function Edit(){
             else {
                 const {data} = res;
                 const {profileImg} = data;
-                console.log(data);
                 //updated successfully
                 //set the localStorage here
                 const newValue = {
@@ -416,7 +411,6 @@ export function Courses(){
         (async() => {
             try{
                 const res = await fetchCourses(userdata?.token);
-                console.log(res);
                 const {success, message, statusCode} = res;
                 if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
                 else {
@@ -481,7 +475,6 @@ export function Courses(){
 
   // Catch Rating value
   const handleRating = (rate) => {
-      console.log(rate)
     setRating(rate)
     // other logic
   }
@@ -530,7 +523,6 @@ export function History(){
                 try{
                     const res = await fetchEnrollments(userdata?.token);
                     setGeneralState({...generalState, loading: false})
-                    console.log(res);
                     const {success, message, statusCode} = res;
                     if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
                     else {
@@ -659,7 +651,6 @@ function ClassesCard({numberOfLessons, title, date, time, isLive, color}){
 const Students = ({children, isMobile, notification, userdata}) => {
     const {generalState: {showSidebar, loading}, generalState, setGeneralState} = useAuth();
     useEffect(() => {
-        console.log("Students component is mounted", userdata);
         if(notification){
             toast.success(notification, {
                 position: "top-right",

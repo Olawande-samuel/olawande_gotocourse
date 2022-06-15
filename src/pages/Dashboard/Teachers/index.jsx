@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Modal, Box, Typography } from "@mui/material";
 import { AiOutlineMenu } from "react-icons/ai";
-import {FiFilter} from "react-icons/fi"
+import { FiFilter } from "react-icons/fi";
+
+import Loader from "../../../components/Loader";
 import { Sidebar, Searchbar } from "../components";
 import clsx from "./styles.module.css";
 import { colors } from "../../../constants";
@@ -15,17 +17,21 @@ import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
 import { UserInfoCard } from "../Admin";
 import { useLocalStorage } from "../../../hooks";
-import {useSyllabus} from "../../../contexts/Syllabus"; 
-import { Chart as ChartLogo} from "../../../images/components/svgs";
+import { useSyllabus } from "../../../contexts/Syllabus";
+import { Chart as ChartLogo } from "../../../images/components/svgs";
 import MyChart from "../../../components/Chart";
 
-
-
-const KEY = "gotocourse-userdata"
+const KEY = "gotocourse-userdata";
 
 export function Profile() {
-  const { generalState: { isMobile, notification }, setGeneralState, teacherFunctions: { fetchProfile }, } = useAuth();
-  const [userInfo, setUserInfo]= useState([
+  const { updateItem, getItem } = useLocalStorage();
+  let userdata = getItem(KEY);
+  const {
+    generalState: { isMobile, notification },
+    setGeneralState,
+    teacherFunctions: { fetchProfile },
+  } = useAuth();
+  const [userInfo, setUserInfo] = useState([
     {
       title: "Brief Introduction",
       content: userdata?.bio ?? "",
@@ -42,9 +48,8 @@ export function Profile() {
       title: "Category",
       content: "Cybersecurity, UX, Data Analysis",
     },
-  ])
-  const { updateItem, getItem } = useLocalStorage();
-  let userdata = getItem(KEY);
+  ]);
+
   const navigate = useNavigate();
   useEffect(() => {
     setTimeout(() => {
@@ -62,20 +67,20 @@ export function Profile() {
       async function get() {
         try {
           let data = await fetchProfile(userdata?.token);
-          const {success, message, statusCode} = data;
-          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+          const { success, message, statusCode } = data;
+          if (!success || statusCode !== 1)
+            throw new AdvancedError(message, statusCode);
           else {
-            const {data: d} = data;
-            console.log(d);
+            const { data: d } = data;
             const newValue = {
               ...userdata,
-              ...d
-            }
+              ...d,
+            };
             userdata = updateItem(KEY, newValue);
             setGeneralState((old) => {
               return {
                 ...old,
-                userdata:{...old.userdata, ...d},
+                userdata: { ...old.userdata, ...d },
               };
             });
           }
@@ -95,7 +100,6 @@ export function Profile() {
     }
   }, [userdata?.token]);
 
- 
   function editProfileHandler(e) {
     navigate("/teacher/profile/edit");
   }
@@ -105,7 +109,6 @@ export function Profile() {
       userdata={userdata}
       notification={notification}
     >
-     
       <div className={clsx.teachers_profile}>
         <div className={clsx.teachers_profile_top}>
           <div className={clsx.teachers_profile_top_img}>
@@ -129,10 +132,10 @@ export function Profile() {
           </h1>
 
           <div className={clsx.teachers__profile_info}>
-              <Info title="Brief Introduction" content={userdata?.bio}  />
-              <Info title="Location" content={userdata?.location}  />
-              <Info title="Courses" content={userdata?.courses}  />
-              <Info title="Category" content={userdata?.category}  />
+            <Info title="Brief Introduction" content={userdata?.bio} />
+            <Info title="Location" content={userdata?.location} />
+            <Info title="Courses" content={userdata?.courses} />
+            <Info title="Category" content={userdata?.category} />
           </div>
         </div>
       </div>
@@ -149,14 +152,14 @@ function Info({ title, content }) {
   );
 }
 
-const Syllabus = ({title, description}) => {
-  return(
+const Syllabus = ({ title, description }) => {
+  return (
     <div className={clsx.syllabus_container}>
       <h5>{title}</h5>
       <p>{description}</p>
     </div>
-  )
-}
+  );
+};
 
 export function CreateCourse() {
   const {
@@ -164,9 +167,9 @@ export function CreateCourse() {
     // setGeneralState,
     teacherFunctions: { addCourse },
   } = useAuth();
-  const {getItem} = useLocalStorage();
+  const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
-  const {syllabuses, addtoSyllabus} = useSyllabus();
+  const { syllabuses, addtoSyllabus } = useSyllabus();
   const [formstate, setFormstate] = useState({
     name: "",
     categoryName: "",
@@ -176,11 +179,10 @@ export function CreateCourse() {
   const [packageState, setPackageState] = useState({
     title: "",
     description: "",
-    price: ""
-  })
+    price: "",
+  });
 
   const [open, setOpen] = useState(false);
-
 
   const [loading, setLoading] = useState(false);
   const packages = [
@@ -208,20 +210,20 @@ export function CreateCourse() {
     });
   }
 
-  function changePackageStateHandler(e){
-    const {name, value} = e.target;
-    setPackageState(old => {
-      return{
+  function changePackageStateHandler(e) {
+    const { name, value } = e.target;
+    setPackageState((old) => {
+      return {
         ...old,
-        [name]: value
-      }
-    })
+        [name]: value,
+      };
+    });
   }
 
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
-    console.log([{...formstate, syllabus: [...syllabuses], packages: [packageState]}]);
+   
     try {
       if (
         formstate.name === "" ||
@@ -231,9 +233,11 @@ export function CreateCourse() {
         packageState.title === ""
       )
         throw new AdvancedError("All fields are required", 0);
-      const res = await addCourse({...formstate, syllabus: [...syllabuses], packages: [packageState]}, userdata.token);
+      const res = await addCourse(
+        { ...formstate, syllabus: [...syllabuses], packages: [packageState] },
+        userdata.token
+      );
       const { success, message, statusCode } = res;
-      console.log(res);
 
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -270,17 +274,7 @@ export function CreateCourse() {
   };
   return (
     <Teachers>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+     
       <div className={clsx.teachers_profile}>
         <div className={clsx.edit__profile}>
           <h2>Create a new course</h2>
@@ -345,7 +339,6 @@ export function CreateCourse() {
               </select>
             </div>
 
-
             <Input
               label="Price"
               name="price"
@@ -354,42 +347,69 @@ export function CreateCourse() {
               value={packageState.price}
             />
 
-
-              <div className={clsx.form_group}>
+            <div className={clsx.form_group}>
               <label>Syllabus</label>
-              {
-                syllabuses.length !== 0 ? syllabuses.map(({title, description}, i) => (
+              {syllabuses.length !== 0 ? (
+                syllabuses.map(({ title, description }, i) => (
                   <Syllabus title={title} key={i} description={description} />
-                )) : <h4>No syllabus!</h4>
-              }
+                ))
+              ) : (
+                <h4>No syllabus!</h4>
+              )}
             </div>
 
-                <button
-                  className="btn btn-primary my-3"
-                  style={{ backgroundColor: "var(--theme-blue)" }}
-                  type="button"
-                  onClick={openModal}
-                >
-                  Add Syllabus
-                </button>
+            <button
+              className="btn btn-primary my-3"
+              style={{ backgroundColor: "var(--theme-blue)" }}
+              type="button"
+              onClick={openModal}
+            >
+              Add Syllabus
+            </button>
 
-              <div className="d-flex flex-wrap mt-3" style={{gap:"1rem "}}>
-                {loading ? (
-                  <button className="button log_btn" style={{padding:"10px 44px", borderRadius:"8px", fontSize:"16px", fontWeight:"600"}}>
-                    <div className="spinner-border" role="status">
-                      <span className="visually-hidden">Loading...</span>
-                    </div>
-                  </button>
-                ) : (
-                  <button
-                    className="button log_btn" style={{padding:"10px 44px", borderRadius:"8px", fontSize:"16px", fontWeight:"600"}}
-                    type="submit"
-                  >
-                    Save
-                  </button>
-                )}
-                <button className="btn btn-outline" style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)", padding:"10px 44px", borderRadius:"8px", fontSize:"16px", fontWeight:"600"}}>Preview</button>
-              </div>
+            <div className="d-flex flex-wrap mt-3" style={{ gap: "1rem " }}>
+              {loading ? (
+                <button
+                  className="button log_btn"
+                  style={{
+                    padding: "10px 44px",
+                    borderRadius: "8px",
+                    fontSize: "16px",
+                    fontWeight: "600",
+                  }}
+                >
+                  <div className="spinner-border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </button>
+              ) : (
+                <button
+                  className="button log_btn"
+                  style={{
+                    padding: "10px 44px",
+                    borderRadius: "8px",
+                    fontSize: "16px",
+                    fontWeight: "600",
+                  }}
+                  type="submit"
+                >
+                  Save
+                </button>
+              )}
+              <button
+                className="btn btn-outline"
+                style={{
+                  border: "1px solid var(--theme-blue)",
+                  color: "var(--theme-blue)",
+                  padding: "10px 44px",
+                  borderRadius: "8px",
+                  fontSize: "16px",
+                  fontWeight: "600",
+                }}
+              >
+                Preview
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -423,18 +443,18 @@ function AddSyllabus({ open, handleClose, addSyllabus }) {
     description: "",
   });
   function handleChange(e) {
-    const {name, value} = e.target;
-    setNewSyllabus(old => {
+    const { name, value } = e.target;
+    setNewSyllabus((old) => {
       return {
         ...old,
-        [name]: value
-      }
-    })
+        [name]: value,
+      };
+    });
   }
 
-  function addSyllabusHandler(){
-    const {title, description} = newSyllabus;
-    if(!title || !description) {
+  function addSyllabusHandler() {
+    const { title, description } = newSyllabus;
+    if (!title || !description) {
       toast.error("Title and Description are required", {
         position: "top-right",
         autoClose: 4000,
@@ -444,7 +464,7 @@ function AddSyllabus({ open, handleClose, addSyllabus }) {
         draggable: true,
         progress: undefined,
       });
-    }else {
+    } else {
       addSyllabus(newSyllabus);
     }
   }
@@ -507,32 +527,36 @@ function AddSyllabus({ open, handleClose, addSyllabus }) {
 }
 
 export function Edit() {
-  const { generalState: {  }, setGeneralState, teacherFunctions: { updateAvatar, updateProfile }, } = useAuth();
-  const {updateItem, getItem} = useLocalStorage();
+  const {
+    setGeneralState,
+    teacherFunctions: { updateAvatar, updateProfile },
+  } = useAuth();
+
+  const { updateItem, getItem } = useLocalStorage();
   let userdata = getItem(KEY);
+
   const navigate = useNavigate();
+
   const [imageUrl, setImageUrl] = useState(null);
   const [isUplaoding, setIsUploading] = useState(false);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const [formstate, setFormstate] = useState({
     firstName: userdata?.firstName ?? "",
     lastName: userdata?.lastName ?? "",
-    work: userdata?.work ??"",
-    location:userdata?.location ?? "",
-    category: userdata?.category ??"",
-    bio:userdata?.bio ?? "",
-    goals:userdata?.goals ?? ""
+    work: userdata?.work ?? "",
+    location: userdata?.location ?? "",
+    category: userdata?.category ?? "",
+    bio: userdata?.bio ?? "",
+    goals: userdata?.goals ?? "",
   });
 
-  
   useEffect(() => {
     // to prevent data from disappearing on page reload
     // setFormstate({...formstate, ...userdata})
-  }, [])
+  }, []);
 
-
-  console.log(formstate)
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
@@ -544,28 +568,26 @@ export function Edit() {
         formstate.location === "" ||
         formstate.profession === ""
       )
-      throw new AdvancedError("All fields are required", 0);
+        throw new AdvancedError("All fields are required", 0);
       //submit updated profile
       const res = await updateProfile(formstate, userdata.token);
       const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        const {data} = res;
-        console.log(data);
+        const { data } = res;
         const newValue = {
           ...userdata,
-          ...data
-        }
+          ...data,
+        };
         userdata = updateItem(KEY, newValue);
-        setGeneralState(old => {
-            return {
-                ...old,
-                notification: message
-            }
-        })
+        setGeneralState((old) => {
+          return {
+            ...old,
+            notification: message,
+          };
+        });
         navigate("/teacher/");
       }
-      
     } catch (err) {
       toast.error(err.message, {
         position: "top-right",
@@ -614,18 +636,17 @@ export function Edit() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         const { data } = res;
-        const {profileImg} = data;
-        console.log(data);
+        const { profileImg } = data;
         //updated successfully
         //set the localStorage here
         const newValue = {
           ...userdata,
-          profileImg
-        }
+          profileImg,
+        };
         userdata = updateItem(KEY, newValue);
-        
-        setImageUrl(_ => null);
-        setFile(_ => null);
+
+        setImageUrl((_) => null);
+        setFile((_) => null);
 
         toast.success(message, {
           position: "top-right",
@@ -654,17 +675,7 @@ export function Edit() {
 
   return (
     <Teachers>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+     
       <div className={clsx.teachers_profile}>
         <div className={clsx.edit__profile}>
           <h2>Update Profile</h2>
@@ -692,7 +703,9 @@ export function Edit() {
                 Change Picture
               </p>
             ) : (
-              <p onClick={uploadPicture} style={{cursor: "pointer"}}>Upload Photo</p>
+              <p onClick={uploadPicture} style={{ cursor: "pointer" }}>
+                Upload Photo
+              </p>
             )}
           </div>
           <form className="form" onSubmit={submitHandler}>
@@ -767,14 +780,20 @@ export function Edit() {
   );
 }
 
-
-
 export function Classes() {
   const navigate = useNavigate();
-  const { generalState: { isMobile }, } = useAuth();
-  const {getItem} = useLocalStorage();
+  const {
+    generalState: { isMobile },
+  } = useAuth();
+  const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
-  const tableHeaders = ["No", "Course Name", "Number Enrolled","Teaching Model", "Status"];
+  const tableHeaders = [
+    "No",
+    "Course Name",
+    "Number Enrolled",
+    "Teaching Model",
+    "Status",
+  ];
   const data = [
     {
       title: "CyberSecurity",
@@ -805,16 +824,16 @@ export function Classes() {
       status: "Completed",
     },
   ];
-  
+
   return (
     <Teachers isMobile={isMobile} userdata={userdata}>
       <div className={clsx.teachers_profile}>
         <table className={clsx.teachers_table}>
           <thead>
             <tr>
-            {tableHeaders.map((el, i) => (
-              <th key={i}>{el}</th>
-            ))}
+              {tableHeaders.map((el, i) => (
+                <th key={i}>{el}</th>
+              ))}
             </tr>
           </thead>
           <tbody>
@@ -836,49 +855,57 @@ export function Classes() {
   );
 }
 
-
 export function Earnings() {
-
-  const {getItem} = useLocalStorage();
+  const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const data = [
     {
-      id:1,
-      title: "Day"
+      id: 1,
+      title: "Day",
     },
     {
-      id:2,
-      title: "Week"
+      id: 2,
+      title: "Week",
     },
     {
-      id:3,
-      title: "1 month" 
+      id: 3,
+      title: "1 month",
     },
     {
-      id:4,
-      title: "3 months"
+      id: 4,
+      title: "3 months",
     },
     {
-      id:5,
-      title: "6 months"
+      id: 5,
+      title: "6 months",
     },
     {
-      id:6,
-      title: "1 year"
+      id: 6,
+      title: "1 year",
     },
-  ]
-  const { generalState: { isMobile }, } = useAuth();
+  ];
+  const {
+    generalState: { isMobile },
+  } = useAuth();
   return (
     <Teachers isMobile={isMobile} userdata={userdata}>
       <div className={clsx.teachers_profile}>
-        <div className="d-flex align-items-center mt-3 mb-5" style={{gap:"1rem"}}>
-          <i><FiFilter /></i>
+        <div
+          className="d-flex align-items-center mt-3 mb-5"
+          style={{ gap: "1rem" }}
+        >
+          <i>
+            <FiFilter />
+          </i>
           <span>Filter by: </span>
-          {data.map(date=>(
-            <FilterButton  title={date.title} />
+          {data.map((date) => (
+            <FilterButton title={date.title} />
           ))}
         </div>
-        <div className="d-flex flex-wrap justify-content-center justify-content-md-start" style={{ gap:"1.5rem"}}>
+        <div
+          className="d-flex flex-wrap justify-content-center justify-content-md-start"
+          style={{ gap: "1.5rem" }}
+        >
           <EarningsCard title="Teaching Model" type="COHORT" value="12,923" />
           <EarningsCard title="Per Course" type="Cybersecurity" value="2,923" />
           <EarningsCard total={true} value="100,000" />
@@ -889,81 +916,98 @@ export function Earnings() {
   );
 }
 
-function FilterButton({title}){
+function FilterButton({ title }) {
   return (
-    <button style={{
-        background:"#FFFFFF",
-       border:"1px solid #9F9F9F",
-       borderRadius:"10px",
-       padding:"3px 13px"
-    }}
-    value={title}
-    >{title}</button>
-  )
+    <button
+      style={{
+        background: "#FFFFFF",
+        border: "1px solid #9F9F9F",
+        borderRadius: "10px",
+        padding: "3px 13px",
+      }}
+      value={title}
+    >
+      {title}
+    </button>
+  );
 }
 
-export function EarningsCard({title, type, options=[], total, value}){
+export function EarningsCard({ title, type, options = [], total, value }) {
   return (
     <div className="earnings_card">
-      <p className="text">{title}</p> 
+      <p className="text">{title}</p>
       <div className="card">
         <div className="card-body">
           <div>
-            {total ? 
-          <h3>TOTAL</h3>   :
-          <select name="model" id="model" className="form-select w-75">
-            <option defaultValue>{type}</option>
-            <option defaultValue>COHORT</option>
-            <option defaultValue>COHORT</option>
-            <option defaultValue>COHORT</option>
-          </select>
-          }
+            {total ? (
+              <h3>TOTAL</h3>
+            ) : (
+              <select name="model" id="model" className="form-select w-75">
+                <option defaultValue>{type}</option>
+                <option defaultValue>COHORT</option>
+                <option defaultValue>COHORT</option>
+                <option defaultValue>COHORT</option>
+              </select>
+            )}
           </div>
           <div className="d-flex align-items-center justify-content-around">
-            <h1 className="earnings_card_total"> <small>$</small>{value}</h1>
-              <i><ChartLogo /></i>
+            <h1 className="earnings_card_total">
+              {" "}
+              <small>$</small>
+              {value}
+            </h1>
+            <i>
+              <ChartLogo />
+            </i>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export function Courses() {
   const {
-    generalState: { isMobile },
+    generalState: { isMobile, loading },
+    generalState,
     teacherFunctions: { fetchCourse, fetchApplications },
+    setGeneralState,
   } = useAuth();
-  const {getItem} = useLocalStorage();
+  const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const [courses, setCourses] = useState([]);
 
-  console.log(userdata);
 
   useEffect(() => {
-
     //fetch courses
-    (async() => {
-      try{
-        console.log(userdata);
+    (async () => {
+      setGeneralState({ ...generalState, loading: true });
+
+      try {
         const res = await fetchApplications(userdata?.token);
-        const {success, message, statusCode} = res;
-        if(!success) throw new AdvancedError(message, statusCode);
+        setGeneralState({ ...generalState, loading: false });
+
+        const { success, message, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
         else {
-          const {data} = res;
-          console.log(data);
-          setCourses(_ => data);
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          const { data } = res;
+          if (data.length <= 0) {
+            throw new AdvancedError("Your course list is empty", 0);
+          } else {
+            setCourses((_) => data);
+            toast.success(message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
         }
-      }catch(err){
+      } catch (err) {
+        setGeneralState({ ...generalState, loading: false });
         toast.error(err.message, {
           position: "top-right",
           autoClose: 4000,
@@ -974,53 +1018,51 @@ export function Courses() {
           progress: undefined,
         });
       }
-    })()
+    })();
   }, []);
+
   const navigate = useNavigate();
-  const tableHeaders = ["No", "Courses", "Teaching Model", "Starting Date", "Status"];
-  const tableContents = !courses?.length ? [
-    {
-      name: "Melanie Grutt",
-      course: "Cybersecurity",
-      package: "Cohort",
-      rating: "Approved",
-    },
-    {
-      name: "Keira Danlop",
-      course: "UI/UX",
-      package: "Cohort",
-      rating: "Pending",
-    },
-    {
-      name: "Diop Grutt",
-      course: "HTML",
-      package: "One on One",
-      rating: "Approved",
-    },
-    {
-      name: "Diop Grutt",
-      course: "Data Analytics",
-      package: "Self paced",
-      rating: "Not Approved",
-    },
-  ] : courses;
+  const tableHeaders = [
+    "No",
+    "Courses",
+    "Teaching Model",
+    "Starting Date",
+    "Status",
+  ];
+  const tableContents = !courses?.length
+    ? [
+        {
+          name: "Melanie Grutt",
+          course: "Cybersecurity",
+          package: "Cohort",
+          rating: "Approved",
+        },
+        {
+          name: "Keira Danlop",
+          course: "UI/UX",
+          package: "Cohort",
+          rating: "Pending",
+        },
+        {
+          name: "Diop Grutt",
+          course: "HTML",
+          package: "One on One",
+          rating: "Approved",
+        },
+        {
+          name: "Diop Grutt",
+          course: "Data Analytics",
+          package: "Self paced",
+          rating: "Not Approved",
+        },
+      ]
+    : courses;
 
   function createCourseHandler(e) {
     navigate("create");
   }
   return (
     <Teachers isMobile={isMobile} userdata={userdata}>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <div className={clsx.teachers_profile}>
         <button
           className="button button-md log_btn w-30 mb-5"
@@ -1032,25 +1074,27 @@ export function Courses() {
         <table className={clsx.teachers_table}>
           <thead>
             <tr>
-            {tableHeaders.map((el, i) => (
-              <th key={i}>{el}</th>
-            ))}
+              {tableHeaders.map((el, i) => (
+                <th key={i}>{el}</th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {tableContents.map(({ name, package: p, course, rating, status }, i) => (
-              <UserInfoCard
-                key={i}
-                // name={name}
-                num={i}
-                comp={"Teacher"}
-                // approveHandler=
-                start_date="1/12/20"
-                course_status={rating}
-                pack={p}
-                course={course}
-              />
-            ))}
+            {tableContents.map(
+              ({ name, package: p, course, rating, status }, i) => (
+                <UserInfoCard
+                  key={i}
+                  // name={name}
+                  num={i}
+                  comp={"Teacher"}
+                  // approveHandler=
+                  start_date="1/12/20"
+                  course_status={rating}
+                  pack={p}
+                  course={course}
+                />
+              )
+            )}
           </tbody>
         </table>
       </div>
@@ -1096,12 +1140,11 @@ function ClassesCard({ numberOfLessons, title, date, time, isLive, color }) {
 
 const Teachers = ({ children, isMobile, userdata, notification }) => {
   const {
-    generalState: { showSidebar },
+    generalState: { showSidebar, loading },
     generalState,
     setGeneralState,
   } = useAuth();
   useEffect(() => {
-    console.log("Teachers component is mounted");
     if (notification) {
       toast.success(notification, {
         position: "top-right",
@@ -1123,6 +1166,17 @@ const Teachers = ({ children, isMobile, userdata, notification }) => {
   return (
     <GuardedRoute>
       <div className={clsx.teachers}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
         <Sidebar isMobile={isMobile} />
         <div className={clsx.teachers_main}>
           <div className={`align-items-center ${clsx.teachers_topbar}`}>
@@ -1142,8 +1196,8 @@ const Teachers = ({ children, isMobile, userdata, notification }) => {
 
           {children}
         </div>
+        {loading && <Loader />}
       </div>
     </GuardedRoute>
-    
   );
 };
