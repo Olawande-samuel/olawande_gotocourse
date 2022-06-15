@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,6 +11,7 @@ import clsx from "./styles.module.css";
 
 import avatar from "../../../images/teacher.png";
 import { useAuth } from "../../../contexts/Auth";
+import { useSyllabus } from "../../../contexts/Syllabus";
 import img01 from "../../../images/mentor1.png";
 import img02 from "../../../images/mentor2.png";
 import { GuardedRoute } from "../../../hoc";
@@ -19,7 +20,6 @@ import {useLocalStorage} from "../../../hooks";
 
 import Input from "../../../components/Input";
 import Loader from "../../../components/Loader";
-import LogoutButton from "../../../components/LogoutButton";
 import UploadForm from "../../../components/UploadForm";
 import img from "../../../images/coding.png";
 import { Rating } from "react-simple-star-rating";
@@ -45,14 +45,17 @@ function CategoryInterface({name, bannerImg, description}){
   )
 }
 
+
 export function Category(){
   const navigate = useNavigate();
   const [categories, setCategories] = useState([])
   const [open, setOpen] = useState(false);
   const {adminFunctions: {addCategory, fetchCategories}} = useAuth();
   const {getItem} = useLocalStorage();
+  const flag = useRef(false);
   const userdata = getItem(KEY)
   useEffect(() => {
+    if(flag.current) return;
     (async () => {
       try{
         const res = await fetchCategories(userdata?.token);
@@ -90,6 +93,7 @@ export function Category(){
         });
       }
     })()
+    flag.current = true;
   }, [])
   return (
     <Admin header="Course Categories">
@@ -534,36 +538,37 @@ export function CreateCourseCategory(){
 export function Dashboard() {
   const { getItem, updateItem } = useLocalStorage();
   const {adminFunctions: { fetchProfile }} = useAuth();
+  const flag = useRef(false);
   let userdata = getItem(KEY);
   const navigate = useNavigate();
   useEffect(() => {
-    const token = userdata?.token;
 
-      async function get(){
-        try {
-          let { data, message, success, statusCode } = await fetchProfile(
-            token
-          );
-          if (success) {
-            let newValue = {
-              ...userdata,
-              ...data
-            }
-            userdata = updateItem(KEY, newValue);
-          } else throw new AdvancedError(message, statusCode);
-          } catch (err) {
-          toast.error(err.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        }
+    if(flag.current) return;
+    (async() => {
+      try {
+        let { data, message, success, statusCode } = await fetchProfile(
+          userdata?.token
+        );
+        if (success) {
+          let newValue = {
+            ...userdata,
+            ...data
+          }
+          userdata = updateItem(KEY, newValue);
+        } else throw new AdvancedError(message, statusCode);
+        } catch (err) {
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
-      get();
+    })()
+    flag.current = true;
   }, []);
 
   function editProfileHandler(e) {
@@ -828,12 +833,14 @@ export function UserInfoCard({
 export function Teachers() {
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
+  const flag = useRef(false);
   const navigate = useNavigate();
   const [teachers, setTeachers] = useState([]);
   const {
     adminTeacherFunctions: { fetch }
   } = useAuth();
   useEffect(() => {
+    if(flag.current) return;
     (async () => {
       try {
         const token = userdata?.token;
@@ -869,7 +876,8 @@ export function Teachers() {
         });
       }
     })();
-  }, [teachers]);
+    flag.current = true;
+  }, []);
   const tableHeaders = ["No", "Name", "Email", "Access Pledre", "Verified"];
 
   function approveHandler(e, email) {
@@ -916,6 +924,8 @@ export function Teachers() {
 export function Courses() {
   const {adminFunctions: { fetchCourses} } = useAuth();
   const {getItem} = useLocalStorage();
+  const navigate = useNavigate();
+  const flag = useRef(false);
   let userdata = getItem(KEY);
   const [courseList, setCourseList] = useState([])
   const tableHeaders = [
@@ -928,21 +938,9 @@ export function Courses() {
     "Action",
   ];
 
-  const tableContents = [
-    {
-      name: "Melanie Grutt",
-      course: "Cybersecurity",
-      date: "Feb 24",
-      package: "Cohort",
-      rating: "Bronze",
-      approve: true,
-    },
-  ];
-
-  async function getCourses(){
-
-    if (userdata) {
-      
+  useEffect(()=>{
+    if(flag.current) return;
+    (async () => {
       try {
         const res = await fetchCourses(userdata?.token);
         console.log(res);
@@ -977,19 +975,21 @@ export function Courses() {
           progress: undefined,
         });
       }
+    })()
+    flag.current = true;
+  },[])
+
+  function gotoCreateCourseHandler(e){
+    navigate("create");
   }
-  }
-  useEffect(()=>{
-        getCourses()
-  },[userdata])
   return (
     <Admin header={"Courses"}>
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
               <h1>All Courses</h1>
-          {/* <div className="d-flex justify-content-between align-items-center">
-              <button type="button" className="btn btn-primary">Add Course</button>
-          </div> */}
+          <div className="d-flex justify-content-between align-items-center">
+              <button type="button" className="btn btn-primary" onClick={gotoCreateCourseHandler}>Add Course</button>
+          </div>
 
           <div className={clsx.admin__student_main}>
             <table className={clsx.admin__student_table}>
@@ -1032,6 +1032,353 @@ export function Courses() {
           </div>
         </div>
       </div>
+    </Admin>
+  );
+}
+
+function AddSyllabus({ open, handleClose, addSyllabus }) {
+  const [newSyllabus, setNewSyllabus] = useState({
+    title: "",
+    description: "",
+  });
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    minWidth: 600,
+    background: "#fff",
+    border: "1px solid #eee",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 6,
+    padding: "4rem 2rem",
+  };
+  function handleChange(e) {
+    const {name, value} = e.target;
+    setNewSyllabus(old => {
+      return {
+        ...old,
+        [name]: value
+      }
+    })
+  }
+
+  function addSyllabusHandler(){
+    const {title, description} = newSyllabus;
+    if(!title || !description) {
+      toast.error("Title and Description are required", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }else {
+      addSyllabus(newSyllabus);
+    }
+  }
+
+  return (
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box style={style}>
+        {/* <ToastContainer
+          position="top-right"
+          autoClose={2500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        /> */}
+        <h5
+          className="lead text-primary"
+          style={{ color: "var(--theme-blue)" }}
+        >
+          Add Syllabus
+        </h5>
+        <Input
+          label="Title"
+          name="title"
+          type="text"
+          handleChange={handleChange}
+          value={newSyllabus.title}
+        />
+        <div className="form-group my-3">
+          <label htmlFor="description" className="form-label generic_label">
+            Description
+          </label>
+          <textarea
+            rows="5"
+            id="description"
+            name="description"
+            className="form-control generic_input"
+            value={newSyllabus.description}
+            onChange={handleChange}
+          ></textarea>
+        </div>
+        <button
+          className="btn btn-primary my-3"
+          onClick={addSyllabusHandler}
+          style={{ backgroundColor: "var(--theme-blue)" }}
+        >
+          Add
+        </button>
+      </Box>
+    </Modal>
+  );
+}
+
+
+
+export function CreateCourse() {
+  const {
+    // generalState: { isMobile, notification },
+    // setGeneralState,
+    teacherFunctions: { addCourse },
+  } = useAuth();
+  const {getItem} = useLocalStorage();
+
+  let userdata = getItem(KEY);
+  const {syllabuses, addtoSyllabus} = useSyllabus();
+  const [formstate, setFormstate] = useState({
+    name: "",
+    categoryName: "",
+    description: "",
+    faqs: [],
+  });
+  const [packageState, setPackageState] = useState({
+    title: "",
+    description: "",
+    price: ""
+  })
+
+  const [open, setOpen] = useState(false);
+
+
+  const [loading, setLoading] = useState(false);
+  const packages = [
+    {
+      value: "cohort",
+      name: "Cohort",
+    },
+    {
+      value: "self-paced",
+      name: "Self paced",
+    },
+    {
+      value: "one-one",
+      name: "One-One Mentorship",
+    },
+  ];
+
+  function changeHandler(e) {
+    const { name, value } = e.target;
+    setFormstate((old) => {
+      return {
+        ...old,
+        [name]: value,
+      };
+    });
+  }
+
+  function changePackageStateHandler(e){
+    const {name, value} = e.target;
+    setPackageState(old => {
+      return{
+        ...old,
+        [name]: value
+      }
+    })
+  }
+
+  async function submitHandler(e) {
+    e.preventDefault();
+    setLoading(true);
+    console.log([{...formstate, syllabus: [...syllabuses], packages: [packageState]}]);
+    try {
+      if (
+        formstate.name === "" ||
+        formstate.categoryName === "" ||
+        formstate.description === "" ||
+        packageState.price === "" ||
+        packageState.title === ""
+      )
+        throw new AdvancedError("All fields are required", 0);
+      const res = await addCourse({...formstate, syllabus: [...syllabuses], packages: [packageState]}, userdata.token);
+      const { success, message, statusCode } = res;
+      console.log(res);
+
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } finally {
+      setLoading((_) => false);
+    }
+  }
+
+  const openModal = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  return (
+    <Admin>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <div className={clsx.admin_profile}>
+        <div className={clsx.edit__profile}>
+          <h2>Create a new course</h2>
+          <form className="form" onSubmit={submitHandler}>
+            <Input
+              label="Name of course"
+              name="name"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.name}
+            />
+            <Input
+              label="Category"
+              name="categoryName"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.categoryName}
+            />
+
+            <div className={clsx.form_group}>
+              <label htmlFor={"brief"}>
+                Brief Description of course content
+              </label>
+              <textarea
+                rows="5"
+                name="description"
+                value={formstate.description}
+                onChange={changeHandler}
+                className="generic_input"
+              ></textarea>
+            </div>
+
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Type</label>
+              <select
+                rows="5"
+                name="type"
+                value={formstate.type}
+                onChange={changeHandler}
+                className="form-select generic_input"
+              >
+                <option value="">Choose a Type</option>
+                <option value="FLAT">Flat</option>
+                <option value="PACKAGE">Package</option>
+              </select>
+            </div>
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Package</label>
+              <select
+                rows="5"
+                name="title"
+                value={packageState.title}
+                onChange={changePackageStateHandler}
+                className="form-select generic_input"
+              >
+                <option value="">Choose a package</option>
+                {packages.map(({ name, value }, i) => (
+                  <option value={value} key={i}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+
+            <Input
+              label="Price"
+              name="price"
+              type="text"
+              handleChange={changePackageStateHandler}
+              value={packageState.price}
+            />
+
+
+              <div className={clsx.form_group}>
+              <label>Syllabus</label>
+              {
+                syllabuses.length !== 0 ? syllabuses.map(({title, description}, i) => (
+                  <Syllabus title={title} key={i} description={description} />
+                )) : <p>No syllabus!</p>
+              }
+            </div>
+
+            <button
+              className="btn btn-primary my-3"
+              style={{ backgroundColor: "var(--theme-blue)" }}
+              type="button"
+              onClick={openModal}
+            >
+              Add Syllabus
+            </button>
+
+            {loading ? (
+              <button className="button button-lg log_btn w-100 mt-3">
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </button>
+            ) : (
+              <button
+                className="button button-lg log_btn w-100 mt-3"
+                type="submit"
+              >
+                Save
+              </button>
+            )}
+          </form>
+        </div>
+      </div>
+      <AddSyllabus
+        open={open}
+        addSyllabus={addtoSyllabus}
+        setOpen={setOpen}
+        handleClose={handleClose}
+      />
     </Admin>
   );
 }
@@ -1106,6 +1453,7 @@ export function Fees() {
 export function Student() {
   const [studentList, setStudentList] = useState([]);
   const {getItem} = useLocalStorage();
+  const flag = useRef(false);
   let userdata = getItem(KEY);
 
   const { adminStudentFunctions: { fetch, verify, verify_pledre }, generalState: { loading }, setGeneralState, } = useAuth();
@@ -1149,8 +1497,10 @@ export function Student() {
     }
   }
   useEffect(() => {
+    if(flag.current) return;
     fetchStudents()
-  }, [userdata]);
+    flag.current = true;
+  }, []);
 
   async function handleVerification(id) {
     let item = {

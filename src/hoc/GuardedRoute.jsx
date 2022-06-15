@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 
 import { useLocalStorage } from "../hooks"; 
 import { useEffect } from "react";
@@ -9,7 +9,7 @@ const GuardedRoute = ({children}) => {
     const {getItem} = useLocalStorage();
     const value = getItem(key);
     console.log({value});
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const location = useLocation();
     const route = location.pathname.split("/")[1];
     useEffect(() => {
@@ -28,7 +28,12 @@ const GuardedRoute = ({children}) => {
         //     navigate(userType === "admin" ? `/${userType}` : `/${userType}s`);
         // }else 
         return children
-    }else return navigate("/login");
+    }else {
+        if(route === 'admin'){
+            return <Navigate to="/admin/login" />
+        }
+        else return <Navigate to="/login" />;
+    }
 
 }
 
