@@ -27,6 +27,7 @@ import { Rating } from "react-simple-star-rating";
 
 
 
+
 const KEY = "gotocourse-userdata";
 function CategoryInterface({name, bannerImg, description}){
   return (
@@ -263,7 +264,7 @@ export function CreateCourseCategory(){
     description: "",
     niche: "",
     nicheDescription: "",
-    careerDescription: "",
+    career: "",
     bannerImg: "",
     iconImg: ""
   });
@@ -477,8 +478,8 @@ export function CreateCourseCategory(){
               </label>
               <textarea
                 rows="5"
-                name="careerDescription"
-                value={formstate.careerDescription}
+                name="career"
+                value={formstate.career}
                 onChange={changeHandler}
                 className="generic_input"
               ></textarea>

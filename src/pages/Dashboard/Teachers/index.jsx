@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { MdEdit, MdPersonAdd } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -26,29 +26,8 @@ const KEY = "gotocourse-userdata";
 export function Profile() {
   const { updateItem, getItem } = useLocalStorage();
   let userdata = getItem(KEY);
-  const {
-    generalState: { isMobile, notification },
-    setGeneralState,
-    teacherFunctions: { fetchProfile },
-  } = useAuth();
-  const [userInfo, setUserInfo] = useState([
-    {
-      title: "Brief Introduction",
-      content: userdata?.bio ?? "",
-    },
-    {
-      title: "Location",
-      content: userdata?.location ?? "",
-    },
-    {
-      title: "Courses",
-      content: "UX Designer",
-    },
-    {
-      title: "Category",
-      content: "Cybersecurity, UX, Data Analysis",
-    },
-  ]);
+  const { generalState: { isMobile, notification, loading }, setGeneralState, generalState, teacherFunctions: { fetchProfile }, } = useAuth();
+  const flag = useRef(false);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -63,10 +42,15 @@ export function Profile() {
   }, []);
 
   useEffect(() => {
-    if (userdata) {
+    if(flag.current) return
+
+    if (userdata) {  
       async function get() {
+        setGeneralState({...generalState, loading: true})
         try {
           let data = await fetchProfile(userdata?.token);
+        setGeneralState({...generalState, loading: false})
+
           const { success, message, statusCode } = data;
           if (!success || statusCode !== 1)
             throw new AdvancedError(message, statusCode);
@@ -85,6 +69,8 @@ export function Profile() {
             });
           }
         } catch (err) {
+          setGeneralState({...generalState, loading: false})
+
           toast.error(err.message, {
             position: "top-right",
             autoClose: 4000,
@@ -98,6 +84,8 @@ export function Profile() {
       }
       get();
     }
+
+    flag.current = true
   }, [userdata?.token]);
 
   function editProfileHandler(e) {
@@ -162,11 +150,7 @@ const Syllabus = ({ title, description }) => {
 };
 
 export function CreateCourse() {
-  const {
-    // generalState: { isMobile, notification },
-    // setGeneralState,
-    teacherFunctions: { addCourse },
-  } = useAuth();
+  const { teacherFunctions: { addCourse }, } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const { syllabuses, addtoSyllabus } = useSyllabus();
@@ -977,49 +961,61 @@ export function Courses() {
   let userdata = getItem(KEY);
   const [courses, setCourses] = useState([]);
 
+  const flag = useRef(false);
+
+  const getApplication = async () => {
+    setGeneralState({ ...generalState, loading: true });
+
+    try {
+      const res = await fetchApplications(userdata?.token);
+      setGeneralState({ ...generalState, loading: false });
+
+      const { success, message, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        const { data } = res;
+        if (data.length <= 0) {
+          throw new AdvancedError("Your course list is empty", 0);
+        } else {
+          setCourses((_) => data);
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      }
+    } catch (err) {
+      setGeneralState({ ...generalState, loading: false });
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
+
+
 
   useEffect(() => {
+    if(flag.current) return;
+   
     //fetch courses
-    (async () => {
-      setGeneralState({ ...generalState, loading: true });
+    if(userdata){
+      getApplication()
+    }
+    flag.current = true;
 
-      try {
-        const res = await fetchApplications(userdata?.token);
-        setGeneralState({ ...generalState, loading: false });
+  }, [userdata])
 
-        const { success, message, statusCode } = res;
-        if (!success) throw new AdvancedError(message, statusCode);
-        else {
-          const { data } = res;
-          if (data.length <= 0) {
-            throw new AdvancedError("Your course list is empty", 0);
-          } else {
-            setCourses((_) => data);
-            toast.success(message, {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          }
-        }
-      } catch (err) {
-        setGeneralState({ ...generalState, loading: false });
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-    })();
-  }, []);
 
   const navigate = useNavigate();
   const tableHeaders = [

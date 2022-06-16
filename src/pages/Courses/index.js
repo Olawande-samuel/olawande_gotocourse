@@ -361,6 +361,15 @@ export const CourseDetail = () => {
 };
 
 export const CourseProfile = () => {
+
+  const course = {
+    title:"Linear Programming",
+    category:"Software Development",
+    rating:4,
+    students: 120,
+    description:""
+
+  }
   return (
     <Courses>
       <div className="container">
