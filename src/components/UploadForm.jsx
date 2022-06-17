@@ -99,12 +99,12 @@ const UploadForm = ({isOpen, setIsOpen}) => {
             }
         }}>
             <div className={clsx.uploda_file__container}>
-                {data && <input type="text" readOnly value={data} onClick={e => copy(e.currentTarget.value)} />}
+                {data && <input className="w-100" style={{cursor: "pointer"}} type="text" readOnly value={data} onClick={e => copy(e.currentTarget.value)} />}
                 <div className={clsx.upload_file} onClick={triggerUpload}>
                     <input type="file" onChange={changeHandler} id="uploadFile" />
                     {imageUrl ? <img src={imageUrl} alt="Preview" /> : (<>
-                    <h5>Click to Upload</h5>
-                    <p>Only jpeg, jpg, png images are allowed</p>
+                    <h5 className="text-white">Click to Upload</h5>
+                    {/* <p>Only jpeg, jpg, png images are allowed</p> */}
                     </>) }
                 </div>
 

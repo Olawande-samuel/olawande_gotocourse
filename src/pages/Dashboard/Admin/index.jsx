@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { MdEdit } from "react-icons/md";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
-import { Grid, Switch, Paper, Modal, Box } from "@mui/material";
-import { AiOutlineMenu } from "react-icons/ai";
+import { Switch, Modal, Box } from "@mui/material";
+import { AiOutlineMenu, AiOutlineDelete, AiTwotoneEdit } from "react-icons/ai";
 
 import { Sidebar, Searchbar } from "../components";
 import clsx from "./styles.module.css";
@@ -21,28 +21,178 @@ import {useLocalStorage} from "../../../hooks";
 import Input from "../../../components/Input";
 import Loader from "../../../components/Loader";
 import UploadForm from "../../../components/UploadForm";
-import img from "../../../images/coding.png";
 import { Rating } from "react-simple-star-rating";
+import vector from "../../../images/vector.png"
 
 
 
 
 
 const KEY = "gotocourse-userdata";
-function CategoryInterface({name, bannerImg, description}){
-  return (
-    <Grid item xs={12} sm={12} md={6} lg={6}>
-      <Paper className={clsx.catergory__interface}>
-        <div className={clsx.category__image}>
-          <img src={img} alt="Banner" />
+
+export function CourseDetails({}){
+  const navigate = useNavigate();
+  const {getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
+  const {adminFunctions: {fetchCategory}} = useAuth();
+  const flag = useRef(false);
+  const [details, setDetails] = useState({});
+  const [formstate, setFormstate] = useState({
+    name: "",
+    description: "",
+    teacher: "",
+    student: ""
+  })
+  const teachers = ["Dr. Joy Castus"];
+  const students = ["James Segun"];
+  const params = useParams()
+  //get user id
+  console.log(params);
+  useEffect(() => {
+    //fetch course details for the id
+    if(flag.current) return;
+    (async() => {
+      try{
+        const res = await fetchCategory(params?.id, userdata?.token);
+        const {message, statusCode, success} = res;
+        if(!success) throw new AdvancedError(message, statusCode);
+        else {
+          const {data} = res;
+          console.log(data);
+          setFormstate(old => {
+            return {
+              ...old,
+              name: data.name,
+              description: data.description
+            }
+          })
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      }catch(err){
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    })()
+    flag.current = true;
+
+
+    return () => console.log("Leaving Details page");
+  }, [])
+
+
+  function changeHandler(e){
+    const {name, value} = e.target;
+    setFormstate(old => {
+      return {
+        ...old,
+        [name]: value
+      }
+    })
+  }
+
+
+  return(
+    <Admin header="ADMIN">
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+          {/* <h3>Course Details</h3> */}
+
+          <form className="form" style={{width: "80%", margin: "20px 0px"}}>
+            <Input
+              label="Name of Course"
+              name="name"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.name}
+              readOnly={true}
+            />
+
+            <div className={clsx.form_group}>
+              <label htmlFor={"description"} className="form-label generic_label">
+                Description
+              </label>
+              <textarea
+                rows="5"
+                name="description"
+                value={formstate.description}
+                onChange={changeHandler}
+                className="form-control generic_input"
+                readOnly
+              ></textarea>
+            </div>
+
+            <div className={clsx.form_group}>
+              <div className={clsx.form_group__teachers}>
+                <label>Name of teachers</label>
+                {
+                  teachers.map((t, i) => (
+                    <div key={i}>
+                      <p>{i + 1}. &nbsp; {t}</p> 
+                      <div className={clsx.teachers__actions}>
+                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
+                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+              <Input
+                style={{margin: "0px !important"}}
+                name="teacher"
+                type="text"
+                handleChange={changeHandler}
+                value={formstate.teacher}
+              />
+              <button className={clsx.form_group__button}>
+                Add Teacher
+              </button>
+            </div>
+
+            <div className={clsx.form_group}>
+              <div className={clsx.form_group__teachers}>
+                <label>Add Student</label>
+                {
+                  students.map((s, i) => (
+                    <div key={i}>
+                      <p>{i + 1}. &nbsp; {s}</p> 
+                      <div className={clsx.teachers__actions}>
+                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
+                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+              <Input
+                name="student"
+                type="text"
+                handleChange={changeHandler}
+                value={formstate.student}
+              />
+              <button className={clsx.form_group__button}>
+                Add Student
+              </button>
+            </div>
+
+          </form>
         </div>
-        <h5>{name}</h5>
-        <p>{description}</p>
-        <div className={clsx.category_more__info}>
-          <button>Expand</button>
-        </div>
-      </Paper>
-    </Grid>
+      </div>
+    </Admin>
   )
 }
 
@@ -50,21 +200,17 @@ function CategoryInterface({name, bannerImg, description}){
 export function Category(){
   const navigate = useNavigate();
   const [categories, setCategories] = useState([])
-  const [open, setOpen] = useState(false);
-  const {adminFunctions: {addCategory, fetchCategories}} = useAuth();
+  const {adminFunctions: {fetchCategories}} = useAuth();
   const {getItem} = useLocalStorage();
   const flag = useRef(false);
   const userdata = getItem(KEY)
+  const tableHeaders = ["No", "Name of Category", "Date", "No of Student"]
   useEffect(() => {
     if(flag.current) return;
     (async () => {
       try{
         const res = await fetchCategories(userdata?.token);
         const {success, statusCode, message} = res;
-        console.log(res);
-        // if(statusCode === 2) {
-        //   navigate("/login");
-        // }
         if(!success) throw new AdvancedError(message, statusCode);
         else {
           if(res?.data){
@@ -96,27 +242,56 @@ export function Category(){
     })()
     flag.current = true;
   }, [])
+
+
+
+  function deleteCourseHandler(e, id){
+    if(e.target === e.currentTarget){
+      console.log(e.target, id);
+    }
+  }
+
+  function showDetailsHandler(e, id){
+    console.log(e.target, id);
+    navigate(`details/${id}`);
+  }
   return (
-    <Admin header="Course Categories">
-      <UploadForm isOpen={open} setIsOpen={setOpen} />
+    <Admin header="Category">
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-            {/* <button onClick={() => setOpen(_ => true)}>Upload File</button> */}
-            <button onClick={(e) => navigate("new")}>Create Category</button>
-            <Grid container spacing={4}>
-              {
-                categories ? categories.map((
-                {bannerImg, careerDescription, careerList, 
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h1 style={{margin: 0}}>All Category</h1>  <button className="btn btn-primary px-4" onClick={(e) => navigate("new")}>Add Category</button>
+          </div>
+            <div className={`table-responsive ${clsx.admin__student_main}`}>
+              <table className={`${clsx.admin__student_table}`}>
+                <thead>
+                  {tableHeaders.map((el, i) => (
+                    <td key={i}>{el}</td>
+                  ))}
+                </thead>
+                <tbody>
+                  {categories.length > 0 ? categories.map((
+                  {bannerImg, careerDescription, careerList, 
                   name, description, iconImg, categoryId, 
                   niche: nicheTitle, nicheDescription, 
                   nicheItems
                 }, i) => (
-                  <CategoryInterface key={i} name={name} bannerImg={bannerImg} description={description} />
-                )) : <h3>No categories found</h3>
-              }
-            </Grid>
+                    <UserInfoCard
+                      key={i}
+                      comp="Category"
+                      name={name}
+                      num={i}
+                      date={"Feb 24"}
+                      students={90}
+                      id={categoryId}
+                      deleteCourseHandler={deleteCourseHandler}
+                      showDetailsHandler={showDetailsHandler}
+                    />
+                  )) : <h5 style={{textAlign:'center'}}>No Category found</h5>}
+                </tbody>
+              </table>
+            </div>
           </div>
-        {/* </div> */}
       </div>
     </Admin>
   )
@@ -419,13 +594,21 @@ export function CreateCourseCategory(){
   }
 
 
+  function showUploadFormHandler(){
+    setOpen(_ => true)
+  }
+
+
   return(
     <Admin header="Create Category">
-       <UploadForm isOpen={open} setIsOpen={setOpen} />
+      <UploadForm isOpen={open} setIsOpen={setOpen} />
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-            <button onClick={() => setOpen(_ => true)}>Upload File</button> 
-            <form className="form" onSubmit={submitHandler}>
+            <div className={clsx.upload__file_box} onClick={showUploadFormHandler}>
+              <img src={vector} alt={"Empty Image"} />
+              <p>Upload Image</p>
+            </div>
+            <form className="form" style={{width: "80%"}}>
             <Input
               label="Name of category"
               name="name"
@@ -461,11 +644,11 @@ export function CreateCourseCategory(){
               ></textarea>
             </div>
             <div className={clsx.form_group}>
-              <label>Niche(s)</label>
+              <label>Niches</label>
               {
                 nichelists.length !== 0 ? nichelists.map(({name, description}, i) => (
                   <Syllabus key={i} title={name} description={description} />
-                )) : <h5>No Niche(s)!</h5>
+                )) : <p className="m-0 text-danger" style={{fontSize: '0.8rem', textIndent: 20}}>No Niche</p>
               }
             </div>
             <button type="button" style={{background:"var(--secondary"}} className={`btn btn-primary ${clsx.addniche_button}`}  onClick={e => setShowNicheModal(_ => true)}>Add Niche Items</button>
@@ -485,14 +668,14 @@ export function CreateCourseCategory(){
               ></textarea>
             </div>
             <div className={clsx.form_group}>
-              <label>Career(s)</label>
+              <label>Career</label>
               {
                 careerlists.length !== 0 ? careerlists.map(({name}, i) => (
                   <Syllabus key={i} title={name} />
-                )) : <h5>No Career(s)!</h5>
+                )) : <p className="m-0 text-danger" style={{fontSize: '0.8rem', textIndent: 20}}>No Careers</p>
               }
             </div>
-            <button type="button" style={{background:"var(--secondary"}} className={`btn btn-primary ${clsx.addcareer_button}`} onClick={e => setShowCareerModal(_ => true)}>Add Career List</button>
+            <button type="button" style={{background:"var(--secondary"}} className={`btn btn-primary mb-3 ${clsx.addcareer_button}`} onClick={e => setShowCareerModal(_ => true)}>Add Career List</button>
             <CareerModal open={showCareerModal} newCareer={careerlist} setOpen={setShowCareerModal}
             handleChange={careerChangeHandler} updateCareer={updateCareerHandler} />
 
@@ -513,22 +696,11 @@ export function CreateCourseCategory(){
             />
             <i className="text-danger">Make sure to upload the files and get the file name</i>
 
-
-            {loading ? (
-              <button className="button button-lg log_btn w-100 mt-3">
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </button>
-            ) : (
-              <button
-                className="button button-lg log_btn w-100 mt-3"
-                type="submit"
-              >
-                Save
-              </button>
-            )}
           </form>
+          <div className={clsx.form_button__container}>
+            <button className="btn btn-primary" onClick={submitHandler}>Submit</button>
+            <button className="btn border-primary text-primary">Preview</button>
+          </div>
         </div>
       </div>
     </Admin>
@@ -706,6 +878,7 @@ export function Approve() {
 
 export function UserInfoCard({
   img,
+  id,
   name,
   date,
   email,
@@ -720,6 +893,8 @@ export function UserInfoCard({
   firstName,
   lastName,
   user,
+  unpaid,
+  students,
   status,
   amount,
   accessPledre=null,
@@ -730,15 +905,14 @@ export function UserInfoCard({
   start_date,
   course_status,
   enrolled,
-  approveHandler = () => {
-    return;
-  },
+  deleteCourseHandler,
+  showDetailsHandler = () => {return},
+  approveHandler = () => {return},
 }) {
   return (
-    // <div>
     <tr
       className={clsx.user__info_card}
-      onClick={(e) => approveHandler(e, email)}
+      onClick={(e) => comp === 'Category' ? showDetailsHandler(e, id) : approveHandler(e, email)}
     >
       <td className={clsx.user__info}>{num + 1}.</td>
       {user && (
@@ -748,11 +922,11 @@ export function UserInfoCard({
         </td>
       )}
 
-      {(comp === "Courses" ||comp === "History" || comp === "Teacher") && <td className={clsx.user__info}>{course}</td>}
+      {(comp === "Courses" || comp === "History" || comp === "Teacher") && <td className={clsx.user__info}>{course}</td>}
       {enrolled && <td className={clsx.user__info}>{enrolled}</td>}
       {comp === "History" && <td className={clsx.user__info}>{status}</td>}
 
-      {comp === "Courses" && <td className={clsx.user__info}>{name}</td>}
+      {(comp === "Courses" || comp === "Category") && <td className={clsx.user__info}>{name}</td>}
 
       {date && (
         <td className={clsx.user__date}>
@@ -791,6 +965,11 @@ export function UserInfoCard({
           <span>{email}</span>
         </td>
       )}
+      {students && (
+        <td className={clsx.user__email}>
+          <span>{students}</span>
+        </td>
+      )}
       {rating && (
         <td className={clsx.user__email}>
           <Rating onClick={handleRating} ratingValue={starRating} size={18} initialValue={0} />
@@ -812,6 +991,16 @@ export function UserInfoCard({
           </span>
         </td>
       )}
+      {unpaid && (
+        <td className={clsx.user__button}>
+          <span style={{color: 'red'}}>
+            -{new Intl.NumberFormat("en-us", {
+              style: "currency",
+              currency: "USD",
+            }).format(unpaid)}
+          </span>
+        </td>
+      )}
       {isActive !== null && (
         <td className={clsx.user__button}>
           <span>
@@ -819,6 +1008,17 @@ export function UserInfoCard({
           </span>
         </td>
       )}
+      {
+        comp === "Category" && (
+          <td className={clsx.user__button}>
+            <span onClick={e => {
+              deleteCourseHandler(e, id);
+            }}>
+              <AiOutlineDelete style={{fontSize: "2rem"}} className="text-danger" />
+            </span>
+          </td>
+        )
+      }
       {accessPledre !== null && (
         <td className={clsx.user__button}>
           <span>
@@ -827,7 +1027,6 @@ export function UserInfoCard({
         </td>
       )}
     </tr>
-    // </div>
   );
 }
 
@@ -931,12 +1130,12 @@ export function Courses() {
   const [courseList, setCourseList] = useState([])
   const tableHeaders = [
     "No",
-    "Course",
-    "Category",
-    "Description",
-    "Type",
-    "Price",
-    "Action",
+    "Courses",
+    "Name",
+    "Date",
+    "Package",
+    "Rating",
+    "Approval",
   ];
 
   useEffect(()=>{
@@ -944,13 +1143,10 @@ export function Courses() {
     (async () => {
       try {
         const res = await fetchCourses(userdata?.token);
-        console.log(res);
         const { message, success, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         else if (statusCode === 1) {
           const { data } = res;
-          //do somethings
-
           setCourseList(data);
           toast.success(message, {
             position: "top-right",
@@ -987,9 +1183,8 @@ export function Courses() {
     <Admin header={"Courses"}>
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-              <h1>All Courses</h1>
-          <div className="d-flex justify-content-between align-items-center">
-              <button type="button" className="btn btn-primary" onClick={gotoCreateCourseHandler}>Add Course</button>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h1 style={{margin: 0}}>All Courses</h1>  <button type="button" className="btn btn-primary px-5" onClick={gotoCreateCourseHandler}>Add Course</button>
           </div>
 
           <div className={clsx.admin__student_main}>
@@ -1000,6 +1195,25 @@ export function Courses() {
                 ))}
               </thead>
               <tbody>
+              {/* category: "Web development"
+​​
+              courseId: "629a3b3cc6abb4b3ca556805"
+              ​​
+              courseImg: "courseImg.png"
+              ​​
+              description: "Introduction to python"
+              ​​
+              faqs: Array [ {…} ]
+              ​​
+              instructorId: "629a3a04c6abb4b3ca5567eb"
+              ​​
+              name: "Python programming"
+              ​​
+              packages: Array [ {…} ]
+              ​​
+              price: 300
+              ​​
+              type: "PACKAGE" */}
                 {courseList.length > 0 && courseList.map(
                   (
                     {
@@ -1009,8 +1223,8 @@ export function Courses() {
                       price,
                       type,
                       approve,
-                      course,
-                      rating,
+                      courseId,
+                      packages: {title}
                     },
                     i
                   ) => (
@@ -1020,11 +1234,8 @@ export function Courses() {
                       num={i}
                       name={category}
                       course={name}
-                      date={description}
-                      pack={type}
-                      email={price}
-
-                      isActive={approve}
+                      paid={price}
+                      isActive={approve ?? true}
                     />
                   )
                 )}
@@ -1037,7 +1248,8 @@ export function Courses() {
   );
 }
 
-function AddSyllabus({ open, handleClose, addSyllabus }) {
+
+function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
   const [newSyllabus, setNewSyllabus] = useState({
     title: "",
     description: "",
@@ -1079,6 +1291,7 @@ function AddSyllabus({ open, handleClose, addSyllabus }) {
       });
     }else {
       addSyllabus(newSyllabus);
+      setOpen(_ => false);
     }
   }
 
@@ -1090,17 +1303,6 @@ function AddSyllabus({ open, handleClose, addSyllabus }) {
       aria-describedby="modal-modal-description"
     >
       <Box style={style}>
-        {/* <ToastContainer
-          position="top-right"
-          autoClose={2500}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        /> */}
         <h5
           className="lead text-primary"
           style={{ color: "var(--theme-blue)" }}
@@ -1143,8 +1345,6 @@ function AddSyllabus({ open, handleClose, addSyllabus }) {
 
 export function CreateCourse() {
   const {
-    // generalState: { isMobile, notification },
-    // setGeneralState,
     teacherFunctions: { addCourse },
   } = useAuth();
   const {getItem} = useLocalStorage();
@@ -1253,7 +1453,7 @@ export function CreateCourse() {
     setOpen(false);
   };
   return (
-    <Admin>
+    <Admin header="Create Course">
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -1267,7 +1467,6 @@ export function CreateCourse() {
       />
       <div className={clsx.admin_profile}>
         <div className={clsx.edit__profile}>
-          <h2>Create a new course</h2>
           <form className="form" onSubmit={submitHandler}>
             <Input
               label="Name of course"
@@ -1344,15 +1543,16 @@ export function CreateCourse() {
               {
                 syllabuses.length !== 0 ? syllabuses.map(({title, description}, i) => (
                   <Syllabus title={title} key={i} description={description} />
-                )) : <p>No syllabus!</p>
+                )) : <p className="m-0 text-danger" style={{fontSize: '0.8rem', textIndent: 20}}>No syllabus!</p>
               }
             </div>
 
             <button
-              className="btn btn-primary my-3"
+              className="btn btn-primary mb-5"
               style={{ backgroundColor: "var(--theme-blue)" }}
               type="button"
               onClick={openModal}
+              disabled={loading}
             >
               Add Syllabus
             </button>
@@ -1384,8 +1584,9 @@ export function CreateCourse() {
   );
 }
 
+
 export function Fees() {
-  const tableHeaders = ["No", "Name", "Date", "Email", "Paid"];
+  const tableHeaders = ["No", "Name", "Date", "Email", "Paid", "Amount Unpaid"];
   const tableContents = [
     {
       name: "Melanie Grutt",
@@ -1393,6 +1594,7 @@ export function Fees() {
       date: "Feb 24",
       email: "melanie@gmail.com",
       paid: 2000,
+      unpaid: 2000,
     },
     {
       name: "Kiera Danlop",
@@ -1400,6 +1602,7 @@ export function Fees() {
       date: "Mar 23",
       email: "kiera@gmail.com",
       paid: 4000,
+      unpaid: 3000,
     },
     {
       name: "Melanie Grutt",
@@ -1407,6 +1610,7 @@ export function Fees() {
       date: "Feb 24",
       email: "melanie@gmail.com",
       paid: 1000,
+      unpaid: 500,
     },
     {
       name: "Kiera Danlop",
@@ -1414,6 +1618,7 @@ export function Fees() {
       date: "Mar 23",
       email: "kiera@gmail.com",
       paid: 6000,
+      unpaid: 2000,
     },
   ];
   return (
@@ -1430,15 +1635,17 @@ export function Fees() {
                 ))}
               </thead>
               <tbody>
-                {tableContents.map(({ img, email, date, name, paid }, i) => (
+                {tableContents.map(({ img, email, date, name, paid, unpaid }, i) => (
                   <UserInfoCard
                     key={i}
-                    name={name}
+                    firstName={name.split(" ")[0]}
+                    lastName={name.split(" ")[1]}
                     img={img}
                     paid={paid}
                     date={date}
                     email={email}
-                    isActive={false}
+                    unpaid={unpaid}
+                    user={true}
                     num={i}
                   />
                 ))}
@@ -1450,6 +1657,7 @@ export function Fees() {
     </Admin>
   );
 }
+
 
 export function Student() {
   const [studentList, setStudentList] = useState([]);
@@ -1686,18 +1894,7 @@ export function Edit() {
     category: userdata?.category ?? "",
   });
   useEffect(() => {
-    // if (userdata) {
-    //   setFormstate({
-    //     firstName: userdata.firstName,
-    //     lastName: userdata.lastName,
-    //     bio: userdata.bio,
-    //     location: userdata.location,
-    //     phoneNumber: userdata.phoneNumber,
-    //     work: userdata.work,
-    //     categoty: userdata.category,
-    //   });
-    // }
-  }, [userdata]);
+  }, []);
 
   async function submitHandler(e) {
     e.preventDefault();
@@ -1828,7 +2025,7 @@ export function Edit() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h3>Update Profile</h3>
-          <div className="row w-100">
+          <div className="row w-100 mt-4">
             <div className={` col-sm-3 ${clsx.edit__picture}`}>
               {userdata?.profileImg ? (
                 <img
@@ -1862,7 +2059,7 @@ export function Edit() {
             </div>
           </div>
 
-          <form className="form" onSubmit={submitHandler}>
+          <form className="form" onSubmit={submitHandler} style={{width: "80%"}}>
             <Input
               label="First name"
               name="firstName"
