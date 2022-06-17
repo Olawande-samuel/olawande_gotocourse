@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import {MdEdit, MdPersonAdd} from "react-icons/md"
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -25,11 +25,9 @@ import { useLocalStorage } from "../../../hooks";
 
 const KEY = 'gotocourse-userdata';
 export function Profile(){
-    const {generalState: {isMobile, notification},
-    setGeneralState, 
-    studentFunctions: {fetchProfile}} = useAuth();
+    const {generalState: {isMobile, notification,loading}, setGeneralState, studentFunctions: {fetchProfile}} = useAuth();
 
-
+    const ref = useRef(false)
     const {updateItem, getItem} = useLocalStorage();
     let userdata = getItem(KEY);
     const navigate = useNavigate();
@@ -46,6 +44,7 @@ export function Profile(){
 
 
     useEffect(() => {
+        if(ref.current) return
         if(userdata){
             const token = userdata.token;
             (async () => {
@@ -73,7 +72,9 @@ export function Profile(){
                     });
                 }
             })()
-        }
+        } 
+
+        ref.current = true
     }, [userdata?.token])
     function editProfileHandler(e){
         navigate("/students/profile/edit");
@@ -407,7 +408,10 @@ export function Courses(){
     const {getItem} = useLocalStorage();
     let userdata = getItem(KEY);
     const [courses, setCourses] = useState([]);
+
+    const ref = useRef(false)
     useEffect(() => {
+        if(ref.current) return
         (async() => {
             try{
                 const res = await fetchCourses(userdata?.token);
@@ -438,6 +442,8 @@ export function Courses(){
                 });
             }
         })()
+
+        ref.current = true
     }, [])
     const tableHeaders = ["No", "Courses", "Tutor's Name", "Teaching Model", "Course Fee", "Rating"]
     const tableContents = [
@@ -516,7 +522,9 @@ export function History(){
     const {getItem} = useLocalStorage();
     let userdata = getItem(KEY);
     const [courses, setCourses] = useState([]);
+    const ref = useRef(false)
     useEffect(() => {
+        if(ref.current) return
         if(userdata){
             (async() => {
                 setGeneralState({...generalState, loading: true})
@@ -551,6 +559,8 @@ export function History(){
                 }
             })()
         }
+
+        ref.current = true
     }, [])
 
     
