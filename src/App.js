@@ -8,7 +8,7 @@ import Login from "./pages/User/Login";
 import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
-import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CreateCourseCategory, CreateCourse as AdminCreateCourse} from "./pages/Dashboard/Admin";
+import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails} from "./pages/Dashboard/Admin";
 import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Courses as StudentCourses, History as StudentHistory} from "./pages/Dashboard/Students";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, Courses as TeacherCourses, CreateCourse, Earnings} from "./pages/Dashboard/Teachers";
 import 'react-toastify/dist/ReactToastify.css';
@@ -76,6 +76,7 @@ function App() {
               <Route path="courses" element={<Courses />} />
               <Route path="courses/create" element={<AdminCreateCourse />} />
               <Route path="courses-categories" element={<AdminCategories />} />
+              <Route path="courses-categories/details/:id" element={<AdminCourseDetails />} />
               <Route path="courses-categories/new" element={<CreateCourseCategory />} />
               <Route path="teachers/approve" element={<Approve />} />
               <Route path="profile/edit" element={<AdminEdit />} />
