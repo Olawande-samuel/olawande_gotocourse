@@ -367,8 +367,11 @@ export const CourseProfile = () => {
     category:"Software Development",
     rating:4,
     students: 120,
-    description:""
-
+    description:"",
+    courseImg:"",
+    faqs: [],
+    packages:[],
+    price:5000,
   }
   return (
     <Courses>
