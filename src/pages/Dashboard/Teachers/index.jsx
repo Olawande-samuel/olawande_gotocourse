@@ -952,10 +952,7 @@ export function EarningsCard({ title, type, options = [], total, value }) {
 
 export function Courses() {
   const {
-    generalState: { isMobile, loading },
-    generalState,
-    teacherFunctions: { fetchCourse, fetchApplications },
-    setGeneralState,
+    generalState: { isMobile, loading }, generalState, teacherFunctions: { fetchCourses, fetchApplications }, setGeneralState,
   } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
@@ -967,7 +964,7 @@ export function Courses() {
     setGeneralState({ ...generalState, loading: true });
 
     try {
-      const res = await fetchApplications(userdata?.token);
+      const res = await fetchCourses(userdata?.token);
       setGeneralState({ ...generalState, loading: false });
 
       const { success, message, statusCode } = res;
@@ -1025,34 +1022,6 @@ export function Courses() {
     "Starting Date",
     "Status",
   ];
-  const tableContents = !courses?.length
-    ? [
-        {
-          name: "Melanie Grutt",
-          course: "Cybersecurity",
-          package: "Cohort",
-          rating: "Approved",
-        },
-        {
-          name: "Keira Danlop",
-          course: "UI/UX",
-          package: "Cohort",
-          rating: "Pending",
-        },
-        {
-          name: "Diop Grutt",
-          course: "HTML",
-          package: "One on One",
-          rating: "Approved",
-        },
-        {
-          name: "Diop Grutt",
-          course: "Data Analytics",
-          package: "Self paced",
-          rating: "Not Approved",
-        },
-      ]
-    : courses;
 
   function createCourseHandler(e) {
     navigate("create");
@@ -1067,6 +1036,9 @@ export function Courses() {
         >
           Create Course
         </button>
+
+        {courses.length > 0 ? (
+
         <table className={clsx.teachers_table}>
           <thead>
             <tr>
@@ -1076,8 +1048,8 @@ export function Courses() {
             </tr>
           </thead>
           <tbody>
-            {tableContents.map(
-              ({ name, package: p, course, rating, status }, i) => (
+            {courses.map(
+              ({ name, package: p, category, rating, status }, i) => (
                 <UserInfoCard
                   key={i}
                   // name={name}
@@ -1085,14 +1057,19 @@ export function Courses() {
                   comp={"Teacher"}
                   // approveHandler=
                   start_date="1/12/20"
-                  course_status={rating}
-                  pack={p}
-                  course={course}
+                  course_status={status}
+                  pack={category}
+                  course={name}
                 />
               )
             )}
           </tbody>
         </table>
+        ):(
+          <div className="text-center">
+            <p className="lead">You are yet to create a course</p>
+          </div>
+        )}
       </div>
     </Teachers>
   );
