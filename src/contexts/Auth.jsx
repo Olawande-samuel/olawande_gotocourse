@@ -1,6 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
 
-import { authFunctions, studentFunctions, adminFunctions, teacherFunctions, adminStudentFunctions, adminTeacherFunctions } from "./functions";
+import { authFunctions, studentFunctions, adminFunctions, teacherFunctions, adminStudentFunctions, adminTeacherFunctions, otherFunctions } from "./functions";
 
 const AuthContext = createContext();
 
@@ -22,7 +22,7 @@ const AuthContextProvider = ({children}) => {
         return () => console.log("Rerendering");
     }, [generalState])
     return (
-        <AuthContext.Provider value={{authFunctions, teacherFunctions, studentFunctions, adminFunctions, generalState, setGeneralState, adminStudentFunctions, adminTeacherFunctions}}>
+        <AuthContext.Provider value={{authFunctions, teacherFunctions, studentFunctions, adminFunctions, generalState, setGeneralState, adminStudentFunctions, adminTeacherFunctions, otherFunctions}}>
             {children}
         </AuthContext.Provider>
     )

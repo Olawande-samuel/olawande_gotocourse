@@ -1,13 +1,26 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { BsStarFill } from "react-icons/bs";
+import { ToastContainer, toast } from "react-toastify";
 
+import {
+  Cyber,
+  Data,
+  IT,
+  Audit,
+  Product,
+  Project,
+  Risk,
+} from "../../images/components/svgs.js";
+import {useAuth} from "../../contexts/Auth"
+import { AdvancedError } from "../../classes";
 import Power from "../../images/powerbi.png";
 import Algo from "../../images/algo.png";
 import Layout from "../../components/Layout";
+import Loader from "../../components/Loader";
 import { careers } from "../../components/Career";
 import style from "./courses.module.css";
 import banner from "../../images/header.png";
@@ -142,11 +155,13 @@ const courseDetails = [
 ];
 const Courses = ({ children }) => {
   const location = useLocation();
+  const { generalState:{loading} } = useAuth()
   const bread = location.pathname.split("/");
   return (
     <Layout>
       <ScrollToTop />
       <div className={style.block}>
+        <ToastContainer />  
         <div className={`container`}>
           <div className={style.breadcrumbs_wrapper}>
             <nav arial-label="breadcrumb">
@@ -165,19 +180,24 @@ const Courses = ({ children }) => {
         </div>
         {children}
       </div>
+      {loading && 
+            <Loader />
+        }
     </Layout>
   );
 };
 
 export default Courses;
 
-const Card = ({ logo, title, details }) => {
+const Card = ({ logo, name, description, iconImg }) => {
   return (
-    <div className={`card ${style.card}`}>
+    <div className={`card h-100 ${style.card}`}>
       <div className={`card-body ${style.cate_card_body}`}>
-        <i className={style.icon}>{logo}</i>
-        <h4 className={style.cate_card_title}>{title}</h4>
-        <p className={style.text}>{details}</p>
+        <i className={style.icon}>
+          {logo}
+        </i>
+        <h4 className={style.cate_card_title}>{name}</h4>
+        <p className={style.text}>{description}</p>
         <hr />
         <div className="d-flex">
           <button className={`btn-plain ms-auto ${style.button}`}>
@@ -206,6 +226,143 @@ export const CourseCard = ({ img, title, details, subtitle, author, color, backg
 };
 
 export const Categories = () => {
+  const logos = [
+    {
+      logo: <Cyber />,
+    },
+    {
+      logo: <Risk />,
+    },
+    {
+      logo: <Data />,
+    },
+    {
+      logo: <Project />,
+    },
+    {
+      logo: <IT />,
+    },
+    {
+      logo: <Audit />,
+    },
+    {
+      logo: <Cyber />,
+    },
+    {
+      logo: <Product />,
+    },
+    {
+      logo: <Project />,
+    },
+    {
+      logo: <Risk />,
+    },
+    {
+      logo: <IT />,
+    },
+  ];
+  const {generalState, setGeneralState, otherFunctions: {fetchCategories, searchCategories}} = useAuth();
+  const [categories, setCategories] = useState([])
+  const [searchTerm, setSearchTerm] = useState("")
+  
+  const ref = useRef(false);
+  useEffect(()=>{
+    if(ref.current) return
+    (async()=>{
+      try{
+        setGeneralState({...generalState, loading: true})
+        const res = await fetchCategories();
+        const {success, message, statusCode, data} = res;
+        setGeneralState({...generalState, loading: false})
+
+          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+          const arr = []
+          data.forEach((item, index)=>{
+            let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
+
+            arr.push(merged)
+          })
+          setCategories(arr)
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+      
+    }catch(err){
+        setGeneralState({...generalState, loading: false})
+        toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+    })()
+    ref.current = true
+  },[])
+
+
+  function getRandomArbitrary(min, max) {
+    return Math.ceil(Math.random() * (max - min) + min)
+  }
+
+ async function search(e){
+    e.preventDefault();
+    try{
+      setGeneralState({...generalState, loading: true})
+        const res = await searchCategories(searchTerm);
+        const {success, message, statusCode, data} = res;
+
+        
+        if(!success || statusCode !== 1) {
+          throw new AdvancedError(message, statusCode);
+        }
+        else if(data.length <= 0) {
+          throw new AdvancedError("Category not found", statusCode)
+        } 
+        else {
+
+          const arr = []
+          data.forEach((item, index)=>{
+            let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
+            arr.push(merged)
+          })
+            setCategories(arr)
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    }catch(err){
+      toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+      })
+    }finally {
+      setGeneralState({...generalState, loading: false})
+
+    }
+
+  }
+
   return (
     <Courses>
       <div className="container">
@@ -220,14 +377,16 @@ export const Categories = () => {
               id="search"
               className="form-control"
               placeholder="Search category"
+              onChange={(e)=>setSearchTerm(e.target.value)}
+              value={searchTerm}
             />
-            <button className="button">Search</button>
+            <button className="button" onClick={search}>Search</button>
           </div>
         </div>
 
-        <main className={style.main}>
-          {careers.map((career) => (
-            <Link to={career.title.split(" ").join("-").toLowerCase()}>
+        <main className={style.new_main}>
+          {categories.length > 0 && categories.map((career) => (
+            <Link to={career.name.split(" ").join("-").toLowerCase()}>
               <Card {...career} />
             </Link>
           ))}
@@ -265,14 +424,57 @@ export const CourseList = () => {
     </Courses>
   );
 };
-export const CourseDetail = () => {
+export const CourseDetail = ({preview}) => {
+
+  const data = preview?.name ? preview : {
+    bannerImg:banner,
+    iconImg:"",
+    carreerList:[
+      {name:"Data mining engineer"},
+      {name:"Business intelligence analyst"},
+      {name:"Data scientist"},
+      {name:"Data architect"},
+      {name:"Senior data scientist"},
+    ],
+    career:"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, voluptas?",
+    nicheItems:[
+      {
+        name:"Genetic algorithms",
+        description:"A technique used for optimization that is inspired by the process of natural evolution or “survival of the fittest.”Often described as a type of “evolutionary algorithm,” these algorithms are well-suited for solving nonlinear problems."
+      },
+      {
+        name:"Machine learning",
+        description:"A subspecialty of computer science (within a field historically called “artificial intelligence”) concerned with the design and development of algorithms that allow computers to evolve behaviors based on empirical data."
+      },
+      {
+        name:"Pattern recognition",
+        description:"It is a set of machine learning techniques that assign some sort of output value (or label) to a given input value (or instance) according to a specific algorithm."
+      },
+      {
+        name:"Regression",
+        description:"A set of statistical techniques to determine how the value of the dependent variable changes when one or more independent variables is modified. Often used for forecasting or prediction."
+      },
+      {
+        name:"Time series analysis",
+        description:"ASet of techniques from both statistics and signal processing for analyzing sequences of data points, representing values at successive times, to extract meaningful characteristics from the data."
+      },
+    ],
+    nicheDescription:"Lorem ipsum dolor sit amet, consectetur wene adipiscing elit. Lorem ipsum dolor sit amet, consectetur wene adipiscing elit.",
+    niche:"Lorem ipsum dolor sit amet, consectetur wene adipiscing elit. Lorem ipsum dolor sit amet, consectetur wene adipiscing elit.",
+    description:"Data science is an interdisciplinary field that uses scientific methods, processes, algorithms and systems to extract knowledge and insights from noisy, structured and unstructured data, and apply knowledge and actionable insights from data across a broad range of application domains. It also involves a plethora of disciplines and expertise areas to produce a holistic, thorough and refined look into raw data.",
+    name:"Data Science",
+    categoryId:""
+
+  }
   return (
     <Courses>
       <main className={style.details_main}>
         <div className={style.banner}>
-          <img src={banner} alt="" />
+          <img src={data.bannerImg} alt="" />
           <div className="container py-5 position-relative">
-            <div className={style.box}></div>
+            <div className={style.box}>
+              {data.iconImg && <img src={data.iconImg} alt="" /> }
+            </div>
           </div>
         </div>
         <div className={`container ${style.details_main} `}>
@@ -280,33 +482,23 @@ export const CourseDetail = () => {
             <section className="col-md-7">
               <article>
                 <header>
-                  <h2>Data Science</h2>
+                  <h2>{data.name}</h2>
                 </header>
                 <p>
-                  Data science is an interdisciplinary field that uses
-                  scientific methods, processes, algorithms and systems to
-                  extract knowledge and insights from noisy, structured and
-                  unstructured data, and apply knowledge and actionable insights
-                  from data across a broad range of application domains.
-                </p>
-                <p>
-                  It also involves a plethora of disciplines and expertise areas
-                  to produce a holistic, thorough and refined look into raw
-                  data.
+                  {data.description}
                 </p>
               </article>
               <article>
-                <h3>Data Science Niche </h3>
+                <h3>{data.name} Niche </h3>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur wene adipiscing elit.
-                  Lorem ipsum dolor sit amet, consectetur wene adipiscing elit.{" "}
+                  {data.nicheDescription}
                 </p>
 
                 <ul>
-                  {courseDetails.map((item) => (
+                  {data.nicheItems.map((item) => (
                     <li>
-                      <p className={style.niche}>{item.title}</p>
-                      <p className={style.niche}>{item.details}</p>
+                      <p className={style.niche}>{item.name}</p>
+                      <p className={style.niche}>{item.description}</p>
                     </li>
                   ))}
                 </ul>
@@ -319,22 +511,20 @@ export const CourseDetail = () => {
                   <h3>Career Prospect</h3>
                 </header>
                 <p>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Reiciendis, voluptas?{" "}
+                  {data.career}
                 </p>
                 <ul>
-                  <li>Data mining engineer</li>
-                  <li>Business intelligence analyst</li>
-                  <li>Data scientist</li>
-                  <li>Data architect</li>
-                  <li>Senior data scientist</li>
+                  {data.carreerList.map(({name})=>(
+                  <li>{name}</li>
+                  ))
+                  }
                 </ul>
               </aside>
             </div>
           </div>
           <section>
             <header className={`text-center ${style.details_title}`}>
-              <h2 className={style.details_head}>Data Science Courses</h2>
+              <h2 className={style.details_head}>{data.name} Courses</h2>
               <p className="subtitle">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm
                 risus ridiculus nunc adipiscing justo.
@@ -360,9 +550,9 @@ export const CourseDetail = () => {
   );
 };
 
-export const CourseProfile = () => {
+export const CourseProfile = ({preview}) => {
 
-  const course = {
+  const course = preview?.name ? preview : {
     title:"Linear Programming",
     category:"Software Development",
     rating:4,
