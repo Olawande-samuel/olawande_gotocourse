@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useParams, useNavigate } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -25,6 +25,7 @@ import { careers } from "../../components/Career";
 import style from "./courses.module.css";
 import banner from "../../images/header.png";
 import details from "../../images/course_details.png";
+import { Rating } from "react-simple-star-rating";
 
 export function ScrollToTop() {
   const { pathname } = useLocation();
@@ -209,9 +210,13 @@ const Card = ({ logo, name, description, iconImg }) => {
   );
 };
 
-export const CourseCard = ({ img, title, details, subtitle, author, color, background, show }) => {
+export const  CourseCard = ({ img, title, details, subtitle, author, color, background, show ,  course, courseId}) => {
+  const navigate = useNavigate()
   return (
-    <div className={`card ${style.course_card}`} style={{background:background, color:color}}>
+    <div className={`card ${style.course_card}`} style={{background:background, color:color, cursor: "pointer"}} onClick={()=>{
+      localStorage.setItem("gotocourse-courseInfo", JSON.stringify(course ))
+      navigate(show === true ?  `courses/${title.replace(/\s+/g, '-').toLowerCase()}`:`${title.replace(/\s+/g, '-').toLowerCase()} `)
+      }}>
       <img src={img} alt="" className="card-img-top mentor_image" />
       <div className={`card-body ${style.course_Card_body}`}>
         <Link to={show === true ?  `courses/${title.replace(/\s+/g, '-').toLowerCase()}`:`${title.replace(/\s+/g, '-').toLowerCase()} `}>
@@ -425,55 +430,110 @@ export const CourseList = () => {
   );
 };
 export const CourseDetail = ({preview}) => {
+  const {generalState, setGeneralState, otherFunctions: {fetchCategory}} = useAuth();
+  
+  const {id} = useParams()
+  const ref = useRef(false);
 
-  const data = preview?.name ? preview : {
-    bannerImg:banner,
-    iconImg:"",
-    carreerList:[
-      {name:"Data mining engineer"},
-      {name:"Business intelligence analyst"},
-      {name:"Data scientist"},
-      {name:"Data architect"},
-      {name:"Senior data scientist"},
-    ],
-    career:"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, voluptas?",
-    nicheItems:[
-      {
-        name:"Genetic algorithms",
-        description:"A technique used for optimization that is inspired by the process of natural evolution or “survival of the fittest.”Often described as a type of “evolutionary algorithm,” these algorithms are well-suited for solving nonlinear problems."
-      },
-      {
-        name:"Machine learning",
-        description:"A subspecialty of computer science (within a field historically called “artificial intelligence”) concerned with the design and development of algorithms that allow computers to evolve behaviors based on empirical data."
-      },
-      {
-        name:"Pattern recognition",
-        description:"It is a set of machine learning techniques that assign some sort of output value (or label) to a given input value (or instance) according to a specific algorithm."
-      },
-      {
-        name:"Regression",
-        description:"A set of statistical techniques to determine how the value of the dependent variable changes when one or more independent variables is modified. Often used for forecasting or prediction."
-      },
-      {
-        name:"Time series analysis",
-        description:"ASet of techniques from both statistics and signal processing for analyzing sequences of data points, representing values at successive times, to extract meaningful characteristics from the data."
-      },
-    ],
-    nicheDescription:"Lorem ipsum dolor sit amet, consectetur wene adipiscing elit. Lorem ipsum dolor sit amet, consectetur wene adipiscing elit.",
-    niche:"Lorem ipsum dolor sit amet, consectetur wene adipiscing elit. Lorem ipsum dolor sit amet, consectetur wene adipiscing elit.",
-    description:"Data science is an interdisciplinary field that uses scientific methods, processes, algorithms and systems to extract knowledge and insights from noisy, structured and unstructured data, and apply knowledge and actionable insights from data across a broad range of application domains. It also involves a plethora of disciplines and expertise areas to produce a holistic, thorough and refined look into raw data.",
-    name:"Data Science",
-    categoryId:""
+  const [categoryDetails, setCategoryDetails]= useState(
+    {
+      bannerImg:banner,
+      iconImg:"",
+      carreerList:[
+        {name:"Data mining engineer"},
+        {name:"Business intelligence analyst"},
+        {name:"Data scientist"},
+        {name:"Data architect"},
+        {name:"Senior data scientist"},
+      ],
+      career:"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, voluptas?",
+      nicheItems:[
+        {
+          name:"Genetic algorithms",
+          description:"A technique used for optimization that is inspired by the process of natural evolution or “survival of the fittest.”Often described as a type of “evolutionary algorithm,” these algorithms are well-suited for solving nonlinear problems."
+        },
+        {
+          name:"Machine learning",
+          description:"A subspecialty of computer science (within a field historically called “artificial intelligence”) concerned with the design and development of algorithms that allow computers to evolve behaviors based on empirical data."
+        },
+        {
+          name:"Pattern recognition",
+          description:"It is a set of machine learning techniques that assign some sort of output value (or label) to a given input value (or instance) according to a specific algorithm."
+        },
+        {
+          name:"Regression",
+          description:"A set of statistical techniques to determine how the value of the dependent variable changes when one or more independent variables is modified. Often used for forecasting or prediction."
+        },
+        {
+          name:"Time series analysis",
+          description:"ASet of techniques from both statistics and signal processing for analyzing sequences of data points, representing values at successive times, to extract meaningful characteristics from the data."
+        },
+      ],
+      nicheDescription:"Lorem ipsum dolor sit amet, consectetur wene adipiscing elit. Lorem ipsum dolor sit amet, consectetur wene adipiscing elit.",
+      niche:"Lorem ipsum dolor sit amet, consectetur wene adipiscing elit. Lorem ipsum dolor sit amet, consectetur wene adipiscing elit.",
+      description:"Data science is an interdisciplinary field that uses scientific methods, processes, algorithms and systems to extract knowledge and insights from noisy, structured and unstructured data, and apply knowledge and actionable insights from data across a broad range of application domains. It also involves a plethora of disciplines and expertise areas to produce a holistic, thorough and refined look into raw data.",
+      name:"Data Science",
+      categoryId:""
+  
+    }
+  )
 
+  
+  useEffect(()=>{
+    if(preview?.name) {
+      setCategoryDetails(preview)
+    } else {
+    let categoryId = id.charAt(0).toUpperCase() + id.slice(1)
+    let one = categoryId.split("-").join(" ")
+    
+    if(ref.current) return
+    // (async()=>{
+    //   try{
+    //     setGeneralState({...generalState, loading: true})
+    //     const res = await fetchCategory(one);
+    //     const {success, message, statusCode, data} = res;
+    //     setGeneralState({...generalState, loading: false})
+    //       if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+    //       setCategoryDetails(data)
+    //       toast.success(message, {
+    //         position: "top-right",
+    //         autoClose: 4000,
+    //         hideProgressBar: true,
+    //         closeOnClick: true,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //         progress: undefined,
+    //       });
+      
+    // }catch(err){
+    //     setGeneralState({...generalState, loading: false})
+    //     toast.error(err.message, {
+    //         position: "top-right",
+    //         autoClose: 4000,
+    //         hideProgressBar: true,
+    //         closeOnClick: true,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //         progress: undefined,
+    //     });
+    // }
+    // })()
   }
+  ref.current = true
+  },[id, preview])
+
+
+
+  
   return (
     <Courses>
       <main className={style.details_main}>
         <div className={style.banner}>
-          <img src={data.bannerImg} alt="" />
+          
+          <img src={ categoryDetails?.bannerImg ? categoryDetails?.bannerImg :banner } alt="" style={{height:"70vh", background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} />
           <div className="container py-5 position-relative">
             <div className={style.box}>
-              {data.iconImg && <img src={data.iconImg} alt="" /> }
+              {categoryDetails?.iconImg && <img src={categoryDetails?.iconImg} alt="" /> }
             </div>
           </div>
         </div>
@@ -482,20 +542,20 @@ export const CourseDetail = ({preview}) => {
             <section className="col-md-7">
               <article>
                 <header>
-                  <h2>{data.name}</h2>
+                  <h2>{categoryDetails?.name}</h2>
                 </header>
                 <p>
-                  {data.description}
+                  {categoryDetails?.description}
                 </p>
               </article>
               <article>
-                <h3>{data.name} Niche </h3>
+                <h3>{categoryDetails?.name} Niche </h3>
                 <p>
-                  {data.nicheDescription}
+                  {categoryDetails?.nicheDescription}
                 </p>
 
                 <ul>
-                  {data.nicheItems.map((item) => (
+                  {categoryDetails?.nicheItems.length > 0 && categoryDetails?.nicheItems.map((item) => (
                     <li>
                       <p className={style.niche}>{item.name}</p>
                       <p className={style.niche}>{item.description}</p>
@@ -511,10 +571,10 @@ export const CourseDetail = ({preview}) => {
                   <h3>Career Prospect</h3>
                 </header>
                 <p>
-                  {data.career}
+                  {categoryDetails?.career}
                 </p>
                 <ul>
-                  {data.carreerList.map(({name})=>(
+                  {categoryDetails?.carreerList?.length > 0 && categoryDetails.carreerList.map(({name})=>(
                   <li>{name}</li>
                   ))
                   }
@@ -524,7 +584,7 @@ export const CourseDetail = ({preview}) => {
           </div>
           <section>
             <header className={`text-center ${style.details_title}`}>
-              <h2 className={style.details_head}>{data.name} Courses</h2>
+              <h2 className={style.details_head}>{categoryDetails?.name} Courses</h2>
               <p className="subtitle">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm
                 risus ridiculus nunc adipiscing justo.
@@ -532,7 +592,7 @@ export const CourseDetail = ({preview}) => {
             </header>
             <div className={style.main}>
               {courseList.slice(0, 6).map((course) => (
-                <CourseCard {...course} show={true} />
+                <CourseCard {...course} show={true} course={course} />
               ))}
             </div>
             <div className={`text-end ${style.more}`}>
@@ -551,18 +611,67 @@ export const CourseDetail = ({preview}) => {
 };
 
 export const CourseProfile = ({preview}) => {
+  const {generalState, setGeneralState, otherFunctions: {fetchCourse}} = useAuth();
+  
+  const {id} = useParams()
+  const ref = useRef(false);
 
-  const course = preview?.name ? preview : {
-    title:"Linear Programming",
+  console.log("id", id)
+  const [courseProfile, setCourseProfile]= useState(
+    {
+    courseId: "629931276651235bbb08dc97",
+    name:"Linear Programming",
     category:"Software Development",
     rating:4,
     students: 120,
-    description:"",
+    description:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo pariatur est exercitationem distinctio alias ducimus impedit? Aut asperiores pariatur porro quibusdam voluptate consequuntur, voluptas culpa ullam numquam fugiat officia autem.",
     courseImg:"",
     faqs: [],
-    packages:[],
+    packages:[
+      {
+        title: "Lorem ipsum dolor sit amet.",
+        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, illum aut! Illo expedita saepe veritatis?",
+        price: 400
+      },
+      {
+        title: "Lorem ipsum dolor sit amet.",
+        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, illum aut! Illo expedita saepe veritatis?",
+        price: 800
+      },
+      {
+        title: "Lorem ipsum dolor sit amet.",
+        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, illum aut! Illo expedita saepe veritatis?",
+        price: 1200
+      }
+    ],
     price:5000,
+    instructorId: "629747d8611a99e372b13230",
+    instructorName: "John Doe",
+    instructorProfileImg: "",
+    instructorRating: 4.5,
+    instructorLocation: "united states",
+    instructorCategory: "Data Science",
+    instructorJoinDate: "2022-06-01T11:04:56.016Z"
+    }
+  )
+
+  useEffect(()=>{
+
+    if(preview?.name) {
+      setCourseProfile(preview)
+    } else {
+    const data = localStorage.getItem("gotocourse-courseInfo");
+    // if(data){
+    //   setCourseProfile(JSON.parse(data))
+    // }
   }
+    ref.current = true
+  },[id, preview])
+
+  function getDate(date){
+      return new Date(date).toDateString()
+  }
+
   return (
     <Courses>
       <div className="container">
@@ -577,8 +686,8 @@ export const CourseProfile = ({preview}) => {
           <div className={`row mb-3 ${style.intro}`} >
             <div className="col-md-6 d-flex align-items-center">
               <div>
-                <h2 className={style.topic}>Linear Programming</h2>
-                <p className={style.subject}>Data Science</p>
+                <h2 className={style.topic}>{courseProfile?.name}</h2>
+                <p className={style.subject}>{courseProfile?.category}</p>
                 <p className={style.rating}> 
                 <BsStarFill style={{ color: "#FFCB14", fontSize: "20px" }} />
                 <BsStarFill style={{ color: "#FFCB14", fontSize: "20px" }} />
@@ -603,14 +712,7 @@ export const CourseProfile = ({preview}) => {
           <div className="row justify-content-between">
             <div className="col-md-7">
               <p className={style.paragraph}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm
-                risus ridiculus nunc adipiscing justo. Proin fermentum ipsum a
-                non tellus tincidunt feugiat laoreet laoreet. Quis sit pulnar
-                massa amet. Nibh commodo laoreet scelerisque dis aliqm velit
-                sit. Eu non ultricies tristique sit proin ut. Prin fermentum
-                ipsum a non tellus tincidunt feugiat laeet laoreet. Quis sit
-                pulvinar massa amet. Nibh commodo laoreet scelerisque dis
-                aliquam velit sit. Eu non ultricies tristique sit proin ut.
+                {courseProfile?.description}
               </p>
               <ul>
                 <li className={style.paragraph}>
@@ -679,23 +781,25 @@ export const CourseProfile = ({preview}) => {
                   </div>
 
                   <div className={style.card_right}>
-                    <p className={style.name}>Niyi Adegoke</p>
+                    <p className={style.name}>{courseProfile?.instructorName}</p>
                     <p className={style.occupation}>
                       Power BI instructor (Data science)
                     </p>
                     <div className={style.rating_wrapper}>
                       <p className={style.rating}>Rating</p>
-                      <span className={style.rating_stars}></span>
+                      <span className={style.rating_stars}> 
+                       <Rating  ratingValue={4} size={18} initialValue={4} />
+</span>
                       <span className={style.rating_total}></span>
                     </div>
                     <div className={style.profile_footer}>
                       <div className={style.location}>
                         <p className={style.occupation}>Location</p>
-                        <p className="fw-bold">Lagos, Nigeria</p>
+                        <p className="fw-bold">{(courseProfile?.instructorLocation).toLocaleUpperCase()}</p>
                       </div>
                       <div className="style time">
                         <p className={style.occupation}>Time Active</p>
-                        <p className="fw-bold"> January, 2022</p>
+                        <p className="fw-bold"> {courseProfile?.instructorJoinDate && getDate(courseProfile.instructorJoinDate)}</p>
                       </div>
                     </div>
                   </div>
@@ -711,7 +815,7 @@ export const CourseProfile = ({preview}) => {
             ridiculus nunc adipiscing justo.{" "}
           </p>
           <ul>
-            {courseDetails.slice(0, 3).map((item) => (
+            {courseProfile?.faqs?.length > 0 && courseProfile.faqs.slice(0, 3).map((item) => (
               <li>
                 <p>{item.title}</p>
                 <p>{item.details}</p>
@@ -726,15 +830,11 @@ export const CourseProfile = ({preview}) => {
             ridiculus nunc adipiscing justo.
           </p>
           <div className={` row ${style.package_card_wrapper}`}>
+            {courseProfile?.packages?.length > 0 && courseProfile.packages.map(item=>(
             <div className="col-md-4">
-              <PackageCard />
+              <PackageCard item={item} />
             </div>
-            <div className="col-md-4">
-              <PackageCard />
-            </div>
-            <div className="col-md-4">
-              <PackageCard />
-            </div>
+            ))}
           </div>
         </section>
         <ReviewSection />
@@ -749,8 +849,8 @@ export const CourseProfile = ({preview}) => {
               navigation
               pagination={{ clickable: true }}
               scrollbar={{ draggable: true }}
-              onSwiper={(swiper) => console.log(swiper)}
-              onSlideChange={() => console.log("slide change")}
+              onSwiper={(swiper) => {}}
+              onSlideChange={() => {}}
               breakpoints={{
                 // when window width is >= 320px
                 320: {
@@ -795,17 +895,17 @@ export const CourseProfile = ({preview}) => {
   );
 };
 
-export const PackageCard = () => {
+export const PackageCard = ({item}) => {
   return (
-    <div className={`card ${style.package_card}`}>
-      <div className="card-body">
-        <p className={style.package_price}>$100</p>
-        <p className={style.package_title}>Cohort Course</p>
-        <p className={style.package_text}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus
-          ridiculus nunc adipiscing justo. Proin fermentum ipsum a non t
-          laoreet.{" "}
-        </p>
+    <div className={`card ${style.package_card}`} style={{height:"100%"}}>
+      <div className="card-body d-flex flex-column justify-content-around" style={{}}>
+        <p className={style.package_price}>$ {item.price}</p>
+          <p className={style.package_title}>{item.title}</p>
+        
+          <p className={style.package_text}>
+            {item.description}
+          </p>
+        
         <div className="text-center">
           <button
             className={`button button-md mx-auto ${style.package_button}`}
@@ -892,8 +992,8 @@ export const ReviewSection = ()=> {
         navigation
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => console.log(swiper)}
-        onSlideChange={() => console.log("slide change")}
+        onSwiper={(swiper) => {}}
+        onSlideChange={() => {}}
         breakpoints={{
           // when window width is >= 320px
           320: {

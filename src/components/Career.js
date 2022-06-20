@@ -197,11 +197,13 @@ const Career = () => {
         </div>
         <div className="col-lg-6">
       <div className="new_list_section">
-        {categories.length > 0 ? categories.slice(0,6).map(category=>(
-           <CareerBox
-           {...category}
-         />
-        )) : (
+        {
+        // categories.length > 0 ? categories.slice(0,6).map(category=>(
+        //    <CareerBox
+        //    {...category}
+        //  />
+        // )) :
+         (
               careers.slice(0, 6).map((career) => (
               <CareerBox
               {...career}
@@ -228,9 +230,9 @@ const Career = () => {
   );
 };
 
-export const CareerBox = ({ logo, title, details, link , name, description}) => {
+export const CareerBox = ({ logo, title, details, link , name, description, all}) => {
   return (
-    <Link to={link ? link : name.split(" ").join("-").toLowerCase()}>
+    <Link to={link ? link : `categories/${name.split(" ").join("-").toLowerCase()}`} >
     <div className="career_box d-flex flex-column">
       <div className="career_box_left">
         <i>{logo}</i>

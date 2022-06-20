@@ -91,11 +91,11 @@ export const BootcampBox = ({ image, title, content, link }) => {
             <Link to={link}>
               <motion.button 
               whileHover={{
-                backgroundColor:"#0C2191",
-                color:"#fff"
+                backgroundColor:"#fff",
+                color:"#0C2191"
               }}
               transition={{duration: 0.1}}
-              className="btn-plain" style={{backgroundColor:"#fff",border:"1px solid var(--theme-blue)"}}>Learn More</motion.button>
+              className="btn-plain" style={{backgroundColor:"#0C2191", color:"#fff",border:"1px solid var(--theme-blue)"}}>Enroll Now</motion.button>
             </Link>
           </div>
         </div>

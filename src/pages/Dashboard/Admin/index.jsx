@@ -506,7 +506,7 @@ export function CreateCourseCategory(){
   useEffect(()=>{
       setFullData({
         ...formstate, 
-        carreerList:[...careerlists],
+        careerList:[...careerlists],
         nicheItems: [...nichelists]
       })
   },[careerlists, careerlist, nichelist, nichelists, formstate])
@@ -519,7 +519,7 @@ export function CreateCourseCategory(){
       const data = {
         ...formstate,
         nicheItems: [...nichelists],
-        carreerList: [...careerlists]
+        careerList: [...careerlists]
       }
       const res = await addCategory(data, userdata?.token);
       const {success, message, statusCode} = res;
@@ -672,7 +672,7 @@ export function CreateCourseCategory(){
               name="name"
               type="text"
               handleChange={changeHandler}
-              value={formstate.name}
+              value={formstate.name.toUpperCase()}
             />
             <Input
               label="Description"
