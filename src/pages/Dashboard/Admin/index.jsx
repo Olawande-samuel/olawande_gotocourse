@@ -1895,7 +1895,7 @@ export function Student() {
 
   return (
     <Admin header={"Student"}>
-      {loading && <Loader />}
+      {loader && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h1>All Students</h1>
