@@ -38,13 +38,13 @@ export function CourseDetails({}){
   let userdata = getItem(KEY);
   const {adminFunctions: {fetchCategory}} = useAuth();
   const flag = useRef(false);
-  const [details, setDetails] = useState({});
   const [formstate, setFormstate] = useState({
     name: "",
     description: "",
     teacher: "",
     student: ""
   })
+  const [loading, setLoading] = useState(true);
   const teachers = ["Dr. Joy Castus"];
   const students = ["James Segun"];
   const params = useParams()
@@ -88,6 +88,8 @@ export function CourseDetails({}){
           draggable: true,
           progress: undefined,
         });
+      }finally{
+        setLoading(_ => false);
       }
     })()
     flag.current = true;
@@ -110,9 +112,9 @@ export function CourseDetails({}){
 
   return(
     <Admin header="ADMIN">
+      {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          {/* <h3>Course Details</h3> */}
 
           <form className="form" style={{width: "80%", margin: "20px 0px"}}>
             <Input
@@ -199,9 +201,12 @@ export function CourseDetails({}){
 }
 
 
+
 export function Category(){
   const navigate = useNavigate();
   const [categories, setCategories] = useState([])
+
+const [loading, setLoading] = useState(true);
   const {generalState, setGeneralState, adminFunctions: {fetchCategories}} = useAuth();
   const {getItem} = useLocalStorage();
   const flag = useRef(false);
@@ -245,6 +250,8 @@ export function Category(){
           draggable: true,
           progress: undefined,
         });
+      }finally{
+        setLoading(_ => false);
       }
     })()
     flag.current = true;
@@ -264,6 +271,7 @@ export function Category(){
   }
   return (
     <Admin header="Category">
+      {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center mb-3">
@@ -278,7 +286,9 @@ export function Category(){
                   ))}
                 </thead>
                 <tbody>
-                   {categories.map((
+
+                  {categories?.length > 0 ? categories?.map((
+
                   {bannerImg, careerDescription, careerList, 
                   name, description, iconImg, categoryId, 
                   niche: nicheTitle, nicheDescription, 
@@ -786,6 +796,7 @@ export function Dashboard() {
   const flag = useRef(false);
   let userdata = getItem(KEY);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
 
     if(flag.current) return;
@@ -811,6 +822,8 @@ export function Dashboard() {
           draggable: true,
           progress: undefined,
         });
+      }finally {
+        setLoading(_ => false);
       }
     })()
     flag.current = true;
@@ -822,6 +835,7 @@ export function Dashboard() {
 
   return (
     <Admin header="Dashboard">
+      {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx["admin_profile_top"]}>
           <div className={clsx["admin_profile_top_img"]}>
@@ -1108,6 +1122,7 @@ export function Teachers() {
   const flag = useRef(false);
   const navigate = useNavigate();
   const [teachers, setTeachers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const {
     adminTeacherFunctions: { fetch }
   } = useAuth();
@@ -1146,6 +1161,8 @@ export function Teachers() {
           draggable: true,
           progress: undefined,
         });
+      }finally {
+        setLoading(_ => false);
       }
     })();
     flag.current = true;
@@ -1159,6 +1176,7 @@ export function Teachers() {
   }
   return (
     <Admin header={"Mentors/Teachers"}>
+      {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h1>All Mentors</h1>
@@ -1170,7 +1188,7 @@ export function Teachers() {
                 ))}
               </thead>
               <tbody>
-                {teachers.length > 0 ? teachers.map(({ profileImg, email, firstName, lastName, accessPledre, isVerified }, i) => (
+                {teachers?.length > 0 ? teachers?.map(({ profileImg, email, firstName, lastName, accessPledre, isVerified }, i) => (
                   <UserInfoCard
                     key={i}
                     user={true}
@@ -1200,6 +1218,7 @@ export function Courses() {
   const flag = useRef(false);
   let userdata = getItem(KEY);
   const [courseList, setCourseList] = useState([])
+  const [loading, setLoading] = useState(true);
   const tableHeaders = [
     "No",
     "Courses",
@@ -1243,6 +1262,8 @@ export function Courses() {
           draggable: true,
           progress: undefined,
         });
+      }finally{
+        setLoading(_ => false);
       }
     })()
     flag.current = true;
@@ -1253,6 +1274,7 @@ export function Courses() {
   }
   return (
     <Admin header={"Courses"}>
+      {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center mb-3">
@@ -1267,25 +1289,6 @@ export function Courses() {
                 ))}
               </thead>
               <tbody>
-              {/* category: "Web development"
-​​
-              courseId: "629a3b3cc6abb4b3ca556805"
-              ​​
-              courseImg: "courseImg.png"
-              ​​
-              description: "Introduction to python"
-              ​​
-              faqs: Array [ {…} ]
-              ​​
-              instructorId: "629a3a04c6abb4b3ca5567eb"
-              ​​
-              name: "Python programming"
-              ​​
-              packages: Array [ {…} ]
-              ​​
-              price: 300
-              ​​
-              type: "PACKAGE" */}
                 {courseList.length > 0 && courseList.map(
                   (
                     {
@@ -1733,6 +1736,7 @@ export function Student() {
   const {getItem} = useLocalStorage();
   const flag = useRef(false);
   let userdata = getItem(KEY);
+  const [loader, setLoader] = useState(true);
 
   const { adminStudentFunctions: { fetch, verify, verify_pledre }, generalState: { loading }, setGeneralState, } = useAuth();
 
@@ -1771,6 +1775,8 @@ export function Student() {
             draggable: true,
             progress: undefined,
           });
+        }finally{
+          setLoader(_ => false);
         }
     }
   }
@@ -1889,6 +1895,7 @@ export function Student() {
 
   return (
     <Admin header={"Student"}>
+      {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h1>All Students</h1>
@@ -1901,8 +1908,8 @@ export function Student() {
                 ))}
               </thead>
               <tbody>
-                {studentList.length > 0 &&
-                  studentList.map(
+                {studentList?.length > 0 &&
+                  studentList?.map(
                     (
                       {
                         userId,
