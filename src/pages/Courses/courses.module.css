@@ -82,6 +82,12 @@
   /* padding-block: 4.375rem; */
 }
 
+.new_main {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
 .top {
   margin-bottom: 1.8rem;
 }
@@ -96,7 +102,7 @@
   height: 40px;
 }
 
-.icon svg {
+.icon svg , .icon img{
   width: 40px;
   height: 40px;
   margin-bottom: 0.625rem;
@@ -108,7 +114,13 @@
   line-height: 30px;
   margin-bottom: 0.75rem;
 }
-
+.text {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .button {
   font-size: 1rem;
@@ -122,6 +134,9 @@
 }
 .card  .cate_card_body {
   padding: 0.6rem;
+  display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .card:hover {
@@ -468,4 +483,14 @@ a .course_card:hover .course_author {
 .teacher_profile_wrapper ul li {
   font-size: 15px;
 
+}
+@media screen and (max-width: 997px){
+  .new_main {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media screen and (max-width: 758px){
+  .new_main {
+    grid-template-columns:  1fr;
+  }
 }

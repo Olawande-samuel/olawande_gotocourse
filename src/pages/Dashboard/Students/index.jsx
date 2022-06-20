@@ -404,7 +404,7 @@ function WishCard(){
 
 
 export function Courses(){
-    const {generalState: {isMobile}, studentFunctions: {fetchCourses}} = useAuth();
+    const {generalState: {isMobile, loading}, generalState, setGeneralState, studentFunctions: {fetchCourses}} = useAuth();
     const {getItem} = useLocalStorage();
     let userdata = getItem(KEY);
     const [courses, setCourses] = useState([]);
@@ -414,8 +414,10 @@ export function Courses(){
         if(ref.current) return
         (async() => {
             try{
+                setGeneralState({...generalState, loading: true})
                 const res = await fetchCourses(userdata?.token);
                 const {success, message, statusCode} = res;
+                setGeneralState({...generalState, loading: false})
                 if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
                 else {
                     const {data} = res;
@@ -431,6 +433,7 @@ export function Courses(){
                     });
                 }
             }catch(err){
+                setGeneralState({...generalState, loading: false})
                 toast.error(err.message, {
                     position: "top-right",
                     autoClose: 4000,
@@ -445,6 +448,7 @@ export function Courses(){
 
         ref.current = true
     }, [])
+    
     const tableHeaders = ["No", "Courses", "Tutor's Name", "Teaching Model", "Course Fee", "Rating"]
     const tableContents = [
         {

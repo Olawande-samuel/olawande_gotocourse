@@ -1,7 +1,7 @@
 import React from 'react'
 
 const style ={
-    position:"absolute",
+    position:"fixed",
     inset: 0,
     backgroundColor:"#fff",
     opacity:"0.7",

@@ -461,17 +461,6 @@ function AddSyllabus({ open, handleClose, addSyllabus }) {
       aria-describedby="modal-modal-description"
     >
       <Box style={style}>
-        {/* <ToastContainer
-          position="top-right"
-          autoClose={2500}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        /> */}
         <h5
           className="lead text-primary"
           style={{ color: "var(--theme-blue)" }}
@@ -766,11 +755,65 @@ export function Edit() {
 
 export function Classes() {
   const navigate = useNavigate();
-  const {
-    generalState: { isMobile },
-  } = useAuth();
+  const { generalState: { isMobile }, setGeneralState, generalState, teacherFunctions: { fetchApplications } } = useAuth();
   const { getItem } = useLocalStorage();
+  const [applications, setApplications]= useState([])
   let userdata = getItem(KEY);
+
+  const flag = useRef(false);
+
+  const getApplication = async () => {
+    setGeneralState({ ...generalState, loading: true });
+
+    try {
+      const res = await fetchApplications(userdata?.token);
+      setGeneralState({ ...generalState, loading: false });
+
+      const { success, message, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        const { data } = res;
+        if (data.length <= 0) {
+          throw new AdvancedError("Your applications list is empty", 0);
+        } else {
+          setApplications((_) => data);
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      }
+    } catch (err) {
+      setGeneralState({ ...generalState, loading: false });
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
+
+
+
+  useEffect(() => {
+    if(flag.current) return;
+   
+    //fetch courses
+    if(userdata){
+      getApplication()
+    }
+    flag.current = true;
+
+  }, [userdata])
   const tableHeaders = [
     "No",
     "Course Name",
@@ -778,7 +821,7 @@ export function Classes() {
     "Teaching Model",
     "Status",
   ];
-  const data = [
+  const data = applications.length > 0 ? applications : [
     {
       title: "CyberSecurity",
       enrolled: 10,
@@ -812,28 +855,35 @@ export function Classes() {
   return (
     <Teachers isMobile={isMobile} userdata={userdata}>
       <div className={clsx.teachers_profile}>
-        <table className={clsx.teachers_table}>
-          <thead>
-            <tr>
-              {tableHeaders.map((el, i) => (
-                <th key={i}>{el}</th>
+        {
+          applications.length > 0 ?  
+          <table className={clsx.teachers_table}>
+            <thead>
+              <tr>
+                {tableHeaders.map((el, i) => (
+                  <th key={i}>{el}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {data.map(({ title, enrolled, model, status }, i) => (
+                <UserInfoCard
+                  key={i}
+                  num={i}
+                  comp={"Teacher"}
+                  course={title}
+                  enrolled={enrolled}
+                  pack={model}
+                  course_status={status}
+                />
               ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map(({ title, enrolled, model, status }, i) => (
-              <UserInfoCard
-                key={i}
-                num={i}
-                comp={"Teacher"}
-                course={title}
-                enrolled={enrolled}
-                pack={model}
-                course_status={status}
-              />
-            ))}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+          : 
+          <div className="text-center">
+            <p className="lead">Your classes list is empty</p>
+          </div>
+        }
       </div>
     </Teachers>
   );
@@ -951,9 +1001,7 @@ export function EarningsCard({ title, type, options = [], total, value }) {
 }
 
 export function Courses() {
-  const {
-    generalState: { isMobile, loading }, generalState, teacherFunctions: { fetchCourses, fetchApplications }, setGeneralState,
-  } = useAuth();
+  const { generalState: { isMobile, loading }, generalState, teacherFunctions: { fetchCourses, fetchApplications }, setGeneralState, } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const [courses, setCourses] = useState([]);

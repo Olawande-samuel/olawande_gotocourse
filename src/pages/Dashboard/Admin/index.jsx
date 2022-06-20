@@ -23,6 +23,8 @@ import Loader from "../../../components/Loader";
 import UploadForm from "../../../components/UploadForm";
 import { Rating } from "react-simple-star-rating";
 import vector from "../../../images/vector.png"
+import { CourseDetail } from "../../Courses";
+import Layout from "../../../components/Layout";
 
 
 
@@ -200,17 +202,21 @@ export function CourseDetails({}){
 export function Category(){
   const navigate = useNavigate();
   const [categories, setCategories] = useState([])
-  const {adminFunctions: {fetchCategories}} = useAuth();
+  const {generalState, setGeneralState, adminFunctions: {fetchCategories}} = useAuth();
   const {getItem} = useLocalStorage();
   const flag = useRef(false);
   const userdata = getItem(KEY)
   const tableHeaders = ["No", "Name of Category", "Date", "No of Student"]
+
   useEffect(() => {
     if(flag.current) return;
     (async () => {
+      setGeneralState({...generalState, loading: true})
       try{
         const res = await fetchCategories(userdata?.token);
         const {success, statusCode, message} = res;
+        setGeneralState({...generalState, loading: false})
+
         if(!success) throw new AdvancedError(message, statusCode);
         else {
           if(res?.data){
@@ -229,6 +235,7 @@ export function Category(){
           }
         }
       }catch(err){
+        setGeneralState({...generalState, loading: false})
         toast.error(err.message, {
           position: "top-right",
           autoClose: 4000,
@@ -263,6 +270,7 @@ export function Category(){
             <h1 style={{margin: 0}}>All Category</h1>  <button className="btn btn-primary px-4" onClick={(e) => navigate("new")}>Add Category</button>
           </div>
             <div className={`table-responsive ${clsx.admin__student_main}`}>
+            {categories.length > 0 ?
               <table className={`${clsx.admin__student_table}`}>
                 <thead>
                   {tableHeaders.map((el, i) => (
@@ -270,7 +278,7 @@ export function Category(){
                   ))}
                 </thead>
                 <tbody>
-                  {categories.length > 0 ? categories.map((
+                   {categories.map((
                   {bannerImg, careerDescription, careerList, 
                   name, description, iconImg, categoryId, 
                   niche: nicheTitle, nicheDescription, 
@@ -287,16 +295,16 @@ export function Category(){
                       deleteCourseHandler={deleteCourseHandler}
                       showDetailsHandler={showDetailsHandler}
                     />
-                  )) : <h5 style={{textAlign:'center'}}>No Category found</h5>}
+                  )) }
                 </tbody>
               </table>
+              : <h5 style={{textAlign:'center'}}>No Category found</h5>}
             </div>
           </div>
       </div>
     </Admin>
   )
 }
-
 
 function NicheModal({newNiche, updateNiche, open, setOpen, handleChange}){
 
@@ -414,6 +422,45 @@ function CareerModal({newCareer, updateCareer, open, setOpen, handleChange}){
     </Modal>
   )
 }
+function CategoryPreviewModal({preview, open, setOpen}){
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    minWidth: "95%",
+    background: "#fff",
+    border: "1px solid #eee",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 6,
+    padding: "4rem 2rem",
+  };
+
+
+  return (
+    <Modal
+      open={open}
+      onClose={e => {
+        setOpen(_ => false);
+      }}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box style={style}>
+        <div className="position-relative" style={{
+          height: "80vh",
+          overflowY: "scroll",
+        }}>
+        <Layout>
+          <CourseDetail preview={preview} />
+        </Layout>
+        </div>
+      </Box>
+    </Modal>
+  )
+}
 
 const Syllabus = ({title, description}) => {
   return(
@@ -424,16 +471,18 @@ const Syllabus = ({title, description}) => {
   )
 }
 
-
-
 export function CreateCourseCategory(){
   const {adminFunctions: {addCategory}} = useAuth();
   const {getItem} = useLocalStorage();
   const userdata = getItem(KEY);
   const [open, setOpen] = useState(false);
+  const [openPreview, setOpenPreview] = useState(false);
+  const [previewImage, setPreviewImage] = useState(false);
+
   const [showCareerModal, setShowCareerModal] = useState(false);
   const [showNicheModal, setShowNicheModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [fullData, setFullData] = useState([])
   const [formstate, setFormstate] = useState({
     name: "",
     description: "",
@@ -454,6 +503,15 @@ export function CreateCourseCategory(){
   })
   const [careerlists, setCareerlists] = useState([]);
 
+  useEffect(()=>{
+      setFullData({
+        ...formstate, 
+        careerList:[...careerlists],
+        nicheItems: [...nichelists]
+      })
+  },[careerlists, careerlist, nichelist, nichelists, formstate])
+
+  console.log("fullData", fullData)
   async function submitHandler(e){
     e.preventDefault();
     setLoading(_ => true);
@@ -461,7 +519,7 @@ export function CreateCourseCategory(){
       const data = {
         ...formstate,
         nicheItems: [...nichelists],
-        careeerList: [...careerlists]
+        careerList: [...careerlists]
       }
       const res = await addCategory(data, userdata?.token);
       const {success, message, statusCode} = res;
@@ -601,12 +659,12 @@ export function CreateCourseCategory(){
 
   return(
     <Admin header="Create Category">
-      <UploadForm isOpen={open} setIsOpen={setOpen} />
+      <UploadForm isOpen={open} setIsOpen={setOpen} setPreviewImage={setPreviewImage} />
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
             <div className={clsx.upload__file_box} onClick={showUploadFormHandler}>
-              <img src={vector} alt={"Empty Image"} />
-              <p>Upload Image</p>
+              <img src={vector} alt={"Placeholder"} />
+              <p>Upload banner or icon Image</p>
             </div>
             <form className="form" style={{width: "80%"}}>
             <Input
@@ -614,7 +672,7 @@ export function CreateCourseCategory(){
               name="name"
               type="text"
               handleChange={changeHandler}
-              value={formstate.name}
+              value={formstate.name.toUpperCase()}
             />
             <Input
               label="Description"
@@ -655,6 +713,7 @@ export function CreateCourseCategory(){
             <NicheModal open={showNicheModal} newNiche={nichelist} setOpen={setShowNicheModal}
             handleChange={nicheChangeHandler} updateNiche={updateNicheHandler} />
 
+
             <div className={clsx.form_group}>
               <label htmlFor={"brief"}>
                 Career Description
@@ -680,7 +739,7 @@ export function CreateCourseCategory(){
             handleChange={careerChangeHandler} updateCareer={updateCareerHandler} />
 
             <Input
-              label="Banner Image Name"
+              label="Banner Image"
               name="bannerImg"
               type="text"
               handleChange={changeHandler}
@@ -688,7 +747,7 @@ export function CreateCourseCategory(){
             />
 
             <Input
-              label="Icon Image Name"
+              label="Icon Image "
               name="iconImg"
               type="text"
               handleChange={changeHandler}
@@ -697,11 +756,24 @@ export function CreateCourseCategory(){
             <i className="text-danger">Make sure to upload the files and get the file name</i>
 
           </form>
+          {loading ? 
+            <div className="d-flex justify-content-center">
+              <div className="spinner-border text-primary" role="status" style={{width:"4rem", height:"4rem"}}>
+                <span className="visually-hidden">Loading...</span>
+            </div>
+            </div>
+          :
           <div className={clsx.form_button__container}>
             <button className="btn btn-primary" onClick={submitHandler}>Submit</button>
-            <button className="btn border-primary text-primary">Preview</button>
+            <button className="btn border-primary text-primary" 
+            onClick={()=>{
+              setOpenPreview(!openPreview)
+            }}
+            >Preview</button>
           </div>
+          }
         </div>
+        <CategoryPreviewModal preview={fullData} open={openPreview} setOpen={setOpenPreview} />
       </div>
     </Admin>
   )
@@ -1344,10 +1416,7 @@ function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
 
 
 export function CreateCourse() {
-  const {
-    teacherFunctions: { addCourse },
-  } = useAuth();
-  const {getItem} = useLocalStorage();
+  const {generalState, setGeneralState, teacherFunctions: { addCourse }, } = useAuth(); const {getItem} = useLocalStorage();
 
   let userdata = getItem(KEY);
   const {syllabuses, addtoSyllabus} = useSyllabus();
@@ -1401,11 +1470,10 @@ export function CreateCourse() {
       }
     })
   }
-
+ 
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
-    console.log([{...formstate, syllabus: [...syllabuses], packages: [packageState]}]);
     try {
       if (
         formstate.name === "" ||
@@ -1417,7 +1485,7 @@ export function CreateCourse() {
         throw new AdvancedError("All fields are required", 0);
       const res = await addCourse({...formstate, syllabus: [...syllabuses], packages: [packageState]}, userdata.token);
       const { success, message, statusCode } = res;
-      console.log(res);
+
 
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -1443,6 +1511,7 @@ export function CreateCourse() {
       });
     } finally {
       setLoading((_) => false);
+
     }
   }
 
@@ -2137,7 +2206,7 @@ export function Edit() {
 
 const Admin = ({ children, header }) => {
   const {
-    generalState: { isMobile, showSidebar },
+    generalState: { isMobile, showSidebar,loading },
     generalState,
     setGeneralState,
   } = useAuth();
@@ -2169,6 +2238,7 @@ const Admin = ({ children, header }) => {
           </div>
           {children}
         </div>
+        {loading && <Loader />}
       </div>
     </GuardedRoute>
   );
