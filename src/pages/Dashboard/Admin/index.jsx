@@ -286,9 +286,7 @@ const [loading, setLoading] = useState(true);
                   ))}
                 </thead>
                 <tbody>
-
-                  {categories?.length > 0 ? categories?.map((
-
+                  {categories?.length > 0 && categories?.map((
                   {bannerImg, careerDescription, careerList, 
                   name, description, iconImg, categoryId, 
                   niche: nicheTitle, nicheDescription, 
@@ -308,7 +306,9 @@ const [loading, setLoading] = useState(true);
                   )) }
                 </tbody>
               </table>
-              : <h5 style={{textAlign:'center'}}>No Category found</h5>}
+              : <h5 style={{textAlign:'center'}}>No Category found</h5>
+              }
+              
             </div>
           </div>
       </div>
