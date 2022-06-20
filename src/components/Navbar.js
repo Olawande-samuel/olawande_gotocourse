@@ -1,9 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import Logo from "../images/Logo.png";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { FaRegUser } from "react-icons/fa";
 import {motion} from 'framer-motion'
 import {Link} from "react-router-dom"
+
+
+
 import { useAuth } from "../contexts/Auth";
+import { useLocalStorage } from "../hooks";
+
+const KEY = "gotocourse-userdata"
 const navList = [
   {
     id: 1,
@@ -63,10 +70,14 @@ const navList = [
 ];
 const Navbar = () => {
   const { setGeneralState } = useAuth();
-
-
   const [show, setShow] = useState(false);
   const [drop, setDrop] = useState(false);
+  const {getItem} = useLocalStorage();
+
+  const value = getItem(KEY)
+
+  console.log(value === null)
+
   const toggleNav = () => {
     setShow(!show);
   };
@@ -91,6 +102,7 @@ const Navbar = () => {
       };
     });
   }, [drop,status]);
+
   return (
     <nav ref={heightRef} className="nav navbar navbar-expand-lg navbar-light" style={{borderBottom: "1px solid rgba(159, 159, 159, .3)"}}>
 
@@ -126,13 +138,26 @@ const Navbar = () => {
               </button>
               {drop ? <NavList dropRef={dropRef} /> : null}
             </li>
-            {/* <li className="nav-item d-flex align-items-center nav_link me-2"><Link to="/students" className="link">Go to Dashboard</Link></li> */}
-            <li className="nav-item d-flex align-items-center nav_link"><Link to="/become-a-teacher" className="link">Become a Teacher</Link></li>
-            <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/login" className="link">Sign In</Link></li>
-            <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/signup" className="link">Register</Link></li>
+            { value?.token ? (
+                <li className="nav-item d-flex align-items-center nav_link me-2"><a href="https://goto-course.com/dashboard" className="link">Go to Dashboard</a></li> 
+            ):(
+              <>
+                <li className="nav-item d-flex align-items-center nav_link"><Link to="/become-a-teacher" className="link">Become a Teacher</Link></li>
+                <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/login" className="link">Sign In</Link></li>
+                <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/signup" className="link">Register</Link></li>
+              </>
+            )}
           </ul>
+          {value?.token ? (
+            <Link to={`${value.userType === "student" ? "/students" : "/teacher"}`}>
+              <div className="d-flex align-items-center" style={{color:"var(--theme-blue", fontSize:"20px"}}>
+                <i className="d-flex align-items-center justify-content-center me-2" style={{color:"var(--theme-blue"}}><FaRegUser /></i>
+                <span>{value.firstName}</span>
+              </div>
+            </Link>
+          ) : (
+            <>
           <Link to="/login">
-
           <motion.button type="button" className="button button-md d-none d-lg-block signup"
           whileHover={{
             textShadow: "0px 0px 8px rgb(255, 255, 255)",
@@ -157,6 +182,10 @@ const Navbar = () => {
             <span>Register</span>
           </motion.button>
           </Link>
+          </>
+
+          )}
+
         </div>
       </div>
     </nav>

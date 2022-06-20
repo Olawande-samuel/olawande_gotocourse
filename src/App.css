@@ -634,6 +634,7 @@ padding: 13px 0 ;
 .career .career_box:hover {
   background: var(--btn-color);
   color: #fff !important;
+  height: 100%;
 
 }
 .career .career_box:hover .details, .career .career_box:hover .careerBox_title {
@@ -644,6 +645,12 @@ padding: 13px 0 ;
   font-size: 15px;
   line-height: 24px;
   color: var(--text-color-light);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
 }
 
 .career .new_list_section {
