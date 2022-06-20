@@ -27,6 +27,7 @@ import vector from "../../../images/vector.png"
 
 
 
+
 const KEY = "gotocourse-userdata";
 
 export function CourseDetails({}){
@@ -445,7 +446,7 @@ export function CreateCourseCategory(){
     description: "",
     niche: "",
     nicheDescription: "",
-    careerDescription: "",
+    career: "",
     bannerImg: "",
     iconImg: ""
   });
@@ -667,8 +668,8 @@ export function CreateCourseCategory(){
               </label>
               <textarea
                 rows="5"
-                name="careerDescription"
-                value={formstate.careerDescription}
+                name="career"
+                value={formstate.career}
                 onChange={changeHandler}
                 className="generic_input"
               ></textarea>
