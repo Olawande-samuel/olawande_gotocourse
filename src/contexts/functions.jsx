@@ -19,7 +19,7 @@ export const authFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {...res.data, success: true};
         }catch(err){
             return {
@@ -44,7 +44,7 @@ export const authFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -78,7 +78,7 @@ export const adminTeacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -108,7 +108,7 @@ export const adminTeacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -138,7 +138,7 @@ export const adminTeacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -171,7 +171,7 @@ export const adminStudentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -201,7 +201,7 @@ export const adminStudentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -231,7 +231,7 @@ export const adminStudentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -263,7 +263,7 @@ export const adminFunctions = {
                 }
             })
             console.log(res.data);
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -291,7 +291,7 @@ export const adminFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -320,7 +320,7 @@ export const adminFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -348,7 +348,7 @@ export const adminFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -378,7 +378,7 @@ export const adminFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -406,7 +406,7 @@ export const adminFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -462,7 +462,7 @@ export const adminFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true

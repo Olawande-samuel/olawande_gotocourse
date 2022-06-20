@@ -125,7 +125,7 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage }) => {
                 <div className={clsx.upload_file} onClick={triggerUpload}>
                     <input type="file" onChange={changeHandler} id="uploadFile" />
                     {imageUrl ? <img src={imageUrl} alt="Preview" /> : (<>
-                    <h5 className="text-white">Click to Upload</h5>
+                    <h5 className="text-dark">Click to Upload</h5>
                     {/* <p>Only jpeg, jpg, png images are allowed</p> */}
                     </>) }
                 </div>
