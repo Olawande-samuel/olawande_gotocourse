@@ -17,16 +17,20 @@ import Classroom from '../components/Classroom'
 import Layout from '../components/Layout'
 import Bootcamp from '../components/Bootcamp';
 import Development from "../components/Development"
+import Companies from '../components/Companies'
+import Experienced from '../components/Experienced'
 const Landing = () => {
   return (
     <div>
         <Layout>
         <Hero />
+        <Experienced />
         <Bootcamp />
         <Learn />
         <Development />
         <Transition />
         <Services />
+        <Companies />
         <Becoming />
         <Career />
         <Mentors />

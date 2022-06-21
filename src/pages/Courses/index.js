@@ -5,7 +5,7 @@ import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { BsStarFill } from "react-icons/bs";
 import { ToastContainer, toast } from "react-toastify";
-
+import {categories as allCategories} from "../../data"
 import {
   Cyber,
   Data,
@@ -272,47 +272,56 @@ export const Categories = () => {
   
   const ref = useRef(false);
   useEffect(()=>{
-    if(ref.current) return
-    (async()=>{
-      try{
-        setGeneralState({...generalState, loading: true})
-        const res = await fetchCategories();
-        const {success, message, statusCode, data} = res;
-        setGeneralState({...generalState, loading: false})
-
-          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-          const arr = []
-          data.forEach((item, index)=>{
-            let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
-
-            arr.push(merged)
-          })
-          setCategories(arr)
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-      
-    }catch(err){
-        setGeneralState({...generalState, loading: false})
-        toast.error(err.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
-    }
-    })()
-    ref.current = true
+    const arr = []
+    allCategories.forEach((item, index)=>{
+      let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
+      arr.push(merged)
+    })
+    setCategories(arr)
   },[])
+
+  // useEffect(()=>{
+  //   if(ref.current) return
+  //   (async()=>{
+  //     try{
+  //       setGeneralState({...generalState, loading: true})
+  //       const res = await fetchCategories();
+  //       const {success, message, statusCode, data} = res;
+  //       setGeneralState({...generalState, loading: false})
+
+  //         if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+  //         const arr = []
+  //         data.forEach((item, index)=>{
+  //           let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
+
+  //           arr.push(merged)
+  //         })
+  //         setCategories(arr)
+  //         toast.success(message, {
+  //           position: "top-right",
+  //           autoClose: 4000,
+  //           hideProgressBar: true,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //         });
+      
+  //   }catch(err){
+  //       setGeneralState({...generalState, loading: false})
+  //       toast.error(err.message, {
+  //           position: "top-right",
+  //           autoClose: 4000,
+  //           hideProgressBar: true,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //       });
+  //   }
+  //   })()
+  //   ref.current = true
+  // },[])
 
 
   function getRandomArbitrary(min, max) {
@@ -487,37 +496,38 @@ export const CourseDetail = ({preview}) => {
     let one = categoryId.split("-").join(" ")
     
     if(ref.current) return
-    // (async()=>{
-    //   try{
-    //     setGeneralState({...generalState, loading: true})
-    //     const res = await fetchCategory(one);
-    //     const {success, message, statusCode, data} = res;
-    //     setGeneralState({...generalState, loading: false})
-    //       if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-    //       setCategoryDetails(data)
-    //       toast.success(message, {
-    //         position: "top-right",
-    //         autoClose: 4000,
-    //         hideProgressBar: true,
-    //         closeOnClick: true,
-    //         pauseOnHover: true,
-    //         draggable: true,
-    //         progress: undefined,
-    //       });
+    (async()=>{
+      try{
+        setGeneralState({...generalState, loading: true})
+        
+        const res = await fetchCategory(one);
+        const {success, message, statusCode, data} = res;
+        setGeneralState({...generalState, loading: false})
+          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+          setCategoryDetails(data)
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
       
-    // }catch(err){
-    //     setGeneralState({...generalState, loading: false})
-    //     toast.error(err.message, {
-    //         position: "top-right",
-    //         autoClose: 4000,
-    //         hideProgressBar: true,
-    //         closeOnClick: true,
-    //         pauseOnHover: true,
-    //         draggable: true,
-    //         progress: undefined,
-    //     });
-    // }
-    // })()
+    }catch(err){
+        setGeneralState({...generalState, loading: false})
+        toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+    })()
   }
   ref.current = true
   },[id, preview])
@@ -530,7 +540,7 @@ export const CourseDetail = ({preview}) => {
       <main className={style.details_main}>
         <div className={style.banner}>
           
-          <img src={ categoryDetails?.bannerImg ? categoryDetails?.bannerImg :banner } alt="" style={{height:"70vh", background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} />
+          <img src={ categoryDetails?.bannerImg ? categoryDetails?.bannerImg :banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} />
           <div className="container py-5 position-relative">
             <div className={style.box}>
               {categoryDetails?.iconImg && <img src={categoryDetails?.iconImg} alt="" /> }
@@ -661,9 +671,9 @@ export const CourseProfile = ({preview}) => {
       setCourseProfile(preview)
     } else {
     const data = localStorage.getItem("gotocourse-courseInfo");
-    // if(data){
-    //   setCourseProfile(JSON.parse(data))
-    // }
+    if(data){
+      setCourseProfile(JSON.parse(data))
+    }
   }
     ref.current = true
   },[id, preview])

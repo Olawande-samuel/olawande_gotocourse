@@ -6,10 +6,11 @@ import "swiper/css/navigation";
 import { motion } from "framer-motion";
 
 import Coding from "../images/coding.png";
-import Cyber from "../images/cyber.png";
+import Cyber from "../images/cybersecurity.webp";
 import Marketing from "../images/marketing.png";
-import Tech from "../images/tech_audit.png";
+import Tech from "../images/itaudit.webp";
 import Ui from "../images/ui.png";
+import Sales from "../images/salesforce.webp";
 
 import { CareerBox, careers } from "./Career";
 import { Link } from "react-router-dom";
@@ -38,6 +39,12 @@ const bootcamps = [
     content: "Launch into technology audit with an intensive training",
     image: Tech,
     link:"/categories/it-audit"
+  },
+  {
+    title: "Salesforce Training",
+    content: "Set yourself  up for high-paying job and secure tech career.",
+    image: Sales,
+    link:"/categories/salesforce"
   },
   {
     title: "Digital Marketing Bootcamp",
@@ -77,10 +84,12 @@ export default Bootcamp;
 
 export const BootcampBox = ({ image, title, content, link }) => {
   return (
-    <div className="card bootcamp_card">
+    <div className="card bootcamp_card h-100">
       <div className="card-body bg-white d-flex flex-column justify-content-around">
         <div className="bootcamp_box_left">
-          <img src={image} alt={title} className="img-fluid" />
+          <div style={{borderRadius:"10px"}}>
+          <img src={image} alt={title} className="img-fluid" style={{borderRadius:"10px",width:"360px", height:"168px", maxWidth:"100%"}} />
+          </div>
         </div>
         <div className="career_box_right d-flex flex-column mt-4">
           <header style={{ marginBottom: ".5rem" }}>

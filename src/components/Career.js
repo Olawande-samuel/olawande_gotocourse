@@ -6,7 +6,7 @@ import {useAuth} from "../contexts/Auth"
 import { AdvancedError } from "../classes";
 
 import Learning from "../images/newCareer.png";
-
+import {categories as allCategories} from "../data"
 import {
   Cyber,
   Data,
@@ -150,30 +150,41 @@ const Career = () => {
   const [categories, setCategories] = useState([])
   const ref = useRef(false);
 
-  useEffect(()=>{
-    if(ref.current) return
-    (async()=>{
-      try{
-        setGeneralState({...generalState, loading: true})
-        const res = await fetchCategories();
-        const {success, message, statusCode, data} = res;
-        setGeneralState({...generalState, loading: false})
+  // useEffect(()=>{
+  //   if(ref.current) return
+  //   (async()=>{
+  //     try{
+  //       setGeneralState({...generalState, loading: true})
+  //       const res = await fetchCategories();
+  //       const {success, message, statusCode, data} = res;
+  //       setGeneralState({...generalState, loading: false})
 
-        if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-        const arr = []
-        data.forEach((item, index)=>{
+  //       if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+  //       const arr = []
+  //       data.forEach((item, index)=>{
+  //         let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
+
+  //         arr.push(merged)
+  //       })
+  //       setCategories(arr)
+      
+  //     }catch(err){
+  //       setGeneralState({...generalState, loading: false})
+        
+  //   }
+  //   })()
+  //   ref.current = true
+  // },[])
+  useEffect(()=>{
+    const arr = []
+    allCategories.forEach((item, index)=>{
           let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
 
           arr.push(merged)
         })
         setCategories(arr)
       
-      }catch(err){
-        setGeneralState({...generalState, loading: false})
-        
-    }
-    })()
-    ref.current = true
+    
   },[])
 
 
@@ -198,11 +209,11 @@ const Career = () => {
         <div className="col-lg-6">
       <div className="new_list_section">
         {
-        // categories.length > 0 ? categories.slice(0,6).map(category=>(
-        //    <CareerBox
-        //    {...category}
-        //  />
-        // )) :
+        categories.length > 0 ? categories.slice(0,6).map(category=>(
+           <CareerBox
+           {...category}
+         />
+        )) :
          (
               careers.slice(0, 6).map((career) => (
               <CareerBox
@@ -217,7 +228,7 @@ const Career = () => {
             whileHover={{
               boxShadow: "0px 0px 8px rgb(0,0,0)"
             }}
-            className="btn-plain">Learn More</motion.button>       
+            className="btn-plain" style={{background:"var(--theme-blue)", color:"#fff"}}>Learn More</motion.button>       
           </div>
         </Link>
       </div>

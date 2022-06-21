@@ -73,9 +73,9 @@ const Hero = () => {
 
     
   }; 
-
+  const {  generalState: { navHeight }, } = useAuth();
   return (
-    <section className="hero">
+    <section className="hero" style={{height: `min(calc(100vh - ${navHeight}px ), 530px)`}}>
           <Others {...New} />
 
       {/* <Swiper
@@ -184,6 +184,7 @@ export const Generic = ({ image, background}) => {
     </div>
   );
 };
+
 export const Others = ({ title, image, title2, title3, subtitle, background,btn, link, color, colorSwap }) => {
   const {  generalState: { navHeight }, } = useAuth();
 
@@ -192,7 +193,7 @@ export const Others = ({ title, image, title2, title3, subtitle, background,btn,
       className="hero_container_wrapper"
       style={{ background: "#fff", color: colorSwap }}
     >
-      <div className="container hero_container" style={{minHeight: `calc(100vh - ${navHeight}px )`,display:"grid", placeItems:"center" }}>
+      <div className="container hero_container" style={{height: `min(calc(100vh - ${navHeight}px ), 530px)`,display:"grid", placeItems:"center" }}>
         <div className="row hero_row w-100">
           <motion.div
             className={`col-md-7 hero_left`}
