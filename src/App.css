@@ -33,6 +33,16 @@
 
 }
 
+.icon svg , .icon img{
+  width: 150px;
+  height: 40px;
+  margin-bottom: 0.625rem;
+}
+.experienced_icon svg {
+  width: 100px;
+  height: 40px;
+  margin-bottom: 0.625rem;
+}
 .breadcrumb-item + .breadcrumb-item::before {
   content: url(./images/bread.png) !important;
 }
