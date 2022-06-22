@@ -1322,7 +1322,299 @@ export function Courses() {
     </Admin>
   );
 }
+export function Bootcamps() {
+  const {adminFunctions: { fetchCourses} } = useAuth();
+  const {getItem} = useLocalStorage();
+  const navigate = useNavigate();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [courseList, setCourseList] = useState(["hi"])
+  const [loading, setLoading] = useState(true);
 
+  const tableHeaders = [ "No", "Title", "Details", "Type", "Duration", "Date", "Time", "Action" ];
+
+  useEffect(()=>{
+    if(flag.current) return;
+    (async () => {
+      try {
+        const res = await fetchCourses(userdata?.token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else if (statusCode === 1) {
+          const { data } = res;
+          setCourseList(data);
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          console.log(data);
+        } else {
+          throw new AdvancedError(message, statusCode);
+        }
+      } catch (err) {
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }finally{
+        setLoading(_ => false);
+      }
+    })()
+    flag.current = true;
+  },[])
+
+  function gotoCreateCourseHandler(e){
+    navigate("create");
+  }
+  return (
+    <Admin header={"Bootcamps"}>
+      {loading && <Loader />}
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h1 style={{margin: 0}}>Bootcamps</h1>  <button type="button" className="btn btn-primary px-5" onClick={gotoCreateCourseHandler}>Add Bootcamp</button>
+          </div>
+
+          <div className={clsx.admin__student_main}>
+            <table className={clsx.admin__student_table}>
+              <thead>
+                {tableHeaders.map((el, i) => (
+                  <th key={i}>{el}</th>
+                ))}
+              </thead>
+              <tbody>
+                {courseList.length > 0 && courseList.map(
+                  ( item, i ) => (
+                    <BootcampRow
+                      key={i}
+                      comp={"Courses"}
+                      index={i}
+                      title="Lorem ipsum dolor sit amet."
+                      detail={"Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur sint tempore iste animi nisi eius alias eveniet possimus itaque voluptatem tenetur necessitatibus asperiores repellat sapiente, laborum aspernatur in quam maxime!"}
+                      duration={"16 weeks"}
+                      type={"Full Time"}
+                      time={"6am - 12pm CET"}
+                      date={"Jan 6 - Mar 24"}
+                    />
+                  )
+                )}
+                <p>
+                        
+
+                </p>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </Admin>
+  );
+}
+
+export function CreateBootcamp(){
+  const {generalState, setGeneralState, teacherFunctions: { addCourse }, } = useAuth(); const {getItem} = useLocalStorage();
+
+  let userdata = getItem(KEY);
+
+  const [formstate, setFormstate] = useState({
+    name: "",
+    categoryName: "",
+    description: "",
+    faqs: [],
+  });
+  function changeHandler(e) {
+    const { name, value } = e.target;
+    setFormstate((old) => {
+      return {
+        ...old,
+        [name]: value,
+      };
+    });
+  }
+
+  const [open, setOpen] = useState(false);
+
+
+  const [loading, setLoading] = useState(false);
+  async function submitHandler(e) {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      if ( formstate.name === "" ||
+        formstate.categoryName === "" ||
+        formstate.description === ""
+      ) throw new AdvancedError("All fields are required", 0);
+
+      const res = await addCourse();
+      const { success, message, statusCode } = res;
+
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } finally {
+      setLoading((_) => false);
+
+    }
+  }
+
+ 
+  return (
+    <Admin header="Create Bootcamp">
+      <div className={clsx.admin_profile}>
+        <div className={clsx.edit__profile}>
+          <form className="form" onSubmit={submitHandler}>
+            <Input
+              label="Title"
+              name="name"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.name}
+            />
+            <Input
+              label="Duration"
+              name="duration"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.duration}
+            />
+            <div className="d-flex flex-wrap">
+              <div className="col-sm-6 col-md-3 pe-2 ">
+                <Input
+                  label="Starts By (Gmt)"
+                  name="time"
+                  type="text"
+                  handleChange={changeHandler}
+                  value={formstate.time}
+              />
+              </div>
+              <div className="col-sm-6 col-md-3 pe-2  ">
+                <Input
+                label="Ends By (Gmt)"
+                name="time"
+                type="text"
+                handleChange={changeHandler}
+                value={formstate.time}
+              />
+              </div>
+              <div className="col-sm-6 col-md-3 pe-2 ">
+                  <Input
+                  label="Start Date"
+                  name="start_date"
+                  type="date"
+                  handleChange={changeHandler}
+                />
+              </div>
+              <div className="col-sm-6 col-md-3 ">
+              <Input
+              label="End Date"
+              name="end_date"
+              type="date"
+              handleChange={changeHandler}
+            />
+              </div>
+            </div>
+            <div className="row">
+            </div>
+            <div className={clsx.form_group}>
+              <label htmlFor={"brief"}>
+                Description
+              </label>
+              <textarea
+                rows="5"
+                name="description"
+                value={formstate.description}
+                onChange={changeHandler}
+                className="generic_input"
+              ></textarea>
+            </div>
+
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Type</label>
+              <select
+                rows="5"
+                name="type"
+                value={formstate.type}
+                onChange={changeHandler}
+                className="form-select generic_input"
+              >
+                <option value="">Choose a Type</option>
+                <option value="full time">Full Time</option>
+                <option value="Part-time">Part-Time</option>
+              </select>
+            </div>
+
+            {loading ? (
+              <button className="button button-lg log_btn w-100 mt-3">
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </button>
+            ) : (
+              <button
+                className="button button-lg log_btn w-100 mt-3"
+                type="submit"
+              >
+                Save
+              </button>
+            )}
+          </form>
+        </div>
+      </div>
+    </Admin>
+  );
+}
+function BootcampRow({index, title, detail, time, date, type,duration }){
+  return (
+    <tr className={clsx.user__info_card} >
+      <td className={clsx.user__info}>{index + 1}.</td>
+      <td className={clsx.user__info}>{title}</td>
+      <td className={clsx.user__info}>
+          <p className="restricted_line">
+            {detail}
+          </p> 
+        </td>
+      <td className={clsx.user__info}>{type}</td>
+      <td className={clsx.user__info}>{duration}</td>
+      <td className={clsx.user__info}>{date}</td>
+      <td className={clsx.user__info}>{time}</td>
+      <td className={clsx.user__info}>
+        <div className="d-flex justify-content-center" style={{gap:"1rem"}}>
+          <i style={{fontSize:"24px", color:"var(--theme-orange)"}}><AiOutlineDelete /></i>
+          <i style={{fontSize:"24px", color:"var(--theme-blue)"}}><AiTwotoneEdit /></i>
+        </div>
+      </td>
+      </tr>
+  )
+}
 
 function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
   const [newSyllabus, setNewSyllabus] = useState({
@@ -1526,17 +1818,6 @@ export function CreateCourse() {
   };
   return (
     <Admin header="Create Course">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <div className={clsx.admin_profile}>
         <div className={clsx.edit__profile}>
           <form className="form" onSubmit={submitHandler}>

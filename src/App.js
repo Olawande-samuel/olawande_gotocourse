@@ -8,7 +8,7 @@ import Login from "./pages/User/Login";
 import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
-import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails} from "./pages/Dashboard/Admin";
+import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp} from "./pages/Dashboard/Admin";
 import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Courses as StudentCourses, History as StudentHistory} from "./pages/Dashboard/Students";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, Courses as TeacherCourses, CreateCourse, Earnings} from "./pages/Dashboard/Teachers";
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,6 +20,8 @@ import All, {Payment} from "./pages/Teacher/Teachers";
 import TeacherProfile from "./pages/Teacher/TeacherProfile";
 import TeacherSignup from "./pages/User/TeacherSignup";
 import SyllabusContextProvider from "./contexts/Syllabus";
+import ResetPassword from "./pages/ResetPassword";
+import ForgotPassword from "./pages/ForgotPassword";
 
 
 
@@ -32,6 +34,8 @@ function App() {
           <Route index element={<Landing />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="change-password" element={<ResetPassword />} />
             <Route path="become-a-teacher" element={<BecomeATeacher />} />
 
             <Route path="students" element={<Out />}>
@@ -73,6 +77,8 @@ function App() {
               <Route path="students" element={<Student />} />
               <Route path="fees" element={<Fees />} />
               <Route path="teachers" element={<Teachers />} />
+              <Route path="bootcamps" element={<Bootcamps />} />
+              <Route path="bootcamps/create" element={<CreateBootcamp />} />
               <Route path="courses" element={<Courses />} />
               <Route path="courses/create" element={<AdminCreateCourse />} />
               <Route path="courses-categories" element={<AdminCategories />} />

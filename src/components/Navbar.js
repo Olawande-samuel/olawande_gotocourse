@@ -3,71 +3,71 @@ import Logo from "../images/Logo.png";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
 import {motion} from 'framer-motion'
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 
 
-
+import {categories as navList} from "../data"
 import { useAuth } from "../contexts/Auth";
 import { useLocalStorage } from "../hooks";
 
 const KEY = "gotocourse-userdata"
-const navList = [
-  {
-    id: 1,
-    title: "Cybersecurity",
-    link: "/categories/cybersecurity"
-  },
-  {
-    id: 2,
-    title: "Risk Management",
-    link: "/categories/risk-management"
-  },
-  {
-    id: 3,
-    title: "Data Science",
-    link: "/categories/data-science"
-  },
-  {
-    id: 4,
-    title: "Project Management",
-    link: "/categories/project-management"
-  },
-  {
-    id: 5,
-    title: "IT compliance",
-    link: "/categories/it-compliance"
-  },
-  {
-    id: 6,
-    title: "IT Audit",
-    link: "/categories/it-audit"
-  },
-  {
-    id: 7,
-    title: "Business Analysis",
-    link: "/categories/business-analysis"
-  },
-  {
-    id: 8,
-    title: "Product Design",
-    link: "/categories/product-design"
-  },
-  {
-    id: 9,
-    title: "Web Design",
-    link: "/categories/web-design"
-  },
-  {
-    id: 10,
-    title: "Software Development",
-    link: "/categories/software-development"
-  },
-  {
-    id: 11,
-    title: "IT Service Management",
-    link: "/categories/it-service-management"
-  },
-];
+// const navList = [
+//   {
+//     id: 1,
+//     title: "Cybersecurity",
+//     link: "/categories/cybersecurity"
+//   },
+//   {
+//     id: 2,
+//     title: "Risk Management",
+//     link: "/categories/risk-management"
+//   },
+//   {
+//     id: 3,
+//     title: "Data Science",
+//     link: "/categories/data-science"
+//   },
+//   {
+//     id: 4,
+//     title: "Project Management",
+//     link: "/categories/project-management"
+//   },
+//   {
+//     id: 5,
+//     title: "IT compliance",
+//     link: "/categories/it-compliance"
+//   },
+//   {
+//     id: 6,
+//     title: "IT Audit",
+//     link: "/categories/it-audit"
+//   },
+//   {
+//     id: 7,
+//     title: "Business Analysis",
+//     link: "/categories/business-analysis"
+//   },
+//   {
+//     id: 8,
+//     title: "Product Design",
+//     link: "/categories/product-design"
+//   },
+//   {
+//     id: 9,
+//     title: "Web Design",
+//     link: "/categories/web-design"
+//   },
+//   {
+//     id: 10,
+//     title: "Software Development",
+//     link: "/categories/software-development"
+//   },
+//   {
+//     id: 11,
+//     title: "IT Service Management",
+//     link: "/categories/it-service-management"
+//   },
+// ];
 const Navbar = () => {
   const { setGeneralState } = useAuth();
   const [show, setShow] = useState(false);
@@ -192,6 +192,8 @@ const Navbar = () => {
   );
 };
 const NavList = ({ dropRef }) => {
+  const navigate = useNavigate()
+
   return (
     <motion.div 
     initial={{opacity:0}}
@@ -202,9 +204,20 @@ const NavList = ({ dropRef }) => {
     >
       <ul>
         {navList.map((list) => (
-          <li key={list.id}>
-            <Link to={list.link}>{list.title}</Link>
-           
+          <li key={list.name}>
+
+          <div
+            className="text-capitalize"
+            style={{cursor:"pointer"}}
+            onClick={()=>{
+              console.log(list.logo) 
+              delete list.logo
+              localStorage.setItem("gotocourse-category", JSON.stringify(list))
+              navigate(`/categories/${list.name.split(" ").join("-").toLowerCase()}`)
+            }}
+          > 
+            {(list.name).toLowerCase()}
+           </div>
           </li>
         ))}
       </ul>
