@@ -29,10 +29,22 @@
     max-width: 1250px !important;
     height: 100%;
   }
-  
-
 }
-
+@media (min-width: 768px){
+  .upcoming_text {
+    margin-right: 6rem !important;
+  }
+}
+.upcoming_card .row {
+  --bs-gutter-x: 0;
+}
+.restricted_line{
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .icon svg , .icon img{
   width: 150px;
   height: 40px;
@@ -1481,7 +1493,7 @@ line-height: 16px;
   }
 
   .faq {
-    margin: 6.375rem 0 7.0625rem 0;
+    margin: 3.375rem 0;
   }
   .faq_wrapper {
     width: 80%;

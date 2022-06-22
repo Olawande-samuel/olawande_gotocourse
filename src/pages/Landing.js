@@ -19,6 +19,7 @@ import Bootcamp from '../components/Bootcamp';
 import Development from "../components/Development"
 import Companies from '../components/Companies'
 import Experienced from '../components/Experienced'
+import Upcoming from '../components/Upcoming'
 const Landing = () => {
   return (
     <div>
@@ -37,6 +38,7 @@ const Landing = () => {
         <Degree />
         <Testimonials />
         <Faq />
+        <Upcoming />
         </Layout>
     </div>
   )

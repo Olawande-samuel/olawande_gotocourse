@@ -231,6 +231,7 @@ export const  CourseCard = ({ img, title, details, subtitle, author, color, back
 };
 
 export const Categories = () => {
+  const navigate = useNavigate()
   const logos = [
     {
       logo: <Cyber />,
@@ -399,10 +400,18 @@ export const Categories = () => {
         </div>
 
         <main className={style.new_main}>
+          {/* NB: CHANGE DIV TO LINK AFTER UPDATE */}
           {categories.length > 0 && categories.map((career) => (
-            <Link to={career.name.split(" ").join("-").toLowerCase()}>
+            <div
+            //  to={career.name.split(" ").join("-").toLowerCase()} 
+             onClick={()=>{
+               console.log(career.logo) 
+               delete career.logo
+                localStorage.setItem("gotocourse-category", JSON.stringify(career))
+              navigate(`${career.name.split(" ").join("-").toLowerCase()}`)
+            }}> 
               <Card {...career} />
-            </Link>
+            </div>
           ))}
         </main>
       </div>
@@ -444,92 +453,58 @@ export const CourseDetail = ({preview}) => {
   const {id} = useParams()
   const ref = useRef(false);
 
-  const [categoryDetails, setCategoryDetails]= useState(
-    {
-      bannerImg:banner,
-      iconImg:"",
-      carreerList:[
-        {name:"Data mining engineer"},
-        {name:"Business intelligence analyst"},
-        {name:"Data scientist"},
-        {name:"Data architect"},
-        {name:"Senior data scientist"},
-      ],
-      career:"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, voluptas?",
-      nicheItems:[
-        {
-          name:"Genetic algorithms",
-          description:"A technique used for optimization that is inspired by the process of natural evolution or “survival of the fittest.”Often described as a type of “evolutionary algorithm,” these algorithms are well-suited for solving nonlinear problems."
-        },
-        {
-          name:"Machine learning",
-          description:"A subspecialty of computer science (within a field historically called “artificial intelligence”) concerned with the design and development of algorithms that allow computers to evolve behaviors based on empirical data."
-        },
-        {
-          name:"Pattern recognition",
-          description:"It is a set of machine learning techniques that assign some sort of output value (or label) to a given input value (or instance) according to a specific algorithm."
-        },
-        {
-          name:"Regression",
-          description:"A set of statistical techniques to determine how the value of the dependent variable changes when one or more independent variables is modified. Often used for forecasting or prediction."
-        },
-        {
-          name:"Time series analysis",
-          description:"ASet of techniques from both statistics and signal processing for analyzing sequences of data points, representing values at successive times, to extract meaningful characteristics from the data."
-        },
-      ],
-      nicheDescription:"Lorem ipsum dolor sit amet, consectetur wene adipiscing elit. Lorem ipsum dolor sit amet, consectetur wene adipiscing elit.",
-      niche:"Lorem ipsum dolor sit amet, consectetur wene adipiscing elit. Lorem ipsum dolor sit amet, consectetur wene adipiscing elit.",
-      description:"Data science is an interdisciplinary field that uses scientific methods, processes, algorithms and systems to extract knowledge and insights from noisy, structured and unstructured data, and apply knowledge and actionable insights from data across a broad range of application domains. It also involves a plethora of disciplines and expertise areas to produce a holistic, thorough and refined look into raw data.",
-      name:"Data Science",
-      categoryId:""
-  
-    }
-  )
+  // const [categoryDetails, setCategoryDetails]= useState({})
 
-  
+  let categoryDetails = {}
+  const data = localStorage.getItem("gotocourse-category")
+  if (data){
+    categoryDetails = JSON.parse(data)          
+  }
+
+  console.log("cate", categoryDetails)
   useEffect(()=>{
     if(preview?.name) {
-      setCategoryDetails(preview)
+      categoryDetails = preview;
     } else {
-    let categoryId = id.charAt(0).toUpperCase() + id.slice(1)
-    let one = categoryId.split("-").join(" ")
-    
-    if(ref.current) return
-    (async()=>{
-      try{
-        setGeneralState({...generalState, loading: true})
-        
-        const res = await fetchCategory(one);
-        const {success, message, statusCode, data} = res;
-        setGeneralState({...generalState, loading: false})
-          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-          setCategoryDetails(data)
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
       
-    }catch(err){
-        setGeneralState({...generalState, loading: false})
-        toast.error(err.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
-    }
-    })()
+  //   let categoryId = id.charAt(0).toUpperCase() + id.slice(1)
+  //   let one = categoryId.split("-").join(" ")
+    
+  //   if(ref.current) return
+  //   (async()=>{
+  //     try{
+  //       setGeneralState({...generalState, loading: true})
+        
+  //       const res = await fetchCategory(one);
+  //       const {success, message, statusCode, data} = res;
+  //       setGeneralState({...generalState, loading: false})
+  //         if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+  //         setCategoryDetails(data)
+  //         toast.success(message, {
+  //           position: "top-right",
+  //           autoClose: 4000,
+  //           hideProgressBar: true,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //         });
+      
+  //   }catch(err){
+  //       setGeneralState({...generalState, loading: false})
+  //       toast.error(err.message, {
+  //           position: "top-right",
+  //           autoClose: 4000,
+  //           hideProgressBar: true,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //       });
+  //   }
+  //   })()
   }
-  ref.current = true
+  // ref.current = true
   },[id, preview])
 
 
@@ -557,13 +532,13 @@ export const CourseDetail = ({preview}) => {
                 <p>
                   {categoryDetails?.description}
                 </p>
+                <p>{categoryDetails?.importance}</p>
               </article>
               <article>
-                <h3>{categoryDetails?.name} Niche </h3>
+                <h3 className="text-uppercase">{`${categoryDetails?.name} Niche`}</h3>
                 <p>
                   {categoryDetails?.nicheDescription}
                 </p>
-
                 <ul>
                   {categoryDetails?.nicheItems.length > 0 && categoryDetails?.nicheItems.map((item) => (
                     <li>
@@ -574,7 +549,6 @@ export const CourseDetail = ({preview}) => {
                 </ul>
               </article>
             </section>
-
             <div className="col-md-4 ">
               <aside className="border rounded p-3">
                 <header>
@@ -584,7 +558,7 @@ export const CourseDetail = ({preview}) => {
                   {categoryDetails?.career}
                 </p>
                 <ul>
-                  {categoryDetails?.carreerList?.length > 0 && categoryDetails.carreerList.map(({name})=>(
+                  {categoryDetails?.careerList?.length > 0 && categoryDetails.careerList.map(({name})=>(
                   <li>{name}</li>
                   ))
                   }
@@ -594,10 +568,9 @@ export const CourseDetail = ({preview}) => {
           </div>
           <section>
             <header className={`text-center ${style.details_title}`}>
-              <h2 className={style.details_head}>{categoryDetails?.name} Courses</h2>
+              <h2 className={`text-uppercase ${style.details_head}`}>{categoryDetails?.name} Courses</h2>
               <p className="subtitle">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm
-                risus ridiculus nunc adipiscing justo.
+                
               </p>
             </header>
             <div className={style.main}>
