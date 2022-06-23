@@ -29,10 +29,32 @@
     max-width: 1250px !important;
     height: 100%;
   }
-  
-
 }
-
+@media (min-width: 768px){
+  .upcoming_text {
+    margin-right: 6rem !important;
+  }
+}
+.upcoming_card .row {
+  --bs-gutter-x: 0;
+}
+.restricted_line{
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.icon svg , .icon img{
+  width: 150px;
+  height: 40px;
+  margin-bottom: 0.625rem;
+}
+.experienced_icon svg {
+  width: 100px;
+  height: 40px;
+  margin-bottom: 0.625rem;
+}
 .breadcrumb-item + .breadcrumb-item::before {
   content: url(./images/bread.png) !important;
 }
@@ -1310,11 +1332,14 @@ line-height: 16px;
 }
 
 @media screen and (max-width: 995px) {
+  .hero {
+    height: auto !important;
+  }
   .hero, .hero_row {
     flex-direction: column-reverse;
   }
   .hero_container_wrapper {
-    min-height: 100vh;
+    /* min-height: 100vh; */
     padding-bottom: 1.5rem;
   }
   .hero_container {
@@ -1468,7 +1493,7 @@ line-height: 16px;
   }
 
   .faq {
-    margin: 6.375rem 0 7.0625rem 0;
+    margin: 3.375rem 0;
   }
   .faq_wrapper {
     width: 80%;
