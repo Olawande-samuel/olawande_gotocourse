@@ -254,29 +254,29 @@ td {
 }
 
 
-
-
-
 .hero .hero_logo {
   margin-top: .3rem;
   margin-bottom: 2.5rem;
 }
+
 .hero_row {
   height: 100%;
   /* padding-top: 3.5rem; */
 }
+
 .hero .hero_content  .hero_left{
   padding-top: 6.5rem;
   /* padding-right: 4rem; */
 }
+
 .hero_text_group {
   margin-bottom: 2.5375rem;
-
 }
+
 .hero .hero_text {
   font-family: 'Raleway', sans-serif;
   font-weight: 800;
-  font-size: clamp(34px, 5vw,60px);
+  font-size: clamp(1.8rem, -0.875rem + 8.333vw, 2.25rem);
   line-height: 64px;
   /* color: var(--text-blue); */
   text-transform: capitalize;
@@ -615,7 +615,7 @@ padding: 13px 0 ;
 .career,
 .mentors,
 .bootcamp {
-  padding: 3.0625rem 3.625rem;
+  padding: 3.8625rem 3.625rem;
   color: var(--text-color-light);
 }
 .career .career_title {

@@ -70,7 +70,7 @@ export const categories = [
           {name:"Chief Information Security Officer"},
           {name:"Digital Forensics Specialists"},
           {name:"Security Engineer"},
-          {name:"Security Architec"},
+          {name:"Security Architect"},
         ],
         career:"Average income per annum: $150,000. You can earn from data science with any of these job roles: ",
         nicheItems:[
@@ -104,7 +104,7 @@ export const categories = [
         niche:"Lorem ipsum dolor sit amet, consectetur wene adipiscing elit. Lorem ipsum dolor sit amet, consectetur wene adipiscing elit.",
         description:"'Cyber' means computer network and 'Security' means protection. Therefore, Cyber security as a field focuses on the protection of a network of computers from unauthorized accesses or malicious attacks. Unauthorized access can be made by exploiting computer weaknesses, network and vulnerabilities. ",
         importance:"Cyber Security is for you if you are attentive to details, interested in intensive coding, and a problem-interpreter and solver. ",
-        name:"CYBER SECURITY",
+        name:"CYBERSECURITY",
         categoryId:""
     
       },

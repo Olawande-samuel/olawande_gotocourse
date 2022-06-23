@@ -51,7 +51,7 @@ const UpcomingCards = ()=> {
         <div className="card p-0 upcoming_card position-relative mx-auto" style={{width:"min(100% - .5rem, 1500px)", borderRadius:"8px"}}>
             <div className="card-body p-0">
                 <div className="row" style={{}}>
-                    <div className="col-md-3 d-flex justify-content-center align-items-center" style={{background:"var(--theme-blue)", borderRadius:"8px", padding:"8rem 5rem"}}>
+                    <div className="col-md-3 d-flex justify-content-center align-items-center" style={{background:"var(--theme-orange)", borderRadius:"8px", padding:"8rem 5rem"}}>
                        <h3 className="text-light">Cybersecurity Bootcamp - Full Time</h3>
                     </div>
                     <div className="col-md-9 p-2 p-md-3 pe-md-4 d-flex flex-column justify-content-between">
@@ -86,7 +86,7 @@ const style ={
     flag:{
         top:0,
         right:0,
-        background:"var(--theme-orange)",
+        background:"var(--theme-blue)",
         padding:"1.1rem",
         borderTopRightRadius:"8px"
     },

@@ -15,7 +15,7 @@ import { useAuth } from "../../../contexts/Auth";
 import { GuardedRoute } from "../../../hoc";
 import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
-import { UserInfoCard } from "../Admin";
+import { BootcampRow, UserInfoCard } from "../Admin";
 import { useLocalStorage } from "../../../hooks";
 import { useSyllabus } from "../../../contexts/Syllabus";
 import { Chart as ChartLogo } from "../../../images/components/svgs";
@@ -152,15 +152,19 @@ const Syllabus = ({ title, description, packagelist, price }) => {
 
 
 export function CreateCourse() {
-  const { teacherFunctions: { addCourse }, } = useAuth();
+  const ref = useRef(false)
+
+  const { teacherFunctions: { addCourse }, otherFunctions:{fetchCategories} } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const { syllabuses, addtoSyllabus } = useSyllabus();
   const [packageList, addtoPackageList ] = useState([]);
+  const [faq, setFaq ] = useState([]);
   const [formstate, setFormstate] = useState({
     name: "",
     categoryName: "",
     description: "",
+    type:"PACKAGE",
     faqs: [],
   });
   const [packageState, setPackageState] = useState({
@@ -168,26 +172,14 @@ export function CreateCourse() {
     description: "",
     price: "",
   });
+  const [categories, setCategories]= useState([])
 
   const [open, setOpen] = useState(false);
   const [openPackage, setOpenPackage] = useState(false);
+  const [openFaq, setOpenFaq] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const packages = [
-    {
-      value: "cohort",
-      name: "Cohort",
-    },
-    {
-      value: "self-paced",
-      name: "Self paced",
-    },
-    {
-      value: "one-one",
-      name: "One-One Mentorship",
-    },
-  ];
-
+  
   function changeHandler(e) {
     const { name, value } = e.target;
     setFormstate((old) => {
@@ -211,7 +203,6 @@ export function CreateCourse() {
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
-   
     try {
       if (
         formstate.name === "" ||
@@ -254,6 +245,50 @@ export function CreateCourse() {
     }
   }
 
+  // get Categories
+  useEffect(()=>{
+    let mounted = true;
+    if(mounted){
+      if(ref.current) return
+      (async ()=>{
+        try{
+          setLoading(true)
+          const res = await fetchCategories();
+          const {success, message, statusCode} = res;
+  
+          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+          const {data} = res;
+          setCategories(data)
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });  
+        }catch(err){
+          toast.error(err.message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+          });
+        } finally {
+          setLoading(false)
+        }
+      })()
+
+      ref.current = true;
+    }
+
+    return ()=> mounted = false
+  },[])
+
   const openModal = () => {
     setOpen(true);
   };
@@ -265,6 +300,12 @@ export function CreateCourse() {
   }
   const handleClosePackage =()=>{
     setOpenPackage(false)
+  }
+  const openFaqModal = ()=> {
+    setOpenFaq(true)
+  }
+  const handleCloseFaq =()=>{
+    setOpenFaq(false)
   }
   return (
     <Teachers>
@@ -280,13 +321,22 @@ export function CreateCourse() {
               handleChange={changeHandler}
               value={formstate.name}
             />
-            <Input
-              label="Category"
-              name="categoryName"
-              type="text"
-              handleChange={changeHandler}
-              value={formstate.categoryName}
-            />
+            {/* should be a select field */}
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Category</label>
+              <select
+                rows="5"
+                name="categoryName"
+                value={formstate.categoryName}
+                onChange={changeHandler}
+                className="form-select generic_input"
+              >
+                <option value="">Choose a Category</option>
+                {categories.length > 0 && categories.map(item=>(
+                  <option value={item.name}>{item.name}</option>
+                )) }
+              </select>
+            </div>
 
             <div className={clsx.form_group}>
               <label htmlFor={"brief"}>
@@ -300,8 +350,27 @@ export function CreateCourse() {
                 className="generic_input"
               ></textarea>
             </div>
-
-            <div className={clsx.form_group}>
+            <div className="d-flex flex-wrap" style={{gap: ".5rem"}}>
+                  <div className="col-sm-4">
+                    <Input
+                      label="Start Date"
+                      name="start_date"
+                      type="date"
+                      handleChange={changeHandler}
+                      value={formstate.start_date}
+                    />
+                  </div>
+                  <div className="col-sm-4">
+                    <Input
+                      label="End Date"
+                      name="end_date"
+                      type="date"
+                      handleChange={changeHandler}
+                      value={formstate.end_date}
+                    />
+                  </div>
+                </div>
+            {/* <div className={clsx.form_group}>
               <label htmlFor={"package"}>Type</label>
               <select
                 rows="5"
@@ -314,7 +383,7 @@ export function CreateCourse() {
                 <option value="FLAT">Flat</option>
                 <option value="PACKAGE">Package</option>
               </select>
-            </div>
+            </div> */}
             <div className={clsx.form_group}>
               <label htmlFor={"package"}>Package</label>
                 {packageList.length > 0 ? (
@@ -325,7 +394,7 @@ export function CreateCourse() {
                   <h6>No Packages</h6>
                 )}
             </div>
-
+                
             <button
               className="btn btn-primary my-3"
               style={{ backgroundColor: "var(--theme-blue)" }}
@@ -362,7 +431,25 @@ export function CreateCourse() {
             >
               Add Syllabus
             </button>
-
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Package</label>
+                {faq.length > 0 ? (
+                  faq.map(item=>(
+                    <Syllabus {...item} />
+                  ))
+                ):(
+                  <h6>No faq</h6>
+                )}
+            </div>
+                
+            <button
+              className="btn btn-primary my-3"
+              style={{ backgroundColor: "var(--theme-blue)" }}
+              type="button"
+              onClick={openFaqModal}
+            >
+              Add FAQ
+            </button>
             <div className="d-flex flex-wrap mt-3" style={{ gap: "1rem " }}>
               {loading ? (
                 <button
@@ -422,6 +509,13 @@ export function CreateCourse() {
         setOpen={setOpen}
         handleClosePackage={handleClosePackage}
       />
+      <AddFaq
+      openFaq={openFaq}
+      handleCloseFaq={handleCloseFaq}
+      addFaq={setFaq}
+      list={faq}
+      />
+
     </Teachers>
   );
 }
@@ -636,6 +730,208 @@ function AddPackage({ openPackage, handleClosePackage, list, addPackage }) {
     </Modal>
   );
 }
+function AddFaq({ openFaq, handleCloseFaq, list, addFaq }) {
+  const [faq, setFaq] = useState({
+    title: "",
+    price:"",
+    description: "",
+  });
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    minWidth: 600,
+    background: "#fff",
+    border: "1px solid #eee",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 6,
+    padding: "4rem 2rem",
+  };
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setFaq((old) => {
+      return {
+        ...old,
+        [name]: value,
+      };
+    });
+  }
+
+  function addFaqHandler() {
+    const { title, description } = faq;
+    if (!title || !description) {
+      toast.error("All field are required", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else {
+      addFaq([...list, faq]);
+      toast.success("FAQ added successfully", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setFaq({
+        title: "",
+        description: "",
+      })
+    }
+  }
+
+  return (
+    <Modal
+      open={openFaq}
+      onClose={handleCloseFaq}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box style={style}>
+        <h5
+          className="lead text-primary"
+          style={{ color: "var(--theme-blue)" }}
+        >
+          Add Faq
+        </h5>
+        
+        <Input
+          label="Question"
+          name="title"
+          type="text"
+          handleChange={handleChange}
+          value={faq.title}
+        />
+        <div className="form-group my-3">
+          <label htmlFor="description" className="form-label generic_label">
+            Answer
+          </label>
+          <textarea
+            rows="5"
+            id="description"
+            name="description"
+            className="form-control generic_input"
+            value={faq.description}
+            onChange={handleChange}
+          ></textarea>
+        </div>
+        <button
+          className="btn btn-primary my-3"
+          onClick={addFaqHandler}
+          style={{ backgroundColor: "var(--theme-blue)" }}
+        >
+          Add
+        </button>
+      </Box>
+    </Modal>
+  );
+}
+
+export function Bootcamps() {
+  const {teacherFunctions: { fetchCourses} } = useAuth();
+  const {getItem} = useLocalStorage();
+  const navigate = useNavigate();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [courseList, setCourseList] = useState(["hi"])
+  const [loading, setLoading] = useState(true);
+
+  const tableHeaders = [ "No", "Title", "Details", "Type", "Duration", "Date", "Time", "Action" ];
+
+  useEffect(()=>{
+    if(flag.current) return;
+    (async () => {
+      try {
+        const res = await fetchCourses(userdata?.token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else if (statusCode === 1) {
+          const { data } = res;
+          setCourseList(data);
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          console.log(data);
+        } else {
+          throw new AdvancedError(message, statusCode);
+        }
+      } catch (err) {
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }finally{
+        setLoading(_ => false);
+      }
+    })()
+    flag.current = true;
+  },[])
+
+  function gotoCreateCourseHandler(e){
+    navigate("create");
+  }
+  return (
+    <Teachers header={"Bootcamps"}>
+      {loading && <Loader />}
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h1 style={{margin: 0}}>Bootcamps</h1>  
+          </div>
+
+          <div className={clsx.admin__student_main}>
+            <table className={clsx.admin__student_table}>
+              <thead>
+                {tableHeaders.map((el, i) => (
+                  <th key={i}>{el}</th>
+                ))}
+              </thead>
+              <tbody>
+                {courseList.length > 0 && courseList.map(
+                  ( item, i ) => (
+                    <BootcampRow
+                      key={i}
+                      comp={"Courses"}
+                      index={i}
+                      title="Lorem ipsum dolor sit amet."
+                      detail={"Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur sint tempore iste animi nisi eius alias eveniet possimus itaque voluptatem tenetur necessitatibus asperiores repellat sapiente, laborum aspernatur in quam maxime!"}
+                      duration={"16 weeks"}
+                      type={"Full Time"}
+                      time={"6am - 12pm CET"}
+                      date={"Jan 6 - Mar 24"}
+                    />
+                  )
+                )}
+                <p>
+                </p>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </Teachers>
+  );
+}
 
 export function Edit() {
   const {
@@ -818,6 +1114,18 @@ export function Edit() {
                 Upload Photo
               </p>
             )}
+          </div>
+          <div className={clsx.edit__picture}>
+            <button style={{
+              border:"1px dotted var(--theme-blue)",
+              outline:"none",
+              color:"var(--theme-blue)",
+              padding:"4px",
+              borderRadius:"8px"
+            }} 
+            type="button" onClick={()=>{
+                navigate("/change-password")
+            }}>Change Password</button>
           </div>
           <form className="form" onSubmit={submitHandler}>
             <Input
@@ -1078,9 +1386,9 @@ export function Earnings() {
           className="d-flex flex-wrap justify-content-center justify-content-md-start"
           style={{ gap: "1.5rem" }}
         >
-          <EarningsCard title="Teaching Model" type="COHORT" value="12,923" />
-          <EarningsCard title="Per Course" type="Cybersecurity" value="2,923" />
-          <EarningsCard total={true} value="100,000" />
+          <EarningsCard title="Teaching Model" type="COHORT" value="0" />
+          <EarningsCard title="Per Course" type="Cybersecurity" value="0" />
+          <EarningsCard total={true} value="0" />
         </div>
         <MyChart />
       </div>

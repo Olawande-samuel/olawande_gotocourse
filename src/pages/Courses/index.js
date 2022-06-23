@@ -514,8 +514,7 @@ export const CourseDetail = ({preview}) => {
     <Courses>
       <main className={style.details_main}>
         <div className={style.banner}>
-          
-          <img src={ categoryDetails?.bannerImg ? categoryDetails?.bannerImg :banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} />
+          <img src={ categoryDetails?.bannerImg ? categoryDetails?.bannerImg : banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} />
           <div className="container py-5 position-relative">
             <div className={style.box}>
               {categoryDetails?.iconImg && <img src={categoryDetails?.iconImg} alt="" /> }
@@ -662,7 +661,6 @@ export const CourseProfile = ({preview}) => {
     if(userData !== null){
       try {
         setLoading(true)
-
         const response =  await wishlistCourse(123, userData.token)
         const {success, message, statusCode} = response
         if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
@@ -725,22 +723,22 @@ export const CourseProfile = ({preview}) => {
                   <a href="#packages">
                     <button className={`button ${style.btn}`}>Enroll</button>
                   </a>
+                    {loading ? 
+                  <div className="spinner-border text-primary" role="status" >
+                    <span className="visually-hidden">Loading...</span>
+                  </div>  
+                  :
                   <button 
                     type="button"
                     className={` ${style.btn} btn-plain`} 
                     style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)"}}
-                    onClick={{addToWishList}}
+                    onClick={addToWishList}
                   >
-                    {loading ? 
-                      <div className="spinner-border text-light px-4" role="status" style={{width:"1rem", height:"3rem"}}>
-                        <span className="visually-hidden">Loading...</span>
-                      </div>  
-                      :
                       <span>
                         Add to Wishlist
                       </span>
-                    }
                   </button>
+                    }
                 </div>
                 <p className={style.total_student}>120 enrolled students</p>
               </div>
@@ -999,7 +997,7 @@ export const PackageCard = ({item, }) => {
             onClick={enrollToCourse}
           >
             {loading ? 
-              <div className="spinner-border text-light px-4" role="status" style={{width:"1rem", height:"3rem"}}>
+              <div className="spinner-border text-light" role="status" >
                 <span className="visually-hidden">Loading...</span>
               </div>  
               :

@@ -18,7 +18,7 @@ import { useAuth } from "../../../contexts/Auth";
 import {GuardedRoute} from "../../../hoc";
 import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
-import { UserInfoCard } from "../Admin";
+import { BootcampRow, UserInfoCard } from "../Admin";
 import { useLocalStorage } from "../../../hooks";
 
 
@@ -255,6 +255,12 @@ export function Edit(){
                     <input id="imageUpload" type="file" style={{display: 'none'}} onChange={changeImageHandler} />
                     {imageUrl ? (<p style={{cursor: isUplaoding && 'not-allowed'}} onClick={changeProfilePictureHandler}>Change Picture</p>) : (<p onClick={uploadPicture}>Upload Photo</p>)}
                 </div>
+                <div className={clsx.edit__picture}>
+                    <button className="button button-md" type="button" onClick={()=>{
+                        navigate("/change-password")
+                    }}>Change Password</button>
+                </div>
+                
                 <form className="form" onSubmit={submitHandler}>
                     <Input
                         label="First name"
@@ -325,6 +331,102 @@ export function Edit(){
     )
 }
 
+export function Bootcamps() {
+    const {teacherFunctions: { fetchCourses} } = useAuth();
+    const {getItem} = useLocalStorage();
+    const navigate = useNavigate();
+    const flag = useRef(false);
+    let userdata = getItem(KEY);
+    const [courseList, setCourseList] = useState(["hi"])
+    const [loading, setLoading] = useState(true);
+  
+    const tableHeaders = [ "No", "Title", "Details", "Type", "Duration", "Date", "Time", "Action" ];
+  
+    useEffect(()=>{
+      if(flag.current) return;
+      (async () => {
+        try {
+          const res = await fetchCourses(userdata?.token);
+          const { message, success, statusCode } = res;
+          if (!success) throw new AdvancedError(message, statusCode);
+          else if (statusCode === 1) {
+            const { data } = res;
+            setCourseList(data);
+            toast.success(message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            console.log(data);
+          } else {
+            throw new AdvancedError(message, statusCode);
+          }
+        } catch (err) {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }finally{
+          setLoading(_ => false);
+        }
+      })()
+      flag.current = true;
+    },[])
+  
+    function gotoCreateCourseHandler(e){
+      navigate("create");
+    }
+    return (
+      <Students header={"Bootcamps"}>
+        {loading && <Loader />}
+        <div className={clsx["admin_profile"]}>
+          <div className={clsx.admin__student}>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <h1 style={{margin: 0}}>Bootcamps</h1>  
+            </div>
+  
+            <div className={clsx.admin__student_main}>
+              <table className={clsx.admin__student_table}>
+                <thead>
+                  {tableHeaders.map((el, i) => (
+                    <th key={i}>{el}</th>
+                  ))}
+                </thead>
+                <tbody>
+                  {courseList.length > 0 && courseList.map(
+                    ( item, i ) => (
+                      <BootcampRow
+                        key={i}
+                        comp={"Courses"}
+                        index={i}
+                        title="Lorem ipsum dolor sit amet."
+                        detail={"Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur sint tempore iste animi nisi eius alias eveniet possimus itaque voluptatem tenetur necessitatibus asperiores repellat sapiente, laborum aspernatur in quam maxime!"}
+                        duration={"16 weeks"}
+                        type={"Full Time"}
+                        time={"6am - 12pm CET"}
+                        date={"Jan 6 - Mar 24"}
+                      />
+                    )
+                  )}
+                  <p>
+                  </p>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </Students>
+    );
+  }
 
 export function Classes(){
     const {generalState: {isMobile}} = useAuth();
