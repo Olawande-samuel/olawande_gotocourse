@@ -16,6 +16,7 @@ import {
   Risk,
 } from "../../images/components/svgs.js";
 import {useAuth} from "../../contexts/Auth"
+import {useLocalStorage} from "../../hooks"
 import { AdvancedError } from "../../classes";
 import Power from "../../images/powerbi.png";
 import Algo from "../../images/algo.png";
@@ -36,6 +37,8 @@ export function ScrollToTop() {
 
   return null;
 }
+
+const KEY = "gotocourse-userdata";
 export const courseList = [
   {
     id: 1,
@@ -507,9 +510,6 @@ export const CourseDetail = ({preview}) => {
   // ref.current = true
   },[id, preview])
 
-
-
-  
   return (
     <Courses>
       <main className={style.details_main}>
@@ -594,11 +594,13 @@ export const CourseDetail = ({preview}) => {
 };
 
 export const CourseProfile = ({preview}) => {
-  const {generalState, setGeneralState, otherFunctions: {fetchCourse}} = useAuth();
-  
+  const {generalState, setGeneralState, otherFunctions: {fetchCourse}, studentFunctions:{wishlistCourse}} = useAuth();
+  const {getItem} = useLocalStorage()
+
   const {id} = useParams()
   const ref = useRef(false);
-
+  const navigate = useNavigate()
+  const [loading, setLoading]= useState(false)
   console.log("id", id)
   const [courseProfile, setCourseProfile]= useState(
     {
@@ -643,10 +645,10 @@ export const CourseProfile = ({preview}) => {
     if(preview?.name) {
       setCourseProfile(preview)
     } else {
-    const data = localStorage.getItem("gotocourse-courseInfo");
-    if(data){
-      setCourseProfile(JSON.parse(data))
-    }
+    // const data = localStorage.getItem("gotocourse-courseInfo");
+    // if(data){
+    //   setCourseProfile(JSON.parse(data))
+    // }
   }
     ref.current = true
   },[id, preview])
@@ -655,6 +657,44 @@ export const CourseProfile = ({preview}) => {
       return new Date(date).toDateString()
   }
 
+ async function addToWishList(){
+    const  userData = getItem(KEY)
+    if(userData !== null){
+      try {
+        setLoading(true)
+
+        const response =  await wishlistCourse(123, userData.token)
+        const {success, message, statusCode} = response
+        if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      }catch(error){
+        console.error(error)
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }finally{
+        setLoading(false)
+      }
+      
+      
+    } else {
+      navigate("/login")
+    }
+  }
   return (
     <Courses>
       <div className="container">
@@ -671,7 +711,7 @@ export const CourseProfile = ({preview}) => {
               <div>
                 <h2 className={style.topic}>{courseProfile?.name}</h2>
                 <p className={style.subject}>{courseProfile?.category}</p>
-                <p className={style.rating}> 
+                  <p className={style.rating}> 
                 <BsStarFill style={{ color: "#FFCB14", fontSize: "20px" }} />
                 <BsStarFill style={{ color: "#FFCB14", fontSize: "20px" }} />
                 <BsStarFill style={{ color: "#FFCB14", fontSize: "20px" }} />
@@ -681,7 +721,27 @@ export const CourseProfile = ({preview}) => {
                 ( 5 )
                 </span>
                 </p>
-                <button className={`button ${style.btn}`}>Enroll</button>
+                <div className="d-flex" style={{gap:"1rem"}}>
+                  <a href="#packages">
+                    <button className={`button ${style.btn}`}>Enroll</button>
+                  </a>
+                  <button 
+                    type="button"
+                    className={` ${style.btn} btn-plain`} 
+                    style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)"}}
+                    onClick={{addToWishList}}
+                  >
+                    {loading ? 
+                      <div className="spinner-border text-light px-4" role="status" style={{width:"1rem", height:"3rem"}}>
+                        <span className="visually-hidden">Loading...</span>
+                      </div>  
+                      :
+                      <span>
+                        Add to Wishlist
+                      </span>
+                    }
+                  </button>
+                </div>
                 <p className={style.total_student}>120 enrolled students</p>
               </div>
             </div>
@@ -724,7 +784,7 @@ export const CourseProfile = ({preview}) => {
                 </li>
               </ul>
             </div>
-            <div className="col-md-4">
+            <div className="col-md-5 col-lg-4">
               <ul>
                 <li>
                   <div className="fw-bold">Lorem, ipsum dolor.</div>
@@ -754,7 +814,7 @@ export const CourseProfile = ({preview}) => {
         <section id="instructor" className={style.profile_section}>
           <h5 className={style.title}>Instructor</h5>
           <div className="row">
-            <div className="col-md-4">
+            <div className="col-lg-4">
               <div className={`card ${style.profile_card}`}>
                 <div className="d-flex g-3">
                   <div className={style.card_left}>
@@ -778,7 +838,7 @@ export const CourseProfile = ({preview}) => {
                     <div className={style.profile_footer}>
                       <div className={style.location}>
                         <p className={style.occupation}>Location</p>
-                        <p className="fw-bold">{(courseProfile?.instructorLocation).toLocaleUpperCase()}</p>
+                        <p className="fw-bold">{courseProfile?.instructorLocation}</p>
                       </div>
                       <div className="style time">
                         <p className={style.occupation}>Time Active</p>
@@ -812,10 +872,10 @@ export const CourseProfile = ({preview}) => {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus
             ridiculus nunc adipiscing justo.
           </p>
-          <div className={` row ${style.package_card_wrapper}`}>
+          <div id="packages" className={` row ${style.package_card_wrapper}`}>
             {courseProfile?.packages?.length > 0 && courseProfile.packages.map(item=>(
-            <div className="col-md-4">
-              <PackageCard item={item} />
+            <div className="col-md-4" key={item.name}>
+              <PackageCard key={item.name} item={item} />
             </div>
             ))}
           </div>
@@ -878,7 +938,51 @@ export const CourseProfile = ({preview}) => {
   );
 };
 
-export const PackageCard = ({item}) => {
+export const PackageCard = ({item, }) => {
+  const {studentFunctions:{addCourse}} = useAuth();
+  const {getItem}= useLocalStorage()
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
+   async function enrollToCourse(){
+    const  userData = getItem(KEY)
+    if(userData !== null){
+      const data = {
+        courseId:"",
+        selectedPackage:"",
+        fullPayment:true,
+        amountPaid:0
+      }
+      try {
+        setLoading(true)
+        const response =  await addCourse(data, userData.token)
+        const {success, message, statusCode} = response
+        if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      }catch(error){
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }finally{
+        setLoading(false)
+      }
+    } else {
+      navigate("/login")
+    }
+   }
   return (
     <div className={`card ${style.package_card}`} style={{height:"100%"}}>
       <div className="card-body d-flex flex-column justify-content-around" style={{}}>
@@ -892,8 +996,17 @@ export const PackageCard = ({item}) => {
         <div className="text-center">
           <button
             className={`button button-md mx-auto ${style.package_button}`}
+            onClick={enrollToCourse}
           >
-            Proceed to payment
+            {loading ? 
+              <div className="spinner-border text-light px-4" role="status" style={{width:"1rem", height:"3rem"}}>
+                <span className="visually-hidden">Loading...</span>
+              </div>  
+              :
+              <span>
+                Proceed to payment
+              </span>
+            }
           </button>
         </div>
       </div>
@@ -910,7 +1023,7 @@ export const ReviewCard = () => {
           is the place to be to get all your I.T. certifications.”
         </p>
         <div
-          className={`d-flex justify-content-between align-items-center ${style.review_card_footer}`}
+          className={`d-flex flex-wrap justify-content-between align-items-center ${style.review_card_footer}`}
         >
           <div className={`d-flex align-items-center ${style.review_left}`}>
             <div className={style.profile_img_wrapper}>

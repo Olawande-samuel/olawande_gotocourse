@@ -140,20 +140,23 @@ function Info({ title, content }) {
   );
 }
 
-const Syllabus = ({ title, description }) => {
+const Syllabus = ({ title, description, packagelist, price }) => {
   return (
     <div className={clsx.syllabus_container}>
       <h5>{title}</h5>
+      {packagelist && <p>{price}</p>}
       <p>{description}</p>
     </div>
   );
 };
+
 
 export function CreateCourse() {
   const { teacherFunctions: { addCourse }, } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const { syllabuses, addtoSyllabus } = useSyllabus();
+  const [packageList, addtoPackageList ] = useState([]);
   const [formstate, setFormstate] = useState({
     name: "",
     categoryName: "",
@@ -167,6 +170,7 @@ export function CreateCourse() {
   });
 
   const [open, setOpen] = useState(false);
+  const [openPackage, setOpenPackage] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const packages = [
@@ -256,6 +260,12 @@ export function CreateCourse() {
   const handleClose = () => {
     setOpen(false);
   };
+  const openPackageModal =()=>{
+    setOpenPackage(true)
+  }
+  const handleClosePackage =()=>{
+    setOpenPackage(false)
+  }
   return (
     <Teachers>
      
@@ -307,21 +317,23 @@ export function CreateCourse() {
             </div>
             <div className={clsx.form_group}>
               <label htmlFor={"package"}>Package</label>
-              <select
-                rows="5"
-                name="title"
-                value={packageState.title}
-                onChange={changePackageStateHandler}
-                className="form-select generic_input"
-              >
-                <option value="">Choose a package</option>
-                {packages.map(({ name, value }, i) => (
-                  <option value={value} key={i}>
-                    {name}
-                  </option>
-                ))}
-              </select>
+                {packageList.length > 0 ? (
+                  packageList.map(item=>(
+                    <Syllabus {...item} packagelist={true} />
+                  ))
+                ):(
+                  <h6>No Packages</h6>
+                )}
             </div>
+
+            <button
+              className="btn btn-primary my-3"
+              style={{ backgroundColor: "var(--theme-blue)" }}
+              type="button"
+              onClick={openPackageModal}
+            >
+              Add Package
+            </button>
 
             <Input
               label="Price"
@@ -338,7 +350,7 @@ export function CreateCourse() {
                   <Syllabus title={title} key={i} description={description} />
                 ))
               ) : (
-                <h4>No syllabus!</h4>
+                <h6>No syllabus!</h6>
               )}
             </div>
 
@@ -402,6 +414,13 @@ export function CreateCourse() {
         addSyllabus={addtoSyllabus}
         setOpen={setOpen}
         handleClose={handleClose}
+      />
+      <AddPackage
+        openPackage={openPackage}
+        addPackage={addtoPackageList}
+        list={packageList}
+        setOpen={setOpen}
+        handleClosePackage={handleClosePackage}
       />
     </Teachers>
   );
@@ -490,6 +509,125 @@ function AddSyllabus({ open, handleClose, addSyllabus }) {
         <button
           className="btn btn-primary my-3"
           onClick={addSyllabusHandler}
+          style={{ backgroundColor: "var(--theme-blue)" }}
+        >
+          Add
+        </button>
+      </Box>
+    </Modal>
+  );
+}
+function AddPackage({ openPackage, handleClosePackage, list, addPackage }) {
+  const [newPackage, setNewPackage] = useState({
+    title: "",
+    price:"",
+    description: "",
+  });
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    minWidth: 600,
+    background: "#fff",
+    border: "1px solid #eee",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 6,
+    padding: "4rem 2rem",
+  };
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setNewPackage((old) => {
+      return {
+        ...old,
+        [name]: value,
+      };
+    });
+  }
+
+  function addPackageHandler() {
+    const { title, description, price } = newPackage;
+    if (!title || !description || !price) {
+      toast.error("All field are required", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else {
+      addPackage([...list, newPackage]);
+      toast.success("Package added successfully", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setNewPackage({
+        title: "",
+        price:"",
+        description: "",
+      })
+    }
+  }
+
+  return (
+    <Modal
+      open={openPackage}
+      onClose={handleClosePackage}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box style={style}>
+        <h5
+          className="lead text-primary"
+          style={{ color: "var(--theme-blue)" }}
+        >
+          Add Package
+        </h5>
+        <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Type</label>
+          <select
+          name="title"
+          value={newPackage.title}
+          onChange={handleChange}
+          className="form-select generic_input"
+        >
+          <option value="">Choose a Type</option>
+          <option value="one-on-one">One-on-One</option>
+          <option value="cohort">Cohort</option>
+          <option value="Self Paced">Self Paced</option>
+        </select>
+        </div>
+        <Input
+          label="Price"
+          name="price"
+          type="number"
+          handleChange={handleChange}
+          value={newPackage.price}
+        />
+        <div className="form-group my-3">
+          <label htmlFor="description" className="form-label generic_label">
+            Description
+          </label>
+          <textarea
+            rows="5"
+            id="description"
+            name="description"
+            className="form-control generic_input"
+            value={newPackage.description}
+            onChange={handleChange}
+          ></textarea>
+        </div>
+        <button
+          className="btn btn-primary my-3"
+          onClick={addPackageHandler}
           style={{ backgroundColor: "var(--theme-blue)" }}
         >
           Add

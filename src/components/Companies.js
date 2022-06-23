@@ -1,9 +1,12 @@
 import React from 'react'
 
 
-import {Microsoft, PWC, Samsung, Verizon, Walmart,Shell, Uber, Shopify, Twitter, Tmobile, Slack, Mastercard, Facebook, Ey, Boa, Deloitte, KPMG, Google, Chase } from "../images/components/svgs"
+import {Microsoft, PWC, Samsung, Verizon, Walmart,Shell, Uber, Shopify, Twitter, Tmobile, Slack, Mastercard, Facebook, Ey, Boa, Deloitte, KPMG, Google, Chase, Tesla, Geico, Lucid, Zoom, AWS, Tesco } from "../images/components/svgs"
 
-export const icons = [<Deloitte />, <KPMG />, <Google />, <Chase />, <Microsoft />, <PWC />, <Samsung />, <Verizon />, <Walmart />,<Shell />, <Uber />,  <Tmobile />, <Shopify />, <Twitter />, <Slack />, <Mastercard />, <Facebook />, <Ey />, <Boa />]
+export const icons = [<Deloitte />, <KPMG />, <Google />, <Chase />, <Microsoft />, <PWC />, <Samsung />, <Verizon />, <Walmart />,<Shell />, <Uber />,  <Tmobile />, <Shopify />, <Twitter />, <Slack />, <Mastercard />, <Facebook />, <Ey />, <Boa />,
+<Tesla />, <Geico />, <AWS />, <Lucid />, <Zoom />, <Tesco />
+
+]
 const Companies = () => {
   return (
     <section className="wrapper services">

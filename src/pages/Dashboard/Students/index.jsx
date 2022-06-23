@@ -76,6 +76,7 @@ export function Profile(){
 
         ref.current = true
     }, [userdata?.token])
+    
     function editProfileHandler(e){
         navigate("/students/profile/edit");
     }
