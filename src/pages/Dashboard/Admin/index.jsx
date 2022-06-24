@@ -1421,6 +1421,7 @@ export function Bootcamps() {
                       type={"Full Time"}
                       time={"6am - 12pm CET"}
                       date={"Jan 6 - Mar 24"}
+                      admin={true}
                     />
                   )
                 )}
@@ -1608,7 +1609,7 @@ export function CreateBootcamp(){
     </Admin>
   );
 }
-export function BootcampRow({index, title, detail, time, date, type,duration }){
+export function BootcampRow({index, title, detail, time, date, type,duration, admin }){
   return (
     <tr className={clsx.user__info_card} >
       <td className={clsx.user__info}>{index + 1}.</td>
@@ -1622,12 +1623,14 @@ export function BootcampRow({index, title, detail, time, date, type,duration }){
       <td className={clsx.user__info}>{duration}</td>
       <td className={clsx.user__info}>{date}</td>
       <td className={clsx.user__info}>{time}</td>
+      {admin && 
       <td className={clsx.user__info}>
-        <div className="d-flex justify-content-center" style={{gap:"1rem"}}>
+        <div className="d-flex align-items-center" style={{gap:"1rem"}}>
           <i style={{fontSize:"24px", color:"var(--theme-orange)"}}><AiOutlineDelete /></i>
           <i style={{fontSize:"24px", color:"var(--theme-blue)"}}><AiTwotoneEdit /></i>
         </div>
       </td>
+      }
       </tr>
   )
 }
