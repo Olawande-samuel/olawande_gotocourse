@@ -85,6 +85,11 @@ const Sidebar = ({isMobile}) => {
             title: "My Courses"
         },
         {
+            icon: BiCategory,
+            path: "bootcamps",
+            title: "My Bootcamps"
+        },
+        {
             icon: FiGift,
             path: "wishlist",
             title: "Wishlist"
@@ -109,6 +114,11 @@ const Sidebar = ({isMobile}) => {
             icon: MdMessage,
             path: "classes",
             title: "Classes"
+        },
+        {
+            icon: BiCategory,
+            path: "bootcamps",
+            title: "Bootcamps"
         },
         {
             icon: IoIosCash,

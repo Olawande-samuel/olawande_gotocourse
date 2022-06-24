@@ -432,7 +432,7 @@ function CareerModal({newCareer, updateCareer, open, setOpen, handleChange}){
     </Modal>
   )
 }
-function CategoryPreviewModal({preview, open, setOpen}){
+export function CategoryPreviewModal({preview, open, setOpen}){
 
   const style = {
     position: "absolute",
@@ -1592,7 +1592,7 @@ export function CreateBootcamp(){
     </Admin>
   );
 }
-function BootcampRow({index, title, detail, time, date, type,duration }){
+export function BootcampRow({index, title, detail, time, date, type,duration }){
   return (
     <tr className={clsx.user__info_card} >
       <td className={clsx.user__info}>{index + 1}.</td>
@@ -2250,8 +2250,7 @@ export function Edit() {
     work: userdata?.work ?? "",
     category: userdata?.category ?? "",
   });
-  useEffect(() => {
-  }, []);
+  const navigate = useNavigate();
 
   async function submitHandler(e) {
     e.preventDefault();
@@ -2368,17 +2367,6 @@ export function Edit() {
   console.log("user", userdata);
   return (
     <Admin header="ADMIN">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h3>Update Profile</h3>
@@ -2415,7 +2403,18 @@ export function Edit() {
               )}
             </div>
           </div>
-
+          <div className={clsx.edit__picture}>
+            <button style={{
+              border:"1px dotted var(--theme-blue)",
+              outline:"none",
+              color:"var(--theme-blue)",
+              padding:"4px",
+              borderRadius:"8px"
+            }} 
+            type="button" onClick={()=>{
+                navigate("/change-password")
+            }}>Change Password</button>
+          </div>
           <form className="form" onSubmit={submitHandler} style={{width: "80%"}}>
             <Input
               label="First name"
@@ -2509,7 +2508,17 @@ const Admin = ({ children, header }) => {
   return (
     <GuardedRoute>
       <div className={clsx["admin"]}>
-        <ToastContainer />
+        <ToastContainer
+          position="top-right"
+          autoClose={4500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <Sidebar isMobile={isMobile} />
         <div className={clsx["admin_main"]}>
           <div className={`align-items-center ${clsx["admin_topbar"]}`}>

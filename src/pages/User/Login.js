@@ -117,7 +117,7 @@ const Login = () => {
           />
           <p className="mt-3">
              <span>Forgot password? </span>
-             <Link to="/reset-password">Click here to reset</Link>
+             <Link to="/forgot-password">Click here to reset</Link>
             </p>
           {/* <div className="form-check ">
             <input

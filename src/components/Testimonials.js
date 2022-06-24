@@ -69,7 +69,7 @@ const Testimonials = () => {
       modules={[Navigation, Pagination, Scrollbar, A11y]}
       loop={true}
       speed={1000}
-      autoplay={{delay:2500}}
+      // autoplay={{delay:2500}}
       spaceBetween={0}
       slidesPerView={1}
       navigation
