@@ -418,7 +418,7 @@ export function CreateCourse() {
               <div className="col-sm-4">
                 <Input
                   label="Start Date"
-                  name="start_date"
+                  name="startDate"
                   type="date"
                   handleChange={changeHandler}
                   value={formstate.start_date}
@@ -427,7 +427,7 @@ export function CreateCourse() {
               <div className="col-sm-4">
                 <Input
                   label="End Date"
-                  name="end_date"
+                  name="endDate"
                   type="date"
                   handleChange={changeHandler}
                   value={formstate.end_date}

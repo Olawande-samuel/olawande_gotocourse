@@ -43,83 +43,110 @@ export const courseList = [
   {
     id: 1,
     title: "Cybersecurity",
+    name: "Cybersecurity",
     subtitle: "Data Science",
+    category: "Data Science",
     author: "George Brown",
-    details:
-      "This is the practice ofprotecting critical systems and sensitive information from digital attacks.",
+    details: "This is the practice ofprotecting critical systems and sensitive information from digital attacks.",
+    description: "This is the practice ofprotecting critical systems and sensitive information from digital attacks.",
     img: Power,
+    courseImg: Power,
   },
   {
     id: 2,
     title: "Algorithims",
+    name: "Algorithims",
     subtitle: "Data Science",
+    category: "Data Science",
     author: "Mary Brown",
-    details:
-      "Risk management is the process of assessing and controlling threats to an organization's capital and earnings.",
+    details: "Risk management is the process of assessing and controlling threats to an organization's capital and earnings.",
+    description: "Risk management is the process of assessing and controlling threats to an organization's capital and earnings.",
     img: Algo,
+    courseImg: Algo,
   },
   {
     id: 3,
     title: "Machine Learning",
+    name: "Machine Learning",
     subtitle: "Data Science",
+    category: "Data Science",
     author: "George Brown",
-    details:
-      "Data science refers to the process of extracting clean information to formulate actionable insights",
+    details: "Data science refers to the process of extracting clean information to formulate actionable insights",
+    description: "Data science refers to the process of extracting clean information to formulate actionable insights",
     img: Power,
+    courseImg: Power,
   },
   {
     id: 4,
     title: "Project Management",
+    name: "Project Management",
     subtitle: "Data Science",
+    category: "Data Science",
     author: "Mary Brown",
-    details:
-      "the process of leading the work of a team to achieve all project goals within the given constraints.",
+    details: "the process of leading the work of a team to achieve all project goals within the given constraints.",
+    description: "the process of leading the work of a team to achieve all project goals within the given constraints.",
     img: Algo,
+    courseImg: Algo,
   },
   {
     id: 5,
     title: "Introduction to SQL",
+    name: "Introduction to SQL",
     subtitle: "Data Science",
+    category: "Data Science",
     author: "George Brown",
-    details:
-      "IT compliance refers to businesses meeting all legal requirements,  and regulations for the software of company.",
+    details: "IT compliance refers to businesses meeting all legal requirements,  and regulations for the software of company.",
+    description: "IT compliance refers to businesses meeting all legal requirements,  and regulations for the software of company.",
     img: Power,
+    courseImg: Power,
   },
   {
     id: 6,
     title: "Regression",
+    name: "Regression",
     subtitle: "Data Science",
+    category: "Data Science",
     author: "Mary Brown",
-    details:
-      "It is the process of evaluating evidence to determine whether a computer system safeguards assets",
+    details: "It is the process of evaluating evidence to determine whether a computer system safeguards assets",
+    description: "It is the process of evaluating evidence to determine whether a computer system safeguards assets",
     img: Algo,
+    courseImg: Algo,
   },
   {
     id: 7,
     title: "Linear Programming",
+    name: "Linear Programming",
     subtitle: "Data Science",
+    category: "Data Science",
     author: "George Brown",
-    details:
-      "Business analysis is a strategy for initiating and managing change in organisations.",
+    details: "Business analysis is a strategy for initiating and managing change in organisations.",
+    description: "Business analysis is a strategy for initiating and managing change in organisations.",
     img: Power,
+    courseImg: Power,
   },
   {
     id: 8,
     title: "Advance Algorithims",
+    name: "Advance Algorithims",
     subtitle: "Data Science",
+    category: "Data Science",
     author: "Mary Brown",
-    details:
-      "the process of identifying a market opportunity, clearly defining the problem, developing a proper solution for that",
+    details: "the process of identifying a market opportunity, clearly defining the problem, developing a proper solution for that",
+    description: "the process of identifying a market opportunity, clearly defining the problem, developing a proper solution for that",
     img: Algo,
+    courseImg: Algo,
   },
   {
     id: 9,
     title: "Advance Power BI",
+    name: "Advance Power BI",
     subtitle: "Data Science",
+    category: "Data Science",
     author: "George Brown",
-    details:
-      "Web design encompasses many different skills and disciplines in the production and maintenance of websites.",
+    details: "Web design encompasses many different skills and disciplines in the production and maintenance of websites.",
+    description: "Web design encompasses many different skills and disciplines in the production and maintenance of websites.",
     img: Power,
+    courseImg: Power,
   },
 ];
 
@@ -160,7 +187,7 @@ const courseDetails = [
 const Courses = ({ children }) => {
   const location = useLocation();
   const { generalState:{loading} } = useAuth()
-  const bread = location.pathname.split("/");
+  const bread = location.pathname?.split("/");
   return (
     <Layout>
       <ScrollToTop />
@@ -213,21 +240,22 @@ const Card = ({ logo, name, description, iconImg }) => {
   );
 };
 
-export const  CourseCard = ({ img, title, details, subtitle, author, color, background, show ,  course, courseId}) => {
+export const  CourseCard = ({ courseImg, name, description, category, instructorName, color, background, show ,  course, courseId}) => {
   const navigate = useNavigate()
   return (
     <div className={`card ${style.course_card}`} style={{background:background, color:color, cursor: "pointer"}} onClick={()=>{
       localStorage.setItem("gotocourse-courseInfo", JSON.stringify(course ))
-      navigate(show === true ?  `courses/${title.replace(/\s+/g, '-').toLowerCase()}`:`${title.replace(/\s+/g, '-').toLowerCase()} `)
+      navigate(show === true ?  `courses/${name?.replace(/\s+/g, '-').toLowerCase()}`:`${name?.replace(/\s+/g, '-').toLowerCase()} `)
       }}>
-      <img src={img} alt="" className="card-img-top mentor_image" />
+      <img src={courseImg} alt="" className="card-img-top mentor_image" />
       <div className={`card-body ${style.course_Card_body}`}>
-        <Link to={show === true ?  `courses/${title.replace(/\s+/g, '-').toLowerCase()}`:`${title.replace(/\s+/g, '-').toLowerCase()} `}>
-          <h5 className={`card-title ${style.course_title}`} style={{ color:color}}>{title}</h5>
+        <Link to={show === true ?  `courses/${name?.replace(/\s+/g, '-').toLowerCase()}`:`${name?.replace(/\s+/g, '-').toLowerCase()} `}>
+          <h5 className={`card-title ${style.course_title}`} style={{ color:color}}>{name}</h5>
         </Link> 
-        <h6 className={`card-subtitle ${style.course_subtitle}`}>{subtitle}</h6>
-        <p className={`card-text ${style.course_text}`}>{details}</p>
-        <p className={`text-end ${style.course_author}`} style={{ color:color}}>{author}</p>
+        <h6 className={`card-subtitle ${style.course_subtitle}`}>{category}</h6>
+        {/* add line-clamp to this v */}
+        <p className={`card-text clamp_text ${style.course_text}`}>{description}</p>
+        <p className={`text-end ${style.course_author}`} style={{ color:color}}>{instructorName}</p>
       </div>
     </div>
   );
@@ -406,12 +434,12 @@ export const Categories = () => {
           {/* NB: CHANGE DIV TO LINK AFTER UPDATE */}
           {categories.length > 0 && categories.map((career) => (
             <div
-            //  to={career.name.split(" ").join("-").toLowerCase()} 
+            //  to={career.name?.split(" ").join("-").toLowerCase()} 
              onClick={()=>{
                console.log(career.logo) 
                delete career.logo
                 localStorage.setItem("gotocourse-category", JSON.stringify(career))
-              navigate(`${career.name.split(" ").join("-").toLowerCase()}`)
+              navigate(`${career.name?.split(" ").join("-").toLowerCase()}`)
             }}> 
               <Card {...career} />
             </div>
@@ -590,8 +618,8 @@ export const CourseList = () => {
   );
 };
 export const CourseDetail = ({preview}) => {
-  const {generalState, setGeneralState, otherFunctions: {fetchCategory}} = useAuth();
-  
+  const {generalState, setGeneralState, otherFunctions: {searchCategories}} = useAuth();
+  const [categoryCourses, setCategoryCourses]= useState([])
   const {id} = useParams()
   const ref = useRef(false);
 
@@ -604,6 +632,57 @@ export const CourseDetail = ({preview}) => {
   }
 
   console.log("cate", categoryDetails)
+  // fetch courses under each category
+  useEffect(()=>{
+    if(ref.current) return
+      (async()=>{
+        try{
+          setGeneralState({...generalState, loading: true})
+          const res = await searchCategories(categoryDetails?.name);
+          const {success, message, statusCode} = res;
+            if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+            if(res.data.length > 0){
+              setCategoryCourses(res.data) 
+              console.log("category-courses", res.data);
+              toast.success(message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+          toast.error("No course found", {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        
+      }catch(err){
+          toast.error(err.message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+          });
+      }finally{
+        setGeneralState({...generalState, loading: false})
+      }
+      })()
+    
+    ref.current = true
+  },[categoryDetails?.name])
+
+  //NB: use dummy is no data exist
   useEffect(()=>{
     if(preview?.name) {
       categoryDetails = preview;
@@ -711,10 +790,12 @@ export const CourseDetail = ({preview}) => {
                 
               </p>
             </header>
-            <div className={style.main}>
-              {courseList.slice(0, 6).map((course) => (
+            <div className={style.new_main}>
+              {categoryCourses.length > 0 ? categoryCourses.slice(0, 6).map(course => (
                 <CourseCard {...course} show={true} course={course} />
-              ))}
+            )) : courseList.slice(0, 6).map((course) => (
+                <CourseCard {...course} show={true} course={course} />
+            ))}
             </div>
             <div className={`text-end ${style.more}`}>
               <Link to="courses" className={style.link}>
@@ -783,10 +864,10 @@ console.log("pre",preview)
     if(preview?.name) {
       setCourseProfile(preview)
     } else {
-    // const data = localStorage.getItem("gotocourse-courseInfo");
-    // if(data){
-    //   setCourseProfile(JSON.parse(data))
-    // }
+    const data = localStorage.getItem("gotocourse-courseInfo");
+    if(data){
+      setCourseProfile(JSON.parse(data))
+    }
   }
     ref.current = true
   },[id, preview])
@@ -847,7 +928,7 @@ console.log("pre",preview)
             <div className="col-md-6 d-flex align-items-center">
               <div>
                 <h2 className={style.topic}>{courseProfile?.name}</h2>
-                <p className={style.subject}>{courseProfile?.categoryName}</p>
+                <p className={style.subject}>{courseProfile?.category}</p>
                   <p className={style.rating}> 
                 <BsStarFill style={{ color: "#FFCB14", fontSize: "20px" }} />
                 <BsStarFill style={{ color: "#FFCB14", fontSize: "20px" }} />
@@ -883,7 +964,7 @@ console.log("pre",preview)
               </div>
             </div>
             <div className="col-md-6">
-              <img src={details} alt="laptop" style={{maxWidth:"100%"}} />
+              <img src={courseProfile?.courseImg ? courseProfile?.courseImg : details } alt="laptop" style={{maxWidth:"100%"}} />
             </div>
           </div>
           <header>
@@ -894,7 +975,7 @@ console.log("pre",preview)
               <p className={style.paragraph}>
                 {courseProfile?.description}
               </p>
-              <ul>
+              {/* <ul>
                 <li className={style.paragraph}>
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo
                   pariatur est exercitationem distinctio alias ducimus impedit?
@@ -919,7 +1000,7 @@ console.log("pre",preview)
                   pariatur est exercitationem distinctio alias ducimus impedit?
                   Aut asperiores pariatur porro quibusdam.
                 </li>
-              </ul>
+              </ul> */}
             </div>
             <div className="col-md-5 col-lg-4">
               <ul>
@@ -956,7 +1037,7 @@ console.log("pre",preview)
                 <div className="d-flex g-3">
                   <div className={style.card_left}>
                     <div className={style.profile_img_wrapper}>
-                      <img src={Algo} alt="" className={style.image} />
+                      <img src={courseProfile?.instructorProfileImg ?courseProfile?.instructorProfileImg : Algo} alt="" className={style.image} />
                     </div>
                   </div>
 
@@ -1012,7 +1093,7 @@ console.log("pre",preview)
           <div id="packages" className={` row ${style.package_card_wrapper}`}>
             {courseProfile?.packages?.length > 0 && courseProfile.packages.map(item=>(
             <div className="col-md-4" key={item.name}>
-              <PackageCard key={item.name} item={item} />
+              <PackageCard key={item.name} item={item} courseId={courseProfile.courseId} />
             </div>
             ))}
           </div>
@@ -1075,47 +1156,17 @@ console.log("pre",preview)
   );
 };
 
-export const PackageCard = ({item, }) => {
+export const PackageCard = ({item, courseId}) => {
   const {studentFunctions:{addCourse}} = useAuth();
   const {getItem}= useLocalStorage()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
+
    async function enrollToCourse(){
     const  userData = getItem(KEY)
     if(userData !== null){
-      const data = {
-        courseId:"",
-        selectedPackage:"",
-        fullPayment:true,
-        amountPaid:0
-      }
-      try {
-        setLoading(true)
-        const response =  await addCourse(data, userData.token)
-        const {success, message, statusCode} = response
-        if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-      }catch(error){
-        toast.error(error.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }finally{
-        setLoading(false)
-      }
+      localStorage.setItem("gotocourse-paymentDetails", JSON.stringify({...item, courseId:courseId}))
+     navigate("payment")
     } else {
       navigate("/login")
     }

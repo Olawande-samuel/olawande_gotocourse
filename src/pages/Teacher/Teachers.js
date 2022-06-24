@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {Link, useNavigate} from "react-router-dom"
 
@@ -8,6 +8,13 @@ import { courseList } from "../Courses";
 import { useAuth } from "../../contexts/Auth";
 import style from "./teacher.module.css";
 import lere from "../../images/lere.png";
+import { useLocalStorage } from "../../hooks";
+import { toast } from "react-toastify";
+import { AdvancedError } from "../../classes";
+
+
+const KEY = "gotocourse-userdata";
+
 const nav = [
   { name: "All Courses", value: "" },
   { name: "Business Analysis", value: "Business Analysis" },
@@ -94,6 +101,66 @@ const NavItems = ({ item, handleChange, search }) => {
 };
 
 export const Payment = () => {
+  const {studentFunctions:{addCourse}} = useAuth();
+  const {getItem}= useLocalStorage()
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
+  const [paymentDetails, setPaymentDetails]= useState({})
+  const [courseInfo, setCourseInfo]= useState({})
+  
+  const details = localStorage.getItem("gotocourse-paymentDetails")
+  const info = localStorage.getItem("gotocourse-courseInfo")
+  useEffect(()=>{
+    if (details ){
+      setPaymentDetails(JSON.parse(details))
+      setCourseInfo(JSON.parse(info))
+    }
+  },[])
+
+  async function enrollToCourse(e){
+    e.preventDefault();
+
+    const  userData = getItem(KEY)
+
+    if(userData !== null){
+      const data = {
+        courseId:paymentDetails.courseId,
+        selectedPackage:paymentDetails.title,
+        fullPayment:true,
+        amountPaid:paymentDetails.price
+      }
+      try {
+        setLoading(true)
+        const response =  await addCourse(data, userData.token)
+        const {success, message, statusCode} = response
+        if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      }catch(error){
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+    }finally{
+      setLoading(false)
+    }
+
+  } else {
+    navigate("/login")
+  }
+}
   return (
     <Courses>
       <div className="container">
@@ -106,28 +173,28 @@ export const Payment = () => {
                 <div className={style.payment_card_top}>
                   <div className="d-flex align-items-center">
                     <div className={style.payment_profile}>
-                      <img src={lere} alt="" className={style.payment_image} />
+                      <img src={courseInfo?.instructorProfileImg ? courseInfo.instructorProfileImg : lere} alt="" className={style.payment_image} />
                     </div>
                     <div className={style.payment_profile_info}>
-                      <p className={style.payment_name}>Bola</p>
-                      <small>Power Bi Instructor</small>
+                      <p className={style.payment_name}>{courseInfo?.instructorName}</p>
+                      <small className="text-capitalize">{(courseInfo?.category).toLowerCase()} Instructor</small>
                     </div>
                   </div>
                 </div>
                 <hr />
                 <div className={style.payment_card_mid}>
                   <div className="d-flex justify-content-between align-items-center">
-                    <p className={style.payment_course}>Cohort Course</p>
-                    <p>$100</p>
+                    <p className={`text-capitalize ${style.payment_course}`}>{`${paymentDetails?.title} Course`}</p>
+                    <p>${paymentDetails?.price}</p>
                   </div>
-                  <small className="d-block">
+                  {/* <small className="d-block">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Totam debitis fugiat animi veritatis, accusantium sit unde!
-                  </small>
-                  <ul>
+                  </small> */}
+                  {/* <ul>
                     <li>Lorem ipsum dolor sit amet.</li>
                     <li>Lorem ipsum dolor sit amet.</li>
-                  </ul>
+                  </ul> */}
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between align-items-center">
@@ -137,11 +204,25 @@ export const Payment = () => {
                 <hr />
                 <div className="d-flex justify-content-between align-items-center">
                   <p>Total</p>
-                  <p className={style.payment_total}>$105</p>
+                  <p className={style.payment_total}>${+paymentDetails?.price + 5}</p>
                 </div>
-                <button className="button w-100 button-md">Checkout</button>
+                <button onClick={enrollToCourse} className="button w-100 button-md">
+                  {
+                    loading ? 
+                    <div className="spinner-border text-primary" role="status" style={{width:"4rem", height:"4rem"}}>
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                    :
+                    <span>Checkout</span>
+                    
+                  }
+                </button>
                 <div className="cancel w-100 text-center my-3">
-                  <button className="" style={{ color:"var(--theme-blue)", border:"none", outline:"none", fontSize:"14px"}}>Cancel</button>
+                  <button className="" style={{ color:"var(--theme-blue)", border:"none", outline:"none", fontSize:"14px"}}
+                  onClick={()=>{
+                    navigate(-2)
+                  }}
+                  >Cancel</button>
                 </div>
 
               </div>
