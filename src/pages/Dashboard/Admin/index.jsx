@@ -162,7 +162,7 @@ export function CourseDetails({}){
                 handleChange={changeHandler}
                 value={formstate.teacher}
               />
-              <button className={clsx.form_group__button}>
+              <button type="button" className={clsx.form_group__button}>
                 Add Teacher
               </button>
             </div>
@@ -188,7 +188,7 @@ export function CourseDetails({}){
                 handleChange={changeHandler}
                 value={formstate.student}
               />
-              <button className={clsx.form_group__button}>
+              <button type="button" className={clsx.form_group__button}>
                 Add Student
               </button>
             </div>
@@ -211,7 +211,7 @@ const [loading, setLoading] = useState(true);
   const {getItem} = useLocalStorage();
   const flag = useRef(false);
   const userdata = getItem(KEY)
-  const tableHeaders = ["No", "Name of Category", "Date", "No of Student"]
+  const tableHeaders = ["No", "Name of Category", "Date", "No of Student", "Actions"]
 
   useEffect(() => {
     if(flag.current) return;
@@ -265,10 +265,19 @@ const [loading, setLoading] = useState(true);
     }
   }
 
+  function editCourseHandler(e, id){
+    if(e.currentTarget === e.target){
+      console.log(e.target, id);
+    }
+  }
+
   function showDetailsHandler(e, id){
-    console.log(e.target, id);
+    e.stopPropagation();
+    console.log(e.target, id, e.currentTarget);
+    if(e.target.id === "actions") return;
     navigate(`details/${id}`);
   }
+
   return (
     <Admin header="Category">
       {loading && <Loader />}
@@ -300,6 +309,7 @@ const [loading, setLoading] = useState(true);
                       date={"Feb 24"}
                       students={90}
                       id={categoryId}
+                      editCourseHandler={editCourseHandler}
                       deleteCourseHandler={deleteCourseHandler}
                       showDetailsHandler={showDetailsHandler}
                     />
@@ -992,6 +1002,7 @@ export function UserInfoCard({
   course_status,
   enrolled,
   deleteCourseHandler,
+  editCourseHandler,
   showDetailsHandler = () => {return},
   approveHandler = () => {return},
 }) {
@@ -1096,11 +1107,16 @@ export function UserInfoCard({
       )}
       {
         comp === "Category" && (
-          <td className={clsx.user__button}>
+          <td className={clsx.user__button} id="actions">
             <span onClick={e => {
               deleteCourseHandler(e, id);
             }}>
-              <AiOutlineDelete style={{fontSize: "2rem"}} className="text-danger" />
+              <AiOutlineDelete style={{fontSize: "1.5rem",}} className="text-danger" />
+            </span>
+            <span onClick={e => {
+              editCourseHandler(e, id);
+            }}>
+              <AiTwotoneEdit style={{fontSize: "1.5rem", marginLeft: 20}} className="text-primary" />
             </span>
           </td>
         )
@@ -1711,7 +1727,7 @@ function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
 
 
 export function CreateCourse() {
-  const {generalState, setGeneralState, teacherFunctions: { addCourse }, } = useAuth(); const {getItem} = useLocalStorage();
+  const {teacherFunctions: { addCourse }, } = useAuth(); const {getItem} = useLocalStorage();
 
   let userdata = getItem(KEY);
   const {syllabuses, addtoSyllabus} = useSyllabus();
@@ -2176,7 +2192,7 @@ export function Student() {
 
   return (
     <Admin header={"Student"}>
-      {loading && <Loader />}
+      {loader && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h1>All Students</h1>
