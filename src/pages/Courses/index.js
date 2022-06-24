@@ -638,7 +638,7 @@ export const CourseProfile = ({preview}) => {
     instructorJoinDate: "2022-06-01T11:04:56.016Z"
     }
   )
-
+console.log("pre",preview)
   useEffect(()=>{
 
     if(preview?.name) {
@@ -856,7 +856,7 @@ export const CourseProfile = ({preview}) => {
             ridiculus nunc adipiscing justo.{" "}
           </p>
           <ul>
-            {courseProfile?.faqs?.length > 0 && courseProfile.faqs.slice(0, 3).map((item) => (
+            {courseProfile?.syllabus?.length > 0 && courseProfile.syllabus.slice(0, 3).map((item) => (
               <li>
                 <p>{item.title}</p>
                 <p>{item.details}</p>

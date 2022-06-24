@@ -432,7 +432,7 @@ function CareerModal({newCareer, updateCareer, open, setOpen, handleChange}){
     </Modal>
   )
 }
-function CategoryPreviewModal({preview, open, setOpen}){
+export function CategoryPreviewModal({preview, open, setOpen}){
 
   const style = {
     position: "absolute",

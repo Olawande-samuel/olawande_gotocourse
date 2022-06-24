@@ -20,6 +20,9 @@ import { useLocalStorage } from "../../../hooks";
 import { useSyllabus } from "../../../contexts/Syllabus";
 import { Chart as ChartLogo } from "../../../images/components/svgs";
 import MyChart from "../../../components/Chart";
+import Layout from "../../../components/Layout";
+import { CourseProfile } from "../../Courses";
+// import { PreviewModal } from "../components/Preview";
 
 const KEY = "gotocourse-userdata";
 
@@ -158,6 +161,7 @@ export function CreateCourse() {
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const { syllabuses, addtoSyllabus } = useSyllabus();
+  const [preview, setPreview ] = useState({});
   const [packageList, addtoPackageList ] = useState([]);
   const [faq, setFaq ] = useState([]);
   const [formstate, setFormstate] = useState({
@@ -177,8 +181,8 @@ export function CreateCourse() {
   const [open, setOpen] = useState(false);
   const [openPackage, setOpenPackage] = useState(false);
   const [openFaq, setOpenFaq] = useState(false);
-
   const [loading, setLoading] = useState(false);
+  const [openPreview, setOpenPreview] = useState(false);
   
   function changeHandler(e) {
     const { name, value } = e.target;
@@ -189,7 +193,7 @@ export function CreateCourse() {
       };
     });
   }
-
+console.log(formstate)
   function changePackageStateHandler(e) {
     const { name, value } = e.target;
     setPackageState((old) => {
@@ -198,6 +202,19 @@ export function CreateCourse() {
         [name]: value,
       };
     });
+  }
+
+  // let preview = {}
+
+  const showPreview = (e)=>{
+    e.preventDefault();
+    setPreview({ ...formstate,
+      syllabus: [...syllabuses],
+      packages: [...packageList],
+      faqs: [...faq]
+    })
+       console.log("clicked")
+    setOpenPreview(true)
   }
 
   async function submitHandler(e) {
@@ -213,7 +230,7 @@ export function CreateCourse() {
       )
         throw new AdvancedError("All fields are required", 0);
       const res = await addCourse(
-        { ...formstate, syllabus: [...syllabuses], packages: [packageState] },
+        { ...formstate, syllabus: [...syllabuses], packages: [...packageList] , faqs:[...faq]},
         userdata.token
       );
       const { success, message, statusCode } = res;
@@ -307,6 +324,9 @@ export function CreateCourse() {
   const handleCloseFaq =()=>{
     setOpenFaq(false)
   }
+  // const handleOpenPreview = ()=>{
+  //   setOpenPreview(true)
+  // }
   return (
     <Teachers>
      
@@ -432,7 +452,7 @@ export function CreateCourse() {
               Add Syllabus
             </button>
             <div className={clsx.form_group}>
-              <label htmlFor={"package"}>Package</label>
+              <label htmlFor={"package"}>FAQ</label>
                 {faq.length > 0 ? (
                   faq.map(item=>(
                     <Syllabus {...item} />
@@ -481,6 +501,8 @@ export function CreateCourse() {
               )}
               <button
                 className="btn btn-outline"
+                type="button"
+                onClick={showPreview}
                 style={{
                   border: "1px solid var(--theme-blue)",
                   color: "var(--theme-blue)",
@@ -495,6 +517,12 @@ export function CreateCourse() {
             </div>
           </form>
         </div>
+        <PreviewModal
+        open={openPreview}
+        preview={preview}
+        setOpen={setOpenPreview}
+      
+      />
       </div>
       <AddSyllabus
         open={open}
@@ -515,11 +543,53 @@ export function CreateCourse() {
       addFaq={setFaq}
       list={faq}
       />
+     
 
     </Teachers>
   );
 }
 
+
+export function PreviewModal({preview, open, setOpen}){
+console.log("modal",preview)
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    minWidth: "95%",
+    background: "#fff",
+    border: "1px solid #eee",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 6,
+    padding: "4rem 2rem",
+  };
+
+
+  return (
+    <Modal
+      open={open}
+      onClose={e => {
+        setOpen(_ => false);
+      }}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box style={style}>
+        <div className="position-relative" style={{
+          height: "80vh",
+          overflowY: "scroll",
+        }}>
+        <Layout>
+          <CourseProfile preview={preview} />
+        </Layout>
+        <button className="btn btn-danger position-fixed" style={{bottom:"8%", right:"5px", zIndex:"1200"}} onClick={()=>setOpen(false)}>Close Preview</button>
+        </div>
+      </Box>
+    </Modal>
+  )
+}
 
 function AddSyllabus({ open, handleClose, addSyllabus }) {
   const [newSyllabus, setNewSyllabus] = useState({
