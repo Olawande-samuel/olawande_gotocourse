@@ -9,8 +9,8 @@ import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
 import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp} from "./pages/Dashboard/Admin";
-import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Courses as StudentCourses, History as StudentHistory} from "./pages/Dashboard/Students";
-import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, Courses as TeacherCourses, CreateCourse, Earnings} from "./pages/Dashboard/Teachers";
+import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps} from "./pages/Dashboard/Students";
+import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps} from "./pages/Dashboard/Teachers";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
@@ -41,6 +41,7 @@ function App() {
             <Route path="students" element={<Out />}>
               <Route path="" element={<StudentProfile  />} />
               <Route path="classes" element={<StudentClasses  />} />
+              <Route path="bootcamps" element={<StudentBootcamps  />} />
               <Route path="profile/edit" element={<StudentEdit  />} />
               <Route path="courses" element={<StudentCourses />} />
               <Route path="wishlist" element={<Wishlist />} />
@@ -59,6 +60,7 @@ function App() {
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<TeacherSignup />} />
               <Route path="classes" element={<TeacherClasses  />} />
+              <Route path="bootcamps" element={<TeacherBootcamps  />} />
               <Route path="earnings" element={<Earnings  />} />
               <Route path="profile/edit" element={<TeacherEdit  />} />
               <Route path="courses" element={<TeacherCourses />} />

@@ -70,6 +70,11 @@ const rightLink = [
     title:"Contact us",
     path:"/"
   },
+  {
+    id:7,
+    title:"Admin",
+    path:"/admin/login"
+  },
 ]
 const Footer = () => {
   return (

@@ -105,7 +105,7 @@ const AdminLogin = () => {
           <Password label="Password" name="password" value={formstate.password} password="password" placeholder="Password" handleChange={changeHandler} />
           <p className="mt-3">
              <span>Forgot password? </span>
-             <Link to="/reset-password">Click here to reset</Link>
+             <Link to="/forgot-password">Click here to reset</Link>
             </p>
           {loading ? (
             <button className="button button-lg log_btn w-100">

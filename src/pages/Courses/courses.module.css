@@ -327,10 +327,7 @@
   border: 1px solid var(--text-blue);
 }
 
-.package_button {
-  padding: 11px 40px;
-  border-radius: 5px;
-}
+
 
 .package_text {
   font-size: 14px;
@@ -487,6 +484,10 @@ a .course_card:hover .course_author {
 @media screen and (max-width: 997px){
   .new_main {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .package_button {
+    padding: 0.5rem 10px !important;
+    border-radius: 5px;
   }
 }
 @media screen and (max-width: 758px){

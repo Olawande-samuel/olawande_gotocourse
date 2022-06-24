@@ -3,7 +3,7 @@ import { icons } from './Companies'
 
 const Experienced = () => {
   return (
-    <section className="bootcamp" style={{padding: "2.3625rem"}}>
+    <section className="bootcamp" style={{padding: "3.3625rem 2.3625rem"}}>
       <div className=" container-lg bootcamp_content">
       <div className="d-flex row  flex-md-row content justify-content-between">
           <div className="col-md-4">

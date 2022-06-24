@@ -60,9 +60,9 @@ const Hero = () => {
     
   }; 
   const New = {
-    title: "Learn from Experts.",
-    title2: "Learn from Anywhere.",
-    title3: "Learn More for Less.",
+    title: "Learn from Experts",
+    title2: "Learn from Anywhere",
+    title3: "Learn More for Less",
     subtitle: "GotoCourse helps you achieve your tech career goals by connecting you to a global network of highly skilled professionals and domain experts.",
     image: place,
     link: "/categories",
@@ -203,10 +203,10 @@ export const Others = ({ title, image, title2, title3, subtitle, background,btn,
           >
             <div>
               <div className="hero_text_group">
-              <h1 className="hero_text">{title}</h1>
+              <h2 className="hero_text">{title}</h2>
               {/* new */}
-              <h1 className="hero_text">{title2}</h1>
-              <h1 className="hero_text">{title3}</h1>
+              <h2 className="hero_text">{title2}</h2>
+              <h2 className="hero_text">{title3}</h2>
               </div>
 
               <p className="hero_subtext text-center text-lg-start ">{subtitle}</p>
