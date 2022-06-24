@@ -193,11 +193,17 @@
 .user__info_card{
    height: 90px;
    cursor: pointer;
+   border-radius: 10px;
 }
+
 .user__info_card td{
    height: 90px;
    letter-spacing: var(--letterSpacing);
    text-align: center
+}
+
+.user__info_card:hover {
+    background-color: rgba(230,230,230,0.3);
 }
 
 .form_group__teachers {
@@ -515,3 +521,4 @@
     letter-spacing: 0.4px;
     color: var(--textColorLight);
 }
+
