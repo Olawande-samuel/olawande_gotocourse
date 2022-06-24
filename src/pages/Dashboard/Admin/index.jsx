@@ -1107,7 +1107,7 @@ export function UserInfoCard({
       )}
       {
         comp === "Category" && (
-          <td className={clsx.user__button} id="actions">
+          <td className={clsx.user__button}>
             <span onClick={e => {
               deleteCourseHandler(e, id);
             }}>
