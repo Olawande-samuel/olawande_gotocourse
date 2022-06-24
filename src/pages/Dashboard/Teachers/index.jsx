@@ -225,8 +225,7 @@ console.log(formstate)
         formstate.name === "" ||
         formstate.categoryName === "" ||
         formstate.description === "" ||
-        packageState.price === "" ||
-        packageState.title === ""
+        formstate.price === ""
       )
         throw new AdvancedError("All fields are required", 0);
       const res = await addCourse(
@@ -428,8 +427,8 @@ console.log(formstate)
               label="Price"
               name="price"
               type="text"
-              handleChange={changePackageStateHandler}
-              value={packageState.price}
+              handleChange={changeHandler}
+              value={formstate.price}
             />
 
             <div className={clsx.form_group}>

@@ -276,7 +276,7 @@ td {
 .hero .hero_text {
   font-family: 'Raleway', sans-serif;
   font-weight: 800;
-  font-size: clamp(1.8rem, -0.875rem + 8.333vw, 2.25rem);
+  font-size: clamp(1.8rem, -0.875rem + 4.833vw, 3.4rem);
   line-height: 64px;
   /* color: var(--text-blue); */
   text-transform: capitalize;

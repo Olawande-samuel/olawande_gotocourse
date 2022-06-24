@@ -708,7 +708,7 @@ console.log("pre",preview)
             <div className="col-md-6 d-flex align-items-center">
               <div>
                 <h2 className={style.topic}>{courseProfile?.name}</h2>
-                <p className={style.subject}>{courseProfile?.category}</p>
+                <p className={style.subject}>{courseProfile?.categoryName}</p>
                   <p className={style.rating}> 
                 <BsStarFill style={{ color: "#FFCB14", fontSize: "20px" }} />
                 <BsStarFill style={{ color: "#FFCB14", fontSize: "20px" }} />
@@ -853,13 +853,13 @@ console.log("pre",preview)
           <h4 className={style.title}>Syllabus</h4>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus
-            ridiculus nunc adipiscing justo.{" "}
+            ridiculus nunc adipiscing justo.
           </p>
           <ul>
             {courseProfile?.syllabus?.length > 0 && courseProfile.syllabus.slice(0, 3).map((item) => (
               <li>
                 <p>{item.title}</p>
-                <p>{item.details}</p>
+                <p>{item.description}</p>
               </li>
             ))}
           </ul>
