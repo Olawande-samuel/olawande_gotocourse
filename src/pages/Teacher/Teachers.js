@@ -177,7 +177,7 @@ export const Payment = () => {
                     </div>
                     <div className={style.payment_profile_info}>
                       <p className={style.payment_name}>{courseInfo?.instructorName}</p>
-                      <small className="text-capitalize">{(courseInfo?.category).toLowerCase()} Instructor</small>
+                      <small className="text-capitalize">{courseInfo?.category?.toLowerCase()} Instructor</small>
                     </div>
                   </div>
                 </div>

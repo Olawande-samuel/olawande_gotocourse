@@ -546,8 +546,10 @@ export const CourseList = () => {
     
     if(ref.current) return
     (async()=>{
+      if(name){
+        let info = JSON.parse(name)
       try{
-        const res = await searchCategories(name);
+        const res = await searchCategories(info.name);
         const {success, message, statusCode} = res;
         setGeneralState({...generalState, loading: false})
           if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
@@ -563,8 +565,8 @@ export const CourseList = () => {
               draggable: true,
               progress: undefined,
             });
-          }
-          toast.error("course list is empty", {
+          } else {
+            toast.error("course list is empty", {
             position: "top-right",
             autoClose: 4000,
             hideProgressBar: true,
@@ -573,6 +575,7 @@ export const CourseList = () => {
             draggable: true,
             progress: undefined,
           });
+          }
       
     }catch(err){
         setGeneralState({...generalState, loading: false})
@@ -586,6 +589,8 @@ export const CourseList = () => {
             progress: undefined,
         });
     }
+  }
+
     })()
   ref.current = true
   },[name])
@@ -608,9 +613,9 @@ export const CourseList = () => {
             <button className="button">Search</button>
           </div>
         </div>
-        <main className={style.main}>
+        <main className={style.new_main}>
           {courses.map((course) => (
-            <CourseCard {...course} />
+            <CourseCard key={course.name} {...course} course={course} />
           ))}
         </main>
       </div>
@@ -653,8 +658,9 @@ export const CourseDetail = ({preview}) => {
               draggable: true,
               progress: undefined,
             });
-          }
-          toast.error("No course found", {
+          } else {
+
+            toast.error("No course found", {
             position: "top-right",
             autoClose: 4000,
             hideProgressBar: true,
@@ -663,6 +669,7 @@ export const CourseDetail = ({preview}) => {
             draggable: true,
             progress: undefined,
           });
+        }
         
       }catch(err){
           toast.error(err.message, {
@@ -1176,7 +1183,6 @@ export const PackageCard = ({item, courseId}) => {
       <div className="card-body d-flex flex-column justify-content-around" style={{}}>
         <p className={style.package_price}>$ {item.price}</p>
           <p className={style.package_title}>{item.title}</p>
-        
           <p className={style.package_text}>
             {item.description}
           </p>
