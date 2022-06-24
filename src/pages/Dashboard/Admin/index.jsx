@@ -110,12 +110,20 @@ export function CourseDetails({}){
   }
 
 
+  function deleteCategoryHandler(e){}
+
+  function editCategoryHandler(e){}
+
+
   return(
     <Admin header="ADMIN">
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-
+          <div className="d-flex justify-content-between align-items-center mb-5" style={{width: "80%"}}>
+            <button type="button" className="btn btn-sm btn-danger px-3 py-2" style={{fontSize: "0.8rem"}} onClick={deleteCategoryHandler}>Delete Category</button>
+            <button type="button" className="btn btn-sm btn-primary px-3 py-2" style={{fontSize: "0.8rem"}} onClick={editCategoryHandler}>Edit Category</button>
+          </div>
           <form className="form" style={{width: "80%", margin: "20px 0px"}}>
             <Input
               label="Name of Course"
@@ -211,7 +219,7 @@ const [loading, setLoading] = useState(true);
   const {getItem} = useLocalStorage();
   const flag = useRef(false);
   const userdata = getItem(KEY)
-  const tableHeaders = ["No", "Name of Category", "Date", "No of Student", "Actions"]
+  const tableHeaders = ["No", "Name of Category", "Date", "No of Student"]
 
   useEffect(() => {
     if(flag.current) return;
@@ -259,22 +267,7 @@ const [loading, setLoading] = useState(true);
 
 
 
-  function deleteCourseHandler(e, id){
-    if(e.target === e.currentTarget){
-      console.log(e.target, id);
-    }
-  }
-
-  function editCourseHandler(e, id){
-    if(e.currentTarget === e.target){
-      console.log(e.target, id);
-    }
-  }
-
   function showDetailsHandler(e, id){
-    e.stopPropagation();
-    console.log(e.target, id, e.currentTarget);
-    if(e.target.id === "actions") return;
     navigate(`details/${id}`);
   }
 
@@ -309,8 +302,6 @@ const [loading, setLoading] = useState(true);
                       date={"Feb 24"}
                       students={90}
                       id={categoryId}
-                      editCourseHandler={editCourseHandler}
-                      deleteCourseHandler={deleteCourseHandler}
                       showDetailsHandler={showDetailsHandler}
                     />
                   )) }
@@ -474,7 +465,7 @@ export function CategoryPreviewModal({preview, open, setOpen}){
           overflowY: "scroll",
         }}>
         <Layout>
-          <CourseDetail preview={preview} />
+          {preview ? <CourseDetail preview={preview} /> : <h3>No preview available!!!</h3> }
         </Layout>
         </div>
       </Box>
@@ -502,7 +493,7 @@ export function CreateCourseCategory(){
   const [showCareerModal, setShowCareerModal] = useState(false);
   const [showNicheModal, setShowNicheModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [fullData, setFullData] = useState([])
+  // const [fullData, setFullData] = useState([])
   const [formstate, setFormstate] = useState({
     name: "",
     description: "",
@@ -524,14 +515,14 @@ export function CreateCourseCategory(){
   const [careerlists, setCareerlists] = useState([]);
 
   useEffect(()=>{
-      setFullData({
-        ...formstate, 
-        careerList:[...careerlists],
-        nicheItems: [...nichelists]
-      })
-  },[careerlists, careerlist, nichelist, nichelists, formstate])
+      // setFullData({
+      //   ...formstate, 
+      //   careerList:[...careerlists],
+      //   nicheItems: [...nichelists]
+      // })
+  },[])
 
-  console.log("fullData", fullData)
+  // console.log("fullData", fullData)
   async function submitHandler(e){
     e.preventDefault();
     setLoading(_ => true);
@@ -793,7 +784,11 @@ export function CreateCourseCategory(){
           </div>
           }
         </div>
-        <CategoryPreviewModal preview={fullData} open={openPreview} setOpen={setOpenPreview} />
+        <CategoryPreviewModal preview={{
+        ...formstate,
+        nicheItems: [...nichelists],
+        careerList: [...careerlists]
+      }} open={openPreview} setOpen={setOpenPreview} />
       </div>
     </Admin>
   )
@@ -1001,11 +996,10 @@ export function UserInfoCard({
   start_date,
   course_status,
   enrolled,
-  deleteCourseHandler,
-  editCourseHandler,
   showDetailsHandler = () => {return},
   approveHandler = () => {return},
 }) {
+
   return (
     <tr
       className={clsx.user__info_card}
@@ -1077,7 +1071,6 @@ export function UserInfoCard({
           <span>{course_status}</span>
         </td>
       )}
-
       {paid && (
         <td className={clsx.user__button}>
           <span>
@@ -1105,22 +1098,6 @@ export function UserInfoCard({
           </span>
         </td>
       )}
-      {
-        comp === "Category" && (
-          <td className={clsx.user__button} id="actions">
-            <span onClick={e => {
-              deleteCourseHandler(e, id);
-            }}>
-              <AiOutlineDelete style={{fontSize: "1.5rem",}} className="text-danger" />
-            </span>
-            <span onClick={e => {
-              editCourseHandler(e, id);
-            }}>
-              <AiTwotoneEdit style={{fontSize: "1.5rem", marginLeft: 20}} className="text-primary" />
-            </span>
-          </td>
-        )
-      }
       {accessPledre !== null && (
         <td className={clsx.user__button}>
           <span>
@@ -1339,12 +1316,12 @@ export function Courses() {
   );
 }
 export function Bootcamps() {
-  const {adminFunctions: { fetchCourses} } = useAuth();
+  const {adminFunctions: { fetchBootcamps } } = useAuth();
   const {getItem} = useLocalStorage();
   const navigate = useNavigate();
   const flag = useRef(false);
   let userdata = getItem(KEY);
-  const [courseList, setCourseList] = useState(["hi"])
+  const [bootcamps, setBootcamps] = useState([])
   const [loading, setLoading] = useState(true);
 
   const tableHeaders = [ "No", "Title", "Details", "Type", "Duration", "Date", "Time", "Action" ];
@@ -1353,12 +1330,12 @@ export function Bootcamps() {
     if(flag.current) return;
     (async () => {
       try {
-        const res = await fetchCourses(userdata?.token);
+        const res = await fetchBootcamps(userdata?.token);
         const { message, success, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         else if (statusCode === 1) {
           const { data } = res;
-          setCourseList(data);
+          setBootcamps( _ => data);
           toast.success(message, {
             position: "top-right",
             autoClose: 4000,
@@ -1409,7 +1386,7 @@ export function Bootcamps() {
                 ))}
               </thead>
               <tbody>
-                {courseList.length > 0 && courseList.map(
+                {bootcamps.length > 0 ? bootcamps.map(
                   ( item, i ) => (
                     <BootcampRow
                       key={i}
@@ -1424,11 +1401,7 @@ export function Bootcamps() {
                       admin={true}
                     />
                   )
-                )}
-                <p>
-                        
-
-                </p>
+                ) : <h1>No Bootcamps found</h1>}
               </tbody>
             </table>
           </div>
@@ -1439,8 +1412,8 @@ export function Bootcamps() {
 }
 
 export function CreateBootcamp(){
-  const {generalState, setGeneralState, teacherFunctions: { addCourse }, } = useAuth(); const {getItem} = useLocalStorage();
-
+  const {adminFunctions: { addBootcamp }, } = useAuth(); 
+  const {getItem} = useLocalStorage();
   let userdata = getItem(KEY);
 
   const [formstate, setFormstate] = useState({
@@ -1460,8 +1433,6 @@ export function CreateBootcamp(){
   }
 
   const [open, setOpen] = useState(false);
-
-
   const [loading, setLoading] = useState(false);
   async function submitHandler(e) {
     e.preventDefault();
@@ -1472,7 +1443,7 @@ export function CreateBootcamp(){
         formstate.description === ""
       ) throw new AdvancedError("All fields are required", 0);
 
-      const res = await addCourse();
+      const res = await addBootcamp(userdata?.id, formstate);
       const { success, message, statusCode } = res;
 
       if (!success) throw new AdvancedError(message, statusCode);
@@ -1611,7 +1582,7 @@ export function CreateBootcamp(){
 }
 export function BootcampRow({index, title, detail, time, date, type,duration, admin }){
   return (
-    <tr className={clsx.user__info_card} >
+    <tr className={clsx.user__info_card}>
       <td className={clsx.user__info}>{index + 1}.</td>
       <td className={clsx.user__info}>{title}</td>
       <td className={clsx.user__info}>
