@@ -151,7 +151,38 @@
 }
 
 
+.upload__file_box {
+    width: 80%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--textColorLighter);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
 
+.upload__file_box:hover {
+    background-color:rgba(208, 204, 204, 0.2)
+}
+
+.upload__file_box p {
+    margin: 0px;
+    margin-top: 15px;
+    color: var(--secondary);
+}
+
+.user__info_card{
+    height: 90px;
+    cursor: pointer;
+ }
+ .user__info_card td{
+    height: 90px;
+    letter-spacing: var(--letterSpacing);
+    text-align: center
+ }
 @media(max-width: 400px) {
     .teachers_topbar h1 {
         display: none;

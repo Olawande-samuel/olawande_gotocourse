@@ -264,6 +264,11 @@
     background-color:rgba(208, 204, 204, 0.2)
 }
 
+.upload__file_box p {
+    margin: 0px;
+    margin-top: 15px;
+    color: var(--secondary);
+}
 .form_button__container {
     margin-top: 30px;
 }
@@ -276,11 +281,6 @@
     font-size: 0.9rem;
 }
 
-.upload__file_box p {
-    margin: 0px;
-    margin-top: 15px;
-    color: var(--secondary);
-}
 
 .teachers__actions_edit svg, .teachers__actions_delete svg {
     font-size: 1.5rem;

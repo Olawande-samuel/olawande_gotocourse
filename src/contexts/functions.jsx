@@ -820,6 +820,34 @@ export const studentFunctions = {
             }
         }
     },
+    fetchBootcamps: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/teacher/bootcamps/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
 }
 
 
@@ -1030,6 +1058,34 @@ export const teacherFunctions = {
     fetchCourses: async function(token){
         try{
             const res = await axios.get(`${baseURL}/teacher/courses/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchBootcamps: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/teacher/bootcamps/fetch`,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,
