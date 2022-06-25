@@ -562,7 +562,7 @@ export const adminFunctions = {
     },
     deleteBootcamp: async function(token, id){
         try{
-            const res = await axios.patch(`${baseURL}/admin/bootcamp/delete/${id}`,
+            const res = await axios.delete(`${baseURL}/admin/bootcamp/delete/${id}`,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,

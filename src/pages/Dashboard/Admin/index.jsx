@@ -1315,6 +1315,173 @@ export function Courses() {
     </Admin>
   );
 }
+
+
+export function BootcampDetails({}){
+  const navigate = useNavigate();
+  const {getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
+  const {adminFunctions: {deleteBootcamp}} = useAuth();
+  const flag = useRef(false);
+  const [formstate, setFormstate] = useState({
+    title: "",
+    description: "",
+    instructor: "",
+    student: ""
+  })
+  // const [loading, setLoading] = useState(true);
+  const instructors = ["Dr. Joy Castus"];
+  const students = ["James Segun"];
+  const params = useParams()
+  //get user id
+  console.log(params);
+  useEffect(() => {
+
+
+    return () => console.log("Leaving Details page");
+  }, [])
+
+
+  function changeHandler(e){
+    const {name, value} = e.target;
+    setFormstate(old => {
+      return {
+        ...old,
+        [name]: value
+      }
+    })
+  }
+
+
+  async function deleteBootcampHandler(e){
+    try{
+      const res = await deleteBootcamp(userdata?.token, params?.id);
+      const {message, success, statusCode} = res;
+      if(!success) throw new AdvancedError(message, statusCode);
+      else {
+        navigate("/admin/bootcamps");
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    }catch(err){
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
+
+  function editBootcampHandler(e){
+    navigate(`/admin/bootcamps/create?edit=${params?.id}`);
+  }
+
+
+  return(
+    <Admin header="ADMIN">
+      {/* {loading && <Loader />} */}
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+          <div className="d-flex justify-content-between align-items-center mb-5" style={{width: "80%"}}>
+            <button type="button" className="btn btn-sm btn-danger px-3 py-2" style={{fontSize: "0.8rem"}} onClick={deleteBootcampHandler}>Delete Bootcamp</button>
+            <button type="button" className="btn btn-sm btn-primary px-3 py-2" style={{fontSize: "0.8rem"}} onClick={editBootcampHandler}>Edit Bootcamp</button>
+          </div>
+          <form className="form" style={{width: "80%", margin: "20px 0px"}}>
+            <Input
+              label="Title"
+              name="title"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.title}
+              readOnly={true}
+            />
+
+            <div className={clsx.form_group}>
+              <label htmlFor={"description"} className="form-label generic_label">
+                Description
+              </label>
+              <textarea
+                rows="5"
+                name="description"
+                value={formstate.description}
+                onChange={changeHandler}
+                className="form-control generic_input"
+                readOnly
+              ></textarea>
+            </div>
+
+            <div className={clsx.form_group}>
+              <div className={clsx.form_group__teachers}>
+                <label>Name of Instructors</label>
+                {
+                  instructors.map((t, i) => (
+                    <div key={i}>
+                      <p>{i + 1}. &nbsp; {t}</p> 
+                      <div className={clsx.teachers__actions}>
+                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
+                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+              <Input
+                style={{margin: "0px !important"}}
+                name="teacher"
+                type="text"
+                handleChange={changeHandler}
+                value={formstate.instructor}
+              />
+              <button type="button" className={clsx.form_group__button}>
+                Add Instructor
+              </button>
+            </div>
+
+            <div className={clsx.form_group}>
+              <div className={clsx.form_group__teachers}>
+                <label>Add Student</label>
+                {
+                  students.map((s, i) => (
+                    <div key={i}>
+                      <p>{i + 1}. &nbsp; {s}</p> 
+                      <div className={clsx.teachers__actions}>
+                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
+                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+              <Input
+                name="student"
+                type="text"
+                handleChange={changeHandler}
+                value={formstate.student}
+              />
+              <button type="button" className={clsx.form_group__button}>
+                Add Student
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </Admin>
+  )
+}
+
+
 export function Bootcamps() {
   const {adminFunctions: { fetchBootcamps } } = useAuth();
   const {getItem} = useLocalStorage();
@@ -1324,7 +1491,16 @@ export function Bootcamps() {
   const [bootcamps, setBootcamps] = useState([])
   const [loading, setLoading] = useState(true);
 
-  const tableHeaders = [ "No", "Title", "Details", "Type", "Duration", "Date", "Time", "Action" ];
+  function getDate(date){
+    // 2022-07-03T00:00:00.000Z
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let d = date.split("T")[0];
+    let [y, m, day] = d.split("-");
+    m = months[parseInt(m) - 1];
+    return `${m} ${day}`;
+  }
+
+  const tableHeaders = [ "No", "Title", "Details", "Type", "Duration", "Date", "Time" ];
 
   useEffect(()=>{
     if(flag.current) return;
@@ -1369,6 +1545,10 @@ export function Bootcamps() {
   function gotoCreateCourseHandler(e){
     navigate("create");
   }
+
+  function detailHandler(e, _id){
+    navigate("details/"+_id);
+  }
   return (
     <Admin header={"Bootcamps"}>
       {loading && <Loader />}
@@ -1387,18 +1567,18 @@ export function Bootcamps() {
               </thead>
               <tbody>
                 {bootcamps.length > 0 ? bootcamps.map(
-                  ( item, i ) => (
+                  ( {title, duration, description, type, startTime, endTime, endDate, startDate, _id}, i ) => (
                     <BootcampRow
                       key={i}
-                      comp={"Courses"}
                       index={i}
-                      title="Lorem ipsum dolor sit amet."
-                      detail={"Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur sint tempore iste animi nisi eius alias eveniet possimus itaque voluptatem tenetur necessitatibus asperiores repellat sapiente, laborum aspernatur in quam maxime!"}
-                      duration={"16 weeks"}
-                      type={"Full Time"}
-                      time={"6am - 12pm CET"}
-                      date={"Jan 6 - Mar 24"}
-                      admin={true}
+                      title={title}
+                      detail={description}
+                      duration={duration}
+                      type={type}
+                      admin={false}
+                      clickHandler={e => detailHandler(e, _id)}
+                      time={`${startTime} - ${endTime} CST`}
+                      date={`${getDate(startDate)} - ${getDate(endDate)}`}
                     />
                   )
                 ) : <h1>No Bootcamps found</h1>}
@@ -1412,16 +1592,73 @@ export function Bootcamps() {
 }
 
 export function CreateBootcamp(){
-  const {adminFunctions: { addBootcamp }, } = useAuth(); 
+  const {adminFunctions: { addBootcamp, fetchBootcamps, updateBootcamp}, } = useAuth(); 
   const {getItem} = useLocalStorage();
   let userdata = getItem(KEY);
-
+  const flag = useRef(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [loader, setLoader] = useState(location.search ? true : false);
   const [formstate, setFormstate] = useState({
-    name: "",
-    categoryName: "",
+    title: "",
+    duration: "",
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
     description: "",
-    faqs: [],
+    type: "",
+    instructor: ""
   });
+
+  useEffect(() => {
+    if(flag.current) return;
+    if(location.search){
+      const id = location.search.split("=").reverse()[0];
+      console.log(id);
+      (async () => {
+        try {
+          const res = await fetchBootcamps(userdata?.token);
+          const { message, success, statusCode } = res;
+          if (!success) throw new AdvancedError(message, statusCode);
+          else if (statusCode === 1) {
+            const { data } = res;
+            let found = data.find(d => d._id === id);
+            found.startDate = found.startDate.split("T")[0];
+            found.endDate = found.endDate.split("T")[0];
+            setFormstate(_ => found);
+            toast.success("Bootcamp found successfully", {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          } else {
+            throw new AdvancedError(message, statusCode);
+          }
+        } catch (err) {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }finally{
+          setLoader(_ => false);
+        }
+      })()
+    }
+    //do some coding
+    flag.current = true;
+    return () => console.log("Removing CreateBootcamp component");
+  }, [])
+
   function changeHandler(e) {
     const { name, value } = e.target;
     setFormstate((old) => {
@@ -1432,18 +1669,19 @@ export function CreateBootcamp(){
     });
   }
 
-  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
     try {
-      if ( formstate.name === "" ||
-        formstate.categoryName === "" ||
-        formstate.description === ""
+      if ( formstate.description === "" ||
+        formstate.title === "" ||
+        formstate.duration === "" || formstate.endTime === "" || 
+        formstate.startTime === "" || formstate.startDate === "" || 
+        formstate.endDate === ""
       ) throw new AdvancedError("All fields are required", 0);
 
-      const res = await addBootcamp(userdata?.id, formstate);
+      const res = location.search ? await updateBootcamp(userdata?.token, location.search.split("=").reverse()[0], formstate) : await addBootcamp(userdata?.token, formstate);
       const { success, message, statusCode } = res;
 
       if (!success) throw new AdvancedError(message, statusCode);
@@ -1457,6 +1695,7 @@ export function CreateBootcamp(){
           draggable: true,
           progress: undefined,
         });
+        navigate("/admin/bootcamps");
       }
     } catch (err) {
       toast.error(err.message, {
@@ -1477,15 +1716,16 @@ export function CreateBootcamp(){
  
   return (
     <Admin header="Create Bootcamp">
+      {loader && <Loader />}
       <div className={clsx.admin_profile}>
         <div className={clsx.edit__profile}>
           <form className="form" onSubmit={submitHandler}>
             <Input
               label="Title"
-              name="name"
+              name="title"
               type="text"
               handleChange={changeHandler}
-              value={formstate.name}
+              value={formstate.title}
             />
             <Input
               label="Duration"
@@ -1498,36 +1738,38 @@ export function CreateBootcamp(){
               <div className="col-sm-6 col-md-3 pe-2 ">
                 <Input
                   label="Starts By (Gmt)"
-                  name="time"
+                  name="startTime"
                   type="text"
                   handleChange={changeHandler}
-                  value={formstate.time}
+                  value={formstate.startTime}
               />
               </div>
               <div className="col-sm-6 col-md-3 pe-2  ">
                 <Input
                 label="Ends By (Gmt)"
-                name="time"
+                name="endTime"
                 type="text"
                 handleChange={changeHandler}
-                value={formstate.time}
+                value={formstate.endTime}
               />
               </div>
               <div className="col-sm-6 col-md-3 pe-2 ">
-                  <Input
+                <Input
                   label="Start Date"
-                  name="start_date"
+                  name="startDate"
                   type="date"
+                  value={formstate.startDate}
                   handleChange={changeHandler}
                 />
               </div>
               <div className="col-sm-6 col-md-3 ">
-              <Input
-              label="End Date"
-              name="end_date"
-              type="date"
-              handleChange={changeHandler}
-            />
+                <Input
+                  label="End Date"
+                  name="endDate"
+                  type="date"
+                  value={formstate.endDate}
+                  handleChange={changeHandler}
+                />
               </div>
             </div>
             <div className="row">
@@ -1545,6 +1787,14 @@ export function CreateBootcamp(){
               ></textarea>
             </div>
 
+            <Input
+              label="Instructor"
+              name="instructor"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.instructor}
+            />
+
             <div className={clsx.form_group}>
               <label htmlFor={"package"}>Type</label>
               <select
@@ -1556,7 +1806,7 @@ export function CreateBootcamp(){
               >
                 <option value="">Choose a Type</option>
                 <option value="full time">Full Time</option>
-                <option value="Part-time">Part-Time</option>
+                <option value="part time">Part-Time</option>
               </select>
             </div>
 
@@ -1571,7 +1821,7 @@ export function CreateBootcamp(){
                 className="button button-lg log_btn w-100 mt-3"
                 type="submit"
               >
-                Save
+              { location.search ? "Update" : "Save" }
               </button>
             )}
           </form>
@@ -1580,9 +1830,9 @@ export function CreateBootcamp(){
     </Admin>
   );
 }
-export function BootcampRow({index, title, detail, time, date, type,duration, admin }){
+export function BootcampRow({index, title, detail, time, date, type,duration, admin, clickHandler=null }){
   return (
-    <tr className={clsx.user__info_card}>
+    <tr className={clsx.user__info_card} onClick={clickHandler}>
       <td className={clsx.user__info}>{index + 1}.</td>
       <td className={clsx.user__info}>{title}</td>
       <td className={clsx.user__info}>
