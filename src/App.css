@@ -83,6 +83,13 @@ a {
 td {
   min-width: 9rem;
 }
+.clamp_text {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .mt-mid {
   margin-top: 2.0625rem !important;
 }
@@ -279,7 +286,7 @@ td {
   font-size: clamp(1.8rem, -0.875rem + 4.833vw, 3.4rem);
   line-height: 64px;
   /* color: var(--text-blue); */
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 
 .hero_subtext {
