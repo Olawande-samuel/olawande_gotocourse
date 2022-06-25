@@ -9,7 +9,7 @@ import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
 import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, 
-  CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp} from "./pages/Dashboard/Admin";
+  CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails} from "./pages/Dashboard/Admin";
 import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit,
    Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps} from "./pages/Dashboard/Students";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, 
@@ -83,6 +83,7 @@ function App() {
               <Route path="fees" element={<Fees />} />
               <Route path="teachers" element={<Teachers />} />
               <Route path="bootcamps" element={<Bootcamps />} />
+              <Route path="bootcamps/details/:id" element={<BootcampDetails />} />
               <Route path="bootcamps/create" element={<CreateBootcamp />} />
               <Route path="courses" element={<Courses />} />
               <Route path="courses/create" element={<AdminCreateCourse />} />
