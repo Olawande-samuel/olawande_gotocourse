@@ -332,7 +332,7 @@ export function Edit(){
 }
 
 export function Bootcamps() {
-    const {teacherFunctions: { fetchCourses} } = useAuth();
+    const {studentFunctions: { fetchBootcamps} } = useAuth();
     const {getItem} = useLocalStorage();
     const navigate = useNavigate();
     const flag = useRef(false);
@@ -340,19 +340,46 @@ export function Bootcamps() {
     const [courseList, setCourseList] = useState(["hi"])
     const [loading, setLoading] = useState(true);
   
-    const tableHeaders = [ "No", "Title", "Details", "Type", "Duration", "Date", "Time", "Action" ];
+    const tableHeaders = [ "No", "Title", "Details", "Type", "Duration", "Date", "Time" ];
   
     useEffect(()=>{
-      if(flag.current) return;
-      (async () => {
-        try {
-          const res = await fetchCourses(userdata?.token);
-          const { message, success, statusCode } = res;
-          if (!success) throw new AdvancedError(message, statusCode);
-          else if (statusCode === 1) {
-            const { data } = res;
-            setCourseList(data);
-            toast.success(message, {
+        if(flag.current) return;
+        (async () => {
+          try {
+            const res = await fetchBootcamps(userdata?.token);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+              const { data } = res;
+              if(data.length > 0){
+    
+                setCourseList(data);
+                toast.success(message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+    
+              toast.error("message", {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            }
+            
+            } else {
+              throw new AdvancedError(message, statusCode);
+            }
+          } catch (err) {
+            toast.error(err.message, {
               position: "top-right",
               autoClose: 4000,
               hideProgressBar: true,
@@ -361,25 +388,11 @@ export function Bootcamps() {
               draggable: true,
               progress: undefined,
             });
-            console.log(data);
-          } else {
-            throw new AdvancedError(message, statusCode);
+          }finally{
+            setLoading(_ => false);
           }
-        } catch (err) {
-          toast.error(err.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        }finally{
-          setLoading(_ => false);
-        }
-      })()
-      flag.current = true;
+        })()
+        flag.current = true;
     },[])
   
     function gotoCreateCourseHandler(e){

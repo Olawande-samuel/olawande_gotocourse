@@ -423,6 +423,145 @@ export const Categories = () => {
 };
 
 export const CourseList = () => {
+
+  const [courses, setCourses] =useState([
+    {
+      id: 1,
+      title: "Cybersecurity",
+      subtitle: "Data Science",
+      author: "George Brown",
+      details:
+        "This is the practice ofprotecting critical systems and sensitive information from digital attacks.",
+      img: Power,
+    },
+    {
+      id: 2,
+      title: "Algorithims",
+      subtitle: "Data Science",
+      author: "Mary Brown",
+      details:
+        "Risk management is the process of assessing and controlling threats to an organization's capital and earnings.",
+      img: Algo,
+    },
+    {
+      id: 3,
+      title: "Machine Learning",
+      subtitle: "Data Science",
+      author: "George Brown",
+      details:
+        "Data science refers to the process of extracting clean information to formulate actionable insights",
+      img: Power,
+    },
+    {
+      id: 4,
+      title: "Project Management",
+      subtitle: "Data Science",
+      author: "Mary Brown",
+      details:
+        "the process of leading the work of a team to achieve all project goals within the given constraints.",
+      img: Algo,
+    },
+    {
+      id: 5,
+      title: "Introduction to SQL",
+      subtitle: "Data Science",
+      author: "George Brown",
+      details:
+        "IT compliance refers to businesses meeting all legal requirements,  and regulations for the software of company.",
+      img: Power,
+    },
+    {
+      id: 6,
+      title: "Regression",
+      subtitle: "Data Science",
+      author: "Mary Brown",
+      details:
+        "It is the process of evaluating evidence to determine whether a computer system safeguards assets",
+      img: Algo,
+    },
+    {
+      id: 7,
+      title: "Linear Programming",
+      subtitle: "Data Science",
+      author: "George Brown",
+      details:
+        "Business analysis is a strategy for initiating and managing change in organisations.",
+      img: Power,
+    },
+    {
+      id: 8,
+      title: "Advance Algorithims",
+      subtitle: "Data Science",
+      author: "Mary Brown",
+      details:
+        "the process of identifying a market opportunity, clearly defining the problem, developing a proper solution for that",
+      img: Algo,
+    },
+    {
+      id: 9,
+      title: "Advance Power BI",
+      subtitle: "Data Science",
+      author: "George Brown",
+      details:
+        "Web design encompasses many different skills and disciplines in the production and maintenance of websites.",
+      img: Power,
+    },
+  ])
+  const {generalState, setGeneralState, otherFunctions: {searchCategories}} = useAuth();
+
+  const {id} = useParams()
+  const ref = useRef(false);
+  const name = localStorage.getItem("gotocourse-category")
+
+  useEffect(()=>{
+    let categoryId = id.charAt(0).toUpperCase() + id.slice(1)
+    
+    if(ref.current) return
+    (async()=>{
+      try{
+        const res = await searchCategories(name);
+        const {success, message, statusCode} = res;
+        setGeneralState({...generalState, loading: false})
+          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+          const {data} = res
+          if(data.length > 0 ){
+            setCourses(data)
+            toast.success(message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+          toast.error("course list is empty", {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+      
+    }catch(err){
+        setGeneralState({...generalState, loading: false})
+        toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+    })()
+  ref.current = true
+  },[name])
+
   return (
     <Courses>
       <div className="container">
@@ -442,7 +581,7 @@ export const CourseList = () => {
           </div>
         </div>
         <main className={style.main}>
-          {courseList.map((course) => (
+          {courses.map((course) => (
             <CourseCard {...course} />
           ))}
         </main>
