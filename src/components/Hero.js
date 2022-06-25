@@ -60,9 +60,9 @@ const Hero = () => {
     
   }; 
   const New = {
-    title: "Learn from Experts",
-    title2: "Learn from Anywhere",
-    title3: "Learn More for Less",
+    title: "Learn from experts",
+    title2: "Learn from anywhere",
+    title3: "Learn more for less",
     subtitle: "GotoCourse helps you achieve your tech career goals by connecting you to a global network of highly skilled professionals and domain experts.",
     image: place,
     link: "/categories",

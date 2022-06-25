@@ -73,8 +73,11 @@ function App() {
               <Route path="" element={<Categories  />} />
               <Route path=":id" element={<Out />}  >
                 <Route index element={<CourseDetail />} />
-                <Route path="courses/:profile" element={<CourseProfile />} />
                 <Route path="courses" element={<CourseList />} />
+                <Route path="courses/:profile" element={<Out />}>
+                  <Route index element={<CourseProfile />} />
+                  <Route path="payment" element={<Payment />} />
+                </Route>
               </Route>
             </Route>
             <Route path="admin">

@@ -327,7 +327,7 @@ export const categories = [
             {name:"IT auditor"},
 
         ],
-        niche:"",
+        niche:"IT audit  is for you if you have a good business sense, organizational and problem-solving skills.",
         nicheDescription:"IT audit  is for you if you have a good business sense, organizational and problem-solving skills.",
         nicheItems:[],
     },
