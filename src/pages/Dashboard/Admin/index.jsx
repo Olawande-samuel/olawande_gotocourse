@@ -1324,6 +1324,15 @@ export function Bootcamps() {
   const [bootcamps, setBootcamps] = useState([])
   const [loading, setLoading] = useState(true);
 
+  function getDate(date){
+    // 2022-07-03T00:00:00.000Z
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let d = date.split("T")[0];
+    let [y, m, day] = d.split("-");
+    m = months[parseInt(m) - 1];
+    return `${m} ${day}`;
+  }
+
   const tableHeaders = [ "No", "Title", "Details", "Type", "Duration", "Date", "Time", "Action" ];
 
   useEffect(()=>{
@@ -1387,17 +1396,16 @@ export function Bootcamps() {
               </thead>
               <tbody>
                 {bootcamps.length > 0 ? bootcamps.map(
-                  ( item, i ) => (
+                  ( {title, duration, description, type, startTime, endTime, endDate, startDate}, i ) => (
                     <BootcampRow
                       key={i}
-                      comp={"Courses"}
                       index={i}
-                      title="Lorem ipsum dolor sit amet."
-                      detail={"Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur sint tempore iste animi nisi eius alias eveniet possimus itaque voluptatem tenetur necessitatibus asperiores repellat sapiente, laborum aspernatur in quam maxime!"}
-                      duration={"16 weeks"}
-                      type={"Full Time"}
-                      time={"6am - 12pm CET"}
-                      date={"Jan 6 - Mar 24"}
+                      title={title}
+                      detail={description}
+                      duration={duration}
+                      type={type}
+                      time={`${startTime} - ${endTime} CST`}
+                      date={`${getDate(startDate)} - ${getDate(endDate)}`}
                     />
                   )
                 ) : <h1>No Bootcamps found</h1>}
@@ -1414,13 +1422,19 @@ export function CreateBootcamp(){
   const {adminFunctions: { addBootcamp }, } = useAuth(); 
   const {getItem} = useLocalStorage();
   let userdata = getItem(KEY);
-
+  const navigate = useNavigate();
   const [formstate, setFormstate] = useState({
-    name: "",
-    categoryName: "",
+    title: "",
+    duration: "",
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
     description: "",
-    faqs: [],
+    type: "",
+    instructor: ""
   });
+
   function changeHandler(e) {
     const { name, value } = e.target;
     setFormstate((old) => {
@@ -1431,18 +1445,19 @@ export function CreateBootcamp(){
     });
   }
 
-  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
     try {
-      if ( formstate.name === "" ||
-        formstate.categoryName === "" ||
-        formstate.description === ""
+      if ( formstate.description === "" ||
+        formstate.title === "" ||
+        formstate.duration === "" || formstate.endTime === "" || 
+        formstate.startTime === "" || formstate.startDate === "" || 
+        formstate.endDate === ""
       ) throw new AdvancedError("All fields are required", 0);
 
-      const res = await addBootcamp(userdata?.id, formstate);
+      const res = await addBootcamp(userdata?.token, formstate);
       const { success, message, statusCode } = res;
 
       if (!success) throw new AdvancedError(message, statusCode);
@@ -1456,6 +1471,7 @@ export function CreateBootcamp(){
           draggable: true,
           progress: undefined,
         });
+        navigate("/admin/bootcamps");
       }
     } catch (err) {
       toast.error(err.message, {
@@ -1481,10 +1497,10 @@ export function CreateBootcamp(){
           <form className="form" onSubmit={submitHandler}>
             <Input
               label="Title"
-              name="name"
+              name="title"
               type="text"
               handleChange={changeHandler}
-              value={formstate.name}
+              value={formstate.title}
             />
             <Input
               label="Duration"
@@ -1497,36 +1513,38 @@ export function CreateBootcamp(){
               <div className="col-sm-6 col-md-3 pe-2 ">
                 <Input
                   label="Starts By (Gmt)"
-                  name="time"
+                  name="startTime"
                   type="text"
                   handleChange={changeHandler}
-                  value={formstate.time}
+                  value={formstate.startTime}
               />
               </div>
               <div className="col-sm-6 col-md-3 pe-2  ">
                 <Input
                 label="Ends By (Gmt)"
-                name="time"
+                name="endTime"
                 type="text"
                 handleChange={changeHandler}
-                value={formstate.time}
+                value={formstate.endTime}
               />
               </div>
               <div className="col-sm-6 col-md-3 pe-2 ">
-                  <Input
+                <Input
                   label="Start Date"
-                  name="start_date"
+                  name="startDate"
                   type="date"
+                  value={formstate.startDate}
                   handleChange={changeHandler}
                 />
               </div>
               <div className="col-sm-6 col-md-3 ">
-              <Input
-              label="End Date"
-              name="end_date"
-              type="date"
-              handleChange={changeHandler}
-            />
+                <Input
+                  label="End Date"
+                  name="endDate"
+                  type="date"
+                  value={formstate.endDate}
+                  handleChange={changeHandler}
+                />
               </div>
             </div>
             <div className="row">
@@ -1544,6 +1562,14 @@ export function CreateBootcamp(){
               ></textarea>
             </div>
 
+            <Input
+              label="Instructor"
+              name="instructor"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.instructor}
+            />
+
             <div className={clsx.form_group}>
               <label htmlFor={"package"}>Type</label>
               <select
@@ -1555,7 +1581,7 @@ export function CreateBootcamp(){
               >
                 <option value="">Choose a Type</option>
                 <option value="full time">Full Time</option>
-                <option value="Part-time">Part-Time</option>
+                <option value="part time">Part-Time</option>
               </select>
             </div>
 
