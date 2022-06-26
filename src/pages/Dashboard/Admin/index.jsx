@@ -1492,7 +1492,6 @@ export function Bootcamps() {
   const [loading, setLoading] = useState(true);
 
   function getDate(date){
-    // 2022-07-03T00:00:00.000Z
     let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     let d = date.split("T")[0];
     let [y, m, day] = d.split("-");
@@ -1557,7 +1556,6 @@ export function Bootcamps() {
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h1 style={{margin: 0}}>Bootcamps</h1>  <button type="button" className="btn btn-primary px-5" onClick={gotoCreateCourseHandler}>Add Bootcamp</button>
           </div>
-
           <div className={clsx.admin__student_main}>
             <table className={clsx.admin__student_table}>
               <thead>
