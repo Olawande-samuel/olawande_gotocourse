@@ -476,6 +476,62 @@ export const adminFunctions = {
             }
         }
     },
+    deleteCategory: async function(token, id){
+        try{
+            const res = await axios.delete(`${baseURL}/admin/category/delete/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log(res);
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    updateCategory: async function(token, id, _data){
+        try{
+            const res = await axios.put(`${baseURL}/admin/category/update/${id}`, JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log(res);
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
     fetchBootcamps: async function(token){
         try{
             const res = await axios.get(`${baseURL}/admin/bootcamps/fetch`,
@@ -973,7 +1029,7 @@ export const teacherFunctions = {
     },
     fetchCourse: async function(_id, token){
         try{
-            const res = await axios.get(`${baseURL}/user/course/${_id}`,
+            const res = await axios.get(`${baseURL}/course/${_id}`,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -1070,6 +1126,62 @@ export const teacherFunctions = {
         
 
             if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    updateCourse: async function(token, id, _data){
+        try{
+            const res = await axios.put(`${baseURL}/teacher/course/update/${id}`, JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log(res);
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    deleteCourse: async function(token, id){
+        try{
+            const res = await axios.delete(`${baseURL}/teacher/course/delete/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log(res);
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1206,6 +1318,34 @@ export const otherFunctions = {
     searchCategories: async function(name){
         try{
             const res = await axios.get(`${baseURL}/course/category/${name}/fetch`,
+            {
+                headers: {
+                    // "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log(res);
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchBootcamps: async function(){
+        try{
+            const res = await axios.get(`${baseURL}/user/bootcamps/fetch`,
             {
                 headers: {
                     // "Authorization": `Bearer ${token}`,

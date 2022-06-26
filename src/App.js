@@ -13,7 +13,7 @@ import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit,
 import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit,
    Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps} from "./pages/Dashboard/Students";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, 
-  Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps} from "./pages/Dashboard/Teachers";
+  Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo} from "./pages/Dashboard/Teachers";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
@@ -64,10 +64,12 @@ function App() {
               <Route path="signup" element={<TeacherSignup />} />
               <Route path="classes" element={<TeacherClasses  />} />
               <Route path="bootcamps" element={<TeacherBootcamps  />} />
+              <Route path="bootcamps/details/:id" element={<TeacherBootcampDetails />} />
               <Route path="earnings" element={<Earnings  />} />
               <Route path="profile/edit" element={<TeacherEdit  />} />
               <Route path="courses" element={<TeacherCourses />} />
               <Route path="courses/create" element={<CreateCourse />} />
+              <Route path="courses/details/:id" element={<TeacherCourseInfo />} />
             </Route>
             <Route path="categories" element={<Out />}>
               <Route path="" element={<Categories  />} />
