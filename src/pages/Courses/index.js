@@ -631,14 +631,21 @@ export const CourseDetail = ({preview}) => {
   // const [categoryDetails, setCategoryDetails]= useState({})
 
   let categoryDetails = {}
-  const data = localStorage.getItem("gotocourse-category")
-  if (data){
-    categoryDetails = JSON.parse(data)          
+  if(!preview?.name){
+    const data = localStorage.getItem("gotocourse-category")
+    if (data){
+      categoryDetails = JSON.parse(data)          
+    }
+  } else {
+    categoryDetails = preview          
+
   }
 
   console.log("cate", categoryDetails)
   // fetch courses under each category
   useEffect(()=>{
+    if(!preview?.name){
+
     if(ref.current) return
       (async()=>{
         try{
@@ -685,8 +692,9 @@ export const CourseDetail = ({preview}) => {
         setGeneralState({...generalState, loading: false})
       }
       })()
+      ref.current = true
+    } 
     
-    ref.current = true
   },[categoryDetails?.name])
 
   //NB: use dummy is no data exist
@@ -739,7 +747,7 @@ export const CourseDetail = ({preview}) => {
     <Courses>
       <main className={style.details_main}>
         <div className={style.banner}>
-          <img src={ categoryDetails?.bannerImg ? categoryDetails?.bannerImg : banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} />
+          <img src={categoryDetails?.bannerImg ? categoryDetails?.bannerImg : banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} />
           <div className="container py-5 position-relative">
             <div className={style.box}>
               {categoryDetails?.iconImg && <img src={categoryDetails?.iconImg} alt="" /> }
