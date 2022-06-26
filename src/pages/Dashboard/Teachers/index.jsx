@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { MdEdit, MdPersonAdd } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Modal, Box, Typography } from "@mui/material";
 import { AiOutlineMenu } from "react-icons/ai";
@@ -178,10 +178,10 @@ const Syllabus = ({
 
 export function CreateCourse() {
   const ref = useRef(false);
-
+const navigate = useNavigate();
   const {
     generalState: { courseInfo },
-    teacherFunctions: { addCourse },
+    teacherFunctions: { addCourse, updateCourse },
     otherFunctions: { fetchCategories },
   } = useAuth();
   console.log(courseInfo);
@@ -193,11 +193,16 @@ export function CreateCourse() {
 
   const [formstate, setFormstate] = useState({
     name: courseInfo?.name ?? "",
-    categoryName: courseInfo?.categoryName ?? "",
+    categoryName: courseInfo?.category ?? "",
     description: courseInfo?.description ?? "",
+    courseImg: courseInfo?.courseImg ?? "",
+    startDate: courseInfo?.startDate ?? "",
+    endDate: courseInfo?.endDate ?? "",
     type: "PACKAGE",
     faqs: courseInfo?.faqs ?? [],
+
   });
+
   const { syllabuses, addtoSyllabus } = useSyllabus();
   const [faq, setFaq] = useState(courseInfo?.faqs ?? []);
   const [packageList, setPackageList] = useState(courseInfo?.packages ?? []);
@@ -209,6 +214,16 @@ export function CreateCourse() {
   const [loading, setLoading] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
   const [packageFilter, setPackageFilter] = useState("");
+
+// check if courseinfo exist then setSyllabus to existing syllabus
+useEffect(()=>{
+  if(courseInfo?.syllabus?.length > 0){
+    addtoSyllabus({...courseInfo.syllabus})
+  }
+  
+
+},[courseInfo])
+
   function changeHandler(e) {
     const { name, value } = e.target;
     setFormstate((old) => {
@@ -237,7 +252,57 @@ export function CreateCourse() {
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
+    if(courseInfo?.courseId){
+      console.log("submit", "updatecourse")
+      try {
+        if (
+          formstate.name === "" ||
+          formstate.categoryName === "" ||
+          formstate.description === "" ||
+          formstate.price === ""
+        )
+          throw new AdvancedError("All fields are required", 0);
+        const res = await updateCourse( userdata?.token, courseInfo?.courseId,
+          {
+            ...formstate,
+            syllabus: [...syllabuses],
+            packages: [...packageList],
+            faqs: [...faq],
+          },
+          userdata.token
+        );
+        const { success, message, statusCode } = res;
+  
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          navigate("/teacher/courses")
+        }
+      } catch (err) {
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } finally {
+        setLoading((_) => false);
+      }
+    } else {
     try {
+      console.log("submit", "addcourse")
+
       if (
         formstate.name === "" ||
         formstate.categoryName === "" ||
@@ -282,6 +347,7 @@ export function CreateCourse() {
       setLoading((_) => false);
     }
   }
+}
 
   // get Categories
   useEffect(() => {
@@ -360,7 +426,11 @@ export function CreateCourse() {
     <Teachers>
       <div className={clsx.teachers_profile}>
         <div className={clsx.edit__profile}>
+          {courseInfo?.name ? 
+          <h2>Edit course</h2>
+            :
           <h2>Create a new course</h2>
+        }
           <UploadForm isOpen={openImage} setIsOpen={setOpenImage} />
           <div
             className={clsx.upload__file_box}
@@ -418,7 +488,7 @@ export function CreateCourse() {
               <div className="col-sm-4">
                 <Input
                   label="Start Date"
-                  name="start_date"
+                  name="startDate"
                   type="date"
                   handleChange={changeHandler}
                   value={formstate.start_date}
@@ -427,7 +497,7 @@ export function CreateCourse() {
               <div className="col-sm-4">
                 <Input
                   label="End Date"
-                  name="end_date"
+                  name="endDate"
                   type="date"
                   handleChange={changeHandler}
                   value={formstate.end_date}
@@ -581,6 +651,257 @@ export function CreateCourse() {
         addFaq={setFaq}
         list={faq}
       />
+    </Teachers>
+  );
+}
+export function CourseInfo() {
+  const navigate = useNavigate();
+  const ref = useRef(false);
+  const {id} = useParams()
+  const { generalState: { courseInfo, loading }, generalState, setGeneralState, teacherFunctions: { fetchCourse, deleteCourse }, } = useAuth();
+
+  const { getItem } = useLocalStorage();
+  let userdata = getItem(KEY);
+  
+  const [btnloading, setLoading]= useState(false)
+  const [formstate, setFormstate] = useState({}); 
+  console.log(formstate);
+
+  async function handleCourseEdit(e){
+    setGeneralState({...generalState, courseInfo: formstate})
+      navigate("/teacher/courses/create")
+  }
+  async function deleteCourseInfo(e) {
+    e.preventDefault();
+    setLoading(true);
+    try {    
+      const res = await deleteCourse(userdata?.token, id);
+      const { success, message, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        navigate(-1)
+      }
+    } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } finally {
+      setLoading((_) => false);
+    }
+  }
+
+  // get Course info
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      if (ref.current) return;
+      (async () => {
+        try {
+          setGeneralState({...generalState, loading: true});
+          const res = await fetchCourse(id, userdata?.token);
+          const { success, message, statusCode } = res;
+
+          if (!success || statusCode !== 1)
+            throw new AdvancedError(message, statusCode);
+          const { data } = res;
+          setFormstate(data);
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } catch (err) {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } finally {
+          setGeneralState({...generalState, loading: false});
+        }
+      })();
+
+      ref.current = true;
+    }
+
+    return () => (mounted = false);
+  }, [id]);
+
+ 
+  return (
+    <Teachers>
+      <div className={clsx.teachers_profile}>
+        <div className={clsx.edit__profile}>
+          <h2>Course Information</h2>
+          <form className="form">
+            <Input
+              label="Name of course"
+              name="name"
+              type="text"
+              value={formstate.name}
+              readOnly={true}
+            />
+            <div className={clsx.form_group}>
+              <Input
+                label="Category"
+                name="category"
+                type="text"
+                  value={formstate.name}
+                readOnly={true}
+              />
+            </div>
+            <div className={clsx.form_group}>
+              <label className="form-label generic_label" htmlFor={"description"}>
+                Brief Description of course content
+              </label>
+              <textarea
+                rows="5"
+                name="description"
+                value={formstate.description}
+                className="generic_input"
+                readOnly={true}
+              ></textarea>
+            </div>
+            {/* <div className="d-flex flex-wrap" style={{ gap: ".5rem" }}>
+              <div className="col-sm-4">
+                <Input
+                  label="Start Date"
+                  name="startDate"
+                  type="date"
+                      value={formstate.start_date}
+                  readOnly={true}
+                />
+              </div>
+              <div className="col-sm-4">
+                <Input
+                  label="End Date"
+                  name="endDate"
+                  type="date"
+                      value={formstate.end_date}
+                  readOnly={true}
+                />
+              </div>
+            </div> */}
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"} className="form-label generic_label">
+                Package
+              </label>
+              {formstate.packages?.length > 0 ? (
+                formstate.packages?.map((item, index) => (
+                  <Syllabus
+                    key={item.title}
+                    {...item}
+                    packagelist={true}
+                    index={index}
+                    packageItems={formstate.packages}
+                  />
+                ))
+              ) : (
+                <h6>No Packages</h6>
+              )}
+            </div>
+            <Input
+              label="Price"
+              name="price"
+              type="text"
+              value={formstate.price}
+              readOnly={true}
+            />
+
+            <div className={clsx.form_group}>
+              <label className="form-label generic_label">Syllabus</label>
+              {formstate.syllabus?.length !== 0 ? (
+                formstate.syllabus?.map(({ title, description }, i) => (
+                  <Syllabus title={title} key={i} description={description} />
+                ))
+              ) : (
+                <h6>No syllabus!</h6>
+              )}
+            </div>
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"} className="form-label generic_label">
+                FAQ
+              </label>
+              {formstate.faq?.length > 0 ? (
+                formstate.faq?.map((item) => <Syllabus {...item} />)
+              ) : (
+                <h6>No faq</h6>
+              )}
+            </div>
+            <div className="d-flex flex-wrap mt-3" style={{ gap: "1rem " }}>
+                <button
+                onClick={handleCourseEdit}
+                  className="button log_btn"
+                  style={{
+                    padding: "10px 44px",
+                    borderRadius: "8px",
+                    fontSize: "16px",
+                    fontWeight: "600",
+                  }}
+                  type="button"
+                >
+                  Edit
+                </button>
+              {btnloading ? (
+                <button
+                  className="btn btn-outline"
+                  style={{
+                    border:" 1px solid var(--theme-orange)",
+                    padding: "10px 44px",
+                    borderRadius: "8px",
+                    fontSize: "16px",
+                    fontWeight: "600",
+                  }}
+                >
+                  <div className="spinner-border text-dark" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </button>
+              ) : (
+              <button
+                className="btn btn-outline"
+                type="button"
+                onClick={deleteCourseInfo}
+                style={{
+                  border: "1px solid var(--theme-orange)",
+                  color: "var(--theme-orange)",
+                  padding: "10px 44px",
+                  borderRadius: "8px",
+                  fontSize: "16px",
+                  fontWeight: "600",
+                }}
+              >
+                Delete
+              </button>
+              )}
+            </div>
+          </form>
+        </div>
+      </div>
+      
     </Teachers>
   );
 }
@@ -957,7 +1278,7 @@ export function Bootcamps() {
   const navigate = useNavigate();
   const flag = useRef(false);
   let userdata = getItem(KEY);
-  const [courseList, setCourseList] = useState(["hi"]);
+  const [courseList, setCourseList] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const tableHeaders = [
@@ -990,8 +1311,8 @@ export function Bootcamps() {
               draggable: true,
               progress: undefined,
             });
-
-            toast.error("message", {
+          } else {
+            toast.error("No bootcamp assigned", {
               position: "top-right",
               autoClose: 4000,
               hideProgressBar: true,
@@ -1021,8 +1342,17 @@ export function Bootcamps() {
     flag.current = true;
   }, []);
 
-  function gotoCreateCourseHandler(e) {
-    navigate("create");
+  function getDate(date){
+  
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let d = date.split("T")[0];
+    let [y, m, day] = d.split("-");
+    m = months[parseInt(m) - 1];
+    return `${m} ${day}`;
+  }
+  function detailHandler(e, _id, item){
+    localStorage.setItem("gotocourse-teacherbootcamp", JSON.stringify(item))
+    navigate("details/"+_id);
   }
   return (
     <Teachers header={"Bootcamps"}>
@@ -1044,17 +1374,16 @@ export function Bootcamps() {
                 {courseList.length > 0 &&
                   courseList.map((item, i) => (
                     <BootcampRow
-                      key={i}
-                      comp={"Courses"}
-                      index={i}
-                      title="Lorem ipsum dolor sit amet."
-                      detail={
-                        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur sint tempore iste animi nisi eius alias eveniet possimus itaque voluptatem tenetur necessitatibus asperiores repellat sapiente, laborum aspernatur in quam maxime!"
-                      }
-                      duration={"16 weeks"}
-                      type={"Full Time"}
-                      time={"6am - 12pm CET"}
-                      date={"Jan 6 - Mar 24"}
+                    key={i}
+                    index={i}
+                    title={item.title}
+                    detail={item.description}
+                    duration={item.duration}
+                    type={item.type}
+                    admin={false}
+                    clickHandler={e => detailHandler(e, item._id, item)}
+                    time={`${item.startTime} - ${item.endTime} CST`}
+                    date={`${getDate(item.startDate)} - ${getDate(item.endDate)}`}
                     />
                   ))}
                 <p></p>
@@ -1065,6 +1394,159 @@ export function Bootcamps() {
       </div>
     </Teachers>
   );
+}
+export function BootcampDetails({}){
+  const navigate = useNavigate();
+  const {getItem} = useLocalStorage();
+
+  const bookcampInfo = getItem("gotocourse-teacherbootcamp")
+  let userdata = getItem(KEY);
+
+  const {adminFunctions: {deleteBootcamp}} = useAuth();
+  const flag = useRef(false);
+  const [formstate, setFormstate] = useState({
+    title: "",
+    description: "",
+    instructor: "",
+    student: ""
+  })
+  // const [loading, setLoading] = useState(true);
+  const instructors = ["Dr. Joy Castus"];
+  const students = ["James Segun"];
+  const params = useParams()
+  //get user id
+  console.log(params);
+  useEffect(() => {
+
+
+    return () => console.log("Leaving Details page");
+  }, [])
+
+
+  function changeHandler(e){
+    const {name, value} = e.target;
+    setFormstate(old => {
+      return {
+        ...old,
+        [name]: value
+      }
+    })
+  }
+
+
+  async function deleteBootcampHandler(e){
+    try{
+      const res = await deleteBootcamp(userdata?.token, params?.id);
+      const {message, success, statusCode} = res;
+      if(!success) throw new AdvancedError(message, statusCode);
+      else {
+        navigate("/admin/bootcamps");
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    }catch(err){
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
+
+  function editBootcampHandler(e){
+    navigate(`/teacher/bootcamps/create?edit=${params?.id}`);
+  }
+
+
+  return(
+    <Teachers header="Teacher">
+      {/* {loading && <Loader />} */}
+      <div className={clsx.teachers_profile}>
+        <div className={clsx.admin__student}>
+          <div className={clsx.admin__student_main}>
+          <div className="d-flex justify-content-between align-items-center mb-5" style={{width: "80%"}}>
+            {/* <button type="button" className="btn btn-sm btn-danger px-3 py-2" style={{fontSize: "0.8rem"}} onClick={deleteBootcampHandler}>Delete Bootcamp</button>
+            <button type="button" className="btn btn-sm btn-primary px-3 py-2" style={{fontSize: "0.8rem"}} onClick={editBootcampHandler}>Edit Bootcamp</button> */}
+            <h3>Bootcamp</h3>
+          </div>
+
+          <form className="form" style={{width: "80%", margin: "20px 0px"}}>
+            <Input
+              label="Title"
+              name="title"
+              type="text"
+              handleChange={changeHandler}
+              value={bookcampInfo?.title}
+              readOnly={true}
+            />
+
+            <div className={clsx.form_group}>
+              <label htmlFor={"description"} className="form-label generic_label">
+                Description
+              </label>
+              <textarea
+                rows="5"
+                name="description"
+                value={bookcampInfo?.description}
+                onChange={changeHandler}
+                className="form-control generic_input"
+                readOnly
+              ></textarea>
+            </div>
+
+            <div className={clsx.form_group}>
+              <div className={clsx.form_group__teachers}>
+                <label className="form-label generic_label">Instructors</label>
+                {/* {
+                  instructors.map((t, i) => (
+                    <div key={i}>
+                      <p>{i + 1}. &nbsp; {t}</p> 
+                    </div>
+                  ))
+                } */}
+                <p>{bookcampInfo?.instructorName}</p>
+              </div>
+            </div>
+
+            <div className={clsx.form_group}>
+              <div className={clsx.form_group__teachers}>
+                <label className="form-label generic_label">Add Student</label>
+                {
+                  students.map((s, i) => (
+                    <div key={i}>
+                      <p>{i + 1}. &nbsp; {s}</p> 
+                    </div>
+                  ))
+                }
+              </div>
+              <Input
+                name="student"
+                type="text"
+                handleChange={changeHandler}
+                value={formstate.student}
+              />
+              <button type="button" className={clsx.form_group__button}>
+                Add Student
+              </button>
+            </div>
+
+          </form>
+          </div>
+        </div>
+      </div>
+    </Teachers>
+  )
 }
 
 export function Edit() {
@@ -1661,7 +2143,16 @@ export function Courses() {
   ];
 
   function createCourseHandler(e) {
+    setGeneralState({ ...generalState, courseInfo:{}})
     navigate("create");
+  }
+  function getDate(date){
+  
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let d = date.split("T")[0];
+    let [y, m, day] = d.split("-");
+    m = months[parseInt(m) - 1];
+    return `${m} ${day}`;
   }
   return (
     <Teachers isMobile={isMobile} userdata={userdata}>
@@ -1673,7 +2164,6 @@ export function Courses() {
         >
           Create Course
         </button>
-
         {courses.length > 0 ? (
           <table className={clsx.teachers_table}>
             <thead>
@@ -1688,8 +2178,8 @@ export function Courses() {
                 <CourseCard
                   index={i}
                   num={i}
-                  date="1/12/20"
-                  course_status={course.status}
+                  date={course.startDate}
+                  status={course.status}
                   model={course.category}
                   title={course.name}
                   category={course.category}
@@ -1709,6 +2199,14 @@ export function Courses() {
 }
 
 function CourseCard({ index, title, model, date, status, category, info }) {
+  function getDate(date){
+  
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let d = date.split("T")[0];
+    let [y, m, day] = d.split("-");
+    m = months[parseInt(m) - 1];
+    return `${m} ${day}`;
+  }
   const navigate = useNavigate();
   const { generalState, setGeneralState } = useAuth();
   return (
@@ -1717,13 +2215,13 @@ function CourseCard({ index, title, model, date, status, category, info }) {
       onClick={() => {
         setGeneralState({ ...generalState, courseInfo: info });
         // navigate(`/categories/${category?.toLowerCase()}/courses/${title.split(" ").join("-")}`)
-        navigate(`create`);
+        navigate(`details/${info.courseId}`);
       }}
     >
       <td className={clsx.user__info}>{index + 1}</td>
       <td className={clsx.user__info}>{title}</td>
       <td className={clsx.user__info}>{model}</td>
-      <td className={clsx.user__info}>{date}</td>
+      <td className={clsx.user__info}>{date ? getDate(date) : ""}</td>
       <td className={clsx.user__info}>{status}</td>
     </tr>
   );

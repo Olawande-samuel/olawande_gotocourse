@@ -36,7 +36,7 @@ export function CourseDetails({}){
   const navigate = useNavigate();
   const {getItem} = useLocalStorage();
   let userdata = getItem(KEY);
-  const {adminFunctions: {fetchCategory}} = useAuth();
+  const {generalState, setGeneralState,adminFunctions: {fetchCategory, deleteCategory}} = useAuth();
   const flag = useRef(false);
   const [formstate, setFormstate] = useState({
     name: "",
@@ -65,7 +65,8 @@ export function CourseDetails({}){
             return {
               ...old,
               name: data.name,
-              description: data.description
+              description: data.description,
+              categoryId: data.categoryId
             }
           })
           toast.success(message, {
@@ -110,9 +111,45 @@ export function CourseDetails({}){
   }
 
 
-  function deleteCategoryHandler(e){}
+  async function deleteCategoryHandler(e){
+    e.preventDefault();
+    setGeneralState({ ...generalState, loading: true});
+    try {    
+      const res = await deleteCategory(userdata?.token, formstate.categoryId);
+      const { success, message, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        navigate(-1)
+      }
+    } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } finally {
+      setGeneralState({ ...generalState, loading: false});
+    }
+  
+  }
 
-  function editCategoryHandler(e){}
+  function editCategoryHandler(e){
+    navigate(`/admin/courses-categories/new?edit=${formstate.name}`);
+
+  }
 
 
   return(
@@ -266,7 +303,7 @@ const [loading, setLoading] = useState(true);
   }, [])
 
 
-
+ 
   function showDetailsHandler(e, id){
     navigate(`details/${id}`);
   }
@@ -299,10 +336,10 @@ const [loading, setLoading] = useState(true);
                       comp="Category"
                       name={name}
                       num={i}
-                      date={"Feb 24"}
+                      date={"2022-06-26T00:00:00.000Z"}
                       students={90}
                       id={categoryId}
-                      showDetailsHandler={showDetailsHandler}
+                      showDetailsHandler={(e)=>showDetailsHandler(e, name)}
                     />
                   )) }
                 </tbody>
@@ -483,7 +520,7 @@ const Syllabus = ({title, description}) => {
 }
 
 export function CreateCourseCategory(){
-  const {adminFunctions: {addCategory}} = useAuth();
+  const {adminFunctions: {addCategory, fetchCategory, updateCategory}} = useAuth();
   const {getItem} = useLocalStorage();
   const userdata = getItem(KEY);
   const [open, setOpen] = useState(false);
@@ -513,16 +550,59 @@ export function CreateCourseCategory(){
     name: "",
   })
   const [careerlists, setCareerlists] = useState([]);
-
-  useEffect(()=>{
-      // setFullData({
-      //   ...formstate, 
-      //   careerList:[...careerlists],
-      //   nicheItems: [...nichelists]
-      // })
-  },[])
-
-  // console.log("fullData", fullData)
+  const flag = useRef(false);
+  const location = useLocation();
+  const [loader, setLoader] = useState(location.search ? true : false);
+  const edit = location.search
+  useEffect(() => {
+    if(flag.current) return;
+    if(location.search){
+      const id = location.search.split("=").reverse()[0];
+      console.log(id);
+      (async () => {
+        try {
+          const res = await fetchCategory(id, userdata?.token);
+          const { message, success, statusCode } = res;
+          if (!success) throw new AdvancedError(message, statusCode);
+          else if (statusCode === 1) {
+            const { data } = res;
+            // let found = data.find(d => d._id === id);
+            // found.startDate = found.startDate.split("T")[0];
+            // found.endDate = found.endDate.split("T")[0];
+            setFormstate(_ => data);
+           data.nicheItems && setNichelists(data.nicheItems)
+            data.careerList && setCareerlists(data.careerList)
+            toast.success(message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          } else {
+            throw new AdvancedError(message, statusCode);
+          }
+        } catch (err) {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }finally{
+          setLoader(_ => false);
+        }
+      })()
+    }
+    //do some coding
+    flag.current = true;
+    return () => console.log("Removing CreateBootcamp component");
+  }, [])
   async function submitHandler(e){
     e.preventDefault();
     setLoading(_ => true);
@@ -532,7 +612,8 @@ export function CreateCourseCategory(){
         nicheItems: [...nichelists],
         careerList: [...careerlists]
       }
-      const res = await addCategory(data, userdata?.token);
+     
+      const res = edit ? await updateCategory(userdata?.token, formstate.categoryId, data): await addCategory(data, userdata?.token);
       const {success, message, statusCode} = res;
       if(!success) throw new AdvancedError(message, statusCode);
       else {
@@ -996,10 +1077,18 @@ export function UserInfoCard({
   start_date,
   course_status,
   enrolled,
+  packages=[],
   showDetailsHandler = () => {return},
   approveHandler = () => {return},
 }) {
-
+  function getDate(date){
+  
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let d = date.split("T")[0];
+    let [y, m, day] = d.split("-");
+    m = months[parseInt(m) - 1];
+    return `${m} ${day}`;
+  }
   return (
     <tr
       className={clsx.user__info_card}
@@ -1019,9 +1108,9 @@ export function UserInfoCard({
 
       {(comp === "Courses" || comp === "Category") && <td className={clsx.user__info}>{name}</td>}
 
-      {date && (
+      {(comp === "Courses" || date) && (
         <td className={clsx.user__date}>
-          <span>{date}</span>
+          <span>{date ? getDate(date):""}</span>
         </td>
       )}
       {(comp === "History" ) && (
@@ -1031,12 +1120,9 @@ export function UserInfoCard({
       )}
       {(comp === "Courses") && (
         <td className={clsx.user__date}>
-          <span>{model}</span>
-        </td>
-      )}
-      {(comp === "Courses") && (
-        <td className={clsx.user__date}>
-          <span>{amount}</span>
+            {packages.map(item=>(
+              <div>{item.title}</div>
+            ))}
         </td>
       )}
 
@@ -1287,12 +1373,13 @@ export function Courses() {
                     {
                       category,
                       name,
-                      description,
                       price,
+                      status,
                       type,
                       approve,
                       courseId,
-                      packages: {title}
+                      startDate,
+                      packages
                     },
                     i
                   ) => (
@@ -1302,7 +1389,9 @@ export function Courses() {
                       num={i}
                       name={category}
                       course={name}
-                      paid={price}
+                      rating={4}
+                      packages={packages}
+                      date={startDate ? startDate : ""}
                       isActive={approve ?? true}
                     />
                   )
@@ -1320,6 +1409,7 @@ export function Courses() {
 export function BootcampDetails({}){
   const navigate = useNavigate();
   const {getItem} = useLocalStorage();
+
   let userdata = getItem(KEY);
   const {adminFunctions: {deleteBootcamp}} = useAuth();
   const flag = useRef(false);
@@ -1438,7 +1528,7 @@ export function BootcampDetails({}){
               </div>
               <Input
                 style={{margin: "0px !important"}}
-                name="teacher"
+                name="instructor"
                 type="text"
                 handleChange={changeHandler}
                 value={formstate.instructor}
@@ -1595,6 +1685,7 @@ export function CreateBootcamp(){
   let userdata = getItem(KEY);
   const flag = useRef(false);
   const navigate = useNavigate();
+
   const location = useLocation();
   const [loader, setLoader] = useState(location.search ? true : false);
   const [formstate, setFormstate] = useState({
