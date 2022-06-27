@@ -1,7 +1,7 @@
 
-import Transition from "../images/careerTransition.png"
-import Planning from "../images/careerTraining.png"
-import Advancement from "../images/advancement.png"
+import Transition from "../images/ctransition.png"
+import Planning from "../images/cplanning.png"
+import Advancement from "../images/cadvancement.png"
 const data = [
     {
         image:Transition,

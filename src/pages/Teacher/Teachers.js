@@ -43,9 +43,8 @@ const All = () => {
     <Courses>
       <div className="container">
         <section className={` ${style.navigation}`}>
-          {nav.map((item) => (
-            // <a href="#">{item}</a>
-            <NavItems item={item} handleChange={handleChange} search={search} />
+          {nav.map((item, i) => (
+            <NavItems key={item.name} item={item} handleChange={handleChange} search={search} />
           ))}
         </section>
         <main className={style.main}>
