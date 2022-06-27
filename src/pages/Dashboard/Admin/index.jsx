@@ -32,7 +32,221 @@ import Layout from "../../../components/Layout";
 
 const KEY = "gotocourse-userdata";
 
+
+// COURSE DETAILS COMPONENT
 export function CourseDetails({}){
+  const navigate = useNavigate();
+  const {getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
+  const {adminFunctions: {fetchCourses, deleteCourse}} = useAuth();
+  const flag = useRef(false);
+  const [formstate, setFormstate] = useState({
+    name: "",
+    description: "",
+    teacher: "",
+    student: ""
+  })
+  const [loading, setLoading] = useState(true);
+  const teachers = ["Dr. Joy Castus"];
+  const students = ["James Segun"];
+  const params = useParams();
+  //get user id
+
+  useEffect(() => {
+    //fetch course details for the id
+    if(flag.current) return;
+    (async() => {
+      try{
+        const res = await fetchCourses(userdata?.token);
+        const {message, statusCode, success} = res;
+        if(!success) throw new AdvancedError(message, statusCode);
+        else {
+          const {data} = res;
+          let course = data.find(d => d.courseId === params?.id);
+          setFormstate(old => {
+            return {
+              ...old,
+              name: course.name,
+              description: course.description
+            }
+          })
+          toast.success("Course Details fetched successfully", {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      }catch(err){
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }finally{
+        setLoading(_ => false);
+      }
+    })()
+    flag.current = true;
+
+
+    return () => console.log("Leaving Details page");
+  }, [])
+
+
+  function changeHandler(e){
+    const {name, value} = e.target;
+    setFormstate(old => {
+      return {
+        ...old,
+        [name]: value
+      }
+    })
+  }
+
+
+  async function deleteCourseHandler(e){
+    setLoading(_ => true);
+    try {    
+      const res = await deleteCourse(userdata?.token, params?.id);
+      const { success, message, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        navigate(-1)
+      }
+    } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }finally{
+      setLoading(_ => false);
+    }
+  
+  }
+
+  function editCourseHandler(e){
+    navigate(`/admin/courses/create?edit=${params?.id}`);
+  }
+
+
+  return(
+    <Admin header="ADMIN">
+      {loading && <Loader />}
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+          <div className="d-flex justify-content-between align-items-center mb-5" style={{width: "80%"}}>
+            <button type="button" className="btn btn-sm btn-danger px-3 py-2" style={{fontSize: "0.8rem"}} onClick={deleteCourseHandler}>Delete Course</button>
+            <button type="button" className="btn btn-sm btn-primary px-3 py-2" style={{fontSize: "0.8rem"}} onClick={editCourseHandler}>Edit Course</button>
+          </div>
+          <form className="form" style={{width: "80%", margin: "20px 0px"}}>
+            <Input
+              label="Name of Course"
+              name="name"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.name}
+              readOnly={true}
+            />
+
+            <div className={clsx.form_group}>
+              <label htmlFor={"description"} className="form-label generic_label">
+                Description
+              </label>
+              <textarea
+                rows="5"
+                name="description"
+                value={formstate.description}
+                onChange={changeHandler}
+                className="form-control generic_input"
+                readOnly
+              ></textarea>
+            </div>
+
+            <div className={clsx.form_group}>
+              <div className={clsx.form_group__teachers}>
+                <label>Name of teachers</label>
+                {
+                  teachers.map((t, i) => (
+                    <div key={i}>
+                      <p>{i + 1}. &nbsp; {t}</p> 
+                      <div className={clsx.teachers__actions}>
+                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
+                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+              <Input
+                style={{margin: "0px !important"}}
+                name="teacher"
+                type="text"
+                handleChange={changeHandler}
+                value={formstate.teacher}
+              />
+              <button type="button" className={clsx.form_group__button}>
+                Add Teacher
+              </button>
+            </div>
+
+            <div className={clsx.form_group}>
+              <div className={clsx.form_group__teachers}>
+                <label>Add Student</label>
+                {
+                  students.map((s, i) => (
+                    <div key={i}>
+                      <p>{i + 1}. &nbsp; {s}</p> 
+                      <div className={clsx.teachers__actions}>
+                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
+                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+              <Input
+                name="student"
+                type="text"
+                handleChange={changeHandler}
+                value={formstate.student}
+              />
+              <button type="button" className={clsx.form_group__button}>
+                Add Student
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </Admin>
+  )
+}
+
+
+// CATEGORY DETAILS COMPONENT
+export function CategoryDetails({}){
   const navigate = useNavigate();
   const {getItem} = useLocalStorage();
   let userdata = getItem(KEY);
@@ -246,7 +460,7 @@ export function CourseDetails({}){
 }
 
 
-
+// CATEGORY COMPONENT
 export function Category(){
   const navigate = useNavigate();
   const [categories, setCategories] = useState([])
@@ -354,6 +568,9 @@ const [loading, setLoading] = useState(true);
   )
 }
 
+
+
+// NICHEMODAL COMPONENT
 function NicheModal({newNiche, updateNiche, open, setOpen, handleChange}){
 
   const style = {
@@ -419,6 +636,9 @@ function NicheModal({newNiche, updateNiche, open, setOpen, handleChange}){
   )
 }
 
+
+
+// CAREERMODAL COMPONENT
 function CareerModal({newCareer, updateCareer, open, setOpen, handleChange}){
 
   const style = {
@@ -470,6 +690,10 @@ function CareerModal({newCareer, updateCareer, open, setOpen, handleChange}){
     </Modal>
   )
 }
+
+
+
+// CATEGORYPREVIEWMODAL COMPONENT
 export function CategoryPreviewModal({preview, open, setOpen}){
 
   const style = {
@@ -496,7 +720,7 @@ export function CategoryPreviewModal({preview, open, setOpen}){
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box style={style}>
+      <Box sx={style}>
         <div className="position-relative" style={{
           height: "80vh",
           overflowY: "scroll",
@@ -510,6 +734,8 @@ export function CategoryPreviewModal({preview, open, setOpen}){
   )
 }
 
+
+// SYLLABUS COMPONENT
 const Syllabus = ({title, description}) => {
   return(
     <div className={clsx.syllabus_container}>
@@ -519,6 +745,8 @@ const Syllabus = ({title, description}) => {
   )
 }
 
+
+// CREATECOURSECATEGORY COMPONENT
 export function CreateCourseCategory(){
   const {adminFunctions: {addCategory, fetchCategory, updateCategory}} = useAuth();
   const {getItem} = useLocalStorage();
@@ -530,7 +758,6 @@ export function CreateCourseCategory(){
   const [showCareerModal, setShowCareerModal] = useState(false);
   const [showNicheModal, setShowNicheModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  // const [fullData, setFullData] = useState([])
   const [formstate, setFormstate] = useState({
     name: "",
     description: "",
@@ -566,12 +793,9 @@ export function CreateCourseCategory(){
           if (!success) throw new AdvancedError(message, statusCode);
           else if (statusCode === 1) {
             const { data } = res;
-            // let found = data.find(d => d._id === id);
-            // found.startDate = found.startDate.split("T")[0];
-            // found.endDate = found.endDate.split("T")[0];
             setFormstate(_ => data);
-           data.nicheItems && setNichelists(data.nicheItems)
-            data.careerList && setCareerlists(data.careerList)
+            data.nicheItems && setNichelists(_ => data.nicheItems)
+            data.careerList && setCareerlists(_ => data.careerList)
             toast.success(message, {
               position: "top-right",
               autoClose: 4000,
@@ -751,6 +975,7 @@ export function CreateCourseCategory(){
 
   return(
     <Admin header="Create Category">
+      {loader && <Loader />}
       <UploadForm isOpen={open} setIsOpen={setOpen} setPreviewImage={setPreviewImage} />
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
@@ -876,6 +1101,8 @@ export function CreateCourseCategory(){
 }
 
 
+
+// DASHBOARD COMPONENT
 export function Dashboard() {
   const { getItem, updateItem } = useLocalStorage();
   const {adminFunctions: { fetchProfile }} = useAuth();
@@ -952,6 +1179,8 @@ export function Dashboard() {
   );
 }
 
+
+// INFO COMPONENT
 function Info({ title, content }) {
   return (
     <div className={clsx.admin__info}>
@@ -961,6 +1190,9 @@ function Info({ title, content }) {
   );
 }
 
+
+
+// APPROVE TEACHER COMPONENT
 export function Approve() {
   const location = useLocation();
   const [data, setData] = useState(null);
@@ -1048,6 +1280,9 @@ export function Approve() {
   );
 }
 
+
+
+// USERINFOCARD COMPONENT
 export function UserInfoCard({
   img,
   id,
@@ -1092,7 +1327,7 @@ export function UserInfoCard({
   return (
     <tr
       className={clsx.user__info_card}
-      onClick={(e) => comp === 'Category' ? showDetailsHandler(e, id) : approveHandler(e, email)}
+      onClick={(e) => ((comp === 'Category') || (comp === 'Courses')) ? showDetailsHandler(e, id) : approveHandler(e, email)}
     >
       <td className={clsx.user__info}>{num + 1}.</td>
       {user && (
@@ -1195,6 +1430,8 @@ export function UserInfoCard({
   );
 }
 
+
+// TEACHERS COMPONENT
 export function Teachers() {
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
@@ -1290,8 +1527,11 @@ export function Teachers() {
   );
 }
 
+
+
+// COURSES COMPONENT
 export function Courses() {
-  const {adminFunctions: { fetchCourses} } = useAuth();
+  const {adminFunctions: { fetchCourses } } = useAuth();
   const {getItem} = useLocalStorage();
   const navigate = useNavigate();
   const flag = useRef(false);
@@ -1351,6 +1591,10 @@ export function Courses() {
   function gotoCreateCourseHandler(e){
     navigate("create");
   }
+
+  function showDetailsHandler(e, id){
+    navigate(`details/${id}`);
+  }
   return (
     <Admin header={"Courses"}>
       {loading && <Loader />}
@@ -1390,6 +1634,8 @@ export function Courses() {
                       name={category}
                       course={name}
                       rating={4}
+                      id={courseId}
+                      showDetailsHandler={showDetailsHandler}
                       packages={packages}
                       date={startDate ? startDate : ""}
                       isActive={approve ?? true}
@@ -1406,12 +1652,13 @@ export function Courses() {
 }
 
 
+
+// BOOTCAMPDETAILS COMPONENT
 export function BootcampDetails({}){
   const navigate = useNavigate();
   const {getItem} = useLocalStorage();
-
   let userdata = getItem(KEY);
-  const {adminFunctions: {deleteBootcamp}} = useAuth();
+  const {adminFunctions: {deleteBootcamp, fetchBootcamps}} = useAuth();
   const flag = useRef(false);
   const [formstate, setFormstate] = useState({
     title: "",
@@ -1419,15 +1666,57 @@ export function BootcampDetails({}){
     instructor: "",
     student: ""
   })
-  // const [loading, setLoading] = useState(true);
-  const instructors = ["Dr. Joy Castus"];
+  const [loading, setLoading] = useState(true);
+  const [instructors, setInstructors] = useState([]);
   const students = ["James Segun"];
   const params = useParams()
   //get user id
-  console.log(params);
   useEffect(() => {
-
-
+    //fetch bootcamp details for the id
+    if(flag.current) return;
+    (async() => {
+      try{
+        const res = await fetchBootcamps(userdata?.token);
+        const {message, statusCode, success} = res;
+        if(!success) throw new AdvancedError(message, statusCode);
+        else {
+          const {data} = res;
+          let bootcamp = data.find(d => d._id === params?.id);
+          setFormstate(old => {
+            return {
+              ...old,
+              title: bootcamp.title,
+              description: bootcamp.description
+            }
+          })
+          setInstructors(_ => {
+            return [bootcamp.instructorName]
+          })
+          toast.success("Bootcamp Details fetched successfully", {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      }catch(err){
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }finally{
+        setLoading(_ => false);
+      }
+    })()
+    flag.current = true;
     return () => console.log("Leaving Details page");
   }, [])
 
@@ -1480,7 +1769,7 @@ export function BootcampDetails({}){
 
   return(
     <Admin header="ADMIN">
-      {/* {loading && <Loader />} */}
+      {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center mb-5" style={{width: "80%"}}>
@@ -1572,6 +1861,8 @@ export function BootcampDetails({}){
 }
 
 
+
+// BOOTCAMPS COMPONENT
 export function Bootcamps() {
   const {adminFunctions: { fetchBootcamps } } = useAuth();
   const {getItem} = useLocalStorage();
@@ -1679,6 +1970,8 @@ export function Bootcamps() {
   );
 }
 
+
+// CREATEBOOTCAMP COMPONENT
 export function CreateBootcamp(){
   const {adminFunctions: { addBootcamp, fetchBootcamps, updateBootcamp}, } = useAuth(); 
   const {getItem} = useLocalStorage();
@@ -1715,6 +2008,9 @@ export function CreateBootcamp(){
             let found = data.find(d => d._id === id);
             found.startDate = found.startDate.split("T")[0];
             found.endDate = found.endDate.split("T")[0];
+            found.instructor = found.instructorName;
+            delete found.instructorName;
+            console.log(found);
             setFormstate(_ => found);
             toast.success("Bootcamp found successfully", {
               position: "top-right",
@@ -1919,6 +2215,8 @@ export function CreateBootcamp(){
     </Admin>
   );
 }
+
+// BOOTCAMPROW COMPONENT
 export function BootcampRow({index, title, detail, time, date, type,duration, admin, clickHandler=null }){
   return (
     <tr className={clsx.user__info_card} onClick={clickHandler}>
@@ -1945,6 +2243,8 @@ export function BootcampRow({index, title, detail, time, date, type,duration, ad
   )
 }
 
+
+// ADDSYLLABUS COMPONENT
 function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
   const [newSyllabus, setNewSyllabus] = useState({
     title: "",
@@ -2038,29 +2338,27 @@ function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
 }
 
 
-
+// CREATECOURSE COMPONENT
 export function CreateCourse() {
-  const {teacherFunctions: { addCourse }, } = useAuth(); const {getItem} = useLocalStorage();
-
+  const {adminFunctions: { fetchCourses, updateCourse }, teacherFunctions: { addCourse } } = useAuth(); 
+  const {getItem} = useLocalStorage();
+  const location = useLocation();
+  const flag = useRef(false);
   let userdata = getItem(KEY);
-  const {syllabuses, addtoSyllabus} = useSyllabus();
+  const {syllabuses, addtoSyllabus, setSyllabusses} = useSyllabus();
   const [formstate, setFormstate] = useState({
     name: "",
     categoryName: "",
     description: "",
+    type: "",
+    price: "",
     faqs: [],
   });
   const [packageState, setPackageState] = useState({
     title: "",
-    description: "",
-    price: ""
+    description: ""
   })
-
-  const [open, setOpen] = useState(false);
-
-
-  const [loading, setLoading] = useState(false);
-  const packages = [
+  const [packages, setPackages] = useState([
     {
       value: "cohort",
       name: "Cohort",
@@ -2073,7 +2371,60 @@ export function CreateCourse() {
       value: "one-one",
       name: "One-One Mentorship",
     },
-  ];
+  ])
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(location.search ? true : false);
+  useEffect(() => {
+    if(flag.current) return;
+    if(location.search){
+      console.log(location.search);
+      const id = location.search.split("=")[1];
+      (async() => {
+        try{
+          const res = await fetchCourses(userdata?.token);
+          const {message, success, statusCode} = res;
+          if(!success) throw new AdvancedError(message, statusCode);
+          else {
+            const {data} = res;
+            const course = data.find(d => d.courseId === id);
+            console.log(course);
+            setFormstate(old => {
+              return {
+                ...old,
+                name: course.name,
+                description: course.description,
+                type: course.type,
+                categoryName: course.category,
+                price: course.price
+              }
+            })
+            setPackages(_ => {
+              return course.packages.map(p => {
+                return {
+                  name: p.title,
+                  value: p.title
+                }
+              })
+            })
+          }
+        }catch(err){
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }finally{
+          setLoader(_ => false);
+        }
+      })()
+    }
+    flag.current = true;
+  }, [])
 
   function changeHandler(e) {
     const { name, value } = e.target;
@@ -2103,14 +2454,12 @@ export function CreateCourse() {
         formstate.name === "" ||
         formstate.categoryName === "" ||
         formstate.description === "" ||
-        packageState.price === "" ||
-        packageState.title === ""
+        formstate.price === ""
       )
         throw new AdvancedError("All fields are required", 0);
-      const res = await addCourse({...formstate, syllabus: [...syllabuses], packages: [packageState]}, userdata.token);
+      console.log({...formstate, syllabus: [...syllabuses], packages: [packageState]})
+      const res = location.search ? await updateCourse(userdata.token, location.search.split("=")[1], {...formstate, syllabus: [...syllabuses], packages: [...packages]}) : await addCourse({...formstate, syllabus: [...syllabuses], packages: [packageState]}, userdata.token);
       const { success, message, statusCode } = res;
-
-
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         toast.success(message, {
@@ -2147,6 +2496,7 @@ export function CreateCourse() {
   };
   return (
     <Admin header="Create Course">
+      {loader && <Loader />}
       <div className={clsx.admin_profile}>
         <div className={clsx.edit__profile}>
           <form className="form" onSubmit={submitHandler}>
@@ -2166,7 +2516,7 @@ export function CreateCourse() {
             />
 
             <div className={clsx.form_group}>
-              <label htmlFor={"brief"}>
+              <label htmlFor={"description"}>
                 Brief Description of course content
               </label>
               <textarea
@@ -2192,7 +2542,7 @@ export function CreateCourse() {
                 <option value="PACKAGE">Package</option>
               </select>
             </div>
-            <div className={clsx.form_group}>
+           {!location.search && (<div className={clsx.form_group}>
               <label htmlFor={"package"}>Package</label>
               <select
                 rows="5"
@@ -2208,19 +2558,18 @@ export function CreateCourse() {
                   </option>
                 ))}
               </select>
-            </div>
+            </div>)}
 
 
             <Input
               label="Price"
               name="price"
               type="text"
-              handleChange={changePackageStateHandler}
-              value={packageState.price}
+              handleChange={changeHandler}
+              value={formstate.price}
             />
 
-
-              <div className={clsx.form_group}>
+            <div className={clsx.form_group}>
               <label>Syllabus</label>
               {
                 syllabuses.length !== 0 ? syllabuses.map(({title, description}, i) => (
@@ -2240,7 +2589,7 @@ export function CreateCourse() {
             </button>
 
             {loading ? (
-              <button className="button button-lg log_btn w-100 mt-3">
+              <button className="button button-lg log_btn w-100 mt-3" disabled={loading}>
                 <div className="spinner-border" role="status">
                   <span className="visually-hidden">Loading...</span>
                 </div>
@@ -2250,7 +2599,7 @@ export function CreateCourse() {
                 className="button button-lg log_btn w-100 mt-3"
                 type="submit"
               >
-                Save
+                {location.search ? "Update" : "Save"}
               </button>
             )}
           </form>
@@ -2267,6 +2616,8 @@ export function CreateCourse() {
 }
 
 
+
+// FEES COMPONENT
 export function Fees() {
   const tableHeaders = ["No", "Name", "Date", "Email", "Paid", "Amount Unpaid"];
   const tableContents = [
@@ -2341,6 +2692,8 @@ export function Fees() {
 }
 
 
+
+// STUDENT COMPONENT
 export function Student() {
   const [studentList, setStudentList] = useState([]);
   const {getItem} = useLocalStorage();
@@ -2561,6 +2914,8 @@ export function Student() {
   );
 }
 
+
+// PROFILEEDIT COMPONENT
 export function Edit() {
   const {
     adminFunctions: { updateAvatar, updateProfile },

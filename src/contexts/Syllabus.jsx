@@ -29,7 +29,7 @@ const SyllabusContextProvider = ({children}) => {
     }
 
     return (
-        <SyllabusContext.Provider value={{syllabuses, setIsnew, addtoSyllabus}} >
+        <SyllabusContext.Provider value={{syllabuses, setIsnew, addtoSyllabus, setSyllabusses}} >
             {children}
         </SyllabusContext.Provider>
     )
