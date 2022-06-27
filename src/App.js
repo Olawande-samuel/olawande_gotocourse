@@ -8,7 +8,7 @@ import Login from "./pages/User/Login";
 import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
-import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, 
+import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails,
   CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails} from "./pages/Dashboard/Admin";
 import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit,
    Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps} from "./pages/Dashboard/Students";
@@ -91,9 +91,10 @@ function App() {
               <Route path="bootcamps/details/:id" element={<BootcampDetails />} />
               <Route path="bootcamps/create" element={<CreateBootcamp />} />
               <Route path="courses" element={<Courses />} />
+              <Route path="courses/details/:id" element={<AdminCourseDetails />} />
               <Route path="courses/create" element={<AdminCreateCourse />} />
               <Route path="courses-categories" element={<AdminCategories />} />
-              <Route path="courses-categories/details/:id" element={<AdminCourseDetails />} />
+              <Route path="courses-categories/details/:id" element={<AdminCategoryDetails />} />
               <Route path="courses-categories/new" element={<CreateCourseCategory />} />
               <Route path="teachers/approve" element={<Approve />} />
               <Route path="profile/edit" element={<AdminEdit />} />
