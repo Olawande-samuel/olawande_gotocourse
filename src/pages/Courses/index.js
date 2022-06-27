@@ -5,6 +5,7 @@ import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { BsStarFill } from "react-icons/bs";
 import { ToastContainer, toast } from "react-toastify";
+import StarRatings from "react-star-ratings"
 import {categories as allCategories} from "../../data"
 import {
   Cyber,
@@ -1064,7 +1065,15 @@ console.log("pre",preview)
                     <div className={style.rating_wrapper}>
                       <p className={style.rating}>Rating</p>
                       <span className={style.rating_stars}> 
-                       <Rating  ratingValue={4} size={18} initialValue={4} />
+                       <StarRatings
+                        rating={4}
+                        starRatedColor="yellow"
+                        starDimension={18} 
+                        starSpacing="2px"
+                        numberOfStars={5}
+                        name='rating'
+                        fillColor="red" 
+                        transition />
 </span>
                       <span className={style.rating_total}></span>
                     </div>

@@ -25,3 +25,5 @@ export const breakpoints = {
 
 export const baseURL = "https://loftywebtech.com/gotocourse/api/v1";
 
+export const KEY = "gotocourse-userdata"
+
