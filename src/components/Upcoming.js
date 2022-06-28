@@ -62,15 +62,15 @@ const Upcoming = () => {
         else if (statusCode === 1) {
           const { data } = res;
           setBootcamps( _ => data);
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          // toast.success(message, {
+          //   position: "top-right",
+          //   autoClose: 4000,
+          //   hideProgressBar: true,
+          //   closeOnClick: true,
+          //   pauseOnHover: true,
+          //   draggable: true,
+          //   progress: undefined,
+          // });
           console.log(data);
         } else {
           throw new AdvancedError(message, statusCode);
