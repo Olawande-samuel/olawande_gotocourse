@@ -153,7 +153,6 @@ const toggleSidebar = ()=>{
                         </NavLink>
                     ))
                 }
-            </div>
             <div className="button_wrapper text-center" style={{marginTop:"3rem"}}>
                 <motion.a 
                 whileHover={{
@@ -163,6 +162,7 @@ const toggleSidebar = ()=>{
                 href="https://gotocourse.com/dashboard" className="btn btn-primary" style={{padding:"10px 28px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}>Go to Class</motion.a>
             </div>
             <LogoutButton />
+                </div>
 
         </div>
         <div onClick={toggleSidebar} className={`d-lg-none ${clsx.overlay} ${generalState.showSidebar ? clsx.overlayopen :clsx.overlayclose}`}></div>

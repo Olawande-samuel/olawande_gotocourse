@@ -208,7 +208,7 @@ const NavList = ({ dropRef }) => {
 
           <div
             className="text-capitalize"
-            style={{cursor:"pointer"}}
+            style={{cursor:"pointer", fontSize:"14px"}}
             onClick={()=>{
               console.log(list.logo) 
               delete list.logo
@@ -216,7 +216,7 @@ const NavList = ({ dropRef }) => {
               navigate(`/categories/${list.name.split(" ").join("-").toLowerCase()}`)
             }}
           > 
-            {(list.name).toLowerCase()}
+            {list.name}
            </div>
           </li>
         ))}

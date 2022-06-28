@@ -893,11 +893,14 @@ console.log("pre",preview)
   }
 
  async function addToWishList(){
+    const data = getItem("gotocourse-courseInfo");
+
     const  userData = getItem(KEY)
+    console.log(userData)
     if(userData !== null){
       try {
         setLoading(true)
-        const response =  await wishlistCourse(123, userData.token)
+        const response =  await wishlistCourse(data.courseId, userData?.token)
         const {success, message, statusCode} = response
         if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
         toast.success(message, {
