@@ -431,9 +431,23 @@ padding: 13px 0 ;
   font-weight: 300;
 }
 
-.degree .dev_card:nth-child(2) {
+/* .degree .dev_card:nth-child(2) {
   background-color:var(--theme-orange) !important;
   color: white!important;
+} */
+
+.devbox_title {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 30px;
+  color: var(--obsidian);
+}
+.dev_list {
+  display: grid;
+  grid-template-columns:repeat(auto-fit, minmax(min(200px, 100%), 290px));
+  justify-content:center;
+  gap: 2rem;
+  row-gap: 2.5rem;
 }
 /* **********************SERVICES******************************* */
 .wrapper {
@@ -1401,6 +1415,13 @@ line-height: 16px;
   /* .services .title {
     line-height: 40px;
   } */
+
+  .dev_list {
+    display: grid;
+    grid-template-columns:repeat(auto-fit, minmax(min(289px, 100%), 1fr));
+    gap: 2rem;
+    row-gap: 2.5rem;
+  }
   .learning,
   .transition,
   .testimonials,
@@ -1632,7 +1653,7 @@ line-height: 16px;
   color: var(--white);
 }
 
-#sidebar__items a {
+#sidebar__items a:not(:last-child) {
   margin: 5px 0px;
   padding: 5px;
   border-radius: 0px 10px 10px 0px;

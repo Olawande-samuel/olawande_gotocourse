@@ -6,12 +6,12 @@ const data = [
     {
         image:Transition,
         title:"Career Transition",
-        text:"Are you looking to switch jobs or change your current career ? Gotocourse can help make that transition with ease",
+        text:"Are you looking to switch jobs or change your current career ? Gotocourse can help make that transition with ease.",
     },
     {
         title:"Career Advancement",
         image:Advancement,
-        text:"Fast track your career and earn that long deserved promotion at work. Gotocourse is here to help upskill ",
+        text:"Fast track your career and earn that long deserved promotion at work. Gotocourse is here to help upskill.",
     },
     {
         image:Planning,
@@ -33,7 +33,7 @@ export default function Development(){
                 Take control of your career path and position yourself for advancement
                 </p>
             </header>
-            <div className="bootcamp_list">
+            <div className="dev_list">
                     {data.map((career) => (
                         <DevelopmentBox {...career} />
                     ))}
@@ -47,15 +47,15 @@ function DevelopmentBox({image, title, text, link}){
 
     return (
         <div className="card bootcamp_card dev_card border-none text-dark">
-            <div className="card-body d-flex justify-content-around">
-                <div className="bootcamp_box_left me-1" >
-                <img src={image} alt={title} className="img-fluid" />
+            <div className="card-body d-flex flex-column justify-content-around" style={{padding:"2rem"}}>
+                <div className="bootcamp_box_left mx-auto mb-4" style={{height:"80px"}}>
+                    <img src={image} alt={title} className="img-fluid" style={{width:"160px", height:"100%" }}/>
                 </div>
                 <div className="career_box_right d-flex flex-column ">
                 <header style={{ marginBottom: "0.1rem" }}>
-                    <h3 className="bootcampBox_title" style={{lineHeight:"24px"}}>{title}</h3>
+                    <h3 className="devbox_title text-center" style={{lineHeight:"24px"}}>{title}</h3>
                 </header>
-                <p className="details" style={{fontSize:"14px", lineHeight:"unset"}}>{text}</p>
+                <p className="details" style={{fontSize:"14px", lineHeight:"24px"}}>{text}</p>
                 </div>
             </div>
          </div>

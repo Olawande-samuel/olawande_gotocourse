@@ -20,6 +20,8 @@ import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
 import { BootcampRow, UserInfoCard } from "../Admin";
 import { useLocalStorage } from "../../../hooks";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { Box, Modal } from "@mui/material";
 
 
 
@@ -333,8 +335,8 @@ export function Edit(){
 
 export function Bootcamps() {
     const {studentFunctions: { fetchBootcamps} } = useAuth();
-    const {getItem} = useLocalStorage();
     const navigate = useNavigate();
+    const {getItem} = useLocalStorage();
     const flag = useRef(false);
     let userdata = getItem(KEY);
     const [courseList, setCourseList] = useState(["hi"])
@@ -479,8 +481,66 @@ export function Classes(){
     )
 }
 export function Wishlist(){
-    const {generalState: {isMobile, userdata}} = useAuth();
+    const {generalState: {isMobile}, setGeneralState, generalState, studentFunctions:{fetchWishlist}} = useAuth();
+    const [wishlists, setWishlists]= useState([])
+
+    const {getItem} = useLocalStorage();
+    let userdata = getItem(KEY);
+
+    const flag = useRef(false);
+     useEffect(()=>{
+        if(flag.current) return;
+        (async () => {
+          try {
+            setGeneralState({...generalState, loading: true})
+            const res = await fetchWishlist(userdata?.token);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+              const { data } = res;
+              if(data.length > 0){
     
+                setWishlists(data);
+                toast.success(message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            }else{
+              toast.error("wishlist is empty", {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            }
+            
+            } else {
+              throw new AdvancedError(message, statusCode);
+            }
+          } catch (err) {
+            toast.error(err.message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }finally{
+            setGeneralState({...generalState, loading: false});
+          }
+        })()
+        flag.current = true;
+    },[])
     return ( 
         <Students isMobile={isMobile} userdata={userdata}>               
             <div className={clsx.students_profile}>
@@ -489,11 +549,11 @@ export function Wishlist(){
                 </header>
                 <div className={clsx.classes}>
                     <div className={clsx.students_wishlist}>
-                        <WishCard />
-                        <WishCard />
-                        <WishCard />
-                        <WishCard />
-                        <WishCard />
+                        {wishlists.length > 0 ? wishlists.map((item, index)=>(
+                            <WishCard key={index} {...item} />
+                        )) : 
+                        <p className="text-center">Nothing to see here</p>
+                        }
                     </div>
                 </div>
             </div>
@@ -501,7 +561,11 @@ export function Wishlist(){
     )
 }
 
-function WishCard(){
+function WishCard({id}){
+    const [open, setOpen]= useState(false);
+    function closeModal(){
+        setOpen(false)
+    }
     return(
         <div className="card wish">
             <div className="card-body wish-card-body">
@@ -510,14 +574,89 @@ function WishCard(){
                 </div>
             <h5 className="fw-bold">Project Management</h5>
             <p className="">the process of leading the work of a team to achieve all project goals within the given constraints.</p>
-            <div>
-                <button className="btn btn-plain" style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)", fontWeight:"bold"}}>Register today</button>
+            <div className="d-flex justify-content-between">
+                <button className="btn btn-outline-primary" style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)", fontWeight:"bold", padding:"0.5rem 1rem"}}>Register today</button>
+                <button className="btn btn-outline-primary" onClick={()=>setOpen(true)} style={{border:"1px solid var(--theme-orange)", color:"var(--theme-orange)", fontWeight:"bold", padding:"0.5rem 1rem"}}>
+                    <i><FaRegTrashAlt /></i>
+                </button>
             </div>
             </div>
+            <DeleteModal open={open} handleClose={closeModal} id={id} />
         </div>
     )
 }
 
+function DeleteModal({id,open,handleClose}){
+    const {generalState: {isMobile}, setGeneralState, generalState, studentFunctions:{deleteFromWishlist}} = useAuth();
+    const {getItem} = useLocalStorage();
+    let userdata = getItem(KEY);
+    console.log(id)
+    const style = {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        minWidth: 600,
+        background: "#fff",
+        border: "1px solid #eee",
+        borderRadius: "10px",
+        boxShadow: 24,
+        p: 6,
+        padding: "4rem 2rem",
+    };
+
+    async  function removeCourse(e){
+        e.preventDefault();
+        try{
+            setGeneralState({...generalState, loading: true});
+            const res =  await deleteFromWishlist(userdata?.token, id)
+            const {success, message, statusCode} = res;
+            if(!success) throw new AdvancedError(message, statusCode);
+            else {
+                const {data} = res;
+                console.log(data);
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        }catch(err){
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }finally {
+            setGeneralState({...generalState, loading: false});
+        }
+    }
+    return(
+        <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box style={style}>
+                <h4 className="text-center mb-4">Delete From WishList ?</h4>
+                <div className="d-flex justify-content-around">
+                <button className="btn btn-outline-primary" onClick={handleClose}  style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)", fontWeight:"bold", padding:"0.5rem 1rem"}}>Cancel</button>
+                <button className="btn btn-outline-primary" onClick={removeCourse} style={{border:"1px solid var(--theme-orange)", color:"var(--theme-orange)", fontWeight:"bold", padding:"0.5rem 1rem"}}>Yes</button>
+                </div>
+            </Box>
+        </Modal>
+
+    )
+}
 
 export function Courses(){
     const {generalState: {isMobile, loading}, generalState, setGeneralState, studentFunctions: {fetchCourses}} = useAuth();
@@ -685,7 +824,7 @@ export function History(){
 
     
     const tableHeaders = ["No", "Courses", "Status", "Date", "Amount Paid"]
-    const tableContents = [
+    const tableContents = courses.length > 0 ? courses : [
         {
             status: "Approved",
             course: "Cybersecurity",
