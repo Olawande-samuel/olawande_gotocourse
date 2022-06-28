@@ -245,7 +245,7 @@ export function CourseInfo() {
                 >
                   Edit
                 </button>
-              {btnloading ? (
+              {/* {btnloading ? (
                 <button
                   className="btn btn-outline"
                   style={{
@@ -276,7 +276,7 @@ export function CourseInfo() {
               >
                 Delete
               </button>
-              )}
+              )} */}
             </div>
           </form>
         </div>

@@ -109,8 +109,8 @@ export const categories = [
     
       },
     { 
-        iconImg:"",
-        bannerImg:banner,
+      bannerImg:banner,
+      iconImg:"",
         categoryId:"",
         name:"PRODUCT DESIGN",
         description:"Product design is a discipline that employs creative thinking to tailor products and services to solve consumer problems and better consumer experience. Product design is evident in every product. From the evolving form of Coca-cola bottles (which enables a better grip and catches the attention of potential buyers) to the unique designs of your bedside lamps. Product design may require coding if the envisioned result is digital, such as software.",
@@ -143,8 +143,8 @@ export const categories = [
       },
     
     { 
+      bannerImg:banner,
         iconImg:"",
-        bannerImg:banner,
         categoryId:"",
         name:"PROJECT MANAGEMENT",
         description:"Project Management is a complementary discipline to fields across various industries that employs processes, techniques, knowledge and skills to achieve specific project requirements.",
@@ -180,8 +180,8 @@ export const categories = [
         ],
       },
     { 
+      bannerImg:banner,
         iconImg:"",
-        bannerImg:banner,
         categoryId:"",
         name:"RISK MANAGEMENT",
         description:"Risk management is the process of identifying, evaluating, prioritizing and controlling threats to an organization's financial resources. These threats arise from various sources such as natural disasters, economic uncertainties, legal liabilities, or even accidents.",

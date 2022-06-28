@@ -1196,6 +1196,8 @@ function Info({ title, content }) {
 export function Approve() {
   const location = useLocation();
   const [data, setData] = useState(null);
+  const {getItem} = useLocalStorage();
+  const { adminTeacherFunctions: { verify, verify_pledre }, setGeneralState, } = useAuth();
   const info = [
     {
       title: "Brief Introduction",
@@ -1214,44 +1216,72 @@ export function Approve() {
       content: "Cybersecurity, UX, Data Analysis",
     },
   ];
-  const tableContents = [
-    {
-      name: "Melanie Grutt",
-      img: img01,
-      date: "Feb 24",
-      email: "melanie@gmail.com",
-      approve: true,
-    },
-    {
-      name: "Kiera Danlop",
-      img: img02,
-      date: "Mar 23",
-      email: "kiera@gmail.com",
-      approve: false,
-    },
-    {
-      name: "Melanie Grutt",
-      img: img01,
-      date: "Feb 24",
-      email: "melanie@gmail.com",
-      approve: true,
-    },
-  ];
+  
   useEffect(() => {
-    const email = location.search.split("=")[1];
-    console.log(email);
-
-    setData((_) => {
-      return tableContents.find((t) => t.email === email);
-    });
+    const teacherInfo = getItem("gotocourse-teacherDetails")
+    setData(teacherInfo);
   }, []);
+
+  let accessPledre = false;
+
+ async function handleVerification( e, type, id){
+  e.preventDefault();
+    const userdata = getItem(KEY)
+    let item = {
+      userId: id,
+    };
+    try {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: true,
+        };
+      });
+
+      const res = type === "approve" ? await verify(item, userdata?.token) : await verify_pledre(item, userdata?.token);
+      console.log('res', res)
+      const { message, success, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        //do somethings
+        localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
+        type ===  "approve" ? setData({...data, isVerified: !data?.isVerified}) : setData({...data, accessPledre: !data.accessPledre})
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }) 
+    } finally{
+        setGeneralState((old) => {
+          return {
+            ...old,
+            loading: false,
+          };
+        });
+    }
+  }
   return (
     <Admin header="Approval">
       <div className={clsx["admin_profile"]}>
         <div className={clsx["admin_profile_top"]}>
           <div className={clsx["admin_profile_top_img"]}>
             <img
-              src={data ? data.img : avatar}
+              src={data ? data.profileImg : avatar}
               style={{ borderRadius: 10 }}
               width="100%"
               alt="Avatar"
@@ -1259,19 +1289,39 @@ export function Approve() {
           </div>
         </div>
         <div className={clsx["admin_profile_main"]}>
-          <h1>{data ? data.name : "Olu Jacobs"}</h1>
+          <h1>{data ? `${data?.firstName} ${data?.lastName}` : "Olu Jacobs"}</h1>
 
           <div className={clsx.admin__profile_info}>
             {info.map(({ title, content }, i) => (
               <Info title={title} content={content} key={i} />
             ))}
-
+            <div className="form-group my-3">
+              <label htmlFor="accessPledre" className="form-label generic_label">Access Pledre</label>
+              <Switch onClick={(e)=>handleVerification(e, "pledre", data?.userId)} checked={data?.accessPledre} />
+            </div>
+            <div className="form-group my-3">
+              <label htmlFor="approveMentorship" className="form-label generic_label">Approve Mentorship</label>
+              <Switch onClick={(e)=>handleVerification(e, "mentor", data?.userId)} checked={accessPledre} />
+            </div>
+            <div className="form-group my-3">
+              <label htmlFor="level" className="form-label generic_label">Assign Level</label>
+              <select name="level" id="level" className="form-select" style={{width: "unset"}}>
+                <option value="">Select a level</option>
+                <option value="">1</option>
+                <option value="">2</option>
+                <option value="">3</option>
+                <option value="">4</option>
+                <option value="">5</option>
+              </select>
+              </div> 
+              
             <button
               className="button button-lg log_btn w-50 mt-3"
-              style={{ backgroundColor: data?.approve && "red" }}
+              style={{ backgroundColor: data?.isVerified && "red" }}
               type="submit"
+              onClick={(e)=>handleVerification(e, "approve", data?.userId) }
             >
-              {data?.approve ? "Revoke" : "Approve"}
+              {data?.isVerified ? "Revoke" : "Approve Application"}
             </button>
           </div>
         </div>
@@ -1287,6 +1337,7 @@ export function UserInfoCard({
   img,
   id,
   name,
+  details,
   date,
   email,
   isActive = null,
@@ -1312,6 +1363,7 @@ export function UserInfoCard({
   start_date,
   course_status,
   enrolled,
+  level,
   packages=[],
   showDetailsHandler = () => {return},
   approveHandler = () => {return},
@@ -1327,7 +1379,7 @@ export function UserInfoCard({
   return (
     <tr
       className={clsx.user__info_card}
-      onClick={(e) => ((comp === 'Category') || (comp === 'Courses')) ? showDetailsHandler(e, id) : approveHandler(e, email)}
+      onClick={(e) => ((comp === 'Category') || (comp === 'Courses')) ? showDetailsHandler(e, id) : approveHandler(e, email, details)}
     >
       <td className={clsx.user__info}>{num + 1}.</td>
       {user && (
@@ -1426,6 +1478,11 @@ export function UserInfoCard({
           </span>
         </td>
       )}
+      {level && (
+        <td className={clsx.user__email}>
+          <span>{level}</span>
+        </td>
+      )}
     </tr>
   );
 }
@@ -1483,11 +1540,11 @@ export function Teachers() {
     })();
     flag.current = true;
   }, []);
-  const tableHeaders = ["No", "Name", "Email", "Access Pledre", "Verified"];
+  const tableHeaders = ["No", "Name", "Email", "Access Pledre", "Level"];
 
-  function approveHandler(e, email) {
+  function approveHandler(e, email, details) {
     console.log(e.target, email);
-
+    localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(details))
     if (email) navigate(`approve?email=${email}`);
   }
   return (
@@ -1504,18 +1561,19 @@ export function Teachers() {
                 ))}
               </thead>
               <tbody>
-                {teachers?.length > 0 ? teachers?.map(({ profileImg, email, firstName, lastName, accessPledre, isVerified }, i) => (
+                {teachers?.length > 0 ? teachers?.map((teacher, i) => (
                   <UserInfoCard
                     key={i}
                     user={true}
-                    firstName={firstName}
-                    lastName={lastName}
-                    img={profileImg}
+                    firstName={teacher.firstName}
+                    lastName={teacher.lastName}
+                    img={teacher.profileImg}
                     num={i}
-                    email={email}
-                    isActive={isVerified}
+                    email={teacher.email}
+                    level={1}
+                    details={teacher}
                     approveHandler={approveHandler}
-                    accessPledre={accessPledre}
+                    accessPledre={teacher.accessPledre}
                   />
                 )) : <h5 style={{textAlign:'center'}}>No Teachers found</h5>}
               </tbody>

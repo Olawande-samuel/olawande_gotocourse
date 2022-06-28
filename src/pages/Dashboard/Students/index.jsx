@@ -552,7 +552,7 @@ export function Wishlist(){
                         {wishlists.length > 0 ? wishlists.map((item, index)=>(
                             <WishCard key={index} {...item} />
                         )) : 
-                        <p className="text-center">Nothing to see here</p>
+                        <p className="text-center mx-auto">Nothing to see here</p>
                         }
                     </div>
                 </div>
@@ -561,10 +561,14 @@ export function Wishlist(){
     )
 }
 
-function WishCard({id}){
+function WishCard({courseId:id, courseName, courseDescription}){
+    const navigate = useNavigate();
     const [open, setOpen]= useState(false);
     function closeModal(){
         setOpen(false)
+    }
+    function handleNavigate(){
+        navigate(`/categories/`)
     }
     return(
         <div className="card wish">
@@ -572,10 +576,10 @@ function WishCard({id}){
                 <div style={{width:"50px", height:"50px", borderRadius:"50%"}}>
                     <img src={trello} alt="icon" className="img-fluid" />
                 </div>
-            <h5 className="fw-bold">Project Management</h5>
-            <p className="">the process of leading the work of a team to achieve all project goals within the given constraints.</p>
+            <h5 className="fw-bold">{courseName}</h5>
+            <p className="">{courseDescription}</p> 
             <div className="d-flex justify-content-between">
-                <button className="btn btn-outline-primary" style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)", fontWeight:"bold", padding:"0.5rem 1rem"}}>Register today</button>
+                <button className="btn btn-outline-primary" onClick={handleNavigate} style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)", fontWeight:"bold", padding:"0.5rem 1rem"}}>Register today</button>
                 <button className="btn btn-outline-primary" onClick={()=>setOpen(true)} style={{border:"1px solid var(--theme-orange)", color:"var(--theme-orange)", fontWeight:"bold", padding:"0.5rem 1rem"}}>
                     <i><FaRegTrashAlt /></i>
                 </button>
