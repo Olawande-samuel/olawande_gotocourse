@@ -11,7 +11,7 @@ import lere from "../../images/lere.png";
 import { useLocalStorage } from "../../hooks";
 import { toast } from "react-toastify";
 import { AdvancedError } from "../../classes";
-
+import {witnesses, Card as MentorsCard} from "../../components/Mentors"
 
 const KEY = "gotocourse-userdata";
 
@@ -28,7 +28,7 @@ const nav = [
   { name: "Software Development", value: "Software Development" },
   { name: "IT Service Management", value: "IT Service Management" },
 ];
-const All = () => {
+const All = ({type}) => {
   const [search, setSearch] = React.useState("");
 
   function handleChange(e) {
@@ -38,7 +38,10 @@ const All = () => {
 
   const {setGeneralState} = useAuth();
   const navigate = useNavigate()
-    
+
+  // fetch teachers/mentors
+  useEffect(()=>{},[])
+  console.log("courseList",courseList)
   return (
     <Courses>
       <div className="container">
@@ -47,8 +50,18 @@ const All = () => {
             <NavItems key={item.name} item={item} handleChange={handleChange} search={search} />
           ))}
         </section>
-        <main className={style.main}>
-          {courseList.filter(item=> item.subtitle.includes(search)).map((item) => (
+        <main className={`mentors_list_main ${style.main}`}>
+          {
+          type === "mentors" ?  
+          witnesses
+          // .filter(item=> item.subtitle.includes(search))
+          .map((item) => (
+              <div className="mentors_list_card">
+                <MentorsCard  item={item} />
+              </div>
+          ))
+          :
+          courseList.map((item) => (
             <div style={{cursor: 'pointer'}} onClick={() => {
               setGeneralState(old => {
                 return {
@@ -63,7 +76,7 @@ const All = () => {
               })
               navigate(item.author.split(" ").join("-"))
             }}>
-              <CourseCard img={item.img} title={item.title} subtitle={item.subtitle} author={item.author} backgroundColor="backgroundColor" />
+              <CourseCard courseImg={item.img} name={item.title} category={item.subtitle} instructorName={item.author} backgroundColor="backgroundColor" />
             </div>
           ))}
         </main>

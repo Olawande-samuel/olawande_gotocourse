@@ -150,50 +150,51 @@ const Career = () => {
   const [categories, setCategories] = useState([])
   const ref = useRef(false);
 
-  // useEffect(()=>{
-  //   if(ref.current) return
-  //   (async()=>{
-  //     try{
-  //       setGeneralState({...generalState, loading: true})
-  //       const res = await fetchCategories();
-  //       const {success, message, statusCode, data} = res;
-  //       setGeneralState({...generalState, loading: false})
 
-  //       if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-  //       const arr = []
-  //       data.forEach((item, index)=>{
+  // useEffect(()=>{
+  //   const arr = []
+  //   allCategories.forEach((item, index)=>{
   //         let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
 
   //         arr.push(merged)
   //       })
   //       setCategories(arr)
       
-  //     }catch(err){
-  //       setGeneralState({...generalState, loading: false})
-        
-  //   }
-  //   })()
-  //   ref.current = true
-  // },[])
-  useEffect(()=>{
-    const arr = []
-    allCategories.forEach((item, index)=>{
-          let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
-
-          arr.push(merged)
-        })
-        setCategories(arr)
-      
     
-  },[])
+  // },[])
 
+  useEffect(()=>{
+    if(ref.current) return
+    (async()=>{
+      try{
+        setGeneralState({...generalState, loading: true})
+        const res = await fetchCategories();
+        const {success, message, statusCode, data} = res;
+        setGeneralState({...generalState, loading: false})
+
+          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+          const arr = []
+          data.forEach((item, index)=>{
+            let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
+
+            arr.push(merged)
+          })
+          setCategories(arr)
+         
+      
+    }catch(err){
+        setGeneralState({...generalState, loading: false})
+    }
+    })()
+    ref.current = true
+  },[])
 
   function getRandomArbitrary(min, max) {
     return Math.ceil(Math.random() * (max - min) + min)
   }
 
   return (
-    <section className="career">
+    <section className="career" id="categories">
       <div className="container">
 
       <header className="text-center">

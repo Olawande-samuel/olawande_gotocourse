@@ -151,6 +151,36 @@ export const adminTeacherFunctions = {
                 statusCode: err.statusCode
             }
         }
+    },
+    makeMentor: async function(_data, token){
+        try{
+            console.log(_data)
+            const res = await axios.patch(`${baseURL}/admin/teacher/pledre/toggle`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log(res);
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
     }
 
 }

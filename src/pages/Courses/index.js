@@ -304,57 +304,57 @@ export const Categories = () => {
   const [searchTerm, setSearchTerm] = useState("")
   
   const ref = useRef(false);
-  useEffect(()=>{
-    const arr = []
-    allCategories.forEach((item, index)=>{
-      let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
-      arr.push(merged)
-    })
-    setCategories(arr)
-  },[])
-
   // useEffect(()=>{
-  //   if(ref.current) return
-  //   (async()=>{
-  //     try{
-  //       setGeneralState({...generalState, loading: true})
-  //       const res = await fetchCategories();
-  //       const {success, message, statusCode, data} = res;
-  //       setGeneralState({...generalState, loading: false})
-
-  //         if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-  //         const arr = []
-  //         data.forEach((item, index)=>{
-  //           let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
-
-  //           arr.push(merged)
-  //         })
-  //         setCategories(arr)
-  //         toast.success(message, {
-  //           position: "top-right",
-  //           autoClose: 4000,
-  //           hideProgressBar: true,
-  //           closeOnClick: true,
-  //           pauseOnHover: true,
-  //           draggable: true,
-  //           progress: undefined,
-  //         });
-      
-  //   }catch(err){
-  //       setGeneralState({...generalState, loading: false})
-  //       toast.error(err.message, {
-  //           position: "top-right",
-  //           autoClose: 4000,
-  //           hideProgressBar: true,
-  //           closeOnClick: true,
-  //           pauseOnHover: true,
-  //           draggable: true,
-  //           progress: undefined,
-  //       });
-  //   }
-  //   })()
-  //   ref.current = true
+  //   const arr = []
+  //   allCategories.forEach((item, index)=>{
+  //     let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
+  //     arr.push(merged)
+  //   })
+  //   setCategories(arr)
   // },[])
+
+  useEffect(()=>{
+    if(ref.current) return
+    (async()=>{
+      try{
+        setGeneralState({...generalState, loading: true})
+        const res = await fetchCategories();
+        const {success, message, statusCode, data} = res;
+        setGeneralState({...generalState, loading: false})
+
+          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+          const arr = []
+          data.forEach((item, index)=>{
+            let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
+
+            arr.push(merged)
+          })
+          setCategories(arr)
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+      
+    }catch(err){
+        setGeneralState({...generalState, loading: false})
+        toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+    })()
+    ref.current = true
+  },[])
 
 
   function getRandomArbitrary(min, max) {
@@ -748,7 +748,8 @@ export const CourseDetail = ({preview}) => {
     <Courses>
       <main className={style.details_main}>
         <div className={style.banner}>
-          <img src={categoryDetails?.bannerImg ? categoryDetails?.bannerImg : banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} />
+          {/* <img src={categoryDetails?.bannerImg ? categoryDetails?.bannerImg : banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} /> */}
+          <img src={banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} />
           <div className="container py-5 position-relative">
             <div className={style.box}>
               {categoryDetails?.iconImg && <img src={categoryDetails?.iconImg} alt="" /> }
@@ -806,12 +807,13 @@ export const CourseDetail = ({preview}) => {
                 
               </p>
             </header>
+            {categoryCourses.length > 0 ? (
+              <>
             <div className={style.new_main}>
-              {categoryCourses.length > 0 ? categoryCourses.slice(0, 6).map(course => (
-                <CourseCard {...course} show={true} course={course} />
-            )) : courseList.slice(0, 6).map((course) => (
-                <CourseCard {...course} show={true} course={course} />
-            ))}
+              { categoryCourses.slice(0, 6).map(course => (
+                  <CourseCard {...course} show={true} course={course} />
+                ))
+              }
             </div>
             <div className={`text-end ${style.more}`}>
               <Link to="courses" className={style.link}>
@@ -821,6 +823,11 @@ export const CourseDetail = ({preview}) => {
                 </i>{" "}
               </Link>
             </div>
+              
+              </>
+            ):(
+              <p className="lead text-center mx-auto">Course list is currently empty </p>
+            )}
           </section>
         </div>
       </main>

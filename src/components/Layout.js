@@ -5,10 +5,11 @@ import End from "./End"
 import { useAuth } from '../contexts/Auth'
 const Layout = ({children}) => {
   const {generalState: { navHeight },}= useAuth()
+  const height = localStorage.getItem("g2cNavHeight")
   return (
     <>
     <Navbar />
-    <section className="layout_main" style={{marginTop: `${navHeight + 1}px`}}>
+    <section className="layout_main" style={{marginTop: `${+height + 2.5}px`}}>
         {children}
     </section>
     <Footer />
