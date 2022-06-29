@@ -10,7 +10,7 @@ import {useAuth} from "../../contexts/Auth";
 
 
 
-const TeacherProfile = ({}) => {
+const TeacherProfile = ({type}) => {
 
   const {pathname} = useLocation()
   const {generalState: {teacherProfile}} = useAuth();
@@ -80,24 +80,32 @@ const TeacherProfile = ({}) => {
                   <span className={style.teacher_occupation}>
                     Data science
                   </span>
-                  <div className={ `d-flex align-items-center${style.rating_wrapper}`}>
-                    <span className={style.teacher_rating}>Rating:  </span>
-                    <span className={style.rating_stars}>
+                  <div className={ `d-flex  justify-content-between ${style.rating_wrapper}`}>
+                    {type === "mentors" && (
+                      <div>
+                      <p className={style.headers}>Work Experience</p>
+                      <p className={style.occupation}>10 years experience</p>
+                    </div>
+                    )}
+                    <div>
+                    <p className={style.headers}>Rating </p>
+                    <div className={style.rating_stars}>
                         <BsStarFill style={{ color: "#FFCB14", fontSize: "18px" }} />
                         <BsStarFill style={{ color: "#FFCB14", fontSize: "18px" }} />
                         <BsStarFill style={{ color: "#FFCB14", fontSize: "18px" }} />
                         <BsStarFill style={{ color: "#FFCB14", fontSize: "18px" }} />
                         <BsStarFill style={{ color: "#FFCB14", fontSize: "18px" }} />
-                    </span>
-                        <span className={style.rating_total}>( 5 )</span>
+                      <span className={style.occupation}>(5)</span>
+                    </div>
+                    </div>
                   </div>
                   <div className={style.profile_footer}>
                     <div className={style.location}>
-                      <p className={style.occupation}>Location</p>
+                      <p className={style.headers}>Location</p>
                       <p className="fw-bold">Lagos, Nigeria</p>
                     </div>
                     <div className="style time">
-                      <p className={style.occupation}>Time Active</p>
+                      <p className={style.headers}>Time Active</p>
                       <p className="fw-bold"> January, 2022</p>
                     </div>
                   </div>
@@ -113,6 +121,26 @@ const TeacherProfile = ({}) => {
           </div>
           <div className="col-md-5">
               <div className={`card ${style.button_card}`}>
+                {type === "mentors" ? (
+                  <>
+                  <div className={`btn-group w-100 text-center ${style.button_group}`}>
+                      <p>One-One Mentorship</p>
+                  </div>
+                  <div className="card-body p-2">
+                    <h5 className={`my-4 ${style.title}`}>Fees per session</h5>
+                    <p className={style.teacher_paragraph}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo. Proin fermentum ipsum a non tellus tincidunt feugiat laoreet laoreet. </p>
+                    <ul>
+                        <li>Lorem ipsum dolor sit.</li>
+                        <li>Lorem ipsum dolor sit amet.</li>
+                    </ul>
+
+                    <div>
+                        <button className="button button-md w-100">Contact Us</button>
+                    </div>
+                  </div>
+                  </>
+                ):(
+                    <>
                     <div className={`btn-group w-100 ${style.button_group}`}>
                         <input type="radio" className={`btn-check ${style.btn_check}`} name="btnradio" id="btnradio1" autocomplete="off" checked />
                         <label style={{borderTopLeftRadius:"10px"}}  className={`btn btn-outline-primary generic_label ${style.teacher_profile_options}`} for="btnradio1">Cohort</label>
@@ -124,17 +152,19 @@ const TeacherProfile = ({}) => {
                         <label className={`btn btn-outline-primary generic_label ${style.teacher_profile_options}`} for="btnradio3">One-on-One</label>
                     </div>
                   <div className="card-body p-2">
-                  <h5 className={`my-4 ${style.title}`}>Cohort Course</h5>
-                  <p className={style.teacher_paragraph}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo. Proin fermentum ipsum a non tellus tincidunt feugiat laoreet laoreet. </p>
-                  <ul>
-                      <li>Lorem ipsum dolor sit.</li>
-                      <li>Lorem ipsum dolor sit amet.</li>
-                  </ul>
+                    <h5 className={`my-4 ${style.title}`}>Cohort Course</h5>
+                    <p className={style.teacher_paragraph}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo. Proin fermentum ipsum a non tellus tincidunt feugiat laoreet laoreet. </p>
+                    <ul>
+                        <li>Lorem ipsum dolor sit.</li>
+                        <li>Lorem ipsum dolor sit amet.</li>
+                    </ul>
 
-                  <div>
-                      <button className="button button-md w-100">Contact Teacher</button>
+                    <div>
+                        <button className="button button-md w-100">Contact Teacher</button>
+                    </div>
                   </div>
-                  </div>
+                    </>
+                )}
               </div>
           </div>
             </div>

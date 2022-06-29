@@ -1,19 +1,20 @@
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {GoChevronRight} from "react-icons/go"
 
 import mentor from "../images/productDesigner.png";
 import mentor2 from "../images/mentor3.png";
 import mentor3 from "../images/businessAnalyst.png";
-import mentor4 from "../images/mentor4.png";
+
 import SwiperCore, { Navigation, Autoplay, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/Auth";
+import {useAuth} from "../contexts/Auth"
+import { AdvancedError } from "../classes";
 
-const witnesses = [
+export const witnesses = [
   {
     id: 1,
     title:"Product Designer",
@@ -69,6 +70,43 @@ const witnesses = [
   },
 ];
 const Mentors = () => {
+  const {generalState, setGeneralState, otherFunctions: {fetchCategories}} = useAuth();
+  const [mentors, setMentors] = useState([])
+  const ref = useRef(false);
+
+
+  // useEffect(()=>{
+  //   const arr = []
+  //   allCategories.forEach((item, index)=>{
+  //         let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
+
+  //         arr.push(merged)
+  //       })
+  //       setCategories(arr)
+      
+    
+  // },[])
+
+  useEffect(()=>{
+    if(ref.current) return
+    (async()=>{
+      try{
+        setGeneralState({...generalState, loading: true})
+        const res = await fetchCategories();
+        const {success, message, statusCode, data} = res;
+        setGeneralState({...generalState, loading: false})
+
+          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+          setMentors(data)
+         
+      
+    }catch(err){
+        setGeneralState({...generalState, loading: false})
+    }
+    })()
+    ref.current = true
+  },[])
+
   SwiperCore.use([Autoplay])
   return (
     <section className="mentors">
@@ -132,9 +170,10 @@ const Mentors = () => {
   );
 };
 
-const Card = ({ item }) => {
+export const Card = ({ item,type }) => {
   const navigate = useNavigate();
   const {setGeneralState} = useAuth()
+  
   function gotoMentorPage(){
     setGeneralState(old => {
       return {
@@ -144,7 +183,7 @@ const Card = ({ item }) => {
     })
     let meta = item.location.split(" ");
     let name = meta[0] + "-" + meta[1]; 
-    navigate("/teachers/"+name);
+    navigate("/mentors/"+name);
   }
   return (
     <div className="px-1" style={{cursor: "pointer"}} onClick={gotoMentorPage}>

@@ -9,7 +9,7 @@ import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
 import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails,
-  CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails} from "./pages/Dashboard/Admin";
+  CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails, AddMentor} from "./pages/Dashboard/Admin";
 import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit,
    Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps} from "./pages/Dashboard/Students";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, 
@@ -51,8 +51,15 @@ function App() {
               <Route path="history" element={<StudentHistory />} />
             </Route>
 
+            <Route path="mentors" element={<Out/>}>
+              <Route index element={<All type="mentors" />} />
+              <Route path=":id" element={<Out />} >
+              ` <Route index element={<TeacherProfile type="mentors" />} />
+                {/* <Route path="payment" element={<Payment />} /> */}
+              </Route>
+            </Route>
             <Route path="teachers" element={<Out/>}>
-              <Route index element={<All />} />
+              <Route index element={<All  type="teachers" />} />
               <Route path=":id" element={<Out />} >
               ` <Route index element={<TeacherProfile />} />
                 <Route path="payment" element={<Payment />} />
@@ -97,6 +104,7 @@ function App() {
               <Route path="courses-categories/details/:id" element={<AdminCategoryDetails />} />
               <Route path="courses-categories/new" element={<CreateCourseCategory />} />
               <Route path="teachers/approve" element={<Approve />} />
+              <Route path="teachers/approve/mentorship" element={<AddMentor />} />
               <Route path="profile/edit" element={<AdminEdit />} />
             </Route>
             <Route path="admin" element={<Out />}>

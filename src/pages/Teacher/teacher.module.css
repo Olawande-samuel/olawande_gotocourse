@@ -4,6 +4,11 @@
     gap: 1.5rem;
     /* padding-block: 4.375rem; */
 }
+
+.main .mentors_list_card .card {
+  padding: 0;
+  border-radius:10px;
+}
 .navigation {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr));

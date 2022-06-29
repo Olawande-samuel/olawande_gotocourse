@@ -11,7 +11,7 @@ import Layout from "../../components/Layout";
 import { Jumbotron } from "./components";
 import clsx from "./styles.module.css";
 import img from "../../images/bola.png";
-
+import {ScrollToTop} from "../Courses"
 
 
 
@@ -106,6 +106,7 @@ export const Home = () => {
     }
     return (
         <Layout>
+            <ScrollToTop />
             <Jumbotron />
             <div className={clsx.how_it_works}>
                 <h1>How It Works</h1>

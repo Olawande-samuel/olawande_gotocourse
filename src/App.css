@@ -736,7 +736,7 @@ padding: 13px 0 ;
 }
 
 
-.mentors .mentors_card_top {
+.mentors .mentors_card_top, .mentors_card_top {
   width: 100%;
   height: 250px;
   position: relative;
@@ -748,23 +748,23 @@ padding: 13px 0 ;
   
 }
 
-.swiper-wrapper .swiper-slide:nth-child(even) .mentors_card_top{
+.swiper-wrapper .swiper-slide:nth-child(even) .mentors_card_top, .mentors_list_main .mentors_list_card:nth-child(even) .mentors_card_top {
   border-bottom:5px solid var(--theme-orange);
 
 }
-.swiper-wrapper .swiper-slide:nth-child(odd) .mentors_card_top{
+.swiper-wrapper .swiper-slide:nth-child(odd) .mentors_card_top, .mentors_list_main .mentors_list_card:nth-child(odd) .mentors_card_top{
   border-bottom:5px solid var(--theme-blue);
 
 }
 
 
-.mentors .mentors_card_top > div {
+.mentors .mentors_card_top > div,  .mentors_list_card .mentors_card_top > div {
   position: absolute;
   bottom: 0;
   left: 10px;
   width: 80%;
 }
-.mentors .mentors_card_top > div p {
+.mentors .mentors_card_top > div p,  .mentors_list_card .mentors_card_top > div p {
   font-weight:200;
 }
 .mentors .card-title {
@@ -784,6 +784,29 @@ padding: 13px 0 ;
   font-size: 16px;
   line-height: 38px;
   color: #fff;
+}
+
+/* for mentors full list */ 
+.mentors_list_card .card {
+  border-radius: 16px;
+}
+.mentors_list_card .card-body {
+  padding: 0;
+}
+.mentors_list_card  .mentors_card_top {
+  margin-bottom: 1rem;
+}
+.mentors_list_card  .mentors_card_top h5, .mentors_list_card .mentors_card_top  p {
+  color: #fff;
+}
+.mentors_list_card .mentors_card_top  p{
+  font-weight: 400;
+  font-size: 12px;
+
+}
+.mentors_list_card h5 {
+  font-size: 17px;
+
 }
 /* ***********************TESTIMONIALS******************************* */
 
@@ -846,6 +869,7 @@ line-height: 25px;
 .testimonials .avatar img {
   width: 67px;
   height: 67px;
+  border-radius:50%;
 }
 .testimonials .slide_container {
   position: relative;
@@ -1453,10 +1477,10 @@ line-height: 16px;
   .testimonials {
     margin: 0;
   }
-  .testimonials .slides {
-    height: 350px;
+  /* .testimonials .slides {
+    height: 450px;
     
-  }     
+  }      */
   
   .career {
     padding: 3.0625rem 0;

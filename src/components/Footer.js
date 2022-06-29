@@ -104,12 +104,15 @@ const Footer = () => {
 
         <div className="footer_left">
             <div className="footer_top pt-2">
-            <i className="d-none d-lg-block">
-              <Logo />
-            </i>
-            <i className="d-lg-none">
-              <Logosm />
-            </i>
+              <Link to="/" onClick={()=>window.scrollTo(0, 0)}>
+                <i className="d-none d-lg-block">
+                  <Logo />
+                </i>
+            
+                <i className="d-lg-none">
+                  <Logosm />
+                </i>
+              </Link>
             </div>
         </div>
         <div className="footer_right">

@@ -305,8 +305,12 @@
   font-size: 12px;
 }
 .occupation,
-.rating {
+.rating, .headers {
   font-size: 14px;
+  color: #000000;
+}
+.headers {
+  color: rgb(114, 114, 114);
 }
 .name {
   color: var(--text-blue);
@@ -409,18 +413,32 @@ a .course_card:hover .course_author {
   margin-block: 3rem;
 }
 
-.teacher_profile_options {
+/* .teacher_profile_options {
   padding: 10px 35px !important;
-}
+} */
 
 
 .teacher_card_right {
     padding-inline: 0.3rem;
-    width: min(100%, 60%);
 }
 .button_card {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+}
+.button_group {
+  border: 1px solid #c1c1c1 !important;
+  border-top-right-radius: 10px !important;
+  border-top-left-radius: 10px !important;
+
+}
+
+.button_group p {
+  color: var(--btn-color);
+  text-align:center;
+  margin-inline: auto;
+  margin-block: 0.5rem;
+
+
 }
 .button_group label  {
   border: 1px solid var(--btn-color) !important;
@@ -494,4 +512,13 @@ a .course_card:hover .course_author {
   .new_main {
     grid-template-columns:  1fr;
   }
+  .teacher_profile_options {
+    padding: 0.375rem 0.75rem !important;
+  }
+}
+@media screen and (min-width:997px ){
+  .teacher_card_right  {
+    width: 60%;
+  }
+
 }

@@ -1194,19 +1194,12 @@ function Info({ title, content }) {
 
 // APPROVE TEACHER COMPONENT
 export function Approve() {
+  const navigate = useNavigate()
   const location = useLocation();
   const [data, setData] = useState(null);
   const {getItem} = useLocalStorage();
   const { adminTeacherFunctions: { verify, verify_pledre }, setGeneralState, } = useAuth();
   const info = [
-    {
-      title: "Brief Introduction",
-      content: "Enjoys writing and playing video games",
-    },
-    {
-      title: "Location",
-      content: "Lagos, Nigeria",
-    },
     {
       title: "Courses",
       content: "UX Designer",
@@ -1214,6 +1207,10 @@ export function Approve() {
     {
       title: "Category",
       content: "Cybersecurity, UX, Data Analysis",
+    },
+    {
+      title: "Mentorship status",
+      content: "Unassigned",
     },
   ];
   
@@ -1295,13 +1292,17 @@ export function Approve() {
             {info.map(({ title, content }, i) => (
               <Info title={title} content={content} key={i} />
             ))}
+            
+            <div className="form-group my-3">
+              <label htmlFor="approveMentorship" className="form-label generic_label d-block">Mentorship</label>
+              <button className="button btn" onClick={()=> {
+                navigate("/admin/teachers/approve/mentorship")}
+                } type="button">Assign Mentorship</button>
+            </div>
+
             <div className="form-group my-3">
               <label htmlFor="accessPledre" className="form-label generic_label">Access Pledre</label>
               <Switch onClick={(e)=>handleVerification(e, "pledre", data?.userId)} checked={data?.accessPledre} />
-            </div>
-            <div className="form-group my-3">
-              <label htmlFor="approveMentorship" className="form-label generic_label">Approve Mentorship</label>
-              <Switch onClick={(e)=>handleVerification(e, "mentor", data?.userId)} checked={accessPledre} />
             </div>
             <div className="form-group my-3">
               <label htmlFor="level" className="form-label generic_label">Assign Level</label>
@@ -1552,7 +1553,10 @@ export function Teachers() {
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <h1>All Mentors</h1>
+          {/* <div className="d-flex justify-content-between align-items-center"> */}
+            <h1>All Mentors</h1>
+            {/* <button className="btn button-md" style={{background:"var(--theme-blue)", color:"#fff"}} type="button" onClick={()=>navigate("add-mentor")}>Add Mentor</button> */}
+          {/* </div> */}
           <div className={`table-responsive ${clsx.admin__student_main}`}>
             <table className={`${clsx.admin__student_table}`}>
               <thead>
@@ -1585,7 +1589,166 @@ export function Teachers() {
   );
 }
 
+// ADD MENTORS COMPONENT 
 
+export function AddMentor(){
+  const { adminFunctions: { makeMentor} } = useAuth();
+  const {updateItem, getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
+
+  let mentorInfo = getItem("gotocourse-teacherDetails");
+
+  const [imageUrl, setImageUrl] = useState(null);
+  const [isUplaoding, setIsUploading] = useState(false);
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [formstate, setFormstate] = useState({
+    firstName: mentorInfo?.firstName ?? "",
+    lastName: mentorInfo?.lastName ?? "",
+    email: mentorInfo?.email ?? "",
+    bio: mentorInfo?.bio ?? "",
+    location: mentorInfo?.location ?? "",
+    work: mentorInfo?.work ?? "",
+    category: mentorInfo?.category ?? "",
+    img: mentorInfo?.profileImg ?? "",
+              
+  });
+
+  const navigate = useNavigate();
+
+
+
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await makeMentor(formstate);
+      const { success, message, statusCode, data } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        navigate(-1)
+      }
+    } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } finally {
+      setLoading((_) => false);
+    }
+  }
+
+  function changeHandler(e) {
+    const { name, value } = e.target;
+    setFormstate((old) => {
+      return {
+        ...old,
+        [name]: value,
+      };
+    });
+  }
+ 
+  return (
+    <Admin header="ADMIN">
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+          <h3>Add Mentor</h3>
+          <div className="row w-100 mt-4">
+            <div className={` col-sm-3 ${clsx.edit__picture}`}>
+                <img src={formstate.img} alt="Avatar" style={{width:"150px", height:"100px", borderRadius:"8px"}} />
+            </div>
+          </div>
+          <form className="form" style={{width: "80%"}}>
+            <Input
+              label="First name"
+              name="firstName"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.firstName}
+              readOnly
+            />
+            <Input
+              label="Last name"
+              name="lastName"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.lastName}
+              readOnly
+            />
+              <Input
+                label="Email"
+                name="Email"
+                type="email"
+                handleChange={changeHandler}
+                value={formstate.email}
+                readOnly
+              />
+            <div className={clsx.form_group}>
+              <label htmlFor={"bio"} className="form-label generic_label">
+                Bio
+              </label>
+              <textarea
+                rows="5"
+                name="bio"
+                value={formstate.bio}
+                onChange={changeHandler}
+                className="form-control generic_input"
+                readOnly
+              ></textarea>
+            </div> 
+            <Input
+              label="Area of Expertise"
+              name="area"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.area}
+            />
+
+            <Input
+              label="Fees per session"
+              name="fees"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.fees}
+            />
+
+            {loading ? (
+              <button className="button button-lg log_btn w-100 mt-3">
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </button>
+            ) : (
+              <button
+                className="button button-lg log_btn w-100 mt-3"
+                type="submit"
+                onClick={handleSubmit}
+              >
+                Save
+              </button>
+            )}
+          </form>
+        </div>
+      </div>
+    </Admin>
+
+  )
+}
 
 // COURSES COMPONENT
 export function Courses() {

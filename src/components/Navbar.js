@@ -3,12 +3,13 @@ import Logo from "../images/Logo.png";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
 import {motion} from 'framer-motion'
-import {Link, useNavigate} from "react-router-dom"
+import {Link, useNavigate, useLocation} from "react-router-dom"
 
 
 import {categories as navList} from "../data"
 import { useAuth } from "../contexts/Auth";
 import { useLocalStorage } from "../hooks";
+import {ScrollToTop} from "../pages/Courses"
 
 const KEY = "gotocourse-userdata"
 // const navList = [
@@ -75,8 +76,10 @@ const Navbar = () => {
   const {getItem} = useLocalStorage();
 
   const value = getItem(KEY)
+  const location = useLocation();
 
-  console.log(value === null)
+  console.log(location.pathname.split("/"))
+  console.log(location.pathname.split("/").length)
 
   const toggleNav = () => {
     setShow(!show);
@@ -90,26 +93,26 @@ const Navbar = () => {
   const heightRef = useRef(null);
   
   const status = OutsideClick(dropRef);
+
+
+
   useEffect(() => {
-    if (status === true) {
-      setDrop(false);
-    }
-    let navbarHeight = heightRef.current.clientHeight
-    setGeneralState((old) => {
+    localStorage.setItem("g2cNavHeight", heightRef.current.clientHeight )
+      setGeneralState((old) => {
       return {
         ...old,
-        navHeight: navbarHeight
+        navHeight: heightRef.current.clientHeight
       };
-    });
-  }, [drop,status]);
+    });  
+  }, []);
 
   return (
-    <nav ref={heightRef} className="nav navbar navbar-expand-lg navbar-light" style={{borderBottom: "1px solid rgba(159, 159, 159, .3)"}}>
-
+    <nav ref={heightRef} section="top" className="nav navbar navbar-expand-lg navbar-light" style={{borderBottom: "1px solid rgba(159, 159, 159, .3)"}}>
+<ScrollToTop />
       <div className="container navbar-container align-items-center">
-        <a href="/" className="logo navbar-brand ">
+        <Link to="/" onClick={()=> window.scrollTo(0, 0)} className="logo navbar-brand ">
           <img src={Logo} alt="Brand Name" />
-        </a>
+        </Link>
         <button type="button" className="navbar-toggler " onClick={toggleNav}>
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -120,24 +123,28 @@ const Navbar = () => {
           id="navbarNav"
         >
           <ul className="navbar-nav me-5">
+            {location.pathname.split("/")[1] === "" &&
             <li className="nav-item holder">
-              <button
+              <Link
                 type="button"
-                className="link nav-link courses"
-                onClick={toggleDrop}
+                className="link nav-link courses me-4"
+                to="/categories"
+                // onClick={toggleDrop}
+
               >
                 Categories
-                <span>
+                {/* <span>
                   <i>
                     <MdOutlineKeyboardArrowDown
                       style={{ fontSize: "20px" }}
                       className={`drop_caret ${drop ? "rotate" : ""}`}
                     />
                   </i>
-                </span>
-              </button>
+                </span> */}
+              </Link>
               {drop ? <NavList dropRef={dropRef} /> : null}
             </li>
+            }
             { value?.token ? (
                 <li className="nav-item d-flex align-items-center nav_link me-2"><a href="https://goto-course.com/dashboard" className="link">Go to Dashboard</a></li> 
             ):(
