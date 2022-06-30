@@ -822,6 +822,7 @@ export function CreateCourseCategory(){
   const location = useLocation();
   const [loader, setLoader] = useState(location.search ? true : false);
   const edit = location.search
+
   useEffect(() => {
     if(flag.current) return;
     if(location.search){
@@ -1244,7 +1245,6 @@ function Info({ title, content }) {
 // APPROVE TEACHER COMPONENT
 export function Approve() {
   const navigate = useNavigate()
-  const location = useLocation();
   const [data, setData] = useState(null);
   const {getItem} = useLocalStorage();
   const { adminTeacherFunctions: { verify, verify_pledre }, setGeneralState, } = useAuth();
@@ -1342,12 +1342,12 @@ export function Approve() {
               <Info title={title} content={content} key={i} />
             ))}
             
-            <div className="form-group my-3">
+            {/* <div className="form-group my-3">
               <label htmlFor="approveMentorship" className="form-label generic_label d-block">Mentorship</label>
               <button className="button btn" onClick={()=> {
                 navigate("/admin/teachers/approve/mentorship")}
                 } type="button">Assign Mentorship</button>
-            </div>
+            </div> */}
 
             <div className="form-group my-3">
               <label htmlFor="accessPledre" className="form-label generic_label">Access Pledre</label>
@@ -1594,10 +1594,10 @@ export function Teachers() {
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          {/* <div className="d-flex justify-content-between align-items-center"> */}
+          <div className="d-flex justify-content-between align-items-center">
             <h1>All Mentors</h1>
-            {/* <button className="btn button-md" style={{background:"var(--theme-blue)", color:"#fff"}} type="button" onClick={()=>navigate("add-mentor")}>Add Mentor</button> */}
-          {/* </div> */}
+            <button className="btn button-md" style={{background:"var(--theme-blue)", color:"#fff"}} type="button" onClick={()=>navigate("create/mentor")}>Add Mentor</button>
+          </div>
           <div className={`table-responsive ${clsx.admin__student_main}`}>
             <table className={`${clsx.admin__student_table}`}>
               <thead>
@@ -1634,24 +1634,28 @@ export function Teachers() {
 
 export function AddMentor(){
   const { adminFunctions: { makeMentor} } = useAuth();
-  const {updateItem, getItem} = useLocalStorage();
+  const {getItem} = useLocalStorage();
+
+  const [previewImage, setPreviewImage] = useState(false);
+
   let userdata = getItem(KEY);
 
-  let mentorInfo = getItem("gotocourse-teacherDetails");
+  const [open, setOpen] = useState(false);
 
-  const [imageUrl, setImageUrl] = useState(null);
-  const [isUplaoding, setIsUploading] = useState(false);
-  const [file, setFile] = useState(null);
+  function showUploadFormHandler(){
+     setOpen(_ => true)
+  }
+
   const [loading, setLoading] = useState(false);
   const [formstate, setFormstate] = useState({
-    firstName: mentorInfo?.firstName ?? "",
-    lastName: mentorInfo?.lastName ?? "",
-    email: mentorInfo?.email ?? "",
-    bio: mentorInfo?.bio ?? "",
-    location: mentorInfo?.location ?? "",
-    work: mentorInfo?.work ?? "",
-    category: mentorInfo?.category ?? "",
-    img: mentorInfo?.profileImg ?? "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    bio: "",
+    location: "",
+    work: "",
+    category: "",
+    img: "",
               
   });
 
@@ -1703,25 +1707,81 @@ export function AddMentor(){
       };
     });
   }
- 
+
+  // async function changeProfilePictureHandler(e) {
+  //   setIsUploading((_) => true);
+  //   try {
+  //     let formdata = new FormData();
+  //     formdata.append("image", file, file.name);
+
+  //     const res = await updateAvatar(formdata, userdata.token);
+  //     const { success, message, statusCode } = res;
+  //     if (!success) throw new AdvancedError(message, statusCode);
+  //     else {
+  //       const { data } = res;
+  //       console.log(data);
+  //       const newValue = {
+  //         ...userdata,
+  //         ...data
+  //       }
+  //       userdata = updateItem(KEY, newValue);
+  //       toast.success(message, {
+  //         position: "top-right",
+  //         autoClose: 4000,
+  //         hideProgressBar: true,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //       });
+  //     }
+  //   } catch (err) {
+  //     toast.error(err.message, {
+  //       position: "top-right",
+  //       autoClose: 4000,
+  //       hideProgressBar: true,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //     });
+  //   } finally {
+  //     setIsUploading((_) => false);
+  //   }
+  // }
   return (
     <Admin header="ADMIN">
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h3>Add Mentor</h3>
+          <UploadForm isOpen={open} setIsOpen={setOpen} setPreviewImage={setPreviewImage} />
           <div className="row w-100 mt-4">
-            <div className={` col-sm-3 ${clsx.edit__picture}`}>
-                <img src={formstate.img} alt="Avatar" style={{width:"150px", height:"100px", borderRadius:"8px"}} />
+            <div className="col-12 d-flex justify-content-between align-items-center">
+              <div className={clsx.upload__file_box} onClick={showUploadFormHandler}>
+                <img src={vector} alt={"Placeholder"} />
+                <p>Upload Mentor image</p>
+              </div>
+              {previewImage && 
+                <div className={clsx.upload__file_box}>
+                  <img src={previewImage} alt={"Placeholder"} style={{width:"150px", height:"100px", objectFit:"cover", objectPosition:"top"}} />
+                </div>
+              }
             </div>
           </div>
           <form className="form" style={{width: "80%"}}>
+            <Input
+              label="Profile image file name"
+              name="profileImg"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.profileimg}
+            />
             <Input
               label="First name"
               name="firstName"
               type="text"
               handleChange={changeHandler}
               value={formstate.firstName}
-              readOnly
             />
             <Input
               label="Last name"
@@ -1729,15 +1789,13 @@ export function AddMentor(){
               type="text"
               handleChange={changeHandler}
               value={formstate.lastName}
-              readOnly
             />
               <Input
-                label="Email"
+                label="Mentor's Email"
                 name="Email"
                 type="email"
                 handleChange={changeHandler}
                 value={formstate.email}
-                readOnly
               />
             <div className={clsx.form_group}>
               <label htmlFor={"bio"} className="form-label generic_label">
@@ -1749,7 +1807,6 @@ export function AddMentor(){
                 value={formstate.bio}
                 onChange={changeHandler}
                 className="form-control generic_input"
-                readOnly
               ></textarea>
             </div> 
             <Input

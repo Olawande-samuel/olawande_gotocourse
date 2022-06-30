@@ -11,6 +11,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-block: 0.2rem;
 }
 
 .bootcamp_content {
@@ -67,10 +68,11 @@
 
 .image_container {
     position: absolute;
-    height: 600px;
+    height: 65%;
     width: 550px;
     left: -150px;
-    top: 200px;
+    top: 50%;
+    transform:translateY(-50%);
     border-radius: 10px;
     background-image: url("../../images/bootcamp.png");
     background-size: cover;

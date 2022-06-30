@@ -1,5 +1,4 @@
-import {useEffect, useState} from "react";
-import {useNavigate, Link} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { Grid, Paper, Breadcrumbs } from "@mui/material";
 import {BiChalkboard, BiEditAlt, BiDollar} from "react-icons/bi";
 import { MdPictureAsPdf, MdExpandMore, MdExpandLess } from "react-icons/md";
@@ -20,49 +19,46 @@ export const Home = () => {
         {
             icon: BiEditAlt,
             title: "Create Class",
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo. Proin fermentum ipsum a non tellus tincidunt feugiat laoreet laoreet."
+            content: "Create a learning environment according to your niche with your own modifications. "
         },
         {
             icon: BiChalkboard,
             title: "Deliver a great Class",
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo. Proin fermentum ipsum a non tellus tincidunt feugiat laoreet laoreet."
+            content: "With our built-in creator suite, you can optimize your class to deliver a great lecture to your students."
         },
         {
             icon: BiDollar,
             title: "Get Paid",
-            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo. Proin fermentum ipsum a non tellus tincidunt feugiat laoreet laoreet."
+            content: "Get paid by your students via our payment systems, a reward for your mentorship."
         },
     ]
 
     const faqs = [
         {
-            question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-            answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh amet, erat sed risus tristique ultrices. Augue mauris, egestas"
+            question: "Can I host the school on my domain name?",
+            answer: "Yes, you can have a school onGotocourse. You can select your domain name or have your school hosted on a Gotocourse subdomain. To learn more about this, please send an email to "
         },
         {
-            question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-            answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh amet, erat sed risus tristique ultrices. Augue mauris, egestas"
+            question: "What currencies do you support?",
+            answer: "You can currently pay us in either naira or dollars. We're working on supporting more currencies, though"
         },
         {
-            question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-            answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh amet, erat sed risus tristique ultrices. Augue mauris, egestas"
+            question: "When will I pay?",
+            answer: "Both monthly and yearly payments are allowed."
         },
         {
-            question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-            answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh amet, erat sed risus tristique ultrices. Augue mauris, egestas"
+            question: "Without being enrolled, can I take courses in a school?",
+            answer: "No. The platform is virtual, and you must enroll in a school first."
         },
         {
-            question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-            answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh amet, erat sed risus tristique ultrices. Augue mauris, egestas"
+            question: "Is there a discount for a school with a large number of students?",
+            answer: "Yes, we offer a discount for schools with many students. For more details, please email "
         },
         {
-            question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-            answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh amet, erat sed risus tristique ultrices. Augue mauris, egestas"
-        },
-        {
-            question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-            answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh amet, erat sed risus tristique ultrices. Augue mauris, egestas"
-        },
+            question: "Can I receive payments directly from my students?",
+            answer: "No. Students can only pay via the Gotocourse payment system. In naira and dollar now, though"
+        }
+        
     ]
 
 
@@ -70,20 +66,20 @@ export const Home = () => {
         {
             review: "I had a wonderful experience and can confidently say that GotoCourse is the place to be as a teacher . I highly recommend them",
             avatar: img,
-            name: "Bola",
+            name: "Ope",
             location: "Lagos, Nigeria"
         },
         {
             review: "I had a wonderful experience and can confidently say that GotoCourse is the place to be as a teacher . I highly recommend them",
             avatar: img,
-            name: "Bola",
-            location: "Lagos, Nigeria"
+            name: "James",
+            location: "Houston, Texas"
         },
         {
             review: "I had a wonderful experience and can confidently say that GotoCourse is the place to be as a teacher . I highly recommend them",
             avatar: img,
-            name: "Bola",
-            location: "Lagos, Nigeria"
+            name: "Ike",
+            location: "Abuja, Nigeria"
         },
     ]
 
@@ -110,7 +106,7 @@ export const Home = () => {
             <Jumbotron />
             <div className={clsx.how_it_works}>
                 <h1>How It Works</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo.</p>
+                <p>Discover the steps involved in becoming a tutor on Gotocourse.</p>
                 <div className={clsx.how_it_works_container}>
                     <Grid container spacing={4}>
                         {
@@ -131,7 +127,7 @@ export const Home = () => {
             </div>
             <div className={clsx.best_features}>
                 <h1>Our Best Features</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo.</p>
+                <p>Check out what makes us stand out at Gotocourse!</p>
                 <Grid container spacing={6} sx={{position: "relative", marginBottom: 5}}>
                     <Grid item xs={12} sm={12} md={6}>
                         <div className={clsx.rectangle}></div>
@@ -175,7 +171,7 @@ export const Home = () => {
                                 <MdPictureAsPdf />
                             </span>
                             <h4>Creator Suites</h4>
-                            <p>We use an efficient classroom management tool that helps track student progress and optimise learning for both teachers and students.</p>
+                            <p>The built-in creator suite lets you create high-quality videos without expensive recording equipment and additional software. One of the great pros of Gotocourse!</p>
                         </div>
                     </Grid>
                 </Grid>
@@ -187,7 +183,7 @@ export const Home = () => {
                                 <MdPictureAsPdf />
                             </span>
                             <h4>Customization</h4>
-                            <p>We use an efficient classroom management tool that helps track student progress and optimise learning for both teachers and students.</p>
+                            <p>You can modify the appearance of your classes, such as the images, colours and layouts.</p>
                             <Link to="/teacher/signup">
                             <motion.button
                             className="button button-md"
@@ -211,7 +207,7 @@ export const Home = () => {
 
             <div className={clsx.frequently_asked_questions}>
                 <h1>Frequently Asked Questions</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo.</p>
+                {/* <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo.</p> */}
                 <div className={clsx.frequently_asked_questions_container}>
                     <Grid container spacing={4}>
                         {
@@ -232,7 +228,7 @@ export const Home = () => {
 
             <div className={clsx.reviews}>
                 <h1>Reviews</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo.</p>
+                <p>Care to know what the world say about us?</p>
                 <div className={clsx.reviews__container}>
                     <Swiper
                         // install Swiper modules

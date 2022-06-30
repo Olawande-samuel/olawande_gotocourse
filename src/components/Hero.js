@@ -1,22 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
-import SwiperCore, { Autoplay, EffectCreative } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Autoplay } from "swiper";
 import { motion } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import hero from "../images/NewHero.png";
-import teach from "../images/newTeach.png";
-import stu from "../images/newLearn.png";
-import gen from "../images/generaltp.png";
 
-import tentative from "../images/tentative_hero.png";
-import Border from "../images/hero_border.png";
-import br from "../images/br.svg"
-import tl from "../images/tl.svg"
-import square from "../images/square.svg"
+import gen from "../images/generaltp.png";
 import place from "../images/placehero.png"
 
 import Image from "./Image";
@@ -31,7 +22,7 @@ const Hero = () => {
     title: "Endless Possibilities With Borderless Learning",
     subtitle:
     "Enabling students to learn and  benefit from a global network of highly skilled professionals by increased access to quality learning and mentorship from domain experts",
-    image: stu,
+    // image: stu,
     link: "/categories",
     background: "#F1F8FF",
     color: "#F75C4E",
@@ -42,7 +33,7 @@ const Hero = () => {
     title: "Explore Wide Range Of Tech Skills To Develop Your Professional Career",
     subtitle:
     "Learn from top industry experts or less",
-    image: teach,
+    // image: teach,
     link: "/signup",
   background: "#F1F8FF",
   color: "#0C2191",

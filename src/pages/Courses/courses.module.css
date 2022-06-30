@@ -55,8 +55,8 @@
   margin-bottom: 1.8rem;
 }
 .breadcrumbs_wrapper li {
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 0.87rem;
+  font-weight: 700;
   color: #9F9F9F;
 }
 .top h3 {
@@ -146,8 +146,12 @@
 }
 .top .niche {
   margin-bottom: .3rem ;
+  
 }
 
+.top ul li p:first-child {
+  font-weight: 700;
+} 
 .course_Card_body {
   padding: .6rem !important;
 }

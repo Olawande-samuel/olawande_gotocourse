@@ -106,7 +106,7 @@ function App() {
               <Route path="courses-categories/details/:id" element={<AdminCategoryDetails />} />
               <Route path="courses-categories/new" element={<CreateCourseCategory />} />
               <Route path="teachers/approve" element={<Approve />} />
-              <Route path="teachers/approve/mentorship" element={<AddMentor />} />
+              <Route path="teachers/create/mentor" element={<AddMentor />} />
               <Route path="profile/edit" element={<AdminEdit />} />
             </Route>
             <Route path="admin" element={<Out />}>
