@@ -1,5 +1,5 @@
 :root {
-    --primary: #0C2191;
+    --pry: #0C2191;
     --red: #F75C4E;
     --white: #fff;
 }
@@ -21,7 +21,7 @@
 
 .bootcamp_content h2 {
     font-weight: 700;
-    color: var(--primary);
+    color: var(--pry);
     margin-bottom: 30px;
     font-size: 2.2rem;
     letter-spacing: 0.3px;
@@ -38,7 +38,7 @@
     padding: 15px 30px;
     border-radius: 10px;
     border: none;
-    background-color: var(--primary);
+    background-color: var(--pry);
     color: var(--white);
 }
 
@@ -61,7 +61,7 @@
 .bootcamp_image {
     width: 35%;
     height: 100vh;
-    background-color: var(--primary);
+    background-color: var(--pry);
     position: relative;
 }
 

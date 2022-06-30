@@ -38,11 +38,12 @@ export function CourseDetails({}){
   const navigate = useNavigate();
   const {getItem} = useLocalStorage();
   let userdata = getItem(KEY);
-  const {adminFunctions: {fetchCourses, deleteCourse}} = useAuth();
+  const {adminFunctions: {fetchCourses, deleteCourse, toggleCourseStatus}} = useAuth();
   const flag = useRef(false);
   const [formstate, setFormstate] = useState({
     name: "",
     description: "",
+    status: false,
     teacher: "",
     student: ""
   })
@@ -63,11 +64,13 @@ export function CourseDetails({}){
         else {
           const {data} = res;
           let course = data.find(d => d.courseId === params?.id);
+          console.log(course);
           setFormstate(old => {
             return {
               ...old,
               name: course.name,
-              description: course.description
+              description: course.description,
+              status: course.isActive
             }
           })
           toast.success("Course Details fetched successfully", {
@@ -143,7 +146,40 @@ export function CourseDetails({}){
     }finally{
       setLoading(_ => false);
     }
-  
+  }
+
+
+  async function toggleCourseStatusHandler(e){
+    setLoading(_ => true);
+    try {    
+      const res = await toggleCourseStatus(userdata?.token, params?.id);
+      const { success, message, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        console.log(res);
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }finally{
+      setLoading(_ => false);
+    }
   }
 
   function editCourseHandler(e){
@@ -235,6 +271,11 @@ export function CourseDetails({}){
               <button type="button" className={clsx.form_group__button}>
                 Add Student
               </button>
+            </div>
+
+            <div className={clsx.form_group} style={{marginTop: 40}}>
+              <label>Change Course Status</label>
+              <Switch onClick={toggleCourseStatusHandler} checked={formstate.status} />
             </div>
 
           </form>
@@ -550,7 +591,7 @@ const [loading, setLoading] = useState(true);
                       comp="Category"
                       name={name}
                       num={i}
-                      date={"2022-06-26T00:00:00.000Z"}
+                      date={"2022-06-26T00:00:00.000Z".split("T")[0]}
                       students={90}
                       id={categoryId}
                       showDetailsHandler={(e)=>showDetailsHandler(e, name)}
@@ -825,7 +866,7 @@ export function CreateCourseCategory(){
     }
     //do some coding
     flag.current = true;
-    return () => console.log("Removing CreateBootcamp component");
+    return () => console.log("Removing CreateCategory component");
   }, [])
   async function submitHandler(e){
     e.preventDefault();
@@ -1369,14 +1410,6 @@ export function UserInfoCard({
   showDetailsHandler = () => {return},
   approveHandler = () => {return},
 }) {
-  function getDate(date){
-  
-    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    let d = date.split("T")[0];
-    let [y, m, day] = d.split("-");
-    m = months[parseInt(m) - 1];
-    return `${m} ${day}`;
-  }
   return (
     <tr
       className={clsx.user__info_card}
@@ -1397,8 +1430,8 @@ export function UserInfoCard({
       {(comp === "Courses" || comp === "Category") && <td className={clsx.user__info}>{name}</td>}
 
       {(comp === "Courses" || date) && (
-        <td className={clsx.user__date}>
-          <span>{date ? getDate(date):""}</span>
+        <td className={clsx.user__date} style={{padding: "2px 8px"}}>
+          <span>{date}</span>
         </td>
       )}
       {(comp === "History" ) && (
@@ -1813,6 +1846,15 @@ export function Courses() {
     navigate("create");
   }
 
+  function getDate(date){
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let d = date.split("T")[0];
+    let [y, m, day] = d.split("-");
+    m = months[parseInt(m) - 1];
+    console.log(`${m} ${day}`);
+    return `${m} ${day}`;
+  }
+
   function showDetailsHandler(e, id){
     navigate(`details/${id}`);
   }
@@ -1844,7 +1886,8 @@ export function Courses() {
                       approve,
                       courseId,
                       startDate,
-                      packages
+                      packages,
+                      endDate
                     },
                     i
                   ) => (
@@ -1858,7 +1901,7 @@ export function Courses() {
                       id={courseId}
                       showDetailsHandler={showDetailsHandler}
                       packages={packages}
-                      date={startDate ? startDate : ""}
+                      date={`${getDate(startDate)} - ${getDate(endDate)}`}
                       isActive={approve ?? true}
                     />
                   )
@@ -1879,11 +1922,12 @@ export function BootcampDetails({}){
   const navigate = useNavigate();
   const {getItem} = useLocalStorage();
   let userdata = getItem(KEY);
-  const {adminFunctions: {deleteBootcamp, fetchBootcamps}} = useAuth();
+  const {adminFunctions: {deleteBootcamp, fetchBootcamps, toggleBootcampStatus}} = useAuth();
   const flag = useRef(false);
   const [formstate, setFormstate] = useState({
     title: "",
     description: "",
+    status: false,
     instructor: "",
     student: ""
   })
@@ -1903,11 +1947,13 @@ export function BootcampDetails({}){
         else {
           const {data} = res;
           let bootcamp = data.find(d => d._id === params?.id);
+          console.log(bootcamp);
           setFormstate(old => {
             return {
               ...old,
               title: bootcamp.title,
-              description: bootcamp.description
+              description: bootcamp.description,
+              status: bootcamp.isActive
             }
           })
           setInstructors(_ => {
@@ -1952,8 +1998,42 @@ export function BootcampDetails({}){
     })
   }
 
+  async function toggleBootcampStatusHandler(e){
+    setLoading(_ => true);
+    try{
+      const res = await toggleBootcampStatus(userdata?.token, params?.id);
+      const {message, statusCode, success} = res;
+      if(!success) throw new AdvancedError(message, statusCode);
+      else {
+        console.log(res);
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    }catch(err){
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }finally{
+      setLoading(_ => false);
+    }
+  }
+
 
   async function deleteBootcampHandler(e){
+    setLoading(_ => true);
     try{
       const res = await deleteBootcamp(userdata?.token, params?.id);
       const {message, success, statusCode} = res;
@@ -1980,6 +2060,8 @@ export function BootcampDetails({}){
         draggable: true,
         progress: undefined,
       });
+    }finally {
+      setLoading(_ => false);
     }
   }
 
@@ -2072,6 +2154,11 @@ export function BootcampDetails({}){
               <button type="button" className={clsx.form_group__button}>
                 Add Student
               </button>
+            </div>
+
+            <div className={clsx.form_group} style={{marginTop: 40}}>
+              <label>Change Bootcamp Status</label>
+              <Switch onClick={toggleBootcampStatusHandler} size="large" checked={formstate.status} />
             </div>
 
           </form>
@@ -2572,6 +2659,8 @@ export function CreateCourse() {
     categoryName: "",
     description: "",
     type: "",
+    startDate: "",
+    endDate: "",
     price: "",
     faqs: [],
   });
@@ -2617,7 +2706,9 @@ export function CreateCourse() {
                 description: course.description,
                 type: course.type,
                 categoryName: course.category,
-                price: course.price
+                price: course.price,
+                startDate: course.startDate.split("T")[0],
+                endDate: course.endDate.split("T")[0]
               }
             })
             setPackages(_ => {
@@ -2675,7 +2766,8 @@ export function CreateCourse() {
         formstate.name === "" ||
         formstate.categoryName === "" ||
         formstate.description === "" ||
-        formstate.price === ""
+        formstate.price === "" ||
+        formstate.startDate === "" || formstate.endDate === ""
       )
         throw new AdvancedError("All fields are required", 0);
       console.log({...formstate, syllabus: [...syllabuses], packages: [packageState]})
@@ -2762,6 +2854,26 @@ export function CreateCourse() {
                 <option value="FLAT">Flat</option>
                 <option value="PACKAGE">Package</option>
               </select>
+            </div>
+            <div className="d-flex flex-wrap">
+              <div className="col-sm-5 col-md-5" style={{marginRight: 50}}>
+                <Input
+                  label="Start Date"
+                  name="startDate"
+                  type="date"
+                  value={formstate.startDate}
+                  handleChange={changeHandler}
+                />
+              </div>
+              <div className="col-sm-5 col-md-5">
+                <Input
+                  label="End Date"
+                  name="endDate"
+                  type="date"
+                  value={formstate.endDate}
+                  handleChange={changeHandler}
+                />
+              </div>
             </div>
            {!location.search && (<div className={clsx.form_group}>
               <label htmlFor={"package"}>Package</label>
