@@ -29,7 +29,7 @@ const bootcamps = [
     link:"/categories/web-development"
   },
   {
-    title: "UI/UX Desing Bootcamp",
+    title: "UI/UX Design Bootcamp",
     content: "Launch into UI/UX design with an intensive training",
     image: Ui,
     link:"/categories/web-design"

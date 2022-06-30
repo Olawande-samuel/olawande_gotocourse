@@ -793,7 +793,11 @@ export function CreateCourseCategory(){
           if (!success) throw new AdvancedError(message, statusCode);
           else if (statusCode === 1) {
             const { data } = res;
-            setFormstate(_ => data);
+            
+            const iconImg = data.iconImg?.split("/").slice(-1)
+            const bannerImg = data.bannerImg?.split("/").slice(-1)
+            setFormstate({...data, bannerImg: bannerImg[0], iconImg: iconImg[0]});
+            
             data.nicheItems && setNichelists(_ => data.nicheItems)
             data.careerList && setCareerlists(_ => data.careerList)
             toast.success(message, {
@@ -827,6 +831,11 @@ export function CreateCourseCategory(){
     flag.current = true;
     return () => console.log("Removing CreateBootcamp component");
   }, [])
+  
+  console.log(formstate)
+
+
+
   async function submitHandler(e){
     e.preventDefault();
     setLoading(_ => true);
@@ -1308,11 +1317,11 @@ export function Approve() {
               <label htmlFor="level" className="form-label generic_label">Assign Level</label>
               <select name="level" id="level" className="form-select" style={{width: "unset"}}>
                 <option value="">Select a level</option>
-                <option value="">1</option>
-                <option value="">2</option>
-                <option value="">3</option>
-                <option value="">4</option>
-                <option value="">5</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
               </select>
               </div> 
               

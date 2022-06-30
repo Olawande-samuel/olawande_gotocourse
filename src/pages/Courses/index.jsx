@@ -199,13 +199,13 @@ const Courses = ({ children }) => {
             <nav arial-label="breadcrumb">
               <ol className="breadcrumb">
                 <li className="breadcrumb-item">
-                  <Link to="/">Homepage</Link>
+                  <Link to="/">HOMEPAGE</Link>
                   </li>
-                {bread.filter(item=> item !== "").map((item, idx)=>(
-                    <li className="breadcrumb-item active text-capitalize">
-                      <NavLink  to={`${bread.slice(0, idx + 2).join("/")}`}>{item.split("-").join(" " )}</NavLink>
-                    </li>
-                  ))}
+                    {bread.filter(item=> item !== "").map((item, idx)=>(
+                      <li className="breadcrumb-item active text-uppercase">
+                        <NavLink  to={`${bread.slice(0, idx + 2).join("/")}`}>{item.split("-").join(" " )}</NavLink>
+                      </li>
+                    ))}
               </ol>
             </nav>
           </div>
@@ -748,8 +748,8 @@ export const CourseDetail = ({preview}) => {
     <Courses>
       <main className={style.details_main}>
         <div className={style.banner}>
-          {/* <img src={categoryDetails?.bannerImg ? categoryDetails?.bannerImg : banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} /> */}
-          <img src={banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} />
+          <img src={categoryDetails?.bannerImg ? categoryDetails?.bannerImg : banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} />
+          {/* <img src={banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} /> */}
           <div className="container py-5 position-relative">
             <div className={style.box}>
               {categoryDetails?.iconImg && <img src={categoryDetails?.iconImg} alt="" /> }
@@ -766,7 +766,7 @@ export const CourseDetail = ({preview}) => {
                 <p>
                   {categoryDetails?.description}
                 </p>
-                <p>{categoryDetails?.importance}</p>
+                <p>{categoryDetails?.niche ? categoryDetails?.niche : categoryDetails?.importance}</p>
               </article>
               <article>
                 <h3 className="text-uppercase">{`${categoryDetails?.name} Niche`}</h3>
@@ -796,6 +796,11 @@ export const CourseDetail = ({preview}) => {
                   <li>{name}</li>
                   ))
                   }
+                  {categoryDetails?.carreerList?.length > 0 && categoryDetails.carreerList.map(({name})=>(
+                  <li>{name}</li>
+                  ))
+                  }
+
                 </ul>
               </aside>
             </div>
