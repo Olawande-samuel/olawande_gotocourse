@@ -23,7 +23,7 @@ const TeacherSignup = () => {
     email: "",
     password: "",
     retype_password: "",
-    userType: "teacher",
+    userType: "",
   })
   const navigate = useNavigate();
 
@@ -56,10 +56,8 @@ const TeacherSignup = () => {
       ;
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
-      console.log(others);
       const response = await register(others, "user");
 
-      console.log(response);
       let { success, message, statusCode } = response;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -125,15 +123,24 @@ const TeacherSignup = () => {
             placeholder="Confirm Password"
             password="password"
           />
+            
+            <div className="form-group d-flex ">
+              <input type="radio" name="userType" id="teacher" onChange={changeHandler} value="teacher" />
+              <label htmlFor="teacher" className=" generic_label ms-3">Teacher</label>
+            </div>
+            <div className="form-group d-flex ">
+              <input type="radio" name="userType" id="mentor" onChange={changeHandler} value="mentor" />
+              <label htmlFor="mentor" className=" generic_label ms-3">Mentor</label>
+            </div>
           {loading ? (
-            <button className="button button-lg log_btn w-100">
+            <button className="button button-lg log_btn w-100 mt-4">
               <div className="spinner-border" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
             </button>
           ) : (
           <div>
-            <button className="button button-md log_btn w-100" type="submit">Register</button>
+            <button className="button button-md log_btn w-100 mt-4" type="submit">Register</button>
           </div>
           )}
         </form>

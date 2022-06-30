@@ -27,6 +27,7 @@ import { careers } from "../../components/Career";
 import style from "./courses.module.css";
 import banner from "../../images/header.png";
 import details from "../../images/course_details.png";
+import placeholder from "../../images/cybersecurity.webp";
 import { Rating } from "react-simple-star-rating";
 
 export function ScrollToTop() {
@@ -248,7 +249,7 @@ export const  CourseCard = ({ courseImg, name, description, category, instructor
       localStorage.setItem("gotocourse-courseInfo", JSON.stringify(course ))
       navigate(show === true ?  `courses/${name?.replace(/\s+/g, '-').toLowerCase()}`:`${name?.replace(/\s+/g, '-').toLowerCase()} `)
       }}>
-      <img src={courseImg} alt="" className="card-img-top mentor_image" />
+      <img src={courseImg ? courseImg : placeholder} alt="" className="card-img-top mentor_image" />
       <div className={`card-body ${style.course_Card_body}`}>
         <Link to={show === true ?  `courses/${name?.replace(/\s+/g, '-').toLowerCase()}`:`${name?.replace(/\s+/g, '-').toLowerCase()} `}>
           <h5 className={`card-title ${style.course_title}`} style={{ color:color}}>{name}</h5>
@@ -747,16 +748,10 @@ export const CourseDetail = ({preview}) => {
   return (
     <Courses>
       <main className={style.details_main}>
-        <div className={style.banner}>
-          <img src={categoryDetails?.bannerImg ? categoryDetails?.bannerImg : banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} />
-          {/* <img src={banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} /> */}
-          <div className="container py-5 position-relative">
-            <div className={style.box}>
-              {categoryDetails?.iconImg && <img src={categoryDetails?.iconImg} alt="" /> }
-            </div>
-          </div>
-        </div>
         <div className={`container ${style.details_main} `}>
+          <div className={` mb-5 ${style.banner}`}>
+            <img src={categoryDetails?.bannerImg ? categoryDetails?.bannerImg : banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} />
+          </div>
           <div className={`row ${style.top} justify-content-between`}>
             <section className="col-md-7">
               <article>

@@ -12,7 +12,7 @@ import {Product} from "../../../images/components/svgs"
 import Loader from "../../../components/Loader"
 import { Sidebar, Searchbar } from "../components";
 import clsx from "./styles.module.css";
-import { colors } from "../../../constants";
+import { colors, getDate } from "../../../constants";
 import avatar from "../../../images/teacher.png"
 import { useAuth } from "../../../contexts/Auth";
 import {GuardedRoute} from "../../../hoc";
@@ -26,6 +26,8 @@ import { Box, Modal } from "@mui/material";
 
 
 const KEY = 'gotocourse-userdata';
+
+
 export function Profile(){
     const {generalState: {isMobile, notification,loading}, setGeneralState, studentFunctions: {fetchProfile}} = useAuth();
 
@@ -339,7 +341,7 @@ export function Bootcamps() {
     const {getItem} = useLocalStorage();
     const flag = useRef(false);
     let userdata = getItem(KEY);
-    const [courseList, setCourseList] = useState(["hi"])
+    const [courseList, setCourseList] = useState([])
     const [loading, setLoading] = useState(true);
   
     const tableHeaders = [ "No", "Title", "Details", "Type", "Duration", "Date", "Time" ];
@@ -364,9 +366,10 @@ export function Bootcamps() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-              });
-    
-              toast.error("message", {
+            });
+            } else {
+
+                toast.error("No bootcamp found", {
                 position: "top-right",
                 autoClose: 4000,
                 hideProgressBar: true,
@@ -374,7 +377,7 @@ export function Bootcamps() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-              });
+                });
             }
             
             } else {
@@ -400,42 +403,49 @@ export function Bootcamps() {
     function gotoCreateCourseHandler(e){
       navigate("create");
     }
+    function detailHandler(e, _id){
+        navigate("details/"+_id);
+      }
     return (
       <Students header={"Bootcamps"}>
         {loading && <Loader />}
         <div className={clsx["admin_profile"]}>
           <div className={clsx.admin__student}>
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <h1 style={{margin: 0}}>Bootcamps</h1>  
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h3 style={{margin: 0}}>Bootcamps</h3>  
             </div>
-  
             <div className={clsx.admin__student_main}>
-              <table className={clsx.admin__student_table}>
+                {courseList.length > 0 ? (
+                    <table className={clsx.admin__student_table}>
                 <thead>
                   {tableHeaders.map((el, i) => (
                     <th key={i}>{el}</th>
                   ))}
                 </thead>
                 <tbody>
-                  {courseList.length > 0 && courseList.map(
-                    ( item, i ) => (
+                  {courseList.map(
+                    ( {title, duration, description, type, startTime, endTime, endDate, startDate, _id}, i ) => (
                       <BootcampRow
-                        key={i}
-                        comp={"Courses"}
-                        index={i}
-                        title="Lorem ipsum dolor sit amet."
-                        detail={"Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur sint tempore iste animi nisi eius alias eveniet possimus itaque voluptatem tenetur necessitatibus asperiores repellat sapiente, laborum aspernatur in quam maxime!"}
-                        duration={"16 weeks"}
-                        type={"Full Time"}
-                        time={"6am - 12pm CET"}
-                        date={"Jan 6 - Mar 24"}
+                      key={i}
+                      index={i}
+                      title={title}
+                      detail={description}
+                      duration={duration}
+                      type={type}
+                      admin={false}
+                      clickHandler={e => detailHandler(e, _id)}
+                      time={`${startTime} - ${endTime} CST`}
+                      date={`${getDate(startDate)} - ${getDate(endDate)}`}
                       />
                     )
                   )}
                   <p>
                   </p>
                 </tbody>
-              </table>
+                </table>
+                ):( <p className="lead">No bootcamps found</p>)
+                }
+              
             </div>
           </div>
         </div>

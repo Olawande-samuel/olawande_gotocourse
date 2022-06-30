@@ -1133,7 +1133,7 @@ export const studentFunctions = {
     },
     fetchBootcamps: async function(token){
         try{
-            const res = await axios.get(`${baseURL}/teacher/bootcamps/fetch`,
+            const res = await axios.get(`${baseURL}/user/bootcamps/fetch`,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,

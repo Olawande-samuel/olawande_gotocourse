@@ -163,7 +163,7 @@ const Mentors = () => {
           ))}
         </Swiper>
         <div className="text-end w-100 my-4 ">
-        <Link to="/teachers" className="text-end text-secondary">Learn more <i><GoChevronRight /></i></Link>
+        <Link to="/mentors" className="text-end text-secondary">Learn more <i><GoChevronRight /></i></Link>
         </div>
       </div>
     </section>
