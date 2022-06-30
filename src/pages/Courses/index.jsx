@@ -747,14 +747,14 @@ export const CourseDetail = ({preview}) => {
   return (
     <Courses>
       <main className={style.details_main}>
-        <div className={style.banner}>
+        <div className={` mb-5 ${style.banner}`}>
           <img src={categoryDetails?.bannerImg ? categoryDetails?.bannerImg : banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} />
           {/* <img src={banner } alt="" style={{ background:"linear-gradient(90deg, rgba(247,92,78,1) 12%, rgba(12,33,145,1) 72%)"}} /> */}
-          <div className="container py-5 position-relative">
+          {/* <div className="container py-5 position-relative">
             <div className={style.box}>
               {categoryDetails?.iconImg && <img src={categoryDetails?.iconImg} alt="" /> }
             </div>
-          </div>
+          </div> */}
         </div>
         <div className={`container ${style.details_main} `}>
           <div className={`row ${style.top} justify-content-between`}>
