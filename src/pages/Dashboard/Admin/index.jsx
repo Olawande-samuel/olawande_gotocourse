@@ -1001,20 +1001,19 @@ export function CreateCourseCategory(){
               value={formstate.name.toUpperCase()}
             />
             <Input
-              label="Description"
+              label="First Description"
               name="description"
               type="text"
               handleChange={changeHandler}
               value={formstate.description}
             />
             <Input
-              label="Niche"
+              label=" Second Description"
               name="niche"
               type="text"
               handleChange={changeHandler}
               value={formstate.niche}
             />
-
             <div className={clsx.form_group}>
               <label htmlFor={"brief"}>
                 Niche Description
