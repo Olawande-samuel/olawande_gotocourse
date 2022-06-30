@@ -562,7 +562,7 @@ export const adminFunctions = {
             }
         }
     },
-    updateCourseStatus: async function(token, id){
+    toggleCourseStatus: async function(token, id){
         try{
             const res = await axios.patch(`${baseURL}/admin/course/status/toggle/${id}`,
             {
