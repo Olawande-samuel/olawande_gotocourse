@@ -25,6 +25,7 @@ import TeacherSignup from "./pages/User/TeacherSignup";
 import SyllabusContextProvider from "./contexts/Syllabus";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
+import Bootcamp from "./pages/Bootcamp";
 
 
 
@@ -37,6 +38,7 @@ function App() {
           <Route index element={<Landing />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
+            <Route path="bootcamp" element={<Bootcamp />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
             <Route path="change-password" element={<ResetPassword />} />
             <Route path="become-a-teacher" element={<BecomeATeacher />} />
