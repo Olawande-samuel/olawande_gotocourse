@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import {Link, useNavigate} from "react-router-dom"
 
+import mentor from "../../images/productDesigner.png";
+import mentor2 from "../../images/mentor3.png";
+import mentor3 from "../../images/businessAnalyst.png";
 
 import Courses, { CourseCard } from "../Courses";
 import { courseList } from "../Courses";
@@ -12,6 +15,7 @@ import { useLocalStorage } from "../../hooks";
 import { toast } from "react-toastify";
 import { AdvancedError } from "../../classes";
 import {witnesses, Card as MentorsCard} from "../../components/Mentors"
+import { useRef } from "react";
 
 const KEY = "gotocourse-userdata";
 
@@ -36,11 +40,86 @@ const All = ({type}) => {
     setSearch(e.target.value);
   }
 
-  const {setGeneralState} = useAuth();
   const navigate = useNavigate()
+  const {generalState, setGeneralState, otherFunctions: {fetchMentors}} = useAuth();
+  const [mentors, setMentors] = useState([
+    {
+      id: 1,
+      title:"Product Designer",
+      content: "Discuss how to kickstart your career as a product designer",
+      profile: mentor,
+      location: "Sarah Grace",
+      other:"11 years work experience"
+  
+    },
+    {
+      id: 2,
+      title:"Product Manager",
+      content: "Discuss how to kickstart your career as a product manager",
+      profile: mentor2,
+      location: "Amanda George",
+      other:"11 years work experience"
+  
+    },
+    {
+      id: 3,
+      title:"Business Analyst",
+      content: "Discuss how to kickstart your career as a business analyst",
+      profile: mentor3,
+      location: "Cassandra Geoffrey",
+      other:"11 years work experience"
+    },
+    {
+      id: 4,
+      title:"Data Scientist",
+      content: "Discuss how to kickstart your career as a data scientist",
+      profile: mentor2,
+      location: "Patrick Quinn",
+      other:"11 years work experience"
+  
+    },
+    {
+      id: 5,
+      title:"Web Designer",
+      content: "Discuss how to kickstart your career web designer",
+      profile: mentor2,
+      location: "Cassandra Geoffrey",
+      other:"11 years work experience"
+  
+    },
+    {
+      id: 6,
+      title:"Software Developer",
+      content: "Discuss how to kickstart your career as a software development",
+      profile: mentor3,
+      location: "Niyi Adegoke",
+      other:"13 years work experience"
+  
+    },
+  ])
+  const ref = useRef(false);
 
   // fetch teachers/mentors
-  useEffect(()=>{},[])
+
+    useEffect(()=>{
+      if(ref.current) return
+      (async()=>{
+        try{
+          setGeneralState({...generalState, loading: true})
+          const res = await fetchMentors();
+          const {success, message, statusCode, data} = res;
+          setGeneralState({...generalState, loading: false})
+          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+          if(data.length > 0){
+            setMentors(data)
+          }
+      }catch(err){
+          setGeneralState({...generalState, loading: false})
+      }
+      })()
+      ref.current = true
+    },[])
+
   console.log("courseList",courseList)
   return (
     <Courses>
@@ -53,7 +132,7 @@ const All = ({type}) => {
         <main className={`mentors_list_main ${style.main}`}>
           {
           type === "mentors" ?  
-          witnesses
+          mentors
           // .filter(item=> item.subtitle.includes(search))
           .map((item) => (
               <div className="mentors_list_card">

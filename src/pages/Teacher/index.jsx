@@ -35,30 +35,29 @@ export const Home = () => {
 
     const faqs = [
         {
+            question: "How do I get paid?",
+            answer: "When students pay for courses, we share and convey teachers’ commissions. We operate a rather flexible concept that involves sharing profits among our contributors."
+        },
+        {
+            question: "Is there a discount for a school with a large number of students?",
+            answer: "Yes, we offer a discount for schools with many students. For more details, please email."
+        },
+        {
+            question: "Can I receive payments directly from my students?",
+            answer: "No. Students can only pay via the Gotocourse payment system while Gotocourse pays you afterward."
+        },
+        {
+            question: "How do I receive my payment?",
+            answer: "You receive your payments to your Paypal or Stride."
+        },
+        {
             question: "Can I host the school on my domain name?",
             answer: "Yes, you can have a school onGotocourse. You can select your domain name or have your school hosted on a Gotocourse subdomain. To learn more about this, please send an email to "
         },
         {
-            question: "What currencies do you support?",
-            answer: "You can currently pay us in either naira or dollars. We're working on supporting more currencies, though"
+            question: "Can I teach a subject other than the one I earned my degree in?",
+            answer: "-That wouldn’t do! Teachers will only teach in their respective areas of expertise after enough tests and have gained trust from Gotocourse."
         },
-        {
-            question: "When will I pay?",
-            answer: "Both monthly and yearly payments are allowed."
-        },
-        {
-            question: "Without being enrolled, can I take courses in a school?",
-            answer: "No. The platform is virtual, and you must enroll in a school first."
-        },
-        {
-            question: "Is there a discount for a school with a large number of students?",
-            answer: "Yes, we offer a discount for schools with many students. For more details, please email "
-        },
-        {
-            question: "Can I receive payments directly from my students?",
-            answer: "No. Students can only pay via the Gotocourse payment system. In naira and dollar now, though"
-        }
-        
     ]
 
 

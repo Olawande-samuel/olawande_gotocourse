@@ -152,10 +152,10 @@ export const adminTeacherFunctions = {
             }
         }
     },
-    makeMentorPage: async function(_data, token){
+    makeMentorPage: async function(token,  _data ){
         try{
             console.log(_data)
-            const res = await axios.patch(`${baseURL}/admin/teacher/pledre/toggle`,
+            const res = await axios.post(`${baseURL}/admin/mentor/page/add`,
             JSON.stringify(_data),
             {
                 headers: {
@@ -185,7 +185,7 @@ export const adminTeacherFunctions = {
     addMentor: async function(_data, token){
         try{
             console.log(_data)
-            const res = await axios.post(`${baseURL}/admin/category/add`,
+            const res = await axios.post(`${baseURL}/admin/mentor/add`,
             JSON.stringify(_data),
             {
                 headers: {
@@ -212,11 +212,10 @@ export const adminTeacherFunctions = {
             }
         }
     },
-    updateMentor: async function(_data, token){
+    updateMentor: async function(id, data, token){
         try{
-            console.log(_data)
-            const res = await axios.patch(`${baseURL}/admin/teacher/pledre/toggle`,
-            JSON.stringify(_data),
+            const res = await axios.put(`${baseURL}/admin/mentor/page/update/${id}`,
+            JSON.stringify(data),
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -242,9 +241,9 @@ export const adminTeacherFunctions = {
             }
         }
     },
-    deleteCourse: async function(token, id){
+    deleteMentor: async function(id, token){
         try{
-            const res = await axios.delete(`${baseURL}/admin/course/delete/${id}`,
+            const res = await axios.delete(`${baseURL}/admin/mentor/page/delete/${id}`,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,

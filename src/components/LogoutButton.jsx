@@ -24,6 +24,7 @@ const LogoutButton = () => {
         try{
             const key = 'gotocourse-userdata';
             removeItem(key);
+            localStorage.clear()
             navigate("/login");
             toast.success("Logout out successfully",{
                 position:"top-right",

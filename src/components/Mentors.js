@@ -70,8 +70,62 @@ export const witnesses = [
   },
 ];
 const Mentors = () => {
-  const {generalState, setGeneralState, otherFunctions: {fetchCategories}} = useAuth();
-  const [mentors, setMentors] = useState([])
+  const {generalState, setGeneralState, otherFunctions: {fetchMentors}} = useAuth();
+  const [mentors, setMentors] = useState([
+    {
+      id: 1,
+      title:"Product Designer",
+      content: "Discuss how to kickstart your career as a product designer",
+      profile: mentor,
+      location: "Sarah Grace",
+      other:"11 years work experience"
+  
+    },
+    {
+      id: 2,
+      title:"Product Manager",
+      content: "Discuss how to kickstart your career as a product manager",
+      profile: mentor2,
+      location: "Amanda George",
+      other:"11 years work experience"
+  
+    },
+    {
+      id: 3,
+      title:"Business Analyst",
+      content: "Discuss how to kickstart your career as a business analyst",
+      profile: mentor3,
+      location: "Cassandra Geoffrey",
+      other:"11 years work experience"
+    },
+    {
+      id: 4,
+      title:"Data Scientist",
+      content: "Discuss how to kickstart your career as a data scientist",
+      profile: mentor2,
+      location: "Patrick Quinn",
+      other:"11 years work experience"
+  
+    },
+    {
+      id: 5,
+      title:"Web Designer",
+      content: "Discuss how to kickstart your career web designer",
+      profile: mentor2,
+      location: "Cassandra Geoffrey",
+      other:"11 years work experience"
+  
+    },
+    {
+      id: 6,
+      title:"Software Developer",
+      content: "Discuss how to kickstart your career as a software development",
+      profile: mentor3,
+      location: "Niyi Adegoke",
+      other:"13 years work experience"
+  
+    },
+  ])
   const ref = useRef(false);
 
 
@@ -92,14 +146,13 @@ const Mentors = () => {
     (async()=>{
       try{
         setGeneralState({...generalState, loading: true})
-        const res = await fetchCategories();
+        const res = await fetchMentors();
         const {success, message, statusCode, data} = res;
         setGeneralState({...generalState, loading: false})
-
           if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-          setMentors(data)
-         
-      
+          if(data.length > 0){
+            setMentors(data)
+          }
     }catch(err){
         setGeneralState({...generalState, loading: false})
     }
@@ -156,7 +209,7 @@ const Mentors = () => {
             },
           }}
         >
-          {witnesses.map((item) => (
+          {mentors.length> 0 && mentors.map((item) => (
             <SwiperSlide>
               <Card item={item} />
             </SwiperSlide>
@@ -181,25 +234,29 @@ export const Card = ({ item,type }) => {
         teacherProfile: item
       }
     })
-    let meta = item.location.split(" ");
-    let name = meta[0] + "-" + meta[1]; 
-    navigate("/mentors/"+name);
+    navigate(`/mentors/${item.mentorFirstName}-${item.mentorLastName}`)
+    // let meta = item.location?.split(" ");
+    // let name = meta[0] + "-" + meta[1]; 
+    // item?.mentorFirstName ? (
+    //   ):(
+    //     navigate("/mentors/"+name)
+    //   )
   }
   return (
     <div className="px-1" style={{cursor: "pointer"}} onClick={gotoMentorPage}>
       <div className="card">
         <div className="card-body">
-        <div className="mentors_card_top" style={{background:`url(${item.profile}), rgba(0, 0, 0, 0.5)`}}>
+        <div className="mentors_card_top" style={{background:`url(${item.mentorImg ? item.mentorImg : item.profile}), rgba(0, 0, 0, 0.5)`}}>
         {/* <img src={item.profile} alt="" className="card-img-top mentor_image" /> */}
         
           <div>
-           <h5>{item.title}</h5>
-            <p>{item.content}</p>
+           {/* <h5>{item.mentorBio ? item.mentorBio : item.title}</h5> */}
+            <p>{item.mentorBio ? item.mentorBio : item.content}</p>
           </div>
         </div>
         <div className="text-dark w-100 px-2">
-          <h5 className="">{item.location}</h5>
-          <small className="">{item.other}</small>
+          <h5 className="">{`${item.mentorFirstName ? item.mentorFirstName : item.location}  ${item.mentorLastName && item.mentorLastName} `}</h5>
+          <small className="">{item.expertise? item.expertise : item.other}</small>
         </div>
         </div>
       </div>
