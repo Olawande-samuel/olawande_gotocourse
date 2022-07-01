@@ -1247,7 +1247,7 @@ export function Approve() {
   const navigate = useNavigate()
   const [data, setData] = useState(null);
   const {getItem} = useLocalStorage();
-  const { adminTeacherFunctions: { verify, verify_pledre }, setGeneralState, } = useAuth();
+  const { adminTeacherFunctions: { verify, verify_pledre, addMentor}, setGeneralState, } = useAuth();
   const info = [
     {
       title: "Courses",
@@ -1321,6 +1321,56 @@ export function Approve() {
         });
     }
   }
+ async function conferMentorship( e, id, email){
+  e.preventDefault();
+    const userdata = getItem(KEY)
+    let item = {
+      teacherEmail: email,
+    };
+    try {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: true,
+        };
+      });
+      
+      const res = await addMentor(item, userdata?.token);
+      console.log('res', res)
+      const { message, success, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        //do somethings
+        // localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }) 
+    } finally{
+        setGeneralState((old) => {
+          return {
+            ...old,
+            loading: false,
+          };
+        });
+    }
+  }
   return (
     <Admin header="Approval">
       <div className={clsx["admin_profile"]}>
@@ -1349,6 +1399,10 @@ export function Approve() {
                 } type="button">Assign Mentorship</button>
             </div> */}
 
+            <div className="form-group my-3">
+              <label htmlFor="accessPledre" className="form-label generic_label">Confer Mentorship</label>
+              <Switch onClick={(e)=>conferMentorship(e, data?.userId, data?.email)} checked={false} />
+            </div>
             <div className="form-group my-3">
               <label htmlFor="accessPledre" className="form-label generic_label">Access Pledre</label>
               <Switch onClick={(e)=>handleVerification(e, "pledre", data?.userId)} checked={data?.accessPledre} />
@@ -1629,11 +1683,125 @@ export function Teachers() {
     </Admin>
   );
 }
+// MENTORS COMPONENT
+export function Mentors() {
+
+  const { getItem } = useLocalStorage();
+  let userdata = getItem(KEY);
+  const flag = useRef(false);
+  const navigate = useNavigate();
+  const [teachers, setTeachers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const {
+    otherFunctions: { fetchMentors }
+  } = useAuth();
+  useEffect(() => {
+    if(flag.current) return;
+    (async () => {
+      try {
+        const token = userdata?.token;
+        console.log(token)
+        const res = await fetchMentors(token);
+        console.log(res);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          const { data } = res;
+          //do somethings
+          if(data.length > 0) {
+
+            console.log(data);
+          setTeachers(_=>  data);
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+         }  else {
+          toast.success("No mentor page found", {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+         }
+        } 
+      } catch (err) {
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }finally {
+        setLoading(_ => false);
+      }
+    })();
+    flag.current = true;
+  }, []);
+
+  const tableHeaders = ["No", "Name", "Email", "Expertise"];
+
+  function approveHandler(e, email, details) {
+    console.log(e.target, email);
+    localStorage.setItem("gotocourse-mentorDetails", JSON.stringify(details))
+    if (email) navigate(`detail`);
+  }
+  return (
+    <Admin header={"Mentors"}>
+      {loading && <Loader />}
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+          <div className="d-flex justify-content-between align-items-center">
+            <h1>Mentors</h1>
+            {/* <button className="btn button-md" style={{background:"var(--theme-blue)", color:"#fff"}} type="button" onClick={()=>navigate("create/mentor")}>Add Mentor</button> */}
+          </div>
+          <div className={`table-responsive ${clsx.admin__student_main}`}>
+            <table className={`${clsx.admin__student_table}`}>
+              <thead>
+                {tableHeaders.map((el, i) => (
+                  <td key={i}>{el}</td>
+                ))}
+              </thead>
+              <tbody>
+                {teachers?.length > 0 ? teachers?.map((teacher, i) => (
+                  <UserInfoCard
+                    key={i}
+                    user={true}
+                    firstName={teacher.mentorFirstName}
+                    lastName={teacher.mentorLastName}
+                    img={teacher.mentorImg}
+                    num={i}
+                    email={teacher.mentorEmail}
+                    level={teacher.expertise}
+                    details={teacher}
+                    approveHandler={approveHandler}
+                    // accessPledre={teacher.accessPledre}
+                  />
+                )) : <h5 style={{textAlign:'center'}}>No mentor page found</h5>}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </Admin>
+  );
+}
 
 // ADD MENTORS COMPONENT 
 
-export function AddMentor(){
-  const { adminFunctions: { makeMentor} } = useAuth();
+export function AddMentor({edit}){
+  const { adminTeacherFunctions: { makeMentorPage, updateMentor} } = useAuth();
   const {getItem} = useLocalStorage();
 
   const [previewImage, setPreviewImage] = useState(false);
@@ -1648,28 +1816,32 @@ export function AddMentor(){
 
   const [loading, setLoading] = useState(false);
   const [formstate, setFormstate] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    bio: "",
-    location: "",
-    work: "",
-    category: "",
-    img: "",
+    mentorFirstName: "",
+    mentorLastName: "",
+    mentorEmail: "",
+    mentorBio: "",
+    expertise: "",
+    fee: "",
               
   });
 
   const navigate = useNavigate();
 
+useEffect(()=>{
+    if(edit){
+      const editMentorData =  getItem("gotocourse-mentorDetails")
+      setFormstate(editMentorData)
+    }
 
-
+},[edit])
 
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await makeMentor(formstate);
+      const res =  edit === "mentor" ? await updateMentor( formstate._id, formstate, userdata?.token,) : await makeMentorPage(userdata?.token, formstate);
       const { success, message, statusCode, data } = res;
+      console.log(data)
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         toast.success(message, {
@@ -1681,7 +1853,12 @@ export function AddMentor(){
           draggable: true,
           progress: undefined,
         });
-        navigate(-1)
+        if(edit === "mentor"){
+          localStorage.setItem("gotocourse-mentorDetails", JSON.stringify(data))
+          navigate(-1)
+        }
+        
+        
       }
     } catch (err) {
       toast.error(err.message, {
@@ -1771,31 +1948,31 @@ export function AddMentor(){
           <form className="form" style={{width: "80%"}}>
             <Input
               label="Profile image file name"
-              name="profileImg"
+              name="mentorImg"
               type="text"
               handleChange={changeHandler}
-              value={formstate.profileimg}
+              value={formstate.mentorImg}
             />
             <Input
               label="First name"
-              name="firstName"
+              name="mentorFirstName"
               type="text"
               handleChange={changeHandler}
-              value={formstate.firstName}
+              value={formstate.mentorFirstName}
             />
             <Input
               label="Last name"
-              name="lastName"
+              name="mentorLastName"
               type="text"
               handleChange={changeHandler}
-              value={formstate.lastName}
+              value={formstate.mentorLastName}
             />
               <Input
                 label="Mentor's Email"
-                name="Email"
+                name="mentorEmail"
                 type="email"
                 handleChange={changeHandler}
-                value={formstate.email}
+                value={formstate.mentorEmail}
               />
             <div className={clsx.form_group}>
               <label htmlFor={"bio"} className="form-label generic_label">
@@ -1803,26 +1980,26 @@ export function AddMentor(){
               </label>
               <textarea
                 rows="5"
-                name="bio"
-                value={formstate.bio}
+                name="mentorBio"
+                value={formstate.mentorBio}
                 onChange={changeHandler}
                 className="form-control generic_input"
               ></textarea>
             </div> 
             <Input
               label="Area of Expertise"
-              name="area"
+              name="expertise"
               type="text"
               handleChange={changeHandler}
-              value={formstate.area}
+              value={formstate.expertise}
             />
 
             <Input
               label="Fees per session"
-              name="fees"
+              name="fee"
               type="text"
               handleChange={changeHandler}
-              value={formstate.fees}
+              value={formstate.fee}
             />
 
             {loading ? (
@@ -1846,6 +2023,142 @@ export function AddMentor(){
     </Admin>
 
   )
+}
+
+
+//MENTORS DETAILS COMPONENT
+export function MentorsDetail() {
+  const navigate = useNavigate()
+  const [data, setData] = useState(null);
+  const {getItem} = useLocalStorage();
+  const { adminTeacherFunctions: {  deleteMentor }, setGeneralState, } = useAuth();
+  const info = [
+    {
+      title: "Courses",
+      content: "UX Designer",
+    },
+    {
+      title: "Category",
+      content: "Cybersecurity, UX, Data Analysis",
+    },
+    {
+      title: "Mentorship status",
+      content: "Unassigned",
+    },
+  ];
+  
+  useEffect(() => {
+    const teacherInfo = getItem("gotocourse-mentorDetails")
+    setData(teacherInfo);
+  }, []);
+
+  let accessPledre = false;
+
+ async function deleteMentorPage( e, id){
+  e.preventDefault();
+    const userdata = getItem(KEY)
+    let item = {
+      userId: id,
+    };
+    try {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: true,
+        };
+      });
+
+      const res =  await deleteMentor(id, userdata?.token);
+      console.log('res', res)
+      const { message, success, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        //do somethings
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        navigate(-1)
+      }
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }) 
+    } finally{
+        setGeneralState((old) => {
+          return {
+            ...old,
+            loading: false,
+          };
+        });
+    }
+  }
+  return (
+    <Admin header="Mentor Details">
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx["admin_profile_top"]}>
+          <div className={clsx["admin_profile_top_img"]}>
+            <img
+              src={data?.mentorImg ? data.mentorImg : avatar}
+              style={{ borderRadius: 10 }}
+              width="100%"
+              alt="Avatar"
+            />
+          </div>
+        </div>
+        <div className={clsx["admin_profile_main"]}>
+          <h1>{data ? `${data?.mentorFirstName} ${data?.mentorLastName}` : ""}</h1>
+
+          <div className={clsx.admin__profile_info}>
+          <div className={clsx.admin__info}>
+            <span className={clsx.admin__info_title}>Email</span>
+            <span className={clsx.admin__info_content}>{data?.mentorEmail}</span>
+          </div>
+          <div className={clsx.admin__info}>
+            <span className={clsx.admin__info_title}>Expertise</span>
+            <span className={clsx.admin__info_content}>{data?.expertise}</span>
+          </div>
+          <div className={clsx.admin__info}>
+            <span className={clsx.admin__info_title}>Bio</span>
+            <span className={clsx.admin__info_content}>{data?.mentorBio}</span>
+          </div>
+          <div className={clsx.admin__info}>
+            <span className={clsx.admin__info_title}>Fees</span>
+            <span className={clsx.admin__info_content}>{data?.fee}</span>
+          </div>  
+          <div className="d-flex align-items-center mt-3"></div>
+            <button
+              className="button button-lg log_btn me-4"
+              style={{ backgroundColor:"red" }}
+              type="submit"
+              onClick={(e)=>deleteMentorPage(e, data?._id) }
+            >
+             Delete
+            </button>
+            <button
+              className="button button-lg log_btn"
+              type="submit"
+              onClick={(e)=>{
+                navigate("edit")} }
+            >
+             Edit
+            </button>
+          </div>
+        </div>
+      </div>
+    </Admin>
+  );
 }
 
 // COURSES COMPONENT

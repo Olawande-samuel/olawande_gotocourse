@@ -3,6 +3,7 @@ import {MdMessage, MdHistory} from "react-icons/md";
 import {AiOutlineClose} from "react-icons/ai";
 import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash, IoIosHelpBuoy} from "react-icons/io";
 import {BiCategory} from "react-icons/bi";
+import {FaTwitch} from "react-icons/fa";
 import {useNavigate, useLocation, NavLink} from "react-router-dom";
 import {FiGift, FiSend, FiBookOpen} from "react-icons/fi";
 import {motion} from "framer-motion"
@@ -52,6 +53,11 @@ const Sidebar = ({isMobile}) => {
             icon: FiSend,
             path: "teachers",
             title: "Mentors/Teachers"
+        },
+        {
+            icon: FaTwitch,
+            path: "mentors",
+            title: "Mentors"
         },
         {
             icon: IoIosCash,
