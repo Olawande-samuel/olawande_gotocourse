@@ -15,13 +15,13 @@ const TeacherProfile = ({type}) => {
   const {pathname} = useLocation()
   const {generalState: {teacherProfile}} = useAuth();
   let name;
-  if(teacherProfile){
-    let meta = teacherProfile.location.split(" ");
-    name = meta[0] + " " + meta[1]; 
-  }else {
-    let meta = pathname.split("/").reverse()[0];
-    name = `${meta.split("-")[0]} ${meta.split("-")[1]}`
-  }
+  // if(teacherProfile){
+  //   let meta = teacherProfile.location.split(" ");
+  //   name = meta[0] + " " + meta[1]; 
+  // }else {
+  //   let meta = pathname.split("/").reverse()[0];
+  //   name = `${meta.split("-")[0]} ${meta.split("-")[1]}`
+  // }
 
   console.log(teacherProfile)
   return (
@@ -71,12 +71,12 @@ const TeacherProfile = ({type}) => {
               <div className="g-3">
                 <div className={style.teacher_image}>
                   <div className={style.teacher_img_wrapper}>
-                    <img src={teacherProfile ? teacherProfile.profile : Algo} alt="" className={style.teacher_image} />
+                    <img src={teacherProfile.mentorImg ? teacherProfile.mentorImg : teacherProfile.img} alt="" className={style.teacher_image} />
                   </div>
                 </div>
 
                 <div className={` mt-lg-3 ${style.teacher_card_right}`}>
-                  <p className={style.teacher_name}>{name}</p>
+                  <p className={style.teacher_name}>{`${teacherProfile?.mentorFirstName ? teacherProfile.mentorFirstName: teacherProfile.mentorLastName} ${teacherProfile?.mentorFirstName && teacherProfile.mentorLastName}`}</p>
                   <span className={style.teacher_occupation}>
                     Data science
                   </span>
@@ -116,7 +116,7 @@ const TeacherProfile = ({type}) => {
                 <header>
                     <h5>Information</h5>
                 </header>
-                <p className={style.teacher_paragraph}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo. Proin fermentum ipsum a non tellus tincidunt feugiat laoreet laoreet. Quis sit pulnar massa amet. Nibh commodo laoreet scelerisque dis aliqm velit sit. Eu non ultricies tristique sit proin ut. Prin fermentum ipsum a non tellus tincidunt feugiat laeet laoreet. Quis sit pulvinar massa amet. Nibh commodo laoreet scelerisque dis aliquam velit sit. Eu non ultricies tristique sit proin ut.</p>
+                <p className={style.teacher_paragraph}>{teacherProfile?.mentorBio ? teacherProfile.mentorBio: teacherProfile.bio}</p>
             </article>
           </div>
           <div className="col-md-5">
@@ -128,7 +128,7 @@ const TeacherProfile = ({type}) => {
                   </div>
                   <div className="card-body p-2">
                     <h5 className={`my-4 ${style.title}`}>Fees per session</h5>
-                    <p className={style.teacher_paragraph}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo. Proin fermentum ipsum a non tellus tincidunt feugiat laoreet laoreet. </p>
+                    <p className={style.teacher_paragraph}>{teacherProfile?.fee && teacherProfile.fee}</p>
                     <ul>
                         <li>Lorem ipsum dolor sit.</li>
                         <li>Lorem ipsum dolor sit amet.</li>
@@ -170,7 +170,9 @@ const TeacherProfile = ({type}) => {
             </div>
          </section>
          <div id="syllabus" className={style.block}>
+          {teacherProfile?.mentorId ? null :
             <AllCourses pathname={pathname} />
+          }
          </div>
          <div className={style.block}>
             <ReviewSection />
