@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import { Switch, Modal, Box } from "@mui/material";
 import { AiOutlineMenu, AiOutlineDelete, AiTwotoneEdit } from "react-icons/ai";
@@ -1821,10 +1823,13 @@ export function AddMentor({edit}){
     mentorEmail: "",
     mentorBio: "",
     expertise: "",
+    experience: "",
+    footnote: "",
     fee: "",
               
   });
 
+const [bio, setBio] = useState("")
   const navigate = useNavigate();
 
 useEffect(()=>{
@@ -1837,9 +1842,10 @@ useEffect(()=>{
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const formdata = {...formstate, mentorBio:bio}
     setLoading(true);
     try {
-      const res =  edit === "mentor" ? await updateMentor( formstate._id, formstate, userdata?.token,) : await makeMentorPage(userdata?.token, formstate);
+      const res =  edit === "mentor" ? await updateMentor( formstate._id, formdata, userdata?.token,) : await makeMentorPage(userdata?.token, formdata);
       const { success, message, statusCode, data } = res;
       console.log(data)
       if (!success) throw new AdvancedError(message, statusCode);
@@ -1884,48 +1890,8 @@ useEffect(()=>{
       };
     });
   }
+  console.log(bio); 
 
-  // async function changeProfilePictureHandler(e) {
-  //   setIsUploading((_) => true);
-  //   try {
-  //     let formdata = new FormData();
-  //     formdata.append("image", file, file.name);
-
-  //     const res = await updateAvatar(formdata, userdata.token);
-  //     const { success, message, statusCode } = res;
-  //     if (!success) throw new AdvancedError(message, statusCode);
-  //     else {
-  //       const { data } = res;
-  //       console.log(data);
-  //       const newValue = {
-  //         ...userdata,
-  //         ...data
-  //       }
-  //       userdata = updateItem(KEY, newValue);
-  //       toast.success(message, {
-  //         position: "top-right",
-  //         autoClose: 4000,
-  //         hideProgressBar: true,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //       });
-  //     }
-  //   } catch (err) {
-  //     toast.error(err.message, {
-  //       position: "top-right",
-  //       autoClose: 4000,
-  //       hideProgressBar: true,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //     });
-  //   } finally {
-  //     setIsUploading((_) => false);
-  //   }
-  // }
   return (
     <Admin header="ADMIN">
       <div className={clsx["admin_profile"]}>
@@ -1978,13 +1944,33 @@ useEffect(()=>{
               <label htmlFor={"bio"} className="form-label generic_label">
                 Bio
               </label>
-              <textarea
+              {/* <textarea
                 rows="5"
                 name="mentorBio"
                 value={formstate.mentorBio}
                 onChange={changeHandler}
                 className="form-control generic_input"
-              ></textarea>
+              ></textarea> */}
+              <CKEditor
+                editor={ ClassicEditor }
+                data={formstate.mentorBio}
+                onReady={ editor => {
+                    // You can store the "editor" and use when it is needed.
+                    console.log( 'Editor is ready to use!', editor );
+                } }
+                onChange={ ( event, editor ) => {
+                    const data = editor.getData();
+                    console.log(data); 
+                    setBio(data)
+                    // setFormstate({...formstate, mentorBio: data})
+                } }
+                onBlur={ ( event, editor ) => {
+                    console.log( 'Blur.', editor );
+                } }
+                onFocus={ ( event, editor ) => {
+                    console.log( 'Focus.', editor );
+                } }
+                />
             </div> 
             <Input
               label="Area of Expertise"
@@ -1993,9 +1979,23 @@ useEffect(()=>{
               handleChange={changeHandler}
               value={formstate.expertise}
             />
+            <Input
+              label="Years of experience"
+              name="experience"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.experience}
+            />
+            <Input
+              label="Footnote"
+              name="footnote"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.footnote}
+            />
 
             <Input
-              label="Fees per session"
+              label="Fees per session ($)"
               name="fee"
               type="text"
               handleChange={changeHandler}
@@ -2131,7 +2131,7 @@ export function MentorsDetail() {
           </div>
           <div className={clsx.admin__info}>
             <span className={clsx.admin__info_title}>Bio</span>
-            <span className={clsx.admin__info_content}>{data?.mentorBio}</span>
+            <div className={clsx.admin__info_content} dangerouslySetInnerHTML={{__html: data?.mentorBio}} />
           </div>
           <div className={clsx.admin__info}>
             <span className={clsx.admin__info_title}>Fees</span>
