@@ -1,5 +1,4 @@
-import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
+import React, {useEffect, useState, useRef} from "react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -12,8 +11,11 @@ import Tech from "../images/itaudit.webp";
 import Ui from "../images/ui.png";
 import Sales from "../images/salesforce.webp";
 
+
 import { CareerBox, careers } from "./Career";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/Auth";
+import { AdvancedError } from "../classes";
 
 const bootcamps = [
   {
@@ -55,6 +57,10 @@ const bootcamps = [
 ];
 
 const Bootcamp = () => {
+  useEffect(() => {
+    console.log("Bootcamp is mounted");
+    return () => console.log("Bootcamp is unmounted");
+  }, [])
   return (
     <section className="bootcamp">
       <div className=" container-lg bootcamp_content">
@@ -71,10 +77,10 @@ const Bootcamp = () => {
           </p>
         </header>
         <div className="bootcamp_list">
-              {bootcamps.map((career) => (
-                  <BootcampBox {...career} />
-              ))}
-            </div>
+          {
+            bootcamps.map((b, i) => (<BootcampBox {...b} key={i} />))
+          }
+        </div>
       </div>
     </section>
   );
@@ -84,31 +90,31 @@ export default Bootcamp;
 
 export const BootcampBox = ({ image, title, content, link }) => {
   return (
-    <div className="card bootcamp_card h-100">
-      <div className="card-body bg-white d-flex flex-column justify-content-around">
-        <div className="bootcamp_box_left">
-          <div style={{borderRadius:"10px"}}>
-          <img src={image} alt={title} className="img-fluid" style={{borderRadius:"10px",width:"360px", height:"168px", maxWidth:"100%"}} />
+      <div className="card bootcamp_card h-100">
+        <div className="card-body bg-white d-flex flex-column justify-content-around">
+          <div className="bootcamp_box_left">
+            <div style={{borderRadius:"10px"}}>
+            <img src={image} alt={title} className="img-fluid" style={{borderRadius:"10px",width:"360px", height:"168px", maxWidth:"100%"}} />
+            </div>
           </div>
-        </div>
-        <div className="career_box_right d-flex flex-column mt-4">
-          <header style={{ marginBottom: ".5rem" }}>
-            <h3 className="bootcampBox_title">{title}</h3>
-          </header>
-          <p className="details">{content}</p>
-          <div className="text-end">
-            <Link to={link}>
-              <motion.button 
-              whileHover={{
-                backgroundColor:"#fff",
-                color:"#0C2191"
-              }}
-              transition={{duration: 0.1}}
-              className="btn-plain" style={{backgroundColor:"#0C2191", color:"#fff",border:"1px solid var(--theme-blue)"}}>Enroll Now</motion.button>
-            </Link>
+          <div className="career_box_right d-flex flex-column mt-4">
+            <header style={{ marginBottom: ".5rem" }}>
+              <h3 className="bootcampBox_title">{title}</h3>
+            </header>
+            <p className="details">{content}</p>
+            <div className="text-end">
+              <Link to={link}>
+                <motion.button 
+                whileHover={{
+                  backgroundColor:"#fff",
+                  color:"#0C2191"
+                }}
+                transition={{duration: 0.1}}
+                className="btn-plain" style={{backgroundColor:"#0C2191", color:"#fff",border:"1px solid var(--theme-blue)"}}>Enroll Now</motion.button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
-    </div>
   );
 };

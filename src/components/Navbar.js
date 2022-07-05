@@ -78,8 +78,6 @@ const Navbar = () => {
   const value = getItem(KEY)
   const location = useLocation();
 
-  console.log(location.pathname.split("/"))
-  console.log(location.pathname.split("/").length)
 
   const toggleNav = () => {
     setShow(!show);

@@ -35,12 +35,12 @@ export const Home = () => {
 
     const faqs = [
         {
-            question: "How do I get paid?",
-            answer: "When students pay for courses, we share and convey teachers’ commissions. We operate a rather flexible concept that involves sharing profits among our contributors."
+            question: "Do I require any form of certification to teach on Gotocourse?",
+            answer: "Yes! Teachers will only teach in their respective areas of expertise in which they are certified after they have been screened and vetted by Gotocourse."
         },
         {
-            question: "Is there a discount for a school with a large number of students?",
-            answer: "Yes, we offer a discount for schools with many students. For more details, please email."
+            question: "How often do I get paid on Gotocourse?",
+            answer: "Payment starts from when the class is 25% done till when class is completed. Teachers can choose to be paid when the class is 100% done"
         },
         {
             question: "Can I receive payments directly from my students?",
@@ -48,16 +48,12 @@ export const Home = () => {
         },
         {
             question: "How do I receive my payment?",
-            answer: "You receive your payments to your Paypal or Stride."
+            answer: "You receive your payments to your Paypal or Stripe."
         },
         {
-            question: "Can I host the school on my domain name?",
-            answer: "Yes, you can have a school onGotocourse. You can select your domain name or have your school hosted on a Gotocourse subdomain. To learn more about this, please send an email to "
-        },
-        {
-            question: "Can I teach a subject other than the one I earned my degree in?",
-            answer: "-That wouldn’t do! Teachers will only teach in their respective areas of expertise after enough tests and have gained trust from Gotocourse."
-        },
+            question: "How do I conduct my training on Gotocourse?",
+            answer: "Teachers have access to training suite/tools on Gotocourse which they can use to create and conduct all their trainings."
+        }
     ]
 
 
