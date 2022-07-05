@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import { Switch, Modal, Box } from "@mui/material";
 import { AiOutlineMenu, AiOutlineDelete, AiTwotoneEdit } from "react-icons/ai";
@@ -17,7 +19,7 @@ import img02 from "../../../images/mentor2.png";
 import { GuardedRoute } from "../../../hoc";
 import { AdvancedError } from "../../../classes";
 import {useLocalStorage} from "../../../hooks";
-
+import {getDate} from "../../../constants"
 import Input from "../../../components/Input";
 import Loader from "../../../components/Loader";
 import UploadForm from "../../../components/UploadForm";
@@ -1821,10 +1823,13 @@ export function AddMentor({edit}){
     mentorEmail: "",
     mentorBio: "",
     expertise: "",
+    experience: "",
+    footnote: "",
     fee: "",
               
   });
 
+const [bio, setBio] = useState("")
   const navigate = useNavigate();
 
 useEffect(()=>{
@@ -1837,9 +1842,10 @@ useEffect(()=>{
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const formdata = {...formstate, mentorBio:bio}
     setLoading(true);
     try {
-      const res =  edit === "mentor" ? await updateMentor( formstate._id, formstate, userdata?.token,) : await makeMentorPage(userdata?.token, formstate);
+      const res =  edit === "mentor" ? await updateMentor( formstate._id, formdata, userdata?.token,) : await makeMentorPage(userdata?.token, formdata);
       const { success, message, statusCode, data } = res;
       console.log(data)
       if (!success) throw new AdvancedError(message, statusCode);
@@ -1884,48 +1890,8 @@ useEffect(()=>{
       };
     });
   }
+  console.log(bio); 
 
-  // async function changeProfilePictureHandler(e) {
-  //   setIsUploading((_) => true);
-  //   try {
-  //     let formdata = new FormData();
-  //     formdata.append("image", file, file.name);
-
-  //     const res = await updateAvatar(formdata, userdata.token);
-  //     const { success, message, statusCode } = res;
-  //     if (!success) throw new AdvancedError(message, statusCode);
-  //     else {
-  //       const { data } = res;
-  //       console.log(data);
-  //       const newValue = {
-  //         ...userdata,
-  //         ...data
-  //       }
-  //       userdata = updateItem(KEY, newValue);
-  //       toast.success(message, {
-  //         position: "top-right",
-  //         autoClose: 4000,
-  //         hideProgressBar: true,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //       });
-  //     }
-  //   } catch (err) {
-  //     toast.error(err.message, {
-  //       position: "top-right",
-  //       autoClose: 4000,
-  //       hideProgressBar: true,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //     });
-  //   } finally {
-  //     setIsUploading((_) => false);
-  //   }
-  // }
   return (
     <Admin header="ADMIN">
       <div className={clsx["admin_profile"]}>
@@ -1978,13 +1944,33 @@ useEffect(()=>{
               <label htmlFor={"bio"} className="form-label generic_label">
                 Bio
               </label>
-              <textarea
+              {/* <textarea
                 rows="5"
                 name="mentorBio"
                 value={formstate.mentorBio}
                 onChange={changeHandler}
                 className="form-control generic_input"
-              ></textarea>
+              ></textarea> */}
+              <CKEditor
+                editor={ ClassicEditor }
+                data={formstate.mentorBio}
+                onReady={ editor => {
+                    // You can store the "editor" and use when it is needed.
+                    console.log( 'Editor is ready to use!', editor );
+                } }
+                onChange={ ( event, editor ) => {
+                    const data = editor.getData();
+                    console.log(data); 
+                    setBio(data)
+                    // setFormstate({...formstate, mentorBio: data})
+                } }
+                onBlur={ ( event, editor ) => {
+                    console.log( 'Blur.', editor );
+                } }
+                onFocus={ ( event, editor ) => {
+                    console.log( 'Focus.', editor );
+                } }
+                />
             </div> 
             <Input
               label="Area of Expertise"
@@ -1993,9 +1979,23 @@ useEffect(()=>{
               handleChange={changeHandler}
               value={formstate.expertise}
             />
+            <Input
+              label="Years of experience"
+              name="experience"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.experience}
+            />
+            <Input
+              label="Footnote"
+              name="footnote"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.footnote}
+            />
 
             <Input
-              label="Fees per session"
+              label="Fees per session ($)"
               name="fee"
               type="text"
               handleChange={changeHandler}
@@ -2131,7 +2131,7 @@ export function MentorsDetail() {
           </div>
           <div className={clsx.admin__info}>
             <span className={clsx.admin__info_title}>Bio</span>
-            <span className={clsx.admin__info_content}>{data?.mentorBio}</span>
+            <div className={clsx.admin__info_content} dangerouslySetInnerHTML={{__html: data?.mentorBio}} />
           </div>
           <div className={clsx.admin__info}>
             <span className={clsx.admin__info_title}>Fees</span>
@@ -2224,14 +2224,7 @@ export function Courses() {
     navigate("create");
   }
 
-  function getDate(date){
-    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    let d = date.split("T")[0];
-    let [y, m, day] = d.split("-");
-    m = months[parseInt(m) - 1];
-    console.log(`${m} ${day}`);
-    return `${m} ${day}`;
-  }
+  
 
   function showDetailsHandler(e, id){
     navigate(`details/${id}`);
@@ -2558,13 +2551,6 @@ export function Bootcamps() {
   const [bootcamps, setBootcamps] = useState([])
   const [loading, setLoading] = useState(true);
 
-  function getDate(date){
-    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    let d = date.split("T")[0];
-    let [y, m, day] = d.split("-");
-    m = months[parseInt(m) - 1];
-    return `${m} ${day}`;
-  }
 
   const tableHeaders = [ "No", "Title", "Details", "Type", "Duration", "Date", "Time" ];
 
@@ -3395,6 +3381,79 @@ export function Fees() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+    </Admin>
+  );
+}
+// NOTIFICATIONS COMPONENT
+export function Notification() {
+  const {getItem} = useLocalStorage();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [loader, setLoader] = useState(false);
+  const {adminFunctions: { fetchCourses } } = useAuth(); 
+
+  const notifications = [
+    {
+      time:'28/06/22',
+      message:"You have message from Dr. Ajala"
+    },
+    {
+      time:'28/06/22',
+      message:"A new student just signed up"
+    },
+    {
+      time:'29/06/22',
+      message:"Femi Gabriel paid his fees"
+    },
+    {
+      time:'30/06/22',
+      message:"A new mentor just signed up"
+    },
+    {
+      time:'01/07/22',
+      message:"New message from mentor"
+    },
+  ];
+
+  useEffect(() => {
+    // if(flag.current) return;
+    //   (async() => {
+    //     try{
+    //       const res = await fetchCourses(userdata?.token);
+    //       const {message, success, statusCode} = res;
+    //       if(!success) throw new AdvancedError(message, statusCode);
+    //     }catch(err){
+    //       toast.error(err.message, {
+    //         position: "top-right",
+    //         autoClose: 4000,
+    //         hideProgressBar: true,
+    //         closeOnClick: true,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //         progress: undefined,
+    //       });
+    //     }finally{
+    //       setLoader(_ => false);
+    //     }
+    //   })()
+    //   flag.current = true;
+    },[])
+  return (
+    <Admin header={"Notifications"}>
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+          <h1>My notifications</h1>
+
+          <div className={clsx.admin__student_main}>
+            {notifications.map((notification, index)=>(
+              <div key={index} className={clsx["notification"]}>
+                <span>{notification.time}</span>
+                <span>{notification.message}</span>
+              </div> 
+            ))}
           </div>
         </div>
       </div>

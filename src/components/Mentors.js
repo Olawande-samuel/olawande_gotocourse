@@ -71,61 +71,7 @@ export const witnesses = [
 ];
 const Mentors = () => {
   const {generalState, setGeneralState, otherFunctions: {fetchMentors}} = useAuth();
-  const [mentors, setMentors] = useState([
-    {
-      id: 1,
-      title:"Product Designer",
-      content: "Discuss how to kickstart your career as a product designer",
-      profile: mentor,
-      location: "Sarah Grace",
-      other:"11 years work experience"
-  
-    },
-    {
-      id: 2,
-      title:"Product Manager",
-      content: "Discuss how to kickstart your career as a product manager",
-      profile: mentor2,
-      location: "Amanda George",
-      other:"11 years work experience"
-  
-    },
-    {
-      id: 3,
-      title:"Business Analyst",
-      content: "Discuss how to kickstart your career as a business analyst",
-      profile: mentor3,
-      location: "Cassandra Geoffrey",
-      other:"11 years work experience"
-    },
-    {
-      id: 4,
-      title:"Data Scientist",
-      content: "Discuss how to kickstart your career as a data scientist",
-      profile: mentor2,
-      location: "Patrick Quinn",
-      other:"11 years work experience"
-  
-    },
-    {
-      id: 5,
-      title:"Web Designer",
-      content: "Discuss how to kickstart your career web designer",
-      profile: mentor2,
-      location: "Cassandra Geoffrey",
-      other:"11 years work experience"
-  
-    },
-    {
-      id: 6,
-      title:"Software Developer",
-      content: "Discuss how to kickstart your career as a software development",
-      profile: mentor3,
-      location: "Niyi Adegoke",
-      other:"13 years work experience"
-  
-    },
-  ])
+  const [mentors, setMentors] = useState([])
   const ref = useRef(false);
 
 
@@ -233,30 +179,27 @@ export const Card = ({ item,type }) => {
         ...old,
         teacherProfile: item
       }
-    })
-    navigate(`/mentors/${item.mentorFirstName}-${item.mentorLastName}`)
-    // let meta = item.location?.split(" ");
-    // let name = meta[0] + "-" + meta[1]; 
-    // item?.mentorFirstName ? (
-    //   ):(
-    //     navigate("/mentors/"+name)
-    //   )
+    }) 
+      localStorage.setItem("gotocourse-viewMentor", JSON.stringify(item))
+      navigate(`/mentors/${item.mentorFirstName}-${item.mentorLastName}`)
+
+ 
   }
   return (
-    <div className="px-1" style={{cursor: "pointer"}} onClick={gotoMentorPage}>
+    <div className="px-1 mentors_new_card" style={{cursor: "pointer"}} onClick={gotoMentorPage}>
       <div className="card">
         <div className="card-body">
-        <div className="mentors_card_top" style={{background:`url(${item.mentorImg ? item.mentorImg : item.profile}), rgba(0, 0, 0, 0.5)`}}>
-        {/* <img src={item.profile} alt="" className="card-img-top mentor_image" /> */}
+        <div className="mentors_card_top" style={{background:`url(${item?.mentorImg && `https://loftywebtech.com/gotocourse/api/uploads/${item?.mentorImg} `}), rgba(0, 0, 0, 0.5)`}}>
+        {/* <img src={item?.profile} alt="" className="card-img-top mentor_image" /> */}
         
           <div>
-           {/* <h5>{item.mentorBio ? item.mentorBio : item.title}</h5> */}
-            <p>{item.mentorBio ? item.mentorBio : item.content}</p>
+           <h5>{item?.expertise}</h5>
+            <p className="mentors_footnote" style={{fontSize:"14px"}}>{item?.footnote}</p>
           </div>
         </div>
         <div className="text-dark w-100 px-2">
-          <h5 className="">{`${item.mentorFirstName ? item.mentorFirstName : item.location}  ${item.mentorLastName && item.mentorLastName} `}</h5>
-          <small className="">{item.expertise? item.expertise : item.other}</small>
+          <h5 className="">{`${item?.mentorFirstName}  ${item?.mentorLastName && item?.mentorLastName} `}</h5>
+          <small className="">{item?.experience && item?.experience}</small>
         </div>
         </div>
       </div>
