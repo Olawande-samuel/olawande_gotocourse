@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import {Link, useNavigate} from "react-router-dom"
 
+import mentor from "../../images/productDesigner.png";
+import mentor2 from "../../images/mentor3.png";
+import mentor3 from "../../images/businessAnalyst.png";
 
 import Courses, { CourseCard } from "../Courses";
 import { courseList } from "../Courses";
@@ -12,6 +15,7 @@ import { useLocalStorage } from "../../hooks";
 import { toast } from "react-toastify";
 import { AdvancedError } from "../../classes";
 import {witnesses, Card as MentorsCard} from "../../components/Mentors"
+import { useRef } from "react";
 
 const KEY = "gotocourse-userdata";
 
@@ -36,11 +40,32 @@ const All = ({type}) => {
     setSearch(e.target.value);
   }
 
-  const {setGeneralState} = useAuth();
   const navigate = useNavigate()
+  const {generalState, setGeneralState, otherFunctions: {fetchMentors}} = useAuth();
+  const [mentors, setMentors] = useState([])
+  const ref = useRef(false);
 
   // fetch teachers/mentors
-  useEffect(()=>{},[])
+
+    useEffect(()=>{
+      if(ref.current) return
+      (async()=>{
+        try{
+          setGeneralState({...generalState, loading: true})
+          const res = await fetchMentors();
+          const {success, message, statusCode, data} = res;
+          setGeneralState({...generalState, loading: false})
+          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+          if(data.length > 0){
+            setMentors(data)
+          }
+      }catch(err){
+          setGeneralState({...generalState, loading: false})
+      }
+      })()
+      ref.current = true
+    },[])
+
   console.log("courseList",courseList)
   return (
     <Courses>
@@ -53,7 +78,7 @@ const All = ({type}) => {
         <main className={`mentors_list_main ${style.main}`}>
           {
           type === "mentors" ?  
-          witnesses
+          mentors
           // .filter(item=> item.subtitle.includes(search))
           .map((item) => (
               <div className="mentors_list_card">
@@ -68,7 +93,8 @@ const All = ({type}) => {
                   ...old,
                   teacherProfile: {
                     profile: item.img,
-                    location: `${item.author} . ${item.details}`,
+                    location: `${item.author} `,
+                    details: item.details,
                     content: item.title,
                     id: item.id
                   }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {NavHashLink } from "react-router-hash-link"
 import {BsStarFill} from "react-icons/bs"
 import Algo from "../../images/mentor2.png";
@@ -6,27 +6,43 @@ import Courses, { OtherCard, ReviewSection } from "../Courses";
 import style from "../Courses/courses.module.css";
 import { useLocation } from "react-router-dom";
 import {useAuth} from "../../contexts/Auth";
+import {useLocalStorage} from "../../hooks"
 // USING STYLES FROM COURSES.MODULE.CSS
 
 
 
 const TeacherProfile = ({type}) => {
+  const {getItem} = useLocalStorage();
+
+  const {generalState} = useAuth();
 
   const {pathname} = useLocation()
-  const {generalState: {teacherProfile}} = useAuth();
-  let name;
-  if(teacherProfile){
-    let meta = teacherProfile.location.split(" ");
-    name = meta[0] + " " + meta[1]; 
-  }else {
-    let meta = pathname.split("/").reverse()[0];
-    name = `${meta.split("-")[0]} ${meta.split("-")[1]}`
-  }
 
-  console.log(teacherProfile)
+  // if(teacherProfile){
+  //   let meta = teacherProfile.location.split(" ");
+  //   name = meta[0] + " " + meta[1]; 
+  // }else {
+  //   let meta = pathname.split("/").reverse()[0];
+  //   name = `${meta.split("-")[0]} ${meta.split("-")[1]}`
+  // }
+  const mentor = getItem("gotocourse-viewMentor")
+
+  const [teacherProfile, setTeacherProfile]= useState({})
+  
+  useEffect(()=>{
+    if(mentor && type === "mentor"){
+      setTeacherProfile(mentor)
+    } else {
+      setTeacherProfile(generalState.teacherProfile)
+
+    }
+
+  },[])
+  console.log(generalState)
   return (
     <Courses>
         <div className="container">
+        {type !== "mentors" && 
       <section className={`d-flex ${style.navigation}`}>
           <NavHashLink
           smooth
@@ -64,6 +80,7 @@ const TeacherProfile = ({type}) => {
             Faq
           </NavHashLink>
       </section>
+        }
       <section id="about" className={style.teacher_profile_wrapper}>
         <div className={`row justify-content-between $${style.teacher_profile_row}`}>
           <div className="col-md-5">
@@ -71,20 +88,20 @@ const TeacherProfile = ({type}) => {
               <div className="g-3">
                 <div className={style.teacher_image}>
                   <div className={style.teacher_img_wrapper}>
-                    <img src={teacherProfile ? teacherProfile.profile : Algo} alt="" className={style.teacher_image} />
+                    <img src={teacherProfile?.mentorImg ?`https://loftywebtech.com/gotocourse/api/uploads/${teacherProfile.mentorImg} ` : teacherProfile.profile} alt="" className={style.teacher_image} />
                   </div>
                 </div>
 
                 <div className={` mt-lg-3 ${style.teacher_card_right}`}>
-                  <p className={style.teacher_name}>{name}</p>
+                  <p className={style.teacher_name}>{`${teacherProfile?.mentorFirstName ? teacherProfile.mentorFirstName : teacherProfile.location} ${teacherProfile?.mentorLastName ? teacherProfile.mentorLastName: ""}`}</p>
                   <span className={style.teacher_occupation}>
-                    Data science
+                    { teacherProfile?.expertise}
                   </span>
                   <div className={ `d-flex  justify-content-between ${style.rating_wrapper}`}>
                     {type === "mentors" && (
                       <div>
                       <p className={style.headers}>Work Experience</p>
-                      <p className={style.occupation}>10 years experience</p>
+                      <p className={style.occupation}>{teacherProfile?.experience}</p>
                     </div>
                     )}
                     <div>
@@ -100,10 +117,10 @@ const TeacherProfile = ({type}) => {
                     </div>
                   </div>
                   <div className={style.profile_footer}>
-                    <div className={style.location}>
+                    {/* <div className={style.location}>
                       <p className={style.headers}>Location</p>
                       <p className="fw-bold">Lagos, Nigeria</p>
-                    </div>
+                    </div> */}
                     <div className="style time">
                       <p className={style.headers}>Time Active</p>
                       <p className="fw-bold"> January, 2022</p>
@@ -116,7 +133,7 @@ const TeacherProfile = ({type}) => {
                 <header>
                     <h5>Information</h5>
                 </header>
-                <p className={style.teacher_paragraph}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo. Proin fermentum ipsum a non tellus tincidunt feugiat laoreet laoreet. Quis sit pulnar massa amet. Nibh commodo laoreet scelerisque dis aliqm velit sit. Eu non ultricies tristique sit proin ut. Prin fermentum ipsum a non tellus tincidunt feugiat laeet laoreet. Quis sit pulvinar massa amet. Nibh commodo laoreet scelerisque dis aliquam velit sit. Eu non ultricies tristique sit proin ut.</p>
+                <p className={style.teacher_paragraph}  dangerouslySetInnerHTML={{__html:teacherProfile?.mentorBio ? teacherProfile.mentorBio: teacherProfile.bio}} />
             </article>
           </div>
           <div className="col-md-5">
@@ -128,10 +145,10 @@ const TeacherProfile = ({type}) => {
                   </div>
                   <div className="card-body p-2">
                     <h5 className={`my-4 ${style.title}`}>Fees per session</h5>
-                    <p className={style.teacher_paragraph}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo. Proin fermentum ipsum a non tellus tincidunt feugiat laoreet laoreet. </p>
+                    <p className={style.teacher_paragraph}>$ {teacherProfile?.fee && teacherProfile.fee} per hour</p>
                     <ul>
-                        <li>Lorem ipsum dolor sit.</li>
-                        <li>Lorem ipsum dolor sit amet.</li>
+                        <li>A session - 2.5 hours $ {teacherProfile?.fee && teacherProfile.fee * 2.5} </li>
+                        <li>A session - 6 hours $ {teacherProfile?.fee && teacherProfile.fee * 5}</li>
                     </ul>
 
                     <div>
@@ -170,7 +187,9 @@ const TeacherProfile = ({type}) => {
             </div>
          </section>
          <div id="syllabus" className={style.block}>
+          {teacherProfile?.mentorId ? null :
             <AllCourses pathname={pathname} />
+          }
          </div>
          <div className={style.block}>
             <ReviewSection />

@@ -1297,8 +1297,7 @@ export const ReviewSection = ()=> {
     <section id="review" className={style.review}>
     <h3 className={style.header}>Reviews</h3>
     <p className={`subtitle ${style.subtitle}`}>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus
-      ridiculus nunc adipiscing justo.
+     Care to know what the world says about us?
     </p>
     <div className={style.review_main}>
       <Swiper

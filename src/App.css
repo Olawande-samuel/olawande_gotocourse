@@ -90,6 +90,13 @@ td {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.clamp_text_sm {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .mt-mid {
   margin-top: 2.0625rem !important;
 }
@@ -734,8 +741,17 @@ padding: 13px 0 ;
   border-radius: 1rem;
   color: #fff;
 }
+.mentors_new_card {
+  transition: all .3s ease;
+}
+.mentors_footnote {
+  display:none;
+  transition: all .3s ease;
 
-
+}
+.mentors_new_card:hover .mentors_footnote{
+  display:  block;
+}
 .mentors .mentors_card_top, .mentors_card_top {
   width: 100%;
   height: 250px;
@@ -1768,4 +1784,20 @@ line-height: 16px;
   grid-template-columns:repeat(auto-fit, minmax(min(200px, 100%), 1fr));
   gap: 1rem;
   row-gap: 1.5rem;
+}
+
+/* ck editor */
+.ck.ck-editor__top {
+  display: none;
+}
+
+.ck.ck-editor__main{
+  height: 150px;
+  border-radius:8px;
+}
+
+.ck.ck-editor__main .ck-content {
+  height:150px;
+  border-radius:8px;
+  font-size: 14px;
 }

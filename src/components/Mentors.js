@@ -70,7 +70,7 @@ export const witnesses = [
   },
 ];
 const Mentors = () => {
-  const {generalState, setGeneralState, otherFunctions: {fetchCategories}} = useAuth();
+  const {generalState, setGeneralState, otherFunctions: {fetchMentors}} = useAuth();
   const [mentors, setMentors] = useState([])
   const ref = useRef(false);
 
@@ -92,14 +92,13 @@ const Mentors = () => {
     (async()=>{
       try{
         setGeneralState({...generalState, loading: true})
-        const res = await fetchCategories();
+        const res = await fetchMentors();
         const {success, message, statusCode, data} = res;
         setGeneralState({...generalState, loading: false})
-
           if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-          setMentors(data)
-         
-      
+          if(data.length > 0){
+            setMentors(data)
+          }
     }catch(err){
         setGeneralState({...generalState, loading: false})
     }
@@ -156,7 +155,7 @@ const Mentors = () => {
             },
           }}
         >
-          {witnesses.map((item) => (
+          {mentors.length> 0 && mentors.map((item) => (
             <SwiperSlide>
               <Card item={item} />
             </SwiperSlide>
@@ -180,26 +179,27 @@ export const Card = ({ item,type }) => {
         ...old,
         teacherProfile: item
       }
-    })
-    let meta = item.location.split(" ");
-    let name = meta[0] + "-" + meta[1]; 
-    navigate("/mentors/"+name);
+    }) 
+      localStorage.setItem("gotocourse-viewMentor", JSON.stringify(item))
+      navigate(`/mentors/${item.mentorFirstName}-${item.mentorLastName}`)
+
+ 
   }
   return (
-    <div className="px-1" style={{cursor: "pointer"}} onClick={gotoMentorPage}>
+    <div className="px-1 mentors_new_card" style={{cursor: "pointer"}} onClick={gotoMentorPage}>
       <div className="card">
         <div className="card-body">
-        <div className="mentors_card_top" style={{background:`url(${item.profile}), rgba(0, 0, 0, 0.5)`}}>
-        {/* <img src={item.profile} alt="" className="card-img-top mentor_image" /> */}
+        <div className="mentors_card_top" style={{background:`url(${item?.mentorImg && `https://loftywebtech.com/gotocourse/api/uploads/${item?.mentorImg} `}), rgba(0, 0, 0, 0.5)`}}>
+        {/* <img src={item?.profile} alt="" className="card-img-top mentor_image" /> */}
         
           <div>
-           <h5>{item.title}</h5>
-            <p>{item.content}</p>
+           <h5>{item?.expertise}</h5>
+            <p className="mentors_footnote" style={{fontSize:"14px"}}>{item?.footnote}</p>
           </div>
         </div>
         <div className="text-dark w-100 px-2">
-          <h5 className="">{item.location}</h5>
-          <small className="">{item.other}</small>
+          <h5 className="">{`${item?.mentorFirstName}  ${item?.mentorLastName && item?.mentorLastName} `}</h5>
+          <small className="">{item?.experience && item?.experience}</small>
         </div>
         </div>
       </div>

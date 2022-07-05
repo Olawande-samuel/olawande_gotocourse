@@ -522,3 +522,26 @@
     color: var(--textColorLight);
 }
 
+
+.notification {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    transition:all .5s ease;
+    padding: 26.67px 43px 19px 43px;
+    outline-color:#DFE0EB;
+    cursor:pointer;
+
+}   
+.notification:hover {
+    outline: 1.5px solid #DFE0EB;
+
+}
+.notification span{
+    flex: 0.5;
+    /* background:blue; */
+}
+.notification span:nth-child(2){
+    flex: 2;
+    /* background:red; */
+}
