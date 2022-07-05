@@ -19,7 +19,7 @@ import img02 from "../../../images/mentor2.png";
 import { GuardedRoute } from "../../../hoc";
 import { AdvancedError } from "../../../classes";
 import {useLocalStorage} from "../../../hooks";
-
+import {getDate} from "../../../constants"
 import Input from "../../../components/Input";
 import Loader from "../../../components/Loader";
 import UploadForm from "../../../components/UploadForm";
@@ -2224,14 +2224,7 @@ export function Courses() {
     navigate("create");
   }
 
-  function getDate(date){
-    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    let d = date.split("T")[0];
-    let [y, m, day] = d.split("-");
-    m = months[parseInt(m) - 1];
-    console.log(`${m} ${day}`);
-    return `${m} ${day}`;
-  }
+  
 
   function showDetailsHandler(e, id){
     navigate(`details/${id}`);
@@ -2558,13 +2551,6 @@ export function Bootcamps() {
   const [bootcamps, setBootcamps] = useState([])
   const [loading, setLoading] = useState(true);
 
-  function getDate(date){
-    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    let d = date.split("T")[0];
-    let [y, m, day] = d.split("-");
-    m = months[parseInt(m) - 1];
-    return `${m} ${day}`;
-  }
 
   const tableHeaders = [ "No", "Title", "Details", "Type", "Duration", "Date", "Time" ];
 
@@ -3395,6 +3381,79 @@ export function Fees() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+    </Admin>
+  );
+}
+// NOTIFICATIONS COMPONENT
+export function Notification() {
+  const {getItem} = useLocalStorage();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [loader, setLoader] = useState(false);
+  const {adminFunctions: { fetchCourses } } = useAuth(); 
+
+  const notifications = [
+    {
+      time:'28/06/22',
+      message:"You have message from Dr. Ajala"
+    },
+    {
+      time:'28/06/22',
+      message:"A new student just signed up"
+    },
+    {
+      time:'29/06/22',
+      message:"Femi Gabriel paid his fees"
+    },
+    {
+      time:'30/06/22',
+      message:"A new mentor just signed up"
+    },
+    {
+      time:'01/07/22',
+      message:"New message from mentor"
+    },
+  ];
+
+  useEffect(() => {
+    // if(flag.current) return;
+    //   (async() => {
+    //     try{
+    //       const res = await fetchCourses(userdata?.token);
+    //       const {message, success, statusCode} = res;
+    //       if(!success) throw new AdvancedError(message, statusCode);
+    //     }catch(err){
+    //       toast.error(err.message, {
+    //         position: "top-right",
+    //         autoClose: 4000,
+    //         hideProgressBar: true,
+    //         closeOnClick: true,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //         progress: undefined,
+    //       });
+    //     }finally{
+    //       setLoader(_ => false);
+    //     }
+    //   })()
+    //   flag.current = true;
+    },[])
+  return (
+    <Admin header={"Notifications"}>
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+          <h1>My notifications</h1>
+
+          <div className={clsx.admin__student_main}>
+            {notifications.map((notification, index)=>(
+              <div key={index} className={clsx["notification"]}>
+                <span>{notification.time}</span>
+                <span>{notification.message}</span>
+              </div> 
+            ))}
           </div>
         </div>
       </div>

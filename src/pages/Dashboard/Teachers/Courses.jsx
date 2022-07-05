@@ -10,7 +10,7 @@ import { useAuth } from "../../../contexts/Auth";
 
 import { AdvancedError } from "../../../classes";
 import { useLocalStorage } from "../../../hooks";
-
+import {getDate} from "../../../constants"
 
 const KEY = "gotocourse-userdata";
 
@@ -85,14 +85,7 @@ export default function Courses() {
       setGeneralState({ ...generalState, courseInfo:{}})
       navigate("create");
     }
-    function getDate(date){
-    
-      let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      let d = date.split("T")[0];
-      let [y, m, day] = d.split("-");
-      m = months[parseInt(m) - 1];
-      return `${m} ${day}`;
-    }
+   
     return (
       <Teachers isMobile={isMobile} userdata={userdata}>
         <div className={clsx.teachers_profile}>
@@ -138,14 +131,6 @@ export default function Courses() {
   }
 
   function CourseCard({ index, title, model, date, status, category, info }) {
-    function getDate(date){
-    
-      let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      let d = date.split("T")[0];
-      let [y, m, day] = d.split("-");
-      m = months[parseInt(m) - 1];
-      return `${m} ${day}`;
-    }
     const navigate = useNavigate();
     const { generalState, setGeneralState } = useAuth();
     return (
