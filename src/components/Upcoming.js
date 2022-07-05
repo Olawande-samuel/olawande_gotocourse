@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import SwiperCore, { Navigation, Autoplay, Pagination, Scrollbar, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Skeleton } from '@mui/material';
+
+
+
+
 import { AdvancedError } from '../classes';
 import { useAuth } from '../contexts/Auth';
 import { useLocalStorage } from '../hooks';
@@ -10,45 +15,16 @@ import { useLocalStorage } from '../hooks';
 
 
 
-const dummyCamp =[
-    {
-        _id:"not real camp",
-        title: "Cybersecurity Bootcamp",
-        duration: "2 days",
-        startTime: "01:33",
-        endTime: "03:33",
-        startDate: "2022-06-25T00:00:00.000Z",
-        endDate: "2022-07-13T00:00:00.000Z",
-        description: "Learn cybersecurity in 24 weeks of online classes to qualify for jobs paying $78,800 or more. You will pay nothing till you get hired and train through Salesforce programming projects. Prerequisites: There are no requirements for education or work experience. We will first teach you the Admin and App Builder basics and then progress to Salesforce programming.",
-        type: "Full Time",
-        isActive: false,
-        instructorId: "629747d8611a99e372b13230",
-        instructorName: "John Doe",
-        createdAt: "2022-06-24T12:33:36.456Z",
-        updatedAt: "2022-06-24T12:33:36.456Z",
-    }
-]
-
-
 const Upcoming = () => {
-    const {otherFunctions: { fetchBootcamps } } = useAuth();
+  const {otherFunctions: { fetchBootcamps } } = useAuth();
   const {getItem} = useLocalStorage();
   const navigate = useNavigate();
   const flag = useRef(false);
 
 
-//   let userdata = getItem(KEY);
+  // let userdata = getItem(KEY);
   const [bootcamps, setBootcamps] = useState([])
   const [loading, setLoading] = useState(true);
-
-  function getDate(date){
-    // 2022-07-03T00:00:00.000Z
-    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    let d = date.split("T")[0];
-    let [y, m, day] = d.split("-");
-    m = months[parseInt(m) - 1];
-    return `${m} ${day}`;
-  }
 
   
 
@@ -62,15 +38,6 @@ const Upcoming = () => {
         else if (statusCode === 1) {
           const { data } = res;
           setBootcamps( _ => data);
-          // toast.success(message, {
-          //   position: "top-right",
-          //   autoClose: 4000,
-          //   hideProgressBar: true,
-          //   closeOnClick: true,
-          //   pauseOnHover: true,
-          //   draggable: true,
-          //   progress: undefined,
-          // });
           console.log(data);
         } else {
           throw new AdvancedError(message, statusCode);
@@ -120,16 +87,16 @@ const Upcoming = () => {
             },            
             }}
       >
-            {bootcamps.length > 0 ? (
+            {!loading ? (
                 bootcamps.map(bootcamp=>(
                     <SwiperSlide>
                         <UpcomingCards {...bootcamp} />
                     </SwiperSlide>
                 ))
             ):(
-                dummyCamp.map(bootcamp=>(
-                    <SwiperSlide>
-                        <UpcomingCards {...bootcamp} />
+                [0, 0, 0, 0, 0].map((_, i)=>(
+                    <SwiperSlide key={i}>
+                        <Skeleton className="col-md-9 p-2 p-md-3 pe-md-4" variant='rectangular' width={1200} height={300} animation="wave" sx={{borderRadius: 10}} />
                     </SwiperSlide>
                 ))
             )}
@@ -142,6 +109,7 @@ const Upcoming = () => {
 }
 
 export default Upcoming
+
 
 const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId})=> {
 

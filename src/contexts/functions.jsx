@@ -1749,7 +1749,6 @@ export const otherFunctions = {
             const res = await axios.get(`${baseURL}/user/bootcamps/fetch`,
             {
                 headers: {
-                    // "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
                 validateStatus: status => {

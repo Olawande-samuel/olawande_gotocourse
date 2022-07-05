@@ -109,6 +109,10 @@
     text-align: left;
 }
 
+.paper {
+    height: 250px;
+}
+
 .paper span {
     background-color: var(--textBlue);
     padding: 16px;
