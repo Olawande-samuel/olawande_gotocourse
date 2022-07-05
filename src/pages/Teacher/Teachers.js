@@ -42,61 +42,7 @@ const All = ({type}) => {
 
   const navigate = useNavigate()
   const {generalState, setGeneralState, otherFunctions: {fetchMentors}} = useAuth();
-  const [mentors, setMentors] = useState([
-    {
-      id: 1,
-      title:"Product Designer",
-      content: "Discuss how to kickstart your career as a product designer",
-      profile: mentor,
-      location: "Sarah Grace",
-      other:"11 years work experience"
-  
-    },
-    {
-      id: 2,
-      title:"Product Manager",
-      content: "Discuss how to kickstart your career as a product manager",
-      profile: mentor2,
-      location: "Amanda George",
-      other:"11 years work experience"
-  
-    },
-    {
-      id: 3,
-      title:"Business Analyst",
-      content: "Discuss how to kickstart your career as a business analyst",
-      profile: mentor3,
-      location: "Cassandra Geoffrey",
-      other:"11 years work experience"
-    },
-    {
-      id: 4,
-      title:"Data Scientist",
-      content: "Discuss how to kickstart your career as a data scientist",
-      profile: mentor2,
-      location: "Patrick Quinn",
-      other:"11 years work experience"
-  
-    },
-    {
-      id: 5,
-      title:"Web Designer",
-      content: "Discuss how to kickstart your career web designer",
-      profile: mentor2,
-      location: "Cassandra Geoffrey",
-      other:"11 years work experience"
-  
-    },
-    {
-      id: 6,
-      title:"Software Developer",
-      content: "Discuss how to kickstart your career as a software development",
-      profile: mentor3,
-      location: "Niyi Adegoke",
-      other:"13 years work experience"
-  
-    },
-  ])
+  const [mentors, setMentors] = useState([])
   const ref = useRef(false);
 
   // fetch teachers/mentors
@@ -147,7 +93,8 @@ const All = ({type}) => {
                   ...old,
                   teacherProfile: {
                     profile: item.img,
-                    location: `${item.author} . ${item.details}`,
+                    location: `${item.author} `,
+                    details: item.details,
                     content: item.title,
                     id: item.id
                   }
