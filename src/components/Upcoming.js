@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Skeleton } from '@mui/material';
 
 
-
+import {getDate} from "../constants"
 
 import { AdvancedError } from '../classes';
 import { useAuth } from '../contexts/Auth';
@@ -18,7 +18,6 @@ import { useLocalStorage } from '../hooks';
 const Upcoming = () => {
   const {otherFunctions: { fetchBootcamps } } = useAuth();
   const {getItem} = useLocalStorage();
-  const navigate = useNavigate();
   const flag = useRef(false);
 
 
@@ -77,8 +76,8 @@ const Upcoming = () => {
             navigation
             pagination={{ clickable: true }}
             scrollbar={{ draggable: true }}
-            onSwiper={(swiper) => console.log(swiper)}
-            onSlideChange={() => console.log('slide change')}
+            // onSwiper={(swiper) => console.log(swiper)}
+            // onSlideChange={() => console.log('slide change')}
             breakpoints= {{
             // when window width is >= 320px
             320: {
@@ -90,7 +89,7 @@ const Upcoming = () => {
             {!loading ? (
                 bootcamps.map(bootcamp=>(
                     <SwiperSlide>
-                        <UpcomingCards {...bootcamp} />
+                        <UpcomingCards {...bootcamp} all={bootcamp} />
                     </SwiperSlide>
                 ))
             ):(
@@ -111,16 +110,10 @@ const Upcoming = () => {
 export default Upcoming
 
 
-const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId})=> {
+const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, all})=> {
+  const navigate = useNavigate();
 
-    function getDate(date){
-        // 2022-07-03T00:00:00.000Z
-        let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        let d = date.split("T")[0];
-        let [y, m, day] = d.split("-");
-        m = months[parseInt(m) - 1];
-        return `${m} ${day}`;
-      }
+    
     return (
         <div className="card p-0 upcoming_card position-relative mx-auto" style={{width:"min(100% - .5rem, 1500px)", borderRadius:"8px"}}>
             <div className="card-body p-0">
@@ -145,7 +138,9 @@ const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endD
                             </div>
                         </div>
                         <div className="text-center text-md-end">
-                            <button className="btn" style={{ background:"var(--theme-blue)", color:"#fff"}}>Apply Now</button>
+                            <button className="btn" style={{ background:"var(--theme-blue)", color:"#fff"}} onClick={()=>{
+                              localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+                              navigate("bootcamp")}}>Apply Now</button>
                         </div>
                     </div>
                 </div>
