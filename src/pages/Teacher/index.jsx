@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import { Grid, Paper, Breadcrumbs } from "@mui/material";
 import {BiChalkboard, BiEditAlt, BiDollar} from "react-icons/bi";
-import { MdPictureAsPdf, MdExpandMore, MdExpandLess } from "react-icons/md";
+import { MdPictureAsPdf, MdExpandMore, MdExpandLess, MdPlaylistAddCheck } from "react-icons/md";
 import { Rating } from "react-simple-star-rating";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -16,6 +16,11 @@ import {ScrollToTop} from "../Courses"
 
 export const Home = () => {
     const data = [
+        {
+            icon: MdPlaylistAddCheck,
+            title: "Enroll to Teach",
+            content: "Enroll to teach on Gotocourse and get approved by Gotocourse course standardization team. "
+        },
         {
             icon: BiEditAlt,
             title: "Create Class",
