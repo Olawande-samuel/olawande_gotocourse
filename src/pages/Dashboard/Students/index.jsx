@@ -424,7 +424,7 @@ export function Bootcamps() {
                 </thead>
                 <tbody>
                   {courseList.map(
-                    ( {title, duration, description, type, startTime, endTime, endDate, startDate, _id}, i ) => (
+                    ( {title, duration, description, type, startTime, endTime, endDate, startDate, bootcampId, _id}, i ) => (
                       <BootcampRow
                       key={i}
                       index={i}
@@ -433,7 +433,7 @@ export function Bootcamps() {
                       duration={duration}
                       type={type}
                       admin={false}
-                      clickHandler={e => detailHandler(e, _id)}
+                      clickHandler={e => detailHandler(e, bootcampId)}
                       time={`${startTime} - ${endTime} CST`}
                       date={`${getDate(startDate)} - ${getDate(endDate)}`}
                       />

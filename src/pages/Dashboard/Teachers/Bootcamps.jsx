@@ -125,7 +125,7 @@ export default function Bootcamps() {
                       duration={item.duration}
                       type={item.type}
                       admin={false}
-                      clickHandler={e => detailHandler(e, item._id, item)}
+                      clickHandler={e => detailHandler(e, item.bootcampId, item)}
                       time={`${item.startTime} - ${item.endTime} CST`}
                       date={`${getDate(item.startDate)} - ${getDate(item.endDate)}`}
                       />

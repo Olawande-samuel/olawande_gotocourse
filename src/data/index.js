@@ -379,3 +379,55 @@ export const categories = [
         ],
     },
 ]
+
+export const policies = {
+  privacy: [
+    {details: "Information created, sent, received, or stored on GOTOCOURSE Information Resources are not private and may be accessed by Realztech Institute IT employees at any time, under the direction of Realztech executive management and/or Human Resources, without knowledge of the user or resource owner."},
+    {details:"Realztech Institute may log, review, and otherwise utilize any information stored on or passing through its Information Resource"},
+    {details:"Systems Administrators, Realztech IT, and other authorized Realztech Institute personnel may have privileges that extend beyond those granted to standard business personnel. Personnel with extended privileges should not access files and/or other information that is not specifically required to carry out an employment-related task."}
+  ],
+  teaching:[
+    {details:"We Promote high quality teaching and learning across the school."},
+    {details:"We Raise standards by ensuring consistency and continuity of teaching and learning."},
+    {details:"We Ensure all students are included, motivated, and engaged by their learning."},
+    {details:"We Promote high quality learning experiences that focus on the development of skills, knowledge and understanding."},
+    {details:"All personnel must be provided with and acknowledge they have received and agree to adhere to the Realztech Institute Information Security Policies before they are granted access to GOTOCOURSE Information Resources."},
+    {details:"All personnel must complete the annual security awareness training."},
+    {details:"No individual or program shall agree in a contract with any private or public entity to deliver entire courses or Programs on behalf of GOTOCOURSE without prior approval."}
+  ],
+  endUser:[
+    {details:"You have a responsibility to promptly report the theft, loss or unauthorized disclosure of Realztech Institute proprietary information."},
+    {details:"You may access, use, or share Realztech Institute proprietary information only to the extent it is authorized and necessary to fulfill your assigned job duties."},
+    {details:"Employees are responsible for exercising good judgment regarding the reasonableness of personal use. Individual departments are responsible for creating guidelines concerning personal use of Internet/Intranet/Extranet systems. In the absence of such policies, employees should be guided by departmental policies on personal use, and if there is any uncertainty, employees should consult their supervisor or manager."},
+    {details:"For security and network maintenance purposes, authorized individuals within Realztech Institute may monitor equipment, systems and network traffic at any time."},
+    {details:"Realztech Institute reserves the right to audit networks and systems on a periodic basis to ensure compliance with this policy."},
+    {details:"Realztech Institute proprietary information stored on GOTOCOURSE by the employee, or a third party remains the sole property of Realztech Institute. You must ensure through legal or technical means that proprietary information is protected in accordance with the Data Protection Standard."}
+  ],
+  TOU:[
+    {details:"Personnel are responsible for complying with Realztech Institute policies when using GOTOCOURSE information resources."},
+    {
+      details:"Personnel must promptly report harmful events or policy violations involving Realztech Institute assets or information to their manager or a member of the Incident Handling Team. Events include, but are not limited to, the following:",
+      info:[
+        {content:"Technology incident: any potentially harmful event that may cause a failure, interruption, or loss in availability to GOTOCOURSE Information Resources."},
+        {content:"Data incident: any potential loss, theft, or compromise of GOTOCOURSE information."},
+        {content:"Unauthorized access incident: any potential unauthorized access to a GOTOCOURSE Information Resource."},
+        {content:"Facility security incident: any damage or potentially unauthorized access to a GOTOCOURSE owned, leased, or managed facility."},
+        {content:"Policy violation: any potential violation to this or other Realztech Institute policies, standards, or procedures."},
+      ]
+    },
+    {
+      details:"Personnel should not purposely engage in activities that may",
+      info:[
+        {content:"Harass, threaten, impersonate, or abuse others."},
+        {content:"Degrade the performance of Realztech Institute Information Resources."},
+        {content:"Deprive authorized Realztech Institute personnel access to a GOTOCOURSE Information Resource."},
+        {content:"obtain additional resources beyond those allocated."}
+      ]
+    },
+    {details:"Personnel should not download, install, or run security programs or utilities that reveal or exploit weakness in the security of a system. For example, Realztech personnel should not run password cracking programs, packet sniffers, port scanners, or any other non-approved programs on any GOTOCOURSE Information Resource." },
+    {details:"All inventions, intellectual property, and proprietary information, including reports, drawings, blueprints, software codes, computer programs, data, writings, and technical information, developed on Realztech Institute time and/or using GOTOCOURSE Information Resources are the property of Realztech Institute."},
+    {details:"Use of encryption should be managed in a manner that allows designated Realztech Institute personnel to promptly access all data for business use only."},
+    {details:"Personnel are expected to respect and comply with all legal protections provided by copyrights, trademarks, and intellectual property rights for any software and/or materials viewed, used, or obtained using Realztech Institute Information Resources."},
+    {details:"Personnel should not intentionally access, create, store, or transmit material which Realztech Institute may deem to be offensive, indecent, or obscene."},
+  ]
+}

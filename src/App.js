@@ -27,6 +27,7 @@ import SyllabusContextProvider from "./contexts/Syllabus";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import Bootcamp from "./pages/Bootcamp";
+import Policies from "./pages/PrivacyPolicy";
 
  
 
@@ -39,6 +40,7 @@ function App() {
           <Route index element={<Landing />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
+            <Route path="policies" element={<Policies />} />
             <Route path="bootcamp" element={<Bootcamp />} />
             <Route path="bootcamp/payment" element={<Payment />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
