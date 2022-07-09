@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { Route, Routes } from "react-router-dom";
 import './App.css';
+import'@stripe/stripe-js'
 
 import Landing from './pages/Landing';
 import Out from "./pages/Out";
@@ -19,15 +20,16 @@ import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
 import { Categories, CourseDetail, CourseList, CourseProfile } from "./pages/Courses";
 import {Home as BecomeATeacher, Profile} from "./pages/Teacher";
-import All, {Payment} from "./pages/Teacher/Teachers";
+import All, {Payment, PaymentStatus} from "./pages/Teacher/Teachers";
 import TeacherProfile from "./pages/Teacher/TeacherProfile";
 import TeacherSignup from "./pages/User/TeacherSignup";
 import SyllabusContextProvider from "./contexts/Syllabus";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import Bootcamp from "./pages/Bootcamp";
+import Policies from "./pages/PrivacyPolicy";
 
-
+ 
 
 function App() {
   return (
@@ -38,10 +40,15 @@ function App() {
           <Route index element={<Landing />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
+            <Route path="policies" element={<Policies />} />
             <Route path="bootcamp" element={<Bootcamp />} />
+            <Route path="bootcamp/payment" element={<Payment />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
             <Route path="change-password" element={<ResetPassword />} />
             <Route path="become-a-teacher" element={<BecomeATeacher />} />
+            <Route path="payment/success" element={<PaymentStatus success={true} />} />
+            <Route path="payment/error" element={<PaymentStatus />} />
+
 
             <Route path="students" element={<Out />}>
               <Route path="" element={<StudentProfile  />} />
@@ -67,6 +74,7 @@ function App() {
                 <Route path="payment" element={<Payment />} />
               </Route>
             </Route>
+
             <Route path="teacher" element={<Out />}>
               <Route path="" element={<TeacherDashboard  />} /> 
               <Route path="login" element={<Login />} />
@@ -88,6 +96,8 @@ function App() {
                 <Route path="courses/:profile" element={<Out />}>
                   <Route index element={<CourseProfile />} />
                   <Route path="payment" element={<Payment />} />
+                  
+
                 </Route>
               </Route>
             </Route>

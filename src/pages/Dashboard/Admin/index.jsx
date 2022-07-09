@@ -2317,7 +2317,7 @@ export function BootcampDetails({}){
         if(!success) throw new AdvancedError(message, statusCode);
         else {
           const {data} = res;
-          let bootcamp = data.find(d => d._id === params?.id);
+          let bootcamp = data.find(d => d.bootcampId === params?.id);
           console.log(bootcamp);
           setFormstate(old => {
             return {
@@ -2618,7 +2618,7 @@ export function Bootcamps() {
               </thead>
               <tbody>
                 {bootcamps.length > 0 ? bootcamps.map(
-                  ( {title, duration, description, type, startTime, endTime, endDate, startDate, _id}, i ) => (
+                  ( {title, duration, description, type, startTime, endTime, endDate, startDate, bootcampId, _id}, i ) => (
                     <BootcampRow
                       key={i}
                       index={i}
@@ -2627,7 +2627,7 @@ export function Bootcamps() {
                       duration={duration}
                       type={type}
                       admin={false}
-                      clickHandler={e => detailHandler(e, _id)}
+                      clickHandler={e => detailHandler(e, bootcampId)}
                       time={`${startTime} - ${endTime} CST`}
                       date={`${getDate(startDate)} - ${getDate(endDate)}`}
                     />
@@ -2677,7 +2677,7 @@ export function CreateBootcamp(){
           if (!success) throw new AdvancedError(message, statusCode);
           else if (statusCode === 1) {
             const { data } = res;
-            let found = data.find(d => d._id === id);
+            let found = data.find(d => d.bootcampId === id);
             found.startDate = found.startDate.split("T")[0];
             found.endDate = found.endDate.split("T")[0];
             found.instructor = found.instructorName;
@@ -2769,14 +2769,40 @@ export function CreateBootcamp(){
 
     }
   }
+  const [open, setOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState(false);
 
+  function showUploadFormHandler(){
+     setOpen(_ => true)
+  }
  
   return (
     <Admin header="Create Bootcamp">
       {loader && <Loader />}
       <div className={clsx.admin_profile}>
         <div className={clsx.edit__profile}>
+        <UploadForm isOpen={open} setIsOpen={setOpen} setPreviewImage={setPreviewImage} />
+          <div className="row w-100 mt-4">
+            <div className="col-12 d-flex justify-content-between align-items-center">
+              <div className={clsx.upload__file_box} onClick={showUploadFormHandler}>
+                <img src={vector} alt={"Placeholder"} />
+                <p>Upload Bootcamp image</p>
+              </div>
+              {previewImage && 
+                <div className={clsx.upload__file_box}>
+                  <img src={previewImage} alt={"Placeholder"} style={{width:"150px", height:"100px", objectFit:"cover", objectPosition:"top"}} />
+                </div>
+              }
+            </div>
+          </div>
           <form className="form" onSubmit={submitHandler}>
+          <Input
+              label="Bootcamp image file name"
+              name="bootcampImg"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.bootcampImg}
+            />
             <Input
               label="Title"
               name="title"
@@ -2794,7 +2820,7 @@ export function CreateBootcamp(){
             <div className="d-flex flex-wrap">
               <div className="col-sm-6 col-md-3 pe-2 ">
                 <Input
-                  label="Starts By (Gmt)"
+                  label="Starts By (CST)"
                   name="startTime"
                   type="text"
                   handleChange={changeHandler}
@@ -2803,7 +2829,7 @@ export function CreateBootcamp(){
               </div>
               <div className="col-sm-6 col-md-3 pe-2  ">
                 <Input
-                label="Ends By (Gmt)"
+                label="Ends By (CST)"
                 name="endTime"
                 type="text"
                 handleChange={changeHandler}
@@ -2845,7 +2871,7 @@ export function CreateBootcamp(){
             </div>
 
             <Input
-              label="Instructor"
+              label="Instructor Email"
               name="instructor"
               type="text"
               handleChange={changeHandler}
@@ -2883,7 +2909,7 @@ export function CreateBootcamp(){
             )}
           </form>
         </div>
-      </div>
+        </div>
     </Admin>
   );
 }

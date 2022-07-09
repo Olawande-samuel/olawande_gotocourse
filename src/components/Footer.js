@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import {motion} from "framer-motion"
 import {Logo, Logosm} from "../images/components/svgs"
-
+import {HashLink} from "react-router-hash-link"
 const hover = {
   hover: {
     scale:1.2,
@@ -19,27 +19,27 @@ const leftLink = [
   {
     id:1,
     title:"End-user Policy",
-    path:"/"
+    path:"/policies#end-user"
   },
   {
     id:3,
     title:"Privacy Policy",
-    path:"/"
+    path:"/policies#privacy"
   },
   {
     id:4,
     title:"Teaching Policy",
-    path:"/"
+    path:"/policies#teaching"
   },
   {
     id:5,
     title:"Terms of Use",
-    path:"/"
+    path:"/policies#terms-of-use"
   },
   {
     id:6,
     title:"Cookies",
-    path:"/"
+    path:"/policies#cookies"
   },
 ]
 
@@ -77,6 +77,11 @@ const rightLink = [
   },
 ]
 const Footer = () => {
+  const scrollWithOffset = (el)=>{
+    const yCoord = el.getBoundingClientRect().top + window.pageYOffset;
+    const yOffset = -80;
+    window.scrollTo({top: yCoord + yOffset, behaviou:"smooth"})
+  }
   return (
     <footer className="footer wrapper">
       <div className="container ">
@@ -122,8 +127,11 @@ const Footer = () => {
             
                 <li>Legal</li>
              
-              {leftLink.map(link=>(
-              <Link to={link.path}>
+              {leftLink.map((link, index)=>(
+              // <Link to={link.path}>
+              <HashLink key={index} to={link.path} scroll={el=>scrollWithOffset(el)}
+              >
+
                 <motion.li
                 
                 whileHover={{
@@ -138,7 +146,9 @@ const Footer = () => {
                 >
                     {link.title}
                 </motion.li>
-              </Link>
+              </HashLink>
+
+              // </Link>
               ))}
             </ul>
           </div>
@@ -146,8 +156,8 @@ const Footer = () => {
             <ul>
             <li>Company</li>
 
-            {rightLink.map(link=>(
-              <Link to={link.path}>
+            {rightLink.map((link, index)=>(
+              <Link  key={index} to={link.path}>
                 <motion.li
                 whileHover={{
                   scale:1.2,

@@ -525,10 +525,11 @@
 
 .notification {
     display: flex;
+    flex-wrap:wrap;
     align-items: center;
     border-radius: 10px;
     transition:all .5s ease;
-    padding: 26.67px 43px 19px 43px;
+    padding: 18px 8px;
     outline-color:#DFE0EB;
     cursor:pointer;
 
@@ -544,4 +545,17 @@
 .notification span:nth-child(2){
     flex: 2;
     /* background:red; */
+}
+
+@media screen and (max-width:580px){
+    .notification {
+        flex-direction:column-reverse;
+        align-items: flex-start;
+
+    } 
+}
+@media screen and (min-width:997px){
+    .notification {
+        padding: 26.67px 43px 19px 43px;
+    }
 }

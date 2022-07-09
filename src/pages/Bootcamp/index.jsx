@@ -3,13 +3,22 @@ import {useEffect, useState} from "react";
 
 import Layout from "../../components/Layout";
 import clsx from "./styles.module.css";
-
-
+import {useLocalStorage} from "../../hooks"
+import { getDate } from "../../constants";
+import { useNavigate } from "react-router-dom";
+import BootcampImage from  "../../images/bootcamp.png"
 
 
 const Bootcamp = () => {
+    const {getItem} = useLocalStorage();
+    const [bootcampInfo, setBootcampInfo] = useState({})
+    const bootcamp = getItem("gotocourse-bootcampdata")
+    const navigate = useNavigate()
     useEffect(() => {
         console.log("Bootcamp is mounted");
+        if(bootcamp){
+            setBootcampInfo(bootcamp)
+        }
         return () => console.log("Bootcamp is unmounted");
     }, [])
 
@@ -32,25 +41,38 @@ const Bootcamp = () => {
         <Layout>
             <div className={clsx.bootcamp}>
                 <div className={clsx.bootcamp_content}>
-                    <h2>Cyber Security Bootcamp</h2>
-                    <p>Learn cybersecurity in 24 weeks of online classes to qualify for jobs paying $78,800 or more. You will pay nothing till you get hired and train through saleforce programming projects. Prerequisites : there are no requirements for education or work experience . We will first teach you the admin and app builder basics and then progress to salesforce programming.</p>
+                    <h2>{bootcampInfo?.title}</h2>
+                    <p>{bootcampInfo?.description ? bootcampInfo?.description : bootcampInfo?.content}</p>
                     <div className={clsx.bootcamp_details}>
-                        {
+                        {/* {
                             details.map(({key, value}, i) => (
                                 <div key={i}>
                                     <p>{key}</p>
                                     <span>{value}</span>
                                 </div>
                             ))
-                        }
+                        } */}
+
+                        <div>
+                            <p>Duration</p>
+                            <span>{bootcampInfo?.duration ? bootcampInfo?.duration: "10 weeks" }</span>
+                        </div>
+                        <div>
+                            <p>Days</p>
+                            <span>{`${bootcampInfo?.startDate ? getDate(bootcampInfo?.startDate) : "Jun 26"} - ${bootcampInfo?.endDate ? getDate(bootcampInfo?.endDate) : "Sept 04"}`}</span>
+                        </div>
+                        <div>
+                            <p>Time</p>
+                            <span>{`${bootcampInfo?.startTime ? bootcampInfo?.startTime : "09:00"} - ${bootcampInfo?.endTime ? bootcampInfo?.endTime : "14:00"}`}</span>
+                        </div>
                     </div>
 
-                    <button>Apply Now</button>
+                    <button type="button" onClick={()=> navigate("payment")}>Apply Now</button>
                 </div>
 
 
                 <div className={clsx.bootcamp_image}>
-                    <div className={clsx.image_container}></div>
+                    <div className={clsx.image_container} style={{backgroundImage:`url(${bootcampInfo?.image ? bootcampInfo?.image: bootcampInfo?.bootcampImg})`}}></div>
                 </div>
             </div>
         </Layout>

@@ -32,8 +32,15 @@
 }
 @media (min-width: 768px){
   .upcoming_text {
-    margin-right: 6rem !important;
+    margin-right: 12rem !important;
   }
+  
+}
+@media (max-width: 768px){
+  .upcoming_card {
+    height:auto !important;
+  }
+  
 }
 .upcoming_card .row {
   --bs-gutter-x: 0;
@@ -1068,12 +1075,13 @@ font-size: 16px;
 .footer .footer_top {
   margin-bottom: 20px;
 }
-.footer a li {
+.footer a li, .footer ul div li {
   font-weight: 300;
   font-size: 13px;
   line-height: 32px;
   text-decoration: none;
   color: #fff;
+  cursor:pointer;
 }
 /* .footer li a:hover {
   color: var(--btn-color);
@@ -1223,6 +1231,30 @@ line-height: 16px;
 
   color: var(--accent-color);
 }
+.policy_wrapper h4 {
+  font-weight: 700;
+}
+
+.policy_wrapper li {
+  line-height:28px;
+  margin-block:.5rem;
+
+}
+ .policy_wrapper .policy_inner_list {
+  list-style-type:square;
+  list-style-position:inside;
+  margin-left:1rem;
+  line-height:34px;
+  font-size:.9rem;
+  margin-block:unset;
+
+
+}
+.policy_title {
+  margin-block:1.5rem;
+}
+
+
 @media screen and (max-width: 777px) {
   .mt-mid {
     margin-top: 1.0625rem !important;
@@ -1391,6 +1423,7 @@ line-height: 16px;
     text-align: center;
   }
 }
+
 
 @media screen and (max-width: 995px) {
   .hero {
@@ -1667,9 +1700,9 @@ line-height: 16px;
   }
  
   
-.end_left {
-  text-align:center;
-}
+  .end_left {
+    text-align:center;
+  }
   .end .box {
     width: 95%;
     gap: 1rem;
@@ -1677,6 +1710,7 @@ line-height: 16px;
     justify-content: space-between;
     align-items: center;
   }
+  
 }
 
 
