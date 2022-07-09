@@ -115,6 +115,27 @@
   margin-left: 1rem;
 }
 
+.paymentScreen {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background: var(--theme-blue);
+
+}
+.paymentScreen .paymentScreenBox {
+  height: 50vh;
+  width: min(100% - .5rem,  500px);
+  margin: auto;
+  border-radius:8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+  color:#000000;
+  background:#fff;
+  box-shadow:0px 0px 8px rgb(0, 0, 0) ;
+}
 @media screen and (max-width:1200px){
   .main {
 

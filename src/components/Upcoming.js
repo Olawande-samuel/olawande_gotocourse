@@ -20,13 +20,10 @@ const Upcoming = () => {
   const {getItem} = useLocalStorage();
   const flag = useRef(false);
 
-
   // let userdata = getItem(KEY);
   const [bootcamps, setBootcamps] = useState([])
   const [loading, setLoading] = useState(true);
-
   
-
   useEffect(()=>{
     if(flag.current) return;
     (async () => {
@@ -110,16 +107,35 @@ const Upcoming = () => {
 export default Upcoming
 
 
-const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, all})=> {
+const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all})=> {
   const navigate = useNavigate();
+  const flagRef = useRef(null)
 
-    
+  const style ={
+    flag:{
+        top:0,
+        right:0,
+        background:"var(--theme-blue)",
+        padding:"1.1rem",
+        borderTopRightRadius:"8px"
+    },
+    text:{
+        marginRight:"190px",
+        fontSize:"17px"
+    },
+
+  }
+  useEffect(()=>{
+    console.log(flagRef.current.clientWidth)
+  },[])
     return (
-        <div className="card p-0 upcoming_card position-relative mx-auto" style={{width:"min(100% - .5rem, 1500px)", borderRadius:"8px"}}>
+        <div className="card p-0 upcoming_card position-relative mx-auto" style={{width:"min(100% - .5rem, 1500px)", borderRadius:"8px", height:"300px"}}>
             <div className="card-body p-0">
-                <div className="row" style={{}}>
-                    <div className="col-md-3 d-flex justify-content-center align-items-center" style={{background:"var(--theme-orange)", borderRadius:"8px", padding:"8rem 5rem"}}>
-                       <h3 className="text-light">{title}</h3>
+                <div className="row" style={{height:"100%"}}>
+                    {/* <div className="col-md-3 d-flex justify-content-center align-items-center" style={{background:`url(https://loftywebtech.com/gotocourse/api/uploads/${bootcampImg})`, borderRadius:"8px", padding:"8rem 5rem", position:"relative"}}> */}
+                    <div className="col-md-3 d-flex justify-content-center align-items-center" style={{background:`url(${bootcampImg})`, borderRadius:"8px", padding:"8rem 5rem", position:"relative"}}>
+                       {/* <img src={`https://loftywebtech.com/gotocourse/api/uploads/${bootcampImg}`} alt="" /> */}
+                       <h3 className="text-light" style={{position:"absolute", top:"50%", transform:"translateY(-50%)"}}>{title}</h3>
                     </div>
                     <div className="col-md-9 p-2 p-md-3 pe-md-4 d-flex flex-column justify-content-between">
                         <p className="mx-0  upcoming_text" style={style.text}> {description}</p>
@@ -145,25 +161,12 @@ const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endD
                     </div>
                 </div>
             </div>
-            <div className="flag position-absolute" style={style.flag}>
-                <p className="mb-0 text-light">{type}</p>
+            <div className="flag position-absolute" ref={flagRef} style={style.flag}>
+                {/* <p className="mb-0 text-light">{type}</p> */}
+                <p className="mb-0 text-light">Registration in progress</p>
             </div>
         </div>
     )
 }
 
 
-const style ={
-    flag:{
-        top:0,
-        right:0,
-        background:"var(--theme-blue)",
-        padding:"1.1rem",
-        borderTopRightRadius:"8px"
-    },
-    text:{
-        marginRight:"6.5rem",
-        fontSize:"17px"
-    },
-
-}

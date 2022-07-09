@@ -6,7 +6,7 @@ import clsx from "./styles.module.css";
 import {useLocalStorage} from "../../hooks"
 import { getDate } from "../../constants";
 import { useNavigate } from "react-router-dom";
-
+import BootcampImage from  "../../images/bootcamp.png"
 
 
 const Bootcamp = () => {
@@ -72,7 +72,7 @@ const Bootcamp = () => {
 
 
                 <div className={clsx.bootcamp_image}>
-                    <div className={clsx.image_container}></div>
+                    <div className={clsx.image_container} style={{backgroundImage:`url(${bootcampInfo?.image ? bootcampInfo?.image: bootcampInfo?.bootcampImg})`}}></div>
                 </div>
             </div>
         </Layout>

@@ -22,6 +22,7 @@ import lere from "../../images/lere.png";
 import { useLocalStorage } from "../../hooks";
 import { AdvancedError } from "../../classes";
 import { witnesses, Card as MentorsCard } from "../../components/Mentors";
+import Input from "../../components/Input";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 const KEY = "gotocourse-userdata";
@@ -43,7 +44,6 @@ const All = ({ type }) => {
   const [search, setSearch] = React.useState("");
 
   function handleChange(e) {
-    console.log(e.target.value);
     setSearch(e.target.value);
   }
 
@@ -78,7 +78,6 @@ const All = ({ type }) => {
     ref.current = true;
   }, []);
 
-  console.log("courseList", courseList);
   return (
     <Courses>
       <div className="container">
@@ -178,7 +177,10 @@ export const Payment = () => {
 
   const [stripeId, setStripeId] = useState(null);
   const [showStripeModal, setShowStripeModal] = useState(false);
-  const [paymentData, setPaymentData]= useState("")
+  const [paymentData, setPaymentData]= useState({
+    fullPayment: true,
+    initialPayment: ""
+  })
 
   useEffect(() => {
     if (details) {
@@ -187,8 +189,10 @@ export const Payment = () => {
     }
   }, []);
 
-  function handleChange(e){
-    setPaymentData(e.target.value === "1" ? true : false)
+  function handleChange(e, type){
+    type === "select" ? 
+    setPaymentData({...paymentData, fullPayment: e.target.value === "1" ? true : false}) :
+    setPaymentData({...paymentData, [e.target.name]: e.target.value}) 
   }
   async function enrollToCourse(e) {
     e.preventDefault();
@@ -200,7 +204,9 @@ export const Payment = () => {
         courseId: paymentDetails.courseId,
         selectedPackage: paymentDetails.title,
         amountPaid: paymentDetails.price,
-        fullPayment: paymentData,
+        fullPayment: paymentData.fullPayment,
+        installments: paymentData.fullPayment ? "" : 3,
+        initialPayment: paymentData.fullPayment ? "" : paymentData.initialPayment
       };
       try {
         setLoading(true);
@@ -244,7 +250,7 @@ export const Payment = () => {
         <section
           className={`row justify-content-center align-items-center ${style.paymeny_main}`}
         >
-          <div className="col-md-5">
+          <div className="col-md-7 col-lg-5">
             {showStripeModal ? (
               <PaymentModal token={stripeId} />
             ) : (
@@ -289,14 +295,6 @@ export const Payment = () => {
                         ${paymentDetails?.price ? paymentDetails?.price : "500"}
                       </p>
                     </div>
-                    {/* <small className="d-block">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Totam debitis fugiat animi veritatis, accusantium sit unde!
-                  </small> */}
-                    {/* <ul>
-                    <li>Lorem ipsum dolor sit amet.</li>
-                    <li>Lorem ipsum dolor sit amet.</li>
-                  </ul> */}
                   </div>
                   <hr />
                   <div className="d-flex justify-content-between align-items-center">
@@ -305,13 +303,29 @@ export const Payment = () => {
                   </div>
                   <hr />
                   <div className="d-flex justify-content-between align-items-center">
-                    <select name="fullPayment" onChange={handleChange} id="paymentType" className="form-select">
+                    <select name="fullPayment" onChange={(e)=>handleChange(e, "select")} id="paymentType" className="form-select">
                       <option defaultValue  >Choose a payment structure</option>
                       <option value="1" >Full Payment</option>
                       <option value="0" >Installment</option>
                     </select>
                   </div>
                   <hr />
+                  {paymentData.fullPayment === false ? 
+                  <>
+                    <div className=""> 
+                    <small className="text-info" style={{fontSize:"12px"}}>*Fees must be paid in not more than three Installments</small>
+                    <Input
+                      label="Initial Payment"
+                      name="initialPayment"
+                      type="text"
+                      handleChange={(e)=>handleChange(e)}
+                      value={paymentData.initialPayment}
+                    />
+                    </div>
+                    <hr /> 
+                  </>
+                  : ""
+                }
                   <div className="d-flex justify-content-between align-items-center">
                     <p>Total</p>
                     <p className={style.payment_total}>
@@ -362,7 +376,6 @@ export const Payment = () => {
 };
 
 function PaymentModal({ token }) {
-  console.log(stripePromise);
 
   const options = {
     clientSecret: token,
@@ -381,14 +394,7 @@ const CheckoutForm = () => {
   const [loading, setLoading] = useState(false);
   const [loadingComponent, setLoadingComponent] = useState(true);
   
-  useEffect(() => {
-    console.log("component mounted successfully");
-    console.log(stripe);
-
-    return () => {
-      console.log("component unmounted");
-    };
-  }, []);
+  
   async function handlesubmit(e) {
     e.preventDefault();
     setLoading(true);
@@ -403,10 +409,10 @@ const CheckoutForm = () => {
         return_url: "http://localhost:3000/payment/success",
       },
     });
+    console.log(result)
 
     result && setLoading(false);
     if (result.error) {
-      console.log("stripe error", result.error);
       toast.error(result.error.message, {
         position: "top-right",
         autoClose: 4000,
@@ -421,9 +427,13 @@ const CheckoutForm = () => {
 
   return (
     <form onSubmit={handlesubmit}>
-      <PaymentElement onReady={() => {
-        console.log("Ready")
-        setLoadingComponent(false)}} />
+      
+      <PaymentElement
+       onReady={() => {
+        setLoadingComponent(false)
+        }}
+      />
+
       { loadingComponent ? (
         <div className="text-center">
           <div
@@ -453,24 +463,19 @@ const CheckoutForm = () => {
   );
 };
 
-const statusStyle = {
-  height: "100vh",
-  display: "grid",
-  placeitems: "center",
-};
 
 export const PaymentStatus = ({success}) => {
   const navigate = useNavigate();
   return (
-    <div className="text-center" style={statusStyle}>
-      <div style={{ width: "min(100% - .5rem,  500px)", margin: "auto" }}>
-        <h2 className="text-center">
+    <div className={style.paymentScreen}>
+      <div className={style.paymentScreenBox}>
+        <h3 className="text-center">
           {success ? 
             "Course Purchased Successfully"
           :
             "An error occured during payment processing"
           }
-        </h2>
+        </h3>
         <button
           className="button button-md"
           type="button"
