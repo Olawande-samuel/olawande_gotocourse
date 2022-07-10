@@ -27,6 +27,7 @@ import { Rating } from "react-simple-star-rating";
 import vector from "../../../images/vector.png"
 import { CourseDetail } from "../../Courses";
 import Layout from "../../../components/Layout";
+import ChatComponent from "./Chat";
 
 
 
@@ -3965,6 +3966,28 @@ export function Edit() {
           </form>
         </div>
       </div>
+    </Admin>
+  );
+}
+
+
+
+
+// CHAT COMPONENT
+export function Chat() {
+
+  const [loader, setLoader] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoader(_ => false);
+    }, 2000)
+  }, [])
+
+  return (
+    <Admin header={"Chat"}>
+      {loader && <Loader />}
+        <ChatComponent />
     </Admin>
   );
 }
