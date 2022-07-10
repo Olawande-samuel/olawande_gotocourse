@@ -10,9 +10,6 @@ import {
 } from "@stripe/react-stripe-js";
 import { toast } from "react-toastify";
 
-import mentor from "../../images/productDesigner.png";
-import mentor2 from "../../images/mentor3.png";
-import mentor3 from "../../images/businessAnalyst.png";
 
 import Courses, { CourseCard } from "../Courses";
 import { courseList } from "../Courses";
@@ -94,7 +91,7 @@ const All = ({ type }) => {
         <main className={`mentors_list_main ${style.main}`}>
           {type === "mentors"
             ? mentors
-                // .filter(item=> item.subtitle.includes(search))
+                .filter(item=> item.expertise.includes(search))
                 .map((item) => (
                   <div className="mentors_list_card">
                     <MentorsCard item={item} />

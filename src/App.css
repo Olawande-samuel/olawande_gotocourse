@@ -750,7 +750,12 @@ padding: 13px 0 ;
 }
 .mentors_new_card {
   transition: all .3s ease;
+  height:100%;
 }
+.mentors_new_card .card{
+  height:100%;
+}
+
 .mentors_footnote {
   display:none;
   transition: all .3s ease;
