@@ -9,7 +9,7 @@ import Login from "./pages/User/Login";
 import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
-import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails,
+import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails, Chat as AdminChat,
   CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails, AddMentor,Mentors, MentorsDetail, Notification} from "./pages/Dashboard/Admin";
 import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit,
    Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps} from "./pages/Dashboard/Students";
@@ -122,6 +122,7 @@ function App() {
               <Route path="teachers/approve" element={<Approve />} />
               <Route path="teachers/create/mentor" element={<AddMentor />} />
               <Route path="profile/edit" element={<AdminEdit />} />
+              <Route path="chat" element={<AdminChat />} />
             </Route>
             <Route path="admin" element={<Out />}>
               <Route path="login" element={<AdminLogin />} />
