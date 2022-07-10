@@ -84,6 +84,11 @@ const Sidebar = ({isMobile}) => {
             path: "notifications",
             title: "Notifications"
         },
+        {
+            icon:IoIosChatbubbles,
+            path: "chat",
+            title: "Chat"
+        }
     ] : route === "students" ?  [
         {
             icon: IoIosPerson,
