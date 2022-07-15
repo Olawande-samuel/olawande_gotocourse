@@ -59,7 +59,7 @@ export function CourseDetails({}){
   useEffect(() => {
     //fetch course details for the id
     if(flag.current) return;
-    (async() => {
+    (async() => { 
       try{
         const res = await fetchCourses(userdata?.token);
         const {message, statusCode, success} = res;
@@ -67,7 +67,6 @@ export function CourseDetails({}){
         else {
           const {data} = res;
           let course = data.find(d => d.courseId === params?.id);
-          console.log(course);
           setFormstate(old => {
             return {
               ...old,
@@ -1157,12 +1156,14 @@ export function CreateCourseCategory(){
 
 // DASHBOARD COMPONENT
 export function Dashboard() {
+
   const { getItem, updateItem } = useLocalStorage();
   const {adminFunctions: { fetchProfile }} = useAuth();
   const flag = useRef(false);
   let userdata = getItem(KEY);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
 
     if(flag.current) return;
@@ -1177,6 +1178,7 @@ export function Dashboard() {
             ...data
           }
           userdata = updateItem(KEY, newValue);
+
         } else throw new AdvancedError(message, statusCode);
         } catch (err) {
         toast.error(err.message, {
@@ -1194,6 +1196,7 @@ export function Dashboard() {
     })()
     flag.current = true;
   }, []);
+
 
   function editProfileHandler(e) {
     navigate("/admin/profile/edit");
@@ -1221,10 +1224,9 @@ export function Dashboard() {
           </button>
         </div>
         <div className={clsx["admin_profile_main"]}>
-          <h1>Olu Jacobs</h1>
+          <h1>{userdata?.firstName && userdata.firstName} {userdata?.lastName && userdata.lastName} </h1>
           <p className={clsx["admin__paragraph"]}>
-            Enjoys writing and playing video games. <br />I joined Gotocourse to
-            make friends connect with people virtually
+           {userdata?.bio && userdata.bio}
           </p>
         </div>
       </div>
@@ -1472,6 +1474,7 @@ export function UserInfoCard({
   enrolled,
   level,
   packages=[],
+  type,
   showDetailsHandler = () => {return},
   approveHandler = () => {return},
 }) {
@@ -1570,6 +1573,13 @@ export function UserInfoCard({
           </span>
         </td>
       )}
+      {type !== null && (
+        <td className={clsx.user__button}>
+          <span>
+           {type}
+          </span>
+        </td>
+      )}
       {accessPledre !== null && (
         <td className={clsx.user__button}>
           <span>
@@ -1639,7 +1649,7 @@ export function Teachers() {
     })();
     flag.current = true;
   }, []);
-  const tableHeaders = ["No", "Name", "Email", "Access Pledre", "Level"];
+  const tableHeaders = ["No", "Name", "Email", "Type", "Access Pledre", "Level"];
 
   function approveHandler(e, email, details) {
     console.log(e.target, email);
@@ -1651,8 +1661,8 @@ export function Teachers() {
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <div className="d-flex justify-content-between align-items-center">
-            <h1>All Mentors</h1>
+          <div className="d-flex justify-content-between align-items-center flex-wrap">
+            <h1>Mentors/Teachers</h1>
             <button className="btn button-md" style={{background:"var(--theme-blue)", color:"#fff"}} type="button" onClick={()=>navigate("create/mentor")}>Add Mentor</button>
           </div>
           <div className={`table-responsive ${clsx.admin__student_main}`}>
@@ -1674,6 +1684,7 @@ export function Teachers() {
                     email={teacher.email}
                     level={1}
                     details={teacher}
+                    type={teacher.userType}
                     approveHandler={approveHandler}
                     accessPledre={teacher.accessPledre}
                   />

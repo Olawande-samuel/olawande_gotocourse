@@ -75,7 +75,7 @@
     transform:translateY(-50%);
     border-radius: 10px;
     background-image: url("../../images/bootcamp.png");
-    background-size: cover;
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
 }

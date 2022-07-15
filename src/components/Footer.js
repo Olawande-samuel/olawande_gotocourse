@@ -47,7 +47,7 @@ const rightLink = [
   {
     id:1,
     title:"About us",
-    path:"/"
+    path:"/about-us"
   },
   {
     id:2,
@@ -68,7 +68,7 @@ const rightLink = [
   {
     id:6,
     title:"Contact us",
-    path:"/"
+    path:"/contact-us"
   },
   {
     id:7,

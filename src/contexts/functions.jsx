@@ -388,6 +388,9 @@ export const adminFunctions = {
                 success: true
             }
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 message: err.message,
                 statusCode: 0,
@@ -417,6 +420,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -446,6 +452,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -474,6 +483,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -504,6 +516,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -532,6 +547,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -560,6 +578,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -588,6 +609,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -616,6 +640,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -644,6 +671,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -672,6 +702,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -700,6 +733,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -728,6 +764,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -756,6 +795,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -784,6 +826,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -812,6 +857,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -840,6 +888,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -868,6 +919,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -901,6 +955,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -930,6 +987,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -958,6 +1018,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -986,6 +1049,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1014,6 +1080,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1043,6 +1112,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1072,6 +1144,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1101,6 +1176,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1129,6 +1207,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1157,6 +1238,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1185,6 +1269,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1213,6 +1300,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1241,6 +1331,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1277,6 +1370,9 @@ export const teacherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1306,6 +1402,9 @@ export const teacherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1334,6 +1433,9 @@ export const teacherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1364,6 +1466,9 @@ export const teacherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1392,6 +1497,9 @@ export const teacherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1420,6 +1528,9 @@ export const teacherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1448,6 +1559,9 @@ export const teacherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1476,6 +1590,9 @@ export const teacherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1504,6 +1621,9 @@ export const teacherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1532,6 +1652,9 @@ export const teacherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1560,6 +1683,9 @@ export const teacherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1594,6 +1720,9 @@ export const otherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1623,6 +1752,9 @@ export const otherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1651,6 +1783,9 @@ export const otherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1680,6 +1815,9 @@ export const otherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1709,6 +1847,9 @@ export const otherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1737,6 +1878,9 @@ export const otherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1764,6 +1908,9 @@ export const otherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
