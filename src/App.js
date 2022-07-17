@@ -27,7 +27,7 @@ import SyllabusContextProvider from "./contexts/Syllabus";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import Bootcamp from "./pages/Bootcamp";
-import Policies from "./pages/PrivacyPolicy";
+import Policies, {TeachingPolicy, TermsOfUse, EndUserPolicy, Cookies} from "./pages/PrivacyPolicy";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 
@@ -42,7 +42,11 @@ function App() {
           <Route index element={<Landing />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
-            <Route path="policies" element={<Policies />} />
+            <Route path="privacy-policy" element={<Policies />} />
+            <Route path="terms-of-use" element={<TermsOfUse />} />
+            <Route path="cookies" element={<Cookies />} />
+            <Route path="end-user-policy" element={<EndUserPolicy />} />
+            <Route path="teaching-policy" element={<TeachingPolicy />} />
             <Route path="about-us" element={<About />} />
             <Route path="contact-us" element={<Contact />} />
             <Route path="bootcamp" element={<Bootcamp />} />

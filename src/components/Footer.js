@@ -19,27 +19,27 @@ const leftLink = [
   {
     id:1,
     title:"End-user Policy",
-    path:"/policies#end-user"
+    path:"/end-user-policy"
   },
   {
     id:3,
     title:"Privacy Policy",
-    path:"/policies#privacy"
+    path:"/privacy-policy"
   },
   {
     id:4,
     title:"Teaching Policy",
-    path:"/policies#teaching"
+    path:"/teaching-policy"
   },
   {
     id:5,
     title:"Terms of Use",
-    path:"/policies#terms-of-use"
+    path:"/terms-of-use"
   },
   {
     id:6,
     title:"Cookies",
-    path:"/policies#cookies"
+    path:"/cookies"
   },
 ]
 
@@ -49,17 +49,17 @@ const rightLink = [
     title:"About us",
     path:"/about-us"
   },
-  {
-    id:2,
-    title:"Security",
-    path:"/"
-  },
+  // {
+  //   id:2,
+  //   title:"Security",
+  //   path:"/"
+  // },
  
-  {
-    id:4,
-    title:"Coverage",
-    path:"/"
-  },
+  // {
+  //   id:4,
+  //   title:"Coverage",
+  //   path:"/"
+  // },
   {
     id:5,
     title:"Careers",

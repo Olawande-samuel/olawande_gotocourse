@@ -79,14 +79,27 @@ const All = ({ type }) => {
     <Courses>
       <div className="container">
         <section className={` ${style.navigation}`}>
-          {nav.map((item, i) => (
+          {/* {nav.map((item, i) => (
             <NavItems
               key={item.name}
               item={item}
               handleChange={handleChange}
               search={search}
             />
-          ))}
+          ))} */}
+           <div className={`d-flex justify-content-between align-items-center ${style.top}`}>
+              <h3 className={style.section_title}>{type === "mentors"? "Mentors":"Teachers"}</h3>
+           <div className={`${style.input_wrapper} d-flex`}>
+            <input
+              type="search"
+              name="search"
+              id="search"
+              className="form-control"
+              placeholder={type === "mentors"? "Search mentor":"Search Teacher"} 
+            />
+            <button className="button">Search</button>
+          </div>
+          </div>
         </section>
         <main className={`mentors_list_main ${style.main}`}>
           {type === "mentors"
@@ -403,10 +416,9 @@ const CheckoutForm = () => {
     const result = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost:3000/payment/success",
+        return_url: "http://gotocourse.us/payment/success",
       },
     });
-    console.log(result)
 
     result && setLoading(false);
     if (result.error) {

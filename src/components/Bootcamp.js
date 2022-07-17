@@ -115,7 +115,7 @@ export const BootcampBox = ({ image, title, content, link , all}) => {
                   navigate("bootcamp")
                 } }
                 transition={{duration: 0.1}}
-                className="btn-plain" style={{backgroundColor:"#0C2191", color:"#fff",border:"1px solid var(--theme-blue)"}}>Enroll Now</motion.button>
+                className="btn-plain" style={{backgroundColor:"#0C2191", color:"#fff",border:"1px solid var(--theme-blue)"}}>Learn More</motion.button>
               {/* </Link> */}
             </div>
           </div>

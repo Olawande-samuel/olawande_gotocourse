@@ -58,16 +58,18 @@ const Bootcamp = () => {
                             <span>{bootcampInfo?.duration ? bootcampInfo?.duration: "10 weeks" }</span>
                         </div>
                         <div>
-                            <p>Days</p>
+                            <p>Date</p>
                             <span>{`${bootcampInfo?.startDate ? getDate(bootcampInfo?.startDate) : "Jun 26"} - ${bootcampInfo?.endDate ? getDate(bootcampInfo?.endDate) : "Sept 04"}`}</span>
                         </div>
-                        <div>
+                        {/* <div>
                             <p>Time</p>
                             <span>{`${bootcampInfo?.startTime ? bootcampInfo?.startTime : "09:00"} - ${bootcampInfo?.endTime ? bootcampInfo?.endTime : "14:00"}`}</span>
-                        </div>
+                        </div> */}
                     </div>
-
+                    {bootcampInfo?.instructorName ? 
                     <button type="button" onClick={()=> navigate("payment")}>Apply Now</button>
+                    : null
+                    }
                 </div>
 
 

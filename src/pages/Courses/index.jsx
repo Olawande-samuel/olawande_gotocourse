@@ -610,7 +610,7 @@ export const CourseList = () => {
               name="search"
               id="search"
               className="form-control"
-              placeholder="Search category"
+              placeholder="Search Courses"
             />
             <button className="button">Search</button>
           </div>

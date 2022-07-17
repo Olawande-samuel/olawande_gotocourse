@@ -137,6 +137,7 @@ const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endD
                 <div className="row" style={{height:"100%"}}>
                   
                     <div className="col-12 p-2 p-md-3 pe-md-4 d-flex flex-column justify-content-between">
+                      <h5 className="fw-bolder">{title}</h5>
                         <p className="mx-0  upcoming_text" style={style.text}> {description}</p>
                         <div className="timing d-flex flex-column flex-md-row flex-wrap justify-content-between text-center">
                             <div>
@@ -144,13 +145,13 @@ const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endD
                                 <p>{duration}</p>
                             </div>
                             <div>
-                                <h6 className="fw-bolder">Days</h6>
+                                <h6 className="fw-bolder">Date</h6>
                                 <p>{getDate(startDate)} -{getDate(endDate)}</p>
                             </div>
-                            <div>
+                            {/* <div>
                                 <h6 className="fw-bolder">Timing</h6>
                                 <p>{startTime} - {endTime}</p>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="text-center text-md-end">
                             <button className="btn" style={{ background:"var(--theme-blue)", color:"#fff"}} onClick={()=>{

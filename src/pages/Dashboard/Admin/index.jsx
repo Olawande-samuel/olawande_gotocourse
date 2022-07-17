@@ -1409,7 +1409,7 @@ export function Approve() {
               <Switch onClick={(e)=>conferMentorship(e, data?.userId, data?.email)} checked={false} />
             </div>
             <div className="form-group my-3">
-              <label htmlFor="accessPledre" className="form-label generic_label">Access Pledre</label>
+              <label htmlFor="accessPledre" className="form-label generic_label">Access Dashboard</label>
               <Switch onClick={(e)=>handleVerification(e, "pledre", data?.userId)} checked={data?.accessPledre} />
             </div>
             <div className="form-group my-3">
@@ -1649,7 +1649,7 @@ export function Teachers() {
     })();
     flag.current = true;
   }, []);
-  const tableHeaders = ["No", "Name", "Email", "Type", "Access Pledre", "Level"];
+  const tableHeaders = ["No", "Name", "Email", "Type", "Access Dashboard", "Level"];
 
   function approveHandler(e, email, details) {
     console.log(e.target, email);
@@ -3431,9 +3431,9 @@ export function Notification() {
   const flag = useRef(false);
   let userdata = getItem(KEY);
   const [loader, setLoader] = useState(false);
-  const {adminFunctions: { fetchCourses } } = useAuth(); 
-
-  const notifications = [
+  const {adminFunctions: { fetchNotifications } } = useAuth(); 
+  
+  const [notifications, setNotifications] = useState([
     {
       time:'28/06/22',
       message:"You have message from Dr. Ajala"
@@ -3454,30 +3454,35 @@ export function Notification() {
       time:'01/07/22',
       message:"New message from mentor"
     },
-  ];
+  ]);
 
   useEffect(() => {
-    // if(flag.current) return;
-    //   (async() => {
-    //     try{
-    //       const res = await fetchCourses(userdata?.token);
-    //       const {message, success, statusCode} = res;
-    //       if(!success) throw new AdvancedError(message, statusCode);
-    //     }catch(err){
-    //       toast.error(err.message, {
-    //         position: "top-right",
-    //         autoClose: 4000,
-    //         hideProgressBar: true,
-    //         closeOnClick: true,
-    //         pauseOnHover: true,
-    //         draggable: true,
-    //         progress: undefined,
-    //       });
-    //     }finally{
-    //       setLoader(_ => false);
-    //     }
-    //   })()
-    //   flag.current = true;
+    if(flag.current) return;
+      (async() => {
+        try{
+          const res = await fetchNotifications(userdata?.token);
+          console.log(res)
+          const {message, success, statusCode} = res;
+          if(!success) throw new AdvancedError(message, statusCode);
+          const {data} = res;
+          if(data.length > 0) {
+            setNotifications(data)
+          }
+        }catch(err){
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }finally{
+          setLoader(_ => false);
+        }
+      })()
+      flag.current = true;
     },[])
   return (
     <Admin header={"Notifications"}>
@@ -3662,7 +3667,7 @@ export function Student() {
 
 
 
-  const tableHeaders = ["No", "Name", "Email", "Approve", "Access Pledre"];
+  const tableHeaders = ["No", "Name", "Email", "Approve", "Access Dashboard"];
 
   return (
     <Admin header={"Student"}>
