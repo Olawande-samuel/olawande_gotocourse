@@ -72,7 +72,7 @@ export function CourseDetails({}){
               ...old,
               name: course.name,
               description: course.description,
-              status: course.isActive
+              status: course.status
             }
           })
           toast.success("Course Details fetched successfully", {
@@ -154,7 +154,7 @@ export function CourseDetails({}){
   async function toggleCourseStatusHandler(e){
     setLoading(_ => true);
     try {    
-      const res = await toggleCourseStatus(userdata?.token, params?.id);
+      const res = await toggleCourseStatus(userdata?.token,  params?.id);
       const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -277,7 +277,7 @@ export function CourseDetails({}){
 
             <div className={clsx.form_group} style={{marginTop: 40}}>
               <label>Change Course Status</label>
-              <Switch onClick={toggleCourseStatusHandler} checked={formstate.status} />
+              <Switch onClick={toggleCourseStatusHandler} checked={formstate.status === "active" ? true : false} />
             </div>
 
           </form>
@@ -2285,7 +2285,7 @@ export function Courses() {
                       showDetailsHandler={showDetailsHandler}
                       packages={packages}
                       date={`${getDate(startDate)} - ${getDate(endDate)}`}
-                      isActive={approve ?? true}
+                      isActive={status === "active" ? true : false}
                     />
                   )
                 )}

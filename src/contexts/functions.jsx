@@ -683,7 +683,7 @@ export const adminFunctions = {
     },
     toggleCourseStatus: async function(token, id){
         try{
-            const res = await axios.patch(`${baseURL}/admin/course/status/toggle/${id}`,
+            const res = await axios.patch(`${baseURL}/admin/course/status/toggle/${id}`, {},
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,
