@@ -74,7 +74,6 @@ const All = ({ type }) => {
     })();
     ref.current = true;
   }, []);
-
   return (
     <Courses>
       <div className="container">
@@ -96,15 +95,17 @@ const All = ({ type }) => {
               id="search"
               className="form-control"
               placeholder={type === "mentors"? "Search mentor":"Search Teacher"} 
+              onChange={(e)=> setSearch(e.target.value)}
+              value={search}
             />
-            <button className="button">Search</button>
+            <button className="button ms-3">Search</button>
           </div>
           </div>
         </section>
         <main className={`mentors_list_main ${style.main}`}>
           {type === "mentors"
             ? mentors
-                .filter(item=> item.expertise.includes(search))
+                .filter(item=> item.expertise.includes(search) || item.mentorFirstName.includes(search.toUpperCase())|| item.mentorLastName.includes(search.toUpperCase())||item.mentorBio.includes(search)||item.mentorEmail.includes(search))
                 .map((item) => (
                   <div className="mentors_list_card">
                     <MentorsCard item={item} />
