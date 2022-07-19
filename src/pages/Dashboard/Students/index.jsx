@@ -838,32 +838,7 @@ export function History(){
 
     
     const tableHeaders = ["No", "Courses", "Status", "Date", "Amount Paid"]
-    const tableContents = courses.length > 0 ? courses : [
-        {
-            status: "Approved",
-            course: "Cybersecurity",
-            date: "12/03/2022",
-            amount: 3000,
-        },
-        {
-            status: "Approved",
-            course: "UI/UX",
-            date: "12/03/2022",
-            amount: 3000,
-        },
-        {
-            status: "Approved",
-            course: "HTML",
-            date: "12/03/2022",
-            amount: 3000,
-        },
-        {
-            status: "Approved",
-            course: "Data Analytics",
-            date: "12/03/2022",
-            amount: 3000,
-        },
-    ]
+    const tableContents = courses.length > 0 ? courses : []
     return ( 
         <Students isMobile={isMobile} userdata={userdata}>               
             <div className={clsx.students_profile}>
@@ -885,9 +860,9 @@ export function History(){
                     </thead>
                     <tbody>
                         {
-                            tableContents.map(({status, date, package: p, course, amount}, i) => (
+                            tableContents.map(({status, date, package: p, coursePrice, courseName, amount}, i) => (
                                 <UserInfoCard key={i} status={status} num={i} comp={"History"} date={date} amount={amount}
-                                pack={p} course={course} />
+                                pack={`$ ${coursePrice}`} course={courseName} />
                             ))
                         }
                     </tbody>

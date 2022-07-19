@@ -3087,6 +3087,7 @@ export function CreateCourse() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loader, setLoader] = useState(location.search ? true : false);
+  
   useEffect(() => {
     if(flag.current) return;
     if(location.search){
@@ -3294,8 +3295,6 @@ export function CreateCourse() {
                 ))}
               </select>
             </div>)}
-
-
             <Input
               label="Price"
               name="price"
@@ -3349,8 +3348,6 @@ export function CreateCourse() {
     </Admin>
   );
 }
-
-
 
 // FEES COMPONENT
 export function Fees() {

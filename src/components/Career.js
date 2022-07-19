@@ -22,7 +22,7 @@ export const careers = [
     id: 1,
     title: "Cybersecurity",
     details:
-      "This is the practice ofprotecting critical systems and sensitive information from digital attacks.",
+      "This is the practice of protecting critical systems and sensitive information from digital attacks.",
     logo: <Cyber />,
     link: "categories/cybersecurity"
   },

@@ -22,37 +22,37 @@ const bootcamps = [
     title: "CyberSecurity Certificate Course",
     content: "Launch into cybersecurity with an intensive training",
     image: Cyber,
-    link:"/bootcamp"
+    link:"/bootcamp-training"
   },
   {
     title: "Coding Bootcamp",
     content: "Launch into world of coding with an intensive training",
     image: Coding,
-    link:"/bootcamp"
+    link:"/bootcamp-training"
   },
   {
     title: "UI/UX Design Bootcamp",
     content: "Launch into UI/UX design with an intensive training",
     image: Ui,
-    link:"/bootcamp"
+    link:"/bootcamp-training"
   },
   {
     title: "Technology Audit Certificate Course",
     content: "Launch into technology audit with an intensive training",
     image: Tech,
-    link:"/bootcamp"
+    link:"/bootcamp-training"
   },
   {
     title: "Salesforce Training",
     content: "Set yourself  up for high-paying job and secure tech career.",
     image: Sales,
-    link:"/bootcamp"
+    link:"/bootcamp-training"
   },
   {
     title: "Digital Marketing Bootcamp",
     content: "Launch into digital marketing with an intensive training",
     image: Marketing,
-    link:"/bootcamp"
+    link:"/bootcamp-training"
   },
 ];
 
@@ -112,7 +112,7 @@ export const BootcampBox = ({ image, title, content, link , all}) => {
                 }}
                 onClick={()=>{
                   localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-                  navigate("bootcamp")
+                  navigate("/bootcamp-training")
                 } }
                 transition={{duration: 0.1}}
                 className="btn-plain" style={{backgroundColor:"#0C2191", color:"#fff",border:"1px solid var(--theme-blue)"}}>Learn More</motion.button>

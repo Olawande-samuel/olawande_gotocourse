@@ -694,6 +694,7 @@ export const Syllabus = ({
               <option value="one-on-one">One-on-One</option>
               <option value="cohort">Cohort</option>
               <option value="Self Paced">Self Paced</option>
+              <option value="In-person Training">In-person Training</option>
             </select>
           </div>
           <Input

@@ -123,7 +123,7 @@ export default Bootcamp;
 export const BootcampDetails = ()=> {
     const [bootcampTrainingInfo, setBootcampTrainingInfo]= useState({})
     const {getItem} = useLocalStorage()
-    const bootcampTraining =  getItem("gotocourse-bootcampTraining")
+    const bootcampTraining =  getItem("gotocourse-bootcampdata")
 
     useEffect(() => {
         console.log("BootcampDetails is mounted");
@@ -137,10 +137,10 @@ export const BootcampDetails = ()=> {
     return (
         <Layout>
             <div className={clsx.bootcampTraining}>
-                <section className={clsx.hero} style={{background: `url(${BootcampImg}), rgba(0, 0, 0, 0.7)`, backgroundRepeat:"no-repeat", backgroundSize:"cover", height: `min(calc(100vh - ${navHeight}px ), 600px)`}}>
+                <section className={clsx.hero} style={{background: `url(${bootcampTraining?.image ? bootcampTraining?.image :  BootcampImg}), rgba(0, 0, 0, 0.7)`, backgroundRepeat:"no-repeat", backgroundSize:"cover", height: `min(calc(100vh - ${navHeight}px ), 600px)`}}>
                     <div className={`container ${clsx.hero_content}`}>
                         <div>
-                            <h1>User Interface and User Experience design</h1>
+                            <h1>{bootcampTraining?.title ? bootcampTraining?.title:"User Interface and User Experience design"}</h1>
                             <p>Learn the basics of cybersecurity and get mentorship in this bootcamp</p>
                         </div>
                     </div>

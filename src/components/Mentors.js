@@ -193,12 +193,12 @@ export const Card = ({ item,type }) => {
         {/* <img src={item?.profile} alt="" className="card-img-top mentor_image" /> */}
         
           <div>
-           <h5>{item?.expertise}</h5>
+            <h5 className="">{`${item?.mentorFirstName}  ${item?.mentorLastName && item?.mentorLastName} `}</h5>
             <p className="mentors_footnote" style={{fontSize:"14px"}}>{item?.footnote}</p>
           </div>
         </div>
         <div className="text-dark w-100 px-2">
-          <h5 className="">{`${item?.mentorFirstName}  ${item?.mentorLastName && item?.mentorLastName} `}</h5>
+           <h5>{item?.expertise}</h5>
           <small className="">{item?.experience && item?.experience}</small>
         </div>
         </div>

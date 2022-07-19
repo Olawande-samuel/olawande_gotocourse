@@ -53,7 +53,7 @@ export const Home = () => {
         },
         {
             question: "How do I receive my payment?",
-            answer: "You receive your payments to your Paypal or Stripe."
+            answer: "You receive your payments via your bank info as specified by you."
         },
         {
             question: "How do I conduct my training on Gotocourse?",

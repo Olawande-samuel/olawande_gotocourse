@@ -49,7 +49,7 @@ function App() {
             <Route path="teaching-policy" element={<TeachingPolicy />} />
             <Route path="about-us" element={<About />} />
             <Route path="contact-us" element={<Contact />} />
-            <Route path="/bootcamp-training" element={<TrainingBootcamp />} />
+            <Route path="bootcamp-training" element={<TrainingBootcamp />} />
             <Route path="bootcamp" element={<Bootcamp />} />
             <Route path="bootcamp/payment" element={<Payment />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
@@ -72,14 +72,14 @@ function App() {
             <Route path="mentors" element={<Out/>}>
               <Route index element={<All type="mentors" />} />
               <Route path=":id" element={<Out />} >
-              ` <Route index element={<TeacherProfile type="mentors" />} />
+              <Route index element={<TeacherProfile type="mentors" />} />
                 {/* <Route path="payment" element={<Payment />} /> */}
               </Route>
             </Route>
             <Route path="teachers" element={<Out/>}>
               <Route index element={<All  type="teachers" />} />
               <Route path=":id" element={<Out />} >
-              ` <Route index element={<TeacherProfile />} />
+               <Route index element={<TeacherProfile />} />
                 <Route path="payment" element={<Payment />} />
               </Route>
             </Route>
