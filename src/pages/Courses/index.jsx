@@ -1044,9 +1044,9 @@ console.log("pre",preview)
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus
             ridiculus nunc adipiscing justo.
           </p>
-          <div id="packages" className={` row ${style.package_card_wrapper}`}>
+          <div id="packages" className={` row justify-content-around ${style.package_card_wrapper}`}>
             {courseProfile?.packages?.length > 0 && courseProfile.packages.map(item=>(
-            <div className="col-md-4" key={item.name}>
+            <div className="col-md-3" key={item.name}>
               <PackageCard key={item.name} item={item} courseId={courseProfile.courseId} />
             </div>
             ))}

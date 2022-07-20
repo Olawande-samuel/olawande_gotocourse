@@ -650,7 +650,9 @@ export const adminFunctions = {
             }
         }
     },
-    updateCourse: async function(token, id, _data){
+    adminUpdateCourse: async function(token, id, _data){
+        console.log("running")
+        console.log(id)
         try{
             const res = await axios.put(`${baseURL}/admin/course/update/${id}`, JSON.stringify(_data),
             {
