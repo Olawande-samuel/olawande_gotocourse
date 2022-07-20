@@ -28,6 +28,7 @@ import vector from "../../../images/vector.png"
 import { CourseDetail } from "../../Courses";
 import Layout from "../../../components/Layout";
 import ChatComponent from "./Chat";
+import { CreateCourseMain } from "../Teachers/CreateCourse";
 
 
 
@@ -36,256 +37,6 @@ import ChatComponent from "./Chat";
 const KEY = "gotocourse-userdata";
 
 
-// COURSE DETAILS COMPONENT
-export function CourseDetails({}){
-  const navigate = useNavigate();
-  const {getItem} = useLocalStorage();
-  let userdata = getItem(KEY);
-  const {adminFunctions: {fetchCourses, deleteCourse, toggleCourseStatus}} = useAuth();
-  const flag = useRef(false);
-  const [formstate, setFormstate] = useState({
-    name: "",
-    description: "",
-    status: false,
-    teacher: "",
-    student: ""
-  })
-  const [loading, setLoading] = useState(true);
-  const teachers = ["Dr. Joy Castus"];
-  const students = ["James Segun"];
-  const params = useParams();
-  //get user id
-
-  useEffect(() => {
-    //fetch course details for the id
-    if(flag.current) return;
-    (async() => { 
-      try{
-        const res = await fetchCourses(userdata?.token);
-        const {message, statusCode, success} = res;
-        if(!success) throw new AdvancedError(message, statusCode);
-        else {
-          const {data} = res;
-          let course = data.find(d => d.courseId === params?.id);
-          setFormstate(old => {
-            return {
-              ...old,
-              name: course.name,
-              description: course.description,
-              status: course.status
-            }
-          })
-          toast.success("Course Details fetched successfully", {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        }
-      }catch(err){
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }finally{
-        setLoading(_ => false);
-      }
-    })()
-    flag.current = true;
-
-
-    return () => console.log("Leaving Details page");
-  }, [])
-
-
-  function changeHandler(e){
-    const {name, value} = e.target;
-    setFormstate(old => {
-      return {
-        ...old,
-        [name]: value
-      }
-    })
-  }
-
-
-  async function deleteCourseHandler(e){
-    setLoading(_ => true);
-    try {    
-      const res = await deleteCourse(userdata?.token, params?.id);
-      const { success, message, statusCode } = res;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        navigate(-1)
-      }
-    } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }finally{
-      setLoading(_ => false);
-    }
-  }
-
-
-  async function toggleCourseStatusHandler(e){
-    setLoading(_ => true);
-    try {    
-      const res = await toggleCourseStatus(userdata?.token,  params?.id);
-      const { success, message, statusCode } = res;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        console.log(res);
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-    } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }finally{
-      setLoading(_ => false);
-    }
-  }
-
-  function editCourseHandler(e){
-    navigate(`/admin/courses/create?edit=${params?.id}`);
-  }
-
-
-  return(
-    <Admin header="ADMIN">
-      {loading && <Loader />}
-      <div className={clsx["admin_profile"]}>
-        <div className={clsx.admin__student}>
-          <div className="d-flex justify-content-between align-items-center mb-5" style={{width: "80%"}}>
-            <button type="button" className="btn btn-sm btn-danger px-3 py-2" style={{fontSize: "0.8rem"}} onClick={deleteCourseHandler}>Delete Course</button>
-            <button type="button" className="btn btn-sm btn-primary px-3 py-2" style={{fontSize: "0.8rem"}} onClick={editCourseHandler}>Edit Course</button>
-          </div>
-          <form className="form" style={{width: "80%", margin: "20px 0px"}}>
-            <Input
-              label="Name of Course"
-              name="name"
-              type="text"
-              handleChange={changeHandler}
-              value={formstate.name}
-              readOnly={true}
-            />
-
-            <div className={clsx.form_group}>
-              <label htmlFor={"description"} className="form-label generic_label">
-                Description
-              </label>
-              <textarea
-                rows="5"
-                name="description"
-                value={formstate.description}
-                onChange={changeHandler}
-                className="form-control generic_input"
-                readOnly
-              ></textarea>
-            </div>
-
-            <div className={clsx.form_group}>
-              <div className={clsx.form_group__teachers}>
-                <label>Name of teachers</label>
-                {
-                  teachers.map((t, i) => (
-                    <div key={i}>
-                      <p>{i + 1}. &nbsp; {t}</p> 
-                      <div className={clsx.teachers__actions}>
-                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
-                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
-                      </div>
-                    </div>
-                  ))
-                }
-              </div>
-              <Input
-                style={{margin: "0px !important"}}
-                name="teacher"
-                type="text"
-                handleChange={changeHandler}
-                value={formstate.teacher}
-              />
-              <button type="button" className={clsx.form_group__button}>
-                Add Teacher
-              </button>
-            </div>
-
-            <div className={clsx.form_group}>
-              <div className={clsx.form_group__teachers}>
-                <label>Add Student</label>
-                {
-                  students.map((s, i) => (
-                    <div key={i}>
-                      <p>{i + 1}. &nbsp; {s}</p> 
-                      <div className={clsx.teachers__actions}>
-                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
-                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
-                      </div>
-                    </div>
-                  ))
-                }
-              </div>
-              <Input
-                name="student"
-                type="text"
-                handleChange={changeHandler}
-                value={formstate.student}
-              />
-              <button type="button" className={clsx.form_group__button}>
-                Add Student
-              </button>
-            </div>
-
-            <div className={clsx.form_group} style={{marginTop: 40}}>
-              <label>Change Course Status</label>
-              <Switch onClick={toggleCourseStatusHandler} checked={formstate.status === "active" ? true : false} />
-            </div>
-
-          </form>
-        </div>
-      </div>
-    </Admin>
-  )
-}
 
 
 // CATEGORY DETAILS COMPONENT
@@ -573,7 +324,7 @@ const [loading, setLoading] = useState(true);
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h1 style={{margin: 0}}>All Category</h1>  <button className="btn btn-primary px-4" onClick={(e) => navigate("new")}>Add Category</button>
           </div>
-            <div className={`table-responsive ${clsx.admin__student_main}`}>
+            <div className={` ${clsx.admin__student_main}`}>
             {categories.length > 0 ?
               <table className={`${clsx.admin__student_table}`}>
                 <thead>
@@ -1264,7 +1015,7 @@ export function Approve() {
     },
     {
       title: "Mentorship status",
-      content: "Unassigned",
+      content: data?.userType === "mentor"? "Assigned" : "Unassigned",
     },
   ];
   
@@ -1405,8 +1156,8 @@ export function Approve() {
             </div> */}
 
             <div className="form-group my-3">
-              <label htmlFor="accessPledre" className="form-label generic_label">Confer Mentorship</label>
-              <Switch onClick={(e)=>conferMentorship(e, data?.userId, data?.email)} checked={false} />
+              <label htmlFor="accessPledre" className="form-label generic_label">{data?.userType === "mentor"? "Revoke Mentorship" : "Confer Mentorship"}</label>
+              <Switch onClick={(e)=>conferMentorship(e, data?.userId, data?.email)} checked={data?.userType === "mentor" ? true : false} />
             </div>
             <div className="form-group my-3">
               <label htmlFor="accessPledre" className="form-label generic_label">Access Dashboard</label>
@@ -1475,6 +1226,7 @@ export function UserInfoCard({
   level,
   packages=[],
   type,
+  coursePrice,
   showDetailsHandler = () => {return},
   approveHandler = () => {return},
 }) {
@@ -1515,6 +1267,11 @@ export function UserInfoCard({
         </td>
       )}
 
+      {coursePrice && (
+        <td className={clsx.user__date}>
+          <span>{coursePrice}</span>
+        </td>
+      )}
       {pack && (
         <td className={clsx.user__date}>
           <span>{pack}</span>
@@ -1662,10 +1419,10 @@ export function Teachers() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center flex-wrap">
-            <h1>Mentors/Teachers</h1>
+            <h5>Mentors/Teachers</h5>
             <button className="btn button-md" style={{background:"var(--theme-blue)", color:"#fff"}} type="button" onClick={()=>navigate("create/mentor")}>Add Mentor</button>
           </div>
-          <div className={`table-responsive ${clsx.admin__student_main}`}>
+          <div className={`${clsx.admin__student_main}`}>
             <table className={`${clsx.admin__student_table}`}>
               <thead>
                 {tableHeaders.map((el, i) => (
@@ -1780,7 +1537,7 @@ export function Mentors() {
             <h1>Mentors</h1>
             {/* <button className="btn button-md" style={{background:"var(--theme-blue)", color:"#fff"}} type="button" onClick={()=>navigate("create/mentor")}>Add Mentor</button> */}
           </div>
-          <div className={`table-responsive ${clsx.admin__student_main}`}>
+          <div className={` ${clsx.admin__student_main}`}>
             <table className={`${clsx.admin__student_table}`}>
               <thead>
                 {tableHeaders.map((el, i) => (
@@ -2298,7 +2055,272 @@ export function Courses() {
   );
 }
 
+// CREATECOURSE COMPONENT
+export function CreateCourse() {
+  const location = useLocation();
+  const [loader, setLoader] = useState(location.search ? true : false);
+  
 
+  return (
+    <Admin header={location.search ? "Edit Course":"Create Course"}>
+      {/* {loader && <Loader />} */}
+      <div className={clsx.admin_profile}>
+        <CreateCourseMain type={"admin"} />
+      </div>
+    </Admin>
+  );
+}
+
+// COURSE DETAILS COMPONENT
+export function CourseDetails({}){
+  const navigate = useNavigate();
+  const {getItem, updateItem} = useLocalStorage();
+  let userdata = getItem(KEY);
+  const {generalState, setGeneralState, adminFunctions: {fetchCourses, deleteCourse, toggleCourseStatus}} = useAuth();
+  const flag = useRef(false);
+  const [formstate, setFormstate] = useState({
+    name: "",
+    description: "",
+    status: false,
+    teacher: "",
+    student: ""
+  })
+  const [loading, setLoading] = useState(true);
+  const teachers = ["Dr. Joy Castus"];
+  const students = ["James Segun"];
+  const params = useParams();
+  //get user id
+
+  useEffect(() => {
+    //fetch course details for the id
+    if(flag.current) return;
+    (async() => { 
+      try{
+        const res = await fetchCourses(userdata?.token);
+        const {message, statusCode, success} = res;
+        if(!success) throw new AdvancedError(message, statusCode);
+        else {
+          const {data} = res;
+          let course = data.find(d => d.courseId === params?.id);
+          setFormstate(old => {
+            return {
+              ...old,
+              ...course
+            }
+          })
+          toast.success("Course Details fetched successfully", {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      }catch(err){
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }finally{
+        setLoading(_ => false);
+      }
+    })()
+    flag.current = true;
+
+
+    return () => console.log("Leaving Details page");
+  }, [])
+
+
+  function changeHandler(e){
+    const {name, value} = e.target;
+    setFormstate(old => {
+      return {
+        ...old,
+        [name]: value
+      }
+    })
+  }
+
+
+  async function deleteCourseHandler(e){
+    setLoading(_ => true);
+    try {    
+      const res = await deleteCourse(userdata?.token, params?.id);
+      const { success, message, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        navigate(-1)
+      }
+    } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }finally{
+      setLoading(_ => false);
+    }
+  }
+
+
+  async function toggleCourseStatusHandler(e){
+    setLoading(_ => true);
+    try {    
+      const res = await toggleCourseStatus(userdata?.token,  params?.id);
+      const { success, message, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        console.log(res);
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }finally{
+      setLoading(_ => false);
+    }
+  }
+
+  function editCourseHandler(e){
+    setGeneralState({ ...generalState, courseInfo: formstate });
+    updateItem("gotocourse-courseEdit", formstate )
+    navigate(`/admin/courses/create?edit=${params?.id}`);
+  }
+
+
+  return(
+    <Admin header="ADMIN">
+      {loading && <Loader />}
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+          <div className="d-flex justify-content-between align-items-center mb-5" style={{width: "80%"}}>
+            <button type="button" className="btn btn-sm btn-danger px-3 py-2" style={{fontSize: "0.8rem"}} onClick={deleteCourseHandler}>Delete Course</button>
+            <button type="button" className="btn btn-sm btn-primary px-3 py-2" style={{fontSize: "0.8rem"}} onClick={editCourseHandler}>Edit Course</button>
+          </div>
+          <form className="form" style={{width: "80%", margin: "20px 0px"}}>
+            <Input
+              label="Name of Course"
+              name="name"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.name}
+              readOnly={true}
+            />
+
+            <div className={clsx.form_group}>
+              <label htmlFor={"description"} className="form-label generic_label">
+                Description
+              </label>
+              <textarea
+                rows="5"
+                name="description"
+                value={formstate.description}
+                onChange={changeHandler}
+                className="form-control generic_input"
+                readOnly
+              ></textarea>
+            </div>
+
+            <div className={clsx.form_group}>
+              <div className={clsx.form_group__teachers}>
+                <label>Name of teachers</label>
+                {
+                  teachers.map((t, i) => (
+                    <div key={i}>
+                      <p>{i + 1}. &nbsp; {t}</p> 
+                      <div className={clsx.teachers__actions}>
+                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
+                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+              <Input
+                style={{margin: "0px !important"}}
+                name="teacher"
+                type="text"
+                handleChange={changeHandler}
+                value={formstate.teacher}
+              />
+              <button type="button" className={clsx.form_group__button}>
+                Add Teacher
+              </button>
+            </div>
+
+            <div className={clsx.form_group}>
+              <div className={clsx.form_group__teachers}>
+                <label>Add Student</label>
+                {
+                  students.map((s, i) => (
+                    <div key={i}>
+                      <p>{i + 1}. &nbsp; {s}</p> 
+                      <div className={clsx.teachers__actions}>
+                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
+                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+              <Input
+                name="student"
+                type="text"
+                handleChange={changeHandler}
+                value={formstate.student}
+              />
+              <button type="button" className={clsx.form_group__button}>
+                Add Student
+              </button>
+            </div>
+
+            <div className={clsx.form_group} style={{marginTop: 40}}>
+              <label>Change Course Status</label>
+              <Switch onClick={toggleCourseStatusHandler} checked={formstate.status === "active" ? true : false} />
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </Admin>
+  )
+}
 
 // BOOTCAMPDETAILS COMPONENT
 export function BootcampDetails({}){
@@ -3048,306 +3070,7 @@ function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
 }
 
 
-// CREATECOURSE COMPONENT
-export function CreateCourse() {
-  const {adminFunctions: { fetchCourses, updateCourse }, teacherFunctions: { addCourse } } = useAuth(); 
-  const {getItem} = useLocalStorage();
-  const location = useLocation();
-  const flag = useRef(false);
-  let userdata = getItem(KEY);
-  const {syllabuses, addtoSyllabus, setSyllabusses} = useSyllabus();
-  const [formstate, setFormstate] = useState({
-    name: "",
-    categoryName: "",
-    description: "",
-    type: "",
-    startDate: "",
-    endDate: "",
-    price: "",
-    faqs: [],
-  });
-  const [packageState, setPackageState] = useState({
-    title: "",
-    description: ""
-  })
-  const [packages, setPackages] = useState([
-    {
-      value: "cohort",
-      name: "Cohort",
-    },
-    {
-      value: "self-paced",
-      name: "Self paced",
-    },
-    {
-      value: "one-one",
-      name: "One-One Mentorship",
-    },
-  ])
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [loader, setLoader] = useState(location.search ? true : false);
-  
-  useEffect(() => {
-    if(flag.current) return;
-    if(location.search){
-      console.log(location.search);
-      const id = location.search.split("=")[1];
-      (async() => {
-        try{
-          const res = await fetchCourses(userdata?.token);
-          const {message, success, statusCode} = res;
-          if(!success) throw new AdvancedError(message, statusCode);
-          else {
-            const {data} = res;
-            const course = data.find(d => d.courseId === id);
-            console.log(course);
-            setFormstate(old => {
-              return {
-                ...old,
-                name: course.name,
-                description: course.description,
-                type: course.type,
-                categoryName: course.category,
-                price: course.price,
-                startDate: course.startDate.split("T")[0],
-                endDate: course.endDate.split("T")[0]
-              }
-            })
-            setPackages(_ => {
-              return course.packages.map(p => {
-                return {
-                  name: p.title,
-                  value: p.title
-                }
-              })
-            })
-          }
-        }catch(err){
-          toast.error(err.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        }finally{
-          setLoader(_ => false);
-        }
-      })()
-    }
-    flag.current = true;
-  }, [])
 
-  function changeHandler(e) {
-    const { name, value } = e.target;
-    setFormstate((old) => {
-      return {
-        ...old,
-        [name]: value,
-      };
-    });
-  }
-
-  function changePackageStateHandler(e){
-    const {name, value} = e.target;
-    setPackageState(old => {
-      return{
-        ...old,
-        [name]: value
-      }
-    })
-  }
- 
-  async function submitHandler(e) {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      if (
-        formstate.name === "" ||
-        formstate.categoryName === "" ||
-        formstate.description === "" ||
-        formstate.price === "" ||
-        formstate.startDate === "" || formstate.endDate === ""
-      )
-        throw new AdvancedError("All fields are required", 0);
-      console.log({...formstate, syllabus: [...syllabuses], packages: [packageState]})
-      const res = location.search ? await updateCourse(userdata.token, location.search.split("=")[1], {...formstate, syllabus: [...syllabuses], packages: [...packages]}) : await addCourse({...formstate, syllabus: [...syllabuses], packages: [packageState]}, userdata.token);
-      const { success, message, statusCode } = res;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-    } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } finally {
-      setLoading((_) => false);
-
-    }
-  }
-
-  const openModal = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-  return (
-    <Admin header="Create Course">
-      {loader && <Loader />}
-      <div className={clsx.admin_profile}>
-        <div className={clsx.edit__profile}>
-          <form className="form" onSubmit={submitHandler}>
-            <Input
-              label="Name of course"
-              name="name"
-              type="text"
-              handleChange={changeHandler}
-              value={formstate.name}
-            />
-            <Input
-              label="Category"
-              name="categoryName"
-              type="text"
-              handleChange={changeHandler}
-              value={formstate.categoryName}
-            />
-
-            <div className={clsx.form_group}>
-              <label htmlFor={"description"}>
-                Brief Description of course content
-              </label>
-              <textarea
-                rows="5"
-                name="description"
-                value={formstate.description}
-                onChange={changeHandler}
-                className="generic_input"
-              ></textarea>
-            </div>
-
-            <div className={clsx.form_group}>
-              <label htmlFor={"package"}>Type</label>
-              <select
-                rows="5"
-                name="type"
-                value={formstate.type}
-                onChange={changeHandler}
-                className="form-select generic_input"
-              >
-                <option value="">Choose a Type</option>
-                <option value="FLAT">Flat</option>
-                <option value="PACKAGE">Package</option>
-              </select>
-            </div>
-            <div className="d-flex flex-wrap">
-              <div className="col-sm-5 col-md-5" style={{marginRight: 50}}>
-                <Input
-                  label="Start Date"
-                  name="startDate"
-                  type="date"
-                  value={formstate.startDate}
-                  handleChange={changeHandler}
-                />
-              </div>
-              <div className="col-sm-5 col-md-5">
-                <Input
-                  label="End Date"
-                  name="endDate"
-                  type="date"
-                  value={formstate.endDate}
-                  handleChange={changeHandler}
-                />
-              </div>
-            </div>
-           {!location.search && (<div className={clsx.form_group}>
-              <label htmlFor={"package"}>Package</label>
-              <select
-                rows="5"
-                name="title"
-                value={packageState.title}
-                onChange={changePackageStateHandler}
-                className="form-select generic_input"
-              >
-                <option value="">Choose a package</option>
-                {packages.map(({ name, value }, i) => (
-                  <option value={value} key={i}>
-                    {name}
-                  </option>
-                ))}
-              </select>
-            </div>)}
-            <Input
-              label="Price"
-              name="price"
-              type="text"
-              handleChange={changeHandler}
-              value={formstate.price}
-            />
-
-            <div className={clsx.form_group}>
-              <label>Syllabus</label>
-              {
-                syllabuses.length !== 0 ? syllabuses.map(({title, description}, i) => (
-                  <Syllabus title={title} key={i} description={description} />
-                )) : <p className="m-0 text-danger" style={{fontSize: '0.8rem', textIndent: 20}}>No syllabus!</p>
-              }
-            </div>
-
-            <button
-              className="btn btn-primary mb-5"
-              style={{ backgroundColor: "var(--theme-blue)" }}
-              type="button"
-              onClick={openModal}
-              disabled={loading}
-            >
-              Add Syllabus
-            </button>
-
-            {loading ? (
-              <button className="button button-lg log_btn w-100 mt-3" disabled={loading}>
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </button>
-            ) : (
-              <button
-                className="button button-lg log_btn w-100 mt-3"
-                type="submit"
-              >
-                {location.search ? "Update" : "Save"}
-              </button>
-            )}
-          </form>
-        </div>
-      </div>
-      <AddSyllabus
-        open={open}
-        addSyllabus={addtoSyllabus}
-        setOpen={setOpen}
-        handleClose={handleClose}
-      />
-    </Admin>
-  );
-}
 
 // FEES COMPONENT
 export function Fees() {
@@ -3673,12 +3396,15 @@ export function Student() {
         <div className={clsx.admin__student}>
           <h1>All Students</h1>
 
-          <div className={`table-responsive ${clsx.admin__student_main}`}>
+          <div className={`${clsx.admin__student_main}`}>
             <table className={clsx.admin__student_table}>
               <thead>
+                <tr>
+
                 {tableHeaders.map((el, i) => (
-                  <td key={i}>{el}</td>
-                ))}
+                  <th key={i}>{el}</th>
+                  ))}
+                  </tr>
               </thead>
               <tbody>
                 {studentList?.length > 0 &&
@@ -3689,7 +3415,6 @@ export function Student() {
                         profileImg,
                         accessPledre,
                         email,
-                        date,
                         name,
                         isVerified,
                         firstName,
@@ -3703,12 +3428,12 @@ export function Student() {
                         firstName={firstName}
                         lastName={lastName}
                         img={profileImg}
-                        date={date}
                         email={email}
                         num={i}
                         isActive={isVerified}
                         accessPledre={accessPledre}
                         user={true}
+                        type={null}
                         handleVerification={() => handleVerification(userId)}
                         handlePledreAccess={() => handlePledreAccess(userId)}
                       />
