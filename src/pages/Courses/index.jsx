@@ -1009,9 +1009,9 @@ console.log("pre",preview)
         <section id="packages" className={style.packages}>
           <h3 className={`text-center ${style.header}`}>Packages</h3>
           <p className={`subtitle ${style.subtitle}`}>
-            With your learning needs in mind we have carefully curated the following learning options that offer flexibility, independence and learning at your own pace. Click your preferred choice to proceed to payment
+            With your learning needs in mind we have carefully curated the following learning options that offer flexibility, independence and learning at your own pace.
           </p>
-          <div id="packages" className={` row justify-content-around ${style.package_card_wrapper}`}>
+          <div id="packages" className={`row justify-content-around ${style.package_card_wrapper}`}>
             {courseProfile?.packages?.length > 0 && courseProfile.packages.map(item=>(
             <div className="col-md-3" key={item.name}>
               <PackageCard key={item.name} item={item} courseId={courseProfile.courseId} />
