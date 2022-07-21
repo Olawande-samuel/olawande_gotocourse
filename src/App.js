@@ -28,6 +28,7 @@ import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import Bootcamp from "./pages/Bootcamp";
 import Policies from "./pages/PrivacyPolicy";
+import Career from "./pages/Career";
 
  
 
@@ -48,7 +49,7 @@ function App() {
             <Route path="become-a-teacher" element={<BecomeATeacher />} />
             <Route path="payment/success" element={<PaymentStatus success={true} />} />
             <Route path="payment/error" element={<PaymentStatus />} />
-
+            <Route path="career" element={<Career />} />
 
             <Route path="students" element={<Out />}>
               <Route path="" element={<StudentProfile  />} />
