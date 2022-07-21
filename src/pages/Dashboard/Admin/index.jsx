@@ -3153,28 +3153,7 @@ export function Notification() {
   const [loader, setLoader] = useState(false);
   const {adminFunctions: { fetchNotifications } } = useAuth(); 
   
-  const [notifications, setNotifications] = useState([
-    {
-      time:'28/06/22',
-      message:"You have message from Dr. Ajala"
-    },
-    {
-      time:'28/06/22',
-      message:"A new student just signed up"
-    },
-    {
-      time:'29/06/22',
-      message:"Femi Gabriel paid his fees"
-    },
-    {
-      time:'30/06/22',
-      message:"A new mentor just signed up"
-    },
-    {
-      time:'01/07/22',
-      message:"New message from mentor"
-    },
-  ]);
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     if(flag.current) return;
@@ -3184,7 +3163,8 @@ export function Notification() {
           console.log(res)
           const {message, success, statusCode} = res;
           if(!success) throw new AdvancedError(message, statusCode);
-          const {data} = res;
+          const {data} = res
+          console.log(data)
           if(data.length > 0) {
             setNotifications(data)
           }
@@ -3209,14 +3189,13 @@ export function Notification() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h1>My notifications</h1>
-
           <div className={clsx.admin__student_main}>
-            {notifications.map((notification, index)=>(
+            {notifications.length > 0 ? notifications.map((notification, index)=>(
               <div key={index} className={clsx["notification"]}>
-                <span>{notification.time}</span>
+                <span>{getDate(notification.createdAt)}</span>
                 <span>{notification.message}</span>
               </div> 
-            ))}
+            )) : <p>No notifications found</p>}
           </div>
         </div>
       </div>

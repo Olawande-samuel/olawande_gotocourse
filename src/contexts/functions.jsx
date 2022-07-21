@@ -944,8 +944,8 @@ export const adminFunctions = {
                 }
             })
             console.log(res);
-
-            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+// Error from backend
+            if(res.data.message !== "Notifications fetched successfully") throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -981,7 +981,7 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1013,7 +1013,7 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1044,7 +1044,7 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1075,7 +1075,7 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1106,7 +1106,7 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1137,14 +1137,16 @@ export const studentFunctions = {
                 }
             })
             console.log(res);
-
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+ 
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            console.error(err)
+            console.log(err.statusCode === 2)
             if(err.statusCode === 2){
                 localStorage.clear()
             }
@@ -1170,7 +1172,7 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1202,7 +1204,7 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1233,7 +1235,7 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1264,7 +1266,7 @@ export const studentFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1357,7 +1359,7 @@ export const studentFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1396,7 +1398,7 @@ export const teacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1428,7 +1430,7 @@ export const teacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1459,7 +1461,7 @@ export const teacherFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1492,7 +1494,7 @@ export const teacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1523,7 +1525,7 @@ export const teacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1554,7 +1556,7 @@ export const teacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1585,7 +1587,7 @@ export const teacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1616,7 +1618,7 @@ export const teacherFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1709,7 +1711,7 @@ export const teacherFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1746,7 +1748,7 @@ export const otherFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1809,7 +1811,7 @@ export const otherFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true

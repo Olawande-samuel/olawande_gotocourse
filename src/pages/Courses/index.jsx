@@ -313,6 +313,7 @@ export const Categories = () => {
   // },[])
 
   useEffect(()=>{
+    localStorage.removeItem("gotocourse-category")
     if(ref.current) return
     (async()=>{
       try{
@@ -549,18 +550,20 @@ export const CourseDetail = ({preview}) => {
   const [categoryCourses, setCategoryCourses]= useState([])
   const {id} = useParams()
   const ref = useRef(false);
-
+  const navigate = useNavigate()
   // const [categoryDetails, setCategoryDetails]= useState({})
 
   let categoryDetails = {}
   if(!preview?.name){
     const data = localStorage.getItem("gotocourse-category")
+    console.log(data)
     if (data){
       categoryDetails = JSON.parse(data)          
+    } else {
+      navigate("/not-found")
     }
   } else {
     categoryDetails = preview          
-
   }
 
   console.log("cate", categoryDetails)
@@ -570,7 +573,9 @@ export const CourseDetail = ({preview}) => {
 
     if(ref.current) return
       (async()=>{
+        if(categoryDetails){
         try{
+
           setGeneralState({...generalState, loading: true})
           const res = await searchCategories(categoryDetails?.name);
           const {success, message, statusCode} = res;
@@ -613,6 +618,9 @@ export const CourseDetail = ({preview}) => {
       }finally{
         setGeneralState({...generalState, loading: false})
       }
+      } else {
+        navigate("/not-found")
+      }
       })()
       ref.current = true
     } 
@@ -623,45 +631,7 @@ export const CourseDetail = ({preview}) => {
   useEffect(()=>{
     if(preview?.name) {
       categoryDetails = preview;
-    } else {
-      
-  //   let categoryId = id.charAt(0).toUpperCase() + id.slice(1)
-  //   let one = categoryId.split("-").join(" ")
-    
-  //   if(ref.current) return
-  //   (async()=>{
-  //     try{
-  //       setGeneralState({...generalState, loading: true})
-        
-  //       const res = await fetchCategory(one);
-  //       const {success, message, statusCode, data} = res;
-  //       setGeneralState({...generalState, loading: false})
-  //         if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-  //         setCategoryDetails(data)
-  //         toast.success(message, {
-  //           position: "top-right",
-  //           autoClose: 4000,
-  //           hideProgressBar: true,
-  //           closeOnClick: true,
-  //           pauseOnHover: true,
-  //           draggable: true,
-  //           progress: undefined,
-  //         });
-      
-  //   }catch(err){
-  //       setGeneralState({...generalState, loading: false})
-  //       toast.error(err.message, {
-  //           position: "top-right",
-  //           autoClose: 4000,
-  //           hideProgressBar: true,
-  //           closeOnClick: true,
-  //           pauseOnHover: true,
-  //           draggable: true,
-  //           progress: undefined,
-  //       });
-  //   }
-  //   })()
-  }
+    }
   // ref.current = true
   },[id, preview])
 
@@ -689,7 +659,7 @@ export const CourseDetail = ({preview}) => {
                   {categoryDetails?.nicheDescription}
                 </p>
                 <ul>
-                  {categoryDetails?.nicheItems.length > 0 && categoryDetails?.nicheItems.map((item) => (
+                  {categoryDetails?.nicheItems?.length > 0 && categoryDetails?.nicheItems.map((item) => (
                     <li>
                       <p className={style.niche}>{item.name}</p>
                       <p className={style.niche}>{item.description}</p>
@@ -724,7 +694,6 @@ export const CourseDetail = ({preview}) => {
             <header className={`text-center ${style.details_title}`}>
               <h2 className={`text-uppercase ${style.details_head}`}>{categoryDetails?.name} Courses</h2>
               <p className="subtitle">
-                
               </p>
             </header>
             {categoryCourses.length > 0 ? (
@@ -1026,8 +995,7 @@ console.log("pre",preview)
         <section id="syllabus" className={style.syllabus}>
           <h4 className={style.title}>Syllabus</h4>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus
-            ridiculus nunc adipiscing justo.
+            This syllabus covers the relevant topics, assessment and projects you will need in your learning path for this course
           </p>
           <ul>
             {courseProfile?.syllabus?.length > 0 && courseProfile.syllabus.slice(0, 3).map((item) => (
@@ -1041,8 +1009,7 @@ console.log("pre",preview)
         <section id="packages" className={style.packages}>
           <h3 className={`text-center ${style.header}`}>Packages</h3>
           <p className={`subtitle ${style.subtitle}`}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus
-            ridiculus nunc adipiscing justo.
+            With your learning needs in mind we have carefully curated the following learning options that offer flexibility, independence and learning at your own pace. Click your preferred choice to proceed to payment
           </p>
           <div id="packages" className={` row justify-content-around ${style.package_card_wrapper}`}>
             {courseProfile?.packages?.length > 0 && courseProfile.packages.map(item=>(

@@ -105,8 +105,6 @@ function App() {
                 <Route path="courses/:profile" element={<Out />}>
                   <Route index element={<CourseProfile />} />
                   <Route path="payment" element={<Payment />} />
-                  
-
                 </Route>
               </Route>
             </Route>
