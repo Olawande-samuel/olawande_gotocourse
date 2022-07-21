@@ -96,6 +96,11 @@ export const Syllabus = ({
 
       if(courseData){
         setFormstate(courseData)
+        
+        if(courseData.courseImg){
+          const imgArr = courseData.courseImg.split("/").slice(-1)
+          setFormstate({...courseData, courseImg: imgArr[0]})
+        }
       }
     },[])
 
@@ -151,8 +156,8 @@ export const Syllabus = ({
         if (
           formstate.name === "" ||
           formstate.categoryName === "" ||
-          formstate.description === "" ||
-          formstate.price === ""
+          formstate.description === "" 
+         
         )
           throw new AdvancedError("All fields are required", 0);
           let formdata = {
@@ -441,13 +446,13 @@ export const Syllabus = ({
                 Add Package
               </button>
   
-              <Input
+              {/* <Input
                 label="Price"
                 name="price"
                 type="text"
                 handleChange={changeHandler}
                 value={formstate.price}
-              />
+              /> */}
   
               <div className={clsx.form_group}>
                 <label className="form-label generic_label">Syllabus</label>
