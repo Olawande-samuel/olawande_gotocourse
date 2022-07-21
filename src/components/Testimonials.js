@@ -9,7 +9,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
 import 'swiper/css';
-const witnesses = [
+export const witnesses = [
   {
     id: 1,
     content:

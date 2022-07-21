@@ -144,7 +144,8 @@ const Navbar = () => {
             </li>
             }
             { value?.token ? (
-                <li className="nav-item d-flex align-items-center nav_link me-2"><a href="https://goto-course.com/dashboard" className="link">Go to Dashboard</a></li> 
+                // <li className="nav-item d-flex align-items-center nav_link me-2"><a href="https://goto-course.com/dashboard" className="link">Go to Dashboard</a></li> 
+                ""
             ):(
               <>
                 <li className="nav-item d-flex align-items-center nav_link"><Link to="/become-a-teacher" className="link">Become a Teacher</Link></li>

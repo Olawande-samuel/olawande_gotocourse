@@ -61,8 +61,8 @@ const Upcoming = () => {
           <header>
             <h3 className="testimonials_title">Upcoming Bootcamps</h3>
           </header>
-          <div>
-          <Swiper
+          <div className="upcoming_card_wrapper justify-content-around align-items-center">
+          {/* <Swiper
             // install Swiper modules
             modules={[Navigation, Pagination, Scrollbar, A11y]}
             loop={true}
@@ -82,21 +82,21 @@ const Upcoming = () => {
                 spaceBetween: 16
             },            
             }}
-      >
+            >
+        <SwiperSlide>
+          </SwiperSlide>
+            </Swiper> */}
             {!loading ? (
-                bootcamps.map(bootcamp=>(
-                    <SwiperSlide>
-                        <UpcomingCards {...bootcamp} all={bootcamp} />
-                    </SwiperSlide>
+                bootcamps.slice(0, 3).map((bootcamp, index)=>(
+                  <>
+                        <UpcomingCards key={index} {...bootcamp} all={bootcamp} />
+                  </>
                 ))
             ):(
-                [0, 0, 0, 0, 0].map((_, i)=>(
-                    <SwiperSlide key={i}>
-                        <Skeleton className="col-md-9 p-2 p-md-3 pe-md-4" variant='rectangular' width={1200} height={300} animation="wave" sx={{borderRadius: 10}} />
-                    </SwiperSlide>
+                [0, 0, 0].map((_, i)=>(
+                        <Skeleton key={i} className="col-md-9 p-2 p-md-3 pe-md-4" variant='rectangular' width={350} height={500} animation="wave" sx={{borderRadius: 10}} />
                 ))
             )}
-            </Swiper>
           </div>
   
         </div>
@@ -126,32 +126,32 @@ const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endD
 
   }
   useEffect(()=>{
-    console.log(flagRef.current.clientWidth)
+    // console.log(flagRef.current.clientWidth)
   },[])
     return (
-        <div className="card p-0 upcoming_card position-relative mx-auto" style={{width:"min(100% - .5rem, 1500px)", borderRadius:"8px", height:"300px"}}>
+        <div className="card p-0 upcoming_card position-relative mx-auto" style={{borderRadius:"8px", height:"100%"}}>
+          <div className="upcoming_card_img_wrapper">
+            <img src={bootcampImg} alt="" className="card-img-top img-fluid"  />
+          </div>
             <div className="card-body p-0">
                 <div className="row" style={{height:"100%"}}>
-                    {/* <div className="col-md-3 d-flex justify-content-center align-items-center" style={{background:`url(https://loftywebtech.com/gotocourse/api/uploads/${bootcampImg})`, borderRadius:"8px", padding:"8rem 5rem", position:"relative"}}> */}
-                    <div className="col-md-3 d-flex justify-content-center align-items-center" style={{background:`url(${bootcampImg})`, borderRadius:"8px", padding:"8rem 5rem", position:"relative"}}>
-                       {/* <img src={`https://loftywebtech.com/gotocourse/api/uploads/${bootcampImg}`} alt="" /> */}
-                       <h3 className="text-light" style={{position:"absolute", top:"50%", transform:"translateY(-50%)"}}>{title}</h3>
-                    </div>
-                    <div className="col-md-9 p-2 p-md-3 pe-md-4 d-flex flex-column justify-content-between">
+                  
+                    <div className="col-12 p-2 p-md-3 pe-md-4 d-flex flex-column justify-content-between">
+                      <h5 className="fw-bolder">{title}</h5>
                         <p className="mx-0  upcoming_text" style={style.text}> {description}</p>
-                        <div className="timing d-flex flex-column flex-md-row justify-content-between text-center">
+                        <div className="timing d-flex flex-column flex-md-row flex-wrap justify-content-between text-center">
                             <div>
                                 <h6 className="fw-bolder">Duration</h6>
                                 <p>{duration}</p>
                             </div>
                             <div>
-                                <h6 className="fw-bolder">Days</h6>
+                                <h6 className="fw-bolder">Date</h6>
                                 <p>{getDate(startDate)} -{getDate(endDate)}</p>
                             </div>
-                            <div>
+                            {/* <div>
                                 <h6 className="fw-bolder">Timing</h6>
                                 <p>{startTime} - {endTime}</p>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="text-center text-md-end">
                             <button className="btn" style={{ background:"var(--theme-blue)", color:"#fff"}} onClick={()=>{
@@ -161,10 +161,9 @@ const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endD
                     </div>
                 </div>
             </div>
-            <div className="flag position-absolute" ref={flagRef} style={style.flag}>
-                {/* <p className="mb-0 text-light">{type}</p> */}
+            {/* <div className="flag position-absolute" ref={flagRef} style={style.flag}>
                 <p className="mb-0 text-light">Registration in progress</p>
-            </div>
+            </div> */}
         </div>
     )
 }

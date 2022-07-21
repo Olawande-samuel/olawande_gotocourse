@@ -29,7 +29,7 @@
 }
 
 .subtitle {
-  width: min(100% - 1rem, 500px);
+  width: min(100% - 1rem, 800px);
   margin-inline: auto;
   text-align: center;
   font-size: 15px;

@@ -26,9 +26,12 @@ import TeacherSignup from "./pages/User/TeacherSignup";
 import SyllabusContextProvider from "./contexts/Syllabus";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
-import Bootcamp from "./pages/Bootcamp";
-import Policies from "./pages/PrivacyPolicy";
+import Bootcamp, {BootcampDetails as TrainingBootcamp} from "./pages/Bootcamp";
+import Policies, {TeachingPolicy, TermsOfUse, EndUserPolicy, Cookies} from "./pages/PrivacyPolicy";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 import Career from "./pages/Career";
+
 
  
 
@@ -41,7 +44,14 @@ function App() {
           <Route index element={<Landing />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
-            <Route path="policies" element={<Policies />} />
+            <Route path="privacy-policy" element={<Policies />} />
+            <Route path="terms-of-use" element={<TermsOfUse />} />
+            <Route path="cookies" element={<Cookies />} />
+            <Route path="end-user-policy" element={<EndUserPolicy />} />
+            <Route path="teaching-policy" element={<TeachingPolicy />} />
+            <Route path="about-us" element={<About />} />
+            <Route path="contact-us" element={<Contact />} />
+            <Route path="bootcamp-training" element={<TrainingBootcamp />} />
             <Route path="bootcamp" element={<Bootcamp />} />
             <Route path="bootcamp/payment" element={<Payment />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
@@ -64,14 +74,14 @@ function App() {
             <Route path="mentors" element={<Out/>}>
               <Route index element={<All type="mentors" />} />
               <Route path=":id" element={<Out />} >
-              ` <Route index element={<TeacherProfile type="mentors" />} />
+              <Route index element={<TeacherProfile type="mentors" />} />
                 {/* <Route path="payment" element={<Payment />} /> */}
               </Route>
             </Route>
             <Route path="teachers" element={<Out/>}>
               <Route index element={<All  type="teachers" />} />
               <Route path=":id" element={<Out />} >
-              ` <Route index element={<TeacherProfile />} />
+               <Route index element={<TeacherProfile />} />
                 <Route path="payment" element={<Payment />} />
               </Route>
             </Route>
@@ -97,8 +107,6 @@ function App() {
                 <Route path="courses/:profile" element={<Out />}>
                   <Route index element={<CourseProfile />} />
                   <Route path="payment" element={<Payment />} />
-                  
-
                 </Route>
               </Route>
             </Route>

@@ -30,12 +30,6 @@
     height: 100%;
   }
 }
-@media (min-width: 768px){
-  .upcoming_text {
-    margin-right: 12rem !important;
-  }
-  
-}
 @media (max-width: 768px){
   .upcoming_card {
     height:auto !important;
@@ -44,6 +38,25 @@
 }
 .upcoming_card .row {
   --bs-gutter-x: 0;
+}
+.upcoming_card_wrapper {
+  display: grid;
+  grid-template-columns:repeat(auto-fit, minmax(min(300px, 100%), 380px));
+  gap:.5rem;
+}
+.upcoming_card_img_wrapper {
+  width: min(100%, 450px);
+  height:300px;
+
+}
+.upcoming_text {
+font-size: 14px;
+}
+.upcoming_card_img_wrapper img {
+  height:100%;
+}
+.timing p {
+font-size:14px;
 }
 .restricted_line{
   display: -webkit-box;
@@ -1717,7 +1730,132 @@ line-height: 16px;
   }
   
 }
+/* ***************ABOUT********************* */
+.about_wrapper p {
+  font-size: clamp(16px, 1rem + 2vw, 18px);
+  letter-spacing:1.2px
+}
+.about_hero {
+  background: url(./images/about-hero.png), rgba(0, 0, 0, 0.7);
+  background-repeat:no-repeat;
+  background-blend-mode: multiply;
+  background-size: cover;
+  background-position: top;
+  background-origin: center;
+}
+.about_hero main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.about_hero ul{
+  padding-left: 0;
+}
+.about_hero ul li{
+  list-style-type: none;
+  color: var(--white);
+  line-height: 20px;
+}
 
+.about_hero ul li::before {
+  content:".";
+  color: white;
+  font-size: 80px;
+}
+
+.about_hero h1 {
+  width: min(100%, 800px);
+  font-size: clamp(3.2rem, -0.875rem + 8vw, 5.10rem);
+  color: #fff;
+}
+.about_hero > div {
+  display: flex;
+  justify-content:flex-start;
+  align-items: center;
+  height: 100%;
+}
+.about_article {
+  margin-block:4.5rem;
+}
+.about_hero > div h1 {
+  width: min(100% - .5rem, 480px);
+}
+.about_mission {
+  background: rgba(216, 222, 255, 0.8);;
+}
+.about_mission h2 {
+  text-align:center;
+}
+.about_mission_img, .about_mission_info {
+  flex: 1;
+}
+.about_mission_info{
+  display: flex;
+  flex-direction: column;
+  justify-content: center
+}
+.about_mission_info p {
+  width: 80%;
+  text-align: right;
+  font-weight: 600;
+  font-size: clamp(18px, 1rem + 2vw, 24px);
+}
+.about_mission_info h2 {
+  font-weight: bolder;
+  margin-bottom: 2rem;
+}
+
+
+.about_committed {
+  padding-top: 2rem;
+}
+.about_committed_header h2 {
+  text-align:center;
+  font-weight: 700;
+}
+.about_committed_left {
+  flex: 1.5;
+}
+
+.about_committed_img {
+  flex: 1;
+}
+/* .about_wrapper img  {
+  height:  300px;
+} */
+
+
+
+/* *******************CONTACT FORM******************** */
+.contact_form{
+  position: absolute;
+  top: -11%;
+  right: 0;
+  left: 0;
+  background: var(--theme-blue);
+  padding: 40px 35px;
+  border-radius:10px;
+  width: min(100% - .5rem, 700px);
+  margin: auto;
+}
+
+.contact_form label {
+  color: var(--white);
+}
+.contact_form  .form-group, .contact_form textarea{
+  width: 100% !important;
+}
+.contact_form button {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 10px 23px;
+  background: #B1D3FF;
+  border: none;
+  outline:none;
+  border-radius:8px;
+  color: var(--theme-blue);
+  font-weight: 600;
+}
 
 /* OTHER STYLES */
 #sidebar__items .active {

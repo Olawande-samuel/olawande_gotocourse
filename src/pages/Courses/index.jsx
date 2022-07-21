@@ -23,13 +23,11 @@ import Power from "../../images/powerbi.png";
 import Algo from "../../images/algo.png";
 import Layout from "../../components/Layout";
 import Loader from "../../components/Loader";
-import { careers } from "../../components/Career";
 import style from "./courses.module.css";
 import banner from "../../images/header.png";
 import details from "../../images/course_details.png";
 import placeholder from "../../images/cybersecurity.webp";
-import { Rating } from "react-simple-star-rating";
-
+import {witnesses} from "../../components/Testimonials";
 export function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -315,6 +313,7 @@ export const Categories = () => {
   // },[])
 
   useEffect(()=>{
+    localStorage.removeItem("gotocourse-category")
     if(ref.current) return
     (async()=>{
       try{
@@ -364,50 +363,53 @@ export const Categories = () => {
 
  async function search(e){
     e.preventDefault();
-    try{
-      setGeneralState({...generalState, loading: true})
-        const res = await searchCategories(searchTerm);
-        const {success, message, statusCode, data} = res;
+    console.log(searchTerm)
+    let newCategories = categories.filter((item)=>item.name.includes(searchTerm.toUpperCase()))
+    setCategories(newCategories)
+    // try{
+    //   setGeneralState({...generalState, loading: true})
+    //     const res = await searchCategories(searchTerm);
+    //     const {success, message, statusCode, data} = res;
 
         
-        if(!success || statusCode !== 1) {
-          throw new AdvancedError(message, statusCode);
-        }
-        else if(data.length <= 0) {
-          throw new AdvancedError("Category not found", statusCode)
-        } 
-        else {
+    //     if(!success || statusCode !== 1) {
+    //       throw new AdvancedError(message, statusCode);
+    //     }
+    //     else if(data.length <= 0) {
+    //       throw new AdvancedError("Category not found", statusCode)
+    //     } 
+    //     else {
 
-          const arr = []
-          data.forEach((item, index)=>{
-            let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
-            arr.push(merged)
-          })
-            setCategories(arr)
-            toast.success(message, {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        }
-    }catch(err){
-      toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-      })
-    }finally {
-      setGeneralState({...generalState, loading: false})
+    //       const arr = []
+    //       data.forEach((item, index)=>{
+    //         let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
+    //         arr.push(merged)
+    //       })
+    //         setCategories(arr)
+    //         toast.success(message, {
+    //             position: "top-right",
+    //             autoClose: 4000,
+    //             hideProgressBar: true,
+    //             closeOnClick: true,
+    //             pauseOnHover: true,
+    //             draggable: true,
+    //             progress: undefined,
+    //         });
+    //     }
+    // }catch(err){
+    //   toast.error(err.message, {
+    //       position: "top-right",
+    //       autoClose: 4000,
+    //       hideProgressBar: true,
+    //       closeOnClick: true,
+    //       pauseOnHover: true,
+    //       draggable: true,
+    //       progress: undefined,
+    //   })
+    // }finally {
+    //   setGeneralState({...generalState, loading: false})
 
-    }
+    // }
 
   }
 
@@ -433,14 +435,11 @@ export const Categories = () => {
         </div>
 
         <main className={style.new_main}>
-          {/* NB: CHANGE DIV TO LINK AFTER UPDATE */}
           {categories.length > 0 && categories.map((career) => (
             <div
-            //  to={career.name?.split(" ").join("-").toLowerCase()} 
-             onClick={()=>{
-               console.log(career.logo) 
-               delete career.logo
-                localStorage.setItem("gotocourse-category", JSON.stringify(career))
+              onClick={()=>{
+              delete career.logo
+              localStorage.setItem("gotocourse-category", JSON.stringify(career))
               navigate(`${career.name?.split(" ").join("-").toLowerCase()}`)
             }}> 
               <Card {...career} />
@@ -454,91 +453,9 @@ export const Categories = () => {
 
 export const CourseList = () => {
 
-  const [courses, setCourses] =useState([
-    {
-      id: 1,
-      title: "Cybersecurity",
-      subtitle: "Data Science",
-      author: "George Brown",
-      details:
-        "This is the practice ofprotecting critical systems and sensitive information from digital attacks.",
-      img: Power,
-    },
-    {
-      id: 2,
-      title: "Algorithims",
-      subtitle: "Data Science",
-      author: "Mary Brown",
-      details:
-        "Risk management is the process of assessing and controlling threats to an organization's capital and earnings.",
-      img: Algo,
-    },
-    {
-      id: 3,
-      title: "Machine Learning",
-      subtitle: "Data Science",
-      author: "George Brown",
-      details:
-        "Data science refers to the process of extracting clean information to formulate actionable insights",
-      img: Power,
-    },
-    {
-      id: 4,
-      title: "Project Management",
-      subtitle: "Data Science",
-      author: "Mary Brown",
-      details:
-        "the process of leading the work of a team to achieve all project goals within the given constraints.",
-      img: Algo,
-    },
-    {
-      id: 5,
-      title: "Introduction to SQL",
-      subtitle: "Data Science",
-      author: "George Brown",
-      details:
-        "IT compliance refers to businesses meeting all legal requirements,  and regulations for the software of company.",
-      img: Power,
-    },
-    {
-      id: 6,
-      title: "Regression",
-      subtitle: "Data Science",
-      author: "Mary Brown",
-      details:
-        "It is the process of evaluating evidence to determine whether a computer system safeguards assets",
-      img: Algo,
-    },
-    {
-      id: 7,
-      title: "Linear Programming",
-      subtitle: "Data Science",
-      author: "George Brown",
-      details:
-        "Business analysis is a strategy for initiating and managing change in organisations.",
-      img: Power,
-    },
-    {
-      id: 8,
-      title: "Advance Algorithims",
-      subtitle: "Data Science",
-      author: "Mary Brown",
-      details:
-        "the process of identifying a market opportunity, clearly defining the problem, developing a proper solution for that",
-      img: Algo,
-    },
-    {
-      id: 9,
-      title: "Advance Power BI",
-      subtitle: "Data Science",
-      author: "George Brown",
-      details:
-        "Web design encompasses many different skills and disciplines in the production and maintenance of websites.",
-      img: Power,
-    },
-  ])
+  const [courses, setCourses] =useState([])
   const {generalState, setGeneralState, otherFunctions: {searchCategories}} = useAuth();
-
+  const [search, setSearch]= useState("")
   const {id} = useParams()
   const ref = useRef(false);
   const name = localStorage.getItem("gotocourse-category")
@@ -597,10 +514,12 @@ export const CourseList = () => {
   ref.current = true
   },[name])
 
+  console.log(courses) 
+
   return (
     <Courses>
       <div className="container">
-        <div
+        <div 
           className={`d-flex justify-content-between align-items-center ${style.top}`}
         >
           <h3 className={style.section_title}>Courses</h3>
@@ -610,13 +529,15 @@ export const CourseList = () => {
               name="search"
               id="search"
               className="form-control"
-              placeholder="Search category"
+              placeholder="Search Courses"
+              onChange={(e)=>setSearch(e.target.value)}
+              value={search}
             />
             <button className="button">Search</button>
           </div>
         </div>
         <main className={style.new_main}>
-          {courses.map((course) => (
+          {courses.filter(item=>item.name.includes(search)|| item.category.includes(search) || item.description.includes(search)).map((course) => (
             <CourseCard key={course.name} {...course} course={course} />
           ))}
         </main>
@@ -629,18 +550,20 @@ export const CourseDetail = ({preview}) => {
   const [categoryCourses, setCategoryCourses]= useState([])
   const {id} = useParams()
   const ref = useRef(false);
-
+  const navigate = useNavigate()
   // const [categoryDetails, setCategoryDetails]= useState({})
 
   let categoryDetails = {}
   if(!preview?.name){
     const data = localStorage.getItem("gotocourse-category")
+    console.log(data)
     if (data){
       categoryDetails = JSON.parse(data)          
+    } else {
+      navigate("/not-found")
     }
   } else {
     categoryDetails = preview          
-
   }
 
   console.log("cate", categoryDetails)
@@ -650,7 +573,9 @@ export const CourseDetail = ({preview}) => {
 
     if(ref.current) return
       (async()=>{
+        if(categoryDetails){
         try{
+
           setGeneralState({...generalState, loading: true})
           const res = await searchCategories(categoryDetails?.name);
           const {success, message, statusCode} = res;
@@ -693,6 +618,9 @@ export const CourseDetail = ({preview}) => {
       }finally{
         setGeneralState({...generalState, loading: false})
       }
+      } else {
+        navigate("/not-found")
+      }
       })()
       ref.current = true
     } 
@@ -703,45 +631,7 @@ export const CourseDetail = ({preview}) => {
   useEffect(()=>{
     if(preview?.name) {
       categoryDetails = preview;
-    } else {
-      
-  //   let categoryId = id.charAt(0).toUpperCase() + id.slice(1)
-  //   let one = categoryId.split("-").join(" ")
-    
-  //   if(ref.current) return
-  //   (async()=>{
-  //     try{
-  //       setGeneralState({...generalState, loading: true})
-        
-  //       const res = await fetchCategory(one);
-  //       const {success, message, statusCode, data} = res;
-  //       setGeneralState({...generalState, loading: false})
-  //         if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-  //         setCategoryDetails(data)
-  //         toast.success(message, {
-  //           position: "top-right",
-  //           autoClose: 4000,
-  //           hideProgressBar: true,
-  //           closeOnClick: true,
-  //           pauseOnHover: true,
-  //           draggable: true,
-  //           progress: undefined,
-  //         });
-      
-  //   }catch(err){
-  //       setGeneralState({...generalState, loading: false})
-  //       toast.error(err.message, {
-  //           position: "top-right",
-  //           autoClose: 4000,
-  //           hideProgressBar: true,
-  //           closeOnClick: true,
-  //           pauseOnHover: true,
-  //           draggable: true,
-  //           progress: undefined,
-  //       });
-  //   }
-  //   })()
-  }
+    }
   // ref.current = true
   },[id, preview])
 
@@ -769,7 +659,7 @@ export const CourseDetail = ({preview}) => {
                   {categoryDetails?.nicheDescription}
                 </p>
                 <ul>
-                  {categoryDetails?.nicheItems.length > 0 && categoryDetails?.nicheItems.map((item) => (
+                  {categoryDetails?.nicheItems?.length > 0 && categoryDetails?.nicheItems.map((item) => (
                     <li>
                       <p className={style.niche}>{item.name}</p>
                       <p className={style.niche}>{item.description}</p>
@@ -804,7 +694,6 @@ export const CourseDetail = ({preview}) => {
             <header className={`text-center ${style.details_title}`}>
               <h2 className={`text-uppercase ${style.details_head}`}>{categoryDetails?.name} Courses</h2>
               <p className="subtitle">
-                
               </p>
             </header>
             {categoryCourses.length > 0 ? (
@@ -1029,7 +918,7 @@ console.log("pre",preview)
               </ul> */}
             </div>
             <div className="col-md-5 col-lg-4">
-              <ul>
+              {/* <ul>
                 <li>
                   <div className="fw-bold">Lorem, ipsum dolor.</div>
                   <p className={style.paragraph}>
@@ -1051,7 +940,7 @@ console.log("pre",preview)
                     Ipsam, itaque dolor.
                   </div>
                 </li>
-              </ul>
+              </ul> */}
             </div>
           </div>
         </section>
@@ -1106,8 +995,7 @@ console.log("pre",preview)
         <section id="syllabus" className={style.syllabus}>
           <h4 className={style.title}>Syllabus</h4>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus
-            ridiculus nunc adipiscing justo.
+            This syllabus covers the relevant topics, assessment and projects you will need in your learning path for this course
           </p>
           <ul>
             {courseProfile?.syllabus?.length > 0 && courseProfile.syllabus.slice(0, 3).map((item) => (
@@ -1121,12 +1009,11 @@ console.log("pre",preview)
         <section id="packages" className={style.packages}>
           <h3 className={`text-center ${style.header}`}>Packages</h3>
           <p className={`subtitle ${style.subtitle}`}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus
-            ridiculus nunc adipiscing justo.
+            With your learning needs in mind we have carefully curated the following learning options that offer flexibility, independence and learning at your own pace.
           </p>
-          <div id="packages" className={` row ${style.package_card_wrapper}`}>
+          <div id="packages" className={`row justify-content-around ${style.package_card_wrapper}`}>
             {courseProfile?.packages?.length > 0 && courseProfile.packages.map(item=>(
-            <div className="col-md-4" key={item.name}>
+            <div className="col-md-3" key={item.name}>
               <PackageCard key={item.name} item={item} courseId={courseProfile.courseId} />
             </div>
             ))}
@@ -1235,24 +1122,23 @@ export const PackageCard = ({item, courseId}) => {
   );
 };
 
-export const ReviewCard = () => {
+export const ReviewCard = ({content, profile, name, location}) => {
   return (
     <div className={`card ${style.review_card} w-100`}>
       <div className="card-body">
         <p className={style.review_text}>
-          “I had a wonderful experience and can confidently say that GotoCourse
-          is the place to be to get all your I.T. certifications.”
+          {content}
         </p>
         <div
           className={`d-flex flex-wrap justify-content-between align-items-center ${style.review_card_footer}`}
         >
           <div className={`d-flex align-items-center ${style.review_left}`}>
             <div className={style.profile_img_wrapper}>
-              <img src={Power} alt="" className={style.image} />
+              <img src={profile} alt="" className={style.image} />
             </div>
             <div className={style.profile_info}>
-              <p className={style.profile_name}>Bola</p>
-              <small>Lagos, Nigeria</small>
+              <p className={style.profile_name}>{name}</p>
+              <small>{location}</small>
             </div>
           </div>
           <div className={style.review_right}>
@@ -1331,12 +1217,13 @@ export const ReviewSection = ()=> {
           },
         }}
       >
-        <SwiperSlide>
-          <ReviewCard />
+        {witnesses.slice(0, 2).map(witness=>(
+
+          <SwiperSlide>
+          <ReviewCard {...witness} />
         </SwiperSlide>
-        <SwiperSlide>
-          <ReviewCard />
-        </SwiperSlide>
+          ))}
+        
       </Swiper>
     </div>
   </section>

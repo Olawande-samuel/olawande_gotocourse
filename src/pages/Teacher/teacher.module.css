@@ -4,7 +4,12 @@
     gap: 1.5rem;
     /* padding-block: 4.375rem; */
 }
-
+.top h3 {
+  flex: 50%;
+}
+.input_wrapper button {
+  padding: 5px 20px;
+}
 .main .mentors_list_card .card {
   padding: 0;
   border-radius:10px;

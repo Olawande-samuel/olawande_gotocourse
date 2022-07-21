@@ -74,24 +74,38 @@ const All = ({ type }) => {
     })();
     ref.current = true;
   }, []);
-
   return (
     <Courses>
       <div className="container">
         <section className={` ${style.navigation}`}>
-          {nav.map((item, i) => (
+          {/* {nav.map((item, i) => (
             <NavItems
               key={item.name}
               item={item}
               handleChange={handleChange}
               search={search}
             />
-          ))}
+          ))} */}
+           <div className={`d-flex justify-content-between align-items-center ${style.top}`}>
+              <h3 className={style.section_title}>{type === "mentors"? "Mentors":"Teachers"}</h3>
+           <div className={`${style.input_wrapper} d-flex`}>
+            <input
+              type="search"
+              name="search"
+              id="search"
+              className="form-control"
+              placeholder={type === "mentors"? "Search mentor":"Search Teacher"} 
+              onChange={(e)=> setSearch(e.target.value)}
+              value={search}
+            />
+            <button className="button ms-3">Search</button>
+          </div>
+          </div>
         </section>
         <main className={`mentors_list_main ${style.main}`}>
           {type === "mentors"
             ? mentors
-                .filter(item=> item.expertise.includes(search))
+                .filter(item=> item.expertise.includes(search) || item.mentorFirstName.includes(search.toUpperCase())|| item.mentorLastName.includes(search.toUpperCase())||item.mentorBio.includes(search)||item.mentorEmail.includes(search))
                 .map((item) => (
                   <div className="mentors_list_card">
                     <MentorsCard item={item} />
@@ -191,6 +205,13 @@ export const Payment = () => {
     setPaymentData({...paymentData, fullPayment: e.target.value === "1" ? true : false}) :
     setPaymentData({...paymentData, [e.target.name]: e.target.value}) 
   }
+
+  function handleInstallmentChoice(e) {
+    e.target.id === "2" ? setPaymentData({...paymentData, installments: 2, [e.target.name]: e.target.value}) :
+    setPaymentData({...paymentData, installments: 4, [e.target.name]: e.target.value}) 
+  }
+
+  console.log(paymentData)
   async function enrollToCourse(e) {
     e.preventDefault();
 
@@ -202,10 +223,12 @@ export const Payment = () => {
         selectedPackage: paymentDetails.title,
         amountPaid: paymentDetails.price,
         fullPayment: paymentData.fullPayment,
-        installments: paymentData.fullPayment ? "" : 3,
+        installments: paymentData.fullPayment ? "" : paymentData.installments,
         initialPayment: paymentData.fullPayment ? "" : paymentData.initialPayment
       };
       try {
+        console.log({courseData})
+        if(!courseData.fullPayment && !courseData.installments) throw new AdvancedError("All fields required")
         setLoading(true);
         const response = await addCourse(courseData, userData.token);
         const { success, message, statusCode } = response;
@@ -214,7 +237,6 @@ export const Payment = () => {
         const { data } = response;
         setStripeId(data.clientSecret);
         setShowStripeModal(true);
-        // item.price = data.clientSecret;
         toast.success(message, {
           position: "top-right",
           autoClose: 4000,
@@ -299,9 +321,9 @@ export const Payment = () => {
                     <p>$5</p>
                   </div>
                   <hr />
-                  <div className="d-flex justify-content-between align-items-center">
+                  <div className="d-flex flex-column justify-content-between">
+                    <label htmlFor="paymentType" className="form-label generic_label">Choose a payment structure</label>
                     <select name="fullPayment" onChange={(e)=>handleChange(e, "select")} id="paymentType" className="form-select">
-                      <option defaultValue  >Choose a payment structure</option>
                       <option value="1" >Full Payment</option>
                       <option value="0" >Installment</option>
                     </select>
@@ -310,14 +332,18 @@ export const Payment = () => {
                   {paymentData.fullPayment === false ? 
                   <>
                     <div className=""> 
-                    <small className="text-info" style={{fontSize:"12px"}}>*Fees must be paid in not more than three Installments</small>
-                    <Input
-                      label="Initial Payment"
-                      name="initialPayment"
-                      type="text"
-                      handleChange={(e)=>handleChange(e)}
-                      value={paymentData.initialPayment}
-                    />
+                    <small className="text-info" style={{fontSize:"12px"}}>*Fees must be paid in not more than four Installments</small>
+                    <div className="form-group">
+                      <input type="radio" name="initialPayment" id="2"  onChange={handleInstallmentChoice} value={ paymentDetails?.price / 2} />
+                      <label htmlFor="2" className="form-label generic_label ms-2 ">Pay in two installments of { paymentDetails?.price / 2} each</label>
+                    </div>
+                    <div className="text-center">
+                      <small className="text-center text-dark">or</small>
+                    </div>
+                    <div className="form-group">
+                      <input type="radio" name="initialPayment" id="4" onChange={handleInstallmentChoice}  value={ paymentDetails?.price / 4} />
+                      <label htmlFor="4" className="form-label generic_label ms-2 ">Pay in four installments of { paymentDetails?.price / 4} each</label>
+                    </div>
                     </div>
                     <hr /> 
                   </>
@@ -403,10 +429,9 @@ const CheckoutForm = () => {
     const result = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost:3000/payment/success",
+        return_url: "http://gotocourse.us/payment/success",
       },
     });
-    console.log(result)
 
     result && setLoading(false);
     if (result.error) {

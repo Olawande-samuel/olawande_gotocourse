@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Modal, Box } from "@mui/material";
 
@@ -13,6 +13,8 @@ import {KEY} from "../../../constants"
 import vector from "../../../images/vector.png";
 import UploadForm from "../../../components/UploadForm";
 import  {PreviewModal, Teachers} from "./index"
+import { BiTrash } from "react-icons/bi";
+import axios from "axios";
 
 
 export const Syllabus = ({
@@ -31,25 +33,49 @@ export const Syllabus = ({
         {packagelist && <p>{price}</p>}
         <p>{description}</p>
         <p>
-          {/* <i className="text-danger" style={{cursor:"pointer"}} onClick={()=>deleteOption(index)}>
+          <i className="text-danger" style={{cursor:"pointer"}} onClick={()=>deleteOption(index)}>
             <BiTrash />
-          </i> */}
+          </i>
         </p>
       </div>
     );
   };
   
-  export default function CreateCourse() {
+  export default function CreateCourse(){
+    <Teachers>
+      <div className={clsx.teachers_profile}>
+        <CreateCourseMain type="teacher" />
+      </div>
+    </Teachers>
+  }
+
+  export  function CreateCourseMain({type}) {
+
+    // useEffect(()=>{
+    //   async function get(){
+    //     try{
+    //       const reso = await axios.get(`https://live.ipms247.com/booking/reservation_api/listing.php?request_type=InsertBooking&HotelCode=18727&APIKey=9148790807c57666de-bb8c-11ea-a&BookingData={"Room_Details":{"Room_1":{"Rateplan_Id":"1872700000000000002","Ratetype_Id":"1872700000000000001","Roomtype_Id":"1872700000000000002","baserate":"3500","extradultrate":"500","extrachildrate":"500","number_adults":"2","number_children":"1","ExtraChild_Age":"2","Title":"","First_Name":"Rokik","Last_Name":"wpani","Gender":"","SpecialRequest":""}},"check_in_date":"2022-07-25","check_out_date":"2022-07-26","Booking_Payment_Mode":"","Email_Address":"pj@gmnnail.com","Source_Id":"","MobileNo":"","Address":"","State":"","Country":"","City":"","Zipcode":"","Fax":"","Device":"","Languagekey":"","paymenttypeunkid":""}`)
+    //       console.log("test",reso)
+    //     } catch(err){
+    //       console.error(err)
+    //     }
+    //   }
+    //   get()
+    // },[])
+    
     const ref = useRef(false);
-  const navigate = useNavigate();
+    const navigate = useNavigate();
     const {
       generalState: { courseInfo },
       teacherFunctions: { addCourse, updateCourse },
+      adminFunctions: { addCourse:adminAddCourse, adminUpdateCourse },
       otherFunctions: { fetchCategories },
     } = useAuth();
-  
+      
     const { getItem } = useLocalStorage();
+    const location = useLocation();
     let userdata = getItem(KEY);
+
     const [preview, setPreview] = useState({});
     const [open, setOpen] = useState(false);
   
@@ -65,11 +91,24 @@ export const Syllabus = ({
   
     });
   
-    const { syllabuses, addtoSyllabus } = useSyllabus();
-    const [faq, setFaq] = useState(courseInfo?.faqs ?? []);
-    const [packageList, setPackageList] = useState(courseInfo?.packages ?? []);
+    let courseData = getItem("gotocourse-courseEdit")
+    useEffect(()=>{
+
+      if(courseData){
+        setFormstate(courseData)
+        
+        if(courseData.courseImg){
+          const imgArr = courseData.courseImg.split("/").slice(-1)
+          setFormstate({...courseData, courseImg: imgArr[0]})
+        }
+      }
+    },[])
+
+    const { syllabuses, addtoSyllabus, setSyllabusses } = useSyllabus();
+    const [faq, setFaq] = useState(formstate?.faqs ?? []);
+    const [packageList, setPackageList] = useState(formstate?.packages ?? []);
   
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState([]); 
     const [openImage, setOpenImage] = useState(false);
     const [openPackage, setOpenPackage] = useState(false);
     const [openFaq, setOpenFaq] = useState(false);
@@ -79,108 +118,57 @@ export const Syllabus = ({
   
   // check if courseinfo exist then setSyllabus to existing syllabus
   useEffect(()=>{
-    if(courseInfo?.syllabus?.length > 0){
-      addtoSyllabus({...courseInfo.syllabus})
-    }
+    formstate?.syllabus?.length > 0 && setSyllabusses(formstate.syllabus)
+    formstate?.packages?.length > 0 && setPackageList(formstate.packages)
+    formstate?.faqs?.length > 0 && setFaq(formstate.faqs) 
     
+  },[courseData])
   
-  },[courseInfo])
-  
-    function changeHandler(e) {
-      const { name, value } = e.target;
-      setFormstate((old) => {
-        return {
-          ...old,
-          [name]: value,
-        };
-      });
-    }
-    console.log(formstate);
-  
-    // let preview = {}
-  
-    const showPreview = (e) => {
-      e.preventDefault();
-      setPreview({
-        ...formstate,
-        syllabus: [...syllabuses],
-        packages: [...packageList],
-        faqs: [...faq],
-      });
-      console.log("clicked");
-      setOpenPreview(true);
-    };
-  
-    async function submitHandler(e) {
-      e.preventDefault();
-      setLoading(true);
-      if(courseInfo?.courseId){
-        console.log("submit", "updatecourse")
-        try {
-          if (
-            formstate.name === "" ||
-            formstate.categoryName === "" ||
-            formstate.description === "" ||
-            formstate.price === ""
-          )
-            throw new AdvancedError("All fields are required", 0);
-          const res = await updateCourse( userdata?.token, courseInfo?.courseId,
-            {
-              ...formstate,
-              syllabus: [...syllabuses],
-              packages: [...packageList],
-              faqs: [...faq],
-            },
-            userdata.token
-          );
-          const { success, message, statusCode } = res;
-    
-          if (!success) throw new AdvancedError(message, statusCode);
-          else {
-            toast.success(message, {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-            navigate("/teacher/courses")
-          }
-        } catch (err) {
-          toast.error(err.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        } finally {
-          setLoading((_) => false);
-        }
-      } else {
+  function changeHandler(e) {
+    const { name, value } = e.target;
+    setFormstate((old) => {
+      return {
+        ...old,
+        [name]: value,
+      };
+    });
+  }
+
+
+  const showPreview = (e) => {
+    e.preventDefault();
+    setPreview({
+      ...formstate,
+      syllabus: [...syllabuses],
+      packages: [...packageList],
+      faqs: [...faq],
+    });
+    console.log("clicked");
+    setOpenPreview(true);
+  };
+
+  async function submitHandler(e) {
+    e.preventDefault();
+    setLoading(true);
+    if(formstate?.courseId){
+      console.log("submit", "updatecourse")
       try {
-        console.log("submit", "addcourse")
-  
         if (
           formstate.name === "" ||
           formstate.categoryName === "" ||
-          formstate.description === "" ||
-          formstate.price === ""
+          formstate.description === "" 
+         
         )
           throw new AdvancedError("All fields are required", 0);
-        const res = await addCourse(
-          {
+          let formdata = {
             ...formstate,
             syllabus: [...syllabuses],
             packages: [...packageList],
             faqs: [...faq],
-          },
-          userdata.token
-        );
+          }
+
+        const res = type === "admin" ? await adminUpdateCourse( userdata?.token, formstate?.courseId,  formdata) : await updateCourse( userdata?.token, formstate?.courseId, formdata, userdata.token );
+
         const { success, message, statusCode } = res;
   
         if (!success) throw new AdvancedError(message, statusCode);
@@ -194,6 +182,7 @@ export const Syllabus = ({
             draggable: true,
             progress: undefined,
           });
+          navigate(type === "admin"? "/admin/courses":"/teacher/courses")
         }
       } catch (err) {
         toast.error(err.message, {
@@ -208,91 +197,152 @@ export const Syllabus = ({
       } finally {
         setLoading((_) => false);
       }
+    } else {
+    try {
+      console.log("submit", "addcourse")
+
+      if (
+        formstate.name === "" ||
+        formstate.categoryName === "" ||
+        formstate.description === "" ||
+        formstate.price === ""
+      )
+        throw new AdvancedError("All fields are required", 0);
+      const res = type=== "admin" ? await adminAddCourse(
+        {
+          ...formstate,
+          syllabus: [...syllabuses],
+          packages: [...packageList],
+          faqs: [...faq],
+        },
+        userdata.token
+      ): await addCourse(
+        {
+          ...formstate,
+          syllabus: [...syllabuses],
+          packages: [...packageList],
+          faqs: [...faq],
+        },
+        userdata.token
+      );
+      const { success, message, statusCode } = res;
+
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } finally {
+      setLoading((_) => false);
     }
   }
+  }
   
-    // get Categories
-    useEffect(() => {
-      let mounted = true;
-      if (mounted) {
-        if (ref.current) return;
-        (async () => {
-          try {
-            setLoading(true);
-            const res = await fetchCategories();
-            const { success, message, statusCode } = res;
-  
-            if (!success || statusCode !== 1)
-              throw new AdvancedError(message, statusCode);
-            const { data } = res;
-            setCategories(data);
-            toast.success(message, {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          } catch (err) {
-            toast.error(err.message, {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          } finally {
-            setLoading(false);
-          }
-        })();
-  
-        ref.current = true;
-      }
-  
-      return () => (mounted = false);
-    }, []);
-  
-    const openModal = () => {
-      setOpen(true);
-    };
-    const handleClose = () => {
-      setOpen(false);
-    };
-    const openPackageModal = () => {
-      setOpenPackage(true);
-    };
-    const handleClosePackage = () => {
-      setOpenPackage(false);
-    };
-    const openFaqModal = () => {
-      setOpenFaq(true);
-    };
-    const handleCloseFaq = () => {
-      setOpenFaq(false);
-    };
-    // const handleOpenPreview = ()=>{
-    //   setOpenPreview(true)
-    // }
-    function showUploadFormHandler() {
-      setOpenImage((_) => true);
+  // get Categories
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      if (ref.current) return;
+      (async () => {
+        try {
+          setLoading(true);
+          const res = await fetchCategories();
+          const { success, message, statusCode } = res;
+
+          if (!success || statusCode !== 1)
+            throw new AdvancedError(message, statusCode);
+          const { data } = res;
+          setCategories(data);
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } catch (err) {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } finally {
+          setLoading(false);
+        }
+      })();
+
+      ref.current = true;
     }
-    function filterPackage(title, index) {
-      setPackageFilter(index);
-      console.log(index);
-    }
+
+    return () => (mounted = false);
+  }, []);
+
+  const openModal = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const openPackageModal = () => {
+    setOpenPackage(true);
+  };
+  const handleClosePackage = () => {
+    setOpenPackage(false);
+  };
+  const openFaqModal = () => {
+    setOpenFaq(true);
+  };
+  const handleCloseFaq = () => {
+    setOpenFaq(false);
+  };
+  // const handleOpenPreview = ()=>{
+  //   setOpenPreview(true)
+  // }
+  function showUploadFormHandler() {
+    setOpenImage((_) => true);
+  }
+  function filterPackage(title, index) {
+    setPackageFilter(index);
+  }
+  function deleteOption(e){
+    let newSyllabusArr = syllabuses.filter((item, index) => (item.title + index) !== e)
+    setSyllabusses(newSyllabusArr)
+  }
+  function deletePackage(e){
+    let newPackageList = packageList.filter((item, index) => (item.title + index) !== e)
+    setFormstate({...formstate, packages:newPackageList})
+  }
     return (
-      <Teachers>
-        <div className={clsx.teachers_profile}>
+     <>
           <div className={clsx.edit__profile}>
-            {courseInfo?.name ? 
+            {location.search ? 
             <h2>Edit course</h2>
               :
             <h2>Create a new course</h2>
-          }
+            }
             <UploadForm isOpen={openImage} setIsOpen={setOpenImage} />
             <div
               className={clsx.upload__file_box}
@@ -373,12 +423,13 @@ export const Syllabus = ({
                 {packageList.length > 0 ? (
                   packageList.map((item, index) => (
                     <Syllabus
-                      key={item.title}
+                      key={item.title + index}
                       {...item}
                       packagelist={true}
                       index={index}
                       packageItems={packageList}
                       setPackageList={setPackageList}
+                      deleteOption={()=>deletePackage(item.title + index)}
                     />
                   ))
                 ) : (
@@ -395,19 +446,19 @@ export const Syllabus = ({
                 Add Package
               </button>
   
-              <Input
+              {/* <Input
                 label="Price"
                 name="price"
                 type="text"
                 handleChange={changeHandler}
                 value={formstate.price}
-              />
+              /> */}
   
               <div className={clsx.form_group}>
                 <label className="form-label generic_label">Syllabus</label>
                 {syllabuses.length !== 0 ? (
-                  syllabuses.map(({ title, description }, i) => (
-                    <Syllabus title={title} key={i} description={description} />
+                  syllabuses.map(({ title, description, }, i) => (
+                    <Syllabus title={title} key={i} description={description} deleteOption={()=>deleteOption(title + i)} />
                   ))
                 ) : (
                   <h6>No syllabus!</h6>
@@ -493,7 +544,6 @@ export const Syllabus = ({
             preview={preview}
             setOpen={setOpenPreview}
           />
-        </div>
         <AddSyllabus
           open={open}
           addSyllabus={addtoSyllabus}
@@ -513,7 +563,8 @@ export const Syllabus = ({
           addFaq={setFaq}
           list={faq}
         />
-      </Teachers>
+     </>
+
     );
   }
   
@@ -694,6 +745,7 @@ export const Syllabus = ({
               <option value="one-on-one">One-on-One</option>
               <option value="cohort">Cohort</option>
               <option value="Self Paced">Self Paced</option>
+              <option value="In-person Training">In-person Training</option>
             </select>
           </div>
           <Input

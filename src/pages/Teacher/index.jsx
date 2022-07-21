@@ -53,7 +53,7 @@ export const Home = () => {
         },
         {
             question: "How do I receive my payment?",
-            answer: "You receive your payments to your Paypal or Stripe."
+            answer: "You receive your payments via your bank info as specified by you."
         },
         {
             question: "How do I conduct my training on Gotocourse?",
@@ -111,7 +111,7 @@ export const Home = () => {
                     <Grid container spacing={4}>
                         {
                             data.map(({icon: Icon, title, content}, i) => (
-                                <Grid item xs={12} sm={12} md={6} lg={4} key={i}>
+                                <Grid item xs={12} sm={12} md={6} lg={3} key={i}>
                                     <Paper elevation={1} className={clsx.paper}>
                                         <span>
                                             <Icon />

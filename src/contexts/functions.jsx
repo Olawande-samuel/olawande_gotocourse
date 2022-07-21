@@ -388,6 +388,9 @@ export const adminFunctions = {
                 success: true
             }
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 message: err.message,
                 statusCode: 0,
@@ -417,6 +420,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -446,6 +452,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -474,6 +483,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -504,6 +516,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -532,6 +547,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -560,6 +578,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -588,6 +609,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -616,6 +640,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -623,7 +650,9 @@ export const adminFunctions = {
             }
         }
     },
-    updateCourse: async function(token, id, _data){
+    adminUpdateCourse: async function(token, id, _data){
+        console.log("running")
+        console.log(id)
         try{
             const res = await axios.put(`${baseURL}/admin/course/update/${id}`, JSON.stringify(_data),
             {
@@ -644,6 +673,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -653,7 +685,7 @@ export const adminFunctions = {
     },
     toggleCourseStatus: async function(token, id){
         try{
-            const res = await axios.patch(`${baseURL}/admin/course/status/toggle/${id}`,
+            const res = await axios.patch(`${baseURL}/admin/course/status/toggle/${id}`, {},
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -672,6 +704,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -700,6 +735,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -728,6 +766,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -756,6 +797,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -784,6 +828,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -812,6 +859,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -840,6 +890,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -868,6 +921,40 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchNotifications: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/admin/notifications/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log(res);
+// Error from backend
+            if(res.data.message !== "Notifications fetched successfully") throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -894,13 +981,16 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -923,13 +1013,16 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -951,13 +1044,16 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -979,13 +1075,16 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1007,13 +1106,16 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1035,14 +1137,19 @@ export const studentFunctions = {
                 }
             })
             console.log(res);
-
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+ 
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            console.error(err)
+            console.log(err.statusCode === 2)
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1065,13 +1172,16 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1094,13 +1204,16 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1122,13 +1235,16 @@ export const studentFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1150,13 +1266,16 @@ export const studentFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1185,6 +1304,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1213,6 +1335,9 @@ export const studentFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1234,13 +1359,16 @@ export const studentFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1270,13 +1398,16 @@ export const teacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1299,13 +1430,16 @@ export const teacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1327,13 +1461,16 @@ export const teacherFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1357,13 +1494,16 @@ export const teacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1385,13 +1525,16 @@ export const teacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1413,13 +1556,16 @@ export const teacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1441,13 +1587,16 @@ export const teacherFunctions = {
             })
             console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1469,13 +1618,16 @@ export const teacherFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1504,6 +1656,9 @@ export const teacherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1532,6 +1687,9 @@ export const teacherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1553,13 +1711,16 @@ export const teacherFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1587,13 +1748,16 @@ export const otherFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1623,6 +1787,9 @@ export const otherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1644,13 +1811,16 @@ export const otherFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1680,6 +1850,9 @@ export const otherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1709,6 +1882,9 @@ export const otherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1737,6 +1913,9 @@ export const otherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -1764,6 +1943,9 @@ export const otherFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,

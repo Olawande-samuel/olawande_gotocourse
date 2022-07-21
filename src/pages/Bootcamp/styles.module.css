@@ -75,7 +75,7 @@
     transform:translateY(-50%);
     border-radius: 10px;
     background-image: url("../../images/bootcamp.png");
-    background-size: cover;
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
 }
@@ -154,4 +154,49 @@
     }
 
     
+}
+
+
+/* bootcamp details */
+
+.bootcampTraining .hero {
+    color: var(--white);
+    background-origin: center;
+    background-blend-mode: multiply !important;
+    background-repeat:no-repeat;
+
+
+}
+.bootcampTraining section:not(:first-child) {
+        margin-block:3.5rem;
+}
+.bootcampTraining .hero .hero_content {
+    display: grid;
+    height:100%;
+    align-items:center;
+}
+
+.bootcampTraining .hero h1 {
+    width: min(100%, 800px);
+    font-size:clamp(38px, 3.5vw + 1rem, 60px);
+    font-weight:800;
+}
+.bootcampTraining h3 {
+    font-size:32px;
+    font-weight:800;
+}
+
+.bootcampTraining .timing {
+    background: var(--theme-blue);
+    color: var(--white);
+    padding-block: 1.5rem;
+}
+.bootcampTraining .timing h4 {
+    font-size:clamp(18px, 3.5vw, 28px);
+}
+
+
+.bootcampTraining ol li,
+.bootcampTraining ul li {
+    line-height:28px;
 }

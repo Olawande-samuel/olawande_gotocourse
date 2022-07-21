@@ -719,36 +719,36 @@ export function Courses(){
     }, [])
     
     const tableHeaders = ["No", "Courses", "Tutor's Name", "Teaching Model", "Course Fee", "Rating"]
-    const tableContents = [
-        {
-            name: "Melanie Grutt",
-            course: "Cybersecurity",
-            package: "Cohort",
-            rating: "Bronze",
-            amount:"3000"
-        },
-        {
-            name: "Keira Danlop",
-            course: "UI/UX",
-            package: "Cohort",
-            rating: "Silver",
-            amount:"3000"
-        },
-        {
-            name: "Diop Grutt",
-            course: "HTML",
-            package: "One on One",
-            rating: "Gold",
-            amount:"3000"
-        },
-        {
-            name: "Diop Grutt",
-            course: "Data Analytics",
-            package: "Self paced",
-            rating: "Diamond",
-            amount:"3000"
-        },
-    ]
+    // const tableContents = [
+    //     {
+    //         name: "Melanie Grutt",
+    //         course: "Cybersecurity",
+    //         package: "Cohort",
+    //         rating: "Bronze",
+    //         amount:"3000"
+    //     },
+    //     {
+    //         name: "Keira Danlop",
+    //         course: "UI/UX",
+    //         package: "Cohort",
+    //         rating: "Silver",
+    //         amount:"3000"
+    //     },
+    //     {
+    //         name: "Diop Grutt",
+    //         course: "HTML",
+    //         package: "One on One",
+    //         rating: "Gold",
+    //         amount:"3000"
+    //     },
+    //     {
+    //         name: "Diop Grutt",
+    //         course: "Data Analytics",
+    //         package: "Self paced",
+    //         rating: "Diamond",
+    //         amount:"3000"
+    //     },
+    // ]
 
     const [rating, setRating] = useState(0) // initial rating value
 
@@ -760,32 +760,30 @@ export function Courses(){
     return ( 
         <Students isMobile={isMobile} userdata={userdata}>               
             <div className={clsx.students_profile}>
-
-                {/* {courses.length === 0 ?         
-                               <NoDetail text="You haven't registered for any course" />
-
-                : */}
                 {
-                <table className={clsx.student_table}>
-                    <thead>
-                        <tr>
-                        {
-                            tableHeaders.map((el, i) => (
-                                <th key={i}>{el}</th>
-                                ))
-                            } 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            tableContents.map(({name,amount, package: p, course, rating}, i) => (
-                                <UserInfoCard key={i} amount={amount} model={p} name={name} num={i} comp={"Courses"} rating={rating} handleRating={()=>handleRating("courseID")} course={course} />
-                            ))
-                        }
-                    </tbody>
-                </table>
+                courses.length === 0 ?         
+                    <NoDetail text="You haven't registered for any course" />
 
-        }
+                :
+                    <table className={clsx.student_table}>
+                        <thead>
+                            <tr>
+                            {
+                                tableHeaders.map((el, i) => (
+                                    <th key={i}>{el}</th>
+                                    ))
+                                } 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                courses.length > 0 && courses.map(({name,amount, package: p, course, rating}, i) => (
+                                    <UserInfoCard key={i} amount={amount} model={p} name={name} num={i} comp={"Courses"} rating={rating} handleRating={()=>handleRating("courseID")} course={course} />
+                                )) 
+                            }
+                        </tbody>
+                    </table>
+                }
             </div>
         </Students>
     )
@@ -837,33 +835,8 @@ export function History(){
     }, [])
 
     
-    const tableHeaders = ["No", "Courses", "Status", "Date", "Amount Paid"]
-    const tableContents = courses.length > 0 ? courses : [
-        {
-            status: "Approved",
-            course: "Cybersecurity",
-            date: "12/03/2022",
-            amount: 3000,
-        },
-        {
-            status: "Approved",
-            course: "UI/UX",
-            date: "12/03/2022",
-            amount: 3000,
-        },
-        {
-            status: "Approved",
-            course: "HTML",
-            date: "12/03/2022",
-            amount: 3000,
-        },
-        {
-            status: "Approved",
-            course: "Data Analytics",
-            date: "12/03/2022",
-            amount: 3000,
-        },
-    ]
+    const tableHeaders = ["No", "Courses", "Status", "Date", "Course Price","Amount Paid"]
+    const tableContents = courses.length > 0 ? courses : []
     return ( 
         <Students isMobile={isMobile} userdata={userdata}>               
             <div className={clsx.students_profile}>
@@ -885,9 +858,9 @@ export function History(){
                     </thead>
                     <tbody>
                         {
-                            tableContents.map(({status, date, package: p, course, amount}, i) => (
+                            tableContents.map(({status, date, package: p, coursePrice, amountPaid, courseName, amount}, i) => (
                                 <UserInfoCard key={i} status={status} num={i} comp={"History"} date={date} amount={amount}
-                                pack={p} course={course} />
+                                pack={`$ ${amountPaid}`} course={courseName} coursePrice={`$ ${coursePrice}`} />
                             ))
                         }
                     </tbody>

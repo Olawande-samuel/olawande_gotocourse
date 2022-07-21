@@ -9,7 +9,7 @@ const Layout = ({children}) => {
   return (
     <>
     <Navbar />
-    <section className="layout_main" style={{marginTop: `${+height + 2.5}px`}}>
+    <section className="layout_main" style={{marginTop: `${+height + 2}px`}}>
         {children}
     </section>
     <Footer />
