@@ -57,7 +57,6 @@ export function CategoryDetails({}){
   const students = ["James Segun"];
   const params = useParams()
   //get user id
-  console.log(params);
   useEffect(() => {
     //fetch course details for the id
     if(flag.current) return;
@@ -68,7 +67,6 @@ export function CategoryDetails({}){
         if(!success) throw new AdvancedError(message, statusCode);
         else {
           const {data} = res;
-          console.log(data);
           setFormstate(old => {
             return {
               ...old,
@@ -279,7 +277,6 @@ const [loading, setLoading] = useState(true);
         else {
           if(res?.data){
             const {data} = res;
-            console.log(data);
             toast.success(message, {
               position: "top-right",
               autoClose: 4000,
@@ -580,7 +577,6 @@ export function CreateCourseCategory(){
     if(flag.current) return;
     if(location.search){
       const id = location.search.split("=").reverse()[0];
-      console.log(id);
       (async () => {
         try {
           const res = await fetchCategory(id, userdata?.token);
@@ -627,7 +623,6 @@ export function CreateCourseCategory(){
     return () => console.log("Removing CreateCategory component");
   }, [])
   
-  console.log(formstate)
 
 
 
@@ -647,7 +642,6 @@ export function CreateCourseCategory(){
       else {
         if(res?.data){
           const {data} = res;
-          console.log(data);
           toast.success(message, {
             position: "top-right",
             autoClose: 4000,
@@ -1041,7 +1035,6 @@ export function Approve() {
       });
 
       const res = type === "approve" ? await verify(item, userdata?.token) : await verify_pledre(item, userdata?.token);
-      console.log('res', res)
       const { message, success, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -1092,7 +1085,6 @@ export function Approve() {
       });
       
       const res = await addMentor(item, userdata?.token);
-      console.log('res', res)
       const { message, success, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -1370,15 +1362,12 @@ export function Teachers() {
     (async () => {
       try {
         const token = userdata?.token;
-        console.log(token)
         const res = await fetch(token);
-        console.log(res);
         const { message, success, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         else {
           const { data } = res;
           //do somethings
-          console.log(data);
           setTeachers(_=>  data);
           toast.success(message, {
             position: "top-right",
@@ -1409,7 +1398,6 @@ export function Teachers() {
   const tableHeaders = ["No", "Name", "Email", "Type", "Access Dashboard", "Level"];
 
   function approveHandler(e, email, details) {
-    console.log(e.target, email);
     localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(details))
     if (email) navigate(`approve?email=${email}`);
   }
@@ -1471,17 +1459,14 @@ export function Mentors() {
     (async () => {
       try {
         const token = userdata?.token;
-        console.log(token)
         const res = await fetchMentors(token);
-        console.log(res);
+
         const { message, success, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         else {
           const { data } = res;
           //do somethings
           if(data.length > 0) {
-
-            console.log(data);
           setTeachers(_=>  data);
           toast.success(message, {
             position: "top-right",
@@ -1524,7 +1509,6 @@ export function Mentors() {
   const tableHeaders = ["No", "Name", "Email", "Expertise"];
 
   function approveHandler(e, email, details) {
-    console.log(e.target, email);
     localStorage.setItem("gotocourse-mentorDetails", JSON.stringify(details))
     if (email) navigate(`detail`);
   }
@@ -1616,7 +1600,6 @@ useEffect(()=>{
     try {
       const res =  edit === "mentor" ? await updateMentor( formstate._id, formdata, userdata?.token,) : await makeMentorPage(userdata?.token, formdata);
       const { success, message, statusCode, data } = res;
-      console.log(data)
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         toast.success(message, {
@@ -1659,7 +1642,6 @@ useEffect(()=>{
       };
     });
   }
-  console.log(bio); 
 
   return (
     <Admin header="ADMIN">
@@ -1725,19 +1707,11 @@ useEffect(()=>{
                 data={formstate.mentorBio}
                 onReady={ editor => {
                     // You can store the "editor" and use when it is needed.
-                    console.log( 'Editor is ready to use!', editor );
                 } }
                 onChange={ ( event, editor ) => {
                     const data = editor.getData();
-                    console.log(data); 
                     setBio(data)
                     // setFormstate({...formstate, mentorBio: data})
-                } }
-                onBlur={ ( event, editor ) => {
-                    console.log( 'Blur.', editor );
-                } }
-                onFocus={ ( event, editor ) => {
-                    console.log( 'Focus.', editor );
                 } }
                 />
             </div> 
@@ -1838,7 +1812,6 @@ export function MentorsDetail() {
       });
 
       const res =  await deleteMentor(id, userdata?.token);
-      console.log('res', res)
       const { message, success, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -1968,7 +1941,6 @@ export function Courses() {
             draggable: true,
             progress: undefined,
           });
-          console.log(data);
         } else {
           throw new AdvancedError(message, statusCode);
         }
@@ -2191,7 +2163,6 @@ export function CourseDetails({}){
       const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        console.log(res);
         toast.success(message, {
           position: "top-right",
           autoClose: 4000,
@@ -2352,7 +2323,6 @@ export function BootcampDetails({}){
         else {
           const {data} = res;
           let bootcamp = data.find(d => d.bootcampId === params?.id);
-          console.log(bootcamp);
           setFormstate(old => {
             return {
               ...old,
@@ -2410,7 +2380,6 @@ export function BootcampDetails({}){
       const {message, statusCode, success} = res;
       if(!success) throw new AdvancedError(message, statusCode);
       else {
-        console.log(res);
         toast.success(message, {
           position: "top-right",
           autoClose: 4000,
@@ -2607,7 +2576,6 @@ export function Bootcamps() {
             draggable: true,
             progress: undefined,
           });
-          console.log(data);
         } else {
           throw new AdvancedError(message, statusCode);
         }
@@ -2703,7 +2671,6 @@ export function CreateBootcamp(){
     if(flag.current) return;
     if(location.search){
       const id = location.search.split("=").reverse()[0];
-      console.log(id);
       (async () => {
         try {
           const res = await fetchBootcamps(userdata?.token);
@@ -2716,7 +2683,6 @@ export function CreateBootcamp(){
             found.endDate = found.endDate.split("T")[0];
             found.instructor = found.instructorName;
             delete found.instructorName;
-            console.log(found);
             setFormstate(_ => found);
             toast.success("Bootcamp found successfully", {
               position: "top-right",
@@ -3160,11 +3126,9 @@ export function Notification() {
       (async() => {
         try{
           const res = await fetchNotifications(userdata?.token);
-          console.log(res)
           const {message, success, statusCode} = res;
           if(!success) throw new AdvancedError(message, statusCode);
           const {data} = res
-          console.log(data)
           if(data.length > 0) {
             setNotifications(data)
           }
@@ -3217,11 +3181,9 @@ export function Student() {
 
   async function fetchStudents(){
     if (userdata) {
-      console.log("2",userdata)
       
         try {
           const res = await fetch(userdata?.token); 
-          console.log(res);
           const { message, success, statusCode } = res;
           if (!success) throw new AdvancedError(message, statusCode);
           else {
@@ -3229,7 +3191,6 @@ export function Student() {
             //do somethings
 
             setStudentList(data);
-            console.log(data);
             toast.success(message, {
               position: "top-right",
               autoClose: 4000,
@@ -3531,7 +3492,6 @@ export function Edit() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         const { data } = res;
-        console.log(data);
         const newValue = {
           ...userdata,
           ...data
@@ -3562,7 +3522,6 @@ export function Edit() {
     }
   }
 
-  console.log("user", userdata);
   return (
     <Admin header="ADMIN">
       <div className={clsx["admin_profile"]}>
@@ -3717,10 +3676,6 @@ const Admin = ({ children, header }) => {
     generalState,
     setGeneralState,
   } = useAuth();
-  useEffect(() => {
-    console.log("Admin component is mounted");
-    return () => console.log("Admin component is unmounted");
-  }, []);
 
   const toggleSidebar = () => {
     setGeneralState({ ...generalState, showSidebar: !showSidebar });

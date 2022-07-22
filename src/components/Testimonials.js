@@ -59,8 +59,6 @@ const Testimonials = () => {
       navigation
       pagination={{ clickable: true }}
       scrollbar={{ draggable: true }}
-      onSwiper={(swiper) => console.log(swiper)}
-      onSlideChange={() => console.log('slide change')}
       breakpoints= {{
         // when window width is >= 320px
         320: {

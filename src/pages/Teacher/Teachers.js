@@ -148,10 +148,7 @@ const All = ({ type }) => {
 export default All;
 
 const NavItems = ({ item, handleChange, search }) => {
-  // function handleChange(e) {
-  //     console.log(e)
-  //     setCheck(!check)
-  // }
+  
   return (
     <div className="d-flex">
       {/* <input type="radio" name="course" id={item} onChange={handleChange} />
@@ -211,7 +208,6 @@ export const Payment = () => {
     setPaymentData({...paymentData, installments: 4, [e.target.name]: e.target.value}) 
   }
 
-  console.log(paymentData)
   async function enrollToCourse(e) {
     e.preventDefault();
 
@@ -227,7 +223,6 @@ export const Payment = () => {
         initialPayment: paymentData.fullPayment ? "" : paymentData.initialPayment
       };
       try {
-        console.log({courseData})
         if(!courseData.fullPayment && !courseData.installments) throw new AdvancedError("All fields required")
         setLoading(true);
         const response = await addCourse(courseData, userData.token);

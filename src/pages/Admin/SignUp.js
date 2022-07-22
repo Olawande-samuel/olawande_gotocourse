@@ -47,7 +47,6 @@ const AdminSignup = () => {
       if(formstate.email.trim() === "" || formstate.fullname === "" || formstate.password === "") throw new AdvancedError("All fields are required", 0);
       const {retype_password, ...data} = formstate;
       const res = await register({...data, userType: 'admin'}, 'admin');
-      console.log(res);
       const {success, message, statusCode} = res;
       if(!success) throw new AdvancedError(message, statusCode);
       else {

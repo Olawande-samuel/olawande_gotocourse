@@ -604,7 +604,6 @@ function DeleteModal({id,open,handleClose}){
     const {generalState: {isMobile}, setGeneralState, generalState, studentFunctions:{deleteFromWishlist}} = useAuth();
     const {getItem} = useLocalStorage();
     let userdata = getItem(KEY);
-    console.log(id)
     const style = {
         position: "absolute",
         top: "50%",
@@ -628,7 +627,6 @@ function DeleteModal({id,open,handleClose}){
             if(!success) throw new AdvancedError(message, statusCode);
             else {
                 const {data} = res;
-                console.log(data);
                 toast.success(message, {
                     position: "top-right",
                     autoClose: 4000,

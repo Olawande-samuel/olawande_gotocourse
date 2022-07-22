@@ -29,15 +29,12 @@ const AdminLogin = () => {
 
 
   async function submitHandler(e){
-    console.log(e);
     e.preventDefault();
     setLoading(_ => true);
     try{
       if(formstate.email.trim() === "" || formstate.password.trim() === "") throw new AdvancedError("Both email and password are required fields", 0);
       //do some code
-      console.log(formstate);
       const res = await login(formstate, "admin");
-      console.log(res);
       const {message, success, statusCode} = res;
       if(!success) throw new AdvancedError(message, statusCode);
       else {

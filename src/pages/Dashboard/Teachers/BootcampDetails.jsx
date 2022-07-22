@@ -31,7 +31,6 @@ export default function BootcampDetails({}){
     const students = ["James Segun"];
     const params = useParams()
     //get user id
-    console.log(params);
     useEffect(() => {
   
   

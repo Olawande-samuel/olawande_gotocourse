@@ -68,41 +68,6 @@ const Hero = () => {
   return (
     <section className="hero" style={{height: `min(calc(100vh - ${navHeight}px ), 530px)`}}>
           <Others {...New} />
-
-      {/* <Swiper
-        creativeEffect={{
-          prev: {
-            shadow: true,
-            translate: [0, 0, -400],
-          },
-          next: {
-            translate: ["100%", 0, 0],
-          },
-        }}
-        loop={true}
-        speed={1000}
-        modules={[EffectCreative]}
-        spaceBetween={0}
-        slidesPerView={1}
-        pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => {
-          console.log(swiper);
-        }}
-        autoplay={{ delay: 3500 }}
-        effect={"creativeEffect"}
-        breakpoints={{ 320: { slidesPerView: 1, spaceBetween: 0 } }}
-      >
-        <SwiperSlide>
-          <Generic {...general} />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Others {...student} />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Others {...teacher} />
-        </SwiperSlide>
-      </Swiper> */}
     </section>
   );
 };

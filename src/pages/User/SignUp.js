@@ -32,8 +32,6 @@ const SignUp = () => {
     }
   }, [data.fullname]);
 
-  console.log(data);
-
   const { getItem, removeItem } = useLocalStorage();
   const {
     authFunctions: { register },

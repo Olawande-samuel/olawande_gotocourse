@@ -49,7 +49,6 @@ const Bootcamp = () => {
     const bootcamp = getItem("gotocourse-bootcampdata")
     const navigate = useNavigate()
     useEffect(() => {
-        console.log("Bootcamp is mounted");
         if(bootcamp){
             setBootcampInfo(bootcamp)
         }
@@ -126,7 +125,6 @@ export const BootcampDetails = ()=> {
     const bootcampTraining =  getItem("gotocourse-bootcampdata")
 
     useEffect(() => {
-        console.log("BootcampDetails is mounted");
         if(bootcampTraining){
             setBootcampTrainingInfo(bootcampTraining)
         }
@@ -251,9 +249,6 @@ const SimilarBootcamps = ()=> {
         slidesPerView={1}
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => {
-          console.log(swiper);
-        }}
         navigation
         effect={"creativeEffect"}
         breakpoints={{

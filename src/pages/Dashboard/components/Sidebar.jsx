@@ -143,12 +143,6 @@ const Sidebar = ({isMobile}) => {
         },
     ];
 
-    useEffect(() => {
-        console.log("Sidebar is mounted");
-
-        return () => console.log("Sidebar is unmounted");
-    }, [])
-
 const toggleSidebar = ()=>{
     setGeneralState({...generalState, showSidebar:!generalState.showSidebar})
 }

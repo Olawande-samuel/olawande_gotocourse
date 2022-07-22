@@ -38,7 +38,6 @@ const TeacherProfile = ({type}) => {
     }
 
   },[])
-  console.log(generalState)
   return (
     <Courses>
         <div className="container">

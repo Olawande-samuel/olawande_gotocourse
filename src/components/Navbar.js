@@ -216,7 +216,6 @@ const NavList = ({ dropRef }) => {
             className="text-capitalize"
             style={{cursor:"pointer", fontSize:"14px"}}
             onClick={()=>{
-              console.log(list.logo) 
               delete list.logo
               localStorage.setItem("gotocourse-category", JSON.stringify(list))
               navigate(`/categories/${list.name.split(" ").join("-").toLowerCase()}`)

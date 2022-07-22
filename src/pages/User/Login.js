@@ -42,7 +42,6 @@ const Login = () => {
     try {
       const response = await login(data, "user");
 
-      console.log(response)
       const {success, statusCode, message} = response;
       
       if(success) {

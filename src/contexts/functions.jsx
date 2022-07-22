@@ -31,7 +31,6 @@ export const authFunctions = {
     },
     register: async function(_data, type){
         try{
-            console.log(_data)
             const res = await axios.post(type !== "admin" ? `${baseURL}/user/signup` : `${baseURL}/admin/signup`,
             JSON.stringify(_data),
             {
@@ -42,7 +41,6 @@ export const authFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -76,7 +74,6 @@ export const adminTeacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -94,7 +91,6 @@ export const adminTeacherFunctions = {
     },
     verify: async function(_data, token){
         try{
-            console.log(_data)
             const res = await axios.patch(`${baseURL}/admin/teacher/verify`,
             JSON.stringify(_data),
             {
@@ -106,7 +102,6 @@ export const adminTeacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -124,7 +119,6 @@ export const adminTeacherFunctions = {
     },
     verify_pledre: async function(_data, token){
         try{
-            console.log(_data)
             const res = await axios.patch(`${baseURL}/admin/teacher/pledre/toggle`,
             JSON.stringify(_data),
             {
@@ -136,7 +130,6 @@ export const adminTeacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -154,7 +147,6 @@ export const adminTeacherFunctions = {
     },
     makeMentorPage: async function(token,  _data ){
         try{
-            console.log(_data)
             const res = await axios.post(`${baseURL}/admin/mentor/page/add`,
             JSON.stringify(_data),
             {
@@ -166,7 +158,6 @@ export const adminTeacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -184,7 +175,6 @@ export const adminTeacherFunctions = {
     },
     addMentor: async function(_data, token){
         try{
-            console.log(_data)
             const res = await axios.post(`${baseURL}/admin/mentor/add`,
             JSON.stringify(_data),
             {
@@ -196,7 +186,6 @@ export const adminTeacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -225,7 +214,6 @@ export const adminTeacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -253,7 +241,6 @@ export const adminTeacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -288,7 +275,6 @@ export const adminStudentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -306,7 +292,6 @@ export const adminStudentFunctions = {
     },
     verify: async function(_data, token){
         try{
-            console.log(_data)
             const res = await axios.patch(`${baseURL}/admin/student/verify`,
             JSON.stringify(_data),
             {
@@ -318,7 +303,6 @@ export const adminStudentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -336,7 +320,6 @@ export const adminStudentFunctions = {
     },
     verify_pledre: async function(_data, token){
         try{
-            console.log(_data)
             const res = await axios.patch(`${baseURL}/admin/student/pledre/toggle`,
             JSON.stringify(_data),
             {
@@ -348,7 +331,6 @@ export const adminStudentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -381,7 +363,6 @@ export const adminFunctions = {
                     return status >= 200 && status < 505;
                 }
             })
-            console.log(res.data);
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
@@ -411,7 +392,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -443,7 +423,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -474,7 +453,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -495,7 +473,6 @@ export const adminFunctions = {
     },
     addCategory: async function(_data, token){
         try{
-            console.log(_data)
             const res = await axios.post(`${baseURL}/admin/category/add`,
             JSON.stringify(_data),
             {
@@ -507,7 +484,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -538,7 +514,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -569,7 +544,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -600,7 +574,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -631,7 +604,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -651,8 +623,7 @@ export const adminFunctions = {
         }
     },
     adminUpdateCourse: async function(token, id, _data){
-        console.log("running")
-        console.log(id)
+      
         try{
             const res = await axios.put(`${baseURL}/admin/course/update/${id}`, JSON.stringify(_data),
             {
@@ -664,7 +635,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -695,7 +665,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -726,7 +695,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -757,7 +725,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -788,7 +755,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -819,7 +785,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -850,7 +815,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -881,7 +845,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -912,7 +875,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -943,7 +905,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 // Error from backend
             if(res.data.message !== "Notifications fetched successfully") throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -979,7 +940,6 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1011,7 +971,6 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1042,7 +1001,6 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1073,7 +1031,6 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1104,7 +1061,6 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1136,7 +1092,6 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
  
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1146,7 +1101,6 @@ export const studentFunctions = {
             
         }catch(err){
             console.error(err)
-            console.log(err.statusCode === 2)
             if(err.statusCode === 2){
                 localStorage.clear()
             }
@@ -1170,7 +1124,6 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1202,7 +1155,6 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1233,7 +1185,6 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1295,7 +1246,6 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1326,7 +1276,6 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1396,7 +1345,6 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1428,7 +1376,6 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1480,7 +1427,6 @@ export const teacherFunctions = {
     },
     addCourse: async function(_data, token){
         try{
-            console.log(_data);
             const res = await axios.post(`${baseURL}/teacher/course/add`,
             JSON.stringify(_data),
             {
@@ -1492,7 +1438,6 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1523,7 +1468,6 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1554,7 +1498,6 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1585,7 +1528,6 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1647,7 +1589,6 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1678,7 +1619,6 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1778,7 +1718,6 @@ export const otherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1841,7 +1780,6 @@ export const otherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1873,7 +1811,6 @@ export const otherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1904,7 +1841,6 @@ export const otherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -1934,7 +1870,6 @@ export const otherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {

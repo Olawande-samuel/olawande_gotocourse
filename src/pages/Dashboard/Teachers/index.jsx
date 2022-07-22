@@ -45,7 +45,6 @@ export function CourseInfo() {
   
   const [btnloading, setLoading]= useState(false)
   const [formstate, setFormstate] = useState({}); 
-  console.log(formstate);
 
   async function handleCourseEdit(e){
     setGeneralState({...generalState, courseInfo: formstate})
@@ -287,7 +286,6 @@ export function CourseInfo() {
 }
 
 export function PreviewModal({ preview, open, setOpen }) {
-  console.log("modal", preview);
   const style = {
     position: "absolute",
     top: "50%",

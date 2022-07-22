@@ -363,7 +363,6 @@ export const Categories = () => {
 
  async function search(e){
     e.preventDefault();
-    console.log(searchTerm)
     let newCategories = categories.filter((item)=>item.name.includes(searchTerm.toUpperCase()))
     setCategories(newCategories)
     // try{
@@ -514,7 +513,6 @@ export const CourseList = () => {
   ref.current = true
   },[name])
 
-  console.log(courses) 
 
   return (
     <Courses>
@@ -556,7 +554,6 @@ export const CourseDetail = ({preview}) => {
   let categoryDetails = {}
   if(!preview?.name){
     const data = localStorage.getItem("gotocourse-category")
-    console.log(data)
     if (data){
       categoryDetails = JSON.parse(data)          
     } else {
@@ -566,7 +563,6 @@ export const CourseDetail = ({preview}) => {
     categoryDetails = preview          
   }
 
-  console.log("cate", categoryDetails)
   // fetch courses under each category
   useEffect(()=>{
     if(!preview?.name){
@@ -582,7 +578,6 @@ export const CourseDetail = ({preview}) => {
             if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
             if(res.data.length > 0){
               setCategoryCourses(res.data) 
-              console.log("category-courses", res.data);
               toast.success(message, {
               position: "top-right",
               autoClose: 4000,
@@ -732,7 +727,6 @@ export const CourseProfile = ({preview}) => {
   const ref = useRef(false);
   const navigate = useNavigate()
   const [loading, setLoading]= useState(false)
-  console.log("id", id)
   const [courseProfile, setCourseProfile]= useState(
     {
     courseId: "629931276651235bbb08dc97",
@@ -770,7 +764,6 @@ export const CourseProfile = ({preview}) => {
     instructorJoinDate: "2022-06-01T11:04:56.016Z"
     }
   )
-console.log("pre",preview)
   useEffect(()=>{
 
     if(preview?.name) {
@@ -792,7 +785,6 @@ console.log("pre",preview)
     const data = getItem("gotocourse-courseInfo");
 
     const  userData = getItem(KEY)
-    console.log(userData)
     if(userData !== null){
       try {
         setLoading(true)

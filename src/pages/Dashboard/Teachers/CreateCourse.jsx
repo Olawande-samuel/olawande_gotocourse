@@ -51,18 +51,6 @@ export const Syllabus = ({
 
   export  function CreateCourseMain({type}) {
 
-    // useEffect(()=>{
-    //   async function get(){
-    //     try{
-    //       const reso = await axios.get(`https://live.ipms247.com/booking/reservation_api/listing.php?request_type=InsertBooking&HotelCode=18727&APIKey=9148790807c57666de-bb8c-11ea-a&BookingData={"Room_Details":{"Room_1":{"Rateplan_Id":"1872700000000000002","Ratetype_Id":"1872700000000000001","Roomtype_Id":"1872700000000000002","baserate":"3500","extradultrate":"500","extrachildrate":"500","number_adults":"2","number_children":"1","ExtraChild_Age":"2","Title":"","First_Name":"Rokik","Last_Name":"wpani","Gender":"","SpecialRequest":""}},"check_in_date":"2022-07-25","check_out_date":"2022-07-26","Booking_Payment_Mode":"","Email_Address":"pj@gmnnail.com","Source_Id":"","MobileNo":"","Address":"","State":"","Country":"","City":"","Zipcode":"","Fax":"","Device":"","Languagekey":"","paymenttypeunkid":""}`)
-    //       console.log("test",reso)
-    //     } catch(err){
-    //       console.error(err)
-    //     }
-    //   }
-    //   get()
-    // },[])
-    
     const ref = useRef(false);
     const navigate = useNavigate();
     const {
@@ -151,7 +139,6 @@ export const Syllabus = ({
     e.preventDefault();
     setLoading(true);
     if(formstate?.courseId){
-      console.log("submit", "updatecourse")
       try {
         if (
           formstate.name === "" ||
@@ -199,8 +186,6 @@ export const Syllabus = ({
       }
     } else {
     try {
-      console.log("submit", "addcourse")
-
       if (
         formstate.name === "" ||
         formstate.categoryName === "" ||

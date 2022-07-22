@@ -31,13 +31,11 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage }) => {
             const res = await uploadFile(formdata, value?.token);
             setLoading(false)
 
-            console.log(res);   
             const {success, message, statusCode} = res;
             if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
             else {
 
                 const {data} = res;
-                console.log(data);
                 setData(_ => data.name);
                 toast.success(message,{
                     position:"top-right",
@@ -91,7 +89,6 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage }) => {
     function triggerUpload(e){
         e.stopPropagation();
         let input = document.getElementById("uploadFile");
-        console.log(input);
         input.click();
     }
 
@@ -110,7 +107,6 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage }) => {
         isOpen && 
         (<div className={clsx.upload_file__background} onClick={e => {
             if(e.target === e.currentTarget) {
-                console.log("Reached")
                 setIsOpen(_ => false);
             }
         }}>
