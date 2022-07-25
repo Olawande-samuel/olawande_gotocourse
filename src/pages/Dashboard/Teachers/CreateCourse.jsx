@@ -553,6 +553,15 @@ export const Syllabus = ({
     );
   }
   
+ export function UploadImageIcon({showUploadFormHandler, title}){
+    <div
+    className={clsx.upload__file_box}
+    onClick={showUploadFormHandler}
+  >
+    <img src={vector} alt={"Placeholder"} />
+    <p>{title}</p>
+  </div>
+  }
 
   function AddSyllabus({ open, handleClose, addSyllabus }) {
     const [newSyllabus, setNewSyllabus] = useState({

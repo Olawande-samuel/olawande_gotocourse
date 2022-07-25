@@ -1978,3 +1978,8 @@ line-height: 16px;
   border-radius:8px;
   font-size: 14px;
 }
+
+.editsectionsradio:checked {
+color: red;
+background: yellow;
+}

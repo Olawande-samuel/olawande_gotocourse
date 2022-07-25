@@ -31,6 +31,7 @@ import Policies, {TeachingPolicy, TermsOfUse, EndUserPolicy, Cookies} from "./pa
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Career from "./pages/Career";
+import Settings from "./pages/Dashboard/Admin/Settings";
 
 
  
@@ -132,6 +133,7 @@ function App() {
               <Route path="teachers/create/mentor" element={<AddMentor />} />
               <Route path="profile/edit" element={<AdminEdit />} />
               <Route path="chat" element={<AdminChat />} />
+              <Route path="settings" element={<Settings />} />
             </Route>
             <Route path="admin" element={<Out />}>
               <Route path="login" element={<AdminLogin />} />

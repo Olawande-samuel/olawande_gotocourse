@@ -1,6 +1,6 @@
 import {useEffect, useState,useRef} from "react";
 import {MdMessage, MdHistory} from "react-icons/md";
-import {AiOutlineClose} from "react-icons/ai";
+import {AiOutlineClose, AiOutlineSetting} from "react-icons/ai";
 import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash, IoIosHelpBuoy} from "react-icons/io";
 import {BiCategory, BiBell} from "react-icons/bi";
 import {FaTwitch} from "react-icons/fa";
@@ -88,6 +88,11 @@ const Sidebar = ({isMobile}) => {
             icon:IoIosChatbubbles,
             path: "chat",
             title: "Chat"
+        },
+        {
+            icon:AiOutlineSetting,
+            path: "settings",
+            title: "Settings"
         }
     ] : route === "students" ?  [
         {

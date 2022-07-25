@@ -3670,7 +3670,7 @@ export function Chat() {
 
 
 
-const Admin = ({ children, header }) => {
+export const Admin = ({ children, header }) => {
   const {
     generalState: { isMobile, showSidebar,loading },
     generalState,

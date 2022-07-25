@@ -20,7 +20,8 @@ import { useLocalStorage } from "../../hooks";
 import { AdvancedError } from "../../classes";
 import { witnesses, Card as MentorsCard } from "../../components/Mentors";
 import Input from "../../components/Input";
-
+import Success from "../../images/paymentSuccess.png"
+import Failure from "../../images/Bad Gateway.png"
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 const KEY = "gotocourse-userdata";
 
@@ -483,22 +484,28 @@ const CheckoutForm = () => {
 
 export const PaymentStatus = ({success}) => {
   const navigate = useNavigate();
+  const [status, setStatus]= useState({
+    image: success ? Success : Failure,
+    title:success ? "Payment Successful" : "Payment Denied",
+    subtitle:success ? "You can start learning now": "Unable to process payment",
+    action: success ? "Go to Dashboard" : "Try Again",
+  })
   return (
     <div className={style.paymentScreen}>
       <div className={style.paymentScreenBox}>
-        <h3 className="text-center">
-          {success ? 
-            "Course Purchased Successfully"
-          :
-            "An error occured during payment processing"
-          }
-        </h3>
+        <div>
+          <img src={status.image} alt="" className="img-fluid" />
+        </div>
+        <h4 className="text-center" style={{color:success ? "var(--theme-blue)" : "var(--theme-orange" }}>
+          {status.title}
+        </h4>
+        <small className="my-1">{status.subtitle}</small>
         <button
           className="button button-md"
           type="button"
-          onClick={() => navigate(-1)}
+          onClick={() => success ? navigate("/") : navigate(-1)}
         >
-          Go Back
+          {status.action}
         </button>
       </div>
     </div>
