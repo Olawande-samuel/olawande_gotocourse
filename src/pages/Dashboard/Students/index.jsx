@@ -116,7 +116,7 @@ export function Edit(){
     const {generalState: {}, studentFunctions: {updateAvatar, fetchProfile, updateProfile}, setGeneralState} = useAuth();
 
     const [imageUrl, setImageUrl] = useState(null);
-    const [isUplaoding, setIsUploading] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -257,7 +257,16 @@ export function Edit(){
                         <MdPersonAdd />
                     </span>) : (<img src={imageUrl} alt="Avatar" />)}
                     <input id="imageUpload" type="file" style={{display: 'none'}} onChange={changeImageHandler} />
-                    {imageUrl ? (<p style={{cursor: isUplaoding && 'not-allowed'}} onClick={changeProfilePictureHandler}>Change Picture</p>) : (<p onClick={uploadPicture}>Upload Photo</p>)}
+                    {imageUrl ?
+                        isUploading ? 
+                        <div className="spinner-border text-primary" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                         : 
+                        <p style={{cursor: isUploading && 'not-allowed'}} onClick={changeProfilePictureHandler}>Change Picture</p>
+                    
+                    : (<p onClick={uploadPicture}>Upload Photo</p>)
+                    }
                 </div>
                 <div className={clsx.edit__picture}>
                     <button className="button button-md" type="button" onClick={()=>{

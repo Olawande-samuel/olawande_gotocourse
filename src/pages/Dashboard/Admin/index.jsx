@@ -969,7 +969,9 @@ export function Dashboard() {
           </button>
         </div>
         <div className={clsx["admin_profile_main"]}>
+          <small className="text-muted">Name:</small>
           <h1>{userdata?.firstName && userdata.firstName} {userdata?.lastName && userdata.lastName} </h1>
+          <small className="text-muted">Bio:</small>
           <p className={clsx["admin__paragraph"]}>
            {userdata?.bio && userdata.bio}
           </p>
@@ -2679,9 +2681,12 @@ export function CreateBootcamp(){
           else if (statusCode === 1) {
             const { data } = res;
             let found = data.find(d => d.bootcampId === id);
+            console.log({found})
             found.startDate = found.startDate.split("T")[0];
             found.endDate = found.endDate.split("T")[0];
             found.instructor = found.instructorName;
+            found.bootcampImg = found.bootcampImg.split("/").slice(-1)[0]
+
             delete found.instructorName;
             setFormstate(_ => found);
             toast.success("Bootcamp found successfully", {
@@ -3398,7 +3403,7 @@ export function Edit() {
   const {updateItem, getItem} = useLocalStorage();
   let userdata = getItem(KEY);
   const [imageUrl, setImageUrl] = useState(null);
-  const [isUplaoding, setIsUploading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formstate, setFormstate] = useState({
@@ -3527,7 +3532,7 @@ export function Edit() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h3>Update Profile</h3>
-          <div className="row w-100 mt-4">
+          <div className="row w-100 mt-4 mb-2 mx-0">
             <div className={` col-sm-3 ${clsx.edit__picture}`}>
               {userdata?.profileImg ? (
                 <img
@@ -3547,8 +3552,12 @@ export function Edit() {
                 onChange={changeImageHandler}
               />
               {imageUrl ? (
+                isUploading ? 
+                <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+               </div> : 
                 <p
-                  style={{ cursor: isUplaoding && "not-allowed" }}
+                  style={{ cursor: isUploading && "not-allowed" }}
                   onClick={changeProfilePictureHandler}
                 >
                   Change Picture
@@ -3572,7 +3581,7 @@ export function Edit() {
                 navigate("/change-password")
             }}>Change Password</button>
           </div>
-          <form className="form" onSubmit={submitHandler} style={{width: "80%"}}>
+          <form className="form" onSubmit={submitHandler} style={{width:"min(100% - 0.5rem, 400px)"}}>
             <Input
               label="First name"
               name="firstName"
