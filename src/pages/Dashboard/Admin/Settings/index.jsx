@@ -135,7 +135,7 @@ function HomepageHero({showButtons}){
             </div>
 
             <div>
-              <input type="radio" name="color" id="blue"  handleChange={changeHandler} className="ms-5" />
+              <input type="radio" name="color" id="blue"  handleChange={changeHandler} className="ms-md-5" />
               <label htmlFor="blue" className="form-label generic_label ms-1" style={{color:"var(--theme-blue)"}}>Gotocourse Blue</label>
             </div>
           </div>

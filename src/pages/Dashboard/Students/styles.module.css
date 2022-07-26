@@ -73,12 +73,15 @@
     border: none;
     padding: 10px 30px;
     border-radius: 10px;
+    display: flex;
+    align-items:center;
 }
 
 
 .students__header {
     font-size: 1.5rem;
     color: var(--textColorDark);
+    margin-block:.5rem ;
 }
 .students__paragraph {
     line-height: 2;
@@ -218,7 +221,7 @@
     border: 1px solid rgba(208, 204, 204, 0.5);
     padding: 4px;
     border-radius: 5px;
-    text-indent: 40px;
+    text-indent: 5px;
     background-color: var(--primary);
 }
 
@@ -287,5 +290,9 @@
   .students_wishlist {
     grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
     /* padding-block: 4.375rem; */
+}
+
+.students_profile_top_button {
+    padding: 5px 15px;
 }
 }

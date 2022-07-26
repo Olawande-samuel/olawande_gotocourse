@@ -92,14 +92,16 @@ export function Profile(){
                         <img src={userdata?.profileImg ? userdata.profileImg : avatar} style={{borderRadius: 10}} width="100%" alt="Avatar" />
                     </div>
                     <button className={clsx.students_profile_top_button} onClick={editProfileHandler}>
-                        <MdEdit />  &nbsp;   Edit
+                        <MdEdit />  &nbsp;   <span className="d-none d-md-block">Edit</span>
                     </button>
                 </div>
                 <div className={clsx.students_profile_main}>
+                    {/* <span className="text-muted">Name:</span> */}
                     <h1 className={clsx.students__header} style={{marginTop: 20}}>{userdata?.firstName} {userdata?.lastName}</h1>
-                    <p className={clsx.students__paragraph}>{userdata?.bio ? userdata?.bio : "I'm a mysterious person"} <br />
-                    {userdata?.goals ? userdata?.goals : "I'm yet to decide what I want to achieve here"}
-                    </p>
+                    <span className="text-muted">Experience:</span>
+                    <p>{userdata?.bio ? userdata?.bio : "I'm a mysterious person"} </p>
+                    <span className="text-muted">Bio:</span>
+                    <p>{userdata?.goals ? userdata?.goals : "I'm yet to decide what I want to achieve here"}</p>
 
                 </div>
             </div>

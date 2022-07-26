@@ -1690,7 +1690,10 @@ line-height: 16px;
    
 }
 @media screen and (max-width: 550px) {
-  
+  .button-md {
+    padding: 0.6875rem 1.5rem !important;
+    font-size: clamp(0.875rem, -4.0179rem + 24.4643vw, 1.125rem);
+  }
   .services .title {
     line-height: 32px;
   }
@@ -1982,4 +1985,14 @@ line-height: 16px;
 .editsectionsradio:checked {
 color: red;
 background: yellow;
+}
+td,
+td span {
+  font-size: clamp(0.95rem, 0.3143rem + 0.9286vw, 1rem);
+  text-align:start;
+
+}
+tr th, thead td {
+  font-size: clamp(0.956rem, -0.2429rem + 3.7143vw, 1.15rem);
+  text-align:start;
 }

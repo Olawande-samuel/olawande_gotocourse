@@ -151,10 +151,14 @@
 }
 
 .admin__student h1{
-    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    font-size: clamp(1.15rem, -0.2429rem + 3.7143vw, 1.8rem);
     font-weight: 400;
     margin-bottom: 30px;
 }
+.admin__student h5{
+    font-size: clamp(1.12rem, -0.2429rem + 3.7143vw, 1.25rem);
+}
+
 
 .admin__student_table {
     border: none;
@@ -199,7 +203,7 @@
 .user__info_card td{
    height: 90px;
    letter-spacing: var(--letterSpacing);
-   text-align: center
+   text-align: start
 }
 
 .user__info_card:hover {
@@ -294,7 +298,7 @@
     margin-left: 10px;
     margin-top: 20px;
     font-weight: 400;
-    font-size: 1.1rem
+    font-size: clamp(0.8rem, -0.2429rem + 3.7143vw, 1rem)
 }
 
 .user__details img {
@@ -358,7 +362,7 @@
 }
 
 .admin__info_content {
-    font-size: 1.15rem;
+    font-size: clamp(0.8rem, -0.2429rem + 3.7143vw, 1.15rem);
 }
 
 

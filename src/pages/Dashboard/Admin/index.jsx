@@ -1221,6 +1221,7 @@ export function UserInfoCard({
   packages=[],
   type,
   coursePrice,
+  isAbsolute,
   showDetailsHandler = () => {return},
   approveHandler = () => {return},
 }) {
@@ -1232,8 +1233,8 @@ export function UserInfoCard({
       <td className={clsx.user__info}>{num + 1}.</td>
       {user && (
         <td className={clsx.user__details}>
-          {img && <img src={img} alt="avatar" />}
-          <span>{`${firstName} ${lastName}`}</span>
+          {img && <img src={isAbsolute ? img :`https://loftywebtech.com/gotocourse/api/uploads/${img}`  } alt="avatar" />}
+          <span>{`${firstName} ${lastName}`}</span> 
         </td>
       )}
 
@@ -1403,6 +1404,7 @@ export function Teachers() {
     localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(details))
     if (email) navigate(`approve?email=${email}`);
   }
+  console.log("reacj",teachers == true)
   return (
     <Admin header={"Mentors/Teachers"}>
       {loading && <Loader />}
@@ -1420,7 +1422,7 @@ export function Teachers() {
                 ))}
               </thead>
               <tbody>
-                {teachers?.length > 0 ? teachers?.map((teacher, i) => (
+                {teachers?.length > 0 && teachers?.map((teacher, i) => (
                   <UserInfoCard
                     key={i}
                     user={true}
@@ -1434,10 +1436,15 @@ export function Teachers() {
                     type={teacher.userType}
                     approveHandler={approveHandler}
                     accessPledre={teacher.accessPledre}
+                    isAbsolute={true}
                   />
-                )) : <h5 style={{textAlign:'center'}}>No Teachers found</h5>}
+                ))}
               </tbody>
             </table>
+            {teachers <= 0  && <div className="text-center">
+              <p style={{textAlign:'center'}}>No Teachers found</p>
+            </div>}
+            
           </div>
         </div>
       </div>
@@ -1531,7 +1538,7 @@ export function Mentors() {
                 ))}
               </thead>
               <tbody>
-                {teachers?.length > 0 ? teachers?.map((teacher, i) => (
+                {teachers?.length > 0 && teachers?.map((teacher, i) => (
                   <UserInfoCard
                     key={i}
                     user={true}
@@ -1543,11 +1550,19 @@ export function Mentors() {
                     level={teacher.expertise}
                     details={teacher}
                     approveHandler={approveHandler}
+                    isActive={null}
+                    isAbsolute={false}
+                    type={null}
                     // accessPledre={teacher.accessPledre}
                   />
-                )) : <h5 style={{textAlign:'center'}}>No mentor page found</h5>}
+                ))}
               </tbody>
             </table>
+            {teachers.length <=0 && 
+             <div className="text-center">  
+                <p>No mentor page found</p> 
+             </div>
+            }
           </div>
         </div>
       </div>
@@ -3381,6 +3396,7 @@ export function Student() {
                         type={null}
                         handleVerification={() => handleVerification(userId)}
                         handlePledreAccess={() => handlePledreAccess(userId)}
+                        isAbsolute={true}
                       />
                     )
                   )}
