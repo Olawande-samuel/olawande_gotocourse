@@ -2073,14 +2073,15 @@ export function CourseDetails({}){
     description: "",
     status: false,
     teacher: "",
-    student: ""
+    student: "",
+    instructors: []
   })
   const [loading, setLoading] = useState(true);
   const teachers = ["Dr. Joy Castus"];
   const students = ["James Segun"];
   const params = useParams();
   //get user id
-
+  console.log({formstate})
   useEffect(() => {
     //fetch course details for the id
     if(flag.current) return;
@@ -2247,34 +2248,25 @@ export function CourseDetails({}){
               ></textarea>
             </div>
 
-            {/* <div className={clsx.form_group}>
+            <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
                 <label>Name of teachers</label>
                 {
-                  teachers.map((t, i) => (
+                  formstate.instructors.length > 0 ? formstate.instructors.map((t, i) => (
                     <div key={i}>
-                      <p>{i + 1}. &nbsp; {t}</p> 
-                      <div className={clsx.teachers__actions}>
+                      <p>{i + 1}. &nbsp; {t.name}</p> 
+                      {/* <div className={clsx.teachers__actions}>
                         <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
                         <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
-                      </div>
+                      </div> */}
                     </div>
-                  ))
+                  )) : <p>{formstate.instructorName}</p>
                 }
+             
               </div>
-              <Input
-                style={{margin: "0px !important"}}
-                name="teacher"
-                type="text"
-                handleChange={changeHandler}
-                value={formstate.teacher}
-              />
-              <button type="button" className={clsx.form_group__button}>
-                Add Teacher
-              </button>
             </div>
 
-            <div className={clsx.form_group}>
+            {/* <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
                 <label>Add Student</label>
                 {

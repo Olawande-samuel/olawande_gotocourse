@@ -42,11 +42,13 @@ export const Syllabus = ({
   };
   
   export default function CreateCourse(){
-    <Teachers>
-      <div className={clsx.teachers_profile}>
-        <CreateCourseMain type="teacher" />
-      </div>
-    </Teachers>
+    return(
+      <Teachers>
+        <div className={clsx.teachers_profile}>
+          <CreateCourseMain type="teacher" />
+        </div>
+     </Teachers>
+    )
   }
 
   export  function CreateCourseMain({type}) {
@@ -79,15 +81,17 @@ export const Syllabus = ({
   
     });
   
-    let courseData = getItem("gotocourse-courseEdit")
+    let courseData;   
     useEffect(()=>{
-
-      if(courseData){
-        setFormstate(courseData)
-        
-        if(courseData.courseImg){
-          const imgArr = courseData.courseImg.split("/").slice(-1)
-          setFormstate({...courseData, courseImg: imgArr[0]})
+      if(location.search){
+        courseData = getItem("gotocourse-courseEdit")
+        if(courseData){
+          setFormstate(courseData)
+          
+          if(courseData.courseImg){
+            const imgArr = courseData.courseImg.split("/").slice(-1)
+            setFormstate({...courseData, courseImg: imgArr[0]})
+          }
         }
       }
     },[])
@@ -95,7 +99,8 @@ export const Syllabus = ({
     const { syllabuses, addtoSyllabus, setSyllabusses } = useSyllabus();
     const [faq, setFaq] = useState(formstate?.faqs ?? []);
     const [packageList, setPackageList] = useState(formstate?.packages ?? []);
-    const [instructorsList, setInstructorsList] = useState(formstate?.instructors ?? []);
+    const [instructorsList, setInstructorsList] = useState([]);
+    const [editInstructorsList, setEditInstructorsList] = useState(formstate?.instructorsList ?? []);
   
     const [categories, setCategories] = useState([]); 
     const [openImage, setOpenImage] = useState(false);
@@ -105,14 +110,21 @@ export const Syllabus = ({
     const [loading, setLoading] = useState(false);
     const [openPreview, setOpenPreview] = useState(false);
     const [packageFilter, setPackageFilter] = useState("");
-  
+    const [test, setTest]= useState([])
   // check if courseinfo exist then setSyllabus to existing syllabus
   useEffect(()=>{
     formstate?.syllabus?.length > 0 && setSyllabusses(formstate.syllabus)
     formstate?.packages?.length > 0 && setPackageList(formstate.packages)
     formstate?.faqs?.length > 0 && setFaq(formstate.faqs) 
-    
+    formstate?.instructors?.length > 0 && setEditInstructorsList(editInstructorsList.length > 0 ? editInstructorsList : formstate.instructors)
+
   },[courseData])
+
+  // useEffect(()=>{
+
+  // },[holder])
+
+  console.log({test})
   
   function changeHandler(e) {
     const { name, value } = e.target;
@@ -150,13 +162,15 @@ export const Syllabus = ({
          
         )
           throw new AdvancedError("All fields are required", 0);
+          let currentInstructor= [];
+          editInstructorsList.length >0 && editInstructorsList.forEach(tutor=>{currentInstructor.push(tutor.email)})
           let formdata = {
             ...formstate,
             type:"PACKAGE",
             syllabus: [...syllabuses],
             packages: [...packageList],
             faqs: [...faq],
-            instructors:[...instructorsList]
+            instructors:[...instructorsList, ...currentInstructor]
           }
 
         const res = type === "admin" ? await adminUpdateCourse( userdata?.token, formstate?.courseId,  formdata) : await updateCourse( userdata?.token, formstate?.courseId, formdata, userdata.token );
@@ -230,6 +244,8 @@ export const Syllabus = ({
           draggable: true,
           progress: undefined,
         });
+
+        navigate(-1)
       }
     } catch (err) {
       toast.error(err.message, {
@@ -328,14 +344,21 @@ export const Syllabus = ({
   function deleteOption(e){
     let newSyllabusArr = syllabuses.filter((item, index) => (item.title + index) !== e)
     setSyllabusses(newSyllabusArr)
+    setFormstate({...formstate, syllabus:newSyllabusArr})
+
   }
   function deletePackage(e){
     let newPackageList = packageList.filter((item, index) => (item.title + index) !== e)
     setFormstate({...formstate, packages:newPackageList})
   }
 
+  function removeTeacher(e){
+    let currentTeachers = editInstructorsList.filter(item=>item.tutorId !== e)
+    console.log(currentTeachers)
+    setEditInstructorsList(currentTeachers)
+  }
 
-  console.log({instructorsList})
+
     return (
      <>
           <div className={clsx.edit__profile}>
@@ -475,6 +498,19 @@ export const Syllabus = ({
                 Add Syllabus
               </button>
               {type === "admin" && (<>
+                {location.search &&
+              <div className={clsx.form_group}>
+                <label htmlFor={"package"} className="form-label generic_label">
+                  Current Instructors
+                </label>
+                {editInstructorsList.length > 0 ? (
+                  editInstructorsList.map((item) =>  <Syllabus title={item.name} deleteOption={removeTeacher} index={item.tutorId} /> )
+                ) : (
+                  <h6>No instructor</h6>
+                )}
+              </div>
+                }
+              
               <div className={clsx.form_group}>
                 <label htmlFor={"package"} className="form-label generic_label">
                   Instructors
