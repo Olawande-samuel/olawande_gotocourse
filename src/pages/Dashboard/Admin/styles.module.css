@@ -501,12 +501,26 @@
     font-size: 0.6rem;
 }
 
+.admin__notification_button {
+    border: 0.5px solid;
+    background: #fff;
+    color:var(--theme-orange);
+    padding: 4px;
+    transition: all .53s ease;
+    font-size:11px;
+}
 
+.admin__notification_button:hover{
+    background:var(--theme-orange);
+    color:#fff;
+
+}
 .addniche_button, .addcareer_button {
     font-size: 0.8rem;
     background-color:rgba(208, 204, 204, 0.5);
 
 }
+
 
 .syllabus_container {
     display: flex;

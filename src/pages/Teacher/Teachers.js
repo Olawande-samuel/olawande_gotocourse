@@ -22,7 +22,9 @@ import { witnesses, Card as MentorsCard } from "../../components/Mentors";
 import Input from "../../components/Input";
 import Success from "../../images/paymentSuccess.png"
 import Failure from "../../images/Bad Gateway.png"
+
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+
 const KEY = "gotocourse-userdata";
 
 const nav = [
@@ -328,17 +330,17 @@ export const Payment = () => {
                   {paymentData.fullPayment === false ? 
                   <>
                     <div className=""> 
-                    <small className="text-info" style={{fontSize:"12px"}}>*Fees must be paid in not more than four Installments</small>
+                    <small className="text-info" style={{fontSize:"12px"}}>*Fees must be paid in not more than four Installments. Each instalment carries a $100 extra charge</small>
                     <div className="form-group">
-                      <input type="radio" name="initialPayment" id="2"  onChange={handleInstallmentChoice} value={ paymentDetails?.price / 2} />
-                      <label htmlFor="2" className="form-label generic_label ms-2 ">Pay in two installments of { paymentDetails?.price / 2} each</label>
+                      <input type="radio" name="initialPayment" id="2"  onChange={handleInstallmentChoice} value={ (paymentDetails?.price / 2) + 100} />
+                      <label htmlFor="2" className="form-label generic_label ms-2 ">Pay in two installments of { (paymentDetails?.price / 2) + 100} each</label>
                     </div>
                     <div className="text-center">
                       <small className="text-center text-dark">or</small>
                     </div>
                     <div className="form-group">
-                      <input type="radio" name="initialPayment" id="4" onChange={handleInstallmentChoice}  value={ paymentDetails?.price / 4} />
-                      <label htmlFor="4" className="form-label generic_label ms-2 ">Pay in four installments of { paymentDetails?.price / 4} each</label>
+                      <input type="radio" name="initialPayment" id="4" onChange={handleInstallmentChoice}  value={ (paymentDetails?.price / 4) + 100} />
+                      <label htmlFor="4" className="form-label generic_label ms-2 ">Pay in four installments of { (paymentDetails?.price / 4) + 100} each</label>
                     </div>
                     </div>
                     <hr /> 

@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-import { Switch, Modal, Box } from "@mui/material";
+import { Switch, Modal, Box, Skeleton } from "@mui/material";
 import { AiOutlineMenu, AiOutlineDelete, AiTwotoneEdit } from "react-icons/ai";
 
 import { Sidebar, Searchbar } from "../components";
@@ -1358,6 +1358,7 @@ export function Teachers() {
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const {
+
     adminTeacherFunctions: { fetch }
   } = useAuth();
   useEffect(() => {
@@ -2180,6 +2181,7 @@ export function CourseDetails({}){
       const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
+        setFormstate({...formstate, status: "active"})
         toast.success(message, {
           position: "top-right",
           autoClose: 4000,
@@ -2245,7 +2247,7 @@ export function CourseDetails({}){
               ></textarea>
             </div>
 
-            <div className={clsx.form_group}>
+            {/* <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
                 <label>Name of teachers</label>
                 {
@@ -2296,7 +2298,7 @@ export function CourseDetails({}){
               <button type="button" className={clsx.form_group__button}>
                 Add Student
               </button>
-            </div>
+            </div> */}
 
             <div className={clsx.form_group} style={{marginTop: 40}}>
               <label>Change Course Status</label>
@@ -3137,7 +3139,7 @@ export function Notification() {
   const flag = useRef(false);
   let userdata = getItem(KEY);
   const [loader, setLoader] = useState(false);
-  const {adminFunctions: { fetchNotifications } } = useAuth(); 
+  const {generalState, setGeneralState, adminFunctions: { fetchNotifications } } = useAuth(); 
   
   const [notifications, setNotifications] = useState([]);
 
@@ -3145,12 +3147,14 @@ export function Notification() {
     if(flag.current) return;
       (async() => {
         try{
+          setLoader(true)
           const res = await fetchNotifications(userdata?.token);
           const {message, success, statusCode} = res;
           if(!success) throw new AdvancedError(message, statusCode);
           const {data} = res
           if(data.length > 0) {
             setNotifications(data)
+            setGeneralState({...generalState, notifications: 0})
           }
         }catch(err){
           toast.error(err.message, {
@@ -3167,20 +3171,35 @@ export function Notification() {
         }
       })()
       flag.current = true;
-    },[])
+  },[])
+  
+  function handleRead(){
+
+  }
   return (
     <Admin header={"Notifications"}>
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h1>My notifications</h1>
-          <div className={clsx.admin__student_main}>
-            {notifications.length > 0 ? notifications.map((notification, index)=>(
-              <div key={index} className={clsx["notification"]}>
+          <div className={clsx.admin__student_main}> 
+            {loader ? <div>
+                <Skeleton variant="rectangular" width={"100%"} height={58} />
+                <br />
+                <Skeleton variant="rectangular" width={"100%"} height={58} />
+                <br />
+
+                <Skeleton variant="rectangular" width={"100%"} height={58} />
+              </div> : 
+
+              notifications.length > 0 ? notifications.map((notification, index)=>(
+                <div key={index} className={clsx["notification"]}>
                 <span>{getDate(notification.createdAt)}</span>
                 <span>{notification.message}</span>
-              </div> 
-            )) : <p>No notifications found</p>}
-          </div>
+                {/* <button className={clsx.admin__notification_button} onClick={()=>handleRead(notification._id)} >Mark as read</button> */}
+                </div> 
+                )) : <p>No notifications found</p>
+            }
+              </div>
         </div>
       </div>
     </Admin>
@@ -3696,15 +3715,40 @@ export function Chat() {
 
 
 export const Admin = ({ children, header }) => {
-  const {
-    generalState: { isMobile, showSidebar,loading },
-    generalState,
-    setGeneralState,
-  } = useAuth();
+  const { generalState: { isMobile, showSidebar,loading }, generalState, setGeneralState, adminFunctions:{fetchNotifications} } = useAuth();
+  const {getItem} = useLocalStorage();
 
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
   const toggleSidebar = () => {
     setGeneralState({ ...generalState, showSidebar: !showSidebar });
   };
+
+  useEffect(() => {
+    if(flag.current) return;
+      (async() => {
+        try{
+          const res = await fetchNotifications(userdata?.token);
+          const {message, success, statusCode} = res;
+          if(!success) throw new AdvancedError(message, statusCode);
+          const {data} = res
+          if(data.length > 0) {
+            setGeneralState({...generalState, notifications: data.length})
+          }
+        }catch(err){
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })()
+      flag.current = true;
+    },[])
   return (
     <GuardedRoute>
       <div className={clsx["admin"]}>

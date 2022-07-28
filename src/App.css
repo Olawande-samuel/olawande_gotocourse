@@ -1140,6 +1140,9 @@ font-size: 16px;
 .end_right {
   gap: .5rem;
 }
+.end_right a {
+  color: #fff;
+}
 .end_left span {
   margin-right: .3rem;
 }

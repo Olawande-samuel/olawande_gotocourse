@@ -95,10 +95,12 @@ export const Syllabus = ({
     const { syllabuses, addtoSyllabus, setSyllabusses } = useSyllabus();
     const [faq, setFaq] = useState(formstate?.faqs ?? []);
     const [packageList, setPackageList] = useState(formstate?.packages ?? []);
+    const [instructorsList, setInstructorsList] = useState(formstate?.instructors ?? []);
   
     const [categories, setCategories] = useState([]); 
     const [openImage, setOpenImage] = useState(false);
     const [openPackage, setOpenPackage] = useState(false);
+    const [openInstructor, setOpenInstructor] = useState(false);
     const [openFaq, setOpenFaq] = useState(false);
     const [loading, setLoading] = useState(false);
     const [openPreview, setOpenPreview] = useState(false);
@@ -127,6 +129,7 @@ export const Syllabus = ({
     e.preventDefault();
     setPreview({
       ...formstate,
+      type:"PACKAGE",
       syllabus: [...syllabuses],
       packages: [...packageList],
       faqs: [...faq],
@@ -149,9 +152,11 @@ export const Syllabus = ({
           throw new AdvancedError("All fields are required", 0);
           let formdata = {
             ...formstate,
+            type:"PACKAGE",
             syllabus: [...syllabuses],
             packages: [...packageList],
             faqs: [...faq],
+            instructors:[...instructorsList]
           }
 
         const res = type === "admin" ? await adminUpdateCourse( userdata?.token, formstate?.courseId,  formdata) : await updateCourse( userdata?.token, formstate?.courseId, formdata, userdata.token );
@@ -189,21 +194,23 @@ export const Syllabus = ({
       if (
         formstate.name === "" ||
         formstate.categoryName === "" ||
-        formstate.description === "" ||
-        formstate.price === ""
+        formstate.description === ""
       )
         throw new AdvancedError("All fields are required", 0);
       const res = type=== "admin" ? await adminAddCourse(
         {
           ...formstate,
+          type:"PACKAGE",
           syllabus: [...syllabuses],
           packages: [...packageList],
           faqs: [...faq],
+          instructors:[...instructorsList]
         },
         userdata.token
       ): await addCourse(
         {
           ...formstate,
+          type:"PACKAGE",
           syllabus: [...syllabuses],
           packages: [...packageList],
           faqs: [...faq],
@@ -294,8 +301,14 @@ export const Syllabus = ({
   const openPackageModal = () => {
     setOpenPackage(true);
   };
+  const openInstructorModal = () => {
+    setOpenInstructor(true);
+  };
   const handleClosePackage = () => {
     setOpenPackage(false);
+  };
+  const handleCloseInstuctors = () => {
+    setOpenInstructor(false);
   };
   const openFaqModal = () => {
     setOpenFaq(true);
@@ -320,6 +333,9 @@ export const Syllabus = ({
     let newPackageList = packageList.filter((item, index) => (item.title + index) !== e)
     setFormstate({...formstate, packages:newPackageList})
   }
+
+
+  console.log({instructorsList})
     return (
      <>
           <div className={clsx.edit__profile}>
@@ -424,7 +440,7 @@ export const Syllabus = ({
   
               <button
                 className="btn btn-primary my-3"
-                style={{ backgroundColor: "var(--theme-blue)" }}
+                style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
                 type="button"
                 onClick={openPackageModal}
               >
@@ -452,12 +468,34 @@ export const Syllabus = ({
   
               <button
                 className="btn btn-primary my-3"
-                style={{ backgroundColor: "var(--theme-blue)" }}
+                style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
                 type="button"
                 onClick={openModal}
               >
                 Add Syllabus
               </button>
+              {type === "admin" && (<>
+              <div className={clsx.form_group}>
+                <label htmlFor={"package"} className="form-label generic_label">
+                  Instructors
+                </label>
+                {instructorsList.length > 0 ? (
+                  instructorsList.map((item) => <p>{item}</p>)
+                ) : (
+                  <h6>No instructor</h6>
+                )}
+              </div>
+  
+              <button
+                className="btn btn-primary my-3"
+                style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
+                type="button"
+                onClick={openInstructorModal}
+              >
+                Add Instructor
+              </button>
+              </>)}
+
               <div className={clsx.form_group}>
                 <label htmlFor={"package"} className="form-label generic_label">
                   FAQ
@@ -484,7 +522,7 @@ export const Syllabus = ({
                     style={{
                       padding: "10px 44px",
                       borderRadius: "8px",
-                      fontSize: "16px",
+                      fontSize: "14px",
                       fontWeight: "600",
                     }}
                   >
@@ -542,6 +580,15 @@ export const Syllabus = ({
           setOpen={setOpen}
           handleClosePackage={handleClosePackage}
         />
+        {type === "admin" && 
+        <AddInstructors
+          openInstructors={openInstructor}
+          addInstructor={setInstructorsList}
+          list={instructorsList}
+          setOpen={setOpen}
+          handleCloseInstructors={handleCloseInstuctors}
+          />
+        }
         <AddFaq
           openFaq={openFaq}
           handleCloseFaq={handleCloseFaq}
@@ -765,6 +812,143 @@ export const Syllabus = ({
           <button
             className="btn btn-primary my-3"
             onClick={addPackageHandler}
+            style={{ backgroundColor: "var(--theme-blue)" }}
+          >
+            Add
+          </button>
+        </Box>
+      </Modal>
+    );
+  }
+  function AddInstructors({ openInstructors, handleCloseInstructors, list, addInstructor }) {
+    const [newInstructor, setNewInstructor] = useState("");
+    const style = {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      minWidth: 600,
+      background: "#fff",
+      border: "1px solid #eee",
+      borderRadius: "10px",
+      boxShadow: 24,
+      p: 6,
+      padding: "4rem 2rem",
+  };
+  const { getItem } = useLocalStorage();
+  let userdata = getItem(KEY);
+  const flag = useRef(false);
+  const [teachers, setTeachers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const {
+    
+    adminTeacherFunctions: { fetch }
+  } = useAuth();
+    function handleChange(e) {
+      setNewInstructor(e.target.value);
+    }
+  
+    console.log(teachers)
+    function addInstructorHandler() {
+      if (!newInstructor) {
+        toast.error("All fields are required", {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        addInstructor([...list, newInstructor]);
+        toast.success("Instructor added successfully", {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setNewInstructor({
+          title: "",
+          price: "",
+          description: "",
+        });
+      }
+    }
+
+    useEffect(() => {
+      if(flag.current) return;
+      (async () => {
+        try {
+          const token = userdata?.token;
+          const res = await fetch(token);
+          const { message, success, statusCode } = res;
+          if (!success) throw new AdvancedError(message, statusCode);
+          else {
+            const { data } = res;
+            //do somethings
+            setTeachers(_=>  data);
+            toast.success(message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+        } catch (err) {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }finally {
+          setLoading(_ => false);
+        }
+      })();
+      flag.current = true;
+    }, []);
+  
+    return (
+      <Modal
+        open={openInstructors}
+        onClose={handleCloseInstructors}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box style={style}>
+          <h5
+            className="lead text-primary"
+            style={{ color: "var(--theme-blue)" }}
+          >
+            Add Instructor
+          </h5>
+          <div className={clsx.form_group}>
+            <label htmlFor={"package"}>Type</label>
+            <select
+              name="title"
+              value={newInstructor}
+              onChange={handleChange}
+              className="form-select generic_input"
+            >
+              <option value="">Choose an instructor</option>
+              {teachers.filter((teacher)=>teacher.userType !== "mentor").map(teacher=>(
+                <option value={teacher.email}>{teacher.firstName} - {teacher.lastName}</option>
+              ))}
+            </select>
+          </div>
+          <button
+            className="btn btn-primary my-3"
+            onClick={addInstructorHandler}
             style={{ backgroundColor: "var(--theme-blue)" }}
           >
             Add

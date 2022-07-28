@@ -15,7 +15,10 @@ const AuthContextProvider = ({children}) => {
         showSidebar: false,
         teacherProfile: null,
         navHeight: "",
-        loading: false
+        loading: false,
+        notifications:0,
+        chat:0
+
     })
     useEffect(() => {
         console.log("Rendering");

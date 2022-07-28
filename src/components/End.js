@@ -10,10 +10,18 @@ const End = () => {
           <span>&copy; 2022 Gotocourse Inc.</span>
         </div>
         <div className="end_right d-flex ">
-        <FaFacebook />
-        <FaInstagram />
-        <FaTwitter />
-        <FaEnvelope />
+          <a href="https://www.facebook.com/realztechinstitute/">
+           <FaFacebook />
+          </a>
+          <a href="https://instagram.com/mygotocourse?igshid=YmMyMTA2M2Y=">
+           <FaInstagram />
+          </a>
+          <a href="https://twitter.com/mygotocourse?s=09">
+           <FaTwitter />
+          </a>
+          <a href="mailto:info@gotocourse.us">
+           <FaEnvelope />
+          </a>
         </div>
       </div>
     </div>
