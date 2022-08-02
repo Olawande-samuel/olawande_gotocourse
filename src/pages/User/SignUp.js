@@ -13,6 +13,8 @@ import { useLocalStorage } from "../../hooks";
 
 const KEY = 'gotocourse-userdata';
 const SignUp = () => {
+  const emailReg = new RegExp(/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/)
+  const passReg = new RegExp(/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/)
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -23,6 +25,7 @@ const SignUp = () => {
     userType: "student",
     fullname: "",
   });
+  const [focus, setFocus] =useState(false)
   useEffect(() => {
     if (data.fullname !== "") {
       const name = data.fullname.split(" ");
@@ -49,16 +52,20 @@ const SignUp = () => {
     });
   };
 
+  console.log(emailReg.test(data.email))
+  console.log(passReg.test(data.password))
+  console.log(data.password)
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       let { retype_password, ...others } = data;
+      if(!emailReg.test(others.email) && !passReg.test(others.password)) throw new AdvancedError("Invalid email or password")
       if (others.email.trim() === "" || others.password.trim() === "") throw new AdvancedError("Fields cannot be empty", 0);
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
       const response = await register(others, "user");
-
       let { success, message, statusCode } = response;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -132,7 +139,18 @@ const SignUp = () => {
             value={data.password}
             handleChange={handleChange}
             placeholder="Password"
+            onFocus ={()=>setFocus(true)}
           />
+          {!passReg.test(data.password) &&
+            <small style={{fontSize:"11px"}}>
+              <p className="text-danger">Password must satify the following conditions</p>
+              <p className="text-danger"> - At least one upper case English letter</p>
+              <p className="text-danger"> - At least one lower case English letter</p>
+              <p className="text-danger"> - At least one digit</p>
+              <p className="text-danger"> - At least one special character</p>
+              <p className="text-danger"> - Minimum eight in length</p>
+            </small>
+          }
           <Password
             label="Confirm Password"
             name="retype_password"

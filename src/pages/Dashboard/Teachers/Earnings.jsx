@@ -13,49 +13,58 @@ import { useLocalStorage } from "../../../hooks";
 import {KEY} from "../../../constants"
 import MyChart from "../../../components/Chart";
 
+const data = [
+  {
+    id: 1,
+    title: "Day",
+  },
+  {
+    id: 2,
+    title: "Week",
+  },
+  {
+    id: 3,
+    title: "1 month",
+  },
+  {
+    id: 4,
+    title: "3 months",
+  },
+  {
+    id: 5,
+    title: "6 months",
+  },
+  {
+    id: 6,
+    title: "1 year",
+  },
+];
 export default function Earnings() {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
-    const data = [
-      {
-        id: 1,
-        title: "Day",
-      },
-      {
-        id: 2,
-        title: "Week",
-      },
-      {
-        id: 3,
-        title: "1 month",
-      },
-      {
-        id: 4,
-        title: "3 months",
-      },
-      {
-        id: 5,
-        title: "6 months",
-      },
-      {
-        id: 6,
-        title: "1 year",
-      },
-    ];
     const {
       generalState: { isMobile },
     } = useAuth();
     return (
       <Teachers isMobile={isMobile} userdata={userdata}>
         <div className={clsx.teachers_profile}>
-          <div
-            className="d-flex align-items-center mt-3 mb-5"
+          <AllEarnings />
+        </div>
+      </Teachers>
+    );
+  }
+  
+  export function AllEarnings (){
+    return (
+      <>
+      <div
+            className="d-flex align-items-center mt-3 mb-5 flex-wrap"
             style={{ gap: "1rem" }}
           >
             <i>
               <FiFilter />
             </i>
-            <span>Filter by: </span>
+            <span style={{fontSize:"0.8rem"}}>Filter by: </span>
             {data.map((date, i) => (
               <FilterButton key={i} title={date.title} />
             ))}
@@ -68,20 +77,21 @@ export default function Earnings() {
             <EarningsCard title="Per Course" type="Cybersecurity" value="0" />
             <EarningsCard total={true} value="0" />
           </div>
+          <div  className="overflow-auto">
           <MyChart />
-        </div>
-      </Teachers>
-    );
+          </div>
+      </>
+    )
   }
-  
-  function FilterButton({ title }) {
+  export function FilterButton({ title }) {
     return (
       <button
         style={{
           background: "#FFFFFF",
           border: "1px solid #9F9F9F",
           borderRadius: "10px",
-          padding: "3px 13px",
+          padding: "3px 10px",
+          fontSize: "0.8rem"
         }}
         value={title}
       >

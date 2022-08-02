@@ -101,6 +101,11 @@ const Sidebar = ({isMobile}) => {
 
         },
         {
+            icon: IoIosCash,
+            path: "earnings",
+            title: "Earnings"
+        },
+        {
             icon:AiOutlineSetting,
             path: "settings",
             title: "Settings"

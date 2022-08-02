@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect, useRef} from "react";
 import { Link } from "react-router-dom";
 import SwiperCore, { Autoplay } from "swiper";
 import { motion } from "framer-motion";
@@ -17,6 +17,7 @@ import "swiper/css/effect-creative";
 import { useAuth } from "../contexts/Auth";
 
 const Hero = () => {
+  const ref = useRef()
   SwiperCore.use([Autoplay]);
   const teacher = {
     title: "Endless Possibilities With Borderless Learning",
@@ -64,6 +65,26 @@ const Hero = () => {
 
     
   }; 
+
+  // useEffect(()=>{
+  //   if (ref.current) return;
+  //   try {
+  //     setGeneralState({ ...generalState, loading: true });
+  //     const res = await fetchMentors();
+  //     const { success, message, statusCode, data } = res;
+  //     setGeneralState({ ...generalState, loading: false });
+  //     if (!success || statusCode !== 1)
+  //       throw new AdvancedError(message, statusCode);
+  //     if (data.length > 0) {
+  //       setMentors(data);
+  //     }
+  //   } catch (err) {
+  //     setGeneralState({ ...generalState, loading: false });
+  //   }
+
+  //   ref.current = true
+  // },[])
+
   const {  generalState: { navHeight }, } = useAuth();
   return (
     <section className="hero" style={{height: `min(calc(100vh - ${navHeight}px ), 530px)`}}>

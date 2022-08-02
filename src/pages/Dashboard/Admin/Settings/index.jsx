@@ -123,10 +123,9 @@ function HomepageHero({showButtons, category}){
   
   async function onSubmit(e){
     e.preventDefault()
-    // if(category === "LpHero" ){
       try {
         setLoading(true)
-        const response = category === "LpHero"  ? await AddLPHero(formstate, userdata?.token): category === "TpHero" ? await AddTPHero(formstate, userdata?.token): category === "Cohort" ? await AddCohortSection (formstate, userdata?.token): await AddSelfpacedSection(formstate, userdata?.token)
+        const response = category === "LpHero" ? await AddLPHero(formstate, userdata?.token): category === "TpHero" ? await AddTPHero(formstate, userdata?.token): category === "Cohort" ? await AddCohortSection (formstate, userdata?.token): await AddSelfpacedSection(formstate, userdata?.token)
         const { success, message, statusCode } = response;
         if (!success || statusCode !== 1)
           throw new AdvancedError(message, statusCode);
@@ -136,7 +135,7 @@ function HomepageHero({showButtons, category}){
           position: "top-right",
           autoClose: 4000,
           hideProgressBar: true,
-          closeOnClick: true,
+          closeOnClick: true, 
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
@@ -155,8 +154,6 @@ function HomepageHero({showButtons, category}){
         setLoading(false)
       }
     // } else if (category === "TpHero"){
-
-    
   }
   return(
     <div className="row">

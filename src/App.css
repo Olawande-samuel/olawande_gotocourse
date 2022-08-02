@@ -1734,7 +1734,9 @@ line-height: 16px;
     justify-content: space-between;
     align-items: center;
   }
-  
+  .chart_container {
+    overflow:scroll;
+  }
 }
 /* ***************ABOUT********************* */
 .about_wrapper p {
