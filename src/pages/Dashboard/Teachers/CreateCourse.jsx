@@ -27,16 +27,19 @@ export const Syllabus = ({
     packageItems,
     setPackageList,
   }) => {
+    const location = useLocation()
     return (
       <div className={clsx.syllabus_container}>
         <h5>{title}</h5>
         {packagelist && <p>{price}</p>}
         <p>{description}</p>
+        {location.search && 
         <p>
           <i className="text-danger" style={{cursor:"pointer"}} onClick={()=>deleteOption(index)}>
             <BiTrash />
           </i>
         </p>
+        }
       </div>
     );
   };
@@ -81,7 +84,7 @@ export const Syllabus = ({
   
     });
   
-    let courseData;   
+    let courseData = getItem("gotocourse-courseEdit")
     useEffect(()=>{
       if(location.search){
         courseData = getItem("gotocourse-courseEdit")
@@ -119,7 +122,7 @@ export const Syllabus = ({
     formstate?.instructors?.length > 0 && setEditInstructorsList(editInstructorsList.length > 0 ? editInstructorsList : formstate.instructors)
 
   },[courseData])
-
+console.log( formstate.packages)
   // useEffect(()=>{
 
   // },[holder])

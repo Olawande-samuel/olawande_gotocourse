@@ -12,6 +12,10 @@ import UploadForm from "../../../../components/UploadForm";
 import Input from "../../../../components/Input";
 
 import {UploadImageIcon} from "../../Teachers/CreateCourse"
+import { useLocalStorage } from '../../../../hooks';
+import { useAuth } from '../../../../contexts/Auth';
+import { AdvancedError } from '../../../../classes';
+import { toast } from 'react-toastify';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -52,18 +56,22 @@ export default function Settings() {
     {
       title:"Homepage Hero",
       hero: true,
+      category:"LpHero"
     },
     {
       title:"Homepage Cohort",
       hero: false,
+      category:"Cohort"
     }, 
     {
       title:"Homepage Self Paced" ,
       hero: false,  
+      category:"selfPaced"
     },
     {
       title:"Teachers Hero",
       hero: true,
+      category:"TpHero"
     }
   ]
   const handleChange = (event, newValue) => {
@@ -86,7 +94,7 @@ export default function Settings() {
                 </Box>
                 {title.map((item, index)=>(
                   <TabPanel value={value} index={index}>
-                    <HomepageHero showButtons={item.hero}/>
+                    <HomepageHero showButtons={item.hero} category={item.category} />
                 </TabPanel>
                 ))}
               </Box>
@@ -98,19 +106,62 @@ export default function Settings() {
 }
 
 
-function HomepageHero({showButtons}){
+function HomepageHero({showButtons, category}){
   const[formstate, setFormstate] = React.useState({})
   const [openImage, setOpenImage] = useState(false);
-
+  const {adminFunctions: {AddLPHero, AddTPHero, AddCohortSection, AddSelfpacedSection}} = useAuth()
+  const {getItem} = useLocalStorage()
+  const [loading, setLoading]= useState(false)
+  const userdata = getItem("gotocourse-userdata")
   function changeHandler(e){
     setFormstate({...formstate, [e.target.name]: e.target.value})
   }
   function showUploadFormHandler() {
     setOpenImage((_) => true);
   }
+
+  
+  async function onSubmit(e){
+    e.preventDefault()
+    // if(category === "LpHero" ){
+      try {
+        setLoading(true)
+        const response = category === "LpHero"  ? await AddLPHero(formstate, userdata?.token): category === "TpHero" ? await AddTPHero(formstate, userdata?.token): category === "Cohort" ? await AddCohortSection (formstate, userdata?.token): await AddSelfpacedSection(formstate, userdata?.token)
+        const { success, message, statusCode } = response;
+        if (!success || statusCode !== 1)
+          throw new AdvancedError(message, statusCode);
+        const { data } = response;
+        console.log(data)
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } catch (error) {
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } finally {
+        setLoading(false)
+      }
+    // } else if (category === "TpHero"){
+
+    
+  }
   return(
     <div className="row">
       <div className="col-lg-8">
+        <form  className="form" onSubmit={onSubmit}>
         <UploadForm isOpen={openImage} setIsOpen={setOpenImage} />
         <div
           className={adminClsx.upload__file_box}
@@ -119,7 +170,7 @@ function HomepageHero({showButtons}){
           <img src={vector} alt={"Placeholder"} />
           <p>Upload Image</p>
         </div>
-        <Input label="Image file name" name="img" type="text" value={formstate.img} handleChange={changeHandler} />
+        <Input label="Image file name" name="image" type="text" value={formstate.image} handleChange={changeHandler} />
         <Input label="Heading" name="heading" type="text" value={formstate.heading} handleChange={changeHandler} />
         <div className="form-group my-2">
           <label htmlFor="description" className="form-label generic_label">Description</label>
@@ -130,12 +181,12 @@ function HomepageHero({showButtons}){
           <label htmlFor="description" className="form-label generic_label d-block">Button Color</label>
           <div className="d-flex flex-wrap">
             <div>
-              <input type="radio" name="color" id="orange" handleChange={changeHandler} className="editsectionsradio" style={{color:"red"}} />
+              <input type="radio" name="buttonColor" id="orange" value={"#F75C4E"} handleChange={changeHandler} className="editsectionsradio" style={{color:"red"}} />
               <label htmlFor="orange" className="form-label generic_label ms-1" style={{color:"var(--theme-orange)"}}>Gotocourse Orange</label>
             </div>
 
             <div>
-              <input type="radio" name="color" id="blue"  handleChange={changeHandler} className="ms-md-5" />
+              <input type="radio" name="buttonColor" id="blue"  value={"#0C2191"} handleChange={changeHandler} className="ms-md-5" />
               <label htmlFor="blue" className="form-label generic_label ms-1" style={{color:"var(--theme-blue)"}}>Gotocourse Blue</label>
             </div>
           </div>
@@ -143,11 +194,18 @@ function HomepageHero({showButtons}){
         }
         <button
             className="btn btn-primary my-3"
-            // onClick={addSyllabusHandler}
             style={{ backgroundColor: "var(--theme-blue)" }}
+            type="submit"
           >
-            Save
+            {loading ? 
+            <div className="spinner-border text-light">
+               <span className="visually-hidden">Loading...</span>
+            </div>
+           :
+           "Save"
+          }
           </button>
+        </form>
       </div>
     </div>
   )

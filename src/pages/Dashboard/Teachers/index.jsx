@@ -40,7 +40,7 @@ export function CourseInfo() {
   const {id} = useParams()
   const { generalState: { courseInfo, loading }, generalState, setGeneralState, teacherFunctions: { fetchCourse, deleteCourse }, } = useAuth();
 
-  const { getItem } = useLocalStorage();
+  const { getItem, updateItem } = useLocalStorage();
   let userdata = getItem(KEY);
   
   const [btnloading, setLoading]= useState(false)
@@ -48,7 +48,9 @@ export function CourseInfo() {
 
   async function handleCourseEdit(e){
     setGeneralState({...generalState, courseInfo: formstate})
-      navigate("/teacher/courses/create")
+    updateItem("gotocourse-courseEdit", formstate )
+
+      navigate(`/teacher/courses/create?edit=${id}`)
   }
   async function deleteCourseInfo(e) {
     e.preventDefault();
@@ -202,13 +204,13 @@ export function CourseInfo() {
                 <h6>No Packages</h6>
               )}
             </div>
-            <Input
+            {/* <Input
               label="Price"
               name="price"
               type="text"
               value={formstate.price}
               readOnly={true}
-            />
+            /> */}
 
             <div className={clsx.form_group}>
               <label className="form-label generic_label">Syllabus</label>

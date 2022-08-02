@@ -7,6 +7,8 @@ import {BiCategory, BiBell} from "react-icons/bi";
 import {FaTwitch} from "react-icons/fa";
 import {useNavigate, useLocation, NavLink} from "react-router-dom";
 import {FiGift, FiSend, FiBookOpen} from "react-icons/fi";
+import {FaRegMoneyBillAlt} from "react-icons/fa";
+
 import {motion} from "framer-motion"
 
 
@@ -128,6 +130,11 @@ const Sidebar = ({isMobile}) => {
             icon: MdHistory,
             path: "history",
             title: "History"
+        },
+        {
+            icon: FaRegMoneyBillAlt,
+            path: "fees",
+            title: "Fees"
         },
     ] : [
         {

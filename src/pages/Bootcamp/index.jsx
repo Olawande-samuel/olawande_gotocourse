@@ -100,7 +100,14 @@ const Bootcamp = () => {
                         </div> */}
                     </div>
                     {bootcampInfo?.instructorName ? 
-                    <button type="button" onClick={()=> navigate("payment")}>Apply Now</button>
+                    <button type="button" onClick={()=> {
+                        localStorage.setItem("gotocourse-paymentDetails", JSON.stringify({
+                            title:bootcampInfo.title,
+                            courseId:bootcampInfo.bootcampId,
+                            price:500
+                        }))
+                        navigate("payment")
+                    }}>Apply Now</button>
                     : null
                     }
                 </div>

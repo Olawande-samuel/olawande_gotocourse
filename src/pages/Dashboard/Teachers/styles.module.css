@@ -341,10 +341,12 @@
 
 .syllabus_container h5 {
     font-size: 0.9rem;
+    margin-bottom: 0;
 }
 
 .syllabus_container p {
     font-size: 0.7rem;
     letter-spacing: 0.4px;
     color: var(--textColorLight);
+    margin-bottom: 0;
 }

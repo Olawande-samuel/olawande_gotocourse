@@ -1903,18 +1903,21 @@ line-height: 16px;
 }
 @media screen and (max-width: 468px){
   
-    .services .services_box {
-      flex: 100% 0;
-      margin-bottom:1.5rem;
-    }
-  
+  .services .services_box {
+    flex: 100% 0;
+    margin-bottom:1.5rem;
+  }
 
-    .join_button_wrapper {
-      flex-direction: column;
-    }
-    .form-wrapper {
-      padding: 16px 20px;
-    }
+
+  .join_button_wrapper {
+    flex-direction: column;
+  }
+  .form-wrapper {
+    padding: 16px 20px;
+  }
+  .btn-plain {
+    padding: 0.375rem .5rem !important;
+  }
 }
 
 
@@ -1961,7 +1964,11 @@ line-height: 16px;
 .earnings_card .card-body .earnings_card_total small {
   font-size: 18px;
 }
-
+.wish-card-body  {
+  display: flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
 .wishlist_cards {
   display: grid;
   grid-template-columns:repeat(auto-fit, minmax(min(200px, 100%), 1fr));

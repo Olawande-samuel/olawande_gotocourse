@@ -85,7 +85,7 @@ export default Upcoming
 const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all})=> {
   const navigate = useNavigate();
   const flagRef = useRef(null)
-
+console.log(all)
   const style ={
     flag:{
         top:0,
@@ -117,6 +117,7 @@ const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endD
                                 <p>{duration}</p>
                             </div>
                             <div>
+
                                 <h6 className="fw-bolder">Date</h6>
                                 <p>{getDate(startDate)} -{getDate(endDate)}</p>
                             </div>

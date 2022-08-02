@@ -11,7 +11,7 @@ import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
 import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails, Chat as AdminChat,
   CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails, AddMentor,Mentors, MentorsDetail, Notification} from "./pages/Dashboard/Admin";
-import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit,
+import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Fees as StudentFees,
    Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps} from "./pages/Dashboard/Students";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, 
   Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo,  } from "./pages/Dashboard/Teachers";
@@ -70,6 +70,7 @@ function App() {
               <Route path="courses" element={<StudentCourses />} />
               <Route path="wishlist" element={<Wishlist />} />
               <Route path="history" element={<StudentHistory />} />
+              <Route path="fees" element={<StudentFees />} />
             </Route>
 
             <Route path="mentors" element={<Out/>}>

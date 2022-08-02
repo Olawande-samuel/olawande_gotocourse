@@ -486,12 +486,17 @@ const CheckoutForm = () => {
 
 export const PaymentStatus = ({success}) => {
   const navigate = useNavigate();
+  const { getItem } = useLocalStorage();
+
+
   const [status, setStatus]= useState({
     image: success ? Success : Failure,
     title:success ? "Payment Successful" : "Payment Denied",
     subtitle:success ? "You can start learning now": "Unable to process payment",
     action: success ? "Go to Dashboard" : "Try Again",
   })
+  
+  const userdata = getItem("gotocourse-userdata")
   return (
     <div className={style.paymentScreen}>
       <div className={style.paymentScreenBox}>
@@ -505,7 +510,7 @@ export const PaymentStatus = ({success}) => {
         <button
           className="button button-md"
           type="button"
-          onClick={() => success ? navigate("/") : navigate(-1)}
+          onClick={() => success ? navigate(userdata.userType === "student" ? "/student" : userdata.userType === "admin" ? "/admin" :"/teacher") : navigate(-1)}
         >
           {status.action}
         </button>

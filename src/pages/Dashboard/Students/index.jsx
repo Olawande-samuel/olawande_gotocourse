@@ -582,14 +582,18 @@ export function Wishlist(){
     )
 }
 
-function WishCard({courseId:id, courseName, courseDescription}){
+function WishCard({courseId:id, courseName, courseDescription, courseCategory}){
     const navigate = useNavigate();
     const [open, setOpen]= useState(false);
+
     function closeModal(){
         setOpen(false)
     }
-    function handleNavigate(){
-        navigate(`/categories/`)
+    function handleNavigate(category, name){
+        localStorage.setItem("gotocourse-courseId", id)
+        let courseCategory = category.split(" ").join("-")
+        let courseName = name.split(" ").join("-")
+        navigate(`/categories/${courseCategory}/courses/${courseName}`)
     }
     return(
         <div className="card wish">
@@ -598,9 +602,9 @@ function WishCard({courseId:id, courseName, courseDescription}){
                     <img src={trello} alt="icon" className="img-fluid" />
                 </div>
             <h5 className="fw-bold">{courseName}</h5>
-            <p className="">{courseDescription}</p> 
+            <p className="restricted_line">{courseDescription}</p> 
             <div className="d-flex justify-content-between">
-                <button className="btn btn-outline-primary" onClick={handleNavigate} style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)", fontWeight:"bold", padding:"0.5rem 1rem"}}>Register today</button>
+                <button className="btn btn-outline-primary" onClick={()=>handleNavigate(courseCategory, courseName)} style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)", fontWeight:"bold", padding:"0.5rem 1rem"}}>Register today</button>
                 <button className="btn btn-outline-primary" onClick={()=>setOpen(true)} style={{border:"1px solid var(--theme-orange)", color:"var(--theme-orange)", fontWeight:"bold", padding:"0.5rem 1rem"}}>
                     <i><FaRegTrashAlt /></i>
                 </button>
@@ -613,6 +617,7 @@ function WishCard({courseId:id, courseName, courseDescription}){
 
 function DeleteModal({id,open,handleClose}){
     const {generalState: {isMobile}, setGeneralState, generalState, studentFunctions:{deleteFromWishlist}} = useAuth();
+
     const {getItem} = useLocalStorage();
     let userdata = getItem(KEY);
     const style = {
@@ -870,6 +875,89 @@ export function History(){
                             tableContents.map(({status, date, package: p, coursePrice, amountPaid, courseName, amount}, i) => (
                                 <UserInfoCard key={i} status={status} num={i} comp={"History"} date={date} amount={amount}
                                 pack={`$ ${amountPaid}`} course={courseName} coursePrice={`$ ${coursePrice}`} />
+                            ))
+                        }
+                    </tbody>
+                </table>
+                }
+            
+        </div>
+        </Students>
+    )
+}
+export function Fees(){
+    const {generalState: {isMobile},generalState, setGeneralState, studentFunctions: {fetchFees}} = useAuth();
+    const {getItem} = useLocalStorage();
+    let userdata = getItem(KEY);
+    const [fees, setFees] = useState([]);
+    const ref = useRef(false)
+    useEffect(() => {
+        if(ref.current) return
+        if(userdata){
+            (async() => {
+                setGeneralState({...generalState, loading: true})
+                try{
+                    const res = await fetchFees(userdata?.token);
+                    setGeneralState({...generalState, loading: false})
+                    const {success, message, statusCode} = res;
+                    if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+                    else {
+                        const {data} = res;
+                        setFees(_ => data);
+                        toast.success(message, {
+                            position: "top-right",
+                            autoClose: 4000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+                }catch(err){
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+            })()
+        }
+
+        ref.current = true
+    }, [])
+
+    console.log({fees})
+    
+    const tableHeaders = ["No", "Type", "Date Initialted", "Due Date", "Status"]
+    const tableContents = fees.length > 0 ? fees : []
+    return ( 
+        <Students isMobile={isMobile} userdata={userdata}>               
+            <div className={clsx.students_profile}>
+                
+                {/* {courses.length === 0 ? 
+                
+                <NoDetail text="Nothing to See here" />
+                 : */}
+                 {
+                <table className={clsx.student_table}>
+                    <thead>
+                        <tr>
+                            {
+                                tableHeaders.map((el, i) => (
+                                    <th key={i}>{el}</th>
+                                    ))
+                            } 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            tableContents.map(({type,createdAt, dueDate, status, amount}, i) => (
+                                <UserInfoCard key={i} enrolled={type} coursePrice={new Date(dueDate).toLocaleDateString()} date={new Date(createdAt).toLocaleDateString()} type={status} num={i} amount={amount} />
                             ))
                         }
                     </tbody>

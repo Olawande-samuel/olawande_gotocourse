@@ -244,7 +244,8 @@ export const  CourseCard = ({ courseImg, name, description, category, instructor
   const navigate = useNavigate()
   return (
     <div className={`card ${style.course_card}`} style={{background:background, color:color, cursor: "pointer"}} onClick={()=>{
-      localStorage.setItem("gotocourse-courseInfo", JSON.stringify(course ))
+      localStorage.setItem("gotocourse-courseInfo", JSON.stringify(course))
+      localStorage.setItem("gotocourse-courseId", courseId)
       navigate(show === true ?  `courses/${name?.replace(/\s+/g, '-').toLowerCase()}`:`${name?.replace(/\s+/g, '-').toLowerCase()} `)
       }}>
       <img src={courseImg ? courseImg : placeholder} alt="" className="card-img-top mentor_image" />
@@ -451,7 +452,6 @@ export const Categories = () => {
 };
 
 export const CourseList = () => {
-
   const [courses, setCourses] =useState([])
   const {generalState, setGeneralState, otherFunctions: {searchCategories}} = useAuth();
   const [search, setSearch]= useState("")
@@ -721,59 +721,56 @@ export const CourseDetail = ({preview}) => {
 
 export const CourseProfile = ({preview}) => {
   const {generalState, setGeneralState, otherFunctions: {fetchCourse}, studentFunctions:{wishlistCourse}} = useAuth();
+  
   const {getItem} = useLocalStorage()
 
   const {id} = useParams()
   const ref = useRef(false);
   const navigate = useNavigate()
   const [loading, setLoading]= useState(false)
-  const [courseProfile, setCourseProfile]= useState(
-    {
-    courseId: "629931276651235bbb08dc97",
-    name:"Linear Programming",
-    category:"Software Development",
-    rating:4,
-    students: 120,
-    description:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo pariatur est exercitationem distinctio alias ducimus impedit? Aut asperiores pariatur porro quibusdam voluptate consequuntur, voluptas culpa ullam numquam fugiat officia autem.",
-    courseImg:"",
-    faqs: [],
-    packages:[
-      {
-        title: "Lorem ipsum dolor sit amet.",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, illum aut! Illo expedita saepe veritatis?",
-        price: 400
-      },
-      {
-        title: "Lorem ipsum dolor sit amet.",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, illum aut! Illo expedita saepe veritatis?",
-        price: 800
-      },
-      {
-        title: "Lorem ipsum dolor sit amet.",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, illum aut! Illo expedita saepe veritatis?",
-        price: 1200
-      }
-    ],
-    price:5000,
-    instructorId: "629747d8611a99e372b13230",
-    instructorName: "John Doe",
-    instructorProfileImg: "",
-    instructorRating: 4.5,
-    instructorLocation: "united states",
-    instructorCategory: "Data Science",
-    instructorJoinDate: "2022-06-01T11:04:56.016Z"
-    }
-  )
-  useEffect(()=>{
+  const [courseProfile, setCourseProfile]= useState()
 
+  useEffect(()=>{
     if(preview?.name) {
       setCourseProfile(preview)
     } else {
-    const data = localStorage.getItem("gotocourse-courseInfo");
-    if(data){
-      setCourseProfile(JSON.parse(data))
+      const id = localStorage.getItem("gotocourse-courseId");
+      if(id){
+        (async()=>{
+          try{
+          setGeneralState({...generalState, loading: true});
+          const res =  await fetchCourse(id)
+          const {success, message, statusCode} = res;
+          if(!success) throw new AdvancedError(message, statusCode);
+          else {
+            const {data} = res;
+            setCourseProfile(data)
+            toast.success(message, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+      }catch(err){
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }finally {
+          setGeneralState({...generalState, loading: false});
+      }
+    })()
+      }
     }
-  }
     ref.current = true
   },[id, preview])
 
@@ -944,7 +941,7 @@ export const CourseProfile = ({preview}) => {
                 <div className="d-flex g-3">
                   <div className={style.card_left}>
                     <div className={style.profile_img_wrapper}>
-                      <img src={courseProfile?.instructorProfileImg ?courseProfile?.instructorProfileImg : Algo} alt="" className={style.image} />
+                      <img src={courseProfile?.instructorProfileImg ?`https://loftywebtech.com/gotocourse/api/uploads/${courseProfile?.instructorProfileImg }`: Algo} alt="" className={style.image} />
                     </div>
                   </div>
 
@@ -1003,9 +1000,9 @@ export const CourseProfile = ({preview}) => {
           <p className={`subtitle ${style.subtitle}`}>
             With your learning needs in mind we have carefully curated the following learning options that offer flexibility, independence and learning at your own pace.
           </p>
-          <div id="packages" className={`row justify-content-around ${style.package_card_wrapper}`}>
+          <div id="packages" className={`row justify-content-around g-1 ${style.package_card_wrapper}`}>
             {courseProfile?.packages?.length > 0 && courseProfile.packages.map(item=>(
-            <div className="col-md-3" key={item.name}>
+            <div className="col-lg-3 col-md-4" key={item.name}>
               <PackageCard key={item.name} item={item} courseId={courseProfile.courseId} />
             </div>
             ))}
@@ -1084,8 +1081,9 @@ export const PackageCard = ({item, courseId}) => {
       navigate("/login")
     }
    }
+
   return (
-    <div className={`card ${style.package_card}`} style={{height:"100%"}}>
+    <div className={`card p-1 ${style.package_card}`} style={{height:"100%"}}>
       <div className="card-body d-flex flex-column justify-content-around" style={{}}>
         <p className={style.package_price}>$ {item.price}</p>
           <p className={style.package_title}>{item.title}</p>
