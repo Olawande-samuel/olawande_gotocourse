@@ -34,7 +34,6 @@ const Upcoming = () => {
         else if (statusCode === 1) {
           const { data } = res;
           setBootcamps( _ => data);
-          console.log(data);
         } else {
           throw new AdvancedError(message, statusCode);
         }
@@ -62,30 +61,6 @@ const Upcoming = () => {
             <h3 className="testimonials_title">Upcoming Bootcamps</h3>
           </header>
           <div className="upcoming_card_wrapper justify-content-around align-items-center">
-          {/* <Swiper
-            // install Swiper modules
-            modules={[Navigation, Pagination, Scrollbar, A11y]}
-            loop={true}
-            speed={1500}
-            autoplay={{delay:3500}}
-            spaceBetween={4}
-            slidesPerView={1}
-            navigation
-            pagination={{ clickable: true }}
-            scrollbar={{ draggable: true }}
-            // onSwiper={(swiper) => console.log(swiper)}
-            // onSlideChange={() => console.log('slide change')}
-            breakpoints= {{
-            // when window width is >= 320px
-            320: {
-                slidesPerView: 1,
-                spaceBetween: 16
-            },            
-            }}
-            >
-        <SwiperSlide>
-          </SwiperSlide>
-            </Swiper> */}
             {!loading ? (
                 bootcamps.slice(0, 3).map((bootcamp, index)=>(
                   <>
@@ -110,7 +85,7 @@ export default Upcoming
 const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all})=> {
   const navigate = useNavigate();
   const flagRef = useRef(null)
-
+console.log(all)
   const style ={
     flag:{
         top:0,
@@ -125,9 +100,6 @@ const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endD
     },
 
   }
-  useEffect(()=>{
-    // console.log(flagRef.current.clientWidth)
-  },[])
     return (
         <div className="card p-0 upcoming_card position-relative mx-auto" style={{borderRadius:"8px", height:"100%"}}>
           <div className="upcoming_card_img_wrapper">
@@ -145,6 +117,7 @@ const UpcomingCards = ({_id, title, duration, startTime, endTime, startDate,endD
                                 <p>{duration}</p>
                             </div>
                             <div>
+
                                 <h6 className="fw-bolder">Date</h6>
                                 <p>{getDate(startDate)} -{getDate(endDate)}</p>
                             </div>

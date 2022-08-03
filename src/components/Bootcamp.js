@@ -57,10 +57,6 @@ const bootcamps = [
 ];
 
 const Bootcamp = () => {
-  useEffect(() => {
-    console.log("Bootcamp is mounted");
-    return () => console.log("Bootcamp is unmounted");
-  }, [])
   return (
     <section className="bootcamp">
       <div className=" container-lg bootcamp_content">

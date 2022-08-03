@@ -41,7 +41,6 @@ function ContactForm({heightRef, setFormHeight}){
     useEffect(()=>{
         const height = ref.current.clientHeight
         setFormHeight(height)
-        console.log(height)
     },[])
 
     const [formstate, setFormstate] = useState({})

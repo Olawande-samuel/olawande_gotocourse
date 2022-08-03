@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BsEyeSlash, BsEye } from "react-icons/bs";
-const Password = ({ label, password, name, handleChange, value, placeholder }) => {
+const Password = ({ label, password, name, handleChange, value, placeholder, focus,blur }) => {
   const [type, setType] = useState(false);
   return (
     <div className="form-group mb-3">
@@ -16,6 +16,8 @@ const Password = ({ label, password, name, handleChange, value, placeholder }) =
           placeholder={placeholder}
           onChange={handleChange}
           value={value}
+          onFocus={focus}
+          onBlur={blur}
         />
         {password === "password" ? (
           <span className="eye">

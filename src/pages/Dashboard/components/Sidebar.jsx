@@ -1,11 +1,14 @@
 import {useEffect, useState,useRef} from "react";
+import {Badge} from "@mui/material"
 import {MdMessage, MdHistory} from "react-icons/md";
-import {AiOutlineClose} from "react-icons/ai";
+import {AiOutlineClose, AiOutlineSetting} from "react-icons/ai";
 import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash, IoIosHelpBuoy} from "react-icons/io";
 import {BiCategory, BiBell} from "react-icons/bi";
 import {FaTwitch} from "react-icons/fa";
 import {useNavigate, useLocation, NavLink} from "react-router-dom";
 import {FiGift, FiSend, FiBookOpen} from "react-icons/fi";
+import {FaRegMoneyBillAlt} from "react-icons/fa";
+
 import {motion} from "framer-motion"
 
 
@@ -18,13 +21,18 @@ import LogoutButton from "../../../components/LogoutButton";
 
 
 //mini-components
-function SidebarItem({icon: Icon, title, isMobile, path, ...props}){
+function SidebarItem({icon: Icon, title, isMobile, path,showBadge, ...props}){
+    const {generalState:{notifications, chat}} = useAuth(); 
+
     return (
         <div className={clsx.sidebar_item} {...props}>
+        <Badge badgeContent={showBadge ? path === "notifications" ? notifications : chat : 0} color="secondary" >
+
             <Icon className={clsx.sidebar_icon} />
             {isMobile && <span className={clsx.sidebar_item_title}>
                 {title}
             </span>}
+        </Badge>
         </div>
     )
 }
@@ -82,12 +90,25 @@ const Sidebar = ({isMobile}) => {
         {
             icon: BiBell,
             path: "notifications",
-            title: "Notifications"
+            title: "Notifications",
+            showBadge:true,
         },
         {
             icon:IoIosChatbubbles,
             path: "chat",
-            title: "Chat"
+            title: "Chat",
+            showBadge:true,
+
+        },
+        {
+            icon: IoIosCash,
+            path: "earnings",
+            title: "Earnings"
+        },
+        {
+            icon:AiOutlineSetting,
+            path: "settings",
+            title: "Settings"
         }
     ] : route === "students" ?  [
         {
@@ -114,6 +135,11 @@ const Sidebar = ({isMobile}) => {
             icon: MdHistory,
             path: "history",
             title: "History"
+        },
+        {
+            icon: FaRegMoneyBillAlt,
+            path: "fees",
+            title: "Fees"
         },
     ] : [
         {
@@ -143,12 +169,6 @@ const Sidebar = ({isMobile}) => {
         },
     ];
 
-    useEffect(() => {
-        console.log("Sidebar is mounted");
-
-        return () => console.log("Sidebar is unmounted");
-    }, [])
-
 const toggleSidebar = ()=>{
     setGeneralState({...generalState, showSidebar:!generalState.showSidebar})
 }
@@ -161,11 +181,11 @@ const toggleSidebar = ()=>{
             <Logo />
             <div className={clsx.sidebar_items} id="sidebar__items">
                 {
-                    data.map(({icon, path, title}, i) => (
+                    data.map(({icon, path, title,showBadge, admin}, i) => (
                         <NavLink onClick={toggleSidebar} to={`${route === "admin" ? '/admin' : route === 'students' ? '/students' : '/teacher'}${'/'+path}`}  key={i}>
                             <SidebarItem location={location}
                             isMobile={!isMobile} icon={icon} 
-                            title={title} path={path} />
+                            title={title} path={path} showBadge={showBadge} admin={admin} />
                         </NavLink>
                     ))
                 }

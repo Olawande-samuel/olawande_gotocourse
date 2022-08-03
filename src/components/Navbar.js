@@ -155,7 +155,7 @@ const Navbar = () => {
             )}
           </ul>
           {value?.token ? (
-            <Link to={`${value.userType === "student" ? "/students" : "/teacher"}`}>
+            <Link to={`${value.category === "Admin" ? "/admin" : value.userType === "student" ? "/students" : "/teacher"}`}>
               <div className="d-flex align-items-center" style={{color:"var(--theme-blue", fontSize:"20px"}}>
                 <i className="d-flex align-items-center justify-content-center me-2" style={{color:"var(--theme-blue"}}><FaRegUser /></i>
                 <span>{value.firstName}</span>
@@ -216,7 +216,6 @@ const NavList = ({ dropRef }) => {
             className="text-capitalize"
             style={{cursor:"pointer", fontSize:"14px"}}
             onClick={()=>{
-              console.log(list.logo) 
               delete list.logo
               localStorage.setItem("gotocourse-category", JSON.stringify(list))
               navigate(`/categories/${list.name.split(" ").join("-").toLowerCase()}`)

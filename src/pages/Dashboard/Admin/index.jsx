@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
-import { Switch, Modal, Box } from "@mui/material";
+import {motion} from "framer-motion"
+import { Switch, Modal, Box, Skeleton } from "@mui/material";
 import { AiOutlineMenu, AiOutlineDelete, AiTwotoneEdit } from "react-icons/ai";
 
 import { Sidebar, Searchbar } from "../components";
@@ -29,8 +29,9 @@ import { CourseDetail } from "../../Courses";
 import Layout from "../../../components/Layout";
 import ChatComponent from "./Chat";
 import { CreateCourseMain } from "../Teachers/CreateCourse";
+import { AllEarnings} from "../Teachers/Earnings"
 
-
+import EarningsTable from "./Earnings/Table"
 
 
 
@@ -57,7 +58,6 @@ export function CategoryDetails({}){
   const students = ["James Segun"];
   const params = useParams()
   //get user id
-  console.log(params);
   useEffect(() => {
     //fetch course details for the id
     if(flag.current) return;
@@ -68,7 +68,6 @@ export function CategoryDetails({}){
         if(!success) throw new AdvancedError(message, statusCode);
         else {
           const {data} = res;
-          console.log(data);
           setFormstate(old => {
             return {
               ...old,
@@ -279,7 +278,6 @@ const [loading, setLoading] = useState(true);
         else {
           if(res?.data){
             const {data} = res;
-            console.log(data);
             toast.success(message, {
               position: "top-right",
               autoClose: 4000,
@@ -580,7 +578,6 @@ export function CreateCourseCategory(){
     if(flag.current) return;
     if(location.search){
       const id = location.search.split("=").reverse()[0];
-      console.log(id);
       (async () => {
         try {
           const res = await fetchCategory(id, userdata?.token);
@@ -627,7 +624,6 @@ export function CreateCourseCategory(){
     return () => console.log("Removing CreateCategory component");
   }, [])
   
-  console.log(formstate)
 
 
 
@@ -647,7 +643,6 @@ export function CreateCourseCategory(){
       else {
         if(res?.data){
           const {data} = res;
-          console.log(data);
           toast.success(message, {
             position: "top-right",
             autoClose: 4000,
@@ -975,7 +970,9 @@ export function Dashboard() {
           </button>
         </div>
         <div className={clsx["admin_profile_main"]}>
+          <small className="text-muted">Name:</small>
           <h1>{userdata?.firstName && userdata.firstName} {userdata?.lastName && userdata.lastName} </h1>
+          <small className="text-muted">Bio:</small>
           <p className={clsx["admin__paragraph"]}>
            {userdata?.bio && userdata.bio}
           </p>
@@ -1041,7 +1038,6 @@ export function Approve() {
       });
 
       const res = type === "approve" ? await verify(item, userdata?.token) : await verify_pledre(item, userdata?.token);
-      console.log('res', res)
       const { message, success, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -1092,7 +1088,6 @@ export function Approve() {
       });
       
       const res = await addMentor(item, userdata?.token);
-      console.log('res', res)
       const { message, success, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -1227,6 +1222,7 @@ export function UserInfoCard({
   packages=[],
   type,
   coursePrice,
+  isAbsolute,
   showDetailsHandler = () => {return},
   approveHandler = () => {return},
 }) {
@@ -1238,8 +1234,8 @@ export function UserInfoCard({
       <td className={clsx.user__info}>{num + 1}.</td>
       {user && (
         <td className={clsx.user__details}>
-          {img && <img src={img} alt="avatar" />}
-          <span>{`${firstName} ${lastName}`}</span>
+          {img && <img src={isAbsolute ? img :`https://loftywebtech.com/gotocourse/api/uploads/${img}`  } alt="avatar" />}
+          <span>{`${firstName} ${lastName}`}</span> 
         </td>
       )}
 
@@ -1363,6 +1359,7 @@ export function Teachers() {
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const {
+
     adminTeacherFunctions: { fetch }
   } = useAuth();
   useEffect(() => {
@@ -1370,15 +1367,12 @@ export function Teachers() {
     (async () => {
       try {
         const token = userdata?.token;
-        console.log(token)
         const res = await fetch(token);
-        console.log(res);
         const { message, success, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         else {
           const { data } = res;
           //do somethings
-          console.log(data);
           setTeachers(_=>  data);
           toast.success(message, {
             position: "top-right",
@@ -1409,10 +1403,10 @@ export function Teachers() {
   const tableHeaders = ["No", "Name", "Email", "Type", "Access Dashboard", "Level"];
 
   function approveHandler(e, email, details) {
-    console.log(e.target, email);
     localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(details))
     if (email) navigate(`approve?email=${email}`);
   }
+  console.log("reacj",teachers == true)
   return (
     <Admin header={"Mentors/Teachers"}>
       {loading && <Loader />}
@@ -1430,7 +1424,7 @@ export function Teachers() {
                 ))}
               </thead>
               <tbody>
-                {teachers?.length > 0 ? teachers?.map((teacher, i) => (
+                {teachers?.length > 0 && teachers?.map((teacher, i) => (
                   <UserInfoCard
                     key={i}
                     user={true}
@@ -1444,10 +1438,15 @@ export function Teachers() {
                     type={teacher.userType}
                     approveHandler={approveHandler}
                     accessPledre={teacher.accessPledre}
+                    isAbsolute={true}
                   />
-                )) : <h5 style={{textAlign:'center'}}>No Teachers found</h5>}
+                ))}
               </tbody>
             </table>
+            {teachers <= 0  && <div className="text-center">
+              <p style={{textAlign:'center'}}>No Teachers found</p>
+            </div>}
+            
           </div>
         </div>
       </div>
@@ -1471,17 +1470,14 @@ export function Mentors() {
     (async () => {
       try {
         const token = userdata?.token;
-        console.log(token)
         const res = await fetchMentors(token);
-        console.log(res);
+
         const { message, success, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         else {
           const { data } = res;
           //do somethings
           if(data.length > 0) {
-
-            console.log(data);
           setTeachers(_=>  data);
           toast.success(message, {
             position: "top-right",
@@ -1524,7 +1520,6 @@ export function Mentors() {
   const tableHeaders = ["No", "Name", "Email", "Expertise"];
 
   function approveHandler(e, email, details) {
-    console.log(e.target, email);
     localStorage.setItem("gotocourse-mentorDetails", JSON.stringify(details))
     if (email) navigate(`detail`);
   }
@@ -1545,7 +1540,7 @@ export function Mentors() {
                 ))}
               </thead>
               <tbody>
-                {teachers?.length > 0 ? teachers?.map((teacher, i) => (
+                {teachers?.length > 0 && teachers?.map((teacher, i) => (
                   <UserInfoCard
                     key={i}
                     user={true}
@@ -1557,11 +1552,19 @@ export function Mentors() {
                     level={teacher.expertise}
                     details={teacher}
                     approveHandler={approveHandler}
+                    isActive={null}
+                    isAbsolute={false}
+                    type={null}
                     // accessPledre={teacher.accessPledre}
                   />
-                )) : <h5 style={{textAlign:'center'}}>No mentor page found</h5>}
+                ))}
               </tbody>
             </table>
+            {teachers.length <=0 && 
+             <div className="text-center">  
+                <p>No mentor page found</p> 
+             </div>
+            }
           </div>
         </div>
       </div>
@@ -1616,7 +1619,6 @@ useEffect(()=>{
     try {
       const res =  edit === "mentor" ? await updateMentor( formstate._id, formdata, userdata?.token,) : await makeMentorPage(userdata?.token, formdata);
       const { success, message, statusCode, data } = res;
-      console.log(data)
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         toast.success(message, {
@@ -1659,7 +1661,6 @@ useEffect(()=>{
       };
     });
   }
-  console.log(bio); 
 
   return (
     <Admin header="ADMIN">
@@ -1725,19 +1726,11 @@ useEffect(()=>{
                 data={formstate.mentorBio}
                 onReady={ editor => {
                     // You can store the "editor" and use when it is needed.
-                    console.log( 'Editor is ready to use!', editor );
                 } }
                 onChange={ ( event, editor ) => {
                     const data = editor.getData();
-                    console.log(data); 
                     setBio(data)
                     // setFormstate({...formstate, mentorBio: data})
-                } }
-                onBlur={ ( event, editor ) => {
-                    console.log( 'Blur.', editor );
-                } }
-                onFocus={ ( event, editor ) => {
-                    console.log( 'Focus.', editor );
                 } }
                 />
             </div> 
@@ -1838,7 +1831,6 @@ export function MentorsDetail() {
       });
 
       const res =  await deleteMentor(id, userdata?.token);
-      console.log('res', res)
       const { message, success, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -1968,7 +1960,6 @@ export function Courses() {
             draggable: true,
             progress: undefined,
           });
-          console.log(data);
         } else {
           throw new AdvancedError(message, statusCode);
         }
@@ -2083,14 +2074,15 @@ export function CourseDetails({}){
     description: "",
     status: false,
     teacher: "",
-    student: ""
+    student: "",
+    instructors: []
   })
   const [loading, setLoading] = useState(true);
   const teachers = ["Dr. Joy Castus"];
   const students = ["James Segun"];
   const params = useParams();
   //get user id
-
+  console.log({formstate})
   useEffect(() => {
     //fetch course details for the id
     if(flag.current) return;
@@ -2191,7 +2183,7 @@ export function CourseDetails({}){
       const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        console.log(res);
+        setFormstate({...formstate, status: "active"})
         toast.success(message, {
           position: "top-right",
           autoClose: 4000,
@@ -2261,30 +2253,21 @@ export function CourseDetails({}){
               <div className={clsx.form_group__teachers}>
                 <label>Name of teachers</label>
                 {
-                  teachers.map((t, i) => (
+                  formstate.instructors.length > 0 ? formstate.instructors.map((t, i) => (
                     <div key={i}>
-                      <p>{i + 1}. &nbsp; {t}</p> 
-                      <div className={clsx.teachers__actions}>
+                      <p>{i + 1}. &nbsp; {t.name}</p> 
+                      {/* <div className={clsx.teachers__actions}>
                         <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
                         <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
-                      </div>
+                      </div> */}
                     </div>
-                  ))
+                  )) : <p>{formstate.instructorName}</p>
                 }
+             
               </div>
-              <Input
-                style={{margin: "0px !important"}}
-                name="teacher"
-                type="text"
-                handleChange={changeHandler}
-                value={formstate.teacher}
-              />
-              <button type="button" className={clsx.form_group__button}>
-                Add Teacher
-              </button>
             </div>
 
-            <div className={clsx.form_group}>
+            {/* <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
                 <label>Add Student</label>
                 {
@@ -2308,7 +2291,7 @@ export function CourseDetails({}){
               <button type="button" className={clsx.form_group__button}>
                 Add Student
               </button>
-            </div>
+            </div> */}
 
             <div className={clsx.form_group} style={{marginTop: 40}}>
               <label>Change Course Status</label>
@@ -2352,7 +2335,6 @@ export function BootcampDetails({}){
         else {
           const {data} = res;
           let bootcamp = data.find(d => d.bootcampId === params?.id);
-          console.log(bootcamp);
           setFormstate(old => {
             return {
               ...old,
@@ -2410,7 +2392,6 @@ export function BootcampDetails({}){
       const {message, statusCode, success} = res;
       if(!success) throw new AdvancedError(message, statusCode);
       else {
-        console.log(res);
         toast.success(message, {
           position: "top-right",
           autoClose: 4000,
@@ -2607,7 +2588,6 @@ export function Bootcamps() {
             draggable: true,
             progress: undefined,
           });
-          console.log(data);
         } else {
           throw new AdvancedError(message, statusCode);
         }
@@ -2703,7 +2683,6 @@ export function CreateBootcamp(){
     if(flag.current) return;
     if(location.search){
       const id = location.search.split("=").reverse()[0];
-      console.log(id);
       (async () => {
         try {
           const res = await fetchBootcamps(userdata?.token);
@@ -2712,11 +2691,13 @@ export function CreateBootcamp(){
           else if (statusCode === 1) {
             const { data } = res;
             let found = data.find(d => d.bootcampId === id);
+            console.log({found})
             found.startDate = found.startDate.split("T")[0];
             found.endDate = found.endDate.split("T")[0];
             found.instructor = found.instructorName;
+            found.bootcampImg = found.bootcampImg.split("/").slice(-1)[0]
+
             delete found.instructorName;
-            console.log(found);
             setFormstate(_ => found);
             toast.success("Bootcamp found successfully", {
               position: "top-right",
@@ -3151,22 +3132,23 @@ export function Notification() {
   const flag = useRef(false);
   let userdata = getItem(KEY);
   const [loader, setLoader] = useState(false);
-  const {adminFunctions: { fetchNotifications } } = useAuth(); 
-  
+  const [load, setLoad] = useState(false);
+  const {generalState, setGeneralState, adminFunctions: { fetchNotifications, readNotifications } } = useAuth(); 
+  const [reload, setReload]= useState(false)
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     if(flag.current) return;
       (async() => {
         try{
+          setLoader(true)
           const res = await fetchNotifications(userdata?.token);
-          console.log(res)
           const {message, success, statusCode} = res;
           if(!success) throw new AdvancedError(message, statusCode);
           const {data} = res
-          console.log(data)
           if(data.length > 0) {
             setNotifications(data)
+            setGeneralState({...generalState, notifications: 0})
           }
         }catch(err){
           toast.error(err.message, {
@@ -3183,19 +3165,141 @@ export function Notification() {
         }
       })()
       flag.current = true;
-    },[])
+  },[reload])
+  
+  async function markAsRead(e){
+    e.preventDefault();
+    try{
+      setLoad(true)
+      const res = await readNotifications(userdata?.token);
+      const {message, success, statusCode} = res;
+      if(!success) throw new AdvancedError(message, statusCode);
+      const {data} = res
+      console.log(data)
+      setReload(true)
+      flag.current = false;
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }catch(err){
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }finally{
+      setLoad(_ => false);
+    }
+  }
+
   return (
     <Admin header={"Notifications"}>
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <h1>My notifications</h1>
-          <div className={clsx.admin__student_main}>
-            {notifications.length > 0 ? notifications.map((notification, index)=>(
-              <div key={index} className={clsx["notification"]}>
-                <span>{getDate(notification.createdAt)}</span>
-                <span>{notification.message}</span>
-              </div> 
-            )) : <p>No notifications found</p>}
+          <div className="d-flex justify-content-between align-items-center mb-4">
+             <h1 className="mb-0">My notifications</h1>
+             {  notifications.length > 0 && 
+                <motion.button  whileHover={{ 
+                  boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                  textShadow: "0px 0px 8px rgb(255, 255, 255)",
+                }} className="btn-plain mark_as_read p-1" style={{fontSize:"14px"}} onClick={markAsRead}>{load ? <div className="spinner-border text-dark">
+                  <div className="visually-hidden">Loading</div>
+                </div>  : "Mark as read"}</motion.button>
+              }
+            </div>
+          <div className={clsx.admin__student_main}> 
+            {loader ? <div>
+                <Skeleton variant="rectangular" width={"100%"} height={58} />
+                <br />
+                <Skeleton variant="rectangular" width={"100%"} height={58} />
+                <br />
+
+                <Skeleton variant="rectangular" width={"100%"} height={58} />
+              </div> : 
+
+              notifications.length > 0 ? notifications.map((notification, index)=>(
+                <div key={index} className={clsx["notification"]}>
+                  <span>{getDate(notification.createdAt)}</span>
+                  <span>{notification.message}</span>
+                  {/* <button className={clsx.admin__notification_button} onClick={()=>handleRead(notification._id)} >Mark as read</button> */}
+                </div> 
+              )) : <p>No notifications found</p>
+            }
+              </div>
+        </div>
+      </div>
+    </Admin>
+  );
+}
+// NOTIFICATIONS COMPONENT
+
+export function Earnings () {
+  const {getItem} = useLocalStorage();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [loader, setLoader] = useState(false);
+  const {generalState, setGeneralState, adminFunctions: { fetchNotifications } } = useAuth(); 
+  
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    if(flag.current) return;
+      (async() => {
+        try{
+          setLoader(true)
+          const res = await fetchNotifications(userdata?.token);
+          const {message, success, statusCode} = res;
+          if(!success) throw new AdvancedError(message, statusCode);
+          const {data} = res
+          if(data.length > 0) {
+            setNotifications(data)
+            setGeneralState({...generalState, notifications: 0})
+          }
+        }catch(err){
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }finally{
+          setLoader(_ => false);
+        }
+      })()
+      flag.current = true;
+  },[])
+  
+  function handleRead(){
+
+  }
+  return (
+    <Admin header={"Earnings"}>
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+          <div className={clsx.admin__student_main}> 
+            <AllEarnings /> 
+          </div>
+          <div className="py-3">
+          <div className="d-flex justify-content-between flex-wrap">
+             <h5>List of Requests</h5>
+            <button className="button p-1">Download CSV</button>
+            </div>
+          <div className={clsx.admin__student_main}> 
+            <EarningsTable /> 
+          </div>
           </div>
         </div>
       </div>
@@ -3217,11 +3321,9 @@ export function Student() {
 
   async function fetchStudents(){
     if (userdata) {
-      console.log("2",userdata)
       
         try {
           const res = await fetch(userdata?.token); 
-          console.log(res);
           const { message, success, statusCode } = res;
           if (!success) throw new AdvancedError(message, statusCode);
           else {
@@ -3229,7 +3331,6 @@ export function Student() {
             //do somethings
 
             setStudentList(data);
-            console.log(data);
             toast.success(message, {
               position: "top-right",
               autoClose: 4000,
@@ -3415,6 +3516,7 @@ export function Student() {
                         type={null}
                         handleVerification={() => handleVerification(userId)}
                         handlePledreAccess={() => handlePledreAccess(userId)}
+                        isAbsolute={true}
                       />
                     )
                   )}
@@ -3437,7 +3539,7 @@ export function Edit() {
   const {updateItem, getItem} = useLocalStorage();
   let userdata = getItem(KEY);
   const [imageUrl, setImageUrl] = useState(null);
-  const [isUplaoding, setIsUploading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formstate, setFormstate] = useState({
@@ -3531,7 +3633,6 @@ export function Edit() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         const { data } = res;
-        console.log(data);
         const newValue = {
           ...userdata,
           ...data
@@ -3562,13 +3663,12 @@ export function Edit() {
     }
   }
 
-  console.log("user", userdata);
   return (
     <Admin header="ADMIN">
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h3>Update Profile</h3>
-          <div className="row w-100 mt-4">
+          <div className="row w-100 mt-4 mb-2 mx-0">
             <div className={` col-sm-3 ${clsx.edit__picture}`}>
               {userdata?.profileImg ? (
                 <img
@@ -3588,8 +3688,12 @@ export function Edit() {
                 onChange={changeImageHandler}
               />
               {imageUrl ? (
+                isUploading ? 
+                <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+               </div> : 
                 <p
-                  style={{ cursor: isUplaoding && "not-allowed" }}
+                  style={{ cursor: isUploading && "not-allowed" }}
                   onClick={changeProfilePictureHandler}
                 >
                   Change Picture
@@ -3613,7 +3717,7 @@ export function Edit() {
                 navigate("/change-password")
             }}>Change Password</button>
           </div>
-          <form className="form" onSubmit={submitHandler} style={{width: "80%"}}>
+          <form className="form" onSubmit={submitHandler} style={{width:"min(100% - 0.5rem, 400px)"}}>
             <Input
               label="First name"
               name="firstName"
@@ -3711,20 +3815,41 @@ export function Chat() {
 
 
 
-const Admin = ({ children, header }) => {
-  const {
-    generalState: { isMobile, showSidebar,loading },
-    generalState,
-    setGeneralState,
-  } = useAuth();
-  useEffect(() => {
-    console.log("Admin component is mounted");
-    return () => console.log("Admin component is unmounted");
-  }, []);
+export const Admin = ({ children, header }) => {
+  const { generalState: { isMobile, showSidebar,loading }, generalState, setGeneralState, adminFunctions:{fetchNotifications} } = useAuth();
+  const {getItem} = useLocalStorage();
 
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
   const toggleSidebar = () => {
     setGeneralState({ ...generalState, showSidebar: !showSidebar });
   };
+
+  useEffect(() => {
+    if(flag.current) return;
+      (async() => {
+        try{
+          const res = await fetchNotifications(userdata?.token);
+          const {message, success, statusCode} = res;
+          if(!success) throw new AdvancedError(message, statusCode);
+          const {data} = res
+          if(data.length > 0) {
+            setGeneralState({...generalState, notifications: data.length})
+          }
+        }catch(err){
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })()
+      flag.current = true;
+    },[])
   return (
     <GuardedRoute>
       <div className={clsx["admin"]}>

@@ -4,6 +4,7 @@ import {BiCalendar} from "react-icons/bi"
 import SwiperCore, { Navigation, Autoplay, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";import "swiper/css";
 import "swiper/css/effect-creative";
+import { toast, ToastContainer } from "react-toastify";
 
 
 import Layout from "../../components/Layout";
@@ -19,6 +20,8 @@ import uiux from  "../../images/bootcamps/bootcamp_uiux.png"
 import web from  "../../images/bootcamps/bootcamp_web.png"
 
 import {useAuth} from "../../contexts/Auth"
+import { AdvancedError } from "../../classes";
+
 import BootcampImg from "../../images/bootcamps/bootcampTraining.png"
 
 const similarBootcamp = [
@@ -44,36 +47,75 @@ const similarBootcamp = [
     },
 ]
 const Bootcamp = () => {
+    const navigate = useNavigate()
     const {getItem} = useLocalStorage();
+    const {studentFunctions:{addBootcamp}} = useAuth()
+    const [loading, setLoading]= useState(false)
+
     const [bootcampInfo, setBootcampInfo] = useState({})
     const bootcamp = getItem("gotocourse-bootcampdata")
-    const navigate = useNavigate()
+    const userdata = getItem("gotocourse-userdata")
+    
     useEffect(() => {
-        console.log("Bootcamp is mounted");
         if(bootcamp){
             setBootcampInfo(bootcamp)
         }
         return () => console.log("Bootcamp is unmounted");
     }, [])
 
-    const details = [
-        {
-            key: 'Duration',
-            value: '10 weeks'
-        },
-        {
-            key: 'Days',
-            value: 'Jun 26 - Sept 04'
-        },
-        {
-            key: 'Time',
-            value: '09:00 - 14:00'
-        },
-    ]
+    async function handleBootstrapEnrollment(e){
+        e.preventDefault()
+        if(userdata?.token){
+            try{
+                setLoading(true)
+                const response = await addBootcamp({bootcampId: bootcampInfo.bootcampId}, userdata.token)
+                const { success, message, statusCode } = response;
+                if(!success || statusCode !==1) throw new AdvancedError(message, statusCode)
+                const {data} = response;
+                
+                console.log(data)
 
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                console.log(response)
+
+            }catch(error){
+                toast.error(error.message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }finally{
+                setLoading(false)
+            }
+        }else {
+            toast.error("User must be logged in to register", {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    } 
     return (
         <Layout>
             <div className={clsx.bootcamp}>
+            <ToastContainer />  
+
                 <div className={clsx.bootcamp_content}>
                     <h2>{bootcampInfo?.title}</h2>
                     <p>{bootcampInfo?.description ? bootcampInfo?.description : bootcampInfo?.content}</p>
@@ -101,7 +143,9 @@ const Bootcamp = () => {
                         </div> */}
                     </div>
                     {bootcampInfo?.instructorName ? 
-                    <button type="button" onClick={()=> navigate("payment")}>Apply Now</button>
+                    <button type="submit" onClick={handleBootstrapEnrollment}>{ loading ?  <div className="spinner-border text-light">
+                        <div className="visually-hidden">loading</div>
+                    </div>: "Apply Now"}</button>
                     : null
                     }
                 </div>
@@ -126,7 +170,6 @@ export const BootcampDetails = ()=> {
     const bootcampTraining =  getItem("gotocourse-bootcampdata")
 
     useEffect(() => {
-        console.log("BootcampDetails is mounted");
         if(bootcampTraining){
             setBootcampTrainingInfo(bootcampTraining)
         }
@@ -251,9 +294,6 @@ const SimilarBootcamps = ()=> {
         slidesPerView={1}
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => {
-          console.log(swiper);
-        }}
         navigation
         effect={"creativeEffect"}
         breakpoints={{

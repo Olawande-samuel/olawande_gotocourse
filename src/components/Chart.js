@@ -35,7 +35,7 @@ const MyChart = () => {
                 position: 'top', 
               },
               
-              // columnWidth: ["35%"],
+              columnWidth: ["85%"],
             },
             
         }
@@ -43,7 +43,7 @@ const MyChart = () => {
       series: [
         {
           name: "Total Earnings",
-          data: [0,  0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0]
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         }
       ]
 })
@@ -52,7 +52,9 @@ const MyChart = () => {
       options={options.options}
       series={options.series}
       type="bar"
-      width="100%"
+      // width="100%"
+      width="500"
+
       // height="250"
     />
   )

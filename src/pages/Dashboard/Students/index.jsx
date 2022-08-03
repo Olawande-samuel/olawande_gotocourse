@@ -92,14 +92,16 @@ export function Profile(){
                         <img src={userdata?.profileImg ? userdata.profileImg : avatar} style={{borderRadius: 10}} width="100%" alt="Avatar" />
                     </div>
                     <button className={clsx.students_profile_top_button} onClick={editProfileHandler}>
-                        <MdEdit />  &nbsp;   Edit
+                        <MdEdit />  &nbsp;   <span className="d-none d-md-block">Edit</span>
                     </button>
                 </div>
                 <div className={clsx.students_profile_main}>
+                    {/* <span className="text-muted">Name:</span> */}
                     <h1 className={clsx.students__header} style={{marginTop: 20}}>{userdata?.firstName} {userdata?.lastName}</h1>
-                    <p className={clsx.students__paragraph}>{userdata?.bio ? userdata?.bio : "I'm a mysterious person"} <br />
-                    {userdata?.goals ? userdata?.goals : "I'm yet to decide what I want to achieve here"}
-                    </p>
+                    <span className="text-muted">Experience:</span>
+                    <p>{userdata?.bio ? userdata?.bio : "I'm a mysterious person"} </p>
+                    <span className="text-muted">Bio:</span>
+                    <p>{userdata?.goals ? userdata?.goals : "I'm yet to decide what I want to achieve here"}</p>
 
                 </div>
             </div>
@@ -116,7 +118,7 @@ export function Edit(){
     const {generalState: {}, studentFunctions: {updateAvatar, fetchProfile, updateProfile}, setGeneralState} = useAuth();
 
     const [imageUrl, setImageUrl] = useState(null);
-    const [isUplaoding, setIsUploading] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -257,7 +259,16 @@ export function Edit(){
                         <MdPersonAdd />
                     </span>) : (<img src={imageUrl} alt="Avatar" />)}
                     <input id="imageUpload" type="file" style={{display: 'none'}} onChange={changeImageHandler} />
-                    {imageUrl ? (<p style={{cursor: isUplaoding && 'not-allowed'}} onClick={changeProfilePictureHandler}>Change Picture</p>) : (<p onClick={uploadPicture}>Upload Photo</p>)}
+                    {imageUrl ?
+                        isUploading ? 
+                        <div className="spinner-border text-primary" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                         : 
+                        <p style={{cursor: isUploading && 'not-allowed'}} onClick={changeProfilePictureHandler}>Change Picture</p>
+                    
+                    : (<p onClick={uploadPicture}>Upload Photo</p>)
+                    }
                 </div>
                 <div className={clsx.edit__picture}>
                     <button className="button button-md" type="button" onClick={()=>{
@@ -571,14 +582,18 @@ export function Wishlist(){
     )
 }
 
-function WishCard({courseId:id, courseName, courseDescription}){
+function WishCard({courseId:id, courseName, courseDescription, courseCategory}){
     const navigate = useNavigate();
     const [open, setOpen]= useState(false);
+
     function closeModal(){
         setOpen(false)
     }
-    function handleNavigate(){
-        navigate(`/categories/`)
+    function handleNavigate(category, name){
+        localStorage.setItem("gotocourse-courseId", id)
+        let courseCategory = category.split(" ").join("-")
+        let courseName = name.split(" ").join("-")
+        navigate(`/categories/${courseCategory}/courses/${courseName}`)
     }
     return(
         <div className="card wish">
@@ -587,9 +602,9 @@ function WishCard({courseId:id, courseName, courseDescription}){
                     <img src={trello} alt="icon" className="img-fluid" />
                 </div>
             <h5 className="fw-bold">{courseName}</h5>
-            <p className="">{courseDescription}</p> 
+            <p className="restricted_line">{courseDescription}</p> 
             <div className="d-flex justify-content-between">
-                <button className="btn btn-outline-primary" onClick={handleNavigate} style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)", fontWeight:"bold", padding:"0.5rem 1rem"}}>Register today</button>
+                <button className="btn btn-outline-primary" onClick={()=>handleNavigate(courseCategory, courseName)} style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)", fontWeight:"bold", padding:"0.5rem 1rem"}}>Register today</button>
                 <button className="btn btn-outline-primary" onClick={()=>setOpen(true)} style={{border:"1px solid var(--theme-orange)", color:"var(--theme-orange)", fontWeight:"bold", padding:"0.5rem 1rem"}}>
                     <i><FaRegTrashAlt /></i>
                 </button>
@@ -602,9 +617,9 @@ function WishCard({courseId:id, courseName, courseDescription}){
 
 function DeleteModal({id,open,handleClose}){
     const {generalState: {isMobile}, setGeneralState, generalState, studentFunctions:{deleteFromWishlist}} = useAuth();
+
     const {getItem} = useLocalStorage();
     let userdata = getItem(KEY);
-    console.log(id)
     const style = {
         position: "absolute",
         top: "50%",
@@ -628,7 +643,6 @@ function DeleteModal({id,open,handleClose}){
             if(!success) throw new AdvancedError(message, statusCode);
             else {
                 const {data} = res;
-                console.log(data);
                 toast.success(message, {
                     position: "top-right",
                     autoClose: 4000,
@@ -718,37 +732,7 @@ export function Courses(){
         ref.current = true
     }, [])
     
-    const tableHeaders = ["No", "Courses", "Tutor's Name", "Teaching Model", "Course Fee", "Rating"]
-    // const tableContents = [
-    //     {
-    //         name: "Melanie Grutt",
-    //         course: "Cybersecurity",
-    //         package: "Cohort",
-    //         rating: "Bronze",
-    //         amount:"3000"
-    //     },
-    //     {
-    //         name: "Keira Danlop",
-    //         course: "UI/UX",
-    //         package: "Cohort",
-    //         rating: "Silver",
-    //         amount:"3000"
-    //     },
-    //     {
-    //         name: "Diop Grutt",
-    //         course: "HTML",
-    //         package: "One on One",
-    //         rating: "Gold",
-    //         amount:"3000"
-    //     },
-    //     {
-    //         name: "Diop Grutt",
-    //         course: "Data Analytics",
-    //         package: "Self paced",
-    //         rating: "Diamond",
-    //         amount:"3000"
-    //     },
-    // ]
+    const tableHeaders = ["No", "Courses", "Teaching Model", "Course Fee"]
 
     const [rating, setRating] = useState(0) // initial rating value
 
@@ -777,8 +761,8 @@ export function Courses(){
                         </thead>
                         <tbody>
                             {
-                                courses.length > 0 && courses.map(({name,amount, package: p, course, rating}, i) => (
-                                    <UserInfoCard key={i} amount={amount} model={p} name={name} num={i} comp={"Courses"} rating={rating} handleRating={()=>handleRating("courseID")} course={course} />
+                                courses.length > 0 && courses.map(({courseName,coursePrice, package: p, course, rating}, i) => (
+                                    <UserInfoCard key={i} enrolled={courseName} date={p} coursePrice={coursePrice}   num={i} handleRating={()=>handleRating("courseID")}  />
                                 )) 
                             }
                         </tbody>
@@ -861,6 +845,89 @@ export function History(){
                             tableContents.map(({status, date, package: p, coursePrice, amountPaid, courseName, amount}, i) => (
                                 <UserInfoCard key={i} status={status} num={i} comp={"History"} date={date} amount={amount}
                                 pack={`$ ${amountPaid}`} course={courseName} coursePrice={`$ ${coursePrice}`} />
+                            ))
+                        }
+                    </tbody>
+                </table>
+                }
+            
+        </div>
+        </Students>
+    )
+}
+export function Fees(){
+    const {generalState: {isMobile},generalState, setGeneralState, studentFunctions: {fetchFees}} = useAuth();
+    const {getItem} = useLocalStorage();
+    let userdata = getItem(KEY);
+    const [fees, setFees] = useState([]);
+    const ref = useRef(false)
+    useEffect(() => {
+        if(ref.current) return
+        if(userdata){
+            (async() => {
+                setGeneralState({...generalState, loading: true})
+                try{
+                    const res = await fetchFees(userdata?.token);
+                    setGeneralState({...generalState, loading: false})
+                    const {success, message, statusCode} = res;
+                    if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+                    else {
+                        const {data} = res;
+                        setFees(_ => data);
+                        toast.success(message, {
+                            position: "top-right",
+                            autoClose: 4000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+                }catch(err){
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+            })()
+        }
+
+        ref.current = true
+    }, [])
+
+    console.log({fees})
+    
+    const tableHeaders = ["No", "Type", "Date Initialted", "Due Date", "Status"]
+    const tableContents = fees.length > 0 ? fees : []
+    return ( 
+        <Students isMobile={isMobile} userdata={userdata}>               
+            <div className={clsx.students_profile}>
+                
+                {/* {courses.length === 0 ? 
+                
+                <NoDetail text="Nothing to See here" />
+                 : */}
+                 {
+                <table className={clsx.student_table}>
+                    <thead>
+                        <tr>
+                            {
+                                tableHeaders.map((el, i) => (
+                                    <th key={i}>{el}</th>
+                                    ))
+                            } 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            tableContents.map(({type,createdAt, dueDate, status, amount}, i) => (
+                                <UserInfoCard key={i} enrolled={type} coursePrice={new Date(dueDate).toLocaleDateString()} date={new Date(createdAt).toLocaleDateString()} type={status} num={i} amount={amount} />
                             ))
                         }
                     </tbody>

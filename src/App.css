@@ -1140,12 +1140,15 @@ font-size: 16px;
 .end_right {
   gap: .5rem;
 }
+.end_right a {
+  color: #fff;
+}
 .end_left span {
   margin-right: .3rem;
 }
 .end .box span {
   font-size: 12px;
-line-height: 45px;
+  line-height: 45px;
 }
 /* ********************SIGNUP/LOGIN************************** */
 
@@ -1690,7 +1693,10 @@ line-height: 16px;
    
 }
 @media screen and (max-width: 550px) {
-  
+  .button-md {
+    padding: 0.6875rem 1.5rem !important;
+    font-size: clamp(0.875rem, -4.0179rem + 24.4643vw, 1.125rem);
+  }
   .services .title {
     line-height: 32px;
   }
@@ -1728,7 +1734,9 @@ line-height: 16px;
     justify-content: space-between;
     align-items: center;
   }
-  
+  .chart_container {
+    overflow:scroll;
+  }
 }
 /* ***************ABOUT********************* */
 .about_wrapper p {
@@ -1897,18 +1905,21 @@ line-height: 16px;
 }
 @media screen and (max-width: 468px){
   
-    .services .services_box {
-      flex: 100% 0;
-      margin-bottom:1.5rem;
-    }
-  
+  .services .services_box {
+    flex: 100% 0;
+    margin-bottom:1.5rem;
+  }
 
-    .join_button_wrapper {
-      flex-direction: column;
-    }
-    .form-wrapper {
-      padding: 16px 20px;
-    }
+
+  .join_button_wrapper {
+    flex-direction: column;
+  }
+  .form-wrapper {
+    padding: 16px 20px;
+  }
+  .btn-plain {
+    padding: 0.375rem .5rem !important;
+  }
 }
 
 
@@ -1955,7 +1966,11 @@ line-height: 16px;
 .earnings_card .card-body .earnings_card_total small {
   font-size: 18px;
 }
-
+.wish-card-body  {
+  display: flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
 .wishlist_cards {
   display: grid;
   grid-template-columns:repeat(auto-fit, minmax(min(200px, 100%), 1fr));
@@ -1977,4 +1992,19 @@ line-height: 16px;
   height:150px;
   border-radius:8px;
   font-size: 14px;
+}
+
+.editsectionsradio:checked {
+color: red;
+background: yellow;
+}
+td,
+td span {
+  font-size: clamp(0.95rem, 0.3143rem + 0.9286vw, 1rem);
+  text-align:start;
+
+}
+tr th, thead td {
+  font-size: clamp(0.956rem, -0.2429rem + 3.7143vw, 1.15rem);
+  text-align:start;
 }

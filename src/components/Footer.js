@@ -63,7 +63,7 @@ const rightLink = [
   {
     id:5,
     title:"Careers",
-    path:"/"
+    path:"/career"
   },
   {
     id:6,

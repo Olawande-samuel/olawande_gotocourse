@@ -20,8 +20,11 @@ import { useLocalStorage } from "../../hooks";
 import { AdvancedError } from "../../classes";
 import { witnesses, Card as MentorsCard } from "../../components/Mentors";
 import Input from "../../components/Input";
+import Success from "../../images/paymentSuccess.png"
+import Failure from "../../images/Bad Gateway.png"
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+
 const KEY = "gotocourse-userdata";
 
 const nav = [
@@ -148,10 +151,7 @@ const All = ({ type }) => {
 export default All;
 
 const NavItems = ({ item, handleChange, search }) => {
-  // function handleChange(e) {
-  //     console.log(e)
-  //     setCheck(!check)
-  // }
+  
   return (
     <div className="d-flex">
       {/* <input type="radio" name="course" id={item} onChange={handleChange} />
@@ -211,7 +211,6 @@ export const Payment = () => {
     setPaymentData({...paymentData, installments: 4, [e.target.name]: e.target.value}) 
   }
 
-  console.log(paymentData)
   async function enrollToCourse(e) {
     e.preventDefault();
 
@@ -227,7 +226,6 @@ export const Payment = () => {
         initialPayment: paymentData.fullPayment ? "" : paymentData.initialPayment
       };
       try {
-        console.log({courseData})
         if(!courseData.fullPayment && !courseData.installments) throw new AdvancedError("All fields required")
         setLoading(true);
         const response = await addCourse(courseData, userData.token);
@@ -332,17 +330,17 @@ export const Payment = () => {
                   {paymentData.fullPayment === false ? 
                   <>
                     <div className=""> 
-                    <small className="text-info" style={{fontSize:"12px"}}>*Fees must be paid in not more than four Installments</small>
+                    <small className="text-info" style={{fontSize:"12px"}}>*Fees must be paid in not more than four Installments. Each instalment carries a $100 extra charge</small>
                     <div className="form-group">
-                      <input type="radio" name="initialPayment" id="2"  onChange={handleInstallmentChoice} value={ paymentDetails?.price / 2} />
-                      <label htmlFor="2" className="form-label generic_label ms-2 ">Pay in two installments of { paymentDetails?.price / 2} each</label>
+                      <input type="radio" name="initialPayment" id="2"  onChange={handleInstallmentChoice} value={ (paymentDetails?.price / 2) + 100} />
+                      <label htmlFor="2" className="form-label generic_label ms-2 ">Pay in two installments of { (paymentDetails?.price / 2) + 100} each</label>
                     </div>
                     <div className="text-center">
                       <small className="text-center text-dark">or</small>
                     </div>
                     <div className="form-group">
-                      <input type="radio" name="initialPayment" id="4" onChange={handleInstallmentChoice}  value={ paymentDetails?.price / 4} />
-                      <label htmlFor="4" className="form-label generic_label ms-2 ">Pay in four installments of { paymentDetails?.price / 4} each</label>
+                      <input type="radio" name="initialPayment" id="4" onChange={handleInstallmentChoice}  value={ (paymentDetails?.price / 4) + 100} />
+                      <label htmlFor="4" className="form-label generic_label ms-2 ">Pay in four installments of { (paymentDetails?.price / 4) + 100} each</label>
                     </div>
                     </div>
                     <hr /> 
@@ -488,22 +486,33 @@ const CheckoutForm = () => {
 
 export const PaymentStatus = ({success}) => {
   const navigate = useNavigate();
+  const { getItem } = useLocalStorage();
+
+
+  const [status, setStatus]= useState({
+    image: success ? Success : Failure,
+    title:success ? "Payment Successful" : "Payment Denied",
+    subtitle:success ? "You can start learning now": "Unable to process payment",
+    action: success ? "Go to Dashboard" : "Try Again",
+  })
+  
+  const userdata = getItem("gotocourse-userdata")
   return (
     <div className={style.paymentScreen}>
       <div className={style.paymentScreenBox}>
-        <h3 className="text-center">
-          {success ? 
-            "Course Purchased Successfully"
-          :
-            "An error occured during payment processing"
-          }
-        </h3>
+        <div>
+          <img src={status.image} alt="" className="img-fluid" />
+        </div>
+        <h4 className="text-center" style={{color:success ? "var(--theme-blue)" : "var(--theme-orange" }}>
+          {status.title}
+        </h4>
+        <small className="my-1">{status.subtitle}</small>
         <button
           className="button button-md"
           type="button"
-          onClick={() => navigate(-1)}
+          onClick={() => success ? navigate(userdata.userType === "student" ? "/student" : userdata.userType === "admin" ? "/admin" :"/teacher") : navigate(-1)}
         >
-          Go Back
+          {status.action}
         </button>
       </div>
     </div>

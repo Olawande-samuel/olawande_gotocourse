@@ -48,7 +48,7 @@
 }
 
 .admin_profile_main h1 {
-    margin: 30px 0px;
+    margin: 10px 0 30px 0px;
     font-size: 1.5rem;
 }
 
@@ -59,7 +59,7 @@
 .admin_profile {
     background-color:var(--white);
     height: 80vh;
-    padding: 40px;
+    padding:20px;
     border-radius: 10px;
     width: 100%;
     overflow-y: scroll;
@@ -151,10 +151,14 @@
 }
 
 .admin__student h1{
-    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    font-size: clamp(1.15rem, -0.2429rem + 3.7143vw, 1.8rem);
     font-weight: 400;
     margin-bottom: 30px;
 }
+.admin__student h5{
+    font-size: clamp(1.12rem, -0.2429rem + 3.7143vw, 1.25rem);
+}
+
 
 .admin__student_table {
     border: none;
@@ -199,7 +203,7 @@
 .user__info_card td{
    height: 90px;
    letter-spacing: var(--letterSpacing);
-   text-align: center
+   text-align: start
 }
 
 .user__info_card:hover {
@@ -294,7 +298,7 @@
     margin-left: 10px;
     margin-top: 20px;
     font-weight: 400;
-    font-size: 1.1rem
+    font-size: clamp(0.8rem, -0.2429rem + 3.7143vw, 1rem)
 }
 
 .user__details img {
@@ -308,6 +312,7 @@
 @media screen and (max-width: 390px){
     .admin_profile_top {
         align-items: flex-start;
+        justify-content: between;
     }
 
     .admin_profile_top span {
@@ -357,7 +362,7 @@
 }
 
 .admin__info_content {
-    font-size: 1.15rem;
+    font-size: clamp(0.8rem, -0.2429rem + 3.7143vw, 1.15rem);
 }
 
 
@@ -496,12 +501,26 @@
     font-size: 0.6rem;
 }
 
+.admin__notification_button {
+    border: 0.5px solid;
+    background: #fff;
+    color:var(--theme-orange);
+    padding: 4px;
+    transition: all .53s ease;
+    font-size:11px;
+}
 
+.admin__notification_button:hover{
+    background:var(--theme-orange);
+    color:#fff;
+
+}
 .addniche_button, .addcareer_button {
     font-size: 0.8rem;
     background-color:rgba(208, 204, 204, 0.5);
 
 }
+
 
 .syllabus_container {
     display: flex;

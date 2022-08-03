@@ -40,16 +40,17 @@ export function CourseInfo() {
   const {id} = useParams()
   const { generalState: { courseInfo, loading }, generalState, setGeneralState, teacherFunctions: { fetchCourse, deleteCourse }, } = useAuth();
 
-  const { getItem } = useLocalStorage();
+  const { getItem, updateItem } = useLocalStorage();
   let userdata = getItem(KEY);
   
   const [btnloading, setLoading]= useState(false)
   const [formstate, setFormstate] = useState({}); 
-  console.log(formstate);
 
   async function handleCourseEdit(e){
     setGeneralState({...generalState, courseInfo: formstate})
-      navigate("/teacher/courses/create")
+    updateItem("gotocourse-courseEdit", formstate )
+
+      navigate(`/teacher/courses/create?edit=${id}`)
   }
   async function deleteCourseInfo(e) {
     e.preventDefault();
@@ -203,13 +204,13 @@ export function CourseInfo() {
                 <h6>No Packages</h6>
               )}
             </div>
-            <Input
+            {/* <Input
               label="Price"
               name="price"
               type="text"
               value={formstate.price}
               readOnly={true}
-            />
+            /> */}
 
             <div className={clsx.form_group}>
               <label className="form-label generic_label">Syllabus</label>
@@ -287,7 +288,6 @@ export function CourseInfo() {
 }
 
 export function PreviewModal({ preview, open, setOpen }) {
-  console.log("modal", preview);
   const style = {
     position: "absolute",
     top: "50%",
@@ -348,7 +348,7 @@ export function Edit() {
   const navigate = useNavigate();
 
   const [imageUrl, setImageUrl] = useState(null);
-  const [isUplaoding, setIsUploading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -505,12 +505,18 @@ export function Edit() {
               onChange={changeImageHandler}
             />
             {imageUrl ? (
-              <p
-                style={{ cursor: isUplaoding && "not-allowed" }}
+                isUploading ? 
+                <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+               </div> : 
+
+             <p
+                style={{ cursor: isUploading && "not-allowed" }}
                 onClick={changeProfilePictureHandler}
               >
                 Change Picture
               </p>
+          
             ) : (
               <p onClick={uploadPicture} style={{ cursor: "pointer" }}>
                 Upload Photo

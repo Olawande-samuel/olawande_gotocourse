@@ -10,8 +10,8 @@ import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
 import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails, Chat as AdminChat,
-  CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails, AddMentor,Mentors, MentorsDetail, Notification} from "./pages/Dashboard/Admin";
-import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit,
+  CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails, AddMentor,Mentors, MentorsDetail, Notification, Earnings as AdminEarning} from "./pages/Dashboard/Admin";
+import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Fees as StudentFees,
    Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps} from "./pages/Dashboard/Students";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, 
   Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo,  } from "./pages/Dashboard/Teachers";
@@ -31,13 +31,14 @@ import Policies, {TeachingPolicy, TermsOfUse, EndUserPolicy, Cookies} from "./pa
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Career from "./pages/Career";
+import Settings from "./pages/Dashboard/Admin/Settings";
 
 
- 
 
 function App() {
   return (
     <AuthContextProvider>
+
       <SyllabusContextProvider>
       <Routes>
         <Route path="/" element={<Out />}>
@@ -69,6 +70,7 @@ function App() {
               <Route path="courses" element={<StudentCourses />} />
               <Route path="wishlist" element={<Wishlist />} />
               <Route path="history" element={<StudentHistory />} />
+              <Route path="fees" element={<StudentFees />} />
             </Route>
 
             <Route path="mentors" element={<Out/>}>
@@ -132,6 +134,8 @@ function App() {
               <Route path="teachers/create/mentor" element={<AddMentor />} />
               <Route path="profile/edit" element={<AdminEdit />} />
               <Route path="chat" element={<AdminChat />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="earnings" element={<AdminEarning />} />
             </Route>
             <Route path="admin" element={<Out />}>
               <Route path="login" element={<AdminLogin />} />
