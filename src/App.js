@@ -34,11 +34,11 @@ import Career from "./pages/Career";
 import Settings from "./pages/Dashboard/Admin/Settings";
 
 
- 
 
 function App() {
   return (
     <AuthContextProvider>
+
       <SyllabusContextProvider>
       <Routes>
         <Route path="/" element={<Out />}>

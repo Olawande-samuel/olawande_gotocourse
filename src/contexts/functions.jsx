@@ -954,6 +954,35 @@ export const adminFunctions = {
             }
         }
     },
+    readNotifications: async function(token){
+        try{
+            const res = await axios.post(`${baseURL}/admin/notifications/action/read`, {},
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
     AddLPHero: async function(_data, token){
         try{
             const res = await axios.post(`${baseURL}/admin/settings/homepage/hero/add`,
@@ -997,7 +1026,7 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            if(res.data.message !== "Notifications fetched successfully") throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1088,7 +1117,7 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            if(res.data.message !== "Notifications fetched successfully") throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1179,7 +1208,7 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            if(res.data.message !== "Notifications fetched successfully") throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -1270,7 +1299,7 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            if(res.data.message !== "Notifications fetched successfully") throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true

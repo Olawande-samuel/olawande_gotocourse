@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
+import {motion} from "framer-motion"
 import { Switch, Modal, Box, Skeleton } from "@mui/material";
 import { AiOutlineMenu, AiOutlineDelete, AiTwotoneEdit } from "react-icons/ai";
 
@@ -3132,8 +3132,9 @@ export function Notification() {
   const flag = useRef(false);
   let userdata = getItem(KEY);
   const [loader, setLoader] = useState(false);
-  const {generalState, setGeneralState, adminFunctions: { fetchNotifications } } = useAuth(); 
-  
+  const [load, setLoad] = useState(false);
+  const {generalState, setGeneralState, adminFunctions: { fetchNotifications, readNotifications } } = useAuth(); 
+  const [reload, setReload]= useState(false)
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -3164,16 +3165,58 @@ export function Notification() {
         }
       })()
       flag.current = true;
-  },[])
+  },[reload])
   
-  function handleRead(){
-
+  async function markAsRead(e){
+    e.preventDefault();
+    try{
+      setLoad(true)
+      const res = await readNotifications(userdata?.token);
+      const {message, success, statusCode} = res;
+      if(!success) throw new AdvancedError(message, statusCode);
+      const {data} = res
+      console.log(data)
+      setReload(true)
+      flag.current = false;
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }catch(err){
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }finally{
+      setLoad(_ => false);
+    }
   }
+
   return (
     <Admin header={"Notifications"}>
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <h1>My notifications</h1>
+          <div className="d-flex justify-content-between align-items-center mb-4">
+             <h1 className="mb-0">My notifications</h1>
+             {  notifications.length > 0 && 
+                <motion.button  whileHover={{ 
+                  boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                  textShadow: "0px 0px 8px rgb(255, 255, 255)",
+                }} className="btn-plain mark_as_read p-1" style={{fontSize:"14px"}} onClick={markAsRead}>{load ? <div className="spinner-border text-dark">
+                  <div className="visually-hidden">Loading</div>
+                </div>  : "Mark as read"}</motion.button>
+              }
+            </div>
           <div className={clsx.admin__student_main}> 
             {loader ? <div>
                 <Skeleton variant="rectangular" width={"100%"} height={58} />
@@ -3186,11 +3229,11 @@ export function Notification() {
 
               notifications.length > 0 ? notifications.map((notification, index)=>(
                 <div key={index} className={clsx["notification"]}>
-                <span>{getDate(notification.createdAt)}</span>
-                <span>{notification.message}</span>
-                {/* <button className={clsx.admin__notification_button} onClick={()=>handleRead(notification._id)} >Mark as read</button> */}
+                  <span>{getDate(notification.createdAt)}</span>
+                  <span>{notification.message}</span>
+                  {/* <button className={clsx.admin__notification_button} onClick={()=>handleRead(notification._id)} >Mark as read</button> */}
                 </div> 
-                )) : <p>No notifications found</p>
+              )) : <p>No notifications found</p>
             }
               </div>
         </div>

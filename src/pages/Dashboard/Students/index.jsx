@@ -732,37 +732,7 @@ export function Courses(){
         ref.current = true
     }, [])
     
-    const tableHeaders = ["No", "Courses", "Tutor's Name", "Teaching Model", "Course Fee", "Rating"]
-    // const tableContents = [
-    //     {
-    //         name: "Melanie Grutt",
-    //         course: "Cybersecurity",
-    //         package: "Cohort",
-    //         rating: "Bronze",
-    //         amount:"3000"
-    //     },
-    //     {
-    //         name: "Keira Danlop",
-    //         course: "UI/UX",
-    //         package: "Cohort",
-    //         rating: "Silver",
-    //         amount:"3000"
-    //     },
-    //     {
-    //         name: "Diop Grutt",
-    //         course: "HTML",
-    //         package: "One on One",
-    //         rating: "Gold",
-    //         amount:"3000"
-    //     },
-    //     {
-    //         name: "Diop Grutt",
-    //         course: "Data Analytics",
-    //         package: "Self paced",
-    //         rating: "Diamond",
-    //         amount:"3000"
-    //     },
-    // ]
+    const tableHeaders = ["No", "Courses", "Teaching Model", "Course Fee"]
 
     const [rating, setRating] = useState(0) // initial rating value
 
@@ -791,8 +761,8 @@ export function Courses(){
                         </thead>
                         <tbody>
                             {
-                                courses.length > 0 && courses.map(({name,amount, package: p, course, rating}, i) => (
-                                    <UserInfoCard key={i} amount={amount} model={p} name={name} num={i} comp={"Courses"} rating={rating} handleRating={()=>handleRating("courseID")} course={course} />
+                                courses.length > 0 && courses.map(({courseName,coursePrice, package: p, course, rating}, i) => (
+                                    <UserInfoCard key={i} enrolled={courseName} date={p} coursePrice={coursePrice}   num={i} handleRating={()=>handleRating("courseID")}  />
                                 )) 
                             }
                         </tbody>

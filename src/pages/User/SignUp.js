@@ -52,9 +52,7 @@ const SignUp = () => {
     });
   };
 
-  console.log(emailReg.test(data.email))
-  console.log(passReg.test(data.password))
-  console.log(data.password)
+
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -83,7 +81,6 @@ const SignUp = () => {
         navigate("/students");
       }
     } catch (err) {
-      console.error(err.message, err.statusCode);
       if (err.statusCode === 0) {
         toast.error(err.message, {
           position: "top-right",
@@ -139,11 +136,12 @@ const SignUp = () => {
             value={data.password}
             handleChange={handleChange}
             placeholder="Password"
-            onFocus ={()=>setFocus(true)}
+            focus ={()=>setFocus(true)}
+            blur={()=>setFocus(false)}
           />
-          {!passReg.test(data.password) &&
+          {focus && !passReg.test(data.password) &&
             <small style={{fontSize:"11px"}}>
-              <p className="text-danger">Password must satify the following conditions</p>
+              <p className="text-danger">Password must satisfy the following conditions</p>
               <p className="text-danger"> - At least one upper case English letter</p>
               <p className="text-danger"> - At least one lower case English letter</p>
               <p className="text-danger"> - At least one digit</p>
