@@ -13,6 +13,9 @@ import {Teachers} from "./index"
 import { useLocalStorage } from "../../../hooks";
 import {KEY} from "../../../constants"
 import MyChart from "../../../components/Chart";
+import Input from "../../../components/Input";
+import { AdvancedError } from "../../../classes";
+import Loader from "../../../components/Loader";
 
 
 
@@ -132,205 +135,99 @@ export default function Earnings() {
 
 
 const Requests = () => {
-  const [data, setData] = useState([
-    {
-      title: "Day", 
-      active: true
-    },
-    {
-      title: "Week", 
-      active: false
-    },
-    {
-      title: "1 month", 
-      active: false
-    },
-    {
-      title: "3 months", 
-      active: false
-    },
-    {
-      title: "6 months", 
-      active: false
-    },
-    {
-      title: "1 year", 
-      active: false
-    },
-  ])
+  const [formstate, setFormstate] = useState({
+    courseName: "",
+    training: "",
+    accountDetails: "",
+    requestDetails: ""
+  })
+  const [loading, setLoading] = useState(false);
 
-  const rowData = [
-    {
-      header: "No",
-      entries: [
-        {
-          id: 1,
-          title: "1."
-        },
-        {
-          id: 2,
-          title: "2."
-        },
-        {
-          id: 3,
-          title: "3."
-        },
-      ]
-    },
-    {
-      header: "Name of Teacher",
-      entries: [
-        {
-          id: 1,
-          title: "Peter Cole"
-        },
-        {
-          id: 2,
-          title: "James Jackson"
-        },
-        {
-          id: 3,
-          title: "Lucas mata"
-        },
-      ]
-    },
-    {
-      header: "Date",
-      entries: [
-        {
-          id: 1,
-          title: "02-04-12"
-        },
-        {
-          id: 2,
-          title: "02-02-12"
-        },
-        {
-          id: 3,
-          title: "04-31-24"
-        },
-      ]
-    },
-    {
-      header: "Account Details",
-      entries: [
-        {
-          id: 1,
-          title: "UBA-84458588"
-        },
-        {
-          id: 2,
-          title: "JPM-873747484"
-        },
-        {
-          id: 3,
-          title: "CITI-848487484"
-        },
-      ]
-    },
-    {
-      header: "Amount",
-      entries: [
-        {
-          id: 1,
-          title: "25%"
-        },
-        {
-          id: 2,
-          title: "50%"
-        },
-        {
-          id: 3,
-          title: "25% balance"
-        },
-      ]
-    },
-    {
-      header: "Approve Request",
-      entries: [
-        {
-          id: 1,
-          title: false
-        },
-        {
-          id: 2,
-          title: false
-        },
-        {
-          id: 3,
-          title: true
-        },
-      ]
-    }
-  ]
-
-  function toggleActiveHandler(e){
-    let title = e.target.textContent;
-    console.log(title);
-    setData(old => {
-      let copy = [...old];
-      return copy.map(c => {
-        if(c.title === title) {
-          c.active = true;
-        }else {
-          c.active = false;
-        }
-        return c;
-      })
+  function changeHandler(e){
+    const {name, value} = e.target;
+    setFormstate(old => {
+      return {
+        ...old,
+        [name]: value
+      }
     })
+  }
+
+  async function submitHandler(e){
+    e.preventDefault();
+    setLoading(_ => true);
+    try{
+      console.log(e.target);
+      if(
+        formstate.courseName.trim() === "" || formstate.training.trim() === "" ||
+        formstate.accountDetails.trim() === "" || formstate.requestDetails.trim() === ""
+      ) throw new AdvancedError("Empty field detected", 1);
+      //at this point it is valid submit
+      console.log({formstate});
+      toast.success("Valid entries", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }catch(err){
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }finally{
+      setLoading(_ => false);
+    }
   }
   return(
     <div className={clsx.requests}>
-      <div className={clsx.requests_header}>
-        <h2>List of Requests</h2>
-        <button>Download CSV</button>
-      </div>
-      <div className={clsx.requests_meta}>
-        <span>
-          <HiOutlineFilter /> &nbsp; Filter by:
-        </span>
-        {
-          data.map(({active, title}, i) => (
-            <Tab toggleActiveHandler={toggleActiveHandler} key={i} active={active}>
-              {title}
-            </Tab>
-          ))
-        }
-      </div>
-      <RequestsTable rows={rowData} />
+      {loading ? <Loader /> : null}
+      <h2>Request for Fund</h2>
+      <form className="form" onSubmit={submitHandler}>
+        <Input
+          label="Name of Course"
+          name="courseName"
+          type="text"
+          handleChange={changeHandler}
+          value={formstate.courseName}
+        />
+        <Input
+          label="Stage of Training"
+          name="training"
+          type="text"
+          handleChange={changeHandler}
+          value={formstate.training}
+        />
+        <Input
+          label="Account Details"
+          name="accountDetails"
+          type="text"
+          handleChange={changeHandler}
+          value={formstate.accountDetails}
+        />
+        <div className="form-group my-3">
+          <label htmlFor="level" className="form-label generic_label">Details of Request</label>
+          <select name="level" id="level" className="form-select" style={{width: "unset"}}>
+            <option value="">0%</option>
+            <option value="25%">25%</option>
+            <option value="50%">50%</option>
+            <option value="75%">75%</option>
+            <option value="100%">100%</option>
+          </select>
+        </div> 
+
+        <div className={`${clsx.requests_button} form-group my-3`}>
+          <button>Request for Fund</button>
+        </div>
+      </form>
     </div>
   )
 }
-
-
-const Tab = ({children, active, toggleActiveHandler}) => {
-  return (
-    <div onClick={toggleActiveHandler} className={`${clsx.requests_tab} ${active ? 'in_active' : ''}`}>
-      {children}
-    </div>
-  )
-}
-
-
-const RequestsTable = ({rows}) => {
-  return (
-    <div className={clsx.requests_table}>
-      {
-        rows.map(({header, entries}, i) => (
-          <div key={i} className={clsx.requests_table_column}>
-            <h6>{header}</h6>
-            <ul>
-              {
-                entries.map((e, i) => (
-                  <li key={i}>
-                   {header === "Approve Request" ? <Switch checked={e.title} /> : e.title}
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
-        ))
-      }
-    </div>
-  )
-} 
