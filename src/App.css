@@ -2008,3 +2008,12 @@ tr th, thead td {
   font-size: clamp(0.956rem, -0.2429rem + 3.7143vw, 1.15rem);
   text-align:start;
 }
+
+
+
+/* TEACHER REQUESTS */
+
+.in_active {
+  background-color: rgba(90, 99, 247,.2);
+  border: none !important;
+}
