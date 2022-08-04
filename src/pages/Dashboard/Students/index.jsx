@@ -502,17 +502,15 @@ export function Classes(){
     )
 }
 export function Wishlist(){
-    const {generalState: {isMobile}, setGeneralState, generalState, studentFunctions:{fetchWishlist}} = useAuth();
+    const {generalState: {isMobile, loading}, setGeneralState, generalState, studentFunctions:{fetchWishlist}} = useAuth();
     const [wishlists, setWishlists]= useState([])
 
     const {getItem} = useLocalStorage();
     let userdata = getItem(KEY);
 
     const flag = useRef(false);
-     useEffect(()=>{
-        if(flag.current) return;
-        (async () => {
-          try {
+    async function getWishList(){
+        try {
             setGeneralState({...generalState, loading: true})
             const res = await fetchWishlist(userdata?.token);
             const { message, success, statusCode } = res;
@@ -520,7 +518,6 @@ export function Wishlist(){
             else if (statusCode === 1) {
               const { data } = res;
               if(data.length > 0){
-    
                 setWishlists(data);
                 toast.success(message, {
                 position: "top-right",
@@ -541,6 +538,7 @@ export function Wishlist(){
                 draggable: true,
                 progress: undefined,
               });
+              setWishlists([])
             }
             
             } else {
@@ -559,7 +557,10 @@ export function Wishlist(){
           }finally{
             setGeneralState({...generalState, loading: false});
           }
-        })()
+    }
+     useEffect(()=>{
+        if(flag.current) return;
+        getWishList()
         flag.current = true;
     },[])
     return ( 
@@ -571,7 +572,7 @@ export function Wishlist(){
                 <div className={clsx.classes}>
                     <div className={clsx.students_wishlist}>
                         {wishlists.length > 0 ? wishlists.map((item, index)=>(
-                            <WishCard key={index} {...item} />
+                            <WishCard key={index} {...item} refetch={getWishList} />
                         )) : 
                         <p className="text-center mx-auto">Nothing to see here</p>
                         }
@@ -582,12 +583,13 @@ export function Wishlist(){
     )
 }
 
-function WishCard({courseId:id, courseName, courseDescription, courseCategory}){
+function WishCard({courseId:id, courseName, courseDescription, courseCategory, refetch}){
     const navigate = useNavigate();
     const [open, setOpen]= useState(false);
 
     function closeModal(){
         setOpen(false)
+        refetch()
     }
     function handleNavigate(category, name){
         localStorage.setItem("gotocourse-courseId", id)
@@ -616,7 +618,7 @@ function WishCard({courseId:id, courseName, courseDescription, courseCategory}){
 }
 
 function DeleteModal({id,open,handleClose}){
-    const {generalState: {isMobile}, setGeneralState, generalState, studentFunctions:{deleteFromWishlist}} = useAuth();
+    const {generalState: {isMobile, loading}, setGeneralState, generalState, studentFunctions:{deleteFromWishlist}} = useAuth();
 
     const {getItem} = useLocalStorage();
     let userdata = getItem(KEY);
@@ -643,6 +645,7 @@ function DeleteModal({id,open,handleClose}){
             if(!success) throw new AdvancedError(message, statusCode);
             else {
                 const {data} = res;
+                handleClose()
                 toast.success(message, {
                     position: "top-right",
                     autoClose: 4000,
@@ -676,10 +679,18 @@ function DeleteModal({id,open,handleClose}){
         >
             <Box style={style}>
                 <h4 className="text-center mb-4">Delete From WishList ?</h4>
-                <div className="d-flex justify-content-around">
-                <button className="btn btn-outline-primary" onClick={handleClose}  style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)", fontWeight:"bold", padding:"0.5rem 1rem"}}>Cancel</button>
-                <button className="btn btn-outline-primary" onClick={removeCourse} style={{border:"1px solid var(--theme-orange)", color:"var(--theme-orange)", fontWeight:"bold", padding:"0.5rem 1rem"}}>Yes</button>
+                {loading ? 
+                <div className="text-center">
+                    <div className="spinner-border text-primary">
+                        <div className="visually-hidden">Loading</div>    
+                    </div>   
                 </div>
+                    :
+                <div className="d-flex justify-content-around">
+                    <button className="btn btn-outline-primary" onClick={handleClose}  style={{border:"1px solid var(--theme-blue)", color:"var(--theme-blue)", fontWeight:"bold", padding:"0.5rem 1rem"}}>Cancel</button>
+                    <button className="btn btn-outline-primary" onClick={removeCourse} style={{border:"1px solid var(--theme-orange)", color:"var(--theme-orange)", fontWeight:"bold", padding:"0.5rem 1rem"}}>Yes</button>
+                </div>
+                }
             </Box>
         </Modal>
 
@@ -762,7 +773,7 @@ export function Courses(){
                         <tbody>
                             {
                                 courses.length > 0 && courses.map(({courseName,coursePrice, package: p, course, rating}, i) => (
-                                    <UserInfoCard key={i} enrolled={courseName} date={p} coursePrice={coursePrice}   num={i} handleRating={()=>handleRating("courseID")}  />
+                                    <UserInfoCard key={i} enrolled={courseName} date={p} coursePrice={coursePrice} num={i} handleRating={()=>handleRating("courseID")}  />
                                 )) 
                             }
                         </tbody>
