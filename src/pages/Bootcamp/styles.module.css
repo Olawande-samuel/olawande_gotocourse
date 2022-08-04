@@ -60,10 +60,11 @@
 }
 
 .bootcamp_image {
-    width: 35%;
+    width: 50%;
     height: 100vh;
     background-color: var(--pry);
     position: relative;
+    margin-top: 40px;
 }
 
 .image_container {
