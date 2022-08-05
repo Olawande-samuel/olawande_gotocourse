@@ -152,11 +152,11 @@ const Sidebar = ({isMobile}) => {
             path: "courses",
             title: "Courses"
         },
-        {
-            icon: MdMessage,
-            path: "classes",
-            title: "Classes"
-        },
+        // {
+        //     icon: MdMessage,
+        //     path: "classes",
+        //     title: "Classes"
+        // },
         {
             icon: BiCategory,
             path: "bootcamps",

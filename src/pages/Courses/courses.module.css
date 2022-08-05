@@ -26,6 +26,7 @@
   font-size: clamp(20px, 2.5vw, 32px);
   line-height: 32px;
   margin-bottom: 1rem !important;
+  text-transform: capitalize;
 }
 
 .subtitle {
@@ -175,6 +176,11 @@
   color: #9f9f9f;
 }
 
+.course_teachers_card .course_Card_body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
 /* *************************DETAILS****************************************** */
 .details_main h2 {
   font-weight: 600;
@@ -400,6 +406,10 @@ a .course_card:hover .course_author {
 .course_card_author {
   margin-bottom: 0;
   margin-left: .3rem;
+}
+
+.course_card .teacher_page_image {
+  height: 230px;
 }
 
 .othercard:hover {

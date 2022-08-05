@@ -37,7 +37,7 @@ const SignUp = () => {
 
   const { getItem, removeItem } = useLocalStorage();
   const {
-    authFunctions: { register },
+    authFunctions: { register }, generalState,
     setGeneralState,
   } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -53,17 +53,26 @@ const SignUp = () => {
   };
 
 
-
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       let { retype_password, ...others } = data;
-      if(!emailReg.test(others.email) && !passReg.test(others.password)) throw new AdvancedError("Invalid email or password")
-      if (others.email.trim() === "" || others.password.trim() === "") throw new AdvancedError("Fields cannot be empty", 0);
+      if(!emailReg.test(others.email) || !passReg.test(others.password)) 
+        throw new AdvancedError("Invalid email or password", 0)
+      if (others.email.trim() === "" || others.password.trim() === "")
+       throw new AdvancedError("Fields cannot be empty", 0);
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
+        
+
       const response = await register(others, "user");
+    //   const res = await generalState.pledre.signUpStudent({
+    //     name: "Ola",
+    //     email: "samueldacoal@gmail.com",
+    //     password: data.password
+    // })
+      // console.log(res)
       let { success, message, statusCode } = response;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -81,16 +90,17 @@ const SignUp = () => {
         navigate("/students");
       }
     } catch (err) {
+      console.error(err)
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       if (err.statusCode === 0) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
       }
     } finally {
       setLoading(false);

@@ -11,7 +11,7 @@ import {
 import { toast } from "react-toastify";
 
 
-import Courses, { CourseCard } from "../Courses";
+import Courses, { TeachersCard } from "../Courses";
 import { courseList } from "../Courses";
 import { useAuth } from "../../contexts/Auth";
 import style from "./teacher.module.css";
@@ -51,9 +51,10 @@ const All = ({ type }) => {
   const {
     generalState,
     setGeneralState,
-    otherFunctions: { fetchMentors },
+    otherFunctions: { fetchMentors, fetchTeachers },
   } = useAuth();
   const [mentors, setMentors] = useState([]);
+  const [teachers, setTeachers] = useState([]);
   const ref = useRef(false);
 
   // fetch teachers/mentors
@@ -63,13 +64,15 @@ const All = ({ type }) => {
     (async () => {
       try {
         setGeneralState({ ...generalState, loading: true });
-        const res = await fetchMentors();
+        const res = type === "mentors" ? await fetchMentors() : await fetchTeachers();
         const { success, message, statusCode, data } = res;
+        console.log(res)
         setGeneralState({ ...generalState, loading: false });
         if (!success || statusCode !== 1)
           throw new AdvancedError(message, statusCode);
         if (data.length > 0) {
-          setMentors(data);
+          type === "mentors" ?
+          setMentors(data) : setTeachers(data)
         }
       } catch (err) {
         setGeneralState({ ...generalState, loading: false });
@@ -106,7 +109,7 @@ const All = ({ type }) => {
           </div>
         </section>
         <main className={`mentors_list_main ${style.main}`}>
-          {type === "mentors"
+          {type === "mentors" 
             ? mentors
                 .filter(item=> item.expertise.includes(search) || item.mentorFirstName.includes(search.toUpperCase())|| item.mentorLastName.includes(search.toUpperCase())||item.mentorBio.includes(search)||item.mentorEmail.includes(search))
                 .map((item) => (
@@ -114,33 +117,18 @@ const All = ({ type }) => {
                     <MentorsCard item={item} />
                   </div>
                 ))
-            : courseList.map((item) => (
-                <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setGeneralState((old) => {
-                      return {
-                        ...old,
-                        teacherProfile: {
-                          profile: item.img,
-                          location: `${item.author} `,
-                          details: item.details,
-                          content: item.title,
-                          id: item.id,
-                        },
-                      };
-                    });
-                    navigate(item.author.split(" ").join("-"));
-                  }}
-                >
-                  <CourseCard
-                    courseImg={item.img}
-                    name={item.title}
-                    category={item.subtitle}
-                    instructorName={item.author}
+            : teachers.map((item) => (
+                
+                  <TeachersCard
+                    courseImg={item.profileImg}
+                    name={`${item.firstName} ${item.lastName}`}
+                    category={item.category}
+                    instructorName={item.location}
+                    description={item.bio}
                     backgroundColor="backgroundColor"
+                    teacher={item}
+                    teacherId={item.teacherId}
                   />
-                </div>
               ))}
         </main>
       </div>
@@ -510,7 +498,7 @@ export const PaymentStatus = ({success}) => {
         <button
           className="button button-md"
           type="button"
-          onClick={() => success ? navigate(userdata.userType === "student" ? "/student" : userdata.userType === "admin" ? "/admin" :"/teacher") : navigate(-1)}
+          onClick={() => success ? navigate(userdata.userType === "student" ? "/students" : userdata.userType === "admin" ? "/admin" :"/teacher") : navigate(-1)}
         >
           {status.action}
         </button>

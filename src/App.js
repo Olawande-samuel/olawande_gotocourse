@@ -38,7 +38,6 @@ import Settings from "./pages/Dashboard/Admin/Settings";
 function App() {
   return (
     <AuthContextProvider>
-
       <SyllabusContextProvider>
       <Routes>
         <Route path="/" element={<Out />}>
@@ -84,7 +83,7 @@ function App() {
               <Route index element={<All  type="teachers" />} />
               <Route path=":id" element={<Out />} >
                <Route index element={<TeacherProfile />} />
-                <Route path="payment" element={<Payment />} />
+                {/* <Route path="payment" element={<Payment />} /> */}
               </Route>
             </Route>
 

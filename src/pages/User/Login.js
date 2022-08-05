@@ -14,7 +14,7 @@ import { AdvancedError } from "../../classes";
 const KEY = 'gotocourse-userdata';
 const Login = () => {
   const navigate = useNavigate()
-  const {authFunctions: {login}, setGeneralState} = useAuth();
+  const {authFunctions: {login}, generalState:{pledre}, setGeneralState} = useAuth();
   const {getItem, removeItem} = useLocalStorage();
 
   const [data, setData] = useState({
@@ -41,7 +41,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await login(data, "user");
-
+      console.log(response)
       const {success, statusCode, message} = response;
       
       if(success) {
