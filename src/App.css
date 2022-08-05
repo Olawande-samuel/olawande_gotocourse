@@ -2009,11 +2009,3 @@ tr th, thead td {
   text-align:start;
 }
 
-
-
-/* TEACHER REQUESTS */
-
-.in_active {
-  background-color: rgba(90, 99, 247,.2);
-  border: none !important;
-}
