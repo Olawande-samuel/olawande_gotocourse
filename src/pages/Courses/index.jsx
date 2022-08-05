@@ -261,6 +261,27 @@ export const  CourseCard = ({ courseImg, name, description, category, instructor
     </div>
   );
 };
+export const  TeachersCard = ({ courseImg, name, description, category, instructorName, color, background, show ,  teacher, teacherId}) => {
+  const navigate = useNavigate()
+  return (
+    <div className={`card ${style.course_card} ${style.course_teachers_card}`} style={{background:background, color:color, cursor: "pointer", height:"100%"}} onClick={()=>{
+      localStorage.setItem("gotocourse-teacherInfo", JSON.stringify(teacher))
+      localStorage.setItem("gotocourse-teacherId", teacherId)
+      navigate(show === true ?  `courses/${name?.replace(/\s+/g, '-').toLowerCase()}`:`${name?.replace(/\s+/g, '-').toLowerCase()} `)
+      }}>
+      <img src={courseImg ? courseImg : placeholder} alt="" className={`card-img-top mentor_image ${style.teacher_page_image}`} />
+      <div className={`card-body ${style.course_Card_body}`}>
+        <Link to={show === true ?  `courses/${name?.replace(/\s+/g, '-').toLowerCase()}`:`${name?.replace(/\s+/g, '-').toLowerCase()} `}>
+          <h5 className={`card-title ${style.course_title}`} style={{ color:color}}>{name}</h5>
+        </Link> 
+        <h6 className={`card-subtitle ${style.course_subtitle}`}>{category}</h6>
+        {/* add line-clamp to this v */}
+        <p className={`card-text restricted_line ${style.course_text}`}>{description}</p>
+        <p className={`text-end ${style.course_author}`} style={{ color:color}}>{instructorName}</p>
+      </div>
+    </div>
+  );
+};
 
 export const Categories = () => {
   const navigate = useNavigate()
@@ -1146,22 +1167,29 @@ export const ReviewCard = ({content, profile, name, location}) => {
   );
 };
 
-export const OtherCard = () => {
+export const OtherCard = ({name, category, description, instructorName, instructorProfileImg, course, courseId}) => {
+  const navigate = useNavigate()
+  function handleNavigate(){
+    localStorage.setItem("gotocourse-courseId", courseId)
+    let cat = category.split(" ").join("-").toLowerCase()
+    let courseName = name.split(" ").join("-")
+    navigate(`/categories/${cat}/courses/${courseName}`)
+  }
   return (
-    <div className={`card ${style.package_card, style.othercard} p-2`}>
-      <div className="card-body">
-        <p className={style.package_price}>Introduction to SQL</p>
-        <p className={style.subtext}>Data Science</p>
-        <p className={style.package_text}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus
-          ridiculus nunc adipiscing justo. Proin fermentum ipsum a non t
-          laoreet.
+    <div className={`card ${style.package_card} ${style.othercard} cursor-pointer p-2`} onClick={handleNavigate}>
+      <div className="card-body d-flex flex-column justify-content-between">
+        <div>
+          <p className={style.package_price}>{name}</p>
+          <p className={style.subtext}>{category}</p>
+        </div>
+        <p className={`restricted_line ${style.package_text}`}>
+          {description}
         </p>
         <div className="d-flex align-items-center" >
             <div className={style.profile_img_wrapper}>
-              <img src={Power} alt="" className={style.image} />
+              <img src={instructorProfileImg} alt="" className={style.image} />
             </div>
-            <p className={style.course_card_author}>Niyi Adegoke</p>
+            <p className={style.course_card_author}>{instructorName}</p>
         </div>
       </div>
     </div>

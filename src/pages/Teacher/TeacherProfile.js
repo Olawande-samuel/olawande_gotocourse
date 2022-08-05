@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {NavHashLink } from "react-router-hash-link"
 import {BsStarFill} from "react-icons/bs"
 import Algo from "../../images/mentor2.png";
@@ -7,6 +7,8 @@ import style from "../Courses/courses.module.css";
 import { useLocation } from "react-router-dom";
 import {useAuth} from "../../contexts/Auth";
 import {useLocalStorage} from "../../hooks"
+import { AdvancedError } from "../../classes";
+import { toast } from "react-toastify";
 // USING STYLES FROM COURSES.MODULE.CSS
 
 
@@ -25,15 +27,20 @@ const TeacherProfile = ({type}) => {
   //   let meta = pathname.split("/").reverse()[0];
   //   name = `${meta.split("-")[0]} ${meta.split("-")[1]}`
   // }
-  const mentor = getItem("gotocourse-viewMentor")
+  let mentor, teacher;
+  if(type === "mentor"){
+    mentor = getItem("gotocourse-viewMentor")
 
+  } else {
+    teacher = getItem("gotocourse-teacherInfo")
+  }
   const [teacherProfile, setTeacherProfile]= useState({})
   
   useEffect(()=>{
     if(mentor && type === "mentor"){
       setTeacherProfile(mentor)
     } else {
-      setTeacherProfile(generalState.teacherProfile)
+      setTeacherProfile(teacher)
 
     }
 
@@ -41,7 +48,7 @@ const TeacherProfile = ({type}) => {
   return (
     <Courses>
         <div className="container">
-        {type !== "mentors" && 
+        {/* {type !== "mentors" && 
       <section className={`d-flex ${style.navigation}`}>
           <NavHashLink
           smooth
@@ -79,7 +86,7 @@ const TeacherProfile = ({type}) => {
             Faq
           </NavHashLink>
       </section>
-        }
+        } */}
       <section id="about" className={style.teacher_profile_wrapper}>
         <div className={`row justify-content-between $${style.teacher_profile_row}`}>
           <div className="col-md-5">
@@ -87,14 +94,14 @@ const TeacherProfile = ({type}) => {
               <div className="g-3">
                 <div className={style.teacher_image}>
                   <div className={style.teacher_img_wrapper}>
-                    <img src={teacherProfile?.mentorImg ?`https://loftywebtech.com/gotocourse/api/uploads/${teacherProfile.mentorImg} ` : teacherProfile.profile} alt="" className={style.teacher_image} />
+                    <img src={teacherProfile?.mentorImg ?`https://loftywebtech.com/gotocourse/api/uploads/${teacherProfile.mentorImg} ` : teacherProfile.profileImg} alt="" className={style.teacher_image} />
                   </div>
                 </div>
 
                 <div className={` mt-lg-3 ${style.teacher_card_right}`}>
-                  <p className={style.teacher_name}>{`${teacherProfile?.mentorFirstName ? teacherProfile.mentorFirstName : teacherProfile.location} ${teacherProfile?.mentorLastName ? teacherProfile.mentorLastName: ""}`}</p>
+                  <p className={style.teacher_name}>{`${teacherProfile?.mentorFirstName ? teacherProfile.mentorFirstName : teacherProfile.firstName} ${teacherProfile?.mentorLastName ? teacherProfile.mentorLastName: teacherProfile.lastName}`}</p>
                   <span className={style.teacher_occupation}>
-                    { teacherProfile?.expertise}
+                    { teacherProfile?.expertise ? teacherProfile.expertise : teacherProfile.category}
                   </span>
                   <div className={ `d-flex  justify-content-between ${style.rating_wrapper}`}>
                     {type === "mentors" && (
@@ -103,7 +110,20 @@ const TeacherProfile = ({type}) => {
                       <p className={style.occupation}>{teacherProfile?.experience}</p>
                     </div>
                     )}
-                    <div>
+                    {/* <div>
+                    <p className={style.headers}>Rating </p>
+                    <div className={style.rating_stars}>
+                        <BsStarFill style={{ color: "#FFCB14", fontSize: "18px" }} />
+                        <BsStarFill style={{ color: "#FFCB14", fontSize: "18px" }} />
+                        <BsStarFill style={{ color: "#FFCB14", fontSize: "18px" }} />
+                        <BsStarFill style={{ color: "#FFCB14", fontSize: "18px" }} />
+                        <BsStarFill style={{ color: "#FFCB14", fontSize: "18px" }} />
+                      <span className={style.occupation}>(5)</span>
+                    </div>
+                    </div> */}
+                  </div>
+                  <div className={style.profile_footer}>
+                  <div className="">
                     <p className={style.headers}>Rating </p>
                     <div className={style.rating_stars}>
                         <BsStarFill style={{ color: "#FFCB14", fontSize: "18px" }} />
@@ -114,12 +134,6 @@ const TeacherProfile = ({type}) => {
                       <span className={style.occupation}>(5)</span>
                     </div>
                     </div>
-                  </div>
-                  <div className={style.profile_footer}>
-                    {/* <div className={style.location}>
-                      <p className={style.headers}>Location</p>
-                      <p className="fw-bold">Lagos, Nigeria</p>
-                    </div> */}
                     <div className="style time">
                       <p className={style.headers}>Time Active</p>
                       <p className="fw-bold"> January, 2022</p>
@@ -157,7 +171,7 @@ const TeacherProfile = ({type}) => {
                   </>
                 ):(
                     <>
-                    <div className={`btn-group w-100 ${style.button_group}`}>
+                    {/* <div className={`btn-group w-100 ${style.button_group}`}>
                         <input type="radio" className={`btn-check ${style.btn_check}`} name="btnradio" id="btnradio1" autocomplete="off" checked />
                         <label style={{borderTopLeftRadius:"10px"}}  className={`btn btn-outline-primary generic_label ${style.teacher_profile_options}`} for="btnradio1">Cohort</label>
 
@@ -166,14 +180,14 @@ const TeacherProfile = ({type}) => {
 
                         <input type="radio" className={`btn-check ${style.btn_check}`} name="btnradio" id="btnradio3" autocomplete="off" />
                         <label className={`btn btn-outline-primary generic_label ${style.teacher_profile_options}`} for="btnradio3">One-on-One</label>
-                    </div>
+                    </div> */}
                   <div className="card-body p-2">
-                    <h5 className={`my-4 ${style.title}`}>Cohort Course</h5>
+                    {/* <h5 className={`my-4 ${style.title}`}>Cohort Course</h5>
                     <p className={style.teacher_paragraph}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo. Proin fermentum ipsum a non tellus tincidunt feugiat laoreet laoreet. </p>
                     <ul>
                         <li>Lorem ipsum dolor sit.</li>
                         <li>Lorem ipsum dolor sit amet.</li>
-                    </ul>
+                    </ul> */}
 
                     <div>
                         <button className="button button-md w-100">Contact Teacher</button>
@@ -187,7 +201,7 @@ const TeacherProfile = ({type}) => {
          </section>
          <div id="syllabus" className={style.block}>
           {teacherProfile?.mentorId ? null :
-            <AllCourses pathname={pathname} />
+            <AllCourses pathname={pathname} id={teacherProfile.teacherId} />
           }
          </div>
          <div className={style.block}>
@@ -200,21 +214,68 @@ const TeacherProfile = ({type}) => {
 
 export default TeacherProfile;
 
-const AllCourses = ({teacher, pathname})=> {
+const AllCourses = ({teacher, pathname, id})=> {
+  
+  const {generalState, setGeneralState, otherFunctions:{fetchCourses}} = useAuth()
+  const [courses, setCourses]= useState([])
   const name = pathname.split("/").reverse()[0];
+  const ref = useRef()
 
+  async function fetchCourse(){
+    try{
+    setGeneralState({...generalState, loading: true});
+  
+    const res =  await fetchCourses()
+    const {success, message, statusCode} = res;
+    if(!success) throw new AdvancedError(message, statusCode);
+    else {
+      const {data} = res;
+      console.log(data)
+      data.length > 0 ? setCourses(data.filter((course) => course.instructorId === id )) : setCourses([])
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }catch(err){
+    toast.error(err.message, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }finally {
+      setGeneralState({...generalState, loading: false});
+  }
+}
+  useEffect(()=>{
+    if(ref.current) return
+    if(id){
+      fetchCourse()
+
+      ref.current = true
+    }
+  },[id])
     return (
         <section>
             <h3 className={`text-center ${style.header}`}>Courses By {`${name.split("-")[0]} ${name.split("-")[1]}`}</h3>
             <p className={`subtitle ${style.subtitle}`}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus
-                ridiculus nunc adipiscing justo.
+                Here are some of the courses offered by the tutor
             </p>
             <div className={style.main}>
-                {[1,2, 3, 4, 5, 6].map(list=>(
-                    <OtherCard />
-                ))}
+              {courses?.map(course =>(
+                <OtherCard {...course} course={course} />
+            ))}
             </div>
+            {courses.length <=0 &&  <p>Courses are unavailable</p>}
         </section>
     )
 }
