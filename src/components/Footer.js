@@ -75,6 +75,11 @@ const rightLink = [
     title:"Admin",
     path:"/admin/login"
   },
+  {
+    id:7,
+    title:"Teachers",
+    path:"/teachers"
+  },
 ]
 const Footer = () => {
   const scrollWithOffset = (el)=>{

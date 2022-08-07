@@ -836,7 +836,7 @@ export const adminFunctions = {
     },
     toggleBootcampStatus: async function(token, id){
         try{
-            const res = await axios.patch(`${baseURL}/admin/bootcamp/toggle/${id}`,
+            const res = await axios.patch(`${baseURL}/admin/bootcamp/toggle/${id}`, {},
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,

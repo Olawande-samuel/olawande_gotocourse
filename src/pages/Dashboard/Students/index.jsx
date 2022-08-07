@@ -355,7 +355,7 @@ export function Bootcamps() {
     const [courseList, setCourseList] = useState([])
     const [loading, setLoading] = useState(true);
   
-    const tableHeaders = [ "No", "Title", "Details", "Type", "Duration", "Date", "Time" ];
+    const tableHeaders = [ "No", "Title", "Tutor", "Date", "Time" ];
   
     useEffect(()=>{
         if(flag.current) return;
@@ -411,11 +411,13 @@ export function Bootcamps() {
         flag.current = true;
     },[])
   
+    console.log({courseList})
     function gotoCreateCourseHandler(e){
       navigate("create");
     }
     function detailHandler(e, _id){
-        navigate("details/"+_id);
+        // navigate("/bootcamps/details/"+_id);
+        console.log("clicked")
       }
     return (
       <Students header={"Bootcamps"}>
@@ -435,18 +437,18 @@ export function Bootcamps() {
                 </thead>
                 <tbody>
                   {courseList.map(
-                    ( {title, duration, description, type, startTime, endTime, endDate, startDate, bootcampId, _id}, i ) => (
+                    ( {bootcampName, duration, tutorName, type, startTime, endTime, endDate, startDate, bootcampId, _id}, i ) => (
                       <BootcampRow
                       key={i}
                       index={i}
-                      title={title}
-                      detail={description}
-                      duration={duration}
-                      type={type}
+                      title={bootcampName}
+                      detail={tutorName}
+                    //   duration={duration}
+                    //   type={type}
                       admin={false}
                       clickHandler={e => detailHandler(e, bootcampId)}
-                      time={`${startTime} - ${endTime} CST`}
-                      date={`${getDate(startDate)} - ${getDate(endDate)}`}
+                      type={`${startTime} - ${endTime} CST`}
+                      duration={`${getDate(startDate)} - ${getDate(endDate)}`}
                       />
                     )
                   )}

@@ -29,10 +29,10 @@ export default function Earnings() {
       <Teachers isMobile={isMobile} userdata={userdata} style={{overflowY: "scroll"}}>
         <div className={clsx.teachers_profile}>
           <AllEarnings />
-        </div>
-        <div className={clsx.teachers_profile} style={{marginTop:20}}>
           <Requests />
         </div>
+        {/* <div className={clsx.teachers_profile} style={{marginTop:20}}>
+        </div> */}
       </Teachers>
     );
   }
@@ -41,14 +41,46 @@ export default function Earnings() {
     const data = [
       {
         title: "Teaching Model",
+        type: "Model",
+        value: 0
+      },
+      {
+        title: "Per Course",
+        type: "Courses",
+        value: 0
+      }
+    ]
+    const filterBy = [
+      {
+        title: "Day",
         type: "COHORT",
         value: 0
       },
       {
-        title: "Teaching Model",
+        title: "Week",
         type: "COHORT",
         value: 0
-      }
+      },
+      {
+        title: "1 Month",
+        type: "COHORT",
+        value: 0
+      },
+      {
+        title: "3 Months",
+        type: "COHORT",
+        value: 0
+      },
+      {
+        title: "6 Month",
+        type: "COHORT",
+        value: 0
+      },
+      {
+        title: "7 Month",
+        type: "COHORT",
+        value: 0
+      },
     ]
     return (
       <>
@@ -60,7 +92,7 @@ export default function Earnings() {
               <FiFilter />
             </i>
             <span style={{fontSize:"0.8rem"}}>Filter by: </span>
-            {data.map((date, i) => (
+            {filterBy.map((date, i) => (
               <FilterButton key={i} title={date.title} />
             ))}
           </div>
@@ -188,7 +220,7 @@ const Requests = () => {
     }
   }
   return(
-    <div className={clsx.requests}>
+    <div className={clsx.requests} style={{marginTop:20}}>
       {loading ? <Loader /> : null}
       <h2>Request for Fund</h2>
       <form className="form" onSubmit={submitHandler}>

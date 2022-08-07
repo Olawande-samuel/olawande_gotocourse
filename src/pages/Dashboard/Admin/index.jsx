@@ -2392,6 +2392,7 @@ export function BootcampDetails({}){
       const {message, statusCode, success} = res;
       if(!success) throw new AdvancedError(message, statusCode);
       else {
+        setFormstate({...formstate, status: true})
         toast.success(message, {
           position: "top-right",
           autoClose: 4000,
@@ -2489,7 +2490,7 @@ export function BootcampDetails({}){
               ></textarea>
             </div>
 
-            <div className={clsx.form_group}>
+            {/* <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
                 <label>Name of Instructors</label>
                 {
@@ -2514,9 +2515,9 @@ export function BootcampDetails({}){
               <button type="button" className={clsx.form_group__button}>
                 Add Instructor
               </button>
-            </div>
+            </div> */}
 
-            <div className={clsx.form_group}>
+            {/* <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
                 <label>Add Student</label>
                 {
@@ -2540,7 +2541,7 @@ export function BootcampDetails({}){
               <button type="button" className={clsx.form_group__button}>
                 Add Student
               </button>
-            </div>
+            </div> */}
 
             <div className={clsx.form_group} style={{marginTop: 40}}>
               <label>Change Bootcamp Status</label>
@@ -3148,7 +3149,8 @@ export function Notification() {
           const {data} = res
           if(data.length > 0) {
             setNotifications(data)
-            setGeneralState({...generalState, notifications: 0})
+            const unread = data.filter((notification)=>notification.isRead !== true)
+            setGeneralState({...generalState, notifications: unread.length})
           }
         }catch(err){
           toast.error(err.message, {
@@ -3214,7 +3216,7 @@ export function Notification() {
                   textShadow: "0px 0px 8px rgb(255, 255, 255)",
                 }} className="btn-plain mark_as_read p-1" style={{fontSize:"14px"}} onClick={markAsRead}>{load ? <div className="spinner-border text-dark">
                   <div className="visually-hidden">Loading</div>
-                </div>  : "Mark as read"}</motion.button>
+                </div>  : "Mark all as read"}</motion.button>
               }
             </div>
           <div className={clsx.admin__student_main}> 
@@ -3834,7 +3836,8 @@ export const Admin = ({ children, header }) => {
           if(!success) throw new AdvancedError(message, statusCode);
           const {data} = res
           if(data.length > 0) {
-            setGeneralState({...generalState, notifications: data.length})
+            const unread = data.filter((notification)=>notification.isRead !== true)
+            setGeneralState({...generalState, notifications: unread.length})
           }
         }catch(err){
           toast.error(err.message, {
