@@ -20,10 +20,12 @@ import Development from "../components/Development"
 import Companies from '../components/Companies'
 import Experienced from '../components/Experienced'
 import Upcoming from '../components/Upcoming'
+import NewLanding from '../components/NewLanding/NewLanding'
 const Landing = () => {
   return (
     <div>
-        <Layout>
+      <NewLanding />
+        {/* <Layout>
         <Hero />
         <Experienced />
         <Bootcamp />
@@ -39,7 +41,7 @@ const Landing = () => {
         <Testimonials />
         <Faq />
         <Upcoming />
-        </Layout>
+        </Layout> */}
     </div>
   )
 }

@@ -2,33 +2,38 @@ import React from "react";
 import { Learn, Certificate, Cohort,Ml, Support, InPerson } from "../images/components/svgs";
 
 
-const serviceList=[
+export const serviceList=[
   {
     id: 1,
     icon: <Learn />,
     title:"Learn from the best",
-    text:"Learn high in-demand skills from industry experts through Live classes, pre-recorded videos, and mentorship"
+    text:"Learn high in-demand skills from industry experts through Live classes, pre-recorded videos, and mentorship",
+    color:"orange"
+
   
   }, 
   {
     id: 2,
     icon: <Cohort />,
     title:"Flexible Learning model",
-    text:"Learn with a group of people with similar interest and experience."
+    text:"Learn with a group of people with similar interest and experience.",
+    color:"blue"
   
   }, 
   {
     id: 3,
     icon: <Certificate />,
     title:"Earn badges and completion certificates",
-    text:"Completion certificates awarded on every course completion "
+    text:"Completion certificates awarded on every course completion ",
+    color:"orange"
   
   }, 
   {
     id: 4,
     icon: <Ml />,
     title:"Live Classes",
-    text:"Experience enhanced collaboration. Join conference calls with teacher and other students to share screen"
+    text:"Experience enhanced collaboration. Join conference calls with teacher and other students to share screen",
+    color:"orange"
   
   }, 
   
@@ -37,7 +42,8 @@ const serviceList=[
     id: 7,
     icon: <InPerson />,
     title:"In-person training",
-    text:"Do you enjoy hand holding in person training ? Some of our trainings are available at our physical locations."
+    text:"Do you enjoy hand holding in person training ? Some of our trainings are available at our physical locations.",
+    color:"blue"
   
   }, 
  

@@ -51,7 +51,7 @@ const AdminSignup = () => {
       if(formstate.password !== formstate.retype_password) throw new Error("Passwords don't match", 0);
       if(formstate.email.trim() === "" || formstate.fullname === "" || formstate.password === "") throw new AdvancedError("All fields are required", 0);
       const {retype_password, ...data} = formstate;
-      const res = await register({...data, userType: 'admin'}, 'admin');
+      const res = await register({...data, userType: 'student'}, 'admin');
       const {success, message, statusCode} = res;
       if(!success) throw new AdvancedError(message, statusCode);
       else {

@@ -12,9 +12,9 @@ import AdminSignup from "./pages/Admin/SignUp"
 import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails, Chat as AdminChat,
   CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails, AddMentor,Mentors, MentorsDetail, Notification, Earnings as AdminEarning} from "./pages/Dashboard/Admin";
 import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Fees as StudentFees,
-   Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps} from "./pages/Dashboard/Students";
+   Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat} from "./pages/Dashboard/Students";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, 
-  Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo,  } from "./pages/Dashboard/Teachers";
+  Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo, Chat as TeacherChat  } from "./pages/Dashboard/Teachers";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
@@ -61,7 +61,7 @@ function App() {
             <Route path="payment/error" element={<PaymentStatus />} />
             <Route path="career" element={<Career />} />
 
-            <Route path="students" element={<Out />}>
+            <Route path="student" element={<Out />}>
               <Route path="" element={<StudentProfile  />} />
               <Route path="classes" element={<StudentClasses  />} />
               <Route path="bootcamps" element={<StudentBootcamps  />} />
@@ -70,6 +70,7 @@ function App() {
               <Route path="wishlist" element={<Wishlist />} />
               <Route path="history" element={<StudentHistory />} />
               <Route path="fees" element={<StudentFees />} />
+              <Route path="chat" element={<StudentChat />} />
             </Route>
 
             <Route path="mentors" element={<Out/>}>
@@ -99,9 +100,10 @@ function App() {
               <Route path="courses" element={<TeacherCourses />} />
               <Route path="courses/create" element={<CreateCourse />} />
               <Route path="courses/details/:id" element={<TeacherCourseInfo />} />
+              <Route path="chat" element={<TeacherChat />} />
             </Route>
             <Route path="categories" element={<Out />}>
-              <Route path="" element={<Categories  />} />
+              <Route index element={<Categories  />} />
               <Route path=":id" element={<Out />}  >
                 <Route index element={<CourseDetail />} />
                 <Route path="courses" element={<CourseList />} />

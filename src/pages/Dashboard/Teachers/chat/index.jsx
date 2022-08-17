@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { useLocalStorage } from "../../../../hooks";
 import { useAuth } from "../../../../contexts/Auth";
 
-import clsx from "./styles.module.css";
+import clsx from "../../Admin/Chat/styles.module.css";
 import img from "../../../../images/john.png";
 import { Searchbar } from "../../components";
 
@@ -56,11 +56,11 @@ const ChatComponent = () => {
     },
     {
       active: false,
-      name: "Teacher",
+      name: "My Teachers/Mentors",
     },
     {
       active: false,
-      name: "Community",
+      name: "Admin",
     },
   ]);
 
@@ -90,11 +90,11 @@ const ChatComponent = () => {
     },
     {
       id: 2,
-      type: "Teachers/Mentors",
+      type: "My Teachers/Mentors",
     },
     {
-      id: 4,
-      type: "Others",
+      id: 3,
+      type: "Admin",
     },
   ];
   const messages = [
@@ -290,7 +290,7 @@ const Chat = ({ type, messagedata }) => {
         />
         <div className={clsx.users__list}>
           {
-            type === "New Messages" ?
+            type !== "Admin" && (type === "New Messages" ?
             // myMessages.data?.data?.map((message, index) => (
               dummy.map((message, index) => (
               <div
@@ -298,8 +298,6 @@ const Chat = ({ type, messagedata }) => {
                 onClick={(e) => openMessage(e, message)}
               >
                 <div className={clsx.user_image}>
-                  {/* <div className={clsx.dot}></div> */}
-                  {/* <img src={messagedata.image} alt="avatar" /> */}
                   <p className={clsx.user_name}>{message.fromUser}</p>
                 </div>
                 <h5 className={clsx.user_role}>{message.type}</h5>
@@ -317,16 +315,17 @@ const Chat = ({ type, messagedata }) => {
                 </div>
                 <h5 className={clsx.user_role}>{user.userType}</h5>
               </div>
-            ))
+            )))
           }
         </div>
       </div>
-      <ChatBox messages={messages} boxdata={messagedata} type={type} displayControl={messages} />
+
+      <ChatBox messages={messages} boxdata={messagedata} type={type} />
     </div>
   );
 };
 
-const ChatBox = ({ messages, boxdata, checked, type , displayControl}) => {
+const ChatBox = ({ messages, boxdata, checked, type }) => {
   const [messageList, setMessageList] = useState([]);
   const [text, setText] = useState("");
   const { getItem } = useLocalStorage();
@@ -358,7 +357,7 @@ const ChatBox = ({ messages, boxdata, checked, type , displayControl}) => {
       });
     }finally{
       // setLoader(_ => false);
-      console.log("done")
+      console.log("donte")
     }
 
 
@@ -373,14 +372,13 @@ const ChatBox = ({ messages, boxdata, checked, type , displayControl}) => {
     }
   }, [messages]);
 
-  
 
   return (
     <div className={clsx.chat_box}> 
       {
-        Object.keys(messages).length <= 0 ? (
-        <h2 className="text-center generic_label">No messages yet</h2>
-      ) :
+      //   !messages.fromUser ? (
+      //   <h2 className="text-center generic_label">No messages yet</h2>
+      // ) :
        (
         <>
           {checked}
@@ -401,24 +399,24 @@ const ChatBox = ({ messages, boxdata, checked, type , displayControl}) => {
               ))
                 }
           </div>
-          <div className={clsx.chat_sender_container}>
-            <div className={clsx.chat_sender}>
-              <input type="text" placeholder="Enter message" onChange={handleTextMsg} value={text} />
-              <span className={clsx.chat_icons}>
-                <span className={clsx.send}>
-                  <IoMdSend onClick={sendMsg} />
-                </span>
-                {/* <span className={clsx.attach}>
-                  <IoIosAttach />
-                </span> */}
-                <span className={clsx.check}>
-                  <IoMdCheckmark />
-                </span>
-              </span>
-            </div>
-          </div>
         </>
       )}
+      <div className={clsx.chat_sender_container}>
+        <div className={clsx.chat_sender}>
+          <input type="text" placeholder="Enter message" onChange={handleTextMsg} value={text} />
+          <span className={clsx.chat_icons}>
+            <span className={clsx.send}>
+              <IoMdSend onClick={sendMsg} />
+            </span>
+            {/* <span className={clsx.attach}>
+              <IoIosAttach />
+            </span> */}
+            <span className={clsx.check}>
+              <IoMdCheckmark />
+            </span>
+          </span>
+        </div>
+      </div>
     </div>
   );
 };

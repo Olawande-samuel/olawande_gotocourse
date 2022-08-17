@@ -38,10 +38,10 @@ export const witnesses = [
 ];
 
 
-const Testimonials = () => {
+const Testimonials = ({type}) => {
   SwiperCore.use([Autoplay])
   return (
-    <section className="testimonials">
+    <section className="testimonials" style={{background: type === "newLanding" ? "#EBF0FF" : "white", paddingBlock:"2.5rem"}}>
       <div className="container-lg testimonial_content">
         <header>
         <h3 className="testimonials_title">Real Stories from Real Customers</h3>

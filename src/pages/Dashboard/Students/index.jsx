@@ -22,6 +22,7 @@ import { BootcampRow, UserInfoCard } from "../Admin";
 import { useLocalStorage } from "../../../hooks";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { Box, Modal } from "@mui/material";
+import ChatComponent from "./chat";
 
 
 
@@ -82,7 +83,7 @@ export function Profile(){
     }, [userdata?.token])
     
     function editProfileHandler(e){
-        navigate("/students/profile/edit");
+        navigate("/student/profile/edit");
     }
     return (  
         <Students isMobile={isMobile} userdata={userdata} notification={notification}>            
@@ -161,7 +162,7 @@ export function Edit(){
                         notification: message
                     }
                 })
-                navigate("/students/");
+                navigate("/student/");
             }
         }catch(err){
             toast.error(err.message, {
@@ -983,9 +984,30 @@ function ClassesCard({numberOfLessons, title, date, time, isLive, color}){
     )
 }
 
+export function Chat() {
+    const {getItem} = useLocalStorage()
+    const [loader, setLoader] = useState(true);
+    let userdata = getItem(KEY);
+
+    useEffect(() => {
+      setTimeout(() => {
+        setLoader(_ => false);
+      }, 2000)
+    }, [])
+  
+    return (
+        <Students  userdata={userdata}>
+        {loader && <Loader />}
+          <ChatComponent />
+        </Students>
+    );
+  }
+  
 
 const Students = ({children, isMobile, notification, userdata}) => {
-    const {generalState: {showSidebar, loading}, generalState, setGeneralState} = useAuth();
+    const [pledredata, setPledreData]= useState({})
+    const {generalState: {showSidebar, loading, pledre}, generalState, setGeneralState} = useAuth();
+    const { getItem }= useLocalStorage()
     useEffect(() => {
         if(notification){
             toast.success(notification, {
@@ -1005,6 +1027,45 @@ const Students = ({children, isMobile, notification, userdata}) => {
         setGeneralState({...generalState, showSidebar: !showSidebar})
     }
 
+    useEffect(()=>{
+        let isActive = true
+        if(!pledredata.email && pledre.getStudentDetails){
+
+            (async()=>{
+                const user = getItem("gotocourse-userdata")
+                
+                try{
+                    const response = await pledre.getStudentDetails(user.email)
+                    if(isActive ){
+                        if(response.email){
+                            setPledreData(response )
+                            console.log(response)
+                            localStorage.setItem("gotocourse-userdata", JSON.stringify({...user, pledre: response}))
+                        }
+                    }
+
+                }catch(err){
+                    console.error(err)
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }finally{
+                    console.log("pData done")
+                }
+            })()
+        }
+
+        return ()=>{
+            isActive = false
+        }
+    },[pledre.baseUrl])
+
     return (
         <GuardedRoute>
             <div className={clsx.students}>
@@ -1020,12 +1081,12 @@ const Students = ({children, isMobile, notification, userdata}) => {
                     <h1 className={clsx.students__header}>{userdata?.firstName} {userdata?.lastName}</h1>
                     <Searchbar showIcon={true} placeholder="Search" />
                     <div className="button_wrapper text-center d-none d-lg-block">
-                <motion.a 
+                {/* <motion.a 
                 whileHover={{
                     // boxShadow: "0px 0px 8px rgb(0, 0, 0)",
                     textShadow: "0px 0px 8px rgb(255, 255, 255)"
                 }}
-                href="https://gotocourse.com/dashboard" className="btn btn-primary" style={{padding:"10px 28px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}>Go to Class</motion.a>
+                href="https://gotocourse.com/dashboard" className="btn btn-primary" style={{padding:"10px 28px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}>Go to Class</motion.a> */}
             </div>
                 </div>
 

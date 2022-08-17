@@ -23,32 +23,13 @@ const AuthContextProvider = ({children}) => {
    
     useEffect(() => {
         console.log("Rendering");
-        if(!generalState.pledre && window.PledreAPI){
+        if(!generalState.pledre && window.PledreAPI ){
             const Pledre = new window.PledreAPI(process.env.REACT_APP_PLEDRE_API, process.env.REACT_APP_PLEDRE_API_SECRET, process.env.REACT_APP_PLEDRE_URL)
-            console.log("pledre",Pledre)
-
             setGeneralState({...generalState, pledre: Pledre})
+
         }
         return () => console.log("Rerendering");
-    }, [generalState])
-
-    console.log("general state",generalState.pledre)
-
-    // async function GetPledre(){
-    //     try{
-    //         const response = await generalState.pledre.signUpStudent({
-    //             name: "Alex",
-    //             email: "samueldacoal@gmail.com",
-    //             password: "pAssword1k"
-    //         })
-    //         console.log(response)
-    //     }catch(err){
-    //         console.error(err)
-    //     }
-    // }
-    // if(generalState.pledre){
-    //     GetPledre()
-    // }
+    }, [generalState]) 
 
     return (
         <AuthContext.Provider value={{authFunctions, teacherFunctions, studentFunctions, adminFunctions, generalState, setGeneralState, adminStudentFunctions, adminTeacherFunctions, otherFunctions}}>
