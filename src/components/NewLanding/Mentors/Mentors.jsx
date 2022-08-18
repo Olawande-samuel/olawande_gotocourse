@@ -137,7 +137,7 @@ const Mentors = () => {
         >
           {mentors.length> 0 && mentors.map((item, index) => (
             <SwiperSlide key={index}>
-              <Card item={item} />
+              <Card item={item} key={index} />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -167,13 +167,15 @@ export const Card = ({ item,type }) => {
  
   }
   return (
-    <div className="px-1" style={{cursor: "pointer"}} onClick={gotoMentorPage}>
-      <div className="card">
-        <img src={item?.mentorImg && `https://loftywebtech.com/gotocourse/api/uploads/${item?.mentorImg}`} alt="" className="card-img-top mentor_image" />
-        <div className="card-body">
+    <div className="px-1" style={{cursor: "pointer", height:"380px"}} onClick={gotoMentorPage}>
+      <div className="card mentor_image h-100 w-100 position-relative" style={{background:`url(${item?.mentorImg && `https://loftywebtech.com/gotocourse/api/uploads/${item?.mentorImg} `}), rgba(0, 0, 0, 0.5)`, backgroundRepeat:"no-repeat", backgroundPosition:"top", backgroundSize:"cover"}}>
+        {/* <img src={item?.mentorImg && `https://loftywebtech.com/gotocourse/api/uploads/${item?.mentorImg}`} alt="" className="card-img-top mentor_image" /> */}
+        <div className="card-body newMentors_card-body position-absolute w-100">
             <div>
                 <h5 className="">{`${item?.mentorFirstName}  ${item.mentorLastName} `}</h5>
-                <p>{item?.expertise}</p>
+                <p className="mentors_footnote" style={{fontSize:"14px"}}>{item?.footnote}</p>
+                <p className="mb-1">{item?.expertise}</p>
+                <small className="">{item?.experience && item?.experience}</small>
             </div>
         </div>
       </div>

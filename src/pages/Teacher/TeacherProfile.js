@@ -2,7 +2,6 @@ import React, {useState, useEffect, useRef} from "react";
 import DOMPurify from 'dompurify';
 import {NavHashLink } from "react-router-hash-link"
 import {BsStarFill} from "react-icons/bs"
-import Algo from "../../images/mentor2.png";
 import Courses, { OtherCard, ReviewSection } from "../Courses";
 import style from "../Courses/courses.module.css";
 import { useLocation } from "react-router-dom";

@@ -15,8 +15,7 @@ import clsx from "./styles.module.css";
 import avatar from "../../../images/teacher.png";
 import { useAuth } from "../../../contexts/Auth";
 import { useSyllabus } from "../../../contexts/Syllabus";
-import img01 from "../../../images/mentor1.png";
-import img02 from "../../../images/mentor2.png";
+
 import { GuardedRoute } from "../../../hoc";
 import { AdvancedError } from "../../../classes";
 import {useLocalStorage} from "../../../hooks";

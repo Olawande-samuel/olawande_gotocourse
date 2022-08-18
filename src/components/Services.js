@@ -6,7 +6,7 @@ export const serviceList=[
   {
     id: 1,
     icon: <Learn />,
-    title:"Learn from the best",
+    title:"Learn from industry Experts",
     text:"Learn high in-demand skills from industry experts through Live classes, pre-recorded videos, and mentorship",
     color:"orange"
 
@@ -15,8 +15,8 @@ export const serviceList=[
   {
     id: 2,
     icon: <Cohort />,
-    title:"Flexible Learning model",
-    text:"Learn with a group of people with similar interest and experience.",
+    title:"Flexible learning model",
+    text:"Learn with a group of people with similar interest and experience or at your own pace.",
     color:"blue"
   
   }, 

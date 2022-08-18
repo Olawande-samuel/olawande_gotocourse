@@ -233,6 +233,10 @@ background: #ffffff;
     flex: 2;
 }
 
+.newLearning_right .background img {
+    object-position: top;
+    border-radius: 10px;
+}
 .newLearning-text {
     line-height:38px;
 }
@@ -272,20 +276,50 @@ margin: auto;
     width:40%;
 }
 
+.newMentors {
+    transition: all .3s ease;
+    height:100%;
+  }
+  .newMentors .card{
+    height:100%;
+    transition: all .3s ease;
+  }
+  
+  .newMentors  .mentors_footnote {
+    display:none;
+    transition: all .3s ease;
+
+  }
+ 
+  
 .newMentors .card-body{
     background: rgba(255, 255, 255, 0.49);
-    border-radius: 16px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.3);
+    height: 130px;
+    bottom: 0;
+    transition: all .3s ease-in-out;
+
 }
 
-.newMentors .card img{
+.newMentors .card:hover  .newMentors_card-body{
+    /* display: none; */
+    height: 200px;
+   }
+  .newMentors .card:hover  .mentors_footnote{
+     display:  block;
+     transition: all .3s ease;
+
+   }
+/* .newMentors .card img{
     height:270px;
     object-position:top;
     object-fit:cover;
-}
+} */
 .newMentors .card{
     height:100%;
   }

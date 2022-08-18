@@ -1,56 +1,19 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, { useRef} from "react";
 import { Link } from "react-router-dom";
 import SwiperCore, { Autoplay } from "swiper";
 import { motion } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-import hero from "../images/NewHero.png";
-
-import gen from "../images/generaltp.png";
 import place from "../images/placehero.png"
-
 import Image from "./Image";
+import { useAuth } from "../contexts/Auth";
 
 import "swiper/css";
 import "swiper/css/effect-creative";
-import { useAuth } from "../contexts/Auth";
 
 const Hero = () => {
   const ref = useRef()
   SwiperCore.use([Autoplay]);
-  const teacher = {
-    title: "Endless Possibilities With Borderless Learning",
-    subtitle:
-    "Enabling students to learn and  benefit from a global network of highly skilled professionals by increased access to quality learning and mentorship from domain experts",
-    // image: stu,
-    link: "/categories",
-    background: "#F1F8FF",
-    color: "#F75C4E",
-    btn: "Explore Courses",
-    colorSwap:"#0C2191"
-  };
-  const student = {
-    title: "Explore Wide Range Of Tech Skills To Develop Your Professional Career",
-    subtitle:
-    "Learn from top industry experts or less",
-    // image: teach,
-    link: "/signup",
-  background: "#F1F8FF",
-  color: "#0C2191",
-  btn: "Get Started",
-  colorSwap:"#F75C4E"
-
-  };
-  const general = {
-    title: "We make Teaching and learning Tech skills  Accessible.",
-    subtitle: "",
-    image: gen,
-    link: "/signup",
-    background: "#F1F8FF",
-
-    
-  }; 
   const New = {
     title: "Learn from experts",
     title2: "Learn from anywhere",
@@ -65,25 +28,6 @@ const Hero = () => {
 
     
   }; 
-
-  // useEffect(()=>{
-  //   if (ref.current) return;
-  //   try {
-  //     setGeneralState({ ...generalState, loading: true });
-  //     const res = await fetchMentors();
-  //     const { success, message, statusCode, data } = res;
-  //     setGeneralState({ ...generalState, loading: false });
-  //     if (!success || statusCode !== 1)
-  //       throw new AdvancedError(message, statusCode);
-  //     if (data.length > 0) {
-  //       setMentors(data);
-  //     }
-  //   } catch (err) {
-  //     setGeneralState({ ...generalState, loading: false });
-  //   }
-
-  //   ref.current = true
-  // },[])
 
   const {  generalState: { navHeight }, } = useAuth();
   return (
@@ -214,21 +158,6 @@ export const Others = ({ title, image, title2, title3, subtitle, background,btn,
               alt="woman on a laptop smiling"
               effect="blur"
             />
-              {/* <div className="background" style={{position:"relative", border:"1px solid red"}}>
-
-                  <img src={Border} alt="" className="hero_img_border position-absolute" height="300" />
-                  <img src={tl} alt=""  className="position-absolute top_left"/>
-                  <img src={br} alt=""  className="position-absolute bottom_right" />
-                  <img src={square} alt=""  className="position-absolute right_square" />
-                  <img src={square} alt="" className="position-absolute bottom_square"  />
-
-                  <LazyLoadImage
-                    alt="Woman holding laptop "
-                    src={image} // use normal <img> attributes as props
-                    visibleByDefault={true}
-                    className="new_hero_image position-absolute"
-                     />
-                </div> */}
           </motion.div>
         </div>
         <div></div>

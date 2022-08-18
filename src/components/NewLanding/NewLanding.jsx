@@ -16,8 +16,10 @@ import {motion} from 'framer-motion'
 
 import {getDate,KEY} from "../../constants"
 import Learning from "../../images/cohort.webp";
-import Inperson from "../../images/newCareer.png"
+// import Inperson from "../../images/newCareer.png"
+import Inperson from "../../images/in-Person.png"
 import Mento from "../../images/inPerson.png";
+// import Mento from "../../images/one-on-one.jpg";
 import Image from "../Image";
 import Tech from "../../images/fast.webp";
 import Testimonials from "../Testimonials"
@@ -144,7 +146,6 @@ function Bootcamp(){
     const {otherFunctions: { fetchBootcamps } } = useAuth();
 
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
-console.log({bootcamps})
     return (
 
 
@@ -180,13 +181,12 @@ console.log({bootcamps})
             },
           }}
         >
-          {bootcamps.data?.data.map((item) => (
+          {bootcamps.data?.data?.map((item) => (
             <SwiperSlide key={item.courseId}>
-              <BootcampCard {...item} all={item} />
+              <BootcampCard {...item} all={item} key={item.courseId} />
             </SwiperSlide>
           ))}
         </Swiper>
-        // {bootcamps.data?.data.map(bootcamp=>())}
         )
 }
 
@@ -330,7 +330,7 @@ function Mentorship (){
             <div className=" border-none newLearning_left">
               <div className="d-flex flex-column justify-content-center h-100">
                 <header className="mb-5">
-                  <h2 className="title">One-on-one mentorship</h2>
+                  <h2 className="title" style={{fontSize:"44px"}}>One-on-one mentorship</h2>
                 </header>
                 <p className="card-text newLearning-text mb-4">
                     Challenge yourself with a one-on-one mentorship session with industry experts and professionals and grow your career.
@@ -351,9 +351,8 @@ function Mentorship (){
               </div>
             </div>
             <div className="newLearning_right d-flex justify-content-end">
-                <Image width="720px" height="452px"  image={Mento} alt="Group of people in an online meeting room" className="background" effect="blur" />
+                <Image width="720px" height="582px"  image={Mento} alt="Group of people in an online meeting room" className="background" effect="blur" />
             </div>
-         
         </div>
       </div>
     </section>
@@ -387,7 +386,7 @@ function InPerson (){
               </div>
             </div>
             <div className="newLearning_right d-flex justify-content-end">
-                <Image width="720px" height="452px"  image={Inperson} alt="Group of people in an online meeting room" className="background" effect="blur" />
+                <Image width="720px" height="582px"  image={Inperson} alt="Group of people in an online meeting room" className="background" effect="blur" />
             </div>
          
         </div>

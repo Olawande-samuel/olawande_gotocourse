@@ -60,12 +60,10 @@ export function Category() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [tabs, setTabs] = useState([]);
 
   const categories = useQuery(["categories"], () => fetchCategories());
   const courses = useQuery(["courses"], () => fetchCourses());
 
-  console.log(courses);
 
   return (
     <section className="newCategories">
@@ -79,13 +77,13 @@ export function Category() {
         variant="scrollable"
       >
         <Tab
-          label={"All Categories"}
+          label={"ALL CATEGORIES"}
           className="text-capitalize fw-bolder text-dark"
           {...a11yProps(0)}
         ></Tab>
-        {categories.data?.data.map((h, i) => (
+        {categories.data?.data?.map((h, i) => (
           <Tab
-            label={h.name?.toLowerCase()}
+            label={h.name}
             className="text-capitalize fw-bolder text-dark"
             {...a11yProps(i + 1)}
           />
@@ -129,14 +127,14 @@ export function Category() {
             },
           }}
         >
-          {courses.data?.data.map((item) => (
+          {courses.data?.data?.map((item) => (
             <SwiperSlide key={item.courseId}>
               <CategoryCard {...item} />
             </SwiperSlide>
           ))}
         </Swiper>
       </TabPanel>
-      {categories.data?.data.map((item, index) => (
+      {categories.data?.data?.map((item, index) => (
         <TabPanel
           value={value}
           index={index + 1}
@@ -175,11 +173,9 @@ export function Category() {
             },
           }}
         >
-          {courses.data?.data
-          .filter(course=>course.category.toLowerCase() === item.name.toLowerCase())
-          .map((course) => (
+          {courses.data?.data?.filter(course=>course.category.toLowerCase() === item.name.toLowerCase()).map((course) => (
             <SwiperSlide key={course.courseId}>
-              <CategoryCard {...course} />
+              <CategoryCard {...course}  key={course.courseId} />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -191,17 +187,11 @@ export function Category() {
 }
 
 function CategoryCard({ courseId, courseImg, name, instructorName, category }) {
-  const navigate = useNavigate();
   return (
     <Link to={`categories/${category.split(" ").join("-").toLowerCase()}/courses/${name.split(" ").join("-").toLowerCase()}`}>
     <div
       className={`card newCategories_card`}
       style={{ cursor: "pointer", height: "100%" }}
-      onClick={() => {
-        // localStorage.setItem("gotocourse-teacherInfo", JSON.stringify(teacher))
-        // localStorage.setItem("gotocourse-teacherId", teacherId)
-        // navigate(show === true ?  `courses/${name?.replace(/\s+/g, '-').toLowerCase()}`:`${name?.replace(/\s+/g, '-').toLowerCase()} `)
-      }}
     >
       <img
         src={courseImg ? courseImg : placeholder}
@@ -212,7 +202,7 @@ function CategoryCard({ courseId, courseImg, name, instructorName, category }) {
           <h6 className={`card-title newCategories_card-title text-center fw-bolder`}>{name}</h6>
         {/* <h6 className={`card-subtitle `}>{category}</h6> */}
         {/* add line-clamp to this v */}
-        <p className={`text-center `}>{instructorName}</p>
+        {/* <p className={`text-center `}>{instructorName}</p> */}
       </div>
     </div>
         </Link>
