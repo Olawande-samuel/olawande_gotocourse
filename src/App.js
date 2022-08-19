@@ -15,6 +15,8 @@ import {Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as 
    Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat} from "./pages/Dashboard/Students";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, 
   Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo, Chat as TeacherChat  } from "./pages/Dashboard/Teachers";
+
+import {Dashboard as AffiliatesDash} from "./pages/Dashboard/Affiliate"
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
@@ -95,7 +97,22 @@ function App() {
               <Route path="classes" element={<TeacherClasses  />} />
               <Route path="bootcamps" element={<TeacherBootcamps  />} />
               <Route path="bootcamps/details/:id" element={<TeacherBootcampDetails />} />
-              <Route path="earnings" element={<Earnings  />} />
+              <Route path="earnings" element={<Earnings />} />
+              <Route path="profile/edit" element={<TeacherEdit  />} />
+              <Route path="courses" element={<TeacherCourses />} />
+              <Route path="courses/create" element={<CreateCourse />} />
+              <Route path="courses/details/:id" element={<TeacherCourseInfo />} />
+              <Route path="chat" element={<TeacherChat />} />
+            </Route>
+
+            <Route path="affiliate" element={<Out />}>
+              <Route path="" element={<AffiliatesDash  />} /> 
+              <Route path="login" element={<Login />} />
+              <Route path="signup" element={<TeacherSignup />} />
+              <Route path="classes" element={<TeacherClasses  />} />
+              <Route path="bootcamps" element={<TeacherBootcamps  />} />
+              <Route path="bootcamps/details/:id" element={<TeacherBootcampDetails />} />
+              <Route path="earnings" element={<Earnings />} />
               <Route path="profile/edit" element={<TeacherEdit  />} />
               <Route path="courses" element={<TeacherCourses />} />
               <Route path="courses/create" element={<CreateCourse />} />

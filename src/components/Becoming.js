@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import React from "react";
 import { Link } from "react-router-dom";
 // import Teacher from "../images/teacher.png";
-import Teacher from "../images/becomeTeacher.png";
+import Teacher from "../images/becomeTeacher.webp";
 import Image from "./Image";
 
 

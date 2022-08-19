@@ -65,6 +65,7 @@ export function Category() {
   const courses = useQuery(["courses"], () => fetchCourses());
 
 
+  console.log({value})
   return (
     <section className="newCategories">
       <header>
@@ -134,6 +135,7 @@ export function Category() {
           ))}
         </Swiper>
       </TabPanel>
+
       {categories.data?.data?.map((item, index) => (
         <TabPanel
           value={value}
@@ -175,7 +177,7 @@ export function Category() {
         >
           {courses.data?.data?.filter(course=>course.category.toLowerCase() === item.name.toLowerCase()).map((course) => (
             <SwiperSlide key={course.courseId}>
-              <CategoryCard {...course}  key={course.courseId} />
+              <CategoryCard {...course} all={course}  key={course.courseId} />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -186,7 +188,8 @@ export function Category() {
   );
 }
 
-function CategoryCard({ courseId, courseImg, name, instructorName, category }) {
+function CategoryCard({ courseId, courseImg, name, instructorName, category, all }) {
+  
   return (
     <Link to={`categories/${category.split(" ").join("-").toLowerCase()}/courses/${name.split(" ").join("-").toLowerCase()}`}>
     <div

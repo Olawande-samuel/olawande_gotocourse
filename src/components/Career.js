@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import {useAuth} from "../contexts/Auth"
 import { AdvancedError } from "../classes";
 
-import Learning from "../images/newCareer.png";
+import Learning from "../images/newCareer.webp";
 import {categories as allCategories} from "../data"
 import {
   Cyber,

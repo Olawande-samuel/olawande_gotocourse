@@ -37,7 +37,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--white);
+  background-color: var(--theme-blue);
   width: 15rem;
   overflow-y: hidden;
 }
@@ -54,10 +54,11 @@
 }
 
 .sidebar_items::-webkit-scrollbar-track {
-  background: #eee; /* color of the tracking area */
+  /* background: #eee;  */
+  background: var(--theme-blue); /* color of the tracking area */
 }
 .sidebar_items::-webkit-scrollbar-thumb {
-  background-color: rgb(181, 181, 181); /* color of the scroll thumb */
+  background-color: var(--white); /* color of the scroll thumb */
   border-radius: 20px; /* roundness of the scroll thumb */
   /* border: 3px solid orange;  */
 }
@@ -65,10 +66,16 @@
 .sidebar_item {
   cursor: pointer;
   padding: 15px;
-  color: var(--gray);
+  color: var(--white);
   display: flex;
   align-items: center;
 }
+
+.sidebar_item_title {
+  font-size: 1.2rem;
+}
+
+
 
 /* SEARCHBAR */
 .searchbar {

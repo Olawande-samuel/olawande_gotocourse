@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import Layout from "../Layout"
-import BootImg from "../../images/newbootcamp.png"
-import HeroImg from "../../images/newHeroLatest.png"
+import BootImg from "../../images/newbootcamp.webp"
+import HeroImg from "../../images/newHeroLatest.webp"
 import { useAuth } from "../../contexts/Auth"
 import "./landing.css"
 import { useQuery } from "@tanstack/react-query";
@@ -17,8 +17,8 @@ import {motion} from 'framer-motion'
 import {getDate,KEY} from "../../constants"
 import Learning from "../../images/cohort.webp";
 // import Inperson from "../../images/newCareer.png"
-import Inperson from "../../images/in-Person.png"
-import Mento from "../../images/inPerson.png";
+import Inperson from "../../images/in-Person.webp"
+import Mento from "../../images/inPerson.webp";
 // import Mento from "../../images/one-on-one.jpg";
 import Image from "../Image";
 import Tech from "../../images/fast.webp";

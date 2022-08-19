@@ -33,6 +33,7 @@
     flex: 1;
     background-color: var(--primary);
     padding: 30px;
+    padding-bottom:1px ;
     overflow-y: hidden;
     display: flex;
     flex-direction: column;
@@ -58,12 +59,26 @@
 }
 .admin_profile {
     background-color:var(--white);
-    height: 80vh;
+    min-height: 82vh;
     padding:20px;
     border-radius: 10px;
     width: 100%;
     overflow-y: scroll;
 }
+
+.admin_profile::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .admin_profile::-webkit-scrollbar-track {
+    /* background: #eee;  */
+    background: #eee; /* color of the tracking area */
+  }
+  .admin_profile::-webkit-scrollbar-thumb {
+    background-color: #e5e5e5; /* color of the scroll thumb */
+    border-radius: 10px; /* roundness of the scroll thumb */
+    /* border: 3px solid orange;  */
+  }
 .admin_profile_top {
     display: flex;
     align-items: center;
