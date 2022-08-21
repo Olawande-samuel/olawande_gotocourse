@@ -31,7 +31,7 @@ function SidebarItem({icon: Icon, title, isMobile, path,showBadge, ...props}){
         <div className={clsx.sidebar_item} {...props}>
         <Badge alignItems="center" badgeContent={showBadge ? path === "notifications" ? notifications : chat : 0} color="secondary" >
             <i>
-                <Icon className={clsx.sidebar_icon} color="white" size="2rem" />
+                <Icon className={clsx.sidebar_icon} color="white" size="1.5rem" />
             </i>
             {isMobile && <span className={clsx.sidebar_item_title}>
                 {title}
@@ -117,8 +117,13 @@ const Sidebar = ({isMobile}) => {
         }
     ] : route === "student" ?  [
         {
-            icon: IoIosPerson,
+            icon: AiOutlineDashboard,
             path: "",
+            title: "Dashboard"
+        },
+        {
+            icon: IoIosPerson,
+            path: "profile",
             title: "My Profile"
         },
         {

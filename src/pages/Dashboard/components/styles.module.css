@@ -6,6 +6,7 @@
   --textColorDark: #081131;
   --textColorLight: #5e5b5b;
   --textColorLighter: #9f9f9f;
+  --textColorBlueish: ##303972;
   --btnColor: rgb(12, 33, 145);
   --accentColor: #023047;
   --textBlue: #0c2191;
@@ -58,7 +59,7 @@
   background: var(--theme-blue); /* color of the tracking area */
 }
 .sidebar_items::-webkit-scrollbar-thumb {
-  background-color: var(--white); /* color of the scroll thumb */
+  background-color: #223288; /* color of the scroll thumb */
   border-radius: 20px; /* roundness of the scroll thumb */
   /* border: 3px solid orange;  */
 }
@@ -72,7 +73,7 @@
 }
 
 .sidebar_item_title {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 
