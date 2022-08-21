@@ -498,7 +498,7 @@ export const PaymentStatus = ({success}) => {
         <button
           className="button button-md"
           type="button"
-          onClick={() => success ? navigate(userdata.userType === "student" ? "/students" : userdata.userType === "admin" ? "/admin" :"/teacher") : navigate(-1)}
+          onClick={() => success ? navigate(userdata.userType === "student" ? "/student" : userdata.userType === "admin" ? "/admin" :"/teacher") : navigate(-1)}
         >
           {status.action}
         </button>

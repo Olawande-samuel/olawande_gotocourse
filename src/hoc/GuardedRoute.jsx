@@ -20,7 +20,7 @@ const GuardedRoute = ({children}) => {
         // if(route === "admin" && userType !== "admin") {
         //     navigate(`/${userType}s`);
         // } 
-        // else if(route === "students" && userType !== "students"){
+        // else if(route === "student" && userType !== "student"){
         //     navigate(userType === "admin" ? `/${userType}` : `/${userType}s`);
         // } else if(route === "teachers" && userType !== "teachers"){
         //     navigate(userType === "admin" ? `/${userType}` : `/${userType}s`);

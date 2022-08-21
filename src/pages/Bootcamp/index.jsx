@@ -12,7 +12,7 @@ import clsx from "./styles.module.css";
 import {useLocalStorage} from "../../hooks"
 import { getDate } from "../../constants";
 import { useNavigate } from "react-router-dom";
-import BootcampImage from  "../../images/bootcamp.png"
+import BootcampImage from  "../../images/bootcamp.webp"
 import Teacher from  "../../images/bootcamps/teacher.png"
 import Cyber from  "../../images/bootcamps/bootcamp_cyber.png"
 import Data from  "../../images/bootcamps/bootcamp_data.png"

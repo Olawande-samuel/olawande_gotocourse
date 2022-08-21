@@ -5,10 +5,10 @@ import { ToastContainer, toast } from "react-toastify";
 import {motion} from "framer-motion"
 import {AiOutlineMenu} from "react-icons/ai"
 import {Rating} from 'react-simple-star-rating'
-
+import {useMutation, useQuery} from "@tanstack/react-query"
 
 import trello from "../../../images/trello.png"
-import {Product} from "../../../images/components/svgs"
+import {Product, Stu1,Stu2, Stu3} from "../../../images/components/svgs"
 import Loader from "../../../components/Loader"
 import { Sidebar, Searchbar } from "../components";
 import clsx from "./styles.module.css";
@@ -20,8 +20,10 @@ import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
 import { BootcampRow, UserInfoCard } from "../Admin";
 import { useLocalStorage } from "../../../hooks";
-import { FaRegTrashAlt } from "react-icons/fa";
+import { FaRegTrashAlt, FaUserAlt } from "react-icons/fa";
+import { IoMdChatboxes } from "react-icons/io";
 import { Box, Modal } from "@mui/material";
+import ChatComponent from "./chat";
 
 
 
@@ -82,7 +84,7 @@ export function Profile(){
     }, [userdata?.token])
     
     function editProfileHandler(e){
-        navigate("/students/profile/edit");
+        navigate("/student/profile/edit");
     }
     return (  
         <Students isMobile={isMobile} userdata={userdata} notification={notification}>            
@@ -161,7 +163,7 @@ export function Edit(){
                         notification: message
                     }
                 })
-                navigate("/students/");
+                navigate("/student/");
             }
         }catch(err){
             toast.error(err.message, {
@@ -355,7 +357,7 @@ export function Bootcamps() {
     const [courseList, setCourseList] = useState([])
     const [loading, setLoading] = useState(true);
   
-    const tableHeaders = [ "No", "Title", "Details", "Type", "Duration", "Date", "Time" ];
+    const tableHeaders = [ "No", "Title", "Tutor", "Date", "Time" ];
   
     useEffect(()=>{
         if(flag.current) return;
@@ -411,11 +413,13 @@ export function Bootcamps() {
         flag.current = true;
     },[])
   
+    console.log({courseList})
     function gotoCreateCourseHandler(e){
       navigate("create");
     }
     function detailHandler(e, _id){
-        navigate("details/"+_id);
+        // navigate("/bootcamps/details/"+_id);
+        console.log("clicked")
       }
     return (
       <Students header={"Bootcamps"}>
@@ -435,18 +439,18 @@ export function Bootcamps() {
                 </thead>
                 <tbody>
                   {courseList.map(
-                    ( {title, duration, description, type, startTime, endTime, endDate, startDate, bootcampId, _id}, i ) => (
+                    ( {bootcampName, duration, tutorName, type, startTime, endTime, endDate, startDate, bootcampId, _id}, i ) => (
                       <BootcampRow
                       key={i}
                       index={i}
-                      title={title}
-                      detail={description}
-                      duration={duration}
-                      type={type}
+                      title={bootcampName}
+                      detail={tutorName}
+                    //   duration={duration}
+                    //   type={type}
                       admin={false}
                       clickHandler={e => detailHandler(e, bootcampId)}
-                      time={`${startTime} - ${endTime} CST`}
-                      date={`${getDate(startDate)} - ${getDate(endDate)}`}
+                      type={`${startTime} - ${endTime} CST`}
+                      duration={`${getDate(startDate)} - ${getDate(endDate)}`}
                       />
                     )
                   )}
@@ -743,44 +747,56 @@ export function Courses(){
         ref.current = true
     }, [])
     
-    const tableHeaders = ["No", "Courses", "Teaching Model", "Course Fee"]
 
     const [rating, setRating] = useState(0) // initial rating value
 
-  // Catch Rating value
-  const handleRating = (rate) => {
-    setRating(rate)
-    // other logic
-  }
+ 
     return ( 
         <Students isMobile={isMobile} userdata={userdata}>               
             <div className={clsx.students_profile}>
-                {
-                courses.length === 0 ?         
+                <CourseTable courses={courses}  />
+            </div>
+        </Students>
+    )
+}
+
+
+
+function CourseTable({courses=[]}){
+    const [rating, setRating] = useState(0) // initial rating value
+
+    const tableHeaders = ["No", "Courses", "Teaching Model", "Course Fee"]
+    const handleRating = (rate) => {
+        setRating(rate)
+        // other logic
+      }
+    return(
+        <>
+            {
+                courses.length === 0 ?          
                     <NoDetail text="You haven't registered for any course" />
 
                 :
-                    <table className={clsx.student_table}>
-                        <thead>
-                            <tr>
-                            {
-                                tableHeaders.map((el, i) => (
-                                    <th key={i}>{el}</th>
-                                    ))
-                                } 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                courses.length > 0 && courses.map(({courseName,coursePrice, package: p, course, rating}, i) => (
-                                    <UserInfoCard key={i} enrolled={courseName} date={p} coursePrice={coursePrice} num={i} handleRating={()=>handleRating("courseID")}  />
-                                )) 
-                            }
-                        </tbody>
-                    </table>
-                }
-            </div>
-        </Students>
+                <table className={clsx.student_table}>
+                    <thead>
+                        <tr>
+                        {
+                            tableHeaders.map((el, i) => (
+                                <th key={i}>{el}</th>
+                                ))
+                            } 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            courses.length > 0 && courses.map(({courseName,coursePrice, package: p, course, rating}, i) => (
+                                <UserInfoCard key={i} enrolled={courseName} date={p} coursePrice={coursePrice} num={i} handleRating={()=>handleRating("courseID")}  />
+                            )) 
+                        }
+                    </tbody>
+                </table>
+            }
+        </>
     )
 }
 export function History(){
@@ -981,9 +997,165 @@ function ClassesCard({numberOfLessons, title, date, time, isLive, color}){
     )
 }
 
+export function Chat() {
+    const {getItem} = useLocalStorage()
+    const [loader, setLoader] = useState(true);
+    let userdata = getItem(KEY);
 
+    useEffect(() => {
+      setTimeout(() => {
+        setLoader(_ => false);
+      }, 2000)
+    }, [])
+  
+    return (
+        <Students  userdata={userdata}>
+        {loader && <Loader />}
+          <ChatComponent />
+        </Students>
+    );
+  }
+  
+export const Dashboard = () => {
+    const {generalState: {isMobile, loading}, generalState, setGeneralState, studentFunctions: {fetchCourses, fetchWishlist}} = useAuth();
+    const {getItem} = useLocalStorage();
+    let userdata = getItem(KEY);
+    const [courses, setCourses] = useState([]);
+
+    const ref = useRef(false)
+
+    const navigate = useNavigate();
+        
+    const { isLoading:isWishListLoading, isError:isWishListError, data:wishlistData } = useQuery(["fetch wishes"], ()=>fetchWishlist(userdata.token))
+
+    const { isLoading, isError, data } = useQuery(["fetch courses"], ()=>fetchCourses(userdata.token))
+
+    console.log({data})
+    console.log({wishlistData})
+  
+   
+    const[topContent, setTopContent] = useState([
+        {
+            id:1,
+            title:"Courses enrolled for",
+            logo: <Stu1 />,
+            value: data?.data?.length ?? 0
+        },
+        {
+            id:2,
+            title:"Courses on wishlist",
+            logo: <Stu2 />,
+            value: wishlistData?.data?.length ?? 0
+        },
+        {
+            id:3,
+            title:"Outstanding fees",
+            logo: <Stu3 />,
+            value: "$80000"
+        }
+    ])
+    const myCourses = ["Data Science", "Data Science", "Project Management", "Cybersecurity & Assurance", "Digital Marketing"]
+    const wishist = ["Data Science", "Data Science", "Project Management", "Cybersecurity & Assurance", "Digital Marketing"]
+    return (
+        <Students isMobile={isMobile} userdata={userdata} >            
+        <div className={clsx.students_profile}>
+            <DasboardTop content={topContent} />
+
+            <div className={clsx.students_profile_main}>
+              <div className={`d-flex ${clsx.dashboard_courses}`}>
+                <div className={clsx["dashboard_courses--left"]}>
+                    <h6>Courses applied for</h6>
+                    <ul>
+                        {
+                            data?.data?.length === 0 ?  
+                              <p className="text-muted">You haven't registered for a course</p>
+                              :
+                            data?.data?.map((item, i)=>(
+                                <li key={i}>{item.courseName}</li>
+                            ))
+                        }
+                    </ul>
+                </div>
+                <div className={clsx["dashboard_courses--right"]}>
+                    <h6>Courses on wishlist</h6>
+                    <ul>
+                        {
+                             wishlistData?.data?.length === 0 ?  
+                             <p className="text-muted">No item in wishlist</p>
+                             :
+                            wishlistData?.data?.map((item, i)=>(
+                                <li key={i}>{item.name}</li>
+                            ))
+                        }
+                        {}
+                    </ul>
+                </div>
+              </div>
+              <div className={`${clsx.dashboard_course_details}`}>
+                <div className="d-flex justify-content-between align-items-center">
+                    <h6>Courses applied for</h6>
+                    <select name="date" id="date" className="">
+                        <option value="aug">August, 2021</option>
+                        <option value="aug">August, 2021</option>
+                        <option value="aug">August, 2021</option>
+                    </select>
+                </div>
+                    <CourseTable courses={courses} />
+              </div>
+
+              <div className={clsx.dashboard_community}>
+                <h6>Community</h6>
+                {[1,2, 3].map(item=>(
+                    <div className={clsx.dashboard_community_profile}>
+                        <div className={clsx.profile_img}>
+                            <FaUserAlt size="2rem" color="grey" />
+                        </div>
+                        <div className={clsx.profile_info}>
+                            <p>Samantha William</p>
+                            <p>How do I create a profile</p>
+                        </div>
+                        <div className={clsx.profile_chat}>
+                            <span className={clsx.chat_time}>Time</span>
+                            <div className={clsx.profile_chat_icon}>
+                                <span className={clsx.chat_icon}><IoMdChatboxes size="1.2rem"  /></span>
+                                <span className={clsx.chat_icon}>(5)</span>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+              </div>
+            </div>
+        </div>
+    </Students>
+    )
+   
+}
+
+export function DasboardTop({content}){
+    return(
+        <div className={clsx.students_profile_top}>
+        <div className={` ${clsx.students_overview} d-flex justify-content-around align-items-center flex-wrap flex-lg-no-wrap w-100`}>
+          { content.map(item=>(
+                <div className={`d-flex p-1 ${clsx.students_overview_container}`} key={item.id}>
+                    <div className={clsx["students_profile_top--left"]}>
+                        <i className={clsx.icon}>
+                            {item.logo}
+                        </i>
+                    </div>
+                    <div className={clsx["students_profile_top--right"]}>
+                        <h3>{item.value}</h3>
+                        <p>{item.title}</p>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+    )
+}
 const Students = ({children, isMobile, notification, userdata}) => {
-    const {generalState: {showSidebar, loading}, generalState, setGeneralState} = useAuth();
+    const [pledredata, setPledreData]= useState({})
+    const {generalState: {showSidebar, loading, pledre}, generalState, setGeneralState} = useAuth();
+    const { getItem }= useLocalStorage()
     useEffect(() => {
         if(notification){
             toast.success(notification, {
@@ -1003,6 +1175,44 @@ const Students = ({children, isMobile, notification, userdata}) => {
         setGeneralState({...generalState, showSidebar: !showSidebar})
     }
 
+    useEffect(()=>{
+        let isActive = true
+        if(!pledredata?.email && pledre.getStudentDetails){
+
+            (async()=>{
+                const user = getItem("gotocourse-userdata")
+                try{
+                    const response = await pledre.getStudentDetails(user?.email)
+                    if(isActive ){
+                        if(response.email){
+                            setPledreData(response )
+                            console.log(response)
+                            localStorage.setItem("gotocourse-userdata", JSON.stringify({...user, pledre: response}))
+                        }
+                    }
+
+                }catch(err){
+                    console.error(err)
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }finally{
+                    console.log("pData done")
+                }
+            })()
+        }
+
+        return ()=>{
+            isActive = false
+        }
+    },[pledre.baseUrl])
+
     return (
         <GuardedRoute>
             <div className={clsx.students}>
@@ -1018,12 +1228,12 @@ const Students = ({children, isMobile, notification, userdata}) => {
                     <h1 className={clsx.students__header}>{userdata?.firstName} {userdata?.lastName}</h1>
                     <Searchbar showIcon={true} placeholder="Search" />
                     <div className="button_wrapper text-center d-none d-lg-block">
-                <motion.a 
+                {/* <motion.a 
                 whileHover={{
                     // boxShadow: "0px 0px 8px rgb(0, 0, 0)",
                     textShadow: "0px 0px 8px rgb(255, 255, 255)"
                 }}
-                href="https://gotocourse.com/dashboard" className="btn btn-primary" style={{padding:"10px 28px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}>Go to Class</motion.a>
+                href="https://gotocourse.com/dashboard" className="btn btn-primary" style={{padding:"10px 28px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}>Go to Class</motion.a> */}
             </div>
                 </div>
 

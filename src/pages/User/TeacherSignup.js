@@ -16,7 +16,9 @@ import { useLocalStorage } from "../../hooks";
 
 const KEY = 'gotocourse-userdata';
 const TeacherSignup = () => {
-    const {authFunctions: {register},setGeneralState } = useAuth();
+  const emailReg = new RegExp(/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/)
+  const passReg = new RegExp(/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/)
+  const {authFunctions: {register}, generalState:{pledre}, setGeneralState } = useAuth();
   const [loading, setLoading] = useState(false)
   const [formstate, setFormstate] = useState({
     fullname: "",
@@ -25,6 +27,8 @@ const TeacherSignup = () => {
     retype_password: "",
     userType: "",
   })
+  const [focus, setFocus] =useState(false)
+
   const navigate = useNavigate();
 
   function changeHandler(e){
@@ -42,7 +46,7 @@ const TeacherSignup = () => {
     if (formstate.fullname !== "") {
       const name = formstate.fullname.split(" ");
       setFormstate((old) => {
-        return { ...old, firstName: name[0], lastName: name[1] };
+        return { ...old, firstName: name[0], lastName: name.slice(-1)[0] };
       });
     }
   }, [formstate.fullname]);
@@ -52,12 +56,21 @@ const TeacherSignup = () => {
     setLoading(_ => true);
     try{
       let { retype_password, ...others } = formstate;
+      if(!emailReg.test(others.email) || !passReg.test(others.password)) 
+        throw new AdvancedError("Invalid email or password", 0)
       if (others.email.trim() === "" || others.password.trim() === "") throw new AdvancedError("Fields cannot be empty", 0);
-      ;
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
-      const response = await register(others, "user");
 
+        const response = await register(others, "user");
+
+        const res = await pledre.addTeacherToSchool({
+          name:`${formstate.firstName} ${formstate.lastName}`,
+          email: formstate.email,
+          password:`${formstate.password}`
+        })
+
+      
       let { success, message, statusCode } = response;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -65,6 +78,7 @@ const TeacherSignup = () => {
         //update the localStorage
         const { data } = response;
         removeItem(KEY);
+        localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res))
         getItem(KEY, data);
         setGeneralState((old) => {
           return {
@@ -114,7 +128,25 @@ const TeacherSignup = () => {
         <form action="" className="form" onSubmit={submitHandler}>
           <Input label="Fullname" handleChange={changeHandler} value={formstate.fullname} name="fullname" placeholder="Fullname" />
           <Input label="Email" handleChange={changeHandler} value={formstate.email} name="email" type="email" placeholder="Email" />
-          <Password label="Password" handleChange={changeHandler} value={formstate.password} name="password" placeholder="Password"  password="password"/>
+          <Password label="Password"
+           handleChange={changeHandler}
+            value={formstate.password} 
+            name="password" 
+            placeholder="Password"  
+            password="password"
+            focus ={()=>setFocus(true)}
+            blur={()=>setFocus(false)}
+          />
+          {focus && !passReg.test(formstate.password) &&
+            <small style={{fontSize:"11px"}}>
+              <p className="text-danger">Password must satisfy the following conditions</p>
+              <p className="text-danger"> - At least one upper case English letter</p>
+              <p className="text-danger"> - At least one lower case English letter</p>
+              <p className="text-danger"> - At least one digit</p>
+              <p className="text-danger"> - At least one special character</p>
+              <p className="text-danger"> - Minimum eight in length</p>
+            </small>
+          }
           <Password
             label="Confirm Password" 
             handleChange={changeHandler} 

@@ -26,11 +26,12 @@ const SignUp = () => {
     fullname: "",
   });
   const [focus, setFocus] =useState(false)
+
   useEffect(() => {
     if (data.fullname !== "") {
       const name = data.fullname.split(" ");
       setData((old) => {
-        return { ...old, firstName: name[0], lastName: name[1] };
+        return { ...old, firstName: name[0], lastName: name.slice(-1)[0] };
       });
     }
   }, [data.fullname]);
@@ -52,7 +53,7 @@ const SignUp = () => {
     });
   };
 
-
+console.log(generalState.pledre)
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -64,15 +65,19 @@ const SignUp = () => {
        throw new AdvancedError("Fields cannot be empty", 0);
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
-        
-
+        // main dashboard
       const response = await register(others, "user");
-    //   const res = await generalState.pledre.signUpStudent({
-    //     name: "Ola",
-    //     email: "samueldacoal@gmail.com",
-    //     password: data.password
-    // })
-      // console.log(res)
+      console.log(data.password)
+
+      // second dashboard
+      const res = await generalState.pledre.signUpStudent({
+        name:`${data.firstName} ${data.lastName}`,
+        email: data.email,
+        password:`${data.password}`
+      })
+    
+      console.log(res)
+
       let { success, message, statusCode } = response;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -81,13 +86,14 @@ const SignUp = () => {
         const { data } = response;
         removeItem(KEY);
         getItem(KEY, data);
+        localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res)) 
         setGeneralState((old) => {
           return {
             ...old,
             notification: message,
           };
         });
-        navigate("/students");
+        navigate("/student");
       }
     } catch (err) {
       console.error(err)

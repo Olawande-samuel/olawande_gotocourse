@@ -2,6 +2,7 @@ import React from "react";
 import { Accordion } from "react-bootstrap";
 
 const Faq = () => {
+  
   return (
     <section className="faq">
       <div className="container ">
@@ -23,7 +24,7 @@ const Faq = () => {
                 How do I manage my classes on Gotocourse?
               </Accordion.Header>
               <Accordion.Body className="faq_acc_text">
-                After you are approved to class, instructional videos on are
+                After you are approved to class, instructional videos are
                 available on your customised class console.
               </Accordion.Body>
             </Accordion.Item>

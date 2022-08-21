@@ -4,6 +4,7 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
 import {motion} from 'framer-motion'
 import {Link, useNavigate, useLocation} from "react-router-dom"
+import { Logosm} from "../images/components/svgs"
 
 
 import {categories as navList} from "../data"
@@ -69,7 +70,7 @@ const KEY = "gotocourse-userdata"
 //     link: "/categories/it-service-management"
 //   },
 // ];
-const Navbar = () => {
+const Navbar = ({background}) => {
   const { setGeneralState } = useAuth();
   const [show, setShow] = useState(false);
   const [drop, setDrop] = useState(false);
@@ -105,11 +106,15 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav ref={heightRef} section="top" className="nav navbar navbar-expand-lg navbar-light" style={{borderBottom: "1px solid rgba(159, 159, 159, .3)"}}>
-<ScrollToTop />
+    <nav ref={heightRef} section="top" className="nav navbar navbar-expand-lg navbar-light" style={{
+      // borderBottom: "1px solid rgba(159, 159, 159, .3)", 
+      // background: background === "blue" ? "var(--theme-blue)": "#fffff",color: background === "blue" ?  "#fffff" : "var(--theme-blue)" }}>
+      background:  "var(--theme-blue)", color:  "#fffff" }}>
+    <ScrollToTop />
       <div className="container navbar-container align-items-center">
         <Link to="/" onClick={()=> window.scrollTo(0, 0)} className="logo navbar-brand ">
-          <img src={Logo} alt="Brand Name" />
+          {/* <img src={Logo} alt="Brand Name" /> */}
+          <Logosm />
         </Link>
         <button type="button" className="navbar-toggler " onClick={toggleNav}>
           <span className="navbar-toggler-icon"></span>
@@ -124,7 +129,6 @@ const Navbar = () => {
             {location.pathname.split("/")[1] === "" &&
             <li className="nav-item holder">
               <Link
-                type="button"
                 className="link nav-link courses me-4"
                 to="/categories"
                 // onClick={toggleDrop}
@@ -156,15 +160,17 @@ const Navbar = () => {
           </ul>
           {value?.token ? (
             <Link to={`${value.category === "Admin" ? "/admin" : value.userType === "student" ? "/students" : "/teacher"}`}>
-              <div className="d-flex align-items-center" style={{color:"var(--theme-blue", fontSize:"20px"}}>
-                <i className="d-flex align-items-center justify-content-center me-2" style={{color:"var(--theme-blue"}}><FaRegUser /></i>
+              {/* <div className="d-flex align-items-center" style={{color:"var(--theme-blue", fontSize:"20px"}}> */}
+              <div className="d-flex align-items-center" style={{color:"#fff", fontSize:"20px"}}>
+                {/* <i className="d-flex align-items-center justify-content-center me-2" style={{color:"var(--theme-blue"}}><FaRegUser /></i> */}
+                <i className="d-flex align-items-center justify-content-center me-2" style={{color:"#fff"}}><FaRegUser /></i>
                 <span>{value.firstName}</span>
               </div>
             </Link>
           ) : (
             <>
           <Link to="/login">
-          <motion.button type="button" className="button button-md d-none d-lg-block signup"
+          <motion.button type="button" className="btn-plain button-md d-none d-lg-block signup newLogin"
           whileHover={{
             textShadow: "0px 0px 8px rgb(255, 255, 255)",
             boxShadow: "0px 0px 8px rgb(0, 0, 0)",
@@ -177,7 +183,7 @@ const Navbar = () => {
           </Link>
 
           <Link to="/signup">
-          <motion.button type="button" className=" btn-plain d-none d-lg-block"
+          <motion.button type="button" className=" btn-plain d-none d-lg-block newRegister"
           whileHover={{
             textShadow: "0px 0px 8px rgb(255, 255, 255)",
             boxShadow: "0px 0px 8px rgb(0, 0, 0)",

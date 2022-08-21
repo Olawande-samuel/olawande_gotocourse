@@ -4,7 +4,7 @@ import { Grid } from "@mui/material";
 
 import clsx from "./styles.module.css";
 import Layout from "../../components/Layout";
-import img from "../../images/careerBg.png"
+import img from "../../images/careerBg.webp"
 import bg1 from "../../images/career/career002.png";
 import layout1 from "../../images/career/career2.png";
 import mainLayout1 from "../../images/career/career2_layout.png"

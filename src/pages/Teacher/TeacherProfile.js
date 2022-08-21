@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from "react";
+import DOMPurify from 'dompurify';
 import {NavHashLink } from "react-router-hash-link"
 import {BsStarFill} from "react-icons/bs"
-import Algo from "../../images/mentor2.png";
 import Courses, { OtherCard, ReviewSection } from "../Courses";
 import style from "../Courses/courses.module.css";
 import { useLocation } from "react-router-dom";
@@ -15,7 +15,6 @@ import { toast } from "react-toastify";
 
 const TeacherProfile = ({type}) => {
   const {getItem} = useLocalStorage();
-
   const {generalState} = useAuth();
 
   const {pathname} = useLocation()
@@ -27,21 +26,16 @@ const TeacherProfile = ({type}) => {
   //   let meta = pathname.split("/").reverse()[0];
   //   name = `${meta.split("-")[0]} ${meta.split("-")[1]}`
   // }
-  let mentor, teacher;
-  if(type === "mentor"){
-    mentor = getItem("gotocourse-viewMentor")
-
-  } else {
-    teacher = getItem("gotocourse-teacherInfo")
-  }
+  
   const [teacherProfile, setTeacherProfile]= useState({})
   
   useEffect(()=>{
-    if(mentor && type === "mentor"){
+    if(pathname.includes("mentors")){
+      let mentor = getItem("gotocourse-viewMentor")
       setTeacherProfile(mentor)
     } else {
+      let teacher = getItem("gotocourse-teacherInfo")
       setTeacherProfile(teacher)
-
     }
 
   },[])
@@ -146,7 +140,7 @@ const TeacherProfile = ({type}) => {
                 <header>
                     <h5>Information</h5>
                 </header>
-                <p className={style.teacher_paragraph}  dangerouslySetInnerHTML={{__html:teacherProfile?.mentorBio ? teacherProfile.mentorBio: teacherProfile.bio}} />
+                <p className={style.teacher_paragraph}  dangerouslySetInnerHTML={{__html:teacherProfile?.mentorBio ? DOMPurify.sanitize(teacherProfile.mentorBio): DOMPurify.sanitize(teacherProfile.bio)}} />
             </article>
           </div>
           <div className="col-md-5">

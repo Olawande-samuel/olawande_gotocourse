@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:ital,wght@0,400;0,500;0,700;1,400&family=Raleway:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:ital,wght@0,400;0,500;0,700;1,400&family=Raleway:wght@600;700;800&family=Inter:wght@300;400;700;800;900&display=swap');
 
 :root {
   --primary: #f5f5f5;
@@ -21,6 +21,8 @@
   --green: #037615;
   --lime: #F1F8FF;
   --primary-dark: #023047;
+  --dashboard-blue: #E5E4F8;
+  --dashboard-pink: #FFF5F5;
 }
 /* override bootstrap */
 
@@ -187,12 +189,13 @@ td {
 }
 .nav .link {
   position: relative;
-  color: var(--btn-color) !important;
+  /* color: var(--btn-color) !important; */
+  color: #fff !important;
   font-size: 14px;
   font-weight: 450;
   outline: none;
   border: none;
-  background: #fff;
+  /* background: #fff; */
 }
 
 /* .nav .courses{
@@ -987,7 +990,8 @@ font-size: 16px;
 /* ****************ACCORDION***************************************** */
 
 .faq {
-  margin: 9.375rem 0 7.0625rem 0;
+  /* margin: 9.375rem 0 7.0625rem 0; */
+  margin: 4.375rem 0 7.0625rem 0;
 }
 
 .faq  .faq_wrapper {
@@ -1744,7 +1748,7 @@ line-height: 16px;
   letter-spacing:1.2px
 }
 .about_hero {
-  background: url(./images/about-hero.png), rgba(0, 0, 0, 0.7);
+  background: url(./images/about-hero.webp), rgba(0, 0, 0, 0.7);
   background-repeat:no-repeat;
   background-blend-mode: multiply;
   background-size: cover;

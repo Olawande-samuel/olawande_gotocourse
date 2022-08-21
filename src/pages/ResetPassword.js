@@ -53,7 +53,7 @@ const ResetPassword = () => {
         //       notification: response.message
         //     }
         //   })
-        //   navigate(`${d.userType === 'student' ? "/students" : "/teacher"}`);
+        //   navigate(`${d.userType === 'student' ? "/student" : "/teacher"}`);
         // }else throw new AdvancedError(message, statusCode);
   
       } catch (err) {

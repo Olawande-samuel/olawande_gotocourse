@@ -18,6 +18,7 @@ import { useLocalStorage } from "../../../hooks";
 import Layout from "../../../components/Layout";
 import { CourseProfile } from "../../Courses";
 import { Syllabus } from "./CreateCourse";
+import ChatComponent from "./chat";
 
 // import { PreviewModal } from "../components/Preview";
 
@@ -612,6 +613,27 @@ export function Edit() {
   );
 }
 
+
+export function Chat() {
+  const {getItem} = useLocalStorage()
+  const [loader, setLoader] = useState(true);
+  let userdata = getItem(KEY);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoader(_ => false);
+    }, 2000)
+  }, [])
+
+  return (
+ <Teachers userdata={userdata}>
+      {loader && <Loader />}
+        <ChatComponent />
+      </Teachers>
+  );
+}
+
+
 function ClassesCard({ numberOfLessons, title, date, time, isLive, color }) {
   return (
     <div className={clsx.classes_card}>
@@ -650,10 +672,14 @@ function ClassesCard({ numberOfLessons, title, date, time, isLive, color }) {
 
 export const Teachers = ({ children, isMobile, userdata, notification }) => {
   const {
-    generalState: { showSidebar, loading },
+    generalState: { showSidebar, loading, pledre },
     generalState,
     setGeneralState,
   } = useAuth();
+  const [pledredata, setPledreData]= useState({})
+
+  const {getItem} = useLocalStorage()
+
   useEffect(() => {
     if (notification) {
       toast.success(notification, {
@@ -668,6 +694,46 @@ export const Teachers = ({ children, isMobile, userdata, notification }) => {
     }
     return () => console.log("Teachers component is unmounted");
   }, []);
+
+  useEffect(()=>{
+    let isActive = true
+    if(!pledredata.email && pledre.getStudentDetails){
+
+        (async()=>{
+            const user = getItem("gotocourse-userdata")
+            
+            try{
+                const response = await pledre.getStudentDetails(user.email)
+                if(isActive ){
+                    if(response.email){
+                        setPledreData(response )
+                        console.log(response)
+                        localStorage.setItem("gotocourse-userdata", JSON.stringify({...user, pledre: response}))
+                    }
+                }
+
+            }catch(err){
+                console.error(err)
+                toast.error(err.message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }finally{
+                console.log("pData done")
+            }
+        })()
+    }
+
+    return ()=>{
+        isActive = false
+
+    }
+},[pledre.baseUrl])
 
   const toggleSidebar = () => {
     setGeneralState({ ...generalState, showSidebar: !showSidebar });

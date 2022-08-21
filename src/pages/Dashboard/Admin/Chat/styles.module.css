@@ -35,20 +35,23 @@
 
 .chat_main_container {
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     justify-content: space-between;
     padding: 30px 0px;
     padding-bottom: 20px;
     width: 100%;
-    height: 100%
+    height: 100%;
+    gap: .5rem;
 }
 
 .main_container__users {
-    width: 35%;
+    /* width: 35%; */
     height: 100%;
     border-radius: 10px;
     background-color: #fff;
     padding: 20px;
+    flex: 1;
+    overflow-y: clip;
 }
 
 .main_container__users h2 {
@@ -60,7 +63,8 @@
 }
 
 .chat_box {
-    width: 64%;
+    min-width: 64%;
+    position: relative;
     height: 100%;
     border-radius: 10px;
     display: flex;
@@ -69,14 +73,18 @@
     justify-content: center;
     background-color: #fff;
     padding-bottom: 20px;
+    flex: 2;
+    /* overflow-y:scroll; */
+
 }
 
 .users__list {
     display: flex;
     flex-direction: column;
     margin-bottom: 15px;
-    /* overflow-y: scroll; */
+    overflow-y: scroll;
     width: 100%;
+    height: 100%;
 }
 
 .user_box {
@@ -156,6 +164,7 @@
     height: 100%;
     overflow-y: scroll;
     padding: 20px;
+    padding-bottom: 30px;
     display: flex;
     flex-direction: column;
 }
@@ -163,6 +172,8 @@
 .chat_sender_container {
     padding: 10px;
     width: 100%;
+    position: absolute;
+    bottom: 0;
 }
 
 .chat_sender {
@@ -172,6 +183,7 @@
     border-radius: 10px;
     padding: 5px;
     background-color: #fff;
+
 }
 
 
@@ -182,15 +194,17 @@
     border: none;
     outline: none;
     font-size: 0.9rem;
+    width: 60%;
 }
 
 .chat_icons {
-    padding: 0px 20px;
+    /* padding: 0px 20px; */
     padding-right: 0px;
 }
 
 .chat_icons span {
     cursor: pointer;
+    font-size: 16px;
 }
 
 .send {
@@ -224,6 +238,7 @@
 
 .message_box {
     align-self: flex-end;
+    flex-direction: row-reverse;
 }
 
 .message_box .message_box_image {
