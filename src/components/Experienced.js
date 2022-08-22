@@ -17,9 +17,9 @@ const Experienced = () => {
             </main>
           </div>
           <div className="col-md-8">
-            <div className="d-flex flex-wrap  justify-content-center px-lg-5 mt-5" style={{gap:"1rem"}}>
+            <div className="d-flex flex-wrap  justify-content-center px-lg-5 mt-5 pe-lg-0" style={{gap:"1rem"}}>
             {icons.slice(0, 6).map(icon=>(
-                <div className="d-flex align-items-center" style={{width:"100px", height:"50px"}}>
+                <div className="d-flex align-items-center" >
                 <i className="icon experienced_icon" style={{width:"100px", height:"50px"}}>{icon}</i>
                 </div>
             ))}

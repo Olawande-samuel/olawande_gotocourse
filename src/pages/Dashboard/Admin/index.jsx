@@ -192,7 +192,7 @@ export function CategoryDetails({}){
               ></textarea>
             </div>
 
-            <div className={clsx.form_group}>
+            {/* <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
                 <label>Name of teachers</label>
                 {
@@ -243,7 +243,7 @@ export function CategoryDetails({}){
               <button type="button" className={clsx.form_group__button}>
                 Add Student
               </button>
-            </div>
+            </div> */}
 
           </form>
         </div>
@@ -633,6 +633,7 @@ export function CreateCourseCategory(){
     try{
       const data = {
         ...formstate,
+        name: formstate.name.trim(),
         nicheItems: [...nichelists],
         careerList: [...careerlists]
       }
@@ -771,7 +772,7 @@ export function CreateCourseCategory(){
     setOpen(_ => true)
   }
 
-
+console.log({formstate})
   return(
     <Admin header="Create Category">
       {loader && <Loader />}

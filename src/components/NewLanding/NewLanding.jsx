@@ -77,24 +77,52 @@ function Hero(){
                     <h6 className="newHero_left-title text-center">Connect with industry experts from anywhere and for less cost</h6>
                 </header>
                 <div className="newHero_left-userSignin">
-                    <button className="facebook d-block mb-3">
+                    <motion.button className="facebook d-block mb-3"
+                     whileHover={{ 
+                    boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                    textShadow:"0px 0px 8px rgb(255, 255, 255)",
+                    backgroundColor: "#eee"
+                  }}
+                    
+                    >
                         <i className="me-4">
                             <img src={goo} alt="" width={25} height={25} />
                         </i>
-                        Continue with Facebook</button>
-                    <button className="google d-block mb-3">
+                        Continue with Google
+                    </motion.button>
+                    <motion.button className="google d-block mb-3"
+                     whileHover={{ 
+                    boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                    textShadow:"0px 0px 8px rgb(255, 255, 255)",
+                    backgroundColor: "#eee"
+                    }}
+                    
+                    >
                     <i className="me-4">
                             <img src={face} alt="" width={25} height={25} />
                         </i>
-                        Continue with Google</button>
-                    <button className="apple d-block mb-3">
+                        Continue with Facebook
+                    </motion.button>
+                    <motion.button className="apple d-block mb-3"
+                     whileHover={{ 
+                    boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                    textShadow:"0px 0px 8px rgb(255, 255, 255)",
+                    backgroundColor: "#eee"
+                    }}
+                    
+                    >
                     <i className="me-4">
                             <img src={apple} alt="" width={25} height={25} />
                         </i>
-                        Continue with Apple</button>
+                        Continue with Apple
+                    </motion.button>
                     <small className="or d-block"><span>or</span></small>
                     <Link to="/signup">
-                        <p>Sign Up With Email</p>
+                        <motion.p
+                         whileHover={{ 
+                          textShadow:"0px 0px 8px rgb(255, 255, 255)"
+                        }}
+                        >Sign Up With Email</motion.p>
                     </Link>
                 </div>
             </div>
@@ -269,7 +297,7 @@ function Learn (){
               </div>
             </div>
             <div className="newLearning_right d-flex justify-content-end">
-                <Image width="720px" height="452px"  image={Learning} alt="Group of people in an online meeting room" className="background" effect="blur" />
+                <Image width="552px" height="452px"  image={Learning} alt="Group of people in an online meeting room" className="background" effect="blur" />
             </div>
          
         </div>
@@ -285,7 +313,7 @@ function Self(){
         <div className="d-flex content justify-content-between flex-column column-reverse flex-md-row">
         <div className="newSelf_right">
           <Image
-            width="720px"
+            width="552"
             height="452"
             image={Tech}
             alt="Young woman smiling while working on laptop"
@@ -351,7 +379,7 @@ function Mentorship (){
               </div>
             </div>
             <div className="newLearning_right d-flex justify-content-end">
-                <Image width="720px" height="582px"  image={Mento} alt="Group of people in an online meeting room" className="background" effect="blur" />
+                <Image width="552px" height="452px"  image={Mento} alt="Group of people in an online meeting room" className="background" effect="blur" />
             </div>
         </div>
       </div>
@@ -386,7 +414,7 @@ function InPerson (){
               </div>
             </div>
             <div className="newLearning_right d-flex justify-content-end">
-                <Image width="720px" height="582px"  image={Inperson} alt="Group of people in an online meeting room" className="background" effect="blur" />
+                <Image width="552px" height="452px"  image={Inperson} alt="Group of people in an online meeting room" className="background" effect="blur" />
             </div>
          
         </div>

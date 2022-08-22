@@ -89,7 +89,7 @@ export function Profile(){
     return (  
         <Students isMobile={isMobile} userdata={userdata} notification={notification}>            
             <div className={clsx.students_profile}>
-                <div className={clsx.students_profile_top}>
+                <div className={clsx.students_profile_top} style={{background:"unset"}}>
                     <div className={clsx.students_profile_top_img}>
                         <img src={userdata?.profileImg ? userdata.profileImg : avatar} style={{borderRadius: 10}} width="100%" alt="Avatar" />
                     </div>
@@ -424,7 +424,7 @@ export function Bootcamps() {
     return (
       <Students header={"Bootcamps"}>
         {loading && <Loader />}
-        <div className={clsx["admin_profile"]}>
+        <div className={clsx["students_profile"]}>
           <div className={clsx.admin__student}>
             <div className="d-flex justify-content-between align-items-center mb-4">
               <h3 style={{margin: 0}}>Bootcamps</h3>  
@@ -1017,24 +1017,24 @@ export function Chat() {
   }
   
 export const Dashboard = () => {
-    const {generalState: {isMobile, loading}, generalState, setGeneralState, studentFunctions: {fetchCourses, fetchWishlist}} = useAuth();
+    const {generalState: {isMobile}, studentFunctions: {fetchCourses, fetchWishlist}} = useAuth();
     const {getItem} = useLocalStorage();
     let userdata = getItem(KEY);
-    const [courses, setCourses] = useState([]);
 
     const ref = useRef(false)
 
     const navigate = useNavigate();
         
-    const { isLoading:isWishListLoading, isError:isWishListError, data:wishlistData } = useQuery(["fetch wishes"], ()=>fetchWishlist(userdata.token))
+    const { isLoading:isWishListLoading, isError:isWishListError, data:wishlistData, isSuccess:wishlistIsSuccess } = useQuery(["fetch wishes"], ()=>fetchWishlist(userdata.token))
 
-    const { isLoading, isError, data } = useQuery(["fetch courses"], ()=>fetchCourses(userdata.token))
+    const { isLoading, isError, data, isSuccess } = useQuery(["fetch courses"], ()=>fetchCourses(userdata.token))
 
-    console.log({data})
-    console.log({wishlistData})
+    console.log({isSuccess})
+    console.log({wishlistIsSuccess})
   
    
-    const[topContent, setTopContent] = useState([
+    
+    const topContent =[
         {
             id:1,
             title:"Courses enrolled for",
@@ -1051,15 +1051,21 @@ export const Dashboard = () => {
             id:3,
             title:"Outstanding fees",
             logo: <Stu3 />,
-            value: "$80000"
+            value: "$80,000"
         }
-    ])
-    const myCourses = ["Data Science", "Data Science", "Project Management", "Cybersecurity & Assurance", "Digital Marketing"]
-    const wishist = ["Data Science", "Data Science", "Project Management", "Cybersecurity & Assurance", "Digital Marketing"]
+    ]
+
+    if(wishlistIsSuccess){
+       topContent[1].value = wishlistData.data.length
+    }
+    if(isSuccess){
+       topContent[0].value = data.data.length
+    }
+
     return (
         <Students isMobile={isMobile} userdata={userdata} >            
         <div className={clsx.students_profile}>
-            <DasboardTop content={topContent} />
+            <DashboardTop content={topContent} />
 
             <div className={clsx.students_profile_main}>
               <div className={`d-flex ${clsx.dashboard_courses}`}>
@@ -1087,7 +1093,7 @@ export const Dashboard = () => {
                                 <li key={i}>{item.name}</li>
                             ))
                         }
-                        {}
+                        
                     </ul>
                 </div>
               </div>
@@ -1100,10 +1106,19 @@ export const Dashboard = () => {
                         <option value="aug">August, 2021</option>
                     </select>
                 </div>
-                    <CourseTable courses={courses} />
+                    <CourseTable courses={data?.data} />
               </div>
 
-              <div className={clsx.dashboard_community}>
+              <Community />
+            </div>
+        </div>
+    </Students>
+    )
+   
+}
+export function Community(){
+    return(
+        <div className={clsx.dashboard_community}>
                 <h6>Community</h6>
                 {[1,2, 3].map(item=>(
                     <div className={clsx.dashboard_community_profile}>
@@ -1124,14 +1139,10 @@ export const Dashboard = () => {
                     </div>
                 ))}
               </div>
-            </div>
-        </div>
-    </Students>
     )
-   
 }
 
-export function DasboardTop({content}){
+export function DashboardTop({content}){
     return(
         <div className={clsx.students_profile_top}>
         <div className={` ${clsx.students_overview} d-flex justify-content-around align-items-center flex-wrap flex-lg-no-wrap w-100`}>
@@ -1183,8 +1194,8 @@ const Students = ({children, isMobile, notification, userdata}) => {
                 const user = getItem("gotocourse-userdata")
                 try{
                     const response = await pledre.getStudentDetails(user?.email)
-                    if(isActive ){
-                        if(response.email){
+                    if(isActive){
+                        if(response?.email){
                             setPledreData(response )
                             console.log(response)
                             localStorage.setItem("gotocourse-userdata", JSON.stringify({...user, pledre: response}))

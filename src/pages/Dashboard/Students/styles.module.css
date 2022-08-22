@@ -121,8 +121,8 @@
     margin-top: 3rem;
 }
 .dashboard_courses--left {
-    background: var(--dashboard-blue);
     flex: 1;
+    background: var(--dashboard-blue);
     padding: 1.5rem 3rem;
     border-radius:10px;
 

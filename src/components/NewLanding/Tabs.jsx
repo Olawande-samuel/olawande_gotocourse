@@ -1,4 +1,6 @@
-import { Box, Tabs, Tab } from "@mui/material";
+
+import {useEffect} from 'react'
+import { Box, Tabs, Tab, Skeleton } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -64,12 +66,13 @@ export function Category() {
   const categories = useQuery(["categories"], () => fetchCategories());
   const courses = useQuery(["courses"], () => fetchCourses());
 
+  // console.log(courses.data?.data?.filter(course=>course.category.toLowerCase() === categories.data.data[1]?.name.toLowerCase()))
+  // console.log(courses.data?.data?.map(item=>console.log(item.name)))
 
-  console.log({value})
   return (
     <section className="newCategories">
       <header>
-        <h1 className="newCategories_header">Popular Categories</h1>
+        <h1 className="newCategories_header">Popular Courses</h1>
       </header>
       <Tabs
         value={value}
@@ -84,6 +87,7 @@ export function Category() {
         ></Tab>
         {categories.data?.data?.map((h, i) => (
           <Tab
+            key={i + 1}
             label={h.name}
             className="text-capitalize fw-bolder text-dark"
             {...a11yProps(i + 1)}
@@ -94,7 +98,8 @@ export function Category() {
       <TabPanel
         value={value}
         index={0}
-        style={{ height: "100%", width: "100%", paddingBottom:"1rem" }}
+        style={{ height: "100%", width: "100%", paddingBottom: "1rem" }}
+        key={0}
       >
         <Swiper
           // install Swiper modules
@@ -128,9 +133,9 @@ export function Category() {
             },
           }}
         >
-          {courses.data?.data?.map((item) => (
-            <SwiperSlide key={item.courseId}>
-              <CategoryCard {...item} />
+          {categories.data?.data?.map((item) => (
+            <SwiperSlide key={item.categoryId}>
+              <CategoryCard {...item} type="category" />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -141,73 +146,135 @@ export function Category() {
           value={value}
           index={index + 1}
           style={{ height: "100%", width: "100%" }}
+          key={index + 1}
         >
-         
-        <Swiper
-          // install Swiper modules
-          modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-          loop={true}
-          speed={1500}
-          autoplay={{ delay: 2500 }}
-          spaceBetween={0}
-          slidesPerView={1}
-          // navigation
-          pagination={{ clickable: true }}
-          scrollbar={{ draggable: true }}
-          breakpoints={{
-            // when window width is >= 320px
-            320: {
-              slidesPerView: 1,
-              spaceBetween: 0,
-            },
-            // when window width is >= 640px
-            575: {
-              slidesPerView: 2,
-              spaceBetween: 5,
-            },
-            700: {
-              slidesPerView: 3,
-              spaceBetween: 5,
-            },
-            1024: {
-              slidesPerView: 3.5,
-              spaceBetween: 28,
-            },
-          }}
-        >
-          {courses.data?.data?.filter(course=>course.category.toLowerCase() === item.name.toLowerCase()).map((course) => (
-            <SwiperSlide key={course.courseId}>
-              <CategoryCard {...course} all={course}  key={course.courseId} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      
+          <CoursesContainer courses={courses} category={item} />
         </TabPanel>
       ))}
     </section>
   );
 }
+function CoursesContainer({ category }) {
+  const {
+    otherFunctions: { fetchCategory, searchCategories },
+  } = useAuth();
 
-function CategoryCard({ courseId, courseImg, name, instructorName, category, all }) {
+
+  const courses = useQuery(["categ"], () => searchCategories(category?.name), {
+    notifyOnChangeProps:["category", "isFetching"]
+  })
+
+  useEffect(()=>{
+    if(category){
+      courses.refetch()
+    }
+  },[category])
+
   
   return (
-    <Link to={`categories/${category.split(" ").join("-").toLowerCase()}/courses/${name.split(" ").join("-").toLowerCase()}`}>
-    <div
-      className={`card newCategories_card`}
-      style={{ cursor: "pointer", height: "100%" }}
-    >
-      <img
-        src={courseImg ? courseImg : placeholder}
-        alt=""
-        className={`card-img-top newCategories_image`}
-      />
-      <div className={`card-body newCategories_card-body`}>
-          <h6 className={`card-title newCategories_card-title text-center fw-bolder`}>{name}</h6>
-        {/* <h6 className={`card-subtitle `}>{category}</h6> */}
-        {/* add line-clamp to this v */}
-        {/* <p className={`text-center `}>{instructorName}</p> */}
+    <>
+    {
+    courses.isFetching ? 
+    <div className="d-flex" style={{gap:"1rem"}}>
+     { [0, 0, 0].map((_, i)=>(
+        <Skeleton key={i} className="col-md-9 p-2 p-md-3 pe-md-4" variant='rectangular' width={350} height={250} animation="wave" sx={{borderTopLeftRadius: 10, borderTopRightRadius: 10}} />
+        ))}
       </div>
-    </div>
-        </Link>
+  :
+    <Swiper
+      // install Swiper modules
+      modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+      // loop={true}
+      speed={1500}
+      autoplay={{ delay: 2500 }}
+      spaceBetween={0}
+      slidesPerView={1}
+      // navigation
+      pagination={{ clickable: true }}
+      scrollbar={{ draggable: true }}
+      breakpoints={{
+        // when window width is >= 320px
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 0,
+        },
+        // when window width is >= 640px
+        575: {
+          slidesPerView: 2,
+          spaceBetween: 5,
+        },
+        700: {
+          slidesPerView: 3,
+          spaceBetween: 5,
+        },
+        1024: {
+          slidesPerView: 3.5,
+          spaceBetween: 28,
+        },
+      }}
+    >
+      {courses.data?.data?.map((course) => (
+          <SwiperSlide key={course.courseId}>
+            <CategoryCard {...course} all={course} key={course.courseId} />
+          </SwiperSlide>
+        ))}
+    </Swiper>
+    }
+    </>
+  
+  );
+}
+
+function CategoryCard({
+  type,
+  bannerImg,
+  courseId,
+  courseImg,
+  name,
+  instructorName,
+  category,
+  all,
+}) {
+  return (
+    <Link
+      to={
+        type === "category"
+          ? `categories/${name.split(" ").join("-").toLowerCase()} `
+          : `categories/${category
+              .split(" ")
+              .join("-")
+              .toLowerCase()}/courses/${name
+              .split(" ")
+              .join("-")
+              .toLowerCase()}`
+      }
+    >
+      <div
+        className={`card newCategories_card`}
+        style={{ cursor: "pointer", height: "100%" }}
+      >
+        <img
+          src={
+            type === "category"
+              ? bannerImg
+              : courseImg
+              ? courseImg
+              : placeholder
+          }
+          alt=""
+          className={`card-img-top newCategories_image`}
+        />
+        <div className={`card-body newCategories_card-body`}>
+          <h6
+            className={`card-title newCategories_card-title text-center fw-bolder`}
+          >
+            {name}
+          </h6>
+          {/* <h6 className={`card-subtitle `}>{category}</h6> */}
+          {/* add line-clamp to this v */}
+          {/* <p className={`text-center `}>{instructorName}</p> */}
+        </div>
+      </div>
+    </Link>
   );
 }

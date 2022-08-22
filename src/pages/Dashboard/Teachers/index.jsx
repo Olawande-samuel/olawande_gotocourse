@@ -4,7 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Modal, Box, Typography } from "@mui/material";
 import { AiOutlineMenu } from "react-icons/ai";
-
+import {Product, Stu1,Stu2, Stu3} from "../../../images/components/svgs"
+import {useQuery} from "@tanstack/react-query"
 import Loader from "../../../components/Loader";
 import { Sidebar, Searchbar } from "../components";
 import clsx from "./styles.module.css";
@@ -20,7 +21,7 @@ import { CourseProfile } from "../../Courses";
 import { Syllabus } from "./CreateCourse";
 import ChatComponent from "./chat";
 
-// import { PreviewModal } from "../components/Preview";
+import { DashboardTop, Community } from "../Students";
 
 const KEY = "gotocourse-userdata";
 
@@ -669,6 +670,106 @@ function ClassesCard({ numberOfLessons, title, date, time, isLive, color }) {
     </div>
   );
 }
+export const Dashboard = ()=>{
+
+  const navigate = useNavigate();
+  const { generalState: { isMobile }, teacherFunctions: { fetchApplications, fetchCourses, earnings }, } = useAuth();
+
+  const { getItem } = useLocalStorage();
+  let userdata = getItem(KEY);
+
+  const {isLoading, isError, isSuccess, data, error} = useQuery(["teacher courses"], () => fetchCourses(userdata.token))
+
+  if(data?.statusCode === 0){
+    toast.error(data?.message, {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: true,
+    });
+  }
+
+  console.log({data})
+
+    const topContent =[
+      {
+          id:1,
+          title:"Students",
+          logo: <Stu1 />,
+          value: 0
+      },
+      {
+          id:2,
+          title:"No of courses created",
+          logo: <Stu2 />,
+          value:  0
+      },
+      {
+          id:3,
+          title:"Earnings",
+          logo: <Stu3 />,
+          value: "$80,000"
+      }
+  ]
+
+  if(data?.data){
+    topContent[1].value = data.data.length
+  }
+  return (
+    <Teachers isMobile={isMobile} userdata={userdata}>
+    <div className={clsx.teachers_profile}>
+    <DashboardTop content={topContent} />
+      <div className={clsx.teachers_profile_dashboard}>
+        <div className={`d-flex justify-content-between ${clsx.dashboard_courses}`}>
+          <div className={clsx["dashboard_courses--left"]}>
+              <h6>My Classes</h6>
+              <ul>
+                  {
+                      // data?.data?.length === 0 ?  
+                      //   <li>
+                      //     <p className="text-muted">You haven't registered for a course</p>
+                      //   </li> 
+                      //   :
+                      [1, 2, 3, 4].map((item, i)=>(
+                          <li key={i} className="d-flex justify-content-between align-items-center">
+                              <div className={clsx["dashboard_class--details"]}>
+                                <p>Basics of Mobile UX</p>
+                                <p>01:00pm</p>
+                              </div>
+                              <div className={`d-flex justify-content-between ${clsx["dashboard_class--action"]}`}>
+                                <button className={`btn-plain ${clsx.completed}`}>Completed</button>
+                                <button className={`button button-md ${clsx.live}`}>Live</button>
+                              </div>
+                          </li>
+                      ))
+                    
+                  }
+              </ul>
+          </div>
+          <div className={clsx["dashboard_courses--right"]}>
+              <h6>My Courses</h6>
+              <ul>
+                  {
+                      data?.data?.length === 0 || !data?.data ?  
+                      <p className="text-muted">You haven't created a course</p>
+                      :
+                      data?.data?.map((item, i)=>(
+                          <li key={i}>{item.name}</li>
+                      ))
+                  }
+              </ul>
+          </div>
+        </div>
+      <Community />
+      </div>
+    </div>
+  </Teachers>
+  )
+}
+
 
 export const Teachers = ({ children, isMobile, userdata, notification }) => {
   const {
@@ -697,37 +798,37 @@ export const Teachers = ({ children, isMobile, userdata, notification }) => {
 
   useEffect(()=>{
     let isActive = true
-    if(!pledredata.email && pledre.getStudentDetails){
+    // if(!pledredata.email && pledre.getStudentDetails){
 
-        (async()=>{
-            const user = getItem("gotocourse-userdata")
+    //     (async()=>{
+    //         const user = getItem("gotocourse-userdata")
             
-            try{
-                const response = await pledre.getStudentDetails(user.email)
-                if(isActive ){
-                    if(response.email){
-                        setPledreData(response )
-                        console.log(response)
-                        localStorage.setItem("gotocourse-userdata", JSON.stringify({...user, pledre: response}))
-                    }
-                }
+    //         try{
+    //             const response = await pledre.getStudentDetails(user.email)
+    //             if(isActive){
+    //                 if(response?.email){
+    //                     setPledreData(response )
+    //                     console.log(response)
+    //                     localStorage.setItem("gotocourse-userdata", JSON.stringify({...user, pledre: response}))
+    //                 }
+    //             }
 
-            }catch(err){
-                console.error(err)
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            }finally{
-                console.log("pData done")
-            }
-        })()
-    }
+    //         }catch(err){
+    //             console.error(err)
+    //             toast.error(err.message, {
+    //                 position: "top-right",
+    //                 autoClose: 4000,
+    //                 hideProgressBar: true,
+    //                 closeOnClick: true,
+    //                 pauseOnHover: true,
+    //                 draggable: true,
+    //                 progress: undefined,
+    //             });
+    //         }finally{
+    //             console.log("pData done")
+    //         }
+    //     })()
+    // }
 
     return ()=>{
         isActive = false

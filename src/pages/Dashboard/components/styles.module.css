@@ -59,7 +59,7 @@
   background: var(--theme-blue); /* color of the tracking area */
 }
 .sidebar_items::-webkit-scrollbar-thumb {
-  background-color: #223288; /* color of the scroll thumb */
+  background-color: #5b607c; /* color of the scroll thumb */
   border-radius: 20px; /* roundness of the scroll thumb */
   /* border: 3px solid orange;  */
 }
@@ -246,10 +246,7 @@
     left: 0;
     z-index: 2000;
     padding-left: 0px;
-    height: 100vh;
-    display: flex;
     flex-direction: column;
-    background-color: var(--white);
     transition: all 0.3s ease;
   }
   /* .sidebar::after {
