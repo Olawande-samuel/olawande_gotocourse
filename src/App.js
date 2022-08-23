@@ -72,7 +72,7 @@ function App() {
               <Route path="courses" element={<StudentCourses />} />
               <Route path="wishlist" element={<Wishlist />} />
               <Route path="history" element={<StudentHistory />} />
-              <Route path="fees" element={<StudentFees />} />
+              <Route path="payment" element={<StudentFees />} />
               <Route path="chat" element={<StudentChat />} />
             </Route>
 

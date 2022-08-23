@@ -44,6 +44,10 @@
   }
   
 }
+.hamburger {
+  display:none;
+}
+
 .upcoming_card .row {
   --bs-gutter-x: 0;
 }
@@ -492,7 +496,7 @@ padding: 13px 0 ;
 }
 .services,
 .becoming {
-  padding: 4.0625rem 0;
+  padding:0 0 2.0625rem 0;
 }
 
 .services .left,
@@ -569,7 +573,7 @@ padding: 13px 0 ;
 .learning {
   position: relative;
   background: #ffffff;
-  padding: 5.0625rem 0;
+  padding: 1rem 0 3.0625rem 0;
 }
 .learning .card {
   position: absolute;
@@ -609,7 +613,7 @@ padding: 13px 0 ;
 .transition {
   position: relative;
   background: #ffffff;
-  padding: 5.0625rem 0;
+  padding:  0  0 2.0625rem 0;
   /* border:1px solid; */
 }
 .transition .card {
@@ -861,7 +865,7 @@ padding: 13px 0 ;
 /* ***********************TESTIMONIALS******************************* */
 
 .testimonials {
-  margin: 3.5625rem 0;
+  margin: 0 0 2.5625rem 0;
   color: var(--text-color-light);
 }
 .testimonials_card_wrapper .card {
@@ -1042,7 +1046,9 @@ font-size: 16px;
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 50%;
-  background: var(--theme-blue);
+  background: url(./images/committed.png);
+  background-repeat: no-repeat;
+  background-size: 2.25rem;
   position: absolute;
   top: 0;
   left: 0;
@@ -1725,6 +1731,12 @@ line-height: 16px;
   }
    
 }
+@media screen and (max-width: 821px){
+  .hamburger {
+    display: block;
+  }
+   
+}
 @media screen and (max-width: 550px) {
   .button-md {
     padding: 0.6875rem 1.5rem !important;
@@ -1769,6 +1781,9 @@ line-height: 16px;
   }
   .chart_container {
     overflow:scroll;
+  }
+  .dashboard_access_button{
+    padding: 10px !important;
   }
 }
 /* ***************ABOUT********************* */
@@ -2031,14 +2046,12 @@ line-height: 16px;
 color: red;
 background: yellow;
 }
-td,
-td span {
-  font-size: clamp(0.95rem, 0.3143rem + 0.9286vw, 1rem);
-  text-align:start;
 
-}
-tr th, thead td {
-  font-size: clamp(0.956rem, -0.2429rem + 3.7143vw, 1.15rem);
+tr th, thead td, td, td span  {
+  font-size: clamp(0.556rem, -0.2429rem + 3.7143vw, .9rem);
   text-align:start;
+  padding: .5rem;
 }
+
+
 

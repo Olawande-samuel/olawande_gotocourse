@@ -229,7 +229,14 @@
                     transform: translateY(12px);
 } */
 
-@media screen and (max-width: 767px) {
+@media (max-width: 1130px){
+  .searchbar {
+   
+    width: 30%;
+  }
+}
+
+@media screen and (max-width: 821px) {
   .overlay {
     position: absolute;
     left: 15rem;

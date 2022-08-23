@@ -3939,7 +3939,7 @@ export const Admin = ({ children, header }) => {
         <Sidebar isMobile={isMobile} />
         <div className={clsx["admin_main"]}>
           <div className={`align-items-center ${clsx["admin_topbar"]}`}>
-            <div className="d-md-none">
+            <div className="hamburger">
               <i>
                 <AiOutlineMenu
                   style={{ fontSize: "24px", color: "#0C2191" }}

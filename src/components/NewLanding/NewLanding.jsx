@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom"
+import { useQuery } from "@tanstack/react-query";
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+
 import Layout from "../Layout"
 import BootImg from "../../images/newbootcamp.webp"
 import HeroImg from "../../images/newHeroLatest.webp"
 import { useAuth } from "../../contexts/Auth"
 import "./landing.css"
-import { useQuery } from "@tanstack/react-query";
 import { useLocalStorage } from "../../hooks";
 
 import Experienced from '../Experienced'
@@ -67,7 +69,10 @@ export default NewLanding
 
 function Hero(){
     const {  generalState: { navHeight }, } = useAuth();
-
+    const responseFacebook = (response) => {
+      console.log(response);
+    }
+     
     return(
         <section className="newHero d-flex position-relative">
             <div className="d-flex container">
@@ -77,6 +82,8 @@ function Hero(){
                     <h6 className="newHero_left-title text-center">Connect with industry experts from anywhere and for less cost</h6>
                 </header>
                 <div className="newHero_left-userSignin">
+
+                
                     <motion.button className="facebook d-block mb-3"
                      whileHover={{ 
                     boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
@@ -90,20 +97,30 @@ function Hero(){
                         </i>
                         Continue with Google
                     </motion.button>
-                    <motion.button className="google d-block mb-3"
-                     whileHover={{ 
-                    boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
-                    textShadow:"0px 0px 8px rgb(255, 255, 255)",
-                    backgroundColor: "#eee"
-                    }}
-                    
-                    >
-                    <i className="me-4">
-                            <img src={face} alt="" width={25} height={25} />
-                        </i>
-                        Continue with Facebook
-                    </motion.button>
-                    <motion.button className="apple d-block mb-3"
+                    <FacebookLogin
+                    appId="3210198802601469"
+                    autoLoad={true}
+                    fields="name,email,picture"
+                    callback={responseFacebook}
+                    cssClass="my-facebook-button-class"
+                    icon="fa-facebook"
+                    render={renderProps => (
+                      <motion.button className="google d-block mb-3"
+                      whileHover={{ 
+                      boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                      textShadow:"0px 0px 8px rgb(255, 255, 255)",
+                      backgroundColor: "#eee"
+                      }}
+                      
+                      >
+                      <i className="me-4">
+                              <img src={face} alt="" width={25} height={25} />
+                          </i>
+                          Continue with Facebook
+                      </motion.button>
+                    )}
+                />,
+                    {/* <motion.button className="apple d-block mb-3"
                      whileHover={{ 
                     boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
                     textShadow:"0px 0px 8px rgb(255, 255, 255)",
@@ -115,7 +132,7 @@ function Hero(){
                             <img src={apple} alt="" width={25} height={25} />
                         </i>
                         Continue with Apple
-                    </motion.button>
+                    </motion.button> */}
                     <small className="or d-block"><span>or</span></small>
                     <Link to="/signup">
                         <motion.p

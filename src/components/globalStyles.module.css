@@ -25,6 +25,14 @@
     border-radius: 8px;
 }
 
+
+@media (max-width:550px) {
+    .general_logout__button button {
+        padding: 10px;
+        font-size: 1rem;
+       
+    }
+}
 .upload_file__background {
     background-color: rgba(0,0,0,.3);
     position: fixed;

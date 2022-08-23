@@ -135,7 +135,7 @@ export function Category() {
         >
           {categories.data?.data?.map((item) => (
             <SwiperSlide key={item.categoryId}>
-              <CategoryCard {...item} type="category" />
+              <CategoryCard {...item} type="category" all={item} />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -235,20 +235,21 @@ function CategoryCard({
   category,
   all,
 }) {
+  const navigate = useNavigate()
+
+  function handleCourseSelect( type){        
+
+    if(type === "category"){
+      localStorage.setItem("gotocourse-category", JSON.stringify(all))
+      navigate(`categories/${name.split(" ").join("-").toLowerCase()}`)
+    }else {
+      localStorage.setItem("gotocourse-courseInfo", JSON.stringify(all))
+      localStorage.setItem("gotocourse-courseId", all.courseId)
+      navigate(`/categories/${category?.split(" ").join("-")}/courses/${name.split(" ").join("-").toLowerCase()}}`)
+    }
+}
   return (
-    <Link
-      to={
-        type === "category"
-          ? `categories/${name.split(" ").join("-").toLowerCase()} `
-          : `categories/${category
-              .split(" ")
-              .join("-")
-              .toLowerCase()}/courses/${name
-              .split(" ")
-              .join("-")
-              .toLowerCase()}`
-      }
-    >
+    <div onClick={()=>handleCourseSelect(type)} >
       <div
         className={`card newCategories_card`}
         style={{ cursor: "pointer", height: "100%" }}
@@ -275,6 +276,6 @@ function CategoryCard({
           {/* <p className={`text-center `}>{instructorName}</p> */}
         </div>
       </div>
-    </Link>
+    </div>
   );
 }

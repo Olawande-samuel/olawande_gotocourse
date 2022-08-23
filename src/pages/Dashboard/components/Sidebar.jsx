@@ -148,8 +148,8 @@ const Sidebar = ({isMobile}) => {
         },
         {
             icon: FaRegMoneyBillAlt,
-            path: "fees",
-            title: "Fees"
+            path: "payment",
+            title: "Payment"
         },
         {
             icon:IoIosChatbubbles,
@@ -283,7 +283,7 @@ const Sidebar = ({isMobile}) => {
                         </NavLink>
                     ))
                 }
-            <div className="button_wrapper text-center" style={{marginTop:"3rem"}}>
+            <div className="button_wrapper d-none text-center" style={{marginTop:"3rem"}}>
                 <motion.button 
                     whileHover={{
                         // boxShadow: "0px 0px 8px rgb(0, 0, 0)",
@@ -292,7 +292,7 @@ const Sidebar = ({isMobile}) => {
                     className="btn btn-primary" 
                     style={{padding:"10px 28px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}
                     onClick={gotodashboard}
-                    disable={loading}
+                    disable={true}
                 >
                     {loading ? <div className="spinner-border text-light">
                         <div className="visually-hidden">loading</div>
@@ -302,7 +302,9 @@ const Sidebar = ({isMobile}) => {
                     }
                 </motion.button>
             </div>
-            <LogoutButton />
+            <div className="d-none">
+                <LogoutButton />
+            </div>
                 </div>
 
         </div>

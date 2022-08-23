@@ -711,7 +711,7 @@ export const Dashboard = ()=>{
           id:3,
           title:"Earnings",
           logo: <Stu3 />,
-          value: "$80,000"
+          value: "$0"
       }
   ]
 
