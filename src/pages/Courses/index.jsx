@@ -224,7 +224,7 @@ const Card = ({ logo, name, description, iconImg }) => {
   return (
     <div className={`card h-100 ${style.card}`}>
       <div className={`card-body ${style.cate_card_body}`}>
-        <i className={style.icon}>
+        <i className={`mb-3 ${style.icon}`}>
           {logo}
         </i>
         <h4 className={style.cate_card_title}>{name}</h4>
@@ -248,7 +248,7 @@ export const  CourseCard = ({ courseImg, name, description, category, instructor
       localStorage.setItem("gotocourse-courseId", courseId)
       navigate(show === true ?  `courses/${name?.replace(/\s+/g, '-').toLowerCase()}`:`${name?.replace(/\s+/g, '-').toLowerCase()} `)
       }}>
-      <img src={courseImg ? courseImg : placeholder} alt="" className="card-img-top mentor_image" />
+      <img src={courseImg ? courseImg : placeholder} alt="" className="card-img-top mentor_image" style={{height:"220px"}} />
       <div className={`card-body ${style.course_Card_body}`}>
         <Link to={show === true ?  `courses/${name?.replace(/\s+/g, '-').toLowerCase()}`:`${name?.replace(/\s+/g, '-').toLowerCase()} `}>
           <h5 className={`card-title ${style.course_title}`} style={{ color:color}}>{name}</h5>
@@ -969,7 +969,6 @@ export const CourseProfile = ({preview}) => {
                   <div className={style.card_right}>
                     <p className={style.name}>{courseProfile?.instructorName}</p>
                     <p className={style.occupation}>
-                      Power BI instructor (Data science)
                     </p>
                     <div className={style.rating_wrapper}>
                       <p className={style.rating}>Rating</p>

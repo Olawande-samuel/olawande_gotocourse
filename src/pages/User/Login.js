@@ -61,7 +61,7 @@ const Login = () => {
       }else throw new AdvancedError(message, statusCode);
 
     } catch (err) {
-      console.error(err);
+      console.error(err.message);
       if (err.statusCode === 0 || err.statusCode === undefined) {
         toast.error(err.message, {
           position: "top-right",

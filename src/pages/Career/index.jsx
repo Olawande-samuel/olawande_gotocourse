@@ -11,6 +11,7 @@ import mainLayout1 from "../../images/career/career2_layout.png"
 import bg2 from "../../images/career/career001.png";
 import layout2 from "../../images/career/career1.png";
 import mainLayout2 from "../../images/career/career_layout_2.png"
+import { Link } from "react-router-dom";
 
 
 
@@ -116,7 +117,7 @@ const Career = () => {
                         </Grid>
                     </div>
                     <div className={clsx.career_teaching}>
-                        <h2>Teaching Information</h2>
+                        <h2>Become a Teacher</h2>
                         <p>
                             <span><div style={dot}></div> Sharing Knowledge</span> <br />
                             We have a top-notch teaching platform where you can share knowledge seamlessly with your students.
@@ -125,6 +126,12 @@ const Career = () => {
                             <div style={dot}></div> Teaching Opportunities <br />
                             You can choose to teach with us, either Part-time of Full-time.
                         </p>
+
+                        <button className="mt-2 button-md button text-white">
+                            <Link to="/become-a-teacher" className="text-white">
+                                Apply Now
+                            </Link>
+                            </button>
                     </div>
                 </div>
             </div>

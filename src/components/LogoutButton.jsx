@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom"
 import clsx from "./globalStyles.module.css";
 import  {useLocalStorage} from "../hooks";
 
-
+import {MdLogout} from "react-icons/md"
 
 
 
@@ -66,7 +66,12 @@ const LogoutButton = () => {
         //  whileHover={{}}
          className={clsx.general_logout__button} onMouseOver={mouseOverHandler} onClick={logout}> 
             <motion.button>
+                <i className="d-md-none">
+                    <MdLogout size="1.5rem" />
+                </i>
+                <span className="d-none d-md-block">
                 Logout
+                </span>
             </motion.button>
         </motion.span>
     )

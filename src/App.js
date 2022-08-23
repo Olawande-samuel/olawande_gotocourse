@@ -13,7 +13,7 @@ import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit,
   CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails, AddMentor,Mentors, MentorsDetail, Notification, Earnings as AdminEarning} from "./pages/Dashboard/Admin";
 import {Dashboard as StudentDashboard,Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Fees as StudentFees,
    Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat} from "./pages/Dashboard/Students";
-import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, 
+import {Dashboard as TeacherDashboard,  Profile as TeachersProfile, Classes as TeacherClasses, Edit as TeacherEdit, 
   Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo, Chat as TeacherChat  } from "./pages/Dashboard/Teachers";
 
 import {Dashboard as AffiliatesDash} from "./pages/Dashboard/Affiliate"
@@ -72,7 +72,7 @@ function App() {
               <Route path="courses" element={<StudentCourses />} />
               <Route path="wishlist" element={<Wishlist />} />
               <Route path="history" element={<StudentHistory />} />
-              <Route path="fees" element={<StudentFees />} />
+              <Route path="payment" element={<StudentFees />} />
               <Route path="chat" element={<StudentChat />} />
             </Route>
 
@@ -92,7 +92,8 @@ function App() {
             </Route>
 
             <Route path="teacher" element={<Out />}>
-              <Route path="" element={<TeacherDashboard  />} /> 
+              <Route index element={<TeacherDashboard  />} /> 
+              <Route path="profile" element={<TeachersProfile  />} /> 
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<TeacherSignup />} />
               <Route path="classes" element={<TeacherClasses  />} />

@@ -1,9 +1,9 @@
 .newHero {
     background: var(--theme-blue);
-    height:min(calc(100vh - 81px ), 530px);
+    height:min(calc(100vh - 81px ), 600px);
     color: #ffffff;
     font-family: 'Inter', sans-serif;
-    margin-bottom: 6.5rem;
+    margin-bottom: 7rem;
     
 }
 .or {
@@ -21,11 +21,13 @@
 }
  .newHero_left header {
     color: #ffffff;
+    width: 100%;
 } 
 .newHero_left-userSignin{
-    width: 60%;
-    margin-inline:auto;
+    width: 100%;
 }
+
+
 .newHero_left-userSignin button, .newHero_left-userSignin  a p {
     cursor: pointer;
 }
@@ -35,7 +37,7 @@
 .newHero_left header h1 {
     margin-bottom: 2rem;
     font-weight: 900;
-    font-size: 45px;
+    font-size: 55px;
 }
 .newHero_left h6{
     font-size: 16px;
@@ -43,18 +45,20 @@
 .newHero_left-title {
     width: 60%;
     margin-inline:auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 .newHero_left{
     display: flex;
     flex-direction: column;
-    justify-content:space-around;
+    justify-content:space-evenly;
     
     align-items: center;
 }
 .newHero_right {
     right: 0;
     /* bottom: 0; */
-    height:min(100vh, 600px);
+    height:min(100vh, 680px);
 
 }
 
@@ -75,12 +79,24 @@
     color: black ;
     width: 100%;
     background: #ffffff;
+    width: 75%;
+    margin-left:auto;
+    margin-right:auto;
 }
-
+.newHero small, .newHero a {
+    width: 60%;
+    margin-left:auto;
+    margin-right:auto;
+}
 .newHero_left small, .newHero_left p:last-child{
     text-align: center;
 }
 
+@media (min-width:1340px){
+    .newHero button{
+        width: 60%;
+    }
+}
 .newCategories_header{
     color: var(--theme-blue);
     text-align: center;
@@ -88,7 +104,10 @@
     font-size: 35px;
     margin-bottom: 3rem;
 }
-
+.newCategories .MuiTabs-scroller button:hover {
+    background: var(--theme-blue);
+    color: #fff !important;
+}
 .newCategories .swiper-wrapper {
     margin-bottom: 1rem !important;
 }
@@ -99,6 +118,7 @@
 
 .newCategories_card-body {
 background: #ffffff;
+height:70px;
 }
 .newCategories_card-body h6, .newCategories_card-body p {
     color: #000000;
@@ -112,6 +132,8 @@ background: #ffffff;
 .benefit_box-top {
     border-left: 6px solid;
     padding-block: 4px;
+    padding-top:auto;
+    padding-bottom:auto;
 }
 .benefit_box-bottom {
     border-left: 6px solid white;
@@ -121,6 +143,8 @@ background: #ffffff;
 }
 .benefit_box .benefit_box-bottom p {
     margin-block: 0 ;
+     margin-top:0;
+    margin-bottom:0;
     text-align: start;
     font-size: 14px;
     color: #9f9f9f;
@@ -132,6 +156,8 @@ background: #ffffff;
     border: 2px solid var(--theme-blue) !important;
     color: var(--theme-blue) !important;
     font-weight: bold;
+    padding-left:3rem;
+    padding-right:3rem;
     padding-inline: 3rem !important;
 }
 .newBootcamp {
@@ -140,6 +166,8 @@ background: #ffffff;
     background-position: center;
     background-size: contain;
     padding-block: 4rem ;
+    padding-top:4rem;
+    padding-bottom:4rem;
     color: #fff;
     /* padding-top: 4rem; */
 
@@ -211,6 +239,8 @@ background: #ffffff;
 .newMentors header p {
     width: 60%;
     margin-inline: auto;
+    margin-left:auto;
+    margin-right:auto;
     line-height:30px;
 }
 
@@ -222,7 +252,7 @@ background: #ffffff;
 }
 
 .newLearning header h2 {
-    font-size: 45px;
+    font-size: clamp(2.1875rem, 1.9554rem + 1.1607vw, 44px);
     color: var(--theme-blue) !important;
 }
 .newLearning_left{
@@ -230,12 +260,13 @@ background: #ffffff;
 }
 
 .newLearning_right{
-    flex: 2;
+    flex: 1;
 }
 
 .newLearning_right .background img {
     object-position: top;
     border-radius: 10px;
+    object-fit: unset!important;
 }
 .newLearning-text {
     line-height:38px;
@@ -264,6 +295,8 @@ margin: auto;
 .newMentors {
     background: var(--theme-blue);
     padding-block:3.8625rem;
+    padding-top:3.8625rem;
+    padding-bottom:3.8625rem;
 }
 .newMentors header {
     color:#fff ;
@@ -272,6 +305,8 @@ margin: auto;
     text-align:center;
     color: #fff !important;
     margin-inline:auto;
+    margin-left:auto;
+    margin-right:auto;
     margin-bottom: 3rem;
     width:40%;
 }
@@ -345,5 +380,21 @@ margin: auto;
         left:0;
         right: 0;
         width: 70%;
+    }
+  }
+
+
+  @media (max-width: 777px){
+    .newLearning header, .newMentors h3{
+        width: 100%;
+    }
+    .newLearning header{
+        margin-top: 2rem;
+    }
+    .background img {
+        width: 100%;
+    }
+        .newSelf_left-wrapper {
+        width: 100%;
     }
   }

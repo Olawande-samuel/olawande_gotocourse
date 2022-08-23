@@ -159,7 +159,7 @@ const Navbar = ({background}) => {
             )}
           </ul>
           {value?.token ? (
-            <Link to={`${value.category === "Admin" ? "/admin" : value.userType === "student" ? "/students" : "/teacher"}`}>
+            <Link to={`${value.category === "Admin" ? "/admin" : value.userType === "student" ? "/student" : "/teacher"}`}>
               {/* <div className="d-flex align-items-center" style={{color:"var(--theme-blue", fontSize:"20px"}}> */}
               <div className="d-flex align-items-center" style={{color:"#fff", fontSize:"20px"}}>
                 {/* <i className="d-flex align-items-center justify-content-center me-2" style={{color:"var(--theme-blue"}}><FaRegUser /></i> */}

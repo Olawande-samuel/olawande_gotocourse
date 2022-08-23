@@ -37,7 +37,7 @@
 }
 
 .students_topbar {
-    width: 80%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -121,8 +121,8 @@
     margin-top: 3rem;
 }
 .dashboard_courses--left {
-    background: var(--dashboard-blue);
     flex: 1;
+    background: var(--dashboard-blue);
     padding: 1.5rem 3rem;
     border-radius:10px;
 
@@ -159,12 +159,19 @@
     font-size: 23px;
 }
 
+
+
+.dashboard_course_details table td {
+    vertical-align:middle;
+    min-width: auto;
+}
 .dashboard_course_details, .dashboard_community{
     border-radius: 10px;
     margin-top: 3rem;
-    padding: 1rem 3rem ;
+    padding: 1rem clamp(0.5rem, -0.2143rem + 3.5714vw, 3rem);
     min-height:400px;
     background: var(--dashboard-pink);
+    overflow:scroll;
 
 }
 .dashboard_community {
@@ -219,7 +226,7 @@
     color: #333333;
 }
 .students__header {
-    font-size: 1.5rem;
+    font-size: 1rem;
     color: var(--textColorDark);
     margin-block:.5rem ;
 }
@@ -432,6 +439,10 @@
     }
 }
 @media screen and (max-width:670px){
+    .students_main {
+        padding: 8px;
+        
+    }
   .students_wishlist {
     grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
     /* padding-block: 4.375rem; */
@@ -440,4 +451,21 @@
 .students_profile_top_button {
     padding: 5px 15px;
 }
+}
+
+@media (max-width:473px){
+    .students_overview_container {
+        width: 100%;
+    }
+}
+@media (max-width:390px){
+    .students__header {
+        display: none;
+    }
+}
+
+@media (min-width:1440px){
+    .dashboard_course_details table{
+        width: 100% !important;
+    }
 }
