@@ -901,7 +901,7 @@ export function CreateCourseCategory(){
 
 
 // DASHBOARD COMPONENT
-export function Dashboard() {
+export function Profile() {
 
   const { getItem, updateItem } = useLocalStorage();
   const {adminFunctions: { fetchProfile }} = useAuth();

@@ -9,14 +9,16 @@ import Login from "./pages/User/Login";
 import SignUp from "./pages/User/SignUp";
 import AdminLogin from "./pages/Admin/Login"
 import AdminSignup from "./pages/Admin/SignUp"
-import {Dashboard, Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails, Chat as AdminChat,
+import {Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails, Chat as AdminChat,
   CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails, AddMentor,Mentors, MentorsDetail, Notification, Earnings as AdminEarning} from "./pages/Dashboard/Admin";
+import AdminDashboard from "./pages/Dashboard/Admin/Dashboard";
 import {Dashboard as StudentDashboard,Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Fees as StudentFees,
    Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat} from "./pages/Dashboard/Students";
 import {Profile as TeacherDashboard, Classes as TeacherClasses, Edit as TeacherEdit, 
   Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo, Chat as TeacherChat  } from "./pages/Dashboard/Teachers";
 
 import {Dashboard as AffiliatesDash} from "./pages/Dashboard/Affiliate"
+import {Landing as AffiliateLanding} from "./pages/Affiliate";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
@@ -105,7 +107,7 @@ function App() {
               <Route path="courses/details/:id" element={<TeacherCourseInfo />} />
               <Route path="chat" element={<TeacherChat />} />
             </Route>
-
+            <Route path="affiliates" element={<AffiliateLanding />} />
             <Route path="affiliate" element={<Out />}>
               <Route path="" element={<AffiliatesDash  />} /> 
               <Route path="login" element={<Login />} />
@@ -132,7 +134,7 @@ function App() {
               </Route>
             </Route>
             <Route path="admin">
-              <Route path="" element={<Dashboard />} />
+              <Route path="" element={<AdminDashboard />} />
               <Route path="students" element={<Student />} />
               <Route path="notifications" element={<Notification />} />
               <Route path="fees" element={<Fees />} />
