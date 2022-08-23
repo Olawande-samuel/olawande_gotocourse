@@ -5,7 +5,7 @@ import Chart from "react-apexcharts"
   
   
   
-const MyChart = () => {
+const MyChart = ({width, height}) => {
   const [options, setOptions] = useState({
     options: {
         chart: {
@@ -53,7 +53,8 @@ const MyChart = () => {
       series={options.series}
       type="bar"
       // width="100%"
-      width="500"
+      height={height}
+      width={width ??"500"}
 
       // height="250"
     />
