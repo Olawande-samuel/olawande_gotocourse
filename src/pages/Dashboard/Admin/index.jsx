@@ -32,6 +32,8 @@ import { CreateCourseMain } from "../Teachers/CreateCourse";
 import { AllEarnings} from "../Teachers/Earnings"
 
 import EarningsTable from "./Earnings/Table"
+import LogoutButton from "../../../components/LogoutButton";
+import { GotoDashboard } from "../Students";
 
 
 
@@ -633,12 +635,12 @@ export function CreateCourseCategory(){
     try{
       const data = {
         ...formstate,
-        name: formstate.name.trim(),
+        name: formstate.name.trim().toUpperCase(),
+        importance: formstate.name.trim().toUpperCase(),
         nicheItems: [...nichelists],
         careerList: [...careerlists]
       }
-     
-      const res = edit ? await updateCategory(userdata?.token, formstate.categoryId, data): await addCategory(data, userdata?.token);
+   const res = edit ? await updateCategory(userdata?.token, formstate.categoryId, data): await addCategory(data, userdata?.token);
       const {success, message, statusCode} = res;
       if(!success) throw new AdvancedError(message, statusCode);
       else {
@@ -772,7 +774,6 @@ export function CreateCourseCategory(){
     setOpen(_ => true)
   }
 
-console.log({formstate})
   return(
     <Admin header="Create Category">
       {loader && <Loader />}
@@ -1024,7 +1025,6 @@ export function Approve() {
       console.log("getting")
       try {
         if(pledre){
-          console.log("ple",pledre) 
           setGeneralState({...generalState, loading: true})
           const pledRes = await pledre.getTeacherDetails(teacherInfo.email)
           console.log("pledRes",pledRes) 
@@ -1040,13 +1040,11 @@ export function Approve() {
         setGeneralState({...generalState, loading: false})
       }
 
-      console.log(pledreInfo)
         setData({...teacherInfo, pledre:pledreInfo});
       }
     )()
   }, []);
 
- console.log(data);
 
  async function handleVerification( e, type, id){
   e.preventDefault();
@@ -1082,7 +1080,6 @@ export function Approve() {
         } else { 
 
           const res = (data.pledre?._id && data.accessPledre === true) ? await pledre.deleteTeacher(data.pledre?._id) : ""
-          console.log(res)
           setData({...data, accessPledre: !data.accessPledre})
           toast.success(message, {
             position: "top-right",
@@ -1447,7 +1444,6 @@ export function Teachers() {
     localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(details))
     if (email) navigate(`approve?email=${email}`);
   }
-  console.log("reacj",teachers == true)
   return (
     <Admin header={"Mentors/Teachers"}>
       {loading && <Loader />}
@@ -2123,7 +2119,6 @@ export function CourseDetails({}){
   const students = ["James Segun"];
   const params = useParams();
   //get user id
-  console.log({formstate})
   useEffect(() => {
     //fetch course details for the id
     if(flag.current) return;
@@ -2217,7 +2212,6 @@ export function CourseDetails({}){
   }
 
 
-  console.log(formstate)
 
   async function toggleCourseStatusHandler(e){
     setLoading(_ => true);
@@ -2233,7 +2227,6 @@ export function CourseDetails({}){
           short_description: formstate.description,
           price: 5000
         })
-        console.log(pledRes)
         setFormstate({...formstate, status: "active"})
         toast.success(message, {
           position: "top-right",
@@ -2743,7 +2736,6 @@ export function CreateBootcamp(){
           else if (statusCode === 1) {
             const { data } = res;
             let found = data.find(d => d.bootcampId === id);
-            console.log({found})
             found.startDate = found.startDate.split("T")[0];
             found.endDate = found.endDate.split("T")[0];
             found.instructor = found.instructorName;
@@ -3126,7 +3118,6 @@ export function Fees() {
           if (!success) throw new AdvancedError(message, statusCode);
           else if (statusCode === 1) {
             const { data } = res;
-            console.log({data})
             setFormstate(data);
             toast.success("Fetched", {
               position: "top-right",
@@ -3246,7 +3237,6 @@ export function Notification() {
       const {message, success, statusCode} = res;
       if(!success) throw new AdvancedError(message, statusCode);
       const {data} = res
-      console.log(data)
       setReload(true)
       flag.current = false;
       toast.success(message, {
@@ -3889,6 +3879,7 @@ export function Chat() {
 export const Admin = ({ children, header }) => {
   const { generalState: { isMobile, showSidebar,loading }, generalState, setGeneralState, adminFunctions:{fetchNotifications} } = useAuth();
   const {getItem} = useLocalStorage();
+  const [loader, setLoading] = useState(false)
 
   const flag = useRef(false);
   let userdata = getItem(KEY);
@@ -3949,6 +3940,12 @@ export const Admin = ({ children, header }) => {
             </div>
             <h1 className="d-none d-md-block">{header}</h1>
             <Searchbar showIcon={true} placeholder="Search" />
+            <div className="button_wrapper d-flex align-items-center text-center d-flex ms-3">
+                        {/* move loading state to this component */}
+                            <GotoDashboard loader={loader} setLoading={setLoading} />
+                        <LogoutButton />
+
+                    </div>
           </div>
           {children}
         </div>

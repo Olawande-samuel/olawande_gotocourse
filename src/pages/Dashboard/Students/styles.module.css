@@ -463,3 +463,9 @@
         display: none;
     }
 }
+
+@media (min-width:1440px){
+    .dashboard_course_details table{
+        width: 100% !important;
+    }
+}

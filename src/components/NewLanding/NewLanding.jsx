@@ -44,6 +44,10 @@ import SwiperCore, {
   
   // Import Swiper styles
   import "swiper/css";
+
+  import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+  import { authentication, provider, facebookProvider } from "../../firebase-config.js"
+
 const NewLanding = ()=>{
     return (
     <Layout background="blue">
@@ -73,6 +77,12 @@ function Hero(){
       console.log(response);
     }
      
+    async function signInWithGoogle(){
+      signInWithPopup(authentication, provider).then(res=>console.log(res)).catch(err=>console.error(err))
+    }
+    async function signInWithFacebook(){
+      signInWithPopup(authentication, facebookProvider).then(res=>console.log(res)).catch(err=>console.error(err))
+    }
     return(
         <section className="newHero d-flex position-relative">
             <div className="d-flex container">
@@ -82,44 +92,33 @@ function Hero(){
                     <h6 className="newHero_left-title text-center">Connect with industry experts from anywhere and for less cost</h6>
                 </header>
                 <div className="newHero_left-userSignin">
-
-                
                     <motion.button className="facebook d-block mb-3"
-                     whileHover={{ 
-                    boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
-                    textShadow:"0px 0px 8px rgb(255, 255, 255)",
-                    backgroundColor: "#eee"
-                  }}
-                    
+                      whileHover={{ 
+                        boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                        textShadow:"0px 0px 8px rgb(255, 255, 255)",
+                        backgroundColor: "#eee"
+                      }}
+                    onClick={signInWithGoogle}
                     >
                         <i className="me-4">
                             <img src={goo} alt="" width={25} height={25} />
                         </i>
                         Continue with Google
                     </motion.button>
-                    <FacebookLogin
-                    appId="3210198802601469"
-                    autoLoad={true}
-                    fields="name,email,picture"
-                    callback={responseFacebook}
-                    cssClass="my-facebook-button-class"
-                    icon="fa-facebook"
-                    render={renderProps => (
+                   
                       <motion.button className="google d-block mb-3"
                       whileHover={{ 
                       boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
                       textShadow:"0px 0px 8px rgb(255, 255, 255)",
                       backgroundColor: "#eee"
                       }}
-                      
+                      onClick={signInWithFacebook}
                       >
                       <i className="me-4">
                               <img src={face} alt="" width={25} height={25} />
                           </i>
                           Continue with Facebook
                       </motion.button>
-                    )}
-                />,
                     {/* <motion.button className="apple d-block mb-3"
                      whileHover={{ 
                     boxShadow: "0px 0px 8px rgb(0, 0, 0)", 

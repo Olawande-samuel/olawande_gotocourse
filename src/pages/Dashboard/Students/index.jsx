@@ -1122,16 +1122,17 @@ export const Dashboard = () => {
               </div>
               <div className={`${clsx.dashboard_course_details}`}>
                 <div className="d-flex justify-content-between align-items-center">
-                    <h6>Courses payed for</h6>
+                    <h6>Courses paid for</h6>
                 </div>
                     {/* <CourseTable courses={data?.data} type="dashboard" /> */}
-
+                        {
+                        data?.data?.length > 0 ? 
                     <div className="table-responsive">
                         <table className="table table-borderless w-auto">
                             <thead>
                                 <tr>
                                     {tableHeaders.map((item, i)=>(
-                                        <th scope="col" key={i} style={{minWidth: item !== "No" ? "150px": "auto" }} >{item}</th>
+                                        <th scope="col" key={i} style={{minWidth: item !== "No" ? "150px": "60px" }} >{item}</th>
                                     ))}
                                 </tr>
                             </thead>
@@ -1153,7 +1154,9 @@ export const Dashboard = () => {
                                 ))}
                             </tbody>
                         </table>
-                    </div>
+                    </div> : <NoDetail text="You haven't registered for any course" />
+
+                        }
               </div>
 
               <Community />
@@ -1297,7 +1300,7 @@ const Students = ({children, isMobile, notification, userdata}) => {
                         </i>
                     </div>
                     <h4 className={clsx.students__header}>{userdata?.firstName} {userdata?.lastName}</h4>
-                    <Searchbar showIcon={true} placeholder="Search" />
+                    <Searchbar showIcon={true} placeholder="Search Keyword" />
                     <div className="button_wrapper d-flex align-items-center text-center d-flex ms-3">
                         {/* move loading state to this component */}
                             <GotoDashboard loader={loader} setLoading={setLoading} />
@@ -1317,7 +1320,7 @@ const Students = ({children, isMobile, notification, userdata}) => {
     )
 }
 
-function GotoDashboard({loader, setLoading}){
+export function GotoDashboard({loader, setLoading}){
     const {getItem} = useLocalStorage();
     const {generalState} = useAuth();
     const location = useLocation()
