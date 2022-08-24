@@ -78,7 +78,12 @@ const rightLink = [
   {
     id:7,
     title:"Teachers",
-    path:"/teachers"
+    path:"/become-a-teacher"
+  },
+  {
+    id:7,
+    title:"Affiliates",
+    path:"/affiliates"
   },
 ]
 const Footer = () => {
@@ -160,7 +165,6 @@ const Footer = () => {
           <div className="second">
             <ul>
             <li>Company</li>
-
             {rightLink.map((link, index)=>(
               <Link  key={index} to={link.path}>
                 <motion.li
