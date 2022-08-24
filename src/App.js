@@ -17,6 +17,7 @@ import {Dashboard as StudentDashboard,Profile as StudentProfile, Classes as Stud
 import {Dashboard as TeacherDashboard,  Profile as TeachersProfile, Classes as TeacherClasses, Edit as TeacherEdit, 
   Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo, Chat as TeacherChat  } from "./pages/Dashboard/Teachers";
 
+  
 import {Dashboard as AffiliatesDash} from "./pages/Dashboard/Affiliate"
 import {Landing as AffiliateLanding} from "./pages/Affiliate";
 import 'react-toastify/dist/ReactToastify.css';

@@ -785,7 +785,7 @@ function CourseTable({courses=[], type}){
                     <NoDetail text="You haven't registered for any course" />
 
                 :
-                <table className={`${clsx.student_table} table table-bordered`}>
+                <table className={`${clsx.student_table}`}>
                     <thead>
                         <tr>
                         {

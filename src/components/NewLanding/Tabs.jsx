@@ -71,6 +71,8 @@ export function Category() {
 
   return (
     <section className="newCategories">
+      <div className="container-xxl">
+
       <header>
         <h1 className="newCategories_header">Popular Courses</h1>
       </header>
@@ -131,6 +133,10 @@ export function Category() {
               slidesPerView: 3.5,
               spaceBetween: 28,
             },
+            1704: {
+              slidesPerView: 4.5,
+              spaceBetween: 28,
+            },
           }}
         >
           {categories.data?.data?.map((item) => (
@@ -151,6 +157,7 @@ export function Category() {
           <CoursesContainer courses={courses} category={item} />
         </TabPanel>
       ))}
+      </div>
     </section>
   );
 }
@@ -209,6 +216,10 @@ function CoursesContainer({ category }) {
         },
         1024: {
           slidesPerView: 3.5,
+          spaceBetween: 28,
+        },
+        1704: {
+          slidesPerView: 4.5,
           spaceBetween: 28,
         },
       }}

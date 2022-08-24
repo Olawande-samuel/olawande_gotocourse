@@ -84,7 +84,7 @@ function Hero(){
       signInWithPopup(authentication, facebookProvider).then(res=>console.log(res)).catch(err=>console.error(err))
     }
     return(
-        <section className="newHero d-flex position-relative">
+        <section className="newHero d-flex position-relative"style={{marginTop: navHeight}}>
             <div className="d-flex container">
             <div className="newHero_left w-50">
                 <header className="">
@@ -198,7 +198,7 @@ function Bootcamp(){
           modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
           loop={true}
           speed={1500}
-          autoplay={{ delay: 2500 }}
+          autoplay={{ delay: 2800 }}
           spaceBetween={0}
           slidesPerView={1}
           // navigation
@@ -264,12 +264,12 @@ function BootcampCard({_id, title, duration, startTime, endTime, startDate,endDa
             <p className="mb-5">{title}</p>
             <p>{description}</p>
         </div>
-        <div className="newBootcamp_timing d-flex flex-column flex-md-row flex-wrap flex justify-content-between text-center">
-            <div className="newBootcamp_duration d-flex">
+        <div className="newBootcamp_timing text-center">
+            <div className="newBootcamp_duration d-flex justify-content-center">
                 <p className="fw-bold">Duration:</p>
                 <p>{duration}</p>
             </div>
-            <div className="newBootcamp_start d-flex">
+            <div className="newBootcamp_start d-flex justify-content-center">
                 <p className="fw-bold">Start Date:</p>
                 <p >{startDate && getDate(startDate)}</p>
             </div>

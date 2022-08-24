@@ -72,7 +72,7 @@ const Mentors = () => {
               spaceBetween: 0,
             },
             700: {
-              slidesPerView: 3,
+              slidesPerView: 2.5,
               spaceBetween: 0,
             },
             1024: {

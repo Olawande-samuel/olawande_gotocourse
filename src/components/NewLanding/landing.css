@@ -101,7 +101,7 @@
     color: var(--theme-blue);
     text-align: center;
     font-weight: 700;
-    font-size: 35px;
+    font-size: clamp(1.8rem, -0.875rem + 8.333vw, 2.25rem);
     margin-bottom: 3rem;
 }
 .newCategories .MuiTabs-scroller button:hover {
@@ -161,7 +161,7 @@ height:70px;
     padding-inline: 3rem !important;
 }
 .newBootcamp {
-    height:min(70vh, 750px);
+    min-height:70vh;
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
@@ -169,15 +169,19 @@ height:70px;
     padding-top:4rem;
     padding-bottom:4rem;
     color: #fff;
-    /* padding-top: 4rem; */
 
 }
 @media (max-width: 600px){
     .newBootcamp, .newHero {
     height: 100% !important;
+    margin-bottom: 2rem;
     }
     .newHero_left-userSignin{
-        width: 90%;
+        width: 100%;
+    }
+    .newHero button {
+        width: 100%;
+        padding: 12px 25px;
     }
      
 }
@@ -198,6 +202,12 @@ height:70px;
     font-size:40px;
     margin-bottom: 1.3rem;
 }
+.newBootcamp_timing{
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+    gap: .5rem;
+}
 .newBootcamp_button {
     border:none;
     outline:none;
@@ -215,6 +225,11 @@ height:70px;
 @media (max-width: 975px) {
     .newBootcamp_title {
         width: 100%;
+    }
+}
+@media (max-width: 660px) {
+    .newLearning_right .background img, .transition .background img, .becoming .background img{
+        height:100%;
     }
 }
 .newLearning header, .newMentors h3 {
@@ -369,8 +384,28 @@ margin: auto;
     color: var(--theme-blue) !important;
     background: #fff
   }
+  @media screen and (min-width: 1440px){
+    .newHero {
+        height:min(calc(100vh - 81px ), 850px);
+        
+    }
+    .newHero_right {
+        right: 0;
+        /* bottom: 0; */
+        height:min(100vh, 930px);
+    
+    }
+    .newHero_left header h1 {
+        margin-bottom: 2rem;
+        font-weight: 900;
+        font-size: 65px;
+    }
+    .newHero_left h6{
+        font-size: 20px;
+    }
+}
 
-  @media (max-width: 1024px){
+@media (max-width: 1024px){
     .newHero_left {
         width: 100% !important;
     }
@@ -381,10 +416,15 @@ margin: auto;
         right: 0;
         width: 70%;
     }
-  }
+}
+@media (max-width: 1200px){
+    .newHero_right img {
+        object-fit: cover;
+        object-position:left;
+    }
+}
 
-
-  @media (max-width: 777px){
+@media (max-width: 777px){
     .newLearning header, .newMentors h3{
         width: 100%;
     }
@@ -397,4 +437,38 @@ margin: auto;
         .newSelf_left-wrapper {
         width: 100%;
     }
-  }
+}
+@media (max-width: 575px){
+    .newBootcamp_timing  {
+        flex-wrap:wrap;
+        justify-content: center;
+        gap: unset;
+    }
+    .newBootcamp_title {
+        text-align: center;
+    }
+    .newBootcamp_timing > div{
+        flex: 50%;
+    }
+}
+@media (max-width: 400px){
+    .newCategories_image {
+        height: 110px;
+        width: 100%;
+        /* object-position: ; */
+        object-fit: fill;
+    }
+    .newCategories_card-body{
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content:center;
+    }
+
+    .newCategories_card-body h6 {
+        font-size: 10px !important;
+    }
+    
+}
+  
+ 
