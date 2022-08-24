@@ -198,7 +198,7 @@ function Bootcamp(){
           modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
           loop={true}
           speed={1500}
-          autoplay={{ delay: 2800 }}
+          // autoplay={{ delay: 2800 }}
           spaceBetween={0}
           slidesPerView={1}
           // navigation
@@ -326,7 +326,7 @@ function Self(){
     return(
         <section className="wrapper transition newLearning">
       <div className="container">
-        <div className="d-flex content justify-content-between flex-column column-reverse flex-md-row">
+        <div className="d-flex content justify-content-between">
         <div className="newSelf_right">
           <Image
             width="552"

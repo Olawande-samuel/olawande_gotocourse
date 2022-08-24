@@ -651,8 +651,10 @@ padding: 13px 0 ;
   position: relative;
   max-width: 100%;
 }
-.transition .background img , .career .background img, .newLearning_right  .background img {
+.transition .background img , .career .background img{
   width: 100%;
+}
+.transition .background img , .career .background img, .newLearning_right  .background img {
   object-fit:cover;
   object-position: center;
 }
@@ -1056,12 +1058,12 @@ font-size: 16px;
 }
 .faq-comp::before {
   content:"";
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.75rem;
+  height: 2.75rem;
   border-radius: 50%;
   background: url(./images/target.png);
   background-repeat: no-repeat;
-  background-size: 2.25rem;
+  background-size: 2.75rem;
   position: absolute;
   top: 0;
   left: 10px;
@@ -1373,11 +1375,13 @@ line-height: 16px;
     text-align: center;
   }
   .learning .content,
-  .transition .content,
   .becoming .content ,
   .classroom .content
   {
     flex-direction: column-reverse;
+  }
+  .transition .content {
+    flex-direction: column;
   }
 
   .services .title {
@@ -1990,8 +1994,17 @@ line-height: 16px;
 @media screen and (min-width: 1600px){
   .learning .background img, .newLearning_right .background img {
     max-width: 100%;
-    object-fit:cover;
-    object-position: top;
+    object-fit:cover !important;
+    object-position: top !important;
+    width: 100%;
+  }
+  .newBootcamp_title p{
+    font-size: 2rem !important;
+    line-height: 34px;
+  }
+  .newBootcamp_title p:first-child{
+    font-size: 65px !important;
+    line-height: 75px;
   }
 }
 
