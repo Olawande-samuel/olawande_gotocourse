@@ -23,7 +23,7 @@ const data = [
 export default function Development(){
     return (
         <section className="wrapper degree">
-            <div className=" container-lg degree_wrapper bootcamp_content">
+            <div className=" container degree_wrapper bootcamp_content">
             <header className="text-center my-4">
                 <h3 className="title">Career development</h3>
                 <p
