@@ -33,11 +33,11 @@ const Faq = () => {
 };
 
 
-function FaqComponent({title,answer}){
+export function FaqComponent({title,answer, styles}){
   return(
     <div className="faq-comp col-md-6 my-2 px-2 px-lg-4">
-      <h6 className="fw-bolder">{title}</h6>
-      <p>{answer}</p>
+      <h6 className="fw-bolder" style={styles.title}>{title}</h6>
+      <p style={styles.answer}>{answer}</p>
     </div>
   )
 }

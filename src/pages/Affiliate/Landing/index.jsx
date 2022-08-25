@@ -5,9 +5,9 @@ import React, {useEffect} from "react";
 
 import Layout from "../../../components/Layout";
 import clsx from "./styles.module.css";
-import img01 from "../../../images/affiliate_girl.png";
-import cactus from "../../../images/green_cactus.png";
-
+import img01 from "../../../images/affiliate_dash.png";
+import cactus from "../../../images/money_bag.png";
+import {FaqComponent} from "../../../components/Faq";
 
 
 
@@ -72,8 +72,8 @@ const Landing = () => {
             <div className={clsx.affiliate}>
                 <div className={clsx.affiliate_top}>
                     <div className={clsx.affiliate_top__absolute}>
-                        <h2>Make earnings with the Go2course Affiliate Program</h2>
-                        <p>Make earnings from students that register on Go2course <br /> through your link.</p>
+                        <h2>Make earnings with <br/> the Go2course Affiliate Program</h2>
+                        <p>Make earnings from students that register to <br /> Go2course through your link.</p>
                         <button>Get Started</button>
                     </div>
                 </div>
@@ -111,9 +111,10 @@ const Landing = () => {
                 </div>
 
                 <div className={clsx.faqs}>
+                    <h2>FAQS</h2>
                     {
                         faqs.map(({question, answer}, i) => (
-                            <Faq question={question} answer={answer} key={i} />
+                            <FaqComponent title={question} answer={answer} styles={styles} key={i} />
                         ))
                     }
                 </div>
@@ -123,6 +124,19 @@ const Landing = () => {
 }
 
 
+const styles = {
+    title: {
+        color: "#0C2191",
+        fontSize: 18,
+        marginBottom: 15
+    },
+    answer: {
+        fontSize: 14,
+        fontWeight: 400,
+        letterSpacing: 0.4
+    }
+}
+
 
 
 const AffiliateCard = ({bgColor, icon, description}) => (
@@ -131,19 +145,6 @@ const AffiliateCard = ({bgColor, icon, description}) => (
         <p>
             {description}
         </p>
-    </div>
-)
-
-
-
-const Faq = ({question, answer}) => (
-    <div className={clsx.faq}>
-        <div className={clsx.faq_question}>
-            {question}
-        </div>
-        <div className={clsx.faq_answer}>
-            {answer}
-        </div>
     </div>
 )
 
