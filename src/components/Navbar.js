@@ -109,7 +109,7 @@ const Navbar = ({background}) => {
     <nav ref={heightRef} section="top" className="nav navbar navbar-expand-lg navbar-light" style={{
       // borderBottom: "1px solid rgba(159, 159, 159, .3)", 
       // background: background === "blue" ? "var(--theme-blue)": "#fffff",color: background === "blue" ?  "#fffff" : "var(--theme-blue)" }}>
-      background:  "var(--theme-blue)", color:  "#fffff" }}>
+      background:  background ?? "var(--theme-blue)", color:  "#fffff" }}>
     <ScrollToTop />
       <div className="container navbar-container align-items-center">
         <Link to="/" onClick={()=> window.scrollTo(0, 0)} className="logo navbar-brand ">
