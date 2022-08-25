@@ -60,7 +60,7 @@
   display:none;
 }
 
-.upcoming_card .row, .bootcamp_content .row {
+.upcoming_card .row, .bootcamp_content .row, .faq_wrapper .row {
   --bs-gutter-x: 0;
 }
 .upcoming_card_wrapper {
@@ -482,7 +482,10 @@ padding: 13px 0 ;
   line-height: 32px;
   font-weight: 300;
 }
-
+.bootcamp_card {
+  box-shadow: 1px 2px 15px 7px rgba(201, 198, 198, 0.25) !important;
+border-radius: 13.5px !important;
+}
 /* .degree .dev_card:nth-child(2) {
   background-color:var(--theme-orange) !important;
   color: white!important;
@@ -651,8 +654,10 @@ padding: 13px 0 ;
   position: relative;
   max-width: 100%;
 }
-.transition .background img , .career .background img, .newLearning_right  .background img {
+.transition .background img , .career .background img{
   width: 100%;
+}
+.transition .background img , .career .background img, .newLearning_right  .background img {
   object-fit:cover;
   object-position: center;
 }
@@ -954,7 +959,6 @@ line-height: 25px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-
 .testimonials .slides {
   width: min(100% - 1rem, 350px);
   line-height:37px;
@@ -964,16 +968,37 @@ line-height: 25px;
   padding: 2rem 1rem;
   
 }
+.students .testimonials {
+  background: inherit !important;
+}
 
+.students .testimonials .slides {
+  width: min(100% - 1rem, 350px);
+  line-height:37px;
+  height: 466px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 2rem 1rem;
+  
+}
+.students .testimonials .testimonials_text {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size:  16px;
+  line-height: 28px;
+  /* margin-bottom: 3.125rem; */
+}
 /* ****************DEGREE****************************** */
 .degree_content {
   width: 75%;
   margin: auto;
 }
 .degree {
-  margin-bottom: 5rem;
-  background: var(--btn-color);
-  color: #fff;
+  margin-bottom: 2rem;
+  /* background: var(--btn-color); */
+  background: inherit;
+  /* color: #fff; */
+  color: var(--theme-blue);
   padding: 49px 0 79px 0;
   /* line-height:34px */
 }
@@ -996,7 +1021,8 @@ line-height: 25px;
   font-weight: 700;
   font-size:  clamp(20px, 3vw + 1 , 34px);
   line-height: 72px;
-  color: #fff !important;
+  /* color: #fff !important; */
+  color: var(--theme-blue) !important;
 }
 .degree  .degree_text {
   font-weight: 400;
@@ -1015,6 +1041,9 @@ font-size: 16px;
 .faq {
   /* margin: 9.375rem 0 7.0625rem 0; */
   margin: 4.375rem 0 7.0625rem 0;
+}
+.students .faq {
+  margin-bottom: 0;
 }
 
 .faq  .faq_wrapper {
@@ -1053,18 +1082,33 @@ font-size: 16px;
 .faq-comp {
   position: relative;
   padding-left: 4rem !important;
+  margin: 1rem 0;
+  margin-bottom: 2.5rem;
 }
 .faq-comp::before {
   content:"";
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.75rem;
+  height: 2.75rem;
   border-radius: 50%;
   background: url(./images/target.png);
   background-repeat: no-repeat;
-  background-size: 2.25rem;
+  background-size: 2.75rem;
   position: absolute;
   top: 0;
   left: 10px;
+}
+.faq-comp:not(.skip)::after {
+  content: "";
+  width: 0.15rem;
+  height: 3.95rem;
+  /* border-radius: 50%; */
+  background: rgba(41, 45, 50, 0.71);
+  background-repeat: no-repeat;
+  background-size: 2.75rem;
+  position: absolute;
+  top: 3.05rem;
+  left: 30px;
+  /* transform: translate(-50%); */
 }
 .faq  .accordion-button:not(.collapsed)::after {
   background-image: url(./images/caret.svg);
@@ -1373,11 +1417,13 @@ line-height: 16px;
     text-align: center;
   }
   .learning .content,
-  .transition .content,
   .becoming .content ,
   .classroom .content
   {
     flex-direction: column-reverse;
+  }
+  .transition .content {
+    flex-direction: column;
   }
 
   .services .title {
@@ -1434,6 +1480,10 @@ line-height: 16px;
 
   .testimonials .slides {
     height: 300px !important;
+    
+  }
+  .students .testimonials .slides {
+    height: 466px !important;
     
   }
   .footer_container {
@@ -1785,6 +1835,9 @@ line-height: 16px;
   .testimonials .slides {
     height: auto;
   }
+  .students .testimonials .slides {
+    height: auto;
+  }
  
   
   .end_left {
@@ -1990,8 +2043,17 @@ line-height: 16px;
 @media screen and (min-width: 1600px){
   .learning .background img, .newLearning_right .background img {
     max-width: 100%;
-    object-fit:cover;
-    object-position: top;
+    object-fit:cover !important;
+    object-position: top !important;
+    width: 100%;
+  }
+  .newBootcamp_title p{
+    font-size: 2rem !important;
+    line-height: 34px;
+  }
+  .newBootcamp_title p:first-child{
+    font-size: 65px !important;
+    line-height: 75px;
   }
 }
 

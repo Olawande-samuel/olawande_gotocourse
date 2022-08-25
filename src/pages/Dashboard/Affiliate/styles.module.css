@@ -65,3 +65,32 @@
     background: #EEF9FF;
     border-radius: 10px;
 }
+
+.small .affiliate_box {
+    display: flex;
+    border-radius:20px;
+    padding:1rem;
+    align-items:center;
+    background: #EEF9FF;
+    gap: 1rem;
+
+}
+.small .affiliate_box:nth-child(1), .affiliate_box:nth-child(5){
+    background:#fff5f5;
+}
+.small .affiliate_box .content {
+    display: flex;
+    gap: 1rem;
+    justify-content:space-between;
+    margin-top: 0;
+
+}
+.small .affiliate_box .content p {
+    color: var(--textColorLight);
+    text-transform: capitalize;
+    margin-bottom: 0;
+}
+
+.small .affiliate_box .content h4 {
+    margin-bottom: 0;
+}

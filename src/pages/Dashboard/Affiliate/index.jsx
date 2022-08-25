@@ -68,7 +68,7 @@ export function Dashboard(){
             value:"8,500",
             icon:<BsCreditCard2BackFill color="#304D74" size="2.5rem" />,
             amount: true
-        },
+        }
     ]
 
 
@@ -107,6 +107,204 @@ export function Dashboard(){
     )
 }
 
+export function Sales(){
+  const gridContent = [
+    {
+        id:2,
+        name:"sales",
+        value:35,
+        icon:<FaShoppingBag  color="#304D74" size="2.5rem" />
+    },
+    {
+        id:3,
+        name:"revenue",
+        value:"3,000",
+        icon:<BiBarChartSquare color="#F75C4E"  size="2.5rem" />,
+        amount: true
+
+    },
+]
+  return (
+    <Affiliates header="Sales">
+            <div className={clsx["admin_profile"]}>
+                <div className={clsx.admin__student}>
+                    <div className={`d-flex mb-4 ${style.affiliate_top}`} style={{gap:"1rem"}}>
+                        
+                          {
+                            gridContent.map(item=>(
+                              <OtherCard {...item} />
+
+                            ))
+                          }
+                    </div>
+                </div>
+                <AffiliateTable header={header} contentArray={contentArray} />
+            </div>
+        </Affiliates>
+  )
+}
+export function Revenue(){
+  const gridContent = [
+        
+    {
+        id:2,
+        name:"sales",
+        value:35,
+        icon:<FaShoppingBag  color="#304D74" size="2.5rem" />
+    },
+    {
+        id:3,
+        name:"revenue",
+        value:"3,000",
+        icon:<BiBarChartSquare color="#F75C4E"  size="2.5rem" />,
+        amount: true
+
+    },
+    {
+        id:4,
+        name:"income",
+        value:"1,500",
+        icon:<FaMoneyBillWave color="#304D74"  size="2.5rem" />,
+        amount: true
+
+    },
+]
+  return (
+    <Affiliates header="Revenue">
+            <div className={clsx["admin_profile"]}>
+                <div className={clsx.admin__student}>
+                    <div className={`d-flex mb-4 ${style.affiliate_top}`}  style={{gap:"1rem"}}>
+                    
+                    {
+                            gridContent.map(item=>(
+                              <OtherCard {...item} />
+
+                            ))
+                          }
+                    </div>
+                </div>
+                <AffiliateTable header={header} contentArray={contentArray} />
+            </div>
+        </Affiliates>
+  )
+}
+export function Income(){
+  const gridContent = [
+        
+    {
+        id:2,
+        name:"sales",
+        value:35,
+        icon:<FaShoppingBag  color="#304D74" size="2.5rem" />
+    },
+    {
+        id:3,
+        name:"revenue",
+        value:"3,000",
+        icon:<BiBarChartSquare color="#F75C4E"  size="2.5rem" />,
+        amount: true
+
+    },
+    {
+        id:4,
+        name:"income",
+        value:"1,500",
+        icon:<FaMoneyBillWave color="#304D74"  size="2.5rem" />,
+        amount: true
+
+    },
+]
+  return (
+    <Affiliates header="Income">
+            <div className={clsx["admin_profile"]}>
+                <div className={clsx.admin__student}>
+                    <div className={`d-flex mb-4 ${style.affiliate_top}`} style={{gap:"1rem"}}>
+                    {
+                            gridContent.map(item=>(
+                              <OtherCard {...item} />
+
+                            ))
+                          }
+                    </div>
+                </div>
+                <AffiliateTable header={header} contentArray={contentArray} />
+            </div>
+        </Affiliates>
+  )
+}
+
+function AffiliateTable({header, contentArray=[]}){
+  return (
+    <div className="table-responsive">
+      <table className="table table-borderless">
+        <thead>
+          <tr>
+            {
+              header.map(item=>(
+                <th>{item}</th>
+              ))
+            }
+          </tr>
+        </thead>
+        <tbody>
+          {
+            contentArray.map((item, i)=>(
+              <tr key={i}>
+                <td><span>{i + 1}</span></td>
+                <td>
+                    <span>{item.date}</span>
+                </td>
+                <td><span>{item.title}</span></td>
+                <td><span>{item.amount}</span></td>
+                <td><span>{item.status}</span></td>
+                
+            </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  )
+}
+const header = ["No", "Date", "Title", "Amount", "Status"]
+
+const contentArray = [
+  {
+    id:1,
+    date:"12/08/2022",
+    title:"Sales",
+    amount:3000,
+    status:"Verified"
+  },
+  {
+    id:2,
+    date:"12/08/2022",
+    title:"Sales",
+    amount:3000,
+    status:"Verified"
+  },
+  {
+    id:3,
+    date:"12/08/2022",
+    title:"Sales",
+    amount:3000,
+    status:"Verified"
+  },
+  {
+    id:4,
+    date:"12/08/2022",
+    title:"Sales",
+    amount:3000,
+    status:"Verified"
+  },
+  {
+    id:5,
+    date:"12/08/2022",
+    title:"Sales",
+    amount:3000,
+    status:"Verified"
+  },
+]
 
 const AffiliateCard = ({icon, name, value, amount})=> {
 
@@ -117,6 +315,20 @@ const AffiliateCard = ({icon, name, value, amount})=> {
                 <h4>{ `${amount? "$":""} ${value}` }</h4>
                 <p>{name}</p>
             </div>
+        </Box>
+    )
+}
+const OtherCard = ({icon, name, value, amount})=> {
+
+    return (
+      <Box className={style.small}>
+        <Box className={style.affiliate_box}>
+            <i className={style.icon}>{icon}</i>
+            <div className={style.content}>
+                <h4>{ `${amount? "$":""} ${value}` }</h4>
+                <p>{name}</p>
+            </div>
+      </Box>
         </Box>
     )
 }

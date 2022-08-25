@@ -97,6 +97,12 @@
         width: 60%;
     }
 }
+@media (max-width:1024px){
+    .newLearning_right .background img{
+        height: 100%;
+    }
+}
+
 .newCategories_header{
     color: var(--theme-blue);
     text-align: center;
@@ -159,6 +165,7 @@ height:70px;
     padding-left:3rem;
     padding-right:3rem;
     padding-inline: 3rem !important;
+   
 }
 .newBootcamp {
     min-height:70vh;
@@ -169,6 +176,8 @@ height:70px;
     padding-top:4rem;
     padding-bottom:4rem;
     color: #fff;
+    display: grid;
+    place-items:center;
 
 }
 @media (max-width: 600px){
@@ -179,9 +188,9 @@ height:70px;
     .newHero_left-userSignin{
         width: 100%;
     }
-    .newHero button {
+    .newHero button {  
         width: 100%;
-        padding: 12px 25px;
+        padding: 12px 18px;
     }
      
 }

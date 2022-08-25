@@ -213,6 +213,21 @@ const Sidebar = ({isMobile}) => {
             path: "income",
             title: "Income"
         },
+        {
+            icon: IoIosPerson,
+            path: "visits",
+            title: "Visits"
+        },
+        {
+            icon: IoIosCash,
+            path: "paid-commissions",
+            title: "Paid"
+        },
+        {
+            icon: FaMoneyBillWave,
+            path: "unpaid-commissions",
+            title: "Unpaid"
+        },
     ];
 
     const toggleSidebar = ()=>{

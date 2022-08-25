@@ -17,13 +17,14 @@ import { Link } from "react-router-dom";
 import {motion} from 'framer-motion'
 
 import {getDate,KEY} from "../../constants"
+
 import Learning from "../../images/cohort.webp";
 // import Inperson from "../../images/newCareer.png"
 import Inperson from "../../images/in-Person.webp"
 import Mento from "../../images/inPerson.webp";
+import Tech from "../../images/fast.webp";
 // import Mento from "../../images/one-on-one.jpg";
 import Image from "../Image";
-import Tech from "../../images/fast.webp";
 import Testimonials from "../Testimonials"
 import Becoming  from "../Becoming"
 import Companies  from "../Companies"
@@ -326,7 +327,7 @@ function Self(){
     return(
         <section className="wrapper transition newLearning">
       <div className="container">
-        <div className="d-flex content justify-content-between flex-column column-reverse flex-md-row">
+        <div className="d-flex content justify-content-between">
         <div className="newSelf_right">
           <Image
             width="552"
