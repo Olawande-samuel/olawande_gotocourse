@@ -1,6 +1,6 @@
 :root {
     --textBlue: #0C2191;
-    --mainBg: rgba(100, 149, 237, .6);
+    --mainBg: rgba(100, 148, 237, 0.6);
 }
 
 .general_logout__button {

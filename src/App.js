@@ -18,7 +18,7 @@ import {Dashboard as TeacherDashboard,  Profile as TeachersProfile, Classes as T
   Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo, Chat as TeacherChat  } from "./pages/Dashboard/Teachers";
 
   
-import {Dashboard as AffiliatesDash} from "./pages/Dashboard/Affiliate"
+import {Dashboard as AffiliatesDash, Sales, Income, Revenue} from "./pages/Dashboard/Affiliate"
 import {Landing as AffiliateLanding} from "./pages/Affiliate";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
@@ -38,7 +38,7 @@ import Contact from "./pages/Contact";
 import Career from "./pages/Career";
 import Settings from "./pages/Dashboard/Admin/Settings";
 
-
+import {Students} from "./pages/Students"
 
 function App() {
   return (
@@ -66,6 +66,8 @@ function App() {
             <Route path="payment/error" element={<PaymentStatus />} />
             <Route path="career" element={<Career />} />
 
+            <Route path="students" element={<Students  />} />
+            
             <Route path="student" element={<Out />}>
               <Route path="" element={<StudentDashboard  />} />
               <Route path="profile" element={<StudentProfile  />} />
@@ -112,9 +114,9 @@ function App() {
             <Route path="affiliates" element={<AffiliateLanding />} />
             <Route path="affiliate" element={<Out />}>
               <Route path="" element={<AffiliatesDash  />} /> 
-              <Route path="login" element={<Login />} />
-              <Route path="signup" element={<TeacherSignup />} />
-              <Route path="classes" element={<TeacherClasses  />} />
+              <Route path="sales" element={<Sales />} />
+              <Route path="income" element={<Income />} />
+              <Route path="revenue" element={<Revenue  />} />
               <Route path="bootcamps" element={<TeacherBootcamps  />} />
               <Route path="bootcamps/details/:id" element={<TeacherBootcampDetails />} />
               <Route path="earnings" element={<Earnings />} />

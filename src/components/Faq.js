@@ -1,29 +1,39 @@
 import React from "react";
 import { Accordion } from "react-bootstrap";
 
-const Faq = () => {
+const Faq = ({other=[]}) => {
   
   return (
     <section className="faq">
-      <div className="container ">
+      <div className="container h-100">
         <header className="text-center mb-4">
           <h2 className="title">Frequently Asked Questions</h2>
         </header>
         <div className="faq-wrapper"> 
           {/* <Accordion  flush> */}
           <div className="row">
-
-            {FaqItems.map((item, i)=>(
-              // <Accordion.Item eventKey={i} className="my-4">
-              //   <Accordion.Header className="faq_acc">
-              //     {item.title}
-              //   </Accordion.Header>
-              //   <Accordion.Body className="faq_acc_text">
-              //     {item.answer}
-              //   </Accordion.Body>
-              // </Accordion.Item>
-              <FaqComponent {...item} />
-              ))}
+              <div className="col-md-6">
+                {
+                  other.length > 0 ? other.slice(0, 3).map((item, i)=>(
+                    <FaqComponent {...item} />
+                    ))
+                    :
+                    FaqItems.slice(0, 3).map((item, i)=>(
+                      <FaqComponent {...item} />
+                      ))
+                }
+                </div>
+                <div className="col-md-6">
+                {
+                  other.length > 0 ? other.slice(3, 6).map((item, i)=>(
+                    <FaqComponent {...item} />
+                    ))
+                    :
+                    FaqItems.slice(3, 6).map((item, i)=>(
+                      <FaqComponent {...item} />
+                      ))
+                }
+                </div>
               </div>
           {/* </Accordion> */}
         </div>
@@ -33,9 +43,9 @@ const Faq = () => {
 };
 
 
-function FaqComponent({title,answer}){
+function FaqComponent({title, answer, show}){
   return(
-    <div className="faq-comp col-md-6 my-2 px-2 px-lg-4">
+    <div className={`faq-comp px-2 px-lg-4 ${show}`}>
       <h6 className="fw-bolder">{title}</h6>
       <p>{answer}</p>
     </div>
@@ -46,27 +56,32 @@ const FaqItems = [
   {
     id:1,
     title:"How relevant is each course on Gotocourse?",
-    answer:"Each course is relevant to skillls highly needed at the work place."
+    answer:"Each course is relevant to skillls highly needed at the work place.",
+    show: ""
   },
   {
     id:2,
     title:"How do I manage my classes on Gotocourse?",
-    answer:"After you are approved to class, instructional videos are available on your customised class console."
+    answer:"After you are approved to class, instructional videos are available on your customised class console.",
+    show: ""
   },
   {
     id:3,
     title:"Are there any prerequisites for courses on Gotocourse?",
-    answer:"There are no prerequisites needed for most courses on gotocourse but some recommended skills may be required. Ask your course advisor for more information." 
+    answer:"There are no prerequisites needed for most courses on gotocourse but some recommended skills may be required. Ask your course advisor for more information." ,
+    show: "skip"
   },
   {
     id:4,
     title:"What is Gotocourse admission process like?",
-    answer:"All students have to sign-up to create an account on Gotocourse before proceeding to enroll in any of the programmes." 
+    answer:"All students have to sign-up to create an account on Gotocourse before proceeding to enroll in any of the programmes." ,
+    show: ""
   },
   {
     id:5,
     title:"How can I combine learning on Gotocourse with work and other engagements?",
-    answer:"With your learning needs in mind, we have curated different learning models for flexibility." 
+    answer:"With your learning needs in mind, we have curated different learning models for flexibility." ,
+    show: "skip"
   },
 
 

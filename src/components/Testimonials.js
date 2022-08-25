@@ -38,14 +38,16 @@ export const witnesses = [
 ];
 
 
-const Testimonials = ({type}) => {
+ const Testimonials = ({type, student=[]}) => {
   SwiperCore.use([Autoplay])
   return (
     <section className="testimonials" style={{background: type === "newLanding" ? "#EBF0FF" : "white", paddingTop:"2.5rem", paddingBottom:"2.5rem"}}>
       <div className="container-lg testimonial_content">
         <header>
-        <h3 className="testimonials_title">Real Stories from Real Customers</h3>
+        <h3 className="testimonials_title">{student.length > 0 ? "Testimonials":"Real Stories from Real Customers"}</h3>
+        {student.length === 0 &&
         <p className="sub_title text-center">Join thousands of people who are achieving their goals on Gotocourse</p>
+        }
         </header>
         <div>
         <Swiper
@@ -78,7 +80,30 @@ const Testimonials = ({type}) => {
       }}
     >
 
-          {witnesses
+          {student.length > 0 ? 
+            student.map((witness, index) => (
+                <SwiperSlide>
+                <div className="px-1 testimonials_card_wrapper" key={index} style={{height:"100%", width:"min(100% - 1rem, 350px)", marginInline:"auto"}}>
+                <div className="card slides">
+                  <div className="card-body">
+                    <div className="avatar d-flex justify-content-center align-items-center">
+                      <img src={witness.profile} alt="testimonies" />
+                      <div>
+                      <span className="text-center testimonials_name">{witness.name}</span>
+                        <p className="location">{witness.location}</p>
+                      </div>
+                    </div>
+                    <p className="testimonials_text">
+                      &ldquo; {witness.content} &rdquo;
+                    </p>
+                  </div>
+                </div>
+                  </div>
+                  
+                </SwiperSlide> 
+          ))
+          :
+           witnesses
               .map((witness, index) => (
                 <SwiperSlide>
                 <div className="px-1 testimonials_card_wrapper" key={index} style={{height:"100%", width:"min(100% - 1rem, 350px)", marginInline:"auto"}}>
