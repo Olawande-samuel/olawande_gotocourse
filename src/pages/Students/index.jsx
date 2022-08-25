@@ -1,3 +1,4 @@
+ import {useNavigate} from "react-router-dom"
 import { Box, Button, Grid, List, ListItem, ListItemText, Typography } from "@mui/material"
 import Image from "../../components/Image"
 import Layout from "../../components/Layout"
@@ -58,7 +59,7 @@ export const Students = ()=>{
 
 function Hero(){
     const {  generalState: { navHeight }, } = useAuth();
-
+    const navigate = useNavigate()
     const list = [
         "Robust curriculum taught by industry expert",
         "Flexible learning modes to personalize your learning",
@@ -81,7 +82,7 @@ function Hero(){
                                     </li>
                                 ))}
                             </ul>
-                            <Button variant="contained">Get started today</Button>
+                            <Button variant="contained" onClick={()=>navigate("/signup")}>Get started today</Button> 
                         </Box>
                     </div>
                     <div className={style.hero_img_container}>
@@ -255,6 +256,7 @@ function Payment(){
 }
 
 function Best(){
+    const navigate = useNavigate()
     return (
         <div className={style.best}>
             <div className="container h-100">
@@ -263,7 +265,7 @@ function Best(){
                         <h3>Learn from the best</h3>
                         <p>Learn high demand skills from industry experts through live classes, pre recorded videos and mentorship</p>
                         <div>
-                            <Button variant="contained">Start Now</Button>
+                            <Button variant="contained" onClick={()=>navigate("/signup")}>Start Now</Button>
                         </div>
                     </div>
                     <div className={style.best_img_container}>

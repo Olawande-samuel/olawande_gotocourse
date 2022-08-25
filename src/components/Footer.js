@@ -102,7 +102,7 @@ const Footer = () => {
               anywhere you are
             </p>
           <div className="join_button_wrapper justify-content-center align-items-center d-flex mb-3">
-            <Link to="/signup">
+            <Link to="/students" onClick={()=>window.scrollTo(0, 0)}>
               <button type="button" className="btn btn-light px-lg-4 py-lg-3">
                 Join as a student
               </button>
