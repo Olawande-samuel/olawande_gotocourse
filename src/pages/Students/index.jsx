@@ -10,17 +10,17 @@ import { useAuth } from "../../contexts/Auth"
 import style from "./style.module.css"
 
 
-import HeroImg from "../../images/student/hero-alt.png"
+import HeroImg from "../../images/student/hero-alt.webp"
 import Learning from "../../images/cohort.webp";
 import Inperson from "../../images/in-Person.webp"
 import Mento from "../../images/inPerson.webp";
 import Tech from "../../images/fast.webp";
 import Yellow from "../../images/student/yellow.png";
-import LiveImg from "../../images/student/live.png";
+import LiveImg from "../../images/student/live.webp";
 import SchCohort from "../../images/student/cohort.png";
-import SchRecorded from "../../images/student/recorded.png";
+import SchRecorded from "../../images/student/recorded.webp";
 import SchWebinar from "../../images/student/webinar.png";
-import graduate from "../../images/student/graduate.png";
+import graduate from "../../images/student/graduate.webp";
 import Initial from "../../images/student/initial.png";
 import Upfront from "../../images/student/upfront.png";
 import Dubai from "../../images/student/abuja.png";

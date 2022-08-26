@@ -22,6 +22,9 @@ import { Syllabus } from "./CreateCourse";
 import ChatComponent from "./chat";
 
 import { DashboardTop, Community } from "../Students";
+import LogoutButton from "../../../components/LogoutButton";
+import { GotoDashboard } from "../Students";
+
 
 const KEY = "gotocourse-userdata";
 
@@ -839,6 +842,7 @@ export const Teachers = ({ children, isMobile, userdata, notification }) => {
   const toggleSidebar = () => {
     setGeneralState({ ...generalState, showSidebar: !showSidebar });
   };
+  const [loader, setLoading] = useState(false)
 
   return (
     <GuardedRoute>
@@ -868,7 +872,13 @@ export const Teachers = ({ children, isMobile, userdata, notification }) => {
             <h1 className={clsx.teachers__header}>
               {userdata?.firstName} {userdata?.lastName}
             </h1>
-            <Searchbar showIcon={true} placeholder="Search" />
+            <Searchbar showIcon={true} placeholder="Search Keyword" />
+            <div className="button_wrapper d-flex align-items-center text-center d-flex ms-3">
+                        {/* move loading state to this component */}
+                            <GotoDashboard loader={loader} setLoading={setLoading} />
+                        <LogoutButton />
+
+                    </div>
           </div>
 
           {children}

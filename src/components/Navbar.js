@@ -106,7 +106,7 @@ const Navbar = ({background}) => {
   }, []);
 
   return (
-    <nav ref={heightRef} section="top" className="nav navbar navbar-expand-lg navbar-light" style={{
+    <nav ref={heightRef} section="top" className="nav navbar navbar-expand-lg navbar-dark" style={{
       // borderBottom: "1px solid rgba(159, 159, 159, .3)", 
       // background: background === "blue" ? "var(--theme-blue)": "#fffff", color: background === "blue" ?  "#fffff" : "var(--theme-blue)" }}>
       background:  "var(--theme-blue)", color:  "#fffff" 
@@ -155,7 +155,7 @@ const Navbar = ({background}) => {
               <>
                 <li className="nav-item d-flex align-items-center nav_link"><Link to="/become-a-teacher" className="link">Become a Teacher</Link></li>
                 <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/login" className="link">Sign In</Link></li>
-                <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/signup" className="link">Register</Link></li>
+                <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/students" className="link">Register</Link></li>
               </>
             )}
           </ul>
