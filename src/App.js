@@ -19,7 +19,10 @@ import {Dashboard as TeacherDashboard,  Profile as TeachersProfile, Classes as T
 
   
 import {Dashboard as AffiliatesDash, Sales, Income, Revenue} from "./pages/Dashboard/Affiliate"
-import {Landing as AffiliateLanding} from "./pages/Affiliate";
+import {Landing as AffiliateLanding, Register as AffiliateRegister, Login as AffiliateLogin, Verification as AffiliateVerification} from "./pages/Affiliate";
+
+
+
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
@@ -112,6 +115,9 @@ function App() {
               <Route path="chat" element={<TeacherChat />} />
             </Route>
             <Route path="affiliates" element={<AffiliateLanding />} />
+            <Route path="affiliates/register" element={<AffiliateRegister />} />
+            <Route path="affiliates/login" element={<AffiliateLogin />} />
+            <Route path="affiliates/verification" element={<AffiliateVerification />} />
             <Route path="affiliate" element={<Out />}>
               <Route path="" element={<AffiliatesDash  />} /> 
               <Route path="sales" element={<Sales />} />
