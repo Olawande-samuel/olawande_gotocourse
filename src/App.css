@@ -1107,7 +1107,7 @@ font-size: 16px;
 .faq-comp:not(.skip)::after {
   content: "";
   width: 0.15rem;
-  height: 3.95rem;
+  height: 100%;
   /* border-radius: 50%; */
   background: rgba(41, 45, 50, 0.71);
   background-repeat: no-repeat;
@@ -1116,6 +1116,26 @@ font-size: 16px;
   top: 3.05rem;
   left: 30px;
   /* transform: translate(-50%); */
+}
+
+@media (max-width: 767px){
+  
+  .faq-comp.skip::after {
+    content: "";
+    width: 0.15rem;
+    height: 100%;
+    /* border-radius: 50%; */
+    background: rgba(41, 45, 50, 0.71);
+    background-repeat: no-repeat;
+    background-size: 2.75rem;
+    position: absolute;
+    top: 3.05rem;
+    left: 30px;
+    /* transform: translate(-50%); */
+  }
+  .faq-wrapper > .row > .col-md-6:last-child .faq-comp:last-child::after {
+    display: none;
+  }
 }
 .faq  .accordion-button:not(.collapsed)::after {
   background-image: url(./images/caret.svg);
@@ -1248,24 +1268,75 @@ font-size: 16px;
 .signWrapper {
   position: relative;
   display: grid;
-  place-items: center;
+  /* place-items: center; */
   min-height: 100vh;
   background-color: var(--lime) ;
+  background-color: #fff ;
   
+}
+.signWrapper_background {
+  height: 100%;
+  background: url(./images/logup.webp);
+  background-repeat:no-repeat;
+  background-size: cover;
+  display: none;
+  place-items:center;
+  color: #ffffff;
+}
+
+.signWrapper_logo svg {
+  width: 100%;
+}
+.signWrapper_background  h1{
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.md_device_login {
+  display: none;
+  justify-content:center;
 }
 .signWrapper .back {
   position: absolute;
   top: 5%;
   left: 3%;
 }
+
 .signWrapper main {
   width: min(100% - 2rem, 600px);
-  margin: auto;
+  /* margin: auto; */
   border-radius:20px;
   background-color: #fff;
   box-shadow: -3px 14px 20px 5px rgba(218, 213, 213, 0.25);
 }
+.signWrapper_header {
+  display: none;
+}
 
+@media (max-width: 802px) {
+  .md_device_login {
+    display: flex;
+    justify-content:center;
+  }
+  .signWrapper_logo > svg {
+    display: none;
+  }
+  .signWrapper_header {
+    display: block;
+  }
+}
+@media (min-width:590px){
+  .signWrapper {
+    display: grid;
+    grid-template-columns:repeat(2, 1fr);
+    place-items: unset;
+  }
+  .signWrapper_background {
+    display: grid;
+   
+  }
+
+}
 .form-wrapper {
   padding: 32px 82px;
 }

@@ -126,8 +126,8 @@
     color: var(--section-title-color);
     font-size: 1.5rem;
     line-height: 29px;
-
 }
+
 .learning_content {
     display: grid;
     grid-template-columns: min(100% - .3rem, 350px) ;
@@ -136,19 +136,18 @@
     column-gap: 1.5rem;
     place-items: center;
     place-content: center;
-
 }
+
 .learn_box {
     background: #ffffff;
     padding: .5rem;
-    border-radius: 40px 40px 0 0;
+    border-radius: 25px 25px 0 0;
     width: min(calc(100% - .5rem), 437px);
     width: 100%;
 }
-
 .learn_img {
-    border-radius: 40px 40px 0 0;
-    height: 270px;
+    border-radius: 25px 25px 0 0;
+    height: 230px;
     max-width: 100%;
     width: 100%;
     object-fit: fill;
@@ -221,7 +220,7 @@
 @media (min-width: 1020px) {
     .learning_content {
         display: grid;
-        grid-template-columns: repeat(2, 437px);
+        grid-template-columns: repeat(2, 380px);
         row-gap: 3rem;
         column-gap: 4rem;
         justify-content: space-between;
@@ -235,9 +234,9 @@
         justify-content: space-around;
         height:250px;
     }
-    .learn_img {
+    /* .learn_img {
         height: 300px;
-    }
+    } */
 }
 @media (min-width: 1900px) {
     .learning_content {
@@ -820,11 +819,12 @@
     font-weight: var(--section-title-font-weight);
     margin-bottom:2rem;
     color: #fff;
+}
 
-}
 .journey_header h2 span {
-    color: #FFCB14;
+    color: #F9C6D6;
 }
+
 .journey_content {
     /* background: url(../../images/student/path.png); */
     /* height: 70vh; */
@@ -883,3 +883,4 @@
 
     }
 }
+
