@@ -92,6 +92,7 @@ const Footer = () => {
     const yOffset = -80;
     window.scrollTo({top: yCoord + yOffset, behaviou:"smooth"})
   }
+  
   return (
     <footer className="footer wrapper">
       <div className="container ">

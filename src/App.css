@@ -116,7 +116,7 @@ font-size: 14px;
   box-sizing: border-box;
 }
 body {
-  font-family: "Poppins", sans-serif !important;
+  font-family: "Inter", sans-serif ;
   color: #000;
 }
 a {
@@ -886,6 +886,10 @@ border-radius: 13.5px !important;
   margin: 0 0 2.5625rem 0;
   color: var(--text-color-light);
 }
+
+.students .testimonials{
+  margin-bottom: 0;
+}
 .testimonials_card_wrapper .card {
   transition: all .3s ease;
   /* cursor: pointer; */
@@ -968,9 +972,9 @@ line-height: 25px;
   padding: 2rem 1rem;
   
 }
-.students .testimonials {
+/* .students .testimonials {
   background: inherit !important;
-}
+} */
 
 .students .testimonials .slides {
   width: min(100% - 1rem, 350px);
@@ -994,9 +998,9 @@ line-height: 25px;
   margin: auto;
 }
 .degree {
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
   /* background: var(--btn-color); */
-  background: inherit;
+  background: #fff;
   /* color: #fff; */
   color: var(--theme-blue);
   padding: 49px 0 79px 0;
@@ -1043,7 +1047,10 @@ font-size: 16px;
   margin: 4.375rem 0 7.0625rem 0;
 }
 .students .faq {
-  margin-bottom: 0;
+  margin: 0;
+  background: #ffffff;
+  padding: 2rem 0;
+
 }
 
 .faq  .faq_wrapper {

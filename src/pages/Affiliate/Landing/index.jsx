@@ -112,11 +112,22 @@ const Landing = () => {
 
                 <div className={clsx.faqs}>
                     <h2>FAQS</h2>
-                    {
-                        faqs.map(({question, answer}, i) => (
-                            <FaqComponent title={question} answer={answer} styles={styles} key={i} />
-                        ))
-                    }
+                    <div className="row">
+                        <div className="col-md-6">
+                            {   
+                                faqs.slice(0, 3).map(({question, answer}, i) => (
+                                    <FaqComponent title={question} answer={answer} styles={styles} key={i} />
+                                ))
+                            }
+                        </div>
+                        <div className="col-md-6">
+                            {   
+                                faqs.slice(3, 6).map(({question, answer}, i) => (
+                                    <FaqComponent title={question} answer={answer} styles={styles} key={i} />
+                                ))
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         </Layout>

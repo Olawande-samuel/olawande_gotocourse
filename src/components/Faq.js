@@ -47,8 +47,8 @@ const Faq = ({other=[]}) => {
 export function FaqComponent({title, answer, show,styles}){
   return(
     <div className={`faq-comp px-2 px-lg-4 ${show}`}>
-      <h6 className="fw-bolder" style={styles.title}>{title}</h6>
-      <p style={styles.answer}>{answer}</p>
+      <h6 className="fw-bolder" style={styles?.title}>{title}</h6>
+      <p style={styles?.answer}>{answer}</p>
 
     </div>
   )

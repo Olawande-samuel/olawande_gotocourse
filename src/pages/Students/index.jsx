@@ -134,9 +134,13 @@ function LearningComp({img, header, text, link,imgAlt}){
         <div className={style.learn_box}>
             <img src={img} alt={imgAlt} className={style.learn_img}/>
             <div className={style.learn_text}>
-                <h3>{header}</h3>
-                <p>{text}</p>
-                <Button variant="contained">View details</Button>
+                <div className={style.learn_text_content}>
+                    <h3>{header}</h3>
+                    <p>{text}</p>
+                </div>
+                <div>
+                    <Button variant="contained">View details</Button>
+                </div>
             </div>
         </div>
     )
@@ -148,7 +152,7 @@ function Live(){
             <div className="container h-100">
                 <div className={`${style.live_container} position-relative h-100`}>
                     <div className={style.live_text_container}>
-                        <h3>Join Gotocourse Live-changing Webinar</h3>
+                        <h2>Join Gotocourse Live-changing Webinar</h2>
                         <p>Gotocourse webinars are valuable and resourceful</p>
                         <div>
                             <Button>Attend for free</Button>
