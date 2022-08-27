@@ -183,7 +183,7 @@ const Navbar = ({background}) => {
           </motion.button>
           </Link>
 
-          <Link to="/signup">
+          <Link to="/students">
           <motion.button type="button" className=" btn-plain d-none d-lg-block newRegister"
           whileHover={{
             textShadow: "0px 0px 8px rgb(255, 255, 255)",

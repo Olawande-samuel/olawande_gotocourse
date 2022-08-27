@@ -867,7 +867,7 @@ export const Teachers = ({ children, isMobile, userdata, notification }) => {
                   style={{ fontSize: "24px", color: "#0C2191" }}
                   onClick={toggleSidebar}
                 />
-              </i>
+              </i> 
             </div>
             <h1 className={clsx.teachers__header}>
               {userdata?.firstName} {userdata?.lastName}

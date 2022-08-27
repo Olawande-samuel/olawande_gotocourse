@@ -23,11 +23,11 @@
 
 .jumbotron {
     background: url("../../images/become_teacher.png"), rgba(0, 0, 0, 0.3);
-    height: 100vh;
+    height: min(100vh, 650px);
     width: 100%;
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: right;
     background-blend-mode: multiply;
 }
 
@@ -64,7 +64,9 @@
     width: 60%;
     margin-bottom: 40px;
 }
-
+.jumbotron__absolute > div {
+    text-align: start;
+}
 .jumbotron__absolute button {
     border: none;
     border-radius: 5px;
@@ -73,6 +75,19 @@
     background-color: var(--textBlue);
 }
 
+@media (max-width: 770px){
+    .jumbotron {
+        background: url("../../images/become_teacher.png"), rgba(0, 0, 0, 0.6);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: right;
+        background-blend-mode: multiply;
+    }
+    .jumbotron__absolute p, .jumbotron__absolute h1 {
+    
+        color: #ffffff;
+    }
+} 
 
 .frequently_asked_questions {
     background-color: #F1F8FF;
@@ -362,6 +377,9 @@
     .jumbotron__absolute h1, .jumbotron__absolute p {
         width: 100%;
         text-align:center;
+    }
+    .jumbotron__absolute > div {
+        text-align: center;
     }
     
      

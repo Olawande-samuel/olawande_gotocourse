@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-
+import {Link} from "react-router-dom"
 
 
 
@@ -74,7 +74,9 @@ const Landing = () => {
                     <div className={clsx.affiliate_top__absolute}>
                         <h2>Make earning with <br/> the Gotocourse affiliate program</h2>
                         <p>Make earnings from students that register to <br /> Gotocourse through your link.</p>
-                        <button>Get Started</button>
+                        <Link to="register">
+                            <button>Get Started</button>
+                        </Link>
                     </div>
                 </div>
 
@@ -94,7 +96,9 @@ const Landing = () => {
                         <h3>Get access to your customized dashboard, track your best work and earnings</h3>
                         <p>Track all your traffic, referrals, and payouts with a personalized dashboard</p>
                         <div className={clsx.right_form}>
-                            <button>Get started</button>
+                            <Link to="register">
+                                <button>Get started</button>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -104,7 +108,9 @@ const Landing = () => {
                         <h2>Make use of this oppurtunity to change lives and make money in this house</h2>
                         <p>Earn upto 5% on qualifying registration to our  program, our competitive conversion rate help 
 maximize earning.</p>
-                        <button>Start now</button>
+                        <Link to="register">
+                            <button>Start now</button>
+                        </Link>
                     </div>
                     <div className={clsx.start_now__right}>
                         <img src={cactus} alt="Cactus" />

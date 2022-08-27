@@ -460,12 +460,18 @@ margin: auto;
         flex: 50%;
     }
 }
+@media  (max-width: 1024px){
+    .newCategories_image {
+        object-position:top ;
+        object-fit: cover;
+    }
+}
 @media (max-width: 400px){
     .newCategories_image {
-        height: 110px;
+        height: 120px;
         width: 100%;
         /* object-position: ; */
-        object-fit: fill;
+        object-fit: cover;
     }
     .newCategories_card-body{
         height: 50px;
