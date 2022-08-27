@@ -1043,6 +1043,8 @@ export const Dashboard = () => {
     const {  data, isSuccess } = useQuery(["fetch courses"], ()=>fetchCourses(userdata.token))
     const {  data:allCourses } = useQuery(["fetch all courses"], ()=>fetchAllCourses())
 
+    console.log({wishlistData})
+    console.log({data})
     
     const topContent = [
         {
@@ -1067,10 +1069,10 @@ export const Dashboard = () => {
     const tableHeaders = ["No", "Courses",  "Course Fee($)", "Action"]
 
     if(wishlistIsSuccess){
-       topContent[1].value = wishlistData.data.length
+       topContent[1].value = wishlistData.data?.length
     }
     if(isSuccess){
-       topContent[0].value = data.data.length
+       topContent[0].value = data.data?.length
     }
 
     function handleCoursSelect(e){        

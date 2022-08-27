@@ -280,7 +280,7 @@
 
 }
 .live_text_container h2 {
-    font-size:clamp(2.4625rem, 1.4435rem + 0.5952vw, 2.99875rem);
+    font-size:clamp(1.9625rem, 1.4435rem + 0.5952vw, 2.99875rem);
     font-weight: 800;
     margin-bottom: 1.2rem;
 }
@@ -396,7 +396,7 @@
     .live {
         
         margin-bottom: 5.5rem;
-        margin-top: 5.5rem;
+        margin-top: 6.5rem;
     }
 }
 @media screen and (min-width:2200px){
@@ -518,6 +518,14 @@
     
     .schedule_comp_wrapper:nth-child(2) .schedule_left{
         text-align:right;
+    }
+}
+@media (min-width:1500px){
+    .schedule_comp_wrapper {
+        width: min(100%, 1400px);
+        margin: auto;
+        max-height:300px;
+
     }
 }
 

@@ -1274,6 +1274,9 @@ font-size: 16px;
   background-color: #fff ;
   
 }
+.signWrapper_logo_container{
+  width: 100%;
+}
 .signWrapper_background {
   height: 100%;
   background: url(./images/logup.webp);
@@ -1284,6 +1287,10 @@ font-size: 16px;
   color: #ffffff;
 }
 
+.signWrapper_logo{
+  display: grid;
+  place-content: center;
+}
 .signWrapper_logo svg {
   width: 100%;
 }
@@ -1313,6 +1320,7 @@ font-size: 16px;
   display: none;
 }
 
+
 @media (max-width: 802px) {
   .md_device_login {
     display: flex;
@@ -1321,6 +1329,9 @@ font-size: 16px;
   .signWrapper_logo > svg {
     display: none;
   }
+
+}
+@media (max-width:590px){
   .signWrapper_header {
     display: block;
   }
@@ -1335,6 +1346,7 @@ font-size: 16px;
     display: grid;
    
   }
+  
 
 }
 .form-wrapper {
@@ -1442,6 +1454,9 @@ line-height: 16px;
   .services .services_box {
     flex: 40% 0;
     margin-bottom:1.5rem;
+  }
+  .form-wrapper {
+    padding: 16px 35px;
   }
 }
 
@@ -1599,9 +1614,7 @@ line-height: 16px;
   .signWrapper {
     min-height: 100vh;
   }
-  .form-wrapper {
-    padding: 16px 50px;
-  }
+  
   
   .log_header {
     padding: 1rem;
