@@ -11,8 +11,8 @@ const Becoming = () => {
   
   return (
     <section className="wrapper becoming">
-      <div className="container content-wrapper d-flex justify-content-end">
-        <div className="d-flex flex-column-reverse flex-md-row content justify-content-between ">
+      <div className="container content-wrapper">
+        <div className="content">
           <div className="left">
             {/* <img src={Teacher} alt="sideview of hands typing on a Laptop" /> */}
             <Image width="552px" height="452px"  image={Teacher} alt="Group of people in an online meeting room" className="background" effect="blur" />

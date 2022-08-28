@@ -28,7 +28,7 @@ const Career = () => {
         top:0,
         left: 0,
         width: "100%",
-        height: "100vh",
+        height: "z",
         backgroundImage: `url(${img})`,
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

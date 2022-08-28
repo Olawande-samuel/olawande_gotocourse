@@ -1,4 +1,5 @@
- import {useNavigate} from "react-router-dom"
+import {useState} from "react"
+import {useNavigate} from "react-router-dom"
 import { Box, Button, Grid, List, ListItem, ListItemText, Typography } from "@mui/material"
 import Image from "../../components/Image"
 import Layout from "../../components/Layout"
@@ -34,6 +35,8 @@ import upskill from "../../images/student/upskil.png"
 import {AiFillPlayCircle, AiOutlineSelect} from "react-icons/ai"
 import {BsFillCreditCardFill, BsCollectionPlayFill} from "react-icons/bs"
 import {FaRegEdit, FaRobot} from "react-icons/fa"
+import { AnimatePresence,  motion } from "framer-motion"
+import { Link } from "react-router-dom"
 
 export const Students = ()=>{
     return (
@@ -111,7 +114,7 @@ function Courses(){
 }
 
 function LearningModel(){
-     
+     const [selectedId, setSelectedId]= useState(null)
     return(
         <div className={style.learning}>
             <div className="container">
@@ -121,28 +124,59 @@ function LearningModel(){
                 </header>
                 <div className={style.learning_content}>
                     {learnInfo.map(item=>(
-                       <LearningComp {...item} /> 
+                       <LearningComp {...item}  handleAction={setSelectedId} /> 
                     ))}
                 </div>
+                <AnimatePresence>
+                    {selectedId &&(
+                        <>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                                transition={{ duration: 0.2, delay: 0.15 }}
+                                style={{ pointerEvents: "auto" }}
+                                className={style.overlay}
+                                onClick={()=>setSelectedId(null)}
+                            >
+                            {/* <Link to="/" /> */}
+                                <div className={style.overlay_container}>
+                                    <LearningComp
+                                    img = {learnInfo[selectedId - 1].img}
+                                    header = {learnInfo[selectedId - 1].header}
+                                    text = {learnInfo[selectedId - 1].text}
+                                    link = {learnInfo[selectedId - 1].link}
+                                    imgAltm = {learnInfo[selectedId - 1].imgAltm}
+                                    showDetails={true}
+                                    handleAction={setSelectedId} /> 
+                                </div>
+                            </motion.div>
+                        </>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     )
 }
 
-function LearningComp({img, header, text, link,imgAlt}){
+function LearningComp({img, header, text, link,imgAltm, id, handleAction, showDetails}){
     return(
-        <div className={style.learn_box}>
-            <img src={img} alt={imgAlt} className={style.learn_img}/>
-            <div className={style.learn_text}>
-                <div className={style.learn_text_content}>
+        <motion.div className={style.learn_box} layoutId={id} onClick={()=>handleAction(id)}>
+            <motion.img src={img} alt={imgAltm} className={style.learn_img}/>
+            <motion.div className={style.learn_text}>
+                <motion.div className={style.learn_text_content}>
                     <h3>{header}</h3>
-                    <p>{text}</p>
-                </div>
-                <div>
-                    <Button variant="contained">View details</Button>
-                </div>
-            </div>
-        </div>
+                    {showDetails && 
+                        <p>{text}</p> 
+                    }
+                </motion.div>
+                {!showDetails &&
+                    <motion.div>
+                        <Button variant="contained">View details</Button>
+                    </motion.div>
+                }
+            </motion.div>
+        </motion.div>
     )
 }
 

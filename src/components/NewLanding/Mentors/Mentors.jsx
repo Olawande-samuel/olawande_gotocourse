@@ -117,21 +117,25 @@ const Mentors = () => {
             breakpoints={{
                 // when window width is >= 320px
                 320: {
-                slidesPerView: 1,
-                spaceBetween: 0,
+                  slidesPerView: 1,
+                  spaceBetween: 0,
                 },
                 // when window width is >= 640px
                 575: {
-                slidesPerView: 2,
-                spaceBetween: 0,
+                  slidesPerView: 2,
+                  spaceBetween: 0,
                 },
                 700: {
-                slidesPerView:2.5 ,
-                spaceBetween: 0,
+                  slidesPerView:2.5 ,
+                  spaceBetween: 0,
                 },
                 1024: {
-                slidesPerView: 4,
-                spaceBetween: 5,
+                  slidesPerView: 3.5,
+                  spaceBetween: 5,
+                },
+                1300: {
+                  slidesPerView: 4,
+                  spaceBetween: 5,
                 },
             }}
         >
@@ -171,11 +175,11 @@ export const Card = ({ item,type }) => {
       <div className="card mentor_image h-100 w-100 position-relative" style={{background:`url(${item?.mentorImg && `https://loftywebtech.com/gotocourse/api/uploads/${item?.mentorImg} `}), rgba(0, 0, 0, 0.5)`, backgroundRepeat:"no-repeat", backgroundPosition:"top", backgroundSize:"cover"}}>
         {/* <img src={item?.mentorImg && `https://loftywebtech.com/gotocourse/api/uploads/${item?.mentorImg}`} alt="" className="card-img-top mentor_image" /> */}
         <div className="card-body newMentors_card-body position-absolute w-100">
-            <div>
-                <h5 className="">{`${item?.mentorFirstName}  ${item.mentorLastName} `}</h5>
-                <p className="mentors_footnote" style={{fontSize:"14px"}}>{item?.footnote}</p>
-                <p className="mb-1">{item?.expertise}</p>
-                <small className="">{item?.experience && item?.experience}</small>
+            <div className="d-flex flex-column justify-content-around h-100">
+                <h5 className="text-center">{`${item?.mentorFirstName}  ${item.mentorLastName} `}</h5>
+                <p className="mentors_footnote text-center" style={{fontSize:"14px"}}>{item?.footnote}</p>
+                <p className="mb-1 text-center">{item?.expertise}</p>
+                <small className="d-block text-center">{item?.experience && item?.experience}</small>
             </div>
         </div>
       </div>
