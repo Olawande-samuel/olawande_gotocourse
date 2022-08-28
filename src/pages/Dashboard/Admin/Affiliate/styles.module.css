@@ -1,0 +1,139 @@
+.affiliate {
+    width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.affiliate_container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.affiliate_select {
+    outline: none;
+    background: transparent;
+    border: none;
+    color: #081131;
+    font-size: 15px;
+    align-self: flex-end;
+}
+
+.affiliate_cards {
+    display: grid;
+    width: 100%;
+    padding: 20px;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-top: 30px;
+    grid-gap: 40px;
+}
+
+
+.affiliate_card {
+    width: 100%;
+    padding: 30px;
+    border-radius: 20px;
+    position: relative;
+}
+
+.affiliate_card__content {
+    width: 100%;
+}
+
+.affiliate_card__content svg {
+    margin-bottom: 30px;
+}
+
+.affiliate_card__content h4 {
+    margin-bottom: 15px;
+    font-weight: 700;
+    font-size: 32px;
+    color: #292D32;
+}
+
+.affiliate_card__content p {
+   color: #081131;
+}
+
+.affiliate_card__absolute {
+    position: absolute;
+    top:20px;
+    right: 20px;
+    font-size: 13px;
+}
+
+
+.affiliate_chart {
+    margin-top: 30px;
+    padding: 20px;
+}
+
+
+.chart_card {
+    background-color: #F4FBFF;
+    border-radius: 20px;
+    padding: 20px;
+    overflow-x: scroll;
+    max-width: 550px;
+    min-width: 250px;
+}
+
+
+.chart_card h3 {
+    color: #081131;
+    font-weight: 500;
+    text-indent: 20px;
+    font-size: 16px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+
+@media screen and (max-width: 1255px){
+    .affiliate_card {
+        width: 100%;
+        padding: 30px;
+        border-radius: 20px;
+        position: relative;
+    }
+    
+    .affiliate_card__content {
+        width: 100%;
+    }
+    
+    .affiliate_card__content svg {
+        margin-bottom: 20px;
+    }
+    
+    .affiliate_card__content h4 {
+        margin-bottom: 15px;
+        font-weight: 700;
+        font-size: 25px;
+        color: #292D32;
+    }
+    
+    .affiliate_card__content p {
+       color: #081131;
+       font-size: 0.85rem;
+    }
+
+    .affiliate_card__absolute {
+        font-size: 11px;
+    }
+}
+
+
+@media screen and (max-width: 1125px){
+    .affiliate_cards {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media screen and (max-width: 565px){
+    .affiliate_cards {
+        grid-template-columns: 1fr;
+    }
+}

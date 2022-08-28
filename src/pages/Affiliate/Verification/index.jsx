@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import { NavLink } from "react-router-dom";
 
 
@@ -13,6 +13,7 @@ const Verification = () => {
         console.log("Registration page showing...");
         return () => console.log("Registration page is removing...")
     }, [])
+    const code1Ref = useRef();
     const [formstate, setFormstate] = useState({
         code1: "",
         code2: "",
@@ -24,6 +25,7 @@ const Verification = () => {
         {
             type: "number",
             name: "code1",
+            ref: code1Ref,
             value: formstate.code1,
         },
         {
@@ -82,8 +84,8 @@ const Verification = () => {
                         <div className={clsx.code_container}>
                             <div className={clsx.code}>
                                 {
-                                    formSettings.map(({type, name, value}, i) => (
-                                        <input onBlur={blurHandler} onFocus={focusHandler} type={type} name={name} value={value} key={i} onChange={changeHandler} />
+                                    formSettings.map(({type, name, value, ref}, i) => (
+                                        <input ref={ref} onBlur={blurHandler} onFocus={focusHandler} type={type} name={name} value={value} key={i} onChange={changeHandler} />
                                     ))
                                 }
                             </div>

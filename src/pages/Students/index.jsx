@@ -224,7 +224,7 @@ function Graduate(){
                             ))}
                         </div>
                         <div>
-                            <Button variant="contained">Get trained, get mentored today</Button>
+                            <Button variant="contained">Get started today</Button>
                         </div>
                     </div>
                     <div className={style.graduate_right}>

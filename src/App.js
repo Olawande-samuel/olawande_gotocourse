@@ -20,7 +20,7 @@ import {Dashboard as TeacherDashboard,  Profile as TeachersProfile, Classes as T
   
 import {Dashboard as AffiliatesDash, Sales, Income, Revenue} from "./pages/Dashboard/Affiliate"
 import {Landing as AffiliateLanding, Register as AffiliateRegister, Login as AffiliateLogin, Verification as AffiliateVerification} from "./pages/Affiliate";
-
+import AdminAffiliate from "./pages/Dashboard/Admin/Affiliate";
 
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -167,6 +167,7 @@ function App() {
               <Route path="chat" element={<AdminChat />} />
               <Route path="settings" element={<Settings />} />
               <Route path="earnings" element={<AdminEarning />} />
+              <Route path="affiliate" element={<AdminAffiliate />} />
             </Route>
             <Route path="admin" element={<Out />}>
               <Route path="login" element={<AdminLogin />} />
