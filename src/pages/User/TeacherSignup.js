@@ -11,9 +11,6 @@ import {useAuth} from "../../contexts/Auth";
 import { useLocalStorage } from "../../hooks";
 
 
-
-
-
 const KEY = 'gotocourse-userdata';
 const TeacherSignup = () => {
   const emailReg = new RegExp(/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/)
@@ -74,8 +71,6 @@ const TeacherSignup = () => {
       let { success, message, statusCode } = response;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        //successfully done
-        //update the localStorage
         const { data } = response;
         removeItem(KEY);
         localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res))
@@ -86,7 +81,7 @@ const TeacherSignup = () => {
             notification: message,
           };
         });
-        navigate("/teacher");
+        navigate("/confirm");
       }
     }catch(err){
       toast.error(err.message, {

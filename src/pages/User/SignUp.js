@@ -53,7 +53,6 @@ const SignUp = () => {
     });
   };
 
-console.log(generalState.pledre)
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -67,8 +66,6 @@ console.log(generalState.pledre)
         throw new AdvancedError("Passwords don't match", 0);
         // main dashboard
       const response = await register(others, "user");
-      console.log(data.password)
-
       // second dashboard
       const res = await generalState.pledre.signUpStudent({
         name:`${data.firstName} ${data.lastName}`,
@@ -76,8 +73,6 @@ console.log(generalState.pledre)
         password:`${data.password}`
       })
     
-      console.log(res)
-
       let { success, message, statusCode } = response;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -173,49 +168,10 @@ console.log(generalState.pledre)
             value={data.retype_password}
             handleChange={handleChange}
           />
-          {/* <div className="form-check ">
-              <input
-                className="form-check-input me-4"
-                type="radio"
-                name="userType"
-                id="flexRadioDefault1"
-                value="student"
-                onChange={handleChange}
-              />
-              <label className="form-check-label" for="flexRadioDefault1">
-                Student
-              </label>
-            </div>
-            <div className="form-check">
-            <input
-            className="form-check-input me-4"
-            type="radio"
-            name="userType"
-            id="flexRadioDefault2"
-            value="mentor"
-            onChange={handleChange}
-            />
-            <label className="form-check-label" for="flexRadioDefault2">
-            Mentor
-            </label> 
-            </div> */}
-          {/*
-            <div className="form-check">
-              <input
-                className="form-check-input me-4"
-                type="radio"
-                name="userType"
-                id="flexRadioDefault2"
-                value="teacher"
-                onChange={handleChange}
-              />
-              <label className="form-check-label" for="flexRadioDefault2">
-                Teacher
-              </label>
-            </div>
-              */}
           {loading ? (
-            <button className="button button-md log_btn w-100 mt-3">
+            <button className="button button-md log_btn w-100 mt-3"
+              disabled={loading}
+            >
               <div className="spinner-border" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
@@ -223,6 +179,7 @@ console.log(generalState.pledre)
           ) : (
             <button
               className="button button-md log_btn w-100 mt-3"
+              disabled={loading}
               onClick={onSubmit}
               type="submit"
             >

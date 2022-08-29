@@ -74,9 +74,7 @@ export default NewLanding
 
 function Hero(){
     const {  generalState: { navHeight }, } = useAuth();
-    const responseFacebook = (response) => {
-      console.log(response);
-    }
+  
      
     async function signInWithGoogle(){
       signInWithPopup(authentication, provider).then(res=>console.log(res)).catch(err=>console.error(err))
@@ -86,7 +84,10 @@ function Hero(){
     }
     return(
         <section className="newHero d-flex position-relative"style={{marginTop: navHeight}}>
-            <div className="d-flex container">
+            <div className="container">
+            <div className="newHero_right">
+                <img className="newHero_right-image" src={HeroImg} alt="collage of laptops" />
+            </div>
             <div className="newHero_left">
                 <header className="">
                     <h1 className="newHero_left-header text-center">Upskill and Reskill</h1>
@@ -121,17 +122,16 @@ function Hero(){
                           Continue with Facebook
                       </motion.button>
                     <small className="or d-block"><span>or</span></small>
-                    <Link to="/signup">
                         <motion.p
                          whileHover={{ 
                           textShadow:"0px 0px 8px rgb(255, 255, 255)"
                         }}
-                        >Sign Up With Email</motion.p>
-                    </Link>
+                        >
+                          <Link to="/signup">
+                            Sign Up With Email
+                          </Link>
+                        </motion.p>
                 </div>
-            </div>
-            <div className="newHero_right position-absolute ">
-                <img className="newHero_right-image" src={HeroImg} alt="collage of laptops" />
             </div>
             </div>
         </section>

@@ -504,6 +504,17 @@ border-radius: 13.5px !important;
   gap: 2rem;
   row-gap: 2.5rem;
 }
+
+@media screen and (max-width:902px){
+  .dev_card_container{
+    padding: .5rem !important;
+  }
+}
+@media screen and (max-width:670px){
+  .dev_card_container{
+    padding: .2rem !important;
+  }
+}
 /* **********************SERVICES******************************* */
 .wrapper {
   display: flex;

@@ -185,19 +185,20 @@ function Live(){
         <div className={style.live}>
             <div className="container h-100">
                 <div className={`${style.live_container} position-relative h-100`}>
+                    <div className={style.live_img_container}>
+                        {/* <div className="position-absolute"> */}
+                            <div className="position-relative w-100">
+                                <img alt="" src={Yellow} className={style.live_background_img} />
+                                <img alt="" src={LiveImg} className={style.live_foreground_img} />
+                            </div>
+                        {/* </div> */}
+                    </div>
                     <div className={style.live_text_container}>
                         <h2>Join Gotocourse Live-changing Webinar</h2>
                         <p>Gotocourse webinars are valuable and resourceful</p>
                         <div>
                             <Button>Attend for free</Button>
-                        </div>
-                            
-                    </div>
-                    <div className={style.live_img_container}>
-                        <div className="position-relative w-100 h-100">
-                            <img alt="" src={Yellow} className={style.live_background_img} />
-                            <img alt="" src={LiveImg} className={style.live_foreground_img} />
-                        </div>
+                        </div>    
                     </div>
                 </div>
             </div>
@@ -278,12 +279,12 @@ function Payment(){
                     <h2>Choose your preferred payment plan</h2>
                     <p className="text-muted">Gotocourse makes it flexible for you to choose a payment plan structure of your choice</p>
                 </header>
-                <div className={style.payment_content}>
-                    <div className={style.payment_left}>
+                <div className="row justify-content-around">
+                    <div className={`col-6 ${style.payment_left}`}>
                         <img src={Upfront} alt="" />
                         <p>Upfront payment</p>
                     </div>
-                    <div className={style.payment_right}>
+                    <div className={`col-6 ${style.payment_right}`}>
                         <img src={Initial} alt="" />
                         <p>Installmental payment</p>
                     </div>

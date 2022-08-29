@@ -33,7 +33,7 @@ export default function Development(){
                 Take control of your career path and position yourself for advancement
                 </p>
             </header>
-            <div className="dev_list">
+            <div className="row">
                     {data.map((career) => (
                         <DevelopmentBox {...career} />
                     ))}
@@ -46,8 +46,9 @@ export default function Development(){
 function DevelopmentBox({image, title, text, link}){
 
     return (
-        <div className="card bootcamp_card dev_card border-none text-dark">
-            <div className="card-body d-flex flex-column justify-content-around" style={{padding:"2rem"}}>
+        <div className="col-sm-4 px-4 dev_card_container">
+        <div className="card bootcamp_card dev_card border-none text-dark h-100 ">
+            <div className="card-body d-flex flex-column justify-content-around" style={{padding:"1rem"}}>
                 <div className="bootcamp_box_left mx-auto mb-4" style={{height:"80px"}}>
                     <img src={image} alt={title} className="img-fluid" style={{width:"160px", height:"100%" }}/>
                 </div>
@@ -59,5 +60,6 @@ function DevelopmentBox({image, title, text, link}){
                 </div>
             </div>
          </div>
+        </div>
     )
 }
