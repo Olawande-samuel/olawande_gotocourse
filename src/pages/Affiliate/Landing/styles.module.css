@@ -264,8 +264,8 @@
     }
      
     .right_form button {
-        padding: 10.5px 0px;
-        width: 50%;
+        padding: 10.5px 10px;
+        /* width: 50%; */
     }
 }
 
@@ -291,8 +291,8 @@
     }
      
     .right_form button {
-        padding: 10.5px 0px;
-        width: 50%;
+        padding: 10.5px;
+        /* width: 50%; */
     }
     
 }

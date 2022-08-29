@@ -153,7 +153,7 @@ const Dashboard = () => {
                 <div className={clsx.dashboard_second}>
                     {
                         chartCards.map(({header, chart}, i) => (
-                            <ChartCard header={header} chart={chart} key={i} />
+                            <ChartCard header={header} className={clsx.chart_card} chart={chart} key={i} />
                         ))
                     }
                 </div>

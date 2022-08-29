@@ -25,8 +25,8 @@ export const HeaderCard = ({icon, title, value, color}) => {
 
 
 
-export const ChartCard = ({header, chart}) => (
-    <div className={clsx.chart_card}>
+export const ChartCard = ({header, chart, className}) => (
+    <div className={className}>
         <h3>{header}</h3>
         <div className={clsx.chart}>
             {chart}
