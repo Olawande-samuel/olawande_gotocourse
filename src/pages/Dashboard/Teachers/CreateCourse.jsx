@@ -46,7 +46,7 @@ export const Syllabus = ({
   
   export default function CreateCourse(){
     return(
-      <Teachers>
+      <Teachers header="Create Course">
         <div className={clsx.teachers_profile}>
           <CreateCourseMain type="teacher" />
         </div>

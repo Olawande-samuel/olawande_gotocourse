@@ -85,7 +85,7 @@ export default function BootcampDetails({}){
   
   
     return(
-      <Teachers header="Teacher">
+      <Teachers header="Bootcamp Details">
         {/* {loading && <Loader />} */}
         <div className={clsx.teachers_profile}>
           <div className={clsx.admin__student}>

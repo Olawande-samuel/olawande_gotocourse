@@ -65,14 +65,17 @@ const LogoutButton = () => {
         //  animate={{ x: 100, y: 100, opacity: 1 }}
         //  whileHover={{}}
          className={clsx.general_logout__button} onMouseOver={mouseOverHandler} onClick={logout}> 
-            <motion.button>
-                <i className="d-md-none">
-                    <MdLogout size="1.5rem" />
+            <>
+                <i className="d-lg-none">
+                    <MdLogout size="1.5rem" color="#F75C4E" />
                 </i>
-                <span className="d-none d-md-block">
-                Logout
-                </span>
-            </motion.button>
+                <motion.button className="d-none d-lg-flex" style={{minWidth:"130px"}} >
+                    <i>
+                        <MdLogout size="1.5rem" className="me-1" />
+                    </i>
+                    <span>Logout</span>
+                </motion.button>
+            </>
         </motion.span>
     )
 }

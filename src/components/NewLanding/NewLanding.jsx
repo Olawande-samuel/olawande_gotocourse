@@ -1,3 +1,4 @@
+import {useState} from "react"
 import { useNavigate } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
@@ -48,6 +49,7 @@ import SwiperCore, {
 
   import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
   import { authentication, provider, facebookProvider } from "../../firebase-config.js"
+import LoginOptions from "./LoginOptions";
 
 const NewLanding = ()=>{
     return (
@@ -73,21 +75,37 @@ export default NewLanding
 
 
 function Hero(){
-    const {  generalState: { navHeight }, } = useAuth();
-    const responseFacebook = (response) => {
-      console.log(response);
-    }
+    const {  generalState: { navHeight }, studentFunctions: { googleSignup } } = useAuth();
+    const [overlay, setOverlay] = useState(false)
+    const [logtype, setLogType] = useState(null)
      
-    async function signInWithGoogle(){
-      signInWithPopup(authentication, provider).then(res=>console.log(res)).catch(err=>console.error(err))
+     function signInWithGoogle(e){
+      e.preventDefault()
+      setLogType("google")
+      setOverlay(true)
+
+      // signInWithPopup(authentication, provider).then(res=>
+        
+      //     console.log(res)
+
+      //   ).catch(err=>
+      //     console.error(err)
+      //     )
     }
-    async function signInWithFacebook(){
-      signInWithPopup(authentication, facebookProvider).then(res=>console.log(res)).catch(err=>console.error(err))
+     function signInWithFacebook(){
+      setLogType("facebook")
+      setOverlay(true)
+
+      // signInWithPopup(authentication, facebookProvider).then(res=>console.log(res)).catch(err=>console.error(err))
     }
     return(
-        <section className="newHero d-flex position-relative"style={{marginTop: navHeight}}>
-            <div className="d-flex container">
-            <div className="newHero_left w-50">
+        <section className="newHero d-flex position-relative"style={{marginTop: navHeight}} >
+            <div className="container">
+              {overlay && <LoginOptions closeOverlay={setOverlay} type={logtype} />}
+            <div className="newHero_right">
+                <img className="newHero_right-image" src={HeroImg} alt="collage of laptops" />
+            </div>
+            <div className="newHero_left">
                 <header className="">
                     <h1 className="newHero_left-header text-center">Upskill and Reskill</h1>
                     <h6 className="newHero_left-title text-center">Connect with industry experts from anywhere and for less cost</h6>
@@ -120,31 +138,17 @@ function Hero(){
                           </i>
                           Continue with Facebook
                       </motion.button>
-                    {/* <motion.button className="apple d-block mb-3"
-                     whileHover={{ 
-                    boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
-                    textShadow:"0px 0px 8px rgb(255, 255, 255)",
-                    backgroundColor: "#eee"
-                    }}
-                    
-                    >
-                    <i className="me-4">
-                            <img src={apple} alt="" width={25} height={25} />
-                        </i>
-                        Continue with Apple
-                    </motion.button> */}
                     <small className="or d-block"><span>or</span></small>
-                    <Link to="/signup">
                         <motion.p
                          whileHover={{ 
                           textShadow:"0px 0px 8px rgb(255, 255, 255)"
                         }}
-                        >Sign Up With Email</motion.p>
-                    </Link>
+                        >
+                          <Link to="/signup">
+                            Sign Up With Email
+                          </Link>
+                        </motion.p>
                 </div>
-            </div>
-            <div className="newHero_right w-50 position-absolute ">
-                <img className="newHero_right-image" src={HeroImg} alt="collage of laptops" />
             </div>
             </div>
         </section>
@@ -192,10 +196,7 @@ function Bootcamp(){
 
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
     return (
-
-
         <Swiper
-          // install Swiper modules
           modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
           loop={true}
           speed={1500}
@@ -287,9 +288,9 @@ function BootcampCard({_id, title, duration, startTime, endTime, startDate,endDa
 
 function Learn (){
    return (
-    <section className="wrapper learning newLearning">
+    <section className="wrapper newLearning">
       <div className="container">
-        <div className="d-flex content justify-content-between">
+        <div className="content">
             <div className=" border-none newLearning_left">
               <div className="d-flex flex-column justify-content-center h-100">
                 <header className="mb-5">
@@ -298,8 +299,7 @@ function Learn (){
                 <p className="card-text newLearning-text mb-4">
                     Join a classroom to take instructor led training, do projects with learning partners, take quizzes, and build work related portfolio
                 </p>
-                
-                  <Link to="/signup">
+                <div>
                   <motion.button 
                   className="btn-plain button-lg newLearning_button" type="button"
                   whileHover={{ 
@@ -307,16 +307,17 @@ function Learn (){
                     textShadow:"0px 0px 8px rgb(255, 255, 255)"
                   }}
                   >
+                  <Link to="/signup">
                     Get Started Today
-                  </motion.button>
                     </Link>
+                  </motion.button>
+                </div>
                   
               </div>
             </div>
             <div className="newLearning_right d-flex justify-content-end">
                 <Image width="552px" height="452px"  image={Learning} alt="Group of people in an online meeting room" className="background" effect="blur" />
             </div>
-         
         </div>
       </div>
     </section>
@@ -325,7 +326,7 @@ function Learn (){
 
 function Self(){
     return(
-        <section className="wrapper transition newLearning">
+        <section className="wrapper transition newLearning newSelf">
       <div className="container">
         <div className="d-flex content justify-content-between">
         <div className="newSelf_right">
@@ -343,10 +344,11 @@ function Self(){
               <header className="mb-5">
                 <h2 className="title">Self paced Learning</h2>
               </header>
-              <p className="card-text newLearning-text mb-4">
+              <p className="newLearning-text mb-4">
                 Self-paced courses that allow you to complete assignments at your own pace, making it easier to balance coursework with your other personal and professional responsibilities.
               </p>
-              <Link to="/signup">
+              <div>
+
                 <motion.button
                   className="btn-plain newLearning_button button-lg"
                   type="button"
@@ -355,9 +357,11 @@ function Self(){
                     textShadow: "0px 0px 8px rgb(255,255,255)",
                   }}
                 >
-                 Try Gotocourse
+                  <Link to="/signup">
+                    Try Gotocourse
+                  </Link>
                 </motion.button>
-              </Link>
+                    </div>
             </div>
           </motion.div>
         </div>
@@ -369,33 +373,34 @@ function Self(){
 function Mentorship (){
     
    return (
-    <section className="wrapper learning newLearning">
+    <section className="wrapper learning newMentor">
       <div className="container">
-        <div className="d-flex content justify-content-between">
-            <div className=" border-none newLearning_left">
+        <div className="content">
+            <div className=" border-none newMentor_left">
               <div className="d-flex flex-column justify-content-center h-100">
                 <header className="mb-5">
                   <h2 className="title" style={{fontSize:"44px"}}>One-on-one mentorship</h2>
                 </header>
-                <p className="card-text newLearning-text mb-4">
+                <p className=" newLearning-text mb-4">
                     Challenge yourself with a one-on-one mentorship session with industry experts and professionals and grow your career.
                 </p>
-                
-                  <Link to="/signup" >
+                <div>
                   <motion.button 
-                  className="btn-plain button-lg newLearning_button" type="button"
+                  className="btn-plain button-lg newMentor_button" type="button"
                   whileHover={{ 
                     boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
                     textShadow:"0px 0px 8px rgb(255, 255, 255)"
                   }}
                   >
+                    <Link to="/signup" >
                     Get Started Today
-                  </motion.button>
                     </Link>
+                  </motion.button>
+                </div>
                   
               </div>
             </div>
-            <div className="newLearning_right d-flex justify-content-end">
+            <div className="newMentor_right d-flex justify-content-end">
                 <Image width="552px" height="452px"  image={Mento} alt="Group of people in an online meeting room" className="background" effect="blur" />
             </div>
         </div>
@@ -405,7 +410,7 @@ function Mentorship (){
 }
 function InPerson (){
    return (
-    <section className="wrapper learning newLearning">
+    <section className="wrapper learning newLearning inPerson">
       <div className="container">
         <div className="d-flex content justify-content-between">
             <div className=" border-none newLearning_left">
@@ -413,10 +418,10 @@ function InPerson (){
                 <header className="mb-5">
                   <h2 className="title">In person Training </h2>
                 </header>
-                <p className="card-text newLearning-text mb-4">
+                <p className="newLearning-text mb-4">
                     Learn from experts by joining us in any of our physical locations.
                 </p>
-                  <Link to="/signup">
+                <div>
                   <motion.button 
                   className="btn-plain button-lg newLearning_button" type="button"
                   whileHover={{ 
@@ -424,9 +429,11 @@ function InPerson (){
                     textShadow:"0px 0px 8px rgb(255, 255, 255)"
                   }}
                   >
+                  <Link to="/signup">
                     Get Started Today
-                  </motion.button>
                     </Link>
+                  </motion.button>
+                </div>
                   
               </div>
             </div>

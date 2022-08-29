@@ -504,6 +504,17 @@ border-radius: 13.5px !important;
   gap: 2rem;
   row-gap: 2.5rem;
 }
+
+@media screen and (max-width:902px){
+  .dev_card_container{
+    padding: .5rem !important;
+  }
+}
+@media screen and (max-width:670px){
+  .dev_card_container{
+    padding: .2rem !important;
+  }
+}
 /* **********************SERVICES******************************* */
 .wrapper {
   display: flex;
@@ -673,16 +684,34 @@ border-radius: 13.5px !important;
 
 
 /* ****************************Becoming************************************ */
-.becoming .right,
-.becoming .left {
-  flex: 50%;
-}
+
 
 .becoming .left {
   display: flex;
   justify-content:center
 }
+.becoming .left img {
+  max-height: 350px;
+  max-width: 100%;
+  object-fit:cover;
+  border-radius:10px;
+}
 
+
+@media (min-width:650px){
+  .becoming .content {
+    display: flex;
+    justify-content:space-between;
+  }
+  .becoming .right,
+  .becoming .left {
+    flex: 50%;
+  }
+  .becoming .right {
+    padding-left: 1rem;
+  }
+
+}
 /* ********************************Classroom******************************* */
 .classroom .btn-plain {
   border: 1px solid var(--btn-color);
@@ -1294,10 +1323,18 @@ font-size: 16px;
 .signWrapper_logo svg {
   width: 100%;
 }
+
+.signWrapper_logo_text h1 span{
+  color: var(--theme-orange);
+}
 .signWrapper_background  h1{
   font-weight: 700;
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+}
+.signWrapper_logo_text h1 {
+  font-size: clamp(1.375rem, 0.625rem + 3.75vw, 3.5rem);
+  font-weight: 900;
 }
 .md_device_login {
   display: none;
@@ -1335,8 +1372,15 @@ font-size: 16px;
   .signWrapper_header {
     display: block;
   }
+
+  .signWrapper > div:nth-child(3) {
+    background: url(./images/logup.webp);
+    background-repeat:no-repeat;
+    background-size: cover;
+    width: min(100%, 600px);
+  }
 }
-@media (min-width:590px){
+@media (min-width:591px){
   .signWrapper {
     display: grid;
     grid-template-columns:repeat(2, 1fr);
@@ -1456,6 +1500,11 @@ line-height: 16px;
     margin-bottom:1.5rem;
   }
   .form-wrapper {
+    padding: 16px 18px;
+  }
+}
+@media (max-width:590px) {
+  .form-wrapper {
     padding: 16px 35px;
   }
 }
@@ -1510,7 +1559,6 @@ line-height: 16px;
     text-align: center;
   }
   .learning .content,
-  .becoming .content ,
   .classroom .content
   {
     flex-direction: column-reverse;
@@ -2233,3 +2281,125 @@ tr th, thead td, td, td span  {
 
 
 
+.user_verifcation > form{
+  padding: initial;
+}
+
+.signUpOptions_overlay {
+  z-index: 1;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.8);
+  will-change: opacity;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  display: grid;
+  place-items:center;
+}
+
+.signUpOptions_overlay_container {
+  width: min(100% - 1.5rem);
+  padding: 1.8rem;
+  height: auto;
+  margin-top: 81px;
+  background: #fff;
+  box-shadow: -7px 10px 27px -29px rgba(255,255,255,0.62);
+  -webkit-box-shadow: -7px 10px 27px -29px rgba(255,255,255,0.62);
+  -moz-box-shadow: -7px 10px 27px -29px rgba(255,255,255,0.62);
+  position: relative;
+  z-index:3;
+}
+.signUpOptions_overlay_container .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.suOptions_cards {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content:space-evenly;
+
+}
+.suOptions_card {
+  padding: 1.5rem;
+  box-shadow: -13px 0px 27px 0px rgba(0,0,0,0.55);
+  -webkit-box-shadow: -13px 0px 27px 0px rgba(0,0,0,0.55);
+  -moz-box-shadow: -13px 0px 27px 0px rgba(0,0,0,0.55);
+  border-radius: 10px;
+  transition: all .5s ease;
+  color: var(--theme-blue);
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items:center;
+  height: 120px;
+  margin-bottom: .7rem ;
+  border: none;
+  outline:none;
+}
+.suOptions_card i{
+  color: var(--theme-blue);
+
+}
+.suOptions_card p{
+  margin-top: .5rem;
+  margin-bottom: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--theme-blue);
+}
+.signUpOptions_overlay_container header{
+  margin-bottom:  2.5rem;
+  position:relative;
+
+}
+
+
+.signUpOptions_overlay_container header::after{
+  content:"";
+  width:150px;
+  height: 10px;
+  background: var(--theme-orange);
+  position: absolute;
+  bottom: -10px;
+}
+
+.suOptions_card {
+  width: 100%;
+}
+.suOptions_card:hover {
+  background:var(--theme-blue);
+  color: #fff;
+}
+.suOptions_card:hover p, 
+.suOptions_card:hover i {
+  color: #fff;
+}
+
+.signUpOptions_overlay_container header h3 {
+  color: var(--theme-blue);
+  font-weight: 800;
+}
+
+@media (min-width:575px){
+  .signUpOptions_overlay_container {
+    width: min(100%, 750px);
+    padding: 4rem;
+    height: 350px;
+    margin-top: 81px;
+    background: #fff;
+    box-shadow: -7px 10px 27px -29px rgba(255,255,255,0.62);
+    -webkit-box-shadow: -7px 10px 27px -29px rgba(255,255,255,0.62);
+    -moz-box-shadow: -7px 10px 27px -29px rgba(255,255,255,0.62);
+  }
+  .suOptions_card {
+    padding: 2rem 2.5rem;
+   
+    border-radius: 30px;
+   
+    height: 200px;
+  }
+}

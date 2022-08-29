@@ -53,15 +53,13 @@ const Mentors = () => {
           // install Swiper modules
           modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
           loop={true}
-      speed={1500}
-      autoplay={{delay:2500}}
+          speed={1500}
+          autoplay={{delay:2500}}
           spaceBetween={0}
           slidesPerView={1}
-          // navigation
           pagination={{ clickable: true }}
           scrollbar={{ draggable: true }}
           breakpoints={{
-            // when window width is >= 320px
             320: {
               slidesPerView: 1,
               spaceBetween: 0,

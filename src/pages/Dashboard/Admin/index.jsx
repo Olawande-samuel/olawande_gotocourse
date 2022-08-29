@@ -7,9 +7,10 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {motion} from "framer-motion"
 import { Switch, Modal, Box, Skeleton } from "@mui/material";
 import { AiOutlineMenu, AiOutlineDelete, AiTwotoneEdit } from "react-icons/ai";
+import {FaUserLock} from "react-icons/fa";
 import DOMPurify from 'dompurify';
 
-import { Sidebar, Searchbar } from "../components";
+import { Sidebar, Searchbar, Navbar } from "../components";
 import clsx from "./styles.module.css";
 
 import avatar from "../../../images/teacher.png";
@@ -3913,6 +3914,10 @@ export const Admin = ({ children, header }) => {
       })()
       flag.current = true;
     },[])
+    const admin = {
+      title: "ADMIN",
+      logo: <FaUserLock size="2.5rem" color="#0C2191" />
+  }
   return (
     <GuardedRoute>
       <div className={clsx["admin"]}>
@@ -3929,24 +3934,7 @@ export const Admin = ({ children, header }) => {
         />
         <Sidebar isMobile={isMobile} />
         <div className={clsx["admin_main"]}>
-          <div className={`align-items-center ${clsx["admin_topbar"]}`}>
-            <div className="hamburger">
-              <i>
-                <AiOutlineMenu
-                  style={{ fontSize: "24px", color: "#0C2191" }}
-                  onClick={toggleSidebar}
-                />
-              </i>
-            </div>
-            <h1 className="d-none d-md-block">{header}</h1>
-            <Searchbar showIcon={true} placeholder="Search" />
-            <div className="button_wrapper d-flex align-items-center text-center d-flex ms-3">
-                        {/* move loading state to this component */}
-                            <GotoDashboard loader={loader} setLoading={setLoading} />
-                        <LogoutButton />
-
-                    </div>
-          </div>
+          <Navbar content={admin}  toggleSidebar={toggleSidebar} header={header} />
           {children}
         </div>
         {loading && <Loader />}

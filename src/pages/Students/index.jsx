@@ -1,4 +1,5 @@
- import {useNavigate} from "react-router-dom"
+import {useState} from "react"
+import {useNavigate} from "react-router-dom"
 import { Box, Button, Grid, List, ListItem, ListItemText, Typography } from "@mui/material"
 import Image from "../../components/Image"
 import Layout from "../../components/Layout"
@@ -34,6 +35,8 @@ import upskill from "../../images/student/upskil.png"
 import {AiFillPlayCircle, AiOutlineSelect} from "react-icons/ai"
 import {BsFillCreditCardFill, BsCollectionPlayFill} from "react-icons/bs"
 import {FaRegEdit, FaRobot} from "react-icons/fa"
+import { AnimatePresence,  motion } from "framer-motion"
+import { Link } from "react-router-dom"
 
 export const Students = ()=>{
     return (
@@ -111,7 +114,7 @@ function Courses(){
 }
 
 function LearningModel(){
-     
+     const [selectedId, setSelectedId]= useState(null)
     return(
         <div className={style.learning}>
             <div className="container">
@@ -121,28 +124,59 @@ function LearningModel(){
                 </header>
                 <div className={style.learning_content}>
                     {learnInfo.map(item=>(
-                       <LearningComp {...item} /> 
+                       <LearningComp {...item}  handleAction={setSelectedId} /> 
                     ))}
                 </div>
+                <AnimatePresence>
+                    {selectedId &&(
+                        <>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                                transition={{ duration: 0.2, delay: 0.15 }}
+                                style={{ pointerEvents: "auto" }}
+                                className={style.overlay}
+                                onClick={()=>setSelectedId(null)}
+                            >
+                            {/* <Link to="/" /> */}
+                                <div className={style.overlay_container}>
+                                    <LearningComp
+                                    img = {learnInfo[selectedId - 1].img}
+                                    header = {learnInfo[selectedId - 1].header}
+                                    text = {learnInfo[selectedId - 1].text}
+                                    link = {learnInfo[selectedId - 1].link}
+                                    imgAltm = {learnInfo[selectedId - 1].imgAltm}
+                                    showDetails={true}
+                                    handleAction={setSelectedId} /> 
+                                </div>
+                            </motion.div>
+                        </>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     )
 }
 
-function LearningComp({img, header, text, link,imgAlt}){
+function LearningComp({img, header, text, link,imgAltm, id, handleAction, showDetails}){
     return(
-        <div className={style.learn_box}>
-            <img src={img} alt={imgAlt} className={style.learn_img}/>
-            <div className={style.learn_text}>
-                <div className={style.learn_text_content}>
+        <motion.div className={style.learn_box} layoutId={id} onClick={()=>handleAction(id)}>
+            <motion.img src={img} alt={imgAltm} className={style.learn_img}/>
+            <motion.div className={style.learn_text}>
+                <motion.div className={style.learn_text_content}>
                     <h3>{header}</h3>
-                    <p>{text}</p>
-                </div>
-                <div>
-                    <Button variant="contained">View details</Button>
-                </div>
-            </div>
-        </div>
+                    {showDetails && 
+                        <p>{text}</p> 
+                    }
+                </motion.div>
+                {!showDetails &&
+                    <motion.div>
+                        <Button variant="contained">View details</Button>
+                    </motion.div>
+                }
+            </motion.div>
+        </motion.div>
     )
 }
 
@@ -151,19 +185,20 @@ function Live(){
         <div className={style.live}>
             <div className="container h-100">
                 <div className={`${style.live_container} position-relative h-100`}>
+                    <div className={style.live_img_container}>
+                        {/* <div className="position-absolute"> */}
+                            <div className="position-relative w-100">
+                                <img alt="" src={Yellow} className={style.live_background_img} />
+                                <img alt="" src={LiveImg} className={style.live_foreground_img} />
+                            </div>
+                        {/* </div> */}
+                    </div>
                     <div className={style.live_text_container}>
                         <h2>Join Gotocourse Live-changing Webinar</h2>
                         <p>Gotocourse webinars are valuable and resourceful</p>
                         <div>
                             <Button>Attend for free</Button>
-                        </div>
-                            
-                    </div>
-                    <div className={style.live_img_container}>
-                        <div className="position-relative w-100 h-100">
-                            <img alt="" src={Yellow} className={style.live_background_img} />
-                            <img alt="" src={LiveImg} className={style.live_foreground_img} />
-                        </div>
+                        </div>    
                     </div>
                 </div>
             </div>
@@ -244,12 +279,12 @@ function Payment(){
                     <h2>Choose your preferred payment plan</h2>
                     <p className="text-muted">Gotocourse makes it flexible for you to choose a payment plan structure of your choice</p>
                 </header>
-                <div className={style.payment_content}>
-                    <div className={style.payment_left}>
+                <div className="row justify-content-around">
+                    <div className={`col-6 ${style.payment_left}`}>
                         <img src={Upfront} alt="" />
                         <p>Upfront payment</p>
                     </div>
-                    <div className={style.payment_right}>
+                    <div className={`col-6 ${style.payment_right}`}>
                         <img src={Initial} alt="" />
                         <p>Installmental payment</p>
                     </div>

@@ -87,7 +87,7 @@ export default function Courses() {
     }
    
     return (
-      <Teachers isMobile={isMobile} userdata={userdata}>
+      <Teachers isMobile={isMobile} userdata={userdata} header="Courses">
         <div className={clsx.teachers_profile}>
           <button
             className="button button-md log_btn w-30 mb-5"
