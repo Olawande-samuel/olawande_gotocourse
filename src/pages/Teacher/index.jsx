@@ -11,10 +11,27 @@ import { Jumbotron } from "./components";
 import clsx from "./styles.module.css";
 import img from "../../images/bola.png";
 import {ScrollToTop} from "../Courses"
-
+import { FaqComponent } from "../../components/Faq";
+import classroom from "../../images/classroom_management.png";
+import liveClass from "../../images/live_class.png";
+import creator from "../../images/creator_suite.png";
+import customization from "../../images/customization.png";
+import teacher from "../../images/become_teacher02.png";
 
 
 export const Home = () => {
+    const styles = {
+        title: {
+            color: "#0C2191 !important",
+            fontSize: 18,
+            marginBottom: 15
+        },
+        answer: {
+            fontSize: 14,
+            fontWeight: 400,
+            letterSpacing: 0.4
+        }
+    }
     const data = [
         {
             icon: MdPlaylistAddCheck,
@@ -83,23 +100,6 @@ export const Home = () => {
         },
     ]
 
-    function toggleHandler(e){
-        let clicked = e.currentTarget;
-        let mainParent = clicked.parentNode.parentNode;
-        let answer = mainParent.querySelector(".frequent_answer");
-        let expandMoreIcon = mainParent.querySelector(".expand__more");
-        let expandLessIcon = mainParent.querySelector(".expand__less");
-
-        if(answer.style.display === 'none' || !answer.style.display){
-            answer.style.display = 'block';
-            expandMoreIcon.style.display = 'none';
-            expandLessIcon.style.display = 'block';
-        }else {
-            answer.style.display = 'none'
-            expandMoreIcon.style.display = 'block';
-            expandLessIcon.style.display = 'none';
-        }
-    }
     return (
         <Layout>
             <ScrollToTop />
@@ -111,7 +111,7 @@ export const Home = () => {
                     <Grid container spacing={4}>
                         {
                             data.map(({icon: Icon, title, content}, i) => (
-                                <Grid item xs={12} sm={12} md={6} lg={3} key={i}>
+                                <Grid item xs={12} sm={12} md={6} lg={4} xl={3} key={i}>
                                     <Paper elevation={1} className={clsx.paper}>
                                         <span>
                                             <Icon />
@@ -128,12 +128,11 @@ export const Home = () => {
             <div className={clsx.best_features}>
                 <h1>Our Best Features</h1>
                 <p>Check out what makes us stand out at Gotocourse!</p>
-                <Grid container spacing={6} sx={{position: "relative", marginBottom: 5}}>
-                    <Grid item xs={12} sm={12} md={6}>
-                        <div className={clsx.rectangle}></div>
-                        <div className={clsx.best__features_img}></div>
+                <Grid container spacing={6} sx={{marginBottom: 15, marginTop: 15}}>
+                    <Grid item xs={12} sm={12} md={7}>
+                        <img src={classroom} className={clsx.image} alt="Classroom" />
                     </Grid>
-                    <Grid item sm={12} md={6}>
+                    <Grid item sm={12} md={5}>
                         <div className={clsx.best__features_card}>
                             <span>
                                 <MdPictureAsPdf />
@@ -144,8 +143,8 @@ export const Home = () => {
                     </Grid>
                 </Grid>
 
-                <Grid container spacing={6} sx={{position: "relative", marginBottom: 5}}>
-                    <Grid item sm={12} md={6}>
+                <Grid container spacing={4} sx={{marginBottom: 15}}>
+                    <Grid item sm={12} md={5}>
                         <div className={clsx.best__features_card}>
                             <span>
                                 <MdPictureAsPdf />
@@ -154,18 +153,16 @@ export const Home = () => {
                             <p>We use an efficient classroom management tool that helps track student progress and optimise learning for both teachers and students.</p>
                         </div>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={6}>
-                        <div className={clsx.rectangle_2}></div>
-                        <div className={clsx.best__features_img_live}></div>
+                    <Grid item xs={12} sm={12} md={7}>
+                       <img src={liveClass} className={clsx.image} alt="Live Class" />
                     </Grid>
                 </Grid>
                 
-                <Grid container spacing={4} sx={{position: "relative", marginBottom: 5}}>
-                    <Grid item xs={12} sm={12} md={6}>
-                        <div className={clsx.rectangle}></div>
-                        <div className={clsx.best__features_creator}></div>
+                <Grid container spacing={4} sx={{marginBottom: 15}}>
+                    <Grid item xs={12} sm={12} md={7}>
+                        <img src={creator} className={clsx.image} alt="Creator" />
                     </Grid>
-                    <Grid item sm={12} md={6}>
+                    <Grid item sm={12} md={5}>
                         <div className={clsx.best__features_card}>
                             <span>
                                 <MdPictureAsPdf />
@@ -176,33 +173,35 @@ export const Home = () => {
                     </Grid>
                 </Grid>
 
-                <Grid container spacing={6} sx={{position: "relative", marginBottom: 5}}>
-                    <Grid item sm={12} md={6}>
+                <Grid container spacing={4} sx={{marginBottom: 15}}>
+                    <Grid item sm={12} md={5}>
                         <div className={clsx.best__features_card}>
                             <span>
                                 <MdPictureAsPdf />
                             </span>
                             <h4>Customization</h4>
                             <p>You can modify the appearance of your classes, such as the images, colours and layouts.</p>
-                            <Link to="/teacher/signup">
-                            <motion.button
-                            className="button button-md"
-                            transition={{
-                                ease: 'easeInOut',
-                                duration: 0.5
-                                }}
-                            whileHover={{
-                                scale: 1.1,
-                                textShadow: "0px 0px 8px rgb(255, 255, 255)"
-                            }}  >Become a teacher</motion.button>
-                            </Link>
                         </div>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={6}>
-                        <div className={clsx.rectangle_2}></div>
-                        <div className={clsx.best__features_img_custom}></div>
+                    <Grid item xs={12} sm={12} md={7}>
+                        <img src={customization} className={clsx.image} alt="Customization" />
                     </Grid>
                 </Grid>
+            </div>
+
+            <div className={clsx.become_a_teacher}>
+                <div className={clsx.become_a_teacher__left}>
+                    <img src={teacher} alt="Teacher" />
+                </div>
+                <div className={clsx.become_a_teacher__right}>
+                    <h3>Get access to customized
+dashboard to track Earnings, 
+Student Enrolment to class, and 
+Payment over a period of time.</h3>
+                    <Link to="/teacher/signup">
+                        <button>Become a teacher</button>
+                    </Link>
+                </div>
             </div>
 
             <div className={clsx.frequently_asked_questions}>
@@ -213,12 +212,7 @@ export const Home = () => {
                         {
                             faqs.map(({question, answer}, i) => (
                                 <Grid item sm={12} md={6} key={i}>
-                                    <Paper elevation={0} className={clsx.frequently_asked_questions_paper}>
-                                        <div className={clsx.question}><p>{question}</p>  <span onClick={toggleHandler}><MdExpandMore className="expand__more" /> <MdExpandLess className="expand__less" /></span></div>
-                                        <div className={`${clsx.answer} frequent_answer`}>
-                                            {answer}
-                                        </div>
-                                    </Paper>
+                                    <FaqComponent title={question} answer={answer} key={i} style={styles} />
                                 </Grid>
                             ))
                         }

@@ -5,12 +5,8 @@ import { Grid } from "@mui/material";
 import clsx from "./styles.module.css";
 import Layout from "../../components/Layout";
 import img from "../../images/careerBg.webp"
-import bg1 from "../../images/career/career002.png";
-import layout1 from "../../images/career/career2.png";
-import mainLayout1 from "../../images/career/career2_layout.png"
-import bg2 from "../../images/career/career001.png";
-import layout2 from "../../images/career/career1.png";
-import mainLayout2 from "../../images/career/career_layout_2.png"
+import career01 from "../../images/career01.png";
+import career02 from "../../images/career02.png";
 import { Link } from "react-router-dom";
 
 
@@ -28,7 +24,7 @@ const Career = () => {
         top:0,
         left: 0,
         width: "100%",
-        height: "100vh",
+        height: "min(100vh, 600px)",
         backgroundImage: `url(${img})`,
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -79,9 +75,7 @@ const Career = () => {
                         <Grid container spacing={4}>
                             <Grid item xs={12} sm={12} md={7} lg={7}>
                                 <div style={{width: "100%", height: "500px"}} className={clsx.commitment_left}>
-                                    <img src={bg1} alt="Image BG" />
-                                    <img src={layout1} alt="Image Layout" />
-                                    <img src={mainLayout1} alt="Image Main Layout" />
+                                    <img src={career01} alt="Career 01" />
                                 </div>
                             </Grid>
                             <Grid item xs={12} sm={12} md={5} lg={5}>
@@ -109,9 +103,7 @@ const Career = () => {
                             </Grid>
                             <Grid sx={{padding: 20, width: "100%", height: "500px"}} item xs={12} sm={12} md={5} lg={5}>
                                 <div className={clsx.culture_right}>
-                                    <img src={bg2} alt="Image BG" />
-                                    <img src={layout2} alt="Image Layout" />
-                                    <img src={mainLayout2} alt="Image Main Layout" />
+                                    <img src={career02} alt="Career 02" />
                                 </div>
                             </Grid>
                         </Grid>

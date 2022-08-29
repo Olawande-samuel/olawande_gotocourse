@@ -38,7 +38,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     background-color: rgba(0,0,0,.5);
     z-index: 100;
     color: var(--white);
@@ -74,6 +74,7 @@
     display: flex;
     align-items: flex-start;
     flex-direction: column;
+    margin-left: 40px;
 }
 
 .career_openings h2, .culture_left h2, .career_teaching h2 {
@@ -125,7 +126,8 @@
     position: relative;
     padding: 10px 30px;
     display: flex;
-    justify-content: flex-end
+    align-items: center;
+    justify-content: center;
 }
 
 .career_commitment, .career_culture {
@@ -134,62 +136,16 @@
     margin: 100px 0px;
 }
 
-
-.commitment_left img {
-    position: absolute;
-    top:0;
-    left: 0;
+.culture_left {
+    margin-left: 40px;
 }
 
-.commitment_left img:nth-child(1) {
-    width: 478px;
-    height: 418px;
-}
-
-.commitment_left img:nth-child(3) {
-    z-index: 50;
-    top: 15%;
-    transform: rotate(-5deg);
-    width: 425px;
-    height: 405px;
-}
-.commitment_left img:nth-child(2) {
-    z-index: 60;
-    width: 494px;
-    height: 455px;
-}
-.culture_right img {
-    position: absolute;
-    top:0;
-    left: 0;
-}
-
-.culture_right img:nth-child(1) {
-    width: 478px;
-    height: 418px;
-}
-
-.culture_right img:nth-child(3) {
-    z-index: 50;
-    top: 15%;
-    transform: rotate(-5deg);
-    width: 425px;
-    height: 405px;
-}
-.culture_right img:nth-child(2) {
-    z-index: 60;
-    width: 494px;
-    height: 455px;
-}
 
 
 .culture_right {
     width: 100%;
     height: 100%;
-    position: relative;
-    padding: 10px 30px;
     display: flex;
-    justify-content: flex-end
 }
 
 .career_teaching {
@@ -203,4 +159,58 @@
     line-height: 1.8;
     padding-left: 10px;
     color: var(--grey);
+}
+
+
+@media screen and (max-width:1200px) {
+    .culture_left {
+        width: 100%;
+    }
+    
+    
+    .imgBg h1 {
+        font-size: 60px;
+        margin-bottom: 30px;
+    }
+    
+    
+    .imgBg p {
+        font-size: 25px;
+        letter-spacing: 1px;
+    }
+}
+
+
+@media screen and (max-width:900px) {
+    .culture_left {
+        width: 100%;
+    }
+
+    .imgBg {
+        padding-left: 50px;
+    }
+
+    .commitment_right {
+        margin-left: 40px;
+        width: 90%;
+    }
+
+    .culture_right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+
+@media screen and (max-width: 525px){
+    .imgBg h1 {
+        font-size: 40px;
+        margin-bottom: 20px;
+    }
+    
+    
+    .imgBg p {
+        font-size: 18px;
+    }
 }
