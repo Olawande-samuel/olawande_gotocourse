@@ -260,7 +260,7 @@ function CategoryCard({
 
     if(type === "category"){
       localStorage.setItem("gotocourse-category", JSON.stringify(all))
-      navigate(`categories/${name.split(" ").join("-").toLowerCase()}`)
+      navigate(`/categories/${name.split(" ").join("-").toLowerCase()}`)
     }else {
       localStorage.setItem("gotocourse-courseInfo", JSON.stringify(all))
       localStorage.setItem("gotocourse-courseId", all.courseId)

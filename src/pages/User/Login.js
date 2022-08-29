@@ -46,9 +46,6 @@ const Login = () => {
       
       if(success) {
         const {data: d} = response;
-
-        //before navigating
-        //save some thing to localStorage and state
         removeItem(KEY);
         getItem(KEY, d);
         setGeneralState(old => {
@@ -118,41 +115,17 @@ const Login = () => {
              <span>Forgot password? </span>
              <Link to="/forgot-password">Click here to reset</Link>
             </p>
-          {/* <div className="form-check ">
-            <input
-              className="form-check-input me-4"
-              type="radio"
-              name="userType"
-              id="flexRadioDefault1"
-              value="student"
-              onChange={handleChange}
-            />
-            <label className="form-check-label" htmlFor="flexRadioDefault1">
-              Student
-            </label>
-          </div>
-          <div className="form-check mb-5">
-            <input
-              className="form-check-input me-4"
-              type="radio"
-              name="userType"
-              id="flexRadioDefault2"
-              value="teacher"
-              onChange={handleChange}
-            />
-            <label className="form-check-label" htmlFor="flexRadioDefault2">
-              Teacher
-            </label>
-          </div> */}
           {loading ? (
-            <button className="button button-md log_btn w-100">
+            <button className="button button-md log_btn w-100" 
+            disabled={loading}>
               <div className="spinner-border" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
             </button>
           ) : (
             <button
-              className="button button-md log_btn w-100"
+              className="button button-md log_btn w-100" 
+              disabled={loading}
               type="submit"
             >
               Sign In

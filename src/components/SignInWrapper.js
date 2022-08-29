@@ -18,14 +18,13 @@ const SignInWrapper = ({ image, children }) => {
       <div className="signWrapper_background">
         <div className="signWrapper_logo_container">
             <h1>Welcome to</h1>
-            <Link to="/" >
               <div className="signWrapper_logo">
-                <ImageLogo />
-                <div className="md_device_login mx-auto ">
-                  <Logosm />
+                <Link to="/" >
+                <div className="signWrapper_logo_text text-center text-white">
+                  <h1>GO<span>2</span>COURSE</h1>
                 </div>
+                </Link>
               </div>
-            </Link>
         </div>
       </div>
       <div>
