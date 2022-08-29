@@ -1,3 +1,4 @@
+import {useState} from "react"
 import { useNavigate } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
@@ -48,6 +49,7 @@ import SwiperCore, {
 
   import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
   import { authentication, provider, facebookProvider } from "../../firebase-config.js"
+import LoginOptions from "./LoginOptions";
 
 const NewLanding = ()=>{
     return (
@@ -73,18 +75,33 @@ export default NewLanding
 
 
 function Hero(){
-    const {  generalState: { navHeight }, } = useAuth();
-  
+    const {  generalState: { navHeight }, studentFunctions: { googleSignup } } = useAuth();
+    const [overlay, setOverlay] = useState(false)
+    const [logtype, setLogType] = useState(null)
      
-    async function signInWithGoogle(){
-      signInWithPopup(authentication, provider).then(res=>console.log(res)).catch(err=>console.error(err))
+     function signInWithGoogle(e){
+      e.preventDefault()
+      setLogType("google")
+      setOverlay(true)
+
+      // signInWithPopup(authentication, provider).then(res=>
+        
+      //     console.log(res)
+
+      //   ).catch(err=>
+      //     console.error(err)
+      //     )
     }
-    async function signInWithFacebook(){
-      signInWithPopup(authentication, facebookProvider).then(res=>console.log(res)).catch(err=>console.error(err))
+     function signInWithFacebook(){
+      setLogType("facebook")
+      setOverlay(true)
+
+      // signInWithPopup(authentication, facebookProvider).then(res=>console.log(res)).catch(err=>console.error(err))
     }
     return(
-        <section className="newHero d-flex position-relative"style={{marginTop: navHeight}}>
+        <section className="newHero d-flex position-relative"style={{marginTop: navHeight}} >
             <div className="container">
+              {overlay && <LoginOptions closeOverlay={setOverlay} type={logtype} />}
             <div className="newHero_right">
                 <img className="newHero_right-image" src={HeroImg} alt="collage of laptops" />
             </div>
@@ -301,7 +318,6 @@ function Learn (){
             <div className="newLearning_right d-flex justify-content-end">
                 <Image width="552px" height="452px"  image={Learning} alt="Group of people in an online meeting room" className="background" effect="blur" />
             </div>
-         
         </div>
       </div>
     </section>

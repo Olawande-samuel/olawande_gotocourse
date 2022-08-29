@@ -31,7 +31,9 @@ const SignInWrapper = ({ image, children }) => {
         <div style={{display:"grid", placeItems:"center", width:"min(100% - .5rem, 600px)",  height:"100%", margin:"auto"}}>
           <header className="signWrapper_header">
             <Link to="/" >
-            <img src={Logo} alt="" />
+            <div className="signWrapper_logo_text text-center text-white">
+                  <h1>GO<span>2</span>COURSE</h1>
+                </div>   
             </Link>
           </header>
           <main className="mt-4">{children}</main>

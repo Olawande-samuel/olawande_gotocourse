@@ -13,33 +13,45 @@ const Verification = () => {
         console.log("Registration page showing...");
         return () => console.log("Registration page is removing...")
     }, [])
-    const code1Ref = useRef();
+   
+
+   
+
+    return (
+        <AuthLayout>
+            <Form />
+        </AuthLayout>
+    )
+}
+
+export function Form({type}){
+
+    const code1Ref = useRef([]);
     const [formstate, setFormstate] = useState({
         code1: "",
         code2: "",
         code3: "",
         code4: ""
     })
-
     const formSettings = [
         {
-            type: "number",
+            type: "text",
             name: "code1",
             ref: code1Ref,
             value: formstate.code1,
         },
         {
-            type: "number",
+            type: "text",
             name: "code2",
             value: formstate.code2,
         },
         {
-            type: "number",
+            type: "text",
             name: "code3",
             value: formstate.code3,
         },
         {
-            type: "number",
+            type: "text",
             name: "code4",
             value: formstate.code4,
         },
@@ -51,18 +63,15 @@ const Verification = () => {
         console.log(formstate);
     }
 
-    function changeHandler(e){
+    function changeHandler(e, index){
         const {name, value} = e.target;
-        switch(name) {
-            case "code1":
-
-        }
         setFormstate(old => {
             return {
                 ...old,
                 [name]: value
             }
         })
+        code1Ref.current[index + 1].focus()
     }
 
 
@@ -74,9 +83,7 @@ const Verification = () => {
         e.target.style.borderBottom = "2px solid #0C2191"
     }
 
-
     return (
-        <AuthLayout>
             <form onSubmit={submitHandler} className={clsx.form}>
                 <h3>Email Verification</h3>
                 <p>Please enter the verification code we sent to your email address</p>
@@ -85,7 +92,7 @@ const Verification = () => {
                             <div className={clsx.code}>
                                 {
                                     formSettings.map(({type, name, value, ref}, i) => (
-                                        <input ref={ref} onBlur={blurHandler} onFocus={focusHandler} type={type} name={name} value={value} key={i} onChange={changeHandler} />
+                                        <input ref={(ref)=>code1Ref.current.push(ref)} onBlur={blurHandler} onFocus={focusHandler} type={type} name={name} value={value} key={i} onChange={(e)=>changeHandler(e, i)} maxLength={1}/>
                                     ))
                                 }
                             </div>
@@ -100,10 +107,10 @@ const Verification = () => {
                         <span>Didn't get code?</span> <NavLink to={"/affiliates/login"}>Resend</NavLink>
                     </div>
             </form>
-        </AuthLayout>
+
     )
 }
 
 
 
-export default Verification;
+export default Verification; 

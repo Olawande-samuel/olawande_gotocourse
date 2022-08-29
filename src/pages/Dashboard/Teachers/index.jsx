@@ -7,7 +7,7 @@ import { AiOutlineMenu } from "react-icons/ai";
 import {Product, Stu1,Stu2, Stu3} from "../../../images/components/svgs"
 import {useQuery} from "@tanstack/react-query"
 import Loader from "../../../components/Loader";
-import { Sidebar, Searchbar } from "../components";
+import { Sidebar, Searchbar, Navbar } from "../components";
 import clsx from "./styles.module.css";
 import { colors } from "../../../constants";
 import { useAuth } from "../../../contexts/Auth";
@@ -24,6 +24,7 @@ import ChatComponent from "./chat";
 import { DashboardTop, Community } from "../Students";
 import LogoutButton from "../../../components/LogoutButton";
 import { GotoDashboard } from "../Students";
+import { FaChalkboardTeacher } from "react-icons/fa";
 
 
 const KEY = "gotocourse-userdata";
@@ -138,7 +139,7 @@ export function CourseInfo() {
 
  
   return (
-    <Teachers>
+    <Teachers header="Course Details">
       <div className={clsx.teachers_profile}>
         <div className={clsx.edit__profile}>
           <h2>Course Information</h2>
@@ -489,7 +490,7 @@ export function Edit() {
   }
 
   return (
-    <Teachers>
+    <Teachers header="Edit Profile">
       <div className={clsx.teachers_profile}>
         <div className={clsx.edit__profile}>
           <h2>Update Profile</h2>
@@ -630,7 +631,7 @@ export function Chat() {
   }, [])
 
   return (
- <Teachers userdata={userdata}>
+ <Teachers userdata={userdata} header="Chat">
       {loader && <Loader />}
         <ChatComponent />
       </Teachers>
@@ -722,7 +723,7 @@ export const Dashboard = ()=>{
     topContent[1].value = data.data.length
   }
   return (
-    <Teachers isMobile={isMobile} userdata={userdata}>
+    <Teachers isMobile={isMobile} userdata={userdata} header="Dashboard">
     <div className={clsx.teachers_profile}>
     <DashboardTop content={topContent} />
       <div className={clsx.teachers_profile_dashboard}>
@@ -774,7 +775,7 @@ export const Dashboard = ()=>{
 }
 
 
-export const Teachers = ({ children, isMobile, userdata, notification }) => {
+export const Teachers = ({ children, isMobile, userdata, notification, header }) => {
   const {
     generalState: { showSidebar, loading, pledre },
     generalState,
@@ -844,6 +845,10 @@ export const Teachers = ({ children, isMobile, userdata, notification }) => {
   };
   const [loader, setLoading] = useState(false)
 
+  const teacher = {
+    title: "TEACHER",
+    logo: <FaChalkboardTeacher size="2.5rem" color="#0C2191" />
+}
   return (
     <GuardedRoute>
       <div className={clsx.teachers}>
@@ -860,27 +865,7 @@ export const Teachers = ({ children, isMobile, userdata, notification }) => {
         />
         <Sidebar isMobile={isMobile} />
         <div className={clsx.teachers_main}>
-          <div className={`align-items-center ${clsx.teachers_topbar}`}>
-            <div className="d-md-none">
-              <i>
-                <AiOutlineMenu
-                  style={{ fontSize: "24px", color: "#0C2191" }}
-                  onClick={toggleSidebar}
-                />
-              </i> 
-            </div>
-            <h1 className={clsx.teachers__header}>
-              {userdata?.firstName} {userdata?.lastName}
-            </h1>
-            <Searchbar showIcon={true} placeholder="Search Keyword" />
-            <div className="button_wrapper d-flex align-items-center text-center d-flex ms-3">
-                        {/* move loading state to this component */}
-                            <GotoDashboard loader={loader} setLoading={setLoading} />
-                        <LogoutButton />
-
-                    </div>
-          </div>
-
+          <Navbar content={teacher}  toggleSidebar={toggleSidebar} header={header} />
           {children}
         </div>
         {loading && <Loader />}

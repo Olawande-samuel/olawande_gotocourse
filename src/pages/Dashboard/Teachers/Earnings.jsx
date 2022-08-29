@@ -26,7 +26,7 @@ export default function Earnings() {
       generalState: { isMobile },
     } = useAuth();
     return (
-      <Teachers isMobile={isMobile} userdata={userdata} style={{overflowY: "scroll"}}>
+      <Teachers isMobile={isMobile} userdata={userdata} style={{overflowY: "scroll"}} header="Earnings">
         <div className={clsx.teachers_profile}>
           <AllEarnings />
           <Requests />

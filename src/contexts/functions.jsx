@@ -55,7 +55,49 @@ export const authFunctions = {
                 statusCode: err.statusCode
             }
         }
+    },
+
+    googleSignUp: async function(_data, type){
+        try{
+            const res = await axios.post(`${baseURL}/user/google/signup`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    googleSignIn: async function(_data){
+        const res = await axios.post(`${baseURL}/user/google/signin`,
+        JSON.stringify(_data),
+        {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res
     }
+    
         
 }
 

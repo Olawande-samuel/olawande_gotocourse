@@ -76,7 +76,40 @@
   font-size: 1.1rem;
 }
 
+/* NAVBAR */
+.dashboard_topbar{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
 
+
+.dashboard_topbar .title__header {
+  display: none;
+}
+.dashboard_topbar .title__info {
+  margin-bottom: 0;
+  display: flex;
+  align-items:center;
+  color: var(--theme-blue);
+}
+
+@media (min-width:512px){
+  .dashboard_topbar .title__header {
+      display: block;
+      font-size: clamp(0.875rem, 0.5536rem + 1.6071vw, 1.2rem);
+      margin-bottom: 0;
+
+  } 
+}
+
+@media (min-width:992px){
+  .dashboard_topbar > div:last-child svg:first-child {
+    width: 100%;
+  }
+}
 
 /* SEARCHBAR */
 .searchbar {

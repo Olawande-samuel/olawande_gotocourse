@@ -19,6 +19,10 @@
     color: #fff;
     padding: 0 10px;
 }
+.social_signIn_wrapper .or span {
+    color: var(--theme-blue);
+    background: #fff;
+}
  .newHero_left header {
     color: #ffffff;
     width: 100%;
@@ -69,7 +73,7 @@
     width: 100%;
     height: 350px;
 }
-.newHero button {
+.newHero .newHero_left-userSignin button, .social_signIn_wrapper button {
     font-size: 14px;
     font-weight: 700;
     border: 0.5px solid var(--theme-blue);
@@ -78,11 +82,14 @@
     line-height:28.24px;
     outline: none;
     color: black ;
-    width: 100%;
     background: #ffffff;
     width: 75%;
     margin-left:auto;
     margin-right:auto;
+}
+.social_signIn_wrapper button {
+    width: 100%;
+
 }
 .newHero small, .newHero a {
     width: 60%;
@@ -92,6 +99,7 @@
 .newHero_left small, .newHero_left p:last-child{
     text-align: center;
 }
+
 
 @media (min-width: 700px){
     .newHero {
@@ -120,13 +128,13 @@
         width: 100%;
         height: 100%;
     }
-    .newHero button {
+    .newHero .newHero_left-userSignin button {
         width: 90%;
     }
 }
 
 @media (min-width:1024px){
-    .newHero button {
+    .newHero .newHero_left-userSignin button{
         width: 85%;
     }
     .newHero_left header{
@@ -142,7 +150,7 @@
 
 }
 @media (min-width:1197px){
-    .newHero button{
+    .newHero .newHero_left-userSignin button{
         width: 60%;
     }
 }
@@ -155,11 +163,18 @@
     .newHero_left-userSignin{
         width: 100%;
     }
-    .newHero button {  
+    .newHero .newHero_left-userSignin button, .social_signIn_wrapper button {  
         width: 100%;
         padding: 12px 18px;
     }
      
+}
+
+@media (min-width:591px) and (max-width: 870px){
+    .social_signIn_wrapper button{
+        width: 100%;
+        padding: 8px;
+    }
 }
 @media screen and (min-width: 1440px){
     .newHero {
