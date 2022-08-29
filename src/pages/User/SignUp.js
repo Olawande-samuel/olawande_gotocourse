@@ -88,7 +88,8 @@ const SignUp = () => {
             notification: message,
           };
         });
-        navigate("/student");
+        // navigate("/student");
+        navigate("/user-authentication");
       }
     } catch (err) {
       console.error(err)

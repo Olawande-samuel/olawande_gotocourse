@@ -4,13 +4,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import {motion} from "framer-motion"
 import {AiOutlineMenu} from "react-icons/ai"
+import {FaGraduationCap} from "react-icons/fa"
+import {BsQuestionCircle, BsDownload} from "react-icons/bs"
 import {Rating} from 'react-simple-star-rating'
 import {useMutation, useQuery} from "@tanstack/react-query"
 
 import trello from "../../../images/trello.png"
 import {Product, Stu1,Stu2, Stu3} from "../../../images/components/svgs"
 import Loader from "../../../components/Loader"
-import { Sidebar, Searchbar } from "../components";
+import { Sidebar, Searchbar, Navbar } from "../components";
 import clsx from "./styles.module.css";
 import { colors, getDate } from "../../../constants";
 import avatar from "../../../images/teacher.png"
@@ -89,7 +91,7 @@ export function Profile(){
         navigate("/student/profile/edit");
     }
     return (  
-        <Students isMobile={isMobile} userdata={userdata} notification={notification}>            
+        <Students isMobile={isMobile} userdata={userdata} notification={notification} header="Profile">            
             <div className={clsx.students_profile}>
                 <div className={clsx.students_profile_top} style={{background:"unset"}}>
                     <div className={clsx.students_profile_top_img}>
@@ -254,7 +256,7 @@ export function Edit(){
 
 
     return (
-        <Students>  
+        <Students header="Edit Profile">  
           <div className={clsx.students_profile}>
             <div className={clsx.edit__profile}>
                 <h2>Update Profile</h2>
@@ -493,7 +495,7 @@ export function Classes(){
         },
     ]
     return ( 
-        <Students isMobile={isMobile} userdata={userdata}>               
+        <Students isMobile={isMobile} userdata={userdata} header="Classes">               
             <div className={clsx.students_profile}>
                 <div className={clsx.classes}>
                     {
@@ -570,7 +572,7 @@ export function Wishlist(){
         flag.current = true;
     },[])
     return ( 
-        <Students isMobile={isMobile} userdata={userdata}>               
+        <Students isMobile={isMobile} userdata={userdata} header="Wishlist">               
             <div className={clsx.students_profile}>
                 <header className="mb-4">
                     <h3>My wishlist</h3>
@@ -754,7 +756,7 @@ export function Courses(){
 
  
     return ( 
-        <Students isMobile={isMobile} userdata={userdata}>               
+        <Students isMobile={isMobile} userdata={userdata} header="Courses">               
             <div className={clsx.students_profile}>
                 <CourseTable courses={courses}  />
             </div>
@@ -863,7 +865,7 @@ export function History(){
     const tableHeaders = ["No", "Courses", "Status", "Date", "Course Price","Amount Paid"]
     const tableContents = courses.length > 0 ? courses : []
     return ( 
-        <Students isMobile={isMobile} userdata={userdata}>               
+        <Students isMobile={isMobile} userdata={userdata} header="History">               
             <div className={clsx.students_profile}>
                 
                 {/* {courses.length === 0 ? 
@@ -947,7 +949,7 @@ export function Fees(){
     const tableHeaders = ["No", "Type", "Date Initialted", "Due Date", "Status"]
     const tableContents = fees.length > 0 ? fees : []
     return ( 
-        <Students isMobile={isMobile} userdata={userdata}>               
+        <Students isMobile={isMobile} userdata={userdata} header="Fees">               
             <div className={clsx.students_profile}>
                 
                 {/* {courses.length === 0 ? 
@@ -1023,7 +1025,7 @@ export function Chat() {
     }, [])
   
     return (
-        <Students  userdata={userdata}>
+        <Students  userdata={userdata} header="Chat">
         {loader && <Loader />}
           <ChatComponent />
         </Students>
@@ -1084,42 +1086,27 @@ export const Dashboard = () => {
 
    
     return (
-        <Students isMobile={isMobile} userdata={userdata} >            
+        <Students isMobile={isMobile} userdata={userdata} header={"Dashboard"} >            
         <div className={clsx.students_profile}>
             <DashboardTop content={topContent} />
 
             <div className={clsx.students_profile_main}>
-              <div className={`d-flex flex-wrap ${clsx.dashboard_courses}`}>
-                <div className={clsx["dashboard_courses--left"]}>
-                    <h6 style={{marginBottom:".5rem"}}>Available Courses</h6>
-                    <small className="mb-4 d-block">Select and enroll to a course to get started</small>
-                    <ul>
-                        {
-                            allCourses?.data?.length === 0 ?  
-                              <p className="text-muted">No course available</p>
-                            :
-                            <select name="course" id="course"  onChange={handleCoursSelect} className="form-select">
-                                <option value="">Select a course</option>
-                            {allCourses?.data?.map((item, i)=>(
-                                <option key={i} value={JSON.stringify(item)}>{item.name}</option>
-                            ))}
-                            </select>
-                        }
-                    </ul>
-                </div>
-                <div className={clsx["dashboard_courses--right"]}>
-                    <h6>Courses on wishlist</h6>
-                    <ul>
-                        {
-                             wishlistData?.data?.length === 0 ?  
-                             <p className="text-muted">No item in wishlist</p>
-                             :
-                            wishlistData?.data?.map((item, i)=>(
-                                <li key={i}>{item.name}</li>
-                            ))
-                        }
-                        
-                    </ul>
+                <AvailableCourses />
+                <div className={`d-flex flex-wrap ${clsx.dashboard_courses}`}>
+                    <div className={clsx["dashboard_courses--right"]}>
+                        <h6>Courses on wishlist</h6>
+                        <ul>
+                            {
+                                wishlistData?.data?.length === 0 ?  
+                                <p className="text-muted">No item in wishlist</p>
+                                :
+                                wishlistData?.data?.map((item, i)=>(
+                                    <li key={i}>{item.name}</li>
+                                ))
+                            }
+                            
+                        </ul>
+                    </div>
                 </div>
               </div>
               <div className={`${clsx.dashboard_course_details}`}>
@@ -1162,13 +1149,72 @@ export const Dashboard = () => {
               </div>
 
               <Community />
-            </div>
         </div>
     </Students>
     )
    
 }
 
+function AvailableCourses({}){
+    const tableHeader = ["Courses", "Start Date", "Program Fee", ""]
+    const tableData = [
+        {
+            id: 1,
+            courseName:"Data science",
+            startDate:"Aug 30",
+            fee:"20"
+        }
+    ]
+    return (
+        <div className={` ${clsx.dashboard_courses}`}>
+            <div className={clsx["dashboard_courses--left"]}>
+                <h6 style={{marginBottom:".5rem"}}>Available Classes</h6>
+                <small className="mb-4 d-block">Select and enroll to a course to get started</small>
+                
+                <div className="table-responsive">
+                    <table className="table table-bordered">
+                        <thead>
+                            <tr>
+                                {
+                                    tableHeader.map(title=>(
+                                        <th>{title}</th>
+                                    ))
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                tableData.map((item, i)=>(
+                                    <tr key={i}>
+                                        <td>
+                                            <span>{item.courseName}</span>
+                                        </td>
+                                        <td><span>{item.startDate}</span></td>
+                                        <td>
+                                            <span>$ {item.fee}</span>
+                                        </td>
+                                        <td>
+                                            <div className={clsx.classes_button}>
+                                                <button className="d-flex"> 
+                                                    <i><BsQuestionCircle /></i>
+                                                    <span>Learn more</span>
+                                                </button>
+                                                <button className="d-flex">
+                                                    <i><BsDownload /></i>
+                                                    <span>Enroll</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    )
+}
 
 
 export function Community(){
@@ -1218,7 +1264,7 @@ export function DashboardTop({content}){
     </div>
     )
 }
-const Students = ({children, isMobile, notification, userdata}) => {
+const Students = ({children, isMobile, notification, userdata, header}) => {
     const location = useLocation();
     const [pledredata, setPledreData]= useState({})
     const {generalState: {showSidebar, loading, pledre}, generalState, setGeneralState, otherFunctions:{fetchCourses}} = useAuth();
@@ -1251,7 +1297,6 @@ const Students = ({children, isMobile, notification, userdata}) => {
     useEffect(()=>{
         let isActive = true
         if(!pledredata?.email && pledre.getStudentDetails){
-
             (async()=>{
                 const user = getItem("gotocourse-userdata")
                 try{
@@ -1287,29 +1332,19 @@ const Students = ({children, isMobile, notification, userdata}) => {
     },[pledre.baseUrl])
 
 
-
+const student = {
+    title: "STUDENT",
+    logo: <FaGraduationCap size="2.5rem" color="#0C2191" />
+}
     
     return (
         <GuardedRoute>
+
             <div className={clsx.students}>
             <ToastContainer />  
             <Sidebar isMobile={isMobile} />
             <div className={clsx.students_main}>
-                <div className={`align-items-center ${clsx.students_topbar}`}>
-                    <div className="hamburger">
-                        <i>
-                            <AiOutlineMenu style={{fontSize:"24px", color:"#0C2191"}} onClick={toggleSidebar} />
-                        </i>
-                    </div>
-                    <h4 className={clsx.students__header}>{userdata?.firstName} {userdata?.lastName}</h4>
-                    <Searchbar showIcon={true} placeholder="Search Keyword" />
-                    <div className="button_wrapper d-flex align-items-center text-center d-flex ms-3">
-                        {/* move loading state to this component */}
-                            <GotoDashboard loader={loader} setLoading={setLoading} />
-                        <LogoutButton />
-
-                    </div>
-                </div>
+               <Navbar toggleSidebar={toggleSidebar} header={header} content={student}  />
 
                 {children}
 
@@ -1372,27 +1407,32 @@ export function GotoDashboard({loader, setLoading}){
         // }
     }  
     return(
-        <motion.button
-            whileHover={{
-                // boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-                textShadow: "0px 0px 8px rgb(255, 255, 255)"
-            }}
-            className="dashboard_access_button d-flex justify-content-center align-items-center mb-0 text-white " 
-            style={{ padding:"10px 20px", borderRadius:"10px", background:"var(--secondary)", border:"1px solid var(--secondary)", fontSize:"14px", width:"100%"}}
-            onClick={gotodashboard}
-            disable={true}
-        >
-            {loader ? <span className="spinner-border text-light">
-                <span className="visually-hidden">loading</span>
-                </span>
-                :
-                <>
-                <i className="d-md-none">
-                    <SiGoogleclassroom size="1.5rem" />
-                </i>
-                <span className="d-none d-md-block">Go to Class</span>
-                </>
-            }
-        </motion.button>
+        <>
+         <i className="d-lg-none">
+                        <SiGoogleclassroom size="1.5rem"  color="#0C2191" />
+                    </i>
+            <motion.button
+                whileHover={{
+                    // boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                    textShadow: "0px 0px 8px rgb(255, 255, 255)"
+                }}
+                className="dashboard_access_button d-flex justify-content-center align-items-center mb-0 text-white d-none d-lg-flex" 
+                style={{ padding:"10px 20px", borderRadius:"10px", background:"var(--secondary)", border:"1px solid var(--secondary)", fontSize:"14px", minWidth:"150px", }}
+                onClick={gotodashboard}
+                disable={true}
+            >
+                {loader ? <span className="spinner-border text-light">
+                    <span className="visually-hidden">loading</span>
+                    </span>
+                    :
+                    <>
+                    <i className="me-1">
+                        <SiGoogleclassroom size="1.5rem" />
+                    </i>
+                    <span className="d-none d-md-block">Go to Class</span>
+                    </>
+                }
+            </motion.button>
+        </>
     )
 }

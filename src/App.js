@@ -42,6 +42,7 @@ import Career from "./pages/Career";
 import Settings from "./pages/Dashboard/Admin/Settings";
 
 import {Students} from "./pages/Students"
+import Verification from "./pages/User/Verification";
 
 function App() {
   return (
@@ -68,8 +69,8 @@ function App() {
             <Route path="payment/success" element={<PaymentStatus success={true} />} />
             <Route path="payment/error" element={<PaymentStatus />} />
             <Route path="career" element={<Career />} />
-
             <Route path="students" element={<Students  />} />
+            <Route path="user-authentication" element={<Verification  />} />
             
             <Route path="student" element={<Out />}>
               <Route path="" element={<StudentDashboard  />} />
@@ -82,6 +83,8 @@ function App() {
               <Route path="history" element={<StudentHistory />} />
               <Route path="payment" element={<StudentFees />} />
               <Route path="chat" element={<StudentChat />} />
+              <Route path="notifications" element={<StudentDashboard />} />
+
             </Route>
 
             <Route path="mentors" element={<Out/>}>
@@ -113,6 +116,8 @@ function App() {
               <Route path="courses/create" element={<CreateCourse />} />
               <Route path="courses/details/:id" element={<TeacherCourseInfo />} />
               <Route path="chat" element={<TeacherChat />} />
+              <Route path="notifications" element={<TeacherDashboard />} />
+
             </Route>
             <Route path="affiliates" element={<AffiliateLanding />} />
             <Route path="affiliates/register" element={<AffiliateRegister />} />

@@ -115,7 +115,7 @@ export default function Classes() {
           ];
   
     return (
-      <Teachers isMobile={isMobile} userdata={userdata}>
+      <Teachers isMobile={isMobile} userdata={userdata} header="Classes">
         <div className={clsx.teachers_profile}>
           {applications.length > 0 ? (
             <table className={clsx.teachers_table}>

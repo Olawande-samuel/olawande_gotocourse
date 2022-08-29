@@ -98,7 +98,7 @@ export default function Bootcamps() {
       navigate("details/"+_id);
     }
     return (
-      <Teachers header={"Bootcamps"}>
+      <Teachers header={"Bootcamps"} >
         {loading && <Loader />}
         <div className={clsx["teachers_profile"]}>
             <div className="d-flex justify-content-between align-items-center mb-3">
