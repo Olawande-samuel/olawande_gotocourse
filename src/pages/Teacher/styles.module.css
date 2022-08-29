@@ -22,8 +22,8 @@
 
 
 .jumbotron {
-    background: url("../../images/become_teacher.png"), rgba(0, 0, 0, 0.3);
-    height: min(100vh, 650px);
+    background: url("../../images/become_teacher.png"), linear-gradient(89.75deg, rgba(0, 15, 98, 0.6) -1.87%, rgba(12, 33, 145, 0.6) 116.06%);
+    height: min(100vh, 750px);
     width: 100%;
     background-size: cover;
     background-repeat: no-repeat;
@@ -34,7 +34,7 @@
 .jumbotron__cover {
     position: relative;
     height: 100%;
-
+    width: 100%;
 }
 .jumbotron__absolute {
     position: absolute;
@@ -44,25 +44,24 @@
     top: 50%;
     transform: translateY(-50%);
     flex-direction: column;
-    /* justify-content: flex-end; */
-    /* padding-bottom: 300px; */
     align-items: flex-start;
+    padding: 20px;
 }
 
 .jumbotron__absolute h1 {
-    width: 60%;
-    text-align: left;
+    width: 80%;
     line-height: 1.5;
     font-weight: 600;
-    color: var(--textBlue);
+    color: var(--white);
     margin-bottom: 30px;
 }
 
 .jumbotron__absolute p {
     line-height: 2;
     letter-spacing: 0.4px;
-    width: 60%;
+    width: 80%;
     margin-bottom: 40px;
+    color: var(--white);
 }
 .jumbotron__absolute > div {
     text-align: start;
@@ -72,51 +71,51 @@
     border-radius: 5px;
     padding: 20px 40px;
     color: var(--white);
-    background-color: var(--textBlue);
+    background-color: #F75C4E;
 }
 
-@media (max-width: 770px){
-    .jumbotron {
-        background: url("../../images/become_teacher.png"), rgba(0, 0, 0, 0.6);
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: right;
-        background-blend-mode: multiply;
-    }
-    .jumbotron__absolute p, .jumbotron__absolute h1 {
-    
-        color: #ffffff;
-    }
-} 
-
-.frequently_asked_questions {
-    background-color: #F1F8FF;
-}
 
 .how_it_works, .best_features, .frequently_asked_questions, .reviews {
     padding: 50px;
     margin-bottom: 30px;
 }
 
+.best_features {
+    background-color: #EFF2FF;
+    margin-bottom: 0px;
+}
+
 .how_it_works h1, .best_features h1, .frequently_asked_questions h1, .reviews h1{
     color: var(--textBlue);
     font-weight: 600;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .how_it_works > p, .best_features > p, .frequently_asked_questions > p, .reviews > p {
     text-align: center;
     color: var(--textColorLighter);
-    margin: 30px auto;
-    /* line */
+    margin: 0px auto;
     margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 20px;
     width: 60%;
 }
+
+.how_it_works > p:before, .best_features > p:before, .frequently_asked_questions > p:before, .reviews > p:before {
+    content : "";
+    position: absolute;
+    left    : 40%;
+    right: 40%;
+    bottom  : 0;
+    /* width   : 40%;  or 100px */
+    border-bottom: 4px solid #F75C4E;
+  }
 
 
 .how_it_works_container {
     padding: 30px;
+    margin-top: 20px;
 }
 
 .paper, .best__features_card {
@@ -126,6 +125,7 @@
 
 .paper {
     height: 250px;
+    box-shadow: 0px 10px 10px 0px rgba(0,0,0,.2) !important;
 }
 
 .paper span {
@@ -155,80 +155,27 @@
 
 .paper h4{
     font-size: 1.3rem;
+    font-weight: 100;
+    font-size: #070F18;
+    margin-bottom: 15px;
 }
 
 .best__features_card h4 {
     font-size: 1.5rem;
-    margin-bottom: 20px
+    margin-bottom: 20px;
+    color: #023047;
 }
 
 .best__features_card p {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     line-height: 2;
-    color: var(--textColorLight)
+    color: #1F485E;
 }
 
 .paper p{
     font-size: 0.9rem;
-    color: var(--textColorLight)
-}
-
-.rectangle {
-    height: 120px;
-    width: 200px;
-    background-color: var(--textBlue);
-    position: absolute;
-    left: -50px;
-    z-index: -10;
-    top: calc((100% - 60%) - 120px);
-}
-
-.rectangle_2 {
-    height: 120px;
-    width: 200px;
-    background-color: var(--textBlue);
-    position: absolute;
-    right: -10px;
-    z-index: -10;
-    top: calc((100% - 60%) - 120px);
-}
-
-.best__features_img {
-    background-image: url("../../images/classroom_management.png");
-    width: 100%;
-    height: 400px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    object-fit: contain;
-}
-
-
-.best__features_img_live {
-    background-image: url("../../images/live_class.png");
-    width: 85%;
-    height: 400px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    object-fit: contain;
-}
-.best__features_creator {
-    background-image: url("../../images/creator_suite.png");
-    width: 100%;
-    height: 400px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    object-fit: contain;
-}
-
-
-
-.best__features_img_custom {
-    background-image: url("../../images/customization.png");
-    width: 85%;
-    height: 400px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    object-fit: contain;
+    color: #070F18;
+    line-height: 1.5;
 }
 
 
@@ -237,48 +184,12 @@
 }
 
 
-.frequently_asked_questions_paper {
-    padding: 10px 20px;
-    border-radius: 5px;
+.image {
+    box-shadow: 0px 10px 10px 0px rgba(12, 33, 145, .2);
+    object-fit: contain;
+    min-width: 300px;
+    max-width: 500px;
 }
-
-.question {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.question > p{
-    margin: 0px;
-    font-weight: 500;
-}
-
-.question > span {
-    cursor: pointer;
-}
-
-.question > span svg {
-    font-size: 1.5rem;
-}
-
-
-.answer {
-    color: var(--textColorLight);
-    padding: 20px 0px;
-    padding-left: 20px;
-    font-size: 0.9rem;
-    letter-spacing: 0.4px;
-    line-height: 2;
-}
-
-
-/* .reviews {
-    overflow: hidden;
-    width: 100%;
-} */
-
-
 
 
 .reviews_paper {
@@ -366,6 +277,53 @@
 }
 
 
+.become_a_teacher {
+    padding: 10px 20px;
+    background-color: #0C2191;
+    display: flex;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.become_a_teacher__left {
+    min-width: 300px;
+    max-width: 600px;
+    height: 500px;
+    flex: 0.5;
+}
+
+.become_a_teacher__right {
+    max-width: 600px;
+    min-width: 300px;
+    padding: 20px;
+    margin-left: 80px;
+    flex: 0.5;
+}
+
+
+.become_a_teacher__right h3 {
+    color: var(--white);
+    font-weight: 700;
+    font-size: 30px;
+    margin-bottom: 40px;
+    line-height: 1.5;
+}
+
+.become_a_teacher__right button {
+    border: none;
+    border-radius: 5px;
+    padding: 20px 40px;
+    color: var(--white);
+    background-color: #F75C4E;
+}
+
+.become_a_teacher__left img {
+    width: 100%;
+    /* object-fit: contain; */
+    height: 100%;
+}
+
+
 
 @media screen and (max-width: 590px){
     .jumbotron__absolute {
@@ -380,11 +338,49 @@
     }
     .jumbotron__absolute > div {
         text-align: center;
-    }
-    
-     
+    } 
     
 }
+
+
+@media screen and (max-width: 1115px){
+    .best__features_card {
+        width: 100%;
+    }
+
+    .become_a_teacher__left {
+        flex: 0.6;
+    }
+    
+    .become_a_teacher__right {
+        margin-left: 30px;
+        flex: 0.4;
+    }
+
+    .become_a_teacher__right h3 {
+        font-size: 25px;
+    }
+    
+}
+
+
+@media screen and (max-width: 925px){
+    .become_a_teacher{
+        flex-direction: column;
+    }
+
+    .become_a_teacher__left {
+        margin: 20px auto;
+    }
+
+    .become_a_teacher__right {
+        margin-left: 0px;
+        margin-bottom: 20px;
+    }
+    
+}
+
+
 @media screen and (max-width: 560px){
 
     .how_it_works_container, .frequently_asked_questions_container {
@@ -394,6 +390,10 @@
     .how_it_works, .frequently_asked_questions, .best_features {
         padding: 10px;
         margin: 50px auto;
+    }
+
+    .best_features {
+        margin-bottom: 0px;
     }
 
     .frequently_asked_questions {
@@ -429,3 +429,14 @@
         top: calc((100% - 60%) + 120px);
     }
 }
+
+
+@media (max-width: 770px){
+    .jumbotron {
+        background: url("../../images/become_teacher.png"), linear-gradient(89.75deg, rgba(0, 15, 98, 0.6) -1.87%, rgba(12, 33, 145, 0.6) 116.06%);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: right;
+        background-blend-mode: multiply;
+    }
+} 

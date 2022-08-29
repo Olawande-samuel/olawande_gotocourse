@@ -67,6 +67,18 @@ const faqs = [
 
 
 const Landing = () => {
+    const styles = {
+        title: {
+            color: "#0C2191",
+            fontSize: 18,
+            marginBottom: 15
+        },
+        answer: {
+            fontSize: 14,
+            fontWeight: 400,
+            letterSpacing: 0.4
+        }
+    }
     return (
         <Layout>
             <div className={clsx.affiliate}>
@@ -139,20 +151,6 @@ maximize earning.</p>
             </div>
         </Layout>
     )
-}
-
-
-const styles = {
-    title: {
-        color: "#0C2191",
-        fontSize: 18,
-        marginBottom: 15
-    },
-    answer: {
-        fontSize: 14,
-        fontWeight: 400,
-        letterSpacing: 0.4
-    }
 }
 
 
