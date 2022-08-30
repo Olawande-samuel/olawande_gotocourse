@@ -1,5 +1,4 @@
 import {useEffect} from "react";
-import { Grid } from "@mui/material";
 
 
 import clsx from "./styles.module.css";
@@ -24,7 +23,7 @@ const Career = () => {
         top:0,
         left: 0,
         width: "100%",
-        height: "min(100vh, 600px)",
+        height: "min(70vh, 600px)",
         backgroundImage: `url(${img})`,
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -70,43 +69,32 @@ const Career = () => {
                                 ))
                             }
                         </ul>
+                        <button className="mt-2 button-md button text-white">Apply now</button>
                     </div>
                     <div className={clsx.career_commitment}>
-                        <Grid container spacing={4}>
-                            <Grid item xs={12} sm={12} md={7} lg={7}>
-                                <div style={{width: "100%", height: "500px"}} className={clsx.commitment_left}>
-                                    <img src={career01} alt="Career 01" />
-                                </div>
-                            </Grid>
-                            <Grid item xs={12} sm={12} md={5} lg={5}>
-                                <div className={clsx.commitment_right}>
-                                    <h2>Our Commitment</h2>
-                                    <p>Gotocourse is committed to empowering individuals with high in-demand skills necessary for this tech-savvy Era. Our team consists of problem-solving, passionate, and tech-savvy individuals who deliver quality educational experiences for our students to move the whole organization's vision forward.
-                                    If you think you are the one we are looking for, we would love to meet you.</p>
-                                </div>
-                            </Grid>
-                        </Grid>
+                        <div className={clsx.commitment_left}>
+                            <img src={career01} alt="Career 01" />
+                        </div>
+                        <div className={clsx.commitment_right}>
+                            <h2>Our Commitment</h2>
+                            <p>Gotocourse is committed to empowering individuals with high in-demand skills necessary for this tech-savvy Era. Our team consists of problem-solving, passionate, and tech-savvy individuals who deliver quality educational experiences for our students to move the whole organization's vision forward.
+                            If you think you are the one we are looking for, we would love to meet you.</p>
+                        </div>
                     </div>
                     <div className={clsx.career_culture}>
-                        <Grid container spacing={4}>
-                            <Grid sx={{padding: 20, width: "100%", height: "100%"}} item xs={12} sm={12} md={7} lg={7}>
-                                <div className={clsx.culture_left}>
-                                    <h2>Our Culture and Benefit</h2>
-                                    <ul>
-                                        {
-                                            cultures.map((c, i) => (
-                                                <li key={i}><div style={dot}></div> {c}</li>
-                                            ))
-                                        }
-                                    </ul>
-                                </div>
-                            </Grid>
-                            <Grid sx={{padding: 20, width: "100%", height: "500px"}} item xs={12} sm={12} md={5} lg={5}>
-                                <div className={clsx.culture_right}>
-                                    <img src={career02} alt="Career 02" />
-                                </div>
-                            </Grid>
-                        </Grid>
+                        <div className={clsx.culture_left}>
+                            <h2>Our Culture and Benefit</h2>
+                            <ul>
+                                {
+                                    cultures.map((c, i) => (
+                                        <li key={i}><div style={dot}></div> {c}</li>
+                                    ))
+                                }
+                            </ul>
+                        </div>
+                        <div className={clsx.culture_right}>
+                            <img src={career02} alt="Career 02" />
+                        </div>
                     </div>
                     <div className={clsx.career_teaching}>
                         <h2>Become a Teacher</h2>
@@ -119,7 +107,7 @@ const Career = () => {
                             You can choose to teach with us, either Part-time of Full-time.
                         </p>
 
-                        <button className="mt-2 button-md button text-white">
+                            <button className="mt-2 button-md button text-white">
                             <Link to="/become-a-teacher" className="text-white">
                                 Apply Now
                             </Link>

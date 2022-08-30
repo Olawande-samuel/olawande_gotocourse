@@ -3,7 +3,8 @@ import {Badge} from "@mui/material"
 import { MdHistory} from "react-icons/md";
 import {AiOutlineClose, AiOutlineSetting, AiOutlineDashboard} from "react-icons/ai";
 import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash, IoIosHelpBuoy} from "react-icons/io";
-import {BiCategory, BiBell, BiBarChartSquare} from "react-icons/bi";
+import {BiCategory, BiBell, BiBarChartSquare, BiHelpCircle} from "react-icons/bi";
+import {MdOutlineAddReaction} from "react-icons/md";
 import {FaTwitch} from "react-icons/fa";
 import { useLocation, Link, NavLink} from "react-router-dom";
 import {FiGift, FiSend, FiBookOpen} from "react-icons/fi";
@@ -142,6 +143,11 @@ const Sidebar = ({isMobile}) => {
             title: "Wishlist"
         },
         {
+            icon: MdOutlineAddReaction,
+            path: "referral",
+            title: "Referral"
+        },
+        {
             icon: MdHistory,
             path: "history",
             title: "History"
@@ -158,6 +164,11 @@ const Sidebar = ({isMobile}) => {
             showBadge:true,
 
         },
+        {
+            icon: BiHelpCircle,
+            path: "help",
+            title: "Help"            
+        }
     ] : route === "teacher" ? [
         {
             icon: AiOutlineDashboard,
@@ -191,6 +202,11 @@ const Sidebar = ({isMobile}) => {
             showBadge:true,
 
         },
+        {
+            icon: BiHelpCircle,
+            path: "help",
+            title: "Help"            
+        }
     ] : [
         
         {
