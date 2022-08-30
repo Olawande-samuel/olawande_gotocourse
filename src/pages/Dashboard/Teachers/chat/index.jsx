@@ -90,7 +90,7 @@ const ChatComponent = () => {
     },
     {
       id: 2,
-      type: "My Teachers/Mentors",
+      type: "Students",
     },
     {
       id: 3,
@@ -194,49 +194,8 @@ const Chat = ({ type, messagedata }) => {
   const userData = getItem(KEY);
   const [loader, setLoader] = useState(false);
 
+  // FETCH REQUESTS
   const myMessages = useQuery(["repoData"], () => getMessages(userData.token));
-
-  
-
-  const [dummy, setDummy] = useState([
-    {
-      _id: "62f5b1f25b279fd3170e5b5a",
-      fromUser: "629728540b5b6d30358384b7",
-      toUser: "62cfe077476937fb369c45e1",
-      body: "Hello from postman",
-      status: "unread",
-      type: "member",
-      sessionId: "",
-      createdAt: "2022-08-12T01:50:42.784Z",
-      updatedAt: "2022-08-12T01:50:42.784Z",
-      __v: 0
-    },
-    {
-      _id: "62f5b2807565f8cb0ece570d",
-      fromUser: "62cfe077476937fb369c45e1",
-      toUser: "629728540b5b6d30358384b7",
-      body: "Hello from postman",
-      status: "unread",
-      type: "member",
-      sessionId: "",
-      createdAt: "2022-08-12T01:53:04.702Z",
-      updatedAt: "2022-08-12T01:53:04.702Z",
-      __v: 0
-    },
-    {
-      _id: "62f5b2807565f8cb0ece570d",
-      fromUser: "62cfe077476937fb369c451e",
-      toUser: "629728540b5b6d30358384c7",
-      body: "Hello from postman",
-      status: "unread",
-      type: "member",
-      sessionId: "",
-      createdAt: "2022-08-12T01:53:04.702Z",
-      updatedAt: "2022-08-12T01:53:04.702Z",
-      __v: 0
-    },
-  ])
-
 
 
   useEffect(() => {
@@ -291,8 +250,8 @@ const Chat = ({ type, messagedata }) => {
         <div className={clsx.users__list}>
           {
             type !== "Admin" && (type === "New Messages" ?
-            // myMessages.data?.data?.map((message, index) => (
-              dummy.map((message, index) => (
+            myMessages.data?.data?.map((message, index) => (
+              // dummy.map((message, index) => (
               <div
                 className={clsx.user_box}
                 onClick={(e) => openMessage(e, message)}
@@ -310,7 +269,7 @@ const Chat = ({ type, messagedata }) => {
               >
                 <div className={clsx.user_image}>
                   {/* <div className={clsx.dot}></div> */}
-                  {/* <img src={messagedata.image} alt="avatar" /> */}
+                  <img src={user.profileImg && user.profileImg} alt="avatar" style={{width:"50px", height:"50px", borderRadius:"50%" }} />
                   <p className={clsx.user_name}>{`${user.firstName} ${user.lastName}`}</p>
                 </div>
                 <h5 className={clsx.user_role}>{user.userType}</h5>
@@ -372,7 +331,7 @@ const ChatBox = ({ messages, boxdata, checked, type }) => {
     }
   }, [messages]);
 
-
+console.log({messages})
   return (
     <div className={clsx.chat_box}> 
       {
@@ -384,7 +343,7 @@ const ChatBox = ({ messages, boxdata, checked, type }) => {
           {checked}
           <div className={clsx.chat_box_top}>
             <div className={clsx.chat_box_top_image}>
-              {/* <img src={boxdata.image} alt="avatar" /> */}
+              <img src={messages.profileImg && messages.profileImg} alt="avatar" style={{width:"50px", height:"50px", borderRadius:"50%" }} />
               <p>{messages?.fromUser ? messages?.fromUser : ( messages?.firstName ? `${messages?.firstName} ${messages?.lastName}` : "")}</p>
             </div>
             <div className={clsx.chat_box_top_meta}>

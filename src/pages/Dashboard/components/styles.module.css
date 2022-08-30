@@ -94,6 +94,7 @@
   display: flex;
   align-items:center;
   color: var(--theme-blue);
+  font-size: clamp(1.2rem, 0.5697rem + 3.1515vw, 1.85rem);
 }
 
 @media (min-width:512px){

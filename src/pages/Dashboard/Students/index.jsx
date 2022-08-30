@@ -1246,22 +1246,24 @@ export function Community(){
 export function DashboardTop({content}){
     return(
         <div className={clsx.students_profile_top}>
-        <div className={` ${clsx.students_overview} d-flex justify-content-around align-items-center flex-wrap flex-lg-no-wrap w-100`}>
-          { content.map(item=>(
-                <div className={`d-flex p-1 ${clsx.students_overview_container}`} key={item.id}>
-                    <div className={clsx["students_profile_top--left"]}>
-                        <i className={clsx.icon}>
-                            {item.logo}
-                        </i>
+            <div className={` ${clsx.students_overview} d-flex justify-content-around align-items-center w-100`}>
+            { 
+                content.map(item=>(
+                    <div className={`d-flex ${clsx.students_overview_container}`} key={item.id}>
+                        <div className={clsx["students_profile_top--left"]}>
+                            <i className={clsx.icon}>
+                                {item.logo}
+                            </i>
+                        </div>
+                        <div className={clsx["students_profile_top--right"]}>
+                            <h3>{item.value}</h3>
+                            <p>{item.title}</p>
+                        </div>
                     </div>
-                    <div className={clsx["students_profile_top--right"]}>
-                        <h3>{item.value}</h3>
-                        <p>{item.title}</p>
-                    </div>
-                </div>
-            ))}
+                ))
+            }
+            </div>
         </div>
-    </div>
     )
 }
 const Students = ({children, isMobile, notification, userdata, header}) => {

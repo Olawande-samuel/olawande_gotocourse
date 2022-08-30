@@ -83,7 +83,7 @@ function App() {
               <Route path="history" element={<StudentHistory />} />
               <Route path="payment" element={<StudentFees />} />
               <Route path="chat" element={<StudentChat />} />
-              <Route path="notifications" element={<StudentDashboard />} />
+              <Route path="notifications" element={<StudentDashboard />} /> 
 
             </Route>
 

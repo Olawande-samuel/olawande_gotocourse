@@ -29,13 +29,17 @@
     height: 100vh;
     flex: 1;
     background-color: var(--primary);
-    padding: 30px;
+    padding: .5rem;
     overflow-y: hidden;
     display: flex;
     flex-direction: column;
     width: 100%;
 }
-
+@media (min-width: 500px ){
+    .teachers_main {
+        padding: 30px;
+    }
+}
 .teachers_topbar {
     width: 100%;
     display: flex;
@@ -51,15 +55,17 @@
 }
 
 .dashboard_courses{
-    gap: 3rem;
+    gap: clamp(1rem, 0.7017rem + 1.4915vw, 2.1rem);
+    flex-wrap: wrap;
     margin-top: 3rem;
 }
 .dashboard_courses--left {
     flex: 2;
     background: rgba(51, 255, 47, 0.06);
-    padding: 1.5rem 3rem;
+    padding: 1.5rem  clamp(0.8rem, 0.1714rem + 3.1429vw, 3rem);
     border-radius:10px;
     min-height: 300px;
+    /* overflow: scroll; */
 }
 
 .dashboard_courses--right {
@@ -87,7 +93,17 @@
     margin-bottom: 2rem;
     font-size: 23px;
 }
-
+.dashboard_class--wrapper{
+    display: flex;
+    align-items:center;
+}
+.dashboard_class--wrapper > div{
+    flex-basis:100%;
+    /* border: 1px solid; */
+}
+/* .dashboard_class--details {
+    width:18ch ;
+} */
 .dashboard_class--details p:first-child {
     font-weight: bold;
     font-size: 17px;
@@ -96,7 +112,7 @@
     gap: 1rem;
 }
 .dashboard_class--action button {
-    padding: 4px 50px !important;
+    padding: 4px clamp(1.25rem, 0.7143rem + 2.6786vw, 3.125rem) !important;
     font-size: 14px;
 }
 .dashboard_class--action .completed {
@@ -110,7 +126,7 @@
 .teachers_profile {
     background-color:var(--white);
     height: 80vh;
-    padding: min(1rem, 40px);
+    padding: min(.5rem, 40px);
     border-radius: 10px;
     width: 100%;
     overflow-y: scroll;
@@ -425,7 +441,7 @@
 
 
 .requests form {
-    width: 80%;
+    width: min(100% - 0.5rem, 480px );
 }
 
 
@@ -446,4 +462,15 @@
     border-radius: 6px;
     color: var(--primary);
     background-color: var(--secondary);
+}
+
+/* EARNINGS */
+.earnings_card_wrapper{
+    display: flex;
+    flex-wrap:wrap;
+    gap: 1.5rem;
+
+}
+.earnings_card_wrapper > div {
+    flex: 1 1 30%;
 }

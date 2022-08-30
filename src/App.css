@@ -2237,6 +2237,9 @@ line-height: 16px;
   color: #454256;
 
 }
+.earnings_card_total {
+  font-size: clamp(1.5rem, 1.3571rem + 0.7143vw, 2rem);
+}
 .earnings_card .card-body .earnings_card_total small {
   font-size: 18px;
 }
