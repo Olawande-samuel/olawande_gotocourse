@@ -58,40 +58,6 @@ export function CourseInfo() {
 
       navigate(`/teacher/courses/create?edit=${id}`)
   }
-  async function deleteCourseInfo(e) {
-    e.preventDefault();
-    setLoading(true);
-    try {    
-      const res = await deleteCourse(userdata?.token, id);
-      const { success, message, statusCode } = res;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        navigate(-1)
-      }
-    } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } finally {
-      setLoading((_) => false);
-    }
-  }
-
   // get Course info
   useEffect(() => {
     let mounted = true;
@@ -707,7 +673,7 @@ export const Dashboard = ()=>{
       },
       {
           id:2,
-          title:"No of courses created",
+          title:"Courses created",
           logo: <Stu2 />,
           value:  0
       },
@@ -715,7 +681,7 @@ export const Dashboard = ()=>{
           id:3,
           title:"Earnings",
           logo: <Stu3 />,
-          value: "$0"
+          value: "$180000"
       }
   ]
 
@@ -738,7 +704,7 @@ export const Dashboard = ()=>{
                       //   </li> 
                       //   :
                       [1, 2, 3, 4].map((item, i)=>(
-                          <li key={i} className="d-flex justify-content-between align-items-center">
+                          <li key={i} className={` ${clsx["dashboard_class--wrapper"]}`}>
                               <div className={clsx["dashboard_class--details"]}>
                                 <p>Basics of Mobile UX</p>
                                 <p>01:00pm</p>

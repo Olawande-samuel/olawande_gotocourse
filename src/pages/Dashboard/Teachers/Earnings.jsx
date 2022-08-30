@@ -97,8 +97,7 @@ export default function Earnings() {
             ))}
           </div>
           <div
-            className="d-flex flex-wrap justify-content-center justify-content-md-start"
-            style={{ gap: "1.5rem" }}
+            className={clsx.earnings_card_wrapper}
           >{
             data.map(({title, type, value}, i) => (
               <EarningsCard title={title} type={type} value={value} key={i} />
@@ -148,11 +147,11 @@ export default function Earnings() {
               )}
             </div>
             <div className="d-flex align-items-center justify-content-around">
-              <h1 className="earnings_card_total">
+              <h2 className="earnings_card_total">
                 {" "}
                 <small>$</small>
                 {value}
-              </h1>
+              </h2>
               <i>
                 <ChartLogo />
               </i>

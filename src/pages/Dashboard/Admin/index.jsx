@@ -3867,10 +3867,40 @@ export function Chat() {
     }, 2000)
   }, [])
 
+  const [tabs, setTabs] = useState([
+    {
+      active: true,
+      name: "New Messages",
+    },
+    {
+      active: false,
+      name: "Teacher",
+    },
+    {
+      active: false,
+      name: "Community",
+    },
+  ]);
+
+  const chatType = [
+    {
+      id: 1,
+      type: "New Messages",
+    },
+    {
+      id: 2,
+      type: "Teachers/Mentors",
+    },
+    {
+      id: 4,
+      type: "Others",
+    },
+  ];
+
   return (
     <Admin header={"Chat"}>
       {loader && <Loader />}
-        <ChatComponent />
+        <ChatComponent tabs={tabs} chatType={chatType} usertype="admin" />
     </Admin>
   );
 }
