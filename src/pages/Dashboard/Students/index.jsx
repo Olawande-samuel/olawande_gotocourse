@@ -26,7 +26,9 @@ import { FaRegTrashAlt, FaUserAlt } from "react-icons/fa";
 import {SiGoogleclassroom } from "react-icons/si";
 import { IoMdChatboxes } from "react-icons/io";
 import { Box, Modal } from "@mui/material";
-import ChatComponent from "./chat";
+
+import ChatComponent from "../Admin/Chat";
+
 import LogoutButton from "../../../components/LogoutButton";
 
 
@@ -1024,10 +1026,39 @@ export function Chat() {
       }, 2000)
     }, [])
   
+    const [tabs, setTabs] = useState([
+        {
+          active: true,
+          name: "New Messages",
+        },
+        {
+          active: false,
+          name: "Admin",
+        },
+        {
+          active: false,
+          name: "Teachers",
+        },
+      ]);
+    
+      const chatType = [
+        {
+          id: 1,
+          type: "New Messages",
+        },
+        {
+          id: 2,
+          type: "Others",
+        },
+        {
+          id: 4,
+          type: "Teachers",
+        },
+      ];
     return (
         <Students  userdata={userdata} header="Chat">
         {loader && <Loader />}
-          <ChatComponent />
+        <ChatComponent tabs={tabs} chatType={chatType} usertype="student" />
         </Students>
     );
   }
@@ -1041,8 +1072,8 @@ export const Dashboard = () => {
     
     const [loader, setLoading]= useState(false)
     
-    const {  data:wishlistData, isSuccess:wishlistIsSuccess } = useQuery(["fetch wishes"], ()=>fetchWishlist(userdata.token))
-    const {  data, isSuccess } = useQuery(["fetch courses"], ()=>fetchCourses(userdata.token))
+    const {  data:wishlistData, isSuccess:wishlistIsSuccess } = useQuery(["fetch wishes"], ()=>fetchWishlist(userdata?.token))
+    const {  data, isSuccess } = useQuery(["fetch courses"], ()=>fetchCourses(userdata?.token))
     const {  data:allCourses } = useQuery(["fetch all courses"], ()=>fetchAllCourses())
 
     console.log({wishlistData})
@@ -1068,22 +1099,15 @@ export const Dashboard = () => {
             value: "$0"
         }
     ]
-    const tableHeaders = ["No", "Courses",  "Course Fee($)", "Action"]
+    const tableHeaders = ["No", "Courses",  "Course Fee($)", ""]
 
     if(wishlistIsSuccess){
-       topContent[1].value = wishlistData.data?.length
+       topContent[1].value = wishlistData?.data?.length
     }
     if(isSuccess){
-       topContent[0].value = data.data?.length
+       topContent[0].value = data?.data?.length
     }
-
-    function handleCoursSelect(e){        
-        const courseInfo = JSON.parse(e.target.value)
-        localStorage.setItem("gotocourse-courseInfo", e.target.value)
-        localStorage.setItem("gotocourse-courseId", courseInfo.courseId)
-        navigate(`/categories/${courseInfo.category?.split(" ").join("-")}/courses/${courseInfo.name.split(" ").join("-")}}`)
-    }
-
+console.log(allCourses)
    
     return (
         <Students isMobile={isMobile} userdata={userdata} header={"Dashboard"} >            
@@ -1091,7 +1115,7 @@ export const Dashboard = () => {
             <DashboardTop content={topContent} />
 
             <div className={clsx.students_profile_main}>
-                <AvailableCourses />
+                <AvailableCourses data={allCourses?.data ? allCourses?.data : []} />
                 <div className={`d-flex flex-wrap ${clsx.dashboard_courses}`}>
                     <div className={clsx["dashboard_courses--right"]}>
                         <h6>Courses on wishlist</h6>
@@ -1155,8 +1179,10 @@ export const Dashboard = () => {
    
 }
 
-function AvailableCourses({}){
+function AvailableCourses({data}){
+    const navigate = useNavigate()
     const tableHeader = ["Courses", "Start Date", "Program Fee", ""]
+    
     const tableData = [
         {
             id: 1,
@@ -1165,6 +1191,14 @@ function AvailableCourses({}){
             fee:"20"
         }
     ]
+
+    function handleCourseSelect(e, item){  
+        e.preventDefault()      
+        const courseInfo = item
+        localStorage.setItem("gotocourse-courseInfo", JSON.stringify(courseInfo))
+        localStorage.setItem("gotocourse-courseId", courseInfo.courseId)
+        navigate(`/categories/${courseInfo.category?.split(" ").join("-")}/courses/${courseInfo.name.split(" ").join("-")}}`)
+    }
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
@@ -1184,22 +1218,22 @@ function AvailableCourses({}){
                         </thead>
                         <tbody>
                             {
-                                tableData.map((item, i)=>(
+                                data?.length > 0 && data.map((item, i)=>(
                                     <tr key={i}>
                                         <td>
-                                            <span>{item.courseName}</span>
+                                            <span>{item.name}</span>
                                         </td>
-                                        <td><span>{item.startDate}</span></td>
+                                        <td><span>{item.startDate && getDate(item.startDate)}</span></td>
                                         <td>
-                                            <span>$ {item.fee}</span>
+                                            <span>$ {item.packages[0]?.price}</span>
                                         </td>
                                         <td>
                                             <div className={clsx.classes_button}>
-                                                <button className="d-flex"> 
+                                                <button className="d-flex align-items-center" onClick={(e)=>handleCourseSelect(e, item)}> 
                                                     <i><BsQuestionCircle /></i>
                                                     <span>Learn more</span>
                                                 </button>
-                                                <button className="d-flex">
+                                                <button className="d-flex align-items-center" onClick={(e)=>handleCourseSelect(e, item)}>
                                                     <i><BsDownload /></i>
                                                     <span>Enroll</span>
                                                 </button>
@@ -1269,7 +1303,7 @@ export function DashboardTop({content}){
 const Students = ({children, isMobile, notification, userdata, header}) => {
     const location = useLocation();
     const [pledredata, setPledreData]= useState({})
-    const {generalState: {showSidebar, loading, pledre}, generalState, setGeneralState, otherFunctions:{fetchCourses}} = useAuth();
+    const {generalState: {showSidebar, loading, pledre}, generalState, setGeneralState, otherFunctions:{fetchCourses}, adminFunctions: {getUnreadMessages}} = useAuth();
     const [loader, setLoading] = useState(false)
     const route = location.pathname.split("/")[1];
 
@@ -1339,11 +1373,67 @@ const student = {
     logo: <FaGraduationCap size="2.5rem" color="#0C2191" />
 }
     
+
+// fetch messages
+const getMessage = useQuery(["fetch admin messages"], ()=>getUnreadMessages(userdata?.token), {
+    onError: (err)=> {
+      toast.error(err.message,  {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    },
+    onSuccess: (res)=>{
+      if(res.data?.statusCode === 2 ){
+        localStorage.clear()
+      }
+      if(res.data?.statusCode !== 1){
+        toast.error(res.data?.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+  
+      const unread = res.data.data?.filter((messages)=>messages.status === "unread")
+      if(unread.length > 0){
+        toast.info(`You have ${unread.length} messages `,  {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      }
+    }
+  })
+
     return (
         <GuardedRoute>
 
             <div className={clsx.students}>
-            <ToastContainer />  
+            <ToastContainer 
+             position="top-right"
+             autoClose={3600}
+             hideProgressBar={false}
+             newestOnTop={false}
+             closeOnClick
+             rtl={false}
+             pauseOnFocusLoss
+             draggable
+             pauseOnHover
+            
+            />  
             <Sidebar isMobile={isMobile} />
             <div className={clsx.students_main}>
                <Navbar toggleSidebar={toggleSidebar} header={header} content={student}  />

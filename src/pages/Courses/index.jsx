@@ -28,6 +28,7 @@ import banner from "../../images/header.png";
 import details from "../../images/course_details.png";
 import placeholder from "../../images/cybersecurity.webp";
 import {witnesses} from "../../components/Testimonials";
+import { changeConstants } from "../Dashboard/Teachers/CreateCourse";
 export function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -1106,7 +1107,7 @@ export const PackageCard = ({item, courseId}) => {
     <div className={`card p-1 ${style.package_card}`} style={{height:"100%"}}>
       <div className="card-body d-flex flex-column justify-content-around" style={{}}>
         <p className={style.package_price}>$ {item.price}</p>
-          <p className={style.package_title}>{item.title}</p>
+          <p className={style.package_title}>{changeConstants(item.title)}</p>
           <p className={style.package_text}>
             {item.description}
           </p>

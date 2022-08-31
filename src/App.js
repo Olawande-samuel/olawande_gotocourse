@@ -84,7 +84,6 @@ function App() {
               <Route path="payment" element={<StudentFees />} />
               <Route path="chat" element={<StudentChat />} />
               <Route path="notifications" element={<StudentDashboard />} /> 
-
             </Route>
 
             <Route path="mentors" element={<Out/>}>
@@ -123,6 +122,7 @@ function App() {
             <Route path="affiliates/register" element={<AffiliateRegister />} />
             <Route path="affiliates/login" element={<AffiliateLogin />} />
             <Route path="affiliates/verification" element={<AffiliateVerification />} />
+            
             <Route path="affiliate" element={<Out />}>
               <Route path="" element={<AffiliatesDash  />} /> 
               <Route path="sales" element={<Sales />} />

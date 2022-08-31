@@ -68,7 +68,7 @@ function ContactForm({heightRef, setFormHeight}){
             </div>
             <div className="input-group d-flex flex-column">
                 <label htmlFor="message" className="form-label generic_label">Message</label>
-                <textarea name="message" id="message" cols="20" rows="5" className="form-control" handleChange={changeHandler} value={formstate.fullname}></textarea>
+                <textarea name="message" id="message" cols="20" rows="5" className="form-control" handleChange={changeHandler} value={formstate.message}></textarea>
             </div>
 
             <button type="submit">Send Message</button>

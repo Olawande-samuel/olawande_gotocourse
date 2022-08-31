@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { IoMdSend, IoIosAttach, IoMdCheckmark } from "react-icons/io";
+import { IoMdSend, IoIosAttach, IoMdCheckmark, IoMdArrowRoundBack } from "react-icons/io";
 import { Box, Tabs, Tab } from "@mui/material";
 import PropTypes from "prop-types";
 import { useLocalStorage } from "../../../../hooks";
@@ -9,7 +9,7 @@ import clsx from "./styles.module.css";
 import img from "../../../../images/john.png";
 import { Searchbar } from "../../components";
 
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { KEY } from "../../../../constants";
 import { AdvancedError } from "../../../../classes";
 import { toast } from "react-toastify";
@@ -80,7 +80,7 @@ const ChatComponent = ({chatType, tabs, usertype}) => {
         </Tabs>
       </div>
       {chatType.map((item, index) => (
-        <TabPanel value={value} index={index} style={{ height: "100%", width:"100%" }}>
+        <TabPanel value={value} index={index} style={{ height: "100%", width:"100%" }} className={clsx.tab_wrapper}>
           <Chat
             messagedata={messagedata}
             type={item.type}
@@ -95,20 +95,22 @@ const ChatComponent = ({chatType, tabs, usertype}) => {
 const Chat = ({ type, messagedata, usertype }) => {
   const { getItem } = useLocalStorage();
   const userData = getItem(KEY);
+  const [showuserlist, setShowUserlist]= useState(true)
   const {
-    generalState,
-    setGeneralState, 
-    adminFunctions: { getMessages }, 
-    adminStudentFunctions: { fetch, verify, verify_pledre }, 
-    adminTeacherFunctions: { fetch: TeachersFetch } 
+    adminFunctions: { getMessages, getUnreadMessages }, 
+    adminStudentFunctions: { fetch}, 
+    adminTeacherFunctions: { fetch: TeachersFetch },
+    otherFunctions: {fetchTeachers} 
   } = useAuth();
 
 
   const [users, setUsers] = useState([]);
-  const [messages, setMessages] = useState({});
+  const [userInfo, setUserInfo] = useState({});
   const [loader, setLoader] = useState(false);
 
-  const newMessages = useQuery(["repoData"], () => getMessages(userData.token));
+  const allMessages = useQuery(userData?.token && ["get unread messages"], () => getUnreadMessages(userData?.token), {
+    onSuccess: (res)=>{}
+  })
 
   useEffect(() => {
     if(type !== "New Messages"){
@@ -130,7 +132,7 @@ const Chat = ({ type, messagedata, usertype }) => {
                 autoClose: 4000,
                 hideProgressBar: true,
                 closeOnClick: true,
-                pauseOnHover: true,
+                pauseOnHtoasover: true,
                 draggable: true,
                 progress: undefined,
               });
@@ -139,7 +141,7 @@ const Chat = ({ type, messagedata, usertype }) => {
             }
           } else if(usertype === "student"){
             try {
-              const res = type === "Others" ?  await fetch(userData?.token) : await TeachersFetch(userData?.token); 
+              const res = type === "Others" ?  await fetch(userData?.token) : await fetchTeachers(); //first should be admin
               const { message, success, statusCode } = res;
               if (!success) throw new AdvancedError(message, statusCode);
               else {
@@ -162,7 +164,7 @@ const Chat = ({ type, messagedata, usertype }) => {
             }
           } else {
             try {
-              const res = type === "Others" ?  await fetch(userData?.token) : await TeachersFetch(userData?.token); 
+              const res = type === "Others" ?  await fetch(userData?.token) : await TeachersFetch(userData?.token); //replace this with fetch students
               const { message, success, statusCode } = res;
               if (!success) throw new AdvancedError(message, statusCode);
               else {
@@ -192,10 +194,13 @@ const Chat = ({ type, messagedata, usertype }) => {
 
   function openMessage(e, message) {
     e.preventDefault();
-    setMessages(message);
+    setUserInfo(message);
+    setShowUserlist(false)
   }
   return (
     <div className={clsx.chat_main_container}>
+      {
+        showuserlist &&
       <div className={clsx.main_container__users}>
         <h2>{type}</h2>
         <Searchbar
@@ -211,23 +216,25 @@ const Chat = ({ type, messagedata, usertype }) => {
         <div className={clsx.users__list}>
           {
             type === "New Messages" ?
-            newMessages.data?.data?.map((message, index) => (
+              allMessages.isSuccess && allMessages.data?.data?.data?.map((message, index) => (
               <div
                 className={clsx.user_box}
                 onClick={(e) => openMessage(e, message)}
+                key={index}
               >
                 <div className={clsx.user_image}>
-                  {/* <div className={clsx.dot}></div> */}
-                  {/* <img src={messagedata.image} alt="avatar" /> */}
-                  <p className={clsx.user_name}>{message.fromUser}</p>
+                  <p className={clsx.user_name}>{message.user.email}</p>
                 </div>
-                <h5 className={clsx.user_role}>{message.type}</h5>
+                <h5 className={clsx.user_role}>{message.userType}</h5>
               </div>
-            )) :
+            )) 
+            :
             users?.map((user, index) => (
               <div
                 className={clsx.user_box}
                 onClick={(e) => openMessage(e, user)}
+                key={index}
+
               >
                 <div className={clsx.user_image}>
                   {/* <div className={clsx.dot}></div> */}
@@ -240,31 +247,73 @@ const Chat = ({ type, messagedata, usertype }) => {
           }
         </div>
       </div>
-      <ChatBox messages={messages} boxdata={messagedata} type={type} displayControl={messages} />
+      }
+      {
+        // for users from new messages and users from no messages
+        !showuserlist &&
+        <ChatBox userInfo={userInfo} boxdata={messagedata} type={type} displayControl={userInfo} setShowUserlist={setShowUserlist} />
+      }
     </div>
   );
 };
 
-const ChatBox = ({ messages, boxdata, checked, type , displayControl}) => {
-  const [messageList, setMessageList] = useState([]);
-  const [text, setText] = useState("");
+const ChatBox = ({ userInfo, boxdata, checked, type , displayControl, setShowUserlist}) => {
+  const queryClient = useQueryClient()
   const { getItem } = useLocalStorage();
   const userData = getItem(KEY);
-  const [sending, setSending]= useState(false)
-  const { generalState, setGeneralState, adminFunctions: { sendMessage } } = useAuth();
 
-  function handleTextMsg(e){
+  const {
+    adminFunctions: { getMessages, sendMessage, readMessage }, 
+    adminStudentFunctions: { fetch}, 
+    adminTeacherFunctions: { fetch: TeachersFetch },
+    otherFunctions: {fetchTeachers} 
+  } = useAuth();
+
+
+  const [messageList, setMessageList] = useState([]);
+  const [text, setText] = useState("");
+
+  const ourMessages = useQuery(["get private messages from user"], () => getMessages(userData.token,  userInfo?.userId ? userInfo?.userId : (userInfo?.fromUser ? userInfo?.fromUser : userInfo?.teacherId)), {
+    onSuccess: (res)=> {
+      if(res.data){
+        setMessageList(res.data)
+      } else {
+        setMessageList([])
+      }
+    },
+     onError: (err)=>{
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHtoasover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+  });
+  
+
+  function handleTextMsg(e){ 
     setText(e.target.value)
   }
-  async function sendMsg() {
-    try {
-      const res =   await sendMessage(userData?.token, {toUser: messages.userId, body: "Hello from Admin"} ); 
-      const { message, success, statusCode } = res;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        const { data } = res;
-        setMessageList([...messageList, data,]);
-        toast.success(message, {
+
+  const msgMutation = useMutation((data)=>sendMessage(userData?.token, data ), {
+    onSuccess: (res)=>{
+      if(res.success){
+        toast.success(res.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        queryClient.invalidateQueries(["get private messages from user"])
+      } else {
+        toast.error(res.message, {
           position: "top-right",
           autoClose: 4000,
           hideProgressBar: true,
@@ -274,7 +323,8 @@ const ChatBox = ({ messages, boxdata, checked, type , displayControl}) => {
           progress: undefined,
         });
       }
-    } catch (err) {
+    },
+    onError: (err)=>{
       toast.error(err.message, {
         position: "top-right",
         autoClose: 4000,
@@ -283,44 +333,107 @@ const ChatBox = ({ messages, boxdata, checked, type , displayControl}) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-      });
-    }finally{
-      // setLoader(_ => false);
-      console.log("done")
+      })
     }
+  })
+  const markRead = useMutation((data)=>readMessage(userData?.token, data ), {
+    onSuccess: (res)=>{
+      if(res.success){
+        toast.success(res.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        queryClient.invalidateQueries(["get private messages from user"])
+      } else {
+        toast.error(res.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    },
+    onError: (err)=>{
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+  })
 
+  async function sendMsg(e) {
+    e.preventDefault()
 
-   
+    if(text){
+      msgMutation.mutate({
+        toUser: userInfo.userId ? userInfo.userId : (userInfo.teacherId ? userInfo.teacherId : userInfo.fromUser),
+        body: text
+      })
+    } else{
+      toast.error("Enter a valid message", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
   }
-  useEffect(() => {
 
-    if(Object.keys(messages).length > 0 && type === "New Messages") {
-        setMessageList([messages]);
-    } else {
-      setMessageList([])
+  async function markAsRead(){
+    if(userInfo.fromUser){
+      markRead.mutate([ userInfo.fromUser ])
     }
-  }, [messages]);
-
-  
-
-  console.log({messages})
+    return
+  }
   return (
     <div className={clsx.chat_box}> 
       {
-        Object.keys(messages).length <= 0 ? (
-        <h2 className="text-center generic_label">No messages yet</h2>
+        Object.keys(userInfo).length <= 0 ? (
+          <>
+            <h2 className="text-center generic_label">No messages yet</h2>
+            <button className="btn btn-outline-primary" onClick={(e)=>{
+              e.preventDefault();
+              setShowUserlist(true)
+            }} >Back</button>
+          </>
       ) :
        (
         <>
           {checked}
           <div className={clsx.chat_box_top}>
             <div className={clsx.chat_box_top_image}>
-              <img src={messages?.profileImg && messages?.profileImg } alt="avatar" style={{width:"50px", height:"50px", borderRadius:"50%" }} /> 
-              <p>{messages?.fromUser ? messages?.fromUser : ( messages?.firstName ? `${messages?.firstName} ${messages?.lastName}` : "")}</p>
+              <i onClick={()=>setShowUserlist(true)}><IoMdArrowRoundBack /></i>
+              {
+                userInfo.profileImg &&
+                <img src={userInfo?.profileImg && userInfo?.profileImg } alt="avatar" style={{width:"50px", height:"50px", borderRadius:"50%" }} /> 
+              }
+              <p>
+              {
+                userInfo?.fromUser ? 
+                userInfo?.user.email : ( userInfo?.firstName ? `${userInfo?.firstName} ${userInfo?.lastName}` : "")
+              }
+              </p>
+
             </div>
             <div className={clsx.chat_box_top_meta}>
-              <h3>{messages?.sender}</h3>
-              <p>{messages?.type ? messages.type : messages?.userType}</p>
+              <h3>{userInfo?.sender}</h3>
+              <p>{userInfo?.type ? userInfo.type : userInfo?.userType}</p>
             </div>
           </div>
           <div className={clsx.chat_message}>
@@ -332,18 +445,20 @@ const ChatBox = ({ messages, boxdata, checked, type , displayControl}) => {
           </div>
           <div className={clsx.chat_sender_container}>
             <div className={clsx.chat_sender}>
-              <input type="text" placeholder="Enter message" onChange={handleTextMsg} value={text} />
-              <span className={clsx.chat_icons}>
-                <span className={clsx.send}>
-                  <IoMdSend onClick={sendMsg} />
-                </span>
-                {/* <span className={clsx.attach}>
-                  <IoIosAttach />
-                </span> */}
-                <span className={clsx.check}>
-                  <IoMdCheckmark />
-                </span>
-              </span>
+              <form className="w-100 d-flex justify-content-between align-items-center" onSubmit={sendMsg}>
+                <input type="text" placeholder="Enter message" onChange={handleTextMsg} value={text} />
+                <span className={clsx.chat_icons}>
+                    <button className={clsx.send} type="submit" onClick={sendMsg}>
+                      <IoMdSend  size="1.2rem" />
+                    </button>
+                  {/* <span className={clsx.attach}>
+                    <IoIosAttach />
+                  </span> */}
+                  <span className={clsx.check}>
+                    <IoMdCheckmark onClick={markAsRead} />
+                  </span>
+                  </span>
+                </form>
             </div>
           </div>
         </>
@@ -353,14 +468,15 @@ const ChatBox = ({ messages, boxdata, checked, type , displayControl}) => {
 };
 
 const MessageBox = ({ senderdata }) => {
-
+  const {getItem}= useLocalStorage();
+  const userdata = getItem(KEY)
   return(
     <div
       className={
-        senderdata.type !== "member" ? clsx.message_box : clsx.message_box_user
+        senderdata.user.email === userdata.email ? clsx.message_box : clsx.message_box_user
       }
     >
-      {senderdata.type !== "member" ? (
+      {senderdata.user.email === userdata.email? (
         <>
           <div className={clsx.message_box_container}>
             <div className={clsx.message}>{senderdata.body}</div>

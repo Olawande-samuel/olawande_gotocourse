@@ -81,7 +81,8 @@ const TeacherSignup = () => {
             notification: message,
           };
         });
-        navigate("/user-authentication");
+        // navigate("/user-authentication");
+        navigate("/teacher");
       }
     }catch(err){
       toast.error(err.message, {

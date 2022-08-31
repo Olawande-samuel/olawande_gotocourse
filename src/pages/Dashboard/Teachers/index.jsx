@@ -1,13 +1,12 @@
 import { useEffect, useState, useRef } from "react";
-import { MdEdit, MdPersonAdd } from "react-icons/md";
+import {  MdPersonAdd } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { Modal, Box, Typography } from "@mui/material";
-import { AiOutlineMenu } from "react-icons/ai";
-import {Product, Stu1,Stu2, Stu3} from "../../../images/components/svgs"
+import { Modal, Box } from "@mui/material";
+import {Stu1,Stu2, Stu3} from "../../../images/components/svgs"
 import {useQuery} from "@tanstack/react-query"
 import Loader from "../../../components/Loader";
-import { Sidebar, Searchbar, Navbar } from "../components";
+import { Sidebar, Navbar } from "../components";
 import clsx from "./styles.module.css";
 import { colors } from "../../../constants";
 import { useAuth } from "../../../contexts/Auth";
@@ -19,11 +18,9 @@ import { useLocalStorage } from "../../../hooks";
 import Layout from "../../../components/Layout";
 import { CourseProfile } from "../../Courses";
 import { Syllabus } from "./CreateCourse";
-import ChatComponent from "./chat";
+import ChatComponent from "../Admin/Chat";
 
 import { DashboardTop, Community } from "../Students";
-import LogoutButton from "../../../components/LogoutButton";
-import { GotoDashboard } from "../Students";
 import { FaChalkboardTeacher } from "react-icons/fa";
 
 
@@ -595,11 +592,39 @@ export function Chat() {
       setLoader(_ => false);
     }, 2000)
   }, [])
+  const [tabs, setTabs] = useState([
+    {
+      active: true,
+      name: "New Messages",
+    },
+    {
+      active: false,
+      name: "Admin",
+    },
+    {
+      active: false,
+      name: "Students",
+    },
+  ]);
 
+  const chatType = [
+    {
+      id: 1,
+      type: "New Messages",
+    },
+    {
+      id: 2,
+      type: "Others",
+    },
+    {
+      id: 4,
+      type: "Teachers",
+    },
+  ];
   return (
  <Teachers userdata={userdata} header="Chat">
       {loader && <Loader />}
-        <ChatComponent />
+      <ChatComponent tabs={tabs} chatType={chatType} usertype="teacher" />
       </Teachers>
   );
 }
@@ -746,7 +771,9 @@ export const Teachers = ({ children, isMobile, userdata, notification, header })
     generalState: { showSidebar, loading, pledre },
     generalState,
     setGeneralState,
+    adminFunctions: {getUnreadMessages}
   } = useAuth();
+
   const [pledredata, setPledreData]= useState({})
 
   const {getItem} = useLocalStorage()
@@ -815,6 +842,53 @@ export const Teachers = ({ children, isMobile, userdata, notification, header })
     title: "TEACHER",
     logo: <FaChalkboardTeacher size="2.5rem" color="#0C2191" />
 }
+
+// fetch messages
+const getMessage = useQuery(["fetch admin messages"], ()=>getUnreadMessages(userdata?.token), {
+  onError: (err)=> {
+    toast.error(err.message,  {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
+  },
+  onSuccess: (res)=>{
+    
+    if(res.data?.statusCode === 2 ){
+      localStorage.clear()
+    }
+    if(res.data?.statusCode !== 1){
+      toast.error(res.data?.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+
+    const unread = res.data.data?.filter((messages)=>messages.status === "unread")
+    if(unread.length > 0){
+      toast.info(`You have ${unread.length} messages `,  {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+  }
+})
+
+
   return (
     <GuardedRoute>
       <div className={clsx.teachers}>
