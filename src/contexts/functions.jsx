@@ -1419,9 +1419,24 @@ export const adminFunctions = {
             }
         }
     },
-    getMessages: async function(token){
+    getUnreadMessages: async function(token){
+     
+        const res = await axios.get(`${baseURL}/user/unread/message/fetch`,
+        {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+            return res
+        
+    },
+    getMessages: async function(token, id){
         try{
-            const res = await axios.get(`${baseURL}/user/message/fetch`,
+            const res = await axios.get(`${baseURL}/user/message/fetch/${id}`,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,

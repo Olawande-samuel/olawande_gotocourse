@@ -76,10 +76,10 @@ const SignUp = () => {
       let { success, message, statusCode } = response;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        //successfully done
-        //update the localStorage
+       
         const { data } = response;
         removeItem(KEY);
+        // set item
         getItem(KEY, data);
         localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res)) 
         setGeneralState((old) => {
@@ -88,8 +88,8 @@ const SignUp = () => {
             notification: message,
           };
         });
-        // navigate("/student");
-        navigate("/user-authentication");
+        navigate("/student");
+        // navigate("/user-authentication");
       }
     } catch (err) {
       console.error(err)

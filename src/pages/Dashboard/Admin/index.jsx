@@ -6,8 +6,9 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {motion} from "framer-motion"
 import { Switch, Modal, Box, Skeleton } from "@mui/material";
-import { AiOutlineMenu, AiOutlineDelete, AiTwotoneEdit } from "react-icons/ai";
+import {  AiOutlineDelete, AiTwotoneEdit } from "react-icons/ai";
 import {FaUserLock} from "react-icons/fa";
+import {useQuery} from "@tanstack/react-query"
 import DOMPurify from 'dompurify';
 
 import { Sidebar, Searchbar, Navbar } from "../components";
@@ -1026,9 +1027,9 @@ export function Approve() {
       console.log("getting")
       try {
         if(pledre){
+          console.log(pledre)
           setGeneralState({...generalState, loading: true})
           const pledRes = await pledre.getTeacherDetails(teacherInfo.email)
-          console.log("pledRes",pledRes) 
           if(pledRes){
             pledreInfo = pledRes
           } else {
@@ -1047,12 +1048,15 @@ export function Approve() {
   }, []);
 
 
- async function handleVerification( e, type, id){
-  e.preventDefault();
+ async function handleVerification( e, type, id, pledreId){
+    e.preventDefault();
     const userdata = getItem(KEY)
+
     let item = {
       userId: id,
+      pledreTeacherId: pledreId ? pledreId : null
     };
+
     try {
       setGeneralState((old) => {
         return {
@@ -1060,26 +1064,12 @@ export function Approve() {
           loading: true,
         };
       });
-
-      const res = type === "approve" ? await verify(item, userdata?.token) : await verify_pledre(item, userdata?.token);
+      if(!pledreId) throw new AdvancedError("User is not registered to your school", 0)
+      const res =  await verify_pledre(item, userdata?.token);
       const { message, success, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        //do somethings
-        localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
-        if(type ===  "approve") {
-           setData({...data, isVerified: !data?.isVerified}) 
-           toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        } else { 
-
+          // if already approved, first verify_pledre unapproves teacher. The one below checks the current pledre access status of the user
           const res = (data.pledre?._id && data.accessPledre === true) ? await pledre.deleteTeacher(data.pledre?._id) : ""
           setData({...data, accessPledre: !data.accessPledre})
           toast.success(message, {
@@ -1091,7 +1081,58 @@ export function Approve() {
             draggable: true,
             progress: undefined,
           }); 
-        }
+        
+      }
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }) 
+    } finally{
+        setGeneralState((old) => {
+          return {
+            ...old,
+            loading: false,
+          };
+        });
+    }
+  }
+  async function approveApplication(e, id){
+    e.preventDefault();
+    const userdata = getItem(KEY)
+
+    let item = {
+      userId: id,
+    };
+
+    try {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: true,
+        };
+      });
+      const res = await verify(item, userdata?.token);
+      const { message, success, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        //do somethingtype s
+        localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
+           setData({...data, isVerified: !data?.isVerified}) 
+           toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
       }
     } catch (error) {
       toast.error(error.message, {
@@ -1161,6 +1202,8 @@ export function Approve() {
         });
     }
   }
+  console.log("data", data)
+  console.log("pledre", data?.pledre)
   return (
     <Admin header="Approval">
       <div className={clsx["admin_profile"]}>
@@ -1195,7 +1238,7 @@ export function Approve() {
             </div>
             <div className="form-group my-3">
               <label htmlFor="accessPledre" className="form-label generic_label">Access Dashboard</label>
-              <Switch onClick={(e)=>handleVerification(e, "pledre", data?.userId)} checked={data?.accessPledre}  value="pledre" />
+              <Switch onClick={(e)=>handleVerification(e, "pledre", data?.userId, data?.pledre?._id)} checked={data?.accessPledre}  value="pledre" />
             </div>
             <div className="form-group my-3">
               <label htmlFor="level" className="form-label generic_label">Assign Level</label>
@@ -1213,7 +1256,7 @@ export function Approve() {
               className="button button-lg log_btn w-50 mt-3"
               style={{ backgroundColor: data?.isVerified && "red" }}
               type="submit"
-              onClick={(e)=>handleVerification(e, "approve", data?.userId) }
+              onClick={(e)=>approveApplication(e,  data?.userId) }
             >
               {data?.isVerified ? "Revoke" : "Approve Application"}
             </button>
@@ -3908,7 +3951,7 @@ export function Chat() {
 
 
 export const Admin = ({ children, header }) => {
-  const { generalState: { isMobile, showSidebar,loading }, generalState, setGeneralState, adminFunctions:{fetchNotifications} } = useAuth();
+  const { generalState: { isMobile, showSidebar,loading }, generalState, setGeneralState, adminFunctions:{fetchNotifications, getMessages, getUnreadMessages} } = useAuth();
   const {getItem} = useLocalStorage();
   const [loader, setLoading] = useState(false)
 
@@ -3943,10 +3986,85 @@ export const Admin = ({ children, header }) => {
         }
       })()
       flag.current = true;
-    },[])
-    const admin = {
-      title: "ADMIN",
-      logo: <FaUserLock size="2.5rem" color="#0C2191" />
+  },[])
+
+  // fetch messages
+  const getMessage = useQuery(["fetch admin messages"], ()=>getUnreadMessages(userdata?.token), {
+    onError: (err)=> {
+      toast.error(err.message,  {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    },
+    onSuccess: (res)=>{
+      
+      if(res.data?.statusCode === 2 ){
+        localStorage.clear()
+      }
+      if(res.data?.statusCode !== 1){
+        toast.error(res.data?.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+      const unread = res.data.data?.filter((messages)=>messages.status === "unread")
+      if(unread.length > 0){
+        toast.info(`You have ${unread.length} messages `,  {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      }
+    }
+  })
+
+
+ 
+  // useEffect(()=>{
+  //   if(getOurMessages.data?.data?.statusCode === 2 ){
+  //     localStorage.clear()
+  //   }
+  //   if(getOurMessages.data?.data?.statusCode !== 1){
+  //     toast.error(getOurMessages.data?.data?.message, {
+  //       position: "top-right",
+  //       autoClose: 4000,
+  //       hideProgressBar: true,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //     });
+  //   }
+  // },[getOurMessages.data?.data?.status])
+  
+
+
+
+  useEffect(()=>{
+    // if(getMessage.data?.statusCode === 1){
+    //   let msg = getMessage.data.data.filter(item=>item.status === "unread").length
+    //   console.log({msg})
+    //   setGeneralState({...generalState, messages: msg})
+    // }
+  },[getMessage.isFetched])
+
+  const admin = {
+    title: "ADMIN",
+    logo: <FaUserLock size="2.5rem" color="#0C2191" />
   }
   return (
     <GuardedRoute>

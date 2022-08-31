@@ -14,7 +14,6 @@ import vector from "../../../images/vector.png";
 import UploadForm from "../../../components/UploadForm";
 import  {PreviewModal, Teachers} from "./index"
 import { BiTrash } from "react-icons/bi";
-import axios from "axios";
 
 
 export const Syllabus = ({
@@ -30,7 +29,7 @@ export const Syllabus = ({
     const location = useLocation()
     return (
       <div className={clsx.syllabus_container}>
-        <h5>{title}</h5>
+        <h5>{changeConstants(title)}</h5>
         {packagelist && <p>{price}</p>}
         <p>{description}</p>
         {location.search && 
@@ -101,9 +100,9 @@ export const Syllabus = ({
 
     const { syllabuses, addtoSyllabus, setSyllabusses } = useSyllabus();
     const [faq, setFaq] = useState(formstate?.faqs ?? []);
-    const [packageList, setPackageList] = useState(formstate?.packages ?? []);
+    const [packageList, setPackageList] = useState([]);
     const [instructorsList, setInstructorsList] = useState([]);
-    const [editInstructorsList, setEditInstructorsList] = useState(formstate?.instructorsList ?? []);
+    const [editInstructorsList, setEditInstructorsList] = useState([]);
   
     const [categories, setCategories] = useState([]); 
     const [openImage, setOpenImage] = useState(false);
@@ -113,21 +112,15 @@ export const Syllabus = ({
     const [loading, setLoading] = useState(false);
     const [openPreview, setOpenPreview] = useState(false);
     const [packageFilter, setPackageFilter] = useState("");
-    const [test, setTest]= useState([])
+
   // check if courseinfo exist then setSyllabus to existing syllabus
   useEffect(()=>{
     formstate?.syllabus?.length > 0 && setSyllabusses(formstate.syllabus)
     formstate?.packages?.length > 0 && setPackageList(formstate.packages)
     formstate?.faqs?.length > 0 && setFaq(formstate.faqs) 
     formstate?.instructors?.length > 0 && setEditInstructorsList(editInstructorsList.length > 0 ? editInstructorsList : formstate.instructors)
-
   },[courseData])
-console.log( formstate.packages)
-  // useEffect(()=>{
-
-  // },[holder])
-
-  console.log({test})
+ 
   
   function changeHandler(e) {
     const { name, value } = e.target;
@@ -149,7 +142,6 @@ console.log( formstate.packages)
       packages: [...packageList],
       faqs: [...faq],
     });
-    console.log("clicked");
     setOpenPreview(true);
   };
 
@@ -357,7 +349,6 @@ console.log( formstate.packages)
 
   function removeTeacher(e){
     let currentTeachers = editInstructorsList.filter(item=>item.tutorId !== e)
-    console.log(currentTeachers)
     setEditInstructorsList(currentTeachers)
   }
 
@@ -473,14 +464,6 @@ console.log( formstate.packages)
                 Add Package
               </button>
   
-              {/* <Input
-                label="Price"
-                name="price"
-                type="text"
-                handleChange={changeHandler}
-                value={formstate.price}
-              /> */}
-  
               <div className={clsx.form_group}>
                 <label className="form-label generic_label">Syllabus</label>
                 {syllabuses.length !== 0 ? (
@@ -500,40 +483,44 @@ console.log( formstate.packages)
               >
                 Add Syllabus
               </button>
-              {type === "admin" && (<>
-                {location.search &&
-              <div className={clsx.form_group}>
-                <label htmlFor={"package"} className="form-label generic_label">
-                  Current Instructors
-                </label>
-                {editInstructorsList.length > 0 ? (
-                  editInstructorsList.map((item) =>  <Syllabus title={item.name} deleteOption={removeTeacher} index={item.tutorId} /> )
-                ) : (
-                  <h6>No instructor</h6>
-                )}
-              </div>
-                }
-              
-              <div className={clsx.form_group}>
-                <label htmlFor={"package"} className="form-label generic_label">
-                  Instructors
-                </label>
-                {instructorsList.length > 0 ? (
-                  instructorsList.map((item) => <p>{item}</p>)
-                ) : (
-                  <h6>No instructor</h6>
-                )}
-              </div>
-  
-              <button
-                className="btn btn-primary my-3"
-                style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
-                type="button"
-                onClick={openInstructorModal}
-              >
-                Add Instructor
-              </button>
-              </>)}
+              {
+                type === "admin" && (
+                  <>
+                    {location.search &&
+                   <div className={clsx.form_group}>
+                    <label htmlFor={"package"} className="form-label generic_label">
+                      Current Instructors
+                    </label>
+                    {editInstructorsList.length > 0 ? (
+                      editInstructorsList.map((item) =>  <Syllabus title={item.name} deleteOption={removeTeacher} index={item.tutorId} /> )
+                    ) : (
+                      <h6>No instructor</h6>
+                    )}
+                    </div>
+                  }
+                  
+                  <div className={clsx.form_group}>
+                    <label htmlFor={"package"} className="form-label generic_label">
+                      Instructors
+                    </label>
+                    {instructorsList.length > 0 ? (
+                      instructorsList.map((item) => <p>{item}</p>)
+                    ) : (
+                      <h6>No instructor</h6>
+                    )}
+                  </div>
+      
+                  <button
+                    className="btn btn-primary my-3"
+                    style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
+                    type="button"
+                    onClick={openInstructorModal}
+                  >
+                    Add Instructor
+                  </button>
+                  </>
+                )
+              }
 
               <div className={clsx.form_group}>
                 <label htmlFor={"package"} className="form-label generic_label">
@@ -614,8 +601,8 @@ console.log( formstate.packages)
         />
         <AddPackage
           openPackage={openPackage}
-          addPackage={setPackageList}
-          list={packageList}
+          addPackage={setFormstate}
+          list={formstate}
           setOpen={setOpen}
           handleClosePackage={handleClosePackage}
         />
@@ -781,7 +768,7 @@ console.log( formstate.packages)
           progress: undefined,
         });
       } else {
-        addPackage([...list, newPackage]);
+        addPackage({...list, packages: [...list.packages, newPackage]});
         toast.success("Package added successfully", {
           position: "top-right",
           autoClose: 4000,
@@ -798,7 +785,7 @@ console.log( formstate.packages)
         });
       }
     }
-  
+
     return (
       <Modal
         open={openPackage}
@@ -822,10 +809,10 @@ console.log( formstate.packages)
               className="form-select generic_input"
             >
               <option value="">Choose a Type</option>
-              <option value="one-on-one">One-on-One</option>
-              <option value="cohort">Cohort</option>
-              <option value="Self Paced">Self Paced</option>
-              <option value="In-person Training">In-person Training</option>
+              <option value="ONE-ON-ONE">One-on-One</option>
+              <option value="COHORT">Cohort</option>
+              <option value="SELF_PACED">Self Paced</option>
+              <option value="PHYSICAL">In-person Training</option>
             </select>
           </div>
           <Input
@@ -887,7 +874,6 @@ console.log( formstate.packages)
       setNewInstructor(e.target.value);
     }
   
-    console.log(teachers)
     function addInstructorHandler() {
       if (!newInstructor) {
         toast.error("All fields are required", {
@@ -1100,4 +1086,11 @@ console.log( formstate.packages)
         </Box>
       </Modal>
     );
+  }
+  export function changeConstants(name){
+    if(name === "SELF_PACED") return "self-paced"
+    if(name === "COHORT") return "Cohort"
+    if(name === "ONE_ON_ONE") return "One-on-One"
+    if(name === "PHYSICAL") return "In-person Training"
+    return name
   }

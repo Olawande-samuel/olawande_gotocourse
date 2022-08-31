@@ -22,6 +22,7 @@ import { witnesses, Card as MentorsCard } from "../../components/Mentors";
 import Input from "../../components/Input";
 import Success from "../../images/paymentSuccess.png"
 import Failure from "../../images/Bad Gateway.png"
+import { changeConstants } from "../Dashboard/Teachers/CreateCourse";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
@@ -66,7 +67,6 @@ const All = ({ type }) => {
         setGeneralState({ ...generalState, loading: true });
         const res = type === "mentors" ? await fetchMentors() : await fetchTeachers();
         const { success, message, statusCode, data } = res;
-        console.log(res)
         setGeneralState({ ...generalState, loading: false });
         if (!success || statusCode !== 1)
           throw new AdvancedError(message, statusCode);
@@ -293,7 +293,7 @@ export const Payment = () => {
                     <div className="d-flex justify-content-between align-items-center">
                       <p className={`text-capitalize fw-normal ${style.payment_course}`}>
                         {paymentDetails?.title
-                          ? `${paymentDetails?.title} Course`
+                          ? `${changeConstants(paymentDetails?.title)} Course`
                           : bootcamp.title}
                       </p>
                       <p>

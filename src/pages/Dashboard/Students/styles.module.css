@@ -136,11 +136,12 @@
     border-radius:10px;
     overflow: scroll;
     min-height: 400px;
+    max-height: 800px;
 
 }
-.dashboard_courses--left > div {
+/* .dashboard_courses--left > div {
     height: 70%;
-}
+} */
 
 .dashboard_courses--left > div table {
     vertical-align:middle;

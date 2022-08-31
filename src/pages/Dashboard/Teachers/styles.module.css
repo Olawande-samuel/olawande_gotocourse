@@ -38,6 +38,7 @@
 @media (min-width: 500px ){
     .teachers_main {
         padding: 30px;
+        padding-bottom: 8px;
     }
 }
 .teachers_topbar {
