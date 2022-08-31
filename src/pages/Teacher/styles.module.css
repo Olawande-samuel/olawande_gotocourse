@@ -44,8 +44,6 @@
     top: 50%;
     transform: translateY(-50%);
     flex-direction: column;
-
-    /* justify-content: flex-end; */
     padding-bottom: 0.5rem;
     align-items: flex-start;
     padding: 20px;
@@ -76,35 +74,6 @@
     color: var(--white);
     background-color: #F75C4E;
 }
-
-@media (max-width: 770px){
-    .jumbotron {
-        background: url("../../images/become_teacher.png"), rgba(0, 0, 0, 0.6);
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: right;
-        background-blend-mode: multiply;
-        padding: 0 .5rem ;
-    }
-    .jumbotron__absolute p, .jumbotron__absolute h1 {
-    
-        color: #ffffff;
-    }
-    .jumbotron__absolute h1 {
-        width: 90%;
-        text-align: left;
-        line-height: 1.5;
-        font-weight: 600;
-        margin-bottom: 30px;
-        font-size: calc(1.975rem + 1.5vw);
-    }
-} 
-@media (min-width: 512px) and (max-width: 530px){
-    .jumbotron__absolute h1 {
-        width: 100%;
-        
-    }
-} 
 
 .frequently_asked_questions {
     background-color: #F1F8FF;
@@ -354,7 +323,6 @@
 
 .become_a_teacher__left img {
     width: 100%;
-    /* object-fit: contain; */
     height: 100%;
 }
 
@@ -377,6 +345,72 @@
     
 }
 
+
+@media screen and (max-width: 525px){
+    .image {
+        min-width: 250px;
+        margin-left: 30px;
+        max-width: 400px;
+    }
+}
+
+@media screen and (max-width: 465px){
+    .image {
+        min-width: 200px;
+        max-width: 350px;
+    }
+}
+
+@media screen and (max-width: 415px){
+    .image {
+        min-width: 150px;
+        max-width: 300px;
+    }
+
+    .jumbotron__absolute h1 {
+        font-size: 1.05rem;
+    }
+    
+    .jumbotron__absolute p {
+        font-size: 0.85rem;
+    }
+}
+@media screen and (max-width: 355px){
+    .image {
+        min-width: 150px;
+        max-width: 250px;
+    }
+}
+
+
+
+@media (max-width: 770px){
+    .jumbotron {
+        background: url("../../images/become_teacher.png"), rgba(0, 0, 0, 0.6);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: right;
+        background-blend-mode: multiply;
+        padding: 0 .5rem ;
+    }
+    .jumbotron__absolute p, .jumbotron__absolute h1 {
+    
+        color: #ffffff;
+    }
+    .jumbotron__absolute h1 {
+        width: 90%;
+        text-align: left;
+        line-height: 1.5;
+        font-weight: 600;
+        margin-bottom: 30px;
+        font-size: calc(1.975rem + 1.5vw);
+    }
+} 
+@media (min-width: 512px) and (max-width: 530px){
+    .jumbotron__absolute h1 {
+        width: 100%;
+    }
+} 
 
 @media screen and (max-width: 1115px){
     .best__features_card {

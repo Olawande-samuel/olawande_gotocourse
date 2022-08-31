@@ -12,11 +12,16 @@ import AdminSignup from "./pages/Admin/SignUp"
 import {Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails, Chat as AdminChat,
   CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails, AddMentor,Mentors, MentorsDetail, Notification, Earnings as AdminEarning} from "./pages/Dashboard/Admin";
 import AdminDashboard from "./pages/Dashboard/Admin/Dashboard";
+
+
 import {Dashboard as StudentDashboard,Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Fees as StudentFees,
    Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat} from "./pages/Dashboard/Students";
+import StudentHelp from "./pages/Dashboard/Students/Help";
+import StudentReferral from "./pages/Dashboard/Students/Referral";
+
 import {Dashboard as TeacherDashboard,  Profile as TeachersProfile, Classes as TeacherClasses, Edit as TeacherEdit, 
   Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo, Chat as TeacherChat  } from "./pages/Dashboard/Teachers";
-
+import TeachersHelp from "./pages/Dashboard/Teachers/Help";
   
 import {Dashboard as AffiliatesDash, Sales, Income, Revenue} from "./pages/Dashboard/Affiliate"
 import {Landing as AffiliateLanding, Register as AffiliateRegister, Login as AffiliateLogin, Verification as AffiliateVerification} from "./pages/Affiliate";
@@ -83,6 +88,8 @@ function App() {
               <Route path="history" element={<StudentHistory />} />
               <Route path="payment" element={<StudentFees />} />
               <Route path="chat" element={<StudentChat />} />
+              <Route path="help" element={<StudentHelp />} />
+              <Route path="referral" element={<StudentReferral />} />
               <Route path="notifications" element={<StudentDashboard />} /> 
             </Route>
 
@@ -116,6 +123,7 @@ function App() {
               <Route path="courses/details/:id" element={<TeacherCourseInfo />} />
               <Route path="chat" element={<TeacherChat />} />
               <Route path="notifications" element={<TeacherDashboard />} />
+              <Route path="help" element={<TeachersHelp />} />
 
             </Route>
             <Route path="affiliates" element={<AffiliateLanding />} />

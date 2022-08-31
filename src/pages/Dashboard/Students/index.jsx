@@ -869,11 +869,6 @@ export function History(){
     return ( 
         <Students isMobile={isMobile} userdata={userdata} header="History">               
             <div className={clsx.students_profile}>
-                
-                {/* {courses.length === 0 ? 
-                
-                <NoDetail text="Nothing to See here" />
-                 : */}
                  {
                 <table className={clsx.student_table}>
                     <thead>
@@ -1300,7 +1295,10 @@ export function DashboardTop({content}){
         </div>
     )
 }
-const Students = ({children, isMobile, notification, userdata, header}) => {
+
+
+
+export const Students = ({children, isMobile, notification, userdata, header}) => {
     const location = useLocation();
     const [pledredata, setPledreData]= useState({})
     const {generalState: {showSidebar, loading, pledre}, generalState, setGeneralState, otherFunctions:{fetchCourses}, adminFunctions: {getUnreadMessages}} = useAuth();
@@ -1339,7 +1337,7 @@ const Students = ({children, isMobile, notification, userdata, header}) => {
                     const response = await pledre.getStudentDetails(user?.email)
                     if(isActive){
                         if(response?.email){
-                            setPledreData(response )
+                            setPledreData(() => response)
                             console.log(response)
                             localStorage.setItem("gotocourse-userdata", JSON.stringify({...user, pledre: response}))
                         }
