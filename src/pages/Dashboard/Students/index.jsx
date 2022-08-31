@@ -1031,10 +1031,10 @@ export function Chat() {
           active: true,
           name: "New Messages",
         },
-        {
-          active: false,
-          name: "Admin",
-        },
+        // {
+        //   active: false,
+        //   name: "Admin",
+        // },
         {
           active: false,
           name: "Teachers",
@@ -1046,10 +1046,10 @@ export function Chat() {
           id: 1,
           type: "New Messages",
         },
-        {
-          id: 2,
-          type: "Others",
-        },
+        // {
+        //   id: 2,
+        //   type: "Others",
+        // },
         {
           id: 4,
           type: "Teachers",
