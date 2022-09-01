@@ -13,8 +13,7 @@ function createData(name, calories, fat, carbs, protein) {
 //   createData('Gingerbread', 356, 16.0, 49, 3.9),
 // ];
 
-export default function EarningsTable() {
-    const [rows, setRows]= useState([])
+export default function EarningsTable({rows}) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -28,8 +27,8 @@ export default function EarningsTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows?.map((row) => (
-            < EarningsRow key={row.name} row={row} />
+          {rows?.map((row, i) => (
+            < EarningsRow key={i} row={row} />
           ))}
         </TableBody>
       </Table>
