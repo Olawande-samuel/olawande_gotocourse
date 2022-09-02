@@ -421,6 +421,33 @@ export const adminFunctions = {
             }
         }
     },
+    fetchEarnings: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/admin/earnings/fetch`, {
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status < 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                message: err.message,
+                statusCode: 0,
+                success: false
+            }
+        }
+    },
     updateAvatar: async function(formdata, token){
         try{
             const res = await axios.post(`${baseURL}/admin/profile/avatar/update`,
@@ -2060,6 +2087,36 @@ export const teacherFunctions = {
         try{
             const res = await axios.patch(`${baseURL}/user/profile/update`,
             JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchEarnings: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/user/earnings/fetch`,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,

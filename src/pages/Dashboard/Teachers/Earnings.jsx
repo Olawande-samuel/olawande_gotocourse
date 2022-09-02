@@ -21,12 +21,56 @@ import Loader from "../../../components/Loader";
 
 export default function Earnings() {
     const { getItem } = useLocalStorage();
+    const flag = useRef(false);
+    const [loading, setLoading] = useState(false);
+    const [rows, setRows] = useState([]);
     let userdata = getItem(KEY);
     const {
       generalState: { isMobile },
+      teacherFunctions: {fetchEarnings}
+
     } = useAuth();
+    useEffect(() => {
+      if(flag.current) return;
+      (async() => {
+        try{
+          setLoading(_ => true);
+          let res = await fetchEarnings(userdata?.token);
+          const {success, message, statusCode} = res;
+          if(!success) throw new AdvancedError(message, statusCode);
+          else {
+            const {data} = res;
+            toast.success(message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            console.log(data)
+            setRows(_ => data);
+          }
+        }catch(err){
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }finally{
+          setLoading(_ => false);
+        }
+      })()
+      flag.current = true;
+    }, [])
     return (
       <Teachers isMobile={isMobile} userdata={userdata} style={{overflowY: "scroll"}} header="Earnings">
+        {loading && <Loader />}
         <div className={clsx.teachers_profile}>
           <AllEarnings />
           <Requests />

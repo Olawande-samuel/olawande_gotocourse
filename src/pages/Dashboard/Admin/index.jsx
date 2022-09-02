@@ -3525,26 +3525,24 @@ export function Earnings () {
   const {getItem} = useLocalStorage();
   const flag = useRef(false);
   let userdata = getItem(KEY);
-  const [loader, setLoader] = useState(false);
-  const {generalState, setGeneralState, adminFunctions: { fetchNotifications } } = useAuth(); 
+  const [loading, setLoading] = useState(false);
+  const [rows, setRows] = useState([]);
+  const {generalState, setGeneralState, adminFunctions: { fetchEarnings } } = useAuth(); 
   
-  const [notifications, setNotifications] = useState([]);
+  // const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     if(flag.current) return;
-      (async() => {
-        try{
-          setLoader(true)
-          const res = await fetchNotifications(userdata?.token);
-          const {message, success, statusCode} = res;
-          if(!success) throw new AdvancedError(message, statusCode);
-          const {data} = res
-          if(data.length > 0) {
-            setNotifications(data)
-            setGeneralState({...generalState, notifications: 0})
-          }
-        }catch(err){
-          toast.error(err.message, {
+
+    (async() => {
+      try{
+        setLoading(_ => true);
+        let res = await fetchEarnings(userdata?.token)
+        const {success, message, statusCode} =  res;
+        if(!success) throw new AdvancedError(message, statusCode);
+        else {
+          let {data} = res;
+          toast.success(message, {
             position: "top-right",
             autoClose: 4000,
             hideProgressBar: true,
@@ -3553,18 +3551,53 @@ export function Earnings () {
             draggable: true,
             progress: undefined,
           });
-        }finally{
-          setLoader(_ => false);
+          console.log(data);
+          setRows(_ => data);
         }
-      })()
+      }catch(err){
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }finally{setLoading(_ => false);}
+    })()
+
+      // (async() => {
+      //   try{
+      //     setLoader(true)
+      //     const res = await fetchNotifications(userdata?.token);
+      //     const {message, success, statusCode} = res;
+      //     if(!success) throw new AdvancedError(message, statusCode);
+      //     const {data} = res
+      //     if(data.length > 0) {
+      //       setNotifications(data)
+      //       setGeneralState({...generalState, notifications: 0})
+      //     }
+      //   }catch(err){
+      //     toast.error(err.message, {
+      //       position: "top-right",
+      //       autoClose: 4000,
+      //       hideProgressBar: true,
+      //       closeOnClick: true,
+      //       pauseOnHover: true,
+      //       draggable: true,
+      //       progress: undefined,
+      //     });
+      //   }finally{
+      //     setLoader(_ => false);
+      //   }
+      // })()
       flag.current = true;
   },[])
   
-  function handleRead(){
-
-  }
   return (
     <Admin header={"Earnings"}>
+      {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className={clsx.admin__student_main}> 
@@ -3576,7 +3609,7 @@ export function Earnings () {
             <button className="button p-1">Download CSV</button>
             </div>
           <div className={clsx.admin__student_main}> 
-            <EarningsTable /> 
+            <EarningsTable rows={rows} /> 
           </div>
           </div>
         </div>
