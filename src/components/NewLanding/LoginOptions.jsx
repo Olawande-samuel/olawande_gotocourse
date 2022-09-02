@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {useNavigate} from "react-router-dom"
 import {GiTeacher} from "react-icons/gi"
 import {AiOutlineClose} from "react-icons/ai"
@@ -15,15 +16,16 @@ import useLocalStorage from "../../hooks/useLocalStorage.jsx"
 const LoginOptions = ({closeOverlay, type}) => {
     const {  generalState: { navHeight }, authFunctions: { googleSignUp } } = useAuth();
     const{getItem}= useLocalStorage()
-const navigate = useNavigate()
+    const navigate = useNavigate()
+    const [loading, setLoading]= useState(false)
 
     const mutation = useMutation((userdata)=>googleSignUp(userdata), {
         onError: (err)=>{
             console.error(err)
         },
         onSuccess: (data)=>{
-            console.log(data)
-            
+            console.log({data})
+            console.log(data.statusCode)
         }
     })
 
@@ -32,20 +34,37 @@ const navigate = useNavigate()
         if(type === "google"){
             signInWithPopup(authentication, provider).then(res=> {
                 if(res.user?.accessToken){
-                    mutation.mutate({
-                        accessToken: res.user.accessToken,
-                        userType: usertype
-                    })
-                    if(mutation.data?.statusCode !== 1) throw new AdvancedError(mutation.data.message, mutation.data.statusCode)
-                    localStorage.setItem(KEY, JSON.stringify(mutation.data?.data));
-                    usertype === "student" ? navigate("/student"):navigate("/teacher")
+                    setLoading(true)
+                    googleSignUp({
+                    
+                    accessToken: res.user.accessToken,
+                    userType: usertype
 
+                  }).then(res=>{
+                    setLoading(false)
+                    if(res.statusCode !== 1) throw new AdvancedError(res.message, res.status)
+                    localStorage.setItem("gotocourse-userdata", JSON.stringify(res.data))
+                    navigate(`${usertype === 'student' ? "/student" : "/teacher"}`);
+
+                  }).catch(err=>{
+                    setLoading(false)
+                    console.error(err)
+                    toast.error(err.message, {
+                        position: "bottom-center",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                
+                  })
                 }
             }
-    
             ).catch(err=> {
                 toast.error(err.message, {
-                    position: "bottom-center",
+                    position: "bottom-left",
                     autoClose: 4000,
                     hideProgressBar: true,
                     closeOnClick: true,
@@ -54,8 +73,7 @@ const navigate = useNavigate()
                     progress: undefined,
                 });
             
-            }
-            )
+            })
         } else {
             signInWithPopup(authentication, facebookProvider).then(res=>{
                 console.log(res)
@@ -91,7 +109,7 @@ const navigate = useNavigate()
 
             <div className="signUpOptions_overlay_container">
                 {
-                    mutation.isLoading ?  <div className="spinner-border text-primary text-center d-flex mx-auto">
+                    loading ?  <div className="spinner-border text-primary text-center d-flex mx-auto">
                         <div className="visually-hidden">Loading...</div>
                     </div> 
                     :  

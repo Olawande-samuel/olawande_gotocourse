@@ -1,0 +1,169 @@
+
+
+
+.textImage {
+    display: flex;
+    flex-direction:column-reverse;
+    gap: 1.5rem;
+}
+.text_section {
+    color:#fff;
+   
+}
+.text_section_header {
+    font-weight: 800;
+    font-size: clamp(2.7rem, 1.3929rem + 0.5357vw, 4.75rem);
+    line-height: 38px;
+    margin-bottom: 1.5rem;
+}           
+.text_section_p {
+    font-size: 15px;
+    margin-bottom: 3rem;
+}
+.text_section_button {
+    padding: 15px 28px;
+    color: white;
+    background: var(--theme-orange);
+    border: none;
+    outline: none;
+    border-radius:10px;
+    transition: all .3s ease;
+}
+.text_section_button:hover {
+    background: linear-gradient(180.9deg, #191046 18.68%, rgba(16, 51, 70, 0.95) 97.29%);
+    color: #eee;
+    opacity:0.4;
+}
+
+.image_section{
+    padding-top: 1rem;
+}
+.image_section > div img {
+    max-width:100%;
+    max-height:350px;
+    object-fit:contain;
+    height: 100%;
+}
+@media (min-width: 612px){
+    .textImage {
+        flex-direction:row;
+        justify-content: center;
+        align-items:center;
+        height: 100%;
+    }
+
+    .textImage > div {
+        flex-basis: 100%;
+    }
+}
+/* CARD */
+.card_content{
+    padding: 1rem .7rem;
+    color: white;
+}
+.card_content h4 {
+    font-weight: 800;
+    font-size: clamp(1.15rem, 1.1071rem + 0.7143vw, 1.4rem);
+    margin-bottom: .2rem;
+}
+.card_content p{
+    margin-bottom: 1.5rem;
+    font-size: 14px;
+    font-weight: lighter;
+}
+.card_img {
+    max-width: 100%;
+    object-position:top;
+    object-fit:cover;
+    width: 100%;
+    height: 300px;
+}
+.see_all {
+    color: #77BBE0;
+    font-size: 13px;
+}
+
+/* HERO */
+
+.hero {
+    margin-top: 1px;
+    background: linear-gradient(180.9deg, #191046 18.68%, rgba(16, 51, 70, 0.95) 97.29%);
+    padding: 1.5rem 0 2rem 0;
+}
+@media (min-width: 612px){
+    .hero {
+        height:min(100vh - 81px, 450px);
+        padding: 1rem 0 2rem 0;
+
+    }
+    
+}
+
+
+
+/* CELEBRITY MENTORS */
+.slider_wrapper{
+    background: #191046;
+    color: #fff ;
+    padding: 4rem 0 2rem 0;
+}
+.slider_wrapper h2 {
+    font-weight: 900;
+}
+
+.slider_header {
+    margin-bottom: 4rem;
+}
+/* .slider_wrapper > div > div > div > div{
+    color: red;
+    width: 300px !important;
+} */
+
+/* FAVOURITES */
+.favourite {
+    background: #191046;
+    padding: 2rem 0;
+}
+
+
+/* RIGHT MENTORS */
+.right_mentor {
+    background: linear-gradient(180.9deg, #191046 18.68%, rgba(16, 51, 70, 0.95) 97.29%);
+    padding: 4rem 0;
+    border-top: 2px solid #CDCDCD;
+    border-bottom: 2px solid #CDCDCD;
+}
+.right_mentor_img_wrapper {
+    display: flex;
+    justify-content:flex-end;
+}
+.right_mentor_img_item {
+    width: min(100%, 180px);
+    height: 280px;
+    background:var(--theme-orange);
+    margin: 0 -20px;
+    padding: .8rem;
+    border-radius:10px;
+    z-index: 2;
+    color: #fff;
+}
+
+.right_mentor_img_item:nth-child(odd){
+    transform: scale(0.8);
+    background:#7ED4EF ;
+    z-index: 1;
+}
+
+.right_mentor_img_item img {
+    max-width:100%;
+    margin-bottom: 3rem;
+    border-radius:10px;
+    height: auto !important;
+
+}
+@media (max-width:611px){
+    .right_mentor_img_wrapper {
+        justify-content:center;
+    }
+}
+/*  */

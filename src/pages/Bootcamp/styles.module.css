@@ -6,7 +6,10 @@
 
 
 .bootcamp {
-    width: 100%;
+    /* width: 100%; */
+    flex:60%;
+    padding-left: 2%;
+    padding-right: 20%;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -15,9 +18,9 @@
 }
 
 .bootcamp_content {
-    padding: 40px;
+    /* padding: 40px; */
     padding-top: 0px;
-    width: 55%;
+    /* width: 45%; */
 }
 
 .bootcamp_content h2 {
@@ -60,11 +63,11 @@
 }
 
 .bootcamp_image {
-    width: 50%;
+    flex: 40%;
     height: 100vh;
     background-color: var(--pry);
     position: relative;
-    margin-top: 40px;
+    margin-top: 0;
 }
 
 .image_container {
@@ -93,11 +96,10 @@
 
 @media screen and (max-width: 800px){
     .bootcamp {
-        width: 100%;
+        /* width: 100%; */
         min-height: 100vh;
-        display: flex;
-        flex-direction: column-reverse;
-        align-items: flex-start;
+        padding-right: 5%;
+
     }
 
     .bootcamp_content {
@@ -108,7 +110,9 @@
 
     .bootcamp_image {
         width: 100%;
-        height: 40vh;
+        position: relative;
+        display: grid;
+        place-items:center;
     }
 
     .image_container {
@@ -117,16 +121,15 @@
         /* top: -100px; */
         /* height: 300px; */
         margin: auto;
-        position: unset;
+        position: relative;
+        border: 1px solid;
 
     }
     .bootcamp_image {
-        background-color: unset;
-        position: relative;
     }
     
     .image_container {
-        height: 100%;
+        height: 65%;
         left:0;
         top: 0;
         transform:translateY(0);
@@ -139,6 +142,24 @@
 }
 
 
+@media screen and (max-width: 600px){
+    .container {
+        flex-direction: column-reverse;
+        min-height: 100vh;
+    }
+    .bootcamp, .bootcamp_image {
+        /* width: 100%; */
+        min-height:100%;
+        flex:1 1 100%;
+    }
+.bootcamp {
+    padding-right: 2%;
+
+}
+    .bootcamp_image{
+        min-height: 400px;
+    }
+}
 @media screen and (max-width: 560px){
     .bootcamp_content h2 {
         font-size: 2rem;
