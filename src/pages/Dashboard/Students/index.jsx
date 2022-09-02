@@ -273,9 +273,9 @@ export function Edit(){
                             <span className="visually-hidden">Loading...</span>
                         </div>
                          : 
-                        <p style={{cursor: isUploading && 'not-allowed'}} onClick={changeProfilePictureHandler}>Change Picture</p>
+                        <p style={{cursor: isUploading && 'not-allowed', color: "var(--theme-orange", fontWeight:"700"}} onClick={changeProfilePictureHandler}>Click to Upload Photo</p>
                     
-                    : (<p onClick={uploadPicture}>Upload Photo</p>)
+                    : (<p onClick={uploadPicture} >Select a photo to upload</p>)
                     }
                 </div>
                 <div className={clsx.edit__picture}>

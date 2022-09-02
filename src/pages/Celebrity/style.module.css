@@ -38,6 +38,10 @@
 .image_section{
     padding-top: 1rem;
 }
+.image_section > div {
+    display: flex;
+    justify-content: center;
+}
 .image_section > div img {
     max-width:100%;
     max-height:350px;
@@ -54,6 +58,10 @@
 
     .textImage > div {
         flex-basis: 100%;
+    }
+    .image_section > div {
+        display: flex;
+        justify-content:flex-end
     }
 }
 /* CARD */
@@ -167,3 +175,43 @@
     }
 }
 /*  */
+
+
+.new_main .slider_wrapper{
+    padding: 2rem 0 2rem 0;
+}
+.new_main .see_all {
+    display: none;
+}
+
+.input_wrapper {
+    gap: 1rem;
+    flex: 50%;
+}
+
+.input_wrapper input {
+    padding: 14px 30px;
+    font-size: 14px;
+    background: rgba(217, 217, 217, 0.4);
+    border-radius: 10px;
+}
+
+.input_wrapper button {
+    padding: 5px 20px;
+}
+
+.top {
+    margin-bottom: 1.8rem;
+}
+
+.top h3 {
+    flex: 50%;
+}
+.top .niche {
+    margin-bottom: .3rem ;
+    
+  }
+  
+  .top ul li p:first-child {
+    font-weight: 700;
+  } 

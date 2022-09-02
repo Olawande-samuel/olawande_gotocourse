@@ -1,7 +1,6 @@
 import {useState} from "react"
 import { useNavigate } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query";
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 
 import Layout from "../Layout"
 import BootImg from "../../images/newbootcamp.webp"

@@ -1,3 +1,4 @@
+import {Link} from "react-router-dom"
 import Image from "../../components/Image"
 import Layout from "../../components/Layout"
 import {useAuth} from "../../contexts/Auth"
@@ -74,18 +75,18 @@ function RightMentor(){
     )
 }
 
-function TechExperts(){
+export function TechExperts(){
     const {otherFunctions: {fetchMentors}} = useAuth();
 
     const {data, isLoading, isError} = useQuery(["tech mentors"], fetchMentors, {
         initialValue: []
     })
     return (
-        <Slider title="Technical Experts Level 1" data={data?.data && data.data.slice(0, 7) }  />
+        <Slider title="Technical Experts Level 1" data={data?.data && data.data.slice(0, 7)} size={5} />
 
   )
 }
-function TechExperts2(){
+export function TechExperts2(){
     const {otherFunctions: {fetchMentors}} = useAuth();
     const {data, isLoading, isError} = useQuery(["tech mentors"], fetchMentors, {
         initialValue: []
@@ -93,7 +94,7 @@ function TechExperts2(){
 
 
     return (
-        <Slider title="Technical Experts Level 2" data={data?.data && data.data.slice(8, 20) }  />
+        <Slider title="Technical Experts Level 2" data={data?.data && data.data.slice(8, 20)} size={5}  />
 
   )
 }
@@ -115,7 +116,7 @@ function Favourite(){
     )
 }
 
-function AlistMentors(){
+export function AlistMentors(){
     const AlistMentor = {
         title: "A-list Mentors",
         size: 4, 
@@ -157,7 +158,7 @@ function AlistMentors(){
 }
 
 
-function CelebrityMentor(){
+export function CelebrityMentor(){
     const celebrityMentors = {
         title: "Celebrity Mentors",
         size:3.3,
@@ -273,14 +274,16 @@ function Slider({title, data, size=4}){
             <div className="container">
                 <div className={`${style.slider_header} d-flex justify-content-between align-items-center`}>
                     <h2>{title}</h2>
-                    <span className={style.see_all}>See all</span>
+                    <Link to="mentors">
+                        <span className={style.see_all}>See all</span>  
+                    </Link>
                 </div>
                 <Swiper
                 // install Swiper modules
                     modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
                     loop={true}
                     speed={1500}
-                    // autoplay={{delay:2500}}
+                    autoplay={{delay:3500}}
                     spaceBetween={0}
                     slidesPerView={1}
                     // navigation
