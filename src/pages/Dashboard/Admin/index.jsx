@@ -3971,14 +3971,14 @@ export function Edit() {
                 <span className="visually-hidden">Loading...</span>
                </div> : 
                 <p
-                  style={{ cursor: isUploading && "not-allowed" }}
+                  style={{ cursor: isUploading && "not-allowed", color: "var(--theme-orange", fontWeight:"700" }}
                   onClick={changeProfilePictureHandler}
                 >
-                  Change Picture
+                  Click to Upload Photo
                 </p>
               ) : (
                 <p onClick={uploadPicture} style={{ cursor: "pointer" }}>
-                  Upload Photo
+                  Select a photo to upload
                 </p>
               )}
             </div>
