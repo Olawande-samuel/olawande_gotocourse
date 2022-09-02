@@ -312,6 +312,7 @@ const ChatBox = ({ userInfo, boxdata, checked, type , displayControl, setShowUse
           progress: undefined,
         });
         queryClient.invalidateQueries(["get private messages from user"])
+        setText("")
       } else {
         toast.error(res.message, {
           position: "top-right",
@@ -418,7 +419,7 @@ const ChatBox = ({ userInfo, boxdata, checked, type , displayControl, setShowUse
           {checked}
           <div className={clsx.chat_box_top}>
             <div className={clsx.chat_box_top_image}>
-              <i onClick={()=>setShowUserlist(true)}><IoMdArrowRoundBack /></i>
+              <i onClick={()=>setShowUserlist(true)} className="me-3"><IoMdArrowRoundBack /></i>
               {
                 userInfo.profileImg &&
                 <img src={userInfo?.profileImg && userInfo?.profileImg } alt="avatar" style={{width:"50px", height:"50px", borderRadius:"50%" }} /> 

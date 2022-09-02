@@ -1025,23 +1025,25 @@ export function Approve() {
       const teacherInfo = getItem("gotocourse-teacherDetails")
       let pledreInfo;
       console.log("getting")
-      try {
-        if(pledre){
-          console.log(pledre)
-          setGeneralState({...generalState, loading: true})
-          const pledRes = await pledre.getTeacherDetails(teacherInfo.email)
-          if(pledRes){
-            pledreInfo = pledRes
-          } else {
-            pledreInfo = {}
+        try {
+          if(pledre){
+            console.log(pledre)
+            setGeneralState({...generalState, loading: true})
+            const pledRes = await pledre.getTeacherDetails(teacherInfo.email)
+            console.log({pledRes})      
+            if(pledRes.email){
+              pledreInfo = pledRes
+            } else {
+              pledreInfo = {}
+            }
           }
+          }catch(error){
+            console.error(error.message)
+          }finally{
+            setGeneralState({...generalState, loading: false})
         }
-      }catch(error){
-        console.error(error.message)
-      }finally{
-        setGeneralState({...generalState, loading: false})
-      }
 
+        localStorage.setItem("gotocourse-teacherDetails", JSON.stringify({...teacherInfo, pledre:pledreInfo}))
         setData({...teacherInfo, pledre:pledreInfo});
       }
     )()
@@ -1052,25 +1054,22 @@ export function Approve() {
     e.preventDefault();
     const userdata = getItem(KEY)
 
+    console.log({pledreId})
     let item = {
       userId: id,
       pledreTeacherId: pledreId ? pledreId : null
     };
 
-    try {
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: true,
-        };
-      });
-      if(!pledreId) throw new AdvancedError("User is not registered to your school", 0)
-      const res =  await verify_pledre(item, userdata?.token);
-      const { message, success, statusCode } = res;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-          // if already approved, first verify_pledre unapproves teacher. The one below checks the current pledre access status of the user
-          const res = (data.pledre?._id && data.accessPledre === true) ? await pledre.deleteTeacher(data.pledre?._id) : ""
+    if(!data.accessPledre){
+      // give access and save pledre id to backend
+      try {
+        setGeneralState((old) => { return { ...old, loading: true, }; });
+        if(!pledreId) throw new AdvancedError("User is not registered to your school", 0)
+        const res =  await verify_pledre(item, userdata?.token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          console.log(data.accessPledre)
           setData({...data, accessPledre: !data.accessPledre})
           toast.success(message, {
             position: "top-right",
@@ -1081,26 +1080,71 @@ export function Approve() {
             draggable: true,
             progress: undefined,
           }); 
-        
+        }
+      } catch (error) {
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }) 
+      } finally{
+          setGeneralState((old) => {
+            return {
+              ...old,
+              loading: false,
+            };
+          });
       }
-    } catch (error) {
-      toast.error(error.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      }) 
-    } finally{
-        setGeneralState((old) => {
-          return {
-            ...old,
-            loading: false,
-          };
-        });
+    }else {
+      // revoke access and delete teacher from pledre     
+      try {
+        console.log(data.pledre?._id)
+        setGeneralState((old) => { return { ...old, loading: true, }; });
+        // revoke acess
+        const res =  await verify_pledre(item, userdata?.token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          // remove from pledre
+          const PledRes = (data.accessPledre === true) && await pledre.deleteTeacher(data.pledre?._id)
+          console.log({PledRes})
+          setData({...data, accessPledre: !data.accessPledre})
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }); 
+        }
+      } catch (error) {
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }) 
+      } finally{
+          setGeneralState((old) => {
+            return {
+              ...old,
+              loading: false,
+            };
+          });
+      }
+
     }
+
+    
   }
   async function approveApplication(e, id){
     e.preventDefault();
@@ -1202,8 +1246,7 @@ export function Approve() {
         });
     }
   }
-  console.log("data", data)
-  console.log("pledre", data?.pledre)
+ 
   return (
     <Admin header="Approval">
       <div className={clsx["admin_profile"]}>
@@ -2148,7 +2191,7 @@ export function CourseDetails({}){
   const navigate = useNavigate();
   const {getItem, updateItem} = useLocalStorage();
   let userdata = getItem(KEY);
-  const {generalState, setGeneralState, adminFunctions: {fetchCourses, deleteCourse, toggleCourseStatus}} = useAuth();
+  const {generalState, setGeneralState, adminFunctions: {fetchCourses, deleteCourse, toggleCourseStatus, adminUpdateCourse}} = useAuth();
   const flag = useRef(false);
   const [formstate, setFormstate] = useState({
     name: "",
@@ -2158,10 +2201,12 @@ export function CourseDetails({}){
     student: "",
     instructors: []
   })
+
+  const [openprompt, setOpenprompt] = useState(false)
+  const [courseTutorId, setCourseTutorId] = useState(false)
   const [loading, setLoading] = useState(true);
-  const teachers = ["Dr. Joy Castus"];
-  const students = ["James Segun"];
   const params = useParams();
+
   //get user id
   useEffect(() => {
     //fetch course details for the id
@@ -2259,19 +2304,39 @@ export function CourseDetails({}){
 
   async function toggleCourseStatusHandler(e){
     setLoading(_ => true);
+    let pledId
     try {    
-      const res = await toggleCourseStatus(userdata?.token,  params?.id);
-      const { success, message, statusCode } = res;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        const pledRes = formstate.status !== "active" && await generalState.pledre.addCourse({
+      if(formstate.status !== "active"){
+        const pledRes = await generalState.pledre.addCourse({
           course_name: formstate.name,
           course_description: formstate.description,
-          is_public: true,
+          is_public: false,
           short_description: formstate.description,
-          price: 5000
+          price: formstate.price
         })
-        setFormstate({...formstate, status: "active"})
+        console.log({pledRes})
+        if(pledRes.id){
+          pledId = pledRes.id
+          const res = await toggleCourseStatus(userdata?.token,  params?.id, {pledreCourseId: pledId});
+          const { success, message, statusCode } = res;
+          if (!success) throw new AdvancedError(message, statusCode);
+          setFormstate({...formstate, status: "active"})
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      }
+      else {
+        const res = await toggleCourseStatus(userdata?.token,  params?.id, {pledreCourseId: pledId});
+        const { success, message, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        setFormstate({...formstate, status: "inactive"})
         toast.success(message, {
           position: "top-right",
           autoClose: 4000,
@@ -2280,7 +2345,7 @@ export function CourseDetails({}){
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        });
+          });
       }
     } catch (err) {
       toast.error(err.message, {
@@ -2303,7 +2368,64 @@ export function CourseDetails({}){
     navigate(`/admin/courses/create?edit=${params?.id}`);
   }
 
+  function removeTutor(tutorId){
+    setCourseTutorId(tutorId)
+    setOpenprompt(true)
+  }
 
+  function closeModal(){
+    setOpenprompt(false)
+  }
+
+  async function deleteTutor(){
+    const newList = formstate.instructors.filter((tutor)=>tutor.tutorId !== courseTutorId)
+    let updatedInstructors = []
+    let startDate =  new Date(formstate.startDate).toISOString().split('T')[0]
+    let endDate =  new Date(formstate.endDate).toISOString().split('T')[0]
+    const instrctors = newList.forEach(instructor=> updatedInstructors.push(instructor.email))
+
+    const formdata = {
+      ...formstate,  
+      instructors: updatedInstructors,
+      startDate,
+      endDate,
+      categoryName: formstate.category
+    }
+
+    try{
+      setLoading(true)
+    const res =  await adminUpdateCourse( userdata?.token, formstate?.courseId,  formdata)
+
+    const { success, message, statusCode } = res;
+
+    if (!success) throw new AdvancedError(message, statusCode);
+    else {
+      setFormstate({...formstate, instructors: newList})
+      setOpenprompt(false)
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } finally {
+      setLoading((_) => false);
+    }
+  }
   return(
     <Admin header="ADMIN">
       {loading && <Loader />}
@@ -2336,7 +2458,6 @@ export function CourseDetails({}){
                 readOnly
               ></textarea>
             </div>
-
             <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
                 <label>Name of teachers</label>
@@ -2344,14 +2465,15 @@ export function CourseDetails({}){
                   formstate.instructors.length > 0 ? formstate.instructors.map((t, i) => (
                     <div key={i}>
                       <p>{i + 1}. &nbsp; {t.name}</p> 
-                      {/* <div className={clsx.teachers__actions}>
-                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
-                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
-                      </div> */}
+                      <div className={clsx.teachers__actions}>
+                        <span className={`${clsx.teachers__actions_delete} text-danger`} onClick={()=>removeTutor(t.tutorId)}><AiOutlineDelete /> Delete</span>
+                      </div>
                     </div>
                   )) : <p>{formstate.instructorName}</p>
                 }
-             
+                <button type="button" className={clsx.form_group__button}>
+                    Add Instructor
+                </button>
               </div>
             </div>
 
@@ -2388,11 +2510,62 @@ export function CourseDetails({}){
 
           </form>
         </div>
+        <DeleteModal open={openprompt} close={closeModal} deleteTutor={deleteTutor} />
       </div>
     </Admin>
   )
 }
 
+// DELETE PROMPT MODAL
+
+function DeleteModal({open, close, deleteTutor}){
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    minWidth: 600,
+    background: "#fff",
+    border: "1px solid #eee",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 6,
+    padding: "4rem 2rem",
+  };
+  return(
+    <Modal
+        open={open}
+        // onClose={close}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box style={style}>
+          <h5
+            className="lead text-primary text-center"
+            style={{ color: "var(--theme-blue)" }}
+          >
+            Remove Instructor from Course?
+          </h5>
+          <div className="d-flex justify-content-around align-items-center mt-4">
+            <button
+              className="btn btn-primary my-3"
+              onClick={close}
+              style={{ backgroundColor: "var(--theme-blue)" }}
+            >
+              Cancel
+            </button>
+            <button
+              className="btn btn-primary my-3"
+              onClick={deleteTutor}
+              style={{ backgroundColor: "var(--theme-orange)" }}
+            >
+              Remove
+            </button>
+            </div>
+        </Box>
+      </Modal>
+  )
+}
 // BOOTCAMPDETAILS COMPONENT
 export function BootcampDetails({}){
   const navigate = useNavigate();

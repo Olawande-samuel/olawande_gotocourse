@@ -26,6 +26,7 @@ export const breakpoints = {
 export const baseURL = "https://loftywebtech.com/gotocourse/api/v1";
 
 export const KEY = "gotocourse-userdata"
+export const IMAGEURL = "https://loftywebtech.com/gotocourse/api/uploads"
 
 export function getDate(date){
   let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

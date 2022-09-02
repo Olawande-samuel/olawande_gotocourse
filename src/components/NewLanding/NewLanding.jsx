@@ -300,6 +300,7 @@ function Learn (){
                     Join a classroom to take instructor led training, do projects with learning partners, take quizzes, and build work related portfolio
                 </p>
                 <div>
+                  <Link to="/signup" style={{display:"inline-block"}}>
                   <motion.button 
                   className="btn-plain button-lg newLearning_button" type="button"
                   whileHover={{ 
@@ -307,10 +308,9 @@ function Learn (){
                     textShadow:"0px 0px 8px rgb(255, 255, 255)"
                   }}
                   >
-                  <Link to="/signup">
                     Get Started Today
-                    </Link>
                   </motion.button>
+                    </Link>
                 </div>
                   
               </div>
@@ -348,20 +348,19 @@ function Self(){
                 Self-paced courses that allow you to complete assignments at your own pace, making it easier to balance coursework with your other personal and professional responsibilities.
               </p>
               <div>
-
-                <motion.button
-                  className="btn-plain newLearning_button button-lg"
-                  type="button"
-                  whileHover={{
-                    boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-                    textShadow: "0px 0px 8px rgb(255,255,255)",
-                  }}
-                >
-                  <Link to="/signup">
+                <Link to="/signup" style={{display:"inline-block"}}>
+                  <motion.button
+                    className="btn-plain newLearning_button button-lg"
+                    type="button"
+                    whileHover={{
+                      boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                      textShadow: "0px 0px 8px rgb(255,255,255)",
+                    }}
+                   >
                     Try Gotocourse
-                  </Link>
-                </motion.button>
-                    </div>
+                    </motion.button>
+                 </Link>
+                </div>
             </div>
           </motion.div>
         </div>
@@ -385,6 +384,7 @@ function Mentorship (){
                     Challenge yourself with a one-on-one mentorship session with industry experts and professionals and grow your career.
                 </p>
                 <div>
+                  <Link to="/signup" style={{display:"inline-block"}}>
                   <motion.button 
                   className="btn-plain button-lg newMentor_button" type="button"
                   whileHover={{ 
@@ -392,10 +392,9 @@ function Mentorship (){
                     textShadow:"0px 0px 8px rgb(255, 255, 255)"
                   }}
                   >
-                    <Link to="/signup" >
                     Get Started Today
-                    </Link>
                   </motion.button>
+                    </Link>
                 </div>
                   
               </div>
@@ -422,6 +421,7 @@ function InPerson (){
                     Learn from experts by joining us in any of our physical locations.
                 </p>
                 <div>
+                  <Link to="/signup" style={{display:"inline-block"}}>
                   <motion.button 
                   className="btn-plain button-lg newLearning_button" type="button"
                   whileHover={{ 
@@ -429,10 +429,9 @@ function InPerson (){
                     textShadow:"0px 0px 8px rgb(255, 255, 255)"
                   }}
                   >
-                  <Link to="/signup">
                     Get Started Today
-                    </Link>
                   </motion.button>
+                    </Link>
                 </div>
                   
               </div>

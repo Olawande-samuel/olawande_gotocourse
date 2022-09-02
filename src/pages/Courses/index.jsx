@@ -203,7 +203,7 @@ const Courses = ({ children }) => {
                   </li>
                     {bread.filter(item=> item !== "").map((item, idx)=>(
                       <li className="breadcrumb-item active text-uppercase">
-                        <NavLink  to={`${bread.slice(0, idx + 2).join("/")}`}>{item.split("-").join(" " )}</NavLink>
+                        <NavLink  to={`${bread.slice(0, idx + 2).join("/")}`}>{item.split("-").join(" ")}</NavLink>
                       </li>
                     ))}
               </ol>
@@ -220,6 +220,8 @@ const Courses = ({ children }) => {
 };
 
 export default Courses;
+
+
 
 const Card = ({ logo, name, description, iconImg }) => {
   return (
@@ -1247,3 +1249,37 @@ export const ReviewSection = ()=> {
   </section>
   )
 }
+
+export const Lounge = ({ children }) => {
+  const location = useLocation();
+  const { generalState:{loading} } = useAuth()
+  const bread = location.pathname?.split("/");
+  return (
+    <Layout celebMentors={true}>
+      <ScrollToTop />
+      <div className={style.block}>
+        <ToastContainer />  
+        <div className={`container`}>
+          <div className={style.breadcrumbs_wrapper}>
+            <nav arial-label="breadcrumb">
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item">
+                  <Link to="/">MENTORS LOUNGE</Link>
+                  </li>
+                    {bread.filter(item=> item !== "").map((item, idx)=>(
+                      <li className="breadcrumb-item active text-uppercase">
+                        <NavLink  to={`${bread.slice(0, idx + 2).join("/")}`}>{item.split("-").join(" ")}</NavLink>
+                      </li>
+                    ))}
+              </ol>
+            </nav>
+          </div>
+        </div>
+        {children}
+      </div>
+      {loading && 
+            <Loader />
+        }
+    </Layout>
+  );
+};

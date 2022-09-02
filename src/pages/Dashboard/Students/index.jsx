@@ -356,6 +356,7 @@ export function Edit(){
 
 export function Bootcamps() {
     const {studentFunctions: { fetchBootcamps} } = useAuth();
+
     const navigate = useNavigate();
     const {getItem} = useLocalStorage();
     const flag = useRef(false);
@@ -1306,6 +1307,7 @@ export const Students = ({children, isMobile, notification, userdata, header}) =
     const route = location.pathname.split("/")[1];
 
     const { getItem }= useLocalStorage()
+
     useEffect(() => {
         if(notification){
             toast.success(notification, {
@@ -1327,12 +1329,12 @@ export const Students = ({children, isMobile, notification, userdata, header}) =
 
     const {isLoading, data} = useQuery(["get courses"], ()=> fetchCourses())
 
+    const user = getItem("gotocourse-userdata")
    
     useEffect(()=>{
         let isActive = true
         if(!pledredata?.email && pledre.getStudentDetails){
             (async()=>{
-                const user = getItem("gotocourse-userdata")
                 try{
                     const response = await pledre.getStudentDetails(user?.email)
                     if(isActive){
@@ -1371,9 +1373,8 @@ const student = {
     logo: <FaGraduationCap size="2.5rem" color="#0C2191" />
 }
     
-
 // fetch messages
-const getMessage = useQuery(["fetch admin messages"], ()=>getUnreadMessages(userdata?.token), {
+const getMessage = useQuery(["fetch student messages"], ()=>getUnreadMessages(user.token), {
     onError: (err)=> {
       toast.error(err.message,  {
         position: "top-right",

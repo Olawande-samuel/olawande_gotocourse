@@ -48,6 +48,7 @@ import Settings from "./pages/Dashboard/Admin/Settings";
 
 import {Students} from "./pages/Students"
 import Verification from "./pages/User/Verification";
+import {Landing as CelebLanding} from "./pages/Celebrity";
 
 function App() {
   return (
@@ -76,6 +77,7 @@ function App() {
             <Route path="career" element={<Career />} />
             <Route path="students" element={<Students  />} />
             <Route path="user-authentication" element={<Verification  />} />
+            <Route path="celebs" element={<CelebLanding />} />
             
             <Route path="student" element={<Out />}>
               <Route path="" element={<StudentDashboard  />} />
@@ -100,6 +102,7 @@ function App() {
                 {/* <Route path="payment" element={<Payment />} /> */}
               </Route>
             </Route>
+            
             <Route path="teachers" element={<Out/>}>
               <Route index element={<All  type="teachers" />} />
               <Route path=":id" element={<Out />} >
@@ -124,7 +127,6 @@ function App() {
               <Route path="chat" element={<TeacherChat />} />
               <Route path="notifications" element={<TeacherDashboard />} />
               <Route path="help" element={<TeachersHelp />} />
-
             </Route>
             <Route path="affiliates" element={<AffiliateLanding />} />
             <Route path="affiliates/register" element={<AffiliateRegister />} />
@@ -186,6 +188,7 @@ function App() {
               <Route path="login" element={<AdminLogin />} />
               <Route path="signup" element={<AdminSignup />} />
             </Route> 
+
         </Route>
         <Route path="*" element={<h1 className="text-center">Page Not Found</h1>} />
       </Routes>

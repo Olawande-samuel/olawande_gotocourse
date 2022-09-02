@@ -158,7 +158,7 @@ export const Syllabus = ({
         )
           throw new AdvancedError("All fields are required", 0);
           let currentInstructor= [];
-          editInstructorsList.length >0 && editInstructorsList.forEach(tutor=>{currentInstructor.push(tutor.email)})
+          editInstructorsList.length > 0 && editInstructorsList.forEach(tutor=>{currentInstructor.push(tutor.email)})
           let formdata = {
             ...formstate,
             type:"PACKAGE",
@@ -168,7 +168,15 @@ export const Syllabus = ({
             instructors:[...instructorsList, ...currentInstructor]
           }
 
-        const res = type === "admin" ? await adminUpdateCourse( userdata?.token, formstate?.courseId,  formdata) : await updateCourse( userdata?.token, formstate?.courseId, formdata, userdata.token );
+        const res = type === "admin" ?
+          await adminUpdateCourse( userdata?.token, formstate?.courseId,  {
+            ...formdata,
+            startDate: new Date(formstate.startDate).toISOString().split('T')[0],
+            endDate: new Date(formstate.endDate).toISOString().split('T')[0],
+            categoryName: formstate.category
+
+          }) 
+        : await updateCourse( userdata?.token, formstate?.courseId, formdata, userdata.token );
 
         const { success, message, statusCode } = res;
   
