@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import {motion} from "framer-motion"
 import {Logo, Logosm} from "../images/components/svgs"
@@ -87,6 +87,9 @@ const rightLink = [
   },
 ]
 const Footer = () => {
+  const location = useLocation();
+  const celebRoute = location.pathname.split("/")[1] === "lounge"
+
   const scrollWithOffset = (el)=>{
     const yCoord = el.getBoundingClientRect().top + window.pageYOffset;
     const yOffset = -80;
@@ -94,7 +97,9 @@ const Footer = () => {
   }
   
   return (
-    <footer className="footer wrapper">
+    <footer className="footer wrapper" style={{
+      background: celebRoute ?  "#191046" :"var(--theme-blue)"  , color:  "#fffff"
+      }}>
       <div className="container ">
       <div className="box mb-5">
             <p className="text-center mb-5">

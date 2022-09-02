@@ -49,6 +49,8 @@ import Settings from "./pages/Dashboard/Admin/Settings";
 import {Students} from "./pages/Students"
 import Verification from "./pages/User/Verification";
 import {Landing as CelebLanding} from "./pages/Celebrity";
+import Lounge from "./pages/Celebrity/Lounge";
+import CelebProfile from "./pages/Celebs/CelebProfile";
 
 function App() {
   return (
@@ -77,8 +79,16 @@ function App() {
             <Route path="career" element={<Career />} />
             <Route path="students" element={<Students  />} />
             <Route path="user-authentication" element={<Verification  />} />
-            <Route path="celebs" element={<CelebLanding />} />
+
             
+            <Route path="lounge" element={<Out/>}>
+              <Route index element={<CelebLanding />} />
+              <Route path="mentors" element={<Lounge />} />
+              <Route path="mentors/:id" element={<CelebProfile />} >
+              </Route>
+            </Route>
+
+
             <Route path="student" element={<Out />}>
               <Route path="" element={<StudentDashboard  />} />
               <Route path="profile" element={<StudentProfile  />} />

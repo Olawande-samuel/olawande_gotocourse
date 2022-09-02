@@ -799,10 +799,10 @@ export const CourseProfile = ({preview}) => {
   },[id, preview])
 
   function getDate(date){
-      return new Date(date).toDateString()
+    return new Date(date).toDateString()
   }
 
- async function addToWishList(){
+  async function addToWishList(){
     const data = getItem("gotocourse-courseInfo");
 
     const  userData = getItem(KEY)
@@ -1257,18 +1257,18 @@ export const Lounge = ({ children }) => {
   return (
     <Layout celebMentors={true}>
       <ScrollToTop />
-      <div className={style.block}>
+      <div className={style.block} style={{background:"#191046", color:"#fff"}}>
         <ToastContainer />  
         <div className={`container`}>
           <div className={style.breadcrumbs_wrapper}>
             <nav arial-label="breadcrumb">
               <ol className="breadcrumb">
                 <li className="breadcrumb-item">
-                  <Link to="/">MENTORS LOUNGE</Link>
+                  <Link to="/lounge" style={{color:"#FFF"}} >MENTORS LOUNGE</Link>
                   </li>
                     {bread.filter(item=> item !== "").map((item, idx)=>(
-                      <li className="breadcrumb-item active text-uppercase">
-                        <NavLink  to={`${bread.slice(0, idx + 2).join("/")}`}>{item.split("-").join(" ")}</NavLink>
+                      <li className="breadcrumb-item  text-uppercase">
+                        <Link style={{color:"#FFF"}} to={`${bread.slice(0, idx + 2).join("/")}`}>{item.split("-").join(" ")}</Link>
                       </li>
                     ))}
               </ol>

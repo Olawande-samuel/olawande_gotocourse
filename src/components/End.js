@@ -1,11 +1,16 @@
 import React from 'react'
+import {useLocation} from "react-router-dom"
 import {FaInstagram, FaFacebook, FaTwitter, FaEnvelope} from "react-icons/fa"
-import {MdAlternateEmail} from "react-icons/md"
 import { useAuth } from "../contexts/Auth"
 const End = () => {
   const {otherFunctions:{validateURL}} = useAuth()
+  const location = useLocation();
+  const celebRoute = location.pathname.split("/")[1] === "lounge"
+
   return (
-    <div className="end">
+    <div className="end" style={{
+       background: celebRoute ?  "#191046" :"var(--theme-blue)", color:  "#fffff"
+      }}>
       <div className="container box d-flex  mx-auto text-light">
         <div className="end_left">
           <span> All rights reserved |</span>

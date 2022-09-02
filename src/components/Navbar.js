@@ -105,16 +105,15 @@ const Navbar = ({background}) => {
     });  
   }, []);
 
+  const celebRoute = location.pathname.split("/")[1] === "lounge"
+
   return (
     <nav ref={heightRef} section="top" className="nav navbar navbar-expand-lg navbar-dark" style={{
-      // borderBottom: "1px solid rgba(159, 159, 159, .3)", 
-      // background: background === "blue" ? "var(--theme-blue)": "#fffff", color: background === "blue" ?  "#fffff" : "var(--theme-blue)" }}>
-      background:  "var(--theme-blue)", color:  "#fffff" 
+      background: celebRoute ?  "#191046" :"var(--theme-blue)"  , color:  "#fffff"
       }}>
     <ScrollToTop />
       <div className="container navbar-container align-items-center">
         <Link to="/" onClick={()=> window.scrollTo(0, 0)} className="logo navbar-brand ">
-          {/* <img src={Logo} alt="Brand Name" /> */}
           <Logosm />
         </Link>
         <button type="button" className="navbar-toggler " onClick={toggleNav}>
@@ -127,75 +126,66 @@ const Navbar = ({background}) => {
           id="navbarNav"
         >
           <ul className="navbar-nav me-5">
-            {location.pathname.split("/")[1] === "" &&
-            <li className="nav-item holder">
-              <Link
-                className="link nav-link courses me-4"
-                to="/categories"
-                // onClick={toggleDrop}
-
-              >
-                Categories
-                {/* <span>
-                  <i>
-                    <MdOutlineKeyboardArrowDown
-                      style={{ fontSize: "20px" }}
-                      className={`drop_caret ${drop ? "rotate" : ""}`}
-                    />
-                  </i>
-                </span> */}
-              </Link>
-              {drop ? <NavList dropRef={dropRef} /> : null}
-            </li>
+            {
+              (location.pathname.split("/")[1] === "" || celebRoute)  &&
+              <li className="nav-item holder">
+                <Link
+                  className="link nav-link courses me-4"
+                  to="/categories"
+                >
+                  Categories
+                </Link>
+                {drop ? <NavList dropRef={dropRef} /> : null}
+              </li>
             }
-            { value?.token ? (
-                // <li className="nav-item d-flex align-items-center nav_link me-2"><a href="https://goto-course.com/dashboard" className="link">Go to Dashboard</a></li> 
+            { 
+              value?.token ? (
                 ""
-            ):(
-              <>
-                <li className="nav-item d-flex align-items-center nav_link"><Link to="/become-a-teacher" className="link">Become a Teacher</Link></li>
-                <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/login" className="link">Sign In</Link></li>
-                <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/students" className="link">Register</Link></li>
-              </>
-            )}
+              ):(
+                <>
+                  {/* <li className="nav-item d-flex align-items-center nav_link  me-4"><Link to="/how-it-works" className="link">How it works</Link></li> */}
+                  <li className="nav-item d-flex align-items-center nav_link"><Link to="/become-a-teacher" className="link">Become a Teacher</Link></li>
+                  <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/login" className="link">Sign In</Link></li>
+                  <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/students" className="link">Register</Link></li>
+                </>
+              )
+            }
           </ul>
           {value?.token ? (
             <Link to={`${value.category === "Admin" ? "/admin" : value.userType === "student" ? "/student" : "/teacher"}`}>
-              {/* <div className="d-flex align-items-center" style={{color:"var(--theme-blue", fontSize:"20px"}}> */}
               <div className="d-flex align-items-center" style={{color:"#fff", fontSize:"20px"}}>
-                {/* <i className="d-flex align-items-center justify-content-center me-2" style={{color:"var(--theme-blue"}}><FaRegUser /></i> */}
                 <i className="d-flex align-items-center justify-content-center me-2" style={{color:"#fff"}}><FaRegUser /></i>
                 <span>{value.firstName}</span>
               </div>
             </Link>
           ) : (
             <>
-          <Link to="/login">
-          <motion.button type="button" className="btn-plain button-md d-none d-lg-block signup newLogin"
-          whileHover={{
-            textShadow: "0px 0px 8px rgb(255, 255, 255)",
-            boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-          }}
-          transition={{duration: 0.1}}
-          
-          >
-            <span>Sign in</span>
-          </motion.button>
-          </Link>
+              <Link to="/login">
+                <motion.button type="button" className="btn-plain button-md d-none d-lg-block signup newLogin"
+                whileHover={{
+                  textShadow: "0px 0px 8px rgb(255, 255, 255)",
+                  boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                }}
+                transition={{duration: 0.1}}
+                
+                >
+                  <span>Sign in</span>
+                </motion.button>
+              </Link>
 
-          <Link to="/students">
-          <motion.button type="button" className=" btn-plain d-none d-lg-block newRegister"
-          whileHover={{
-            textShadow: "0px 0px 8px rgb(255, 255, 255)",
-            boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-          }}
-          transition={{duration: 0.1}}
-          
-          >
-            <span>Register</span>
-          </motion.button>
-          </Link>
-          </>
+              <Link to="/students">
+                <motion.button type="button" className=" btn-plain d-none d-lg-block newRegister"
+                whileHover={{
+                  textShadow: "0px 0px 8px rgb(255, 255, 255)",
+                  boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                }}
+                transition={{duration: 0.1}}
+                
+                >
+                  <span>Register</span>
+                </motion.button>
+              </Link>
+            </>
 
           )}
 
@@ -204,6 +194,15 @@ const Navbar = ({background}) => {
     </nav>
   );
 };
+
+// {/* <span>
+//                   <i>
+//                     <MdOutlineKeyboardArrowDown
+//                       style={{ fontSize: "20px" }}
+//                       className={`drop_caret ${drop ? "rotate" : ""}`}
+//                     />
+//                   </i>
+//                 </span> */}
 const NavList = ({ dropRef }) => {
   const navigate = useNavigate()
 
