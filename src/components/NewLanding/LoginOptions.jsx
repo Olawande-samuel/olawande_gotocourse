@@ -76,7 +76,7 @@ const LoginOptions = ({closeOverlay, type}) => {
             })
         } else {
             signInWithPopup(authentication, facebookProvider).then(res=>{
-                console.log(res.email)
+                console.log({res})
                 // if(res.user?.accessToken){
                 //     mutation.mutate({
                 //         accessToken: res.user.accessToken,
@@ -86,9 +86,29 @@ const LoginOptions = ({closeOverlay, type}) => {
                 //     getItem(KEY, mutation.data?.data);
                 //     usertype === "student" ? navigate("/student"):navigate("/teacher")
                 // }
-            }).catch(err=>{
-                console.error(err)
-                toast.error(err.message, {
+            }).catch(error => {
+                console.error(error)
+                // / Handle Errors here.
+                const errorCode = error.code;
+
+                const errorMessage = error.message;
+                // The email of the user's account used.
+                const email = error.customData.email;
+                // The AuthCredential type that was used.
+                const credential = facebookProvider.credentialFromError(error);
+
+                authentication.fetchSignInMethodsForEmail(email).then(function(methods) {
+                    // Step 3.
+                    // If the user has several sign-in methods,
+                    // the first method in the list will be the "recommended" method to use.
+                    console.log({methods})
+                })
+
+                console.log({email})
+                console.log({errorMessage})
+                console.log({credential})
+                
+                toast.error(error.message, {
                     position: "bottom-center",
                     autoClose: 4000,
                     hideProgressBar: true,

@@ -311,6 +311,8 @@ height:70px;
     font-weight: 800;
     font-size:40px;
     margin-bottom: 1.3rem;
+    line-height: 48.06px;
+
 }
 .newBootcamp_timing{
     display: flex;
@@ -347,7 +349,7 @@ height:70px;
     position:relative;
     margin-bottom: 1rem;
     width: 70%;
-    line-height:40px;
+    line-height:44px;
 
 }
 
@@ -405,6 +407,7 @@ height:70px;
     border-radius:4px;
 }
 @media (max-width: 660px) {
+   
     .newLearning_right .background img, .transition .background img, .becoming .background img {
         height:100%;
     }
@@ -508,6 +511,16 @@ height:70px;
     font-size: clamp(2.1875rem, 1.9554rem + 1.1607vw, 44px);
     color: var(--theme-blue) !important;
 }
+
+@media (max-width: 500px){
+     .newMentor header {
+        position:relative;
+        margin: 1rem 0;
+        width: 100%;
+        line-height:44px;    
+    }
+    
+}
 .newMentor .content {
     display: flex;
     flex-direction: column-reverse;
@@ -575,7 +588,7 @@ height:70px;
     margin-left:auto;
     margin-right:auto;
     margin-bottom: 3rem;
-    width:40%;
+    width:60%;
 }
 
 .newMentors {
@@ -625,7 +638,13 @@ height:70px;
 .newMentors .card{
     height:100%;
 }
-  
+
+
+@media screen and (max-width: 575px){
+    .newMentors h3 {
+        width: 75%;
+    }
+}
 
 
 

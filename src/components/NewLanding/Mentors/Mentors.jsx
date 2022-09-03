@@ -166,7 +166,7 @@ export const Card = ({ item,type }) => {
       }
     }) 
       localStorage.setItem("gotocourse-viewMentor", JSON.stringify(item))
-      navigate(`/mentors/${item.mentorFirstName}-${item.mentorLastName}`)
+      navigate(`/lounge/mentors/${item.mentorFirstName}-${item.mentorLastName}`)
 
  
   }
