@@ -15,12 +15,12 @@ import AdminDashboard from "./pages/Dashboard/Admin/Dashboard";
 
 
 import {Dashboard as StudentDashboard,Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Fees as StudentFees,
-   Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat} from "./pages/Dashboard/Students";
+   Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat, Notification as StudentNotifications} from "./pages/Dashboard/Students";
 import StudentHelp from "./pages/Dashboard/Students/Help";
 import StudentReferral from "./pages/Dashboard/Students/Referral";
 
 import {Dashboard as TeacherDashboard,  Profile as TeachersProfile, Classes as TeacherClasses, Edit as TeacherEdit, 
-  Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo, Chat as TeacherChat  } from "./pages/Dashboard/Teachers";
+  Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo, Chat as TeacherChat , Notification as TeacherNotifications } from "./pages/Dashboard/Teachers";
 import TeachersHelp from "./pages/Dashboard/Teachers/Help";
   
 import {Dashboard as AffiliatesDash, Sales, Income, Revenue} from "./pages/Dashboard/Affiliate"
@@ -102,7 +102,7 @@ function App() {
               <Route path="chat" element={<StudentChat />} />
               <Route path="help" element={<StudentHelp />} />
               <Route path="referral" element={<StudentReferral />} />
-              <Route path="notifications" element={<StudentDashboard />} /> 
+              <Route path="notifications" element={<StudentNotifications />} /> 
             </Route>
 
             <Route path="mentors" element={<Out/>}>
@@ -135,7 +135,7 @@ function App() {
               <Route path="courses/create" element={<CreateCourse />} />
               <Route path="courses/details/:id" element={<TeacherCourseInfo />} />
               <Route path="chat" element={<TeacherChat />} />
-              <Route path="notifications" element={<TeacherDashboard />} />
+              <Route path="notifications" element={<TeacherNotifications />} />
               <Route path="help" element={<TeachersHelp />} />
             </Route>
             <Route path="affiliates" element={<AffiliateLanding />} />

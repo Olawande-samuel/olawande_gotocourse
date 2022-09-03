@@ -1267,7 +1267,7 @@ export const Lounge = ({ children }) => {
                   <Link to="/lounge" style={{color:"#FFF"}} >MENTORS LOUNGE</Link>
                   </li>
                     {bread.filter(item=> item !== "").map((item, idx)=>(
-                      <li className="breadcrumb-item  text-uppercase">
+                      <li className="breadcrumb-item  text-uppercase" key={idx}>
                         <Link style={{color:"#FFF"}} to={`${bread.slice(0, idx + 2).join("/")}`}>{item.split("-").join(" ")}</Link>
                       </li>
                     ))}

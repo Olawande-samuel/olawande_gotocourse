@@ -13,63 +13,7 @@ import { useLocalStorage } from "../hooks";
 import {ScrollToTop} from "../pages/Courses"
 
 const KEY = "gotocourse-userdata"
-// const navList = [
-//   {
-//     id: 1,
-//     title: "Cybersecurity",
-//     link: "/categories/cybersecurity"
-//   },
-//   {
-//     id: 2,
-//     title: "Risk Management",
-//     link: "/categories/risk-management"
-//   },
-//   {
-//     id: 3,
-//     title: "Data Science",
-//     link: "/categories/data-science"
-//   },
-//   {
-//     id: 4,
-//     title: "Project Management",
-//     link: "/categories/project-management"
-//   },
-//   {
-//     id: 5,
-//     title: "IT compliance",
-//     link: "/categories/it-compliance"
-//   },
-//   {
-//     id: 6,
-//     title: "IT Audit",
-//     link: "/categories/it-audit"
-//   },
-//   {
-//     id: 7,
-//     title: "Business Analysis",
-//     link: "/categories/business-analysis"
-//   },
-//   {
-//     id: 8,
-//     title: "Product Design",
-//     link: "/categories/product-design"
-//   },
-//   {
-//     id: 9,
-//     title: "Web Design",
-//     link: "/categories/web-design"
-//   },
-//   {
-//     id: 10,
-//     title: "Software Development",
-//     link: "/categories/software-development"
-//   },
-//   {
-//     id: 11,
-//     title: "IT Service Management",
-//     link: "/categories/it-service-management"
-//   },
-// ];
+
 const Navbar = ({background}) => {
   const { setGeneralState } = useAuth();
   const [show, setShow] = useState(false);
@@ -152,7 +96,7 @@ const Navbar = ({background}) => {
             }
           </ul>
           {value?.token ? (
-            <Link to={`${value.category === "Admin" ? "/admin" : value.userType === "student" ? "/student" : "/teacher"}`}>
+            <Link to={`${value.userType === "admin" ? "/admin" : value.userType === "student" ? "/student" : "/teacher"}`}>
               <div className="d-flex align-items-center" style={{color:"#fff", fontSize:"20px"}}>
                 <i className="d-flex align-items-center justify-content-center me-2" style={{color:"#fff"}}><FaRegUser /></i>
                 <span>{value.firstName}</span>
@@ -195,14 +139,7 @@ const Navbar = ({background}) => {
   );
 };
 
-// {/* <span>
-//                   <i>
-//                     <MdOutlineKeyboardArrowDown
-//                       style={{ fontSize: "20px" }}
-//                       className={`drop_caret ${drop ? "rotate" : ""}`}
-//                     />
-//                   </i>
-//                 </span> */}
+
 const NavList = ({ dropRef }) => {
   const navigate = useNavigate()
 

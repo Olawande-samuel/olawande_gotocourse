@@ -18,6 +18,7 @@ const Password = ({ label, password, name, handleChange, value, placeholder, foc
           value={value}
           onFocus={focus}
           onBlur={blur}
+          autoComplete="off"
         />
         {password === "password" ? (
           <span className="eye">
