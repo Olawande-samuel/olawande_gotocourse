@@ -8,11 +8,19 @@ import clsx from "./styles.module.css";
 import Input from "../../../components/Input";
 import success from "../../../images/boarding_success.png";
 import Loader from "../../../components/Loader";
+import { useLocalStorage } from "../../../hooks";
+import { AdvancedError } from "../../../classes";
+import { useAuth } from "../../../contexts/Auth";
 
 
 
+
+const KEY ='gotocourse-userdata';
 const OnBoarding = () => {
     const [page, setPage] = useState(0);
+    const {getItem} = useLocalStorage();
+    let userdata = getItem(KEY)
+    const {kycFunctions: {addStudentKYC}} = useAuth();
     const [loading, setLoading] = useState(false);
     const [formstate, setFormstate] = useState({
         firstName: "",
@@ -26,7 +34,8 @@ const OnBoarding = () => {
         learningModel: "",
         willingToBeDedicated: "",
         qualification: "",
-        employmentStatus: ""
+        employmentStatus: "",
+        status: "CONFIRMED"
     })
     let component;
     useEffect(() => {
@@ -35,19 +44,44 @@ const OnBoarding = () => {
     }, [])
     function pageHandler(_){ setPage(old => old += 1);}
 
+    function createBoarding(data){
+        return {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            phoneNumber: data.phoneNumber,
+            country: data.country,
+            region: data.region,
+            hearAboutUse: data.hearAboutUs,
+            experience: data.itExperience,
+            willingNess: data.willingToBeDedicated.trim() === "yes" ? true : false,
+            learningStyle: data.learningModel,
+            degree: data.qualification,
+            employment: data.employmentStatus,
+        }
+    }
+
     async function submitHandler(e){
         e.preventDefault();
+        setLoading(_ => true);
         try{
-            setLoading(_ => true);
-            toast.success("Application submitted successfully", {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            const data = createBoarding(formstate);
+            const res = await addStudentKYC(data, userdata?.token);
+            console.log(res);
+            const {success, message, statusCode} = res;
+            if(!success) throw new AdvancedError(message, statusCode)
+            else {
+                setPage(_ => 10);
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
         }catch(err){
             toast.error(err.message, {
                 position: "top-right",
@@ -59,11 +93,7 @@ const OnBoarding = () => {
                 progress: undefined,
             });
         }finally{
-            setTimeout(() => {
-                setLoading(_ => false);
-                console.log(formstate);
-                setPage(_ => 10);
-            }, 3000);
+            setLoading(_ => false);
         }
     }
 

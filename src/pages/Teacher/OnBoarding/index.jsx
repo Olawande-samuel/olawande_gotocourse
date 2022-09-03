@@ -8,11 +8,19 @@ import clsx from "./styles.module.css";
 import Input from "../../../components/Input";
 import success from "../../../images/boarding_success.png";
 import Loader from "../../../components/Loader";
+import { useAuth } from "../../../contexts/Auth";
+import { AdvancedError } from "../../../classes";
+import { useLocalStorage } from "../../../hooks";
 
 
 
+
+const KEY = 'gotocourse-userdata';
 const OnBoarding = () => {
     const [page, setPage] = useState(0);
+    const {kycFunctions: {addMentorKYC}} = useAuth();
+    const {getItem} = useLocalStorage();
+    let userdata = getItem(KEY)
     const [loading, setLoading] = useState(false);
     const [formstate, setFormstate] = useState({
         firstName: "",
@@ -30,6 +38,24 @@ const OnBoarding = () => {
         qualification: "",
         employmentStatus: ""
     })
+    function createBoarding(data){
+        return {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            phoneNumber: data.phoneNumber,
+            country: data.country,
+            region: data.region,
+            hearAboutUse: data.hearAboutUs,
+            expertise: data.expertise,
+            willingNess: data.willingToBeDedicated.trim() === "yes" ? true : false,
+            speciality: data.speciality,
+            certified: data.technicalExpert,
+            degree: data.qualification,
+            employment: data.employmentStatus,
+            preferredCourse: data.preference
+        }
+    }
     let component;
     useEffect(() => {
         console.log("OnBoarding page is mounted");
@@ -41,15 +67,23 @@ const OnBoarding = () => {
         e.preventDefault();
         try{
             setLoading(_ => true);
-            toast.success("Application submitted successfully", {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            let data = createBoarding(formstate, userdata?.token);
+            const res = await addMentorKYC(data);
+            const {success, statusCode, message} = res;
+            if(!success) throw new AdvancedError(message, statusCode);
+            else {
+                //successful
+                setPage(_ => 10);
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
         }catch(err){
             toast.error(err.message, {
                 position: "top-right",
@@ -60,13 +94,7 @@ const OnBoarding = () => {
                 draggable: true,
                 progress: undefined,
             });
-        }finally{
-            setTimeout(() => {
-                setLoading(_ => false);
-                console.log(formstate);
-                setPage(_ => 10);
-            }, 3000);
-        }
+        }finally{setLoading(_ => false)}
     }
 
     function changeHandler(e){
