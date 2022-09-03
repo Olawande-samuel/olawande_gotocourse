@@ -76,8 +76,7 @@ const LoginOptions = ({closeOverlay, type}) => {
             })
         } else {
             signInWithPopup(authentication, facebookProvider).then(res=>{
-                console.log(res)
-                
+                console.log(res.email)
                 // if(res.user?.accessToken){
                 //     mutation.mutate({
                 //         accessToken: res.user.accessToken,
