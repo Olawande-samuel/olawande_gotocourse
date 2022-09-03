@@ -7,7 +7,8 @@ const style ={
     opacity:"0.7",
     height: "100vh",
     display:"grid",
-    placeItems:"center"
+    placeItems:"center",
+    zIndex: 10000
 }
 
 

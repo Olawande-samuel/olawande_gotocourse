@@ -19,6 +19,7 @@ import {Dashboard as StudentDashboard,Profile as StudentProfile, Classes as Stud
 import StudentHelp from "./pages/Dashboard/Students/Help";
 import StudentReferral from "./pages/Dashboard/Students/Referral";
 
+
 import {Dashboard as TeacherDashboard,  Profile as TeachersProfile, Classes as TeacherClasses, Edit as TeacherEdit, 
   Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo, Chat as TeacherChat  } from "./pages/Dashboard/Teachers";
 import TeachersHelp from "./pages/Dashboard/Teachers/Help";
@@ -34,6 +35,7 @@ import "react-multi-carousel/lib/styles.css";
 import { Categories, CourseDetail, CourseList, CourseProfile } from "./pages/Courses";
 import {Home as BecomeATeacher, Profile} from "./pages/Teacher";
 import All, {Payment, PaymentStatus} from "./pages/Teacher/Teachers";
+import TeacherOnBoarding from "./pages/Teacher/OnBoarding";
 import TeacherProfile from "./pages/Teacher/TeacherProfile";
 import TeacherSignup from "./pages/User/TeacherSignup";
 import SyllabusContextProvider from "./contexts/Syllabus";
@@ -47,6 +49,7 @@ import Career from "./pages/Career";
 import Settings from "./pages/Dashboard/Admin/Settings";
 
 import {Students} from "./pages/Students"
+import UserOnBoarding from "./pages/Students/OnBoarding";
 import Verification from "./pages/User/Verification";
 
 function App() {
@@ -76,6 +79,7 @@ function App() {
             <Route path="career" element={<Career />} />
             <Route path="students" element={<Students  />} />
             <Route path="user-authentication" element={<Verification  />} />
+            <Route path="user-onboarding" element={<UserOnBoarding />} />
             
             <Route path="student" element={<Out />}>
               <Route path="" element={<StudentDashboard  />} />
@@ -112,6 +116,7 @@ function App() {
               <Route index element={<TeacherDashboard  />} /> 
               <Route path="profile" element={<TeachersProfile  />} /> 
               <Route path="login" element={<Login />} />
+              <Route path="on-boarding" element={<TeacherOnBoarding />} />
               <Route path="signup" element={<TeacherSignup />} />
               <Route path="classes" element={<TeacherClasses  />} />
               <Route path="bootcamps" element={<TeacherBootcamps  />} />
@@ -129,7 +134,7 @@ function App() {
             <Route path="affiliates" element={<AffiliateLanding />} />
             <Route path="affiliates/register" element={<AffiliateRegister />} />
             <Route path="affiliates/login" element={<AffiliateLogin />} />
-            <Route path="affiliates/verification" element={<AffiliateVerification />} />
+            <Route path="affiliates/verify" element={<AffiliateVerification />} />
             
             <Route path="affiliate" element={<Out />}>
               <Route path="" element={<AffiliatesDash  />} /> 
