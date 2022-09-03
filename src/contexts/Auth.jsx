@@ -1,6 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
 
-import { authFunctions, studentFunctions, adminFunctions, teacherFunctions, adminStudentFunctions, adminTeacherFunctions, otherFunctions } from "./functions";
+import { authFunctions, studentFunctions, adminFunctions, teacherFunctions, adminStudentFunctions, adminTeacherFunctions, otherFunctions, kycFunctions } from "./functions";
 
 const AuthContext = createContext();
 
@@ -33,7 +33,7 @@ const AuthContextProvider = ({children}) => {
     }, [generalState]) 
 
     return (
-        <AuthContext.Provider value={{authFunctions, teacherFunctions, studentFunctions, adminFunctions, generalState, setGeneralState, adminStudentFunctions, adminTeacherFunctions, otherFunctions}}>
+        <AuthContext.Provider value={{authFunctions, teacherFunctions, studentFunctions, adminFunctions, generalState, setGeneralState, adminStudentFunctions, adminTeacherFunctions, otherFunctions, kycFunctions}}>
             {children}
         </AuthContext.Provider>
     )

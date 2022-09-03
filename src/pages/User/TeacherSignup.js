@@ -82,7 +82,7 @@ const TeacherSignup = () => {
           };
         });
         // navigate("/user-authentication");
-        navigate("/teacher");
+        navigate("/teacher/on-boarding");
       }
     }catch(err){
       toast.error(err.message, {
