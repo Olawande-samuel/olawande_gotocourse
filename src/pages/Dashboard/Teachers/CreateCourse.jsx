@@ -54,9 +54,11 @@ export const Syllabus = ({
   }
 
   export  function CreateCourseMain({type}) {
-
+    const location = useLocation();
     const ref = useRef(false);
     const navigate = useNavigate();
+    const { getItem } = useLocalStorage();
+
     const {
       generalState: { courseInfo },
       teacherFunctions: { addCourse, updateCourse },
@@ -64,8 +66,6 @@ export const Syllabus = ({
       otherFunctions: { fetchCategories },
     } = useAuth();
       
-    const { getItem } = useLocalStorage();
-    const location = useLocation();
     let userdata = getItem(KEY);
 
     const [preview, setPreview] = useState({});
@@ -79,30 +79,31 @@ export const Syllabus = ({
       startDate: courseInfo?.startDate ?? "",
       endDate: courseInfo?.endDate ?? "",
       type: "PACKAGE",
-      faqs: courseInfo?.faqs ?? [],
-  
+      syllabus: [],
+      faqs: [],
+      packages: [],
     });
   
     let courseData = getItem("gotocourse-courseEdit")
+
     useEffect(()=>{
       if(location.search){
-        courseData = getItem("gotocourse-courseEdit")
         if(courseData){
           setFormstate(courseData)
-          
           if(courseData.courseImg){
             const imgArr = courseData.courseImg.split("/").slice(-1)
-            setFormstate({...courseData, courseImg: imgArr[0]})
+            const startDate = new Date(courseData.startDate).toISOString().split('T')[0]
+            const endDate= new Date(courseData.endDate).toISOString().split('T')[0]
+            setFormstate({...courseData, courseImg: imgArr[0], startDate, endDate})
           }
         }
       }
-    },[])
+    },[courseData.category])
 
     const { syllabuses, addtoSyllabus, setSyllabusses } = useSyllabus();
     const [faq, setFaq] = useState(formstate?.faqs ?? []);
     const [packageList, setPackageList] = useState([]);
     const [instructorsList, setInstructorsList] = useState([]);
-    const [editInstructorsList, setEditInstructorsList] = useState([]);
   
     const [categories, setCategories] = useState([]); 
     const [openImage, setOpenImage] = useState(false);
@@ -112,16 +113,7 @@ export const Syllabus = ({
     const [loading, setLoading] = useState(false);
     const [openPreview, setOpenPreview] = useState(false);
     const [packageFilter, setPackageFilter] = useState("");
-
-  // check if courseinfo exist then setSyllabus to existing syllabus
-  useEffect(()=>{
-    formstate?.syllabus?.length > 0 && setSyllabusses(formstate.syllabus)
-    formstate?.packages?.length > 0 && setPackageList(formstate.packages)
-    formstate?.faqs?.length > 0 && setFaq(formstate.faqs) 
-    formstate?.instructors?.length > 0 && setEditInstructorsList(editInstructorsList.length > 0 ? editInstructorsList : formstate.instructors)
-  },[courseData])
- 
-  
+   
   function changeHandler(e) {
     const { name, value } = e.target;
     setFormstate((old) => {
@@ -138,48 +130,31 @@ export const Syllabus = ({
     setPreview({
       ...formstate,
       type:"PACKAGE",
-      syllabus: [...syllabuses],
-      packages: [...packageList],
-      faqs: [...faq],
     });
     setOpenPreview(true);
   };
+  console.log({formstate})
 
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
     if(formstate?.courseId){
       try {
-        if (
-          formstate.name === "" ||
-          formstate.categoryName === "" ||
-          formstate.description === "" 
-         
-        )
-          throw new AdvancedError("All fields are required", 0);
-          let currentInstructor= [];
-          editInstructorsList.length > 0 && editInstructorsList.forEach(tutor=>{currentInstructor.push(tutor.email)})
-          let formdata = {
-            ...formstate,
-            type:"PACKAGE",
-            syllabus: [...syllabuses],
-            packages: [...packageList],
-            faqs: [...faq],
-            instructors:[...instructorsList, ...currentInstructor]
-          }
-
+        let currentInstructor= [];
+        formstate.instructors.length > 0 && formstate.instructors.forEach(tutor=>{currentInstructor.push(tutor.email)})
+        let formdata = {
+          ...formstate,
+          type:"PACKAGE",
+          instructors:[...instructorsList, ...currentInstructor],
+          categoryName: formstate.category
+        }
+        delete formdata.category
+        if ( formstate.name === "" || formstate.categoryName === "" || formstate.description === "" ) throw new AdvancedError("All fields are required", 0);
         const res = type === "admin" ?
-          await adminUpdateCourse( userdata?.token, formstate?.courseId,  {
-            ...formdata,
-            startDate: new Date(formstate.startDate).toISOString().split('T')[0],
-            endDate: new Date(formstate.endDate).toISOString().split('T')[0],
-            categoryName: formstate.category
-
-          }) 
+          await adminUpdateCourse( userdata?.token, formstate?.courseId,  formdata) 
         : await updateCourse( userdata?.token, formstate?.courseId, formdata, userdata.token );
 
         const { success, message, statusCode } = res;
-  
         if (!success) throw new AdvancedError(message, statusCode);
         else {
           toast.success(message, {
@@ -210,27 +185,24 @@ export const Syllabus = ({
     try {
       if (
         formstate.name === "" ||
-        formstate.categoryName === "" ||
         formstate.description === ""
       )
         throw new AdvancedError("All fields are required", 0);
-      const res = type=== "admin" ? await adminAddCourse(
-        {
+        let formdata = {
           ...formstate,
           type:"PACKAGE",
-          syllabus: [...syllabuses],
-          packages: [...packageList],
-          faqs: [...faq],
+          categoryName: formstate.category,
           instructors:[...instructorsList]
-        },
-        userdata.token
-      ): await addCourse(
+        }
+
+        delete formdata.category
+      const res = type=== "admin" ? 
+      await adminAddCourse( formdata, userdata.token )
+      :
+      await addCourse(
         {
-          ...formstate,
-          type:"PACKAGE",
-          syllabus: [...syllabuses],
-          packages: [...packageList],
-          faqs: [...faq],
+        ...formdata,
+        instructors:[]
         },
         userdata.token
       );
@@ -344,22 +316,29 @@ export const Syllabus = ({
   function filterPackage(title, index) {
     setPackageFilter(index);
   }
-  function deleteOption(e){
-    let newSyllabusArr = syllabuses.filter((item, index) => (item.title + index) !== e)
-    setSyllabusses(newSyllabusArr)
+  function deleteSyllabus(e){
+    let newSyllabusArr = formstate.syllabus.filter((item, index) => (item.title + index) !== e)
     setFormstate({...formstate, syllabus:newSyllabusArr})
 
   }
   function deletePackage(e){
-    let newPackageList = packageList.filter((item, index) => (item.title + index) !== e)
+    console.log(e)
+    let newPackageList = formstate.packages.filter((item, index) => (item.title + index) !== e)
+    console.log(newPackageList)
     setFormstate({...formstate, packages:newPackageList})
   }
 
   function removeTeacher(e){
-    let currentTeachers = editInstructorsList.filter(item=>item.tutorId !== e)
-    setEditInstructorsList(currentTeachers)
+    let currentTeachers = formstate.instructors.filter(item=>item.tutorId !== e)
+    setFormstate({...formstate, instructors: currentTeachers})
+  }
+  function deleteFaq(e){
+    let faq = formstate.faqs.filter((item, index)=>(item.title + index) !== e)
+    setFormstate({...formstate, faqs: faq})
   }
 
+  console.log({formstate})
+  console.log({courseData})
 
     return (
      <>
@@ -397,8 +376,8 @@ export const Syllabus = ({
                 <label htmlFor={"package"}>Category</label>
                 <select
                   rows="5"
-                  name="categoryName"
-                  value={formstate.categoryName}
+                  name="category"
+                  value={formstate.category}
                   onChange={changeHandler}
                   className="form-select generic_input"
                 >
@@ -429,7 +408,7 @@ export const Syllabus = ({
                     name="startDate"
                     type="date"
                     handleChange={changeHandler}
-                    value={formstate.start_date}
+                    value={formstate.startDate }
                   />
                 </div>
                 <div className="col-sm-4">
@@ -438,28 +417,32 @@ export const Syllabus = ({
                     name="endDate"
                     type="date"
                     handleChange={changeHandler}
-                    value={formstate.end_date}
+                    value={formstate.endDate}
                   />
                 </div>
               </div>
               <div className={clsx.form_group}>
                 <label htmlFor={"package"} className="form-label generic_label">
-                  Package
+                  Packages
                 </label>
-                {packageList.length > 0 ? (
-                  packageList.map((item, index) => (
-                    <Syllabus
-                      key={item.title + index}
-                      {...item}
-                      packagelist={true}
-                      index={index}
-                      packageItems={packageList}
-                      setPackageList={setPackageList}
-                      deleteOption={()=>deletePackage(item.title + index)}
-                    />
+                {formstate.packages?.length > 0 ? (
+                  formstate.packages?.map((item, index) => (
+                     <div className={clsx.syllabus_container}>
+                        <h5>{changeConstants(item.title)}</h5>
+                        {<p>{item.price}</p>}
+                        <p>{item.description}</p>
+                        {
+                          location.search && 
+                          <p>
+                            <i className="text-danger" style={{cursor:"pointer"}} onClick={()=>deletePackage(item.title + index)}>
+                              <BiTrash />
+                            </i>
+                          </p>
+                        }
+                      </div>
                   ))
                 ) : (
-                  <h6>No Packages</h6>
+                  <h6>No Package available</h6>
                 )}
               </div>
   
@@ -474,9 +457,20 @@ export const Syllabus = ({
   
               <div className={clsx.form_group}>
                 <label className="form-label generic_label">Syllabus</label>
-                {syllabuses.length !== 0 ? (
-                  syllabuses.map(({ title, description, }, i) => (
-                    <Syllabus title={title} key={i} description={description} deleteOption={()=>deleteOption(title + i)} />
+                {formstate.syllabus?.length !== 0 ? (
+                  formstate.syllabus?.map(({ title, description, }, i) => (
+                    <div className={clsx.syllabus_container}>
+                        <h5>{title}</h5>
+                        <p>{description}</p>
+                        {
+                          location.search && 
+                          <p>
+                            <i className="text-danger" style={{cursor:"pointer"}} onClick={()=>deleteSyllabus(title + i)}>
+                              <BiTrash />
+                            </i>
+                          </p>
+                        }
+                      </div>
                   ))
                 ) : (
                   <h6>No syllabus!</h6>
@@ -499,8 +493,8 @@ export const Syllabus = ({
                     <label htmlFor={"package"} className="form-label generic_label">
                       Current Instructors
                     </label>
-                    {editInstructorsList.length > 0 ? (
-                      editInstructorsList.map((item) =>  <Syllabus title={item.name} deleteOption={removeTeacher} index={item.tutorId} /> )
+                    {formstate.instructors?.length > 0 ? (
+                      formstate.instructors?.map((item, i) => ( <Syllabus key={i} title={item.name} deleteOption={removeTeacher} index={item.tutorId} />) )
                     ) : (
                       <h6>No instructor</h6>
                     )}
@@ -509,10 +503,10 @@ export const Syllabus = ({
                   
                   <div className={clsx.form_group}>
                     <label htmlFor={"package"} className="form-label generic_label">
-                      Instructors
+                      New Instructors
                     </label>
                     {instructorsList.length > 0 ? (
-                      instructorsList.map((item) => <p>{item}</p>)
+                      instructorsList.map((item, i) => <p key={1}>{item}</p>)
                     ) : (
                       <h6>No instructor</h6>
                     )}
@@ -534,8 +528,21 @@ export const Syllabus = ({
                 <label htmlFor={"package"} className="form-label generic_label">
                   FAQ
                 </label>
-                {faq.length > 0 ? (
-                  faq.map((item) => <Syllabus {...item} />)
+                {formstate.faqs?.length > 0 ? (
+                  formstate.faqs?.map((item, i) => (
+                    <div className={clsx.syllabus_container}>
+                    <h5>{item.title}</h5>
+                    <p>{item.description}</p>
+                    {
+                      location.search && 
+                      <p>
+                        <i className="text-danger" style={{cursor:"pointer"}} onClick={()=>deleteFaq(item.title + i)}>
+                          <BiTrash />
+                        </i>
+                      </p>
+                    }
+                  </div>
+                  ))
                 ) : (
                   <h6>No faq</h6>
                 )}
@@ -604,6 +611,8 @@ export const Syllabus = ({
         <AddSyllabus
           open={open}
           addSyllabus={addtoSyllabus}
+          formstate={formstate}
+          setFormstate={setFormstate}
           setOpen={setOpen}
           handleClose={handleClose}
         />
@@ -626,8 +635,8 @@ export const Syllabus = ({
         <AddFaq
           openFaq={openFaq}
           handleCloseFaq={handleCloseFaq}
-          addFaq={setFaq}
-          list={faq}
+          addFaq={setFormstate}
+          list={formstate}
         />
      </>
 
@@ -644,7 +653,7 @@ export const Syllabus = ({
   </div>
   }
 
-  function AddSyllabus({ open, handleClose, addSyllabus }) {
+  function AddSyllabus({ open, handleClose, formstate, setFormstate, addSyllabus }) {
     const [newSyllabus, setNewSyllabus] = useState({
       title: "",
       description: "",
@@ -685,7 +694,11 @@ export const Syllabus = ({
           progress: undefined,
         });
       } else {
-        addSyllabus(newSyllabus);
+        setFormstate({...formstate, syllabus: [...formstate.syllabus, newSyllabus]});
+        setNewSyllabus({
+          title: "",
+          description: "",
+        })
       }
     }
   
@@ -817,7 +830,7 @@ export const Syllabus = ({
               className="form-select generic_input"
             >
               <option value="">Choose a Type</option>
-              <option value="ONE-ON-ONE">One-on-One</option>
+              <option value="MENTORSHIP">One-on-One</option>
               <option value="COHORT">Cohort</option>
               <option value="SELF_PACED">Self Paced</option>
               <option value="PHYSICAL">In-person Training</option>
@@ -1032,7 +1045,7 @@ export const Syllabus = ({
           progress: undefined,
         });
       } else {
-        addFaq([...list, faq]);
+        addFaq({...list, faqs: [...list.faqs, faq]});
         toast.success("FAQ added successfully", {
           position: "top-right",
           autoClose: 4000,
@@ -1098,7 +1111,7 @@ export const Syllabus = ({
   export function changeConstants(name){
     if(name === "SELF_PACED") return "self-paced"
     if(name === "COHORT") return "Cohort"
-    if(name === "ONE_ON_ONE") return "One-on-One"
+    if(name === "MENTORSHIP") return "One-on-One"
     if(name === "PHYSICAL") return "In-person Training"
     return name
   }

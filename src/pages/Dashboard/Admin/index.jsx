@@ -30,7 +30,7 @@ import vector from "../../../images/vector.png"
 import { CourseDetail } from "../../Courses";
 import Layout from "../../../components/Layout";
 import ChatComponent from "./Chat";
-import { CreateCourseMain } from "../Teachers/CreateCourse";
+import { changeConstants, CreateCourseMain } from "../Teachers/CreateCourse";
 import { AllEarnings} from "../Teachers/Earnings"
 
 import EarningsTable from "./Earnings/Table"
@@ -1383,7 +1383,7 @@ export function UserInfoCard({
       {(comp === "Courses") && (
         <td className={clsx.user__date}>
             {packages.map(item=>(
-              <div>{item.title}</div>
+              <div>{changeConstants(item.title)}</div>
             ))}
         </td>
       )}
@@ -3482,7 +3482,14 @@ export function Notification() {
 
   return (
     <Admin header={"Notifications"}>
-      <div className={clsx["admin_profile"]}>
+      <NotificationContent notifications={notifications} markAsRead={markAsRead} load={load} loader={loader} />
+    </Admin>
+  );
+}
+// NOTIFICATIONS COMPONENT
+export function NotificationContent({notifications, markAsRead, load, loader}){
+  return (
+    <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center mb-4">
              <h1 className="mb-0">My notifications</h1>
@@ -3516,11 +3523,11 @@ export function Notification() {
               </div>
         </div>
       </div>
-    </Admin>
-  );
+  )
 }
-// NOTIFICATIONS COMPONENT
 
+
+// EARNINGS
 export function Earnings () {
   const {getItem} = useLocalStorage();
   const flag = useRef(false);
@@ -3966,7 +3973,7 @@ export function Edit() {
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
-        draggable: true,
+        draggable: true, 
         progress: undefined,
       });
     } finally {

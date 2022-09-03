@@ -158,6 +158,12 @@ const Sidebar = ({isMobile}) => {
             title: "Payment"
         },
         {
+            icon: BiBell,
+            path: "notifications",
+            title: "Notifications",
+            showBadge:true,
+        },
+        {
             icon:IoIosChatbubbles,
             path: "chat",
             title: "Chat",
@@ -194,6 +200,12 @@ const Sidebar = ({isMobile}) => {
             icon: IoIosCash,
             path: "earnings",
             title: "Earnings"
+        },
+        {
+            icon: BiBell,
+            path: "notifications",
+            title: "Notifications",
+            showBadge:true,
         },
         {
             icon:IoIosChatbubbles,

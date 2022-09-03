@@ -2045,6 +2045,65 @@ export const studentFunctions = {
             }
         }
     },
+    fetchNotifications: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/user/notifications/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+// Error from backend
+            if(res.data.message !== "Notifications fetched successfully") throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    readNotifications: async function(token){
+        try{
+            const res = await axios.post(`${baseURL}/user/notifications/action/read`, {},
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
 }
 
 
@@ -2725,8 +2784,93 @@ export const otherFunctions = {
             }
         }
     },
+    fetchAdmin: async function(){
+        try{
+            const res = await axios.get(`${baseURL}/user/admins/fetch`,
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
     validateURL:  function(url) {
         const parsed = new URL(url)
         return ['https:', 'http:'].includes(parsed.protocol)
-      }
+    },
+
+    resetPasswordOTP: async function (_data){
+        const res = await axios.post(`${baseURL}/user/password/otp/send`, 
+        JSON.stringify(_data), {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res
+    },
+
+    resetPassword: async function (_data){
+        const res = await axios.post(`${baseURL}/user/password/reset`, 
+        JSON.stringify(_data), {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res
+    },
+
+    contactUs: async function(data){
+        try{
+            const res = await axios.post(`${baseURL}/user/contact`, JSON.stringify(data),
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
 }

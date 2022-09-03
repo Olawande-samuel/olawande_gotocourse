@@ -1,4 +1,10 @@
 import styled from "styled-components"
+import {useLocation, Link} from "react-router-dom"
+import DOMPurify from "dompurify"
+
+
+import { IMAGEURL } from "../../constants"
+import { useLocalStorage } from "../../hooks"
 import serena from '../../images/celebs/serena.jpg'
 import vector from '../../images/celebs/Vector.png'
 import img1 from '../../images/celebs/Rectangle606.png'
@@ -51,9 +57,8 @@ gap: 3rem;
 
     .bigimage{
         width: 30rem;
-        height: 30rem;
+        max-height: 30rem;
         border-radius: 10px;
-
     }
 
 
@@ -225,8 +230,9 @@ const TextBox = styled.div`
 
     h4{
         font-weight: 900;
-        font-size: 1.5rem;
+        font-size: clamp(1.875rem, 1.5179rem + 1.7857vw, 2.325rem);
         line-height: 53px;
+        margin-bottom: 1.8rem;
     }
 
     p{
@@ -256,7 +262,9 @@ const TextBox = styled.div`
 
         h4{
            
-            font-size: 1.5rem;
+            font-size: clamp(1.875rem, 1.5179rem + 1.7857vw, 2.325rem);
+
+            margin-bottom: 1.8rem;
             line-height: 30px;
             text-align: center;
         }
@@ -271,8 +279,9 @@ width: 100%;
 h4{
     text-align: center;
     font-weight: 900;
-    font-size: 1.5rem;
+    font-size: clamp(1.875rem, 1.5179rem + 1.7857vw, 2.325rem);
     line-height: 53px;
+    margin-bottom: 1.8rem;
 }
 
 .box{
@@ -325,8 +334,9 @@ width: 80%;
 h4{
     text-align: center;
     font-weight: 900;
-    font-size: 1.5rem;
+    font-size: clamp(1.875rem, 1.5179rem + 1.7857vw, 2.325rem);
     line-height: 53px;
+    margin-bottom: 1.8rem;
 }
 
 .box{
@@ -337,14 +347,14 @@ h4{
    
    .card{
        flex:.3;
-       height: 30rem;
+       height: 25rem;
        color: #fff;
        background: #322574;
        border: none;
        outline: none;
 
         .img{
-            height: 285px;
+            height: 60%;
             img{
                 width: 100%;
                 height: 100%
@@ -422,14 +432,15 @@ position: relative;
     transform: translate(-50% , -50%);
     text-align: center;
     // border 2px solid red;
-    max-width: 25%;
+    max-width: 35%;
 
 
     h4{
         text-align: center;
         font-weight: 900;
-        font-size: 1.5rem;
-        line-height: 40px;
+        font-size: clamp(1.875rem, 1.5179rem + 1.7857vw, 2.725rem);
+        line-height: 48px;
+        margin-bottom: 1.8rem;
         color: #fff;
         // border 2px solid red;
     }
@@ -461,25 +472,36 @@ position: relative;
 `
 
 export default function CelebProfile() {
+    const {getItem} = useLocalStorage()
+    const location = useLocation()
+    const mentorData = getItem("gotocourse-viewMentor")
+    const bread =  location.pathname?.split("/")
+    
+    console.log(mentorData)
+
     return (
         <Layout>
             <MainContainer >
-
             <Hero>
             <div className="container">
                     <div className="breadwrapper">
                         <nav arial-label="breadcrumb">
                             <ol className="breadcrumb">
-                                <li className="breadcrumb-item">Mentor Lounge</li>
-                                <li className="breadcrumb-item">Mentors</li>
-                                <li className="breadcrumb-item active">Serena Williams</li>
+                                {
+                                    bread?.slice(1).map((item, idx)=>(
+                                        <li className="breadcrumb-item  text-uppercase" key={idx}>
+                                            <Link style={{color:"#FFF"}} to={`${bread.slice(0, idx + 2).join("/")}`}>{item.split("-").join(" ")}</Link>
+                                        </li>
+                                    ))
+                                }
+                                {/* <li className="breadcrumb-item active">Serena Williams</li> */}
                             </ol>
                         </nav>
                     </div>
                     
                     <Top>
                         <div className="img">
-                            <img className="bigimage" src={serena} alt="" />
+                            <img className="bigimage" src={mentorData?.img ? mentorData.img : `${IMAGEURL}/${mentorData.mentorImg}`} alt="" />
 
                             <div className="stat">
 
@@ -507,18 +529,22 @@ export default function CelebProfile() {
                         <div className="content">
 
                             <h1>About</h1>
-                            <h4>Serena Williams</h4>
-                            <p>
-                                Serena Williams, (born September 26, 1981, Saginaw, Michigan,
-                                U.S.), American tennis player who revolutionized women’s tennis with her powerful style of play and who won more Grand Slam singles titles (23) than any other woman or man during the open era.
-                                <br />
-                                <br />
-                                Serena Williams
-                                Williams grew up in Compton, California. The family included her parents—Oracene Price, a nurse, and Richard Williams, who founded a security service—and Venus Williams, her older sister.
-                                <br />
-                                <br />
-                                While both parents encouraged Serena and Venus Williams to play tennis, it was Richard Williams who largely taught them the sport, taking the two girls to the public courts in the area. He was known as a strict coach, and the sisters spent long hours practicing. In 1991 the family moved to Florida so that Serena and Venus Williams could attend a tennis academy.
-                            </p>
+                            <h4>{`${mentorData.mentorFirstName} ${mentorData.mentorLastName}`}</h4>
+                            {
+                                mentorData.mentorBio ? <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(mentorData.mentorBio)}} />
+                                :
+                                <p>
+                                    Serena Williams, (born September 26, 1981, Saginaw, Michigan,
+                                    U.S.), American tennis player who revolutionized women’s tennis with her powerful style of play and who won more Grand Slam singles titles (23) than any other woman or man during the open era.
+                                    <br />
+                                    <br />
+                                    Serena Williams
+                                    Williams grew up in Compton, California. The family included her parents—Oracene Price, a nurse, and Richard Williams, who founded a security service—and Venus Williams, her older sister.
+                                    <br />
+                                    <br />
+                                    While both parents encouraged Serena and Venus Williams to play tennis, it was Richard Williams who largely taught them the sport, taking the two girls to the public courts in the area. He was known as a strict coach, and the sisters spent long hours practicing. In 1991 the family moved to Florida so that Serena and Venus Williams could attend a tennis academy.
+                                </p>
+                            }
 
                             <div className="socials">
                                 <a href="">website</a>

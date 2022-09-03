@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import Image from "../../components/Image"
 import Layout from "../../components/Layout"
 import {useAuth} from "../../contexts/Auth"
@@ -123,36 +123,42 @@ export function AlistMentors(){
         data: [
             {
                 id:1,
-                name:"Davis Williams", 
-                occupation:"CEO", 
-                amount:200, 
+                mentorFirstName:"Davis", 
+                mentorLastName:"Williams", 
+                expertise:"CEO", 
+                fee:350, 
                 img:Alist
             },
             {
                 id:2,
-                name:"Jolly Vee", 
-                occupation:"Entrepreneur and Internet Personality", 
-                amount:200, 
+                mentorFirstName:"Jolly", 
+                mentorLastName:"Vee", 
+                expertise:"Entrepreneur and Internet Personality", 
+                fee:300, 
                 img:Jolly
             },
             {
                 id:3,
-                name:"Dave King", 
-                occupation:"Musician", 
-                amount:200, 
+                mentorFirstName:"Dave", 
+                mentorLastName:"King", 
+                expertise:"Musician", 
+                fee:280, 
                 img:Dave
             },
             {
                 id:4,
-                name:"Joyce King", 
-                occupation:"Musician", 
-                amount:200, 
+                mentorFirstName:"Joyce", 
+                mentorLastName:"King",
+                expertise:"Musician", 
+                fee:250, 
                 img:Joyce
             },
         ]
     }
     return (
-        <Slider {...AlistMentor}  />
+        <div className={style.a_list}>
+            <Slider {...AlistMentor}  />
+        </div>
 
   )
 }
@@ -165,30 +171,35 @@ export function CelebrityMentor(){
         data: [
             {
                 id:1,
-                name:"Serena Williams", 
-                occupation:"Tennis Player", 
-                amount:200, 
+                mentorFirstName:"Serena", 
+                mentorLastName:"Williams",
+                expertise:"Tennis Player", 
+                fee:500, 
                 img:Serena
             },
             {
                 id:2,
-                name:"Gary Vee", 
-                occupation:"Entrepreneur and Internet Personality", 
-                amount:200, 
+                mentorFirstName:"Gary", 
+                mentorLastName:"Vee",
+                expertise:"Entrepreneur and Internet Personality", 
+                fee:450, 
                 img:Gary
             },
             {
-                id:2,
-                name:"George Joy", 
-                occupation:"Musician", 
-                amount:200, 
+                id:3,
+                mentorFirstName:"Joy", 
+                mentorLastName:"George",
+                expertise:"Musician", 
+                fee:390, 
                 img:Joy
             },
         ]
     }
     
     return (
-        <Slider {...celebrityMentors}  />
+        <div className={style.celeb}>
+            <Slider {...celebrityMentors} size={3} midSize={3} gap={30} />
+        </div>
     )
 }
 
@@ -214,6 +225,7 @@ export const Landing = () =>{
 
     return (
         <Celebrity>
+            <div className={style.back}>
             <Hero />
             <CelebrityMentor />
             <AlistMentors />
@@ -221,6 +233,7 @@ export const Landing = () =>{
             <TechExperts />
             <RightMentor />
             <TechExperts2 />
+            </div>
         </Celebrity>
     )
 }
@@ -240,7 +253,9 @@ export function TextandImage({direction, button, title, paragraph, btn_title, im
                 <h2 className={style.text_section_header}>{title}</h2>
                 <p className={style.text_section_p}>{paragraph}</p>
                 {
-                    button && <button className={style.text_section_button}>{btn_title}</button>
+                    button &&  <Link to="mentors"className="d-inline-block">
+                        <button className={style.text_section_button}>{btn_title}</button>
+                    </Link>
                 }
             </div>
             <div className={style.image_section}>
@@ -249,15 +264,19 @@ export function TextandImage({direction, button, title, paragraph, btn_title, im
         </div>
     )
 }
-export function CelebCard({name, occupation, amount, img, mentorImg, mentorFirstName, mentorLastName, expertise, fee}){
+export function CelebCard({img, mentorImg, mentorFirstName, mentorLastName, expertise, fee, item}){
+    const navigate = useNavigate()
     return (
-        <div className={style.celebrity_card}>      
-            <img src={img ? img : `${IMAGEURL}/${mentorImg}`} alt={name ? name :`${mentorFirstName} ${mentorLastName}`} className={style.card_img} />
+        <div className={style.celebrity_card} onClick={()=>{
+            localStorage.setItem("gotocourse-viewMentor", JSON.stringify(item))
+            navigate(`/lounge/mentors/${mentorFirstName}-${mentorLastName}`)
+        }}>      
+            <img src={img ? img : `${IMAGEURL}/${mentorImg}`} alt={`${mentorFirstName} ${mentorLastName}`} className={style.card_img} />
             <div className={style.card_content}>
-                <h4>{name ? name : `${mentorFirstName} ${mentorLastName}`}</h4>
-                <p>{occupation ? occupation : expertise}</p>
+                <h4>{`${mentorFirstName} ${mentorLastName}`}</h4>
+                <p>{expertise}</p>
                 <div className="d-flex justify-content-between">
-                    <span>$ {amount ? amount : fee}</span>
+                    <span>$ {fee}</span>
                     <span>
                         <i><BsLightningFill color="#F8C40D" size="2rem" /></i>
                         <span>24Hrs</span>
@@ -267,8 +286,7 @@ export function CelebCard({name, occupation, amount, img, mentorImg, mentorFirst
         </div>
     )
 }
-function Slider({title, data, size=4}){
-    console.log({data})
+function Slider({title, data, size=4, midSize=4, gap=10}){
     return(
         <div className={style.slider_wrapper}>
             <div className="container">
@@ -298,19 +316,19 @@ function Slider({title, data, size=4}){
                         // when window width is >= 640px
                         575: {
                         slidesPerView: 2,
-                        spaceBetween: 0,
+                        spaceBetween: 5,
                         },
                         700: {
                         slidesPerView:2.5 ,
                         spaceBetween: 8,
                         },
                         1024: {
-                        slidesPerView: 3.5,
-                        spaceBetween: 30,
+                        slidesPerView: midSize,
+                        spaceBetween: gap,
                         },
                         1350: {
                         slidesPerView: size,
-                        spaceBetween: 30,
+                        spaceBetween: gap,
                         },
                         1500: {
                         slidesPerView: 4,
@@ -320,7 +338,7 @@ function Slider({title, data, size=4}){
                     >
                     {data?.length> 0 && data.map((item, index) => (
                         <SwiperSlide key={index}>
-                            <CelebCard {...item} key={index} />
+                            <CelebCard {...item} key={index} item={item} />
                         </SwiperSlide>
                     ))}
                     </Swiper>
@@ -329,5 +347,29 @@ function Slider({title, data, size=4}){
         </div>
     )
 }
+
+
+
+export function HeroTypeSection({title, button, paragraph, btn_title, children}){
+    return(
+        <div className={`${style.textImage}}`}>
+            <div className={style.text_section}>
+                <h2 className={style.text_section_header}>{title}</h2>
+                <p className={style.text_section_p}>{paragraph}</p>
+                {
+                    button &&  <Link to="mentors"className="d-inline-block">
+                        <button className={style.text_section_button}>{btn_title}</button>
+                    </Link>
+                }
+            </div>
+            <div className={style.image_section}>
+               {children} 
+            </div>
+        </div>
+    )
+}
+
+
+
 
 export default Celebrity
