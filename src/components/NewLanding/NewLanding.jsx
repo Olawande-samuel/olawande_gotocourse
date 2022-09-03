@@ -377,7 +377,7 @@ function Mentorship (){
             <div className=" border-none newMentor_left">
               <div className="d-flex flex-column justify-content-center h-100">
                 <header className="mb-5">
-                  <h2 className="title" style={{fontSize:"44px"}}>One-on-one mentorship</h2>
+                  <h2 className="title">One-on-one mentorship</h2>
                 </header>
                 <p className=" newLearning-text mb-4">
                     Challenge yourself with a one-on-one mentorship session with industry experts and professionals and grow your career.

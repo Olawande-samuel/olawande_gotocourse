@@ -54,7 +54,7 @@ export const Jumbotron = ({title, contact})=>{
     const {  generalState: { navHeight }, } = useAuth();
     return (
         <section className="about_hero d-flex align-items-center" style={{height: `min(calc(100vh - ${navHeight}px ), 600px)`}}>
-        <main className="container">
+        <main className="container" style={{minHeight:"350px"}} >
             <h1>{title}</h1>
             {contact && 
             <ul>

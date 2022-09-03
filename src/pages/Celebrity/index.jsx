@@ -24,8 +24,9 @@ import Joyce from "../../images/celebs/Joyce.png"
 import mentor from "../../images/celebs/mentor.png"
 import harrison from "../../images/celebs/harrison.png"
 import harrison2 from "../../images/celebs/harrison2.png"
+import celeb4 from "../../images/celebs/Rectangle 594.png"
 
-
+  
 function RightMentor(){
     const item = [
         {
@@ -82,7 +83,7 @@ export function TechExperts(){
         initialValue: []
     })
     return (
-        <Slider title="Technical Experts Level 1" data={data?.data && data.data.slice(0, 7)} size={5} />
+        <Slider title="Technical Experts" data={data?.data && data.data.slice(0, 7)} size={5} />
 
   )
 }
@@ -94,7 +95,7 @@ export function TechExperts2(){
 
 
     return (
-        <Slider title="Technical Experts Level 2" data={data?.data && data.data.slice(8, 20)} size={5}  />
+        <Slider title="Technical Experts" data={data?.data && data.data.slice(8, 20)} size={5}  />
 
   )
 }
@@ -193,6 +194,14 @@ export function CelebrityMentor(){
                 fee:390, 
                 img:Joy
             },
+            {
+                id:4,
+                mentorFirstName:"Larry", 
+                mentorLastName:"Richardson",
+                expertise:"Musician", 
+                fee:350, 
+                img:celeb4
+            },
         ]
     }
     
@@ -253,7 +262,7 @@ export function TextandImage({direction, button, title, paragraph, btn_title, im
                 <h2 className={style.text_section_header}>{title}</h2>
                 <p className={style.text_section_p}>{paragraph}</p>
                 {
-                    button &&  <Link to="mentors"className="d-inline-block">
+                    button &&  <Link to="mentors" className="d-inline-block">
                         <button className={style.text_section_button}>{btn_title}</button>
                     </Link>
                 }
