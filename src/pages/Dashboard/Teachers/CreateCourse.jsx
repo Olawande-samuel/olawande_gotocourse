@@ -141,7 +141,7 @@ export const Syllabus = ({
     if(formstate?.courseId){
       try {
         let currentInstructor= [];
-        formstate.instructors.length > 0 && formstate.instructors.forEach(tutor=>{currentInstructor.push(tutor.email)})
+        formstate.instructors?.length > 0 && formstate.instructors?.forEach(tutor=>{currentInstructor.push(tutor.email)})
         let formdata = {
           ...formstate,
           type:"PACKAGE",
