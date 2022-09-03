@@ -203,7 +203,7 @@ const Courses = ({ children }) => {
                   </li>
                     {bread.filter(item=> item !== "").map((item, idx)=>(
                       <li className="breadcrumb-item active text-uppercase">
-                        <NavLink  to={`${bread.slice(0, idx + 2).join("/")}`}>{item.split("-").join(" " )}</NavLink>
+                        <NavLink  to={`${bread.slice(0, idx + 2).join("/")}`}>{item.split("-").join(" ")}</NavLink>
                       </li>
                     ))}
               </ol>
@@ -220,6 +220,8 @@ const Courses = ({ children }) => {
 };
 
 export default Courses;
+
+
 
 const Card = ({ logo, name, description, iconImg }) => {
   return (
@@ -797,10 +799,10 @@ export const CourseProfile = ({preview}) => {
   },[id, preview])
 
   function getDate(date){
-      return new Date(date).toDateString()
+    return new Date(date).toDateString()
   }
 
- async function addToWishList(){
+  async function addToWishList(){
     const data = getItem("gotocourse-courseInfo");
 
     const  userData = getItem(KEY)
@@ -1247,3 +1249,37 @@ export const ReviewSection = ()=> {
   </section>
   )
 }
+
+export const Lounge = ({ children }) => {
+  const location = useLocation();
+  const { generalState:{loading} } = useAuth()
+  const bread = location.pathname?.split("/");
+  return (
+    <Layout celebMentors={true}>
+      <ScrollToTop />
+      <div className={style.block} style={{background:"#191046", color:"#fff"}}>
+        <ToastContainer />  
+        <div className={`container`}>
+          <div className={style.breadcrumbs_wrapper}>
+            <nav arial-label="breadcrumb">
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item">
+                  <Link to="/lounge" style={{color:"#FFF"}} >MENTORS LOUNGE</Link>
+                  </li>
+                    {bread.filter(item=> item !== "").map((item, idx)=>(
+                      <li className="breadcrumb-item  text-uppercase" key={idx}>
+                        <Link style={{color:"#FFF"}} to={`${bread.slice(0, idx + 2).join("/")}`}>{item.split("-").join(" ")}</Link>
+                      </li>
+                    ))}
+              </ol>
+            </nav>
+          </div>
+        </div>
+        {children}
+      </div>
+      {loading && 
+            <Loader />
+        }
+    </Layout>
+  );
+};

@@ -64,35 +64,34 @@ const SignUp = () => {
        throw new AdvancedError("Fields cannot be empty", 0);
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
-        // main dashboard
-      const response = await register(others, "user");
-      // second dashboard
-      const res = await generalState.pledre.signUpStudent({
-        name:`${data.firstName} ${data.lastName}`,
-        email: data.email,
-        password:`${data.password}`
-      })
-    
-      let { success, message, statusCode } = response;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-       
-        const { data } = response;
-        removeItem(KEY);
-        // set item
-        getItem(KEY, data);
-        localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res)) 
-        setGeneralState((old) => {
-          return {
-            ...old,
-            notification: message,
-          };
-        });
-        navigate("/student");
-        // navigate("/user-authentication");
-      }
+        // second dashboard
+        const res = await generalState.pledre.signUpStudent({
+          name:`${data.firstName} ${data.lastName}`,
+          email: data.email,
+          password:`${data.password}`
+        })
+        console.log({res})
+        if(res.approved){
+          // main dashboard
+          const response = await register({...others, pledreStudentId: res._id}, "user");
+          let { success, message, statusCode } = response;
+          if (!success) throw new AdvancedError(message, statusCode);
+          else {
+            const { data } = response;
+            removeItem(KEY);
+            // set item
+            getItem(KEY, data);
+            localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res)) 
+            setGeneralState((old) => {
+              return {
+                ...old,
+                notification: message,
+              };
+            });
+            navigate("/student");
+          }
+        }
     } catch (err) {
-      console.error(err)
       toast.error(err.message, {
         position: "top-right",
         autoClose: 4000,

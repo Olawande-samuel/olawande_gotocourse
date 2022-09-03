@@ -100,7 +100,7 @@ const Chat = ({ type, messagedata, usertype }) => {
     adminFunctions: { getMessages, getUnreadMessages }, 
     adminStudentFunctions: { fetch}, 
     adminTeacherFunctions: { fetch: TeachersFetch },
-    otherFunctions: {fetchTeachers} 
+    otherFunctions: {fetchTeachers, fetchAdmin} 
   } = useAuth();
 
 
@@ -141,7 +141,7 @@ const Chat = ({ type, messagedata, usertype }) => {
             }
           } else if(usertype === "student"){
             try {
-              const res = type === "Others" ?  await fetch(userData?.token) : await fetchTeachers(); //first should be admin
+              const res = type === "Others" ?  await fetchAdmin() : await fetchTeachers(); //first should be admin
               const { message, success, statusCode } = res;
               if (!success) throw new AdvancedError(message, statusCode);
               else {
@@ -164,7 +164,7 @@ const Chat = ({ type, messagedata, usertype }) => {
             }
           } else {
             try {
-              const res = type === "Others" ?  await fetch(userData?.token) : await TeachersFetch(userData?.token); //replace this with fetch students
+              const res = type === "Others" ?  await fetchAdmin() : await TeachersFetch(userData?.token); //replace this with fetch students
               const { message, success, statusCode } = res;
               if (!success) throw new AdvancedError(message, statusCode);
               else {
@@ -273,7 +273,7 @@ const ChatBox = ({ userInfo, boxdata, checked, type , displayControl, setShowUse
   const [messageList, setMessageList] = useState([]);
   const [text, setText] = useState("");
 
-  const ourMessages = useQuery(["get private messages from user"], () => getMessages(userData.token,  userInfo?.userId ? userInfo?.userId : (userInfo?.fromUser ? userInfo?.fromUser : userInfo?.teacherId)), {
+  const ourMessages = useQuery(["get private messages from user"], () => getMessages(userData.token,  userInfo?.userId ? userInfo?.userId : (userInfo?.fromUser ? userInfo?.fromUser : (userInfo?.teacherId ? userInfo?.teacherId : userInfo?._id))), {
     onSuccess: (res)=> {
       if(res.data){
         setMessageList(res.data)
@@ -312,6 +312,7 @@ const ChatBox = ({ userInfo, boxdata, checked, type , displayControl, setShowUse
           progress: undefined,
         });
         queryClient.invalidateQueries(["get private messages from user"])
+        setText("")
       } else {
         toast.error(res.message, {
           position: "top-right",
@@ -379,7 +380,7 @@ const ChatBox = ({ userInfo, boxdata, checked, type , displayControl, setShowUse
 
     if(text){
       msgMutation.mutate({
-        toUser: userInfo.userId ? userInfo.userId : (userInfo.teacherId ? userInfo.teacherId : userInfo.fromUser),
+        toUser: userInfo.userId ? userInfo.userId : (userInfo.teacherId ? userInfo.teacherId : (userInfo.fromUser ? userInfo.fromUser :userInfo._id)),
         body: text
       })
     } else{
@@ -397,7 +398,7 @@ const ChatBox = ({ userInfo, boxdata, checked, type , displayControl, setShowUse
 
   async function markAsRead(){
     if(userInfo.fromUser){
-      markRead.mutate([ userInfo.fromUser ])
+      markRead.mutate([ userInfo.messageId ])
     }
     return
   }
@@ -418,7 +419,7 @@ const ChatBox = ({ userInfo, boxdata, checked, type , displayControl, setShowUse
           {checked}
           <div className={clsx.chat_box_top}>
             <div className={clsx.chat_box_top_image}>
-              <i onClick={()=>setShowUserlist(true)}><IoMdArrowRoundBack /></i>
+              <i onClick={()=>setShowUserlist(true)} className="me-3"><IoMdArrowRoundBack /></i>
               {
                 userInfo.profileImg &&
                 <img src={userInfo?.profileImg && userInfo?.profileImg } alt="avatar" style={{width:"50px", height:"50px", borderRadius:"50%" }} /> 

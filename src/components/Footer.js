@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import {motion} from "framer-motion"
 import {Logo, Logosm} from "../images/components/svgs"
@@ -85,8 +85,16 @@ const rightLink = [
     title:"Affiliates",
     path:"/affiliates"
   },
+  {
+    id:8,
+    title:"Mentors Lounge",
+    path:"/lounge"
+  },
 ]
 const Footer = () => {
+  const location = useLocation();
+  const celebRoute = location.pathname.split("/")[1] === "lounge"
+
   const scrollWithOffset = (el)=>{
     const yCoord = el.getBoundingClientRect().top + window.pageYOffset;
     const yOffset = -80;
@@ -94,28 +102,46 @@ const Footer = () => {
   }
   
   return (
-    <footer className="footer wrapper">
+    <footer className="footer wrapper" style={{
+      background: celebRoute ?  "#000F62" :"var(--theme-blue)"  , color:  "#fffff"
+      }}>
       <div className="container ">
-      <div className="box mb-5">
-            <p className="text-center mb-5">
-              Join Gotocourse to unleash untapped opportunities in borderless
-              knowledge sharing across the world! We are ready to serve you
-              anywhere you are
-            </p>
-          <div className="join_button_wrapper justify-content-center align-items-center d-flex mb-3">
-            <Link to="/students" onClick={()=>window.scrollTo(0, 0)}>
-              <button type="button" className="btn btn-light px-lg-4 py-lg-3">
-                Join as a student
-              </button>
-            </Link>
-            <small>OR</small>
-            <Link to="/become-a-teacher">
+        {
+          celebRoute ? 
+          <div className="box mb-5">
+              <p className="text-center mb-5">Ready to become a mentor on Gotocourse?</p>
+              <div className="join_button_wrapper justify-content-center align-items-center d-flex mb-3">
+              <Link to="/teacher/signup" onClick={()=>window.scrollTo(0, 0)}>
               <button type="button" className="btn btn-outline-light px-lg-4 py-lg-3">
-                Apply to teach
-              </button>
-            </Link>
+                    Enroll as a mentor
+                  </button>
+                </Link>
+              </div>
+
           </div>
-        </div>
+
+          :
+          <div className="box mb-5">
+                <p className="text-center mb-5">
+                  Join Gotocourse to unleash untapped opportunities in borderless
+                  knowledge sharing across the world! We are ready to serve you
+                  anywhere you are
+                </p>
+              <div className="join_button_wrapper justify-content-center align-items-center d-flex mb-3">
+                <Link to="/students" onClick={()=>window.scrollTo(0, 0)}>
+                  <button type="button" className="btn btn-light px-lg-4 py-lg-3">
+                    Join as a student
+                  </button>
+                </Link>
+                <small>OR</small>
+                <Link to="/become-a-teacher">
+                  <button type="button" className="btn btn-outline-light px-lg-4 py-lg-3">
+                    Apply to teach
+                  </button>
+                </Link>
+              </div>
+            </div>
+        }
         <div className="footer_container d-flex justify-content-between">
 
         <div className="footer_left">

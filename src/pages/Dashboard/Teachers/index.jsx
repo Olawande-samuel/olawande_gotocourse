@@ -19,6 +19,7 @@ import Layout from "../../../components/Layout";
 import { CourseProfile } from "../../Courses";
 import { Syllabus } from "./CreateCourse";
 import ChatComponent from "../Admin/Chat";
+import {NotificationContent} from "../Admin";
 
 import { DashboardTop, Community } from "../Students";
 import { FaChalkboardTeacher } from "react-icons/fa";
@@ -480,15 +481,15 @@ export function Edit() {
                </div> : 
 
              <p
-                style={{ cursor: isUploading && "not-allowed" }}
+                style={{ cursor: isUploading && "not-allowed", color: "var(--theme-orange", fontWeight:"700" }}
                 onClick={changeProfilePictureHandler}
               >
-                Change Picture
+                Click to Upload Photo
               </p>
           
             ) : (
               <p onClick={uploadPicture} style={{ cursor: "pointer" }}>
-                Upload Photo
+               Select a photo to upload
               </p>
             )}
           </div>
@@ -582,6 +583,91 @@ export function Edit() {
 }
 
 
+// NOTIFICATION
+export function Notification() {
+  const {getItem} = useLocalStorage();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [loader, setLoader] = useState(false);
+  const [load, setLoad] = useState(false);
+  const {generalState, setGeneralState,  studentFunctions: {fetchNotifications, readNotifications } } = useAuth(); 
+  const [reload, setReload]= useState(false)
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    if(flag.current) return;
+      (async() => {
+        try{
+          setLoader(true)
+          const res = await fetchNotifications(userdata?.token);
+          const {message, success, statusCode} = res;
+          if(!success) throw new AdvancedError(message, statusCode);
+          const {data} = res
+          if(data.length > 0) {
+            setNotifications(data)
+            const unread = data.filter((notification)=>notification.isRead !== true)
+            setGeneralState({...generalState, notifications: unread.length})
+          }
+        }catch(err){
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }finally{
+          setLoader(_ => false);
+        }
+      })()
+      flag.current = true;
+  },[reload])
+  
+  async function markAsRead(e){
+    e.preventDefault();
+    try{
+      setLoad(true)
+      const res = await readNotifications(userdata?.token);
+      const {message, success, statusCode} = res;
+      if(!success) throw new AdvancedError(message, statusCode);
+      const {data} = res
+      setReload(true)
+      flag.current = false;
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }catch(err){
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }finally{
+      setLoad(_ => false);
+    }
+  }
+
+  return (
+    <Teachers userdata={userdata} header="Notifications">
+      <NotificationContent notifications={notifications} markAsRead={markAsRead} load={load} loader={loader} />
+    </Teachers>
+  );
+}
+
+
+
 export function Chat() {
   const {getItem} = useLocalStorage()
   const [loader, setLoader] = useState(true);
@@ -597,10 +683,10 @@ export function Chat() {
       active: true,
       name: "New Messages",
     },
-    // {
-    //   active: false,
-    //   name: "Admin",
-    // },
+    {
+      active: false,
+      name: "Admin",
+    },
     {
       active: false,
       name: "Students",
@@ -612,10 +698,10 @@ export function Chat() {
       id: 1,
       type: "New Messages",
     },
-    // {
-    //   id: 2,
-    //   type: "Others",
-    // },
+    {
+      id: 2,
+      type: "Others",
+    },
     {
       id: 4,
       type: "Teachers",
@@ -706,7 +792,7 @@ export const Dashboard = ()=>{
           id:3,
           title:"Earnings",
           logo: <Stu3 />,
-          value: "$180000"
+          value: "$0"
       }
   ]
 
@@ -771,26 +857,41 @@ export const Teachers = ({ children, isMobile, userdata, notification, header })
     generalState: { showSidebar, loading, pledre },
     generalState,
     setGeneralState,
-    adminFunctions: {getUnreadMessages}
+    adminFunctions: {getUnreadMessages}, studentFunctions: {fetchNotifications }
   } = useAuth();
 
   const [pledredata, setPledreData]= useState({})
 
   const {getItem} = useLocalStorage()
 
+  const userData = getItem(KEY)
+  const flag = useRef(false);
+
   useEffect(() => {
-    if (notification) {
-      toast.success(notification, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
-    return () => console.log("Teachers component is unmounted");
+    if(flag.current) return;
+      (async() => {
+        try{
+          const res = await fetchNotifications(userData?.token);
+          const {message, success, statusCode} = res;
+          if(!success) throw new AdvancedError(message, statusCode);
+          const {data} = res
+          if(data.length > 0) {
+            const unread = data.filter((notification)=>notification.isRead !== true)
+            setGeneralState({...generalState, notifications: unread.length})
+          }
+        }catch(err){
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })()
+      flag.current = true;
   }, []);
 
   useEffect(()=>{
@@ -844,7 +945,7 @@ export const Teachers = ({ children, isMobile, userdata, notification, header })
 }
 
 // fetch messages
-const getMessage = useQuery(["fetch admin messages"], ()=>getUnreadMessages(userdata?.token), {
+const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUnreadMessages(userData?.token), {
   onError: (err)=> {
     toast.error(err.message,  {
       position: "top-right",

@@ -20,7 +20,7 @@ import { useAuth } from "../../../contexts/Auth";
 import {GuardedRoute} from "../../../hoc";
 import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
-import { BootcampRow, UserInfoCard } from "../Admin";
+import { BootcampRow, UserInfoCard, NotificationContent } from "../Admin";
 import { useLocalStorage } from "../../../hooks";
 import { FaRegTrashAlt, FaUserAlt } from "react-icons/fa";
 import {SiGoogleclassroom } from "react-icons/si";
@@ -273,9 +273,9 @@ export function Edit(){
                             <span className="visually-hidden">Loading...</span>
                         </div>
                          : 
-                        <p style={{cursor: isUploading && 'not-allowed'}} onClick={changeProfilePictureHandler}>Change Picture</p>
+                        <p style={{cursor: isUploading && 'not-allowed', color: "var(--theme-orange", fontWeight:"700"}} onClick={changeProfilePictureHandler}>Click to Upload Photo</p>
                     
-                    : (<p onClick={uploadPicture}>Upload Photo</p>)
+                    : (<p onClick={uploadPicture} >Select a photo to upload</p>)
                     }
                 </div>
                 <div className={clsx.edit__picture}>
@@ -356,6 +356,7 @@ export function Edit(){
 
 export function Bootcamps() {
     const {studentFunctions: { fetchBootcamps} } = useAuth();
+
     const navigate = useNavigate();
     const {getItem} = useLocalStorage();
     const flag = useRef(false);
@@ -1010,6 +1011,94 @@ function ClassesCard({numberOfLessons, title, date, time, isLive, color}){
     )
 }
 
+
+
+// NOTIFICATION
+export function Notification() {
+    const {getItem} = useLocalStorage();
+    const flag = useRef(false);
+    let userdata = getItem(KEY);
+    const [loader, setLoader] = useState(false);
+    const [load, setLoad] = useState(false);
+    const {generalState, setGeneralState, studentFunctions: {fetchNotifications, readNotifications }} = useAuth(); 
+    const [reload, setReload]= useState(false)
+    const [notifications, setNotifications] = useState([]);
+  
+    useEffect(() => {
+      if(flag.current) return;
+        (async() => {
+          try{
+            setLoader(true)
+            const res = await fetchNotifications(userdata?.token);
+            const {message, success, statusCode} = res;
+            if(!success) throw new AdvancedError(message, statusCode);
+            const {data} = res
+            if(data.length > 0) {
+              setNotifications(data)
+              const unread = data.filter((notification)=>notification.isRead !== true)
+              setGeneralState({...generalState, notifications: unread.length})
+            }
+          }catch(err){
+            toast.error(err.message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }finally{
+            setLoader(_ => false);
+          }
+        })()
+        flag.current = true;
+    },[reload])
+    
+    async function markAsRead(e){
+      e.preventDefault();
+      try{
+        setLoad(true)
+        const res = await readNotifications(userdata?.token);
+        const {message, success, statusCode} = res;
+        if(!success) throw new AdvancedError(message, statusCode);
+        const {data} = res
+        setReload(true)
+        flag.current = false;
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }catch(err){
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }finally{
+        setLoad(_ => false);
+      }
+    }
+  
+    return (
+        <Students  userdata={userdata} header="Notifications">
+        <NotificationContent notifications={notifications} markAsRead={markAsRead} load={load} loader={loader} />
+      </Students>
+    );
+  }
+
+
+
+// CHAT
 export function Chat() {
     const {getItem} = useLocalStorage()
     const [loader, setLoader] = useState(true);
@@ -1026,10 +1115,10 @@ export function Chat() {
           active: true,
           name: "New Messages",
         },
-        // {
-        //   active: false,
-        //   name: "Admin",
-        // },
+        {
+          active: false,
+          name: "Admin",
+        },
         {
           active: false,
           name: "Teachers",
@@ -1041,10 +1130,10 @@ export function Chat() {
           id: 1,
           type: "New Messages",
         },
-        // {
-        //   id: 2,
-        //   type: "Others",
-        // },
+        {
+          id: 2,
+          type: "Others",
+        },
         {
           id: 4,
           type: "Teachers",
@@ -1130,7 +1219,7 @@ console.log(allCourses)
               </div>
               <div className={`${clsx.dashboard_course_details}`}>
                 <div className="d-flex justify-content-between align-items-center">
-                    <h6>Courses paid for</h6>
+                    <h6>Classes paid for</h6>
                 </div>
                     {/* <CourseTable courses={data?.data} type="dashboard" /> */}
                         {
@@ -1299,40 +1388,51 @@ export function DashboardTop({content}){
 
 
 export const Students = ({children, isMobile, notification, userdata, header}) => {
-    const location = useLocation();
     const [pledredata, setPledreData]= useState({})
-    const {generalState: {showSidebar, loading, pledre}, generalState, setGeneralState, otherFunctions:{fetchCourses}, adminFunctions: {getUnreadMessages}} = useAuth();
-    const [loader, setLoading] = useState(false)
-    const route = location.pathname.split("/")[1];
-
+    const {generalState: {showSidebar, loading, pledre}, generalState, setGeneralState, otherFunctions:{fetchCourses}, adminFunctions: {getUnreadMessages}, studentFunctions: {fetchNotifications, readNotifications }} = useAuth();
     const { getItem }= useLocalStorage()
+    const userData = getItem(KEY)
+    const user = getItem("gotocourse-userdata")
+
+    const flag = useRef(false);
     useEffect(() => {
-        if(notification){
-            toast.success(notification, {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+        if(flag.current) return;
+      (async() => {
+        try{
+          const res = await fetchNotifications(userData?.token);
+          const {message, success, statusCode} = res;
+          if(!success) throw new AdvancedError(message, statusCode);
+          const {data} = res
+          if(data.length > 0) {
+            const unread = data.filter((notification)=>notification.isRead !== true)
+            setGeneralState({...generalState, notifications: unread.length})
+          }
+        }catch(err){
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         }
-        return () => console.log("Students component is unmounted");
+      })()
+      flag.current = true;
     }, [])
 
     const toggleSidebar = ()=> {
         setGeneralState({...generalState, showSidebar: !showSidebar})
     }
 
-    const {isLoading, data} = useQuery(["get courses"], ()=> fetchCourses())
+    // const {isLoading, data} = useQuery(["get courses"], ()=> fetchCourses())
 
    
     useEffect(()=>{
         let isActive = true
         if(!pledredata?.email && pledre.getStudentDetails){
             (async()=>{
-                const user = getItem("gotocourse-userdata")
                 try{
                     const response = await pledre.getStudentDetails(user?.email)
                     if(isActive){
@@ -1371,9 +1471,8 @@ const student = {
     logo: <FaGraduationCap size="2.5rem" color="#0C2191" />
 }
     
-
 // fetch messages
-const getMessage = useQuery(["fetch admin messages"], ()=>getUnreadMessages(userdata?.token), {
+const getMessage = useQuery(["fetch student messages", user.token], ()=>getUnreadMessages(user.token), {
     onError: (err)=> {
       toast.error(err.message,  {
         position: "top-right",

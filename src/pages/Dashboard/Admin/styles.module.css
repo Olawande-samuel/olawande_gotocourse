@@ -75,7 +75,7 @@
     background: #eee; /* color of the tracking area */
   }
   .admin_profile::-webkit-scrollbar-thumb {
-    background-color: #e5e5e5; /* color of the scroll thumb */
+    background-color: #838383; /* color of the scroll thumb */
     border-radius: 10px; /* roundness of the scroll thumb */
     /* border: 3px solid orange;  */
   }

@@ -15,20 +15,20 @@ import AdminDashboard from "./pages/Dashboard/Admin/Dashboard";
 
 
 import {Dashboard as StudentDashboard,Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Fees as StudentFees,
-   Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat} from "./pages/Dashboard/Students";
+   Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat, Notification as StudentNotifications} from "./pages/Dashboard/Students";
 import StudentHelp from "./pages/Dashboard/Students/Help";
 import StudentReferral from "./pages/Dashboard/Students/Referral";
 
 
 import {Dashboard as TeacherDashboard,  Profile as TeachersProfile, Classes as TeacherClasses, Edit as TeacherEdit, 
-  Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo, Chat as TeacherChat  } from "./pages/Dashboard/Teachers";
+  Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo, Chat as TeacherChat , Notification as TeacherNotifications } from "./pages/Dashboard/Teachers";
 import TeachersHelp from "./pages/Dashboard/Teachers/Help";
   
 import {Dashboard as AffiliatesDash, Sales, Income, Revenue} from "./pages/Dashboard/Affiliate"
 import {Landing as AffiliateLanding, Register as AffiliateRegister, Login as AffiliateLogin, Verification as AffiliateVerification} from "./pages/Affiliate";
 import AdminAffiliate from "./pages/Dashboard/Admin/Affiliate";
 
-
+import HIW from "./pages/HowItWorks"
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
@@ -51,6 +51,9 @@ import Settings from "./pages/Dashboard/Admin/Settings";
 import {Students} from "./pages/Students"
 import UserOnBoarding from "./pages/Students/OnBoarding";
 import Verification from "./pages/User/Verification";
+import {Landing as CelebLanding} from "./pages/Celebrity";
+import Lounge from "./pages/Celebrity/Lounge";
+import CelebProfile from "./pages/Celebs/CelebProfile";
 
 function App() {
   return (
@@ -79,8 +82,18 @@ function App() {
             <Route path="career" element={<Career />} />
             <Route path="students" element={<Students  />} />
             <Route path="user-authentication" element={<Verification  />} />
-            <Route path="user-onboarding" element={<UserOnBoarding />} />
+            <Route path="user-onboarding" element={<UserOnBoarding />} />            
             
+            <Route path="test" element={<HIW  />} />
+            
+            <Route path="lounge" element={<Out/>}>
+              <Route index element={<CelebLanding />} />
+              <Route path="mentors" element={<Lounge />} />
+              <Route path="mentors/:id" element={<CelebProfile />} >
+              </Route>
+            </Route>
+
+
             <Route path="student" element={<Out />}>
               <Route path="" element={<StudentDashboard  />} />
               <Route path="profile" element={<StudentProfile  />} />
@@ -94,7 +107,7 @@ function App() {
               <Route path="chat" element={<StudentChat />} />
               <Route path="help" element={<StudentHelp />} />
               <Route path="referral" element={<StudentReferral />} />
-              <Route path="notifications" element={<StudentDashboard />} /> 
+              <Route path="notifications" element={<StudentNotifications />} /> 
             </Route>
 
             <Route path="mentors" element={<Out/>}>
@@ -104,6 +117,7 @@ function App() {
                 {/* <Route path="payment" element={<Payment />} /> */}
               </Route>
             </Route>
+            
             <Route path="teachers" element={<Out/>}>
               <Route index element={<All  type="teachers" />} />
               <Route path=":id" element={<Out />} >
@@ -127,9 +141,8 @@ function App() {
               <Route path="courses/create" element={<CreateCourse />} />
               <Route path="courses/details/:id" element={<TeacherCourseInfo />} />
               <Route path="chat" element={<TeacherChat />} />
-              <Route path="notifications" element={<TeacherDashboard />} />
+              <Route path="notifications" element={<TeacherNotifications />} />
               <Route path="help" element={<TeachersHelp />} />
-
             </Route>
             <Route path="affiliates" element={<AffiliateLanding />} />
             <Route path="affiliates/register" element={<AffiliateRegister />} />
@@ -191,6 +204,7 @@ function App() {
               <Route path="login" element={<AdminLogin />} />
               <Route path="signup" element={<AdminSignup />} />
             </Route> 
+
         </Route>
         <Route path="*" element={<h1 className="text-center">Page Not Found</h1>} />
       </Routes>
