@@ -201,8 +201,7 @@
     align-items: center;
     border: 1px solid #2F80ED;
     border-radius: 10px;
-    padding: 5px;
-    padding-bottom: 0;
+    padding: 0 5px;
     background-color: #fff;
 
 }

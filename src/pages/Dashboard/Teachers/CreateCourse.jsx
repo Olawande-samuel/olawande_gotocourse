@@ -92,7 +92,9 @@ export const Syllabus = ({
           setFormstate(courseData)
           if(courseData.courseImg){
             const imgArr = courseData.courseImg.split("/").slice(-1)
-            setFormstate({...courseData, courseImg: imgArr[0]})
+            const startDate = new Date(courseData.startDate).toISOString().split('T')[0]
+            const endDate= new Date(courseData.endDate).toISOString().split('T')[0]
+            setFormstate({...courseData, courseImg: imgArr[0], startDate, endDate})
           }
         }
       }
@@ -102,7 +104,6 @@ export const Syllabus = ({
     const [faq, setFaq] = useState(formstate?.faqs ?? []);
     const [packageList, setPackageList] = useState([]);
     const [instructorsList, setInstructorsList] = useState([]);
-    const [editInstructorsList, setEditInstructorsList] = useState([]);
   
     const [categories, setCategories] = useState([]); 
     const [openImage, setOpenImage] = useState(false);
@@ -132,29 +133,25 @@ export const Syllabus = ({
     });
     setOpenPreview(true);
   };
+  console.log({formstate})
 
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
     if(formstate?.courseId){
       try {
+        let currentInstructor= [];
+        formstate.instructors.length > 0 && formstate.instructors.forEach(tutor=>{currentInstructor.push(tutor.email)})
+        let formdata = {
+          ...formstate,
+          type:"PACKAGE",
+          instructors:[...instructorsList, ...currentInstructor],
+          categoryName: formstate.category
+        }
+        delete formdata.category
         if ( formstate.name === "" || formstate.categoryName === "" || formstate.description === "" ) throw new AdvancedError("All fields are required", 0);
-          let currentInstructor= [];
-          formstate.instructors.length > 0 && formstate.instructors.forEach(tutor=>{currentInstructor.push(tutor.email)})
-          let formdata = {
-            ...formstate,
-            type:"PACKAGE",
-            instructors:[...instructorsList, ...currentInstructor]
-          }
-
         const res = type === "admin" ?
-          await adminUpdateCourse( userdata?.token, formstate?.courseId,  {
-            ...formdata,
-            startDate: new Date(formstate.startDate).toISOString().split('T')[0],
-            endDate: new Date(formstate.endDate).toISOString().split('T')[0],
-            categoryName: formstate.category
-
-          }) 
+          await adminUpdateCourse( userdata?.token, formstate?.courseId,  formdata) 
         : await updateCourse( userdata?.token, formstate?.courseId, formdata, userdata.token );
 
         const { success, message, statusCode } = res;
@@ -188,21 +185,24 @@ export const Syllabus = ({
     try {
       if (
         formstate.name === "" ||
-        formstate.categoryName === "" ||
         formstate.description === ""
       )
         throw new AdvancedError("All fields are required", 0);
-      const res = type=== "admin" ? await adminAddCourse(
-        {
+        let formdata = {
           ...formstate,
           type:"PACKAGE",
+          categoryName: formstate.category,
           instructors:[...instructorsList]
-        },
-        userdata.token
-      ): await addCourse(
+        }
+
+        delete formdata.category
+      const res = type=== "admin" ? 
+      await adminAddCourse( formdata, userdata.token )
+      :
+      await addCourse(
         {
-          ...formstate,
-          type:"PACKAGE",
+        ...formdata,
+        instructors:[]
         },
         userdata.token
       );
@@ -376,8 +376,8 @@ export const Syllabus = ({
                 <label htmlFor={"package"}>Category</label>
                 <select
                   rows="5"
-                  name="categoryName"
-                  value={formstate.categoryName}
+                  name="category"
+                  value={formstate.category}
                   onChange={changeHandler}
                   className="form-select generic_input"
                 >
@@ -408,7 +408,7 @@ export const Syllabus = ({
                     name="startDate"
                     type="date"
                     handleChange={changeHandler}
-                    value={formstate.start_date}
+                    value={formstate.startDate }
                   />
                 </div>
                 <div className="col-sm-4">
@@ -417,7 +417,7 @@ export const Syllabus = ({
                     name="endDate"
                     type="date"
                     handleChange={changeHandler}
-                    value={formstate.end_date}
+                    value={formstate.endDate}
                   />
                 </div>
               </div>
@@ -830,7 +830,7 @@ export const Syllabus = ({
               className="form-select generic_input"
             >
               <option value="">Choose a Type</option>
-              <option value="ONE-ON-ONE">One-on-One</option>
+              <option value="MENTORSHIP">One-on-One</option>
               <option value="COHORT">Cohort</option>
               <option value="SELF_PACED">Self Paced</option>
               <option value="PHYSICAL">In-person Training</option>
@@ -1111,7 +1111,7 @@ export const Syllabus = ({
   export function changeConstants(name){
     if(name === "SELF_PACED") return "self-paced"
     if(name === "COHORT") return "Cohort"
-    if(name === "ONE_ON_ONE") return "One-on-One"
+    if(name === "MENTORSHIP") return "One-on-One"
     if(name === "PHYSICAL") return "In-person Training"
     return name
   }

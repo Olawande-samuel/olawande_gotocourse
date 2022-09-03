@@ -27,7 +27,7 @@ import {Dashboard as AffiliatesDash, Sales, Income, Revenue} from "./pages/Dashb
 import {Landing as AffiliateLanding, Register as AffiliateRegister, Login as AffiliateLogin, Verification as AffiliateVerification} from "./pages/Affiliate";
 import AdminAffiliate from "./pages/Dashboard/Admin/Affiliate";
 
-
+import HIW from "./pages/HowItWorks"
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
@@ -79,6 +79,9 @@ function App() {
             <Route path="career" element={<Career />} />
             <Route path="students" element={<Students  />} />
             <Route path="user-authentication" element={<Verification  />} />
+
+            
+            <Route path="test" element={<HIW  />} />
 
             
             <Route path="lounge" element={<Out/>}>

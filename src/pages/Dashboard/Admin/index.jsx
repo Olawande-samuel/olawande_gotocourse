@@ -30,7 +30,7 @@ import vector from "../../../images/vector.png"
 import { CourseDetail } from "../../Courses";
 import Layout from "../../../components/Layout";
 import ChatComponent from "./Chat";
-import { CreateCourseMain } from "../Teachers/CreateCourse";
+import { changeConstants, CreateCourseMain } from "../Teachers/CreateCourse";
 import { AllEarnings} from "../Teachers/Earnings"
 
 import EarningsTable from "./Earnings/Table"
@@ -1383,7 +1383,7 @@ export function UserInfoCard({
       {(comp === "Courses") && (
         <td className={clsx.user__date}>
             {packages.map(item=>(
-              <div>{item.title}</div>
+              <div>{changeConstants(item.title)}</div>
             ))}
         </td>
       )}

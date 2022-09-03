@@ -348,4 +348,28 @@ function Slider({title, data, size=4, midSize=4, gap=10}){
     )
 }
 
+
+
+export function HeroTypeSection({title, button, paragraph, btn_title, children}){
+    return(
+        <div className={`${style.textImage}}`}>
+            <div className={style.text_section}>
+                <h2 className={style.text_section_header}>{title}</h2>
+                <p className={style.text_section_p}>{paragraph}</p>
+                {
+                    button &&  <Link to="mentors"className="d-inline-block">
+                        <button className={style.text_section_button}>{btn_title}</button>
+                    </Link>
+                }
+            </div>
+            <div className={style.image_section}>
+               {children} 
+            </div>
+        </div>
+    )
+}
+
+
+
+
 export default Celebrity

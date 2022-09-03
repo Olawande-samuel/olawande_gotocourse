@@ -398,7 +398,7 @@ const ChatBox = ({ userInfo, boxdata, checked, type , displayControl, setShowUse
 
   async function markAsRead(){
     if(userInfo.fromUser){
-      markRead.mutate([ userInfo.fromUser ])
+      markRead.mutate([ userInfo.messageId ])
     }
     return
   }
