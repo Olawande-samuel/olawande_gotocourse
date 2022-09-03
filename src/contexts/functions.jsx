@@ -56,8 +56,62 @@ export const authFunctions = {
             }
         }
     },
+    verifyEmail: async function(_data){
+        try{
+            const res = await axios.post(`${baseURL}/user/email/verify`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
 
-    googleSignUp: async function(_data, type){
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    resendEmailOTP: async function(_data){
+        try{
+            const res = await axios.post(`${baseURL}/user/email/otp/send`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+
+    googleSignUp: async function(_data){
         try{
             const res = await axios.post(`${baseURL}/user/google/signup`,
             JSON.stringify(_data),
@@ -96,8 +150,7 @@ export const authFunctions = {
             }
         })
         return res
-    }
-    
+    } 
         
 }
 
@@ -2119,6 +2172,38 @@ export const teacherFunctions = {
                     "Authorization": `Bearer ${token}`,
 
                     "Content-Type": "multipart/form-data"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    withdrawalRequest: async function(_data, token){
+
+        try{
+            const res = await axios.post(`${baseURL}/teacher/withdrawal/request`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
                 },
                 validateStatus: status => {
                     return status >= 200 && status <= 505;

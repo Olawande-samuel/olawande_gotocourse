@@ -27,7 +27,7 @@ export default function Earnings() {
     let userdata = getItem(KEY);
     const {
       generalState: { isMobile },
-      teacherFunctions: {fetchEarnings}
+      teacherFunctions: {fetchEarnings, withdrawalRequest}
 
     } = useAuth();
     useEffect(() => {
@@ -68,12 +68,56 @@ export default function Earnings() {
       })()
       flag.current = true;
     }, [])
+
+    async function submitHandler(e, formstate){
+      e.preventDefault();
+      setLoading(_ => true);
+      try{
+        console.log(formstate);
+        if(
+          formstate.courseName.trim() === "" || formstate.stage.trim() === "" ||
+          formstate.accountNumber.trim() === "" || formstate.level.trim() === ""
+          || formstate.bankName.trim() === ""
+        ) throw new AdvancedError("Empty field detected", 1);
+        //at this point it is valid submit
+        console.log({formstate});
+        const res = await withdrawalRequest(formstate, userdata?.token);
+        const {message, statusCode, success} = res;
+        if(!success) throw new AdvancedError(message, statusCode);
+        else {
+          const {data} = res;
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          console.log(data)
+        }
+      }catch(err){
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }finally{
+        setLoading(_ => false);
+      }
+    }
+
     return (
       <Teachers isMobile={isMobile} userdata={userdata} style={{overflowY: "scroll"}} header="Earnings">
         {loading && <Loader />}
         <div className={clsx.teachers_profile}>
           <AllEarnings />
-          <Requests />
+          <Requests submitHandler={submitHandler} />
         </div>
         {/* <div className={clsx.teachers_profile} style={{marginTop:20}}>
         </div> */}
@@ -209,12 +253,13 @@ export default function Earnings() {
 
 
 
-const Requests = () => {
+const Requests = ({submitHandler}) => {
   const [formstate, setFormstate] = useState({
     courseName: "",
-    training: "",
-    accountDetails: "",
-    requestDetails: ""
+    stage: "",
+    accountNumber: "",
+    bankName: "",
+    level: ""
   })
   const [loading, setLoading] = useState(false);
 
@@ -228,45 +273,12 @@ const Requests = () => {
     })
   }
 
-  async function submitHandler(e){
-    e.preventDefault();
-    setLoading(_ => true);
-    try{
-      console.log(e.target);
-      if(
-        formstate.courseName.trim() === "" || formstate.training.trim() === "" ||
-        formstate.accountDetails.trim() === "" || formstate.requestDetails.trim() === ""
-      ) throw new AdvancedError("Empty field detected", 1);
-      //at this point it is valid submit
-      console.log({formstate});
-      toast.success("Valid entries", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }catch(err){
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }finally{
-      setLoading(_ => false);
-    }
-  }
+
   return(
     <div className={clsx.requests} style={{marginTop:20}}>
       {loading ? <Loader /> : null}
       <h2>Request for Fund</h2>
-      <form className="form" onSubmit={submitHandler}>
+      <form className="form" onSubmit={e => submitHandler(e, formstate)}>
         <Input
           label="Name of Course"
           name="courseName"
@@ -276,21 +288,28 @@ const Requests = () => {
         />
         <Input
           label="Stage of Training"
-          name="training"
+          name="stage"
           type="text"
           handleChange={changeHandler}
-          value={formstate.training}
+          value={formstate.stage}
         />
         <Input
-          label="Account Details"
-          name="accountDetails"
+          label="Bank Name"
+          name="bankName"
           type="text"
           handleChange={changeHandler}
-          value={formstate.accountDetails}
+          value={formstate.bankName}
+        />
+        <Input
+          label="Account Number"
+          name="accountNumber"
+          type="text"
+          handleChange={changeHandler}
+          value={formstate.accountNumber}
         />
         <div className="form-group my-3">
           <label htmlFor="level" className="form-label generic_label">Details of Request</label>
-          <select name="level" id="level" className="form-select" style={{width: "unset"}}>
+          <select name="level" id="level" onChange={changeHandler} className="form-select" style={{width: "unset"}}>
             <option value="">0%</option>
             <option value="25%">25%</option>
             <option value="50%">50%</option>
