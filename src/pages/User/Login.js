@@ -54,15 +54,30 @@ const Login = () => {
       
       if(success) {
         const {data: d} = response;
+        console.log({response})
         removeItem(KEY);
-        getItem(KEY, d);
         setGeneralState(old => {
           return {
             ...old,
             notification: response.message
           }
-        })
-        navigate(`${d.userType === 'student' ? "/student" : "/teacher"}`);
+        }) 
+        if(d.userType === "student"){
+          getItem(KEY, d);
+
+          navigate("/student")
+
+        } else if(d.userType === "teacher" || d.userType === "mentor"){
+
+          if(d.canTeach){
+            getItem(KEY, d);
+            navigate("/teacher")
+          
+          } else {
+            
+            throw new AdvancedError("Your application is under review. Kindly check back later", 0)
+          }
+        } 
       }else throw new AdvancedError(message, statusCode);
 
     } catch (err) {
@@ -88,15 +103,38 @@ const Login = () => {
   const mutation = useMutation((userdata)=>googleSignIn(userdata), {
     onError: (err)=>console.error(err),
     onSuccess:(res)=>{
-      console.log({res})
-      console.log(res.data.statusCode)
-
+     
       if(res.data?.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode)
       localStorage.setItem(KEY, JSON.stringify(res.data?.data));    
-      res.data?.data?.userType  === "student" ? navigate("/student"):navigate("/teacher")
+      if(res.data.userType === "student"){
+        getItem(KEY, res.data);
+
+        navigate("/student")
+
+      } else if(res.data.userType === "teacher" || res.data.userType === "mentor"){
+
+        if(res.data.canTeach){
+
+          getItem(KEY, res.data);
+
+          navigate("/teacher")
+        
+        } else {
+          toast.error("Your application is under review. Kindly check back later", {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          throw new AdvancedError("Your application is under review. Kindly check back later", 0)
+        }
+      } 
     }
   })
-  
+   
   function signInWithGoogle(e){
     e.preventDefault()
     signInWithPopup(authentication, provider).then(res=>{

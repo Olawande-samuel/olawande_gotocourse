@@ -32,7 +32,7 @@
 
 .onboarding_absolute h2 {
     font-weight: 700;
-    font-size: 58px;
+    font-size: clamp(2.8rem, 2.1786rem + 1.6071vw, 3.625rem);
     text-align: center;
     margin-bottom: 25px;
 }
@@ -71,14 +71,14 @@
 
 
 .question_container {
-    width: min(50vw, 60%);
+    width: min(100% - .5rem, 560px);
     height: 85%;
     background-color: white;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    padding: 20px;
+    font-size: clamp(0.3125rem, 0.0446rem + 1.3393vw, 1.25rem);
     overflow-y: scroll;
 }
 
@@ -94,12 +94,13 @@
 
 
 .question_container form {
-    width: 80%;
-    padding: 20px;
+    min-width: 80%;
+    font-size: clamp(0.3125rem, 0.0446rem + 1.3393vw, 1.25rem);
     margin-top: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-y:scroll;
 }
 
 .form_group {

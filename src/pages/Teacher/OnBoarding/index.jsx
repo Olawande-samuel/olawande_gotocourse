@@ -361,9 +361,7 @@ function Success({}){
                     <h2>Application Successful</h2>
                     <img src={success} alt="Application Success" />
                     <div className={clsx.form_group__button}>
-                        <Link to="/teacher">
-                            <button>Go to Dashboard</button>
-                        </Link>
+                        <p>Your application is under review and we will get back to you within 32 - 48 hours</p>
                     </div>
                 </form>
             </div>
