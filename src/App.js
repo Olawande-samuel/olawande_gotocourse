@@ -45,7 +45,6 @@ import Bootcamp, {BootcampDetails as TrainingBootcamp} from "./pages/Bootcamp";
 import Policies, {TeachingPolicy, TermsOfUse, EndUserPolicy, Cookies} from "./pages/PrivacyPolicy";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import Career from "./pages/Career";
 import Settings from "./pages/Dashboard/Admin/Settings";
 
 import {Students} from "./pages/Students"
@@ -79,7 +78,7 @@ function App() {
             <Route path="become-a-teacher" element={<BecomeATeacher />} />
             <Route path="payment/success" element={<PaymentStatus success={true} />} />
             <Route path="payment/error" element={<PaymentStatus />} />
-            <Route path="career" element={<Career />} />
+            {/* <Route path="career" element={<Career />} /> */}
             <Route path="students" element={<Students  />} />
             <Route path="user-authentication" element={<Verification  />} />
             <Route path="user-onboarding" element={<UserOnBoarding />} />            

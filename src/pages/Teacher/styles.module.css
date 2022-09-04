@@ -38,19 +38,20 @@
 }
 .jumbotron__absolute {
     position: absolute;
-    width: min(100% - .5rem, 800px);
+    width: 100%;
     display: flex;
-    left: 0;
     top: 50%;
     transform: translateY(-50%);
     flex-direction: column;
     padding-bottom: 0.5rem;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
     padding: 20px;
+    text-align: center
 }
 
 .jumbotron__absolute h1 {
-    width: 80%;
+    width: 60%;
     line-height: 1.5;
     font-weight: 600;
     color: var(--white);
@@ -60,8 +61,8 @@
 .jumbotron__absolute p {
     line-height: 2;
     letter-spacing: 0.4px;
-    width: 80%;
-    margin-bottom: 40px;
+    width: 60%;
+    margin-bottom: 50px;
     color: var(--white);
 }
 .jumbotron__absolute > div {
@@ -75,18 +76,66 @@
     background-color: #F75C4E;
 }
 
-.frequently_asked_questions {
-    background-color: #F1F8FF;
-}
 
 .how_it_works, .best_features, .frequently_asked_questions, .reviews {
     padding: 50px;
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
 }
 
 .best_features {
-    background-color: #EFF2FF;
+    background-color: var(--white);
     margin-bottom: 0px;
+}
+
+.how_it_works {
+    background-color: rgba(157, 166, 186, 0.53);
+}
+
+.it_works_grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 20px;
+}
+
+@media screen and (max-width: 1195px){
+    .it_works_grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 920px){
+    .it_works_grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 675px){
+    .it_works_grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.it_works {
+    background-color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 5px;
+    box-shadow: 0px 3px 12px 0px rgba(0,0,0,.2);
+}
+
+.it_works h4 {
+    font-size: 1.1rem;
+    margin-top: 20px;
+}
+
+.it_works p {
+    font-weight: 400;
+    color: #464646;
 }
 
 .how_it_works h1, .best_features h1, .frequently_asked_questions h1, .reviews h1{
@@ -96,14 +145,19 @@
     margin-bottom: 10px;
 }
 
+.reviews {
+    background-color: #CBD0DA;
+}
+
 .how_it_works > p, .best_features > p, .frequently_asked_questions > p, .reviews > p {
     text-align: center;
-    color: var(--textColorLighter);
+    color: var(--textBlue);
     margin: 0px auto;
     margin-bottom: 30px;
     position: relative;
     padding-bottom: 20px;
     width: 60%;
+    margin-bottom: 60px;
 }
 
 .how_it_works > p:before, .best_features > p:before, .frequently_asked_questions > p:before, .reviews > p:before {
@@ -113,36 +167,52 @@
     right: 40%;
     bottom  : 0;
     /* width   : 40%;  or 100px */
-    border-bottom: 4px solid #F75C4E;
-  }
+    border-bottom: 8px solid #F75C4E;
+}
 
+.best_features__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 50px;
+    margin: 10px auto;
+    width: 100%;
+    margin-bottom: 100px;
+}
+
+.image_container {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(12, 33, 145, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 500px;
+}
+
+@media screen and (max-width: 945px){
+    .best_features__content {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.image_container img {
+    border-radius: 8px;
+    width: 100%;
+}
 
 .how_it_works_container {
     padding: 30px;
     margin-top: 20px;
 }
 
-.paper, .best__features_card {
-    padding: 20px;
-    text-align: left;
+.image_card {
+    width: 90%;
+    padding: 10px;
 }
 
-.paper {
-    height: 250px;
-    box-shadow: 0px 10px 10px 0px rgba(0,0,0,.2) !important;
-}
-
-.paper span {
-    background-color: var(--textBlue);
-    padding: 16px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.best__features_card span {
+.image_card span {
     background-color: var(--textBlue);
     padding: 16px;
     margin-bottom: 20px;
@@ -152,28 +222,36 @@
     justify-content: center;
 }
 
-.paper span svg, .best__features_card span svg{
-    font-size: 1.5rem;
+.image_card span svg {
     color: var(--white);
+    font-size: 1.5rem;
 }
 
-.paper h4{
-    font-size: 1.3rem;
-    font-weight: 100;
-    font-size: #070F18;
-    margin-bottom: 15px;
-}
-
-.best__features_card h4 {
+.image_card h4 {
     font-size: 1.5rem;
     margin-bottom: 20px;
-    color: #023047;
+    color: #0C2191;
+    letter-spacing: 0.6px;
+    position: relative;
+    padding-bottom: 10px;
 }
 
-.best__features_card p {
+.image_card h4:before {
+    content : "";
+    position: absolute;
+    left    : 0%;
+    right: 65%;
+    bottom  : 0;
+    /* width   : 40%;  or 100px */
+    border-bottom: 8px solid #F75C4E;
+}
+
+.image_card p {
     font-size: 0.9rem;
     line-height: 2;
-    color: #1F485E;
+    color: #515151;
+    font-weight: 300;
+    letter-spacing: 0.4px;
 }
 
 .paper p{
@@ -185,14 +263,6 @@
 
 .frequently_asked_questions_container {
     padding: 30px;
-}
-
-
-.image {
-    box-shadow: 0px 10px 10px 0px rgba(12, 33, 145, .2);
-    object-fit: contain;
-    min-width: 300px;
-    max-width: 500px;
 }
 
 
@@ -283,7 +353,7 @@
 
 .become_a_teacher {
     padding: 10px 20px;
-    background-color: #0C2191;
+    background-color: #CBD0DA;
     display: flex;
     align-items: center;
     margin-bottom: 50px;
@@ -306,8 +376,8 @@
 
 
 .become_a_teacher__right h3 {
-    color: var(--white);
-    font-weight: 700;
+    color: #191046;
+    font-weight: 500;
     font-size: 30px;
     margin-bottom: 40px;
     line-height: 1.5;
@@ -318,7 +388,7 @@
     border-radius: 5px;
     padding: 20px 40px;
     color: var(--white);
-    background-color: #F75C4E;
+    background-color: #0C2191;
 }
 
 .become_a_teacher__left img {
@@ -399,7 +469,7 @@
     }
     .jumbotron__absolute h1 {
         width: 90%;
-        text-align: left;
+        text-align: center;
         line-height: 1.5;
         font-weight: 600;
         margin-bottom: 30px;
@@ -413,7 +483,7 @@
 } 
 
 @media screen and (max-width: 1115px){
-    .best__features_card {
+    .image_card {
         width: 100%;
     }
 
@@ -458,7 +528,7 @@
 
     .how_it_works, .frequently_asked_questions, .best_features {
         padding: 10px;
-        margin: 50px auto;
+        padding-top: 40px;
     }
 
     .best_features {
