@@ -20,7 +20,7 @@ import { authentication, provider, facebookProvider } from "../../firebase-confi
 
 const Login = () => {
   const navigate = useNavigate()
-  const {authFunctions: {login,googleSignIn}, generalState:{pledre}, setGeneralState} = useAuth();
+  const {authFunctions: {login,googleSignIn, facebookSignIn}, generalState:{pledre}, setGeneralState} = useAuth();
   const {getItem, removeItem} = useLocalStorage();
 
   const [data, setData] = useState({
@@ -54,15 +54,30 @@ const Login = () => {
       
       if(success) {
         const {data: d} = response;
+        console.log({response})
         removeItem(KEY);
-        getItem(KEY, d);
         setGeneralState(old => {
           return {
             ...old,
             notification: response.message
           }
-        })
-        navigate(`${d.userType === 'student' ? "/student" : "/teacher"}`);
+        }) 
+        if(d.userType === "student"){
+          getItem(KEY, d);
+
+          navigate("/student")
+
+        } else if(d.userType === "teacher" || d.userType === "mentor"){
+
+          if(d.canTeach){
+            getItem(KEY, d);
+            navigate("/teacher")
+          
+          } else {
+            
+            throw new AdvancedError("Your application is under review. Kindly check back later", 0)
+          }
+        } 
       }else throw new AdvancedError(message, statusCode);
 
     } catch (err) {
@@ -88,15 +103,71 @@ const Login = () => {
   const mutation = useMutation((userdata)=>googleSignIn(userdata), {
     onError: (err)=>console.error(err),
     onSuccess:(res)=>{
-      console.log({res})
-      console.log(res.data.statusCode)
-
+     console.log({res})
       if(res.data?.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode)
       localStorage.setItem(KEY, JSON.stringify(res.data?.data));    
-      res.data?.data?.userType  === "student" ? navigate("/student"):navigate("/teacher")
+      if(res.data.data.userType === "student"){
+        getItem(KEY, res.data);
+
+        navigate("/student")
+
+      } else if(res.data.data.userType === "teacher" || res.data.data.userType === "mentor"){
+
+        if(res.data.data.canTeach){
+
+          getItem(KEY, res.data.data);
+
+          navigate("/teacher")
+        
+        } else {
+          toast.error("Your application is under review. Kindly check back later", {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          throw new AdvancedError("Your application is under review. Kindly check back later", 0)
+        }
+      } 
     }
   })
-  
+  const faceBookMutation = useMutation((userdata)=>facebookSignIn(userdata), {
+    onError: (err)=>console.error(err),
+    onSuccess:(res)=>{
+      if(res.data?.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode)
+      localStorage.setItem(KEY, JSON.stringify(res.data?.data));    
+      if(res.data.data.userType === "student"){
+        getItem(KEY, res.data);
+
+        navigate("/student")
+
+      } else if(res.data.data.userType === "teacher" || res.data.data.userType === "mentor"){
+
+        if(res.data.data.canTeach){
+
+          getItem(KEY, res.data.data);
+
+          navigate("/teacher")
+        
+        } else {
+          toast.error("Your application is under review. Kindly check back later", {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          throw new AdvancedError("Your application is under review. Kindly check back later", 0)
+        }
+      } 
+    }
+  })
+   
   function signInWithGoogle(e){
     e.preventDefault()
     signInWithPopup(authentication, provider).then(res=>{
@@ -105,7 +176,6 @@ const Login = () => {
           mutation.mutate({
               accessToken: res.user.accessToken
           })
-          console.log({mutation})
           if(mutation.isError ) throw new AdvancedError(mutation.error.message, 0)
        }
     }
@@ -124,9 +194,29 @@ const Login = () => {
     )
   }
    function signInWithFacebook(){
-   
 
-    signInWithPopup(authentication, facebookProvider).then(res=>console.log(res)).catch(err=>console.error(err))
+    signInWithPopup(authentication, facebookProvider).then(res=>{
+      console.log(res)
+      if(res.user?.accessToken){
+        faceBookMutation.mutate({
+            accessToken: res.user.accessToken
+        })
+        if(faceBookMutation.isError ) throw new AdvancedError(faceBookMutation.error.message, 0)
+     }
+  }
+  ).catch(err=>{
+        console.error(err)
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    )
   }
   return (
     <SignInWrapper>

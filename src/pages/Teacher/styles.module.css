@@ -394,6 +394,7 @@
 .become_a_teacher__left img {
     width: 100%;
     height: 100%;
+    object-fit:contain;
 }
 
 

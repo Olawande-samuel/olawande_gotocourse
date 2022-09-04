@@ -14,7 +14,7 @@ import { KEY } from "../../constants/index.js"
 import useLocalStorage from "../../hooks/useLocalStorage.jsx"
 
 const LoginOptions = ({closeOverlay, type}) => {
-    const {  generalState: { navHeight }, authFunctions: { googleSignUp } } = useAuth();
+    const {  generalState: { navHeight }, authFunctions: { googleSignUp, facebookSignUp } } = useAuth();
     const{getItem}= useLocalStorage()
     const navigate = useNavigate()
     const [loading, setLoading]= useState(false)
@@ -44,7 +44,7 @@ const LoginOptions = ({closeOverlay, type}) => {
                     setLoading(false)
                     if(res.statusCode !== 1) throw new AdvancedError(res.message, res.status)
                     localStorage.setItem("gotocourse-userdata", JSON.stringify(res.data))
-                    navigate(`${usertype === 'student' ? "/student" : "/teacher"}`);
+                    navigate(`${usertype === "student" ? "/user-onboarding" :  "/teacher/on-boarding"}`)
 
                   }).catch(err=>{
                     setLoading(false)
@@ -76,19 +76,58 @@ const LoginOptions = ({closeOverlay, type}) => {
             })
         } else {
             signInWithPopup(authentication, facebookProvider).then(res=>{
-                console.log(res.email)
-                // if(res.user?.accessToken){
-                //     mutation.mutate({
-                //         accessToken: res.user.accessToken,
-                //         userType: usertype
-                //     })
-                //     if(mutation.data?.statusCode === 0) throw new AdvancedError(mutation.data.message, mutation.data.statusCode)
-                //     getItem(KEY, mutation.data?.data);
-                //     usertype === "student" ? navigate("/student"):navigate("/teacher")
-                // }
-            }).catch(err=>{
-                console.error(err)
-                toast.error(err.message, {
+                console.log("facebook", res)
+                if(res.user?.accessToken){
+                    setLoading(true)
+                    facebookSignUp({
+                    
+                    accessToken: res.user.accessToken,
+                    userType: usertype
+
+                  }).then(res=>{
+                    setLoading(false)
+                    if(res.statusCode !== 1) throw new AdvancedError(res.message, res.status)
+                    localStorage.setItem("gotocourse-userdata", JSON.stringify(res.data))
+                    navigate(`${usertype === "student" ? "/user-onboarding" :  "/teacher/on-boarding"}`)
+
+                  }).catch(err=>{
+                    setLoading(false)
+                    console.error(err)
+                    toast.error(err.message, {
+                        position: "bottom-center",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                
+                  })
+                }
+            }).catch(error => {
+                console.error(error)
+                // / Handle Errors here.
+                const errorCode = error.code;
+
+                const errorMessage = error.message;
+                // The email of the user's account used.
+                const email = error.customData.email;
+                // The AuthCredential type that was used.
+                const credential = facebookProvider.credentialFromError(error);
+
+                authentication.fetchSignInMethodsForEmail(email).then(function(methods) {
+                    // Step 3.
+                    // If the user has several sign-in methods,
+                    // the first method in the list will be the "recommended" method to use.
+                    console.log({methods})
+                })
+
+                console.log({email})
+                console.log({errorMessage})
+                console.log({credential})
+                
+                toast.error(error.message, {
                     position: "bottom-center",
                     autoClose: 4000,
                     hideProgressBar: true,

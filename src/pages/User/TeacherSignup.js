@@ -81,8 +81,8 @@ const TeacherSignup = () => {
             notification: message,
           };
         });
-        // navigate("/user-authentication");
-        navigate("/teacher/on-boarding");
+        navigate("/user-authentication");
+        // navigate("/teacher/on-boarding");
       }
     }catch(err){
       toast.error(err.message, {

@@ -20,7 +20,7 @@ const MainContainer = styled.div`
 background: #191046;
 min-height: 200vh;
 color: #FFFFFF;
-font-family: 'Inter';
+font-family: 'Inter', sans-serif;
 font-style: normal;
 font-weight: 400;
 
@@ -59,6 +59,7 @@ gap: 3rem;
         width: 30rem;
         max-height: 30rem;
         border-radius: 10px;
+        max-width:100%;
     }
 
 
@@ -66,7 +67,7 @@ gap: 3rem;
         padding:2rem 0.2rem;
 
         .num{
-            max-width: 30%;
+            max-width: 50%;
             display: flex;
             // border: 2px solid green;
             justify-content: space-between;
@@ -163,7 +164,7 @@ gap: 3rem;
     }
 
     .content{
-        margin-top: 4rem;
+        margin-top: 2rem;
 
         h1, h4{
             text-align: center;
@@ -183,11 +184,11 @@ background: linear-gradient(255.48deg, #F75C4E 10.25%, #FF958B 101.26%);
 border-radius: 21.5944px;
 width: 100%;
 display: flex;
-padding: 3rem;
+padding: clamp(1rem, 0.4286rem + 2.8571vw, 3rem);
 // border: 2px solid yellow;
 
 
-@media (max-width: 912px){
+@media (max-width: 916px){
     flex-direction: column;
    gap: 3rem;
 
@@ -196,10 +197,10 @@ padding: 3rem;
 `
 
 const ImageBox = styled.div`
-flex: .5;
+flex-basis: 100%;
 display: flex;
 flex-wrap: wrap;
-gap: 2rem 2rem;
+gap: 1rem;
 
 
 .img{
@@ -207,6 +208,15 @@ gap: 2rem 2rem;
     width: 10rem;
     height: 10rem;
 
+    @media (max-width: 912px) {
+        margin: auto
+    }
+    @media (max-width: 376px) {
+        width: 9rem
+    }
+    @media (max-width: 350px) {
+        width: 100%
+    }
     img{
         border-radius: 21.875px;
         width: 100%;
@@ -217,34 +227,41 @@ gap: 2rem 2rem;
 
 
 @media (max-width: 912px){
-    gap: 2rem;
+    gap: .8rem;
     justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr)
+
+}
+@media (max-width: 584px){
+    gap: .8rem;
+    grid-template-columns: repeat(2, 1fr)
 
 }
 `
 
 const TextBox = styled.div`
-    flex: .5;
+    flex-basis:100% ;
     display: flex;
     flex-direction: column;
 
     h4{
         font-weight: 900;
-        font-size: clamp(1.875rem, 1.5179rem + 1.7857vw, 2.325rem);
+        font-size: clamp(1.775rem, 1.5179rem + 1.7857vw, 2.25rem);
         line-height: 53px;
         margin-bottom: 1.8rem;
     }
 
     p{
         font-weight: 700;
-        font-size: 1rem;
+        font-size: 1.3rem;
         line-height: 25px;
     }
 
     button{
         width: 300px;
         align-self: flex-end;
-        padding: 1rem;
+        padding: 1.5rem .5rem;
         outline: none;
         border:  none;
         background: #0C2191;
@@ -267,6 +284,14 @@ const TextBox = styled.div`
             margin-bottom: 1.8rem;
             line-height: 30px;
             text-align: center;
+        }
+        button {
+            width: 100%
+        }
+    }
+    @media (max-width: 612px){
+        button {
+            width: 100%
         }
     }
 `
@@ -292,7 +317,7 @@ h4{
 
     .card{
         flex:.3;
-        height: 20rem;
+        height: auto;
         background: #2F80ED;
         border-radius: 24.551px;
         color: #fff;
@@ -512,8 +537,9 @@ export default function CelebProfile() {
                                 </div>
 
                                 <div className="light">
-                                    <span className="book">Book Session</span>
-
+                                    <Link to="/contact-us" className="text-light d-inline-block">
+                                        <span className="book">Book Session</span>
+                                    </Link>
                                     <div className="bolt">
                                         <img src={vector} alt="" width="20" height="20" />
                                         <span>24Hrs</span>
@@ -603,19 +629,17 @@ export default function CelebProfile() {
                                 <div className="card">
                                     <p>Monday</p>
                                     <span>A Week Ago</span>
-                                    <p>Thank Amandler for the amazing video</p>
+                                    <p>My Learning experience on Gotocourse was great are affordable and the teachers were very friendly and supportive</p>
                                 </div>
                                 <div className="card">
                                     <p>Monday</p>
                                     <span>A Week Ago</span>
-                                    <p>Thank Amandler for the amazing video</p>
-
+                                    <p>I’m a successful beneficiary of the gotocourse mentorship programme. My experience while learning was great and I was able to launch my career within a short period of time</p>
                                 </div>
                                 <div className="card">
                                     <p>Monday</p>
                                     <span>A Week Ago</span>
-                                    <p>Thank Amandler for the amazing video</p>
-
+                                    <p>Gotocourse did not only help me level up my tech skills but they also connected me with the right mentors who assisted me in getting my dream job.</p>
                                 </div>
 
                             </div>
@@ -695,9 +719,11 @@ export default function CelebProfile() {
                     <div className="overlay" />
                     <div className="text">
                         <h4>Want to step up your career in Tech?</h4>
-                        <button>
-                            Book a  Mentor
-                        </button>
+                        <Link to="/contact-us" className="d-inline-block">
+                            <button>
+                                Book a  Mentor
+                            </button>
+                        </Link>
                     </div>
                 </Image>
 

@@ -1999,7 +1999,6 @@ line-height: 16px;
 /* ***************ABOUT********************* */
 .about_wrapper p {
   font-size: clamp(16px, 1rem + 2vw, 18px);
-  letter-spacing:1.2px
 }
 .about_hero {
   background: url(./images/about-hero.webp), rgba(0, 0, 0, 0.7);

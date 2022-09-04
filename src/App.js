@@ -28,7 +28,7 @@ import {Dashboard as AffiliatesDash, Sales, Income, Revenue} from "./pages/Dashb
 import {Landing as AffiliateLanding, Register as AffiliateRegister, Login as AffiliateLogin, Verification as AffiliateVerification} from "./pages/Affiliate";
 import AdminAffiliate from "./pages/Dashboard/Admin/Affiliate";
 
-import HIW from "./pages/HowItWorks"
+import HIW, {HIWStudent, HIWTeacher, HIWAffiliate}from "./pages/HowItWorks"
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
@@ -83,14 +83,19 @@ function App() {
             <Route path="user-authentication" element={<Verification  />} />
             <Route path="user-onboarding" element={<UserOnBoarding />} />            
             
-            <Route path="test" element={<HIW  />} />
-            
             <Route path="lounge" element={<Out/>}>
               <Route index element={<CelebLanding />} />
-              <Route path="mentors" element={<Lounge />} />
-              <Route path="mentors/:id" element={<CelebProfile />} >
+              <Route path="how-it-works" element={<HIW />} />
+              <Route path="mentors">
+                <Route index element={<Lounge />} />
+                <Route path="mentors/:id" element={<CelebProfile />} />
               </Route>
             </Route>
+
+            <Route path="affiliate-how-it-works" element={<HIWAffiliate />} />
+            <Route path="teachers-how-it-works" element={<HIWTeacher />} />
+            <Route path="student-how-it-works" element={<HIWStudent />} />
+
 
 
             <Route path="student" element={<Out />}>
@@ -211,5 +216,7 @@ function App() {
     </AuthContextProvider>
   );
 }
+
+
 
 export default App;

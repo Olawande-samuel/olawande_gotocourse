@@ -7,7 +7,7 @@ const Policies = ()=>{
                 <div className="container">
                     {/* <h2 className="text-center fw-bolder py-3">OUR POLICIES</h2> */}
 
-                    <section id="privacy">
+                    <section id="privacy" style={{padding:"20px"}}>
                         <h4  className="policy_title">Privacy Policy</h4>
 
                         <ul>
@@ -27,7 +27,7 @@ export const TeachingPolicy = ()=>{
         <Layout>
             <main className="policy_wrapper">
                 <div className="container">
-                    <section id="teaching">
+                    <section id="teaching" style={{padding:"20px"}}>
                         <h4>Teaching Policy</h4>
                         <h6 className="policy_title">On GOTOCOURSE: </h6>
                         <ul>
@@ -47,7 +47,7 @@ export const EndUserPolicy = ()=>{
         <Layout>
             <main className="policy_wrapper">
                 <div className="container">
-                    <section id="end-user">
+                    <section id="end-user" style={{padding:"20px"}}>
                         <h4 className="policy_title">End User Policy</h4>
                         <ul>
                             {policies.endUser.map(({details}, index)=>(
@@ -66,7 +66,7 @@ export const TermsOfUse = ()=>{
         <Layout>
             <main className="policy_wrapper">
                 <div className="container">
-                    <section id="terms-of-use">
+                    <section id="terms-of-use" style={{padding:"20px"}}>
                         <h4 className="policy_title">Terms of Use</h4>
                         <ul>
                             {policies.TOU.map((item, index)=>(
@@ -92,7 +92,7 @@ export const Cookies = ()=>{
         <Layout>
             <main className="policy_wrapper">
                 <div className="container">
-                    <section id="cookies">
+                    <section id="cookies" style={{padding:"20px"}}>
                         <h4 className="policy_title">Cookies</h4>
                         <p>This informs you of our policies regarding the collection, use and disclosure of Personal Information we receive from users of the Site.</p>
                         <p>We use your Personal Information only for providing and improving the Site. By using the Site, you agree to the collection and use of information in accordance with this policy.</p>

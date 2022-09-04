@@ -326,6 +326,46 @@ export const authFunctions = {
             }
         })
         return res
+    },
+    facebookSignUp: async function(_data){
+        try{
+            const res = await axios.post(`${baseURL}/user/facebook/signup`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    facebookSignIn: async function(_data){
+        const res = await axios.post(`${baseURL}/user/facebook/signin`,
+        JSON.stringify(_data),
+        {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res
     } 
         
 }

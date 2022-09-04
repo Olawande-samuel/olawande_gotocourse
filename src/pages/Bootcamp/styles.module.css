@@ -152,6 +152,10 @@
         min-height:100%;
         flex:1 1 100%;
     }
+    .image_container {
+        height: 85%;
+        
+    }
 .bootcamp {
     padding-right: 2%;
 
