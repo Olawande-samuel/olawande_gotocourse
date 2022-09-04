@@ -2093,35 +2093,6 @@ line-height: 16px;
 
 
 /* *******************CONTACT FORM******************** */
-.contact_form{
-  position: absolute;
-  top: -11%;
-  right: 0;
-  left: 0;
-  background: var(--theme-blue);
-  padding: 40px 35px;
-  border-radius:10px;
-  width: min(100% - .5rem, 700px);
-  margin: auto;
-}
-
-.contact_form label {
-  color: var(--white);
-}
-.contact_form  .form-group, .contact_form textarea{
-  width: 100% !important;
-}
-.contact_form button {
-  margin-top: 1rem;
-  width: 100%;
-  padding: 10px 23px;
-  background: #B1D3FF;
-  border: none;
-  outline:none;
-  border-radius:8px;
-  color: var(--theme-blue);
-  font-weight: 600;
-}
 
 /* OTHER STYLES */
 #sidebar__items .active {
