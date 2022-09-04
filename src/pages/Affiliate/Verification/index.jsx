@@ -109,7 +109,7 @@ export function Form({type}){
                       notification: message,
                     };
                 });
-                navigate(userdata.userType === 'affiliate' ? `/affiliate` : userdata.userType === 'student' ? '/"user-onboarding' : userdata.usertype === "admin" ?  '/admin' : "/teacher/on-boarding");
+                navigate(userdata.userType === "affiliate" ? "/affiliate" : userdata.userType === "student" ? "/user-onboarding" : userdata.usertype === "admin" ?  "/admin" : "/teacher/on-boarding");
             }
         }catch(err){
             toast.error(err.message, {
