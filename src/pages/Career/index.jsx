@@ -6,6 +6,11 @@ import Layout from "../../components/Layout";
 import img from "../../images/careerBg.webp"
 import career01 from "../../images/career01.png";
 import career02 from "../../images/career02.png";
+
+import commitment from "../../images/careers/commitment.png";
+import benefit from "../../images/careers/benefits.png";
+import knowledge from "../../images/careers/knowledge.png";
+import teaching from "../../images/careers/teaching.png";
 import { Link } from "react-router-dom";
 
 
@@ -17,108 +22,171 @@ const Career = () => {
         return () => console.log("Removing the Career page");
     }, [])
 
-    ///styles
-    const imgStyle = {
-        position: "relative",
-        top:0,
-        left: 0,
-        width: "100%",
-        height: "min(70vh, 600px)",
-        backgroundImage: `url(${img})`,
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover"
-    }
-
-    const dot = {
-        width: 15,
-        height: 15,
-        display: "inline-block",
-        borderRadius: "50%",
-        backgroundColor: "var(--grey)",
-        marginRight: 20
-    }
-
-
-    ///data
-    const openings = ["Social Media Manager", "Virtual Assistant", "Product Marketer"];
-    const cultures = [
-        "The work culture should be filled here.",
-        "The core values of the organisation should be here.",
-        "Benefits of working with Gotocourse"
-    ]
-
 
     return (
         <Layout>
             <div className={clsx.career_container}>
-                <div className={clsx.career_first} style={imgStyle}>
-                    <div className={clsx.imgBg}>
-                        <h1>Grow with us</h1>
-                        <p>Would you love to join our team?</p>
-                    </div>
-                </div>
-                <div className={clsx.career_main}>
-                    <div className={clsx.career_openings}>
-                        <h2>Job Openings</h2>
-                        <p>We have various openings for a professional like you</p>
-                        <ul>
-                            {
-                                openings.map((o, i) => (
-                                    <li key={i}><div style={dot}></div> {o}</li>
-                                ))
-                            }
-                        </ul>
-                        <button className="mt-2 button-md button text-white">Apply now</button>
-                    </div>
-                    <div className={clsx.career_commitment}>
-                        <div className={clsx.commitment_left}>
-                            <img src={career01} alt="Career 01" />
-                        </div>
-                        <div className={clsx.commitment_right}>
-                            <h2>Our Commitment</h2>
-                            <p>Gotocourse is committed to empowering individuals with high in-demand skills necessary for this tech-savvy Era. Our team consists of problem-solving, passionate, and tech-savvy individuals who deliver quality educational experiences for our students to move the whole organization's vision forward.
-                            If you think you are the one we are looking for, we would love to meet you.</p>
-                        </div>
-                    </div>
-                    <div className={clsx.career_culture}>
-                        <div className={clsx.culture_left}>
-                            <h2>Our Culture and Benefit</h2>
-                            <ul>
-                                {
-                                    cultures.map((c, i) => (
-                                        <li key={i}><div style={dot}></div> {c}</li>
-                                    ))
-                                }
-                            </ul>
-                        </div>
-                        <div className={clsx.culture_right}>
-                            <img src={career02} alt="Career 02" />
-                        </div>
-                    </div>
-                    <div className={clsx.career_teaching}>
-                        <h2>Become a Teacher</h2>
-                        <p>
-                            <span><div style={dot}></div> Sharing Knowledge</span> <br />
-                            We have a top-notch teaching platform where you can share knowledge seamlessly with your students.
-                        </p>
-                        <p>
-                            <div style={dot}></div> Teaching Opportunities <br />
-                            You can choose to teach with us, either Part-time of Full-time.
-                        </p>
-
-                            <button className="mt-2 button-md button text-white">
-                            <Link to="/become-a-teacher" className="text-white">
-                                Apply Now
-                            </Link>
-                            </button>
-                    </div>
-                </div>
+                <CareerHero />
+                <JobOpening />
+                <Commitment />
+                <Benefit />
+                <Become />
             </div>
         </Layout>
     )
 }
 
 
+function CareerHero(){
+    return (
+        <div className={clsx.career_Hero}>
+            <div className={clsx.career_hero_content}>
+                <h1>Grow</h1>
+                <h1>With Us</h1>
+                <h4>Would you love to join our team?</h4>
+            </div>
+        </div>
+    )
+}
 
+function JobOpening(){
+    const jobs = ["Social Media Manger", "Virtual Assistant", "Product Markerter"]
+    return (
+        <div className={clsx.job_opening}>
+
+            <div className={clsx.career_header}>
+                <h2>JOB OPENINGS</h2>
+                <h5 className={clsx.career_header_subtitle}>Would you love to join our team?</h5>
+            </div>
+
+            <div className={clsx.job_opening_jobs}>
+                {
+                    jobs.map(job=>(
+                        <div className={clsx.job_opening_card}>
+                            <p>{job}</p>
+
+                            <div className="text-center">
+                                <button>Apply now</button>
+                            </div>
+
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+    )
+}
+
+
+function TextCard({header, img, children}){
+    return (
+        <div className="container">
+            <div className={clsx.text_card}>
+                <div className={clsx.img_container}>
+                    <img src={img} alt="" className={clsx.text_card_img} />
+                </div>
+                <div className={clsx.text_content}>
+                    <header className={clsx.career_header}>
+                        <h2>{header}</h2>
+                    </header>
+                    {children}
+                </div>
+            </div>
+        </div>
+    )
+}
+function Commitment(){
+
+    return(
+        <div className={clsx.commitment}>
+            <TextCard
+                header="OUR COMMITMENTS"
+                img={commitment}
+            >
+                <div className={clsx.commitment_text}>
+                    <p>
+                    Gotocourse is committed to empowering individuals with high in-demand skills necessary for this tech-savvy Era. Our team consists of problem-solving, passionate, and tech-savvy individuals who deliver quality educational experiences for our students to move the whole organization's vision forward. If you think you are the one we are looking for, we would love to meet you.
+                    </p>
+                </div>
+            </TextCard>
+        </div>
+    )
+}
+
+
+
+function Benefit(){
+    return (
+        <div className={clsx.benefit}>
+            <TextCard
+                header="OUR CULTURE AND BENEFIT"
+                img={benefit}
+            >
+                <div className={clsx.benefit_text}>
+                    <div className={clsx.benefit_list_container}>
+                        <p className={clsx.benefit_list}>The work culture should be filled here</p>
+                        <p className={clsx.benefit_list}>The core values of the organisation should be here</p>
+                        <p className={clsx.benefit_list}>Benefits of working with Gotocourse</p>
+                    </div>
+                </div>
+            </TextCard>
+        </div>
+    )
+}
+
+
+function Become (){
+
+    const data = [
+        {
+            id: 1,
+            title:"Sharing Knowledge",
+            content:"We have a top-notch teaching platform where you can share knowledge seamlessly with your students.",
+            img:knowledge
+        },
+        {
+            id: 2,
+            title:"Teaching Opportunities",
+            content:"You can choose to teach with us, either Part-time of Full-time.",
+            img:teaching
+        }
+    ]
+    return(
+        <div className={clsx.become}>
+            <div className="container">
+                <div className={clsx.career_header}>
+                    <h2>BECOME A TEACHER</h2>
+                </div>
+                
+                <div className={clsx.become_content}>
+                    {
+                        data.map(item => (
+                            <BecomeCard {...item} />
+                        ))
+                    }
+                    
+                </div>
+                <div className="text-center mt-3">
+                    <Link to="/become-a-teacher" className="d-inline-block">
+                        <button>Apply now</button>
+                    </Link>
+                </div>
+            </div>
+
+        </div>
+
+    )
+}
+
+function BecomeCard({title, content, img}){
+    return (
+        <div className={clsx.become_card}>
+            <img src={img} alt="" />
+            <div className={clsx.become_card_content}>
+                <h4 className="text-center fw-bold">{title}</h4>
+                <p className="text-center">{content}</p>
+            </div>
+        </div>
+    )
+}
 export default Career;

@@ -635,13 +635,11 @@ export default function CelebProfile() {
                                     <p>Monday</p>
                                     <span>A Week Ago</span>
                                     <p>I’m a successful beneficiary of the gotocourse mentorship programme. My experience while learning was great and I was able to launch my career within a short period of time</p>
-
                                 </div>
                                 <div className="card">
                                     <p>Monday</p>
                                     <span>A Week Ago</span>
                                     <p>Gotocourse did not only help me level up my tech skills but they also connected me with the right mentors who assisted me in getting my dream job.</p>
-
                                 </div>
 
                             </div>

@@ -109,7 +109,7 @@ export function Form({type}){
                       notification: message,
                     };
                 });
-                navigate(type === 'affiliate' ? `/affiliate` : type === 'student' ? '/student' : '/admin');
+                navigate(userdata.userType === 'affiliate' ? `/affiliate` : userdata.userType === 'student' ? '/"user-onboarding' : userdata.usertype === "admin" ?  '/admin' : "/teacher/on-boarding");
             }
         }catch(err){
             toast.error(err.message, {
@@ -151,7 +151,11 @@ export function Form({type}){
                     };
                 });
                 console.log(data); 
-                navigate(`/affiliates/verify`);
+                if(userdata.userType === 'affiliate'){
+                    navigate(`/affiliates/verify`);
+                } else {
+                    navigate("/user-authentication")
+                }
             }
         }catch(err){
             toast.error(err.message, {

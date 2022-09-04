@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {ToastContainer, toast} from "react-toastify";
 
 
@@ -20,6 +20,7 @@ const OnBoarding = () => {
     const [page, setPage] = useState(0);
     const {getItem} = useLocalStorage();
     let userdata = getItem(KEY)
+    const navigate =useNavigate()
     const {kycFunctions: {addStudentKYC}} = useAuth();
     const [loading, setLoading] = useState(false);
     const [formstate, setFormstate] = useState({

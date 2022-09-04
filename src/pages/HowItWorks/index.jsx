@@ -1,5 +1,4 @@
 import Layout from "../../components/Layout"
-import {HeroTypeSection} from "../Celebrity"
 import style from "./style.module.css"
 import blob from "../../images/how-it-works/blob.png"
 import mentors from "../../images/how-it-works/mentors.png"
@@ -9,30 +8,78 @@ import teacher from "../../images/how-it-works/teacher.png"
 import vidcard from "../../images/how-it-works/videocard.png"
 
 const HIW = ()=> {
+    const data = {
+        title:"Compete guide to Gotocourse navigation as a mentor",
+        button: false,
+        img: mentors
+    }
     return  (
         <Layout>
-            <Hero />
+            <Hero {...data} />
             <Instructional />
+        </Layout>
+    )
+}
+export function HIWStudent(){
+    const data = {
+        title:"Compete guide to Gotocourse navigation as a student",
+        button: false,
+        img: student
+    }
+    return (
+        <Layout>
+            <div className={style.others}>
+                <Hero {...data} />
+                <Instructional />
+            </div>
+        </Layout>
+    )
+} 
+export function HIWTeacher(){
+    const data = {
+        title:"Compete guide to Gotocourse navigation as a teacher",
+        button: false,
+        img: teacher
+    }
+    return (
+        <Layout>
+            <div className={style.others}>
+                <Hero {...data} />
+                <Instructional />
+            </div>
+        </Layout>
+    )
+}
+export function HIWAffiliate(){
+    const data = {
+        title:"Compete guide to Gotocourse navigation as an affiliate",
+        button: false,
+        img: affiliate
+    }
+    return (
+        <Layout>
+            <div className={style.others}>
+                <Hero {...data} />
+                <Instructional />
+            </div>
         </Layout>
     )
 }
 
 
-function Hero({title, button, paragraph, btn_title}){
-    const data = {
-        title:"Compete guide to Gotocourse navigation as a student",
-        button: false,
-        paragrah:"",
-        btn_title:"",
-        img: affiliate
-    }
-
+function Hero({title, img}){
+    
     return (
         <div className={style.hero}>
             <div className="container">
-                <HeroTypeSection title={data.title} button={data.button} paragraph={data.paragraph} btn_title={data.btn_title} >
-                    <BlobImage img={data.img}  />
-                </HeroTypeSection>
+                <div className={style.textImage}>
+                    <div className={style.text_section}>
+                        <h2 className={style.text_section_header}>{title}</h2>
+                    </div>
+                    <div className={style.image_section}>
+                        <BlobImage img={img}  />
+                    </div>
+                </div>
             </div>
         </div>
     )

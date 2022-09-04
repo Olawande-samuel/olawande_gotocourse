@@ -29,191 +29,299 @@
     flex-direction: column;
 }
 
-.career_first {
-    width: 100%;
-}
-
-.imgBg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,.5);
-    z-index: 100;
-    color: var(--white);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-
-.imgBg h1 {
+.career_Hero {
+    height: min(100vh - 82px, 500px);
+    background:  radial-gradient(50% 50% at 50% 50%, rgba(32, 65, 239, 0.4774) 0%, rgba(12, 33, 145, 0.62) 100%), url(../../images/careers/hero.png);
+    background-repeat:no-repeat;
+    background-size: cover;
+    background-position: center;
     color: white;
-    font-size: 2.8rem;
-    margin-bottom: 40px;
-    font-weight: 800;
-    text-align: center;
-    line-height: 1.5;
-}
-
-
-.imgBg p {
-    color: white;
-    font-size: 1.3rem;
-    line-height: 1.5;
-    font-weight: 400;
-    margin-bottom: 40px;
-    letter-spacing: 0.6px;
-    text-align: center;
-}
-
-.career_main {
-    width: 100%;
-    padding: 50px 30px;
-}
-
-
-.career_openings {
-    width: 100%;
-    height: 100%;
-    padding: 20px;
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-}
-
-.career_openings h2, .culture_left h2, .career_teaching h2 {
-    font-weight: 700;
-    font-size: 2rem;
-    margin-bottom: 30px;
-}
-.career_openings p {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    color: var(--grey);
-}
-
-.career_openings ul, .culture_left ul {
-    padding: 0px;
-    list-style-type: none;
-}
-
-.career_openings ul li, .culture_left ul li {
-    display: flex;
-    align-items: center;
-    font-size: 1.15rem;
-    line-height: 1.8;
-    padding-left: 10px;
-    color: var(--grey);
-}
-
-.commitment_right {
-    width: 100%;
-    height: 100%;
-}
-
-.commitment_right h2 {
-    font-weight: 700;
-    font-size: 2rem;
-    margin-bottom: 30px;
-}
-.commitment_right p {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    color: var(--grey);
-    line-height: 1.8
-}
-
-.commitment_left {
-    width: 100%;
-    margin: 10px auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.career_commitment, .career_culture {
-    width: 100%;
-    height: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 30px;
-    margin: 70px auto;
+    place-content:center;
+}
+.career_hero_content {
+    display: grid;
+    place-items:center;
 }
 
+.career_hero_content h1 {
+    font-size: clamp(3.5125rem, 2.5446rem + 1.3393vw, 7.75rem);
+    font-weight: 800;
+}
+.career_header {
+    margin-bottom: 1.8rem;
+}
 
-.culture_right {
-    width: 100%;
+.career_header h2 {
+    display: inline-block;
+    color: var(--theme-blue);
+    font-size: clamp(2.1875rem, 2.0982rem + 0.4464vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    position:relative;
+}
+
+.career_header h2::after{
+    content:"";
+    min-width:100px;
+    height: 10px;
+    background: var(--theme-orange);
+    position: absolute;
+    bottom: -10px;
+    right: 0;
+    left: 0;
+    
+}
+.career_header_subtitle {
+    color: var(--theme-blue);
+    margin-top: 1.5rem;
+}
+
+/* JOB OPENING */
+.job_opening {
+    background: rgba(157, 166, 186, 0.53);
+    padding: 3rem 0;
+}
+
+.job_opening .career_header {
+    text-align:center;
+}
+
+.job_opening_jobs{
+    padding: 2rem 0;
+    display: grid;
+    place-items: center;
+    gap: 1.5rem;
+}
+.job_opening_card {
+    background: #fff;
+    border-radius: 8px;
+    width: min(100%, 300px);
+    min-height:230px;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    
+}
+.job_opening_card p {
+    font-size: 1.4rem;
+    text-align:center;
+}
+.job_opening_card button, .become button{
+    background: var(--theme-blue);
+    color:#fff;
+    padding: 8px 15px;
+    border-radius:8px;
+    border: none;
+    outline:none;
+    transition: all .3s ease;
+}
+
+.job_opening_card button:hover, .become button:hover {
+    opacity: .4;
+}
+
+@media (min-width: 612px){
+    .job_opening_jobs {
+        display: grid;
+        padding: 2rem ;
+        grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+        gap: 1rem;
+        justify-content: center;
+    }
+
+
+}
+@media (min-width: 977px){
+    .job_opening_jobs {
+        grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+        
+    }
+}
+
+@media (min-width: 1024px){
+    .job_opening_jobs {
+        grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+        gap: 3rem;
+    }
+    .job_opening_card {
+        width: 280px;
+    }
+    .job_opening_card p {
+        font-size: 1.5rem;
+        text-align:center;
+    }
+
+}
+@media (min-width: 1224px){
+    .job_opening_jobs {
+        grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));   
+    }
+     .job_opening_card {
+        width: 350px;
+    }
+}
+
+/* COMMITMENT */
+.commitment{
+    padding: 3.5rem 0;
+}
+.text_content {
+    height: 100%;
+}
+/* .commitment_text p {
+    font-size: 1.2rem;
+    line-height: 38px;
+} */
+
+
+.benefit {
+    padding: 3.5rem 0;
+}
+
+.benefit_list {
+    position: relative;
+    padding-left: 40px;
+}
+.benefit_list::before {
+    content:"";
+    position: absolute;
+    width: 1.55rem;
+    height: 1.55rem;
+    background:url(../../images/student/check.png);
+    background-size:1.55rem;
+    background-repeat:no-repeat;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+
+}
+
+.benefit .career_header h2::after, .commitment .career_header h2::after{
+    content:"";
+    width: 200px;
+    height: 10px;
+    background: var(--theme-orange);
+    position: absolute;
+    bottom: -10px;
+    right: 0;
+    left: 0;
+    
+}
+.text_card{
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction:column;
+    gap: 1.5rem;
 }
-
-.career_teaching {
-    padding: 20px;
-    width: 100%;
+.img_container img{
+    max-width:100%;
 }
-
-
-.career_teaching p {
-    font-size: 1.15rem;
-    line-height: 1.8;
-    padding-left: 10px;
-    color: var(--grey);
-}
-
-
-@media screen and (max-width:1200px) {
-    .culture_left {
-        width: 100%;
-    }
-}
-
-
-@media screen and (max-width: 945px){
-    .career_commitment, .career_culture {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-@media screen and (max-width:900px) {
-    .culture_left {
-        width: 100%;
-    }
-
-    .commitment_right {
-        width: 90%;
-    }
-}
-
-
-@media screen and (max-width: 575px){
-    .commitment_left img, .culture_right img {
-        width: 80%;
-    }
-
-    .career_openings h2, .culture_left h2, .career_teaching h2 {
-        font-size: 1.5rem;
-    }
-    .career_openings p {
-        font-size: 1rem;
+@media (min-width: 612px){
+    .commitment_text p, .benefit_text p {
+        line-height: 32px;
     }
     
-    .career_openings ul li, .culture_left ul li {
-        font-size: 0.9rem;
+    .text_card {
+        flex-direction:row;
+        justify-content: center;
+        align-items:center;
+        height: 100%;
     }
+    .benefit .text_card {
+        flex-direction:row-reverse;
+    }
+
+    .text_card > div {
+        flex-basis: 100%;
+    }
+    .img_container  {
+        display: flex;
+        justify-content:flex-start
+    }
+    .benefit .img_container  {
+        justify-content:flex-end
+    }
+}
+@media (min-width: 750px){
+    .commitment_text p, .benefit_text p {
+        line-height: 38px;
+    }
+}
+
+/* BECOME */
+.become {
+    padding: 3rem 0;
+    background: rgba(157, 166, 186, 0.53);
+}
+.become .career_header {
+    text-align: center;
+}
+
+.become_content{
+    padding: 2rem 0;
+    display: grid;
+    place-items: center;
+    gap: 1.8rem;
+}
+.become_card {
+    background: #fff;
+    border-radius: 8px;
+    width: min(100%, 300px);
+    min-height:230px;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    color:#464646;
     
-    .commitment_right h2 {
-        font-size: 1.5rem;
+}
+.become_card img {
+    max-width: 100%;
+    max-height: 100px;
+    margin-bottom: 2rem;
+}
+
+.become button{
+    padding: 12px 48px;
+}
+@media (min-width: 612px){
+    .become_content {
+        display: grid;
+        padding: 2rem ;
+        grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+        gap: 1rem;
+        justify-content: center;
     }
-    .commitment_right p {
+
+
+}
+@media (min-width: 977px){
+    .become_content {
+        grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
+        
+    }
+}
+
+@media (min-width: 1024px){
+    .become_content {
+        grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+        gap: 3rem;
+    }
+    .become_card {
+        width: 100%;
+    }
+    .become_card p {
         font-size: 1rem;
     }
 
-    .career_teaching p {
-        font-size: 0.9rem;
+}
+@media (min-width: 1300px){
+    .become_content {
+        grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+        gap: 4rem;
     }
+    .become_card {
+        width: 350px;
+    }
+    
+
 }
