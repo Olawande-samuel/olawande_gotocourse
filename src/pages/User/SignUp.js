@@ -89,7 +89,6 @@ const SignUp = () => {
               };
             });
             navigate("/user-authentication");
-            // navigate("/student");
           }
         }
     } catch (err) {
