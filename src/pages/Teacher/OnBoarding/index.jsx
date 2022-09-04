@@ -17,7 +17,7 @@ import { useLocalStorage } from "../../../hooks";
 
 const KEY = 'gotocourse-userdata';
 const OnBoarding = () => {
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(10);
     const {kycFunctions: {addMentorKYC}} = useAuth();
     const {getItem} = useLocalStorage();
     let userdata = getItem(KEY)
@@ -361,9 +361,7 @@ function Success({}){
                     <h2>Application Successful</h2>
                     <img src={success} alt="Application Success" />
                     <div className={clsx.form_group__button}>
-                        <Link to="/teacher">
-                            <button>Go to Dashboard</button>
-                        </Link>
+                        <p>You will receive a response from us in 48-72 hours</p>
                     </div>
                 </form>
             </div>
