@@ -3,9 +3,7 @@ import {useEffect} from "react";
 
 import clsx from "./styles.module.css";
 import Layout from "../../components/Layout";
-import img from "../../images/careerBg.webp"
-import career01 from "../../images/career01.png";
-import career02 from "../../images/career02.png";
+
 
 import commitment from "../../images/careers/commitment.png";
 import benefit from "../../images/careers/benefits.png";

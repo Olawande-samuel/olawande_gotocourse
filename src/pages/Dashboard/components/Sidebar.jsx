@@ -243,17 +243,17 @@ const Sidebar = ({isMobile}) => {
         },
         {
             icon: IoIosPerson,
-            path: "visits",
+            path: "",
             title: "Visits"
         },
         {
             icon: IoIosCash,
-            path: "paid-commissions",
+            path: "",
             title: "Paid"
         },
         {
             icon: FaMoneyBillWave,
-            path: "unpaid-commissions",
+            path: "",
             title: "Unpaid"
         },
     ];

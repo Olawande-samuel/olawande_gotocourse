@@ -100,7 +100,7 @@ const Login = () => {
 
 
   // SOCIAL LOGIN
-  const mutation = useMutation((userdata)=>googleSignIn(userdata), {
+  const mutation = useMutation(googleSignIn, {
     onError: (err)=>console.error(err),
     onSuccess:(res)=>{
      console.log({res})
@@ -134,7 +134,7 @@ const Login = () => {
       } 
     }
   })
-  const faceBookMutation = useMutation((userdata)=>facebookSignIn(userdata), {
+  const faceBookMutation = useMutation(facebookSignIn, {
     onError: (err)=>console.error(err),
     onSuccess:(res)=>{
       if(res.data?.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode)
@@ -220,7 +220,7 @@ const Login = () => {
   }
   return (
     <SignInWrapper>
-      <ToastContainer
+    <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -231,7 +231,6 @@ const Login = () => {
         draggable
         pauseOnHover
       />
-      
       <div className="form-wrapper w-100">
         <header>
           <h3 className="title">

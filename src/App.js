@@ -34,6 +34,7 @@ import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
 import { Categories, CourseDetail, CourseList, CourseProfile } from "./pages/Courses";
 import {Home as BecomeATeacher, Profile} from "./pages/Teacher";
+import Career from "./pages/Career";
 import All, {Payment, PaymentStatus} from "./pages/Teacher/Teachers";
 import TeacherOnBoarding from "./pages/Teacher/OnBoarding";
 import TeacherProfile from "./pages/Teacher/TeacherProfile";
@@ -78,7 +79,7 @@ function App() {
             <Route path="become-a-teacher" element={<BecomeATeacher />} />
             <Route path="payment/success" element={<PaymentStatus success={true} />} />
             <Route path="payment/error" element={<PaymentStatus />} />
-            {/* <Route path="career" element={<Career />} /> */}
+            <Route path="career" element={<Career />} />
             <Route path="students" element={<Students  />} />
             <Route path="user-authentication" element={<Verification  />} />
             <Route path="user-onboarding" element={<UserOnBoarding />} />            
@@ -86,9 +87,9 @@ function App() {
             <Route path="lounge" element={<Out/>}>
               <Route index element={<CelebLanding />} />
               <Route path="how-it-works" element={<HIW />} />
-              <Route path="mentors">
+              <Route path="mentors" element={<Out/>}>
                 <Route index element={<Lounge />} />
-                <Route path="mentors/:id" element={<CelebProfile />} />
+                <Route path=":id" element={<CelebProfile />} />
               </Route>
             </Route>
 
@@ -129,7 +130,6 @@ function App() {
                 {/* <Route path="payment" element={<Payment />} /> */}
               </Route>
             </Route>
-
             <Route path="teacher" element={<Out />}>
               <Route index element={<TeacherDashboard  />} /> 
               <Route path="profile" element={<TeachersProfile  />} /> 

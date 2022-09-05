@@ -69,16 +69,17 @@ const cardData = [
 
 
 const Affiliate = () => {
+    
     useEffect(() => {
         console.log("Admin affiliate page showing");
         return () => console.log("Removing Admin affiliate page");
     }, [])
+
     const [select, setSelect] = useState("30 days")
 
     function changeHandler(e){
         setSelect(_ => e.target.value);
     }
-
 
     return (
         <Admin header="Affiliate">
@@ -97,7 +98,6 @@ const Affiliate = () => {
                             ))
                         }
                     </div>
-
                     <div className={clsx.affiliate_chart}>
                         <ChartCard className={clsx.chart_card} chart={<MyChart />} header="Referral traffic"  />
                     </div>
@@ -106,9 +106,6 @@ const Affiliate = () => {
         </Admin>
     )
 }
-
-
-
 
 function AffiliateCard({icon, title, value, color, info}){
     return (
