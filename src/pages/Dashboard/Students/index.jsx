@@ -1401,8 +1401,6 @@ export function DashboardTop({content}){
     )
 }
 
-
-
 export const Students = ({children, isMobile, notification, userdata, header}) => {
     const [pledredata, setPledreData]= useState({})
     const {generalState: {showSidebar, loading, pledre}, generalState, setGeneralState, otherFunctions:{fetchCourses}, adminFunctions: {getUnreadMessages}, studentFunctions: {fetchNotifications, readNotifications }} = useAuth();
@@ -1544,8 +1542,8 @@ const getMessage = useQuery(["fetch student messages", user.token], ()=>getUnrea
              pauseOnFocusLoss
              draggable
              pauseOnHover
-            
             />  
+
             <Sidebar isMobile={isMobile} />
             <div className={clsx.students_main}>
                <Navbar toggleSidebar={toggleSidebar} header={header} content={student}  />
