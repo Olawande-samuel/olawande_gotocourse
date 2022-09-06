@@ -196,7 +196,7 @@ export const affiliatesFunctions = {
         })
         return res    
     },
-    fetchAffiliateStats: async function (_data, token){
+    fetchAffiliateStats: async function (token){
         
         const res = await axios.get(`${baseURL}/affiliate/stats/fetch`, 
        {
@@ -210,7 +210,7 @@ export const affiliatesFunctions = {
         })
         return res    
     },
-    fetchEarnings: async function (_data, token){
+    fetchEarnings: async function (token){
         
         const res = await axios.get(`${baseURL}/affiliate/records/fetch'`, 
        {
