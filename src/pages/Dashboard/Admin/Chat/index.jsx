@@ -80,7 +80,7 @@ const ChatComponent = ({chatType, tabs, usertype}) => {
         </Tabs>
       </div>
       {chatType.map((item, index) => (
-        <TabPanel value={value} index={index} style={{ height: "100%", width:"100%" }} className={clsx.tab_wrapper}>
+        <TabPanel value={value} index={index} style={{ height: "100%", width:"100%", padding: 20 }} className={clsx.tab_wrapper}>
           <Chat
             messagedata={messagedata}
             type={item.type}
