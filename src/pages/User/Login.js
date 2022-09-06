@@ -100,87 +100,50 @@ const Login = () => {
 
 
   // SOCIAL LOGIN
-  const mutation = useMutation(googleSignIn, {
-    onError: (err)=>console.error(err),
-    onSuccess:(res)=>{
-     console.log({res})
+  async function socialSignIn(token, type){
+    try{
+      const res = type === "google" ? await googleSignIn(token) : await facebookSignIn(token)
       if(res.data?.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode)
-      localStorage.setItem(KEY, JSON.stringify(res.data?.data));    
       if(res.data.data.userType === "student"){
+        localStorage.setItem(KEY, JSON.stringify(res.data?.data));    
         getItem(KEY, res.data);
-
         navigate("/student")
-
+        
       } else if(res.data.data.userType === "teacher" || res.data.data.userType === "mentor"){
-
+      // check to see if they've been approved
         if(res.data.data.canTeach){
-
-          getItem(KEY, res.data.data);
-
+          localStorage.setItem(KEY, JSON.stringify(res.data?.data));    
           navigate("/teacher")
         
         } else {
-          toast.error("Your application is under review. Kindly check back later", {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
           throw new AdvancedError("Your application is under review. Kindly check back later", 0)
         }
       } 
+    }catch(err){
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
-  })
-  const faceBookMutation = useMutation(facebookSignIn, {
-    onError: (err)=>console.error(err),
-    onSuccess:(res)=>{
-      if(res.data?.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode)
-      localStorage.setItem(KEY, JSON.stringify(res.data?.data));    
-      if(res.data.data.userType === "student"){
-        getItem(KEY, res.data);
-
-        navigate("/student")
-
-      } else if(res.data.data.userType === "teacher" || res.data.data.userType === "mentor"){
-
-        if(res.data.data.canTeach){
-
-          getItem(KEY, res.data.data);
-
-          navigate("/teacher")
-        
-        } else {
-          toast.error("Your application is under review. Kindly check back later", {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          throw new AdvancedError("Your application is under review. Kindly check back later", 0)
-        }
-      } 
-    }
-  })
+  }
    
   function signInWithGoogle(e){
     e.preventDefault()
     signInWithPopup(authentication, provider).then(res=>{
         console.log(res)
         if(res.user?.accessToken){
-          mutation.mutate({
-              accessToken: res.user.accessToken
-          })
-          if(mutation.isError ) throw new AdvancedError(mutation.error.message, 0)
+         let token =  {
+          accessToken: res.user.accessToken
+        }
+        socialSignIn(token, "google")
        }
     }
     ).catch(err=>{
-      console.error(err)
       toast.error(err.message, {
         position: "top-right",
         autoClose: 4000,
@@ -193,17 +156,19 @@ const Login = () => {
     }
     )
   }
-   function signInWithFacebook(){
-
+   function signInWithFacebook(e){
+    e.preventDefault()
     signInWithPopup(authentication, facebookProvider).then(res=>{
       console.log(res)
       if(res.user?.accessToken){
-        faceBookMutation.mutate({
-            accessToken: res.user.accessToken
-        })
-        if(faceBookMutation.isError ) throw new AdvancedError(faceBookMutation.error.message, 0)
-     }
-  }
+        if(res.user?.accessToken){
+          let token =  {
+          accessToken: res.user.accessToken
+         }
+         socialSignIn(token, "facebook")
+        }
+      }
+    }
   ).catch(err=>{
         console.error(err)
         toast.error(err.message, {
@@ -245,7 +210,6 @@ const Login = () => {
               backgroundColor: "#eee"
             }}
             onClick={signInWithGoogle}
-            disabled={mutation.isLoading}
           >
               <i className="me-4">
                   <img src={goo} alt="" width={25} height={25} />
@@ -260,7 +224,6 @@ const Login = () => {
                 backgroundColor: "#eee"
               }}
               onClick={signInWithFacebook}
-              disabled={mutation.isLoading}
             >
             <i className="me-2">
                     <img src={face} alt="" width={25} height={25} />

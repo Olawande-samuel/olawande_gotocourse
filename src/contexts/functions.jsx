@@ -366,6 +366,20 @@ export const authFunctions = {
             }
         })
         return res
+    } ,
+    changePassword: async function(data, token){
+        const res = await axios.post(`${baseURL}/user/password/update`,
+        JSON.stringify(data),
+        {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res
     } 
         
 }
