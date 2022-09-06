@@ -17,7 +17,7 @@ import { useLocalStorage } from "../../../hooks";
 
 const KEY = 'gotocourse-userdata';
 const OnBoarding = () => {
-    const [page, setPage] = useState(10);
+    const [page, setPage] = useState(0);
     const {kycFunctions: {addMentorKYC}} = useAuth();
     const {getItem} = useLocalStorage();
     let userdata = getItem(KEY)
@@ -126,9 +126,6 @@ const OnBoarding = () => {
         </div>
     )
 }
-
-
-
 
 function WelcomeSection({pageHandler}){
     return(
@@ -354,6 +351,11 @@ function SectionSix({submit, formstate, setFormstate}){
 
 
 function Success({}){
+    
+    useEffect(()=>{
+        localStorage.clear();
+    },[])
+
     return (
         <div className={clsx.question}>
             <div className={clsx.question_container}>

@@ -259,7 +259,7 @@ function BootcampCard({_id, title, duration, startTime, endTime, startDate,endDa
         <div className="container d-flex flex-column justify-content-between">
 
         <header className="mb-5">
-            <h6>Upcoming Bootcamp</h6>
+            <h6>Upcoming Classes</h6>
         </header>
         <div className="newBootcamp_title mb-4">
             <p className="mb-5">{title}</p>

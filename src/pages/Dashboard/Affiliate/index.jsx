@@ -19,6 +19,8 @@ import { FaShoppingBag, FaMoneyBillWave } from 'react-icons/fa';
 import { BiBarChartSquare } from 'react-icons/bi';
 import { IoIosBasket } from 'react-icons/io';
 import { Box } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import LogoutButton from '../../../components/LogoutButton';
 
 
 
@@ -70,7 +72,11 @@ export function Dashboard(){
             amount: true
         }
     ]
-
+    const {getItem} = useLocalStorage();
+    let userdata = getItem(KEY);
+    const {  generalState, setGeneralState, adminFunctions:{fetchNotifications}, affiliatesFunctions:{fetchAffiliateStats} } = useAuth();
+    const fetchMyStats = useQuery(["fetchStats", userdata?.token], ()=>fetchAffiliateStats(userdata?.token))
+    console.log({fetchMyStats})
 
     return (
         <Affiliates header="Dashboard">
@@ -336,11 +342,11 @@ const OtherCard = ({icon, name, value, amount})=> {
 
 
 export const Affiliates = ({ children, header }) => {
-    const { generalState: { isMobile, showSidebar,loading }, generalState, setGeneralState, adminFunctions:{fetchNotifications} } = useAuth();
+    const { generalState: { isMobile, showSidebar, loading }, generalState, setGeneralState, adminFunctions:{fetchNotifications}, affiliatesFunctions:{fetchAffiliateStats} } = useAuth();
     const {getItem} = useLocalStorage();
+    let userdata = getItem(KEY);
   
     const flag = useRef(false);
-    let userdata = getItem(KEY);
     const toggleSidebar = () => {
       setGeneralState({ ...generalState, showSidebar: !showSidebar });
     };
@@ -371,6 +377,8 @@ export const Affiliates = ({ children, header }) => {
         })()
         flag.current = true;
       },[])
+
+      
     return (
       <GuardedRoute>
         <div className={clsx["admin"]}>
@@ -397,7 +405,9 @@ export const Affiliates = ({ children, header }) => {
                 </i>
               </div>
               <h1 className="d-none d-md-block">{header}</h1>
-              <Searchbar showIcon={true} placeholder="Search" />
+              <div className="button_wrapper d-flex align-items-center text-center d-flex ms-3 ">
+                <LogoutButton /> 
+              </div>
             </div>
             {children}
           </div>

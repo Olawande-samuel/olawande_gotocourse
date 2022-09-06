@@ -9,7 +9,7 @@ import vidcard from "../../images/how-it-works/videocard.png"
 
 const HIW = ()=> {
     const data = {
-        title:"Compete guide to Gotocourse navigation as a mentor",
+        title:"Complete guide to Gotocourse navigation as a mentor",
         button: false,
         img: mentors
     }
@@ -22,7 +22,7 @@ const HIW = ()=> {
 }
 export function HIWStudent(){
     const data = {
-        title:"Compete guide to Gotocourse navigation as a student",
+        title:"Complete guide to Gotocourse navigation as a student",
         button: false,
         img: student
     }
@@ -37,7 +37,7 @@ export function HIWStudent(){
 } 
 export function HIWTeacher(){
     const data = {
-        title:"Compete guide to Gotocourse navigation as a teacher",
+        title:"Complete guide to Gotocourse navigation as a teacher",
         button: false,
         img: teacher
     }
@@ -52,7 +52,7 @@ export function HIWTeacher(){
 }
 export function HIWAffiliate(){
     const data = {
-        title:"Compete guide to Gotocourse navigation as an affiliate",
+        title:"Complete guide to Gotocourse navigation as an affiliate",
         button: false,
         img: affiliate
     }

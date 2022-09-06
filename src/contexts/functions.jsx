@@ -181,7 +181,63 @@ export const kycFunctions = {
     },
 }
 
-
+export const affiliatesFunctions = {
+    becomeAffiliate: async function (token){
+        
+        const res = await axios.post(`${baseURL}/user/affiliate/activate`, 
+        {}, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res    
+    },
+    fetchAffiliateStats: async function (_data, token){
+        
+        const res = await axios.get(`${baseURL}/affiliate/stats/fetch`, 
+       {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res    
+    },
+    fetchEarnings: async function (_data, token){
+        
+        const res = await axios.get(`${baseURL}/affiliate/records/fetch'`, 
+       {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res    
+    },
+    visitAffiliate: async function (_data, token){
+        
+        const res = await axios.post(`${baseURL}/affiliate/visit/${token}`, 
+        JSON.stringify(_data), {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res    
+    },
+}
 
 export const authFunctions = {
     login: async function (_data, type){
@@ -359,6 +415,20 @@ export const authFunctions = {
         JSON.stringify(_data),
         {
             headers: {
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res
+    } ,
+    changePassword: async function(data, token){
+        const res = await axios.post(`${baseURL}/user/password/update`,
+        JSON.stringify(data),
+        {
+            headers: {
+                "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json"
             },
             validateStatus: status => {

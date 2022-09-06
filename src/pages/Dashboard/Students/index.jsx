@@ -944,36 +944,50 @@ export function Fees(){
 
     console.log({fees})
     
-    const tableHeaders = ["No", "Type", "Date Initialted", "Due Date", "Status"]
+    const tableHeaders = ["No", "Course", "Status", "Date", "Course Price", "Amount Paid", "Price Plan"]
     const tableContents = fees.length > 0 ? fees : []
     return ( 
-        <Students isMobile={isMobile} userdata={userdata} header="Fees">               
+        <Students isMobile={isMobile} userdata={userdata} header="Payments">               
             <div className={clsx.students_profile}>
                 
                 {/* {courses.length === 0 ? 
                 
                 <NoDetail text="Nothing to See here" />
                  : */}
+                 <div className="table-responsive">
+
                  {
-                <table className={clsx.student_table}>
+
+                <table className="table table-borderless">
                     <thead>
                         <tr>
                             {
                                 tableHeaders.map((el, i) => (
                                     <th key={i}>{el}</th>
-                                    ))
+                                ))
                             } 
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            tableContents.map(({type,createdAt, dueDate, status, amount}, i) => (
-                                <UserInfoCard key={i} enrolled={type} coursePrice={new Date(dueDate).toLocaleDateString()} date={new Date(createdAt).toLocaleDateString()} type={status} num={i} amount={amount} />
+                            tableContents.map(({type,createdAt, dueDate, status, amount,courseName, coursePrice}, i) => (
+                                <tr>
+                                    <td>{i + 1}</td>
+                                    <td>{courseName}</td>
+                                    <td>{status}</td>
+                                    <td>{new Date(createdAt).toLocaleDateString()}</td>
+                                    <td>{amount}</td>
+                                    <td>{coursePrice}</td>
+                                    <td></td>
+                                </tr>
+                                
                             ))
                         }
                     </tbody>
                 </table>
                 }
+                </div>
+
             
         </div>
         </Students>
@@ -1150,7 +1164,7 @@ export function Chat() {
 export const Dashboard = () => {
     const {getItem} = useLocalStorage();
     let userdata = getItem(KEY);
-    const {generalState: {isMobile}, studentFunctions: {fetchCourses, fetchWishlist}, otherFunctions:{fetchCourses:fetchAllCourses}} = useAuth();
+    const {generalState: {isMobile}, studentFunctions: {fetchCourses, fetchWishlist}, otherFunctions:{fetchCourses:fetchAllCourses, fetchBootcamps}} = useAuth();
         
     const navigate = useNavigate();
     
@@ -1158,7 +1172,7 @@ export const Dashboard = () => {
     
     const {  data:wishlistData, isSuccess:wishlistIsSuccess } = useQuery(["fetch wishes"], ()=>fetchWishlist(userdata?.token))
     const {  data, isSuccess } = useQuery(["fetch courses"], ()=>fetchCourses(userdata?.token))
-    const {  data:allCourses } = useQuery(["fetch all courses"], ()=>fetchAllCourses())
+    const {  data:allCourses } = useQuery(["fetch all bootcamps"], ()=>fetchBootcamps())
 
     console.log({wishlistData})
     console.log({data})
@@ -1278,16 +1292,18 @@ function AvailableCourses({data}){
 
     function handleCourseSelect(e, item){  
         e.preventDefault()      
-        const courseInfo = item
-        localStorage.setItem("gotocourse-courseInfo", JSON.stringify(courseInfo))
-        localStorage.setItem("gotocourse-courseId", courseInfo.courseId)
-        navigate(`/categories/${courseInfo.category?.split(" ").join("-")}/courses/${courseInfo.name.split(" ").join("-")}}`)
+        const classInfo = item
+        localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(classInfo))
+        navigate("/bootcamp")
+        // localStorage.setItem("gotocourse-courseInfo", JSON.stringify(courseInfo))
+        // localStorage.setItem("gotocourse-courseId", courseInfo.courseId)
+        // navigate(`/categories/${courseInfo.category?.split(" ").join("-")}/courses/${courseInfo.name.split(" ").join("-")}}`)
     }
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
                 <h6 style={{marginBottom:".5rem"}}>Available Classes</h6>
-                <small className="mb-4 d-block">Select and enroll to a course to get started</small>
+                <small className="mb-4 d-block">Select and enroll to a class to get started</small>
                 
                 <div className="table-responsive">
                     <table className="table table-bordered">
@@ -1305,11 +1321,11 @@ function AvailableCourses({data}){
                                 data?.length > 0 && data.map((item, i)=>(
                                     <tr key={i}>
                                         <td>
-                                            <span>{item.name}</span>
+                                            <span>{item.title}</span>
                                         </td>
                                         <td><span>{item.startDate && getDate(item.startDate)}</span></td>
                                         <td>
-                                            <span>$ {item.packages[0]?.price}</span>
+                                            <span>$ {item.price}</span>
                                         </td>
                                         <td>
                                             <div className={clsx.classes_button}>
@@ -1384,8 +1400,6 @@ export function DashboardTop({content}){
         </div>
     )
 }
-
-
 
 export const Students = ({children, isMobile, notification, userdata, header}) => {
     const [pledredata, setPledreData]= useState({})
@@ -1517,7 +1531,6 @@ const getMessage = useQuery(["fetch student messages", user.token], ()=>getUnrea
 
     return (
         <GuardedRoute>
-
             <div className={clsx.students}>
             <ToastContainer 
              position="top-right"
@@ -1529,8 +1542,8 @@ const getMessage = useQuery(["fetch student messages", user.token], ()=>getUnrea
              pauseOnFocusLoss
              draggable
              pauseOnHover
-            
             />  
+
             <Sidebar isMobile={isMobile} />
             <div className={clsx.students_main}>
                <Navbar toggleSidebar={toggleSidebar} header={header} content={student}  />

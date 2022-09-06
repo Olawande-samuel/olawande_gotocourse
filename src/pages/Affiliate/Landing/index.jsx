@@ -108,7 +108,7 @@ const Landing = () => {
                         <h3>Get access to your customized dashboard, track your best work and earnings</h3>
                         <p>Track all your traffic, referrals, and payouts with a personalized dashboard</p>
                         <div className={clsx.right_form}>
-                            <Link to="register">
+                            <Link to="login">
                                 <button>Get started</button>
                             </Link>
                         </div>

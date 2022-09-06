@@ -62,8 +62,8 @@ const LoginOptions = ({closeOverlay, type}) => {
                   })
                 }
             }
-            ).catch(err=> {
-                toast.error(err.message, {
+            ).catch(error=> {
+                toast.error(error.message, {
                     position: "bottom-left",
                     autoClose: 4000,
                     hideProgressBar: true,
@@ -72,7 +72,33 @@ const LoginOptions = ({closeOverlay, type}) => {
                     draggable: true,
                     progress: undefined,
                 });
-            
+                if (error.code === 'auth/account-exists-with-different-credential') {
+                    // Step 2.
+                    // User's email already exists.
+                    // The pending Google credential.
+                    var pendingCred = error.credential;
+                    // The provider account's email address.
+                    var email = error.email;
+                    // Get sign-in methods for this email.
+                    authentication.fetchSignInMethodsForEmail(email).then(function(methods) {
+                      // Step 3.
+                      // If the user has several sign-in methods,
+                      // the first method in the list will be the "recommended" method to use.
+                      console.log({methods})
+                      if (methods[0] === 'password') {
+                        // Asks the user their password.
+                        // In real scenario, you should handle this asynchronously.
+                        // authentication.signInWithEmailAndPassword(email, password).then(function(result) {
+                        //   // Step 4a.
+                        //   return result.user.linkWithCredential(pendingCred);
+                        // }).then(function() {
+                        //   // Google account successfully linked to the existing Firebase user.
+                          
+                        // });
+                        return;
+                      }
+                    })
+                }
             })
         } else {
             signInWithPopup(authentication, facebookProvider).then(res=>{
@@ -117,9 +143,7 @@ const LoginOptions = ({closeOverlay, type}) => {
                 const credential = facebookProvider.credentialFromError(error);
 
                 authentication.fetchSignInMethodsForEmail(email).then(function(methods) {
-                    // Step 3.
-                    // If the user has several sign-in methods,
-                    // the first method in the list will be the "recommended" method to use.
+                    
                     console.log({methods})
                 })
 
