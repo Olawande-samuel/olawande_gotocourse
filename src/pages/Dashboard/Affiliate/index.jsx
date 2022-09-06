@@ -26,33 +26,38 @@ import LogoutButton from '../../../components/LogoutButton';
 
 
 export function Dashboard(){
-    
+  const {getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
+  const {  generalState, setGeneralState, adminFunctions:{fetchNotifications}, affiliatesFunctions:{fetchAffiliateStats} } = useAuth();
+
+  const fetchMyStats = useQuery(["fetchStats", userdata?.token], ()=>fetchAffiliateStats(userdata?.token))
+  
+
     const gridContent = [
         
         {
             id:1,
             name:"visits",
-            value:850,
+            value:fetchMyStats?.data?.data?.data.visits ? fetchMyStats?.data?.data?.data.visits : 0,
             icon:<BsFillEyeFill color="#F75C4E"  size="2.5rem" />
         },
         {
             id:2,
             name:"sales",
-            value:35,
+            value:fetchMyStats?.data?.data?.data.sales ? fetchMyStats?.data?.data?.data.sales : 0,
             icon:<FaShoppingBag  color="#304D74" size="2.5rem" />
         },
         {
             id:3,
             name:"revenue",
-            value:"3,000",
+            value:fetchMyStats?.data?.data?.data.earnings ? fetchMyStats?.data?.data?.data.earnings : 0,
             icon:<BiBarChartSquare color="#F75C4E"  size="2.5rem" />,
             amount: true
-
         },
         {
             id:4,
             name:"income",
-            value:"1,500",
+            value:0,
             icon:<FaMoneyBillWave color="#304D74"  size="2.5rem" />,
             amount: true
 
@@ -60,24 +65,19 @@ export function Dashboard(){
         {
             id:5,
             name:"paid commission",
-            value:"7,500",
+            value:fetchMyStats?.data?.data?.data.paidEarnings ? fetchMyStats?.data?.data?.data.paidEarnings : 0,
             icon:<IoIosBasket color="#F75C4E" size="2.5rem" />,
             amount: true
         },
         {
             id:6,
             name:"unpaid commissions",
-            value:"8,500",
+            value:fetchMyStats?.data?.data?.data.unpaidEarnings ? fetchMyStats?.data?.data?.data.unpaidEarnings : 0,
             icon:<BsCreditCard2BackFill color="#304D74" size="2.5rem" />,
             amount: true
         }
     ]
-    const {getItem} = useLocalStorage();
-    let userdata = getItem(KEY);
-    const {  generalState, setGeneralState, adminFunctions:{fetchNotifications}, affiliatesFunctions:{fetchAffiliateStats} } = useAuth();
-    const fetchMyStats = useQuery(["fetchStats", userdata?.token], ()=>fetchAffiliateStats(userdata?.token))
-    console.log({fetchMyStats})
-
+   
     return (
         <Affiliates header="Dashboard">
             <div className={clsx["admin_profile"]}>
@@ -114,6 +114,13 @@ export function Dashboard(){
 }
 
 export function Sales(){
+  const {getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
+  const {  affiliatesFunctions:{fetchEarnings} } = useAuth();
+
+  const getEarnings = useQuery(["fetchEarnings", userdata?.token], ()=>fetchEarnings(userdata?.token))
+
+  console.log({getEarnings})
   const gridContent = [
     {
         id:2,
@@ -137,8 +144,8 @@ export function Sales(){
                     <div className={`d-flex mb-4 ${style.affiliate_top}`} style={{gap:"1rem"}}>
                         
                           {
-                            gridContent.map(item=>(
-                              <OtherCard {...item} />
+                            gridContent.map((item, i)=>(
+                              <OtherCard {...item} key={i} />
 
                             ))
                           }
@@ -342,42 +349,11 @@ const OtherCard = ({icon, name, value, amount})=> {
 
 
 export const Affiliates = ({ children, header }) => {
-    const { generalState: { isMobile, showSidebar, loading }, generalState, setGeneralState, adminFunctions:{fetchNotifications}, affiliatesFunctions:{fetchAffiliateStats} } = useAuth();
-    const {getItem} = useLocalStorage();
-    let userdata = getItem(KEY);
-  
-    const flag = useRef(false);
+    const { generalState: { isMobile, showSidebar, loading }, generalState, setGeneralState } = useAuth();
+    
     const toggleSidebar = () => {
       setGeneralState({ ...generalState, showSidebar: !showSidebar });
     };
-  
-    useEffect(() => {
-      if(flag.current) return;
-        (async() => {
-          try{
-            const res = await fetchNotifications(userdata?.token);
-            const {message, success, statusCode} = res;
-            if(!success) throw new AdvancedError(message, statusCode);
-            const {data} = res
-            if(data.length > 0) {
-              const unread = data.filter((notification)=>notification.isRead !== true)
-              setGeneralState({...generalState, notifications: unread.length})
-            }
-          }catch(err){
-            toast.error(err.message, {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          }
-        })()
-        flag.current = true;
-      },[])
-
       
     return (
       <GuardedRoute>
