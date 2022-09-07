@@ -1,6 +1,8 @@
+
 import React, {useEffect, useState, useRef} from "react"
 import Chart from "react-apexcharts";
 import {ToastContainer, toast} from "react-toastify";
+
 
 import clsx from "./styles.module.css";
 import {Admin} from "../";
@@ -15,7 +17,12 @@ import { AdvancedError } from "../../../../classes";
 
 
 
+
+
 //data
+
+
+
 
 
 const chartCards = [
@@ -111,6 +118,7 @@ const communities = [
         conversations: 18
     },
 ]
+
 
 
 const Dashboard = () => {
@@ -209,6 +217,11 @@ const Dashboard = () => {
     ]
 
 
+
+
+
+
+const Dashboard = () => {  
     return (
         <Admin header="Dashboard">
             <ToastContainer />
@@ -303,7 +316,7 @@ const Dashboard = () => {
                             ))
                         }
                     </div>
-                    <p>See all >></p>
+                    <p>See all </p>
                 </div>
             </div>
         </Admin>
@@ -312,4 +325,4 @@ const Dashboard = () => {
 
 
 
-export default Dashboard;
+export default Dashboard

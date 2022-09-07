@@ -337,8 +337,7 @@ export const Syllabus = ({
     setFormstate({...formstate, faqs: faq})
   }
 
-  console.log({formstate})
-  console.log({courseData})
+
 
     return (
      <>

@@ -1,11 +1,15 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {FaGooglePlusG, FaPinterestP, FaTwitter, FaLinkedinIn, FaFacebookF} from "react-icons/fa";
-
-
+import {toast, ToastContainer} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 import clsx from "./styles.module.css";
 import { Students } from "../";
 import referralTable from "../../../../images/referral_table.png";
+import { useLocalStorage } from "../../../../hooks";
+import { KEY } from "../../../../constants";
+import { useAuth } from "../../../../contexts/Auth";
+import { AdvancedError } from "../../../../classes";
 
 
 
@@ -60,13 +64,51 @@ const socials = [
 
 
 const Referral = () => {
+    const navigate = useNavigate()
+    const {generalState, affiliatesFunctions:{becomeAffiliate}} = useAuth()
+
+    const {getItem} = useLocalStorage()
+    const [loading, setLoading]= useState(false)
+    const userdata = getItem(KEY)
+
     useEffect(() => {
         console.log("Student Referral page is mounted");
         return () => console.log("Student Referal page is unmounted");
     }, [])
 
+    async function signupForAffilates(e){
+        e.preventDefault()
+        // sign user up for affiliate program
+        try{
+            setLoading(true)
+            const response  = await becomeAffiliate(userdata?.token);
+            const {message, success, statusCode} = response.data;
+            if(statusCode !== 1) throw new AdvancedError(message, statusCode);
+            toast.success(message)
+            navigate("/affiliates/login")
+        }catch(error){
+            console.error(error)
+            toast.error(error.message)
+        }finally {
+            setLoading(false)
+        }
+
+    }
+
     return (
         <Students header="Referral">
+             <ToastContainer 
+             position="top-right"
+             autoClose={3600}
+             hideProgressBar={false}
+             newestOnTop={false}
+             closeOnClick
+             rtl={false}
+             pauseOnFocusLoss
+             draggable
+             pauseOnHover
+            
+            />  
             <div className={clsx.referral}>
                 <div className={clsx.referral_container}>
                     <div className={clsx.referral_top}>
@@ -85,7 +127,19 @@ const Referral = () => {
                         </div>
 
                         <div className={clsx.referral_button}>
-                            <button>Sign up</button>
+                            {
+                                loading ? <button>
+                                        <div className="spinner-border text-light">
+                                            <div className="visually-hidden"></div>
+                                        </div>
+                                     </button>
+                                :
+                                <button onClick={signupForAffilates}>Sign up</button>
+                            }     
+                            <button className="ms-4" onClick={()=>{
+                                navigate("/affiliates/login")
+                            }}>Log in</button>
+                            
                         </div>
                     </div>
                 </div>

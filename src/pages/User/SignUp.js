@@ -41,6 +41,7 @@ const SignUp = () => {
     authFunctions: { register }, generalState,
     setGeneralState,
   } = useAuth();
+  
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleChange = (e) => {

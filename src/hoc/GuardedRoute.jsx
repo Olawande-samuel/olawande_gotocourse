@@ -24,7 +24,12 @@ const GuardedRoute = ({children}) => {
         //     navigate(userType === "admin" ? `/${userType}` : `/${userType}s`);
         // } else if(route === "teachers" && userType !== "teachers"){
         //     navigate(userType === "admin" ? `/${userType}` : `/${userType}s`);
-        // }else 
+        // }else  
+
+        if(route === "teacher" && !value.canTeach){
+            localStorage.clear()
+            return <Navigate to="/login" />
+        } 
         return children
     }else {
         if(route === 'admin'){

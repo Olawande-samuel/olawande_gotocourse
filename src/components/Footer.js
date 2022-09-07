@@ -65,6 +65,11 @@ const rightLink = [
     title:"Careers",
     path:"/career"
   },
+  // {
+  //   id:9,
+  //   title:"How It Works",
+  //   path:"/career"
+  // },
   {
     id:6,
     title:"Contact us",

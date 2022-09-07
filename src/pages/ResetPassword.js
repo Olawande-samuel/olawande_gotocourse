@@ -1,25 +1,30 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
+import { AdvancedError } from '../classes';
 import Input from '../components/Input';
 import Password from '../components/Password';
 import SignInWrapper from '../components/SignInWrapper';
+import { KEY } from '../constants';
 import { useAuth } from '../contexts/Auth';
+import GuardedRoute from '../hoc/GuardedRoute';
 import { useLocalStorage } from '../hooks';
 
 const ResetPassword = () => {
+  const passReg = new RegExp(/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/)
     const navigate = useNavigate()
-    const {authFunctions: {login}, setGeneralState} = useAuth();
+    const {authFunctions: {changePassword}, setGeneralState} = useAuth();
     const {getItem, removeItem} = useLocalStorage();
   
     const [data, setData] = useState({
-      email: "",
       password: "",
-      userType: ""
+      newPassword: "",
+      confirmPassword: ""
     });
     
     const [loading, setLoading] = useState(false);
-  
+    const [focus, setFocus] = useState(false)
+
     const handleChange = (e) => {
       const {name, value} = e.target;
       setData(old => {
@@ -29,32 +34,38 @@ const ResetPassword = () => {
         }
       })
     };
-  
+    const userdata = getItem(KEY);
+          
+
     const onSubmit = async (e) => {
       e.preventDefault();
-      if(data.email.trim() === "" || data.password.trim() === "") return;
       setLoading(true);
       try {
-        // const response = await login(data, "user");
-  
-        // console.log(response)
-        // const {success, statusCode, message} = response;
+        if(data.password.trim() === "") return;
+        if(data.newPassword.trim() !== data.confirmPassword.trim()) throw new AdvancedError("Passwords don't match")
+        if (!passReg.test(data.newPassword)) throw new AdvancedError("Invalid Password", 0);
         
-        // if(success) {
-        //   const {data: d} = response;
-  
-        //   //before navigating
-        //   //save some thing to localStorage and state
-        //   removeItem(KEY);
-        //   getItem(KEY, d);
-        //   setGeneralState(old => {
-        //     return {
-        //       ...old,
-        //       notification: response.message
-        //     }
-        //   })
-        //   navigate(`${d.userType === 'student' ? "/student" : "/teacher"}`);
-        // }else throw new AdvancedError(message, statusCode);
+        const response = await changePassword(data, userdata.token);
+        console.log({response})
+
+        const {success, statusCode, message} = response.data;
+        console.log({message})
+        console.log({statusCode})
+
+        if(statusCode !== 1)  throw new AdvancedError(message, statusCode);
+          const {data: d} = response;
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          //before navigating
+          //save some thing to localStorage and state
+          navigate(-1)
   
       } catch (err) {
         console.error(err);
@@ -74,6 +85,7 @@ const ResetPassword = () => {
       }
     };
     return (
+      <GuardedRoute>
       <SignInWrapper>
         <ToastContainer
           position="top-right"
@@ -94,36 +106,40 @@ const ResetPassword = () => {
             </h3>
           </header>
           <form className="form" onSubmit={onSubmit}>
-            <Input
-              label="Email"
-              name="email"
-              type="email"
-              handleChange={handleChange}
-              value={data.email}
-              placeholder="Email"
-            />
             <Password
             label="Current Password"
-            name="old_password"
+            name="password"
             password="password"
-            value={data.old_password}
+            value={data.password}
             handleChange={handleChange}
             placeholder="Password"
           />
             <Password
             label="New Password"
-            name="new_password"
+            name="newPassword"
             password="password"
-            value={data.new_password}
+            value={data.newPassword}
             handleChange={handleChange}
             placeholder="Password"
+            focus ={()=>setFocus(true)}
+            blur={()=>setFocus(false)}
           />
+          {focus && !passReg.test(data.newPassword) &&
+            <small style={{fontSize:"11px"}}>
+              <p className="text-danger">Password must satisfy the following conditions</p>
+              <p className="text-danger"> - At least one upper case English letter</p>
+              <p className="text-danger"> - At least one lower case English letter</p>
+              <p className="text-danger"> - At least one digit</p>
+              <p className="text-danger"> - At least one special character</p>
+              <p className="text-danger"> - Minimum eight in length</p>
+            </small>
+          }
           <Password
             label="Confirm New Password"
-            name="retype_password"
+            name="confirmPassword"
             password="password"
             placeholder="Confirm Password"
-            value={data.retype_password}
+            value={data.confirmPassword}
             handleChange={handleChange}
           />
             {loading ? (
@@ -143,6 +159,8 @@ const ResetPassword = () => {
           </form>
         </div>
       </SignInWrapper>
+
+      </GuardedRoute>
     );
 }
 
