@@ -76,7 +76,7 @@ function JobOpening(){
 }
 
 
-function TextCard({header, img, children}){
+export function TextCard({header, img, children}){
     return (
         <div className="container">
             <div className={clsx.text_card}>

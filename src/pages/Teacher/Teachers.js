@@ -268,7 +268,7 @@ export const Payment = () => {
                           src={
                             courseInfo?.instructorProfileImg
                               ? courseInfo.instructorProfileImg
-                              : lere
+                              : (bootcamp.bootcampImg ? bootcamp.bootcampImg : lere)
                           }
                           alt=""
                           className={style.payment_image}

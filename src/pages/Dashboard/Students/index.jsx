@@ -970,7 +970,7 @@ export function Fees(){
                     </thead>
                     <tbody>
                         {
-                            tableContents.map(({type,createdAt, dueDate, status, amount,courseName, coursePrice}, i) => (
+                            tableContents.map(({type,createdAt, dueDate, status, amount,courseName, coursePrice, paymentModel}, i) => (
                                 <tr>
                                     <td>{i + 1}</td>
                                     <td>{courseName}</td>
@@ -978,7 +978,7 @@ export function Fees(){
                                     <td>{new Date(createdAt).toLocaleDateString()}</td>
                                     <td>{amount}</td>
                                     <td>{coursePrice}</td>
-                                    <td></td>
+                                    <td>{paymentModel ? paymentModel : "Full Payment"}</td>
                                 </tr>
                                 
                             ))

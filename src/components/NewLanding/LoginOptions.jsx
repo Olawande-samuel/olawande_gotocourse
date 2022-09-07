@@ -34,6 +34,8 @@ const LoginOptions = ({closeOverlay, type}) => {
         if(type === "google"){
             signInWithPopup(authentication, provider).then(res=> {
                 if(res.user?.accessToken){
+                    
+                    console.log({res})
                     setLoading(true)
                     googleSignUp({
                     
