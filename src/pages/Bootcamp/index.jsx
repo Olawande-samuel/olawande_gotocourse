@@ -84,9 +84,8 @@ const Bootcamp = () => {
         if (!success || statusCode !== 1)
           throw new AdvancedError(message, statusCode);
         const { data } = response;
-
         console.log(data);
-
+        navigate("payment")
         toast.success(message, {
           position: "top-right",
           autoClose: 4000,
@@ -136,15 +135,6 @@ const Bootcamp = () => {
                         : bootcampInfo?.content}
                     </p>
                     <div className={clsx.bootcamp_details}>
-                        {/* {
-                                        details.map(({key, value}, i) => (
-                                            <div key={i}>
-                                                <p>{key}</p>
-                                                <span>{value}</span>
-                                            </div>
-                                        ))
-                                    } */}
-
                         <div>
                         <p>Duration</p>
                         <span>
@@ -163,10 +153,6 @@ const Bootcamp = () => {
                             : "Sept 04"
                         }`}</span>
                         </div>
-                        {/* <div>
-                                        <p>Time</p>
-                                        <span>{`${bootcampInfo?.startTime ? bootcampInfo?.startTime : "09:00"} - ${bootcampInfo?.endTime ? bootcampInfo?.endTime : "14:00"}`}</span>
-                                    </div> */}
                     </div>
                     {bootcampInfo?.instructorName ? (
                         <button type="submit" onClick={handleBootstrapEnrollment}>
