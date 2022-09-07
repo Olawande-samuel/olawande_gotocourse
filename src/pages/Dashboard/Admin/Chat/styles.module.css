@@ -14,7 +14,6 @@
     align-items: center;
     padding: 20px;
     padding-bottom: 8px;
-    overflow-y: scroll;
 }
 
 .chat__top {
@@ -44,14 +43,12 @@
 
 .chat_main_container {
     display: flex;
-    /* align-items: center; */
+    align-items: center;
     justify-content: space-between;
     padding: 30px 0px;
-    padding-bottom: 0;
     width: min(100%, 650px);
     margin-inline: auto;
     height: 100%;
-    /* flex-wrap:wrap; */
     gap: .5rem;
 
 }
@@ -61,12 +58,14 @@
 
 .main_container__users {
     width: 100%;
-    height: 100%;
+    height: 80%;
     border-radius: 10px;
     background-color: #fff;
+    overflow: hidden;
     padding: 10px;
     padding-inline: clamp(1.5rem, 1.5714rem + -0.3571vw, 1.25rem);
     flex: 1;
+    /* padding-bottom: 150px; */
     /* overflow-y: clip;
     overflow-x: scroll; */
 }
@@ -77,6 +76,7 @@
     letter-spacing: 0.6px;
     margin-bottom: 20px;
     text-indent: 20px;
+    margin-top: 20px;
 }
 
 .chat_box {
@@ -91,17 +91,18 @@
     padding-bottom: 20px;
     flex: 2;
     min-height: 380px;
-    /* overflow-y:scroll; */
-
+    overflow: hidden;
 }
 
 .users__list {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    align-items: center;
+    /* justify-content: center; */
     overflow-y: scroll;
     width: 100%;
     height: 100%;
+    padding-bottom: 130px;
 }
 
 .user_box {
@@ -115,6 +116,7 @@
     border-radius: 10px;
     border: 1px solid #E1E2FF;
     cursor: pointer;
+    margin-bottom: 15px;
 }
 
 .user_box:hover {
