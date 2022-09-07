@@ -123,21 +123,22 @@ const Dashboard = () => {
         students: 0,
         teachers: 0,
         earnings: 0,
-        courses: 0
+        courses: 0,
+        categories: []
     })
     const flag = useRef(false);
     const [loading, setLoading] = useState(true);
     let userdata = getItem(KEY);
-    const {adminFunctions: {fetchEarnings, fetchCourses}, adminStudentFunctions: {fetch: fetchStudents}, adminTeacherFunctions: {fetch: fetchTeachers}} = useAuth();
+    const {adminFunctions: {fetchEarnings, fetchCourses, fetchCategories}, adminStudentFunctions: {fetch: fetchStudents}, adminTeacherFunctions: {fetch: fetchTeachers}} = useAuth();
 
     useEffect(() => {
         if(flag.current) return;
         (async() => {
             try{
-                const res = await Promise.all([fetchTeachers(userdata?.token), fetchStudents(userdata?.token), fetchCourses(userdata?.token)]);
+                const res = await Promise.all([fetchTeachers(userdata?.token), fetchStudents(userdata?.token), fetchCourses(userdata?.token), fetchCategories(userdata?.token)]);
                 console.log(res);
-                const [teachers, students, courses] = res;
-                console.log({teachers, students, courses});
+                const [teachers, students, courses, categories] = res;
+                console.log({teachers, students, courses, categories});
                 const {success, statusCode, message} = teachers;
                 if(!success) throw new AdvancedError(message, statusCode);
                 else {
@@ -149,6 +150,7 @@ const Dashboard = () => {
                             teachers: teachers.data.length,
                             students: students.data.length,
                             courses: courses.data.length,
+                            categories: categories.data
                         }
                     })
                     toast.success("Data fetched successfully", {
@@ -248,9 +250,9 @@ const Dashboard = () => {
                         <h3>Categories</h3>
                         <ul className={clsx.categories}>
                             {
-                                categories.map(({title, value}, i) => (
+                                chartData.categories.map(({name, nicheItems}, i) => (
                                     <li key={i}>
-                                        {title} <span>{value}</span>
+                                        {name} <span>{nicheItems.length}</span>
                                     </li>
                                 ))
                             }
