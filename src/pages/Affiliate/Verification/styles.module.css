@@ -1,0 +1,135 @@
+.form {
+    min-height: 50vh;
+    width: min(65%, 550px);
+    margin: 20px auto;
+    background-color: white;
+    padding: 60px 40px;
+    border-radius: 20px;
+}
+
+
+.form h3 {
+    color: #0C2191;
+    font-weight: 500;
+    margin: 20px;
+    font-size: 23px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.form p {
+    color: #333333;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.form_group__button__container {
+    margin: 15px auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form_group button{
+    width: 75%;
+    border: none;
+    cursor: pointer;
+    background-color: #0C2191;
+    color: white;
+    padding: 10px;
+    /* margin-top: 15px; */
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    border-radius: 10px;
+}
+
+.form_footer {
+    margin: 0px auto;
+    width: 80%;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+
+.form_footer span {
+    color: #0C2191;
+    margin-left: 20px;
+}
+
+.form_footer a {
+    text-decoration: underline;
+    color: #7d7d7d !important;
+    cursor: pointer;
+}
+
+.code_container {
+}
+
+
+.code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    padding: 20px;
+}
+
+.code input {
+    width: 10%;
+    border: none;
+    border-bottom: 2px solid #0C2191;
+    outline: none;
+    margin: 0px 10px;
+    line-height: 2;
+    text-align: center;
+    font-size: 25px;
+    color: #0c2191;
+    font-weight: 700;
+}
+
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+@media screen and (max-width: 645px){
+    .form {
+        width: min(75%, 600px);
+        padding: 40px 20px;
+    }
+    
+    
+    .form h3 {
+        font-size: 17px;
+    }
+    
+    
+    .form_group button{
+        font-size: 15px;
+    }
+    
+    
+    
+    .form_footer span {
+        margin-left: 22px;
+        font-size: 13px;
+    }
+    
+    .form_footer a {
+        text-decoration: underline;
+        color: #7d7d7d !important;
+        font-size: 13px;
+    }
+    
+}

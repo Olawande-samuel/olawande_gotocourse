@@ -1,0 +1,22 @@
+.auth_layout {
+    width: 100%;
+    min-height: 100vh;
+    background-image: url("../../../images/auth_layout.jpg");
+    display: flex;
+    flex-direction: column;
+    align-items:  center;
+}
+
+
+
+.layout_header {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.layout_body {
+    width: 100%;
+}

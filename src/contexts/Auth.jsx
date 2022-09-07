@@ -1,42 +1,39 @@
 import {createContext, useContext, useEffect, useState} from "react";
 
-import { authFunctions, studentFunctions, adminFunctions, teacherFunctions, adminStudentFunctions, adminTeacherFunctions } from "./functions";
-import { useCookie } from "../hooks";
+import { authFunctions, studentFunctions, adminFunctions, teacherFunctions, adminStudentFunctions, adminTeacherFunctions, otherFunctions, kycFunctions, affiliatesFunctions } from "./functions";
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
-
 const AuthContextProvider = ({children}) => {
     const [generalState, setGeneralState] = useState({
         notification: null,
-        userdata: null,
-        userType: null,
         isMobile: false,
         theme: "light",
         showSidebar: false,
         teacherProfile: null,
         navHeight: "",
-        loading: false
+        loading: false,
+        notifications:0,
+        chat:0,
+        pledre:""
+        
     })
-    const {fetchCookie} = useCookie();
+   
     useEffect(() => {
         console.log("Rendering");
-        //fetch the cookies
-        setGeneralState(old => {
-            let userdata = fetchCookie('gotocourse-userdata');
-            let userType = fetchCookie('gotocourse-usertype');
-            return {
-                ...old,
-                userdata,
-                userType
-            }
-        })
+        if(!generalState.pledre && window.PledreAPI ){
+            const Pledre = new window.PledreAPI(process.env.REACT_APP_PLEDRE_API, process.env.REACT_APP_PLEDRE_API_SECRET, process.env.REACT_APP_PLEDRE_URL)
+            setGeneralState({...generalState, pledre: Pledre})
+
+            console.log(Pledre)
+        }
         return () => console.log("Rerendering");
-    }, [])
+    }, [generalState]) 
+
     return (
-        <AuthContext.Provider value={{authFunctions, teacherFunctions, studentFunctions, adminFunctions, generalState, setGeneralState, adminStudentFunctions, adminTeacherFunctions}}>
+        <AuthContext.Provider value={{authFunctions, teacherFunctions, studentFunctions, adminFunctions, generalState, setGeneralState,affiliatesFunctions, adminStudentFunctions, adminTeacherFunctions, otherFunctions, kycFunctions}}>
             {children}
         </AuthContext.Provider>
     )

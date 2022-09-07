@@ -5,6 +5,240 @@ import { AdvancedError } from "../classes";
 import { baseURL } from "../constants";
 
 
+
+
+
+export const kycFunctions = {
+    addMentorKYC: async function(_data, token){
+        try{
+            const res = await axios.post(`${baseURL}/mentor/kyc`, 
+            JSON.stringify(_data), {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {...res.data, success: true};
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    addStudentKYC: async function(_data, token){
+        try{
+            const res = await axios.post(`${baseURL}/student/kyc`, 
+            JSON.stringify(_data), {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {...res.data, success: true};
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    getAStudentKYC: async function(_data, token){
+        try{
+            const res = await axios.get(`${baseURL}/student/kyc`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {...res.data, success: true};
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    getAMentorKYC: async function(_data, token){
+        try{
+            const res = await axios.get(`${baseURL}/mentor/kyc`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {...res.data, success: true};
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    getAllStudentKYC: async function(_data, token){
+        try{
+            const res = await axios.get(`${baseURL}/student/kyc/fetch`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {...res.data, success: true};
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    getAllMentorKYC: async function(_data, token){
+        try{
+            const res = await axios.get(`${baseURL}/mentor/kyc/fetch`,{
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {...res.data, success: true};
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    deleteStudentKYC: async function(_data, token, id){
+        try{
+            const res = await axios.delete(`${baseURL}/student/kyc/${id}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {...res.data, success: true};
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    deleteMentorKYC: async function(_data, token, id){
+        try{
+            const res = await axios.delete(`${baseURL}/mentor/kyc/${id}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {...res.data, success: true};
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+}
+
+export const affiliatesFunctions = {
+    becomeAffiliate: async function (token){
+        
+        const res = await axios.post(`${baseURL}/user/affiliate/activate`, 
+        {}, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res    
+    },
+    fetchAffiliateStats: async function (token){
+        
+        const res = await axios.get(`${baseURL}/affiliate/stats/fetch`, 
+       {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res    
+    },
+    fetchEarnings: async function (token){
+        
+        const res = await axios.get(`${baseURL}/affiliate/records/fetch'`, 
+       {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res    
+    },
+    visitAffiliate: async function (_data, token){
+        
+        const res = await axios.post(`${baseURL}/affiliate/visit/${token}`, 
+        JSON.stringify(_data), {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res    
+    },
+}
+
 export const authFunctions = {
     login: async function (_data, type){
         try{
@@ -17,7 +251,7 @@ export const authFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {...res.data, success: true};
         }catch(err){
             return {
@@ -29,7 +263,6 @@ export const authFunctions = {
     },
     register: async function(_data, type){
         try{
-            console.log(_data)
             const res = await axios.post(type !== "admin" ? `${baseURL}/user/signup` : `${baseURL}/admin/signup`,
             JSON.stringify(_data),
             {
@@ -40,9 +273,8 @@ export const authFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -55,7 +287,156 @@ export const authFunctions = {
                 statusCode: err.statusCode
             }
         }
-    }
+    },
+    verifyEmail: async function(_data){
+        try{
+            const res = await axios.post(`${baseURL}/user/email/verify`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    resendEmailOTP: async function(_data){
+        try{
+            const res = await axios.post(`${baseURL}/user/email/otp/send`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+
+    googleSignUp: async function(_data){
+        try{
+            const res = await axios.post(`${baseURL}/user/google/signup`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    googleSignIn: async function(_data){
+        const res = await axios.post(`${baseURL}/user/google/signin`,
+        JSON.stringify(_data),
+        {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res
+    },
+    facebookSignUp: async function(_data){
+        try{
+            const res = await axios.post(`${baseURL}/user/facebook/signup`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    facebookSignIn: async function(_data){
+        const res = await axios.post(`${baseURL}/user/facebook/signin`,
+        JSON.stringify(_data),
+        {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res
+    } ,
+    changePassword: async function(data, token){
+        const res = await axios.post(`${baseURL}/user/password/update`,
+        JSON.stringify(data),
+        {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res
+    } 
         
 }
 
@@ -74,9 +455,8 @@ export const adminTeacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -92,7 +472,6 @@ export const adminTeacherFunctions = {
     },
     verify: async function(_data, token){
         try{
-            console.log(_data)
             const res = await axios.patch(`${baseURL}/admin/teacher/verify`,
             JSON.stringify(_data),
             {
@@ -104,9 +483,8 @@ export const adminTeacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -122,7 +500,6 @@ export const adminTeacherFunctions = {
     },
     verify_pledre: async function(_data, token){
         try{
-            console.log(_data)
             const res = await axios.patch(`${baseURL}/admin/teacher/pledre/toggle`,
             JSON.stringify(_data),
             {
@@ -134,9 +511,8 @@ export const adminTeacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -149,7 +525,120 @@ export const adminTeacherFunctions = {
                 statusCode: err.statusCode
             }
         }
-    }
+    },
+    makeMentorPage: async function(token,  _data ){
+        try{
+            const res = await axios.post(`${baseURL}/admin/mentor/page/add`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    addMentor: async function(_data, token){
+        try{
+            const res = await axios.post(`${baseURL}/admin/mentor/add`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    updateMentor: async function(id, data, token){
+        try{
+            const res = await axios.put(`${baseURL}/admin/mentor/page/update/${id}`,
+            JSON.stringify(data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    deleteMentor: async function(id, token){
+        try{
+            const res = await axios.delete(`${baseURL}/admin/mentor/page/delete/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+
+
 
 }
 
@@ -167,9 +656,8 @@ export const adminStudentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -185,7 +673,6 @@ export const adminStudentFunctions = {
     },
     verify: async function(_data, token){
         try{
-            console.log(_data)
             const res = await axios.patch(`${baseURL}/admin/student/verify`,
             JSON.stringify(_data),
             {
@@ -197,9 +684,8 @@ export const adminStudentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -215,7 +701,6 @@ export const adminStudentFunctions = {
     },
     verify_pledre: async function(_data, token){
         try{
-            console.log(_data)
             const res = await axios.patch(`${baseURL}/admin/student/pledre/toggle`,
             JSON.stringify(_data),
             {
@@ -227,9 +712,8 @@ export const adminStudentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -260,13 +744,42 @@ export const adminFunctions = {
                     return status >= 200 && status < 505;
                 }
             })
-            console.log(res.data);
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                message: err.message,
+                statusCode: 0,
+                success: false
+            }
+        }
+    },
+    fetchEarnings: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/admin/earnings/fetch`, {
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status < 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 message: err.message,
                 statusCode: 0,
@@ -287,15 +800,17 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -316,15 +831,17 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -344,15 +861,17 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -362,7 +881,6 @@ export const adminFunctions = {
     },
     addCategory: async function(_data, token){
         try{
-            console.log(_data)
             const res = await axios.post(`${baseURL}/admin/category/add`,
             JSON.stringify(_data),
             {
@@ -374,15 +892,17 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -402,15 +922,17 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -430,7 +952,6 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -439,6 +960,9 @@ export const adminFunctions = {
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -458,15 +982,937 @@ export const adminFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    addCourse: async function(_data, token){
+        try{
+            const res = await axios.post(`${baseURL}/admin/course/add`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    deleteCourse: async function(token, id){
+        try{
+            const res = await axios.delete(`${baseURL}/admin/course/delete/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    adminUpdateCourse: async function(token, id, _data){
+      
+        try{
+            const res = await axios.put(`${baseURL}/admin/course/update/${id}`, JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    toggleCourseStatus: async function(token, id, courseId){
+        try{
+            const res = await axios.patch(`${baseURL}/admin/course/status/toggle/${id}`, JSON.stringify(courseId),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    deleteCategory: async function(token, id){
+        try{
+            const res = await axios.delete(`${baseURL}/admin/category/delete/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    updateCategory: async function(token, id, _data){
+        try{
+            const res = await axios.put(`${baseURL}/admin/category/update/${id}`, JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchBootcamps: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/admin/bootcamps/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    updateBootcamp: async function(token, id, _data){
+        try{
+            const res = await axios.put(`${baseURL}/admin/bootcamp/update/${id}`, JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    toggleBootcampStatus: async function(token, id){
+        try{
+            const res = await axios.patch(`${baseURL}/admin/bootcamp/toggle/${id}`, {},
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    deleteBootcamp: async function(token, id){
+        try{
+            const res = await axios.delete(`${baseURL}/admin/bootcamp/delete/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    addBootcamp: async function(token, _data){
+        try{
+            const res = await axios.post(`${baseURL}/admin/bootcamp/add`, JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchNotifications: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/admin/notifications/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+// Error from backend
+            if(res.data.message !== "Notifications fetched successfully") throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    readNotifications: async function(token){
+        try{
+            const res = await axios.post(`${baseURL}/admin/notifications/action/read`, {},
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    AddLPHero: async function(_data, token){
+        try{
+            const res = await axios.post(`${baseURL}/admin/settings/homepage/hero/add`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchLPHero: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/admin/settings/homepage/hero/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    updateLPHero: async function(token, id, _data){
+        try{
+            const res = await axios.put(`${baseURL}/admin/settings/homepage/hero/update
+            `, JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    AddCohortSection: async function(_data, token){
+        try{
+            const res = await axios.post(`${baseURL}/admin/settings/cohort/add`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchCohortSection: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/admin/settings/cohort/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    updateCohortSection: async function(token, id, _data){
+        try{
+            const res = await axios.put(`${baseURL}/admin/settings/cohort/update
+            `, JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    AddTPHero: async function(_data, token){
+        try{
+            const res = await axios.post(`${baseURL}/admin/settings/teacherpage/hero/add`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchTPHero: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/admin/settings/teacherpage/hero/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    updateTPHero: async function(token, id, _data){
+        try{
+            const res = await axios.put(`${baseURL}/admin/settings/teacherpage/hero/update
+            `, JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    AddSelfpacedSection: async function(_data, token){
+        try{
+            const res = await axios.post(`${baseURL}/admin/settings/selfpaced/add`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchSelfpacedSection: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/admin/settings/selfpaced/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    updateSelfpacedSection: async function(token, id, _data){
+        try{
+            const res = await axios.put(`${baseURL}/admin/settings/selfpaced/update
+            `, JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchPayment: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/admin/payments/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    getUnreadMessages: async function(token){
+     
+        const res = await axios.get(`${baseURL}/user/unread/message/fetch`,
+        {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+            return res
+        
+    },
+    getMessages: async function(token, id){
+        try{
+            const res = await axios.get(`${baseURL}/user/message/fetch/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    sendMessage: async function(token, data){
+        try{
+            const res = await axios.post(`${baseURL}/user/message/send`, JSON.stringify(data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    readMessage: async function(token, data){
+        try{
+            const res = await axios.patch(`${baseURL}/user/message/mark/read`, JSON.stringify(data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    messageDelivered: async function(token, data){
+        try{
+            const res = await axios.patch(`${baseURL}/user/message/mark/delivered`, JSON.stringify(data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -491,15 +1937,17 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -520,15 +1968,17 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -548,15 +1998,17 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -576,15 +2028,17 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -604,15 +2058,47 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchFees: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/student/payments/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -633,15 +2119,323 @@ export const studentFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
-
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+ 
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            console.error(err)
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    rateCourse: async function(token, id){
+        try{
+            const res = await axios.post(`${baseURL}/user/course/rate/${id}`,
+            // JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    rateTeacher: async function(token, id){
+        try{
+            const res = await axios.post(`${baseURL}/user/teacher/rate/${id}`,
+            // JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    wishlistCourse: async function(courseID, token){
+        try{
+            const res = await axios.post(`${baseURL}/user/wishlist/add/${courseID}`, JSON.stringify({}), 
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchWishlist: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/user/wishlist/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    deleteFromWishlist: async function(token, id){
+        try{
+            const res = await axios.post(`${baseURL}/user/wishlist/remove/${id}`, {},
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    clearWishlist: async function(token, id){
+        try{
+            const res = await axios.delete(`${baseURL}/user/wishlist/clear`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    addBootcamp: async function(_data, token){
+        try{
+            const res = await axios.post(`${baseURL}/user/bootcamp/add`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+ 
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            console.error(err)
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchBootcamps: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/student/bootcamps/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchNotifications: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/user/notifications/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+// Error from backend
+            if(res.data.message !== "Notifications fetched successfully") throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    readNotifications: async function(token){
+        try{
+            const res = await axios.post(`${baseURL}/user/notifications/action/read`, {},
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -669,15 +2463,49 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    withdrawalRequest: async function(_data, token){
+
+        try{
+            const res = await axios.post(`${baseURL}/teacher/withdrawal/request`,
+            JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -698,15 +2526,47 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchEarnings: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/user/earnings/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -728,13 +2588,16 @@ export const teacherFunctions = {
             })
         
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -744,7 +2607,6 @@ export const teacherFunctions = {
     },
     addCourse: async function(_data, token){
         try{
-            console.log(_data);
             const res = await axios.post(`${baseURL}/teacher/course/add`,
             JSON.stringify(_data),
             {
@@ -756,15 +2618,17 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -774,7 +2638,7 @@ export const teacherFunctions = {
     },
     fetchCourse: async function(_id, token){
         try{
-            const res = await axios.get(`${baseURL}/user/course/${_id}`,
+            const res = await axios.get(`${baseURL}/course/${_id}`,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -784,15 +2648,17 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -812,15 +2678,17 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -840,15 +2708,139 @@ export const teacherFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
-            console.log(res);
 
-            if(res.data.statusCode === 0) throw new AdvancedError(res.data.message, res.data.statusCode);
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
             }
             
         }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchCourses: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/teacher/courses/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    updateCourse: async function(token, id, _data){
+        try{
+            const res = await axios.put(`${baseURL}/teacher/course/update/${id}`, JSON.stringify(_data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    deleteCourse: async function(token, id){
+        try{
+            const res = await axios.delete(`${baseURL}/teacher/course/delete/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchBootcamps: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/teacher/bootcamps/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
             return {
                 success: false,
                 message: err.message,
@@ -859,3 +2851,397 @@ export const teacherFunctions = {
 }
 
 
+export const otherFunctions = {
+    // CHANGE URL
+
+    fetchMentors: async function(){
+        try{
+            const res = await axios.get(`${baseURL}/mentor/pages/fetch`,
+            {
+                headers: {
+                    // "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchMentor: async function(id){
+        try{
+
+            const res = await axios.get(`${baseURL}/mentor/page/${id}`,
+            {
+                headers: {
+                    // "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchCourses: async function(){
+        try{
+            const res = await axios.get(`${baseURL}/courses/fetch`,
+            {
+                headers: {
+                    // "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchCourse: async function(id){
+        try{
+            const res = await axios.get(`${baseURL}/course/${id}`,
+            {
+                headers: {
+                    // "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchCategories: async function(){
+        try{
+
+            const res = await axios.get(`${baseURL}/categories`,
+            {
+                headers: {
+                    // "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchCategory: async function(data){
+        try{
+
+            const res = await axios.get(`${baseURL}/category/${data}`,
+            {
+                headers: {
+                    // "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    searchCategories: async function(name){
+        try{
+            const res = await axios.get(`${baseURL}/course/category/${name}/fetch`,
+            {
+                headers: {
+                    // "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchBootcamps: async function(){
+        try{
+            const res = await axios.get(`${baseURL}/user/bootcamps/fetch`,
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchTeachers: async function(){
+        try{
+            const res = await axios.get(`${baseURL}/teachers/fetch`,
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchTeacher: async function(id){
+        try{
+            const res = await axios.get(`${baseURL}teacher/fetch/${id}`,
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchAdmin: async function(){
+        try{
+            const res = await axios.get(`${baseURL}/user/admins/fetch`,
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    validateURL:  function(url) {
+        const parsed = new URL(url)
+        return ['https:', 'http:'].includes(parsed.protocol)
+    },
+
+    resetPasswordOTP: async function (_data){
+        const res = await axios.post(`${baseURL}/user/password/otp/send`, 
+        JSON.stringify(_data), {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res
+    },
+
+    resetPassword: async function (_data){
+        const res = await axios.post(`${baseURL}/user/password/reset`, 
+        JSON.stringify(_data), {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            validateStatus: status => {
+                return status >= 200 && status <= 505;
+            }
+        })
+        return res
+    },
+
+    contactUs: async function(data){
+        try{
+            const res = await axios.post(`${baseURL}/user/contact`, JSON.stringify(data),
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+}

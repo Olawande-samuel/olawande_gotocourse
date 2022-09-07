@@ -1,0 +1,249 @@
+
+.back{
+    background:#191046;
+}
+
+.textImage {
+    display: flex;
+    flex-direction:column-reverse;
+    gap: 1.5rem;
+}
+.text_section {
+    color:#fff;
+   
+}
+.text_section_header {
+    font-weight: 900;
+    font-size: clamp(2.1875rem, 1.4732rem + 3.5714vw, 4.6875rem);
+    line-height: clamp(2.5rem, 1.875rem + 3.125vw, 4.6875rem);
+    margin-bottom: 2.3rem;
+}           
+.text_section_p {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 3rem;
+}
+.text_section_button {
+    padding: 15px 28px;
+    color: white;
+    background: var(--theme-orange);
+    border: none;
+    outline: none;
+    border-radius:10px;
+    transition: all .3s ease;
+}
+.text_section_button:hover {
+    background: linear-gradient(180.9deg, #191046 18.68%, rgba(16, 51, 70, 0.95) 97.29%);
+    color: #eee;
+    opacity:0.4;
+}
+
+.image_section{
+    padding-top: 1rem;
+}
+.image_section > div {
+    display: flex;
+    justify-content: center;
+}
+.image_section > div img {
+    max-width:100%;
+    max-height:350px;
+    object-fit:contain;
+    height: 100%;
+}
+@media (min-width: 612px){
+    .textImage {
+        flex-direction:row;
+        justify-content: center;
+        align-items:center;
+        height: 100%;
+    }
+
+    .textImage > div {
+        flex-basis: 100%;
+    }
+    .image_section > div {
+        display: flex;
+        justify-content:flex-end
+    }
+}
+/* CARD */
+.celebrity_card {
+    cursor: pointer;
+}
+.card_content{
+    padding: 1rem .7rem;
+    color: white;
+}
+.card_content h4 {
+    font-weight: 500;
+    font-size: clamp(1.15rem, 1.1071rem + 0.7143vw, 1.3rem);
+    margin-bottom: .2rem;
+}
+.card_content p{
+    margin-bottom: 1.5rem;
+    font-size: 14px;
+    font-weight: lighter;
+}
+.card_img {
+    max-width: 100%;
+    object-position:top;
+    object-fit:cover;
+    width: 100%;
+    height: 300px;
+}
+.see_all {
+    color: #77BBE0;
+    font-size: 13px;
+}
+
+
+.celeb .card_img, .a_list .card_img {
+    max-width: 100%;
+    object-position:unset;
+    object-fit:unset;
+    width: 100%;
+    height: auto;
+}
+
+/* HERO */
+
+.hero {
+    margin-top: 1px;
+    background: linear-gradient(180.9deg, #191046 18.68%, rgba(16, 51, 70, 0.95) 97.29%);
+    padding: 1.5rem 0 2rem 0;
+}
+@media (min-width: 612px){
+    .hero {
+        height:min(100vh - 81px, 500px);
+        padding: 2.5rem 0;
+
+    }
+    
+}
+
+@media (min-width: 712px){
+    .hero {
+        height:min(100vh - 81px, 450px);
+        padding: 2.5rem 0;
+
+    }
+    
+}
+
+
+
+
+/* CELEBRITY MENTORS */
+.slider_wrapper{
+    background: #191046;
+    color: #fff ;
+    padding: 4rem 0 2rem 0;
+}
+.slider_wrapper h2{
+    font-weight: 900;
+    font-size: clamp(1.875rem, 1.5179rem + 1.7857vw, 2.325rem);
+}
+
+.slider_header {
+    margin-bottom: 4rem;
+}
+/* .slider_wrapper > div > div > div > div{
+    color: red;
+    width: 300px !important;
+} */
+
+/* FAVOURITES */
+.favourite {
+    background: #191046;
+    padding: 4rem 0;
+}
+
+
+/* RIGHT MENTORS */
+.right_mentor {
+    background: linear-gradient(180.9deg, #191046 18.68%, rgba(16, 51, 70, 0.95) 97.29%);
+    padding: 4rem 0;
+    border-top: 6px solid #CDCDCD;
+    border-bottom: 6px solid #CDCDCD;
+}
+.right_mentor_img_wrapper {
+    display: flex;
+    justify-content:flex-end;
+}
+.right_mentor_img_item {
+    width: min(100%, 180px);
+    height: 280px;
+    background:var(--theme-orange);
+    margin: 0 -20px;
+    padding: .8rem;
+    border-radius:10px;
+    z-index: 2;
+    color: #fff;
+}
+
+.right_mentor_img_item:nth-child(odd){
+    transform: scale(0.8);
+    background:#7ED4EF ;
+    z-index: 1;
+}
+
+.right_mentor_img_item img {
+    max-width:100%;
+    margin-bottom: 3rem;
+    border-radius:10px;
+    height: auto !important;
+
+}
+.favourite h2, .right_mentor h2 {
+    line-height: 50px;
+    font-size: clamp(1.875rem, 1.5179rem + 1.7857vw, 2.525rem);
+
+}
+@media (max-width:611px){
+    .right_mentor_img_wrapper {
+        justify-content:center;
+        
+    }
+}
+/*  */
+
+
+.new_main .slider_wrapper{
+    padding: 2rem 0 2rem 0;
+}
+.new_main .see_all {
+    display: none;
+}
+
+.input_wrapper {
+    gap: 1rem;
+    flex: 50%;
+}
+
+.input_wrapper input {
+    padding: 14px 30px;
+    font-size: 14px;
+    background: rgba(217, 217, 217, 0.4);
+    border-radius: 10px;
+}
+
+.input_wrapper button {
+    padding: 5px 20px;
+}
+
+.top {
+    margin-bottom: 1.8rem;
+}
+
+.top h3 {
+    flex: 50%;
+}
+.top .niche {
+    margin-bottom: .3rem ;
+    
+  }
+  
+  .top ul li p:first-child {
+    font-weight: 700;
+  } 

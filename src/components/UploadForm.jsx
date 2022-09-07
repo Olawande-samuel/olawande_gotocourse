@@ -1,33 +1,41 @@
 import {useState} from "react"
 import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 import clsx from "./globalStyles.module.css";
 import {useAuth} from "../contexts/Auth";
 import { AdvancedError } from "../classes";
+import { useLocalStorage } from "../hooks";
 
 
 
 
+const KEY = 'gotocourse-userdata';
+const UploadForm = ({isOpen, setIsOpen, setPreviewImage }) => {
+    const navigate = useNavigate()
 
-const UploadForm = ({isOpen, setIsOpen}) => {
-    const {adminFunctions: {uploadFile}, generalState: {userdata}} = useAuth();
+    const {adminFunctions: {uploadFile}} = useAuth();
+    const {getItem} = useLocalStorage();
+    const value = getItem(KEY);
     const [imageUrl, setImageUrl] = useState(null);
     const [file, setFile] = useState(null);
     const [data, setData] = useState(null);
-
-
+    const [loading, setLoading] = useState(false)
+ 
 
     async function uploadFileHandler(e){
         try{
+            setLoading(true)
             const formdata = new FormData();
             formdata.append('file', file, file.name);
-            const res = await uploadFile(formdata, userdata?.token);
-            console.log(res);   
+            const res = await uploadFile(formdata, value?.token);
+            setLoading(false)
+
             const {success, message, statusCode} = res;
-            if(!success) throw new AdvancedError(message, statusCode);
+            if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
             else {
+
                 const {data} = res;
-                console.log(data);
                 setData(_ => data.name);
                 toast.success(message,{
                     position:"top-right",
@@ -42,6 +50,8 @@ const UploadForm = ({isOpen, setIsOpen}) => {
                 })
             }
         }catch(err){
+            console.error(err.statusCode)
+            setLoading(false)
             toast.error(err.message,{
                 position:"top-right",
                 autoClose: 5000,
@@ -53,8 +63,14 @@ const UploadForm = ({isOpen, setIsOpen}) => {
                 draggable: true,
                 pauseOnHover: true
             })
+            if(err.statusCode === 2){
+                localStorage.clear()
+                // navigate("/")
+            }
         }
+
     }
+
     async function copy(_source){
         await window.navigator.clipboard.writeText(_source);
         toast.success("Copied successfully",{
@@ -73,7 +89,6 @@ const UploadForm = ({isOpen, setIsOpen}) => {
     function triggerUpload(e){
         e.stopPropagation();
         let input = document.getElementById("uploadFile");
-        console.log(input);
         input.click();
     }
 
@@ -84,6 +99,7 @@ const UploadForm = ({isOpen, setIsOpen}) => {
             setImageUrl(_ => {
                 return URL.createObjectURL(files[0]);
             })
+            setPreviewImage(URL.createObjectURL(files[0]))
         }
     }
 
@@ -91,23 +107,34 @@ const UploadForm = ({isOpen, setIsOpen}) => {
         isOpen && 
         (<div className={clsx.upload_file__background} onClick={e => {
             if(e.target === e.currentTarget) {
-                console.log("Reached")
                 setIsOpen(_ => false);
             }
         }}>
             <div className={clsx.uploda_file__container}>
-                {data && <input type="text" readOnly value={data} onClick={e => copy(e.currentTarget.value)} />}
+                {data && 
+                <>
+                <small className="d-block text-danger">Click the button below to copy file name</small>
+                <small className="d-block text-danger">Paste content in the appropriate field</small>
+                <input className="w-100" style={{cursor: "pointer"}} type="text" readOnly value={data} onClick={e => copy(e.currentTarget.value)} />
+                </>
+                }
                 <div className={clsx.upload_file} onClick={triggerUpload}>
                     <input type="file" onChange={changeHandler} id="uploadFile" />
                     {imageUrl ? <img src={imageUrl} alt="Preview" /> : (<>
-                    <h5>Click to Upload</h5>
-                    <p>Only jpeg, jpg, png images are allowed</p>
+                    <h5 className="text-dark">Click to Upload</h5>
+                    {/* <p>Only jpeg, jpg, png images are allowed</p> */}
                     </>) }
                 </div>
 
                 {imageUrl && (
                     <div className={clsx.upload_final}>
+                        {loading ? 
+                        <div className="spinner-border text-primary" role="status" style={{width:"4rem", height:"4rem"}}>
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                        :
                         <button onClick={uploadFileHandler}>Upload</button>
+                        }
                     </div>
                 )}
             </div>

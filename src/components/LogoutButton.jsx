@@ -3,19 +3,18 @@ import {motion} from "framer-motion";
 import {useNavigate} from "react-router-dom"
 
 import clsx from "./globalStyles.module.css";
-import  {useCookie} from "../hooks";
+import  {useLocalStorage} from "../hooks";
 
-
+import {MdLogout} from "react-icons/md"
 
 
 
 const LogoutButton = () => {
     const navigate = useNavigate()
-    const {clearCookie} = useCookie();
+    const {removeItem} = useLocalStorage();
 
 
     function mouseOverHandler(e){
-        console.log(e.currentTarget);
         e.currentTarget.width = 50;
     }
 
@@ -23,9 +22,10 @@ const LogoutButton = () => {
     async function logout(){
         //clear everything
         try{
-            const res = await clearCookie();
-            console.log(res);
-            navigate("/")
+            const key = 'gotocourse-userdata';
+            removeItem(key);
+            localStorage.clear()
+            navigate("/login");
             toast.success("Logout out successfully",{
                 position:"top-right",
                 autoClose: 5000,
@@ -54,6 +54,7 @@ const LogoutButton = () => {
 
     return (
         <motion.span
+        style={{marginTop:"auto"}}
         transition={{
             delay: 1,
             x: {type: "spring", stiffness: 20},
@@ -63,10 +64,18 @@ const LogoutButton = () => {
         }}
         //  animate={{ x: 100, y: 100, opacity: 1 }}
         //  whileHover={{}}
-         className={clsx.general_logout__button} onMouseOver={mouseOverHandler} onClick={logout}>
-            <motion.button>
-                Logout
-            </motion.button>
+         className={clsx.general_logout__button} onMouseOver={mouseOverHandler} onClick={logout}> 
+            <>
+                <i className="d-lg-none">
+                    <MdLogout size="1.5rem" color="#F75C4E" />
+                </i>
+                <motion.button className="d-none d-lg-flex" style={{minWidth:"130px"}} >
+                    <i>
+                        <MdLogout size="1.5rem" className="me-1" />
+                    </i>
+                    <span>Logout</span>
+                </motion.button>
+            </>
         </motion.span>
     )
 }

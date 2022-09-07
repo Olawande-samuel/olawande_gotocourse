@@ -10,9 +10,9 @@ export function Jumbotron(){
         <div className={clsx.jumbotron}>
             <div className={`container ${clsx.jumbotron__cover}`}>
             <div className={clsx.jumbotron__absolute}>
-                <h1>There Is No Successful Student Without A <br/>Teacher</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Platea ac neque amet, sagittis, laoreet augue consequat vestibulum egestas nunc sed quisque in sit ridiculus.</p>
-                <div className="text-center text-sm-start w-100">
+                <h1>There Is No Successful Student Without A Teacher</h1>
+                <p>Absolutely, no one can succeed in their practical lives without teachers. Students also need someone who can show simplify terms in real life. Not only as a coach, but start as a mentor to guide students along their academic lives.</p>
+                <div className="w-100" style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <Link to="/teacher/signup">
 
                 <motion.button

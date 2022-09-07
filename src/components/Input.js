@@ -1,8 +1,8 @@
 import React from "react";
 
-const Input = ({ label, type, name, handleChange, value,placeholder }) => {
+const Input = ({ label, type, name, handleChange, readOnly, value,placeholder, ...props }) => {
   return (
-    <div className="form-group my-1">
+    <div className="form-group my-1" {...props}>
       <label htmlFor={name} className="form-label generic_label">
         {label}
       </label>
@@ -11,6 +11,7 @@ const Input = ({ label, type, name, handleChange, value,placeholder }) => {
           type={type ? type: "text"}
           id={name}
           name={name}
+          readOnly={readOnly}
           className="form-control generic_input"
           placeholder={placeholder}
           onChange={handleChange}

@@ -33,6 +33,7 @@
     flex: 1;
     background-color: var(--primary);
     padding: 30px;
+    padding-bottom:1px ;
     overflow-y: hidden;
     display: flex;
     flex-direction: column;
@@ -40,7 +41,7 @@
 }
 
 .admin_topbar {
-    width: 80%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -48,7 +49,7 @@
 }
 
 .admin_profile_main h1 {
-    margin: 30px 0px;
+    margin: 10px 0 30px 0px;
     font-size: 1.5rem;
 }
 
@@ -58,12 +59,26 @@
 }
 .admin_profile {
     background-color:var(--white);
-    height: 80vh;
-    padding: 40px;
+    min-height: 82vh;
+    padding:20px;
     border-radius: 10px;
     width: 100%;
     overflow-y: scroll;
 }
+
+.admin_profile::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .admin_profile::-webkit-scrollbar-track {
+    /* background: #eee;  */
+    background: #eee; /* color of the tracking area */
+  }
+  .admin_profile::-webkit-scrollbar-thumb {
+    background-color: #838383; /* color of the scroll thumb */
+    border-radius: 10px; /* roundness of the scroll thumb */
+    /* border: 3px solid orange;  */
+  }
 .admin_profile_top {
     display: flex;
     align-items: center;
@@ -151,10 +166,14 @@
 }
 
 .admin__student h1{
-    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    font-size: clamp(1.15rem, -0.2429rem + 3.7143vw, 1.8rem);
     font-weight: 400;
     margin-bottom: 30px;
 }
+.admin__student h5{
+    font-size: clamp(1.12rem, -0.2429rem + 3.7143vw, 1.25rem);
+}
+
 
 .admin__student_table {
     border: none;
@@ -163,6 +182,26 @@
 .admin__student_table thead {
     height: 70px;
     text-align: center;
+    font-weight: bold;
+}
+
+.edit__profile {
+    width: 80%
+}
+
+.edit__profile form div {
+    margin: 15px 0px;
+}
+
+.edit__profile form div label {
+    color: rgba(103, 131, 145, 1);
+    margin: 5px;
+    font-size: 0.9rem;
+}
+
+.edit__profile form div input {
+    border: 1px solid rgba(208, 204, 204, 0.5);;
+    background-color: var(--primary);
 }
 
 .admin__student_table tbody{
@@ -173,13 +212,98 @@
 .user__info_card{
    height: 90px;
    cursor: pointer;
+   border-radius: 10px;
 }
+
 .user__info_card td{
    height: 90px;
    letter-spacing: var(--letterSpacing);
-   text-align: center
+   text-align: start
 }
 
+.user__info_card:hover {
+    background-color: rgba(230,230,230,0.3);
+}
+
+.form_group__teachers {
+    width: 100%;
+    padding-top: 10px;
+}
+
+.form_group__teachers label {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.form_group__teachers > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+.form_group__teachers > div p {
+    font-weight: bold;
+    margin: 0px;
+}
+.teachers__actions_delete {
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.teachers__actions_edit {
+    margin-left: 15px;
+    cursor: pointer;
+    color: var(--textColorLight);
+}
+
+.form_group__button {
+    width: 40%;
+    margin-top: 10px;
+    background-color: var(--info);
+    border-radius: 5px;
+    padding: 10px 30px;
+    border: none;
+    color: var(--white);
+}
+
+.upload__file_box {
+    width: 80%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--textColorLighter);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.upload__file_box:hover {
+    background-color:rgba(208, 204, 204, 0.2)
+}
+
+.upload__file_box p {
+    margin: 0px;
+    margin-top: 15px;
+    color: var(--secondary);
+}
+.form_button__container {
+    margin-top: 30px;
+}
+
+
+.form_button__container button {
+    padding: 10px 40px;
+    margin-right: 30px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+}
+
+
+.teachers__actions_edit svg, .teachers__actions_delete svg {
+    font-size: 1.5rem;
+}
 
 .user__details {
     display: flex;
@@ -189,7 +313,7 @@
     margin-left: 10px;
     margin-top: 20px;
     font-weight: 400;
-    font-size: 1.1rem
+    font-size: clamp(0.8rem, -0.2429rem + 3.7143vw, 1rem)
 }
 
 .user__details img {
@@ -203,6 +327,7 @@
 @media screen and (max-width: 390px){
     .admin_profile_top {
         align-items: flex-start;
+        justify-content: between;
     }
 
     .admin_profile_top span {
@@ -210,9 +335,7 @@
     }
     .admin_profile_top_button {
         display: grid;
-        place-items:center;
-        /* padding: 10px 15px; */
-        
+        place-items:center; 
     }
 
     .admin_profile_top_button svg {
@@ -254,7 +377,7 @@
 }
 
 .admin__info_content {
-    font-size: 1.15rem;
+    font-size: clamp(0.8rem, -0.2429rem + 3.7143vw, 1.15rem);
 }
 
 
@@ -349,12 +472,12 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
-    /* margin: 20px 0px; */
 }
 
 .form_group label {
     margin-bottom: 10px;
-    color: var(--textBlue)
+    color: rgba(103, 131, 145, 1);
+    font-size: 0.9rem;
 }
 
 .form_group select {
@@ -380,7 +503,7 @@
 }
 
 .admin__student form div label {
-    color: var(--textBlue);
+    color: rgba(103, 131, 145, 1);
     margin: 5px;
 }
 
@@ -393,12 +516,26 @@
     font-size: 0.6rem;
 }
 
+.admin__notification_button {
+    border: 0.5px solid;
+    background: #fff;
+    color:var(--theme-orange);
+    padding: 4px;
+    transition: all .53s ease;
+    font-size:11px;
+}
 
+.admin__notification_button:hover{
+    background:var(--theme-orange);
+    color:#fff;
+
+}
 .addniche_button, .addcareer_button {
     font-size: 0.8rem;
     background-color:rgba(208, 204, 204, 0.5);
 
 }
+
 
 .syllabus_container {
     display: flex;
@@ -417,4 +554,45 @@
     font-size: 0.7rem;
     letter-spacing: 0.4px;
     color: var(--textColorLight);
+}
+
+
+.notification {
+    display: flex;
+    flex-wrap:wrap;
+    align-items: center;
+    border-radius: 10px;
+    transition:all .5s ease;
+    padding: 18px 8px;
+    outline-color:#DFE0EB;
+    cursor:pointer;
+
+}   
+.notification:hover {
+    outline: 1.5px solid #DFE0EB;
+
+}
+.notification span{
+    flex: 0.5;
+    /* background:blue; */
+}
+.notification span:nth-child(2){
+    flex: 2;
+    /* background:red; */
+}
+
+@media screen and (max-width:580px){
+    .notification {
+        flex-direction:column-reverse;
+        align-items: flex-start;
+
+    } 
+    .admin_student button {
+        padding: 5px !important;
+    }
+}
+@media screen and (min-width:997px){
+    .notification {
+        padding: 26.67px 43px 19px 43px;
+    }
 }

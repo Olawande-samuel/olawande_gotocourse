@@ -1,72 +1,32 @@
 import React, { useState, useRef, useEffect } from "react";
 import Logo from "../images/Logo.png";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import {motion} from 'framer-motion'
-import {Link} from "react-router-dom"
+import { FaRegUser } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+
+import { Logosm } from "../images/components/svgs";
+
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+
+import { categories as navList } from "../data";
 import { useAuth } from "../contexts/Auth";
-const navList = [
-  {
-    id: 1,
-    title: "Cybersecurity",
-    link: "/categories/cybersecurity"
-  },
-  {
-    id: 2,
-    title: "Risk Management",
-    link: "/categories/risk-management"
-  },
-  {
-    id: 3,
-    title: "Data Science",
-    link: "/categories/data-science"
-  },
-  {
-    id: 4,
-    title: "Project Management",
-    link: "/categories/project-management"
-  },
-  {
-    id: 5,
-    title: "IT compliance",
-    link: "/categories/it-compliance"
-  },
-  {
-    id: 6,
-    title: "IT Audit",
-    link: "/categories/it-audit"
-  },
-  {
-    id: 7,
-    title: "Business Analysis",
-    link: "/categories/business-analysis"
-  },
-  {
-    id: 8,
-    title: "Product Design",
-    link: "/categories/product-design"
-  },
-  {
-    id: 9,
-    title: "Web Design",
-    link: "/categories/web-design"
-  },
-  {
-    id: 10,
-    title: "Software Development",
-    link: "/categories/software-development"
-  },
-  {
-    id: 11,
-    title: "IT Service Management",
-    link: "/categories/it-service-management"
-  },
-];
-const Navbar = () => {
+import { useLocalStorage } from "../hooks";
+import { ScrollToTop } from "../pages/Courses";
+
+const KEY = "gotocourse-userdata";
+
+const Navbar = ({ background }) => {
   const { setGeneralState } = useAuth();
-
-
   const [show, setShow] = useState(false);
   const [drop, setDrop] = useState(false);
+  const { getItem } = useLocalStorage();
+
+  const value = getItem(KEY);
+  const location = useLocation();
+
   const toggleNav = () => {
     setShow(!show);
   };
@@ -77,27 +37,40 @@ const Navbar = () => {
 
   const dropRef = useRef(null);
   const heightRef = useRef(null);
-  
+
   const status = OutsideClick(dropRef);
+
   useEffect(() => {
-    if (status === true) {
-      setDrop(false);
-    }
-    let navbarHeight = heightRef.current.clientHeight
+    localStorage.setItem("g2cNavHeight", heightRef.current.clientHeight);
     setGeneralState((old) => {
       return {
         ...old,
-        navHeight: navbarHeight
+        navHeight: heightRef.current.clientHeight,
       };
     });
-  }, [drop,status]);
-  return (
-    <nav ref={heightRef} className="nav navbar navbar-expand-lg navbar-light" style={{borderBottom: "1px solid rgba(159, 159, 159, .3)"}}>
+  }, []);
 
+  const celebRoute = location.pathname.split("/")[1] === "lounge";
+  function showDrop() {}
+  return (
+    <nav
+      ref={heightRef}
+      section="top"
+      className="nav navbar navbar-expand-lg navbar-dark"
+      style={{
+        background: celebRoute ? "#191046" : "var(--theme-blue)",
+        color: "#fffff",
+      }}
+    >
+      <ScrollToTop />
       <div className="container navbar-container align-items-center">
-        <a href="/" className="logo navbar-brand ">
-          <img src={Logo} alt="Brand Name" />
-        </a>
+        <Link
+          to="/"
+          onClick={() => window.scrollTo(0, 0)}
+          className="logo navbar-brand "
+        >
+          <Logosm />
+        </Link>
         <button type="button" className="navbar-toggler " onClick={toggleNav}>
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -108,74 +81,129 @@ const Navbar = () => {
           id="navbarNav"
         >
           <ul className="navbar-nav me-5">
-            <li className="nav-item holder">
-              <button
-                type="button"
-                className="link nav-link courses"
-                onClick={toggleDrop}
-              >
-                Categories
-                <span>
-                  <i>
-                    <MdOutlineKeyboardArrowDown
-                      style={{ fontSize: "20px" }}
-                      className={`drop_caret ${drop ? "rotate" : ""}`}
-                    />
-                  </i>
-                </span>
-              </button>
-              {drop ? <NavList dropRef={dropRef} /> : null}
-            </li>
-            {/* <li className="nav-item d-flex align-items-center nav_link me-2"><Link to="/students" className="link">Go to Dashboard</Link></li> */}
-            <li className="nav-item d-flex align-items-center nav_link"><Link to="/become-a-teacher" className="link">Become a Teacher</Link></li>
-            <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/login" className="link">Sign In</Link></li>
-            <li className="nav-item d-flex align-items-center nav_link d-lg-none"><Link to="/signup" className="link">Register</Link></li>
+            {(location.pathname.split("/")[1] === "" || celebRoute) && (
+              <li className="nav-item holder">
+                <Link className="link nav-link courses me-4" to="/categories">
+                  Categories
+                </Link>
+                {drop ? <NavList dropRef={dropRef} /> : null}
+              </li>
+            )}
+            {value?.token ? (
+              ""
+            ) : (
+              <>
+                <li className="nav-item d-flex align-items-center nav_link  me-4">
+                  <HowItWorks />
+                </li>
+                <li className="nav-item d-flex align-items-center nav_link">
+                  <Link to="/become-a-teacher" className="link">
+                    Become a Teacher
+                  </Link>
+                </li>
+                <li className="nav-item d-flex align-items-center nav_link d-lg-none">
+                  <Link to="/login" className="link">
+                    Sign In
+                  </Link>
+                </li>
+                <li className="nav-item d-flex align-items-center nav_link d-lg-none">
+                  <Link to="/students" className="link">
+                    Register
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
-          <Link to="/login">
+          {value?.token ? (
+            <Link
+              to={`${
+                value.userType === "admin"
+                  ? "/admin"
+                  : value.userType === "student"
+                  ? "/student"
+                  : "/teacher"
+              }`}
+            >
+              <div
+                className="d-flex align-items-center"
+                style={{ color: "#fff", fontSize: "20px" }}
+              >
+                <i
+                  className="d-flex align-items-center justify-content-center me-2"
+                  style={{ color: "#fff" }}
+                >
+                  <FaRegUser />
+                </i>
+                <span>{value.firstName}</span>
+              </div>
+            </Link>
+          ) : (
+            <>
+              <Link to="/login">
+                <motion.button
+                  type="button"
+                  className="btn-plain button-md d-none d-lg-block signup newLogin"
+                  whileHover={{
+                    textShadow: "0px 0px 8px rgb(255, 255, 255)",
+                    boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                  }}
+                  transition={{ duration: 0.1 }}
+                >
+                  <span>Sign in</span>
+                </motion.button>
+              </Link>
 
-          <motion.button type="button" className="button button-md d-none d-lg-block signup"
-          whileHover={{
-            textShadow: "0px 0px 8px rgb(255, 255, 255)",
-            boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-          }}
-          transition={{duration: 0.1}}
-          
-          >
-            <span>Sign in</span>
-          </motion.button>
-          </Link>
-
-          <Link to="/signup">
-          <motion.button type="button" className=" btn-plain d-none d-lg-block"
-          whileHover={{
-            textShadow: "0px 0px 8px rgb(255, 255, 255)",
-            boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-          }}
-          transition={{duration: 0.1}}
-          
-          >
-            <span>Register</span>
-          </motion.button>
-          </Link>
+              <Link to="/students">
+                <motion.button
+                  type="button"
+                  className=" btn-plain d-none d-lg-block newRegister"
+                  whileHover={{
+                    textShadow: "0px 0px 8px rgb(255, 255, 255)",
+                    boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                  }}
+                  transition={{ duration: 0.1 }}
+                >
+                  <span>Register</span>
+                </motion.button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
   );
 };
+
 const NavList = ({ dropRef }) => {
+  const navigate = useNavigate();
+
   return (
-    <motion.div 
-    initial={{opacity:0}}
-    animate={{opacity: 1}}
-    transition={{duration: 0.3}}
-    className="drop" ref={dropRef}
-    
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="drop"
+      ref={dropRef}
     >
       <ul>
         {navList.map((list) => (
-          <li key={list.id}>
-            <Link to={list.link}>{list.title}</Link>
-           
+          <li key={list.name}>
+            <div
+              className="text-capitalize"
+              style={{ cursor: "pointer", fontSize: "14px" }}
+              onClick={() => {
+                delete list.logo;
+                localStorage.setItem(
+                  "gotocourse-category",
+                  JSON.stringify(list)
+                );
+                navigate(
+                  `/categories/${list.name.split(" ").join("-").toLowerCase()}`
+                );
+              }}
+            >
+              {list.name}
+            </div>
           </li>
         ))}
       </ul>
@@ -200,6 +228,67 @@ function OutsideClick(ref) {
     };
   }, [ref]);
   return isClicked;
+}
+
+export function HowItWorks() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate()
+  
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (user) => {
+    setAnchorEl(null);
+    if (user === "student") {
+      navigate("/student-how-it-works");
+    } else if (user === "affiliate") {
+      navigate("/affiliate-how-it-works");
+    } else if (user === "teacher") {
+      navigate("/teachers-how-it-works");
+    } else {
+      navigate("/lounge/how-it-works");
+    }
+
+  };
+
+  return (
+    <div>
+      <p
+        id="basic-button"
+        aria-controls={open ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        onClick={handleClick}
+        style={{
+          background: "inherit",
+          color: "#fff",
+          textTransform: "capitalize",
+          marginBottom: "0",
+          fontSize: "14px",
+        }}
+      >
+        How It Works
+      </p>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+        style={{ zIndex: 2500 }}
+      >
+        <MenuItem onClick={() => handleClose("student")}>For Students</MenuItem>
+        <MenuItem onClick={() => handleClose("mentor")}>For Mentors</MenuItem>
+        <MenuItem onClick={() => handleClose("teacher")}>For Teacher</MenuItem>
+        <MenuItem onClick={() => handleClose("affiliate")}>
+          For Affiliates
+        </MenuItem>
+      </Menu>
+    </div>
+  );
 }
 
 export default Navbar;

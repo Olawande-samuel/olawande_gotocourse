@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import React from "react";
 import Tech from "../images/fast.webp";
 import Image from "./Image";
+import React from "react";
 import { Link } from "react-router-dom";
 
 const Transition = () => {

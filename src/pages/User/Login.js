@@ -3,18 +3,25 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
-
-
-import { useCookie } from "../../hooks";
+import {useMutation} from "@tanstack/react-query"
+import {motion} from "framer-motion"
+import { useLocalStorage } from "../../hooks";
 import { useAuth } from "../../contexts/Auth";
+import { KEY } from "../../constants";
 import { ToastContainer, toast } from "react-toastify";
 import { AdvancedError } from "../../classes";
+import goo from "../../images/goo.png"
+import face from "../../images/face.png"
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { authentication, provider, facebookProvider } from "../../firebase-config.js"
+
+
 
 
 const Login = () => {
   const navigate = useNavigate()
-  const {authFunctions: {login}, setGeneralState} = useAuth();
-  const {saveCookie, removeCookie, isCookie} = useCookie();
+  const {authFunctions: {login,googleSignIn, facebookSignIn}, generalState:{pledre}, setGeneralState} = useAuth();
+  const {getItem, removeItem} = useLocalStorage();
 
   const [data, setData] = useState({
     email: "",
@@ -22,6 +29,8 @@ const Login = () => {
     userType: ""
   });
   
+
+
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -39,33 +48,40 @@ const Login = () => {
     if(data.email.trim() === "" || data.password.trim() === "") return;
     setLoading(true);
     try {
-      // if(data.userType.trim() === "") throw new AdvancedError("Missing user type", 0);
       const response = await login(data, "user");
-
       console.log(response)
       const {success, statusCode, message} = response;
       
       if(success) {
         const {data: d} = response;
-        const key = 'gotocourse-userdata';
-
-        //before navigating
-        //save some thing to cookie and state
-        if(isCookie(key)){
-          removeCookie(key);
-        }
-        saveCookie(key, d);
+        console.log({response})
+        removeItem(KEY);
         setGeneralState(old => {
           return {
             ...old,
             notification: response.message
           }
-        })
-        navigate(`${d.userType === 'student' ? "/students" : "/teacher"}`);
+        }) 
+        if(d.userType === "student"){
+          getItem(KEY, d);
+
+          navigate("/student")
+
+        } else if(d.userType === "teacher" || d.userType === "mentor"){
+
+          if(d.canTeach){
+            getItem(KEY, d);
+            navigate("/teacher")
+          
+          } else {
+            
+            throw new AdvancedError("Your application is under review. Kindly check back later", 0)
+          }
+        } 
       }else throw new AdvancedError(message, statusCode);
 
     } catch (err) {
-      console.error(err);
+      console.error(err.message);
       if (err.statusCode === 0 || err.statusCode === undefined) {
         toast.error(err.message, {
           position: "top-right",
@@ -81,9 +97,95 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+
+  // SOCIAL LOGIN
+  async function socialSignIn(token, type){
+    try{
+      const res = type === "google" ? await googleSignIn(token) : await facebookSignIn(token)
+      if(res.data?.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode)
+      if(res.data.data.userType === "student"){
+        localStorage.setItem(KEY, JSON.stringify(res.data?.data));    
+        getItem(KEY, res.data);
+        navigate("/student")
+        
+      } else if(res.data.data.userType === "teacher" || res.data.data.userType === "mentor"){
+      // check to see if they've been approved
+        if(res.data.data.canTeach){
+          localStorage.setItem(KEY, JSON.stringify(res.data?.data));    
+          navigate("/teacher")
+        
+        } else {
+          throw new AdvancedError("Your application is under review. Kindly check back later", 0)
+        }
+      } 
+    }catch(err){
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
+   
+  function signInWithGoogle(e){
+    e.preventDefault()
+    signInWithPopup(authentication, provider).then(res=>{
+        console.log(res)
+        if(res.user?.accessToken){
+         let token =  {
+          accessToken: res.user.accessToken
+        }
+        socialSignIn(token, "google")
+       }
+    }
+    ).catch(err=>{
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+    )
+  }
+   function signInWithFacebook(e){
+    e.preventDefault()
+    signInWithPopup(authentication, facebookProvider).then(res=>{
+      console.log(res)
+      if(res.user?.accessToken){
+        if(res.user?.accessToken){
+          let token =  {
+          accessToken: res.user.accessToken
+         }
+         socialSignIn(token, "facebook")
+        }
+      }
+    }
+  ).catch(err=>{
+        console.error(err)
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    )
+  }
   return (
     <SignInWrapper>
-      <ToastContainer
+    <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -94,75 +196,85 @@ const Login = () => {
         draggable
         pauseOnHover
       />
-      
       <div className="form-wrapper w-100">
         <header>
           <h3 className="title">
           Sign In
           </h3>
         </header>
-        <form className="form" onSubmit={onSubmit}>
-          <Input
-            label="Email"
-            name="email"
-            type="email"
-            handleChange={handleChange}
-            value={data.email}
-            placeholder="Email"
-          />
-          <Password
-            label="Password"
-            name="password"
-            password="password"
-            handleChange={handleChange}
-            value={data.password}
-            placeholder="Password"
-          />
-          <p className="mt-3">
-             <span>Forgot password? </span>
-             <Link to="/reset-password">Click here to reset</Link>
-            </p>
-          {/* <div className="form-check ">
-            <input
-              className="form-check-input me-4"
-              type="radio"
-              name="userType"
-              id="flexRadioDefault1"
-              value="student"
-              onChange={handleChange}
-            />
-            <label className="form-check-label" htmlFor="flexRadioDefault1">
-              Student
-            </label>
-          </div>
-          <div className="form-check mb-5">
-            <input
-              className="form-check-input me-4"
-              type="radio"
-              name="userType"
-              id="flexRadioDefault2"
-              value="teacher"
-              onChange={handleChange}
-            />
-            <label className="form-check-label" htmlFor="flexRadioDefault2">
-              Teacher
-            </label>
-          </div> */}
-          {loading ? (
-            <button className="button button-md log_btn w-100">
+        <div className="social_signIn_wrapper">
+          <motion.button className="facebook d-block mb-3"
+            whileHover={{ 
+              boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+              textShadow:"0px 0px 8px rgb(255, 255, 255)",
+              backgroundColor: "#eee"
+            }}
+            onClick={signInWithGoogle}
+          >
+              <i className="me-4">
+                  <img src={goo} alt="" width={25} height={25} />
+              </i>
+              Continue with Google
+          </motion.button>
+          
+            <motion.button className="google d-block mb-3"
+              whileHover={{ 
+                boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                textShadow:"0px 0px 8px rgb(255, 255, 255)",
+                backgroundColor: "#eee"
+              }}
+              onClick={signInWithFacebook}
+            >
+            <i className="me-2">
+                    <img src={face} alt="" width={25} height={25} />
+                </i>
+                Continue with Facebook
+            </motion.button>
+          <small className="or d-block"><span>or</span></small>
+        </div>
+     <form className="form" onSubmit={onSubmit}>
+        <Input
+          label="Email"
+          name="email"
+          type="email"
+          handleChange={handleChange}
+          value={data.email}
+          placeholder="Email"
+        />
+        <Password
+          label="Password"
+          name="password"
+          password="password"
+          handleChange={handleChange}
+          value={data.password}
+          placeholder="Password"
+        />
+        <p className="mt-3">
+            <span>Forgot password? </span>
+            <Link to="/forgot-password">Click here to reset</Link>
+          </p>
+        {
+          loading ? 
+          (
+            <button className="button button-md log_btn w-100" 
+            disabled={loading}>
               <div className="spinner-border" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
             </button>
-          ) : (
+          ) 
+          :
+          (
             <button
-              className="button button-md log_btn w-100"
+              className="button button-md log_btn w-100" 
+              disabled={loading}
               type="submit"
             >
               Sign In
             </button>
-          )}
-        </form>
+          )
+        }
+      </form>
         <p className="mt-5">
           <span>Do not have an account? </span>
         <Link to="/signup"> Register</Link></p>

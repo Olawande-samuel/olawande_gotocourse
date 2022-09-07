@@ -8,14 +8,18 @@ import Input from '../../components/Input'
 import Password from '../../components/Password'
 import SignInWrapper from '../../components/SignInWrapper';
 import {useAuth} from "../../contexts/Auth";
-import { useCookie } from "../../hooks";
+import { useLocalStorage } from "../../hooks";
 
 
 
 
+const KEY = 'gotocourse-userdata'
 const AdminSignup = () => {
+  const emailReg = new RegExp(/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/)
+  const passReg = new RegExp(/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/)
+
   const navigate = useNavigate();
-  const { saveCookie, isCookie, removeCookie } = useCookie();
+  const {getItem, removeItem} = useLocalStorage();
   const {
     authFunctions: { register },
     setGeneralState,
@@ -26,8 +30,8 @@ const AdminSignup = () => {
     email: "",
     password: "",
     retype_password: "",
-    type:"admin"
   })
+  const [focus, setFocus] = useState(false)
 
   function changeHandler(e){
     const {name, value} = e.target;
@@ -43,27 +47,22 @@ const AdminSignup = () => {
     e.preventDefault();
     setLoading(_ => true);
     try{
+      if(!emailReg.test(formstate.email) && !passReg.test(formstate.password)) throw new AdvancedError("Invalid email or password")
       if(formstate.password !== formstate.retype_password) throw new Error("Passwords don't match", 0);
       if(formstate.email.trim() === "" || formstate.fullname === "" || formstate.password === "") throw new AdvancedError("All fields are required", 0);
       const {retype_password, ...data} = formstate;
       const res = await register({...data, userType: 'student'}, 'admin');
-      console.log(res);
       const {success, message, statusCode} = res;
       if(!success) throw new AdvancedError(message, statusCode);
       else {
         const {data} = res;
-        //do some stuffs like clear the cookie gotocourse-userdata gotocourse-usertype
-        if(isCookie('gotocourse-userdata') || isCookie('gotocourse-usertype')){
-          removeCookie('gotocourse-userdata');
-          removeCookie('gotocourse-usertype');
-        }
-        saveCookie("gotocourse-userdata", data);
-        saveCookie("gotocourse-usertype", data.userType);
+        //do some stuffs like clear the localStorage
+        removeItem(KEY);
+        getItem(KEY, {...data, userType: 'admin'});
         setGeneralState((old) => {
           return {
             ...old,
             notification: message,
-            userdata: data
           };
         });
         navigate("/admin");
@@ -108,8 +107,26 @@ const AdminSignup = () => {
         <form action="" className="form" onSubmit={submitHandler}>
           <Input label="Fullname" handleChange={changeHandler} value={formstate.fullname} name="fullname" placeholder="Fullname" />
           <Input label="Email" handleChange={changeHandler} value={formstate.email} name="email" type="email" placeholder="Email" />
-          <Password label="Password" handleChange={changeHandler} value={formstate.password} name="password" placeholder="Password"
-          password="password" />
+          <Password 
+            label="Password"
+            handleChange={changeHandler}
+            value={formstate.password}
+            name="password"
+            placeholder="Password"
+            password="password" 
+            focus ={()=>setFocus(true)}
+            blur={()=>setFocus(false)}
+          />
+          {focus && !passReg.test(formstate.password) &&
+            <small style={{fontSize:"11px"}}>
+              <p className="text-danger">Password must satisfy the following conditions</p>
+              <p className="text-danger"> - At least one upper case English letter</p>
+              <p className="text-danger"> - At least one lower case English letter</p>
+              <p className="text-danger"> - At least one digit</p>
+              <p className="text-danger"> - At least one special character</p>
+              <p className="text-danger"> - Minimum eight in length</p>
+            </small>
+          }
           <Password
             label="Confirm Password" 
             handleChange={changeHandler} 
@@ -117,7 +134,7 @@ const AdminSignup = () => {
             name="retype_password"
             placeholder="Confirm Password"
             password="password"
-          />
+            />
           {loading ? (
             <button className="button button-lg log_btn w-100">
               <div className="spinner-border" role="status">

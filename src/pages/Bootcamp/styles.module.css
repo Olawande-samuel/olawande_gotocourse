@@ -1,0 +1,228 @@
+:root {
+    --pry: #0C2191;
+    --red: #F75C4E;
+    --white: #fff;
+}
+
+
+.bootcamp {
+    /* width: 100%; */
+    flex:60%;
+    padding-left: 2%;
+    padding-right: 20%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-block: 0.2rem;
+}
+
+.bootcamp_content {
+    /* padding: 40px; */
+    padding-top: 0px;
+    /* width: 45%; */
+}
+
+.bootcamp_content h2 {
+    font-weight: 700;
+    color: var(--pry);
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+    letter-spacing: 0.3px;
+}
+
+.bootcamp_content p {
+    margin-bottom: 30px;
+    line-height: 2;
+    letter-spacing: 0.3px;
+}
+
+.bootcamp_content button {
+    width: 157px;
+    padding: 15px 30px;
+    border-radius: 10px;
+    border: none;
+    background-color: var(--pry);
+    color: var(--white);
+}
+
+.bootcamp_details {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 50px;
+    padding-right: 20px;
+}
+
+.bootcamp_details div p{
+    margin-bottom: 5px;
+}
+.bootcamp_details div span{
+    color: var(--red);
+}
+
+.bootcamp_image {
+    flex: 40%;
+    height: 100vh;
+    background-color: var(--pry);
+    position: relative;
+    margin-top: 0;
+}
+
+.image_container {
+    position: absolute;
+    height: 65%;
+    width: min(100% - 2rem, 550px);
+    left: -150px;
+    top: 50%;
+    transform:translateY(-50%);
+    border-radius: 10px;
+    background-image: url("../../images/bootcamp.webp");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+
+@media screen and (max-width: 1160px){
+    .image_container {
+        /* width: 500px; */
+        left: -100px;
+    }
+}
+
+
+@media screen and (max-width: 800px){
+    .bootcamp {
+        /* width: 100%; */
+        min-height: 100vh;
+        padding-right: 5%;
+
+    }
+
+    .bootcamp_content {
+        width: 100%;
+        padding-top: 40px;
+        margin-bottom: 30px;
+    }
+
+    .bootcamp_image {
+        width: 100%;
+        position: relative;
+        display: grid;
+        place-items:center;
+    }
+
+    .image_container {
+        /* width: 70%; */
+        /* left: 15%; */
+        /* top: -100px; */
+        /* height: 300px; */
+        margin: auto;
+        position: relative;
+        border: 1px solid;
+
+    }
+    .bootcamp_image {
+    }
+    
+    .image_container {
+        height: 65%;
+        left:0;
+        top: 0;
+        transform:translateY(0);
+        border-radius: 10px;
+        background-image: url("../../images/bootcamp.webp");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+}
+
+
+@media screen and (max-width: 600px){
+    .container {
+        flex-direction: column-reverse;
+        min-height: 100vh;
+    }
+    .bootcamp, .bootcamp_image {
+        /* width: 100%; */
+        min-height:100%;
+        flex:1 1 100%;
+    }
+    .image_container {
+        height: 85%;
+        
+    }
+.bootcamp {
+    padding-right: 2%;
+
+}
+    .bootcamp_image{
+        min-height: 400px;
+    }
+}
+@media screen and (max-width: 560px){
+    .bootcamp_content h2 {
+        font-size: 2rem;
+    }
+    
+    .bootcamp_content p {
+        line-height: 1.8;
+    }
+
+    .bootcamp_content {
+        width: 100%;
+        padding-top: 40px;
+        margin-bottom: 30px;
+    }
+
+    
+}
+
+
+/* bootcamp details */
+
+.bootcampTraining .hero {
+    color: var(--white);
+    background-origin: center;
+    background-blend-mode: multiply !important;
+    background-repeat:no-repeat;
+
+
+}
+.bootcampTraining section:not(:first-child) {
+        margin-block:3.5rem;
+}
+.bootcampTraining .hero .hero_content {
+    display: grid;
+    height:100%;
+    align-items:center;
+}
+
+.bootcampTraining .hero h1 {
+    width: min(100%, 800px);
+    font-size:clamp(38px, 3.5vw + 1rem, 60px);
+    font-weight:800;
+}
+.bootcampTraining h3 {
+    font-size:32px;
+    font-weight:800;
+}
+
+.bootcampTraining .timing {
+    background: var(--theme-blue);
+    color: var(--white);
+    padding-block: 1.5rem;
+}
+.bootcampTraining .timing h4 {
+    font-size:clamp(18px, 3.5vw, 28px);
+}
+
+
+.bootcampTraining ol li,
+.bootcampTraining ul li {
+    line-height:28px;
+}

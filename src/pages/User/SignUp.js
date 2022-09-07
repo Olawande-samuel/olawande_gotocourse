@@ -6,9 +6,15 @@ import SignInWrapper from "../../components/SignInWrapper";
 import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../contexts/Auth";
 import { AdvancedError } from "../../classes";
-import { useCookie } from "../../hooks";
+import { useLocalStorage } from "../../hooks";
 
+
+
+
+const KEY = 'gotocourse-userdata';
 const SignUp = () => {
+  const emailReg = new RegExp(/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/)
+  const passReg = new RegExp(/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/)
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -19,22 +25,23 @@ const SignUp = () => {
     userType: "student",
     fullname: "",
   });
+  const [focus, setFocus] =useState(false)
+
   useEffect(() => {
     if (data.fullname !== "") {
       const name = data.fullname.split(" ");
       setData((old) => {
-        return { ...old, firstName: name[0], lastName: name[1] };
+        return { ...old, firstName: name[0], lastName: name.slice(-1)[0] };
       });
     }
   }, [data.fullname]);
 
-  console.log(data);
-
-  const { saveCookie, isCookie, removeCookie } = useCookie();
+  const { getItem, removeItem } = useLocalStorage();
   const {
-    authFunctions: { register },
+    authFunctions: { register }, generalState,
     setGeneralState,
   } = useAuth();
+  
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -52,42 +59,50 @@ const SignUp = () => {
     setLoading(true);
     try {
       let { retype_password, ...others } = data;
-      if (others.email.trim() === "" || others.password.trim() === "") throw new AdvancedError("Fields cannot be empty", 0);
+      if(!emailReg.test(others.email) || !passReg.test(others.password)) 
+        throw new AdvancedError("Invalid email or password", 0)
+      if (others.email.trim() === "" || others.password.trim() === "")
+       throw new AdvancedError("Fields cannot be empty", 0);
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
-      const response = await register(others, "user");
-
-      let { success, message, statusCode } = response;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        //successfully done
-        //update the cookie
-        const { data } = response;
-        const key = 'gotocourse-userdata';
-        if(isCookie(key)){
-          removeCookie(key);
+        // second dashboard
+        const res = await generalState.pledre.signUpStudent({
+          name:`${data.firstName} ${data.lastName}`,
+          email: data.email,
+          password:`${data.password}`
+        })
+        console.log({res})
+        if(res.approved){
+          // main dashboard
+          const response = await register({...others, pledreStudentId: res._id}, "user");
+          let { success, message, statusCode } = response;
+          if (!success) throw new AdvancedError(message, statusCode);
+          else {
+            const { data } = response;
+            removeItem(KEY);
+            // set item
+            getItem(KEY, data);
+            localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res)) 
+            setGeneralState((old) => {
+              return {
+                ...old,
+                notification: message,
+              };
+            });
+            navigate("/user-authentication");
+          }
         }
-        saveCookie(key, data);
-        setGeneralState((old) => {
-          return {
-            ...old,
-            notification: message,
-          };
-        });
-        navigate("/students");
-      }
     } catch (err) {
-      console.error(err.message, err.statusCode);
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       if (err.statusCode === 0) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
       }
     } finally {
       setLoading(false);
@@ -133,7 +148,19 @@ const SignUp = () => {
             value={data.password}
             handleChange={handleChange}
             placeholder="Password"
+            focus ={()=>setFocus(true)}
+            blur={()=>setFocus(false)}
           />
+          {focus && !passReg.test(data.password) &&
+            <small style={{fontSize:"11px"}}>
+              <p className="text-danger">Password must satisfy the following conditions</p>
+              <p className="text-danger"> - At least one upper case English letter</p>
+              <p className="text-danger"> - At least one lower case English letter</p>
+              <p className="text-danger"> - At least one digit</p>
+              <p className="text-danger"> - At least one special character</p>
+              <p className="text-danger"> - Minimum eight in length</p>
+            </small>
+          }
           <Password
             label="Confirm Password"
             name="retype_password"
@@ -142,49 +169,10 @@ const SignUp = () => {
             value={data.retype_password}
             handleChange={handleChange}
           />
-          {/* <div className="form-check ">
-              <input
-                className="form-check-input me-4"
-                type="radio"
-                name="userType"
-                id="flexRadioDefault1"
-                value="student"
-                onChange={handleChange}
-              />
-              <label className="form-check-label" for="flexRadioDefault1">
-                Student
-              </label>
-            </div>
-            <div className="form-check">
-            <input
-            className="form-check-input me-4"
-            type="radio"
-            name="userType"
-            id="flexRadioDefault2"
-            value="mentor"
-            onChange={handleChange}
-            />
-            <label className="form-check-label" for="flexRadioDefault2">
-            Mentor
-            </label> 
-            </div> */}
-          {/*
-            <div className="form-check">
-              <input
-                className="form-check-input me-4"
-                type="radio"
-                name="userType"
-                id="flexRadioDefault2"
-                value="teacher"
-                onChange={handleChange}
-              />
-              <label className="form-check-label" for="flexRadioDefault2">
-                Teacher
-              </label>
-            </div>
-              */}
           {loading ? (
-            <button className="button button-md log_btn w-100 mt-3">
+            <button className="button button-md log_btn w-100 mt-3"
+              disabled={loading}
+            >
               <div className="spinner-border" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
@@ -192,6 +180,7 @@ const SignUp = () => {
           ) : (
             <button
               className="button button-md log_btn w-100 mt-3"
+              disabled={loading}
               onClick={onSubmit}
               type="submit"
             >

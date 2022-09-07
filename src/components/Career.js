@@ -1,9 +1,12 @@
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
-import Learning from "../images/newCareer.png";
+import {useAuth} from "../contexts/Auth"
+import { AdvancedError } from "../classes";
 
+import Learning from "../images/newCareer.webp";
+import {categories as allCategories} from "../data"
 import {
   Cyber,
   Data,
@@ -19,7 +22,7 @@ export const careers = [
     id: 1,
     title: "Cybersecurity",
     details:
-      "This is the practice ofprotecting critical systems and sensitive information from digital attacks.",
+      "This is the practice of protecting critical systems and sensitive information from digital attacks.",
     logo: <Cyber />,
     link: "categories/cybersecurity"
   },
@@ -105,38 +108,99 @@ export const careers = [
   },
 ];
 
-const test = [
-  {name:"How far"},
-  {name:"Hoofar"},
-  {name:"Hofar"},
-  {name:"Howryfar"},
-  {name:"Howar"},
-  {name:"Hora"},
-  {name:"Howfar"},
-  {name:"Howra"},
-  {name:"Howr"},
-  {name:"Howdy"},
-  {name:"How"},
-]
 
-const arr = []
-careers.forEach((item, index)=>{
-  let merged = Object.assign(item, test[index])
-
-  arr.push(merged)
-})
-
-console.log(arr)
-
+const logos = [
+  {
+    logo: <Cyber />,
+  },
+  {
+    logo: <Risk />,
+  },
+  {
+    logo: <Data />,
+  },
+  {
+    logo: <Project />,
+  },
+  {
+    logo: <IT />,
+  },
+  {
+    logo: <Audit />,
+  },
+  {
+    logo: <Cyber />,
+  },
+  {
+    logo: <Product />,
+  },
+  {
+    logo: <Project />,
+  },
+  {
+    logo: <Risk />,
+  },
+  {
+    logo: <IT />,
+  },
+];
 const Career = () => {
+
+  const {generalState, setGeneralState, otherFunctions: {fetchCategories}} = useAuth();
+  const [categories, setCategories] = useState([])
+  const ref = useRef(false);
+
+
+  // useEffect(()=>{
+  //   const arr = []
+  //   allCategories.forEach((item, index)=>{
+  //         let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
+
+  //         arr.push(merged)
+  //       })
+  //       setCategories(arr)
+      
+    
+  // },[])
+
+  useEffect(()=>{
+    if(ref.current) return
+    (async()=>{
+      try{
+        setGeneralState({...generalState, loading: true})
+        const res = await fetchCategories();
+        const {success, message, statusCode, data} = res;
+        setGeneralState({...generalState, loading: false})
+
+          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+          const arr = []
+          data.forEach((item, index)=>{
+            let merged = Object.assign(item, logos[getRandomArbitrary(1, 10)])
+
+            arr.push(merged)
+          })
+          setCategories(arr)
+         
+      
+    }catch(err){
+        setGeneralState({...generalState, loading: false})
+    }
+    })()
+    ref.current = true
+  },[])
+
+  function getRandomArbitrary(min, max) {
+    return Math.ceil(Math.random() * (max - min) + min)
+  }
+
   return (
-    <section className="career">
+    <section className="career" id="categories">
       <div className="container">
 
       <header className="text-center">
         <h2 className="career_title text-capitalize">learn online or on campus</h2>
         <p className="sub-title mx-auto" style={{width:"min(100% - 1rem, 900px)"}}>
-        Choose a niche and enroll in certificate courses online or in-person that will help you kickstart yuor career within 3-6 months. We are committed to help you kickstart and build a great career in technology.
+        Choose a niche and enroll in certificate courses online or in-person that will help you kickstart your career within 3-6 months. We are committed to help you kickstart and build a great career in technology.
         </p>
       </header>
       <div className="row align-items-center">
@@ -145,18 +209,27 @@ const Career = () => {
         </div>
         <div className="col-lg-6">
       <div className="new_list_section">
-        {careers.slice(0, 6).map((career) => (
-          <CareerBox
-            {...career}
-          />
-        ))}
+        {
+        categories.length > 0 ? categories.slice(0,6).map(category=>(
+           <CareerBox
+           {...category}
+         />
+        )) :
+         (
+              careers.slice(0, 6).map((career) => (
+              <CareerBox
+              {...career}
+              />
+              )
+            )
+        )}
         <Link to="/categories" className="mt-3">
           <div className="h-100 d-flex align-items-center">
             <motion.button
             whileHover={{
               boxShadow: "0px 0px 8px rgb(0,0,0)"
             }}
-            className="btn-plain">Learn More</motion.button>       
+            className="btn-plain" style={{background:"var(--theme-blue)", color:"#fff"}}>Learn More</motion.button>       
           </div>
         </Link>
       </div>
@@ -169,18 +242,18 @@ const Career = () => {
   );
 };
 
-export const CareerBox = ({ logo, title, details, link }) => {
+export const CareerBox = ({ logo, title, details, link , name, description, all}) => {
   return (
-    <Link to={link}>
+    <Link to={link ? link : `categories/${name.split(" ").join("-").toLowerCase()}`} >
     <div className="career_box d-flex flex-column">
       <div className="career_box_left">
         <i>{logo}</i>
       </div>
       <div className="career_box_right">
         <header>
-          <h3 className="careerBox_title">{title}</h3>
+          <h3 className="careerBox_title">{title ? title : name}</h3>
         </header>
-          <p className="details">{details}</p>
+          <p className="details">{details ? details : description}</p>
       </div>
     </div>
     </Link>

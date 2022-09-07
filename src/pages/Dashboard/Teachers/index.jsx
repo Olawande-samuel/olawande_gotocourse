@@ -1,67 +1,85 @@
-import { useEffect, useState } from "react";
-import { MdEdit, MdPersonAdd } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import {  MdPersonAdd } from "react-icons/md";
+import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { Modal, Box, Typography } from "@mui/material";
-import { AiOutlineMenu } from "react-icons/ai";
-
-import { Sidebar, Searchbar } from "../components";
+import { Modal, Box } from "@mui/material";
+import {Stu1,Stu2, Stu3} from "../../../images/components/svgs"
+import {useQuery} from "@tanstack/react-query"
+import Loader from "../../../components/Loader";
+import { Sidebar, Navbar } from "../components";
 import clsx from "./styles.module.css";
 import { colors } from "../../../constants";
-import avatar from "../../../images/teacher.png";
 import { useAuth } from "../../../contexts/Auth";
 import { GuardedRoute } from "../../../hoc";
 import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
-import { UserInfoCard } from "../Admin";
-import { useCookie } from "../../../hooks";
-import {useSyllabus} from "../../../contexts/Syllabus"; 
+import { useLocalStorage } from "../../../hooks";
+
+import Layout from "../../../components/Layout";
+import { CourseProfile } from "../../Courses";
+import { Syllabus } from "./CreateCourse";
+import ChatComponent from "../Admin/Chat";
+import {NotificationContent} from "../Admin";
+
+import { DashboardTop, Community } from "../Students";
+import { FaChalkboardTeacher } from "react-icons/fa";
+
+
+const KEY = "gotocourse-userdata";
+
+
+export {default as Courses} from "./Courses"
+export {default as Profile} from "./Profile"
+export {default as Classes} from "./Classes"
+export {default as Bootcamps} from "./Bootcamps"
+export {default as BootcampDetails} from "./BootcampDetails"
+export {default as CreateCourse} from "./CreateCourse"
+export {default as Earnings } from "./Earnings"
 
 
 
-
-export function Profile() {
-  const { saveCookie, updateCookie, isCookie } = useCookie();
-  const {
-    generalState: { isMobile, notification, userdata },
-    setGeneralState,
-    teacherFunctions: { fetchProfile },
-  } = useAuth();
+export function CourseInfo() {
   const navigate = useNavigate();
-  useEffect(() => {
-    setTimeout(() => {
-      setGeneralState((old) => {
-        return {
-          ...old,
-          notification: null,
-        };
-      });
-    }, 5000);
-  }, []);
+  const ref = useRef(false);
+  const {id} = useParams()
+  const { generalState: { courseInfo, loading }, generalState, setGeneralState, teacherFunctions: { fetchCourse, deleteCourse }, } = useAuth();
 
+  const { getItem, updateItem } = useLocalStorage();
+  let userdata = getItem(KEY);
+  
+  const [btnloading, setLoading]= useState(false)
+  const [formstate, setFormstate] = useState({}); 
+
+  async function handleCourseEdit(e){
+    setGeneralState({...generalState, courseInfo: formstate})
+    updateItem("gotocourse-courseEdit", formstate )
+
+      navigate(`/teacher/courses/create?edit=${id}`)
+  }
+  // get Course info
   useEffect(() => {
-    if (userdata) {
-      async function get() {
+    let mounted = true;
+    if (mounted) {
+      if (ref.current) return;
+      (async () => {
         try {
-          let data = await fetchProfile(userdata?.token);
-          const key = "gotocourse-userdata";
-          const {success, message, statusCode} = data;
-          if(!success) throw new AdvancedError(message, statusCode);
-          else {
-            const {data: d} = data;
-            console.log(d);
-            if(isCookie(key)){
-              updateCookie(key, d);
-            }else {
-              saveCookie(key, d);
-            }
-            setGeneralState((old) => {
-              return {
-                ...old,
-                userdata:{...old.userdata, ...d},
-              };
-            });
-          }
+          setGeneralState({...generalState, loading: true});
+          const res = await fetchCourse(id, userdata?.token);
+          const { success, message, statusCode } = res;
+
+          if (!success || statusCode !== 1)
+            throw new AdvancedError(message, statusCode);
+          const { data } = res;
+          setFormstate(data);
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         } catch (err) {
           toast.error(err.message, {
             position: "top-right",
@@ -72,461 +90,260 @@ export function Profile() {
             draggable: true,
             progress: undefined,
           });
+        } finally {
+          setGeneralState({...generalState, loading: false});
         }
-      }
-      get();
+      })();
+
+      ref.current = true;
     }
-  }, [userdata?.token]);
 
-  const info = [
-    {
-      title: "Brief Introduction",
-      content: "Enjoys writing and playing video games",
-    },
-    {
-      title: "Location",
-      content: "Lagos, Nigeria",
-    },
-    {
-      title: "Courses",
-      content: "UX Designer",
-    },
-    {
-      title: "Category",
-      content: "Cybersecurity, UX, Data Analysis",
-    },
-  ];
-  function editProfileHandler(e) {
-    navigate("/teacher/profile/edit");
-  }
+    return () => (mounted = false);
+  }, [id]);
+
+ 
   return (
-    <Teachers
-      isMobile={isMobile}
-      userdata={userdata}
-      notification={notification}
-    >
-     
-      <div className={clsx.teachers_profile}>
-        <div className={clsx.teachers_profile_top}>
-          <div className={clsx.teachers_profile_top_img}>
-            <img
-              src={userdata?.profileImg ? userdata.profileImg : avatar}
-              style={{ borderRadius: 10 }}
-              width="100%"
-              alt="Avatar"
-            />
-          </div>
-          <button
-            className={clsx.teachers_profile_top_button}
-            onClick={editProfileHandler}
-          >
-            <MdEdit /> &nbsp; Edit
-          </button>
-        </div>
-        <div className={clsx.teachers_profile_main}>
-          <h1 className={clsx.teachers__header} style={{ marginTop: 20 }}>
-            {userdata?.firstName} {userdata?.lastName}
-          </h1>
-
-          <div className={clsx.teachers__profile_info}>
-            {info.map(({ title, content }, i) => (
-              <Info title={title} content={content} key={i} />
-            ))}
-          </div>
-        </div>
-      </div>
-    </Teachers>
-  );
-}
-
-function Info({ title, content }) {
-  return (
-    <div className={clsx.teachers__info}>
-      <span className={clsx.teachers__info_title}>{title}</span>
-      <span className={clsx.teachers__info_content}>{content}</span>
-    </div>
-  );
-}
-
-const Syllabus = ({title, description}) => {
-  return(
-    <div className={clsx.syllabus_container}>
-      <h5>{title}</h5>
-      <p>{description}</p>
-    </div>
-  )
-}
-
-export function CreateCourse() {
-  const {
-    generalState: { isMobile, notification, userdata },
-    setGeneralState,
-    teacherFunctions: { addCourse },
-  } = useAuth();
-  const {syllabuses, addtoSyllabus} = useSyllabus();
-  const [formstate, setFormstate] = useState({
-    name: "",
-    categoryName: "",
-    description: "",
-    faqs: [],
-  });
-  const [packageState, setPackageState] = useState({
-    title: "",
-    description: "",
-    price: ""
-  })
-
-  const [open, setOpen] = useState(false);
-
-
-  const [loading, setLoading] = useState(false);
-  const packages = [
-    {
-      value: "cohort",
-      name: "Cohort",
-    },
-    {
-      value: "self-paced",
-      name: "Self paced",
-    },
-    {
-      value: "one-one",
-      name: "One-One Mentorship",
-    },
-  ];
-
-  function changeHandler(e) {
-    const { name, value } = e.target;
-    setFormstate((old) => {
-      return {
-        ...old,
-        [name]: value,
-      };
-    });
-  }
-
-  function changePackageStateHandler(e){
-    const {name, value} = e.target;
-    setPackageState(old => {
-      return{
-        ...old,
-        [name]: value
-      }
-    })
-  }
-
-  async function submitHandler(e) {
-    e.preventDefault();
-    setLoading(true);
-    console.log([{...formstate, syllabus: [...syllabuses], packages: [packageState]}]);
-    try {
-      if (
-        formstate.name === "" ||
-        formstate.categoryName === "" ||
-        formstate.description === "" ||
-        packageState.price === "" ||
-        packageState.title === ""
-      )
-        throw new AdvancedError("All fields are required", 0);
-      const res = await addCourse({...formstate, syllabus: [...syllabuses], packages: [packageState]}, userdata.token);
-      const { success, message, statusCode } = res;
-      console.log(res);
-
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-    } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } finally {
-      setLoading((_) => false);
-    }
-  }
-
-  const openModal = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-  return (
-    <Teachers>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+    <Teachers header="Course Details">
       <div className={clsx.teachers_profile}>
         <div className={clsx.edit__profile}>
-          <h2>Create a new course</h2>
-          <form className="form" onSubmit={submitHandler}>
+          <h2>Course Information</h2>
+          <form className="form">
             <Input
               label="Name of course"
               name="name"
               type="text"
-              handleChange={changeHandler}
               value={formstate.name}
+              readOnly={true}
             />
-            <Input
-              label="Category"
-              name="categoryName"
-              type="text"
-              handleChange={changeHandler}
-              value={formstate.categoryName}
-            />
-
             <div className={clsx.form_group}>
-              <label htmlFor={"brief"}>
+              <Input
+                label="Category"
+                name="category"
+                type="text"
+                  value={formstate.name}
+                readOnly={true}
+              />
+            </div>
+            <div className={clsx.form_group}>
+              <label className="form-label generic_label" htmlFor={"description"}>
                 Brief Description of course content
               </label>
               <textarea
                 rows="5"
                 name="description"
                 value={formstate.description}
-                onChange={changeHandler}
                 className="generic_input"
+                readOnly={true}
               ></textarea>
             </div>
-
+            {/* <div className="d-flex flex-wrap" style={{ gap: ".5rem" }}>
+              <div className="col-sm-4">
+                <Input
+                  label="Start Date"
+                  name="startDate"
+                  type="date"
+                      value={formstate.start_date}
+                  readOnly={true}
+                />
+              </div>
+              <div className="col-sm-4">
+                <Input
+                  label="End Date"
+                  name="endDate"
+                  type="date"
+                      value={formstate.end_date}
+                  readOnly={true}
+                />
+              </div>
+            </div> */}
             <div className={clsx.form_group}>
-              <label htmlFor={"package"}>Type</label>
-              <select
-                rows="5"
-                name="type"
-                value={formstate.type}
-                onChange={changeHandler}
-                className="form-select generic_input"
-              >
-                <option value="">Choose a Type</option>
-                <option value="FLAT">Flat</option>
-                <option value="PACKAGE">Package</option>
-              </select>
+              <label htmlFor={"package"} className="form-label generic_label">
+                Package
+              </label>
+              {formstate.packages?.length > 0 ? (
+                formstate.packages?.map((item, index) => (
+                  <Syllabus
+                    key={item.title}
+                    {...item}
+                    packagelist={true}
+                    index={index}
+                    packageItems={formstate.packages}
+                  />
+                ))
+              ) : (
+                <h6>No Packages</h6>
+              )}
             </div>
-            <div className={clsx.form_group}>
-              <label htmlFor={"package"}>Package</label>
-              <select
-                rows="5"
-                name="title"
-                value={packageState.title}
-                onChange={changePackageStateHandler}
-                className="form-select generic_input"
-              >
-                <option value="">Choose a package</option>
-                {packages.map(({ name, value }, i) => (
-                  <option value={value} key={i}>
-                    {name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-
-            <Input
+            {/* <Input
               label="Price"
               name="price"
               type="text"
-              handleChange={changePackageStateHandler}
-              value={packageState.price}
-            />
+              value={formstate.price}
+              readOnly={true}
+            /> */}
 
-
-              <div className={clsx.form_group}>
-              <label>Syllabus</label>
-              {
-                syllabuses.length !== 0 ? syllabuses.map(({title, description}, i) => (
+            <div className={clsx.form_group}>
+              <label className="form-label generic_label">Syllabus</label>
+              {formstate.syllabus?.length !== 0 ? (
+                formstate.syllabus?.map(({ title, description }, i) => (
                   <Syllabus title={title} key={i} description={description} />
-                )) : <h4>No syllabus!</h4>
-              }
+                ))
+              ) : (
+                <h6>No syllabus!</h6>
+              )}
             </div>
-
-            <button
-              className="btn btn-primary my-3"
-              style={{ backgroundColor: "var(--theme-blue)" }}
-              type="button"
-              onClick={openModal}
-            >
-              Add Syllabus
-            </button>
-
-            {loading ? (
-              <button className="button button-lg log_btn w-100 mt-3">
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </button>
-            ) : (
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"} className="form-label generic_label">
+                FAQ
+              </label>
+              {formstate.faq?.length > 0 ? (
+                formstate.faq?.map((item, i) => <Syllabus key={i} {...item} />)
+              ) : (
+                <h6>No faq</h6>
+              )}
+            </div>
+            <div className="d-flex flex-wrap mt-3" style={{ gap: "1rem " }}>
+                <button
+                onClick={handleCourseEdit}
+                  className="button log_btn"
+                  style={{
+                    padding: "10px 44px",
+                    borderRadius: "8px",
+                    fontSize: "16px",
+                    fontWeight: "600",
+                  }}
+                  type="button"
+                >
+                  Edit
+                </button>
+              {/* {btnloading ? (
+                <button
+                  className="btn btn-outline"
+                  style={{
+                    border:" 1px solid var(--theme-orange)",
+                    padding: "10px 44px",
+                    borderRadius: "8px",
+                    fontSize: "16px",
+                    fontWeight: "600",
+                  }}
+                >
+                  <div className="spinner-border text-dark" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </button>
+              ) : (
               <button
-                className="button button-lg log_btn w-100 mt-3"
-                type="submit"
+                className="btn btn-outline"
+                type="button"
+                onClick={deleteCourseInfo}
+                style={{
+                  border: "1px solid var(--theme-orange)",
+                  color: "var(--theme-orange)",
+                  padding: "10px 44px",
+                  borderRadius: "8px",
+                  fontSize: "16px",
+                  fontWeight: "600",
+                }}
               >
-                Save
+                Delete
               </button>
-            )}
+              )} */}
+            </div>
           </form>
         </div>
       </div>
-      <AddSyllabus
-        open={open}
-        addSyllabus={addtoSyllabus}
-        setOpen={setOpen}
-        handleClose={handleClose}
-      />
+      
     </Teachers>
   );
 }
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  minWidth: 600,
-  background: "#fff",
-  border: "1px solid #eee",
-  borderRadius: "10px",
-  boxShadow: 24,
-  p: 6,
-  padding: "4rem 2rem",
-};
-
-function AddSyllabus({ open, handleClose, addSyllabus }) {
-  const [newSyllabus, setNewSyllabus] = useState({
-    title: "",
-    description: "",
-  });
-  function handleChange(e) {
-    const {name, value} = e.target;
-    setNewSyllabus(old => {
-      return {
-        ...old,
-        [name]: value
-      }
-    })
-  }
-
-  function addSyllabusHandler(){
-    const {title, description} = newSyllabus;
-    if(!title || !description) {
-      toast.error("Title and Description are required", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }else {
-      addSyllabus(newSyllabus);
-    }
-  }
+export function PreviewModal({ preview, open, setOpen }) {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    minWidth: "95%",
+    background: "#fff",
+    border: "1px solid #eee",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 6,
+    padding: "4rem 2rem",
+  };
 
   return (
     <Modal
       open={open}
-      onClose={handleClose}
+      onClose={(e) => {
+        setOpen((_) => false);
+      }}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
       <Box style={style}>
-        {/* <ToastContainer
-          position="top-right"
-          autoClose={2500}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        /> */}
-        <h5
-          className="lead text-primary"
-          style={{ color: "var(--theme-blue)" }}
+        <div
+          className="position-relative"
+          style={{
+            height: "80vh",
+            overflowY: "scroll",
+          }}
         >
-          Add Syllabus
-        </h5>
-        <Input
-          label="Title"
-          name="title"
-          type="text"
-          handleChange={handleChange}
-          value={newSyllabus.title}
-        />
-        <div className="form-group my-3">
-          <label htmlFor="description" className="form-label generic_label">
-            Description
-          </label>
-          <textarea
-            rows="5"
-            id="description"
-            name="description"
-            className="form-control generic_input"
-            value={newSyllabus.description}
-            onChange={handleChange}
-          ></textarea>
+          <Layout>
+            <CourseProfile preview={preview} />
+          </Layout>
+          <button
+            className="btn btn-danger position-fixed"
+            style={{ bottom: "8%", right: "5px", zIndex: "1200" }}
+            onClick={() => setOpen(false)}
+          >
+            Close Preview
+          </button>
         </div>
-        <button
-          className="btn btn-primary my-3"
-          onClick={addSyllabusHandler}
-          style={{ backgroundColor: "var(--theme-blue)" }}
-        >
-          Add
-        </button>
       </Box>
     </Modal>
   );
 }
 
+
 export function Edit() {
   const {
-    generalState: { isMobile, userdata },
     setGeneralState,
     teacherFunctions: { updateAvatar, updateProfile },
   } = useAuth();
+
+  const { updateItem, getItem } = useLocalStorage();
+  let userdata = getItem(KEY);
+
   const navigate = useNavigate();
+
   const [imageUrl, setImageUrl] = useState(null);
-  const [isUplaoding, setIsUploading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const [formstate, setFormstate] = useState({
-    firstname: userdata?.firstName ?? "",
-    lastname: userdata?.lastName ?? "",
-    brief_intro: "",
-    location: "",
-    profession: "",
-    category: "",
+    firstName: userdata?.firstName ?? "",
+    lastName: userdata?.lastName ?? "",
+    work: userdata?.work ?? "",
+    location: userdata?.location ?? "",
+    category: userdata?.category ?? "",
+    bio: userdata?.bio ?? "",
+    goals: userdata?.goals ?? "",
   });
+
+  useEffect(() => {
+    // to prevent data from disappearing on page reload
+    // setFormstate({...formstate, ...userdata})
+  }, []);
 
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
     try {
       if (
-        formstate.firstname === "" ||
-        formstate.lastname === "" ||
+        formstate.firstName === "" ||
+        formstate.lastName === "" ||
         formstate.brief_intro === "" ||
         formstate.location === "" ||
         formstate.profession === ""
@@ -537,18 +354,20 @@ export function Edit() {
       const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        const {data} = res;
-        console.log(data);
-        setGeneralState(old => {
-            return {
-                ...old,
-                userdata: data,
-                notification: message
-            }
-        })
+        const { data } = res;
+        const newValue = {
+          ...userdata,
+          ...data,
+        };
+        userdata = updateItem(KEY, newValue);
+        setGeneralState((old) => {
+          return {
+            ...old,
+            notification: message,
+          };
+        });
         navigate("/teacher/");
       }
-      
     } catch (err) {
       toast.error(err.message, {
         position: "top-right",
@@ -597,22 +416,17 @@ export function Edit() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         const { data } = res;
-        const {profileImg} = data;
-        console.log(data);
+        const { profileImg } = data;
         //updated successfully
-        setGeneralState(old => {
-            return {
-                ...old,
-                userdata: {
-                    ...old.userdata,
-                    profileImg
-                }
-            }
-        })
-        //set the cookie here
-        
-        setImageUrl(_ => null);
-        setFile(_ => null);
+        //set the localStorage here
+        const newValue = {
+          ...userdata,
+          profileImg,
+        };
+        userdata = updateItem(KEY, newValue);
+
+        setImageUrl((_) => null);
+        setFile((_) => null);
 
         toast.success(message, {
           position: "top-right",
@@ -640,18 +454,7 @@ export function Edit() {
   }
 
   return (
-    <Teachers>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+    <Teachers header="Edit Profile">
       <div className={clsx.teachers_profile}>
         <div className={clsx.edit__profile}>
           <h2>Update Profile</h2>
@@ -672,38 +475,63 @@ export function Edit() {
               onChange={changeImageHandler}
             />
             {imageUrl ? (
-              <p
-                style={{ cursor: isUplaoding && "not-allowed" }}
+                isUploading ? 
+                <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+               </div> : 
+
+             <p
+                style={{ cursor: isUploading && "not-allowed", color: "var(--theme-orange", fontWeight:"700" }}
                 onClick={changeProfilePictureHandler}
               >
-                Change Picture
+                Click to Upload Photo
               </p>
+          
             ) : (
-              <p onClick={uploadPicture} style={{cursor: "pointer"}}>Upload Photo</p>
+              <p onClick={uploadPicture} style={{ cursor: "pointer" }}>
+               Select a photo to upload
+              </p>
             )}
+          </div>
+          <div className={clsx.edit__picture}>
+            <button
+              style={{
+                border: "1px dotted var(--theme-blue)",
+                outline: "none",
+                color: "var(--theme-blue)",
+                padding: "4px",
+                borderRadius: "8px",
+              }}
+              type="button"
+              onClick={() => {
+                navigate("/change-password");
+              }}
+            >
+              Change Password
+            </button>
           </div>
           <form className="form" onSubmit={submitHandler}>
             <Input
               label="First name"
-              name="firstname"
+              name="firstName"
               type="text"
               handleChange={changeHandler}
-              value={formstate.firstname}
+              value={formstate.firstName}
             />
             <Input
               label="Last name"
-              name="lastname"
+              name="lastName"
               type="text"
               handleChange={changeHandler}
-              value={formstate.lastname}
+              value={formstate.lastName}
             />
 
             <div className={clsx.form_group}>
-              <label htmlFor={"brief_intro"}>Brief Introduction</label>
+              <label htmlFor={"bio"}>Brief Introduction</label>
               <textarea
                 rows="5"
-                name="brief_intro"
-                value={formstate.brief_intro}
+                name="bio"
+                value={formstate.bio}
                 onChange={changeHandler}
                 className="form-control generic_input"
               ></textarea>
@@ -719,10 +547,10 @@ export function Edit() {
 
             <Input
               label="Profession"
-              name="profession"
+              name="work"
               type="text"
               handleChange={changeHandler}
-              value={formstate.profession}
+              value={formstate.work}
             />
 
             <Input
@@ -755,94 +583,33 @@ export function Edit() {
 }
 
 
-
-export function Classes() {
-  const {
-    generalState: { isMobile, userdata },
-  } = useAuth();
-  const data = [
-    {
-      title: "CyberSecurity",
-      numberOfLessons: 10,
-      date: "Apr 5",
-      time: "5pm",
-      isLive: false,
-      color: colors.info,
-    },
-    {
-      title: "Branding",
-      numberOfLessons: 10,
-      date: "Apr 5",
-      time: "5pm",
-      isLive: true,
-      color: colors.greenish,
-    },
-    {
-      title: "UI/UX",
-      numberOfLessons: 10,
-      date: "Apr 5",
-      time: "5pm",
-      isLive: true,
-      color: colors.greenish,
-    },
-    {
-      title: "Data Science",
-      numberOfLessons: 10,
-      date: "Apr 5",
-      time: "5pm",
-      isLive: false,
-      color: colors.greenish,
-    },
-  ];
-  return (
-    <Teachers isMobile={isMobile} userdata={userdata}>
-      <div className={clsx.teachers_profile}>
-        <div className={clsx.classes}>
-          {data.map(
-            ({ numberOfLessons, title, date, time, isLive, color }, i) => (
-              <ClassesCard
-                numberOfLessons={numberOfLessons}
-                key={i}
-                title={title}
-                date={date}
-                time={time}
-                isLive={isLive}
-                color={color}
-              />
-            )
-          )}
-        </div>
-      </div>
-    </Teachers>
-  );
-}
-
-
-
-export function Courses() {
-  const {
-    generalState: { isMobile, userdata },
-    teacherFunctions: { fetchCourse, fetchApplications },
-  } = useAuth();
-  const { fetchCookie } = useCookie();
-  const [courses, setCourses] = useState([]);
-
-  console.log(userdata);
+// NOTIFICATION
+export function Notification() {
+  const {getItem} = useLocalStorage();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [loader, setLoader] = useState(false);
+  const [load, setLoad] = useState(false);
+  const {generalState, setGeneralState,  studentFunctions: {fetchNotifications, readNotifications } } = useAuth(); 
+  const [reload, setReload]= useState(false)
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-
-    //fetch courses
-    (async() => {
-      try{
-        console.log(userdata);
-        const res = await fetchApplications(userdata?.token);
-        const {success, message, statusCode} = res;
-        if(!success) throw new AdvancedError(message, statusCode);
-        else {
-          const {data} = res;
-          console.log(data);
-          setCourses(_ => data);
-          toast.success(message, {
+    if(flag.current) return;
+      (async() => {
+        try{
+          setLoader(true)
+          const res = await fetchNotifications(userdata?.token);
+          const {message, success, statusCode} = res;
+          if(!success) throw new AdvancedError(message, statusCode);
+          const {data} = res
+          if(data.length > 0) {
+            setNotifications(data)
+            const unread = data.filter((notification)=>notification.isRead !== true)
+            setGeneralState({...generalState, notifications: unread.length})
+          }
+        }catch(err){
+          toast.error(err.message, {
             position: "top-right",
             autoClose: 4000,
             hideProgressBar: true,
@@ -851,98 +618,103 @@ export function Courses() {
             draggable: true,
             progress: undefined,
           });
+        }finally{
+          setLoader(_ => false);
         }
-      }catch(err){
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-    })()
-  }, []);
-  const navigate = useNavigate();
-  const tableHeaders = ["No", "Courses", "Name", "Package", "Rating"];
-  const tableContents = !courses?.length ? [
-    {
-      name: "Melanie Grutt",
-      course: "Cybersecurity",
-      package: "Cohort",
-      rating: "Bronze",
-    },
-    {
-      name: "Keira Danlop",
-      course: "UI/UX",
-      package: "Cohort",
-      rating: "Silver",
-    },
-    {
-      name: "Diop Grutt",
-      course: "HTML",
-      package: "One on One",
-      rating: "Gold",
-    },
-    {
-      name: "Diop Grutt",
-      course: "Data Analytics",
-      package: "Self paced",
-      rating: "Diamond",
-    },
-  ] : courses;
-
-  function createCourseHandler(e) {
-    navigate("create");
+      })()
+      flag.current = true;
+  },[reload])
+  
+  async function markAsRead(e){
+    e.preventDefault();
+    try{
+      setLoad(true)
+      const res = await readNotifications(userdata?.token);
+      const {message, success, statusCode} = res;
+      if(!success) throw new AdvancedError(message, statusCode);
+      const {data} = res
+      setReload(true)
+      flag.current = false;
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }catch(err){
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }finally{
+      setLoad(_ => false);
+    }
   }
+
   return (
-    <Teachers isMobile={isMobile} userdata={userdata}>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-      <div className={clsx.teachers_profile}>
-        <button
-          className="button button-md log_btn w-30 mb-5"
-          type="button"
-          onClick={createCourseHandler}
-        >
-          Create Course
-        </button>
-        <table className={clsx.teachers_table}>
-          <thead>
-            {tableHeaders.map((el, i) => (
-              <td key={i}>{el}</td>
-            ))}
-          </thead>
-          <tbody>
-            {tableContents.map(({ name, package: p, course, rating }, i) => (
-              <UserInfoCard
-                key={i}
-                name={name}
-                num={i}
-                comp={"Courses"}
-                // approveHandler=
-                rating={rating}
-                pack={p}
-                course={course}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <Teachers userdata={userdata} header="Notifications">
+      <NotificationContent notifications={notifications} markAsRead={markAsRead} load={load} loader={loader} />
     </Teachers>
   );
 }
+
+
+
+export function Chat() {
+  const {getItem} = useLocalStorage()
+  const [loader, setLoader] = useState(true);
+  let userdata = getItem(KEY);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoader(_ => false);
+    }, 2000)
+  }, [])
+  const [tabs, setTabs] = useState([
+    {
+      active: true,
+      name: "New Messages",
+    },
+    {
+      active: false,
+      name: "Admin",
+    },
+    {
+      active: false,
+      name: "Students",
+    },
+  ]);
+
+  const chatType = [
+    {
+      id: 1,
+      type: "New Messages",
+    },
+    {
+      id: 2,
+      type: "Others",
+    },
+    {
+      id: 4,
+      type: "Teachers",
+    },
+  ];
+  return (
+ <Teachers userdata={userdata} header="Chat">
+      {loader && <Loader />}
+      <ChatComponent tabs={tabs} chatType={chatType} usertype="teacher" />
+      </Teachers>
+  );
+}
+
 
 function ClassesCard({ numberOfLessons, title, date, time, isLive, color }) {
   return (
@@ -979,19 +751,225 @@ function ClassesCard({ numberOfLessons, title, date, time, isLive, color }) {
     </div>
   );
 }
+export const Dashboard = ()=>{
 
-const Teachers = ({ children, isMobile, userdata, notification }) => {
+  const navigate = useNavigate();
+  const { generalState: { isMobile }, teacherFunctions: { fetchApplications, fetchCourses, earnings }, } = useAuth();
+
+  const { getItem } = useLocalStorage();
+  let userdata = getItem(KEY);
+
+  const {isLoading, isError, isSuccess, data, error} = useQuery(["teacher courses"], () => fetchCourses(userdata.token))
+
+  if(data?.statusCode === 0){
+    toast.error(data?.message, {
+      position: "top-right",
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: true,
+    });
+  }
+
+  console.log({data})
+
+    const topContent =[
+      {
+          id:1,
+          title:"Students",
+          logo: <Stu1 />,
+          value: 0
+      },
+      {
+          id:2,
+          title:"Courses created",
+          logo: <Stu2 />,
+          value:  0
+      },
+      {
+          id:3,
+          title:"Earnings",
+          logo: <Stu3 />,
+          value: "$0"
+      }
+  ]
+
+  if(data?.data){
+    topContent[1].value = data.data.length
+  }
+  return (
+    <Teachers isMobile={isMobile} userdata={userdata} header="Dashboard">
+    <div className={clsx.teachers_profile}>
+    <DashboardTop content={topContent} />
+      <div className={clsx.teachers_profile_dashboard}>
+        <div className={`d-flex justify-content-between ${clsx.dashboard_courses}`}>
+          <div className={clsx["dashboard_courses--left"]}>
+              <h6>My Classes</h6>
+              <ul>
+                  {
+                      // data?.data?.length === 0 ?  
+                      //   <li>
+                      //     <p className="text-muted">You haven't registered for a course</p>
+                      //   </li> 
+                      //   :
+                      [1, 2, 3, 4].map((item, i)=>(
+                          <li key={i} className={` ${clsx["dashboard_class--wrapper"]}`}>
+                              <div className={clsx["dashboard_class--details"]}>
+                                <p>Basics of Mobile UX</p>
+                                <p>01:00pm</p>
+                              </div>
+                              <div className={`d-flex justify-content-between ${clsx["dashboard_class--action"]}`}>
+                                <button className={`btn-plain ${clsx.completed}`}>Completed</button>
+                                <button className={`button button-md ${clsx.live}`}>Live</button>
+                              </div>
+                          </li>
+                      ))
+                    
+                  }
+              </ul>
+          </div>
+          <div className={clsx["dashboard_courses--right"]}>
+              <h6>My Courses</h6>
+              <ul>
+                  {
+                      data?.data?.length === 0 || !data?.data ?  
+                      <p className="text-muted">You haven't created a course</p>
+                      :
+                      data?.data?.map((item, i)=>(
+                          <li key={i}>{item.name}</li>
+                      ))
+                  }
+              </ul>
+          </div>
+        </div>
+      <Community />
+      </div>
+    </div>
+  </Teachers>
+  )
+}
+
+
+export const Teachers = ({ children, isMobile, userdata, notification, header }) => {
   const {
-    generalState: { showSidebar },
+    generalState: { showSidebar, loading, pledre },
     generalState,
     setGeneralState,
+    adminFunctions: {getUnreadMessages}, studentFunctions: {fetchNotifications }
   } = useAuth();
+
+  const [pledredata, setPledreData]= useState({})
+
+  const {getItem} = useLocalStorage()
+
+  const userData = getItem(KEY)
+  const flag = useRef(false);
+
   useEffect(() => {
-    console.log("Teachers component is mounted");
-    if (notification) {
-      toast.success(notification, {
+    if(flag.current) return;
+      (async() => {
+        try{
+          const res = await fetchNotifications(userData?.token);
+          const {message, success, statusCode} = res;
+          if(!success) throw new AdvancedError(message, statusCode);
+          const {data} = res
+          console.log({data})
+          console.log({res})
+          if(data.length > 0) {
+            const unread = data.filter((notification)=>notification.isRead !== true)
+            setGeneralState({...generalState, notifications: unread.length})
+          }else {
+            setGeneralState({...generalState, notifications: 0})
+          }
+        }catch(err){
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })()
+      flag.current = true;
+  }, []);
+
+  useEffect(()=>{
+    let isActive = true
+    // if(!pledredata.email && pledre.getStudentDetails){
+
+    //     (async()=>{
+    //         const user = getItem("gotocourse-userdata")
+            
+    //         try{
+    //             const response = await pledre.getStudentDetails(user.email)
+    //             if(isActive){
+    //                 if(response?.email){
+    //                     setPledreData(response )
+    //                     console.log(response)
+    //                     localStorage.setItem("gotocourse-userdata", JSON.stringify({...user, pledre: response}))
+    //                 }
+    //             }
+
+    //         }catch(err){
+    //             console.error(err)
+    //             toast.error(err.message, {
+    //                 position: "top-right",
+    //                 autoClose: 4000,
+    //                 hideProgressBar: true,
+    //                 closeOnClick: true,
+    //                 pauseOnHover: true,
+    //                 draggable: true,
+    //                 progress: undefined,
+    //             });
+    //         }finally{
+    //             console.log("pData done")
+    //         }
+    //     })()
+    // }
+
+    return ()=>{
+        isActive = false
+
+    }
+},[pledre.baseUrl])
+
+  const toggleSidebar = () => {
+    setGeneralState({ ...generalState, showSidebar: !showSidebar });
+  };
+  const [loader, setLoading] = useState(false)
+
+  const teacher = {
+    title: "TEACHER",
+    logo: <FaChalkboardTeacher size="2.5rem" color="#0C2191" />
+}
+
+// fetch messages
+const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUnreadMessages(userData?.token), {
+  onError: (err)=> {
+    toast.error(err.message,  {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
+  },
+  onSuccess: (res)=>{
+    
+    if(res.data?.statusCode === 2 ){
+      localStorage.clear()
+    }
+    if(res.data?.statusCode !== 1){
+      toast.error(res.data?.message, {
         position: "top-right",
-        autoClose: 4000,
+        autoClose: 3000,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
@@ -999,37 +977,44 @@ const Teachers = ({ children, isMobile, userdata, notification }) => {
         progress: undefined,
       });
     }
-    return () => console.log("Teachers component is unmounted");
-  }, []);
 
-  const toggleSidebar = () => {
-    setGeneralState({ ...generalState, showSidebar: !showSidebar });
-  };
+    const unread = res.data.data?.filter((messages)=>messages.status === "unread")
+    if(unread.length > 0){
+      toast.info(`You have ${unread.length} messages `,  {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+  }
+})
+
 
   return (
     <GuardedRoute>
       <div className={clsx.teachers}>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <Sidebar isMobile={isMobile} />
         <div className={clsx.teachers_main}>
-          <div className={`align-items-center ${clsx.teachers_topbar}`}>
-            <div className="d-md-none">
-              <i>
-                <AiOutlineMenu
-                  style={{ fontSize: "24px", color: "#0C2191" }}
-                  onClick={toggleSidebar}
-                />
-              </i>
-            </div>
-            <h1 className={clsx.teachers__header}>
-              {userdata?.firstName} {userdata?.lastName}
-            </h1>
-            <Searchbar showIcon={true} placeholder="Search" />
-          </div>
-
+          <Navbar content={teacher}  toggleSidebar={toggleSidebar} header={header} />
           {children}
         </div>
+        {loading && <Loader />}
       </div>
     </GuardedRoute>
-    
   );
 };

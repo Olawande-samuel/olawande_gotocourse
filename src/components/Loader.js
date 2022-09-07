@@ -1,13 +1,14 @@
 import React from 'react'
 
 const style ={
-    position:"absolute",
+    position:"fixed",
     inset: 0,
     backgroundColor:"#fff",
     opacity:"0.7",
     height: "100vh",
     display:"grid",
-    placeItems:"center"
+    placeItems:"center",
+    zIndex: 10000
 }
 
 

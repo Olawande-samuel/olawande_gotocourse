@@ -1,28 +1,43 @@
-import {useEffect, useState,useRef} from "react";
-import {MdMessage} from "react-icons/md";
-import {AiOutlineClose} from "react-icons/ai";
+import { useState} from "react";
+import {Badge} from "@mui/material"
+import { MdHistory} from "react-icons/md";
+import {AiOutlineClose, AiOutlineSetting, AiOutlineDashboard} from "react-icons/ai";
 import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash, IoIosHelpBuoy} from "react-icons/io";
-import {useNavigate, useLocation, NavLink} from "react-router-dom";
-import {FiGift, FiSend} from "react-icons/fi";
+import {BiCategory, BiBell, BiBarChartSquare, BiHelpCircle} from "react-icons/bi";
+import {MdOutlineAddReaction} from "react-icons/md";
+import {FaTwitch} from "react-icons/fa";
+import { useLocation, Link, NavLink} from "react-router-dom";
+import {FiGift, FiSend, FiBookOpen} from "react-icons/fi";
+import {FaRegMoneyBillAlt, FaMoneyBillWave} from "react-icons/fa";
 import {motion} from "framer-motion"
 
+
+import {AdvancedError} from "../../../classes"
+import { useLocalStorage } from "../../../hooks";
 
 import clsx from "./styles.module.css";
 import Logo from "../../../components/Logo";
 import { colors } from "../../../constants";
 import { useAuth } from "../../../contexts/Auth";
 import LogoutButton from "../../../components/LogoutButton";
+import { LogoSidebar, Logosm } from "../../../images/components/svgs";
 
 
 
 //mini-components
-function SidebarItem({icon: Icon, title, isMobile, path, ...props}){
+function SidebarItem({icon: Icon, title, isMobile, path,showBadge, ...props}){
+    const {generalState:{notifications, chat}} = useAuth(); 
+
     return (
         <div className={clsx.sidebar_item} {...props}>
-            <Icon className={clsx.sidebar_icon} />
+        <Badge alignItems="center" badgeContent={showBadge ? path === "notifications" ? notifications : chat : 0} color="secondary" >
+            <i>
+                <Icon className={clsx.sidebar_icon} color="white" size="1.5rem" />
+            </i>
             {isMobile && <span className={clsx.sidebar_item_title}>
                 {title}
             </span>}
+        </Badge>
         </div>
     )
 }
@@ -32,8 +47,9 @@ function SidebarItem({icon: Icon, title, isMobile, path, ...props}){
 const Sidebar = ({isMobile}) => {
     const location = useLocation();
     const {generalState,  setGeneralState} = useAuth();
+    const {getItem} = useLocalStorage()
     const route = location.pathname.split("/")[1];
-
+    const [loading, setLoading] = useState(false)
     // const sidebarItemRef = useRef(null);
 
     const data =  route === "admin" ? [
@@ -53,6 +69,11 @@ const Sidebar = ({isMobile}) => {
             title: "Mentors/Teachers"
         },
         {
+            icon: FaTwitch,
+            path: "mentors",
+            title: "Mentors"
+        },
+        {
             icon: IoIosCash,
             path: "fees",
             title: "Fees"
@@ -67,81 +88,247 @@ const Sidebar = ({isMobile}) => {
             path: "courses-categories",
             title: "Course Catgories"
         },
-    ] : route === "students" ?  [
+        {
+            icon: BiCategory,
+            path: "bootcamps",
+            title: "Bootcamps"
+        },
+        {
+            icon: BiBell,
+            path: "notifications",
+            title: "Notifications",
+            showBadge:true,
+        },
+        {
+            icon:IoIosChatbubbles,
+            path: "chat",
+            title: "Chat",
+            showBadge:true,
+
+        },
+        {
+            icon: IoIosCash,
+            path: "earnings",
+            title: "Earnings"
+        },
+        {
+            icon:AiOutlineSetting,
+            path: "settings",
+            title: "Settings"
+        }
+    ] : route === "student" ?  [
+        {
+            icon: AiOutlineDashboard,
+            path: "",
+            title: "Dashboard"
+        },
         {
             icon: IoIosPerson,
-            path: "",
+            path: "profile",
             title: "My Profile"
         },
-        // {
-        //     icon: MdMessage,
-        //     path: "classes",
-        //     title: "My Classes"
-        // },
         {
-            icon: FiGift,
+            icon: FiBookOpen,
             path: "courses",
-            title: "Courses"
+            title: "My Courses"
         },
         {
-            icon: IoIosHelpBuoy,
+            icon: BiCategory,
+            path: "bootcamps",
+            title: "My Bootcamps"
+        },
+        {
+            icon: FiGift,
+            path: "wishlist",
+            title: "Wishlist"
+        },
+        {
+            icon: MdOutlineAddReaction,
+            path: "referral",
+            title: "Referral"
+        },
+        {
+            icon: MdHistory,
             path: "history",
             title: "History"
         },
-    ] : [
         {
-            icon: IoIosPerson,
-            path: "",
-            title: "My Profile"
+            icon: FaRegMoneyBillAlt,
+            path: "payment",
+            title: "Payment"
         },
         {
-            icon: MdMessage,
-            path: "classes",
-            title: "My Classes"
+            icon: BiBell,
+            path: "notifications",
+            title: "Notifications",
+            showBadge:true,
+        },
+        {
+            icon:IoIosChatbubbles,
+            path: "chat",
+            title: "Chat",
+            showBadge:true,
+
+        },
+        {
+            icon: BiHelpCircle,
+            path: "help",
+            title: "Help"            
+        }
+    ] : route === "teacher" ? [
+        {
+            icon: AiOutlineDashboard,
+            path: "",
+            title: "Dashboard"
+        },
+        {
+            icon: IoIosPerson,
+            path: "profile",
+            title: "My Profile"
         },
         {
             icon: FiGift,
             path: "courses",
             title: "Courses"
         },
+        {
+            icon: BiCategory,
+            path: "bootcamps",
+            title: "Bootcamps"
+        },
+        {
+            icon: IoIosCash,
+            path: "earnings",
+            title: "Earnings"
+        },
+        {
+            icon: BiBell,
+            path: "notifications",
+            title: "Notifications",
+            showBadge:true,
+        },
+        {
+            icon:IoIosChatbubbles,
+            path: "chat",
+            title: "Chat",
+            showBadge:true,
+
+        },
+        {
+            icon: BiHelpCircle,
+            path: "help",
+            title: "Help"            
+        }
+    ] : [
+        
+        {
+            icon: AiOutlineDashboard,
+            path: "",
+            title: "Dashboard"
+        },
+        {
+            icon: FiGift,
+            path: "sales",
+            title: "Sales"
+        },
+        {
+            icon: FaMoneyBillWave,
+            path: "income",
+            title: "Income"
+        },
     ];
 
-    useEffect(() => {
-        console.log("Sidebar is mounted");
+    const toggleSidebar = ()=>{
+        setGeneralState({...generalState, showSidebar:!generalState.showSidebar})
+    }
 
-        return () => console.log("Sidebar is unmounted");
-    }, [])
+    async function gotodashboard(){
+        const data = getItem("gotocourse-userdata")
 
-const toggleSidebar = ()=>{
-    setGeneralState({...generalState, showSidebar:!generalState.showSidebar})
-}
+        console.log(data)
+        if(data.userType === "student" || data.userType === 'admin'){
+            if(generalState.pledre.loginUser){
+                setLoading(true)
+                try{
+                    const response = await generalState.pledre.loginUser({
+                        user_id: data.pledre._id,
+                        user_type: "student"
+                    })
+
+                    console.log(response)
+                } catch(err){
+                    console.error(err)
+                }finally{
+                    console.log("done!!!")
+                    setLoading(false)
+                }
+            }
+        } else if(data.pledre?.deleted === false && data.accessPledre){
+            if(generalState.pledre.loginUser){
+                setLoading(true)
+                try{
+                    const response = await generalState.pledre.loginUser({
+                        user_id: data.pledre._id,
+                        user_type: route
+                    })
+
+                    console.log(response)
+                } catch(err){
+                    console.error(err)
+                }finally{
+                    console.log("done!!!")
+                    setLoading(false)
+                }
+            }
+        } 
+        else {
+            throw new AdvancedError("User not authorized")
+        }
+    }
     return (
         <>
-        <div className={` ${generalState.showSidebar ? clsx.open :clsx.close}  ${clsx.sidebar}`}>
+        <div className={`${generalState.showSidebar ? clsx.open :clsx.close}  ${clsx.sidebar} sidebar `}>
                 <i className="d-md-none" style={{fontSize:"24px", position:"absolute", right:"-30px", color:"#0C2191", cursor:"pointer", zIndex:"3000"}} onClick={toggleSidebar}>
                     <AiOutlineClose />
                 </i>
-            <Logo />
+                <div className="text-center">
+                    <Link to="/">
+                        <LogoSidebar  />
+                    </Link>
+                </div>
             <div className={clsx.sidebar_items} id="sidebar__items">
                 {
-                    data.map(({icon, path, title}, i) => (
-                        <NavLink onClick={toggleSidebar} to={`${route === "admin" ? '/admin' : route === 'students' ? '/students' : '/teacher'}${'/'+path}`}  key={i}>
+                    data.map(({icon, path, title,showBadge, admin}, i) => (
+                        <NavLink onClick={toggleSidebar} to={`${route === "admin" ? '/admin' : route === 'student' ? '/student' : route === "teacher" ? '/teacher': '/affiliate'}${'/'+path}`}  key={i}>
                             <SidebarItem location={location}
                             isMobile={!isMobile} icon={icon} 
-                            title={title} path={path} />
+                            title={title} path={path} showBadge={showBadge} admin={admin} />
                         </NavLink>
                     ))
                 }
-            </div>
-            <div className="button_wrapper text-center" style={{marginTop:"3rem"}}>
-                <motion.a 
-                whileHover={{
-                    // boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-                    textShadow: "0px 0px 8px rgb(255, 255, 255)"
-                }}
-                href="https://gotocourse.com/dashboard" className="btn btn-primary" style={{padding:"10px 28px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}>Go to Class</motion.a>
-            </div>
-            {/* <LogoutButton /> */}
+                    <div className="button_wrapper d-none text-center" style={{marginTop:"3rem"}}>
+                        <motion.button 
+                            whileHover={{
+                                // boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                                textShadow: "0px 0px 8px rgb(255, 255, 255)"
+                            }}
+                            className="btn btn-primary" 
+                            style={{padding:"10px 28px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}
+                            onClick={gotodashboard}
+                            disable={true}
+                        >
+                            {loading ? <div className="spinner-border text-light">
+                                <div className="visually-hidden">loading</div>
+                                </div>
+                                :
+                                "Go to Class"
+                            }
+                        </motion.button>
+                    </div>
+                    <div className="d-none">
+                        <LogoutButton />
+                    </div>
+                </div>
 
         </div>
         <div onClick={toggleSidebar} className={`d-lg-none ${clsx.overlay} ${generalState.showSidebar ? clsx.overlayopen :clsx.overlayclose}`}></div>

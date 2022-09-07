@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 import React from "react";
 import { Link } from "react-router-dom";
-import Teacher from "../images/teacher.png";
+// import Teacher from "../images/teacher.png";
+import Teacher from "../images/becomeTeacher.webp";
+import Image from "./Image";
 
 
 
@@ -9,9 +11,13 @@ const Becoming = () => {
   
   return (
     <section className="wrapper becoming">
-      <div className="container content-wrapper d-flex justify-content-end">
-        <div className="d-flex flex-column-reverse flex-md-row content justify-content-between">
-          <div className="right">
+      <div className="container content-wrapper">
+        <div className="content">
+          <div className="left">
+            {/* <img src={Teacher} alt="sideview of hands typing on a Laptop" /> */}
+            <Image width="552px" height="452px"  image={Teacher} alt="Group of people in an online meeting room" className="background" effect="blur" />
+          </div>
+          <div className="right mb-4 mb-md-0">
             <header>
               <h2 className="title">Become a teacher on Gotocourse</h2>
             </header>
@@ -33,9 +39,6 @@ const Becoming = () => {
               </motion.button>
                 </Link>
             </main>
-          </div>
-          <div className="left">
-            <img src={Teacher} alt="sideview of hands typing on a Laptop" />
           </div>
         </div>
       </div>

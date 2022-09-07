@@ -17,23 +17,31 @@ import Classroom from '../components/Classroom'
 import Layout from '../components/Layout'
 import Bootcamp from '../components/Bootcamp';
 import Development from "../components/Development"
+import Companies from '../components/Companies'
+import Experienced from '../components/Experienced'
+import Upcoming from '../components/Upcoming'
+import NewLanding from '../components/NewLanding/NewLanding'
 const Landing = () => {
   return (
     <div>
-        <Layout>
+      <NewLanding />
+        {/* <Layout>
         <Hero />
+        <Experienced />
         <Bootcamp />
         <Learn />
         <Development />
         <Transition />
         <Services />
+        <Companies />
         <Becoming />
         <Career />
         <Mentors />
         <Degree />
         <Testimonials />
         <Faq />
-        </Layout>
+        <Upcoming />
+        </Layout> */}
     </div>
   )
 }

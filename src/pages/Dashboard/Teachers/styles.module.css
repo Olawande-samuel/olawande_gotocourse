@@ -29,15 +29,20 @@
     height: 100vh;
     flex: 1;
     background-color: var(--primary);
-    padding: 30px;
+    padding: .5rem;
     overflow-y: hidden;
     display: flex;
     flex-direction: column;
     width: 100%;
 }
-
+@media (min-width: 500px ){
+    .teachers_main {
+        padding: 30px;
+        padding-bottom: 8px;
+    }
+}
 .teachers_topbar {
-    width: 80%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -49,10 +54,80 @@
     align-items: center;
     margin-bottom: 20px; */
 }
+
+.dashboard_courses{
+    gap: clamp(1rem, 0.7017rem + 1.4915vw, 2.1rem);
+    flex-wrap: wrap;
+    margin-top: 3rem;
+}
+.dashboard_courses--left {
+    flex: 2;
+    background: rgba(51, 255, 47, 0.06);
+    padding: 1.5rem  clamp(0.8rem, 0.1714rem + 3.1429vw, 3rem);
+    border-radius:10px;
+    min-height: 300px;
+    /* overflow: scroll; */
+}
+
+.dashboard_courses--right {
+    flex: 1;
+    background: var(--dashboard-blue);
+    padding: 1.5rem 3rem;
+    border-radius:10px;
+    min-height: 300px;
+}
+.dashboard_courses--left ul,
+.dashboard_courses--right ul{
+    list-style:none;
+    padding-left: 0;
+    font-family: 'Inter', sans-serif;
+}
+.dashboard_courses--left ul li,
+.dashboard_courses--right ul li{
+   padding-block: .5rem;
+
+   color: #262424;
+}
+
+.dashboard_courses--right h6 , .dashboard_courses--left h6{
+    color: var(--theme-blue);
+    margin-bottom: 2rem;
+    font-size: 23px;
+}
+.dashboard_class--wrapper{
+    display: flex;
+    align-items:center;
+}
+.dashboard_class--wrapper > div{
+    flex-basis:100%;
+    /* border: 1px solid; */
+}
+/* .dashboard_class--details {
+    width:18ch ;
+} */
+.dashboard_class--details p:first-child {
+    font-weight: bold;
+    font-size: 17px;
+}
+.dashboard_class--action {
+    gap: 1rem;
+}
+.dashboard_class--action button {
+    padding: 4px clamp(1.25rem, 0.7143rem + 2.6786vw, 3.125rem) !important;
+    font-size: 14px;
+}
+.dashboard_class--action .completed {
+    border-color:rgba(201, 209, 255, 1) ;
+    color: rgba(0, 130, 35, 1);
+}
+.dashboard_class--action .live {
+    color:#fff;
+    background-color: rgba(0, 130, 35, 1);
+}
 .teachers_profile {
     background-color:var(--white);
     height: 80vh;
-    padding: 40px;
+    padding: min(.5rem, 40px);
     border-radius: 10px;
     width: 100%;
     overflow-y: scroll;
@@ -79,7 +154,7 @@
     /* margin-right: 5px; */
 }
 .teachers__header {
-    font-size: 1.5rem;
+    font-size: 1rem;
     color: var(--textColorDark);
 }
 .teachers__paragraph {
@@ -151,7 +226,38 @@
 }
 
 
+.upload__file_box {
+    width: 80%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--textColorLighter);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
 
+.upload__file_box:hover {
+    background-color:rgba(208, 204, 204, 0.2)
+}
+
+.upload__file_box p {
+    margin: 0px;
+    margin-top: 15px;
+    color: var(--secondary);
+}
+
+.user__info_card{
+    height: 90px;
+    cursor: pointer;
+ }
+ .user__info_card td{
+    height: 90px;
+    letter-spacing: var(--letterSpacing);
+    text-align: center
+ }
 @media(max-width: 400px) {
     .teachers_topbar h1 {
         display: none;
@@ -159,7 +265,7 @@
 }
 
 .edit__profile {
-    max-width: 80%
+    width:min( 100% - .8rem, 700px)
 }
 
 .edit__profile h2 {
@@ -310,10 +416,62 @@
 
 .syllabus_container h5 {
     font-size: 0.9rem;
+    margin-bottom: 0;
 }
 
 .syllabus_container p {
     font-size: 0.7rem;
     letter-spacing: 0.4px;
     color: var(--textColorLight);
+    margin-bottom: 0;
+}
+
+
+
+/* REQUESTS */
+.requests {
+    padding: 20px;
+}
+
+
+.requests h2 {
+    font-weight: 500;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+
+.requests form {
+    width: min(100% - 0.5rem, 480px );
+}
+
+
+.requests form label {
+    margin-top: 20px;
+}
+
+.requests_button {
+    margin: 15px 0px;
+    width: 100%;
+}
+
+
+.requests_button button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    color: var(--primary);
+    background-color: var(--secondary);
+}
+
+/* EARNINGS */
+.earnings_card_wrapper{
+    display: flex;
+    flex-wrap:wrap;
+    gap: 1.5rem;
+
+}
+.earnings_card_wrapper > div {
+    flex: 1 1 30%;
 }

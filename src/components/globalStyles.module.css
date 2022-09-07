@@ -1,6 +1,6 @@
 :root {
     --textBlue: #0C2191;
-    --mainBg: rgba(100, 149, 237, .6);
+    --mainBg: rgba(100, 148, 237, 0.6);
 }
 
 .general_logout__button {
@@ -20,11 +20,19 @@
     border: none;
     color: whitesmoke;
     background-color: var(--theme-orange);
-    padding: 10px 20px;
-    font-size: 0.5rem;
+    padding: 10px 30px;
+    font-size: 1rem;
     border-radius: 8px;
 }
 
+
+@media (max-width:550px) {
+    .general_logout__button button {
+        padding: 10px;
+        font-size: 1rem;
+       
+    }
+}
 .upload_file__background {
     background-color: rgba(0,0,0,.3);
     position: fixed;
@@ -42,7 +50,7 @@
 .uploda_file__container {
     min-width: 300px;
     min-height: 300px;
-    background-color:rgb(100, 149, 237);
+    background-color:rgb(244, 247, 255);
     padding: 20px;
     border-radius: 10px;
     cursor:pointer

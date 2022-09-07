@@ -1,68 +1,23 @@
-import React from "react";
+import React, { useRef} from "react";
 import { Link } from "react-router-dom";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
-import SwiperCore, { Autoplay, EffectCreative } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Autoplay } from "swiper";
 import { motion } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-import hero from "../images/NewHero.png";
-import teach from "../images/newTeach.png";
-import stu from "../images/newLearn.png";
-import gen from "../images/generaltp.png";
-
-import tentative from "../images/tentative_hero.png";
-import Border from "../images/hero_border.png";
-import br from "../images/br.svg"
-import tl from "../images/tl.svg"
-import square from "../images/square.svg"
 import place from "../images/placehero.png"
-
 import Image from "./Image";
+import { useAuth } from "../contexts/Auth";
 
 import "swiper/css";
 import "swiper/css/effect-creative";
-import { useAuth } from "../contexts/Auth";
 
 const Hero = () => {
+  const ref = useRef()
   SwiperCore.use([Autoplay]);
-  const teacher = {
-    title: "Endless Possibilities With Borderless Learning",
-    subtitle:
-    "Enabling students to learn and  benefit from a global network of highly skilled professionals by increased access to quality learning and mentorship from domain experts",
-    image: stu,
-    link: "/categories",
-    background: "#F1F8FF",
-    color: "#F75C4E",
-    btn: "Explore Courses",
-    colorSwap:"#0C2191"
-  };
-  const student = {
-    title: "Explore Wide Range Of Tech Skills To Develop Your Professional Career",
-    subtitle:
-    "Learn from top industry experts or less",
-    image: teach,
-    link: "/signup",
-  background: "#F1F8FF",
-  color: "#0C2191",
-  btn: "Get Started",
-  colorSwap:"#F75C4E"
-
-  };
-  const general = {
-    title: "We make Teaching and learning Tech skills  Accessible.",
-    subtitle: "",
-    image: gen,
-    link: "/signup",
-    background: "#F1F8FF",
-
-    
-  }; 
   const New = {
-    title: "Learn from Experts.",
-    title2: "Learn from Anywhere.",
-    title3: "Learn More for Less.",
+    title: "Learn from experts",
+    title2: "Learn from anywhere",
+    title3: "Learn more for less",
     subtitle: "GotoCourse helps you achieve your tech career goals by connecting you to a global network of highly skilled professionals and domain experts.",
     image: place,
     link: "/categories",
@@ -74,44 +29,10 @@ const Hero = () => {
     
   }; 
 
+  const {  generalState: { navHeight }, } = useAuth();
   return (
-    <section className="hero">
+    <section className="hero" style={{height: `min(calc(100vh - ${navHeight}px ), 530px)`}}>
           <Others {...New} />
-
-      {/* <Swiper
-        creativeEffect={{
-          prev: {
-            shadow: true,
-            translate: [0, 0, -400],
-          },
-          next: {
-            translate: ["100%", 0, 0],
-          },
-        }}
-        loop={true}
-        speed={1000}
-        modules={[EffectCreative]}
-        spaceBetween={0}
-        slidesPerView={1}
-        pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
-        onSwiper={(swiper) => {
-          console.log(swiper);
-        }}
-        autoplay={{ delay: 3500 }}
-        effect={"creativeEffect"}
-        breakpoints={{ 320: { slidesPerView: 1, spaceBetween: 0 } }}
-      >
-        <SwiperSlide>
-          <Generic {...general} />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Others {...student} />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Others {...teacher} />
-        </SwiperSlide>
-      </Swiper> */}
     </section>
   );
 };
@@ -184,6 +105,7 @@ export const Generic = ({ image, background}) => {
     </div>
   );
 };
+
 export const Others = ({ title, image, title2, title3, subtitle, background,btn, link, color, colorSwap }) => {
   const {  generalState: { navHeight }, } = useAuth();
 
@@ -192,7 +114,7 @@ export const Others = ({ title, image, title2, title3, subtitle, background,btn,
       className="hero_container_wrapper"
       style={{ background: "#fff", color: colorSwap }}
     >
-      <div className="container hero_container" style={{minHeight: `calc(100vh - ${navHeight}px )`,display:"grid", placeItems:"center" }}>
+      <div className="container hero_container" style={{height: `min(calc(100vh - ${navHeight}px ), 530px)`,display:"grid", placeItems:"center" }}>
         <div className="row hero_row w-100">
           <motion.div
             className={`col-md-7 hero_left`}
@@ -202,10 +124,10 @@ export const Others = ({ title, image, title2, title3, subtitle, background,btn,
           >
             <div>
               <div className="hero_text_group">
-              <h1 className="hero_text">{title}</h1>
+              <h2 className="hero_text">{title}</h2>
               {/* new */}
-              <h1 className="hero_text">{title2}</h1>
-              <h1 className="hero_text">{title3}</h1>
+              <h2 className="hero_text">{title2}</h2>
+              <h2 className="hero_text">{title3}</h2>
               </div>
 
               <p className="hero_subtext text-center text-lg-start ">{subtitle}</p>
@@ -236,21 +158,6 @@ export const Others = ({ title, image, title2, title3, subtitle, background,btn,
               alt="woman on a laptop smiling"
               effect="blur"
             />
-              {/* <div className="background" style={{position:"relative", border:"1px solid red"}}>
-
-                  <img src={Border} alt="" className="hero_img_border position-absolute" height="300" />
-                  <img src={tl} alt=""  className="position-absolute top_left"/>
-                  <img src={br} alt=""  className="position-absolute bottom_right" />
-                  <img src={square} alt=""  className="position-absolute right_square" />
-                  <img src={square} alt="" className="position-absolute bottom_square"  />
-
-                  <LazyLoadImage
-                    alt="Woman holding laptop "
-                    src={image} // use normal <img> attributes as props
-                    visibleByDefault={true}
-                    className="new_hero_image position-absolute"
-                     />
-                </div> */}
           </motion.div>
         </div>
         <div></div>
