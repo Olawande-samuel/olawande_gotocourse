@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {motion} from "framer-motion"
 import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
@@ -10,8 +11,14 @@ import { useLocalStorage } from "../../hooks";
 
 
 
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { authentication, provider, facebookProvider } from "../../firebase-config.js"
+import goo from "../../images/goo.png"
+import face from "../../images/face.png"
 
 const KEY = 'gotocourse-userdata';
+
+
 const SignUp = () => {
   const emailReg = new RegExp(/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/)
   const passReg = new RegExp(/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/)
@@ -26,6 +33,11 @@ const SignUp = () => {
     fullname: "",
   });
   const [focus, setFocus] =useState(false)
+  const { authFunctions: { register ,googleSignUp, facebookSignUp}, generalState, setGeneralState, } = useAuth();
+  const { getItem, removeItem } = useLocalStorage();
+  
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (data.fullname !== "") {
@@ -36,14 +48,7 @@ const SignUp = () => {
     }
   }, [data.fullname]);
 
-  const { getItem, removeItem } = useLocalStorage();
-  const {
-    authFunctions: { register }, generalState,
-    setGeneralState,
-  } = useAuth();
-  
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData((old) => {
@@ -54,6 +59,7 @@ const SignUp = () => {
     });
   };
 
+  // Email and Password
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -72,6 +78,7 @@ const SignUp = () => {
           password:`${data.password}`
         })
         console.log({res})
+
         if(res.approved){
           // main dashboard
           const response = await register({...others, pledreStudentId: res._id}, "user");
@@ -81,7 +88,7 @@ const SignUp = () => {
             const { data } = response;
             removeItem(KEY);
             // set item
-            getItem(KEY, data);
+            getItem("userAuthToken", data);
             localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res)) 
             setGeneralState((old) => {
               return {
@@ -93,6 +100,7 @@ const SignUp = () => {
           }
         }
     } catch (err) {
+      console.error({err})
       toast.error(err.message, {
         position: "top-right",
         autoClose: 4000,
@@ -108,6 +116,58 @@ const SignUp = () => {
       setLoading(false);
     }
   };
+
+// SOCIAL SIGNUP
+  async function socialSignUp(token, type){
+    try{
+
+      const res = type === "google" ? await googleSignUp(token) : await facebookSignUp(token)
+      console.log(res)
+      if(res.statusCode !== 1) throw new AdvancedError(res.message, res.statusCode)
+      localStorage.setItem("gotocourse-userdata", JSON.stringify(res.data))
+      navigate("/user-onboarding")
+    }catch(err){
+      toast.error(err.message);
+    }
+  }
+   
+  function signUpWithGoogle(e){
+    e.preventDefault()
+    signInWithPopup(authentication, provider).then(res=>{
+        console.log(res)
+        if(res.user?.accessToken){
+         let token =  {
+          accessToken: res.user.accessToken,
+          userType: "teacher"
+        }
+        socialSignUp(token, "google")
+       }
+    }
+    ).catch(err=>{
+      toast.error(err.message);
+    }
+    )
+  }
+   function signUpWithFacebook(e){
+    e.preventDefault()
+    signInWithPopup(authentication, facebookProvider).then(res=>{
+      console.log(res)
+      if(res.user?.accessToken){
+        if(res.user?.accessToken){
+          let token =  {
+          accessToken: res.user.accessToken,
+          userType: "teacher"
+         }
+         socialSignUp(token, "facebook")
+        }
+      }
+    }
+  ).catch(err=>{
+      console.error(err)
+      toast.error(err.message);
+      }
+    )
+  }
   return (
     <SignInWrapper>
       <ToastContainer
@@ -123,8 +183,38 @@ const SignUp = () => {
       />
       <div className="form-wrapper w-100">
         <header>
-          <h3 className="title">Register</h3>
+          <h3 className="title">Register as a student</h3>
         </header>
+        <div className="social_signIn_wrapper">
+          <motion.button className="facebook d-block mb-3"
+            whileHover={{ 
+              boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+              textShadow:"0px 0px 8px rgb(255, 255, 255)",
+              backgroundColor: "#eee"
+            }}
+            onClick={signUpWithGoogle}
+          >
+              <i className="me-4">
+                  <img src={goo} alt="" width={25} height={25} />
+              </i>
+              Register with Google
+          </motion.button>
+          
+            <motion.button className="google d-block mb-3"
+              whileHover={{ 
+                boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                textShadow:"0px 0px 8px rgb(255, 255, 255)",
+                backgroundColor: "#eee"
+              }}
+              onClick={signUpWithFacebook}
+            >
+            <i className="me-2">
+                    <img src={face} alt="" width={25} height={25} />
+                </i>
+                Register with Facebook
+            </motion.button>
+          <small className="or d-block"><span>or</span></small>
+        </div>
         <form className="form" onSubmit={onSubmit}>
           <Input
             label="Fullname"

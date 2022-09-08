@@ -32,8 +32,8 @@ const Verification = () => {
 }
 
 export function Form({type}){
-    const {getItem} = useLocalStorage();
-    let userdata = getItem(KEY);
+    const {getItem, removeItem} = useLocalStorage();
+    let userdata = getItem("userAuthToken");
     const code1Ref = useRef([]);
     const navigate = useNavigate();
     const {authFunctions: {verifyEmail, resendEmailOTP}, setGeneralState} = useAuth();
@@ -109,6 +109,8 @@ export function Form({type}){
                       notification: message,
                     };
                 });
+                getItem(KEY, userdata);
+                removeItem("userAuthToken");
                 navigate(userdata.userType === "affiliate" ? "/affiliate" : userdata.userType === "student" ? "/user-onboarding" : userdata.usertype === "admin" ?  "/admin" : "/teacher/on-boarding");
             }
         }catch(err){
@@ -197,7 +199,7 @@ export function Form({type}){
                 {loading && <Loader />}
                 <ToastContainer />
                 <h3>Email Verification</h3>
-                <p>Please enter the verification code we sent to your email address</p>
+                <p>Please enter the verification code we sent to your email at <span style={{color:"var(--theme-orange"}}>{userdata?.email}</span></p>
                     <div className={clsx.form_group}>
                         <div className={clsx.code_container}>
                             <div className={clsx.code}>
