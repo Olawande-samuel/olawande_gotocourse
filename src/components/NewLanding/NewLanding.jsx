@@ -168,8 +168,8 @@ function Benefits(){
               ))}
           </div>
           <div className="text-center mt-4">
-          <Link to="/signup">
-            <button className="btn-plain benefits_button mx-auto">Get Started</button>
+          <Link to="/students">
+            <button className="btn-plain benefits_button mx-auto">Learn more</button>
             </Link>
           </div>
         </div>

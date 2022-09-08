@@ -55,6 +55,8 @@ import {Landing as CelebLanding} from "./pages/Celebrity";
 import Lounge from "./pages/Celebrity/Lounge";
 import CelebProfile from "./pages/Celebs/CelebProfile";
 import AllCelebs from "./pages/Celebrity/AllCelebs";
+import Email from "./pages/Confirmation/Email";
+import Confirm from "./pages/Confirmation/Confirm";
 
 function App() {
   return (
@@ -65,6 +67,8 @@ function App() {
           <Route index element={<Landing />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
+            <Route path="email" element={<Email />} />
+            <Route path="confirm" element={<Confirm />} />
             <Route path="privacy-policy" element={<Policies />} />
             <Route path="terms-of-use" element={<TermsOfUse />} />
             <Route path="cookies" element={<Cookies />} />

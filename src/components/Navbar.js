@@ -52,15 +52,16 @@ const Navbar = ({ background }) => {
   }, []);
 
   const celebRoute = location.pathname.split("/")[1] === "lounge";
-  function showDrop() {}
+  const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";
+  function showDrop() { }
   return (
     <nav
       ref={heightRef}
       section="top"
       className="nav navbar navbar-expand-lg navbar-dark"
       style={{
-        background: celebRoute ? "#191046" : "var(--theme-blue)",
-        color: "#fffff",
+        background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : "var(--theme-blue)",
+        color: confirmEmail ? "var(--theme-blue)" : "#fffff",
       }}
     >
       <ScrollToTop />
@@ -70,26 +71,53 @@ const Navbar = ({ background }) => {
           onClick={() => window.scrollTo(0, 0)}
           className="logo navbar-brand "
         >
-          <Logosm />
+          {confirmEmail ? <Logosm color="var(--theme-blue)" /> : <Logosm />}
         </Link>
         <button type="button" className="navbar-toggler " onClick={toggleNav}>
           <span className="navbar-toggler-icon"></span>
         </button>
         <div
-          className={`collapse navbar-collapse  justify-content-end  align-items-center mt-3 mt-lg-0 ${
-            show ? "show" : ""
-          }`}
+          className={`collapse navbar-collapse  justify-content-end  align-items-center mt-3 mt-lg-0 ${show ? "show" : ""
+            }`}
           id="navbarNav"
         >
           <ul className="navbar-nav me-5">
             {(location.pathname.split("/")[1] === "" || celebRoute) && (
               <li className="nav-item holder">
-                <Link className="link nav-link courses me-4" to="/categories">
+                <Link className="link nav-link courses me-4" to="/categories"
+                >
                   Categories
                 </Link>
                 {drop ? <NavList dropRef={dropRef} /> : null}
               </li>
             )}
+
+            {(confirmEmail) && (
+              <>
+                <li className="nav-item holder"
+                >
+                  <Link className="link nav-link courses me-4" to="/course"
+                  style={{
+                    color:"#0C2191"
+                  }}>
+                    Course
+                  </Link>
+                  {drop ? <NavList dropRef={dropRef} /> : null}
+                </li>
+                <li className="nav-item holder">
+                  <Link className="link nav-link courses me-4" to="/dashboard"
+                   style={{
+                    color:"#0C2191"
+                  }}>
+                    Go to DashBoard
+                  </Link>
+                  {drop ? <NavList dropRef={dropRef} /> : null}
+                </li>
+              </>
+            )}
+
+
+
             {value?.token ? (
               ""
             ) : (
@@ -98,7 +126,10 @@ const Navbar = ({ background }) => {
                   <HowItWorks />
                 </li> */}
                 <li className="nav-item d-flex align-items-center nav_link">
-                  <Link to="/become-a-teacher" className="link">
+                  <Link to="/become-a-teacher" className="link"
+                   style={{
+                    color:confirmEmail ? "#0C2191" : "rgba(255, 255, 255, 0.55)"
+                  }}>
                     Become a Teacher
                   </Link>
                 </li>
@@ -121,13 +152,12 @@ const Navbar = ({ background }) => {
               <LogoutButton />
             </li>
             <Link
-              to={`${
-                value.userType === "admin"
-                  ? "/admin"
-                  : value.userType === "student"
+              to={`${value.userType === "admin"
+                ? "/admin"
+                : value.userType === "student"
                   ? "/student"
                   : "/teacher"
-              }`}
+                }`}
             >
               <div
                 className="d-flex align-items-center"
@@ -160,7 +190,7 @@ const Navbar = ({ background }) => {
                 </motion.button>
               </Link>
 
-              <Link to="/students">
+              <Link to="/signup">
                 <motion.button
                   type="button"
                   className=" btn-plain d-none d-lg-block newRegister"
@@ -240,7 +270,7 @@ function OutsideClick(ref) {
 export function HowItWorks() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate()
-  
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
