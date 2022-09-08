@@ -9,6 +9,13 @@ width: 100%;
 background: #E5E5E5;
 font-family: 'Inter';
 font-style: normal;
+
+
+// @media (max-width: 920px){
+//     height: 50vh;
+  
+
+// }
 `
 
 const Content = styled.div`
@@ -50,6 +57,30 @@ h1{
         }
     }
 
+    @media (max-width: 920px){
+        width: 100%;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid red;
+
+        h1{
+            font-size: 36px;
+        }
+
+        button{
+            padding: 1rem;    
+
+            a{
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 150%;  
+            }
+        }
+
+    }
 
 `
 

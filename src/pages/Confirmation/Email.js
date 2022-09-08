@@ -53,12 +53,46 @@ a{
         background: #FAFAFA;
         border: 1px solid #000000;
         border-radius: 10px;
-        padding: 1rem 2rem;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 150%;
+        padding: 1rem 2rem;    
         outline: none;
         border: none;
+
+        a{
+            font-weight: 400;
+            font-size: 18px;
+            line-height: 150%;  
+        }
+    }
+}
+
+@media (max-width: 920px){
+    width: 100%;
+    // padding: unset;
+    margin: unset;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    h1{
+        font-size: 36px;
+    }
+
+    p, a{
+        font-size: 16px; 
+    }
+    
+    .btn{
+        button{
+            padding: 1rem;    
+
+            a{
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 150%;  
+            }
+        }
+
     }
 }
 
@@ -79,11 +113,12 @@ export default function Email() {
 
                         <div className="btn">
                             <button>
-                                Open Gmail
+                                <a href="!#"> Open Gmail</a>
+                               
                             </button>
 
                             <button>
-                                Open Gmail
+                                <a href="!#"> Open Gmail</a>
                             </button>
                         </div>
                     </Content>
