@@ -93,9 +93,9 @@ const Navbar = ({ background }) => {
               ""
             ) : (
               <>
-                <li className="nav-item d-flex align-items-center nav_link  me-4">
+                {/* <li className="nav-item d-flex align-items-center nav_link  me-4">
                   <HowItWorks />
-                </li>
+                </li> */}
                 <li className="nav-item d-flex align-items-center nav_link">
                   <Link to="/become-a-teacher" className="link">
                     Become a Teacher

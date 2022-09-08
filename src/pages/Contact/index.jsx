@@ -1,11 +1,13 @@
 import React, {useState, useEffect, useRef} from "react";
 import {ToastContainer, toast} from "react-toastify";
+import {useMutation} from "@tanstack/react-query"
+
+
 
 
 
 import clsx from "./styles.module.css";
 import Layout from "../../components/Layout";
-import {useMutation} from "@tanstack/react-query"
 import { useAuth } from "../../contexts/Auth";
 import Input from "../../components/Input";
 
@@ -76,7 +78,7 @@ function ContactForm({setFormHeight}){
     const {otherFunctions: {contactUs}} = useAuth()
     const ref = useRef()
 
-    const submitForm = useMutation((data)=>contactUs(data ), {
+    const submitForm = useMutation((data)=>contactUs(data), {
         onSuccess: (res)=>{
           if(res.success){
             toast.success(res.message, {

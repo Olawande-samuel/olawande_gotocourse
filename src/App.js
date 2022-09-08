@@ -54,6 +54,7 @@ import Verification from "./pages/User/Verification";
 import {Landing as CelebLanding} from "./pages/Celebrity";
 import Lounge from "./pages/Celebrity/Lounge";
 import CelebProfile from "./pages/Celebs/CelebProfile";
+import AllCelebs from "./pages/Celebrity/AllCelebs";
 
 function App() {
   return (
@@ -89,15 +90,16 @@ function App() {
               <Route path="how-it-works" element={<HIW />} />
               <Route path="mentors" element={<Out/>}>
                 <Route index element={<Lounge />} />
-                <Route path=":id" element={<CelebProfile />} />
+                <Route path="all" element={<Out />}>
+                  <Route index element={<AllCelebs />} />
+                  <Route path=":id" element={<CelebProfile />} />
+                </Route> 
               </Route>
             </Route>
 
             <Route path="affiliate-how-it-works" element={<HIWAffiliate />} />
             <Route path="teachers-how-it-works" element={<HIWTeacher />} />
             <Route path="student-how-it-works" element={<HIWStudent />} />
-
-
 
             <Route path="student" element={<Out />}>
               <Route path="" element={<StudentDashboard  />} />

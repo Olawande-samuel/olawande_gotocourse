@@ -210,10 +210,47 @@
 
 
 .new_main .slider_wrapper{
-    padding: 2rem 0 2rem 0;
+    padding: 2rem 0;
 }
 .new_main .see_all {
     display: none;
+}
+
+.all_mentors {
+    display: grid;
+    place-items:center;
+    gap: 2rem;
+    grid-template-columns: min(100%, 380px);
+    place-content: center;
+}
+.all_mentors .celebrity_card {
+    width: 100%;
+}
+
+@media (min-width:612px){
+    .all_mentors {
+        display: grid;
+        /* gap: 2rem; */
+        grid-template-columns: repeat(2, 1fr);
+        justify-content:space-between;
+    }
+}
+
+
+@media (min-width: 979px){
+    .all_mentors {
+        display: grid;
+        gap: 3rem;
+        grid-template-columns: repeat(3, 1fr)
+    }
+}
+
+@media (min-width: 1240px){
+    .all_mentors {
+        display: grid;
+        gap: 3rem;
+        grid-template-columns: repeat(4, 1fr)
+    }
 }
 
 .input_wrapper {

@@ -21,6 +21,7 @@ export const kycFunctions = {
                     return status >= 200 && status <= 505;
                 }
             })
+
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {...res.data, success: true};
         }catch(err){

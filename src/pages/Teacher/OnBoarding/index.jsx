@@ -68,7 +68,7 @@ const OnBoarding = () => {
         try{
             setLoading(_ => true);
             let data = createBoarding(formstate, userdata?.token);
-            const res = await addMentorKYC(data);
+            const res = await addMentorKYC(data, userdata?.token);
             const {success, statusCode, message} = res;
             if(!success) throw new AdvancedError(message, statusCode);
             else {
