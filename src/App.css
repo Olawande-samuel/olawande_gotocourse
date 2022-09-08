@@ -212,7 +212,8 @@ td {
 .nav .link {
   position: relative;
   /* color: var(--btn-color) !important; */
-  color: #fff !important;
+  /* color: #fff !important; */
+  color: #fff;
   font-size: 14px;
   font-weight: 450;
   outline: none;
