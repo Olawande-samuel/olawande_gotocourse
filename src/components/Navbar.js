@@ -15,6 +15,7 @@ import { categories as navList } from "../data";
 import { useAuth } from "../contexts/Auth";
 import { useLocalStorage } from "../hooks";
 import { ScrollToTop } from "../pages/Courses";
+import LogoutButton from "./LogoutButton";
 
 const KEY = "gotocourse-userdata";
 
@@ -115,6 +116,10 @@ const Navbar = ({ background }) => {
             )}
           </ul>
           {value?.token ? (
+            <>
+            <li className="me-3">
+              <LogoutButton />
+            </li>
             <Link
               to={`${
                 value.userType === "admin"
@@ -137,6 +142,8 @@ const Navbar = ({ background }) => {
                 <span>{value.firstName}</span>
               </div>
             </Link>
+            </>
+
           ) : (
             <>
               <Link to="/login">

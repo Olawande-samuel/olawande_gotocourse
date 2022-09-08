@@ -199,7 +199,7 @@ export function Form({type}){
                 {loading && <Loader />}
                 <ToastContainer />
                 <h3>Email Verification</h3>
-                <p>Please enter the verification code we sent to your email address</p>
+                <p>Please enter the verification code we sent to your email at <span style={{color:"var(--theme-orange"}}>{userdata?.email}</span></p>
                     <div className={clsx.form_group}>
                         <div className={clsx.code_container}>
                             <div className={clsx.code}>

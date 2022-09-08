@@ -45,14 +45,17 @@ const Login = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
     if(data.email.trim() === "" || data.password.trim() === "") return;
+
     setLoading(true);
+
     try {
       const response = await login(data, "user");
       console.log(response)
       const {success, statusCode, message} = response;
       
-      if(success) {
+      if(success){
         const {data: d} = response;
         console.log({response})
         removeItem(KEY);
@@ -62,22 +65,40 @@ const Login = () => {
             notification: response.message
           }
         }) 
-        if(d.userType === "student"){
+        if(d.userType === "student" && d.isVerified){
           getItem(KEY, d);
-
           navigate("/student")
 
-        } else if(d.userType === "teacher" || d.userType === "mentor"){
+        } else if(d.userType === "teacher"){
 
           if(d.canTeach){
-            getItem(KEY, d);
-            navigate("/teacher")
+            if(d.isVerified){
+              getItem(KEY, d);
+              navigate("/teacher")
+            } else {
+              getItem("userAuthToken", d);
+              navigate("/user-authentication")
+            }
           
           } else {
-            
             throw new AdvancedError("Your application is under review. Kindly check back later", 0)
           }
-        } 
+        } else if(d.userType === "mentor"){
+
+            if(d.isVerified){
+              getItem(KEY, d);
+              navigate("/teacher")
+            } else {
+              getItem("userAuthToken", d);
+              navigate("/user-authentication")
+            }
+        } else {
+          if(d.usertype === "student") {
+            getItem("userAuthToken", d);
+            navigate("/user-authentication")
+          }
+          throw new AdvancedError("Kindly complete your email verification process", 0)
+        }
       }else throw new AdvancedError(message, statusCode);
 
     } catch (err) {
