@@ -64,7 +64,6 @@ h1{
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        border: 2px solid red;
 
         h1{
             font-size: 36px;
