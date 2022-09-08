@@ -69,7 +69,9 @@ const LoginOptions = ({ closeOverlay, type }) => {
             allowOnAccountExistError(error, "google", usertype);
           }
         });
+
     } else {
+
       signInWithPopup(authentication, facebookProvider)
         .then((res) => {
           console.log("facebook", res);
@@ -114,7 +116,8 @@ const LoginOptions = ({ closeOverlay, type }) => {
     }
   }
 
-  function allowOnAccountExistError(error, type, usertype, setLoading) {
+  function allowOnAccountExistError(error, type, usertype) {
+    
     const email = error.customData.email;
     console.log("customdata", error.customData);
     console.log("customdata mail", error.customData.email);
@@ -174,7 +177,6 @@ const LoginOptions = ({ closeOverlay, type }) => {
   return (
     <div className="signUpOptions_overlay">
       <ToastContainer />
-
       <div className="signUpOptions_overlay_container">
         {loading ? (
           <div className="spinner-border text-primary text-center d-flex mx-auto">
