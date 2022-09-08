@@ -164,7 +164,9 @@ const Dashboard = () => {
                     });
                 }
             }catch(err){
-                console.log(err.statusCode);
+                console.log(err.statusCode, err.message);
+                if(err.statusCode === 2) err.message = "Session expired. Please login again";
+                console.log(err.statusCode, err.message);
                 toast.error(err.message, {
                     position: "top-right",
                     autoClose: 4000,
