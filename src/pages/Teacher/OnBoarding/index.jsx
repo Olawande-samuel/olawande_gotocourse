@@ -15,12 +15,13 @@ import { useLocalStorage } from "../../../hooks";
 
 
 
-const KEY = 'gotocourse-userdata';
 const OnBoarding = () => {
     const [page, setPage] = useState(0);
     const {kycFunctions: {addMentorKYC}} = useAuth();
     const {getItem} = useLocalStorage();
-    let userdata = getItem(KEY)
+    
+    let userdata = getItem("userAuthToken")
+
     const [loading, setLoading] = useState(false);
     const [formstate, setFormstate] = useState({
         firstName: "",

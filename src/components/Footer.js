@@ -173,7 +173,7 @@ const Footer = () => {
               // <Link to={link.path}>
               <HashLink key={index} to={link.path} scroll={el=>scrollWithOffset(el)}
               >
-
+ 
                 <motion.li
                 
                 whileHover={{

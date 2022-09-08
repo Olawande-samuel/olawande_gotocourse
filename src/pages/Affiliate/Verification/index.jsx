@@ -32,8 +32,8 @@ const Verification = () => {
 }
 
 export function Form({type}){
-    const {getItem} = useLocalStorage();
-    let userdata = getItem(KEY);
+    const {getItem, removeItem} = useLocalStorage();
+    let userdata = getItem("userAuthToken");
     const code1Ref = useRef([]);
     const navigate = useNavigate();
     const {authFunctions: {verifyEmail, resendEmailOTP}, setGeneralState} = useAuth();
@@ -109,6 +109,8 @@ export function Form({type}){
                       notification: message,
                     };
                 });
+                getItem(KEY, userdata);
+                removeItem("userAuthToken");
                 navigate(userdata.userType === "affiliate" ? "/affiliate" : userdata.userType === "student" ? "/user-onboarding" : userdata.usertype === "admin" ?  "/admin" : "/teacher/on-boarding");
             }
         }catch(err){
