@@ -15,11 +15,14 @@ import { useAuth } from "../../../contexts/Auth";
 
 
 
-const KEY ='gotocourse-userdata';
 const OnBoarding = () => {
     const [page, setPage] = useState(0);
     const {getItem} = useLocalStorage();
-    let userdata = getItem(KEY)
+
+    
+    let userdata = getItem("userAuthToken")
+
+
     const navigate =useNavigate()
     const {kycFunctions: {addStudentKYC}} = useAuth();
     const [loading, setLoading] = useState(false);

@@ -73,8 +73,9 @@ const TeacherSignup = () => {
       else {
         const { data } = response;
         removeItem(KEY);
+
         localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res))
-        getItem(KEY, data);
+        getItem("userAuthToken", data);
         setGeneralState((old) => {
           return {
             ...old,

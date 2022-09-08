@@ -217,11 +217,7 @@ const Dashboard = () => {
     ]
 
 
-
-
-
-
-const Dashboard = () => {  
+// const Dashboard = () => {  
     return (
         <Admin header="Dashboard">
             <ToastContainer />
@@ -324,5 +320,4 @@ const Dashboard = () => {
 }
 
 
-
-export default Dashboard
+export default Dashboard;

@@ -72,6 +72,7 @@ const SignUp = () => {
           password:`${data.password}`
         })
         console.log({res})
+
         if(res.approved){
           // main dashboard
           const response = await register({...others, pledreStudentId: res._id}, "user");
@@ -81,7 +82,7 @@ const SignUp = () => {
             const { data } = response;
             removeItem(KEY);
             // set item
-            getItem(KEY, data);
+            getItem("userAuthToken", data);
             localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res)) 
             setGeneralState((old) => {
               return {
@@ -93,6 +94,7 @@ const SignUp = () => {
           }
         }
     } catch (err) {
+      console.error({err})
       toast.error(err.message, {
         position: "top-right",
         autoClose: 4000,
