@@ -504,7 +504,7 @@ export const adminTeacherFunctions = {
     },
     verify: async function(_data, token){
         try{
-            const res = await axios.patch(`${baseURL}/admin/teacher/verify`,
+            const res = await axios.post(`${baseURL}/admin/teacher/verify/toggle`,
             JSON.stringify(_data),
             {
                 headers: {
