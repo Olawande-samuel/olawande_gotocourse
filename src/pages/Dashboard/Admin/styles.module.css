@@ -225,6 +225,21 @@
     background-color: rgba(230,230,230,0.3);
 }
 
+.user__email button {
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.user__email button svg {
+    color: red;
+    font-size: 1.2rem;
+}
+
 .form_group__teachers {
     width: 100%;
     padding-top: 10px;
