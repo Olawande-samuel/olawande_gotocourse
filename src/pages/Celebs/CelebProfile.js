@@ -15,6 +15,7 @@ import mk from '../../images/celebs/mk.png'
 import transparent from '../../images/celebs/stepup.png'
 import Layout from "../../components/Layout"
 
+import {witnesses} from "../../components/Testimonials"
 
 const MainContainer = styled.div`
 background: #191046;
@@ -626,22 +627,19 @@ export default function CelebProfile() {
                         <Review>
                             <h4>Reviews</h4>
                             <div className="box">
-                                <div className="card">
-                                    <p>Monday</p>
-                                    <span>A Week Ago</span>
-                                    <p>My Learning experience on Gotocourse was great are affordable and the teachers were very friendly and supportive</p>
-                                </div>
-                                <div className="card">
-                                    <p>Monday</p>
-                                    <span>A Week Ago</span>
-                                    <p>I’m a successful beneficiary of the gotocourse mentorship programme. My experience while learning was great and I was able to launch my career within a short period of time</p>
-                                </div>
-                                <div className="card">
-                                    <p>Monday</p>
-                                    <span>A Week Ago</span>
-                                    <p>Gotocourse did not only help me level up my tech skills but they also connected me with the right mentors who assisted me in getting my dream job.</p>
-                                </div>
+                                {
+                                    witnesses.map(item=>(
+                                        <div className="card">
+                                            <div className="d-flex">
+                                            <img src={item.profile} alt="user image" style={{width:"50px", height:"50px", borderRadius:"50%"}} />
+                                            <span className="ms-3" >{item.name}</span>
+                                            </div>
+                                            <span>{item.location}</span>
+                                            <p>{item.content}</p>
+                                        </div>
 
+                                    ))
+                                }
                             </div>
 
 

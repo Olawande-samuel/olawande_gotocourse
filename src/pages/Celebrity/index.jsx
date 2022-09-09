@@ -278,7 +278,7 @@ export function CelebCard({img, mentorImg, mentorFirstName, mentorLastName, expe
     return (
         <div className={style.celebrity_card} onClick={()=>{
             localStorage.setItem("gotocourse-viewMentor", JSON.stringify(item))
-            navigate(`/lounge/mentors/${mentorFirstName}-${mentorLastName}`)
+            navigate(`/lounge/mentors/all/${mentorFirstName}-${mentorLastName}`)
         }}>      
             <img src={img ? img : `${IMAGEURL}/${mentorImg}`} alt={`${mentorFirstName} ${mentorLastName}`} className={style.card_img} />
             <div className={style.card_content}>
@@ -301,7 +301,7 @@ function Slider({title, data, size=4, midSize=4, gap=10}){
             <div className="container">
                 <div className={`${style.slider_header} d-flex justify-content-between align-items-center`}>
                     <h2>{title}</h2>
-                    <Link to="mentors">
+                    <Link to="mentors/all">
                         <span className={style.see_all}>See all</span>  
                     </Link>
                 </div>

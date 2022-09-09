@@ -875,9 +875,13 @@ export const Teachers = ({ children, isMobile, userdata, notification, header })
           const {message, success, statusCode} = res;
           if(!success) throw new AdvancedError(message, statusCode);
           const {data} = res
+          console.log({data})
+          console.log({res})
           if(data.length > 0) {
             const unread = data.filter((notification)=>notification.isRead !== true)
             setGeneralState({...generalState, notifications: unread.length})
+          }else {
+            setGeneralState({...generalState, notifications: 0})
           }
         }catch(err){
           toast.error(err.message, {

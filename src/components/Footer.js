@@ -65,6 +65,11 @@ const rightLink = [
     title:"Careers",
     path:"/career"
   },
+  // {
+  //   id:9,
+  //   title:"How It Works",
+  //   path:"/career"
+  // },
   {
     id:6,
     title:"Contact us",
@@ -168,7 +173,7 @@ const Footer = () => {
               // <Link to={link.path}>
               <HashLink key={index} to={link.path} scroll={el=>scrollWithOffset(el)}
               >
-
+ 
                 <motion.li
                 
                 whileHover={{

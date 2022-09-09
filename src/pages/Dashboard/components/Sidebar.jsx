@@ -232,29 +232,9 @@ const Sidebar = ({isMobile}) => {
             title: "Sales"
         },
         {
-            icon: BiBarChartSquare,
-            path: "revenue",
-            title: "Revenue"
-        },
-        {
             icon: FaMoneyBillWave,
             path: "income",
             title: "Income"
-        },
-        {
-            icon: IoIosPerson,
-            path: "visits",
-            title: "Visits"
-        },
-        {
-            icon: IoIosCash,
-            path: "paid-commissions",
-            title: "Paid"
-        },
-        {
-            icon: FaMoneyBillWave,
-            path: "unpaid-commissions",
-            title: "Unpaid"
         },
     ];
 
@@ -326,28 +306,28 @@ const Sidebar = ({isMobile}) => {
                         </NavLink>
                     ))
                 }
-            <div className="button_wrapper d-none text-center" style={{marginTop:"3rem"}}>
-                <motion.button 
-                    whileHover={{
-                        // boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-                        textShadow: "0px 0px 8px rgb(255, 255, 255)"
-                    }}
-                    className="btn btn-primary" 
-                    style={{padding:"10px 28px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}
-                    onClick={gotodashboard}
-                    disable={true}
-                >
-                    {loading ? <div className="spinner-border text-light">
-                        <div className="visually-hidden">loading</div>
-                        </div>
-                        :
-                        "Go to Class"
-                    }
-                </motion.button>
-            </div>
-            <div className="d-none">
-                <LogoutButton />
-            </div>
+                    <div className="button_wrapper d-none text-center" style={{marginTop:"3rem"}}>
+                        <motion.button 
+                            whileHover={{
+                                // boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                                textShadow: "0px 0px 8px rgb(255, 255, 255)"
+                            }}
+                            className="btn btn-primary" 
+                            style={{padding:"10px 28px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}
+                            onClick={gotodashboard}
+                            disable={true}
+                        >
+                            {loading ? <div className="spinner-border text-light">
+                                <div className="visually-hidden">loading</div>
+                                </div>
+                                :
+                                "Go to Class"
+                            }
+                        </motion.button>
+                    </div>
+                    <div className="d-none">
+                        <LogoutButton />
+                    </div>
                 </div>
 
         </div>

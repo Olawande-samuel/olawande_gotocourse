@@ -11,15 +11,18 @@ import Loader from "../../../components/Loader";
 import { useLocalStorage } from "../../../hooks";
 import { AdvancedError } from "../../../classes";
 import { useAuth } from "../../../contexts/Auth";
+import { KEY, VERIFICATION_KEY } from "../../../constants";
 
 
 
-
-const KEY ='gotocourse-userdata';
 const OnBoarding = () => {
     const [page, setPage] = useState(0);
     const {getItem} = useLocalStorage();
-    let userdata = getItem(KEY)
+
+    
+    let userdata = getItem(VERIFICATION_KEY)
+
+
     const navigate =useNavigate()
     const {kycFunctions: {addStudentKYC}} = useAuth();
     const [loading, setLoading] = useState(false);
@@ -72,7 +75,10 @@ const OnBoarding = () => {
             const {success, message, statusCode} = res;
             if(!success) throw new AdvancedError(message, statusCode)
             else {
-                setPage(_ => 10);
+               console.log({res})
+                // SET USERDATA HERE
+                
+                setPage(_ => 10 );
                 toast.success(message, {
                     position: "top-right",
                     autoClose: 4000,

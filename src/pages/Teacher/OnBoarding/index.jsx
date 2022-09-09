@@ -11,16 +11,18 @@ import Loader from "../../../components/Loader";
 import { useAuth } from "../../../contexts/Auth";
 import { AdvancedError } from "../../../classes";
 import { useLocalStorage } from "../../../hooks";
+import { KEY, VERIFICATION_KEY } from "../../../constants";
 
 
 
 
-const KEY = 'gotocourse-userdata';
 const OnBoarding = () => {
-    const [page, setPage] = useState(10);
+    const [page, setPage] = useState(0);
     const {kycFunctions: {addMentorKYC}} = useAuth();
     const {getItem} = useLocalStorage();
-    let userdata = getItem(KEY)
+    
+    let userdata = getItem(VERIFICATION_KEY)
+
     const [loading, setLoading] = useState(false);
     const [formstate, setFormstate] = useState({
         firstName: "",
@@ -68,7 +70,7 @@ const OnBoarding = () => {
         try{
             setLoading(_ => true);
             let data = createBoarding(formstate, userdata?.token);
-            const res = await addMentorKYC(data);
+            const res = await addMentorKYC(data, userdata?.token);
             const {success, statusCode, message} = res;
             if(!success) throw new AdvancedError(message, statusCode);
             else {
@@ -126,9 +128,6 @@ const OnBoarding = () => {
         </div>
     )
 }
-
-
-
 
 function WelcomeSection({pageHandler}){
     return(
@@ -354,6 +353,11 @@ function SectionSix({submit, formstate, setFormstate}){
 
 
 function Success({}){
+    
+    useEffect(()=>{
+        localStorage.clear();
+    },[])
+
     return (
         <div className={clsx.question}>
             <div className={clsx.question_container}>

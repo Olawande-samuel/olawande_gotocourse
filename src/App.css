@@ -212,7 +212,8 @@ td {
 .nav .link {
   position: relative;
   /* color: var(--btn-color) !important; */
-  color: #fff !important;
+  /* color: #fff !important; */
+  color: #fff;
   font-size: 14px;
   font-weight: 450;
   outline: none;
@@ -2000,7 +2001,7 @@ line-height: 16px;
 .about_wrapper p {
   font-size: clamp(16px, 1rem + 2vw, 18px);
 }
-.about_hero {
+.about_hero{
   background: url(./images/about-hero.webp), rgba(0, 0, 0, 0.7);
   background-repeat:no-repeat;
   background-blend-mode: multiply;
@@ -2008,7 +2009,17 @@ line-height: 16px;
   background-position: top;
   background-origin: center;
 }
-.about_hero main {
+
+.new_about_hero {
+  background:  radial-gradient(50% 50% at 50% 50%, rgba(32, 65, 239, 0.4774) 0%, rgba(12, 33, 145, 0.62) 100%), url(./images/about_us.png);
+  background-repeat:no-repeat;
+  background-size: cover;
+  background-position: top;
+  background-origin: center;
+}
+
+.about_hero main, 
+.new_about_hero main {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -2028,19 +2039,29 @@ line-height: 16px;
   font-size: 80px;
 }
 
+.new_about_hero h1, 
 .about_hero h1 {
   width: min(100%, 800px);
   font-size: clamp(3.2rem, -0.875rem + 8vw, 5.10rem);
   color: #fff;
 }
-.about_hero > div {
+
+.new_about_hero h1 {
+  text-align:center;
+  margin: auto;
+}
+.about_hero > div, 
+.new_about_hero > div {
   display: flex;
   justify-content:flex-start;
   align-items: center;
   height: 100%;
 }
+.new_about_hero .article,
 .about_article {
-  margin-block:4.5rem;
+  padding: 4.5rem 8rem;
+  background: #9DA6BA;
+  color: var(--theme-blue);
 }
 .about_hero > div h1 {
   width: min(100% - .5rem, 480px);
@@ -2259,7 +2280,7 @@ tr th, thead td, td, td span  {
 }
 
 .signUpOptions_overlay {
-  z-index: 1;
+  z-index: 5;
   position: fixed;
   background: rgba(0, 0, 0, 0.8);
   will-change: opacity;

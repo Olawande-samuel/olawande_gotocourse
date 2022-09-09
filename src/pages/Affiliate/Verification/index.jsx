@@ -11,10 +11,11 @@ import { useAuth } from "../../../contexts/Auth";
 import Loader from "../../../components/Loader";
 import { AdvancedError } from "../../../classes";
 import { useLocalStorage } from "../../../hooks";
+import { KEY, VERIFICATION_KEY } from "../../../constants";
 
 
 
-const KEY = 'gotocourse-userdata';
+
 const Verification = () => {
     useEffect(() => {
         console.log("Registration page showing...");
@@ -32,8 +33,8 @@ const Verification = () => {
 }
 
 export function Form({type}){
-    const {getItem} = useLocalStorage();
-    let userdata = getItem(KEY);
+    const {getItem, removeItem, updateItem} = useLocalStorage();
+    let userdata = getItem(VERIFICATION_KEY);
     const code1Ref = useRef([]);
     const navigate = useNavigate();
     const {authFunctions: {verifyEmail, resendEmailOTP}, setGeneralState} = useAuth();
@@ -84,7 +85,9 @@ export function Form({type}){
 
     async function submitHandler(e){
         e.preventDefault();
+
         try{
+
             setLoading(_ => true);
             let d = `${formstate.code1}${formstate.code2}${formstate.code3}${formstate.code4}${formstate.code5}${formstate.code6}`;
             console.log({email: userdata.email, otp: d});
@@ -92,6 +95,7 @@ export function Form({type}){
             const {statusCode, success, message} = res;
             console.log(res);
             if(message === 'Account already verified') throw new AdvancedError(`${message}. Please proceed to login`, statusCode);
+            // add navigate to login
             if(!success) throw new AdvancedError(message, statusCode);
             else {
                 toast.success(message, {
@@ -111,6 +115,7 @@ export function Form({type}){
                 });
                 navigate(userdata.userType === "affiliate" ? "/affiliate" : userdata.userType === "student" ? "/user-onboarding" : userdata.usertype === "admin" ?  "/admin" : "/teacher/on-boarding");
             }
+            
         }catch(err){
             toast.error(err.message, {
                 position: "top-right",
@@ -197,7 +202,7 @@ export function Form({type}){
                 {loading && <Loader />}
                 <ToastContainer />
                 <h3>Email Verification</h3>
-                <p>Please enter the verification code we sent to your email address</p>
+                <p>Please enter the verification code we sent to your email at <span style={{color:"var(--theme-orange"}}>{userdata?.email}</span></p>
                     <div className={clsx.form_group}>
                         <div className={clsx.code_container}>
                             <div className={clsx.code}>

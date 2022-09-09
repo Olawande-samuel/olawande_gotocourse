@@ -18,7 +18,7 @@ const Password = ({ label, password, name, handleChange, value, placeholder, foc
           value={value}
           onFocus={focus}
           onBlur={blur}
-          autoComplete="off"
+          autoComplete="new-password"
         />
         {password === "password" ? (
           <span className="eye">

@@ -1004,7 +1004,7 @@ export function Approve() {
   const navigate = useNavigate()
   const [data, setData] = useState(null);
   const {getItem} = useLocalStorage();
-  const { adminTeacherFunctions: { verify, verify_pledre, addMentor}, generalState,   generalState:{pledre}, setGeneralState, } = useAuth();
+  const { adminTeacherFunctions: { verify, verify_pledre, addMentor},kycFunctions:{getATeacherKYC}, generalState,   generalState:{pledre}, setGeneralState, } = useAuth();
   const info = [
     {
       title: "Courses",
@@ -1022,9 +1022,10 @@ export function Approve() {
   
   useEffect(() => {
     ( async ()=>{
-      const teacherInfo = getItem("gotocourse-teacherDetails")
-      let pledreInfo;
-      console.log("getting")
+        const teacherInfo = getItem("gotocourse-teacherDetails")
+        let pledreInfo;
+        console.log("getting")
+        console.log(pledre)
         try {
           if(pledre){
             console.log(pledre)
@@ -1110,9 +1111,9 @@ export function Approve() {
         if (!success) throw new AdvancedError(message, statusCode);
         else {
           // remove from pledre
-          const PledRes = (data.accessPledre === true) && await pledre.deleteTeacher(data.pledre?._id)
-          console.log({PledRes})
-          setData({...data, accessPledre: !data.accessPledre})
+          // const PledRes = (data.accessPledre === true) && await pledre.deleteTeacher(data.pledre?._id)
+          // console.log({PledRes})
+          // setData({...data, accessPledre: !data.accessPledre})
           toast.success(message, {
             position: "top-right",
             autoClose: 4000,
@@ -1246,6 +1247,52 @@ export function Approve() {
         });
     }
   }
+  // async function approveKYC(e, id){
+  //   e.preventDefault();
+  //   const userdata = getItem(KEY)
+  //   try {
+  //     setGeneralState((old) => {
+  //       return {
+  //         ...old,
+  //         loading: true,
+  //       };
+  //     });
+      
+  //     const res = await getATeacherKYC(item, userdata?.token);
+  //     const { message, success, statusCode } = res;
+  //     if (!success) throw new AdvancedError(message, statusCode);
+  //     else {
+  //       //do somethings
+  //       // localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
+  //       toast.success(message, {
+  //         position: "top-right",
+  //         autoClose: 4000,
+  //         hideProgressBar: true,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message, {
+  //       position: "top-right",
+  //       autoClose: 4000,
+  //       hideProgressBar: true,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //     }) 
+  //   } finally{
+  //       setGeneralState((old) => {
+  //         return {
+  //           ...old,
+  //           loading: false,
+  //         };
+  //       });
+  //   }
+  // }
  
   return (
     <Admin header="Approval">
@@ -2307,20 +2354,25 @@ export function CourseDetails({}){
     let pledId
     try {    
       if(formstate.status !== "active"){
-        const pledRes = await generalState.pledre.addCourse({
-          course_name: formstate.name,
-          course_description: formstate.description,
-          is_public: false,
-          short_description: formstate.description,
-          price: formstate.price
-        })
-        console.log({pledRes})
-        if(pledRes.id){
-          pledId = pledRes.id
-          const res = await toggleCourseStatus(userdata?.token,  params?.id, {pledreCourseId: pledId});
+        // const pledRes = await generalState.pledre.addCourse({
+        //   course_name: formstate.name,
+        //   course_description: formstate.description,
+        //   is_public: false,
+        //   short_description: formstate.description,
+        //   price: formstate.price
+        // })
+        // console.log({pledRes})
+        // if(pledRes.id){
+        //   pledId = pledRes.id
+          // const res = await toggleCourseStatus(userdata?.token,  params?.id, {pledreCourseId: pledId});
+          
+          const res = await toggleCourseStatus(userdata?.token,  params?.id, {});
           const { success, message, statusCode } = res;
           if (!success) throw new AdvancedError(message, statusCode);
           setFormstate({...formstate, status: "active"})
+          
+          // NEEDS REMOVE COURSE API FROM PLEDRE
+          
           toast.success(message, {
             position: "top-right",
             autoClose: 4000,
@@ -2330,7 +2382,7 @@ export function CourseDetails({}){
             draggable: true,
             progress: undefined,
           });
-        }
+        // }
       }
       else {
         const res = await toggleCourseStatus(userdata?.token,  params?.id, {pledreCourseId: pledId});

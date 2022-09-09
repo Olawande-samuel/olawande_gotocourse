@@ -3,14 +3,14 @@ import {Link, useNavigate} from "react-router-dom";
  import Logo from "../images/Logo.png";
 import {BiArrowBack} from "react-icons/bi"
 import {Logo as ImageLogo, Logosm} from "../images/components/svgs"
-
+import {ToastContainer} from "react-toastify"
 const SignInWrapper = ({ image, children }) => {
   const navigate = useNavigate()
   return (
     <section className="signWrapper">
       <div className="back">
         <div onClick={()=>{
-          navigate(-1)
+          navigate("/")
         }}>
           <i><BiArrowBack style={{fontSize:"30px"}} color="#ffffff" /></i>
         </div>
@@ -25,10 +25,12 @@ const SignInWrapper = ({ image, children }) => {
                 </div>
                 </Link>
               </div>
+              
         </div>
       </div>
       <div>
         <div style={{display:"grid", placeItems:"center", width:"min(100% - .5rem, 600px)",  height:"100%", margin:"auto"}}>
+        
           <header className="signWrapper_header">
             <Link to="/" >
             <div className="signWrapper_logo_text text-center text-white">
