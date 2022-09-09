@@ -69,7 +69,7 @@ const OnBoarding = () => {
         e.preventDefault();
         try{
             setLoading(_ => true);
-            let data = createBoarding(formstate, userdata?.token);
+            let data = createBoarding(formstate);
             const res = await addMentorKYC(data, userdata?.token);
             const {success, statusCode, message} = res;
             if(!success) throw new AdvancedError(message, statusCode);
@@ -204,7 +204,7 @@ function SectionTwo({pageHandler, formstate, changeHandler}){
         },
         {
             name: "region",
-            label: "Region",
+            label: "State",
             type: "text",
             value: formstate.region
         }

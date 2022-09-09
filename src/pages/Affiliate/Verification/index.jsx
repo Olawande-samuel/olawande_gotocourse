@@ -93,11 +93,12 @@ export function Form({type}){
             console.log({email: userdata.email, otp: d});
             const res = await verifyEmail({email: userdata.email, otp: d})
             const {statusCode, success, message} = res;
-            console.log(res);
+            console.log({res});
             if(message === 'Account already verified') throw new AdvancedError(`${message}. Please proceed to login`, statusCode);
             // add navigate to login
             if(!success) throw new AdvancedError(message, statusCode);
             else {
+                updateItem(VERIFICATION_KEY, {...userdata, isVerified: true})
                 toast.success(message, {
                     position: "top-right",
                     autoClose: 4000,
