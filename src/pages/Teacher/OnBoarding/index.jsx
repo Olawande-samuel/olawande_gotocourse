@@ -11,6 +11,7 @@ import Loader from "../../../components/Loader";
 import { useAuth } from "../../../contexts/Auth";
 import { AdvancedError } from "../../../classes";
 import { useLocalStorage } from "../../../hooks";
+import { KEY, VERIFICATION_KEY } from "../../../constants";
 
 
 
@@ -20,7 +21,7 @@ const OnBoarding = () => {
     const {kycFunctions: {addMentorKYC}} = useAuth();
     const {getItem} = useLocalStorage();
     
-    let userdata = getItem("userAuthToken")
+    let userdata = getItem(VERIFICATION_KEY)
 
     const [loading, setLoading] = useState(false);
     const [formstate, setFormstate] = useState({

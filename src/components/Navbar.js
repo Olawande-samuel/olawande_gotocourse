@@ -149,7 +149,10 @@ const Navbar = ({ background }) => {
           {value?.token ? (
             <>
             <li className="me-3">
-              <LogoutButton />
+              <span className="text-white" onClick={()=>{
+                  localStorage.clear()
+                  window.location.reload()
+                }}>Logout</span>
             </li>
             <Link
               to={`${value.userType === "admin"

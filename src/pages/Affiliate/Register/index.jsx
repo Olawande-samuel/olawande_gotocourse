@@ -11,16 +11,17 @@ import Loader from "../../../components/Loader";
 import { useAuth } from "../../../contexts/Auth";
 import { useLocalStorage } from "../../../hooks";
 import { AdvancedError } from "../../../classes";
+import { VERIFICATION_KEY } from "../../../constants";
 
 
 
 
-const KEY = "gotocourse-userdata";
+
 const Register = () => {
     const emailReg = new RegExp(/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/)
     const passReg = new RegExp(/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/)
   
-    const {getItem, removeItem} = useLocalStorage();
+    const {getItem, removeItem, updateItem} = useLocalStorage();
     const {authFunctions: {register}, setGeneralState} = useAuth();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -96,8 +97,7 @@ const Register = () => {
                 if(!success) throw new AdvancedError(message, statusCode);
                 else {
                     const {data} = res;
-                    removeItem(KEY);
-                    getItem(KEY, {...data, userType});
+                    updateItem(VERIFICATION_KEY, {...data, userType});
                     setGeneralState((old) => {
                       return {
                         ...old,
@@ -138,7 +138,6 @@ const Register = () => {
             {loading && <Loader />}
             <form onSubmit={submitHandler} className={clsx.form}>
                 <h3>Register as affiliate</h3>
-                
                     {
                         formSettings.map(({label, type, name, value, placeholder}, i) => (
                             <div className={clsx.form_group}>
