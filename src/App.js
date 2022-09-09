@@ -117,7 +117,8 @@ function App() {
               <Route path="payment" element={<StudentFees />} />
               <Route path="chat" element={<StudentChat />} />
               <Route path="help" element={<StudentHelp />} />
-              <Route path="referral" element={<StudentReferral />} />
+              {/* <Route path="referral" element={<StudentReferral />} /> */}
+              <Route path="referral" element={<AffiliatesDash />} />
               <Route path="notifications" element={<StudentNotifications />} /> 
             </Route>
 
