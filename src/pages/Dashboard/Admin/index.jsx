@@ -1043,7 +1043,6 @@ export function Approve() {
           }finally{
             setGeneralState({...generalState, loading: false})
         }
-
         localStorage.setItem("gotocourse-teacherDetails", JSON.stringify({...teacherInfo, pledre:pledreInfo}))
         setData({...teacherInfo, pledre:pledreInfo});
       }
