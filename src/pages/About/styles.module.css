@@ -1,0 +1,210 @@
+.about {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.about_jumbotron {
+    width: 100%;
+    height: min(60vh, 600px);
+    background: url("../../images/about_us.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+
+.about_top__absolute {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background-color: rgba(12, 33, 145, 0.87);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+
+.about_top__absolute h1 {
+    color: white;
+    position: relative;
+}
+
+.about_top__absolute h1::after {
+    position: absolute;
+    background: #F75C4E;
+    content: "";
+    min-width:100px;
+    height: 10px;
+    position: absolute;
+    bottom: -10px;
+    right: 65%;
+    left: 0;
+}
+
+
+.believe {
+    background-color: rgba(157, 166, 186, 0.53);
+    width: 100%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.believe h1 {
+    text-align: center;
+    margin: 50px auto;
+    margin-bottom: 80px;
+    color: #000F62;
+    width: 70%;
+    letter-spacing: 0.4px;
+    line-height: 1.5;
+}
+
+
+.believe_cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 30px;
+    width: min(70vw, 80%);
+}
+
+.believe_card {
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    /* justify-content: center; */
+}
+
+.card_icon {
+    margin-bottom: 30px;
+    padding: 10px;
+}
+
+.card_body {
+    padding: 10px;
+}
+
+.card_body p {
+    text-align: center
+}
+
+
+.mission {
+    background-color: rgba(255, 241, 240, 0.5);
+    display: grid;
+    width: 100%;
+    padding: 50px  20px;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 40px;
+}
+
+.mission_left h2, .committed h2 {
+    color: #0C2191;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.mission_left p {
+    color: #515151;
+    letter-spacing: 0.6px;
+    width: 80%;
+}
+
+
+.mission_left h2::after {
+    position: absolute;
+    background: #F75C4E;
+    content: "";
+    min-width:100px;
+    height: 10px;
+    position: absolute;
+    bottom: -10px;
+    right: 65%;
+    left: 0;
+}
+
+
+.mission_left {
+    display: flex;
+    padding: 20px;
+    justify-content: flex-end;
+    flex-direction: column;
+}
+
+
+.committed {
+    padding: 20px;
+    width: 100%;
+    margin-top: 100px;
+    margin-bottom: 50px;
+}
+
+
+.commited_content {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 30px;
+    padding: 20px;
+}
+
+.committed h2{
+    text-align: center;
+}
+
+.committed h2::after {
+    position: absolute;
+    background: #F75C4E;
+    content: "";
+    min-width:100px;
+    height: 10px;
+    position: absolute;
+    bottom: -10px;
+    right: 40%;
+    left: 40%;
+    top: 55px;
+}
+
+.content_right img, .mission_right img{
+    width: 90%;
+}
+
+
+
+
+.content_left {
+    color: #515151;
+    line-height: 2;
+    width: 80%;
+    padding: 20px;
+}
+
+
+
+
+
+
+
+
+@media screen and (max-width: 1332px) {
+    .believe_cards {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 1055px) {
+    .believe_cards {
+        width: 100%;
+    }
+}

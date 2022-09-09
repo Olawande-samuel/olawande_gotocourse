@@ -414,6 +414,33 @@
     
 }
 
+@media screen and (max-width: 550px){
+    .dashboard_header {
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+    }
+
+    .dashboard_card {
+        width: 100%;
+        margin: 20px auto;
+        justify-content: space-between
+    }
+
+    .card_right {
+        align-items: flex-end;
+    }
+
+    .card_right p {
+       margin-bottom: 5px;
+       font-size: 0.85rem !important;
+    }
+
+    .card_right h4 {
+        font-size: 1.2rem !important;
+    }
+}
 
 @media screen and (max-width: 915px){
     .dashboard_third {

@@ -127,6 +127,7 @@ const Chat = ({ type, messagedata, usertype }) => {
                
               }
             } catch (err) {
+              if(err.statusCode === 2) err.message = "Session expired. Please login again";
               toast.error(err.message, {
                 position: "top-right",
                 autoClose: 4000,
@@ -150,6 +151,7 @@ const Chat = ({ type, messagedata, usertype }) => {
                
               }
             } catch (err) {
+              if(err.statusCode === 2) err.message = "Session expired. Please login again";
               toast.error(err.message, {
                 position: "top-right",
                 autoClose: 4000,
@@ -173,6 +175,7 @@ const Chat = ({ type, messagedata, usertype }) => {
                
               }
             } catch (err) {
+              if(err.statusCode === 2) err.message = "Session expired. Please login again";
               toast.error(err.message, {
                 position: "top-right",
                 autoClose: 4000,
@@ -282,6 +285,7 @@ const ChatBox = ({ userInfo, boxdata, checked, type , displayControl, setShowUse
       }
     },
      onError: (err)=>{
+      if(err.statusCode === 2) err.message = "Session expired. Please login again";
       toast.error(err.message, {
         position: "top-right",
         autoClose: 4000,
