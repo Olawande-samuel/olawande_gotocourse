@@ -17,11 +17,10 @@ import { KEY, VERIFICATION_KEY } from "../../../constants";
 
 const OnBoarding = () => {
     const [page, setPage] = useState(0);
-    const {getItem} = useLocalStorage();
+    const {getItem,removeItem, updateItem} = useLocalStorage();
 
     
     let userdata = getItem(VERIFICATION_KEY)
-
 
     const navigate =useNavigate()
     const {kycFunctions: {addStudentKYC}} = useAuth();
@@ -77,7 +76,8 @@ const OnBoarding = () => {
             else {
                console.log({res})
                 // SET USERDATA HERE
-                
+                removeItem(VERIFICATION_KEY)
+                updateItem(KEY, userdata)
                 setPage(_ => 10 );
                 toast.success(message, {
                     position: "top-right",
