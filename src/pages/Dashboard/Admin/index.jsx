@@ -1209,16 +1209,17 @@ export function Approve() {
       else {
         //do somethingtype s
         localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
-        setData({ ...data, isVerified: !data?.isVerified })
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+
+           setData({...data, canTeach: !data?.canTeach}) 
+           toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
       }
     } catch (error) {
       toast.error(error.message, {
@@ -1402,17 +1403,17 @@ export function Approve() {
 
             <div className={clsx.user__email}>
               <button onClick={e => deleteUserHandler(e, data?.email)}>
-                <AiTwotoneDelete />  &nbsp; &nbsp;Remove
+                <AiTwotoneDelete />  &nbsp; &nbsp;Delete User
               </button>
             </div>
               
             <button
               className="button button-lg log_btn w-50 mt-3"
-              style={{ backgroundColor: data?.isVerified && "green" }}
+              style={{ backgroundColor: data?.canTeach && "red" }}
               type="submit"
               onClick={(e) => approveApplication(e, data?.userId)}
             >
-              {data?.isVerified ? "Revoke" : "Approve Application"}
+              {data?.canTeach ? "Revoke Application" : "Approve Application"}
             </button>
 
             <button
