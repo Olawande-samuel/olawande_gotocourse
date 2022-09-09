@@ -7,7 +7,7 @@ import {useMutation} from "@tanstack/react-query"
 import {motion} from "framer-motion"
 import { useLocalStorage } from "../../hooks";
 import { useAuth } from "../../contexts/Auth";
-import { KEY } from "../../constants";
+import { KEY, VERIFICATION_KEY } from "../../constants";
 import { ToastContainer, toast } from "react-toastify";
 import { AdvancedError } from "../../classes";
 import goo from "../../images/goo.png"
@@ -21,7 +21,7 @@ import { authentication, provider, facebookProvider } from "../../firebase-confi
 const Login = () => {
   const navigate = useNavigate()
   const {authFunctions: {login,googleSignIn, facebookSignIn}, generalState:{pledre}, setGeneralState} = useAuth();
-  const {getItem, removeItem} = useLocalStorage();
+  const {getItem, removeItem, updateItem} = useLocalStorage();
 
   const [data, setData] = useState({
     email: "",
@@ -65,54 +65,43 @@ const Login = () => {
             notification: response.message
           }
         }) 
-        if(d.userType === "student" && d.isVerified){
-          getItem(KEY, d);
-          navigate("/student")
+        if(d.userType === "student"){
+          if(d.isVerified){
+            updateItem(KEY, d);
+            navigate("/student")
+          } else {
+            updateItem(VERIFICATION_KEY, d)
+            navigate("/user-authentication")
+          }
 
         } else if(d.userType === "teacher"){
 
-          if(d.canTeach){
-            if(d.isVerified){
-              getItem(KEY, d);
+          if(d.isVerified){
+            if(d.canTeach){
+              updateItem(KEY, d);
               navigate("/teacher")
             } else {
-              getItem("userAuthToken", d);
-              navigate("/user-authentication")
-            }
-          
+              throw new AdvancedError("Your application is under review. Kindly check back later", 0)
+            }    
           } else {
-            throw new AdvancedError("Your application is under review. Kindly check back later", 0)
-          }
-        } else if(d.userType === "mentor"){
-
-            if(d.isVerified){
-              getItem(KEY, d);
-              navigate("/teacher")
-            } else {
-              getItem("userAuthToken", d);
-              navigate("/user-authentication")
-            }
-        } else {
-          if(d.usertype === "student") {
-            getItem("userAuthToken", d);
+            updateItem(VERIFICATION_KEY, d);
             navigate("/user-authentication")
           }
-          throw new AdvancedError("Kindly complete your email verification process", 0)
+        } else if(d.userType === "mentor"){
+            if(d.isVerified){
+              updateItem(KEY, d);
+              navigate("/teacher")
+            } else {
+              updateItem(VERIFICATION_KEY, d);
+              navigate("/user-authentication")
+            }
         }
       }else throw new AdvancedError(message, statusCode);
 
     } catch (err) {
       console.error(err.message);
       if (err.statusCode === 0 || err.statusCode === undefined) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       }
     }finally{
       setLoading(false);
@@ -131,7 +120,7 @@ const Login = () => {
         navigate("/student")
         
       } else if(res.data.data.userType === "teacher" || res.data.data.userType === "mentor"){
-      // check to see if they've been approved
+        // check to see if they've been approved
         if(res.data.data.canTeach){
           localStorage.setItem(KEY, JSON.stringify(res.data?.data));    
           navigate("/teacher")
@@ -141,15 +130,7 @@ const Login = () => {
         }
       } 
     }catch(err){
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     }
   }
    
@@ -165,15 +146,7 @@ const Login = () => {
        }
     }
     ).catch(err=>{
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     }
     )
   }

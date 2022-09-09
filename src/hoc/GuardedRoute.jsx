@@ -15,15 +15,21 @@ const GuardedRoute = ({children}) => {
     
 
 
-    if(value.token && value.isVerified){
+    if(value.token){
+        if(route === "teacher" || route === "student"){
+            if(value.isVerified){
+                if(route === "teacher" && !value.canTeach){
+                    localStorage.clear()
+                    return <Navigate to="/login" />
+                } 
+                return children
+            }
+        }else if(route === "admin") {
+            return children
+        }
 
-        if(route === "teacher" && !value.canTeach){
-            localStorage.clear()
-            return <Navigate to="/login" />
-        } 
-        return children
     }else {
-        
+
         if(route === 'admin'){
             return <Navigate to="/admin/login" />
         }

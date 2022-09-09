@@ -9,13 +9,13 @@ import Password from '../../components/Password'
 import SignInWrapper from '../../components/SignInWrapper';
 import {useAuth} from "../../contexts/Auth";
 import { useLocalStorage } from "../../hooks";
+import { VERIFICATION_KEY } from "../../constants";
 
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
 import { authentication, provider, facebookProvider } from "../../firebase-config.js"
 import goo from "../../images/goo.png"
 import face from "../../images/face.png"
 
-const KEY = 'gotocourse-userdata';
 const TeacherSignup = () => {
 
   const emailReg = new RegExp(/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/)
@@ -33,7 +33,7 @@ const TeacherSignup = () => {
   const [focus, setFocus] =useState(false)
 
   const navigate = useNavigate();
-  const { getItem, removeItem } = useLocalStorage();
+  const { getItem, removeItem, updateItem } = useLocalStorage();
 
   function changeHandler(e){
     const {name, value} = e.target;
@@ -68,20 +68,21 @@ const TeacherSignup = () => {
 
         const response = await register(others, "user");
         console.log({response})
-        const res = await pledre.addTeacherToSchool({
-          name:`${formstate.firstName} ${formstate.lastName}`,
-          email: formstate.email,
-          password:`${formstate.password}`
-        })
+        // const res = await pledre.addTeacherToSchool({
+        //   name:`${formstate.firstName} ${formstate.lastName}`,
+        //   email: formstate.email,
+        //   password:`${formstate.password}`
+        // })
 
       
       let { success, message, statusCode } = response;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         const { data } = response;
-        removeItem(KEY);
-        localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res))
-        getItem("userAuthToken", data);
+        // localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res))
+
+        updateItem(VERIFICATION_KEY, data);
+        
         navigate("/user-authentication")
         setGeneralState((old) => {
           return {
@@ -97,13 +98,15 @@ const TeacherSignup = () => {
     }
   }
 
+
   async function socialSignUp(token, type){
     try{
       const res = type === "google" ? await googleSignUp(token) : await facebookSignUp(token)
       if(res.statusCode !== 1) throw new AdvancedError(res.message, res.statusCode)
-      localStorage.setItem("gotocourse-userdata", JSON.stringify(res.data))
+      updateItem(VERIFICATION_KEY, res.data);
       navigate("/teacher/on-boarding")
     }catch(err){
+      
       toast.error(err.message);
     }
   }
@@ -121,6 +124,7 @@ const TeacherSignup = () => {
        }
     }
     ).catch(err=>{
+      allowOnAccountExistError(err, "google", "teacher")
       toast.error(err.message);
     }
     )
@@ -141,10 +145,69 @@ const TeacherSignup = () => {
     }
   ).catch(err=>{
       console.error(err)
+      allowOnAccountExistError(err, "facebook", "teacher")
       toast.error(err.message);
       }
     )
   }
+
+
+  function allowOnAccountExistError(error, type, usertype) {
+    const email = error.customData.email;
+    console.log("customdata", error.customData);
+    console.log("customdata mail", error.customData.email);
+  
+    setLoading(true)
+    if (type === "google") {
+      const credential = FacebookAuthProvider.credentialFromError(error);
+      googleSignUp({
+        accessToken: credential.accessToken,
+        userType: usertype,
+      })
+        .then((res) => {
+          setLoading(false);
+          if (res.statusCode !== 1)
+            throw new AdvancedError(res.message, res.status);
+            updateItem(VERIFICATION_KEY, res.data);
+            navigate(
+            `${
+              usertype === "student"
+                ? "/user-onboarding"
+                : "/teacher/on-boarding"
+            }`
+          );
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.error(err);
+          toast.error(err.message);
+        });
+    } else {
+      const gcredential = GoogleAuthProvider.credentialFromError(error);
+      facebookSignUp({
+        accessToken: gcredential.accessToken,
+        userType: usertype,
+      })
+        .then((res) => {
+          setLoading(false);
+          if (res.statusCode !== 1)
+            throw new AdvancedError(res.message, res.status);
+            updateItem(VERIFICATION_KEY, res.data);
+            navigate(
+            `${
+              usertype === "student"
+              ? "/user-onboarding"
+              : "/teacher/on-boarding"
+            }`
+          );
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.error(err);
+          toast.error(err.message);
+        });
+    }
+  } 
   return (
     <SignInWrapper>
       <ToastContainer

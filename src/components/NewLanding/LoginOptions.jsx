@@ -18,17 +18,16 @@ import {
 } from "../../firebase-config.js";
 import { useAuth } from "../../contexts/Auth";
 import AdvancedError from "../../classes/AdvancedError.js";
-import { KEY } from "../../constants/index.js";
+import { KEY, VERIFICATION_KEY } from "../../constants/index.js";
 import useLocalStorage from "../../hooks/useLocalStorage.jsx";
 
 const LoginOptions = ({ closeOverlay, type }) => {
   const { generalState: { navHeight }, authFunctions: { googleSignUp, facebookSignUp }, } = useAuth();
-
-  const { getItem } = useLocalStorage();
-
+  const { getItem, updateItem } = useLocalStorage();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  
   async function handleSignUp(e, usertype) {
     if (type === "google") {
       signInWithPopup(authentication, provider)
@@ -48,6 +47,8 @@ const LoginOptions = ({ closeOverlay, type }) => {
                   "gotocourse-userdata",
                   JSON.stringify(res.data)
                 );
+                updateItem(VERIFICATION_KEY, res.data);
+
                 navigate(
                   `${
                     usertype === "student"
@@ -64,7 +65,6 @@ const LoginOptions = ({ closeOverlay, type }) => {
           }
         })
         .catch((error) => {
-          toast.error(error.message);
           if (error.code === "auth/account-exists-with-different-credential") {
             allowOnAccountExistError(error, "google", usertype);
           }
@@ -110,18 +110,18 @@ const LoginOptions = ({ closeOverlay, type }) => {
           // / Handle Errors here.
           if (error.code === "auth/account-exists-with-different-credential") {
             allowOnAccountExistError(error, "facebook", usertype);
-            toast.error(error.message);
           }
         });
     }
   }
 
   function allowOnAccountExistError(error, type, usertype) {
-    
     const email = error.customData.email;
     console.log("customdata", error.customData);
     console.log("customdata mail", error.customData.email);
-
+    console.log(FacebookAuthProvider.credentialFromError(error))
+    console.log(GoogleAuthProvider.credentialFromError(error))
+    
     setLoading(true)
     if (type === "google") {
       const credential = FacebookAuthProvider.credentialFromError(error);
@@ -149,7 +149,6 @@ const LoginOptions = ({ closeOverlay, type }) => {
         });
     } else {
       const gcredential = GoogleAuthProvider.credentialFromError(error);
-
       facebookSignUp({
         accessToken: gcredential.accessToken,
         userType: usertype,
@@ -176,7 +175,18 @@ const LoginOptions = ({ closeOverlay, type }) => {
   }
   return (
     <div className="signUpOptions_overlay">
-      <ToastContainer />
+      <ToastContainer
+      position="bottom-right"
+      autoClose={4000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      
+      />
       <div className="signUpOptions_overlay_container">
         {loading ? (
           <div className="spinner-border text-primary text-center d-flex mx-auto">
@@ -218,7 +228,7 @@ const LoginOptions = ({ closeOverlay, type }) => {
         </div>
       </div>
     </div>
-  );
+  ); 
 };
 
 export default LoginOptions;

@@ -6,17 +6,16 @@ import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
 import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../contexts/Auth";
+import { VERIFICATION_KEY } from "../../constants";
 import { AdvancedError } from "../../classes";
 import { useLocalStorage } from "../../hooks";
 
 
 
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
 import { authentication, provider, facebookProvider } from "../../firebase-config.js"
 import goo from "../../images/goo.png"
 import face from "../../images/face.png"
-
-const KEY = 'gotocourse-userdata';
 
 
 const SignUp = () => {
@@ -34,7 +33,7 @@ const SignUp = () => {
   });
   const [focus, setFocus] =useState(false)
   const { authFunctions: { register ,googleSignUp, facebookSignUp}, generalState, setGeneralState, } = useAuth();
-  const { getItem, removeItem } = useLocalStorage();
+  const { getItem, removeItem, updateItem } = useLocalStorage();
   
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -72,33 +71,38 @@ const SignUp = () => {
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
         // second dashboard
-        const res = await generalState.pledre.signUpStudent({
-          name:`${data.firstName} ${data.lastName}`,
-          email: data.email,
-          password:`${data.password}`
-        })
-        console.log({res})
+        // if(generalState.pledre){
+        //   const res = await generalState.pledre.signUpStudent({
+        //     name:`${data.firstName} ${data.lastName}`,
+        //     email: data.email,
+        //     password:`${data.password}`
+        //   })
+        //   console.log({res})
+        //     // Something seems to be wrong when instantiating pledre
+        //   if(res.approved){
+            // main dashboard
+            // const response = await register({...others, pledreStudentId: res._id}, "user");
+            const response = await register({...others}, "user");
+            let { success, message, statusCode } = response;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+              const { data } = response;
+              // set item
+              updateItem(VERIFICATION_KEY, data);
+              // localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res)) 
+              setGeneralState((old) => {
+                return {
+                  ...old,
+                  notification: message,
+                };
+              });
+              navigate("/user-authentication");
+            }
+          // }
 
-        if(res.approved){
-          // main dashboard
-          const response = await register({...others, pledreStudentId: res._id}, "user");
-          let { success, message, statusCode } = response;
-          if (!success) throw new AdvancedError(message, statusCode);
-          else {
-            const { data } = response;
-            removeItem(KEY);
-            // set item
-            getItem("userAuthToken", data);
-            localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res)) 
-            setGeneralState((old) => {
-              return {
-                ...old,
-                notification: message,
-              };
-            });
-            navigate("/user-authentication");
-          }
-        }
+        // } else {
+        //   throw new AdvancedError("Something went wrong. Please try again", 0)
+        // }
     } catch (err) {
       console.error({err})
       toast.error(err.message, {
@@ -124,7 +128,7 @@ const SignUp = () => {
       const res = type === "google" ? await googleSignUp(token) : await facebookSignUp(token)
       console.log(res)
       if(res.statusCode !== 1) throw new AdvancedError(res.message, res.statusCode)
-      localStorage.setItem("gotocourse-userdata", JSON.stringify(res.data))
+      localStorage.setItem(VERIFICATION_KEY, JSON.stringify(res.data))
       navigate("/user-onboarding")
     }catch(err){
       toast.error(err.message);
@@ -144,6 +148,7 @@ const SignUp = () => {
        }
     }
     ).catch(err=>{
+      allowOnAccountExistError(err, "google", "teacher")
       toast.error(err.message);
     }
     )
@@ -164,10 +169,70 @@ const SignUp = () => {
     }
   ).catch(err=>{
       console.error(err)
+      allowOnAccountExistError(err, "facebook", "student")
       toast.error(err.message);
       }
     )
   }
+
+
+
+  function allowOnAccountExistError(error, type, usertype) {
+    const email = error.customData.email;
+    console.log("customdata", error.customData);
+    console.log("customdata mail", error.customData.email);
+  
+    setLoading(true)
+    if (type === "google") {
+      const credential = FacebookAuthProvider.credentialFromError(error);
+      googleSignUp({
+        accessToken: credential.accessToken,
+        userType: usertype,
+      })
+        .then((res) => {
+          setLoading(false);
+          if (res.statusCode !== 1)
+            throw new AdvancedError(res.message, res.status);
+          localStorage.setItem(VERIFICATION_KEY, JSON.stringify(res.data));
+          navigate(
+            `${
+              usertype === "student"
+                ? "/user-onboarding"
+                : "/teacher/on-boarding"
+            }`
+          );
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.error(err);
+          toast.error(err.message);
+        });
+    } else {
+      const gcredential = GoogleAuthProvider.credentialFromError(error);
+      facebookSignUp({
+        accessToken: gcredential.accessToken,
+        userType: usertype,
+      })
+        .then((res) => {
+          setLoading(false);
+          if (res.statusCode !== 1)
+            throw new AdvancedError(res.message, res.status);
+          localStorage.setItem(VERIFICATION_KEY, JSON.stringify(res.data));
+          navigate(
+            `${
+              usertype === "student"
+                ? "/user-onboarding"
+                : "/teacher/on-boarding"
+            }`
+          );
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.error(err);
+          toast.error(err.message);
+        });
+    }
+  } 
   return (
     <SignInWrapper>
       <ToastContainer
@@ -286,5 +351,9 @@ const SignUp = () => {
     </SignInWrapper>
   );
 };
+
+
+
+
 
 export default SignUp;

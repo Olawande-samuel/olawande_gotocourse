@@ -11,7 +11,7 @@ import Loader from "../../../components/Loader";
 import { useLocalStorage } from "../../../hooks";
 import { AdvancedError } from "../../../classes";
 import { useAuth } from "../../../contexts/Auth";
-
+import { KEY, VERIFICATION_KEY } from "../../../constants";
 
 
 
@@ -20,7 +20,7 @@ const OnBoarding = () => {
     const {getItem} = useLocalStorage();
 
     
-    let userdata = getItem("userAuthToken")
+    let userdata = getItem(VERIFICATION_KEY)
 
 
     const navigate =useNavigate()
@@ -75,7 +75,10 @@ const OnBoarding = () => {
             const {success, message, statusCode} = res;
             if(!success) throw new AdvancedError(message, statusCode)
             else {
-                setPage(_ => 10);
+               console.log({res})
+                // SET USERDATA HERE
+                
+                setPage(_ => 10 );
                 toast.success(message, {
                     position: "top-right",
                     autoClose: 4000,
