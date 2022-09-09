@@ -212,7 +212,7 @@ function SectionTwo({pageHandler, formstate, changeHandler}){
         },
         {
             name: "region",
-            label: "Region",
+            label: "State",
             type: "text",
             value: formstate.region
         }
