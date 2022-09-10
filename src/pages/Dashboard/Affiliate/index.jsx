@@ -12,6 +12,7 @@ import MyChart from "../../../components/Chart";
 
 import {MdContentCopy} from "react-icons/md"
 import style from "./styles.module.css"
+import {useNavigate} from "react-router-dom";
 
 import { AiOutlineMenu } from 'react-icons/ai';
 import { BsFillEyeFill, BsCreditCard2BackFill } from 'react-icons/bs';
@@ -27,10 +28,47 @@ import LogoutButton from '../../../components/LogoutButton';
 
 export function Dashboard(){
   const {getItem} = useLocalStorage();
+  const navigate = useNavigate();
+  const flag = useRef(false);
   let userdata = getItem(KEY);
+  const [loading, setLoading]  = useState(true);
+  const [notifications, setNotifications] = useState([]);
+  const [stats, setStats] = useState(null);
   const {  generalState, setGeneralState, adminFunctions:{fetchNotifications}, affiliatesFunctions:{fetchAffiliateStats} } = useAuth();
+  useEffect(() => {
+    console.log("Affiliate Dashboard mounted");
+    if(flag.current) return;
+    (async () => {
+      try{
+        const [notifications, affiliateStats] = await Promise.all([fetchNotifications(userdata?.token), fetchAffiliateStats(userdata?.token)])
+        console.log(notifications, affiliateStats);
+        setNotifications(old => [...old, notifications.data]);
+        const {statusCode, message} = affiliateStats.data;
+        if(statusCode !== 1) throw new AdvancedError(message, statusCode);
+        else {
+          setStats(_ => affiliateStats.data.data);
+        }
+      }catch(err){
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHtoasover: true,
+          draggable: true,
+          progress: undefined,
+        })
+        navigate(-1)
+      }finally{setLoading(_ => false)}
+    })()
+    flag.current = true;
+    return () => {
+      return console.log("Affiliate Dashboard unmounted")
+    }
+  }, [])
 
   const fetchMyStats = useQuery(["fetchStats", userdata?.token], ()=>fetchAffiliateStats(userdata?.token))
+  console.log(fetchMyStats)
   
 
     const gridContent = [
@@ -80,6 +118,7 @@ export function Dashboard(){
    
     return (
         <Affiliates header="Dashboard">
+          {loading && <Loader />}
             <div className={clsx["admin_profile"]}>
                 <div className={clsx.admin__student}>
                     <div className={`d-flex justify-content-between ${style.affiliate_top}`}>
@@ -387,7 +426,7 @@ export const Affiliates = ({ children, header }) => {
             </div>
             {children}
           </div>
-          {loading && <Loader />}
+          {/* {loading && <Loader />} */}
         </div>
       </GuardedRoute>
     );
