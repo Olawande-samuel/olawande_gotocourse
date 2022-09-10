@@ -1242,7 +1242,7 @@ export function Approve() {
   }
 
 
-  async function deleteUser(e, id) {
+  async function deleteAUser(e, id) {
     e.preventDefault();
     const userdata = getItem(KEY)
     const teacherInfo = getItem("gotocourse-teacherDetails")
@@ -1420,7 +1420,7 @@ export function Approve() {
               className="button button-lg log_btn w-50 mt-3"
               style={{ backgroundColor: "red" }}
               type="submit"
-              onClick={(e) => deleteUser(e, data?.userId)}
+              onClick={(e) => deleteAUser(e, data?.userId)}
             >
               Delete User
             </button>
