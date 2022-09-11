@@ -76,19 +76,19 @@ export function Dashboard(){
         {
             id:1,
             name:"visits",
-            value:fetchMyStats?.data?.data?.data.visits ? fetchMyStats?.data?.data?.data.visits : 0,
+            value:fetchMyStats?.data?.data?.data?.visits ? fetchMyStats?.data?.data?.data?.visits : 0,
             icon:<BsFillEyeFill color="#F75C4E"  size="2.5rem" />
         },
         {
             id:2,
             name:"sales",
-            value:fetchMyStats?.data?.data?.data.sales ? fetchMyStats?.data?.data?.data.sales : 0,
+            value:fetchMyStats?.data?.data?.data?.sales ? fetchMyStats?.data?.data?.data?.sales : 0,
             icon:<FaShoppingBag  color="#304D74" size="2.5rem" />
         },
         {
             id:3,
             name:"revenue",
-            value:fetchMyStats?.data?.data?.data.earnings ? fetchMyStats?.data?.data?.data.earnings : 0,
+            value:fetchMyStats?.data?.data?.data?.earnings ? fetchMyStats?.data?.data?.data?.earnings : 0,
             icon:<BiBarChartSquare color="#F75C4E"  size="2.5rem" />,
             amount: true
         },
@@ -103,14 +103,14 @@ export function Dashboard(){
         {
             id:5,
             name:"paid commission",
-            value:fetchMyStats?.data?.data?.data.paidEarnings ? fetchMyStats?.data?.data?.data.paidEarnings : 0,
+            value:fetchMyStats?.data?.data?.data?.paidEarnings ? fetchMyStats?.data?.data?.data?.paidEarnings : 0,
             icon:<IoIosBasket color="#F75C4E" size="2.5rem" />,
             amount: true
         },
         {
             id:6,
             name:"unpaid commissions",
-            value:fetchMyStats?.data?.data?.data.unpaidEarnings ? fetchMyStats?.data?.data?.data.unpaidEarnings : 0,
+            value:fetchMyStats?.data?.data?.data?.unpaidEarnings ? fetchMyStats?.data?.data?.data?.unpaidEarnings : 0,
             icon:<BsCreditCard2BackFill color="#304D74" size="2.5rem" />,
             amount: true
         }

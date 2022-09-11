@@ -139,8 +139,8 @@ const Navbar = ({ background }) => {
                   </Link>
                 </li>
                 <li className="nav-item d-flex align-items-center nav_link d-lg-none">
-                  <Link to="/students" className="link">
-                    Register
+                  <Link to="/signup" className="link">
+                    Register as a Student
                   </Link>
                 </li>
               </>
@@ -203,7 +203,7 @@ const Navbar = ({ background }) => {
                   }}
                   transition={{ duration: 0.1 }}
                 >
-                  <span>Register</span>
+                  <span>Register as a Student</span>
                 </motion.button>
               </Link>
             </>
