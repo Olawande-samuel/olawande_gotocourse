@@ -7,7 +7,7 @@ import clsx from "./styles.module.css";
 import { Students } from "../";
 import referralTable from "../../../../images/referral_table.png";
 import { useLocalStorage } from "../../../../hooks";
-import { KEY } from "../../../../constants";
+import { KEY, AFFILIATE_KEY } from "../../../../constants";
 import { useAuth } from "../../../../contexts/Auth";
 import { AdvancedError } from "../../../../classes";
 
@@ -85,7 +85,10 @@ const Referral = () => {
             const {message, success, statusCode} = response.data;
             if(statusCode !== 1) throw new AdvancedError(message, statusCode);
             toast.success(message)
-            navigate("/affiliates/login")
+            const {data} = response.data;
+            console.log(data);
+            getItem(AFFILIATE_KEY, data);
+            navigate("/affiliate")
         }catch(error){
             console.error(error)
             toast.error(error.message)

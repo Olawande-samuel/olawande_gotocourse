@@ -1060,6 +1060,8 @@ export function Approve() {
   async function deleteUserHandler(e, email){
     try{
       setLoading(_ => true);
+      let value = window.confirm("Are you sure you want to delete this user?. This process is irreversible")
+      if(!value) return;
       const res = await deleteUser(userdata?.token, [email]);
       console.log(res);
       const {statusCode, message, success} = res;
@@ -1240,25 +1242,6 @@ export function Approve() {
       });
     }
   }
-
-
-  // async function deleteUser(e, id) {
-  //   e.preventDefault();
-  //   const userdata = getItem(KEY)
-  //   const teacherInfo = getItem("gotocourse-teacherDetails")
-
-  //   try {
-  //     let value = window.confirm("Are you sure you want to delete this user?. This process is irreversible")
-  //     if (value) {
-  //       let res = await deleteAUser(userdata?.token, teacherInfo.email);
-  //       // console.log({res});
-  //       navigate(-1)    
-  //     }
-  //   } catch (error) {
-      
-  //   }
-  // }
-
 
   async function conferMentorship(e, id, email) {
     e.preventDefault();

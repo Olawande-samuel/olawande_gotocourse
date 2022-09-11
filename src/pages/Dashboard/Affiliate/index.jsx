@@ -33,6 +33,7 @@ export function Dashboard(){
   let userdata = getItem(KEY);
   const [loading, setLoading]  = useState(true);
   const [notifications, setNotifications] = useState([]);
+  const [link, setLink] = useState("https://gotocourse.us/categories?referrerId=");
   const [stats, setStats] = useState(null);
   const {  generalState, setGeneralState, adminFunctions:{fetchNotifications}, affiliatesFunctions:{fetchAffiliateStats} } = useAuth();
   useEffect(() => {
@@ -47,6 +48,7 @@ export function Dashboard(){
         if(statusCode !== 1) throw new AdvancedError(message, statusCode);
         else {
           setStats(_ => affiliateStats.data.data);
+          setLink(old => `${old}${affiliateStats.data.data.affiliateId}`)
         }
       }catch(err){
         toast.error(err.message, {
@@ -54,7 +56,7 @@ export function Dashboard(){
           autoClose: 4000,
           hideProgressBar: true,
           closeOnClick: true,
-          pauseOnHtoasover: true,
+          pauseOnHover: true,
           draggable: true,
           progress: undefined,
         })
@@ -67,8 +69,6 @@ export function Dashboard(){
     }
   }, [])
 
-  const fetchMyStats = useQuery(["fetchStats", userdata?.token], ()=>fetchAffiliateStats(userdata?.token))
-  console.log(fetchMyStats)
   
 
     const gridContent = [
@@ -76,19 +76,21 @@ export function Dashboard(){
         {
             id:1,
             name:"visits",
-            value:fetchMyStats?.data?.data?.data?.visits ? fetchMyStats?.data?.data?.data?.visits : 0,
+            value:stats?.visits ? stats?.visits : 0,
+
             icon:<BsFillEyeFill color="#F75C4E"  size="2.5rem" />
         },
         {
             id:2,
             name:"sales",
-            value:fetchMyStats?.data?.data?.data?.sales ? fetchMyStats?.data?.data?.data?.sales : 0,
+            value:stats?.sales ? stats?.sales : 0,
+
             icon:<FaShoppingBag  color="#304D74" size="2.5rem" />
         },
         {
             id:3,
             name:"revenue",
-            value:fetchMyStats?.data?.data?.data?.earnings ? fetchMyStats?.data?.data?.data?.earnings : 0,
+            value:stats?.earnings ? stats?.earnings : 0,
             icon:<BiBarChartSquare color="#F75C4E"  size="2.5rem" />,
             amount: true
         },
@@ -103,18 +105,32 @@ export function Dashboard(){
         {
             id:5,
             name:"paid commission",
-            value:fetchMyStats?.data?.data?.data?.paidEarnings ? fetchMyStats?.data?.data?.data?.paidEarnings : 0,
+            value:stats?.paidEarnings ? stats?.paidEarnings : 0,
             icon:<IoIosBasket color="#F75C4E" size="2.5rem" />,
             amount: true
         },
         {
             id:6,
             name:"unpaid commissions",
-            value:fetchMyStats?.data?.data?.data?.unpaidEarnings ? fetchMyStats?.data?.data?.data?.unpaidEarnings : 0,
+            value:stats?.unpaidEarnings ? stats?.unpaidEarnings : 0,
             icon:<BsCreditCard2BackFill color="#304D74" size="2.5rem" />,
             amount: true
         }
     ]
+
+
+    async function copyInputHandler(e){
+      await navigator.clipboard.writeText(link);
+      toast.success("Referral link copied successfully", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
    
     return (
         <Affiliates header="Dashboard">
@@ -127,8 +143,8 @@ export function Dashboard(){
                             <p>This is your referral URL. Share it with your audience to increase sales</p>
 
                             <div className="d-flex">
-                                <input type="text" name="link" id="link" className="me-3" />
-                                <button className="btn btn-primary"> <i><MdContentCopy /></i> Copy</button>
+                                <input style={{color: 'gray'}} value={link} type="text" name="link" id="link" className="me-3" readOnly />
+                                <button className="btn btn-primary" onClick={copyInputHandler}> <i><MdContentCopy /></i> Copy</button>
                             </div>
                             
                         </div>
