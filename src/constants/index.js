@@ -27,6 +27,7 @@ export const baseURL = "https://loftywebtech.com/gotocourse/api/v1";
 
 export const KEY = "gotocourse-userdata"
 export const VERIFICATION_KEY = "userAuthdata"
+export const AFFILIATE_KEY = "gotocourse-affiliate-data";
 export const IMAGEURL = "https://loftywebtech.com/gotocourse/api/uploads"
 
 export function getDate(date){

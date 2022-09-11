@@ -654,14 +654,16 @@ height:70px;
     border: 2px solid #fff !important;
     color: #fff;
     background:var(--theme-blue);
+    font-size: 14px;
+    padding: 0.725rem 2.5rem !important;
 }
 .newRegister {
     color: var(--theme-blue) !important;
-    background: #fff
+    background: #fff;
+    font-size: 15px;
+    padding: 0.725rem 2.5rem !important;
 }
  
-
-
 @media (max-width: 575px){
     .newBootcamp_timing  {
         flex-wrap:wrap;

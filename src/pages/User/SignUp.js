@@ -61,6 +61,8 @@ const SignUp = () => {
   // Email and Password
   const onSubmit = async (e) => {
     e.preventDefault();
+    console.log(data)
+    
     setLoading(true);
     try {
       let { retype_password, ...others } = data;
@@ -70,7 +72,7 @@ const SignUp = () => {
        throw new AdvancedError("Fields cannot be empty", 0);
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
-        // second dashboard
+    //     // second dashboard
         // if(generalState.pledre){
         //   const res = await generalState.pledre.signUpStudent({
         //     name:`${data.firstName} ${data.lastName}`,
@@ -80,8 +82,9 @@ const SignUp = () => {
         //   console.log({res})
         //     // Something seems to be wrong when instantiating pledre
         //   if(res.approved){
-            // main dashboard
-            // const response = await register({...others, pledreStudentId: res._id}, "user");
+    //         // main dashboard
+        // const response = await register({...others, pledreStudentId: res._id}, "user");
+
             const response = await register({...others}, "user");
             let { success, message, statusCode } = response;
             if (!success) throw new AdvancedError(message, statusCode);
@@ -105,15 +108,7 @@ const SignUp = () => {
         // }
     } catch (err) {
       console.error({err})
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
       if (err.statusCode === 0) {
       }
     } finally {
@@ -178,8 +173,6 @@ const SignUp = () => {
 
 
   function allowOnAccountExistError(error, type, usertype) {
-    const email = error.customData.email;
-    console.log("customdata", error.customData);
     console.log("customdata mail", error.customData.email);
   
     setLoading(true)
@@ -233,6 +226,15 @@ const SignUp = () => {
         });
     }
   } 
+
+
+  // password input validation
+  function handlePasswordBlur(){
+    setFocus(false)
+    if(!passReg.test(data.password)){
+      
+    }
+  }
   return (
     <SignInWrapper>
       <ToastContainer
@@ -280,49 +282,52 @@ const SignUp = () => {
             </motion.button>
           <small className="or d-block"><span>or</span></small>
         </div>
-        <form className="form" onSubmit={onSubmit}>
+        <form className="form" onSubmit={onSubmit}  autoComplete="off">
           <Input
             label="Fullname"
             name="fullname"
             value={data.fullname}
             handleChange={handleChange}
             placeholder="Fullname"
+            required={true}
           />
           <Input
             label="Email"
             name="email"
             type="email"
+            myclassname="email_input"
             value={data.email}
             handleChange={handleChange}
-            placeholder="Email"
+            placeholder="example@email.com"
+            required={true}
+            pattern="^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$"
+            errorMessage="Enter a valid email address"
           />
           <Password
             label="Password"
+            id="password"
             name="password"
+            myclassname="signUpPassword"
             password="password"
             value={data.password}
             handleChange={handleChange}
             placeholder="Password"
             focus ={()=>setFocus(true)}
-            blur={()=>setFocus(false)}
+            blur={handlePasswordBlur}
+            pattern="^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$"
+            errorMessage="Password must be a minimum of eight characters in length and must contain at least 1 uppercase English letter, 1 lowercase English letter, 1 number and 1 special character"
           />
-          {focus && !passReg.test(data.password) &&
-            <small style={{fontSize:"11px"}}>
-              <p className="text-danger">Password must satisfy the following conditions</p>
-              <p className="text-danger"> - At least one upper case English letter</p>
-              <p className="text-danger"> - At least one lower case English letter</p>
-              <p className="text-danger"> - At least one digit</p>
-              <p className="text-danger"> - At least one special character</p>
-              <p className="text-danger"> - Minimum eight in length</p>
-            </small>
-          }
           <Password
+            id="retype_password"
             label="Confirm Password"
+            myclassname="confirmPassword"
             name="retype_password"
             password="password"
             placeholder="Confirm Password"
             value={data.retype_password}
             handleChange={handleChange}
+            // pattern={data.password}
+            errorMessage="Passwords do not match"
           />
           {loading ? (
             <button className="button button-md log_btn w-100 mt-3"
@@ -336,7 +341,6 @@ const SignUp = () => {
             <button
               className="button button-md log_btn w-100 mt-3"
               disabled={loading}
-              onClick={onSubmit}
               type="submit"
             >
               Register
