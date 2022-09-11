@@ -1243,6 +1243,7 @@ export function Approve() {
     }
   }
 
+
   async function conferMentorship(e, id, email) {
     e.preventDefault();
     const userdata = getItem(KEY)
@@ -1403,7 +1404,7 @@ export function Approve() {
               className="button button-lg log_btn w-50 mt-3"
               style={{ backgroundColor: "red" }}
               type="submit"
-              onClick={(e) => deleteUser(e, data?.userId)}
+              onClick={(e) => deleteAUser(e, data?.userId)}
             >
               Delete User
             </button> */}
