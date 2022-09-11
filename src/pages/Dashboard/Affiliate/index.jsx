@@ -77,12 +77,14 @@ export function Dashboard(){
             id:1,
             name:"visits",
             value:stats?.visits ? stats?.visits : 0,
+
             icon:<BsFillEyeFill color="#F75C4E"  size="2.5rem" />
         },
         {
             id:2,
             name:"sales",
             value:stats?.sales ? stats?.sales : 0,
+
             icon:<FaShoppingBag  color="#304D74" size="2.5rem" />
         },
         {

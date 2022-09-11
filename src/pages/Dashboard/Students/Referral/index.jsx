@@ -95,7 +95,6 @@ const Referral = () => {
         }finally {
             setLoading(false)
         }
-
     }
 
     return (

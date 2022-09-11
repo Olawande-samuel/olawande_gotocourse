@@ -250,6 +250,9 @@ function Success({}){
                     <img src={success} alt="Application Success" />
                     <div className={clsx.form_group__button}>
                         <p>You will receive a response from us in 48-72 hours</p>
+                        <Link to="/">
+                            <button>Go Home</button>
+                        </Link>
                     </div>
                     <div className={clsx.form_group__button}>
                         <Link to="/"><button>Go Home</button></Link>

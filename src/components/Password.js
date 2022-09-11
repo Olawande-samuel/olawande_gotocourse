@@ -1,24 +1,22 @@
 import React, { useState } from "react";
 import { BsEyeSlash, BsEye } from "react-icons/bs";
-const Password = ({ label, password, name, handleChange, value, placeholder, focus,blur }) => {
+const Password = (props) => {
+  const {label, password, errorMessage, myclassname, handleChange,  id, ...inputProps } = props
   const [type, setType] = useState(false);
   return (
     <div className="form-group mb-3">
-      <label htmlFor={name} className="form-label generic_label">
+      <label htmlFor={id} className="form-label generic_label">
         {label}
       </label>
-      <div className="input-group input_wrapper">
+      <div className="input-group input_wrapper flex-column">
         <input
           type={type ? "text" : "password"}
-          id={name}
-          name={name}
-          className="form-control generic_input"
-          placeholder={placeholder}
+          id={id}
+          className={`${myclassname} form-control generic_input`}
           onChange={handleChange}
-          value={value}
-          onFocus={focus}
-          onBlur={blur}
           autoComplete="new-password"
+          {...inputProps}
+         
         />
         {password === "password" ? (
           <span className="eye">
@@ -33,7 +31,9 @@ const Password = ({ label, password, name, handleChange, value, placeholder, foc
             )}
           </span>
         ) : null}
+        <span className="text-danger passError" style={{fontSize:"11px"}}>{errorMessage}</span>
       </div>
+      
     </div>
   );
 };
