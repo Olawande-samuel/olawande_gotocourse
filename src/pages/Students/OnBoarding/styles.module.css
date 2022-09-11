@@ -74,6 +74,8 @@
     width: min(100% - .5rem, 560px);
     height: 85%;
     background-color: white;
+    padding: 20px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -94,7 +96,7 @@
 
 
 .question_container form {
-    min-width: 80%;
+    width: 80%;
     font-size: clamp(0.3125rem, 0.0446rem + 1.3393vw, 1.25rem);
     margin-top: 30px;
     display: flex;
@@ -104,8 +106,8 @@
 }
 
 .form_group {
-    width: 80%;
-    margin: 15px auto;
+    width: 100%;
+    margin-bottom: 25px;
 }
 
 .form_group label {
@@ -120,30 +122,30 @@
 }
 
 .form_group__button {
-    width: 80%;
+    width: 100%;
     margin: 25px auto;
     display: flex;
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
 }
 
 .form_group__button button {
     border: none;
     background-color: #0C2191;
     color: white;
-    padding: 15px 45px;
+    padding: 10px 40px;
     border-radius: 10px;
+    font-size: 1rem;
 }
 
 .question_box {
-    width: 90%;
+    width: 100%;
     margin-bottom: 30px;
 }
 
 .question_box h2{
-    font-size: 1.1rem;
+    font-size: 1rem;
     line-height: 1.5;
-    text-align: center;
     color: #191046;
 }
 
@@ -151,7 +153,6 @@
     width:  100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     margin-top: 15px;
 }
 
@@ -161,10 +162,10 @@
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 0.6px;
-    padding: 15px;
+    padding: 10px;
     border-radius: 10px;
     margin: 10px;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
 }
 
 
@@ -175,15 +176,22 @@
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 0.6px;
-    padding: 15px;
+    padding: 10px;
     border-radius: 10px;
     margin: 10px;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
 }
 
 .question_container form h2 {
     font-weight: 700;
     color: #0C2191;
+}
+
+.form_group h2 {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #191046;
+    margin: 0;
 }
 
 

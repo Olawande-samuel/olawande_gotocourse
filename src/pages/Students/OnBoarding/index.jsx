@@ -22,14 +22,14 @@ const OnBoarding = () => {
     
     let userdata = getItem(VERIFICATION_KEY)
 
-    const navigate =useNavigate()
+    const navigate = useNavigate()
     const {kycFunctions: {addStudentKYC}} = useAuth();
     const [loading, setLoading] = useState(false);
     const [formstate, setFormstate] = useState({
-        firstName: "",
-        lastName: "",
+        firstName: userdata?.firstName ?? "",
+        lastName: userdata?.lastName ?? "",
         phoneNumber: "",
-        email: "",
+        email: userdata?.email ?? "",
         country: "",
         region: "",
         hearAboutUs: "",
@@ -40,13 +40,19 @@ const OnBoarding = () => {
         employmentStatus: "",
         status: "CONFIRMED"
     })
-    let component;
     useEffect(() => {
         console.log("OnBoarding page is mounted");
         return () => console.log("Removing OnBoarding page");
     }, [])
     function pageHandler(_){ setPage(old => old += 1);}
-
+    function isValid(data){
+        for(let d in data){
+            console.log(d);
+            if(data[d].trim() === "") return false;
+            else continue;
+        }
+        return true;
+    }
     function createBoarding(data){
         return {
             firstName: data.firstName,
@@ -68,6 +74,8 @@ const OnBoarding = () => {
         e.preventDefault();
         setLoading(_ => true);
         try{
+            let valid = isValid(formstate);
+            if(!valid) throw new AdvancedError("All fields are required for us to get to know you more", 1);
             const data = createBoarding(formstate);
             const res = await addStudentKYC(data, userdata?.token);
             console.log(res);
@@ -78,7 +86,7 @@ const OnBoarding = () => {
                 // SET USERDATA HERE
                 removeItem(VERIFICATION_KEY)
                 updateItem(KEY, userdata)
-                setPage(_ => 10 );
+                setPage(_ => 10);
                 toast.success(message, {
                     position: "top-right",
                     autoClose: 4000,
@@ -115,20 +123,16 @@ const OnBoarding = () => {
         })
     }
 
-    if(page === 0)component = <WelcomeSection pageHandler={pageHandler} />;
-    else if(page === 1)component = <SectionOne formstate={formstate} changeHandler={changeHandler} pageHandler={pageHandler} />;
-    else if(page === 2)component = <SectionTwo formstate={formstate} changeHandler={changeHandler} pageHandler={pageHandler} />;
-    else if(page === 3)component = <SectionThree formstate={formstate} setFormstate={setFormstate} pageHandler={pageHandler} />;
-    else if(page === 4)component = <SectionFour formstate={formstate} setFormstate={setFormstate} pageHandler={pageHandler} />;
-    else if(page === 5)component = <SectionFive formstate={formstate} setFormstate={setFormstate} submit={submitHandler} />;
-    else component = <Success />;
-
 
     return (
         <div className={clsx.onboarding}>
             <ToastContainer />
             {loading && <Loader />}
-            {component}
+            {
+                page === 0 ? (<WelcomeSection pageHandler={pageHandler} />) : page === 1 ? (
+                    <Questions setFormstate={setFormstate} submitHandler={submitHandler} formstate={formstate} changeHandler={changeHandler} />
+                ) : <Success />
+            }
         </div>
     )
 }
@@ -151,7 +155,7 @@ function WelcomeSection({pageHandler}){
 
 
 
-function SectionOne({pageHandler, formstate, changeHandler}){
+function Questions({submitHandler, formstate, changeHandler, setFormstate}){
     const inputData = [
         {
             name: "firstName",
@@ -177,33 +181,6 @@ function SectionOne({pageHandler, formstate, changeHandler}){
             type: "email",
             value: formstate.email
         },
-    ]
-    return (
-        <div className={clsx.question}>
-            <div className={clsx.question_container}>
-                <h2>Please provide us with your information below by completing this form, you will be able to enroll in upcoming courses, bootcamps, and events.</h2>
-
-                <form>
-                    {
-                        inputData.map(({name, label, type, value}, i) => (
-                            <div className={clsx.form_group} key={i}>
-                                <Input autoComplete="off" value={value} handleChange={changeHandler} name={name} label={label} type={type} />
-                            </div>
-                        ))
-                    }
-                    <div className={clsx.form_group__button}>
-                        <button onClick={pageHandler}>Next</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    )
-}
-
-
-
-function SectionTwo({pageHandler, formstate, changeHandler}){
-    const inputData = [
         {
             name: "country",
             label: "Country",
@@ -217,101 +194,33 @@ function SectionTwo({pageHandler, formstate, changeHandler}){
             value: formstate.region
         }
     ]
+    function chooseHandler(e, el){
+        const name = e.currentTarget.getAttribute("name");
+        setFormstate(old => {
+            return {
+                ...old,
+                [name]: el
+            }
+        })
+        console.log({formstate, e, el});
+    }
     return (
         <div className={clsx.question}>
             <div className={clsx.question_container}>
-                <h2>Where are you from?</h2>
+                <h2>Please provide us with your information below by completing this form, you will be able to enroll in upcoming courses, bootcamps, and events.</h2>
 
-                <form>
+                <form onSubmit={submitHandler}>
                     {
                         inputData.map(({name, label, type, value}, i) => (
                             <div className={clsx.form_group} key={i}>
-                                <Input value={value} handleChange={changeHandler} autoComplete="off" name={name} label={label} type={type} />
+                                <Input autoComplete="off" value={value} handleChange={changeHandler} name={name} label={label} type={type} />
                             </div>
                         ))
                     }
-                    <div className={clsx.form_group__button}>
-                        <button onClick={pageHandler}>Next</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    )
-}
-
-
-
-function SectionThree({pageHandler, formstate, setFormstate}){
-    function chooseHandler(e, el){
-        const name = e.currentTarget.getAttribute("name");
-        setFormstate(old => {
-            return {
-                ...old,
-                [name]: el
-            }
-        })
-        console.log({formstate, e, el});
-    }
-    return(
-        <div className={clsx.question}>
-            <div className={clsx.question_container}>
-                <form>
                     <QuestionBox name="hearAboutUs" choice={formstate.hearAboutUs} chooseHandler={chooseHandler} question="How did you hear about us?" options={["facebook ads", "facebook group", "slack group", "telegram group", "word of mouth", "referral", "newsletter", "others"]} />
                     <QuestionBox name="itExperience" choice={formstate.itExperience} chooseHandler={chooseHandler}  question="What is your IT Experience?" options={["none", "intermediate", "advanced"]} />
-                    <div className={clsx.form_group__button}>
-                        <button onClick={pageHandler}>Next</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    )
-}
-
-
-function SectionFour({pageHandler, formstate, setFormstate}){
-    function chooseHandler(e, el){
-        const name = e.currentTarget.getAttribute("name");
-        console.log(name);
-        setFormstate(old => {
-            return {
-                ...old,
-                [name]: el
-            }
-        })
-        console.log({formstate, e, el});
-    }
-    return(
-        <div className={clsx.question}>
-            <div className={clsx.question_container}>
-                <form>
                     <QuestionBox name="learningModel" choice={formstate.learningModel} chooseHandler={chooseHandler} question="What is your preferred learning model?" options={["cohort", "self-paced", "1:1 mentorship", "in-person"]} />
                     <QuestionBox name="willingToBeDedicated" choice={formstate.willingToBeDedicated} chooseHandler={chooseHandler} question="Are you willing to be dedicated and follow through with the training, quizzes, and capstone projects?" options={["yes", "no"]} />
-                    <div className={clsx.form_group__button}>
-                        <button onClick={pageHandler}>Next</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    )
-}
-
-
-function SectionFive({submit, formstate, setFormstate}){
-    function chooseHandler(e, el){
-        const name = e.currentTarget.getAttribute("name");
-        console.log(name);
-        setFormstate(old => {
-            return {
-                ...old,
-                [name]: el
-            }
-        })
-        console.log({formstate, e, el});
-    }
-    return(
-        <div className={clsx.question}>
-            <div className={clsx.question_container}>
-                <form onSubmit={submit}>
                     <QuestionBox name="qualification" choice={formstate.qualification} chooseHandler={chooseHandler} question="What is your highest qualifications or are you currently completing a degree?" options={["no degree", "bachelor degree", "masters degree", "doctoral degree", "other"]} />
                     <QuestionBox name="employmentStatus" choice={formstate.employmentStatus} chooseHandler={chooseHandler} question="What is your current employment status?" options={["unemployed", "full-time", "part-time", "casual", "self employed"]} />
                     <div className={clsx.form_group__button}>
@@ -322,6 +231,9 @@ function SectionFive({submit, formstate, setFormstate}){
         </div>
     )
 }
+
+
+
 
 
 function Success({}){
