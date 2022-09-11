@@ -1242,22 +1242,22 @@ export function Approve() {
   }
 
 
-  async function deleteUser(e, id) {
-    e.preventDefault();
-    const userdata = getItem(KEY)
-    const teacherInfo = getItem("gotocourse-teacherDetails")
+  // async function deleteUser(e, id) {
+  //   e.preventDefault();
+  //   const userdata = getItem(KEY)
+  //   const teacherInfo = getItem("gotocourse-teacherDetails")
 
-    try {
-      let value = window.confirm("Are you sure you want to delete this user?. This process is irreversible")
-      if (value) {
-        let res = await deleteAUser(userdata?.token, teacherInfo.email);
-        // console.log({res});
-        navigate(-1)    
-      }
-    } catch (error) {
+  //   try {
+  //     let value = window.confirm("Are you sure you want to delete this user?. This process is irreversible")
+  //     if (value) {
+  //       let res = await deleteAUser(userdata?.token, teacherInfo.email);
+  //       // console.log({res});
+  //       navigate(-1)    
+  //     }
+  //   } catch (error) {
       
-    }
-  }
+  //   }
+  // }
 
 
   async function conferMentorship(e, id, email) {
@@ -1416,14 +1416,14 @@ export function Approve() {
               {data?.canTeach ? "Revoke Application" : "Approve Application"}
             </button>
 
-            <button
+            {/* <button
               className="button button-lg log_btn w-50 mt-3"
               style={{ backgroundColor: "red" }}
               type="submit"
               onClick={(e) => deleteUser(e, data?.userId)}
             >
               Delete User
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
