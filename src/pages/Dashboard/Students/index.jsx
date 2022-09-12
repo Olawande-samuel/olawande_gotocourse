@@ -429,12 +429,12 @@ export function Bootcamps() {
         console.log("clicked")
     }
     return (
-        <Students header={"Bootcamps"}>
+        <Students header={"Available Classes"}>
             {loading && <Loader />}
             <div className={clsx["students_profile"]}>
                 <div className={clsx.admin__student}>
                     <div className="d-flex justify-content-between align-items-center mb-4">
-                        <h3 style={{ margin: 0 }}>Bootcamps</h3>
+                        <h3 style={{ margin: 0 }}>Available Classes</h3>
                     </div>
                     <div className={clsx.admin__student_main}>
                         {courseList.length > 0 ? (
@@ -465,7 +465,7 @@ export function Bootcamps() {
                                     </p>
                                 </tbody>
                             </table>
-                        ) : (<p className="lead">No bootcamps found</p>)
+                        ) : (<p className="lead">No Class Available </p>)
                         }
 
                     </div>
@@ -1375,51 +1375,7 @@ function AvailableCourses({ data }) {
 
             </div>
 
-            {/* <div className={clsx["dashboard_courses--left"]}>
-                <h6 style={{ marginBottom: ".5rem" }}>Available Classes</h6>
-                <small className="mb-4 d-block">Select and enroll to a class to get started</small>
-
-                <div className="table-responsive">
-                    <table className="table table-bordered">
-                        <thead>
-                            <tr>
-                                {
-                                    tableHeader.map(title => (
-                                        <th>{title}</th>
-                                    ))
-                                }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                data?.length > 0 && data.map((item, i) => (
-                                    <tr key={i}>
-                                        <td>
-                                            <span>{item.title}</span>
-                                        </td>
-                                        <td><span>{item.startDate && getDate(item.startDate)}</span></td>
-                                        <td>
-                                            <span>$ {item.price}</span>
-                                        </td>
-                                        <td>
-                                            <div className={clsx.classes_button}>
-                                                <button className="d-flex align-items-center" onClick={(e) => handleCourseSelect(e, item)}>
-                                                    <i><BsQuestionCircle /></i>
-                                                    <span>Learn more</span>
-                                                </button>
-                                                <button className="d-flex align-items-center" onClick={(e) => handleCourseSelect(e, item)}>
-                                                    <i><BsDownload /></i>
-                                                    <span>Enroll</span>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div> */}
+        
 
            
         </div>
