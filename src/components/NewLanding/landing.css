@@ -3,7 +3,8 @@
     height:100%;
     color: #ffffff;
     font-family: 'Inter', sans-serif;
-    margin-bottom: 7rem;
+    /* margin-bottom:2rem; */
+    padding-top:1.2rem;
     
 }
 .or {
@@ -64,14 +65,14 @@
 
 
 .newHero_right  {
-    height:350px;
+    /* height:350px; */
     margin-bottom: .5rem;
 }
 
 .newHero_right img {
     max-width: 100%;
     width: 100%;
-    height: 350px;
+    /* height: 350px; */
 }
 .newHero .newHero_left-userSignin button, .social_signIn_wrapper button {
     font-size: 14px;
@@ -103,36 +104,43 @@
 
 @media (min-width: 700px){
     .newHero {
-        height:min(calc(100vh - 81px ), 600px);
+        height:100%;
     }
     .newHero > div {
         display: flex;
         /* flex-direction:row-reverse; */
     }
     .newHero_left{
-        width: 50%;
+        width: 45%;
     }
     .newHero_right {
         position: absolute;
         display: block;
-        height:min(100vh, 680px);
+        height:min(100vh, 600px);
         bottom:-50%;
         right: 0;
         top: 0;
-        width: 50%;
+        width: 60%;
         margin-bottom: 0;
+        height: 100%;
+        display: flex;
+        align-items: flex-end;
 
     }
     .newHero_right img {
         max-width: 100%;
         width: 100%;
-        height: 100%;
+        height: 90%;
     }
     .newHero .newHero_left-userSignin button {
         width: 90%;
     }
 }
-
+@media (min-wodth: 768px){
+    .newHero {
+        height:min(calc(100vh - 81px ), 650px);
+    }
+}
 @media (min-width:1024px){
     .newHero .newHero_left-userSignin button{
         width: 85%;
@@ -152,6 +160,17 @@
 @media (min-width:1197px){
     .newHero .newHero_left-userSignin button{
         width: 60%;
+    }
+    .newHero_right img {
+        max-width: 100%;
+        width: 100%;
+        height: 90%;
+    }
+}
+
+@media (min-width:1300px){
+    .newHero_right img {
+        height: 87%;
     }
 }
 
@@ -178,14 +197,19 @@
 }
 @media screen and (min-width: 1440px){
     .newHero {
-        height:min(calc(100vh - 81px ), 850px);
+        height:min(calc(100vh - 81px ), 650px);
         
     }
     .newHero_right {
         right: 0;
         /* bottom: 0; */
-        height:min(100vh, 930px);
+        /* height:min(100vh, 930px); */
     
+    }
+    .newHero_right img {
+        max-width: 100%;
+        width: 100%;
+        height: 85%;
     }
     .newHero_left header h1 {
         margin-bottom: 2rem;
@@ -303,7 +327,7 @@ height:70px;
     width: 65%;
 }
 .newBootcamp_title p {
-    font-size: 1.2rem;
+    font-size: 1rem;
     line-height: 30.06px;
 }
 

@@ -4,7 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import Layout from "../Layout"
 import BootImg from "../../images/newbootcamp.webp"
-import HeroImg from "../../images/newHeroLatest.webp"
+// import HeroImg from "../../images/newHeroLatest.webp"
+import HeroImg from "../../images/newlanding.webp"
 import { useAuth } from "../../contexts/Auth"
 import "./landing.css"
 import { useLocalStorage } from "../../hooks";
@@ -106,14 +107,14 @@ function Hero(){
             </div>
             <div className="newHero_left">
                 <header className="">
-                    <h1 className="newHero_left-header text-center">Upskill and Reskill</h1>
+                    <h1 className="newHero_left-header text-center">Upskill &amp; Reskill</h1>
                     {/* <h6 className="newHero_left-title text-center">Connect with industry experts from anywhere and for less cost</h6> */}
-                    <h6 className="newHero_left-title text-center mb-5">No. 1 platform to start and accelerate your tech career</h6>
+                    <h6 className="newHero_left-title text-center mb-4 mb-lg-5">No. 1 platform to start and accelerate your tech career</h6>
                     <div className="d-flex justify-content-center">
                       <ul>
-                        <li className="newHero_left-title text-start mb-3" style={{fontSize: "18px"}}>Learn from Industry Experts</li>
-                        <li className="newHero_left-title text-start mb-3" style={{fontSize: "18px"}}>Learn from Anywhere</li>
-                        <li className="newHero_left-title text-start mb-3" style={{fontSize: "18px"}}>Learn for Less</li>
+                        <li className="newHero_left-title text-start mb-2" style={{fontSize: "17px"}}>Learn from Industry Experts</li>
+                        <li className="newHero_left-title text-start mb-2" style={{fontSize: "17px"}}>Learn from Anywhere</li>
+                        <li className="newHero_left-title text-start mb-2" style={{fontSize: "17px"}}>Save Time, Save Cost!</li>
                       </ul>
                     </div>
                 </header>
@@ -129,7 +130,7 @@ function Hero(){
                         <i className="me-4">
                             <img src={goo} alt="" width={25} height={25} />
                         </i>
-                        Continue with Google
+                        Sign-up with Google
                     </motion.button>
                    
                       <motion.button className="google d-block mb-3"
@@ -143,7 +144,7 @@ function Hero(){
                       <i className="me-4">
                               <img src={face} alt="" width={25} height={25} />
                           </i>
-                          Continue with Facebook
+                          Sign-up with Facebook
                       </motion.button>
                     <small className="or d-block"><span>or</span></small>
                         <motion.p

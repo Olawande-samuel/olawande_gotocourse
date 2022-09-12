@@ -28,7 +28,7 @@
 
 @media (min-width: 770px) and (max-width: 991px){
   .container-md, .container-sm, .container {
-    max-width: 85%;
+    max-width: 92%;
     height: 100%;
   }
 }
