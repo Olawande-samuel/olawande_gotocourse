@@ -107,7 +107,15 @@ function Hero(){
             <div className="newHero_left">
                 <header className="">
                     <h1 className="newHero_left-header text-center">Upskill and Reskill</h1>
-                    <h6 className="newHero_left-title text-center">Connect with industry experts from anywhere and for less cost</h6>
+                    {/* <h6 className="newHero_left-title text-center">Connect with industry experts from anywhere and for less cost</h6> */}
+                    <h6 className="newHero_left-title text-center mb-5">No. 1 platform to start and accelerate your tech career</h6>
+                    <div className="d-flex justify-content-center">
+                      <ul>
+                        <li className="newHero_left-title text-start mb-3" style={{fontSize: "18px"}}>Learn from Industry Experts</li>
+                        <li className="newHero_left-title text-start mb-3" style={{fontSize: "18px"}}>Learn from Anywhere</li>
+                        <li className="newHero_left-title text-start mb-3" style={{fontSize: "18px"}}>Learn for Less</li>
+                      </ul>
+                    </div>
                 </header>
                 <div className="newHero_left-userSignin">
                     <motion.button className="facebook d-block mb-3"

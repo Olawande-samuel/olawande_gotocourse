@@ -167,7 +167,7 @@ const Navbar = ({ background }) => {
             >
               <div
                 className="d-flex align-items-center"
-                style={{ color: "#fff", fontSize: "20px" }}
+                style={{ color: "#fff", fontSize: "16px" }}
               >
                 <i
                   className="d-flex align-items-center justify-content-center me-2"

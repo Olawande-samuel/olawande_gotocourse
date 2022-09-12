@@ -39,7 +39,7 @@
     color:  #fff;
 }
 .newHero_left header h1 {
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
     font-weight: 900;
     font-size: clamp(2.8125rem, 2.6339rem + 0.8929vw, 3.4375rem);
 }
@@ -47,7 +47,7 @@
     font-size: 16px;
 }
 .newHero_left-title {
-    width: 60%;
+    width: 100%;
     margin-inline:auto;
     margin-left: auto;
     margin-right: auto;
