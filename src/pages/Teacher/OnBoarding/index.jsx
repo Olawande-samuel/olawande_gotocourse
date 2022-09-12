@@ -3,7 +3,9 @@ import {Link} from "react-router-dom";
 import {ToastContainer, toast} from "react-toastify";
 
 
-
+import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css'
+import { Country, State, City }  from 'country-state-city';
 import clsx from "./styles.module.css";
 import Input from "../../../components/Input";
 import success from "../../../images/boarding_success.png";
@@ -71,6 +73,7 @@ const OnBoarding = () => {
         return () => console.log("Removing OnBoarding page");
     }, [])
     function pageHandler(_){ setPage(old => old += 1);}
+    function backpageHandler(_){ setPage(old => old -= 1);}
 
     async function submitHandler(e){
         e.preventDefault();
@@ -126,7 +129,7 @@ const OnBoarding = () => {
             {loading && <Loader />}
             {
                 page === 0 ? (<WelcomeSection pageHandler={pageHandler} />) : page === 1 ? (
-                    <Questions setFormstate={setFormstate} submitHandler={submitHandler} formstate={formstate} changeHandler={changeHandler} />
+                    <Questions setFormstate={setFormstate} submitHandler={submitHandler} formstate={formstate} changeHandler={changeHandler} backpageHandler={backpageHandler} />
                 ) : <Success />
             }
         </div>
@@ -148,7 +151,7 @@ function WelcomeSection({pageHandler}){
 
 
 
-function Questions({submitHandler, formstate, changeHandler, setFormstate}){
+function Questions({submitHandler, formstate, changeHandler, setFormstate, backpageHandler}){
     const inputData = [
         {
             name: "firstName",
@@ -172,7 +175,8 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
             name: "email",
             label: "Email",
             type: "email",
-            value: formstate.email
+            value: formstate.email,
+            disabled: true
         },
         {
             name: "country",
@@ -197,18 +201,85 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
         })
         console.log({formstate, e, el});
     }
+    const [value, setValue] = useState()
+    
+    const countries = Country.getAllCountries()
+    const [countryCode, setCountryCode]= useState()
+    const [states, setStates]= useState([])
+    function handleCountryChange(e){
+        const value = e.target.value
+        let country = value.split("/")[0]
+        setFormstate({...formstate, country:country})
+        setCountryCode(e.target.value.split("/")[1])
+    }
+    function handleStateChange(e){
+        setFormstate({...formstate, region:e.target.value})
+    }
+
+    useEffect(()=>{
+        if(countryCode){
+          let states = State.getStatesOfCountry(countryCode)
+          setStates(states)
+        }
+    },[formstate.country, countryCode])
+    
+    useEffect(()=>{
+        if(value){
+          setFormstate({...formstate, phoneNumber: value})
+        }
+    },[value])
+
+console.log({formstate})
     return (
         <div className={clsx.question}>
             <div className={clsx.question_container}>
                 <h2>Please provide us with your information below by completing this form, you will be able to take classes on Gotocourse upon review and approval by our standardization team.</h2>
                 <form onSubmit={submitHandler}>
                     {
-                        inputData.map(({name, label, type, value}, i) => (
+                        inputData.slice(0, 2).map(({name, label, type, value, disabled}, i) => (
                             <div className={clsx.form_group} key={i}>
-                                <Input autoComplete="off" value={value} handleChange={changeHandler} name={name} label={label} type={type} />
+                                <Input autoComplete="off" value={value} handleChange={changeHandler} name={name} label={label} type={type} readOnly={disabled} />
                             </div>
                         ))
                     }
+                     <div className={`${clsx.form_group} phone_number`}>
+                        <label htmlFor="Phone" className="form-label generic_label">Phone Number</label>
+                        <PhoneInput
+                         placeholder="Enter phone number" 
+                         value={value}
+                         onChange={setValue}
+                         
+                        />
+                    </div>
+                    {
+                        inputData.slice(3, 4).map(({name, label, type, value, disabled}, i) => (
+                            <div className={clsx.form_group} key={i}>
+                                <Input autoComplete="off" value={value} handleChange={changeHandler} name={name} label={label} type={type} readOnly={disabled} />
+                            </div>
+                        ))
+                    }
+                    <div className={clsx.form_group}>
+                        <label htmlFor="country" className="form-label generic_label">Country</label>    
+                        <select name="country" id="country" className="form-select" onChange={handleCountryChange}>
+                            <option value="">Select Country</option>
+                            {
+                                countries?.map(country=>(
+                                    <option value={country.name + "/" + country.isoCode}>{country.name}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
+                    <div className={clsx.form_group}>
+                        <label htmlFor="country" className="form-label generic_label">State</label>    
+                        <select name="country" id="country" className="form-select" onChange={handleStateChange}>
+                            <option value="">Select State</option>
+                            {
+                                states?.map(state=>(
+                                    <option value={state.name}>{state.name}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
                     <QuestionBox name="hearAboutUs" choice={formstate.hearAboutUs} chooseHandler={chooseHandler} question="How did you hear about us?" options={["facebook ads", "facebook group", "slack group", "telegram group", "word of mouth", "referral", "newsletter", "others"]} />
                     <div className={clsx.form_group}>
                         <h2>What is your area of expertise?</h2>
@@ -227,6 +298,7 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
                     <QuestionBox name="qualification" choice={formstate.qualification} chooseHandler={chooseHandler} question="What is your highest qualifications or are you currently completing a degree?" options={["no degree", "bachelor degree", "masters degree", "doctoral degree", "other"]} />
                     <QuestionBox name="employmentStatus" choice={formstate.employmentStatus} chooseHandler={chooseHandler} question="What is your current employment status?" options={["unemployed", "full-time", "part-time", "casual", "self employed"]} />
                     <div className={clsx.form_group__button}>
+                        <button className="btn-danger me-2" onClick={backpageHandler} style={{background: "var(--theme-orange"}}>Back</button>
                         <button>Submit</button>
                     </div>
                 </form>
@@ -249,10 +321,7 @@ function Success({}){
                     <h2>Application Successful</h2>
                     <img src={success} alt="Application Success" />
                     <div className={clsx.form_group__button}>
-                        <p>You will receive a response from us in 48-72 hours</p>
-                        <Link to="/">
-                            <button>Go Home</button>
-                        </Link>
+                        <p>You will receive a response from us within 48-72 hours</p>
                     </div>
                     <div className={clsx.form_group__button}>
                         <Link to="/"><button>Go Home</button></Link>

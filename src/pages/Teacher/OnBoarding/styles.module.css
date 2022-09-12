@@ -1,6 +1,5 @@
 .onboarding {
     width: 100%;
-    height: 100vh;
     box-sizing: border-box;
 }
 
@@ -81,7 +80,7 @@
     flex-direction: column;
     justify-content: center;
     font-size: clamp(0.3125rem, 0.0446rem + 1.3393vw, 1.25rem);
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 
 
@@ -102,7 +101,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-y:scroll;
+    /* overflow-y:scroll; */
 }
 
 .form_group {
@@ -126,7 +125,7 @@
     margin: 25px auto;
     display: flex;
     align-items: center;
-    /* justify-content: center; */
+    justify-content: center;
 }
 
 .form_group__button button {

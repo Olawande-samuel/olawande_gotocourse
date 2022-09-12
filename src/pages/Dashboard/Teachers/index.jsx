@@ -944,7 +944,7 @@ export const Teachers = ({ children, isMobile, userdata, notification, header })
   const [loader, setLoading] = useState(false)
 
   const teacher = {
-    title: "TEACHER",
+    title: userData.userType === "teacher" ? "TEACHER" : "MENTOR",
     logo: <FaChalkboardTeacher size="2.5rem" color="#0C2191" />
 }
 

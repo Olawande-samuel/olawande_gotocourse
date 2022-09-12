@@ -12,7 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { AdvancedError } from "../../classes";
 import goo from "../../images/goo.png"
 import face from "../../images/face.png"
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider,FacebookAuthProvider } from "firebase/auth";
 import { authentication, provider, facebookProvider } from "../../firebase-config.js"
 
 
@@ -146,8 +146,11 @@ const Login = () => {
        }
     }
     ).catch(err=>{
-      toast.error(err.message);
-    }
+        toast.error(err.message);
+        if (err.code === "auth/account-exists-with-different-credential") {
+          allowOnAccountExistError(err, "facebook")
+        }
+      }
     )
   }
    function signInWithFacebook(e){
@@ -163,19 +166,29 @@ const Login = () => {
         }
       }
     }
-  ).catch(err=>{
+  ).catch(err => {
         console.error(err)
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
+        if (err.code === "auth/account-exists-with-different-credential") {
+          allowOnAccountExistError(err, "facebook")
+        }
       }
     )
+  }
+
+  function allowOnAccountExistError(error, type) { 
+    setLoading(true)
+    if (type === "google") {
+      const credential = FacebookAuthProvider.credentialFromError(error);
+      const token = credential.accessToken;
+      socialSignIn(token, "facebook")
+
+      
+    } else {
+      const gcredential = GoogleAuthProvider.credentialFromError(error);
+      const token = gcredential.accessToken;
+      socialSignIn(token, "facebook")
+    }
   }
   return (
     <SignInWrapper>
