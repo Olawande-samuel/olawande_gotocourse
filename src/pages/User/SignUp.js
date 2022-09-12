@@ -137,13 +137,13 @@ const SignUp = () => {
         if(res.user?.accessToken){
          let token =  {
           accessToken: res.user.accessToken,
-          userType: "teacher"
+          userType: "student"
         }
         socialSignUp(token, "google")
        }
     }
     ).catch(err=>{
-      allowOnAccountExistError(err, "google", "teacher")
+      allowOnAccountExistError(err, "google", "student")
       toast.error(err.message);
     }
     )
@@ -156,7 +156,7 @@ const SignUp = () => {
         if(res.user?.accessToken){
           let token =  {
           accessToken: res.user.accessToken,
-          userType: "teacher"
+          userType: "student"
          }
          socialSignUp(token, "facebook")
         }
@@ -174,7 +174,6 @@ const SignUp = () => {
 
   function allowOnAccountExistError(error, type, usertype) {
     console.log("customdata mail", error.customData.email);
-  
     setLoading(true)
     if (type === "google") {
       const credential = FacebookAuthProvider.credentialFromError(error);
@@ -187,13 +186,7 @@ const SignUp = () => {
           if (res.statusCode !== 1)
             throw new AdvancedError(res.message, res.status);
           localStorage.setItem(VERIFICATION_KEY, JSON.stringify(res.data));
-          navigate(
-            `${
-              usertype === "student"
-                ? "/user-onboarding"
-                : "/teacher/on-boarding"
-            }`
-          );
+          navigate("/user-onboarding")
         })
         .catch((err) => {
           setLoading(false);
@@ -211,13 +204,7 @@ const SignUp = () => {
           if (res.statusCode !== 1)
             throw new AdvancedError(res.message, res.status);
           localStorage.setItem(VERIFICATION_KEY, JSON.stringify(res.data));
-          navigate(
-            `${
-              usertype === "student"
-                ? "/user-onboarding"
-                : "/teacher/on-boarding"
-            }`
-          );
+          navigate("/user-onboarding")
         })
         .catch((err) => {
           setLoading(false);
@@ -284,11 +271,11 @@ const SignUp = () => {
         </div>
         <form className="form" onSubmit={onSubmit}  autoComplete="off">
           <Input
-            label="Fullname"
+            label="Full Name"
             name="fullname"
             value={data.fullname}
             handleChange={handleChange}
-            placeholder="Fullname"
+            placeholder="Firstname Lastname"
             required={true}
           />
           <Input

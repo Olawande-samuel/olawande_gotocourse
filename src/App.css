@@ -2416,3 +2416,14 @@ tr th, thead td, td, td span  {
     height: 200px;
   }
 }
+.phone_number {
+  width: 100%;
+}
+.phone_number input {
+  background-color: #EEECEC;
+  padding: 12px;
+  font-size:12px;
+  border-radius:5px !important;
+  border: none;
+  outline: none;
+}

@@ -2,8 +2,9 @@ import React, {useState, useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {ToastContainer, toast} from "react-toastify";
 
-
-
+import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css'
+import { Country, State, City }  from 'country-state-city';
 import clsx from "./styles.module.css";
 import Input from "../../../components/Input";
 import success from "../../../images/boarding_success.png";
@@ -179,6 +180,7 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
             name: "email",
             label: "Email",
             type: "email",
+            disabled: true,
             value: formstate.email
         },
         {
@@ -204,6 +206,37 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
         })
         console.log({formstate, e, el});
     }
+    const [value, setValue] = useState()
+    
+    const countries = Country.getAllCountries()
+    const [countryCode, setCountryCode]= useState()
+    const [states, setStates]= useState([])
+    function handleCountryChange(e){
+        const value = e.target.value
+        let country = value.split("/")[0]
+        console.log(country)
+        setFormstate({...formstate, country:country})
+        setCountryCode(e.target.value.split("/")[1])
+    }
+    function handleStateChange(e){
+        setFormstate({...formstate, region:e.target.value})
+    }
+
+    useEffect(()=>{
+        if(countryCode){
+          let states = State.getStatesOfCountry(countryCode)
+          setStates(states)
+        }
+    },[formstate.country, countryCode])
+    
+    useEffect(()=>{
+        if(value){
+          setFormstate({...formstate, phoneNumber: value})
+        }
+    },[value])
+
+    console.log({value})
+
     return (
         <div className={clsx.question}>
             <div className={clsx.question_container}>
@@ -211,12 +244,53 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
 
                 <form onSubmit={submitHandler}>
                     {
-                        inputData.map(({name, label, type, value}, i) => (
+                        inputData.slice(0,2).map(({name, label, type, value, disabled}, i) => (
                             <div className={clsx.form_group} key={i}>
-                                <Input autoComplete="off" value={value} handleChange={changeHandler} name={name} label={label} type={type} />
+                                <Input autoComplete="off" value={value} handleChange={changeHandler} name={name} label={label} type={type} readOnly={disabled} />
                             </div>
                         ))
                     }
+                    <div className={`${clsx.form_group} phone_number`}>
+                        <label htmlFor="Phone" className="form-label generic_label">Phone Number</label>
+                        <PhoneInput
+                         placeholder="Enter phone number" 
+                         value={value}
+                         onChange={setValue}
+                         
+                        />
+                    </div>
+
+                    {
+                        inputData.slice(3,4).map(({name, label, type, value, disabled}, i) => (
+                            <div className={clsx.form_group} key={i}>
+                                <Input autoComplete="off" value={value} handleChange={changeHandler} name={name} label={label} type={type} readOnly={disabled} />
+                            </div>
+                        ))
+                    }
+
+                    <div className={clsx.form_group}>
+                        <label htmlFor="country" className="form-label generic_label">Country</label>    
+                        <select name="country" id="country" className="form-select" onChange={handleCountryChange}>
+                            <option value="">Select Country</option>
+                            {
+                                countries?.map(country=>(
+                                    <option value={country.name + "/" + country.isoCode}>{country.name}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
+                    <div className={clsx.form_group}>
+                        <label htmlFor="country" className="form-label generic_label">State</label>    
+                        <select name="country" id="country" className="form-select" onChange={handleStateChange}>
+                            <option value="">Select State</option>
+                            {
+                                states?.map(state=>(
+                                    <option value={state.name}>{state.name}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
+
                     <QuestionBox name="hearAboutUs" choice={formstate.hearAboutUs} chooseHandler={chooseHandler} question="How did you hear about us?" options={["facebook ads", "facebook group", "slack group", "telegram group", "word of mouth", "referral", "newsletter", "others"]} />
                     <QuestionBox name="itExperience" choice={formstate.itExperience} chooseHandler={chooseHandler}  question="What is your IT Experience?" options={["none", "intermediate", "advanced"]} />
                     <QuestionBox name="learningModel" choice={formstate.learningModel} chooseHandler={chooseHandler} question="What is your preferred learning model?" options={["cohort", "self-paced", "1:1 mentorship", "in-person"]} />

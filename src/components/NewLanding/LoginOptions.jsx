@@ -35,33 +35,8 @@ const LoginOptions = ({ closeOverlay, type }) => {
           if (res.user?.accessToken) {
             console.log({ res });
             setLoading(true);
-            googleSignUp({
-              accessToken: res.user.accessToken,
-              userType: usertype,
-            })
-              .then((res) => {
-                setLoading(false);
-                if (res.statusCode !== 1)
-                  throw new AdvancedError(res.message, res.status);
-                localStorage.setItem(
-                  "gotocourse-userdata",
-                  JSON.stringify(res.data)
-                );
-                updateItem(VERIFICATION_KEY, res.data);
-
-                navigate(
-                  `${
-                    usertype === "student"
-                      ? "/user-onboarding"
-                      : "/teacher/on-boarding"
-                  }`
-                );
-              })
-              .catch((err) => {
-                setLoading(false);
-                console.error(err);
-                toast.error(err.message);
-              });
+            let token = res.user.accessToken
+            socialSignUp("google", token, usertype)
           }
         })
         .catch((error) => {
@@ -71,42 +46,16 @@ const LoginOptions = ({ closeOverlay, type }) => {
         });
 
     } else {
-
       signInWithPopup(authentication, facebookProvider)
         .then((res) => {
-          console.log("facebook", res);
           if (res.user?.accessToken) {
             setLoading(true);
-            facebookSignUp({
-              accessToken: res.user.accessToken,
-              userType: usertype,
-            })
-              .then((res) => {
-                setLoading(false);
-                if (res.statusCode !== 1)
-                  throw new AdvancedError(res.message, res.status);
-                localStorage.setItem(
-                  "gotocourse-userdata",
-                  JSON.stringify(res.data)
-                );
-                navigate(
-                  `${
-                    usertype === "student"
-                      ? "/user-onboarding"
-                      : "/teacher/on-boarding"
-                  }`
-                );
-              })
-              .catch((err) => {
-                setLoading(false);
-                console.error(err);
-                toast.error(err.message);
-              });
+            let token = res.user.accessToken
+            socialSignUp("facebook", token, usertype)
           }
         })
         .catch((error) => {
           console.error(error);
-          console.log(error.code);
           // / Handle Errors here.
           if (error.code === "auth/account-exists-with-different-credential") {
             allowOnAccountExistError(error, "facebook", usertype);
@@ -115,25 +64,30 @@ const LoginOptions = ({ closeOverlay, type }) => {
     }
   }
 
-  function allowOnAccountExistError(error, type, usertype) {
-    const email = error.customData.email;
-    console.log("customdata", error.customData);
-    console.log("customdata mail", error.customData.email);
-    console.log(FacebookAuthProvider.credentialFromError(error))
-    console.log(GoogleAuthProvider.credentialFromError(error))
-    
+  function allowOnAccountExistError(error, type, usertype) { 
     setLoading(true)
     if (type === "google") {
       const credential = FacebookAuthProvider.credentialFromError(error);
+      const token = credential.accessToken
+      socialSignUp("google", token, usertype)
+    } else {
+      const gcredential = GoogleAuthProvider.credentialFromError(error);
+      const token = gcredential.accessToken
+      socialSignUp("facebook", token, usertype)
+      
+    }
+  }
+  const socialSignUp = (type, token, usertype) => {
+    if(type === "google"){
       googleSignUp({
-        accessToken: credential.accessToken,
+        accessToken: token,
         userType: usertype,
       })
         .then((res) => {
           setLoading(false);
-          if (res.statusCode !== 1)
-            throw new AdvancedError(res.message, res.status);
-          localStorage.setItem("gotocourse-userdata", JSON.stringify(res.data));
+          if (res.statusCode !== 1) throw new AdvancedError(res.message, res.status);
+          localStorage.setItem( "gotocourse-userdata", JSON.stringify(res.data));
+          updateItem(VERIFICATION_KEY, res.data);
           navigate(
             `${
               usertype === "student"
@@ -141,6 +95,7 @@ const LoginOptions = ({ closeOverlay, type }) => {
                 : "/teacher/on-boarding"
             }`
           );
+
         })
         .catch((err) => {
           setLoading(false);
@@ -148,16 +103,15 @@ const LoginOptions = ({ closeOverlay, type }) => {
           toast.error(err.message);
         });
     } else {
-      const gcredential = GoogleAuthProvider.credentialFromError(error);
       facebookSignUp({
-        accessToken: gcredential.accessToken,
+        accessToken: token,
         userType: usertype,
       })
         .then((res) => {
           setLoading(false);
-          if (res.statusCode !== 1)
-            throw new AdvancedError(res.message, res.status);
-          localStorage.setItem("gotocourse-userdata", JSON.stringify(res.data));
+          if (res.statusCode !== 1) throw new AdvancedError(res.message, res.status);
+          localStorage.setItem( "gotocourse-userdata", JSON.stringify(res.data));
+          updateItem(VERIFICATION_KEY, res.data);
           navigate(
             `${
               usertype === "student"
@@ -172,7 +126,10 @@ const LoginOptions = ({ closeOverlay, type }) => {
           toast.error(err.message);
         });
     }
+
   }
+
+
   return (
     <div className="signUpOptions_overlay">
       <ToastContainer

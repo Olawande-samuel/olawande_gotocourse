@@ -65,7 +65,6 @@ const TeacherSignup = () => {
       if (others.email.trim() === "" || others.password.trim() === "") throw new AdvancedError("Fields cannot be empty", 0);
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
-
         const response = await register(others, "user");
         console.log({response})
         // const res = await pledre.addTeacherToSchool({
@@ -169,13 +168,7 @@ const TeacherSignup = () => {
           if (res.statusCode !== 1)
             throw new AdvancedError(res.message, res.status);
             updateItem(VERIFICATION_KEY, res.data);
-            navigate(
-            `${
-              usertype === "student"
-                ? "/user-onboarding"
-                : "/teacher/on-boarding"
-            }`
-          );
+            navigate("/teacher/on-boarding");
         })
         .catch((err) => {
           setLoading(false);
@@ -193,13 +186,7 @@ const TeacherSignup = () => {
           if (res.statusCode !== 1)
             throw new AdvancedError(res.message, res.status);
             updateItem(VERIFICATION_KEY, res.data);
-            navigate(
-            `${
-              usertype === "student"
-              ? "/user-onboarding"
-              : "/teacher/on-boarding"
-            }`
-          );
+            navigate("/teacher/on-boarding");
         })
         .catch((err) => {
           setLoading(false);
@@ -260,29 +247,37 @@ const TeacherSignup = () => {
           <small className="or d-block"><span>or</span></small>
         </div>
         <form action="" className="form" onSubmit={submitHandler}>
-          <Input label="Fullname" handleChange={changeHandler} value={formstate.fullname} name="fullname" placeholder="Fullname" />
-          <Input label="Email" handleChange={changeHandler} value={formstate.email} name="email" type="email" placeholder="Email" />
-          <Password label="Password"
-           handleChange={changeHandler}
+          <Input label="Full Name" handleChange={changeHandler} value={formstate.fullname} name="fullname" placeholder="Fullname" />
+          <Input 
+            label="Email" 
+            handleChange={changeHandler} 
+            value={formstate.email} 
+            name="email" 
+            type="email" 
+            placeholder="Email"
+            myclassname="email_input"
+            required={true}
+            pattern="^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$"
+            errorMessage="Enter a valid email address"
+            />
+          <Password
+            label="Password"
+            id="password"
+            handleChange={changeHandler}
             value={formstate.password} 
             name="password" 
             placeholder="Password"  
             password="password"
             focus ={()=>setFocus(true)}
             blur={()=>setFocus(false)}
+            myclassname="signUpPassword"
+            pattern="^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$"
+            errorMessage="Password must be a minimum of eight characters in length and must contain at least 1 uppercase English letter, 1 lowercase English letter, 1 number and 1 special character"
           />
-          {focus && !passReg.test(formstate.password) &&
-            <small style={{fontSize:"11px"}}>
-              <p className="text-danger">Password must satisfy the following conditions</p>
-              <p className="text-danger"> - At least one upper case English letter</p>
-              <p className="text-danger"> - At least one lower case English letter</p>
-              <p className="text-danger"> - At least one digit</p>
-              <p className="text-danger"> - At least one special character</p>
-              <p className="text-danger"> - Minimum eight in length</p>
-            </small>
-          }
           <Password
-            label="Confirm Password" 
+            id="retype_password"
+            label="Confirm Password"
+            myclassname="confirmPassword"
             handleChange={changeHandler} 
             value={formstate.retype_password}
             name="retype_password"

@@ -85,6 +85,9 @@ const Navbar = ({ background }) => {
             {(location.pathname.split("/")[1] === "" || celebRoute) && (
               <li className="nav-item holder">
                 <Link className="link nav-link courses me-4" to="/categories"
+                style={{
+                  color:"rgba(255, 255, 255)"
+                }}
                 >
                   Categories
                 </Link>
@@ -128,7 +131,7 @@ const Navbar = ({ background }) => {
                 <li className="nav-item d-flex align-items-center nav_link">
                   <Link to="/become-a-teacher" className="link"
                    style={{
-                    color:confirmEmail ? "#0C2191" : "rgba(255, 255, 255, 0.55)"
+                    color:confirmEmail ? "#0C2191" : "rgba(255, 255, 255)"
                   }}>
                     Become a Teacher
                   </Link>

@@ -68,15 +68,7 @@ const AdminSignup = () => {
         navigate("/admin");
       }
     }catch(err){
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     }finally{
       setLoading(_ => false);
     }
@@ -106,29 +98,35 @@ const AdminSignup = () => {
         </header>
         <form action="" className="form" onSubmit={submitHandler}>
           <Input label="Fullname" handleChange={changeHandler} value={formstate.fullname} name="fullname" placeholder="Fullname" />
-          <Input label="Email" handleChange={changeHandler} value={formstate.email} name="email" type="email" placeholder="Email" />
+          <Input 
+            label="Email" 
+            handleChange={changeHandler} 
+            value={formstate.email} 
+            name="email" 
+            type="email" 
+            placeholder="Email"
+            myclassname="email_input"
+            pattern="^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$"
+            errorMessage="Enter a valid email address"
+           />
           <Password 
+            id="password"
             label="Password"
             handleChange={changeHandler}
             value={formstate.password}
             name="password"
+            myclassname="signUpPassword"
             placeholder="Password"
             password="password" 
             focus ={()=>setFocus(true)}
             blur={()=>setFocus(false)}
+            pattern="^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$"
+            errorMessage="Password must be a minimum of eight characters in length and must contain at least 1 uppercase English letter, 1 lowercase English letter, 1 number and 1 special character"
           />
-          {focus && !passReg.test(formstate.password) &&
-            <small style={{fontSize:"11px"}}>
-              <p className="text-danger">Password must satisfy the following conditions</p>
-              <p className="text-danger"> - At least one upper case English letter</p>
-              <p className="text-danger"> - At least one lower case English letter</p>
-              <p className="text-danger"> - At least one digit</p>
-              <p className="text-danger"> - At least one special character</p>
-              <p className="text-danger"> - Minimum eight in length</p>
-            </small>
-          }
           <Password
+            id="retype_password"
             label="Confirm Password" 
+            myclassname="confirmPassword"
             handleChange={changeHandler} 
             value={formstate.retype_password}
             name="retype_password"
