@@ -128,15 +128,16 @@ const Sidebar = ({isMobile}) => {
             title: "My Profile"
         },
         {
+            icon: BiCategory,
+            path: "bootcamps",
+            title: "Available Classes"
+        },
+        {
             icon: FiBookOpen,
             path: "courses",
             title: "My Courses"
         },
-        {
-            icon: BiCategory,
-            path: "bootcamps",
-            title: "My Bootcamps"
-        },
+       
         {
             icon: FiGift,
             path: "wishlist",
