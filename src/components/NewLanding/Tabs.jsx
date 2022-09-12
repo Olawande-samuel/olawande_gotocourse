@@ -99,9 +99,9 @@ function CoursesContainer({ category }) {
     <Swiper
       // install Swiper modules
       modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-      // loop={true}
+      loop={true}
       speed={1500}
-      autoplay={{ delay: 2500 }}
+      autoplay={{ delay: 2000 }}
       spaceBetween={0}
       slidesPerView={1}
       // navigation
