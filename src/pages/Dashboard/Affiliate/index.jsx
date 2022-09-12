@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef} from 'react'
 import { toast, ToastContainer } from 'react-toastify';
 import { AdvancedError } from '../../../classes';
 import Loader from '../../../components/Loader';
-import { KEY } from '../../../constants';
+import { KEY, AFFILIATE_KEY } from '../../../constants';
 import { GuardedRoute } from '../../../hoc';
 import { useLocalStorage } from '../../../hooks';
 import { Searchbar, Sidebar } from '../components';
@@ -26,6 +26,7 @@ import LogoutButton from '../../../components/LogoutButton';
 
 
 
+
 export function Dashboard(){
   const {getItem} = useLocalStorage();
   const navigate = useNavigate();
@@ -35,21 +36,60 @@ export function Dashboard(){
   const [notifications, setNotifications] = useState([]);
   const [link, setLink] = useState("https://gotocourse.us/categories?referrerId=");
   const [stats, setStats] = useState(null);
-  const {  generalState, setGeneralState, adminFunctions:{fetchNotifications}, affiliatesFunctions:{fetchAffiliateStats} } = useAuth();
+  const {  generalState, setGeneralState, adminFunctions:{fetchNotifications}, affiliatesFunctions:{fetchAffiliateStats, becomeAffiliate} } = useAuth();
+  //first we check if the user is an affiliate
+  async function isAffiliate(){
+    try{
+      const res = await fetchAffiliateStats(userdata?.token);
+      const {message, statusCode} = res.data;
+      console.log(res.data);
+      if(statusCode === 1) {
+        const {data} = res.data;
+        setStats(_ => data);
+        setLink(old => `${old}${data?.affiliateId}`)
+        return true;
+      }else throw new AdvancedError(message, statusCode);
+    }catch(err){
+      return false;
+    }
+  }
+
+  async function becomeAnAffilate(){
+    try{
+        const response  = await becomeAffiliate(userdata?.token);
+        const {message, success, statusCode} = response.data;
+        if(statusCode !== 1) throw new AdvancedError(message, statusCode);
+        toast.success(message)
+        const {data} = response.data;
+        console.log(data);
+        setStats(_ => data);
+        setLink(old => `${old}${data?.affiliateId}`)
+        getItem(AFFILIATE_KEY, data);
+    }catch(error){
+        console.error(error)
+        toast.error(error.message)
+    }
+  }
   useEffect(() => {
     console.log("Affiliate Dashboard mounted");
     if(flag.current) return;
     (async () => {
       try{
-        const [notifications, affiliateStats] = await Promise.all([fetchNotifications(userdata?.token), fetchAffiliateStats(userdata?.token)])
-        console.log(notifications, affiliateStats);
-        setNotifications(old => [...old, notifications.data]);
-        const {statusCode, message} = affiliateStats.data;
-        if(statusCode !== 1) throw new AdvancedError(message, statusCode);
-        else {
-          setStats(_ => affiliateStats.data.data);
-          setLink(old => `${old}${affiliateStats.data.data.affiliateId}`)
+        const affiliate = await isAffiliate();
+        if(!affiliate){
+          //we send the become an affiliate request;
+          await becomeAnAffilate();
         }
+        // const [notifications] = await Promise.all([fetchNotifications(userdata?.token)])
+        // console.log(notifications);
+        // setNotifications(old => [...old, notifications.data]);
+        // console.log(stats);
+        // const {statusCode, message} = notifications.data;
+        // if(statusCode !== 1) throw new AdvancedError(message, statusCode);
+        // else {
+        //   setStats(_ => affiliateStats.data.data);
+          
+        // }
       }catch(err){
         toast.error(err.message, {
           position: "top-right",
@@ -67,7 +107,7 @@ export function Dashboard(){
     return () => {
       return console.log("Affiliate Dashboard unmounted")
     }
-  }, [])
+  }, [stats])
 
   
 

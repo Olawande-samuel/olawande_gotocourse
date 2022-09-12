@@ -852,9 +852,9 @@ export const Dashboard = ()=>{
 }
 
 
-export const Teachers = ({ children, isMobile, userdata, notification, header }) => {
+export const Teachers = ({ children, isMobile, userdata, notification, header, loading }) => {
   const {
-    generalState: { showSidebar, loading, pledre },
+    generalState: { showSidebar, pledre },
     generalState,
     setGeneralState,
     adminFunctions: {getUnreadMessages}, studentFunctions: {fetchNotifications }

@@ -3,7 +3,7 @@ import {FaGooglePlusG, FaPinterestP, FaTwitter, FaLinkedinIn, FaFacebookF} from 
 import {useNavigate} from "react-router-dom";
 
 import clsx from "./styles.module.css";
-import { Students } from "../";
+import { Teachers } from "../";
 import referralTable from "../../../../images/referral_table.png";
 
 
@@ -67,12 +67,12 @@ const Referral = () => {
             navigate("/affiliate");
             setLoading(_ => false);
         }, 2000);
-        console.log("Student Referral page is mounted");
-        return () => console.log("Student Referal page is unmounted");
+        console.log("Teacher Referral page is mounted");
+        return () => console.log("Teacher Referal page is unmounted");
     }, [])
 
     return (
-        <Students header="Referral" loading={loading}>
+        <Teachers header="Referral" loading={loading}>
             <div className={clsx.referral}>
                 <div className={clsx.referral_container}>
                     <div className={clsx.referral_top}>
@@ -105,7 +105,7 @@ const Referral = () => {
                     </div>
                 </div>
             </div>
-        </Students>
+        </Teachers>
     )
 }
 
