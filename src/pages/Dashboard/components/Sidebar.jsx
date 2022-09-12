@@ -202,6 +202,11 @@ const Sidebar = ({isMobile}) => {
             title: "Earnings"
         },
         {
+            icon: MdOutlineAddReaction,
+            path: "referral",
+            title: "Referral"
+        },
+        {
             icon: BiBell,
             path: "notifications",
             title: "Notifications",

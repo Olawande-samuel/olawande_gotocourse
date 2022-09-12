@@ -1477,9 +1477,9 @@ export function DashboardTop({ content }) {
     )
 }
 
-export const Students = ({ children, isMobile, notification, userdata, header }) => {
+export const Students = ({ children, isMobile, notification, userdata, header, loading }) => {
     const [pledredata, setPledreData] = useState({})
-    const { generalState: { showSidebar, loading, pledre }, generalState, setGeneralState, otherFunctions: { fetchCourses }, adminFunctions: { getUnreadMessages }, studentFunctions: { fetchNotifications, readNotifications } } = useAuth();
+    const { generalState: { showSidebar, pledre }, generalState, setGeneralState, otherFunctions: { fetchCourses }, adminFunctions: { getUnreadMessages }, studentFunctions: { fetchNotifications, readNotifications } } = useAuth();
     const { getItem } = useLocalStorage()
     const userData = getItem(KEY)
     const user = getItem("gotocourse-userdata")

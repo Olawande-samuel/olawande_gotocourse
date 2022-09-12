@@ -23,6 +23,7 @@ import StudentReferral from "./pages/Dashboard/Students/Referral";
 import {Dashboard as TeacherDashboard,  Profile as TeachersProfile, Classes as TeacherClasses, Edit as TeacherEdit, 
   Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo, Chat as TeacherChat , Notification as TeacherNotifications } from "./pages/Dashboard/Teachers";
 import TeachersHelp from "./pages/Dashboard/Teachers/Help";
+import TeacherReferral from "./pages/Dashboard/Teachers/Referral";
   
 import {Dashboard as AffiliatesDash, Sales, Income, Revenue} from "./pages/Dashboard/Affiliate"
 import {Landing as AffiliateLanding, Register as AffiliateRegister, Login as AffiliateLogin, Verification as AffiliateVerification} from "./pages/Affiliate";
@@ -117,8 +118,7 @@ function App() {
               <Route path="payment" element={<StudentFees />} />
               <Route path="chat" element={<StudentChat />} />
               <Route path="help" element={<StudentHelp />} />
-              {/* <Route path="referral" element={<StudentReferral />} /> */}
-              <Route path="referral" element={<AffiliatesDash />} />
+              <Route path="referral" element={<StudentReferral />} />
               <Route path="notifications" element={<StudentNotifications />} /> 
             </Route>
 
@@ -154,6 +154,7 @@ function App() {
               <Route path="chat" element={<TeacherChat />} />
               <Route path="notifications" element={<TeacherNotifications />} />
               <Route path="help" element={<TeachersHelp />} />
+              <Route path="referral" element={<TeacherReferral />} />
             </Route>
             <Route path="affiliates" element={<AffiliateLanding />} />
             <Route path="affiliates/register" element={<AffiliateRegister />} />

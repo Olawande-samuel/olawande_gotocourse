@@ -17,12 +17,39 @@ import { KEY, VERIFICATION_KEY } from "../../../constants";
 
 
 
+function createBoarding(data){
+    return {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+        country: data.country,
+        region: data.region,
+        hearAboutUse: data.hearAboutUs,
+        expertise: data.expertise,
+        willingNess: data.willingToBeDedicated.trim() === "yes" ? true : false,
+        speciality: data.speciality,
+        certified: data.technicalExpert,
+        degree: data.qualification,
+        employment: data.employmentStatus,
+        preferredCourse: data.preference
+    }
+}
+function isValid(data){
+    for(let d in data){
+        console.log(d);
+        if(data[d].trim() === "") return false;
+        else continue;
+    }
+    return true;
+}
+
 
 const OnBoarding = () => {
     const [page, setPage] = useState(0);
     const {kycFunctions: {addMentorKYC}} = useAuth();
     const {getItem} = useLocalStorage();
-    
+    window.onbeforeunload = function() { alert("Your work will be lost."); };
     let userdata = getItem(VERIFICATION_KEY)
     console.log(userdata);
     const [loading, setLoading] = useState(false);
@@ -42,32 +69,6 @@ const OnBoarding = () => {
         qualification: "",
         employmentStatus: ""
     })
-    function createBoarding(data){
-        return {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
-            phoneNumber: data.phoneNumber,
-            country: data.country,
-            region: data.region,
-            hearAboutUse: data.hearAboutUs,
-            expertise: data.expertise,
-            willingNess: data.willingToBeDedicated.trim() === "yes" ? true : false,
-            speciality: data.speciality,
-            certified: data.technicalExpert,
-            degree: data.qualification,
-            employment: data.employmentStatus,
-            preferredCourse: data.preference
-        }
-    }
-    function isValid(data){
-        for(let d in data){
-            console.log(d);
-            if(data[d].trim() === "") return false;
-            else continue;
-        }
-        return true;
-    }
     useEffect(() => {
         console.log("OnBoarding page is mounted");
         return () => console.log("Removing OnBoarding page");
