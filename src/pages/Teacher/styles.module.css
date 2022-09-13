@@ -22,36 +22,68 @@
 
 
 .jumbotron {
-    background: url("../../images/become_teacher.png"), linear-gradient(89.75deg, rgba(0, 15, 98, 0.6) -1.87%, rgba(12, 33, 145, 0.6) 116.06%);
+    /* background: url("../../images/become_teacher.png"), linear-gradient(89.75deg, rgba(0, 15, 98, 0.6) -1.87%, rgba(12, 33, 145, 0.6) 116.06%); */
     height: min(100vh, 750px);
     width: 100%;
-    background-size: cover;
+    background: var(--textBlue);
+
+    /* background-size: cover;
     background-repeat: no-repeat;
     background-position: right;
-    background-blend-mode: multiply;
+    background-blend-mode: multiply; */
 }
 
 .jumbotron__cover {
-    position: relative;
     height: 100%;
     width: 100%;
-}
-.jumbotron__absolute {
-    position: absolute;
-    width: 100%;
     display: flex;
-    top: 50%;
-    transform: translateY(-50%);
-    flex-direction: column;
-    padding-bottom: 0.5rem;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    text-align: center
+    padding: 1rem 0;
+
 }
 
+.jumb_container{
+    flex: .5;
+    height: 100%;
+    width: 100%;  
+    position: relative;
+
+}
+
+.jumbotron__absolute {
+    flex: .5;
+    /* border: 2px solid yellow; */
+    height: 100%;
+
+
+}
+
+.jumbotron__image {
+    /* border: 2px solid red; */
+    flex: .5;
+    height: 100%;
+    width: 100%;
+    background: url("../../images/ateacher.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+
+    z-index: 100;
+}
+
+
+
+.polygon{
+    width: 100%;
+    height:100%;
+    position: absolute;
+    clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+    background: #FF8A80;
+    z-index: 0;
+    
+}
 .jumbotron__absolute h1 {
-    width: 60%;
+    width: 80%;
     line-height: 1.5;
     font-weight: 600;
     color: var(--white);
@@ -61,13 +93,15 @@
 .jumbotron__absolute p {
     line-height: 2;
     letter-spacing: 0.4px;
-    width: 60%;
+    width: 100%;
     margin-bottom: 50px;
     color: var(--white);
 }
-.jumbotron__absolute > div {
+
+.jumbotron__absolute>div {
     text-align: start;
 }
+
 .jumbotron__absolute button {
     border: none;
     border-radius: 5px;
@@ -77,7 +111,10 @@
 }
 
 
-.how_it_works, .best_features, .frequently_asked_questions, .reviews {
+.how_it_works,
+.best_features,
+.frequently_asked_questions,
+.reviews {
     padding: 50px;
     /* margin-bottom: 30px; */
 }
@@ -97,19 +134,19 @@
     grid-gap: 20px;
 }
 
-@media screen and (max-width: 1195px){
+@media screen and (max-width: 1195px) {
     .it_works_grid {
         grid-template-columns: 1fr 1fr 1fr;
     }
 }
 
-@media screen and (max-width: 920px){
+@media screen and (max-width: 920px) {
     .it_works_grid {
         grid-template-columns: 1fr 1fr;
     }
 }
 
-@media screen and (max-width: 675px){
+@media screen and (max-width: 675px) {
     .it_works_grid {
         grid-template-columns: 1fr;
     }
@@ -125,7 +162,7 @@
     text-align: center;
     font-size: 14px;
     border-radius: 5px;
-    box-shadow: 0px 3px 12px 0px rgba(0,0,0,.2);
+    box-shadow: 0px 3px 12px 0px rgba(0, 0, 0, .2);
 }
 
 .it_works h4 {
@@ -138,7 +175,10 @@
     color: #464646;
 }
 
-.how_it_works h1, .best_features h1, .frequently_asked_questions h1, .reviews h1{
+.how_it_works h1,
+.best_features h1,
+.frequently_asked_questions h1,
+.reviews h1 {
     color: var(--textBlue);
     font-weight: 600;
     text-align: center;
@@ -149,7 +189,10 @@
     background-color: #CBD0DA;
 }
 
-.how_it_works > p, .best_features > p, .frequently_asked_questions > p, .reviews > p {
+.how_it_works>p,
+.best_features>p,
+.frequently_asked_questions>p,
+.reviews>p {
     text-align: center;
     color: var(--textBlue);
     margin: 0px auto;
@@ -160,12 +203,15 @@
     margin-bottom: 60px;
 }
 
-.how_it_works > p:before, .best_features > p:before, .frequently_asked_questions > p:before, .reviews > p:before {
-    content : "";
+.how_it_works>p:before,
+.best_features>p:before,
+.frequently_asked_questions>p:before,
+.reviews>p:before {
+    content: "";
     position: absolute;
-    left    : 40%;
+    left: 40%;
     right: 40%;
-    bottom  : 0;
+    bottom: 0;
     /* width   : 40%;  or 100px */
     border-bottom: 8px solid #F75C4E;
 }
@@ -190,7 +236,7 @@
     max-width: 500px;
 }
 
-@media screen and (max-width: 945px){
+@media screen and (max-width: 945px) {
     .best_features__content {
         grid-template-columns: 1fr;
     }
@@ -237,11 +283,11 @@
 }
 
 .image_card h4:before {
-    content : "";
+    content: "";
     position: absolute;
-    left    : 0%;
+    left: 0%;
     right: 65%;
-    bottom  : 0;
+    bottom: 0;
     /* width   : 40%;  or 100px */
     border-bottom: 8px solid #F75C4E;
 }
@@ -254,7 +300,7 @@
     letter-spacing: 0.4px;
 }
 
-.paper p{
+.paper p {
     font-size: 0.9rem;
     color: #070F18;
     line-height: 1.5;
@@ -286,21 +332,21 @@
     justify-content: space-between;
 }
 
-.reviews_info > div {
+.reviews_info>div {
     display: flex;
     width: 70%;
     align-items: center;
 }
 
-.reviews_info > div img {
+.reviews_info>div img {
     margin-right: 20px;
 }
 
-.reviews_info > div > div h5 {
+.reviews_info>div>div h5 {
     font-weight: 600;
 }
 
-.reviews_info > div > div span {
+.reviews_info>div>div span {
     font-weight: 400;
     font-size: 0.8rem;
     letter-spacing: 0.4px;
@@ -342,7 +388,8 @@
     font-weight: 300;
 }
 
-.profile_navigation span:hover, .profile_navigation span.active {
+.profile_navigation span:hover,
+.profile_navigation span.active {
     margin: 10px 20px;
     cursor: pointer;
     color: var(--textBlue);
@@ -394,30 +441,33 @@
 .become_a_teacher__left img {
     width: 100%;
     height: 100%;
-    object-fit:contain;
+    object-fit: contain;
 }
 
 
 
-@media screen and (max-width: 511px){
+@media screen and (max-width: 511px) {
     .jumbotron__absolute {
-        left: 50%;
+        /* left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        justify-content:center
+        justify-content: center */
     }
-    .jumbotron__absolute h1, .jumbotron__absolute p {
+
+    /* .jumbotron__absolute h1,
+    .jumbotron__absolute p {
         width: 100%;
-        text-align:center;
-    }
-    .jumbotron__absolute > div {
         text-align: center;
-    } 
-    
+    }
+
+    .jumbotron__absolute>div {
+        text-align: center;
+    } */
+
 }
 
 
-@media screen and (max-width: 525px){
+@media screen and (max-width: 525px) {
     .image {
         min-width: 250px;
         margin-left: 30px;
@@ -425,28 +475,29 @@
     }
 }
 
-@media screen and (max-width: 465px){
+@media screen and (max-width: 465px) {
     .image {
         min-width: 200px;
         max-width: 350px;
     }
 }
 
-@media screen and (max-width: 415px){
+@media screen and (max-width: 415px) {
     .image {
         min-width: 150px;
         max-width: 300px;
     }
 
-    .jumbotron__absolute h1 {
+    /* .jumbotron__absolute h1 {
         font-size: 1.05rem;
     }
-    
+
     .jumbotron__absolute p {
         font-size: 0.85rem;
-    }
+    } */
 }
-@media screen and (max-width: 355px){
+
+@media screen and (max-width: 355px) {
     .image {
         min-width: 150px;
         max-width: 250px;
@@ -455,19 +506,42 @@
 
 
 
-@media (max-width: 770px){
-    .jumbotron {
-        background: url("../../images/become_teacher.png"), rgba(0, 0, 0, 0.6);
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: right;
-        background-blend-mode: multiply;
-        padding: 0 .5rem ;
+@media (max-width: 770px) {
+    .jumbotron__cover {
+        flex-direction: column;
+        padding: .5rem;
+
     }
-    .jumbotron__absolute p, .jumbotron__absolute h1 {
-    
+
+    .jumbotron__absolute {
+        width: 100%;
+    }
+
+    .jumb_container {
+        display: none;
+    }
+
+    .jumbotron__absolute h1 {
+        width: 100%;
+        /* font-size: 1.9rem; */
+        text-align: center;
+    }
+
+    .jumbotron__absolute div {
+        justify-content: center !important;
+    }
+
+
+    .jumbotron__absolute p {
+        margin-bottom: 30px;
+    }
+
+    /* .jumbotron__absolute p,
+    .jumbotron__absolute h1 {
+
         color: #ffffff;
     }
+
     .jumbotron__absolute h1 {
         width: 90%;
         text-align: center;
@@ -475,15 +549,16 @@
         font-weight: 600;
         margin-bottom: 30px;
         font-size: calc(1.975rem + 1.5vw);
-    }
-} 
-@media (min-width: 512px) and (max-width: 530px){
-    .jumbotron__absolute h1 {
-        width: 100%;
-    }
-} 
+    } */
+}
 
-@media screen and (max-width: 1115px){
+@media (min-width: 512px) and (max-width: 530px) {
+    /* .jumbotron__absolute h1 {
+        width: 100%;
+    } */
+}
+
+@media screen and (max-width: 1115px) {
     .image_card {
         width: 100%;
     }
@@ -491,7 +566,7 @@
     .become_a_teacher__left {
         flex: 0.6;
     }
-    
+
     .become_a_teacher__right {
         margin-left: 30px;
         flex: 0.4;
@@ -500,12 +575,12 @@
     .become_a_teacher__right h3 {
         font-size: 25px;
     }
-    
+
 }
 
 
-@media screen and (max-width: 925px){
-    .become_a_teacher{
+@media screen and (max-width: 925px) {
+    .become_a_teacher {
         flex-direction: column;
     }
 
@@ -517,17 +592,20 @@
         margin-left: 0px;
         margin-bottom: 20px;
     }
-    
+
 }
 
 
-@media screen and (max-width: 560px){
+@media screen and (max-width: 560px) {
 
-    .how_it_works_container, .frequently_asked_questions_container {
+    .how_it_works_container,
+    .frequently_asked_questions_container {
         padding: 10px
     }
 
-    .how_it_works, .frequently_asked_questions, .best_features {
+    .how_it_works,
+    .frequently_asked_questions,
+    .best_features {
         padding: 10px;
         padding-top: 40px;
     }
@@ -540,12 +618,15 @@
         padding-top: 50px;
     }
 
-    .how_it_works > p, .best_features > p, .frequently_asked_questions > p, .reviews > p {
+    .how_it_works>p,
+    .best_features>p,
+    .frequently_asked_questions>p,
+    .reviews>p {
         width: 80%;
     }
 }
 
-@media screen and (max-width: 560px){
+@media screen and (max-width: 560px) {
     .best__features_img {
         width: 100%;
         /* height: 500px; */
@@ -564,19 +645,8 @@
     }
 }
 
-@media screen and (max-width: 890px){
+@media screen and (max-width: 890px) {
     .rectangle_2 {
         top: calc((100% - 60%) + 120px);
     }
 }
-
-
-@media (max-width: 770px){
-    .jumbotron {
-        background: url("../../images/become_teacher.png"), linear-gradient(89.75deg, rgba(0, 15, 98, 0.6) -1.87%, rgba(12, 33, 145, 0.6) 116.06%);
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: right;
-        background-blend-mode: multiply;
-    }
-} 
