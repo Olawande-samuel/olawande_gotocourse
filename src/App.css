@@ -686,7 +686,20 @@ border-radius: 13.5px !important;
 
 /* ****************************Becoming************************************ */
 
+.becoming_header h2 {
+  position: relative;
+  line-height: 3.5rem;
+}
 
+.becoming_header h2::after {
+  content:"";
+  width:30%;
+  height: 10px;
+  background: var(--theme-orange);
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+}
 .becoming .left {
   display: flex;
   justify-content:center

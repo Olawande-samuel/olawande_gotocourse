@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {ToastContainer, toast} from "react-toastify";
 
-import PhoneInput from 'react-phone-number-input'
+import PhoneInput, {isValidPhoneNumber} from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { Country, State, City }  from 'country-state-city';
 import clsx from "./styles.module.css";
@@ -35,8 +35,6 @@ const OnBoarding = () => {
         region: "",
         hearAboutUs: "",
         itExperience: "",
-        learningModel: "",
-        willingToBeDedicated: "",
         qualification: "",
         employmentStatus: "",
         status: "CONFIRMED"
@@ -76,6 +74,7 @@ const OnBoarding = () => {
         setLoading(_ => true);
         try{
             let valid = isValid(formstate);
+            if(isValidPhoneNumber(formstate.phoneNumber) !== true) throw new AdvancedError("Please enter a valid phone number", 0)
             if(!valid) throw new AdvancedError("All fields are required for us to get to know you more", 1);
             const data = createBoarding(formstate);
             const res = await addStudentKYC(data, userdata?.token);
@@ -207,7 +206,7 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
         console.log({formstate, e, el});
     }
     const [value, setValue] = useState()
-    
+    const [phoneError, setPhoneError] = useState(false)
     const countries = Country.getAllCountries()
     const [countryCode, setCountryCode]= useState()
     const [states, setStates]= useState([])
@@ -231,7 +230,13 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
     
     useEffect(()=>{
         if(value){
-          setFormstate({...formstate, phoneNumber: value})
+            console.log(isValidPhoneNumber(value) === true);
+            if(isValidPhoneNumber(value) === true){
+                setFormstate({...formstate, phoneNumber: value})
+                setPhoneError(false)
+            } else {
+                setPhoneError(true)
+            }
         }
     },[value])
 
@@ -256,8 +261,10 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
                          placeholder="Enter phone number" 
                          value={value}
                          onChange={setValue}
-                         
                         />
+                        {
+                            phoneError && <small className="text-danger" style={{fontSize: '12px'}}>Invalid phone number</small>
+                        }
                     </div>
 
                     {
@@ -293,8 +300,8 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
 
                     <QuestionBox name="hearAboutUs" choice={formstate.hearAboutUs} chooseHandler={chooseHandler} question="How did you hear about us?" options={["facebook ads", "facebook group", "slack group", "telegram group", "word of mouth", "referral", "newsletter", "others"]} />
                     <QuestionBox name="itExperience" choice={formstate.itExperience} chooseHandler={chooseHandler}  question="What is your IT Experience?" options={["none", "intermediate", "advanced"]} />
-                    <QuestionBox name="learningModel" choice={formstate.learningModel} chooseHandler={chooseHandler} question="What is your preferred learning model?" options={["cohort", "self-paced", "1:1 mentorship", "in-person"]} />
-                    <QuestionBox name="willingToBeDedicated" choice={formstate.willingToBeDedicated} chooseHandler={chooseHandler} question="Are you willing to be dedicated and follow through with the training, quizzes, and capstone projects?" options={["yes", "no"]} />
+                    {/* <QuestionBox name="learningModel" choice={formstate.learningModel} chooseHandler={chooseHandler} question="What is your preferred learning model?" options={["cohort", "self-paced", "1:1 mentorship", "in-person"]} />
+                    <QuestionBox name="willingToBeDedicated" choice={formstate.willingToBeDedicated} chooseHandler={chooseHandler} question="Are you willing to be dedicated and follow through with the training, quizzes, and capstone projects?" options={["yes", "no"]} /> */}
                     <QuestionBox name="qualification" choice={formstate.qualification} chooseHandler={chooseHandler} question="What is your highest qualifications or are you currently completing a degree?" options={["no degree", "bachelor degree", "masters degree", "doctoral degree", "other"]} />
                     <QuestionBox name="employmentStatus" choice={formstate.employmentStatus} chooseHandler={chooseHandler} question="What is your current employment status?" options={["unemployed", "full-time", "part-time", "casual", "self employed"]} />
                     <div className={clsx.form_group__button}>

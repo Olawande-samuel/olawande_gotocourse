@@ -294,6 +294,15 @@ function BootcampCard({_id, title, duration, startTime, endTime, startDate,endDa
     )
 }
 
+// function NewBootCampCard({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}){
+//   return (
+//     <div className="new_bootcamp_card">
+
+//     </div>
+//   )
+// }
+
+
 function Learn (){
    return (
     <section className="wrapper newLearning">

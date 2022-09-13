@@ -44,7 +44,7 @@ export const witnesses = [
     <section className="testimonials" style={{background: type === "newLanding" ? "#EBF0FF" : "white", paddingTop:"2.5rem", paddingBottom:"2.5rem"}}>
       <div className="container-lg testimonial_content">
         <header>
-        <h3 className="testimonials_title">{student.length > 0 ? "Testimonials":"Real Stories from Real Customers"}</h3>
+        <h3 className="testimonials_title" style={{color:"var(--theme-blue"}}>{student.length > 0 ? "Testimonials":"Real Stories from Real Customers"}</h3>
         {student.length === 0 &&
         <p className="sub_title text-center">Join thousands of people who are achieving their goals on Gotocourse</p>
         }
