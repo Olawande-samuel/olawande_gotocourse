@@ -355,7 +355,7 @@ export function Edit() {
 }
 
 export function Bootcamps() {
-    const { studentFunctions: { fetchBootcamps } } = useAuth();
+    const { studentFunctions: { fetchBootcamps },  otherFunctions:{ fetchBootcamps: studentboot} } = useAuth();
 
     const navigate = useNavigate();
     const { getItem } = useLocalStorage();
@@ -363,6 +363,10 @@ export function Bootcamps() {
     let userdata = getItem(KEY);
     const [courseList, setCourseList] = useState([])
     const [loading, setLoading] = useState(true);
+
+
+    const bootcamps = useQuery(["bootcamps"], () => studentboot());
+
 
     const tableHeaders = ["No", "Title", "Tutor", "Date", "Time"];
 
@@ -428,6 +432,20 @@ export function Bootcamps() {
         // navigate("/bootcamps/details/"+_id);
         console.log("clicked")
     }
+
+//     bootcampId: "62b6aafa831b67054024fd59"
+// bootcampImg: "https://loftywebtech.com/gotocourse/api/uploads/file-1658253121120-689697422.jpeg"
+// description: "Learn Coding in 10 weeks of online classes and be sure to set yourself up for high-paying jobs in your chosen career path on completion of your training.\n"
+// duration: "10 weeks"
+// endDate: "2022-12-04T00:00:00.000Z"
+// endTime: "11:00am "
+// instructorId: "62cd580930d7fc43073149f1"
+// instructorName: "Teaching Tutoring"
+// isActive: true
+// startDate: "2022-09-25T00:00:00.000Z"
+// startTime: "09:00am "
+// title: "Coding Bootcamp"
+// type: "full time"
     return (
         <Students header={"Available Classes"}>
             {loading && <Loader />}
@@ -437,7 +455,7 @@ export function Bootcamps() {
                         <h3 style={{ margin: 0 }}>Available Classes</h3>
                     </div>
                     <div className={clsx.admin__student_main}>
-                        {courseList.length > 0 ? (
+                        {bootcamps.data?.data?.length > 0 ? (
                             <table className={clsx.admin__student_table}>
                                 <thead>
                                     {tableHeaders.map((el, i) => (
@@ -445,16 +463,20 @@ export function Bootcamps() {
                                     ))}
                                 </thead>
                                 <tbody>
-                                    {courseList.map(
-                                        ({ bootcampName, duration, tutorName, type, startTime, endTime, endDate, startDate, bootcampId, _id }, i) => (
+                                    {bootcamps.data?.data?.map(
+                                        // {_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}
+                                        ({ title,description, duration, instructorName,instructorId, type, startTime, endTime, endDate, startDate, bootcampId,bootcampImg, _id }, i) => (
                                             <BootcampRow
                                                 key={i}
                                                 index={i}
-                                                title={bootcampName}
-                                                detail={tutorName}
-                                                //   duration={duration}
-                                                //   type={type}
+                                                title={title}
+                                                description={description}
+                                                detail={instructorName}
+                                                instructorId={instructorId}
+                                                period={duration}
+                                                jobType={type}
                                                 admin={false}
+                                                bootcampImg={bootcampImg}
                                                 clickHandler={e => detailHandler(e, bootcampId)}
                                                 type={`${startTime} - ${endTime} CST`}
                                                 duration={`${getDate(startDate)} - ${getDate(endDate)}`}
