@@ -102,22 +102,28 @@ const Bootcamp = () => {
                     </p>
                     <div className={clsx.bootcamp_details}>
                         <div>
-                        <p>Duration</p>
-                        <span>
-                            {bootcampInfo?.duration ? bootcampInfo?.duration : "10 weeks"}
-                        </span>
+                          <p>Duration</p>
+                          <span>
+                              {bootcampInfo?.duration ? bootcampInfo?.duration : "10 weeks"}
+                          </span>
                         </div>
                         <div>
-                        <p>Date</p>
-                        <span>{`${
-                            bootcampInfo?.startDate
-                            ? getDate(bootcampInfo?.startDate)
-                            : "Jun 26"
-                        } - ${
-                            bootcampInfo?.endDate
-                            ? getDate(bootcampInfo?.endDate)
-                            : "Sept 04"
-                        }`}</span>
+                          <p>Date</p>
+                          <span>{`${
+                              bootcampInfo?.startDate
+                              ? getDate(bootcampInfo?.startDate)
+                              : "Jun 26"
+                          } - ${
+                              bootcampInfo?.endDate
+                              ? getDate(bootcampInfo?.endDate)
+                              : "Sept 04"
+                          }`}</span>
+                        </div>
+                        <div>
+                          <p>Price</p>
+                          <span>
+                              $ {bootcampInfo?.price ? bootcampInfo?.price : "TBD"}
+                          </span>
                         </div>
                     </div>
                     {bootcampInfo?.instructorName ? (
