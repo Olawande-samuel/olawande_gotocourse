@@ -303,7 +303,7 @@ height:70px;
    
 }
 .newBootcamp {
-    /* min-height:70vh; */
+    min-height:70vh;
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
@@ -315,14 +315,41 @@ height:70px;
     place-items:center;
 
 }
+.new_bootcamp_card {
+    border: 1px solid yellow;
+    background-color: #fff;
+    color: var(--theme-blue);
+    padding: 1rem;
+    display: flex;
+    gap: .3rem;
+    
+}
+.newBootcamp_img img {
+    width: 70px;
+    height: 70px;
+}
+.newBootcampClasses_content button {
+    padding: 8px 12px !important;
+    color: var(--theme-blue);
+    border-color:var(--theme-blue) !important;
+    border-radius: 8px !important;
+}
 @media (max-width: 600px){
     .newBootcamp {
         height: 100% !important;
         margin-bottom: 2rem;
-    }
-    
-     
+    } 
 }
+
+.newBootcamp_content {
+    display: flex;
+    border: 1px solid tomato;
+}
+.newBootcamp_content .others{
+    flex: 65%;
+    border: 1px solid green;
+}
+
 .newBootcamp header h6 {
     font-weight: bolder;
 

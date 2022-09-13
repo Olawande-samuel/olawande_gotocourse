@@ -62,8 +62,6 @@ const OnBoarding = () => {
             region: data.region,
             hearAboutUse: data.hearAboutUs,
             experience: data.itExperience,
-            willingNess: data.willingToBeDedicated.trim() === "yes" ? true : false,
-            learningStyle: data.learningModel,
             degree: data.qualification,
             employment: data.employmentStatus,
         }

@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query";
 
 import Layout from "../Layout"
-import BootImg from "../../images/newbootcamp.webp"
+// import BootImg from "../../images/newbootcamp.webp"
+import BootImg from "../../images/bootcamps/allClasses.webp"
 // import HeroImg from "../../images/newHeroLatest.webp"
 import HeroImg from "../../images/newlanding.webp"
 import { useAuth } from "../../contexts/Auth"
@@ -206,9 +207,9 @@ function Bootcamp(){
     return (
         <Swiper
           modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-          loop={true}
-          speed={1500}
-          autoplay={{ delay: 2800 }}
+          // loop={true}
+          // speed={1500}
+          // autoplay={{ delay: 2800 }}
           spaceBetween={0}
           slidesPerView={1}
           // navigation
@@ -260,12 +261,22 @@ function BootcampCard({_id, title, duration, startTime, endTime, startDate,endDa
 
      }
     return (
-    <div className="newBootcamp" style={{
-        background:"linear-gradient(0deg, rgba(0, 23, 81, 0.7), rgba(0, 23, 81, 0.9)), url(" + BootImg+ ")",
-        backgroundPosition:"center", backgroundSize:"cover", backgroundRepeat:"no-repeat", 
-    
-    }}>
-        <div className="container d-flex flex-column justify-content-between">
+    <div className="newBootcamp" style={{ background:"url(" + BootImg+ ")", backgroundRepeat:"no-repeat", backgroundPosition:"right", backgroundSize:"cover"}}>
+      <div className="container newBootcamp_wrapper">
+        <div className="newBootcamp_content">
+          <div className="classes">
+            <p className="bg-white p-1 text-dark">AVAILABLE CLASSES</p>
+            <div className="classes_container">
+              <NewBootCampCard />
+            </div>
+          </div>
+          <div className="others"></div>
+        </div>
+        <div>
+          <button className="button">Browse more</button>
+        </div>
+      </div>
+        {/* <div className="container d-flex flex-column justify-content-between">
 
         <header className="mb-5">
             <h6>Upcoming Classes</h6>
@@ -289,18 +300,35 @@ function BootcampCard({_id, title, duration, startTime, endTime, startDate,endDa
             </div>
             </div>
         </div>
-        </div>
+        </div> */}
     </div>
     )
 }
 
-// function NewBootCampCard({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}){
-//   return (
-//     <div className="new_bootcamp_card">
 
-//     </div>
-//   )
-// }
+function NewBootCampCard({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}){
+  return (
+    <div className="new_bootcamp_card">
+      <div className="newBootcamp_img">
+        <img src="" alt="" />
+      </div>
+      <div className="newBootcampClasses_content">
+        <h6>Digital Marketing Bootcamp</h6>
+        <div className="time">
+            <div className="newBootcamp_duration">
+              <p>Duration</p>
+              <small>8 weeks</small>
+            </div>
+            <div className="newBootcamp_StartDate">
+              <h6>Start Date</h6>
+              <p>{startDate && getDate(startDate)}</p>
+            </div>
+        </div>
+        <button className="btn-plain">Learn more</button>
+      </div>
+    </div>
+  )
+}
 
 
 function Learn (){
