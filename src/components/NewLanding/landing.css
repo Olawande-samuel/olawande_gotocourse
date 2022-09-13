@@ -307,32 +307,49 @@ height:70px;
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    padding-block: 4rem ;
-    padding-top:4rem;
-    padding-bottom:4rem;
+    padding-block: 2rem ;
+    padding-top:2rem;
+    padding-bottom:2rem;
     color: #fff;
     display: grid;
     place-items:center;
 
 }
 .new_bootcamp_card {
-    border: 1px solid yellow;
+    /* border: 1px solid yellow; */
     background-color: #fff;
     color: var(--theme-blue);
     padding: 1rem;
     display: flex;
-    gap: .3rem;
+    gap: .6rem;
     
+}
+.classes_title {
+    color: var(--theme-blue);
 }
 .newBootcamp_img img {
     width: 70px;
     height: 70px;
 }
+.newBootcampClasses_content {
+    flex: 2;
+}
+.newBootcampClasses_content .time {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
 .newBootcampClasses_content button {
     padding: 8px 12px !important;
     color: var(--theme-blue);
     border-color:var(--theme-blue) !important;
-    border-radius: 8px !important;
+    border-radius: 0 !important;
+}
+.newBootcampClasses_content h6, .newBootcampClasses_content p {
+    font-weight: 700;
+}
+.newBootcampClasses_content p {
+    margin-bottom: 0;
 }
 @media (max-width: 600px){
     .newBootcamp {
@@ -343,13 +360,42 @@ height:70px;
 
 .newBootcamp_content {
     display: flex;
-    border: 1px solid tomato;
+    /* border: 1px solid tomato; */
 }
 .newBootcamp_content .others{
     flex: 65%;
-    border: 1px solid green;
+    /* border: 1px solid green; */
 }
-
+.classes {
+    flex: 35%;
+}
+.newBootcamp_classes_button {
+    padding: 8px 24px;
+    border-radius: 4px;
+    font-size: 18px;
+    background: var(--theme-orange);
+}
+@media (max-width: 1024px){
+    .classes {
+        flex: 50%;
+    }
+}
+@media (max-width: 715px){
+    .classes {
+        flex: 70%;
+    }
+    .newBootcamp_content .others{
+        flex: 30%;;
+    }
+}
+@media (max-width: 420px){
+    .others{
+        display: none;
+    }
+    .classes {
+        flex: 100%;
+    }
+}
 .newBootcamp header h6 {
     font-weight: bolder;
 
