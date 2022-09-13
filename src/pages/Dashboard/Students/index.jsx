@@ -366,7 +366,7 @@ export function Bootcamps() {
 
 
     const bootcamps = useQuery(["bootcamps"], () => studentboot());
-
+    console.log({bootcamps});
 
     const tableHeaders = ["No", "Title", "Tutor", "Date", "Time"];
 
@@ -1187,6 +1187,7 @@ export const Dashboard = () => {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
     const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
+    // const { studentFunctions: { fetchBootcamps },  otherFunctions:{ fetchBootcamps: studentboot} } = useAuth();
 
     const navigate = useNavigate();
 
@@ -1195,7 +1196,10 @@ export const Dashboard = () => {
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
     const { data, isSuccess } = useQuery(["fetch courses"], () => fetchCourses(userdata?.token))
     const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
+    const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
+    
 
+    console.log({bootcamps});
     console.log({ wishlistData })
     console.log({ data })
 
@@ -1235,7 +1239,7 @@ export const Dashboard = () => {
                 <DashboardTop content={topContent} />
 
                 <div className={clsx.students_profile_main}>
-                    <AvailableCourses data={allCourses?.data ? allCourses?.data : []} />
+                    <AvailableCourses data={bootcamps?.data?.data ? bootcamps?.data?.data : []} />
                     <div className={`d-flex flex-wrap ${clsx.dashboard_courses}`}>
                         <div className={clsx["dashboard_courses--right"]}>
                             <h6>Courses on wishlist</h6>
@@ -1357,7 +1361,7 @@ function AvailableCourses({ data }) {
                 </div>
 
                 <div className={clsx["coursebody"]}>
-                    {tableData?.length > 0 && tableData.map((item, i) => (
+                    {data?.length > 0 && data.map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
 
