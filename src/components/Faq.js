@@ -7,7 +7,7 @@ const Faq = ({other=[]}) => {
     <section className="faq">
       <div className="container h-100">
         <header className="text-center mb-4">
-          <h2 className="title" style={{color: "var(--theme-blue"}}>Frequently Asked Questions</h2>
+          <h2 className="title" style={{color: "var(--theme-blue)"}}>Frequently Asked Questions</h2>
         </header>
         <div className="faq-wrapper"> 
           {/* <Accordion  flush> */}
