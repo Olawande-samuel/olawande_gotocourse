@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {ToastContainer, toast} from "react-toastify";
 
 
-import PhoneInput from 'react-phone-number-input'
+import PhoneInput, {isValidPhoneNumber} from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
 import { Country, State, City }  from 'country-state-city';
 import clsx from "./styles.module.css";
@@ -203,7 +203,7 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate, backp
         console.log({formstate, e, el});
     }
     const [value, setValue] = useState()
-    
+    const [phoneError, setPhoneError] = useState(false)
     const countries = Country.getAllCountries()
     const [countryCode, setCountryCode]= useState()
     const [states, setStates]= useState([])
@@ -223,10 +223,16 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate, backp
           setStates(states)
         }
     },[formstate.country, countryCode])
-    
+
     useEffect(()=>{
         if(value){
-          setFormstate({...formstate, phoneNumber: value})
+            console.log(isValidPhoneNumber(value) === true);
+            if(isValidPhoneNumber(value) === true){
+                setFormstate({...formstate, phoneNumber: value})
+                setPhoneError(false)
+            } else {
+                setPhoneError(true)
+            }
         }
     },[value])
 
@@ -249,8 +255,10 @@ console.log({formstate})
                          placeholder="Enter phone number" 
                          value={value}
                          onChange={setValue}
-                         
                         />
+                        {
+                            phoneError && <small className="text-danger" style={{fontSize: '12px'}}>Invalid phone number</small>
+                        }
                     </div>
                     {
                         inputData.slice(3, 4).map(({name, label, type, value, disabled}, i) => (
