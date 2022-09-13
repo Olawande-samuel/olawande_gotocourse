@@ -28,7 +28,11 @@ export function Jumbotron() {
 
                     </div>
                 </div>
-                <div className={clsx.jumbotron__image}></div>
+                <div className={clsx.jumb_container}>
+                    <div className={clsx.polygon}/>
+                    <div className={clsx.jumbotron__image} />
+                </div>
+
             </div>
         </div>
     )
