@@ -205,47 +205,70 @@ function Bootcamp(){
 
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
     return (
-        <Swiper
-          modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-          // loop={true}
-          // speed={1500}
-          // autoplay={{ delay: 2800 }}
-          spaceBetween={0}
-          slidesPerView={1}
-          // navigation
-          pagination={{ clickable: true }}
-          scrollbar={{ draggable: true }}
-          breakpoints={{
-            // when window width is >= 320px
-            320: {
-              slidesPerView: 1,
-              spaceBetween: 0,
-            },
-            // when window width is >= 640px
-            575: {
-              slidesPerView: 1,
-              spaceBetween: 0,
-            },
-            700: {
-              slidesPerView: 1,
-              spaceBetween: 0
-            },
-            1024: {
-              slidesPerView: 1,
-              spaceBetween: 0,
-            },
-          }}
-        >
-          {bootcamps.data?.data?.map((item) => (
-            <SwiperSlide key={item.courseId}>
-              <BootcampCard {...item} all={item} key={item.courseId} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-        )
+      <>
+        
+        <BootcampCard data={bootcamps.data?.data} />
+        
+      </>
+  )
 }
 
-function BootcampCard({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}){
+function BootcampCard({data}){
+    
+
+  
+    return (
+    <div className="newBootcamp" style={{ background:"url(" + BootImg+ ")", backgroundRepeat:"no-repeat", backgroundPosition:"right", backgroundSize:"cover"}}>
+      <div className="container newBootcamp_wrapper">
+        <div className="newBootcamp_content">
+          <div className="classes">
+            <p className="bg-white p-1 classes_title fw-bolder px-3">AVAILABLE CLASSES</p>
+            <div className="classes_container">
+              {
+                data?.map(data=>(
+                  <NewBootCampCard {...data} all={data} />
+                ))
+              }
+            </div>
+          </div>
+          <div className="others"></div>
+        </div>
+        <div className="d-flex justify-content-center">
+          <button className="button newBootcamp_classes_button">Browse all classes</button>
+        </div>
+      </div>
+    </div>
+    )
+  }
+  // {/* <div className="container d-flex flex-column justify-content-between">
+
+  // <header className="mb-5">
+  //     <h6>Upcoming Classes</h6>
+  // </header>
+  // <div className="newBootcamp_title mb-4">
+  //     <p className="mb-5">{title}</p>
+  //     <p>{description}</p>
+  // </div>
+  // <div className="newBootcamp_timing text-center">
+  //     <div className="newBootcamp_duration d-flex justify-content-center">
+  //         <p className="fw-bold">Duration:</p>
+  //         <p>{duration}</p>
+  //     </div>
+  //     <div className="newBootcamp_start d-flex justify-content-center">
+  //         <p className="fw-bold">Start Date:</p>
+  //         <p >{startDate && getDate(startDate)}</p>
+  //     </div>
+  //     <div className="newBootcamp_action">
+  //     <div onClick={handleNavigate}>
+  //         <button className=" newBootcamp_button">Register Today</button>
+  //     </div>
+  //     </div>
+  // </div>
+  // </div> */}
+
+
+
+  function NewBootCampCard({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}){
     const navigate = useNavigate()
     const {getItem}= useLocalStorage()
     const userdata = getItem(KEY)
@@ -260,71 +283,25 @@ function BootcampCard({_id, title, duration, startTime, endTime, startDate,endDa
         navigate("/bootcamp")
 
      }
-    return (
-    <div className="newBootcamp" style={{ background:"url(" + BootImg+ ")", backgroundRepeat:"no-repeat", backgroundPosition:"right", backgroundSize:"cover"}}>
-      <div className="container newBootcamp_wrapper">
-        <div className="newBootcamp_content">
-          <div className="classes">
-            <p className="bg-white p-1 text-dark">AVAILABLE CLASSES</p>
-            <div className="classes_container">
-              <NewBootCampCard />
-            </div>
-          </div>
-          <div className="others"></div>
-        </div>
-        <div>
-          <button className="button">Browse more</button>
-        </div>
-      </div>
-        {/* <div className="container d-flex flex-column justify-content-between">
-
-        <header className="mb-5">
-            <h6>Upcoming Classes</h6>
-        </header>
-        <div className="newBootcamp_title mb-4">
-            <p className="mb-5">{title}</p>
-            <p>{description}</p>
-        </div>
-        <div className="newBootcamp_timing text-center">
-            <div className="newBootcamp_duration d-flex justify-content-center">
-                <p className="fw-bold">Duration:</p>
-                <p>{duration}</p>
-            </div>
-            <div className="newBootcamp_start d-flex justify-content-center">
-                <p className="fw-bold">Start Date:</p>
-                <p >{startDate && getDate(startDate)}</p>
-            </div>
-            <div className="newBootcamp_action">
-            <div onClick={handleNavigate}>
-                <button className=" newBootcamp_button">Register Today</button>
-            </div>
-            </div>
-        </div>
-        </div> */}
-    </div>
-    )
-}
-
-
-function NewBootCampCard({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}){
+     
   return (
-    <div className="new_bootcamp_card">
+    <div className="new_bootcamp_card my-3">
       <div className="newBootcamp_img">
-        <img src="" alt="" />
+        <img src={bootcampImg} alt="" />
       </div>
       <div className="newBootcampClasses_content">
         <h6>Digital Marketing Bootcamp</h6>
-        <div className="time">
+        <div className="time mb-4">
             <div className="newBootcamp_duration">
               <p>Duration</p>
               <small>8 weeks</small>
             </div>
             <div className="newBootcamp_StartDate">
-              <h6>Start Date</h6>
-              <p>{startDate && getDate(startDate)}</p>
+              <p>Start Date</p>
+              <small>{startDate && getDate(startDate)}</small>
             </div>
         </div>
-        <button className="btn-plain">Learn more</button>
+        <button className="btn-plain" onClick={handleNavigate}>Learn more</button>
       </div>
     </div>
   )
