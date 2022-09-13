@@ -66,7 +66,7 @@ const Referral = () => {
         setTimeout(() => {
             navigate("/affiliate");
             setLoading(_ => false);
-        }, 2000);
+        }, 0);
         console.log("Teacher Referral page is mounted");
         return () => console.log("Teacher Referal page is unmounted");
     }, [])
