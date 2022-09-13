@@ -3130,6 +3130,7 @@ export function CreateBootcamp() {
     try {
       if (formstate.description === "" ||
         formstate.title === "" ||
+        formstate.price === "" ||
         formstate.duration === "" || formstate.endTime === "" ||
         formstate.startTime === "" || formstate.startDate === "" ||
         formstate.endDate === ""
@@ -3213,6 +3214,13 @@ export function CreateBootcamp() {
               type="text"
               handleChange={changeHandler}
               value={formstate.duration}
+            />
+            <Input
+              label="Price"
+              name="price"
+              type="number"
+              handleChange={changeHandler}
+              value={formstate.price}
             />
             <div className="d-flex flex-wrap">
               <div className="col-sm-6 col-md-3 pe-2 ">
