@@ -59,8 +59,11 @@ export function Category() {
   return (
     <section className="newCategories">
       <div className="container-xxl">
-      <header>
+      <header className="newCategories_header_wrapper">
         <h1 className="newCategories_header">Popular Courses</h1>
+        <p className="sub_title mx-auto text-center" style={{width:"min(100% - 1rem, 1300px)"}}>
+          Explore our 50+ in-demand courses
+        </p>
       </header>
       <TabsComp />
       

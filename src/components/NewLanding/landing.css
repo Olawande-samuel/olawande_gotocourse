@@ -40,9 +40,9 @@
     color:  #fff;
 }
 .newHero_left header h1 {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0;
     font-weight: 900;
-    font-size: clamp(2.8125rem, 2.6339rem + 0.8929vw, 3.4375rem);
+    font-size: clamp(2.8125rem, 2.25rem + 1.8vw, 3.9375rem) ;
 }
 .newHero_left h6{
     font-size: 16px;
@@ -234,12 +234,16 @@
 
 
 /* CATEGORIES */
+.newCategories_header_wrapper{
+    margin-bottom: 3rem;
+
+}
 .newCategories_header{
     color: var(--theme-blue);
     text-align: center;
     font-weight: 700;
     font-size: clamp(1.8rem, -0.875rem + 8.333vw, 2.25rem);
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
 }
 .newCategories .MuiTabs-scroller button:hover {
     background: var(--theme-blue);

@@ -18,7 +18,7 @@ const Becoming = () => {
             <Image width="552px" height="452px"  image={Teacher} alt="Group of people in an online meeting room" className="background" effect="blur" />
           </div>
           <div className="right mb-4 mb-md-0">
-            <header>
+            <header className="becoming_header">
               <h2 className="title">Become a teacher on Gotocourse</h2>
             </header>
             <main className="mt-mid">
