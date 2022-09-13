@@ -322,7 +322,7 @@ function Success({}){
         <div className={clsx.question}>
             <div className={clsx.question_container}>
                 <form>
-                    <h2>Application Successful</h2>
+                    <h2>Registration Successful</h2>
                     <img src={success} alt="Application Success" />
                     <div className={clsx.form_group__button}>
                         <Link to="/student">
