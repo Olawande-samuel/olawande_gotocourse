@@ -413,6 +413,13 @@
     flex: 0.5;
 }
 
+@media (max-width: 300px) {
+    .become_a_teacher__left {
+        max-width: 100%;
+        min-width: 100%;
+    }    
+}
+
 .become_a_teacher__right {
     max-width: 600px;
     min-width: 300px;
