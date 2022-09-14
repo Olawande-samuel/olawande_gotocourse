@@ -268,7 +268,7 @@ function BootcampCard({data}){
 
 
 
-  function NewBootCampCard({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}){
+  function NewBootCampCard({_id, title, duration, startTime, endTime, startDate, endDate, description, type, isActive, instructorId, bootcampImg, all}){
     const navigate = useNavigate()
     const {getItem}= useLocalStorage()
     const userdata = getItem(KEY)
@@ -303,11 +303,10 @@ function BootcampCard({data}){
         </div>
         <motion.button 
           whileHover={{
-          boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-          background: "var(--theme-blue)"
+          boxShadow: "0px 0px 8px rgb(0, 0, 0)"
         }}
         transition={{ duration: 0.1 }}
-        className="btn-plain" onClick={handleNavigate}>Learn more</motion.button>
+        className="btn-plain new_bootcamp_card_button" onClick={handleNavigate}>Learn more</motion.button>
       </div>
     </div>
   )
