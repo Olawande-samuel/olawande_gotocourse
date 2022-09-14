@@ -56,7 +56,7 @@ const About = () => {
                             <h1>About us</h1>
                             {/* <hr /> */}
                         </header>
-                        <svg width="1512" height="180" viewBox="0 0 1512 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg viewBox="0 0 1512 180" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M-3 0H1527L1547 123.324C1547 123.324 1072.56 179.886 767 180C455.728 180.115 -3 123.324 -3 123.324V0Z" fill="#F75C4E" fill-opacity="0.54"/>
                             <path d="M-3 0H1527L1547 112.978C1547 112.978 1072.56 164.795 767 164.899C455.728 165.005 -3 112.978 -3 112.978V0Z" fill="#0C2191" fill-opacity="0.83"/>
                         </svg>

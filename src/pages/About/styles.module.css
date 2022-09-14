@@ -31,6 +31,8 @@
 
 .about_top__absolute svg {
     opacity: 0.87;
+    position: absolute;
+    top: 0;
 }
 
 
@@ -59,13 +61,19 @@ font-weight: 700;
     /* right: 65%; */
     /* left: 0; */
 }
+ 
+@media (max-width:812px){
+    .about_top__absolute header {
+     top: 0;
+    }
 
+}
 
 .believe {
     background-color: rgba(157, 166, 186, 0.53);
     width: 100%;
-    padding: 40px;
-    display: flex;
+    padding-block: 40px;
+    padding-inline: clamp(0.75rem, 0.25rem + 2.5vw, 2.5rem);    display: flex;
     flex-direction: column;
     align-items: center;
 }
@@ -82,17 +90,20 @@ font-weight: 700;
     font-weight: 800;
 }
 .believe_cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
 
 }
-@media (min-width: 712px) {
+
+@media (min-width: 912px) {
 
     .believe_cards {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
         grid-gap: 30px;
         width: min(70vw, 80%);
     }
 }
+
 
 .believe_card {
     border-radius: 20px;
@@ -119,10 +130,12 @@ font-weight: 700;
 
 .mission {
     background-color: rgba(255, 241, 240, 0.5);
-    display: grid;
+    display: flex;
+    flex-direction: column-reverse;
+
     width: 100%;
     padding: 50px  20px;
-    grid-template-columns: 1fr 1fr;
+    /* grid-template-columns: 1fr 1fr; */
     grid-gap: 40px;
 }
 
@@ -135,7 +148,7 @@ font-weight: 700;
 .mission_left p {
     color: #515151;
     letter-spacing: 0.6px;
-    width: 80%;
+    width: 100%;
 }
 
 
@@ -170,10 +183,10 @@ font-weight: 700;
 
 .commited_content {
     margin-top: 60px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column-reverse;    /* grid-template-columns: 1fr 1fr; */
     grid-gap: 30px;
-    padding: 20px;
+    padding: clamp(0.75rem, 0.6071rem + 0.7143vw, 1.25rem);;
 }
 
 .committed h2{
@@ -188,8 +201,10 @@ font-weight: 700;
     height: 10px;
     position: absolute;
     bottom: -10px;
-    right: 40%;
-    left: 40%;
+    right: 50%;
+    /* left: 40%; */
+    transform: translateX(50%);
+    width: 180px;
     top: 55px;
 }
 
@@ -203,7 +218,7 @@ font-weight: 700;
 .content_left {
     color: #515151;
     line-height: 2;
-    width: 80%;
+    width: 100%;
     padding: 20px;
 }
 
@@ -218,10 +233,11 @@ font-weight: 700;
     padding-block: 2rem;
     display: grid;
     place-items: center;
-    min-height: 70vh;
+    height: min(70vh, 500px);
 }
 .transform div {
     width: min(100% - .7rem, 550px);
+    margin: auto;
 }
 .transform div h2{
     color: #fff;
@@ -230,7 +246,36 @@ font-weight: 700;
     text-align:center;
 }
 
+@media (min-width: 512px) {
 
+    .believe_cards {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        width: min(70vw, 80%);
+    }
+    .mission, .commited_content {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (min-width: 712px) {
+
+    .believe_cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 1rem;
+        width: min(70vw, 80%);
+    }
+    .mission_left p {
+        width: 100%;
+    }
+    .content_left {
+        color: #515151;
+        line-height: 2;
+        width: 80%;
+        padding: 20px;
+    }
+}
 
 @media screen and (max-width: 1332px) {
     .believe_cards {
