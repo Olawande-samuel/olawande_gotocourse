@@ -345,6 +345,9 @@ height:70px;
     border-color:var(--theme-blue) !important;
     border-radius: 0 !important;
 }
+.new_bootcamp_card_button{
+    background: #fff;
+}
 .newBootcampClasses_content h6, .newBootcampClasses_content p {
     font-weight: 700;
 }
@@ -375,6 +378,7 @@ height:70px;
     font-size: 18px;
     background: var(--theme-orange);
 }
+
 @media (max-width: 1024px){
     .classes {
         flex: 50%;

@@ -6,6 +6,7 @@ import clsx from "./styles.module.css";
 import Layout from "../../components/Layout";
 import mission from "../../images/about_mission.png";
 import committed from "../../images/about_committed.png";
+import pie from "../../images/about_pi.png";
 
 
 const cardData = [
@@ -51,7 +52,15 @@ const About = () => {
             <div className={clsx.about}>
                 <div className={clsx.about_jumbotron}>
                     <div className={clsx.about_top__absolute}>
-                        <h1>About us</h1>
+                        <header>
+                            <h1>About us</h1>
+                            {/* <hr /> */}
+                        </header>
+                        <svg viewBox="0 0 1512 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M-3 0H1527L1547 123.324C1547 123.324 1072.56 179.886 767 180C455.728 180.115 -3 123.324 -3 123.324V0Z" fill="#F75C4E" fill-opacity="0.54"/>
+                            <path d="M-3 0H1527L1547 112.978C1547 112.978 1072.56 164.795 767 164.899C455.728 165.005 -3 112.978 -3 112.978V0Z" fill="#0C2191" fill-opacity="0.83"/>
+                        </svg>
+
                     </div>
                 </div>
 
@@ -88,6 +97,22 @@ const About = () => {
                         </div>
                         <div className={clsx.content_right}>
                             <img src={committed} alt="Commited" />
+                        </div>
+                    </div>
+                </div>
+                <div className={clsx.transform}>
+                    <div>
+                        <h2>Transforming lives, Businesses, and Nations through Tech skills training</h2>
+                    </div>
+                </div>
+                <div className={clsx.committed}>
+                    <h2>Our Customer Demography</h2>
+                    <div className={clsx.commited_content}>
+                        <div className={clsx.mission_left} style={{justifyContent: 'center'}}>
+                            <p>Gotocourse targets offering training and mentorship to at least one million College graduates, Professionals who wants to Upskill and all Others looking to re-skill in tech to land high-paying tech jobs by 2027.</p>
+                        </div>
+                        <div className={clsx.content_right}>
+                            <img src={pie} alt="Demography" />
                         </div>
                     </div>
                 </div>
