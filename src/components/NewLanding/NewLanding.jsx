@@ -225,7 +225,7 @@ function BootcampCard({data}){
             <p className="bg-white p-1 classes_title fw-bolder px-3">AVAILABLE CLASSES</p>
             <div className="classes_container">
               {
-                data?.map(data=>(
+                data?.slice(0,4).map(data=>(
                   <NewBootCampCard {...data} all={data} />
                 ))
               }
@@ -290,18 +290,24 @@ function BootcampCard({data}){
         <img src={bootcampImg} alt="" />
       </div>
       <div className="newBootcampClasses_content">
-        <h6>Digital Marketing Bootcamp</h6>
+        <h6>{title}</h6>
         <div className="time mb-4">
             <div className="newBootcamp_duration">
               <p>Duration</p>
-              <small>8 weeks</small>
+              <small>{duration}</small>
             </div>
             <div className="newBootcamp_StartDate">
               <p>Start Date</p>
               <small>{startDate && getDate(startDate)}</small>
             </div>
         </div>
-        <button className="btn-plain" onClick={handleNavigate}>Learn more</button>
+        <motion.button 
+          whileHover={{
+          boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+          background: "var(--theme-blue)"
+        }}
+        transition={{ duration: 0.1 }}
+        className="btn-plain" onClick={handleNavigate}>Learn more</motion.button>
       </div>
     </div>
   )
