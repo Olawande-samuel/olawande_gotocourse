@@ -185,7 +185,7 @@ export function Dashboard(){
     }
    
     return (
-        <Affiliates header="Dashboard">
+        <Affiliates header="Affiliate Dashboard">
           {loading && <Loader />}
             <div className={clsx["admin_profile"]}>
                 <div className={clsx.admin__student}>
@@ -223,6 +223,7 @@ export function Dashboard(){
 export function Sales(){
   const {getItem} = useLocalStorage();
   let affiliateData = getItem(AFFILIATE_KEY);
+  const [sales, setSales] = useState([])
 
 
   const gridContent = [
@@ -255,7 +256,7 @@ export function Sales(){
                           }
                     </div>
                 </div>
-                <AffiliateTable header={header} contentArray={contentArray} />
+                <AffiliateTable header={header} contentArray={sales} tableName="Sales" />
             </div>
         </Affiliates>
   )
@@ -265,6 +266,7 @@ export function Sales(){
 export function Revenue(){
   const {getItem} = useLocalStorage();
   let affiliateData = getItem(VERIFICATION_KEY);
+  const [revenue, setRevenue] = useState([])
 
 
   const gridContent = [    
@@ -305,7 +307,7 @@ export function Revenue(){
                           }
                     </div>
                 </div>
-                <AffiliateTable header={header} contentArray={contentArray} />
+                <AffiliateTable header={header} contentArray={revenue} tableName="Revenue" />
             </div>
         </Affiliates>
   )
@@ -313,6 +315,7 @@ export function Revenue(){
 export function Income(){
   const {getItem} = useLocalStorage();
   let affiliateData = getItem(VERIFICATION_KEY);
+  const [income, setIncome] = useState([]);
 
 
   const gridContent = [    
@@ -352,15 +355,15 @@ export function Income(){
                           }
                     </div>
                 </div>
-                <AffiliateTable header={header} contentArray={contentArray} />
+                <AffiliateTable header={header} contentArray={income} tableName="Income" />
             </div>
         </Affiliates>
   )
 }
 
-function AffiliateTable({header, contentArray=[]}){
+function AffiliateTable({header, contentArray, tableName}){
   return (
-    <div className="table-responsive">
+    contentArray.length ? (<div className="table-responsive">
       <table className="table table-borderless">
         <thead>
           <tr>
@@ -388,7 +391,7 @@ function AffiliateTable({header, contentArray=[]}){
           }
         </tbody>
       </table>
-    </div>
+    </div>) : <h3 style={{color: 'var(--gray', textAlign: 'center', marginTop: 80, fontWeight: '400', fontSize: '1.2rem'}}>No {tableName} found</h3>
   )
 }
 const header = ["No", "Date", "Title", "Amount", "Status"]

@@ -3914,6 +3914,8 @@ export function Student() {
 
   async function deleteUserHandler(e, email){
     try{
+      const v = window.confirm("Are you sure you want to delete " + email);
+      if(!v) return;
       setLoader(_ => true);
       const res = await deleteUser(userdata?.token, [email]);
       console.log(res);

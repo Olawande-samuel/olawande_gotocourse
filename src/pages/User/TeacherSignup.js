@@ -81,14 +81,13 @@ const TeacherSignup = () => {
         // localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res))
 
         updateItem(VERIFICATION_KEY, data);
-        
-        navigate("/user-authentication")
         setGeneralState((old) => {
           return {
             ...old,
             notification: message,
           };
         });
+        navigate(`/email`);
       }
     }catch(err){
       toast.error(err.message);

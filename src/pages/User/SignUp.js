@@ -99,7 +99,7 @@ const SignUp = () => {
                   notification: message,
                 };
               });
-              navigate("/user-authentication");
+              navigate(`/email`);
             }
           // }
 
