@@ -159,6 +159,7 @@ const Footer = () => {
                 <i className="d-lg-none">
                   <Logosm />
                 </i>
+                <small className="text-end d-block" style={{fontSize: '14px'}}>Learn without limits.</small>
               </Link>
             </div>
         </div>

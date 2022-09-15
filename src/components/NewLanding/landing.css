@@ -453,7 +453,7 @@ height:70px;
 .newLearning header, .newMentors h3, .newMentor header {
     position:relative;
     margin-bottom: 1rem;
-    width: 70%;
+    width: 100%;
     line-height:44px;
 
 }
@@ -489,8 +489,8 @@ height:70px;
     padding: 1rem 0;
 }
 .newLearning header h2 {
-    font-size: clamp(2.1875rem, 1.9554rem + 1.1607vw, 44px);
-    color: var(--theme-blue) !important;
+    font-size: clamp(2.0875rem, 2.0054rem + 0.4107vw, 2.375rem);
+        color: var(--theme-blue) !important;
 }
 .newLearning .content{
     display: flex;
@@ -613,7 +613,7 @@ height:70px;
 }
 
 .newMentor header h2 {
-    font-size: clamp(2.1875rem, 1.9554rem + 1.1607vw, 44px);
+    font-size: clamp(2.0875rem, 2.0054rem + 0.4107vw, 2.375rem);
     color: var(--theme-blue) !important;
 }
 

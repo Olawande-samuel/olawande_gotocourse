@@ -46,9 +46,10 @@ const Navbar = ({ background }) => {
     setGeneralState((old) => {
       return {
         ...old,
-        navHeight: heightRef.current.clientHeight,
+        navHeight: heightRef?.current?.clientHeight,
       };
     });
+    console.log(heightRef.current.clientHeight)
   }, []);
 
   const celebRoute = location.pathname.split("/")[1] === "lounge";
@@ -72,6 +73,7 @@ const Navbar = ({ background }) => {
           className="logo navbar-brand "
         >
           {confirmEmail ? <Logosm color="var(--theme-blue)" /> : <Logosm />}
+          <small className="d-block" style={{fontSize:"10px"}}>Learn without limits</small>
         </Link>
         <button type="button" className="navbar-toggler " onClick={toggleNav}>
           <span className="navbar-toggler-icon"></span>
