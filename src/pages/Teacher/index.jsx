@@ -483,21 +483,21 @@ export const Home = () => {
         },
         {
             title: "Live Class",
-            metaData: "We use an efficient classroom management tool that helps track student progress, ensure classes run smoothly without disruptions, and optimize learning for teachers and students. Our classroom management tools support proper and timely execution of curriculum development, developing best practices and putting them to use.",
+            metaData: "Gotocourse online Classes and Bootcamps deliver industry-led curriculum and practical learning experiences to our students learning from anywhere. Explore a world of borderless learning and teaching of tech skills on Gotocourse, which eliminates the need for travel.            ",
             icon: MdPictureAsPdf,
             image: liveClass,
             position: "right"
         },
         {
             title: "Creator Suites",
-            metaData: "We use an efficient classroom management tool that helps track student progress, ensure classes run smoothly without disruptions, and optimize learning for teachers and students. Our classroom management tools support proper and timely execution of curriculum development, developing best practices and putting them to use.",
+            metaData: "The built-in creator suite lets you effectively create and manage high-quality course materials and other content like video courses without expensive recording equipment and additional software—one of the excellent pros of Gotocourse.",
             icon: MdPictureAsPdf,
             image: creator,
             position: "left"
         },
         {
             title: "Customization",
-            metaData: "We use an efficient classroom management tool that helps track student progress, ensure classes run smoothly without disruptions, and optimize learning for teachers and students. Our classroom management tools support proper and timely execution of curriculum development, developing best practices and putting them to use.",
+            metaData: "You can modify the appearance of your classes, such as the images, colors, and layouts to suit your company’s or user’s preferences and requirements, and make the class tailored to fit a specific audience or target customer demography.",
             icon: MdPictureAsPdf,
             image: creator,
             position: "right"
