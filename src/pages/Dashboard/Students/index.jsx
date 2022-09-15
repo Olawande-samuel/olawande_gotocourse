@@ -355,7 +355,7 @@ export function Edit() {
 }
 
 export function Bootcamps() {
-    const { studentFunctions: { fetchBootcamps },  otherFunctions:{ fetchBootcamps: studentboot} } = useAuth();
+    const { studentFunctions: { fetchBootcamps }, otherFunctions: { fetchBootcamps: studentboot } } = useAuth();
 
     const navigate = useNavigate();
     const { getItem } = useLocalStorage();
@@ -366,7 +366,7 @@ export function Bootcamps() {
 
 
     const bootcamps = useQuery(["bootcamps"], () => studentboot());
-    console.log({bootcamps});
+    console.log({ bootcamps });
 
     const tableHeaders = ["No", "Title", "Tutor", "Date", "Time"];
 
@@ -433,19 +433,19 @@ export function Bootcamps() {
         console.log("clicked")
     }
 
-//     bootcampId: "62b6aafa831b67054024fd59"
-// bootcampImg: "https://loftywebtech.com/gotocourse/api/uploads/file-1658253121120-689697422.jpeg"
-// description: "Learn Coding in 10 weeks of online classes and be sure to set yourself up for high-paying jobs in your chosen career path on completion of your training.\n"
-// duration: "10 weeks"
-// endDate: "2022-12-04T00:00:00.000Z"
-// endTime: "11:00am "
-// instructorId: "62cd580930d7fc43073149f1"
-// instructorName: "Teaching Tutoring"
-// isActive: true
-// startDate: "2022-09-25T00:00:00.000Z"
-// startTime: "09:00am "
-// title: "Coding Bootcamp"
-// type: "full time"
+    //     bootcampId: "62b6aafa831b67054024fd59"
+    // bootcampImg: "https://loftywebtech.com/gotocourse/api/uploads/file-1658253121120-689697422.jpeg"
+    // description: "Learn Coding in 10 weeks of online classes and be sure to set yourself up for high-paying jobs in your chosen career path on completion of your training.\n"
+    // duration: "10 weeks"
+    // endDate: "2022-12-04T00:00:00.000Z"
+    // endTime: "11:00am "
+    // instructorId: "62cd580930d7fc43073149f1"
+    // instructorName: "Teaching Tutoring"
+    // isActive: true
+    // startDate: "2022-09-25T00:00:00.000Z"
+    // startTime: "09:00am "
+    // title: "Coding Bootcamp"
+    // type: "full time"
     return (
         <Students header={"Available Classes"}>
             {loading && <Loader />}
@@ -465,7 +465,7 @@ export function Bootcamps() {
                                 <tbody>
                                     {bootcamps.data?.data?.map(
                                         // {_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}
-                                        ({ title,description, duration, instructorName,instructorId, type, startTime, endTime, endDate, startDate, bootcampId,bootcampImg, _id }, i) => (
+                                        ({ title, description, duration, instructorName, instructorId, type, startTime, endTime, endDate, startDate, bootcampId, bootcampImg, _id }, i) => (
                                             <BootcampRow
                                                 key={i}
                                                 index={i}
@@ -966,48 +966,167 @@ export function Fees() {
 
     console.log({ fees })
 
-    const tableHeaders = ["No", "Course", "Status", "Date", "Course Price", "Amount Paid", "Price Plan"]
     const tableContents = fees.length > 0 ? fees : []
+
+
+    const dummy = [
+        {
+            id: "1",
+            course: "CyberSecurity",
+            first: "30000",
+            firstDue: "12/2/30",
+            second: "30000",
+            secondDue: "12/2/30",
+            third: "30000",
+            thirdDue: "12/2/30",
+            outstanding: "30000",
+            total: "90000"
+        },
+        {
+            id: "2",
+            course: "UI/UX",
+            first: "45000",
+            firstDue: "12/2/30",
+            second: "30000",
+            secondDue: "12/2/30",
+            third: "45000",
+            thirdDue: "12/2/30",
+            outstanding: "30000",
+            total: "120000"
+        }
+    ]
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Payments">
             <div className={clsx.students_profile}>
 
-                {/* {courses.length === 0 ? 
-                
-                <NoDetail text="Nothing to See here" />
-                 : */}
-                <div className="table-responsive">
+                <div className={clsx.payment_container}>
 
                     {
+                        dummy.length > 0 ? dummy.map(d => (
+                            <div className={clsx.payment__content}>
 
-                        <table className="table table-borderless">
-                            <thead>
-                                <tr>
-                                    {
-                                        tableHeaders.map((el, i) => (
-                                            <th key={i}>{el}</th>
-                                        ))
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    tableContents.map(({ type, createdAt, dueDate, status, amount, courseName, coursePrice, paymentModel }, i) => (
-                                        <tr>
-                                            <td>{i + 1}</td>
-                                            <td>{courseName}</td>
-                                            <td>{status}</td>
-                                            <td>{new Date(createdAt).toLocaleDateString()}</td>
-                                            <td>{amount}</td>
-                                            <td>{coursePrice}</td>
-                                            <td>{paymentModel ? paymentModel : "Full Payment"}</td>
-                                        </tr>
+                                <div className={clsx.payment__title}>
+                                    <p>No</p>
+                                    <span>{d.id}</span>
+                                </div>
 
-                                    ))
-                                }
-                            </tbody>
-                        </table>
+                                <div className={clsx.payment__title}>
+                                    <p>Course</p>
+                                    <span>{d.course}</span>
+                                </div>
+
+                                <div className={clsx.payment__card}>
+                                    <p>1st installment</p>
+                                    <div className={clsx.payment__fee}>
+                                        <span>Fee</span>
+                                        <span className={clsx.clred}>${d.first}</span>
+                                    </div>
+                                    <div className={clsx.payment__fee}>
+                                        <span>Due Date:</span>
+                                        <span>{d.firstDue}</span>
+                                    </div>
+                                    <div className={clsx.payment__button}>
+                                        <button className={clsx.bgred}>pay</button>
+                                    </div>
+                                </div>
+
+                                <div className={clsx.payment__card}>
+                                    <p>2nd installment</p>
+                                    <div className={clsx.payment__fee}>
+                                        <span>Fee</span>
+                                        <span  className={clsx.clgreen}>${d.second}</span>
+                                    </div>
+                                    <div className={clsx.payment__fee}>
+                                        <span>Due Date:</span>
+                                        <span>{d.secondDue}</span>
+                                    </div>
+                                    <div className={clsx.payment__button}>
+                                        <button className={clsx.bggreen}>pay</button>
+                                    </div>
+                                </div>
+
+                                <div className={clsx.payment__card}>
+                                    <p>3rd installment</p>
+                                    <div className={clsx.payment__fee}>
+                                        <span>Fee</span>
+                                        <span  className={clsx.clgreen}>${d.third}</span>
+                                    </div>
+                                    <div className={clsx.payment__fee}>
+                                        <span>Due Date:</span>
+                                        <span>{d.thirdDue}</span>
+                                    </div>
+                                    <div className={clsx.payment__button}>
+                                        <button className={clsx.bggreen}>pay</button>
+                                    </div>
+                                </div>
+
+
+                                <div className={clsx.payment__title}>
+                                    <p>Outstanding Payment</p>
+                                    <span>${d.outstanding}</span>
+                                </div>
+
+                                <div className={clsx.payment__title}>
+                                    <p>Total payment</p>
+                                    <span>${d.total}</span>
+                                </div>
+
+
+                            </div>
+                        ))
+                            :
+
+                            <>
+                                <h2>payment history empty</h2>
+                            </>
+
                     }
+
+                    <div className="payment__footer">
+                        <div className={clsx.payment__content}>
+
+                            <div className={clsx.payment__title}>
+                                <p>No</p>
+                                <span>1</span>
+                            </div>
+
+                            <div className={clsx.payment__title}>
+                                <p>Course</p>
+                                <span>CyberSecurity</span>
+                            </div>
+
+                            <div className={clsx.payment__card}>
+                                <p>Full Payment</p>
+                                <div className={clsx.payment__fee}>
+                                    <span>Fee</span>
+                                    <span className={clsx.clred}>$30000</span>
+                                </div>
+                                <div className={clsx.payment__fee}>
+                                    <span>Due Date:</span>
+                                    <span>12/2/30</span>
+                                </div>
+                                <div className={clsx.payment__button}>
+                                        <button className={clsx.bggreen}>Full Payment</button>
+                                    </div>
+                            </div>
+
+                            <div className={clsx.payment__empty}></div>
+                            <div className={clsx.payment__empty}></div>
+  
+
+                            <div className={clsx.payment__title}>
+                            <p>Outstanding Payment</p>
+                                <span>$90000</span>
+                            </div>
+
+                            <div className={clsx.payment__title}>
+                                <p>Total payment</p>
+                                <span>$90000</span>
+                            </div>
+
+
+                        </div>
+                    </div>
                 </div>
 
 
@@ -1197,9 +1316,9 @@ export const Dashboard = () => {
     const { data, isSuccess } = useQuery(["fetch courses"], () => fetchCourses(userdata?.token))
     const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
-    
 
-    console.log({bootcamps});
+
+    console.log({ bootcamps });
     console.log({ wishlistData })
     console.log({ data })
 
@@ -1310,31 +1429,31 @@ function AvailableCourses({ data }) {
     const tableData = [
         {
             id: 1,
-            title:"Data science",
+            title: "Data science",
             courseName: "Data science",
             // startDate: "Aug 30",
             startDate: "2015-03-25T12:00:00Z",
             fee: "20",
-            price:"20"
+            price: "20"
         },
 
         {
             id: 2,
-            title:"it technology",
+            title: "it technology",
             courseName: "Data science",
             // startDate: "Aug 30",
             startDate: "2015-03-25T12:00:00Z",
             fee: "20",
-            price:"20"
+            price: "20"
         },
         {
             id: 3,
-            title:"Data science",
+            title: "Data science",
             courseName: "Data science",
             // startDate: "Aug 30",
             startDate: "2015-03-25T12:00:00Z",
             fee: "20",
-            price:"20"
+            price: "20"
         }
     ]
 
@@ -1357,7 +1476,7 @@ function AvailableCourses({ data }) {
                     <div className={clsx["courseitem"]}>course</div>
                     <div className={clsx["courseitem"]}>start date</div>
                     <div className={clsx["courseitem"]}>program fee</div>
-                    <div className={clsx["courseitem"]}/>
+                    <div className={clsx["courseitem"]} />
                 </div>
 
                 <div className={clsx["coursebody"]}>
@@ -1401,9 +1520,9 @@ function AvailableCourses({ data }) {
 
             </div>
 
-        
 
-           
+
+
         </div>
     )
 }
