@@ -1099,9 +1099,10 @@ font-size: 16px;
 .faq  .faq_wrapper {
   width: 80%;
 }
+
 .faq .title{
   margin-bottom: 3.3rem;
-  color: var(--text-color-light) !important;
+  color: var(--theme-blue) !important;
 }
 .faq  .faq_acc button {
   font-weight: 500;

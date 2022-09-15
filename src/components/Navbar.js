@@ -46,9 +46,10 @@ const Navbar = ({ background }) => {
     setGeneralState((old) => {
       return {
         ...old,
-        navHeight: heightRef.current.clientHeight,
+        navHeight: heightRef?.current?.clientHeight,
       };
     });
+    console.log(heightRef.current.clientHeight)
   }, []);
 
   const celebRoute = location.pathname.split("/")[1] === "lounge";
@@ -72,6 +73,7 @@ const Navbar = ({ background }) => {
           className="logo navbar-brand "
         >
           {confirmEmail ? <Logosm color="var(--theme-blue)" /> : <Logosm />}
+          <small className="d-block" style={{fontSize:"10px"}}>Learn without limits</small>
         </Link>
         <button type="button" className="navbar-toggler " onClick={toggleNav}>
           <span className="navbar-toggler-icon"></span>
@@ -152,10 +154,20 @@ const Navbar = ({ background }) => {
           {value?.token ? (
             <>
             <li className="me-3">
-              <span className="text-white" onClick={()=>{
-                  localStorage.clear()
-                  window.location.reload()
-                }}>Logout</span>
+              <motion.span 
+                className="text-white" 
+                style={{cursor: "pointer"}}
+                whileHover={{
+                  textShadow: "0px 0px 8px rgb(255, 255, 255)",
+                }}
+                transition={{ duration: 0.1 }}
+                onClick={()=>{
+                    localStorage.clear()
+                    window.location.reload()
+                }}
+              >
+                Logout
+              </motion.span>
             </li>
             <Link
               to={`${value.userType === "admin"
@@ -165,7 +177,10 @@ const Navbar = ({ background }) => {
                   : "/teacher"
                 }`}
             >
-              <div
+              <motion.div
+              whileHover={{
+                textShadow: "0px 0px 8px rgb(255, 255, 255)"
+              }}
                 className="d-flex align-items-center"
                 style={{ color: "#fff", fontSize: "16px" }}
               >
@@ -176,7 +191,7 @@ const Navbar = ({ background }) => {
                   <FaRegUser />
                 </i>
                 <span>{value.firstName}</span>
-              </div>
+              </motion.div>
             </Link>
             </>
 

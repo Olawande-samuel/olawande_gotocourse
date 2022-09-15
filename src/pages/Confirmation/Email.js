@@ -1,5 +1,16 @@
+import React, {useState, useEffect} from "react";
 import styled from 'styled-components'
+import {ToastContainer, toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
+
+
 import Layout from "../../components/Layout";
+import Loader from "../../components/Loader";
+import { AdvancedError } from "../../classes";
+import { useLocalStorage } from "../../hooks";
+import { VERIFICATION_KEY } from "../../constants";
+import { useAuth } from "../../contexts/Auth";
+
 
 
 const Main = styled.div`
@@ -99,26 +110,80 @@ a{
 `
 
 export default function Email() {
+    const navigate = useNavigate();
+    const {setGeneralState, authFunctions: {resendEmailOTP}} = useAuth();
+    const {getItem} = useLocalStorage();
+    let userdata = getItem(VERIFICATION_KEY);
+    const [loading, setLoading] = useState(false);
+    async function resendOTPHandler(e){
+        try{
+            setLoading(_ => true);
+            const res = await resendEmailOTP({email: userdata.email})
+            const {statusCode, success, message} = res;
+            if(!success) throw new AdvancedError(message, statusCode);
+            else {
+                const {data} = res;
+                console.log(data);
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setGeneralState((old) => {
+                    return {
+                      ...old,
+                      notification: message,
+                    };
+                });
+                console.log(data); 
+                // if(userdata.userType === 'affiliate'){
+                //     navigate(`/affiliates/verify`);
+                // } else {
+                //     navigate("/user-authentication")
+                // }
+            }
+        }catch(err){
+            toast.error(err.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }finally{
+            setLoading(_ => false);
+        }
+    }
+
     return (
         <>
             <Layout>
                 <Main >
+                    <ToastContainer />
+                    {loading && <Loader />}
                     <Content className="container">
                         <h1>Activation Email Sent!</h1>
                         <p>
-                            We've sent an email to olamidebalogun56@gmail.com.
+                            We've sent an email to {userdata?.email}.
                             Click the confirmation link in that email to begin using Gotocourse.
                         </p>
-                        <a href="!#">Resend another mail</a>
+                        <a onClick={resendOTPHandler}>Resend another mail</a>
 
                         <div className="btn">
                             <button>
-                                <a href="!#"> Open Gmail</a>
-                               
+                                <a href="https://gmail.com" target="_blank" rel="noreferrer noopener"> Open Gmail</a>              
                             </button>
 
                             <button>
-                                <a href="!#"> Open Gmail</a>
+                                <a onClick={e => {
+                                    navigate(userdata?.userType === 'affiliate' ? '/affiliates/verify' : "/user-authentication");
+                                }}> Enter OTP</a>
                             </button>
                         </div>
                     </Content>

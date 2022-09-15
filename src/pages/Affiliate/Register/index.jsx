@@ -105,7 +105,7 @@ const Register = () => {
                       };
                     });
                     console.log(data); 
-                    navigate(`/${userType}s/verify`);
+                    navigate(`/email`);
                 }
             }
         }catch(err){
