@@ -442,7 +442,7 @@ function InPerson (){
             <div className=" border-none newLearning_left">
               <div className="d-flex flex-column justify-content-center h-100">
                 <header className="mb-5">
-                  <h2 className="title">In person Training </h2>
+                  <h2 className="title">In-person Training </h2>
                 </header>
                 <p className="newLearning-text mb-4">
                 Take physical lectures on any of our campuses close to you. Enjoy hands-on and interactive expert lead training by joining us in any of our physical learning hubs, practicing new skills through case studies and role-plays, and getting real-time feedback from facilitators. You can’t go wrong joining our small group training on-site to learn and advance your career.
