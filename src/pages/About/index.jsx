@@ -24,7 +24,7 @@ const cardData = [
         </svg>,
         bgColor: "#DDFFC2",
         color: "#56B93F",
-        content: "We partner with Top-notch industry experts and Mentors to deliver the quality learning experience needed to make your career change journey seamless."         
+        content: "We partner with Top-notch industry experts and Mentors to deliver the quality learning experience needed to make your career advancement or change journey seamless."         
     },
     {
         icon: <svg width="107" height="107" viewBox="0 0 107 107" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -80,7 +80,7 @@ const About = () => {
                     <div className={clsx.mission_left}>
                         <h2>Our Mission</h2>
                         <p>
-                        Creating access for Top industry experts to train 1 million immigrants and college graduates on high in-demand technical skills needed to land high-paying jobs by 2027.
+                        Creating access for Top industry experts to train 1 million tech professionals on high-in-demand tech skills needed to bridge the skills gap in the tech industry by 2027.
                         </p>
                     </div>
                     <div className={clsx.mission_right}>
@@ -92,8 +92,8 @@ const About = () => {
                     <h2>Why are we committed to this?</h2>
                     <div className={clsx.commited_content}>
                         <div className={clsx.content_left}>
-                            <p>The number of immigrants and college graduates keeps increasing every day in the U.S and other parts of the world, there is a huge gap in technical skills for these sets of people to land the high-paying jobs they so desire.</p>
-                            <p>Seeing this gap, our commitment lies in impacting you with the necessary high-in-demand skills needed to land the high-paying job you so desire, with a plethora of tutors and mentors committed to your growth within the shortest period of time at a convenient cost.</p>
+                            <p>The tech skills gap is decimating the global workforce, putting workers and companies at risk, the gap keeps widening by the day. The world is advancing and professionals need to Upskill and Reskill to increase their knowledge, productivity on their jobs and take advantage of more lucrative professional opportunities in their chosen career path.</p>
+                            <p>Seeing this gap, and the frustration of long training duration coupled with high tuitions charged by traditional institutions and tech bootcamps faced by students, our commitment lies in imparting you with the necessary high-in-demand skills needed to land the high-paying job you so desire, with a plethora of tutors and mentors committed to your growth within the shortest period of time at a convenient cost.</p>
                         </div>
                         <div className={clsx.content_right}>
                             <img src={committed} alt="Commited" />
