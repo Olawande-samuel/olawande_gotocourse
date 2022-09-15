@@ -476,28 +476,28 @@ export const Home = () => {
     const bestFeatures = [
         {
             title: "Classroom Management",
-            metaData: "We use an efficient classroom management tool that helps track student progress and optimise learning for both teachers and students.",
+            metaData: "We use an efficient classroom management tool that helps track student progress, ensure classes run smoothly without disruptions, and optimize learning for teachers and students. Our classroom management tools support proper and timely execution of curriculum development, developing best practices and putting them to use.",
             icon: MdPictureAsPdf,
             image: classroom,
             position: "left"
         },
         {
             title: "Live Class",
-            metaData: "We use an efficient classroom management tool that helps track student progress and optimise learning for both teachers and students.",
+            metaData: "We use an efficient classroom management tool that helps track student progress, ensure classes run smoothly without disruptions, and optimize learning for teachers and students. Our classroom management tools support proper and timely execution of curriculum development, developing best practices and putting them to use.",
             icon: MdPictureAsPdf,
             image: liveClass,
             position: "right"
         },
         {
             title: "Creator Suites",
-            metaData: "The built-in creator suite lets you create high-quality videos without expensive recording equipment and additional software. One of the great pros of Gotocourse.",
+            metaData: "We use an efficient classroom management tool that helps track student progress, ensure classes run smoothly without disruptions, and optimize learning for teachers and students. Our classroom management tools support proper and timely execution of curriculum development, developing best practices and putting them to use.",
             icon: MdPictureAsPdf,
             image: creator,
             position: "left"
         },
         {
             title: "Customization",
-            metaData: "You can modify the appearance of your classes, such as the images, colours and layouts.",
+            metaData: "We use an efficient classroom management tool that helps track student progress, ensure classes run smoothly without disruptions, and optimize learning for teachers and students. Our classroom management tools support proper and timely execution of curriculum development, developing best practices and putting them to use.",
             icon: MdPictureAsPdf,
             image: creator,
             position: "right"
@@ -530,7 +530,7 @@ export const Home = () => {
             </div>
             <div className={clsx.best_features}>
                 <h1>Our Best Features</h1>
-                <p>Check out what makes us stand out at Gotocourse!</p>
+                <p>Check out the features on Gotocourse that makes the teaching of technical skills seamless</p>
                 {
                     bestFeatures.map(({ title, metaData, icon, image, position }, i) => (
                         <BestFeature title={title} metaData={metaData} position={position} icon={icon} image={image} key={i} />
