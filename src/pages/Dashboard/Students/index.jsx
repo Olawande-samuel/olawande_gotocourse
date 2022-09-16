@@ -975,36 +975,36 @@ export function Fees() {
             id: "1",
             course: "CyberSecurity",
             type: "installment",
-            first: "30000",
+            first: "0",
             firstDue: "12/2/30",
-            second: "30000",
+            second: "0",
             secondDue: "12/2/30",
-            third: "30000",
+            third: "0",
             thirdDue: "12/2/30",
-            outstanding: "30000",
-            total: "90000"
+            outstanding: "0",
+            total: "0"
         },
         {
             id: "2",
             course: "UI/UX",
             type: "installment",
-            first: "45000",
+            first: "0",
             firstDue: "12/2/30",
-            second: "30000",
+            second: "0",
             secondDue: "12/2/30",
-            third: "45000",
+            third: "0",
             thirdDue: "12/2/30",
-            outstanding: "30000",
-            total: "120000"
+            outstanding: "0",
+            total: "0"
         },
         {
             id: "3",
             course: "Dev Ops",
             type: "Full Payment",
-            first: "45000",
+            first: "0",
             firstDue: "12/2/30",
-            outstanding: "30000",
-            total: "120000"
+            outstanding: "0",
+            total: "0"
         }
     ]
     return (
