@@ -1082,6 +1082,21 @@ export function Fees() {
                                                     <button className={clsx.bggreen}>pay</button>
                                                 </div>
                                             </div>
+
+                                            <div className={clsx.payment__card}>
+                                                <p>4th installment</p>
+                                                <div className={clsx.payment__fee}>
+                                                    <span>Fee</span>
+                                                    <span className={clsx.clgreen}>${d.third}</span>
+                                                </div>
+                                                <div className={clsx.payment__fee}>
+                                                    <span>Due Date:</span>
+                                                    <span>{d.thirdDue}</span>
+                                                </div>
+                                                <div className={clsx.payment__button}>
+                                                    <button className={clsx.bggreen}>pay</button>
+                                                </div>
+                                            </div>
                                         </>
                                     ) : (
                                         <>
@@ -1109,7 +1124,7 @@ export function Fees() {
 
 
                                 <div className={clsx.payment__title}>
-                                    <p>Outstanding Payment</p>
+                                    <p>Outstanding</p>
                                     <span>${d.outstanding}</span>
                                 </div>
 

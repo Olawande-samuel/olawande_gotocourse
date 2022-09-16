@@ -52,8 +52,8 @@
     flex: .5;
     height: 100%;
     width: 100%;
-    position: relative;
     /* border: 2px solid purple; */
+    padding-top: 2rem;
 
 
 }
@@ -61,24 +61,12 @@
 .jumbotron__image {
     /* border: 2px solid red; */
     height: 100%;
-    width: 100%;
-    background: url("../../images/ateacher.png");
+    width:100%;
+    background: url("../../images/Group927.png");
     background-size: cover;
     background-repeat: no-repeat;
+    background-position-x: right;
     background-position: center;
-    position: absolute;
-    z-index: 100;
-}
-
-
-
-.polygon {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
-    background: #FF8A80;
-    z-index: 0;
 
 }
 
@@ -453,25 +441,7 @@
 
 
 
-@media screen and (max-width: 511px) {
-    .jumbotron__absolute {
-        /* left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        justify-content: center */
-    }
 
-    /* .jumbotron__absolute h1,
-    .jumbotron__absolute p {
-        width: 100%;
-        text-align: center;
-    }
-
-    .jumbotron__absolute>div {
-        text-align: center;
-    } */
-
-}
 
 
 @media screen and (max-width: 525px) {
@@ -512,13 +482,19 @@
 }
 
 
-/* @media (max-width:912px) {
-   
-} */
+@media (width:280px) {
+    .jumbotron {
+        /* height: 180vh; */
+        /* border: 2px solid yellow; */
+
+    }  
+}
 
 @media (max-width: 768px) {
     .jumbotron {
-        height: unset;
+        height: 120vh;
+        /* height: unset; */
+
         /* border: 2px solid yellow; */
 
     }
@@ -539,9 +515,11 @@
         width: 100%;
         min-height: 50vh;
         flex-shrink: 0;
+        padding-top: unset;
+
     }
 
- 
+
  
 
     .jumbotron__absolute h1 {
@@ -559,20 +537,6 @@
         margin-bottom: 30px;
     }
 
-    /* .jumbotron__absolute p,
-    .jumbotron__absolute h1 {
-
-        color: #ffffff;
-    }
-
-    .jumbotron__absolute h1 {
-        width: 90%;
-        text-align: center;
-        line-height: 1.5;
-        font-weight: 600;
-        margin-bottom: 30px;
-        font-size: calc(1.975rem + 1.5vw);
-    } */
 }
 
 @media (min-width: 512px) and (max-width: 530px) {

@@ -621,7 +621,8 @@ border-radius: 15px;
 }
 
 .payment__content div.payment__card:nth-of-type(4),
-    .payment__content div.payment__card:nth-of-type(5){
+.payment__content div.payment__card:nth-of-type(5),
+    .payment__content div.payment__card:nth-of-type(6){
         background: rgba(81, 247, 78, 0.06);
 }
 
