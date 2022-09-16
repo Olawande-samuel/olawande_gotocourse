@@ -12,6 +12,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-creative";
 import { toast, ToastContainer } from "react-toastify";
+import {motion} from "framer-motion"
 
 import Layout from "../../components/Layout";
 import clsx from "./styles.module.css";
@@ -35,6 +36,7 @@ import g2 from "../../images/bootcamps/g2.png";
 import g3 from "../../images/bootcamps/g3.png";
 import { Payment } from "../Students";
 import { ReviewSection } from "../Courses";
+import { useQuery } from "@tanstack/react-query";
 
 const similarBootcamp = [
   {
@@ -448,8 +450,15 @@ const curriculum = [
 
 export function NewBootcampDetailsComponent(){
   const [bootcampTrainingInfo, setBootcampTrainingInfo] = useState({});
+  const [loading, setLoading] = useState(false)
   const { getItem } = useLocalStorage();
+
   const bootcampTraining = getItem("gotocourse-bootcampdata");
+  const userdata = getItem("gotocourse-userdata");
+
+  const {studentFunctions: {wishlistCourse}, otherFunctions: { fetchBootcamps }} = useAuth()
+  const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
+  const navigate =  useNavigate();
 
   useEffect(() => {
     if (bootcampTraining) {
@@ -461,23 +470,90 @@ export function NewBootcampDetailsComponent(){
     generalState: { navHeight },
   } = useAuth();
 
+  async function handleBootstrapEnrollment(e) {
+    e.preventDefault();
+    if (userdata?.token) {
+      navigate("payment")
+    } else {
+      toast.error("User must be logged in to register", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
+  async function addToWishList(){
+  
+    if(userdata !== null){
+      try {
+        setLoading(true)
+        const response =  await wishlistCourse(bootcampTraining.bootcampId, userdata?.token)
+        const {success, message, statusCode} = response
+        if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+        toast.success(message)
+      }catch(error){
+        console.error(error)
+        toast.error(error.message);
+      }finally{
+        setLoading(false)
+      }
+      
+      
+    } else {
+      navigate("/login")
+    }
+  }
   return (
     <Layout>
       <div className={clsx.bootcampTraining}>
+      <ToastContainer
+        position="top-right"
+        autoClose={3600}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+    />
         <section
           className={clsx.new_hero}
           style={{
             height: `min(calc(100vh - ${navHeight}px ), 450px)`,
-            backgroundImage: `url(${NewBootcampImage})`
+            background: `url(${bootcampTrainingInfo?.bootcampImg? bootcampTrainingInfo?.bootcampImg: NewBootcampImage}), rgba(0,0,0,0.5)`,
+            backgroundRepeat: "no-repeat", backgroundPosition:"center", backgroundSize: "cover"
+
           }}
         >
           <div className={`container ${clsx.hero_content}`}>
             <div>
-              <h4>Data Science</h4>
-              <p>Data science refers to the process of extracting clean information to formulate actionable insights</p>
+              <h4>{bootcampTrainingInfo?.title ? bootcampTrainingInfo?.title : "Data Science"}</h4>
+              <p>{bootcampTrainingInfo?.description ? bootcampTrainingInfo?.description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p>
               <div className={clsx.hero_buttons}>
-                <button>Enroll now</button>
-                <button>Add to wishlist</button>
+                <motion.button 
+                 whileHover={{
+                  boxShadow: "0px 0px 8px rgb(225, 225, 225)"
+                }}
+                transition={{ duration: 0.1 }}
+                onClick={handleBootstrapEnrollment}>Enroll now</motion.button>
+                <motion.button 
+                 whileHover={{
+                  boxShadow: "0px 0px 8px rgb(225, 225, 225)"
+                }}
+                transition={{ duration: 0.1 }}
+                  onClick={addToWishList}
+                >
+                  {
+                    loading ? <div className="spinner-border"></div>
+                    :
+                    "Add to wishlist"
+                  }
+                </motion.button>
               </div>
             </div>
           </div>
@@ -567,8 +643,8 @@ export function NewBootcampDetailsComponent(){
             </header>
             <div className={clsx.upcoming_card}>
               {
-                [1,2,3].map((item,i)=>(
-                    <Upcome />
+                bootcamps.data?.data?.map((item,i)=>(
+                    <Upcome {...item} all={item}/>
                 ))
               }
             </div>
@@ -584,20 +660,41 @@ export function NewBootcampDetailsComponent(){
     </Layout>
   );
 }
-function Upcome({}) {
+function Upcome({_id, title, duration, startTime, endTime, startDate, endDate, description, type, isActive, instructorId, bootcampImg, all}) {
+  const { getItem } = useLocalStorage();
+  const userdata = getItem("gotocourse-userdata");
+  const navigate = useNavigate();
+
+  async function handleBootstrapEnrollment(e) {
+    e.preventDefault();
+    if (userdata?.token) {
+      localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+      navigate("payment")
+    } else {
+      toast.error("User must be logged in to register for this class", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
   return(
     <div className={clsx.upcome}>
-      <p>Coding Bootcamp</p>
+      <p>{title}</p>
       <div>
         <p>Date</p>
-        <p>Sep 25 - Dec 24</p>
+        <p>{startDate ?  getDate(startDate) : ""} - { endDate ?  getDate(endDate) : "" }</p>
       </div>
       <div>
         <p>Duration</p>
-        <p>Sep 25 - Dec 24</p>
+        <p>{duration}</p>
       </div>
       <div>
-        <button>Enroll now</button>
+        <button onClick={handleBootstrapEnrollment}>Enroll now</button>
       </div>
     </div>
   )
