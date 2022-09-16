@@ -95,6 +95,8 @@ function App() {
 
             <Route path="classes" element={<Out />}>
               <Route path="available" element={<AvailableClasses />} />
+              <Route path="class" element={<NewBootcampDetailsComponent />} />
+              <Route path="class/payment" element={<BootcampPayment />} />
             </Route>         
             
             <Route path="lounge" element={<Out/>}>

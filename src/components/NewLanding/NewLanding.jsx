@@ -234,12 +234,15 @@ function BootcampCard({data}){
           <div className="others"></div>
         </div>
         <div className="d-flex justify-content-center">
-          <button className="button newBootcamp_classes_button">Browse all classes</button>
+          <Link className="d-inline-flex" to="classes/available">
+            <button className="button newBootcamp_classes_button">Browse all classes</button>
+          </Link>
         </div>
       </div>
     </div>
     )
   }
+
   // {/* <div className="container d-flex flex-column justify-content-between">
 
   // <header className="mb-5">
@@ -280,7 +283,7 @@ function BootcampCard({data}){
             navigate("/login")
         }
         localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-        navigate("/bootcamp")
+        navigate("/classes/class")
 
      }
      

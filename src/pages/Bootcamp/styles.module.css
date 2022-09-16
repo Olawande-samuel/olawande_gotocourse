@@ -189,7 +189,9 @@
     color: var(--white);
     background-origin: center;
     background-blend-mode: multiply !important;
-    background-repeat:no-repeat;
+    background-repeat:no-repeat !important;
+    background-size:cover !important;
+    background-position: center !important;
     height: min(100vh - 81px, 450px);
 
 
