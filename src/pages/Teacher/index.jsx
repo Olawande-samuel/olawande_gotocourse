@@ -1,13 +1,11 @@
 import { Link } from "react-router-dom";
-import { Grid, Paper, Breadcrumbs } from "@mui/material";
+import { Grid, Breadcrumbs } from "@mui/material";
 import { BiChalkboard, BiEditAlt, BiDollar } from "react-icons/bi";
 import { MdPictureAsPdf, MdExpandMore, MdExpandLess, MdPlaylistAddCheck } from "react-icons/md";
-import { Rating } from "react-simple-star-rating";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
+
 import { motion } from "framer-motion"
 import Layout from "../../components/Layout";
-import { Jumbotron } from "./components";
+import { Jumbotron, Reviews } from "./components";
 import clsx from "./styles.module.css";
 import img from "../../images/bola.png";
 import { ScrollToTop } from "../Courses"
@@ -568,66 +566,7 @@ export const Home = () => {
                     </Grid>
                 </div>
             </div>
-
-            <div className={clsx.reviews}>
-                <h1>Reviews</h1>
-                <p>Care to know what the world say about us?</p>
-                <div className={clsx.reviews__container}>
-                    <Swiper
-                        // install Swiper modules
-                        modules={[Navigation, Pagination, Scrollbar, A11y]}
-                        spaceBetween={50}
-                        slidesPerView={1}
-                        navigation
-                        style={{ padding: "20px 0px" }}
-                        pagination={{ clickable: true }}
-                        scrollbar={{ draggable: true }}
-                        breakpoints={{
-                            // when window width is >= 320px
-                            320: {
-                                slidesPerView: 1,
-                                spaceBetween: 3,
-                            },
-                            // when window width is >= 640px
-                            575: {
-                                slidesPerView: 2,
-                                spaceBetween: 3,
-                            },
-                            700: {
-                                slidesPerView: 2,
-                                spaceBetween: 3,
-                            },
-                            1024: {
-                                slidesPerView: 2,
-                                spaceBetween: 30,
-                            },
-                        }}
-                    >
-                        {
-                            reviews.map(({ review, avatar, name, location }, i) => (
-                                <SwiperSlide>
-
-                                    <Paper className={clsx.reviews_paper} key={i}>
-                                        <q>{review}</q>
-                                        <div className={clsx.reviews_info}>
-                                            <div>
-                                                <img src={avatar} alt="Avatar" />
-                                                <div>
-                                                    <h5>{name}</h5>
-                                                    <span>{location}</span>
-                                                </div>
-                                            </div>
-                                            <Rating ratingValue={100} size={20} allowHover={false} readonly={true} />
-                                        </div>
-                                    </Paper>
-                                </SwiperSlide>
-                            ))
-                        }
-
-                    </Swiper>
-
-                </div>
-            </div>
+            <Reviews reviews={reviews} />
         </Layout>
     )
 }
