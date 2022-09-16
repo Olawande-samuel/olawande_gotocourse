@@ -977,10 +977,13 @@ export function Fees() {
             type: "installment",
             first: "0",
             firstDue: "12/2/30",
+            firstStatus:"paid",
             second: "0",
             secondDue: "12/2/30",
+            secondStatus:"pending",
             third: "0",
             thirdDue: "12/2/30",
+            thirdStatus:"paid",
             outstanding: "0",
             total: "0"
         },
@@ -990,10 +993,13 @@ export function Fees() {
             type: "installment",
             first: "0",
             firstDue: "12/2/30",
+            firstStatus:"paid",
             second: "0",
             secondDue: "12/2/30",
+            secondStatus:"pending",
             third: "0",
             thirdDue: "12/2/30",
+            thirdStatus:"paid",
             outstanding: "0",
             total: "0"
         },
@@ -1003,6 +1009,7 @@ export function Fees() {
             type: "Full Payment",
             first: "0",
             firstDue: "12/2/30",
+            firstStatus:"pending",
             outstanding: "0",
             total: "0"
         }
