@@ -924,6 +924,7 @@ export function Fees() {
     let userdata = getItem(KEY);
     const [fees, setFees] = useState([]);
     const ref = useRef(false)
+
     useEffect(() => {
         if (ref.current) return
         if (userdata) {
@@ -973,6 +974,7 @@ export function Fees() {
         {
             id: "1",
             course: "CyberSecurity",
+            type: "installment",
             first: "30000",
             firstDue: "12/2/30",
             second: "30000",
@@ -985,12 +987,22 @@ export function Fees() {
         {
             id: "2",
             course: "UI/UX",
+            type: "installment",
             first: "45000",
             firstDue: "12/2/30",
             second: "30000",
             secondDue: "12/2/30",
             third: "45000",
             thirdDue: "12/2/30",
+            outstanding: "30000",
+            total: "120000"
+        },
+        {
+            id: "3",
+            course: "Dev Ops",
+            type: "Full Payment",
+            first: "45000",
+            firstDue: "12/2/30",
             outstanding: "30000",
             total: "120000"
         }
@@ -1015,50 +1027,78 @@ export function Fees() {
                                     <span>{d.course}</span>
                                 </div>
 
-                                <div className={clsx.payment__card}>
-                                    <p>1st installment</p>
-                                    <div className={clsx.payment__fee}>
-                                        <span>Fee</span>
-                                        <span className={clsx.clred}>${d.first}</span>
-                                    </div>
-                                    <div className={clsx.payment__fee}>
-                                        <span>Due Date:</span>
-                                        <span>{d.firstDue}</span>
-                                    </div>
-                                    <div className={clsx.payment__button}>
-                                        <button className={clsx.bgred}>pay</button>
-                                    </div>
-                                </div>
+                                {
+                                    d.type === "installment" ? (
 
-                                <div className={clsx.payment__card}>
-                                    <p>2nd installment</p>
-                                    <div className={clsx.payment__fee}>
-                                        <span>Fee</span>
-                                        <span  className={clsx.clgreen}>${d.second}</span>
-                                    </div>
-                                    <div className={clsx.payment__fee}>
-                                        <span>Due Date:</span>
-                                        <span>{d.secondDue}</span>
-                                    </div>
-                                    <div className={clsx.payment__button}>
-                                        <button className={clsx.bggreen}>pay</button>
-                                    </div>
-                                </div>
+                                        <>
+                                            <div className={clsx.payment__card}>
+                                                <p>1st installment</p>
+                                                <div className={clsx.payment__fee}>
+                                                    <span>Fee</span>
+                                                    <span className={clsx.clred}>${d.first}</span>
+                                                </div>
+                                                <div className={clsx.payment__fee}>
+                                                    <span>Due Date:</span>
+                                                    <span>{d.firstDue}</span>
+                                                </div>
+                                                <div className={clsx.payment__button}>
+                                                    <button className={clsx.bgred}>pay</button>
+                                                </div>
+                                            </div>
 
-                                <div className={clsx.payment__card}>
-                                    <p>3rd installment</p>
-                                    <div className={clsx.payment__fee}>
-                                        <span>Fee</span>
-                                        <span  className={clsx.clgreen}>${d.third}</span>
-                                    </div>
-                                    <div className={clsx.payment__fee}>
-                                        <span>Due Date:</span>
-                                        <span>{d.thirdDue}</span>
-                                    </div>
-                                    <div className={clsx.payment__button}>
-                                        <button className={clsx.bggreen}>pay</button>
-                                    </div>
-                                </div>
+                                            <div className={clsx.payment__card}>
+                                                <p>2nd installment</p>
+                                                <div className={clsx.payment__fee}>
+                                                    <span>Fee</span>
+                                                    <span className={clsx.clgreen}>${d.second}</span>
+                                                </div>
+                                                <div className={clsx.payment__fee}>
+                                                    <span>Due Date:</span>
+                                                    <span>{d.secondDue}</span>
+                                                </div>
+                                                <div className={clsx.payment__button}>
+                                                    <button className={clsx.bggreen}>pay</button>
+                                                </div>
+                                            </div>
+
+                                            <div className={clsx.payment__card}>
+                                                <p>3rd installment</p>
+                                                <div className={clsx.payment__fee}>
+                                                    <span>Fee</span>
+                                                    <span className={clsx.clgreen}>${d.third}</span>
+                                                </div>
+                                                <div className={clsx.payment__fee}>
+                                                    <span>Due Date:</span>
+                                                    <span>{d.thirdDue}</span>
+                                                </div>
+                                                <div className={clsx.payment__button}>
+                                                    <button className={clsx.bggreen}>pay</button>
+                                                </div>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className={clsx.payment__card}>
+                                                <p>Full Payment</p>
+                                                <div className={clsx.payment__fee}>
+                                                    <span>Fee</span>
+                                                    <span className={clsx.clred}>${d.first}</span>
+                                                </div>
+                                                <div className={clsx.payment__fee}>
+                                                    <span>Due Date:</span>
+                                                    <span>{d.firstDue}</span>
+                                                </div>
+                                                <div className={clsx.payment__button}>
+                                                    <button className={clsx.bggreen}>Full Payment</button>
+                                                </div>
+                                            </div>
+
+                                            <div className={clsx.payment__empty}></div>
+                                            <div className={clsx.payment__empty}></div>
+                                        </>
+                                    )
+                                }
+
 
 
                                 <div className={clsx.payment__title}>
@@ -1082,51 +1122,6 @@ export function Fees() {
 
                     }
 
-                    <div className="payment__footer">
-                        <div className={clsx.payment__content}>
-
-                            <div className={clsx.payment__title}>
-                                <p>No</p>
-                                <span>1</span>
-                            </div>
-
-                            <div className={clsx.payment__title}>
-                                <p>Course</p>
-                                <span>CyberSecurity</span>
-                            </div>
-
-                            <div className={clsx.payment__card}>
-                                <p>Full Payment</p>
-                                <div className={clsx.payment__fee}>
-                                    <span>Fee</span>
-                                    <span className={clsx.clred}>$30000</span>
-                                </div>
-                                <div className={clsx.payment__fee}>
-                                    <span>Due Date:</span>
-                                    <span>12/2/30</span>
-                                </div>
-                                <div className={clsx.payment__button}>
-                                        <button className={clsx.bggreen}>Full Payment</button>
-                                    </div>
-                            </div>
-
-                            <div className={clsx.payment__empty}></div>
-                            <div className={clsx.payment__empty}></div>
-  
-
-                            <div className={clsx.payment__title}>
-                            <p>Outstanding Payment</p>
-                                <span>$90000</span>
-                            </div>
-
-                            <div className={clsx.payment__title}>
-                                <p>Total payment</p>
-                                <span>$90000</span>
-                            </div>
-
-
-                        </div>
-                    </div>
                 </div>
 
 
