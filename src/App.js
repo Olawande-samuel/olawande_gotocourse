@@ -59,6 +59,7 @@ import CelebProfile from "./pages/Celebs/CelebProfile";
 import AllCelebs from "./pages/Celebrity/AllCelebs";
 import Email from "./pages/Confirmation/Email";
 import Confirm from "./pages/Confirmation/Confirm";
+import {AvailableClasses} from "./pages/Classes";
 
 function App() {
   return (
@@ -90,7 +91,11 @@ function App() {
             <Route path="career" element={<Career />} />
             <Route path="students" element={<Students  />} />
             <Route path="user-authentication" element={<Verification  />} />
-            <Route path="user-onboarding" element={<UserOnBoarding />} />            
+            <Route path="user-onboarding" element={<UserOnBoarding />} />   
+
+            <Route path="classes" element={<Out />}>
+              <Route path="available" element={<AvailableClasses />} />
+            </Route>         
             
             <Route path="lounge" element={<Out/>}>
               <Route index element={<CelebLanding />} />
