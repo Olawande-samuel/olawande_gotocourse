@@ -157,8 +157,8 @@ const Available = () => {
                     </div>
                     <div className={clsx.bootcamps}>
                         {
-                            bootcamps.map(({description, duration, bootcampImg, endDate, startDate, title, price}, i) => (
-                                <Bootcamp key={i} image={bootcampImg} title={title} price={price} startDate={startDate} endDate={endDate} content={description} duration={duration} />
+                            bootcamps.map((item, i) => (
+                                <Bootcamp key={i} {...item} all={item} />
                             ))
                         }
                     </div>
