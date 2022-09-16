@@ -515,7 +515,7 @@ export function NewBootcampDetailsComponent(){
                 <h3 className={clsx.section_title}>Class Curriculum</h3>
                 <hr />
             </header>
-            <h5 className="text-uppercase fw-bolder">Data Science Niche</h5>
+            <h5 className="lead" style={{color:"var(--theme-blue"}}>Data Science Niche</h5>
                   <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, impedit inventore debitis similique a magni quia facere, optio neque delectus pariatur quam. Nostrum quisquam error nemo autem numquam!
                   </p>

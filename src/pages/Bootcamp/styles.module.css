@@ -273,7 +273,7 @@
 .career_list ul {
     padding-left: 0;
 }
-.career_list li{
+.career_list li, .requirement li {
     background: url(../../images/list.png) no-repeat left;
     background-position-y: 7px;
     padding: 5px 10px 5px 35px;
