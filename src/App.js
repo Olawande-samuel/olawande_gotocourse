@@ -43,7 +43,7 @@ import TeacherSignup from "./pages/User/TeacherSignup";
 import SyllabusContextProvider from "./contexts/Syllabus";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
-import Bootcamp, {BootcampDetails as TrainingBootcamp} from "./pages/Bootcamp";
+import Bootcamp, {BootcampDetails as TrainingBootcamp, NewBootcampDetailsComponent} from "./pages/Bootcamp";
 import {BootcampPayment} from "./pages/Bootcamp/Payment";
 import Policies, {TeachingPolicy, TermsOfUse, EndUserPolicy, Cookies} from "./pages/PrivacyPolicy";
 import About from "./pages/About";
@@ -78,7 +78,8 @@ function App() {
             <Route path="teaching-policy" element={<TeachingPolicy />} />
             <Route path="about-us" element={<About />} />
             <Route path="contact-us" element={<Contact />} />
-            <Route path="bootcamp-training" element={<TrainingBootcamp />} />
+            {/* <Route path="bootcamp-training" element={<TrainingBootcamp />} /> */}
+            <Route path="bootcamp-training" element={<NewBootcampDetailsComponent />} />
             <Route path="bootcamp" element={<Bootcamp />} />
             <Route path="bootcamp/payment" element={<BootcampPayment />} />
             <Route path="forgot-password" element={<ForgotPassword />} />

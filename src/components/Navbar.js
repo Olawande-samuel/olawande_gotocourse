@@ -73,7 +73,7 @@ const Navbar = ({ background }) => {
           className="logo navbar-brand "
         >
           {confirmEmail ? <Logosm color="var(--theme-blue)" /> : <Logosm />}
-          <small className="d-block" style={{fontSize:"10px"}}>Learn without limits</small>
+          <small className="d-block" style={{fontSize:"14px"}}>Learn without limits</small>
         </Link>
         <button type="button" className="navbar-toggler " onClick={toggleNav}>
           <span className="navbar-toggler-icon"></span>
