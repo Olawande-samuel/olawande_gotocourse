@@ -185,21 +185,64 @@
 
 /* bootcamp details */
 
-.bootcampTraining .hero {
+.bootcampTraining .hero, .bootcampTraining .new_hero {
     color: var(--white);
     background-origin: center;
     background-blend-mode: multiply !important;
     background-repeat:no-repeat;
+    height: min(100vh - 81px, 450px);
 
 
 }
+
 .bootcampTraining section:not(:first-child) {
-        margin-block:3.5rem;
+        background: #E5E5E5;
+        padding: 2rem 0;
 }
-.bootcampTraining .hero .hero_content {
+.bootcampTraining .hero .hero_content{
     display: grid;
     height:100%;
     align-items:center;
+}
+
+.new_hero .hero_content {
+    display: grid;
+    height:100%;
+    place-items:center;
+    place-content: center;
+
+}
+.hero_content h4 {
+    font-size: clamp(2.375rem, 1.9464rem + 2.1429vw, 3.875rem);
+    font-weight: 800;
+    text-align: center;;
+}
+.hero_content p {
+    width: 70%;
+    text-align: center;
+    margin: auto;
+}
+.hero_content .hero_buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3.7rem;
+    gap: 4rem;
+}
+
+.hero_buttons button {
+    padding: 8px 24px;
+    font-size: .9rem;
+    color: #ffffff;
+    border-radius: 10px;
+}
+.hero_buttons button:last-child {
+    border: 1px solid #e5e5e5;
+    background: none
+}
+.hero_buttons button:first-child {
+    background-color: var(--theme-orange);
+    border: none;
 }
 
 .bootcampTraining .hero h1 {
@@ -220,9 +263,173 @@
 .bootcampTraining .timing h4 {
     font-size:clamp(18px, 3.5vw, 28px);
 }
-
-
+.career_list {
+    margin-top: 2rem;
+}
+.career_list h6 {
+    color: var(--theme-blue);
+    font-weight: 700;
+}
+.career_list ul {
+    padding-left: 0;
+}
+.career_list li{
+    background: url(../../images/list.png) no-repeat left;
+    background-position-y: 7px;
+    padding: 5px 10px 5px 35px;
+    list-style: none;
+    margin: 0;
+    vertical-align: middle;
+  }
+  
 .bootcampTraining ol li,
 .bootcampTraining ul li {
     line-height:28px;
+}
+.img_grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: center;
+    gap: 1.5rem;
+}
+.img_grid img{
+    width: 100%;
+}
+@media (min-width:612px){
+    .img_grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+}
+
+.link {
+    display: flex;
+    justify-content: center;
+    /* gap: 8rem; */
+    align-items: center;
+    width: min(100% - .2rem, 950px);
+    margin: auto;
+    margin-bottom: 2rem;
+}
+.link .box {
+    position: relative;
+    /* margin-right: -90px; */
+}
+.link .line {
+    width: 110%;
+    height: 8px;
+    background-color: var(--theme-orange);
+}
+.link .box p:first-child {
+    padding: 1rem;
+    background-color: var(--theme-orange);
+    color: #fff;
+    font-size: 18px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    margin: auto;
+    margin-bottom: 1rem;
+    text-align: center;
+    position: relative;
+} 
+.link .box p:first-child::after {
+    content: "";
+    width: 150px;
+    color: #000;
+    position: absolute;
+    bottom: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.link .box .learn::after {
+    content:"Learn Foundations" !important;
+}
+.link .box .practice::after {
+    content:"Practice New Skills" !important;
+}
+.link .box .portfolio::after {
+    content:"Create Portfolio" !important;
+}
+.link .box .prepare::after {
+    content:"Prepare for Job Hunt" !important;
+}
+.link .box .land::after {
+    content:"Land the Job!" !important;
+}
+.link .box p:last-child {
+    font-size: 14px;
+}
+
+@media (max-width: 776px) {
+    .link .line {
+        width: 12%;
+    }
+}
+@media (max-width: 690px) {
+    .link .line {
+        display: none;    
+    }
+    .link {
+        justify-content: space-around;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+}
+
+header {
+    margin-bottom: 3rem;
+}
+.section_title {
+    text-align: center;
+}
+header hr {
+    max-width: 150px;
+    height: 5px !important;
+    background: var(--theme-orange);
+    margin: auto;
+    opacity: 1;
+    margin-bottom: 1rem;
+}
+header h3 {
+    color: var(--theme-blue);
+    font-weight: 700;
+}
+.upcoming_classes {
+    padding: 3rem 0;
+    background: #E5E5E5;
+}
+.upcoming_card {
+    background: #F9F9F9;
+    padding: 1rem;
+    /* box-shadow: 0px 591px 236px rgba(0, 0, 0, 0.01), 0px 332px 199px rgba(0, 0, 0, 0.05), 0px 148px 148px rgba(0, 0, 0, 0.09), 0px 37px 81px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1); */
+    
+}
+.upcome {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid gray;
+}
+.upcome:last-child {
+    border-bottom: none;
+
+}
+.upcome > * {
+    flex-basis: 100%;
+}
+.upcome button{
+    border: none;
+    border-radius: 10px;
+    color:#fff;
+    background: var(--theme-orange);
+    padding: 8px 24px;
+}
+.upcome p:first-child {
+    font-weight: 700;
+}
+.payment_options > div {
+    background: #e5e5e5!important;
 }

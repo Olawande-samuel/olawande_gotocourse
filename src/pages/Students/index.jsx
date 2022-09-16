@@ -271,7 +271,7 @@ function Graduate(){
     )
 }
 
-function Payment(){
+export function Payment(){
     return (
         <div className={style.payment}>
             <div className="container">
