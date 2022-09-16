@@ -616,12 +616,13 @@ border-radius: 15px;
 
 }
 
-.payment__card{
+.payment__content div.payment__card:nth-child(3){
     background: rgba(247, 92, 78, 0.06);
 }
 
-.payment__card:nth-of-type(2){
-    background: rgba(81, 247, 78, 0.06);
+.payment__content div.payment__card:nth-of-type(4),
+    .payment__content div.payment__card:nth-of-type(5){
+        background: rgba(81, 247, 78, 0.06);
 }
 
 .payment__fee {
