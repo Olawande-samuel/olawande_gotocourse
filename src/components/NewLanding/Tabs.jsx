@@ -62,7 +62,7 @@ export function Category() {
       <header className="newCategories_header_wrapper">
         <h1 className="newCategories_header">Popular Courses</h1>
         <p className="sub_title mx-auto text-center" style={{width:"min(100% - 1rem, 1300px)"}}>
-          Explore our 50+ in-demand courses
+        Our tailored courses will teach you everything you need to get your first job in tech in as little as 5 months — even if you don't have any previous experience
         </p>
       </header>
       <TabsComp />
