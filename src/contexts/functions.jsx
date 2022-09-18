@@ -2170,6 +2170,38 @@ export const studentFunctions = {
             }
         }
     },
+    fetchStudentFees: async function(token){
+        console.log("studentpaymenttoken", token);
+        try{
+            const res = await axios.get(`${baseURL}/student/courses/enrollments/payment/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log("result payment", res);
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
     addCourse: async function(_data, token){
         try{
             const res = await axios.post(`${baseURL}/user/course/add`,
