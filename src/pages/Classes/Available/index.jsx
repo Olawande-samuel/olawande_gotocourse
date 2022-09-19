@@ -124,16 +124,13 @@ const Available = () => {
             <div className={clsx.available_classes}>
                 <div className={clsx.classes_top}>
                     <div className={clsx.classes_top_left}>
-                        <h2>Enroll in any of our 
-                            Intensive Bootcamp to
-                            get hands-on experience
-                            with expert-led training,
-                            and advance or launch a 
-                            new career in tech you would
-                            be proud of.
+                        <h2>Enroll in any of our Intensive Bootcamp 
                         </h2>
                         <p>
-                        Chart your path to a great career in tech
+                        Get hands-on experience with expert-led 
+                        training, and advance or launch a new career 
+                        in tech you would be proud of.
+
                         </p>
                     </div>
                     <div className={clsx.classes_top_right}>
