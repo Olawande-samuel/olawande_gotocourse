@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Grid, Breadcrumbs } from "@mui/material";
 import { BiChalkboard, BiEditAlt, BiDollar } from "react-icons/bi";
 import { MdPictureAsPdf, MdExpandMore, MdExpandLess, MdPlaylistAddCheck } from "react-icons/md";
+import {SiGoogleclassroom } from "react-icons/si";
 
 import { motion } from "framer-motion"
 import Layout from "../../components/Layout";
@@ -468,7 +469,7 @@ export const Home = () => {
             location: "Houston, Texas"
         },
         {
-            review: "I had a wonderful experience and can confidently say that GotoCourse is the place to be as a teacher . I highly recommend them",
+            review: "I had a wonderful experience and can confidently say that GotoCourse is the place to be as a teacher. I highly recommend them",
             avatar: img,
             name: "Ike",
             location: "Abuja, Nigeria"
@@ -509,7 +510,7 @@ export const Home = () => {
                     </div>
                     <div className={clsx.image_card}>
                         <span>
-                            <MdPictureAsPdf />
+                            <SiGoogleclassroom />
                         </span>
                         <h4>Classroom Management</h4>
                         <p>We use an efficient classroom management tool that helps track student progress, ensure classes run smoothly without disruptions, and optimize learning for teachers and students. Our classroom management tools support proper and timely execution of curriculum development, teachers are able create notes, quizzes, upload files/videos,schedule live classes and have discussion with students in real time.</p>
@@ -519,7 +520,7 @@ export const Home = () => {
                 <div className={clsx.live_class}>
                     <div className={clsx.image_card}>
                         <span>
-                            <MdPictureAsPdf />
+                            <SiGoogleclassroom />
                         </span>
                         <h4>Live Class</h4>
                         <p>Gotocourse online Classes and Bootcamps deliver industry-led curriculum and practical learning experiences to our students learning from anywhere. Explore a world of borderless learning and teaching of tech skills on Gotocourse, which eliminates the need for travel.</p>
@@ -543,7 +544,7 @@ export const Home = () => {
                     </div>
                     <div className={clsx.image_card}>
                         <span>
-                            <MdPictureAsPdf />
+                            <SiGoogleclassroom />
                         </span>
                         <h4>Creator Suites</h4>
                         <p>The built-in creator suite lets you effectively create and manage high-quality course materials and other content like video courses without expensive recording equipment and additional software—one of the excellent pros of Gotocourse.</p>
@@ -553,7 +554,7 @@ export const Home = () => {
                 <div className={clsx.best_features__content} style={{backgroundColor: "white", gridTemplateColumns: '0.8fr 1.1fr'}}>
                     <div className={clsx.image_card}>
                         <span>
-                            <MdPictureAsPdf />
+                            <SiGoogleclassroom />
                         </span>
                         <h4>Customization</h4>
                         <p>You can modify the appearance of your classes, such as the images, colors, and layouts to suit your company’s or user’s preferences and requirements, and make the class tailored to fit a specific audience or target customer demography.</p>

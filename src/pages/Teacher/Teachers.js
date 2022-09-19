@@ -318,7 +318,7 @@ export const Payment = () => {
                               : (bootcamp.bootcampImg ? bootcamp.bootcampImg : lere)
                           }
                           alt=""
-                          className={style.payment_image}
+                          className={style.payment_image} 
                         />
                       </div>
                       <div className={style.payment_profile_info}>
