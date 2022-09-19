@@ -11,7 +11,7 @@ import SwiperCore, {
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-creative";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import {motion} from "framer-motion"
 
 import Layout from "../../components/Layout";
@@ -84,15 +84,7 @@ const Bootcamp = () => {
     if (userdata?.token) {
       navigate("payment")
     } else {
-      toast.error("User must be logged in to register", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      navigate("/login")
     }
   }
   return (
@@ -100,8 +92,7 @@ const Bootcamp = () => {
         {/* <div className="container"> */}
             <div className={` ${clsx.container}  d-flex justify-content-between`}>
                 <div className={clsx.bootcamp}>
-                    <ToastContainer />
-                    <div className={clsx.bootcamp_content}>
+                   <div className={clsx.bootcamp_content}>
                     <h2>{bootcampInfo?.title}</h2>
                     <p>
                         {bootcampInfo?.description
@@ -475,15 +466,7 @@ export function NewBootcampDetailsComponent(){
     if (userdata?.token) {
       navigate("payment")
     } else {
-      toast.error("User must be logged in to register", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      navigate("/login")
     }
   }
   async function addToWishList(){
@@ -510,17 +493,6 @@ export function NewBootcampDetailsComponent(){
   return (
     <Layout>
       <div className={clsx.bootcampTraining}>
-      <ToastContainer
-        position="top-right"
-        autoClose={3600}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-    />
         <section
           className={clsx.new_hero}
           style={{
@@ -671,15 +643,7 @@ function Upcome({_id, title, duration, startTime, endTime, startDate, endDate, d
       localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
       navigate("payment")
     } else {
-      toast.error("User must be logged in to register for this class", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+     navigate("/login")
     }
   }
   return(

@@ -99,7 +99,7 @@ const rightLink = [
 const Footer = () => {
   const location = useLocation();
   const celebRoute = location.pathname.split("/")[1] === "lounge"
-  const landing = location.pathname.split("/")[1] === ""
+  const landing = location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] ==="become-a-teacher";
 
   const scrollWithOffset = (el)=>{
     const yCoord = el.getBoundingClientRect().top + window.pageYOffset;

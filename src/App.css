@@ -39,6 +39,11 @@
     height: 100%;
   }
 }
+@media (min-width: 991px){
+.container-lg, .container-md, .container-sm, .container {
+    max-width: 960px;
+}
+}
 @media (min-width: 1200px){
   .container-xl, .container-lg, .container-md, .container-sm, .container {
     max-width: 1250px !important;
@@ -2013,7 +2018,7 @@ input[type="password"], input[type="text"], input[type="email"] {
     height: auto;
   }
  
-  
+   
   .end_left {
     text-align:center;
   }

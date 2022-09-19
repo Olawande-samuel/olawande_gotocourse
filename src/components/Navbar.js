@@ -54,7 +54,7 @@ const Navbar = ({ background }) => {
 
   const celebRoute = location.pathname.split("/")[1] === "lounge";
   const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";
-  const landing = location.pathname.split("/")[1] === "";
+  const landing = location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] ==="become-a-teacher";
   function showDrop() { }
   return (
     <nav
@@ -160,8 +160,8 @@ const Navbar = ({ background }) => {
             <>
             <li className="me-3">
               <motion.span 
-                className="text-white" 
-                style={{cursor: "pointer"}}
+                style={{cursor: "pointer", color:confirmEmail || landing ? "#0C2191" : "rgba(255, 255, 255)"
+              }}
                 whileHover={{
                   textShadow: "0px 0px 8px rgb(255, 255, 255)",
                 }}
@@ -187,11 +187,11 @@ const Navbar = ({ background }) => {
                 textShadow: "0px 0px 8px rgb(255, 255, 255)"
               }}
                 className="d-flex align-items-center"
-                style={{ color: "#fff", fontSize: "16px" }}
+                style={{ color:confirmEmail || landing ? "#0C2191" : "rgba(255, 255, 255)", fontSize: "16px" }}
               >
                 <i
                   className="d-flex align-items-center justify-content-center me-2"
-                  style={{ color: "#fff" }}
+                  style={{ color:confirmEmail || landing ? "#0C2191" : "rgba(255, 255, 255)" }}
                 >
                   <FaRegUser />
                 </i>

@@ -431,6 +431,10 @@
   }
 }
 
+
+
+
+
 /* LEARNING */
 .newLearning button a,
 .newMentor button a {
@@ -662,11 +666,37 @@
 /* MENTORS */
 
 .newMentors {
-  background: var(--theme-blue);
+  background: url(../../images/landmentors.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  min-height: 120vh;
   padding-block: 3.8625rem;
-  padding-top: 3.8625rem;
-  padding-bottom: 3.8625rem;
+  padding-top: 0;
+  padding-bottom:0;
 }
+.newMentors .backgroundy_img {
+  max-width: 100%;
+  height: 100%;
+}
+.newMentors_content {
+  /* position: absolute; */
+  /* height: 90%; */
+  margin: auto;
+  padding-top:2rem;
+  inset: 0;
+  
+}
+.newMentors_content .sub_title {
+  width: min(100% - .6rem, 980px);
+  margin: auto;
+}
+/* @media screen and (max-width: 1024px) {
+  .newMentors .backgroundy_img {
+    left: 50%;
+    margin-left: -512px;   
+  }
+} */
 .newMentors header {
   color: #fff;
 }
@@ -677,9 +707,54 @@
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 3rem;
-  width: 60%;
+  width: 55%;
+}
+.newMentors_content_mid {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  margin-block: 3rem;
+  gap: 2rem;
+  color: #fff;
+}
+.newMentors_content_mid > div {
+  flex-basis:100%;
+}
+.newMentors_text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.newMentors_text h4 {
+  font-size: min(29px, 34px);
+  text-align: center;
+  font-weight: bolder;
+  
+}
+.newMentors_vid img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.newMentors_vid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+@media screen and (min-width:712px) {
+  .newMentors_content_mid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 2rem;
+    height: 52vh;
+    color: #fff;
+  }
+}
+@media (min-width: 800px){
+  .newMentors {
+    min-height: 70vh;
+  }
+  
+}
 .newMentors {
   transition: all 0.3s ease;
   height: 100%;
@@ -729,6 +804,37 @@
     width: 75%;
   }
 }
+
+.newMentors_content_bottom {
+  padding-block: 1rem;
+  background-color:rgba(167, 167, 167, 0.436) ;
+}
+.newMentors_content_bottom_cards {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+}
+.newMentors_content_bottom_cards small {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #000;
+}
+
+
+
+.bottom_title {
+  color: var(--theme-blue);
+}
+
+.newMentors_content_bottom_card {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+
 
 .newLogin {
   border: 2px solid #fff !important;

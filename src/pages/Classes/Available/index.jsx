@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import {ToastContainer, toast} from "react-toastify";
 
 
 
@@ -86,27 +85,11 @@ const Available = () => {
                 else {
                     const {data} = res;
                     setBootcamps(_ => data.filter(d => d.isActive));
-                    toast.success(message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+                   
                 }
                 console.log(res);
             }catch(err){
-                toast.success(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+                console.error(err)
             }
         })()
         return () => console.log('Removing available classes');
@@ -120,7 +103,6 @@ const Available = () => {
 
     return (
         <Layout>
-            <ToastContainer />
             <div className={clsx.available_classes}>
                 <div className={clsx.classes_top}>
                     <div className={clsx.classes_top_left}>

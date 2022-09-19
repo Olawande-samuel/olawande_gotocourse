@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 
 import clsx from "./styles.module.css";
-
+import teacher from "../../images/Group927.png"
 
 
 export function Jumbotron() {
@@ -35,7 +35,7 @@ export function Jumbotron() {
                     </div>
                 </div>
                 <div className={clsx.jumb_container}>
-                    <div className={clsx.jumbotron__image} />
+                    <img src={teacher} alt="" />
                 </div>
 
             </div>
