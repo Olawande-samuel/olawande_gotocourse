@@ -70,6 +70,7 @@ import SyllabusContextProvider from "./contexts/Syllabus";
 // import AdminSignup from "./pages/Admin/SignUp"
 
 import { Suspense, lazy } from "react";
+import Loader from "./components/Loader";
 
 const Login = lazy(() => import("./pages/User/Login"))
 const SignUp = lazy(() => import("./pages/User/SignUp"))
@@ -97,7 +98,7 @@ function App() {
   return (
     <AuthContextProvider>
       <SyllabusContextProvider>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<Out />}>
               <Route index element={<Landing />} />

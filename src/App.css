@@ -23,6 +23,7 @@
   --primary-dark: #023047;
   --dashboard-blue: #E5E4F8;
   --dashboard-pink: #FFF5F5;
+  --blue-ish: rgba(236, 239, 255, 0.99);
 }
 /* override bootstrap */
 
@@ -961,13 +962,13 @@ border-radius: 13.5px !important;
 .testimonials .testimonials_text {
   font-family: "Lato", sans-serif;
   font-weight: 400;
-  font-size:  clamp(16px, 2.5vw,20px);
+  font-size:  16px;
   line-height: 30px;
   /* margin-bottom: 3.125rem; */
 }
 .testimonials .testimonials_name {
   font-family: "Lato", sans-serif;
-  font-size:  clamp(20px, 4vw, 24px);
+  font-size:  clamp(18px, 4vw, 20px);
 line-height: 42px;
 font-weight: 700;
 text-align: center;
@@ -977,7 +978,7 @@ color: var(--text-color-light);
 .testimonials .location {
   font-family: "Lato", sans-serif;
   font-weight: 300;
-font-size:  clamp(16px, 21px, 21px);
+font-size:  clamp(16px, 21px, 18px);
 line-height: 25px;
 }
 .testimonials .avatar {
@@ -1009,7 +1010,7 @@ line-height: 25px;
 .testimonials .slides {
   width: min(100% - 1rem, 350px);
   line-height:37px;
-  height: 350px;
+  height: 320px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   padding: 2rem 1rem;
