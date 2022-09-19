@@ -919,11 +919,53 @@ export function History() {
     )
 }
 export function Fees() {
-    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees } } = useAuth();
+    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees, fetchStudentFees } } = useAuth();
     const { getItem } = useLocalStorage();
+    const [course, setCourse] = useState([])
     let userdata = getItem(KEY);
     const [fees, setFees] = useState([]);
     const ref = useRef(false)
+
+    // console.log("my userdata", userdata);
+
+    console.log({ course });
+    useEffect(() => {
+        if (userdata.token) {
+
+            (async () => {
+                setGeneralState({ ...generalState, loading: true })
+                try {
+                    const res = await fetchStudentFees(userdata?.token);
+                    setGeneralState({ ...generalState, loading: false })
+                    const { success, message, statusCode } = res;
+                    if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+                    else {
+                        setCourse(res.data)
+                        toast.success(message, {
+                            position: "top-right",
+                            autoClose: 4000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+                } catch (err) {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+
+            })()
+        }
+    }, [userdata.token])
 
     useEffect(() => {
         if (ref.current) return
@@ -965,7 +1007,7 @@ export function Fees() {
         ref.current = true
     }, [])
 
-    console.log({ fees })
+    // console.log({ fees })
 
     const tableContents = fees.length > 0 ? fees : []
 
@@ -977,13 +1019,13 @@ export function Fees() {
             type: "installment",
             first: "0",
             firstDue: "12/2/30",
-            firstStatus:"paid",
+            firstStatus: "paid",
             second: "0",
             secondDue: "12/2/30",
-            secondStatus:"pending",
+            secondStatus: "pending",
             third: "0",
             thirdDue: "12/2/30",
-            thirdStatus:"paid",
+            thirdStatus: "paid",
             outstanding: "0",
             total: "0"
         },
@@ -993,13 +1035,13 @@ export function Fees() {
             type: "installment",
             first: "0",
             firstDue: "12/2/30",
-            firstStatus:"paid",
+            firstStatus: "paid",
             second: "0",
             secondDue: "12/2/30",
-            secondStatus:"pending",
+            secondStatus: "pending",
             third: "0",
             thirdDue: "12/2/30",
-            thirdStatus:"paid",
+            thirdStatus: "paid",
             outstanding: "0",
             total: "0"
         },
@@ -1009,11 +1051,33 @@ export function Fees() {
             type: "Full Payment",
             first: "0",
             firstDue: "12/2/30",
-            firstStatus:"pending",
+            firstStatus: "pending",
             outstanding: "0",
             total: "0"
         }
     ]
+
+    course.length > 0 && console.log("length", course[0].payments.length === 3);
+
+
+    const filterpending = (data) => {
+        console.log("filter", data);
+       let result = data.filter(c => c.status === "pending").reduce((sum, current) => sum + current.amount, 0)
+    //    console.log({result});
+
+       return result
+    }
+
+
+    const filterpaid = (data) => {
+        console.log("filter", data);
+       let result = data.filter(c => c.status === "paid").reduce((sum, current) => sum + current.amount, 0)
+    //    console.log({result});
+
+       return result
+    }
+
+
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Payments">
             <div className={clsx.students_profile}>
@@ -1021,22 +1085,99 @@ export function Fees() {
                 <div className={clsx.payment_container}>
 
                     {
-                        dummy.length > 0 ? dummy.map(d => (
-                            <div className={clsx.payment__content}>
+                        course && course.length > 0 ? course.map((d, i) => (
+                            <div className={clsx.payment__content} key={d.courseId}>
 
                                 <div className={clsx.payment__title}>
                                     <p>No</p>
-                                    <span>{d.id}</span>
+                                    <span>{i + 1}</span>
                                 </div>
 
                                 <div className={clsx.payment__title}>
                                     <p>Course</p>
-                                    <span>{d.course}</span>
+                                    <span>{d.courseName}</span>
                                 </div>
 
-                                {
-                                    d.type === "installment" ? (
 
+                                {d.payments.length > 1 ? d.payments.map((pay, i) => (
+                                    <>
+                                        <div className={clsx.payment__card}>
+                                            <p>{i + 1} installment</p>
+                                            <div className={clsx.payment__fee}>
+                                                <span>Fee</span>
+                                                <span className={clsx.clred}>${pay.amount}</span>
+                                            </div>
+                                            <div className={clsx.payment__fee}>
+                                                <span>Due Date:</span>
+                                                <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
+                                            </div>
+                                            <div className={clsx.payment__button}>
+                                                <button className={clsx.bgred} disabled={pay.status === "paid"}>pay</button>
+                                            </div>
+                                        </div>
+
+
+                                    </>
+                                )) : d.payments.length === 1 ? d.payments.map((pay, i) => (
+                                    <>
+                                        <div className={clsx.payment__card}>
+                                            <p>Full Payment</p>
+                                            <div className={clsx.payment__fee}>
+                                                <span>Fee</span>
+                                                <span className={clsx.clred}>${d.amount}</span>
+                                            </div>
+                                            <div className={clsx.payment__fee}>
+                                                <span>Due Date:</span>
+                                                <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
+                                            </div>
+                                            <div className={clsx.payment__button}>
+                                                <button className={clsx.bggreen} disabled={d.status === "paid"}>Full Payment</button>
+                                            </div>
+                                        </div>
+
+                                        <div className={clsx.payment__empty}></div>
+                                        <div className={clsx.payment__empty}></div>
+                                    </>
+                                ))
+                                    :
+                                    <>
+                                        {/* <h2>payment history empty</h2> */}
+                                    </>
+                                }
+
+                                {
+                                    d.payments.length > 0 && (
+                                        <>
+                                            <div className={clsx.payment__title}>
+                                                <p>Outstanding</p>
+                                                {/* <span>${d.amount}</span> */}
+                                                <span>${d.coursePrice - filterpending(d.payments)}</span>
+                                            </div>
+
+                                            <div className={clsx.payment__title}>
+                                                <p>Total payment</p>
+                                                {/* <span>$0</span> */}
+                                                <span>${filterpaid(d.payments)}</span>
+                                            </div>
+                                        </>
+                                    )
+                                }
+
+
+
+                            </div>
+
+                        ))
+                            :
+
+                            <>
+                                <h2>no errolled enrolled</h2>
+                            </>
+
+                    }
+
+                    {/* {
+                                    d.package === "COHORT" ? (
                                         <>
                                             <div className={clsx.payment__card}>
                                                 <p>1st installment</p>
@@ -1119,35 +1260,11 @@ export function Fees() {
                                             <div className={clsx.payment__empty}></div>
                                         </>
                                     )
-                                }
-
-
-
-                                <div className={clsx.payment__title}>
-                                    <p>Outstanding</p>
-                                    <span>${d.outstanding}</span>
-                                </div>
-
-                                <div className={clsx.payment__title}>
-                                    <p>Total payment</p>
-                                    <span>${d.total}</span>
-                                </div>
-
-
-                            </div>
-                        ))
-                            :
-
-                            <>
-                                <h2>payment history empty</h2>
-                            </>
-
-                    }
+                                } */}
 
                 </div>
-
-
             </div>
+
         </Students>
     )
 }
