@@ -1625,7 +1625,7 @@ function AvailableCourses({ data }) {
         e.preventDefault()
         const classInfo = item
         localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(classInfo))
-        navigate("/bootcamp")
+        navigate("/classes/class")
         // localStorage.setItem("gotocourse-courseInfo", JSON.stringify(courseInfo))
         // localStorage.setItem("gotocourse-courseId", courseInfo.courseId)
         // navigate(`/categories/${courseInfo.category?.split(" ").join("-")}/courses/${courseInfo.name.split(" ").join("-")}}`)

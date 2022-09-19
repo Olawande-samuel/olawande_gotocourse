@@ -12,6 +12,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-creative";
 import { toast, ToastContainer } from "react-toastify";
+import {motion} from "framer-motion"
 
 import Layout from "../../components/Layout";
 import clsx from "./styles.module.css";
@@ -29,6 +30,13 @@ import { useAuth } from "../../contexts/Auth";
 import { AdvancedError } from "../../classes";
 
 import BootcampImg from "../../images/bootcamps/bootcampTraining.png";
+import NewBootcampImage from "../../images/bootcamps/classes.png";
+import g1 from "../../images/bootcamps/g1.png";
+import g2 from "../../images/bootcamps/g2.png";
+import g3 from "../../images/bootcamps/g3.png";
+import { Payment } from "../Students";
+import { ReviewSection } from "../Courses";
+import { useQuery } from "@tanstack/react-query";
 
 const similarBootcamp = [
   {
@@ -181,12 +189,12 @@ export const BootcampDetails = () => {
         <section
           className={clsx.hero}
           style={{
+            height: `min(calc(100vh - ${navHeight}px ), 550px)`,
             background: `url(${
               bootcampTraining?.image ? bootcampTraining?.image : BootcampImg
             }), rgba(0, 0, 0, 0.7)`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
-            height: `min(calc(100vh - ${navHeight}px ), 600px)`,
           }}
         >
           <div className={`container ${clsx.hero_content}`}>
@@ -414,4 +422,280 @@ function Card({ title, image }) {
       </div>
     </div>
   );
+}
+
+const curriculum = [ 
+  {
+    title: "Genetic algorithms",
+    details:"A technique used for optimization that is inspired by the process of natural evolution or “survival of the fittest.”Often described as a type of “evolutionary algorithm,” these algorithms are well-suited for solving nonlinear problems."
+  },
+  {
+    title: "Machine learning",
+    details:"A subspecialty of computer science (within a field historically called “artificial intelligence”) concerned with the design and development of algorithms that allow computers to evolve behaviors based on empirical data."
+  },
+  {
+    title: "Pattern recognition",
+    details:"It is a set of machine learning techniques that assign some sort of output value (or label) to a given input value (or instance) according to a specific algorithm."
+  },
+  {
+    title: "Regression",
+    details:"A set of statistical techniques to determine how the value of the dependent variable changes when one or more independent variables is modified. Often used for forecasting or prediction."
+  },
+  {
+    title: "Time series analysis",
+    details:"Set of techniques from both statistics and signal processing for analyzing sequences of data points, representing values at successive times, to extract meaningful characteristics from the data."
+  }
+]
+
+
+export function NewBootcampDetailsComponent(){
+  const [bootcampTrainingInfo, setBootcampTrainingInfo] = useState({});
+  const [loading, setLoading] = useState(false)
+  const { getItem } = useLocalStorage();
+
+  const bootcampTraining = getItem("gotocourse-bootcampdata");
+  const userdata = getItem("gotocourse-userdata");
+
+  const {studentFunctions: {wishlistCourse}, otherFunctions: { fetchBootcamps }} = useAuth()
+  const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
+  const navigate =  useNavigate();
+
+  useEffect(() => {
+    if (bootcampTraining) {
+      setBootcampTrainingInfo(bootcampTraining);
+    }
+    return () => console.log("BootcampDetails is unmounted");
+  }, []);
+  const {
+    generalState: { navHeight },
+  } = useAuth();
+
+  async function handleBootstrapEnrollment(e) {
+    e.preventDefault();
+    if (userdata?.token) {
+      navigate("payment")
+    } else {
+      toast.error("User must be logged in to register", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
+  async function addToWishList(){
+  
+    if(userdata !== null){
+      try {
+        setLoading(true)
+        const response =  await wishlistCourse(bootcampTraining.bootcampId, userdata?.token)
+        const {success, message, statusCode} = response
+        if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+        toast.success(message)
+      }catch(error){
+        console.error(error)
+        toast.error(error.message);
+      }finally{
+        setLoading(false)
+      }
+      
+      
+    } else {
+      navigate("/login")
+    }
+  }
+  return (
+    <Layout>
+      <div className={clsx.bootcampTraining}>
+      <ToastContainer
+        position="top-right"
+        autoClose={3600}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+    />
+        <section
+          className={clsx.new_hero}
+          style={{
+            height: `min(calc(100vh - ${navHeight}px ), 450px)`,
+            background: `url(${bootcampTrainingInfo?.bootcampImg? bootcampTrainingInfo?.bootcampImg: NewBootcampImage}), rgba(0,0,0,0.5)`,
+            backgroundRepeat: "no-repeat", backgroundPosition:"center", backgroundSize: "cover"
+
+          }}
+        >
+          <div className={`container ${clsx.hero_content}`}>
+            <div>
+              <h4>{bootcampTrainingInfo?.title ? bootcampTrainingInfo?.title : "Data Science"}</h4>
+              <p>{bootcampTrainingInfo?.description ? bootcampTrainingInfo?.description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p>
+              <div className={clsx.hero_buttons}>
+                <motion.button 
+                 whileHover={{
+                  boxShadow: "0px 0px 8px rgb(225, 225, 225)"
+                }}
+                transition={{ duration: 0.1 }}
+                onClick={handleBootstrapEnrollment}>Enroll now</motion.button>
+                <motion.button 
+                 whileHover={{
+                  boxShadow: "0px 0px 8px rgb(225, 225, 225)"
+                }}
+                transition={{ duration: 0.1 }}
+                  onClick={addToWishList}
+                >
+                  {
+                    loading ? <div className="spinner-border"></div>
+                    :
+                    "Add to wishlist"
+                  }
+                </motion.button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className={clsx.to_learn}>
+          <div className="container">
+            <header>
+              <h3 className={clsx.section_title}>Program Overview</h3>
+              <hr />
+            </header>
+            <p>Data science is an interdisciplinary field that uses scientific methods, processes, algorithms and systems to extract knowledge and insights from noisy, structured and unstructured data, and apply knowledge and actionable insights from data across a broad range of application domains.</p>
+            <div className={clsx.career_list}>
+              <h6>Career Prospect</h6>
+              <ul>
+                <li>Data mining engineer</li>
+                <li>Business intelligence analyst</li>
+                <li>Data architect</li>
+                <li>Senior data scientist</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <section className={clsx.images}>
+         <div className="container">
+          <div className={clsx.img_grid}>
+            <img src={g1} alt="" className="img-fluid" />
+            <img src={g2} alt="" className="img-fluid" />
+            <img src={g3} alt="" className="img-fluid" />
+          </div>
+         </div>
+        </section>
+        <section className={clsx.requirement}>
+          <div className="container">
+            <header>
+                <h3 className={clsx.section_title}>Class Curriculum</h3>
+                <hr />
+            </header>
+            <h5 className="lead" style={{color:"var(--theme-blue"}}>Data Science Niche</h5>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, impedit inventore debitis similique a magni quia facere, optio neque delectus pariatur quam. Nostrum quisquam error nemo autem numquam!
+                  </p>
+                  <ul>
+                    {curriculum.map((item) => (
+                      <li>
+                        <p className={clsx.niche}>{item.title}</p>
+                        <p className={clsx.niche}>{item.details}</p>
+                      </li>
+                    ))}
+                  </ul>
+          </div>
+        </section>
+        <section className={clsx.process}>
+          <div className="container">
+            <header>
+              <h3 className={clsx.section_title}>Our Process</h3>
+              <hr />
+            </header>
+            <div className={clsx.link}>
+              <div className={clsx.box}>
+                <p className={clsx.learn}>1</p>
+              </div>
+              <span className={clsx.line}></span>
+              <div className={clsx.box}>
+                <p className={clsx.practice}>2</p>
+              </div>
+              <span className={clsx.line}></span>
+              <div className={clsx.box}>
+                <p className={clsx.portfolio}>3</p>
+              </div>
+              <span className={clsx.line}></span>
+              <div className={clsx.box}>
+                <p className={clsx.prepare}>4</p>
+              </div>
+              <span className={clsx.line}></span>
+              <div className={clsx.box}>
+                <p className={clsx.land}>5</p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+        <section className={clsx.upcoming_classes}>
+          <div className="container">
+            <header>
+              <h3 className={clsx.section_title}>Similar upcoming classes</h3>
+              <hr />
+            </header>
+            <div className={clsx.upcoming_card}>
+              {
+                bootcamps.data?.data?.map((item,i)=>(
+                    <Upcome {...item} all={item}/>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+        <section className={clsx.payment_options}>
+          <Payment />
+        </section>
+        <section className={clsx.teacher}>
+         <ReviewSection />
+        </section>
+      </div>
+    </Layout>
+  );
+}
+function Upcome({_id, title, duration, startTime, endTime, startDate, endDate, description, type, isActive, instructorId, bootcampImg, all}) {
+  const { getItem } = useLocalStorage();
+  const userdata = getItem("gotocourse-userdata");
+  const navigate = useNavigate();
+
+  async function handleBootstrapEnrollment(e) {
+    e.preventDefault();
+    if (userdata?.token) {
+      localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+      navigate("payment")
+    } else {
+      toast.error("User must be logged in to register for this class", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
+  return(
+    <div className={clsx.upcome}>
+      <p>{title}</p>
+      <div>
+        <p>Date</p>
+        <p>{startDate ?  getDate(startDate) : ""} - { endDate ?  getDate(endDate) : "" }</p>
+      </div>
+      <div>
+        <p>Duration</p>
+        <p>{duration}</p>
+      </div>
+      <div>
+        <button onClick={handleBootstrapEnrollment}>Enroll now</button>
+      </div>
+    </div>
+  )
 }

@@ -1,6 +1,11 @@
 import React from 'react'
-import { icons } from './Companies'
+// import { icons } from './Companies'
+import {Microsoft, PWC, Samsung, Verizon, Walmart,Shell, Uber, Shopify, Twitter, Tmobile, Slack, Mastercard, Facebook, Ey, Boa, Deloitte, KPMG, Google, Chase, Tesla, Geico, Lucid, Zoom, AWS, Tesco } from "../images/components/svgs"
 
+export const icons = [<Deloitte />, <Shopify />, <Google />, <Chase />,  <PWC />,<Microsoft />, <Samsung />, <Verizon />, <Walmart />,<Shell />, <Uber />,  <Tmobile />,<KPMG /> , <Twitter />, <Slack />,  <Tesco />, <Facebook />, <Ey />, <Boa />,
+<Tesla />, <Geico />, <AWS />, <Lucid />, <Zoom />,
+
+]
 const Experienced = () => {
   return (
     <section className="bootcamp" style={{padding: "3.3625rem 2.3625rem"}}>

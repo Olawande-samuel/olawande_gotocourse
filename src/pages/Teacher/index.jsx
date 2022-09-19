@@ -1,22 +1,24 @@
 import { Link } from "react-router-dom";
-import { Grid, Paper, Breadcrumbs } from "@mui/material";
+import { Grid, Breadcrumbs } from "@mui/material";
 import { BiChalkboard, BiEditAlt, BiDollar } from "react-icons/bi";
 import { MdPictureAsPdf, MdExpandMore, MdExpandLess, MdPlaylistAddCheck } from "react-icons/md";
-import { Rating } from "react-simple-star-rating";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
+
 import { motion } from "framer-motion"
 import Layout from "../../components/Layout";
-import { Jumbotron } from "./components";
+import { Jumbotron, Reviews } from "./components";
 import clsx from "./styles.module.css";
 import img from "../../images/bola.png";
 import { ScrollToTop } from "../Courses"
 import { FaqComponent } from "../../components/Faq";
 import classroom from "../../images/classroom_management.png";
-import liveClass from "../../images/live_class.png";
-import creator from "../../images/creator_suite.png";
+import creator from "../../images/creator.png";
+import creatorSmall from "../../images/creator_small.png";
 import customization from "../../images/customization.png";
 import teacher from "../../images/become_teacher02.png";
+import liveClassSmall from "../../images/liveClass.png";
+import liveClassBig from "../../images/liveClass_big.png";
+
+
 
 
 export const Home = () => {
@@ -473,37 +475,6 @@ export const Home = () => {
         },
     ]
 
-    const bestFeatures = [
-        {
-            title: "Classroom Management",
-            metaData: "We use an efficient classroom management tool that helps track student progress, ensure classes run smoothly without disruptions, and optimize learning for teachers and students. Our classroom management tools support proper and timely execution of curriculum development, developing best practices and putting them to use.",
-            icon: MdPictureAsPdf,
-            image: classroom,
-            position: "left"
-        },
-        {
-            title: "Live Class",
-            metaData: "Gotocourse online Classes and Bootcamps deliver industry-led curriculum and practical learning experiences to our students learning from anywhere. Explore a world of borderless learning and teaching of tech skills on Gotocourse, which eliminates the need for travel.            ",
-            icon: MdPictureAsPdf,
-            image: liveClass,
-            position: "right"
-        },
-        {
-            title: "Creator Suites",
-            metaData: "The built-in creator suite lets you effectively create and manage high-quality course materials and other content like video courses without expensive recording equipment and additional software—one of the excellent pros of Gotocourse.",
-            icon: MdPictureAsPdf,
-            image: creator,
-            position: "left"
-        },
-        {
-            title: "Customization",
-            metaData: "You can modify the appearance of your classes, such as the images, colors, and layouts to suit your company’s or user’s preferences and requirements, and make the class tailored to fit a specific audience or target customer demography.",
-            icon: MdPictureAsPdf,
-            image: creator,
-            position: "right"
-        }
-    ]
-
 
     return (
         <Layout>
@@ -531,11 +502,67 @@ export const Home = () => {
             <div className={clsx.best_features}>
                 <h1>Our Best Features</h1>
                 <p>Check out the features on Gotocourse that makes the teaching of technical skills seamless</p>
-                {
-                    bestFeatures.map(({ title, metaData, icon, image, position }, i) => (
-                        <BestFeature title={title} metaData={metaData} position={position} icon={icon} image={image} key={i} />
-                    ))
-                }
+                
+                <div className={clsx.best_features__content} style={{backgroundColor: "#E8EFFF"}}>
+                    <div className={clsx.image_container}>
+                        <img src={classroom} className={clsx.image} alt="Icon" />
+                    </div>
+                    <div className={clsx.image_card}>
+                        <span>
+                            <MdPictureAsPdf />
+                        </span>
+                        <h4>Classroom Management</h4>
+                        <p>We use an efficient classroom management tool that helps track student progress, ensure classes run smoothly without disruptions, and optimize learning for teachers and students. Our classroom management tools support proper and timely execution of curriculum development, teachers are able create notes, quizzes, upload files/videos,schedule live classes and have discussion with students in real time.</p>
+                    </div>
+                </div>
+
+                <div className={clsx.live_class}>
+                    <div className={clsx.image_card}>
+                        <span>
+                            <MdPictureAsPdf />
+                        </span>
+                        <h4>Live Class</h4>
+                        <p>Gotocourse online Classes and Bootcamps deliver industry-led curriculum and practical learning experiences to our students learning from anywhere. Explore a world of borderless learning and teaching of tech skills on Gotocourse, which eliminates the need for travel.</p>
+                    </div>
+                    <div className={clsx.live_class_image_small}>
+                        <img src={liveClassSmall} alt="Live Class small" />
+                    </div>
+                    <div className={clsx.live_class_image_big}>
+                        <img src={liveClassBig} alt="Live Class small" />
+                    </div>
+                </div>
+
+                <div className={clsx.creator}>
+                    <div className={clsx.creator_image_big}>
+                        <img src={creator} alt="Live Class small" />
+                    </div>
+                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <div className={clsx.creator_image_small}>
+                            <img src={creatorSmall} alt="Live Class small" />
+                        </div>
+                    </div>
+                    <div className={clsx.image_card}>
+                        <span>
+                            <MdPictureAsPdf />
+                        </span>
+                        <h4>Creator Suites</h4>
+                        <p>The built-in creator suite lets you effectively create and manage high-quality course materials and other content like video courses without expensive recording equipment and additional software—one of the excellent pros of Gotocourse.</p>
+                    </div>
+                </div>
+
+                <div className={clsx.best_features__content} style={{backgroundColor: "white", gridTemplateColumns: '0.8fr 1.1fr'}}>
+                    <div className={clsx.image_card}>
+                        <span>
+                            <MdPictureAsPdf />
+                        </span>
+                        <h4>Customization</h4>
+                        <p>You can modify the appearance of your classes, such as the images, colors, and layouts to suit your company’s or user’s preferences and requirements, and make the class tailored to fit a specific audience or target customer demography.</p>
+                    </div>
+                    <div className={clsx.image_container}>
+                        <img src={customization} className={clsx.image} alt="Icon" />
+                    </div>
+                </div>
+
             </div>
 
             <div className={clsx.become_a_teacher}>
@@ -568,66 +595,7 @@ export const Home = () => {
                     </Grid>
                 </div>
             </div>
-
-            <div className={clsx.reviews}>
-                <h1>Reviews</h1>
-                <p>Care to know what the world say about us?</p>
-                <div className={clsx.reviews__container}>
-                    <Swiper
-                        // install Swiper modules
-                        modules={[Navigation, Pagination, Scrollbar, A11y]}
-                        spaceBetween={50}
-                        slidesPerView={1}
-                        navigation
-                        style={{ padding: "20px 0px" }}
-                        pagination={{ clickable: true }}
-                        scrollbar={{ draggable: true }}
-                        breakpoints={{
-                            // when window width is >= 320px
-                            320: {
-                                slidesPerView: 1,
-                                spaceBetween: 3,
-                            },
-                            // when window width is >= 640px
-                            575: {
-                                slidesPerView: 2,
-                                spaceBetween: 3,
-                            },
-                            700: {
-                                slidesPerView: 2,
-                                spaceBetween: 3,
-                            },
-                            1024: {
-                                slidesPerView: 2,
-                                spaceBetween: 30,
-                            },
-                        }}
-                    >
-                        {
-                            reviews.map(({ review, avatar, name, location }, i) => (
-                                <SwiperSlide>
-
-                                    <Paper className={clsx.reviews_paper} key={i}>
-                                        <q>{review}</q>
-                                        <div className={clsx.reviews_info}>
-                                            <div>
-                                                <img src={avatar} alt="Avatar" />
-                                                <div>
-                                                    <h5>{name}</h5>
-                                                    <span>{location}</span>
-                                                </div>
-                                            </div>
-                                            <Rating ratingValue={100} size={20} allowHover={false} readonly={true} />
-                                        </div>
-                                    </Paper>
-                                </SwiperSlide>
-                            ))
-                        }
-
-                    </Swiper>
-
-                </div>
-            </div>
+            <Reviews bgColor="var(--white)" reviews={reviews} />
         </Layout>
     )
 }
@@ -661,39 +629,4 @@ export const Profile = () => {
             </div>
         </Layout>
     )
-}
-
-
-function BestFeature({ title, metaData, icon: Icon, image, position }) {
-    if (position === "left") {
-        return (
-            <div className={clsx.best_features__content}>
-                <div className={clsx.image_container}>
-                    <img src={image} className={clsx.image} alt="Icon" />
-                </div>
-                <div className={clsx.image_card}>
-                    <span>
-                        <Icon />
-                    </span>
-                    <h4>{title}</h4>
-                    <p>{metaData}</p>
-                </div>
-            </div>
-        )
-    } else {
-        return (
-            <div className={clsx.best_features__content}>
-                <div className={clsx.image_card}>
-                    <span>
-                        <Icon />
-                    </span>
-                    <h4>{title}</h4>
-                    <p>{metaData}</p>
-                </div>
-                <div className={clsx.image_container}>
-                    <img src={image} className={clsx.image} alt="Icon" />
-                </div>
-            </div>
-        )
-    }
 }

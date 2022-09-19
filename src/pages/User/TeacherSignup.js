@@ -65,21 +65,20 @@ const TeacherSignup = () => {
       if (others.email.trim() === "" || others.password.trim() === "") throw new AdvancedError("Fields cannot be empty", 0);
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
-        const response = await register(others, "user");
-        console.log({response})
-        // const res = await pledre.addTeacherToSchool({
-        //   name:`${formstate.firstName} ${formstate.lastName}`,
-        //   email: formstate.email,
-        //   password:`${formstate.password}`
-        // })
-
-      
+        const response = await register(others, "user");  
       let { success, message, statusCode } = response;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
+        console.log({response})
+        const res = await pledre.addTeacherToSchool({
+          name:`${formstate.firstName} ${formstate.lastName}`,
+          email: formstate.email,
+          password:`${formstate.password}`
+        })
         const { data } = response;
-        // localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res))
-
+        if(res.approved){
+          localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res))
+        }
         updateItem(VERIFICATION_KEY, data);
         setGeneralState((old) => {
           return {
@@ -95,8 +94,6 @@ const TeacherSignup = () => {
       setLoading(_ => false);
     }
   }
-
-
   async function socialSignUp(token, type){
     try{
       const res = type === "google" ? await googleSignUp(token) : await facebookSignUp(token)

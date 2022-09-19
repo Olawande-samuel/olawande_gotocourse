@@ -99,6 +99,7 @@ const rightLink = [
 const Footer = () => {
   const location = useLocation();
   const celebRoute = location.pathname.split("/")[1] === "lounge"
+  const landing = location.pathname.split("/")[1] === ""
 
   const scrollWithOffset = (el)=>{
     const yCoord = el.getBoundingClientRect().top + window.pageYOffset;
@@ -108,7 +109,7 @@ const Footer = () => {
   
   return (
     <footer className="footer wrapper" style={{
-      background: celebRoute ?  "#000F62" :"var(--theme-blue)"  , color:  "#fffff"
+      background: celebRoute ?  "#000F62" : landing ? "var(--blue-ish)" :"var(--theme-blue)"  , color: landing ? "var(--theme-blue)": "#fffff"
       }}>
       <div className="container ">
         {
@@ -134,15 +135,33 @@ const Footer = () => {
                 </p>
               <div className="join_button_wrapper justify-content-center align-items-center d-flex mb-3">
                 <Link to="/students" onClick={()=>window.scrollTo(0, 0)}>
-                  <button type="button" className="btn btn-light px-lg-4 py-lg-3">
+                  <motion.button type="button" 
+                   className="btn btn-light px-lg-4 py-lg-3" 
+                   style={{color: landing ? "var(--theme-blue": celebRoute ? "#fff":"#000", background: "#fff",borderColor: landing ? "var(--theme-blue)": "#fff" }}
+                    whileHover={{
+                        boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                        textShadow: "0px 0px 8px rgb(255,255,255)",
+                      }}
+                      transition={{ duration: 0.1 }}
+
+                   >
                     Join as a student
-                  </button>
+                  </motion.button>
                 </Link>
                 <small>OR</small>
                 <Link to="/become-a-teacher">
-                  <button type="button" className="btn btn-outline-light px-lg-4 py-lg-3">
+                  <motion.button type="button" 
+                   className="btn btn-light px-lg-4 py-lg-3" 
+                   style={{color: landing ? "var(--theme-blue)": celebRoute ? "#fff":"#000", borderColor: landing ? "var(--theme-blue)": "#fff"}}
+                    whileHover={{
+                        boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                        textShadow: "0px 0px 8px rgb(255,255,255)",
+                      }}
+                      transition={{ duration: 0.1 }}
+
+                   >
                     Apply to teach
-                  </button>
+                  </motion.button>
                 </Link>
               </div>
             </div>
@@ -153,13 +172,13 @@ const Footer = () => {
             <div className="footer_top pt-2">
               <Link to="/" onClick={()=>window.scrollTo(0, 0)}>
                 <i className="d-none d-lg-block">
-                  <Logo />
+                  <Logo color={landing ? "var(--theme-blue)" : "#fff"} />
                 </i>
             
                 <i className="d-lg-none">
-                  <Logosm />
+                  <Logosm color={landing ? "var(--theme-blue)" : "#fff"} />
                 </i>
-                <small className="text-end d-block" style={{fontSize: '14px'}}>Learn without limits.</small>
+                <small className="text-end d-block" style={{fontSize: '16px', color: landing ? "var(--theme-blue": "#fff"}}>Learn without limits.</small>
               </Link>
             </div>
         </div>
@@ -186,6 +205,7 @@ const Footer = () => {
                 transition={{
                   stiffness:300
                 }}
+                style={{color: landing ? "var(--theme-blue": "#FFF"}}
                 >
                     {link.title}
                 </motion.li>
@@ -209,6 +229,7 @@ const Footer = () => {
                 transition={{
                   stiffness:300
                 }}
+                style={{color: landing ? "var(--theme-blue": "#FFF"}}
                 >
                     {link.title}
                 </motion.li>

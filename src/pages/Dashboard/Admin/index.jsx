@@ -1146,7 +1146,6 @@ export function Approve() {
     } else {
       // revoke access and delete teacher from pledre     
       try {
-        console.log(data.pledre?._id)
         setGeneralState((old) => { return { ...old, loading: true, }; });
         // revoke acess
         const res = await verify_pledre(item, userdata?.token);
@@ -1154,9 +1153,9 @@ export function Approve() {
         if (!success) throw new AdvancedError(message, statusCode);
         else {
           // remove from pledre
-          // const PledRes = (data.accessPledre === true) && await pledre.deleteTeacher(data.pledre?._id)
-          // console.log({PledRes})
-          // setData({...data, accessPledre: !data.accessPledre})
+          const PledRes = (data.accessPledre === true) && await pledre.deleteTeacher(data.pledre?._id)
+          console.log({PledRes})
+          setData({...data, accessPledre: !data.accessPledre})
           toast.success(message, {
             position: "top-right",
             autoClose: 4000,
@@ -2423,19 +2422,19 @@ export function CourseDetails({ }) {
     let pledId
     try {
       if (formstate.status !== "active") {
-        // const pledRes = await generalState.pledre.addCourse({
-        //   course_name: formstate.name,
-        //   course_description: formstate.description,
-        //   is_public: false,
-        //   short_description: formstate.description,
-        //   price: formstate.price
-        // })
-        // console.log({pledRes})
-        // if(pledRes.id){
-        //   pledId = pledRes.id
-        // const res = await toggleCourseStatus(userdata?.token,  params?.id, {pledreCourseId: pledId});
+        const pledRes = await generalState.pledre.addCourse({
+          course_name: formstate.name,
+          course_description: formstate.description,
+          is_public: false,
+          short_description: formstate.description,
+          price: formstate.price
+        })
+        console.log({pledRes})
+        if(pledRes.id){
+          pledId = pledRes.id
+        const res = await toggleCourseStatus(userdata?.token,  params?.id, {pledreCourseId: pledId});
 
-        const res = await toggleCourseStatus(userdata?.token, params?.id, {});
+        // const res = await toggleCourseStatus(userdata?.token, params?.id, {});
         const { success, message, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         setFormstate({ ...formstate, status: "active" })
@@ -2451,7 +2450,7 @@ export function CourseDetails({ }) {
           draggable: true,
           progress: undefined,
         });
-        // }
+        }
       }
       else {
         const res = await toggleCourseStatus(userdata?.token, params?.id, { pledreCourseId: pledId });
