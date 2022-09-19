@@ -1089,7 +1089,7 @@ export function Fees() {
                     draggable: true,
                     progress: undefined,
                 });
-            // getmyFees(userdata.token)
+            getmyFees(userdata.token)
 
 
             }
@@ -1201,7 +1201,7 @@ export function Fees() {
                             :
 
                             <>
-                                <h2>no errolled enrolled</h2>
+                                <h2>No errolled course</h2>
                             </>
 
                     }
