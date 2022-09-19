@@ -919,7 +919,7 @@ export function History() {
     )
 }
 export function Fees() {
-    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees, fetchStudentFees } } = useAuth();
+    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees, fetchStudentFees,payStudentFees } } = useAuth();
     const { getItem } = useLocalStorage();
     const [course, setCourse] = useState([])
     let userdata = getItem(KEY);
@@ -929,6 +929,42 @@ export function Fees() {
     // console.log("my userdata", userdata);
 
     console.log({ course });
+
+    const payNumber = ["1st", "2nd", "3rd", "4th"]
+
+    const getmyFees  =  async (data) => {
+        setGeneralState({ ...generalState, loading: true })
+        try {
+            const res = await fetchStudentFees(data);
+            setGeneralState({ ...generalState, loading: false })
+            const { success, message, statusCode } = res;
+            if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+            else {
+                setCourse(res.data)
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        } catch (err) {
+            toast.error(err.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+
+    }
+
     useEffect(() => {
         if (userdata.token) {
 
@@ -1012,51 +1048,6 @@ export function Fees() {
     const tableContents = fees.length > 0 ? fees : []
 
 
-    const dummy = [
-        {
-            id: "1",
-            course: "CyberSecurity",
-            type: "installment",
-            first: "0",
-            firstDue: "12/2/30",
-            firstStatus: "paid",
-            second: "0",
-            secondDue: "12/2/30",
-            secondStatus: "pending",
-            third: "0",
-            thirdDue: "12/2/30",
-            thirdStatus: "paid",
-            outstanding: "0",
-            total: "0"
-        },
-        {
-            id: "2",
-            course: "UI/UX",
-            type: "installment",
-            first: "0",
-            firstDue: "12/2/30",
-            firstStatus: "paid",
-            second: "0",
-            secondDue: "12/2/30",
-            secondStatus: "pending",
-            third: "0",
-            thirdDue: "12/2/30",
-            thirdStatus: "paid",
-            outstanding: "0",
-            total: "0"
-        },
-        {
-            id: "3",
-            course: "Dev Ops",
-            type: "Full Payment",
-            first: "0",
-            firstDue: "12/2/30",
-            firstStatus: "pending",
-            outstanding: "0",
-            total: "0"
-        }
-    ]
-
     course.length > 0 && console.log("length", course[0].payments.length === 3);
 
 
@@ -1075,6 +1066,45 @@ export function Fees() {
     //    console.log({result});
 
        return result
+    }
+
+    const handlePay = async ( paymentId) => {
+        // console.log({paymentId});
+        // console.log("pay user" , userdata.token);
+
+        setGeneralState({ ...generalState, loading: true })
+        try {
+            const res = await payStudentFees(userdata.token, paymentId)
+            console.log("pay res", res);
+            setGeneralState({ ...generalState, loading: false })
+            const { success, message, statusCode } = res;
+            if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+            else {
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            getmyFees(userdata.token)
+
+
+            }
+        } catch (err) {
+            toast.error(err.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+
     }
 
 
@@ -1102,7 +1132,7 @@ export function Fees() {
                                 {d.payments.length > 1 ? d.payments.map((pay, i) => (
                                     <>
                                         <div className={clsx.payment__card}>
-                                            <p>{i + 1} installment</p>
+                                            <p>{payNumber[i]} installment</p>
                                             <div className={clsx.payment__fee}>
                                                 <span>Fee</span>
                                                 <span className={clsx.clred}>${pay.amount}</span>
@@ -1112,7 +1142,7 @@ export function Fees() {
                                                 <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
                                             </div>
                                             <div className={clsx.payment__button}>
-                                                <button className={clsx.bgred} disabled={pay.status === "paid"}>pay</button>
+                                                <button className={clsx.bgred} disabled={pay.status === "paid"} onClick={() => handlePay(pay._id)}>pay</button>
                                             </div>
                                         </div>
 
@@ -1131,7 +1161,7 @@ export function Fees() {
                                                 <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
                                             </div>
                                             <div className={clsx.payment__button}>
-                                                <button className={clsx.bggreen} disabled={d.status === "paid"}>Full Payment</button>
+                                                <button className={clsx.bggreen} disabled={d.status === "paid"} onClick={() => handlePay(pay._id)}>Full Payment</button>
                                             </div>
                                         </div>
 
@@ -1171,7 +1201,7 @@ export function Fees() {
                             :
 
                             <>
-                                <h2>no errolled enrolled</h2>
+                                <h2>No errolled course</h2>
                             </>
 
                     }
