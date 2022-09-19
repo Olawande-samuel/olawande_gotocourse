@@ -20,8 +20,8 @@ import {motion} from 'framer-motion'
 
 import {getDate,KEY} from "../../constants"
 
-import Learning from "../../images/cohort.webp";
 // import Inperson from "../../images/newCareer.png"
+import Learning from "../../images/cohort.webp";
 import Inperson from "../../images/in-Person.webp"
 import Mento from "../../images/inPerson.webp";
 import Tech from "../../images/fast.webp";
@@ -51,6 +51,8 @@ import SwiperCore, {
   import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
   import { authentication, provider, facebookProvider } from "../../firebase-config.js"
 import LoginOptions from "./LoginOptions";
+import Overview from "./Overview";
+import BetterWay from "./BetterWay";
 
 const NewLanding = ()=>{
     return (
@@ -60,11 +62,13 @@ const NewLanding = ()=>{
         <Category />
         <Benefits />
         <Bootcamp/>
-        <Learn type={"newLanding"} />
+        <Overview />
+        <BetterWay />
+        {/* <Learn type={"newLanding"} />
         <Self />
-        <Mentorship />
+        <Mentorship /> */}
         <Mentors />
-        <InPerson />
+        {/* <InPerson /> */}
         <Testimonials type="newLanding" />
         <Becoming />
         <Companies />
@@ -316,7 +320,7 @@ function BootcampCard({data}){
 }
 
 
-function Learn (){
+export function Learn ({better, content}){
    return (
     <section className="wrapper newLearning">
       <div className="container">
@@ -327,21 +331,25 @@ function Learn (){
                   <h2 className="title">Learn with a cohort</h2>
                 </header>
                 <p className="card-text newLearning-text mb-4">
-                  Join a classroom to take instructor-led training, do projects with learning partners, take quizzes, network, and build a work-related portfolio. Take an opportunity to learn with likeminds across the world and build a great career you will be proud of.
+                  { better ? content:"Join a classroom to take instructor-led training, do projects with learning partners, take quizzes, network, and build a work-related portfolio. Take an opportunity to learn with likeminds across the world and build a great career you will be proud of."}
                 </p>
-                <div>
-                  <Link to="/signup" style={{display:"inline-block"}}>
-                  <motion.button 
-                  className="btn-plain button-lg newLearning_button" type="button"
-                  whileHover={{ 
-                    boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
-                    textShadow:"0px 0px 8px rgb(255, 255, 255)"
-                  }}
-                  >
-                    Get Started Today
-                  </motion.button>
-                    </Link>
-                </div>
+                {
+                  !better &&
+                  <div>
+                    <Link to="/signup" style={{display:"inline-block"}}>
+                    <motion.button 
+                    className="btn-plain button-lg newLearning_button" type="button"
+                    whileHover={{ 
+                      boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                      textShadow:"0px 0px 8px rgb(255, 255, 255)"
+                    }}
+                    >
+                      Get Started Today
+                    </motion.button>
+                      </Link>
+                  </div>
+                }
+
                   
               </div>
             </div>
@@ -354,7 +362,7 @@ function Learn (){
    ) 
 }
 
-function Self(){
+export function Self({better, content}){
     return(
         <section className="wrapper transition newLearning newSelf">
       <div className="container">
@@ -375,22 +383,26 @@ function Self(){
                 <h2 className="title">Self paced Learning</h2>
               </header>
               <p className="newLearning-text mb-4">
-                Learn on a flexible schedule at your own pace. Self-paced courses allow you to complete assignments at your own pace, making it easier to balance coursework with your other personal and professional commitments and responsibilities. You don’t have to worry about rigid learning schedules, learn at your pace and on your terms.
+              { better ? content:"Learn on a flexible schedule at your own pace. Self-paced courses allow you to complete assignments at your own pace, making it easier to balance coursework with your other personal and professional commitments and responsibilities. You don’t have to worry about rigid learning schedules, learn at your pace and on your terms."}
               </p>
-              <div>
-                <Link to="/signup" style={{display:"inline-block"}}>
-                  <motion.button
-                    className="btn-plain newLearning_button button-lg"
-                    type="button"
-                    whileHover={{
-                      boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-                      textShadow: "0px 0px 8px rgb(255,255,255)",
-                    }}
-                   >
-                    Try Gotocourse
-                    </motion.button>
-                 </Link>
-                </div>
+              {
+                !better &&
+                <div>
+                  <Link to="/signup" style={{display:"inline-block"}}>
+                    <motion.button
+                      className="btn-plain newLearning_button button-lg"
+                      type="button"
+                      whileHover={{
+                        boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                        textShadow: "0px 0px 8px rgb(255,255,255)",
+                      }}
+                    >
+                      Try Gotocourse
+                      </motion.button>
+                  </Link>
+                  </div>
+              }
+
             </div>
           </motion.div>
         </div>
@@ -399,7 +411,7 @@ function Self(){
     )
 }
 
-function Mentorship (){
+export function Mentorship ({better, content}){
     
    return (
     <section className="wrapper learning newMentor">
@@ -411,21 +423,25 @@ function Mentorship (){
                   <h2 className="title">One-on-one mentorship</h2>
                 </header>
                 <p className=" newLearning-text mb-4">
-                Get an exclusive and fully immersive learning experience with our Celebrity, A-list, and Technical Experts Mentors. Challenge yourself with a one-on-one mentoring session with industry experts and professionals and grow your career.
+                  { better ? content:"Get an exclusive and fully immersive learning experience with our Celebrity, A-list, and Technical Experts Mentors. Challenge yourself with a one-on-one mentoring session with industry experts and professionals and grow your career."}
                 </p>
-                <div>
-                  <Link to="/signup" style={{display:"inline-block"}}>
-                  <motion.button 
-                  className="btn-plain button-lg newMentor_button" type="button"
-                  whileHover={{ 
-                    boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
-                    textShadow:"0px 0px 8px rgb(255, 255, 255)"
-                  }}
-                  >
-                    Get Started Today
-                  </motion.button>
-                    </Link>
-                </div>
+                {
+                  !better &&
+                  <div>
+                    <Link to="/signup" style={{display:"inline-block"}}>
+                    <motion.button 
+                    className="btn-plain button-lg newMentor_button" type="button"
+                    whileHover={{ 
+                      boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                      textShadow:"0px 0px 8px rgb(255, 255, 255)"
+                    }}
+                    >
+                      Get Started Today
+                    </motion.button>
+                      </Link>
+                  </div>
+                }
+
                   
               </div>
             </div>
@@ -437,7 +453,7 @@ function Mentorship (){
     </section>
    ) 
 }
-function InPerson (){
+export function InPerson ({better, content}){
    return (
     <section className="wrapper learning newLearning inPerson">
       <div className="container">
@@ -448,21 +464,24 @@ function InPerson (){
                   <h2 className="title">In-person Training </h2>
                 </header>
                 <p className="newLearning-text mb-4">
-                Take physical lectures on any of our campuses close to you. Enjoy hands-on and interactive expert lead training by joining us in any of our physical learning hubs, practicing new skills through case studies and role-plays, and getting real-time feedback from facilitators. You can’t go wrong joining our small group training on-site to learn and advance your career.
+                { better ? content:"Take physical lectures on any of our campuses close to you. Enjoy hands-on and interactive expert lead training by joining us in any of our physical learning hubs, practicing new skills through case studies and role-plays, and getting real-time feedback from facilitators. You can’t go wrong joining our small group training on-site to learn and advance your career."}
                 </p>
-                <div>
-                  <Link to="/signup" style={{display:"inline-block"}}>
-                  <motion.button 
-                  className="btn-plain button-lg newLearning_button" type="button"
-                  whileHover={{ 
-                    boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
-                    textShadow:"0px 0px 8px rgb(255, 255, 255)"
-                  }}
-                  >
-                    Get Started Today
-                  </motion.button>
-                    </Link>
-                </div>
+                {
+                  !better &&
+                  <div>
+                    <Link to="/signup" style={{display:"inline-block"}}>
+                    <motion.button 
+                    className="btn-plain button-lg newLearning_button" type="button"
+                    whileHover={{ 
+                      boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                      textShadow:"0px 0px 8px rgb(255, 255, 255)"
+                    }}
+                    >
+                      Get Started Today
+                    </motion.button>
+                      </Link>
+                  </div>
+                }
                   
               </div>
             </div>
