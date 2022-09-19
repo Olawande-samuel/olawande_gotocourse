@@ -2007,7 +2007,7 @@ input[type="password"], input[type="text"], input[type="email"] {
   }
 
   .testimonials .slides {
-    height: auto;
+    height: auto !important;
   }
   .students .testimonials .slides {
     height: auto;
