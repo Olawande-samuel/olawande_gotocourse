@@ -6,7 +6,7 @@ const End = () => {
   const {otherFunctions:{validateURL}} = useAuth()
   const location = useLocation();
   const celebRoute = location.pathname.split("/")[1] === "lounge"
-  const landing = location.pathname.split("/")[1] === ""
+  const landing = location.pathname.split("/")[1] === "" ||location.pathname.split("/")[1] ==="become-a-teacher";
   const  facebook = "https://www.facebook.com/realztechinstitute/";
   const  insta = "https://instagram.com/mygotocourse?igshid=YmMyMTA2M2Y=";
   const  twitter = "https://twitter.com/mygotocourse?s=09";

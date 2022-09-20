@@ -355,27 +355,9 @@ export const Categories = () => {
             arr.push(merged)
           })
           setCategories(arr)
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
       
     }catch(err){
         setGeneralState({...generalState, loading: false})
-        toast.error(err.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
     }
     })()
     ref.current = true
@@ -498,38 +480,11 @@ export const CourseList = () => {
           const {data} = res
           if(data.length > 0 ){
             setCourses(data)
-            toast.success(message, {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          } else {
-            toast.error("course list is empty", {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+           
           }
       
     }catch(err){
         setGeneralState({...generalState, loading: false})
-        toast.error(err.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
     }
   }
 
@@ -602,18 +557,10 @@ export const CourseDetail = ({preview}) => {
             if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
             if(res.data.length > 0){
               setCategoryCourses(res.data) 
-              toast.success(message, {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          } else {
-
-            toast.error("No course found", {
+          }
+        
+      }catch(err){
+          toast.error(err.message, {
             position: "top-right",
             autoClose: 4000,
             hideProgressBar: true,
@@ -621,18 +568,6 @@ export const CourseDetail = ({preview}) => {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-          });
-        }
-        
-      }catch(err){
-          toast.error(err.message, {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
           });
       }finally{
         setGeneralState({...generalState, loading: false})
@@ -769,26 +704,17 @@ export const CourseProfile = ({preview}) => {
           else {
             const {data} = res;
             setCourseProfile(data)
-            toast.success(message, {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
           }
       }catch(err){
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        // toast.error(err.message, {
+        //   position: "top-right",
+        //   autoClose: 3000,
+        //   hideProgressBar: true,
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        //   progress: undefined,
+        // });
       }finally {
           setGeneralState({...generalState, loading: false});
       }
