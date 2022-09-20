@@ -341,6 +341,7 @@ export const BootcampPayment = () => {
 };
 
 
+
 export function PaymentModal({ token }) {
   const options = {
     clientSecret: token,

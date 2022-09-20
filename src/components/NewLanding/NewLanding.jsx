@@ -58,6 +58,7 @@ const NewLanding = ()=>{
     return (
     <Layout background="blue">
         <Hero />
+        <Stats />
         <Experienced />
         <Category />
         <Benefits />
@@ -168,6 +169,47 @@ function Hero(){
     )
 }       
 
+function Stats(){
+  const statData = [
+    {
+      title: '20k+',
+      content:"students registered"
+    },
+    {
+      title: '98%',
+      content:"Completion & Retention rate"
+    },
+    {
+      title: '150+',
+      content:"Teachers & Mentors"
+    },
+    {
+      sup:"More than",
+      title: '89%',
+      content:"Tranined students already have jobs"
+    },
+    {
+      title: '50+',
+      content:"In-demand Courses"
+    },
+  ]
+  return(
+    <section className="stats">
+        <div className="stats_wrapper h-100">
+          {
+            statData.map((item, index) => (
+            <div className="stat" key={index + item.title}>
+              {item.sup && <small>{item.sup}</small>}
+              <h5>{item.title}</h5>
+              <small>{item.content}</small>
+            </div>
+            ))
+              
+            }
+        </div>
+    </section>
+  )
+}
 function Benefits(){
     return (
         <section className="wrapper services">
