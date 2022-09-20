@@ -37,3 +37,10 @@ export function getDate(date){
   m = months[parseInt(m) - 1];
   return `${m} ${day}`;
 }
+
+
+export const capitalize = (str) => {
+  let strArray = str.toLocaleLowerCase().split("");
+  strArray[0] = strArray[0].toLocaleUpperCase();
+  return strArray.join("");
+}

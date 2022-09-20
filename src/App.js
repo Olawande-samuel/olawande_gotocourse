@@ -42,6 +42,8 @@ import Bootcamp, {BootcampDetails as TrainingBootcamp, NewBootcampDetailsCompone
 import {BootcampPayment} from "./pages/Bootcamp/Payment";
 import Policies, {TeachingPolicy, TermsOfUse, EndUserPolicy, Cookies} from "./pages/PrivacyPolicy";
 
+import {Category as CategoryHome, CategoryDetail} from "./pages/Category";
+
 // import About from "./pages/About";
 // import Contact from "./pages/Contact";
 // import Settings from "./pages/Dashboard/Admin/Settings";
@@ -113,6 +115,8 @@ function App() {
                 <Route path="teaching-policy" element={<TeachingPolicy />} />
                 <Route path="about-us" element={<About />} />
                 <Route path="contact-us" element={<Contact />} />
+                <Route path="categories/all" element={<CategoryHome />} />
+                <Route path="category" element={<CategoryDetail />} />
                 {/* <Route path="bootcamp-training" element={<TrainingBootcamp />} /> */}
                 <Route path="bootcamp-training" element={<NewBootcampDetailsComponent />} />
                 <Route path="bootcamp" element={<Bootcamp />} />
