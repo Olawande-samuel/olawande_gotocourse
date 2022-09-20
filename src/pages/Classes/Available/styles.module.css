@@ -32,18 +32,24 @@
     background-position: right bottom;
     background-size: contain;
     background-repeat: no-repeat;
-    position: absolute;
+    height: 100%;
 }
 
 
 .top_right_girl {
     object-fit: contain;
+    height: 100%;
+
 }
 
 .classes_top_left {
     flex: 0.55;
     padding: 20px;
     padding-left: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 
@@ -57,12 +63,12 @@
 
 
 .classes_top_left p {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 400;
     color: #0C2191;
-    line-height: 50px;
     letter-spacing: 1px;
     /* width: 80%; */
+    width: 70%;
 }
 
 .classes_body {
@@ -368,18 +374,26 @@
     }
     .classes_top_left h2 {
         width: 80%;
-        font-size: 26px;
+        margin: auto;
+        font-size: 32px;
+        text-align: center;
     }
     .classes_top_left p {
         font-size: 16px;
+        text-align: center;
+        margin: auto;
+
     }
 
     .classes_top {
-        flex-direction: column;
+        flex-direction: column-reverse;
     }
 
     .classes_top_right {
         width: 100%;
+        min-height: 350px;
+        display: flex;
+        justify-content: center;
     }
 }
 
@@ -387,11 +401,14 @@
 @media screen and (max-width: 900px){
     .classes_top_left h2 {
         width: 100%;
-        font-size: 24px;
+        font-size: 32px;
         line-height: 40px;
+        text-align: center;
     }
     .classes_top_left p {
         font-size: 14px;
+        text-align: center;
+        margin: auto;
     }
 }
 @media screen and (max-width: 835px){
@@ -461,12 +478,15 @@
     }
 
     .classes_top_left h2 {
-        font-size: 24px;
+        font-size: 30px;
         line-height: 30px;
+        text-align: center;
     }
     
     .classes_top_left p {
         font-size: 14px;
+        text-align: center;
+        width: 100%;
     }
 
     .classes_top_left {

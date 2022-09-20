@@ -135,27 +135,27 @@ export const Card = ({ item,type }) => {
 function Mentors(){
   return(
     <section className="newMentors">
+
         <div className="newMentors_content">
+        <div className="container">
+
           <header className="text-center">
             <h3 className="title" >Find Your Mentor, Accelerate Your Success</h3>
             <p className="sub_title mx-auto" style={{width:"min(100% - 1rem, 700px)"}}>
             Gotocourse mentors are experts, and industry rock stars with years of experience that are excited to share their tricks, tools, insights, and experience with you.           </p>
           </header>
-          <div className="newMentors_content_mid">
+          {/* <div className="newMentors_content_mid">
             <div className="newMentors_text">
               <h4>Connect with Celebrity mentors, A-list mentors and Technical experts on Gotocourse</h4>
-              <div className="mt-4 d-flex justify-content-center">
-                <Link to="lounge" className="d-inline-flex">
-                  <button className="button p-2 px-3" style={{background:"var(--theme-orange"}}>Explore Mentors Lounge</button>
-                </Link>
-              </div>
             </div>
             <div className="newMentors_vid ">
               <img src={mentorsVid} alt="" />
             </div>
+          </div> */}
           </div>
-          <div className="newMentors_content_bottom mt-4">
-              <small className="bottom_title d-block text-center fw-bolder mb-3">Connect with</small>
+
+          <div className="newMentors_content_bottom mt-5">
+              <h4 className="bottom_title d-block text-center fw-bolder mb-4">Connect with</h4>
               <div className="newMentors_content_bottom_card">
                 <Link to="/lounge" className="d-inline-flex">
                 <div className="newMentors_content_bottom_cards">
@@ -169,7 +169,7 @@ function Mentors(){
                 <div className="newMentors_content_bottom_cards">
                   <div className="bottom_card d-flex">
                     <GiStarMedal color="#2F88FF" />
-                    <small>A-LIST MENTORS</small>
+                    <small>CAREER ADVISORS</small>
                   </div>
                 </div>
                 </Link>
@@ -182,8 +182,13 @@ function Mentors(){
                 </div>
                 </Link>
               </div> 
+              <div className="mt-5 d-flex justify-content-center">
+                <Link to="lounge" className="d-inline-flex">
+                  <button className="button p-2 px-5" style={{background:"var(--theme-orange)", borderRadius:"4px"}}>Explore Mentors Lounge</button>
+                </Link>
+              </div>
           </div>
-        </div>
+      </div>
     </section>
   )
 }
