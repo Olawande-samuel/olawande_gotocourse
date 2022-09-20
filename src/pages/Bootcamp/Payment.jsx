@@ -340,9 +340,10 @@ export const BootcampPayment = () => {
   );
 };
 
-function PaymentModal({ token }) {
 
-  const options = { 
+
+export function PaymentModal({ token }) {
+  const options = {
     clientSecret: token,
   };
   return (
