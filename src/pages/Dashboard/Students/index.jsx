@@ -30,6 +30,7 @@ import { Box, Modal } from "@mui/material";
 import ChatComponent from "../Admin/Chat";
 
 import LogoutButton from "../../../components/LogoutButton";
+import { PaymentModal } from "../../Bootcamp/Payment";
 
 
 
@@ -919,12 +920,14 @@ export function History() {
     )
 }
 export function Fees() {
-    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees, fetchStudentFees,payStudentFees } } = useAuth();
+    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees, fetchStudentFees, payStudentFees } } = useAuth();
     const { getItem } = useLocalStorage();
     const [course, setCourse] = useState([])
     let userdata = getItem(KEY);
     const [fees, setFees] = useState([]);
     const ref = useRef(false)
+    const [openPaymentModal, setOpenPaymentModal] = useState(false)
+    const [stripeId, setStripeId] = useState("")
 
     // console.log("my userdata", userdata);
 
@@ -932,7 +935,7 @@ export function Fees() {
 
     const payNumber = ["1st", "2nd", "3rd", "4th"]
 
-    const getmyFees  =  async (data) => {
+    const getmyFees = async (data) => {
         setGeneralState({ ...generalState, loading: true })
         try {
             const res = await fetchStudentFees(data);
@@ -1053,22 +1056,22 @@ export function Fees() {
 
     const filterpending = (data) => {
         console.log("filter", data);
-       let result = data.filter(c => c.status === "pending").reduce((sum, current) => sum + current.amount, 0)
-    //    console.log({result});
+        let result = data.filter(c => c.status === "pending").reduce((sum, current) => sum + current.amount, 0)
+           console.log({result});
 
-       return result
+        return result
     }
 
 
     const filterpaid = (data) => {
         console.log("filter", data);
-       let result = data.filter(c => c.status === "paid").reduce((sum, current) => sum + current.amount, 0)
-    //    console.log({result});
+        let result = data.filter(c => c.status === "paid").reduce((sum, current) => sum + current.amount, 0)
+        //    console.log({result});
 
-       return result
+        return result
     }
 
-    const handlePay = async ( paymentId) => {
+    const handlePay = async (paymentId) => {
         // console.log({paymentId});
         // console.log("pay user" , userdata.token);
 
@@ -1089,7 +1092,9 @@ export function Fees() {
                     draggable: true,
                     progress: undefined,
                 });
-            getmyFees(userdata.token)
+                // getmyFees(userdata.token)
+                setStripeId(res.data.clientSecret)
+                setOpenPaymentModal(true)
 
 
             }
@@ -1129,8 +1134,9 @@ export function Fees() {
                                 </div>
 
 
-                                {d.payments.length > 1 ? d.payments.map((pay, i) => (
-                                    <>
+                                {d.payments.length > 1 ? d.payments.map((pay, i) => {
+                                    console.log("status", pay.status === "paid");
+                                    return (<>
                                         <div className={clsx.payment__card}>
                                             <p>{payNumber[i]} installment</p>
                                             <div className={clsx.payment__fee}>
@@ -1142,13 +1148,13 @@ export function Fees() {
                                                 <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
                                             </div>
                                             <div className={clsx.payment__button}>
-                                                <button className={clsx.bgred} disabled={pay.status === "paid"} onClick={() => handlePay(pay._id)}>pay</button>
+                                                <button className={pay.status === "paid" ? clsx.bggreen :clsx.bgred} disabled={pay.status === "paid"} onClick={() => handlePay(pay._id)}>{pay.status === "paid" ? "paid" : "pay"} </button>
                                             </div>
                                         </div>
 
 
-                                    </>
-                                )) : d.payments.length === 1 ? d.payments.map((pay, i) => (
+                                    </>)
+                                }) : d.payments.length === 1 ? d.payments.map((pay, i) => (
                                     <>
                                         <div className={clsx.payment__card}>
                                             <p>Full Payment</p>
@@ -1171,7 +1177,6 @@ export function Fees() {
                                 ))
                                     :
                                     <>
-                                        {/* <h2>payment history empty</h2> */}
                                     </>
                                 }
 
@@ -1181,7 +1186,7 @@ export function Fees() {
                                             <div className={clsx.payment__title}>
                                                 <p>Outstanding</p>
                                                 {/* <span>${d.amount}</span> */}
-                                                <span>${d.coursePrice - filterpending(d.payments)}</span>
+                                                <span>${filterpending(d.payments)}</span>
                                             </div>
 
                                             <div className={clsx.payment__title}>
@@ -1206,91 +1211,7 @@ export function Fees() {
 
                     }
 
-                    {/* {
-                                    d.package === "COHORT" ? (
-                                        <>
-                                            <div className={clsx.payment__card}>
-                                                <p>1st installment</p>
-                                                <div className={clsx.payment__fee}>
-                                                    <span>Fee</span>
-                                                    <span className={clsx.clred}>${d.first}</span>
-                                                </div>
-                                                <div className={clsx.payment__fee}>
-                                                    <span>Due Date:</span>
-                                                    <span>{d.firstDue}</span>
-                                                </div>
-                                                <div className={clsx.payment__button}>
-                                                    <button className={clsx.bgred}>pay</button>
-                                                </div>
-                                            </div>
-
-                                            <div className={clsx.payment__card}>
-                                                <p>2nd installment</p>
-                                                <div className={clsx.payment__fee}>
-                                                    <span>Fee</span>
-                                                    <span className={clsx.clgreen}>${d.second}</span>
-                                                </div>
-                                                <div className={clsx.payment__fee}>
-                                                    <span>Due Date:</span>
-                                                    <span>{d.secondDue}</span>
-                                                </div>
-                                                <div className={clsx.payment__button}>
-                                                    <button className={clsx.bggreen}>pay</button>
-                                                </div>
-                                            </div>
-
-                                            <div className={clsx.payment__card}>
-                                                <p>3rd installment</p>
-                                                <div className={clsx.payment__fee}>
-                                                    <span>Fee</span>
-                                                    <span className={clsx.clgreen}>${d.third}</span>
-                                                </div>
-                                                <div className={clsx.payment__fee}>
-                                                    <span>Due Date:</span>
-                                                    <span>{d.thirdDue}</span>
-                                                </div>
-                                                <div className={clsx.payment__button}>
-                                                    <button className={clsx.bggreen}>pay</button>
-                                                </div>
-                                            </div>
-
-                                            <div className={clsx.payment__card}>
-                                                <p>4th installment</p>
-                                                <div className={clsx.payment__fee}>
-                                                    <span>Fee</span>
-                                                    <span className={clsx.clgreen}>${d.third}</span>
-                                                </div>
-                                                <div className={clsx.payment__fee}>
-                                                    <span>Due Date:</span>
-                                                    <span>{d.thirdDue}</span>
-                                                </div>
-                                                <div className={clsx.payment__button}>
-                                                    <button className={clsx.bggreen}>pay</button>
-                                                </div>
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className={clsx.payment__card}>
-                                                <p>Full Payment</p>
-                                                <div className={clsx.payment__fee}>
-                                                    <span>Fee</span>
-                                                    <span className={clsx.clred}>${d.first}</span>
-                                                </div>
-                                                <div className={clsx.payment__fee}>
-                                                    <span>Due Date:</span>
-                                                    <span>{d.firstDue}</span>
-                                                </div>
-                                                <div className={clsx.payment__button}>
-                                                    <button className={clsx.bggreen}>Full Payment</button>
-                                                </div>
-                                            </div>
-
-                                            <div className={clsx.payment__empty}></div>
-                                            <div className={clsx.payment__empty}></div>
-                                        </>
-                                    )
-                                } */}
+                    {openPaymentModal && <PaymentModal token={stripeId} />}
 
                 </div>
             </div>
