@@ -6,7 +6,9 @@ import { Link } from "react-router-dom";
 import {MdNavigateNext} from "react-icons/md";
 import {BiArrowToRight} from "react-icons/bi";
 import {FaDownload} from "react-icons/fa";
-import {Breadcrumbs} from "@mui/material";
+import {Breadcrumbs, Skeleton} from "@mui/material";
+import { Navigation, Autoplay, Pagination, Scrollbar, A11y } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 
 
@@ -91,7 +93,7 @@ const DetailLeft = styled.div`
 const DetailDescription = styled.p`
     font-weight: 400;
     color: #070F18;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 32px;
     width: 95%;
 `;
@@ -106,7 +108,9 @@ const CareerCard = styled.div`
     background-color: white;
     border-radius: 10px;
 
+
     & p {
+        font-size: 16px;
     }
 
     & ul {
@@ -115,9 +119,10 @@ const CareerCard = styled.div`
         list-style-type: none;
 
         & li {
-            line-height: 2;
+            line-height: 1.8;
             display: flex;
             align-items: center;
+            font-size: 14px;
         }
     }
 `
@@ -235,6 +240,7 @@ const CourseCard = styled.div`
     padding: 5px;
     margin: 15px;
     cursor: pointer;
+    width: 300px;
 `;
 
 const CourseImageContainer = styled.div`
@@ -251,7 +257,7 @@ const CourseImageContainer = styled.div`
 const CourseBody = styled.div`
     & h4 {
         font-weight: 800;
-        font-size: 22px;
+        font-size: 20px;
         line-height: 28px;
         margin-bottom: 20px;
     }
@@ -333,10 +339,9 @@ const Detail = () => {
 
     return (
         <Layout background="category">
-            {loading && <Loader />}
-            <ToastContainer />
-            {details && 
-            (<DetailContainer>
+            {/* {loading && <Loader />} */}
+            <ToastContainer /> 
+            <DetailContainer>
                 <CategoryTop>
                     <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
                         <BreadcrumbLink to="/">
@@ -345,30 +350,42 @@ const Detail = () => {
                         <BreadcrumbLink to="/categories/all">
                             Categories
                         </BreadcrumbLink>
-                        <BreadcrumbLink $isCurrentPage={true} to="!">{capitalize(details?.name)}</BreadcrumbLink>
+                        <BreadcrumbLink $isCurrentPage={true} to="#">{details ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</BreadcrumbLink>
                     </Breadcrumbs>
                 </CategoryTop>
                 <DetailBody>
                     <DetailImage style={{background: `linear-gradient(1.66deg, rgba(44, 43, 44, 0.83) 24.55%, rgba(12, 33, 145, 0) 115.79%), url(${details?.bannerImg})`}}>
-                        <h2>{capitalize(details?.name)}</h2>
+                        <h2>{details ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</h2>
                     </DetailImage>
                     <DetailBodyContent>
                         <DetailLeft>
                             <DetailDescription>
-                                {details?.description}
+                                {details ? details.description : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}
                             </DetailDescription>
 
                             <NicheContainer>
-                                <Header>{capitalize(details?.name)} Niche</Header>
-                                <p>{details?.nicheDescription}</p>
+                                <Header>{details ? `${capitalize(details?.name)} Niche` : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</Header>
+                                <p>{details ? details.nicheDescription : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</p>
                                 <Niches>
                                     {
-                                        details?.nicheItems.map(({name, description}, i) => (
-                                            <Niche key={i}>
+                                        details ? 
+                                        details.nicheItems.map(({name, description}, i) => (
+                                        <Niche key={i}>
                                                 <Dot />
                                                 <NicheBody>
                                                     <h6>{name}</h6>
                                                     <p>{description}</p>
+                                                </NicheBody>
+                                        </Niche>)) : Array(4).fill(undefined).map((_, i) => (
+                                            <Niche key={i}>
+                                                <Dot />
+                                                <NicheBody>
+                                                <Skeleton animation="wave" variant="rectangular" width={"90%"} >
+                                                    <h6>.</h6>
+                                                </Skeleton>
+                                                <Skeleton animation="wave" variant="rectangular" width={"90%"} >
+                                                    <p>.</p>
+                                                </Skeleton>
                                                 </NicheBody>
                                             </Niche>
                                         ))
@@ -379,13 +396,18 @@ const Detail = () => {
                         <DetailRight>
                             <CareerCard>
                                 <Header>Career Prospect</Header>
-                                <p>{details?.career}</p>
+                                <p>{details ? details.career : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={50} />}</p>
                                 <ul>
                                     {
-                                        details?.careerList.map(({name, _id}, i) => (
+                                        details ? details.careerList.map(({name, _id}, i) => (
                                             <li key={i}>
                                                 <Dot />
                                                 {name}
+                                            </li>
+                                        )) : Array(4).fill(undefined).map((_, i) => (
+                                            <li key={i}>
+                                                <Dot />
+                                                <Skeleton animation="wave" variant="rectangular" width={"100%"} height={50} />
                                             </li>
                                         ))
                                     }
@@ -397,11 +419,42 @@ const Detail = () => {
                         Download Curriculum <FaDownload />
                     </DownloadButton>
                     <DetailCourseContainer>
-                        <h2>{capitalize(details?.name)} Courses</h2>
-                        <p>{details?.niche}</p>
+                        <h2>{details ? `${capitalize(details?.name)} Courses` : <Skeleton animation="wave" variant="rectangular" width={300} height={30} /> }</h2>
+                        <p>{details ? details.nicheDescription : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</p>
                         <DetailCourses>
+                          <Swiper
+                            // install Swiper modules
+                            modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+                            loop={true}
+                            speed={1500}
+                            autoplay={{delay:2500}}
+                            spaceBetween={0}
+                            slidesPerView={1}
+                            pagination={{ clickable: true }}
+                            scrollbar={{ draggable: true }}
+                            breakpoints={{
+                            320: {
+                                slidesPerView: 1,
+                                spaceBetween: 0,
+                            },
+                            // when window width is >= 640px
+                            575: {
+                                slidesPerView: 2,
+                                spaceBetween: 0,
+                            },
+                            700: {
+                                slidesPerView: 2.5,
+                                spaceBetween: 0,
+                            },
+                            1024: {
+                                slidesPerView: 3.5,
+                                spaceBetween: 5,
+                            },
+                            }}
+                            >
                             {
-                                courses.length && courses.map(({courseImg, endDate, startDate, name}) => (
+                                courses.length ? courses.map(({courseImg, endDate, startDate, name}, i) => (
+                                    <SwiperSlide key={i}>
                                     <CourseCard>
                                         <CourseImageContainer>
                                             <img src={courseImg} alt="Course Image" />
@@ -414,15 +467,38 @@ const Detail = () => {
                                             </CourseDuration>
                                         </CourseBody>
                                     </CourseCard>
+                                    </SwiperSlide>
+                                )) : Array(4).fill(undefined).map((_, i) => (
+                                    <SwiperSlide key={i}>
+                                    <CourseCard>
+                                        <CourseImageContainer>
+                                            <Skeleton animation="wave" variant="rectangular" width={"100%"} height={"100%"} />
+                                        </CourseImageContainer>
+                                        <CourseBody>
+                                            <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30}>
+                                                <h4>.</h4>
+                                            </Skeleton>
+                                            <CourseDuration>
+                                                <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30}>
+                                                    <h6>.</h6>
+                                                </Skeleton>
+                                                <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30}>
+                                                    <p>.</p>
+                                                </Skeleton>
+                                            </CourseDuration>
+                                        </CourseBody>
+                                    </CourseCard>
+                                    </SwiperSlide>
                                 ))
                             }
+                         </Swiper>
                         </DetailCourses>
                         <Link to="/courses">
                             View more <BiArrowToRight />
                         </Link>
                     </DetailCourseContainer>
                 </DetailBody>
-            </DetailContainer>)}
+            </DetailContainer>
         </Layout>
     )
 }
