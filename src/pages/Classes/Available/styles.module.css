@@ -185,6 +185,7 @@
     font-weight: 700;
 }
 .bootcamp_price h5 {
+    color: var(--theme-orange);
     text-align: end;
 }
 .bootcamp_top p {
@@ -316,6 +317,7 @@
 .classes_start {
     display: flex;
     align-items: center;
+    padding-block: 2rem;
 }
 
 .classes_start > div {
@@ -329,6 +331,12 @@
 
 .start_left img {
     max-width: 100%;
+}
+.start_right h3 {
+    font-size: clamp(1.75rem, 1.5714rem + 0.8929vw, 2.375rem);
+    color: var(--theme-blue);
+    font-weight: 700;
+    margin-bottom: 2rem;
 }
 
 .start_right button {
@@ -344,13 +352,7 @@
     .classes_start > div {
         flex-direction: row;
         align-items: center;
-        gap: 2rem;
-    }
-    .start_right h3 {
-        font-size: clamp(2.125rem, 1.875rem + 1.25vw, 2.7rem);
-        color: var(--theme-blue);
-        font-weight: 700;
-        margin-bottom: 2rem;
+        gap: 0;
     }
 }
 

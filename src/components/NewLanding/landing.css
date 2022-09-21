@@ -232,13 +232,15 @@
 
 
 .stats {
-  width: min(100% - .2rem, 900px);
+  width: min(100% - .2rem, 800px);
   margin: auto;
-  margin-top: 2rem;
-  padding: 1rem;
-  min-height: 150px;
-  background: rgba(153, 153, 153, 0.23);
+  margin-top: 0;
+  padding: .6rem;
+  min-height: 120px;
+  background: rgba(255, 242, 241, 0.79);
   border-radius: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
   z-index: 2;
   display: flex;
   flex-direction: column;

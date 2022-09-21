@@ -18,7 +18,7 @@ export const Bootcamp = ({description, duration, bootcampImg, endDate, startDate
 
     return(
         <div className={clsx.bootcamp}
-        //  onClick={navigateToDetails}
+         onClick={navigateToDetails}
          >
             <div className={clsx.bootcamp_container}>
                 <div className={clsx.image_wrapper}>
