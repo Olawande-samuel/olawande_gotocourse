@@ -13,7 +13,7 @@ import AdminDashboard from "./pages/Dashboard/Admin/Dashboard";
 
 
 import {Dashboard as StudentDashboard,Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Fees as StudentFees,
-   Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat, Notification as StudentNotifications} from "./pages/Dashboard/Students";
+   Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat, Notification as StudentNotifications, MyClasses} from "./pages/Dashboard/Students";
    
 import StudentHelp from "./pages/Dashboard/Students/Help";
 import StudentReferral from "./pages/Dashboard/Students/Referral";
@@ -132,7 +132,7 @@ function App() {
                 <Route path="user-onboarding" element={<UserOnBoarding />} />   
 
                 <Route path="classes" element={<Out />}>
-                  <Route path="available" element={<AvailableClasses />} />
+                  <Route index element={<AvailableClasses />} />
                   <Route path="class" element={<NewBootcampDetailsComponent />} />
                   <Route path="class/payment" element={<BootcampPayment />} />
                 </Route>         
@@ -158,6 +158,7 @@ function App() {
                   <Route path="profile" element={<StudentProfile  />} />
                   <Route path="classes" element={<StudentClasses  />} />
                   <Route path="bootcamps" element={<StudentBootcamps  />} />
+                  <Route path="myclasses" element={<MyClasses  />} />
                   <Route path="profile/edit" element={<StudentEdit  />} />
                   <Route path="courses" element={<StudentCourses />} />
                   <Route path="wishlist" element={<Wishlist />} />

@@ -280,7 +280,7 @@ function BootcampCard({data}){
           <div className="others"></div>
         </div>
         <div className="d-flex justify-content-center">
-          <Link className="d-inline-flex" to="classes/available">
+          <Link className="d-inline-flex" to="classes">
             <button className="button newBootcamp_classes_button">Browse all classes</button>
           </Link>
         </div>

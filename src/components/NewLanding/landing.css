@@ -181,7 +181,7 @@
   .newBootcamp,
   .newHero {
     height: 100% !important;
-    margin-bottom: 2rem;
+    /* margin-bottom: 2rem; */
   }
   .newHero_left-userSignin {
     width: 100%;
@@ -287,16 +287,7 @@
    justify-content: center;
   }
 }
-@media (max-width: 600px) {
-  .stats {
-   margin-top:-8%;
-  }
-}
-@media (max-width: 450px) {
-  .stats {
-   margin-top:-15%;
-  }
-}
+
 
 /* CATEGORIES */
 .newCategories_header_wrapper {
