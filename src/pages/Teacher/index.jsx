@@ -8,7 +8,9 @@ import { motion } from "framer-motion"
 import Layout from "../../components/Layout";
 import { Jumbotron, Reviews } from "./components";
 import clsx from "./styles.module.css";
-import img from "../../images/bola.png";
+// import img from "../../images/bola.png";
+import aisha from "../../images/aisha.png";
+import steph from "../../images/steph.png";
 import { ScrollToTop } from "../Courses"
 import { FaqComponent } from "../../components/Faq";
 import classroom from "../../images/classroom_management.png";
@@ -458,15 +460,15 @@ export const Home = () => {
     const reviews = [
         {
             review: "It's not a fluke when I say that I've had the best experience on Gotocourse, after teaching on a few other platforms before. The administration is really accommodating and doesn't stifle my creative process. If you want a space where you can do what you truly love and still earn good money, Gotocourse is where I recommend!",
-            avatar: img,
-            name: "Ope",
-            location: "Lagos, Nigeria"
+            avatar: aisha,
+            name: "Aisha",
+            location: "Mumbai, India"
         },
         {
             review: "As an IT expert who specializes in cybersecurity, I didn't start out wanting to be a teacher. However, when I learned that I could share my knowledge and develop courses at Gotocourse which I could also monetize, I jumped at the opportunity, and the journey has been a lot of fun. My love for the process of knowledge transfer has been greatly facilitated by the platform. The experience has been worth a while, thank you Gotocourse.",
-            avatar: img,
-            name: "James",
-            location: "Houston, Texas"
+            avatar: steph,
+            name: "Stephanie",
+            location: "Ontario, Canada"
         },
     ]
 
