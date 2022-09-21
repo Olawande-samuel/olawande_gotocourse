@@ -17,26 +17,37 @@ export const Bootcamp = ({description, duration, bootcampImg, endDate, startDate
     }
 
     return(
-        <div className={clsx.bootcamp} onClick={navigateToDetails}>
-            <div className={clsx.bootcamp_left}>
-                <img src={bootcampImg} alt={title} />
-                <div className={clsx.bootcamp_left_meta}>
-                    <h3>{title}</h3>
-                    <p>{description}</p>
-                    <div className={clsx.left_meta}>
+        <div className={clsx.bootcamp}
+         onClick={navigateToDetails}
+         >
+            <div className={clsx.bootcamp_container}>
+                <div className={clsx.image_wrapper}>
+                    <img src={bootcampImg} alt={title} />
+                </div>
+                <div className={clsx.bootcamp_container_meta}>
+                    <div className={clsx.bootcamp_top}>
+                        <div>
+                            <h5>{title}</h5>
+                            <p>{description}</p>
+                        </div>
+                        <div className={clsx.bootcamp_price}>
+                            <h5>{new Intl.NumberFormat('en-us', {style: 'currency', currency: 'USD'}).format(price).split(".")[0]}</h5>
+                        </div>
+                    </div>
+                    <div className={clsx.bootcamp_bottom}>
                         <span className={clsx.meta_left}>
-                            <h4>Duration</h4>
+                            <h6>Duration</h6>
                             <p>{duration}</p>
                         </span>
                         <span className={clsx.meta_right}>
-                            <h4>Date</h4>
+                            <h6>Date</h6>
                             <p>{getDate(startDate)} - {getDate(endDate)}</p>
                         </span>
+                        <div className={`ms-auto ${clsx.boot_button}`}>
+                            <button className="button p-2 ">Learn More</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className={clsx.bootcamp_right}>
-                <h2>{new Intl.NumberFormat('en-us', {style: 'currency', currency: 'USD'}).format(price).split(".")[0]}</h2>
             </div>
         </div>
     )

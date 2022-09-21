@@ -54,7 +54,7 @@ const Navbar = ({ background }) => {
 
   const celebRoute = location.pathname.split("/")[1] === "lounge";
   const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";
-  const landing = location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] ==="become-a-teacher";
+  const landing = location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] ==="become-a-teacher" || location.pathname.split("/")[1] ==="classes";
   function showDrop() { }
   return (
     <nav
