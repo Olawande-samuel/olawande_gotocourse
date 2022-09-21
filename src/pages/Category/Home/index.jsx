@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {MdNavigateNext} from "react-icons/md";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { Breadcrumbs } from "@mui/material";
+import { Breadcrumbs, Skeleton } from "@mui/material";
 
 
 
@@ -37,7 +37,7 @@ const CategoryTop = styled.div`
 
 const BreadcrumbLink = styled(Link)`
     color: ${props => props.$isCurrentPage ? '#0C2191' : '#666363'};
-    font-weight: 700;
+    font-weight: 400;
     font-size: 1rem;
     cursor: ${(props) => props.$isCurrentPage ? 'not-allowed': 'pointer'};
 
@@ -80,7 +80,7 @@ const SearchButton = styled.button`
 
 const CategoryBody = styled.div`
     width: 100%;
-    padding: 20px;
+    padding: 0px;
     display: grid;
     grid-template-columns: 1fr;
 `
@@ -89,8 +89,8 @@ const Card = styled.div`
     width: 100%;
     display: flex;
     align-items: flex-start;
-    padding: 20px;
-    min-height: calc(319px + 40px);
+    padding: 10px;
+    height: calc(260px + 40px);
 `
 
 const CardImageContainer = styled.div`
@@ -112,7 +112,7 @@ const CardBody = styled.div`
     flex-direction: column;
 
     & h2 {
-        font-size: 30px;
+        font-size: 24px;
         color: #0C2191;
         font-weight: 700;
         text-transform: uppercase;
@@ -121,9 +121,9 @@ const CardBody = styled.div`
 
     & p {
         color: #070F18;
-        font-size: 14px;
-        line-height:32px;
-        margin-bottom: 50px;
+        font-size: 13px;
+        line-height:26px;
+        margin-bottom: 30px;
         font-style: normal;
     }
 
@@ -133,8 +133,8 @@ const CardBody = styled.div`
         color: white;
         border-radius: 10px;
         border: none;
-        padding: 15px 30px;
-        font-size: 0.85rem;
+        padding: 10px 20px;
+        font-size: 0.75rem;
     }
 `
 
@@ -190,7 +190,7 @@ const Category = () => {
 
     return (
         <Layout background="category">
-            {loading && <Loader />}
+            {/* {loading && <Loader />} */}
             <ToastContainer />
             <CategoryContainer>
                 <CategoryTop>
@@ -198,7 +198,7 @@ const Category = () => {
                         <BreadcrumbLink to="/">
                             Home
                         </BreadcrumbLink>
-                        <BreadcrumbLink to="!" $isCurrentPage={true}>
+                        <BreadcrumbLink to="#" $isCurrentPage={true}>
                             Category
                         </BreadcrumbLink>
                     </Breadcrumbs>
@@ -210,9 +210,11 @@ const Category = () => {
 
                 <CategoryBody>
                     {
-                        categories.map(({bannerImg, description, name}, i) => (
+                        categories.length !== 0 ? categories.map(({bannerImg, description, name}, i) => (
                             <CategoryCard key={i} image={bannerImg} description={description} 
                             title={name} separator={(categories.length - 1) === i ? false : true} />
+                        )) : Array(4).fill(undefined).map((_, i) => (
+                            <Skeleton sx={{marginBottom: 10}} animation="wave" key={i} variant="rectangular" width={"100%"} height={350} />
                         ))
                     }
                 </CategoryBody>
