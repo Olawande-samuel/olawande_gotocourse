@@ -1092,9 +1092,10 @@ export function Fees() {
                     draggable: true,
                     progress: undefined,
                 });
-                // getmyFees(userdata.token)
+                
                 setStripeId(res.data.clientSecret)
                 setOpenPaymentModal(true)
+                getmyFees(userdata.token)
 
 
             }

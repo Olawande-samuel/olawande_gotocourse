@@ -13,6 +13,7 @@ import { AdvancedError } from "../../../classes";
 import img from "../../../images/bola.png";
 import boySitting from "../../../images/boy_sitting.png";
 import { Link } from "react-router-dom";
+import PaginatedClasses from "./Paginated";
 
 
 const reviews = [
@@ -71,10 +72,10 @@ const tabs = ["All Classes",
 
 
 const Available = () => {
-    const {otherFunctions: {fetchBootcamps}} = useAuth();
     const [activeTab, setActiveTab] = useState(0);
     const [loading, setLoading] = useState(true);
     const [bootcamps, setBootcamps] = useState([]);
+    const {otherFunctions: {fetchBootcamps}} = useAuth();
     useEffectOnMount(() => {
         console.log('Available classes showing');
         (async() => {
@@ -104,57 +105,58 @@ const Available = () => {
     return (
         <Layout>
             <div className={clsx.available_classes}>
-                <div className={clsx.classes_top}>
-                    <div className={clsx.classes_top_left}>
-                        <h2>We’ve got all you need in our comprehensive course catalog </h2>
-                        <p>
-                            Choose from our available classes with new additions published regularly
-                        </p>
-                    </div>
-                    <div className={clsx.classes_top_right}>
-                        <div className={clsx.top_right_layout}>
-                            <img className={clsx.top_right_girl} src={topGirl} alt="Top Girl" />
+                    <div className={clsx.classes_top}>
+                        <div className="container">
+                            <div className={clsx.classes_hero}>
+                            <div className={clsx.classes_top_left}>
+                                <h2>We’ve got all you need in our comprehensive course catalog </h2>
+                                <p>
+                                    Choose from our available classes with new additions published regularly
+                                </p>
+                            </div>
+                            <div className={clsx.classes_top_right}>
+                                <div className={clsx.top_right_layout}>
+                                    <img className={clsx.top_right_girl} src={topGirl} alt="Top Girl" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
                 <div className={clsx.classes_body}>
-                    <h2>We’ve got all you need in our comprehensive course catalog</h2>
-                    <p>Choose from our available classes with new additions published regularly</p>
-                    <div className={clsx.tabs}>
-                        {
-                            tabs.map((el, i) => (
-                                <span key={i} onClick={e => switchTab(e, i)} className={activeTab === i ? clsx.active_tab : clsx.tab}>
-                                    {el}
-                                </span>
-                            ))
-                        }
-                    </div>
-                    <div className={clsx.bootcamps}>
-                        {
-                            bootcamps.map((item, i) => (
-                                <Bootcamp key={i} {...item} all={item} />
-                            ))
-                        }
-                    </div>
-                    <div className={clsx.students}>
-                        <h3>Students are viewing</h3>
-                        <div className={clsx.student_views}>
+                    <div className="container">
+                        <div className={clsx.tabs}>
                             {
-                                bootcamps.reverse().map(({duration, bootcampImg, endDate, startDate, title, price}, i) => (
-                                    <StudentViews key={i} duration={duration} price={price} image={bootcampImg} endDate={endDate} startDate={startDate} title={title} />
+                                tabs.map((el, i) => (
+                                    <span key={i} onClick={e => switchTab(e, i)} className={activeTab === i ? clsx.active_tab : clsx.tab}>
+                                        {el}
+                                    </span>
                                 ))
                             }
                         </div>
-                    </div>
-                    <Reviews reviews={reviews} bgColor="#fff" />
-                    <div className={clsx.classes_start}>
-                        <img src={boySitting} alt="Boy Sitting" />
-                        <div className={clsx.start_right}>
-                            <h3>Start and accelerate your tech career through a great learning experience</h3>
-                            <Link to="/signup">
-                                <button>Register Now</button>
-                            </Link>
+                       <PaginatedClasses list={bootcamps} />
+                        {/* <div className={clsx.students}>
+                            <h3>Students are viewing</h3>
+                            <div className={clsx.student_views}>
+                                {
+                                    bootcamps.reverse().map(({duration, bootcampImg, endDate, startDate, title, price}, i) => (
+                                        <StudentViews key={i} duration={duration} price={price} image={bootcampImg} endDate={endDate} startDate={startDate} title={title} />
+                                    ))
+                                }
+                            </div>
+                        </div> */}
+                        {/* <Reviews reviews={reviews} bgColor="#fff" /> */}
+                        <div className={clsx.classes_start}>
+                            <div className="container">
+                                <div className={clsx.start_left}>
+                                    <img src={boySitting} alt="Boy Sitting" />
+                                </div>
+                                <div className={clsx.start_right}>
+                                    <h3>Start and accelerate your tech career through a great learning experience</h3>
+                                    <Link to="/signup">
+                                        <button>Register Now</button>
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -165,5 +167,15 @@ const Available = () => {
 
 
 
-
+export function ClassLists({bootcamps}){
+    return (
+        <div className={clsx.bootcamps}>
+        {
+            bootcamps?.map((item, i) => (
+                <Bootcamp key={i} {...item} all={item} />
+            ))
+        }
+    </div>
+    )
+}
 export default Available;
