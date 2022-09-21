@@ -104,7 +104,7 @@ const Footer = () => {
   const scrollWithOffset = (el)=>{
     const yCoord = el.getBoundingClientRect().top + window.pageYOffset;
     const yOffset = -80;
-    window.scrollTo({top: yCoord + yOffset, behaviou:"smooth"})
+    window.scrollTo({top: yCoord + yOffset, behaviour:"smooth"})
   }
   
   return (

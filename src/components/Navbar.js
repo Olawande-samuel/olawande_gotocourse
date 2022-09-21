@@ -53,7 +53,8 @@ const Navbar = ({ background }) => {
   }, []);
 
   const celebRoute = location.pathname.split("/")[1] === "lounge";
-  const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";
+  const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";  
+  const categoryRoute = background === "category";
   const landing = location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] ==="become-a-teacher" || location.pathname.split("/")[1] ==="classes";
   function showDrop() { }
   return (
@@ -62,8 +63,8 @@ const Navbar = ({ background }) => {
       section="top"
       className={`nav navbar navbar-expand-lg ${ landing ? "navbar-light" : "navbar-dark"}`}
       style={{
-        background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : landing ? "var(--blue-ish)" :"var(--theme-blue)",
-        color: confirmEmail || landing  ? "var(--theme-blue)" : "#fffff",
+        background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : landing ? "var(--blue-ish)" : categoryRoute ? "var(--white)" : "var(--theme-blue)",
+        color: confirmEmail || landing || categoryRoute ? "var(--theme-blue)" : "#fffff",
       }}
     >
       <ScrollToTop />
@@ -73,7 +74,7 @@ const Navbar = ({ background }) => {
           onClick={() => window.scrollTo(0, 0)}
           className="logo navbar-brand "
         >
-          {confirmEmail || landing ? <Logosm color="var(--theme-blue)" /> : <Logosm />}
+          {confirmEmail || landing || categoryRoute ? <Logosm color="var(--theme-blue)" /> : <Logosm />}
           <small className="d-block" style={{fontSize:"14px", color: landing ? "var(--theme-blue)" : "#fff"}}>Learn without limits</small>
         </Link>
         <button type="button" className="navbar-toggler " onClick={toggleNav}>
@@ -89,7 +90,7 @@ const Navbar = ({ background }) => {
               <li className="nav-item holder">
                 <Link className="link nav-link courses me-4" to="/categories"
                 style={{
-                  color:landing ? "var(--theme-blue)": "rgba(255, 255, 255)"
+                  color: landing ? "var(--theme-blue)": "rgba(255, 255, 255)"
                 }}
                 >
                   Categories
@@ -134,7 +135,7 @@ const Navbar = ({ background }) => {
                 <li className="nav-item d-flex align-items-center nav_link">
                   <Link to="/become-a-teacher" className="link"
                    style={{
-                    color:confirmEmail || landing ? "#0C2191" : "rgba(255, 255, 255)"
+                    color:confirmEmail || landing || categoryRoute ? "#0C2191" : "rgba(255, 255, 255)"
                   }}>
                     Become a Teacher
                   </Link>

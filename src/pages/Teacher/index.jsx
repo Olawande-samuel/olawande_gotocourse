@@ -457,22 +457,16 @@ export const Home = () => {
 
     const reviews = [
         {
-            review: "I had a wonderful experience and can confidently say that GotoCourse is the place to be as a teacher . I highly recommend them",
+            review: "It's not a fluke when I say that I've had the best experience on Gotocourse, after teaching on a few other platforms before. The administration is really accommodating and doesn't stifle my creative process. If you want a space where you can do what you truly love and still earn good money, Gotocourse is where I recommend!",
             avatar: img,
             name: "Ope",
             location: "Lagos, Nigeria"
         },
         {
-            review: "I had a wonderful experience and can confidently say that GotoCourse is the place to be as a teacher . I highly recommend them",
+            review: "As an IT expert who specializes in cybersecurity, I didn't start out wanting to be a teacher. However, when I learned that I could share my knowledge and develop courses at Gotocourse which I could also monetize, I jumped at the opportunity, and the journey has been a lot of fun. My love for the process of knowledge transfer has been greatly facilitated by the platform. The experience has been worth a while, thank you Gotocourse.",
             avatar: img,
             name: "James",
             location: "Houston, Texas"
-        },
-        {
-            review: "I had a wonderful experience and can confidently say that GotoCourse is the place to be as a teacher. I highly recommend them",
-            avatar: img,
-            name: "Ike",
-            location: "Abuja, Nigeria"
         },
     ]
 
