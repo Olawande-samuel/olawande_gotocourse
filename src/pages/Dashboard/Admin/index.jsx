@@ -7,9 +7,9 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { motion } from "framer-motion"
 import { Switch, Modal, Box, Skeleton } from "@mui/material";
 
-import {  AiOutlineDelete, AiTwotoneEdit, AiTwotoneDelete } from "react-icons/ai";
-import {FaUserLock} from "react-icons/fa";
-import {useQuery} from "@tanstack/react-query"
+import { AiOutlineDelete, AiTwotoneEdit, AiTwotoneDelete } from "react-icons/ai";
+import { FaUserLock } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query"
 
 import DOMPurify from 'dompurify';
 
@@ -38,6 +38,7 @@ import { AllEarnings } from "../Teachers/Earnings"
 import EarningsTable from "./Earnings/Table"
 import LogoutButton from "../../../components/LogoutButton";
 import { GotoDashboard } from "../Students";
+import { BiQuestionMark } from "react-icons/bi";
 
 
 
@@ -1004,11 +1005,12 @@ function Info({ title, content }) {
 export function ApproveStudent() {
   const navigate = useNavigate()
   const [data, setData] = useState(null);
+  const [kyc, setKyc] = useState({});
 
   const [loading, setLoading] = useState(false);
-  const {getItem} = useLocalStorage();
+  const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
-  const { adminTeacherFunctions: { verify, verify_pledre, addMentor},kycFunctions:{getATeacherKYC}, generalState,   generalState:{pledre}, setGeneralState, commonFunctions: {deleteUser}} = useAuth();
+  const { adminTeacherFunctions: { verify, verify_pledre, addMentor }, kycFunctions: { getATeacherKYC, getAStudentKYCById }, generalState, generalState: { pledre }, setGeneralState, commonFunctions: { deleteUser } } = useAuth();
   const info = [
     {
       title: "Courses",
@@ -1018,10 +1020,10 @@ export function ApproveStudent() {
       title: "Category",
       content: "Cybersecurity, UX, Data Analysis",
     },
-    {
-      title: "Mentorship status",
-      content: data?.userType === "mentor" ? "Assigned" : "Unassigned",
-    },
+    // {
+    //   title: "Mentorship status",
+    //   content: data?.userType === "mentor" ? "Assigned" : "Unassigned",
+    // },
   ];
 
   useEffect(() => {
@@ -1029,7 +1031,7 @@ export function ApproveStudent() {
       const teacherInfo = getItem("gotocourse-teacherDetails")
       let pledreInfo;
       console.log("getting")
-      console.log({pledre})
+      console.log({ pledre })
       try {
         if (pledre) {
           console.log(pledre)
@@ -1055,15 +1057,15 @@ export function ApproveStudent() {
     )()
   }, []);
 
-  async function deleteUserHandler(e, email){
-    try{
+  async function deleteUserHandler(e, email) {
+    try {
       setLoading(_ => true);
       let value = window.confirm("Are you sure you want to delete this user?. This process is irreversible")
-      if(!value) return;
+      if (!value) return;
       const res = await deleteUser(userdata?.token, [email]);
       console.log(res);
-      const {statusCode, message, success} = res;
-      if(!success) throw new AdvancedError(message, statusCode);
+      const { statusCode, message, success } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
       else {
         toast.success(message, {
           position: "top-right",
@@ -1076,7 +1078,7 @@ export function ApproveStudent() {
         });
         navigate(-1);
       }
-    }catch(err){
+    } catch (err) {
       toast.error(err.message, {
         position: "top-right",
         autoClose: 4000,
@@ -1086,7 +1088,7 @@ export function ApproveStudent() {
         draggable: true,
         progress: undefined,
       });
-    }finally{
+    } finally {
       setLoading(_ => false);
     }
   }
@@ -1152,8 +1154,8 @@ export function ApproveStudent() {
         else {
           // remove from pledre
           const PledRes = (data.accessPledre === true) && await pledre.deleteTeacher(data.pledre?._id)
-          console.log({PledRes})
-          setData({...data, accessPledre: !data.accessPledre})
+          console.log({ PledRes })
+          setData({ ...data, accessPledre: !data.accessPledre })
           toast.success(message, {
             position: "top-right",
             autoClose: 4000,
@@ -1209,16 +1211,16 @@ export function ApproveStudent() {
         //do somethingtype s
         localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
 
-           setData({...data, canTeach: !data?.canTeach}) 
-           toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+        setData({ ...data, canTeach: !data?.canTeach })
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
     } catch (error) {
       toast.error(error.message, {
@@ -1337,7 +1339,116 @@ export function ApproveStudent() {
   //   }
   // }
 
- 
+  console.log("mentors data", data);
+  console.log("loggged in userdata", userdata);
+
+  async function getStudentKyc(id) {
+    const userdata = getItem(KEY)
+
+    try {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: true,
+        };
+      });
+
+      const res = await getAStudentKYCById(id, userdata?.token);
+      const { message, success, statusCode } = res;
+      console.log("student res data", res.data);
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        //do somethings
+        setKyc(res.data)
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        // navigate(-1)
+      }
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    } finally {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: false,
+        };
+      });
+    }
+  }
+
+  useEffect(() => {
+    if (data) {
+      getStudentKyc(data.userId)
+    }
+
+  }, [data])
+  async function handlePledreAccess(id) {
+    // let item = {
+    //   userId: id,
+    // };
+
+    // try {
+    //   setGeneralState((old) => {
+    //     return {
+    //       ...old,
+    //       loading: true,
+    //     };
+    //   });
+
+    //   const res = await verify_pledre(item, userdata?.token);
+    //   const { message, success, statusCode } = res;
+
+
+    //   setGeneralState((old) => {
+    //     return {
+    //       ...old,
+    //       loading: false,
+    //     };
+    //   });
+
+    //   if (!success) throw new AdvancedError(message, statusCode);
+    //   else {
+    //     //do somethings
+    //     toast.success(message, {
+    //       position: "top-right",
+    //       autoClose: 4000,
+    //       hideProgressBar: true,
+    //       closeOnClick: true,
+    //       pauseOnHover: true,
+    //       draggable: true,
+    //       progress: undefined,
+    //     });
+    //     fetchStudents()
+    //   }
+    // } catch (error) {
+    //   toast.error(error.message, {
+    //     position: "top-right",
+    //     autoClose: 4000,
+    //     hideProgressBar: true,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //   });
+    // }
+  }
+  console.log("stuedent", { data });
+  console.log("stuedent", { kyc });
   return (
     <Admin header="Approval">
       {loading && <Loader />}
@@ -1360,26 +1471,8 @@ export function ApproveStudent() {
               <Info title={title} content={content} key={i} />
             ))}
 
-            
-            <div className="form-group my-3">
-              <label htmlFor="accessPledre" className="form-label generic_label">{data?.userType === "mentor" ? "Revoke Mentorship" : "Confer Mentorship"}</label>
-              <Switch onClick={(e) => conferMentorship(e, data?.userId, data?.email)} checked={data?.userType === "mentor" ? true : false} value="mentorship" />
-            </div>
-            <div className="form-group my-3">
-              <label htmlFor="accessPledre" className="form-label generic_label">Access Dashboard</label>
-              <Switch onClick={(e) => handleVerification(e, "pledre", data?.userId, data?.pledre?._id)} checked={data?.accessPledre} value="pledre" />
-            </div>
-            <div className="form-group my-3">
-              <label htmlFor="level" className="form-label generic_label">Assign Level</label>
-              <select name="level" id="level" className="form-select" style={{ width: "unset" }}>
-                <option value="">Select a level</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-              </select>
-            </div>
+
+
 
 
             <div className={clsx.user__email}>
@@ -1387,14 +1480,39 @@ export function ApproveStudent() {
                 <AiTwotoneDelete />  &nbsp; &nbsp;Delete User
               </button>
             </div>
-              
+
+            {/* {data.accessPledre !== null && (
+              <div className={clsx.user__button}>
+                <span>
+                  <Switch onClick={handlePledreAccess} checked={data.accessPledre} />
+                </span>
+              </div>
+            )}
+
+            {data.isActive !== null && (
+              <td className={clsx.user__button}>
+                <span>
+                  <Switch onClick={handleVerification} checked={data.isActive} />
+                </span>
+              </td>
+            )} */}
+
             <button
               className="button button-lg log_btn w-50 mt-3"
-              style={{ backgroundColor: data?.canTeach && "red" }}
+              style={{ backgroundColor: data?.isVerified && "red" }}
               type="submit"
               onClick={(e) => approveApplication(e, data?.userId)}
             >
-              {data?.canTeach ? "Revoke Application" : "Approve Application"}
+              {data?.isVerified ? "Revoke Application" : "Approve Application"}
+            </button>
+
+            <button
+              className="button button-lg log_btn w-50 mt-3"
+              style={{ backgroundColor: data?.accessPledre && "red" }}
+              type="submit"
+              onClick={(e) => approveApplication(e, data?.userId)}
+            >
+              {data?.accessPledre ? "Revoke Dashboard Access" : "Approve Dashboard Access"}
             </button>
 
             {/* <button
@@ -1406,6 +1524,46 @@ export function ApproveStudent() {
               Delete User
             </button> */}
           </div>
+        </div>
+
+        <div className={clsx.kyc}>
+          {
+            kyc !== null && kyc.question &&(
+              <>
+              <div className={clsx.title}>
+                 <p className={clsx.question}>Phone Number</p>
+                 <span className={clsx.answer}>{kyc.question?.phoneNumber}</span>
+               </div>
+             
+     
+               <div className={clsx.title}>
+                 <p className={clsx.question}>Degree</p>
+                 <span className={clsx.answer}>{kyc.question?.degree}</span>
+               </div>
+             
+               <div className={clsx.title}>
+                 <p className={clsx.question}>Experience</p>
+                 <span className={clsx.answer}>{kyc.question?.experience}</span>
+               </div>
+
+               <div className={clsx.title}>
+                 <p className={clsx.question}>Employment</p>
+                 <span className={clsx.answer}>{kyc.question?.employment}</span>
+               </div>
+
+               <div className={clsx.title}>
+                 <p className={clsx.question}>Country</p>
+                 <span className={clsx.answer}>{kyc.question?.country}</span>
+               </div>
+              
+               <div className={clsx.title}>
+                 <p className={clsx.question}>Region</p>
+                 <span className={clsx.answer}>{kyc.question?.region}</span>
+               </div>
+
+             </>
+            )
+          }
         </div>
       </div>
     </Admin>
@@ -1416,11 +1574,72 @@ export function ApproveStudent() {
 export function Approve() {
   const navigate = useNavigate()
   const [data, setData] = useState(null);
+  const [kyc, setKyc] = useState({});
 
   const [loading, setLoading] = useState(false);
-  const {getItem} = useLocalStorage();
+  const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
-  const { adminTeacherFunctions: { verify, verify_pledre, addMentor},kycFunctions:{getATeacherKYC}, generalState,   generalState:{pledre}, setGeneralState, commonFunctions: {deleteUser}} = useAuth();
+  const { adminTeacherFunctions: { verify, verify_pledre, addMentor }, kycFunctions: { getATeacherKYC, getAMentorKYCById }, generalState, generalState: { pledre }, setGeneralState, commonFunctions: { deleteUser } } = useAuth();
+
+  console.log("mentors data", data);
+  console.log("loggged in userdata", userdata);
+
+  async function getMentorInfo(id) {
+    const userdata = getItem(KEY)
+
+    try {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: true,
+        };
+      });
+
+      const res = await getAMentorKYCById(id, userdata?.token);
+      const { message, success, statusCode } = res;
+      console.log("res data kyc", res.data);
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        //do somethings
+        setKyc(res.data)
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        // navigate(-1)
+      }
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    } finally {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: false,
+        };
+      });
+    }
+  }
+
+  useEffect(() => {
+    if (data) {
+      getMentorInfo(data.userId)
+    }
+
+  }, [data])
+
   const info = [
     {
       title: "Courses",
@@ -1441,7 +1660,7 @@ export function Approve() {
       const teacherInfo = getItem("gotocourse-teacherDetails")
       let pledreInfo;
       console.log("getting")
-      console.log({pledre})
+      console.log({ pledre })
       try {
         if (pledre) {
           console.log(pledre)
@@ -1467,15 +1686,15 @@ export function Approve() {
     )()
   }, []);
 
-  async function deleteUserHandler(e, email){
-    try{
+  async function deleteUserHandler(e, email) {
+    try {
       setLoading(_ => true);
       let value = window.confirm("Are you sure you want to delete this user?. This process is irreversible")
-      if(!value) return;
+      if (!value) return;
       const res = await deleteUser(userdata?.token, [email]);
       console.log(res);
-      const {statusCode, message, success} = res;
-      if(!success) throw new AdvancedError(message, statusCode);
+      const { statusCode, message, success } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
       else {
         toast.success(message, {
           position: "top-right",
@@ -1488,7 +1707,7 @@ export function Approve() {
         });
         navigate(-1);
       }
-    }catch(err){
+    } catch (err) {
       toast.error(err.message, {
         position: "top-right",
         autoClose: 4000,
@@ -1498,7 +1717,7 @@ export function Approve() {
         draggable: true,
         progress: undefined,
       });
-    }finally{
+    } finally {
       setLoading(_ => false);
     }
   }
@@ -1564,8 +1783,8 @@ export function Approve() {
         else {
           // remove from pledre
           const PledRes = (data.accessPledre === true) && await pledre.deleteTeacher(data.pledre?._id)
-          console.log({PledRes})
-          setData({...data, accessPledre: !data.accessPledre})
+          console.log({ PledRes })
+          setData({ ...data, accessPledre: !data.accessPledre })
           toast.success(message, {
             position: "top-right",
             autoClose: 4000,
@@ -1621,16 +1840,16 @@ export function Approve() {
         //do somethingtype s
         localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
 
-           setData({...data, canTeach: !data?.canTeach}) 
-           toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+        setData({ ...data, canTeach: !data?.canTeach })
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
     } catch (error) {
       toast.error(error.message, {
@@ -1749,7 +1968,7 @@ export function Approve() {
   //   }
   // }
 
- 
+
   return (
     <Admin header="Approval">
       {loading && <Loader />}
@@ -1772,7 +1991,7 @@ export function Approve() {
               <Info title={title} content={content} key={i} />
             ))}
 
-            
+
             <div className="form-group my-3">
               <label htmlFor="accessPledre" className="form-label generic_label">{data?.userType === "mentor" ? "Revoke Mentorship" : "Confer Mentorship"}</label>
               <Switch onClick={(e) => conferMentorship(e, data?.userId, data?.email)} checked={data?.userType === "mentor" ? true : false} value="mentorship" />
@@ -1799,7 +2018,7 @@ export function Approve() {
                 <AiTwotoneDelete />  &nbsp; &nbsp;Delete User
               </button>
             </div>
-              
+
             <button
               className="button button-lg log_btn w-50 mt-3"
               style={{ backgroundColor: data?.canTeach && "red" }}
@@ -1818,6 +2037,55 @@ export function Approve() {
               Delete User
             </button> */}
           </div>
+        </div>
+
+        <div className={clsx.kyc}>
+          {
+            kyc !== null && kyc.question &&(
+              <>
+              <div className={clsx.title}>
+                 <p className={clsx.question}>Phone Number</p>
+                 <span className={clsx.answer}>{kyc.question?.phoneNumber}</span>
+               </div>
+               <div className={clsx.title}>
+                 <p className={clsx.question}>Certified</p>
+                 <span className={clsx.answer}>{kyc.question?.certified ? "true" : "false"}</span>
+               </div>
+               
+     
+               <div className={clsx.title}>
+                 <p className={clsx.question}>Degree</p>
+                 <span className={clsx.answer}>{kyc.question?.degree}</span>
+               </div>
+
+               <div className={clsx.title}>
+                 <p className={clsx.question}>Expertise</p>
+                 <span className={clsx.answer}>{kyc.question?.expertise}</span>
+               </div>
+             
+               <div className={clsx.title}>
+                 <p className={clsx.question}>Preferred Course</p>
+                 <span className={clsx.answer}>{kyc.question?.preferredCourse}</span>
+               </div>
+
+               <div className={clsx.title}>
+                 <p className={clsx.question}>Employment</p>
+                 <span className={clsx.answer}>{kyc.question?.employment}</span>
+               </div>
+
+               <div className={clsx.title}>
+                 <p className={clsx.question}>Country</p>
+                 <span className={clsx.answer}>{kyc.question?.country}</span>
+               </div>
+              
+               <div className={clsx.title}>
+                 <p className={clsx.question}>Region</p>
+                 <span className={clsx.answer}>{kyc.question?.region}</span>
+               </div>
+
+             </>
+            )
+          }
         </div>
       </div>
     </Admin>
@@ -2211,7 +2479,7 @@ export function Mentors() {
                     isActive={null}
                     isAbsolute={false}
                     type={null}
-                    
+
                   // accessPledre={teacher.accessPledre}
                   />
                 ))}
@@ -2450,7 +2718,7 @@ export function MentorsDetail() {
   const navigate = useNavigate()
   const [data, setData] = useState(null);
   const { getItem } = useLocalStorage();
-  const { adminTeacherFunctions: { deleteMentor },kycFunctions:{getAStudentKYCById, getAMentorKYCById}, setGeneralState, } = useAuth();
+  const { adminTeacherFunctions: { deleteMentor }, setGeneralState, } = useAuth();
   const info = [
     {
       title: "Courses",
@@ -2466,7 +2734,7 @@ export function MentorsDetail() {
     },
   ];
 
-  
+
 
   useEffect(() => {
     const teacherInfo = getItem("gotocourse-mentorDetails")
@@ -2477,62 +2745,6 @@ export function MentorsDetail() {
 
 
 
- console.log("mentors data", data);
-
- async function getMentorInfo(id) {
-    const userdata = getItem(KEY)
-
-    try {
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: true,
-        };
-      });
-
-      const res = await getAMentorKYCById(id, userdata?.token);
-      const { message, success, statusCode } = res;
-      console.log("res data", data);
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        //do somethings
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        navigate(-1)
-      }
-    } catch (error) {
-      toast.error(error.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
-    } finally {
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: false,
-        };
-      });
-    }
-  }
-
-  useEffect(() => {
-    if(data){
-      getMentorInfo(data.mentorId)
-    }
-
-  },[data])
 
   async function deleteMentorPage(e, id) {
     e.preventDefault();
@@ -2589,7 +2801,7 @@ export function MentorsDetail() {
         <div className={clsx["admin_profile_top"]}>
           <div className={clsx["admin_profile_top_img"]}>
             <img
-              src={data?.mentorImg ? `https://loftywebtech.com/gotocourse/api/uploads/${data?.mentorImg}`: avatar}
+              src={data?.mentorImg ? `https://loftywebtech.com/gotocourse/api/uploads/${data?.mentorImg}` : avatar}
               style={{ borderRadius: 10 }}
               width="100%"
               alt="Avatar"
@@ -2909,27 +3121,27 @@ export function CourseDetails({ }) {
           short_description: formstate.description,
           price: formstate.price
         })
-        console.log({pledRes})
-        if(pledRes.id){
+        console.log({ pledRes })
+        if (pledRes.id) {
           pledId = pledRes.id
-        const res = await toggleCourseStatus(userdata?.token,  params?.id, {pledreCourseId: pledId});
+          const res = await toggleCourseStatus(userdata?.token, params?.id, { pledreCourseId: pledId });
 
-        // const res = await toggleCourseStatus(userdata?.token, params?.id, {});
-        const { success, message, statusCode } = res;
-        if (!success) throw new AdvancedError(message, statusCode);
-        setFormstate({ ...formstate, status: "active" })
+          // const res = await toggleCourseStatus(userdata?.token, params?.id, {});
+          const { success, message, statusCode } = res;
+          if (!success) throw new AdvancedError(message, statusCode);
+          setFormstate({ ...formstate, status: "active" })
 
-        // NEEDS REMOVE COURSE API FROM PLEDRE
+          // NEEDS REMOVE COURSE API FROM PLEDRE
 
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         }
       }
       else {
@@ -4244,7 +4456,7 @@ export function Student() {
   const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
 
-  const { adminStudentFunctions: { fetch, verify, verify_pledre }, generalState: { loading }, setGeneralState, commonFunctions: {deleteUser} } = useAuth();
+  const { adminStudentFunctions: { fetch, verify, verify_pledre }, generalState: { loading }, setGeneralState, commonFunctions: { deleteUser } } = useAuth();
 
   async function fetchStudents() {
     if (userdata) {
@@ -4392,15 +4604,15 @@ export function Student() {
     }
   }
 
-  async function deleteUserHandler(e, email){
-    try{
+  async function deleteUserHandler(e, email) {
+    try {
       const v = window.confirm("Are you sure you want to delete " + email);
-      if(!v) return;
+      if (!v) return;
       setLoader(_ => true);
       const res = await deleteUser(userdata?.token, [email]);
       console.log(res);
-      const {statusCode, message, success} = res;
-      if(!success) throw new AdvancedError(message, statusCode);
+      const { statusCode, message, success } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
       else {
         toast.success(message, {
           position: "top-right",
@@ -4412,7 +4624,7 @@ export function Student() {
           progress: undefined,
         });
       }
-    }catch(err){
+    } catch (err) {
       toast.error(err.message, {
         position: "top-right",
         autoClose: 4000,
@@ -4422,7 +4634,7 @@ export function Student() {
         draggable: true,
         progress: undefined,
       });
-    }finally{
+    } finally {
       setLoader(_ => false);
       fetchStudents();
     }
@@ -4437,6 +4649,7 @@ export function Student() {
 
   const tableHeaders = ["No", "Name", "Email", "Approve", "Access Dashboard", "Actions"];
 
+  console.log({ studentList });
   return (
     <Admin header={"Student"}>
       {loader && <Loader />}
@@ -4458,8 +4671,8 @@ export function Student() {
                 {studentList?.length > 0 &&
                   studentList?.map(
                     (
-                     student
-                     ,
+                      student
+                      ,
                       i
                     ) => (
                       <UserInfoCard
