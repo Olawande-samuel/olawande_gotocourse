@@ -80,6 +80,7 @@ const AdminLogin = lazy(() => import("./pages/Admin/Login"))
 const AdminSignup = lazy(() => import("./pages/Admin/SignUp"))
 const Lounge = lazy(() => import("./pages/Celebrity/Lounge"))
 const CelebProfile = lazy(() => import("./pages/Celebs/CelebProfile"))
+const BookMentor = lazy(() => import("./pages/Celebs/Booking"));
 const AllCelebs = lazy(() => import("./pages/Celebrity/AllCelebs"))
 const Email = lazy(() => import("./pages/Confirmation/Email"))
 const Confirm = lazy(() => import("./pages/Confirmation/Confirm"))
@@ -95,6 +96,12 @@ const Verification  = lazy(()=>import("./pages/User/Verification"));
 const About =  lazy(()=> import("./pages/About"))
 const Contact =  lazy(()=> import("./pages/Contact"))
 const Settings =  lazy(()=> import("./pages/Dashboard/Admin/Settings"))
+
+
+
+
+
+
 
 function App() {
   return (
@@ -145,6 +152,7 @@ function App() {
                     <Route path="all" element={<Out />}>
                       <Route index element={<AllCelebs />} />
                       <Route path=":id" element={<CelebProfile />} />
+                      <Route path=":id/booking" element={<BookMentor />} />
                     </Route> 
                   </Route>
                 </Route>
