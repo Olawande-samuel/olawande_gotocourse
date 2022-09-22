@@ -538,7 +538,7 @@ export default function CelebProfile() {
                                 </div>
 
                                 <div className="light">
-                                    <Link to="/contact-us" className="text-light d-inline-block">
+                                    <Link to="booking" className="text-light d-inline-block">
                                         <span className="book">Book Session</span>
                                     </Link>
                                     <div className="bolt">

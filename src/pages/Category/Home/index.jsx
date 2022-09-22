@@ -24,6 +24,10 @@ const CategoryContainer = styled.div`
     align-items: center;
     jusitfy-content: center;
     padding: 20px 40px;
+
+    @media screen and (max-width: 466px){
+        padding: 20px;
+    }
 `;
 
 const CategoryTop = styled.div`
@@ -33,6 +37,14 @@ const CategoryTop = styled.div`
     justify-content: space-between;
     margin-bottom: 20px;
     padding: 20px;
+
+    @media screen and (max-width: 812px){
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 0;
+    }
 `;
 
 const BreadcrumbLink = styled(Link)`
@@ -50,6 +62,18 @@ const BreadcrumbLink = styled(Link)`
 const Search = styled.section`
     display: flex;
     align-items: center;
+    min-width: 280px;
+
+    @media screen and (max-width: 466px){
+        flex-direction: column;
+        align-items: flex-start;
+        gap:10px;
+        margin-bottom: 20px;
+
+        & button {
+            margin: 0;
+        }
+    }
 `
 
 
@@ -60,7 +84,7 @@ const SearchInput = styled.input`
     padding: 8px;
     line-height: 2;
     outline: none;
-    min-width: 300px;
+    min-width: 250px;
     color: #9F9F9F;
     font-weight: 700;
     font-size: 0.9rem;
@@ -90,16 +114,23 @@ const Card = styled.div`
     display: flex;
     align-items: flex-start;
     padding: 10px;
-    height: calc(260px + 40px);
+    // height: calc(260px + 40px);
+
+    @media screen and (max-width: 590px){
+        flex-direction: column;
+        gap: 20px;
+    }
 `
 
 const CardImageContainer = styled.div`
-    width: 399px;
+    max-width: 400px;
     height: 100%;
+    flex-basis: 40%;
 
     & img {
         width: 100%;
-        height: 100%;
+        min-height: 240px;
+        object-fit: cover;
     }
 `
 
@@ -125,6 +156,14 @@ const CardBody = styled.div`
         line-height:26px;
         margin-bottom: 30px;
         font-style: normal;
+
+        @media screen and (max-width: 977px){
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     }
 
     & button {

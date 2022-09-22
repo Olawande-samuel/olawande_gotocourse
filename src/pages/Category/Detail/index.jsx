@@ -77,17 +77,27 @@ const DetailImage = styled.div`
 
 
 const DetailBodyContent = styled.div`
-    display: grid;
+    display: flex;
     width: 100%;
     gap: 20px;
-    grid-template-columns: 1.3fr 0.7fr;
     padding: 40px;
-    padding-bottom:0;
+
+    @media screen and (max-width: 1025px){
+        flex-direction: column;
+    }
+
+    @media screen and (max-width: 535px){
+        padding: 20px;
+    }
 `;
 
 const DetailLeft = styled.div`
     width; 100%;
     padding: 20px;
+
+    @media screen and (max-width: 535px){
+        padding: 10px;
+    }
 `;
 
 const DetailDescription = styled.p`
@@ -107,10 +117,16 @@ const CareerCard = styled.div`
     border: 1px solid rgba(217, 217, 217, 0.4);
     background-color: white;
     border-radius: 10px;
+    min-width: 300px;
+    max-width: 450px;
 
 
     & p {
         font-size: 16px;
+
+        @media screen and (max-width: 1175px){
+            font-size: 14px;
+        }
     }
 
     & ul {
@@ -123,6 +139,10 @@ const CareerCard = styled.div`
             display: flex;
             align-items: center;
             font-size: 14px;
+
+            @media screen and (max-width: 1175px){
+                font-size: 12px;
+            }
         }
     }
 `
@@ -144,6 +164,10 @@ const NicheContainer = styled.div`
         width: 100%;
         margin-bottom: 20px;
         font-weight: 300;
+    }
+
+    @media screen and (max-width: 1025px){
+        margin-top: 50px;
     }
 `;
 
