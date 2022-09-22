@@ -493,43 +493,15 @@ export function NewBootcampDetailsComponent(){
   return (
     <Layout>
       <div className={clsx.bootcampTraining}>
-        <section
-          className={clsx.new_hero}
-          style={{
-            height: `min(calc(100vh - ${navHeight}px ), 450px)`,
-            background: `url(${bootcampTrainingInfo?.bootcampImg? bootcampTrainingInfo?.bootcampImg: NewBootcampImage}), rgba(0,0,0,0.5)`,
-            backgroundRepeat: "no-repeat", backgroundPosition:"center", backgroundSize: "cover"
-
-          }}
-        >
-          <div className={`container ${clsx.hero_content}`}>
-            <div>
-              <h4>{bootcampTrainingInfo?.title ? bootcampTrainingInfo?.title : "Data Science"}</h4>
-              <p>{bootcampTrainingInfo?.description ? bootcampTrainingInfo?.description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p>
-              <div className={clsx.hero_buttons}>
-                <motion.button 
-                 whileHover={{
-                  boxShadow: "0px 0px 8px rgb(225, 225, 225)"
-                }}
-                transition={{ duration: 0.1 }}
-                onClick={handleBootstrapEnrollment}>Enroll now</motion.button>
-                <motion.button 
-                 whileHover={{
-                  boxShadow: "0px 0px 8px rgb(225, 225, 225)"
-                }}
-                transition={{ duration: 0.1 }}
-                  onClick={addToWishList}
-                >
-                  {
-                    loading ? <div className="spinner-border"></div>
-                    :
-                    "Add to wishlist"
-                  }
-                </motion.button>
-              </div>
-            </div>
-          </div>
-        </section>
+        <DetailsHero
+          loading={loading}
+          navHeight={navHeight}
+          title={bootcampTrainingInfo?.title}
+          description={bootcampTrainingInfo?.description}
+          img={bootcampTrainingInfo?.bootcampImg}
+            addToWishList={addToWishList}
+          handleBootstrapEnrollment={handleBootstrapEnrollment}
+        />
         <section className={clsx.to_learn}>
           <div className="container">
             <header>
@@ -631,6 +603,49 @@ export function NewBootcampDetailsComponent(){
       </div>
     </Layout>
   );
+}
+
+
+export function DetailsHero({navHeight, title, description, addToWishList,handleBootstrapEnrollment, loading, img}){
+  
+  return (
+    <section
+    className={clsx.new_hero}
+    style={{
+      height: `min(calc(100vh - ${navHeight}px ), 450px)`,
+      background: `url(${img  ? img: NewBootcampImage}), rgba(0,0,0,0.6) no-repeat`
+
+    }}
+  >
+    <div className={`container ${clsx.hero_content}`}>
+      <div>
+        <h4>{title ? title : "Data Science"}</h4>
+        <p>{description ? description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p>
+        <div className={clsx.hero_buttons}>
+          <motion.button 
+           whileHover={{
+            boxShadow: "0px 0px 8px rgb(225, 225, 225)"
+          }}
+          transition={{ duration: 0.1 }}
+          onClick={handleBootstrapEnrollment}>Enroll now</motion.button>
+          <motion.button 
+           whileHover={{
+            boxShadow: "0px 0px 8px rgb(225, 225, 225)"
+          }}
+          transition={{ duration: 0.1 }}
+            onClick={addToWishList}
+          >
+            {
+              loading ? <div className="spinner-border"></div>
+              :
+              "Add to wishlist"
+            }
+          </motion.button>
+        </div>
+      </div>
+    </div>
+  </section>
+  )
 }
 function Upcome({_id, title, duration, startTime, endTime, startDate, endDate, description, type, isActive, instructorId, bootcampImg, all}) {
   const { getItem } = useLocalStorage();

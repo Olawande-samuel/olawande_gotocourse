@@ -109,7 +109,7 @@ const Available = () => {
                         <div className="container">
                             <div className={clsx.classes_hero}>
                             <div className={clsx.classes_top_left}>
-                                <h2>We’ve got all you need in our comprehensive course catalog </h2>
+                                <h2>The Best time to get trained in now</h2>
                                 <p>
                                     Choose from our available classes with new additions published regularly
                                 </p>
