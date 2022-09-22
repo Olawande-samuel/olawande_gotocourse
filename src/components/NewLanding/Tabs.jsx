@@ -60,7 +60,7 @@ export function Category() {
       <header className="newCategories_header_wrapper">
         <h1 className="newCategories_header">A broad selection of courses</h1>
         <p className="sub_title mx-auto text-start" style={{width:"min(100% - 1rem, 1300px)"}}>
-        Our tailored courses will teach you everything you need to get your first job in tech in as little as 5 months — even if you don't have any previous experience
+        Our 50+ tailored courses will teach you industry required skills in as little as 3 to 5 months—even if you don’t have any previous experience.
         </p>
       </header>
       <TabsComp />
