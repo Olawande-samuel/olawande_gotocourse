@@ -106,6 +106,27 @@ export const kycFunctions = {
             }
         }
     },
+    getAStudentKYCById: async function(id, token){
+        try{
+            const res = await axios.get(`${baseURL}/admin/student/kyc/:${id}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {...res.data, success: true};
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
     getAMentorKYC: async function(_data, token){
         try{
             const res = await axios.get(`${baseURL}/mentor/kyc`, {
@@ -127,9 +148,30 @@ export const kycFunctions = {
             }
         }
     },
+    getAMentorKYCById: async function(id, token){
+        try{
+            const res = await axios.get(`${baseURL}/admin/mentor/kyc/:${id}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {...res.data, success: true};
+        }catch(err){
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
     getAllStudentKYC: async function(_data, token){
         try{
-            const res = await axios.get(`${baseURL}/student/kyc/fetch`, {
+            const res = await axios.get(`${baseURL}/admin/student/kyc/fetch`, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
@@ -150,7 +192,7 @@ export const kycFunctions = {
     },
     getAllMentorKYC: async function(_data, token){
         try{
-            const res = await axios.get(`${baseURL}/mentor/kyc/fetch`,{
+            const res = await axios.get(`${baseURL}/admin/mentor/kyc/fetch`,{
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
@@ -1953,6 +1995,7 @@ export const adminFunctions = {
         }
     },
 
+  
     deleteAUser: async function(token, data){
         console.log({data});
         try{
