@@ -244,7 +244,7 @@ const Card = ({ logo, name, description, iconImg }) => {
   );
 };
 
-export const  CourseCard = ({ courseImg, name, description, category, instructorName, color, background, show ,  course, courseId}) => {
+export const CourseCard = ({ courseImg, name, description, category, instructorName, color, background, show ,  course, courseId}) => {
   const navigate = useNavigate()
   return (
     <div className={`card ${style.course_card}`} style={{background:background, color:color, cursor: "pointer"}} onClick={()=>{

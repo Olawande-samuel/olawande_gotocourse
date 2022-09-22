@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import {MdNavigateNext} from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Breadcrumbs, Skeleton } from "@mui/material";
 
@@ -113,6 +113,7 @@ const Card = styled.div`
     width: 100%;
     display: flex;
     align-items: flex-start;
+    gap: 1rem;
     padding: 10px;
     // height: calc(260px + 40px);
 
@@ -136,7 +137,6 @@ const CardImageContainer = styled.div`
 
 const CardBody = styled.div`
     flex: 1;
-    margin-left: 30px;
     max-width: 900px;
     height: 100%;
     display: flex;
@@ -201,15 +201,7 @@ const Category = () => {
                 else {
                     const {data} = res;
                     setCategories(_ =>  [...data]);
-                    toast.success(message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+                   
                 }
             }catch(err){
                 toast.error(err.message, {
@@ -249,9 +241,8 @@ const Category = () => {
 
                 <CategoryBody>
                     {
-                        categories.length !== 0 ? categories.map(({bannerImg, description, name}, i) => (
-                            <CategoryCard key={i} image={bannerImg} description={description} 
-                            title={name} separator={(categories.length - 1) === i ? false : true} />
+                        categories.length !== 0 ? categories.map((category, i) => (
+                            <CategoryCard key={i} {...category} all={category} separator={(categories.length - 1) === i ? false : true} />
                         )) : Array(4).fill(undefined).map((_, i) => (
                             <Skeleton sx={{marginBottom: 10}} animation="wave" key={i} variant="rectangular" width={"100%"} height={350} />
                         ))
@@ -263,17 +254,25 @@ const Category = () => {
 }
 
 
-function CategoryCard({image, title, description, separator}){
+function CategoryCard({bannerImg, name, description, all, separator}){
+        const navigate = useNavigate()
     return (
         <>
             <Card>
                 <CardImageContainer>
-                    <img src={image} alt="Card Image" />
+                    <img src={bannerImg} alt="Card Image" />
                 </CardImageContainer>
                 <CardBody>
-                    <h2>{title}</h2>
+                    <h2>{name}</h2>
                     <p>{description}</p>
-                    <Link to={`/category?name=${title}`}>
+                    <Link
+                     to={`/categories/${name?.split(" ").join("-").toLowerCase()}`}
+                     onClick={()=>{
+                        localStorage.setItem("gotocourse-category", JSON.stringify(all))
+                        navigate(`${name?.split(" ").join("-").toLowerCase()}`)
+                     }}
+                     
+                     >
                         <button>Learn more</button>
                     </Link>
                 </CardBody>

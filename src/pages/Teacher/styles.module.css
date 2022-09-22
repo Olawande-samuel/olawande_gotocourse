@@ -109,11 +109,15 @@
 
 
 .how_it_works,
-.frequently_asked_questions,
-.reviews {
-    padding: 50px;
+.frequently_asked_questions {
+    padding:  2rem 50px 0 50px;
     /* margin-bottom: 30px; */
 }
+.reviews{
+    padding:  0 50px 2rem 50px;
+
+}
+
 
 .best_features {
     /* background-color: var(--white); */

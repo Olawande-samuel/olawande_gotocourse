@@ -67,7 +67,8 @@ export function Category() {
       
       </div>
     </section>
-  );
+  ); 
+
 }
 function PopularContainer({ category, tab_number, popular }) {
   const {
@@ -288,7 +289,7 @@ export function TabsComp(){
             modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
             loop={true}
             speed={1500}
-            // autoplay={{ delay: 2500 }}
+            autoplay={{ delay: 2500 }}
             spaceBetween={0}
             slidesPerView={1}
             // navigation

@@ -232,9 +232,11 @@ function App() {
                   <Route path="chat" element={<TeacherChat />} />
                 </Route>
                 <Route path="categories" element={<Out />}>
-                  <Route index element={<Categories  />} />
+                  {/* <Route index element={<Categories  />} /> */}
+                  <Route index element={<CategoryHome  />} />
                   <Route path=":id" element={<Out />}  >
-                    <Route index element={<CourseDetail />} />
+                    {/* <Route index element={<CourseDetail />} /> */}
+                    <Route index element={<CategoryDetail />} />
                     <Route path="courses" element={<CourseList />} />
                     <Route path="courses/:profile" element={<Out />}>
                       <Route index element={<CourseProfile />} />
