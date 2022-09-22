@@ -11,7 +11,6 @@ import { Breadcrumbs, Skeleton } from "@mui/material";
 import Layout from "../../../components/Layout";
 import { useEffectOnMount } from "../../../hooks";
 import { useAuth } from "../../../contexts/Auth";
-import Loader from "../../../components/Loader";
 import { AdvancedError } from "../../../classes";
 
 
@@ -189,7 +188,7 @@ const Separator = styled.hr`
 const Category = () => {
     const {otherFunctions: {fetchCategories}} = useAuth();
     const [categories, setCategories] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState("");
     useEffectOnMount(() => {
         console.log("Category is mounted");
         (async () => {
@@ -221,7 +220,7 @@ const Category = () => {
                     draggable: true,
                     progress: undefined,
                 });
-            }finally{setLoading(_ => false)}
+            }
         })()
         return () => console.log("Category page is unmounted");
     }, [])
@@ -229,7 +228,6 @@ const Category = () => {
 
     return (
         <Layout background="category">
-            {/* {loading && <Loader />} */}
             <ToastContainer />
             <CategoryContainer>
                 <CategoryTop>
@@ -242,14 +240,15 @@ const Category = () => {
                         </BreadcrumbLink>
                     </Breadcrumbs>
                     <Search>
-                        <SearchInput type="text" name="search" placeholder="Search Category" />
+                        <SearchInput type="text" value={search} onChange={e => setSearch(e.target.value) && console.log(search)} placeholder="Search Category" />
                         <SearchButton>Search</SearchButton>
                     </Search>
                 </CategoryTop>
 
                 <CategoryBody>
                     {
-                        categories.length !== 0 ? categories.map(({bannerImg, description, name}, i) => (
+                        categories.length !== 0 ? 
+                        categories.filter(c => c.name.toLocaleLowerCase().includes(search)).map(({bannerImg, description, name}, i) => (
                             <CategoryCard key={i} image={bannerImg} description={description} 
                             title={name} separator={(categories.length - 1) === i ? false : true} />
                         )) : Array(4).fill(undefined).map((_, i) => (
