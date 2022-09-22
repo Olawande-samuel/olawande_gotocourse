@@ -33,7 +33,7 @@ import HIW, {HIWStudent, HIWTeacher, HIWAffiliate}from "./pages/HowItWorks"
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
-import { Categories, CourseDetail, CourseList, CourseProfile } from "./pages/Courses";
+import { Categories, CourseDetail, CourseList, CourseProfile, NewCourseProfile } from "./pages/Courses";
 import {Home as BecomeATeacher, Profile} from "./pages/Teacher";
 import Career from "./pages/Career";
 import All, {Payment, PaymentStatus} from "./pages/Teacher/Teachers";
@@ -230,6 +230,7 @@ function App() {
                     <Route path="courses" element={<CourseList />} />
                     <Route path="courses/:profile" element={<Out />}>
                       <Route index element={<CourseProfile />} />
+                      {/* <Route index element={<NewCourseProfile />} /> */}
                       <Route path="payment" element={<Payment />} />
                     </Route>
                   </Route>

@@ -1068,7 +1068,6 @@ export function Fees() {
 
     useEffect(() => {
         if (userdata.token) {
-
             (async () => {
                 setGeneralState({ ...generalState, loading: true })
                 try {
@@ -1078,15 +1077,6 @@ export function Fees() {
                     if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
                     else {
                         setCourse(res.data)
-                        toast.success(message, {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
                     }
                 } catch (err) {
                     toast.error(err.message, {
@@ -1117,15 +1107,6 @@ export function Fees() {
                     else {
                         const { data } = res;
                         setFees(_ => data);
-                        toast.success(message, {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
                     }
                 } catch (err) {
                     toast.error(err.message, {
@@ -1164,15 +1145,10 @@ export function Fees() {
     const filterpaid = (data) => {
         console.log("filter", data);
         let result = data.filter(c => c.status === "paid").reduce((sum, current) => sum + current.amount, 0)
-        //    console.log({result});
-
         return result
     }
 
     const handlePay = async (paymentId) => {
-        // console.log({paymentId});
-        // console.log("pay user" , userdata.token);
-
         setGeneralState({ ...generalState, loading: true })
         try {
             const res = await payStudentFees(userdata.token, paymentId)
