@@ -1000,7 +1000,417 @@ function Info({ title, content }) {
   );
 }
 
+//APPROVE STUDENT COMPONENT
+export function ApproveStudent() {
+  const navigate = useNavigate()
+  const [data, setData] = useState(null);
 
+  const [loading, setLoading] = useState(false);
+  const {getItem} = useLocalStorage();
+  let userdata = getItem(KEY);
+  const { adminTeacherFunctions: { verify, verify_pledre, addMentor},kycFunctions:{getATeacherKYC}, generalState,   generalState:{pledre}, setGeneralState, commonFunctions: {deleteUser}} = useAuth();
+  const info = [
+    {
+      title: "Courses",
+      content: "UX Designer",
+    },
+    {
+      title: "Category",
+      content: "Cybersecurity, UX, Data Analysis",
+    },
+    {
+      title: "Mentorship status",
+      content: data?.userType === "mentor" ? "Assigned" : "Unassigned",
+    },
+  ];
+
+  useEffect(() => {
+    (async () => {
+      const teacherInfo = getItem("gotocourse-teacherDetails")
+      let pledreInfo;
+      console.log("getting")
+      console.log({pledre})
+      try {
+        if (pledre) {
+          console.log(pledre)
+          setGeneralState({ ...generalState, loading: true })
+          const pledRes = await pledre.getTeacherDetails(teacherInfo.email)
+          console.log({ pledRes })
+          if (pledRes.email) {
+            pledreInfo = pledRes
+          } else {
+            pledreInfo = {}
+          }
+        }
+      } catch (error) {
+        console.error(error.message)
+      } finally {
+        setGeneralState({ ...generalState, loading: false })
+
+      }
+
+      localStorage.setItem("gotocourse-teacherDetails", JSON.stringify({ ...teacherInfo, pledre: pledreInfo }))
+      setData({ ...teacherInfo, pledre: pledreInfo });
+    }
+    )()
+  }, []);
+
+  async function deleteUserHandler(e, email){
+    try{
+      setLoading(_ => true);
+      let value = window.confirm("Are you sure you want to delete this user?. This process is irreversible")
+      if(!value) return;
+      const res = await deleteUser(userdata?.token, [email]);
+      console.log(res);
+      const {statusCode, message, success} = res;
+      if(!success) throw new AdvancedError(message, statusCode);
+      else {
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        navigate(-1);
+      }
+    }catch(err){
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }finally{
+      setLoading(_ => false);
+    }
+  }
+
+
+  async function handleVerification(e, type, id, pledreId) {
+    e.preventDefault();
+    const userdata = getItem(KEY)
+
+    console.log({ pledreId })
+    let item = {
+      userId: id,
+      pledreTeacherId: pledreId ? pledreId : null
+    };
+
+    if (!data.accessPledre) {
+      // give access and save pledre id to backend
+      try {
+        setGeneralState((old) => { return { ...old, loading: true, }; });
+        if (!pledreId) throw new AdvancedError("User is not registered to your school", 0)
+        const res = await verify_pledre(item, userdata?.token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          console.log(data.accessPledre)
+          setData({ ...data, accessPledre: !data.accessPledre })
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      } catch (error) {
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      } finally {
+        setGeneralState((old) => {
+          return {
+            ...old,
+            loading: false,
+          };
+        });
+      }
+    } else {
+      // revoke access and delete teacher from pledre     
+      try {
+        setGeneralState((old) => { return { ...old, loading: true, }; });
+        // revoke acess
+        const res = await verify_pledre(item, userdata?.token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          // remove from pledre
+          const PledRes = (data.accessPledre === true) && await pledre.deleteTeacher(data.pledre?._id)
+          console.log({PledRes})
+          setData({...data, accessPledre: !data.accessPledre})
+          toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      } catch (error) {
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      } finally {
+        setGeneralState((old) => {
+          return {
+            ...old,
+            loading: false,
+          };
+        });
+      }
+
+    }
+
+
+  }
+  async function approveApplication(e, id) {
+    e.preventDefault();
+    const userdata = getItem(KEY)
+
+    let item = {
+      userId: id,
+    };
+
+    try {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: true,
+        };
+      });
+      const res = await verify(item, userdata?.token);
+      const { message, success, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        //do somethingtype s
+        localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
+
+           setData({...data, canTeach: !data?.canTeach}) 
+           toast.success(message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+      }
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    } finally {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: false,
+        };
+      });
+    }
+  }
+
+
+  async function conferMentorship(e, id, email) {
+    e.preventDefault();
+    const userdata = getItem(KEY)
+    let item = {
+      teacherEmail: email,
+    };
+    try {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: true,
+        };
+      });
+
+      const res = await addMentor(item, userdata?.token);
+      const { message, success, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        //do somethings
+        // localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    } finally {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: false,
+        };
+      });
+    }
+  }
+  // async function approveKYC(e, id){
+  //   e.preventDefault();
+  //   const userdata = getItem(KEY)
+  //   try {
+  //     setGeneralState((old) => {
+  //       return {
+  //         ...old,
+  //         loading: true,
+  //       };
+  //     });
+
+  //     const res = await getATeacherKYC(item, userdata?.token);
+  //     const { message, success, statusCode } = res;
+  //     if (!success) throw new AdvancedError(message, statusCode);
+  //     else {
+  //       //do somethings
+  //       // localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
+  //       toast.success(message, {
+  //         position: "top-right",
+  //         autoClose: 4000,
+  //         hideProgressBar: true,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message, {
+  //       position: "top-right",
+  //       autoClose: 4000,
+  //       hideProgressBar: true,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //     }) 
+  //   } finally{
+  //       setGeneralState((old) => {
+  //         return {
+  //           ...old,
+  //           loading: false,
+  //         };
+  //       });
+  //   }
+  // }
+
+ 
+  return (
+    <Admin header="Approval">
+      {loading && <Loader />}
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx["admin_profile_top"]}>
+          <div className={clsx["admin_profile_top_img"]}>
+            <img
+              src={data ? data.profileImg : avatar}
+              style={{ borderRadius: 10 }}
+              width="100%"
+              alt="Avatar"
+            />
+          </div>
+        </div>
+        <div className={clsx["admin_profile_main"]}>
+          <h1>{data ? `${data?.firstName} ${data?.lastName}` : "Olu Jacobs"}</h1>
+
+          <div className={clsx.admin__profile_info}>
+            {info.map(({ title, content }, i) => (
+              <Info title={title} content={content} key={i} />
+            ))}
+
+            
+            <div className="form-group my-3">
+              <label htmlFor="accessPledre" className="form-label generic_label">{data?.userType === "mentor" ? "Revoke Mentorship" : "Confer Mentorship"}</label>
+              <Switch onClick={(e) => conferMentorship(e, data?.userId, data?.email)} checked={data?.userType === "mentor" ? true : false} value="mentorship" />
+            </div>
+            <div className="form-group my-3">
+              <label htmlFor="accessPledre" className="form-label generic_label">Access Dashboard</label>
+              <Switch onClick={(e) => handleVerification(e, "pledre", data?.userId, data?.pledre?._id)} checked={data?.accessPledre} value="pledre" />
+            </div>
+            <div className="form-group my-3">
+              <label htmlFor="level" className="form-label generic_label">Assign Level</label>
+              <select name="level" id="level" className="form-select" style={{ width: "unset" }}>
+                <option value="">Select a level</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+
+
+            <div className={clsx.user__email}>
+              <button onClick={e => deleteUserHandler(e, data?.email)}>
+                <AiTwotoneDelete />  &nbsp; &nbsp;Delete User
+              </button>
+            </div>
+              
+            <button
+              className="button button-lg log_btn w-50 mt-3"
+              style={{ backgroundColor: data?.canTeach && "red" }}
+              type="submit"
+              onClick={(e) => approveApplication(e, data?.userId)}
+            >
+              {data?.canTeach ? "Revoke Application" : "Approve Application"}
+            </button>
+
+            {/* <button
+              className="button button-lg log_btn w-50 mt-3"
+              style={{ backgroundColor: "red" }}
+              type="submit"
+              onClick={(e) => deleteAUser(e, data?.userId)}
+            >
+              Delete User
+            </button> */}
+          </div>
+        </div>
+      </div>
+    </Admin>
+  );
+}
 
 // APPROVE TEACHER COMPONENT
 export function Approve() {
@@ -1418,13 +1828,20 @@ export function Approve() {
 
 // USERINFOCARD COMPONENT
 export function UserInfoCard({
+  user,
+  firstName,
+  lastName,
   img,
-  id,
-  name,
-  details,
-  date,
+  mentorId,
   email,
+  id,
+  level,
+  details,
   isActive = null,
+  isAbsolute,
+  type,
+  name,
+  date,
   paid,
   comp,
   num,
@@ -1432,9 +1849,6 @@ export function UserInfoCard({
   model,
   pack,
   rating,
-  firstName,
-  lastName,
-  user,
   unpaid,
   students,
   deleteUser,
@@ -1448,11 +1862,8 @@ export function UserInfoCard({
   start_date,
   course_status,
   enrolled,
-  level,
   packages = [],
-  type,
   coursePrice,
-  isAbsolute,
   showDetailsHandler = () => { return },
   approveHandler = () => { return },
 }) {
@@ -1714,8 +2125,10 @@ export function Mentors() {
         if (!success) throw new AdvancedError(message, statusCode);
         else {
           const { data } = res;
+
           //do somethings
           if (data.length > 0) {
+            console.log("teachers gotten", data);
             setTeachers(_ => data);
             toast.success(message, {
               position: "top-right",
@@ -1761,6 +2174,10 @@ export function Mentors() {
     localStorage.setItem("gotocourse-mentorDetails", JSON.stringify(details))
     if (email) navigate(`detail`);
   }
+
+  // function showDetailsHandler(e, id) {
+  //   navigate(`details/${id}`);
+  // }
   return (
     <Admin header={"Mentors"}>
       {loading && <Loader />}
@@ -1785,6 +2202,7 @@ export function Mentors() {
                     firstName={teacher.mentorFirstName}
                     lastName={teacher.mentorLastName}
                     img={teacher.mentorImg}
+                    mentorId={teacher.mentorId}
                     num={i}
                     email={teacher.mentorEmail}
                     level={teacher.expertise}
@@ -1793,6 +2211,7 @@ export function Mentors() {
                     isActive={null}
                     isAbsolute={false}
                     type={null}
+                    
                   // accessPledre={teacher.accessPledre}
                   />
                 ))}
@@ -2031,7 +2450,7 @@ export function MentorsDetail() {
   const navigate = useNavigate()
   const [data, setData] = useState(null);
   const { getItem } = useLocalStorage();
-  const { adminTeacherFunctions: { deleteMentor }, setGeneralState, } = useAuth();
+  const { adminTeacherFunctions: { deleteMentor },kycFunctions:{getAStudentKYCById, getAMentorKYCById}, setGeneralState, } = useAuth();
   const info = [
     {
       title: "Courses",
@@ -2047,12 +2466,73 @@ export function MentorsDetail() {
     },
   ];
 
+  
+
   useEffect(() => {
     const teacherInfo = getItem("gotocourse-mentorDetails")
     setData(teacherInfo);
   }, []);
 
   let accessPledre = false;
+
+
+
+ console.log("mentors data", data);
+
+ async function getMentorInfo(id) {
+    const userdata = getItem(KEY)
+
+    try {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: true,
+        };
+      });
+
+      const res = await getAMentorKYCById(id, userdata?.token);
+      const { message, success, statusCode } = res;
+      console.log("res data", data);
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        //do somethings
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        navigate(-1)
+      }
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    } finally {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: false,
+        };
+      });
+    }
+  }
+
+  useEffect(() => {
+    if(data){
+      getMentorInfo(data.mentorId)
+    }
+
+  },[data])
 
   async function deleteMentorPage(e, id) {
     e.preventDefault();
@@ -2109,7 +2589,7 @@ export function MentorsDetail() {
         <div className={clsx["admin_profile_top"]}>
           <div className={clsx["admin_profile_top_img"]}>
             <img
-              src={data?.mentorImg ? data.mentorImg : avatar}
+              src={data?.mentorImg ? `https://loftywebtech.com/gotocourse/api/uploads/${data?.mentorImg}`: avatar}
               style={{ borderRadius: 10 }}
               width="100%"
               alt="Avatar"
@@ -3762,6 +4242,7 @@ export function Student() {
   const flag = useRef(false);
   let userdata = getItem(KEY);
   const [loader, setLoader] = useState(true);
+  const navigate = useNavigate();
 
   const { adminStudentFunctions: { fetch, verify, verify_pledre }, generalState: { loading }, setGeneralState, commonFunctions: {deleteUser} } = useAuth();
 
@@ -3948,6 +4429,11 @@ export function Student() {
   }
 
 
+  function approveHandler(e, email, details) {
+    localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(details))
+    if (email) navigate(`approve?email=${email}`);
+  }
+
 
   const tableHeaders = ["No", "Name", "Email", "Approve", "Access Dashboard", "Actions"];
 
@@ -3972,34 +4458,28 @@ export function Student() {
                 {studentList?.length > 0 &&
                   studentList?.map(
                     (
-                      {
-                        userId,
-                        profileImg,
-                        accessPledre,
-                        email,
-                        name,
-                        isVerified,
-                        firstName,
-                        lastName,
-                      },
+                     student
+                     ,
                       i
                     ) => (
                       <UserInfoCard
                         key={i}
-                        name={name}
-                        firstName={firstName}
-                        lastName={lastName}
-                        img={profileImg}
-                        email={email}
+                        name={student.name}
+                        firstName={student.firstName}
+                        lastName={student.lastName}
+                        img={student.profileImg}
+                        email={student.email}
                         num={i}
-                        isActive={isVerified}
-                        accessPledre={accessPledre}
+                        isActive={student.isVerified}
+                        accessPledre={student.accessPledre}
                         user={true}
                         type={null}
-                        deleteUser={e => deleteUserHandler(e, email)}
-                        handleVerification={() => handleVerification(userId)}
-                        handlePledreAccess={() => handlePledreAccess(userId)}
+                        deleteUser={e => deleteUserHandler(e, student.email)}
+                        handleVerification={() => handleVerification(student.userId)}
+                        handlePledreAccess={() => handlePledreAccess(student.userId)}
                         isAbsolute={true}
+                        approveHandler={approveHandler}
+                        details={student}
                       />
                     )
                   )}
