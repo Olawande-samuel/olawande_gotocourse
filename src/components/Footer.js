@@ -109,7 +109,7 @@ const Footer = () => {
   
   return (
     <footer className="footer wrapper" style={{
-      background: celebRoute ?  "#000F62" : landing ? "var(--blue-ish)" :"var(--theme-blue)"  , color: landing ? "var(--theme-blue)": "#fffff"
+      background: celebRoute ?  "#000F62" : "var(--blue-ish)", color: celebRoute ?  "#fffff" : "var(--theme-blue)"
       }}>
       <div className="container ">
         {
@@ -137,7 +137,7 @@ const Footer = () => {
                 <Link to="/students" onClick={()=>window.scrollTo(0, 0)}>
                   <motion.button type="button" 
                    className="btn btn-light px-lg-4 py-lg-3" 
-                   style={{color: landing ? "var(--theme-blue": celebRoute ? "#fff":"#000", background: "#fff",borderColor: landing ? "var(--theme-blue)": "#fff" }}
+                   style={{color: celebRoute ? "#fff":"var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)"}}
                     whileHover={{
                         boxShadow: "0px 0px 8px rgb(0, 0, 0)",
                         textShadow: "0px 0px 8px rgb(255,255,255)",
@@ -152,7 +152,7 @@ const Footer = () => {
                 <Link to="/become-a-teacher">
                   <motion.button type="button" 
                    className="btn btn-light px-lg-4 py-lg-3" 
-                   style={{color: landing ? "var(--theme-blue)": celebRoute ? "#fff":"#000", borderColor: landing ? "var(--theme-blue)": "#fff"}}
+                   style={{color: celebRoute ? "#fff":"var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)"}}
                     whileHover={{
                         boxShadow: "0px 0px 8px rgb(0, 0, 0)",
                         textShadow: "0px 0px 8px rgb(255,255,255)",
@@ -172,13 +172,13 @@ const Footer = () => {
             <div className="footer_top pt-2">
               <Link to="/" onClick={()=>window.scrollTo(0, 0)}>
                 <i className="d-none d-lg-block">
-                  <Logo color={landing ? "var(--theme-blue)" : "#fff"} />
+                  <Logo color={!celebRoute ? "var(--theme-blue)" : "#fff"} />
                 </i>
             
                 <i className="d-lg-none">
-                  <Logosm color={landing ? "var(--theme-blue)" : "#fff"} />
+                  <Logosm color={!celebRoute? "var(--theme-blue)" : "#fff"} />
                 </i>
-                <small className="text-end d-block" style={{fontSize: '16px', color: landing ? "var(--theme-blue": "#fff"}}>Learn without limits.</small>
+                <small className="text-end d-block" style={{fontSize: '16px', color: !celebRoute ? "var(--theme-blue": "#fff"}}>Learn without limits.</small>
               </Link>
             </div>
         </div>
@@ -205,7 +205,7 @@ const Footer = () => {
                 transition={{
                   stiffness:300
                 }}
-                style={{color: landing ? "var(--theme-blue": "#FFF"}}
+                style={{color: !celebRoute ? "var(--theme-blue": "#FFF"}}
                 >
                     {link.title}
                 </motion.li>
@@ -229,7 +229,7 @@ const Footer = () => {
                 transition={{
                   stiffness:300
                 }}
-                style={{color: landing ? "var(--theme-blue": "#FFF"}}
+                style={{color: !celebRoute ? "var(--theme-blue": "#FFF"}}
                 >
                     {link.title}
                 </motion.li>

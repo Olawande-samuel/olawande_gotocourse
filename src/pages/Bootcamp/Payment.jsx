@@ -152,15 +152,6 @@ export const BootcampPayment = () => {
 
         setStripeId(data.clientSecret);
         setShowStripeModal(true);
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
       } catch (error) {
         toast.error(error.message, {
           position: "top-right",

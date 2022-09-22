@@ -135,6 +135,11 @@ const Sidebar = ({isMobile}) => {
             title: "Available Classes"
         },
         {
+            icon: BiCategory,
+            path: "myclasses",
+            title: "My Classes"
+        },
+        {
             icon: FiBookOpen,
             path: "courses",
             title: "My Courses"

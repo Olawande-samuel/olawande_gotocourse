@@ -181,7 +181,7 @@
   .newBootcamp,
   .newHero {
     height: 100% !important;
-    margin-bottom: 2rem;
+    /* margin-bottom: 2rem; */
   }
   .newHero_left-userSignin {
     width: 100%;
@@ -287,26 +287,17 @@
    justify-content: center;
   }
 }
-@media (max-width: 600px) {
-  .stats {
-   margin-top:-8%;
-  }
-}
-@media (max-width: 450px) {
-  .stats {
-   margin-top:-15%;
-  }
-}
+
 
 /* CATEGORIES */
 .newCategories_header_wrapper {
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 }
 .newCategories_header {
-  color: var(--theme-blue);
-  text-align: center;
+  color: #464646;
+  text-align: start;
   font-weight: 700;
-  font-size: clamp(1.8rem, -0.875rem + 8.333vw, 2.25rem);
+  font-size: clamp(1.4rem, -0.875rem + 8.333vw, 1.95rem);
   margin-bottom: 1rem;
 }
 .newCategories .MuiTabs-scroller button:hover {
@@ -319,6 +310,7 @@
 .newCategories_card {
   box-shadow: 0px 15px 13px 0px #eee;
   height: 100%;
+  max-width: 240px;
 }
 
 .newCategories_card-body {
@@ -330,8 +322,10 @@
   color: #000000;
 }
 .newCategories_image {
-  height: 200px;
+  height: 140px;
   width: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .benefit_box-top {
@@ -1217,6 +1211,18 @@
 }
 
 
-.models {
-    
+.popular_categories_tab_wrapper, .popular_views {
+    padding: 1rem 4rem;
 }
+
+@media  (max-width:712px){ 
+  .popular_categories_tab_wrapper, .popular_views {
+    padding: 1rem;
+  }
+}
+@media (max-width:574px){ 
+  .newCategories_card {
+    max-width: 100%;
+  }
+ }
+

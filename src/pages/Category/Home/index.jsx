@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import {MdNavigateNext} from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { Breadcrumbs } from "@mui/material";
+import { Breadcrumbs, Skeleton } from "@mui/material";
 
 
 
@@ -24,6 +24,10 @@ const CategoryContainer = styled.div`
     align-items: center;
     jusitfy-content: center;
     padding: 20px 40px;
+
+    @media screen and (max-width: 466px){
+        padding: 20px;
+    }
 `;
 
 const CategoryTop = styled.div`
@@ -33,11 +37,19 @@ const CategoryTop = styled.div`
     justify-content: space-between;
     margin-bottom: 20px;
     padding: 20px;
+
+    @media screen and (max-width: 812px){
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 0;
+    }
 `;
 
 const BreadcrumbLink = styled(Link)`
     color: ${props => props.$isCurrentPage ? '#0C2191' : '#666363'};
-    font-weight: 700;
+    font-weight: 400;
     font-size: 1rem;
     cursor: ${(props) => props.$isCurrentPage ? 'not-allowed': 'pointer'};
 
@@ -50,6 +62,18 @@ const BreadcrumbLink = styled(Link)`
 const Search = styled.section`
     display: flex;
     align-items: center;
+    min-width: 280px;
+
+    @media screen and (max-width: 466px){
+        flex-direction: column;
+        align-items: flex-start;
+        gap:10px;
+        margin-bottom: 20px;
+
+        & button {
+            margin: 0;
+        }
+    }
 `
 
 
@@ -60,7 +84,7 @@ const SearchInput = styled.input`
     padding: 8px;
     line-height: 2;
     outline: none;
-    min-width: 300px;
+    min-width: 250px;
     color: #9F9F9F;
     font-weight: 700;
     font-size: 0.9rem;
@@ -80,7 +104,7 @@ const SearchButton = styled.button`
 
 const CategoryBody = styled.div`
     width: 100%;
-    padding: 20px;
+    padding: 0px;
     display: grid;
     grid-template-columns: 1fr;
 `
@@ -89,30 +113,37 @@ const Card = styled.div`
     width: 100%;
     display: flex;
     align-items: flex-start;
-    padding: 20px;
-    min-height: calc(319px + 40px);
+    gap: 1rem;
+    padding: 10px;
+    // height: calc(260px + 40px);
+
+    @media screen and (max-width: 590px){
+        flex-direction: column;
+        gap: 20px;
+    }
 `
 
 const CardImageContainer = styled.div`
-    width: 399px;
+    max-width: 400px;
     height: 100%;
+    flex-basis: 40%;
 
     & img {
         width: 100%;
-        height: 100%;
+        min-height: 240px;
+        object-fit: cover;
     }
 `
 
 const CardBody = styled.div`
     flex: 1;
-    margin-left: 30px;
     max-width: 900px;
     height: 100%;
     display: flex;
     flex-direction: column;
 
     & h2 {
-        font-size: 30px;
+        font-size: 24px;
         color: #0C2191;
         font-weight: 700;
         text-transform: uppercase;
@@ -121,10 +152,18 @@ const CardBody = styled.div`
 
     & p {
         color: #070F18;
-        font-size: 14px;
-        line-height:32px;
-        margin-bottom: 50px;
+        font-size: 13px;
+        line-height:26px;
+        margin-bottom: 30px;
         font-style: normal;
+
+        @media screen and (max-width: 977px){
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     }
 
     & button {
@@ -133,8 +172,8 @@ const CardBody = styled.div`
         color: white;
         border-radius: 10px;
         border: none;
-        padding: 15px 30px;
-        font-size: 0.85rem;
+        padding: 10px 20px;
+        font-size: 0.75rem;
     }
 `
 
@@ -162,15 +201,7 @@ const Category = () => {
                 else {
                     const {data} = res;
                     setCategories(_ =>  [...data]);
-                    toast.success(message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+                   
                 }
             }catch(err){
                 toast.error(err.message, {
@@ -190,7 +221,7 @@ const Category = () => {
 
     return (
         <Layout background="category">
-            {loading && <Loader />}
+            {/* {loading && <Loader />} */}
             <ToastContainer />
             <CategoryContainer>
                 <CategoryTop>
@@ -198,7 +229,7 @@ const Category = () => {
                         <BreadcrumbLink to="/">
                             Home
                         </BreadcrumbLink>
-                        <BreadcrumbLink to="!" $isCurrentPage={true}>
+                        <BreadcrumbLink to="#" $isCurrentPage={true}>
                             Category
                         </BreadcrumbLink>
                     </Breadcrumbs>
@@ -210,9 +241,10 @@ const Category = () => {
 
                 <CategoryBody>
                     {
-                        categories.map(({bannerImg, description, name}, i) => (
-                            <CategoryCard key={i} image={bannerImg} description={description} 
-                            title={name} separator={(categories.length - 1) === i ? false : true} />
+                        categories.length !== 0 ? categories.map((category, i) => (
+                            <CategoryCard key={i} {...category} all={category} separator={(categories.length - 1) === i ? false : true} />
+                        )) : Array(4).fill(undefined).map((_, i) => (
+                            <Skeleton sx={{marginBottom: 10}} animation="wave" key={i} variant="rectangular" width={"100%"} height={350} />
                         ))
                     }
                 </CategoryBody>
@@ -222,17 +254,25 @@ const Category = () => {
 }
 
 
-function CategoryCard({image, title, description, separator}){
+function CategoryCard({bannerImg, name, description, all, separator}){
+        const navigate = useNavigate()
     return (
         <>
             <Card>
                 <CardImageContainer>
-                    <img src={image} alt="Card Image" />
+                    <img src={bannerImg} alt="Card Image" />
                 </CardImageContainer>
                 <CardBody>
-                    <h2>{title}</h2>
+                    <h2>{name}</h2>
                     <p>{description}</p>
-                    <Link to={`/category?name=${title}`}>
+                    <Link
+                     to={`/categories/${name?.split(" ").join("-").toLowerCase()}`}
+                     onClick={()=>{
+                        localStorage.setItem("gotocourse-category", JSON.stringify(all))
+                        navigate(`${name?.split(" ").join("-").toLowerCase()}`)
+                     }}
+                     
+                     >
                         <button>Learn more</button>
                     </Link>
                 </CardBody>

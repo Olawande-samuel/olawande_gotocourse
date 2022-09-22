@@ -356,6 +356,117 @@ export function Edit() {
     )
 }
 
+export function MyClasses(){
+    const { studentFunctions: { fetchBootcamps }} = useAuth();
+
+    const navigate = useNavigate();
+    const { getItem } = useLocalStorage();
+
+    const flag = useRef(false);
+    let userdata = getItem(KEY);
+
+    const [courseList, setCourseList] = useState([])
+    const [loading, setLoading] = useState(true);
+
+
+    const tableHeaders = ["No", "Title", "Tutor", "Date", "Time"];
+
+    useEffect(() => {
+        if (flag.current) return;
+        (async () => {
+            try {
+                const res = await fetchBootcamps(userdata?.token);
+                const { message, success, statusCode } = res;
+                if (!success) throw new AdvancedError(message, statusCode);
+                else if (statusCode === 1) {
+                    const { data } = res;
+                    if (data.length > 0) {
+                        setCourseList(data);
+                    } else {
+
+                        toast.error("No bootcamp found", {
+                            position: "top-right",
+                            autoClose: 4000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+
+                } else {
+                    throw new AdvancedError(message, statusCode);
+                }
+            } catch (err) {
+                toast.error(err.message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            } finally {
+                setLoading(_ => false);
+            }
+        })()
+        flag.current = true;
+    }, [])
+
+    console.log({ courseList })
+    function gotoCreateCourseHandler(e) {
+        navigate("create");
+    }
+    function detailHandler(e, _id) {
+        // navigate("/bootcamps/details/"+_id);
+        console.log("clicked")
+    }
+
+    return (
+        <Students header={"My Classes"}>
+            {loading && <Loader />}
+            <div className={clsx["students_profile"]}>
+                <div className={clsx.admin__student}>
+                    {/* <div className="d-flex justify-content-between align-items-center mb-4">
+                        <h4 style={{ margin: 0 }}>My Classes</h4>
+                    </div> */}
+                    <div className={clsx.admin__student_main}>
+                        {courseList?.length > 0 ? (
+                            <table className={clsx.admin__student_table}>
+                                <thead>
+                                    {tableHeaders.map((el, i) => (
+                                        <th key={i}>{el}</th>
+                                    ))}
+                                </thead>
+                                <tbody>
+                                    {courseList?.map(
+                                        // {_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}
+                                        ({ bootcampName,tutorName,startTime, endTime, endDate, startDate, bootcampId, bootcampImg, _id }, i) => (
+                                           <tr style={{padding:"1rem"}}>
+                                            <td>{i + 1}</td>
+                                            <td>{bootcampName}</td>
+                                            <td>{tutorName}</td>
+                                            <td>{getDate(startDate)}</td>
+                                            <td>{startTime}</td>
+                                           </tr>
+                                        )
+                                    )}
+                                    <p>
+                                    </p>
+                                </tbody>
+                            </table>
+                        ) : (<p className="lead">You haven't registered for a class</p>)
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </Students>
+    );
+}
+
 export function Bootcamps() {
     const { studentFunctions: { fetchBootcamps }, otherFunctions: { fetchBootcamps: studentboot } } = useAuth();
 
@@ -435,19 +546,6 @@ export function Bootcamps() {
         console.log("clicked")
     }
 
-    //     bootcampId: "62b6aafa831b67054024fd59"
-    // bootcampImg: "https://loftywebtech.com/gotocourse/api/uploads/file-1658253121120-689697422.jpeg"
-    // description: "Learn Coding in 10 weeks of online classes and be sure to set yourself up for high-paying jobs in your chosen career path on completion of your training.\n"
-    // duration: "10 weeks"
-    // endDate: "2022-12-04T00:00:00.000Z"
-    // endTime: "11:00am "
-    // instructorId: "62cd580930d7fc43073149f1"
-    // instructorName: "Teaching Tutoring"
-    // isActive: true
-    // startDate: "2022-09-25T00:00:00.000Z"
-    // startTime: "09:00am "
-    // title: "Coding Bootcamp"
-    // type: "full time"
     return (
         <Students header={"Available Classes"}>
             {loading && <Loader />}
@@ -974,7 +1072,6 @@ export function Fees() {
 
     useEffect(() => {
         if (userdata.token) {
-
             (async () => {
                 setGeneralState({ ...generalState, loading: true })
                 try {
@@ -984,15 +1081,6 @@ export function Fees() {
                     if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
                     else {
                         setCourse(res.data)
-                        toast.success(message, {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
                     }
                 } catch (err) {
                     toast.error(err.message, {
@@ -1023,15 +1111,6 @@ export function Fees() {
                     else {
                         const { data } = res;
                         setFees(_ => data);
-                        toast.success(message, {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
                     }
                 } catch (err) {
                     toast.error(err.message, {
@@ -1070,15 +1149,10 @@ export function Fees() {
     const filterpaid = (data) => {
         console.log("filter", data);
         let result = data.filter(c => c.status === "paid").reduce((sum, current) => sum + current.amount, 0)
-        //    console.log({result});
-
         return result
     }
 
     const handlePay = async (paymentId) => {
-        // console.log({paymentId});
-        // console.log("pay user" , userdata.token);
-
         setGeneralState({ ...generalState, loading: true })
         try {
             const res = await payStudentFees(userdata.token, paymentId)

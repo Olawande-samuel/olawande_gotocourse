@@ -13,7 +13,7 @@ import AdminDashboard from "./pages/Dashboard/Admin/Dashboard";
 
 
 import {Dashboard as StudentDashboard,Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Fees as StudentFees,
-   Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat, Notification as StudentNotifications} from "./pages/Dashboard/Students";
+   Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat, Notification as StudentNotifications, MyClasses} from "./pages/Dashboard/Students";
    
 import StudentHelp from "./pages/Dashboard/Students/Help";
 import StudentReferral from "./pages/Dashboard/Students/Referral";
@@ -33,7 +33,7 @@ import HIW, {HIWStudent, HIWTeacher, HIWAffiliate}from "./pages/HowItWorks"
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
-import { Categories, CourseDetail, CourseList, CourseProfile } from "./pages/Courses";
+import { Categories, CourseDetail, CourseList, CourseProfile, NewCourseProfile } from "./pages/Courses";
 import {Home as BecomeATeacher, Profile} from "./pages/Teacher";
 import Career from "./pages/Career";
 import All, {Payment, PaymentStatus} from "./pages/Teacher/Teachers";
@@ -80,6 +80,7 @@ const AdminLogin = lazy(() => import("./pages/Admin/Login"))
 const AdminSignup = lazy(() => import("./pages/Admin/SignUp"))
 const Lounge = lazy(() => import("./pages/Celebrity/Lounge"))
 const CelebProfile = lazy(() => import("./pages/Celebs/CelebProfile"))
+const BookMentor = lazy(() => import("./pages/Celebs/Booking"));
 const AllCelebs = lazy(() => import("./pages/Celebrity/AllCelebs"))
 const Email = lazy(() => import("./pages/Confirmation/Email"))
 const Confirm = lazy(() => import("./pages/Confirmation/Confirm"))
@@ -95,6 +96,12 @@ const Verification  = lazy(()=>import("./pages/User/Verification"));
 const About =  lazy(()=> import("./pages/About"))
 const Contact =  lazy(()=> import("./pages/Contact"))
 const Settings =  lazy(()=> import("./pages/Dashboard/Admin/Settings"))
+
+
+
+
+
+
 
 function App() {
   return (
@@ -132,7 +139,7 @@ function App() {
                 <Route path="user-onboarding" element={<UserOnBoarding />} />   
 
                 <Route path="classes" element={<Out />}>
-                  <Route path="available" element={<AvailableClasses />} />
+                  <Route index element={<AvailableClasses />} />
                   <Route path="class" element={<NewBootcampDetailsComponent />} />
                   <Route path="class/payment" element={<BootcampPayment />} />
                 </Route>         
@@ -145,6 +152,7 @@ function App() {
                     <Route path="all" element={<Out />}>
                       <Route index element={<AllCelebs />} />
                       <Route path=":id" element={<CelebProfile />} />
+                      <Route path=":id/booking" element={<BookMentor />} />
                     </Route> 
                   </Route>
                 </Route>
@@ -158,6 +166,7 @@ function App() {
                   <Route path="profile" element={<StudentProfile  />} />
                   <Route path="classes" element={<StudentClasses  />} />
                   <Route path="bootcamps" element={<StudentBootcamps  />} />
+                  <Route path="myclasses" element={<MyClasses  />} />
                   <Route path="profile/edit" element={<StudentEdit  />} />
                   <Route path="courses" element={<StudentCourses />} />
                   <Route path="wishlist" element={<Wishlist />} />
@@ -223,12 +232,15 @@ function App() {
                   <Route path="chat" element={<TeacherChat />} />
                 </Route>
                 <Route path="categories" element={<Out />}>
-                  <Route index element={<Categories  />} />
+                  {/* <Route index element={<Categories  />} /> */}
+                  <Route index element={<CategoryHome  />} />
                   <Route path=":id" element={<Out />}  >
-                    <Route index element={<CourseDetail />} />
+                    {/* <Route index element={<CourseDetail />} /> */}
+                    <Route index element={<CategoryDetail />} />
                     <Route path="courses" element={<CourseList />} />
                     <Route path="courses/:profile" element={<Out />}>
                       <Route index element={<CourseProfile />} />
+                      {/* <Route index element={<NewCourseProfile />} /> */}
                       <Route path="payment" element={<Payment />} />
                     </Route>
                   </Route>
