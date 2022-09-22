@@ -31,6 +31,7 @@ import ChatComponent from "../Admin/Chat";
 
 import LogoutButton from "../../../components/LogoutButton";
 import { PaymentModal } from "../../Bootcamp/Payment";
+import PayModal from "../../../components/PayModal";
 
 
 
@@ -929,6 +930,9 @@ export function Fees() {
     const [openPaymentModal, setOpenPaymentModal] = useState(false)
     const [stripeId, setStripeId] = useState("")
 
+    const handleClose = () => setOpenPaymentModal(false);
+
+
     // console.log("my userdata", userdata);
 
     console.log({ course });
@@ -1057,7 +1061,7 @@ export function Fees() {
     const filterpending = (data) => {
         console.log("filter", data);
         let result = data.filter(c => c.status === "pending").reduce((sum, current) => sum + current.amount, 0)
-           console.log({result});
+        console.log({ result });
 
         return result
     }
@@ -1092,11 +1096,11 @@ export function Fees() {
                     draggable: true,
                     progress: undefined,
                 });
-                
+
                 setStripeId(res.data.clientSecret)
                 setOpenPaymentModal(true)
                 getmyFees(userdata.token)
-
+                // handleClose()
 
             }
         } catch (err) {
@@ -1149,7 +1153,7 @@ export function Fees() {
                                                 <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
                                             </div>
                                             <div className={clsx.payment__button}>
-                                                <button className={pay.status === "paid" ? clsx.bggreen :clsx.bgred} disabled={pay.status === "paid"} onClick={() => handlePay(pay._id)}>{pay.status === "paid" ? "paid" : "pay"} </button>
+                                                <button className={pay.status === "paid" ? clsx.bggreen : clsx.bgred} disabled={pay.status === "paid"} onClick={() => handlePay(pay._id)}>{pay.status === "paid" ? "paid" : "pay"} </button>
                                             </div>
                                         </div>
 
@@ -1212,9 +1216,9 @@ export function Fees() {
 
                     }
 
-                    {openPaymentModal && <PaymentModal token={stripeId} />}
 
                 </div>
+                <PayModal token={stripeId} openPaymentModal={openPaymentModal} handleClose={handleClose} />
             </div>
 
         </Students>
