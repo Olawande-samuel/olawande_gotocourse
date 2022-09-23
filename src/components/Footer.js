@@ -270,11 +270,14 @@ const Footer = () => {
                 <ul>
                   <li>Categories</li>
                   {categories.data?.data?.map((link, index) => (
-                    <Link key={index} to={`/categories/${link.name.split(" ").join("-").toLowerCase()}`}>
+                    <Link key={index} to={`/categories/${link.name.split(" ").join("-").toLowerCase()}`} onClick={()=>{
+                      localStorage.setItem('gotocourse-category', JSON.stringify(link))
+                    }}>
                       <motion.li
                         style={{ 
                           color: !celebRoute ? "var(--theme-blue)" : "#FFF",
-                          lineHeight: "26px"
+                          lineHeight: "26px",
+                          fontSize: "11px",
                         }}
                         whileHover={{
                           scale: 1.1,
@@ -286,7 +289,7 @@ const Footer = () => {
                         }}
                         
                       >
-                        {link.name.toLowerCase()}
+                        {link.name}
                       </motion.li>
                     </Link>
                   ))}
