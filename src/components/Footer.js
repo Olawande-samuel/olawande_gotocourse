@@ -2,7 +2,6 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/Auth";
 import { useQuery } from "@tanstack/react-query";
-
 import { motion } from "framer-motion"
 import { Logo, Logosm } from "../images/components/svgs"
 import { HashLink } from "react-router-hash-link"
@@ -102,7 +101,10 @@ const rightLink = [
 const Footer = () => {
   const location = useLocation();
   const celebRoute = location.pathname.split("/")[1] === "lounge"
-  const landing = location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] === "become-a-teacher" || location.pathname.split("/")[1] === "classes";
+  // const landing = location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] === "become-a-teacher" || location.pathname.split("/")[1] === "classes";
+  const landing = location.pathname.split("/")[1] === "" 
+  const students =location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] === "students";
+  const teacher =location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] === "become-a-teacher" 
 
   const scrollWithOffset = (el) => {
     const yCoord = el.getBoundingClientRect().top + window.pageYOffset;
@@ -118,7 +120,7 @@ const Footer = () => {
   return (
     <footer className="footer wrapper" style={{
       background: celebRoute ? "#000F62" : "var(--blue-ish)", color: celebRoute ? "#fffff" : "var(--theme-blue)"
-      
+
     }}>
       <div className="container ">
         {
@@ -142,8 +144,9 @@ const Footer = () => {
                 knowledge sharing across the world! We are ready to serve you
                 anywhere you are
               </p>
+
               <div className="join_button_wrapper justify-content-center align-items-center d-flex mb-3">
-                <Link to="/students" onClick={() => window.scrollTo(0, 0)}>
+               {students && <Link to="/students" onClick={() => window.scrollTo(0, 0)}>
                   <motion.button type="button"
                     className="btn btn-light px-lg-4 py-lg-3"
                     style={{ color: celebRoute ? "#fff" : "var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)" }}
@@ -157,8 +160,10 @@ const Footer = () => {
                     Join as a student
                   </motion.button>
                 </Link>
-                <small>OR</small>
-                <Link to="/become-a-teacher">
+              } 
+             {landing && <small>OR</small> }
+
+                {teacher && <Link to="/become-a-teacher">
                   <motion.button type="button"
                     className="btn btn-light px-lg-4 py-lg-3"
                     style={{ color: celebRoute ? "#fff" : "var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)" }}
@@ -172,6 +177,7 @@ const Footer = () => {
                     Apply to teach
                   </motion.button>
                 </Link>
+                }
               </div>
             </div>
         }
@@ -267,28 +273,28 @@ const Footer = () => {
             </div>
 
             <div className="second">
-                <ul>
-                  <li>Categories</li>
-                  {categories.data?.data?.map((link, index) => (
-                    <Link key={index} to="/">
-                      <motion.li
-                        whileHover={{
-                          scale: 1.2,
-                          originX: 0,
-                          color: "#F75C4E"
-                        }}
-                        transition={{
-                          stiffness: 300
-                        }}
-                        style={{ color: !celebRoute ? "var(--theme-blue" : "#FFF" }}
-                      >
-                        {link.name}
-                      </motion.li>
-                    </Link>
-                  ))}
+              <ul>
+                <li>Categories</li>
+                {categories.data?.data?.map((link, index) => (
+                  <Link key={index} to="/">
+                    <motion.li
+                      whileHover={{
+                        scale: 1.2,
+                        originX: 0,
+                        color: "#F75C4E"
+                      }}
+                      transition={{
+                        stiffness: 300
+                      }}
+                      style={{ color: !celebRoute ? "var(--theme-blue" : "#FFF" }}
+                    >
+                      {link.name}
+                    </motion.li>
+                  </Link>
+                ))}
 
-                </ul>
-              </div>
+              </ul>
+            </div>
           </div>
 
           <div className="footer_right">
