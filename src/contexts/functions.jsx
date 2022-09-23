@@ -108,7 +108,7 @@ export const kycFunctions = {
     },
     getAStudentKYCById: async function(id, token){
         try{
-            const res = await axios.get(`${baseURL}/admin/student/kyc/:${id}`, {
+            const res = await axios.get(`${baseURL}/admin/student/kyc/${id}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
@@ -150,7 +150,7 @@ export const kycFunctions = {
     },
     getAMentorKYCById: async function(id, token){
         try{
-            const res = await axios.get(`${baseURL}/admin/mentor/kyc/:${id}`, {
+            const res = await axios.get(`${baseURL}/admin/mentor/kyc/${id}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"

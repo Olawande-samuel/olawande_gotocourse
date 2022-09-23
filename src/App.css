@@ -1220,14 +1220,31 @@ font-size: 16px;
 /* .footer_container{
   align-items:end;
 } */
-.footer .footer_left,
+/* .footer .footer_left,
 .footer .footer_right {
   flex: 50%;
 }
 .footer .footer_left {
   display: grid;
   place-items: center;
+} */
+
+.footer .footer_left,
+.footer .footer_right {
+  flex: 50%;
 }
+
+.footer .footer_left{
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+/* .footer .footer_left {
+  display: grid;
+  place-items: center;
+} */
+
+
 .footer a {
   color: #fff;
 }

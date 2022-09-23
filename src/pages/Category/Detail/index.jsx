@@ -506,10 +506,10 @@ const Detail = ({preview}) => {
                                             </CourseImageContainer>
                                             <CourseBody>
                                                 <h4>{course.name}</h4>
-                                                <CourseDuration>
+                                                {/* <CourseDuration>
                                                     <h6>Duration</h6>
                                                     <p>{`${getDate(course.startDate)} - ${getDate(course.endDate)}`}</p>
-                                                </CourseDuration>
+                                                </CourseDuration> */}
                                             </CourseBody>
                                         </CourseCard>
                                         </SwiperSlide>
