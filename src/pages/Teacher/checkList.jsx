@@ -204,7 +204,7 @@ const CheckList = () => {
                 <div>
                 <button className="button button-md log_btn w-100 mt-4" type="submit">Submit</button>
                 <button className="button button-md log_btn w-100 mt-4" style={{background:"var(--theme-orange"}} type="button" onClick={()=>navigate("/")}>Back</button>
-                </div>
+                </div> 
             </form>
         </div>
 

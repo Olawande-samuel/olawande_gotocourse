@@ -542,7 +542,7 @@ border-radius: 13.5px !important;
 }
 .services  .title {
   line-height: 72px;
-  color:var(--text-color-dark) !important;
+  color:var(--theme-blue) !important;
 }
 
 .services .services_list {
