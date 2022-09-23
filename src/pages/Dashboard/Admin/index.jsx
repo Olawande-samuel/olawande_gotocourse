@@ -1507,8 +1507,8 @@ export function ApproveStudent() {
             </button>
 
             <button
-              className="button button-lg log_btn w-50 mt-3"
-              style={{ backgroundColor: data?.accessPledre && "red" }}
+              className="button button-lg log_btn w-50 mt-3 d-block"
+              style={{ backgroundColor: data?.accessPledre && "var(--theme-orange" }}
               type="submit"
               onClick={(e) => approveApplication(e, data?.userId)}
             >

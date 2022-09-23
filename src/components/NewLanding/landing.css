@@ -272,11 +272,15 @@
   
 }
 @media (max-width: 768px) {
+  .stats {
+    min-height: 240px;
+  }
   .stats_wrapper {
    display: grid;
    gap: 1rem;
    grid-template-columns: repeat(3, 1fr); 
    justify-content: center;
+   min-height: 240px;
   }
 }
 @media (max-width: 450px) {

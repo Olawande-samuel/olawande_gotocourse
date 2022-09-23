@@ -72,12 +72,12 @@ export function Category() {
 }
 function PopularContainer({ category, tab_number, popular }) {
   const {
-    otherFunctions: { fetchCategory, searchCategories },
+    otherFunctions: { fetchCourses, searchCategories },
   } = useAuth();
 
 
-  const courses = useQuery(["popular"], () => searchCategories("CLOUD COMPUTING"), {
-    notifyOnChangeProps:["category", "isFetching"]
+  const courses = useQuery(["popular"], () => fetchCourses(), {
+    notifyOnChangeProps:["all course", "isFetching"]
   })
 
   useEffect(()=>{
