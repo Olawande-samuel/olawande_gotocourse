@@ -73,6 +73,7 @@ import SyllabusContextProvider from "./contexts/Syllabus";
 
 import { Suspense, lazy } from "react";
 import Loader from "./components/Loader";
+import CheckList from "./pages/Teacher/checkList";
 
 const Login = lazy(() => import("./pages/User/Login"))
 const SignUp = lazy(() => import("./pages/User/SignUp"))
@@ -137,6 +138,7 @@ function App() {
                 <Route path="students" element={<Students  />} />
                 <Route path="user-authentication" element={<Verification  />} />
                 <Route path="user-onboarding" element={<UserOnBoarding />} />   
+                <Route path="qualifications" element={<CheckList />} />   
 
                 <Route path="classes" element={<Out />}>
                   <Route index element={<AvailableClasses />} />

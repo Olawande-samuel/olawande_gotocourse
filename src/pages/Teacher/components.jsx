@@ -19,7 +19,7 @@ export function Jumbotron() {
                     <h1>There Is No Successful Student Without A Teacher</h1>
                     <p>Absolutely, no one can succeed in their practical lives without teachers. Students also need someone who can show simplify terms in real life. Not only as a coach, but start as a mentor to guide students along their academic lives.</p>
                     <div className="w-100" style={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
-                        <Link to="/teacher/signup">
+                        <Link to="/qualifications">
 
                             <motion.button
                                 transition={{
