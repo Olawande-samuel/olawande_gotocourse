@@ -93,7 +93,7 @@ const Sidebar = ({isMobile}) => {
         {
             icon: BiCategory,
             path: "bootcamps",
-            title: "Bootcamps"
+            title: "Classes"
         },
         {
             icon: BiBell,
@@ -258,7 +258,6 @@ const Sidebar = ({isMobile}) => {
     async function gotodashboard(){
         const data = getItem("gotocourse-userdata")
 
-        console.log(data)
         if(data.userType === "student" || data.userType === 'admin'){
             if(generalState.pledre.loginUser){
                 setLoading(true)
@@ -268,11 +267,9 @@ const Sidebar = ({isMobile}) => {
                         user_type: "student"
                     })
 
-                    console.log(response)
                 } catch(err){
                     console.error(err)
                 }finally{
-                    console.log("done!!!")
                     setLoading(false)
                 }
             }
@@ -285,11 +282,9 @@ const Sidebar = ({isMobile}) => {
                         user_type: route
                     })
 
-                    console.log(response)
                 } catch(err){
                     console.error(err)
                 }finally{
-                    console.log("done!!!")
                     setLoading(false)
                 }
             }
@@ -299,7 +294,6 @@ const Sidebar = ({isMobile}) => {
         }
     }
     const page = location.pathname.split("/")[1];
-    console.log(page, userdata);
     return (
         <>
         <div className={`${generalState.showSidebar ? clsx.open :clsx.close}  ${clsx.sidebar} sidebar `}>

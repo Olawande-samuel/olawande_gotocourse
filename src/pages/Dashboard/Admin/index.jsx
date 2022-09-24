@@ -2,16 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { motion } from "framer-motion"
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { motion } from "framer-motion";
 import { Switch, Modal, Box, Skeleton } from "@mui/material";
 
-import { AiOutlineDelete, AiTwotoneEdit, AiTwotoneDelete } from "react-icons/ai";
+import {
+  AiOutlineDelete,
+  AiTwotoneEdit,
+  AiTwotoneDelete,
+} from "react-icons/ai";
 import { FaUserLock } from "react-icons/fa";
-import { useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query";
 
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 
 import { Sidebar, Searchbar, Navbar } from "../components";
 import clsx from "./styles.module.css";
@@ -23,47 +27,46 @@ import { useSyllabus } from "../../../contexts/Syllabus";
 import { GuardedRoute } from "../../../hoc";
 import { AdvancedError } from "../../../classes";
 import { useLocalStorage } from "../../../hooks";
-import { getDate } from "../../../constants"
+import { getDate } from "../../../constants";
 import Input from "../../../components/Input";
 import Loader from "../../../components/Loader";
 import UploadForm from "../../../components/UploadForm";
 import { Rating } from "react-simple-star-rating";
-import vector from "../../../images/vector.png"
+import vector from "../../../images/vector.png";
 import { CourseDetail } from "../../Courses";
 import Layout from "../../../components/Layout";
 import ChatComponent from "./Chat";
 import { changeConstants, CreateCourseMain } from "../Teachers/CreateCourse";
-import { AllEarnings } from "../Teachers/Earnings"
+import { AllEarnings } from "../Teachers/Earnings";
 
-import EarningsTable from "./Earnings/Table"
+import EarningsTable from "./Earnings/Table";
 import LogoutButton from "../../../components/LogoutButton";
 import { GotoDashboard } from "../Students";
 import { BiQuestionMark } from "react-icons/bi";
 
-
-
 const KEY = "gotocourse-userdata";
 
-
-
-
 // CATEGORY DETAILS COMPONENT
-export function CategoryDetails({ }) {
+export function CategoryDetails({}) {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
-  const { generalState, setGeneralState, adminFunctions: { fetchCategory, deleteCategory } } = useAuth();
+  const {
+    generalState,
+    setGeneralState,
+    adminFunctions: { fetchCategory, deleteCategory },
+  } = useAuth();
   const flag = useRef(false);
   const [formstate, setFormstate] = useState({
     name: "",
     description: "",
     teacher: "",
-    student: ""
-  })
+    student: "",
+  });
   const [loading, setLoading] = useState(true);
   const teachers = ["Dr. Joy Castus"];
   const students = ["James Segun"];
-  const params = useParams()
+  const params = useParams();
   //get user id
   useEffect(() => {
     //fetch course details for the id
@@ -75,14 +78,14 @@ export function CategoryDetails({ }) {
         if (!success) throw new AdvancedError(message, statusCode);
         else {
           const { data } = res;
-          setFormstate(old => {
+          setFormstate((old) => {
             return {
               ...old,
               name: data.name,
               description: data.description,
-              categoryId: data.categoryId
-            }
-          })
+              categoryId: data.categoryId,
+            };
+          });
           toast.success(message, {
             position: "top-right",
             autoClose: 4000,
@@ -104,26 +107,23 @@ export function CategoryDetails({ }) {
           progress: undefined,
         });
       } finally {
-        setLoading(_ => false);
+        setLoading((_) => false);
       }
-    })()
+    })();
     flag.current = true;
 
-
     return () => console.log("Leaving Details page");
-  }, [])
-
+  }, []);
 
   function changeHandler(e) {
     const { name, value } = e.target;
-    setFormstate(old => {
+    setFormstate((old) => {
       return {
         ...old,
-        [name]: value
-      }
-    })
+        [name]: value,
+      };
+    });
   }
-
 
   async function deleteCategoryHandler(e) {
     e.preventDefault();
@@ -142,7 +142,7 @@ export function CategoryDetails({ }) {
           draggable: true,
           progress: undefined,
         });
-        navigate(-1)
+        navigate(-1);
       }
     } catch (err) {
       toast.error(err.message, {
@@ -157,23 +157,37 @@ export function CategoryDetails({ }) {
     } finally {
       setGeneralState({ ...generalState, loading: false });
     }
-
   }
 
   function editCategoryHandler(e) {
     navigate(`/admin/courses-categories/new?edit=${formstate.name}`);
-
   }
-
 
   return (
     <Admin header="ADMIN">
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <div className="d-flex justify-content-between align-items-center mb-5" style={{ width: "80%" }}>
-            <button type="button" className="btn btn-sm btn-danger px-3 py-2" style={{ fontSize: "0.8rem" }} onClick={deleteCategoryHandler}>Delete Category</button>
-            <button type="button" className="btn btn-sm btn-primary px-3 py-2" style={{ fontSize: "0.8rem" }} onClick={editCategoryHandler}>Edit Category</button>
+          <div
+            className="d-flex justify-content-between align-items-center mb-5"
+            style={{ width: "80%" }}
+          >
+            <button
+              type="button"
+              className="btn btn-sm btn-danger px-3 py-2"
+              style={{ fontSize: "0.8rem" }}
+              onClick={deleteCategoryHandler}
+            >
+              Delete Category
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm btn-primary px-3 py-2"
+              style={{ fontSize: "0.8rem" }}
+              onClick={editCategoryHandler}
+            >
+              Edit Category
+            </button>
           </div>
           <form className="form" style={{ width: "80%", margin: "20px 0px" }}>
             <Input
@@ -186,7 +200,10 @@ export function CategoryDetails({ }) {
             />
 
             <div className={clsx.form_group}>
-              <label htmlFor={"description"} className="form-label generic_label">
+              <label
+                htmlFor={"description"}
+                className="form-label generic_label"
+              >
                 Description
               </label>
               <textarea
@@ -251,35 +268,37 @@ export function CategoryDetails({ }) {
                 Add Student
               </button>
             </div> */}
-
           </form>
         </div>
       </div>
     </Admin>
-  )
+  );
 }
-
 
 // CATEGORY COMPONENT
 export function Category() {
   const navigate = useNavigate();
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState([]);
 
   const [loading, setLoading] = useState(true);
-  const { generalState, setGeneralState, adminFunctions: { fetchCategories } } = useAuth();
+  const {
+    generalState,
+    setGeneralState,
+    adminFunctions: { fetchCategories },
+  } = useAuth();
   const { getItem } = useLocalStorage();
   const flag = useRef(false);
-  const userdata = getItem(KEY)
-  const tableHeaders = ["No", "Name of Category", "Date", "No of Student"]
+  const userdata = getItem(KEY);
+  const tableHeaders = ["No", "Name of Category", "Date", "No of Student"];
 
   useEffect(() => {
     if (flag.current) return;
     (async () => {
-      setGeneralState({ ...generalState, loading: true })
+      setGeneralState({ ...generalState, loading: true });
       try {
         const res = await fetchCategories(userdata?.token);
         const { success, statusCode, message } = res;
-        setGeneralState({ ...generalState, loading: false })
+        setGeneralState({ ...generalState, loading: false });
 
         if (!success) throw new AdvancedError(message, statusCode);
         else {
@@ -294,11 +313,11 @@ export function Category() {
               draggable: true,
               progress: undefined,
             });
-            setCategories(_ => data);
+            setCategories((_) => data);
           }
         }
       } catch (err) {
-        setGeneralState({ ...generalState, loading: false })
+        setGeneralState({ ...generalState, loading: false });
         toast.error(err.message, {
           position: "top-right",
           autoClose: 4000,
@@ -309,13 +328,11 @@ export function Category() {
           progress: undefined,
         });
       } finally {
-        setLoading(_ => false);
+        setLoading((_) => false);
       }
-    })()
+    })();
     flag.current = true;
-  }, [])
-
-
+  }, []);
 
   function showDetailsHandler(e, id) {
     navigate(`details/${id}`);
@@ -327,10 +344,16 @@ export function Category() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <h1 style={{ margin: 0 }}>All Category</h1>  <button className="btn btn-primary px-4" onClick={(e) => navigate("new")}>Add Category</button>
+            <h1 style={{ margin: 0 }}>All Category</h1>{" "}
+            <button
+              className="btn btn-primary px-4"
+              onClick={(e) => navigate("new")}
+            >
+              Add Category
+            </button>
           </div>
           <div className={` ${clsx.admin__student_main}`}>
-            {categories.length > 0 ?
+            {categories.length > 0 ? (
               <table className={`${clsx.admin__student_table}`}>
                 <thead>
                   {tableHeaders.map((el, i) => (
@@ -338,40 +361,51 @@ export function Category() {
                   ))}
                 </thead>
                 <tbody>
-                  {categories?.length > 0 && categories?.map((
-                    { bannerImg, careerDescription, careerList,
-                      name, description, iconImg, categoryId,
-                      niche: nicheTitle, nicheDescription,
-                      nicheItems
-                    }, i) => (
-                    <UserInfoCard
-                      key={i}
-                      comp="Category"
-                      name={name}
-                      num={i}
-                      date={"2022-06-26T00:00:00.000Z".split("T")[0]}
-                      students={90}
-                      id={categoryId}
-                      showDetailsHandler={(e) => showDetailsHandler(e, name)}
-                    />
-                  ))}
+                  {categories?.length > 0 &&
+                    categories?.map(
+                      (
+                        {
+                          bannerImg,
+                          careerDescription,
+                          careerList,
+                          name,
+                          description,
+                          iconImg,
+                          categoryId,
+                          niche: nicheTitle,
+                          nicheDescription,
+                          nicheItems,
+                        },
+                        i
+                      ) => (
+                        <UserInfoCard
+                          key={i}
+                          comp="Category"
+                          name={name}
+                          num={i}
+                          date={"2022-06-26T00:00:00.000Z".split("T")[0]}
+                          students={90}
+                          id={categoryId}
+                          showDetailsHandler={(e) =>
+                            showDetailsHandler(e, name)
+                          }
+                        />
+                      )
+                    )}
                 </tbody>
               </table>
-              : <h5 style={{ textAlign: 'center' }}>No Category found</h5>
-            }
-
+            ) : (
+              <h5 style={{ textAlign: "center" }}>No Category found</h5>
+            )}
           </div>
         </div>
       </div>
     </Admin>
-  )
+  );
 }
-
-
 
 // NICHEMODAL COMPONENT
 function NicheModal({ newNiche, updateNiche, open, setOpen, handleChange }) {
-
   const style = {
     position: "absolute",
     top: "50%",
@@ -386,12 +420,11 @@ function NicheModal({ newNiche, updateNiche, open, setOpen, handleChange }) {
     padding: "4rem 2rem",
   };
 
-
   return (
     <Modal
       open={open}
-      onClose={e => {
-        setOpen(_ => false);
+      onClose={(e) => {
+        setOpen((_) => false);
       }}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
@@ -432,14 +465,11 @@ function NicheModal({ newNiche, updateNiche, open, setOpen, handleChange }) {
         </button>
       </Box>
     </Modal>
-  )
+  );
 }
-
-
 
 // CAREERMODAL COMPONENT
 function CareerModal({ newCareer, updateCareer, open, setOpen, handleChange }) {
-
   const style = {
     position: "absolute",
     top: "50%",
@@ -454,12 +484,11 @@ function CareerModal({ newCareer, updateCareer, open, setOpen, handleChange }) {
     padding: "4rem 2rem",
   };
 
-
   return (
     <Modal
       open={open}
-      onClose={e => {
-        setOpen(_ => false);
+      onClose={(e) => {
+        setOpen((_) => false);
       }}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
@@ -487,14 +516,11 @@ function CareerModal({ newCareer, updateCareer, open, setOpen, handleChange }) {
         </button>
       </Box>
     </Modal>
-  )
+  );
 }
-
-
 
 // CATEGORYPREVIEWMODAL COMPONENT
 export function CategoryPreviewModal({ preview, open, setOpen }) {
-
   const style = {
     position: "absolute",
     top: "50%",
@@ -509,30 +535,35 @@ export function CategoryPreviewModal({ preview, open, setOpen }) {
     padding: "4rem 2rem",
   };
 
-
   return (
     <Modal
       open={open}
-      onClose={e => {
-        setOpen(_ => false);
+      onClose={(e) => {
+        setOpen((_) => false);
       }}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <div className="position-relative" style={{
-          height: "80vh",
-          overflowY: "scroll",
-        }}>
+        <div
+          className="position-relative"
+          style={{
+            height: "80vh",
+            overflowY: "scroll",
+          }}
+        >
           <Layout>
-            {preview ? <CourseDetail preview={preview} /> : <h3>No preview available!!!</h3>}
+            {preview ? (
+              <CourseDetail preview={preview} />
+            ) : (
+              <h3>No preview available!!!</h3>
+            )}
           </Layout>
         </div>
       </Box>
     </Modal>
-  )
+  );
 }
-
 
 // SYLLABUS COMPONENT
 const Syllabus = ({ title, description }) => {
@@ -541,13 +572,14 @@ const Syllabus = ({ title, description }) => {
       <h5>{title}</h5>
       {description && <p>{description}</p>}
     </div>
-  )
-}
-
+  );
+};
 
 // CREATECOURSECATEGORY COMPONENT
 export function CreateCourseCategory() {
-  const { adminFunctions: { addCategory, fetchCategory, updateCategory } } = useAuth();
+  const {
+    adminFunctions: { addCategory, fetchCategory, updateCategory },
+  } = useAuth();
   const { getItem } = useLocalStorage();
   const userdata = getItem(KEY);
   const [open, setOpen] = useState(false);
@@ -564,22 +596,22 @@ export function CreateCourseCategory() {
     nicheDescription: "",
     career: "",
     bannerImg: "",
-    iconImg: ""
+    iconImg: "",
   });
 
   const [nichelist, setNichelist] = useState({
     name: "",
-    description: ""
-  })
+    description: "",
+  });
   const [nichelists, setNichelists] = useState([]);
   const [careerlist, setCareerlist] = useState({
     name: "",
-  })
+  });
   const [careerlists, setCareerlists] = useState([]);
   const flag = useRef(false);
   const location = useLocation();
   const [loader, setLoader] = useState(location.search ? true : false);
-  const edit = location.search
+  const edit = location.search;
 
   useEffect(() => {
     if (flag.current) return;
@@ -593,12 +625,16 @@ export function CreateCourseCategory() {
           else if (statusCode === 1) {
             const { data } = res;
 
-            const iconImg = data.iconImg?.split("/").slice(-1)
-            const bannerImg = data.bannerImg?.split("/").slice(-1)
-            setFormstate({ ...data, bannerImg: bannerImg[0], iconImg: iconImg[0] });
+            const iconImg = data.iconImg?.split("/").slice(-1);
+            const bannerImg = data.bannerImg?.split("/").slice(-1);
+            setFormstate({
+              ...data,
+              bannerImg: bannerImg[0],
+              iconImg: iconImg[0],
+            });
 
-            data.nicheItems && setNichelists(_ => data.nicheItems)
-            data.careerList && setCareerlists(_ => data.careerList)
+            data.nicheItems && setNichelists((_) => data.nicheItems);
+            data.careerList && setCareerlists((_) => data.careerList);
             toast.success(message, {
               position: "top-right",
               autoClose: 4000,
@@ -622,30 +658,29 @@ export function CreateCourseCategory() {
             progress: undefined,
           });
         } finally {
-          setLoader(_ => false);
+          setLoader((_) => false);
         }
-      })()
+      })();
     }
     //do some coding
     flag.current = true;
     return () => console.log("Removing CreateCategory component");
-  }, [])
-
-
-
+  }, []);
 
   async function submitHandler(e) {
     e.preventDefault();
-    setLoading(_ => true);
+    setLoading((_) => true);
     try {
       const data = {
         ...formstate,
         name: formstate.name.trim().toUpperCase(),
         importance: formstate.name.trim().toUpperCase(),
         nicheItems: [...nichelists],
-        careerList: [...careerlists]
-      }
-      const res = edit ? await updateCategory(userdata?.token, formstate.categoryId, data) : await addCategory(data, userdata?.token);
+        careerList: [...careerlists],
+      };
+      const res = edit
+        ? await updateCategory(userdata?.token, formstate.categoryId, data)
+        : await addCategory(data, userdata?.token);
       const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -673,51 +708,50 @@ export function CreateCourseCategory() {
         progress: undefined,
       });
     } finally {
-      setLoading(_ => false);
+      setLoading((_) => false);
     }
   }
 
   function changeHandler(e) {
     const { name, value } = e.target;
-    setFormstate(old => {
+    setFormstate((old) => {
       return {
         ...old,
-        [name]: value
-      }
-    })
+        [name]: value,
+      };
+    });
   }
   function nicheChangeHandler(e) {
     const { name, value } = e.target;
-    setNichelist(old => {
+    setNichelist((old) => {
       return {
         ...old,
-        [name]: value
-      }
-    })
+        [name]: value,
+      };
+    });
   }
   function careerChangeHandler(e) {
     const { name, value } = e.target;
-    setCareerlist(old => {
+    setCareerlist((old) => {
       return {
         ...old,
-        [name]: value
-      }
-    })
+        [name]: value,
+      };
+    });
   }
-
 
   function updateNicheHandler(e) {
     if (nichelist.name.trim() !== "" || nichelist.description.trim() !== "") {
-      setNichelists(old => {
-        return [...old, nichelist]
-      })
-      setNichelist(_ => {
+      setNichelists((old) => {
+        return [...old, nichelist];
+      });
+      setNichelist((_) => {
         return {
           name: "",
-          description: ""
-        }
-      })
-      setShowNicheModal(_ => false);
+          description: "",
+        };
+      });
+      setShowNicheModal((_) => false);
       toast.success("Niche added successfully", {
         position: "top-right",
         autoClose: 4000,
@@ -740,18 +774,17 @@ export function CreateCourseCategory() {
     }
   }
 
-
   function updateCareerHandler(e) {
     if (careerlist.name.trim() !== "" || careerlist.description.trim() !== "") {
-      setCareerlists(old => {
-        return [...old, careerlist]
-      })
-      setCareerlist(_ => {
+      setCareerlists((old) => {
+        return [...old, careerlist];
+      });
+      setCareerlist((_) => {
         return {
           name: "",
-        }
-      })
-      setShowCareerModal(_ => false);
+        };
+      });
+      setShowCareerModal((_) => false);
       toast.success("Career added successfully", {
         position: "top-right",
         autoClose: 4000,
@@ -774,18 +807,24 @@ export function CreateCourseCategory() {
     }
   }
 
-
   function showUploadFormHandler() {
-    setOpen(_ => true)
+    setOpen((_) => true);
   }
 
   return (
     <Admin header="Create Category">
       {loader && <Loader />}
-      <UploadForm isOpen={open} setIsOpen={setOpen} setPreviewImage={setPreviewImage} />
+      <UploadForm
+        isOpen={open}
+        setIsOpen={setOpen}
+        setPreviewImage={setPreviewImage}
+      />
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <div className={clsx.upload__file_box} onClick={showUploadFormHandler}>
+          <div
+            className={clsx.upload__file_box}
+            onClick={showUploadFormHandler}
+          >
             <img src={vector} alt={"Placeholder"} />
             <p>Upload banner or icon Image</p>
           </div>
@@ -812,9 +851,7 @@ export function CreateCourseCategory() {
               value={formstate.niche}
             />
             <div className={clsx.form_group}>
-              <label htmlFor={"brief"}>
-                Niche Description
-              </label>
+              <label htmlFor={"brief"}>Niche Description</label>
               <textarea
                 rows="5"
                 name="nicheDescription"
@@ -825,21 +862,37 @@ export function CreateCourseCategory() {
             </div>
             <div className={clsx.form_group}>
               <label>Niches</label>
-              {
-                nichelists.length !== 0 ? nichelists.map(({ name, description }, i) => (
+              {nichelists.length !== 0 ? (
+                nichelists.map(({ name, description }, i) => (
                   <Syllabus key={i} title={name} description={description} />
-                )) : <p className="m-0 text-danger" style={{ fontSize: '0.8rem', textIndent: 20 }}>No Niche</p>
-              }
+                ))
+              ) : (
+                <p
+                  className="m-0 text-danger"
+                  style={{ fontSize: "0.8rem", textIndent: 20 }}
+                >
+                  No Niche
+                </p>
+              )}
             </div>
-            <button type="button" style={{ background: "var(--secondary" }} className={`btn btn-primary ${clsx.addniche_button}`} onClick={e => setShowNicheModal(_ => true)}>Add Niche Items</button>
-            <NicheModal open={showNicheModal} newNiche={nichelist} setOpen={setShowNicheModal}
-              handleChange={nicheChangeHandler} updateNiche={updateNicheHandler} />
-
+            <button
+              type="button"
+              style={{ background: "var(--secondary" }}
+              className={`btn btn-primary ${clsx.addniche_button}`}
+              onClick={(e) => setShowNicheModal((_) => true)}
+            >
+              Add Niche Items
+            </button>
+            <NicheModal
+              open={showNicheModal}
+              newNiche={nichelist}
+              setOpen={setShowNicheModal}
+              handleChange={nicheChangeHandler}
+              updateNiche={updateNicheHandler}
+            />
 
             <div className={clsx.form_group}>
-              <label htmlFor={"brief"}>
-                Career Description
-              </label>
+              <label htmlFor={"brief"}>Career Description</label>
               <textarea
                 rows="5"
                 name="career"
@@ -850,15 +903,34 @@ export function CreateCourseCategory() {
             </div>
             <div className={clsx.form_group}>
               <label>Career</label>
-              {
-                careerlists.length !== 0 ? careerlists.map(({ name }, i) => (
+              {careerlists.length !== 0 ? (
+                careerlists.map(({ name }, i) => (
                   <Syllabus key={i} title={name} />
-                )) : <p className="m-0 text-danger" style={{ fontSize: '0.8rem', textIndent: 20 }}>No Careers</p>
-              }
+                ))
+              ) : (
+                <p
+                  className="m-0 text-danger"
+                  style={{ fontSize: "0.8rem", textIndent: 20 }}
+                >
+                  No Careers
+                </p>
+              )}
             </div>
-            <button type="button" style={{ background: "var(--secondary" }} className={`btn btn-primary mb-3 ${clsx.addcareer_button}`} onClick={e => setShowCareerModal(_ => true)}>Add Career List</button>
-            <CareerModal open={showCareerModal} newCareer={careerlist} setOpen={setShowCareerModal}
-              handleChange={careerChangeHandler} updateCareer={updateCareerHandler} />
+            <button
+              type="button"
+              style={{ background: "var(--secondary" }}
+              className={`btn btn-primary mb-3 ${clsx.addcareer_button}`}
+              onClick={(e) => setShowCareerModal((_) => true)}
+            >
+              Add Career List
+            </button>
+            <CareerModal
+              open={showCareerModal}
+              newCareer={careerlist}
+              setOpen={setShowCareerModal}
+              handleChange={careerChangeHandler}
+              updateCareer={updateCareerHandler}
+            />
 
             <Input
               label="Banner Image"
@@ -875,51 +947,62 @@ export function CreateCourseCategory() {
               handleChange={changeHandler}
               value={formstate.iconImg}
             />
-            <i className="text-danger">Make sure to upload the files and get the file name</i>
-
+            <i className="text-danger">
+              Make sure to upload the files and get the file name
+            </i>
           </form>
-          {loading ?
+          {loading ? (
             <div className="d-flex justify-content-center">
-              <div className="spinner-border text-primary" role="status" style={{ width: "4rem", height: "4rem" }}>
+              <div
+                className="spinner-border text-primary"
+                role="status"
+                style={{ width: "4rem", height: "4rem" }}
+              >
                 <span className="visually-hidden">Loading...</span>
               </div>
             </div>
-            :
+          ) : (
             <div className={clsx.form_button__container}>
-              <button className="btn btn-primary" onClick={submitHandler}>Submit</button>
-              <button className="btn border-primary text-primary"
+              <button className="btn btn-primary" onClick={submitHandler}>
+                Submit
+              </button>
+              <button
+                className="btn border-primary text-primary"
                 onClick={() => {
-                  setOpenPreview(!openPreview)
+                  setOpenPreview(!openPreview);
                 }}
-              >Preview</button>
+              >
+                Preview
+              </button>
             </div>
-          }
+          )}
         </div>
-        <CategoryPreviewModal preview={{
-          ...formstate,
-          nicheItems: [...nichelists],
-          careerList: [...careerlists]
-        }} open={openPreview} setOpen={setOpenPreview} />
+        <CategoryPreviewModal
+          preview={{
+            ...formstate,
+            nicheItems: [...nichelists],
+            careerList: [...careerlists],
+          }}
+          open={openPreview}
+          setOpen={setOpenPreview}
+        />
       </div>
     </Admin>
-  )
+  );
 }
-
-
 
 // DASHBOARD COMPONENT
 export function Profile() {
-
   const { getItem, updateItem } = useLocalStorage();
-  const { adminFunctions: { fetchProfile } } = useAuth();
+  const {
+    adminFunctions: { fetchProfile },
+  } = useAuth();
   const flag = useRef(false);
   let userdata = getItem(KEY);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
-
     if (flag.current) return;
     (async () => {
       try {
@@ -929,28 +1012,18 @@ export function Profile() {
         if (success) {
           let newValue = {
             ...userdata,
-            ...data
-          }
+            ...data,
+          };
           userdata = updateItem(KEY, newValue);
-
         } else throw new AdvancedError(message, statusCode);
       } catch (err) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       } finally {
-        setLoading(_ => false);
+        setLoading((_) => false);
       }
-    })()
+    })();
     flag.current = true;
   }, []);
-
 
   function editProfileHandler(e) {
     navigate("/admin/profile/edit");
@@ -979,7 +1052,10 @@ export function Profile() {
         </div>
         <div className={clsx["admin_profile_main"]}>
           <small className="text-muted">Name:</small>
-          <h1>{userdata?.firstName && userdata.firstName} {userdata?.lastName && userdata.lastName} </h1>
+          <h1>
+            {userdata?.firstName && userdata.firstName}{" "}
+            {userdata?.lastName && userdata.lastName}{" "}
+          </h1>
           <small className="text-muted">Bio:</small>
           <p className={clsx["admin__paragraph"]}>
             {userdata?.bio && userdata.bio}
@@ -989,7 +1065,6 @@ export function Profile() {
     </Admin>
   );
 }
-
 
 // INFO COMPONENT
 function Info({ title, content }) {
@@ -1003,14 +1078,21 @@ function Info({ title, content }) {
 
 //APPROVE STUDENT COMPONENT
 export function ApproveStudent() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [kyc, setKyc] = useState({});
 
   const [loading, setLoading] = useState(false);
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
-  const { adminTeacherFunctions: { verify, verify_pledre, addMentor }, kycFunctions: { getATeacherKYC, getAStudentKYCById }, generalState, generalState: { pledre }, setGeneralState, commonFunctions: { deleteUser } } = useAuth();
+  const {
+    adminStudentFunctions: { fetch, verify, verify_pledre },
+    kycFunctions: { getAStudentKYCById },
+    generalState,
+    generalState: { pledre },
+    setGeneralState,
+    commonFunctions: { deleteUser },
+  } = useAuth();
   const info = [
     {
       title: "Courses",
@@ -1020,330 +1102,132 @@ export function ApproveStudent() {
       title: "Category",
       content: "Cybersecurity, UX, Data Analysis",
     },
-    // {
-    //   title: "Mentorship status",
-    //   content: data?.userType === "mentor" ? "Assigned" : "Unassigned",
-    // },
   ];
 
   useEffect(() => {
     (async () => {
-      const teacherInfo = getItem("gotocourse-teacherDetails")
+      const studentInfo = getItem("gotocourse-studentDetails");
       let pledreInfo;
-      console.log("getting")
-      console.log({ pledre })
+      console.log("getting");
+      console.log({ pledre });
       try {
         if (pledre) {
-          console.log(pledre)
-          setGeneralState({ ...generalState, loading: true })
-          const pledRes = await pledre.getTeacherDetails(teacherInfo.email)
-          console.log({ pledRes })
+          console.log(pledre);
+          setGeneralState({ ...generalState, loading: true });
+          const pledRes = await pledre.getStudentDetails(studentInfo.email);
+          console.log({ pledRes });
           if (pledRes.email) {
-            pledreInfo = pledRes
+            pledreInfo = pledRes;
           } else {
-            pledreInfo = {}
+            pledreInfo = {};
           }
         }
       } catch (error) {
-        console.error(error.message)
+        console.error(error.message);
       } finally {
-        setGeneralState({ ...generalState, loading: false })
-
+        setGeneralState({ ...generalState, loading: false });
       }
 
-      localStorage.setItem("gotocourse-teacherDetails", JSON.stringify({ ...teacherInfo, pledre: pledreInfo }))
-      setData({ ...teacherInfo, pledre: pledreInfo });
-    }
-    )()
+      localStorage.setItem(
+        "gotocourse-studentDetails",
+        JSON.stringify({ ...studentInfo, pledre: pledreInfo })
+      );
+      setData({ ...studentInfo, pledre: pledreInfo });
+    })();
   }, []);
 
-  async function deleteUserHandler(e, email) {
+  async function handleVerification(e, id) {
+    e.preventDefault();
+    let item = {
+      userId: id,
+    };
     try {
-      setLoading(_ => true);
-      let value = window.confirm("Are you sure you want to delete this user?. This process is irreversible")
-      if (!value) return;
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: true,
+        };
+      });
+
+      const res = await verify(item, userdata?.token);
+      const { message, success, statusCode } = res;
+
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: false,
+        };
+      });
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        //do somethings
+        setData({ ...data, accessPledre: !data.isVerified });
+        toast.success(message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
+  async function handlePledreAccess(e, id) {
+    e.preventDefault();
+    let item = {
+      userId: id,
+    };
+
+    try {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: true,
+        };
+      });
+
+      const res = await verify_pledre(item, userdata?.token);
+      const { message, success, statusCode } = res;
+
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: false,
+        };
+      });
+
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        //do somethings
+        setData({ ...data, accessPledre: !data.accessPledre });
+        toast.success(message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
+  async function deleteUserHandler(e, email) {
+    console.log(e)
+    try {
+      const v = window.confirm("Are you sure you want to delete " + email);
+      if (!v) return;
+      setGeneralState({ ...generalState, loading: true });
       const res = await deleteUser(userdata?.token, [email]);
       console.log(res);
       const { statusCode, message, success } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
         navigate(-1);
+        console.log("deleted")
+        toast.success(message);
       }
     } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     } finally {
-      setLoading(_ => false);
+      setGeneralState({ ...generalState, loading: false });
     }
   }
-
-
-  async function handleVerification(e, type, id, pledreId) {
-    e.preventDefault();
-    const userdata = getItem(KEY)
-
-    console.log({ pledreId })
-    let item = {
-      userId: id,
-      pledreTeacherId: pledreId ? pledreId : null
-    };
-
-    if (!data.accessPledre) {
-      // give access and save pledre id to backend
-      try {
-        setGeneralState((old) => { return { ...old, loading: true, }; });
-        if (!pledreId) throw new AdvancedError("User is not registered to your school", 0)
-        const res = await verify_pledre(item, userdata?.token);
-        const { message, success, statusCode } = res;
-        if (!success) throw new AdvancedError(message, statusCode);
-        else {
-          console.log(data.accessPledre)
-          setData({ ...data, accessPledre: !data.accessPledre })
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        }
-      } catch (error) {
-        toast.error(error.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-      } finally {
-        setGeneralState((old) => {
-          return {
-            ...old,
-            loading: false,
-          };
-        });
-      }
-    } else {
-      // revoke access and delete teacher from pledre     
-      try {
-        setGeneralState((old) => { return { ...old, loading: true, }; });
-        // revoke acess
-        const res = await verify_pledre(item, userdata?.token);
-        const { message, success, statusCode } = res;
-        if (!success) throw new AdvancedError(message, statusCode);
-        else {
-          // remove from pledre
-          const PledRes = (data.accessPledre === true) && await pledre.deleteTeacher(data.pledre?._id)
-          console.log({ PledRes })
-          setData({ ...data, accessPledre: !data.accessPledre })
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        }
-      } catch (error) {
-        toast.error(error.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-      } finally {
-        setGeneralState((old) => {
-          return {
-            ...old,
-            loading: false,
-          };
-        });
-      }
-
-    }
-
-
-  }
-  async function approveApplication(e, id) {
-    e.preventDefault();
-    const userdata = getItem(KEY)
-
-    let item = {
-      userId: id,
-    };
-
-    try {
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: true,
-        };
-      });
-      const res = await verify(item, userdata?.token);
-      const { message, success, statusCode } = res;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        //do somethingtype s
-        localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
-
-        setData({ ...data, canTeach: !data?.canTeach })
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-    } catch (error) {
-      toast.error(error.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
-    } finally {
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: false,
-        };
-      });
-    }
-  }
-
-
-  async function conferMentorship(e, id, email) {
-    e.preventDefault();
-    const userdata = getItem(KEY)
-    let item = {
-      teacherEmail: email,
-    };
-    try {
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: true,
-        };
-      });
-
-      const res = await addMentor(item, userdata?.token);
-      const { message, success, statusCode } = res;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        //do somethings
-        // localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-    } catch (error) {
-      toast.error(error.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
-    } finally {
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: false,
-        };
-      });
-    }
-  }
-  // async function approveKYC(e, id){
-  //   e.preventDefault();
-  //   const userdata = getItem(KEY)
-  //   try {
-  //     setGeneralState((old) => {
-  //       return {
-  //         ...old,
-  //         loading: true,
-  //       };
-  //     });
-
-  //     const res = await getATeacherKYC(item, userdata?.token);
-  //     const { message, success, statusCode } = res;
-  //     if (!success) throw new AdvancedError(message, statusCode);
-  //     else {
-  //       //do somethings
-  //       // localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
-  //       toast.success(message, {
-  //         position: "top-right",
-  //         autoClose: 4000,
-  //         hideProgressBar: true,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.message, {
-  //       position: "top-right",
-  //       autoClose: 4000,
-  //       hideProgressBar: true,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //     }) 
-  //   } finally{
-  //       setGeneralState((old) => {
-  //         return {
-  //           ...old,
-  //           loading: false,
-  //         };
-  //       });
-  //   }
-  // }
-
-  console.log("mentors data", data);
-  console.log("loggged in userdata", userdata);
 
   async function getStudentKyc(id) {
-    const userdata = getItem(KEY)
+    const userdata = getItem(KEY);
 
     try {
       setGeneralState((old) => {
@@ -1359,28 +1243,12 @@ export function ApproveStudent() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         //do somethings
-        setKyc(res.data)
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        setKyc(res.data);
+        toast.success(message);
         // navigate(-1)
       }
     } catch (error) {
-      toast.error(error.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      toast.error(error.message);
     } finally {
       setGeneralState((old) => {
         return {
@@ -1393,62 +1261,9 @@ export function ApproveStudent() {
 
   useEffect(() => {
     if (data) {
-      getStudentKyc(data.userId)
+      getStudentKyc(data.userId);
     }
-
-  }, [data])
-  async function handlePledreAccess(id) {
-    // let item = {
-    //   userId: id,
-    // };
-
-    // try {
-    //   setGeneralState((old) => {
-    //     return {
-    //       ...old,
-    //       loading: true,
-    //     };
-    //   });
-
-    //   const res = await verify_pledre(item, userdata?.token);
-    //   const { message, success, statusCode } = res;
-
-
-    //   setGeneralState((old) => {
-    //     return {
-    //       ...old,
-    //       loading: false,
-    //     };
-    //   });
-
-    //   if (!success) throw new AdvancedError(message, statusCode);
-    //   else {
-    //     //do somethings
-    //     toast.success(message, {
-    //       position: "top-right",
-    //       autoClose: 4000,
-    //       hideProgressBar: true,
-    //       closeOnClick: true,
-    //       pauseOnHover: true,
-    //       draggable: true,
-    //       progress: undefined,
-    //     });
-    //     fetchStudents()
-    //   }
-    // } catch (error) {
-    //   toast.error(error.message, {
-    //     position: "top-right",
-    //     autoClose: 4000,
-    //     hideProgressBar: true,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //   });
-    // }
-  }
-  console.log("stuedent", { data });
-  console.log("stuedent", { kyc });
+  }, [data]);
   return (
     <Admin header="Approval">
       {loading && <Loader />}
@@ -1464,107 +1279,85 @@ export function ApproveStudent() {
           </div>
         </div>
         <div className={clsx["admin_profile_main"]}>
-          <h1>{data ? `${data?.firstName} ${data?.lastName}` : "Olu Jacobs"}</h1>
+          <h1>
+            {data ? `${data?.firstName} ${data?.lastName}` : "Olu Jacobs"}
+          </h1>
 
           <div className={clsx.admin__profile_info}>
             {info.map(({ title, content }, i) => (
               <Info title={title} content={content} key={i} />
             ))}
 
-
             <div className={clsx.kyc}>
-              {
-                kyc !== null && kyc.question && (
-                  <>
-                    <div className={clsx.title}>
-                      <p className={clsx.question}>Phone Number</p>
-                      <span className={clsx.answer}>{kyc.question?.phoneNumber}</span>
-                    </div>
+              {kyc !== null && kyc.question && (
+                <>
+                  <div className={clsx.title}>
+                    <p className={clsx.question}>Phone Number</p>
+                    <span className={clsx.answer}>
+                      {kyc.question?.phoneNumber}
+                    </span>
+                  </div>
 
+                  <div className={clsx.title}>
+                    <p className={clsx.question}>Degree</p>
+                    <span className={clsx.answer}>{kyc.question?.degree}</span>
+                  </div>
 
-                    <div className={clsx.title}>
-                      <p className={clsx.question}>Degree</p>
-                      <span className={clsx.answer}>{kyc.question?.degree}</span>
-                    </div>
+                  <div className={clsx.title}>
+                    <p className={clsx.question}>Experience</p>
+                    <span className={clsx.answer}>
+                      {kyc.question?.experience}
+                    </span>
+                  </div>
 
-                    <div className={clsx.title}>
-                      <p className={clsx.question}>Experience</p>
-                      <span className={clsx.answer}>{kyc.question?.experience}</span>
-                    </div>
+                  <div className={clsx.title}>
+                    <p className={clsx.question}>Employment</p>
+                    <span className={clsx.answer}>
+                      {kyc.question?.employment}
+                    </span>
+                  </div>
 
-                    <div className={clsx.title}>
-                      <p className={clsx.question}>Employment</p>
-                      <span className={clsx.answer}>{kyc.question?.employment}</span>
-                    </div>
+                  <div className={clsx.title}>
+                    <p className={clsx.question}>Country</p>
+                    <span className={clsx.answer}>{kyc.question?.country}</span>
+                  </div>
 
-                    <div className={clsx.title}>
-                      <p className={clsx.question}>Country</p>
-                      <span className={clsx.answer}>{kyc.question?.country}</span>
-                    </div>
-
-                    <div className={clsx.title}>
-                      <p className={clsx.question}>Region</p>
-                      <span className={clsx.answer}>{kyc.question?.region}</span>
-                    </div>
-
-                  </>
-                )
-              }
+                  <div className={clsx.title}>
+                    <p className={clsx.question}>Region</p>
+                    <span className={clsx.answer}>{kyc.question?.region}</span>
+                  </div>
+                </>
+              )}
             </div>
-
 
             <div className={clsx.user__email}>
-              <button onClick={e => deleteUserHandler(e, data?.email)}>
-                <AiTwotoneDelete />  &nbsp; &nbsp;Delete User
+              <button onClick={(e) => deleteUserHandler(e, data?.email)}>
+                <AiTwotoneDelete /> &nbsp; &nbsp;Delete User
               </button>
             </div>
-
-            {/* {data.accessPledre !== null && (
-              <div className={clsx.user__button}>
-                <span>
-                  <Switch onClick={handlePledreAccess} checked={data.accessPledre} />
-                </span>
-              </div>
-            )}
-
-            {data.isActive !== null && (
-              <td className={clsx.user__button}>
-                <span>
-                  <Switch onClick={handleVerification} checked={data.isActive} />
-                </span>
-              </td>
-            )} */}
-
             <button
               className="button button-lg log_btn w-50 mt-3"
               style={{ backgroundColor: data?.isVerified && "red" }}
               type="submit"
-              onClick={(e) => approveApplication(e, data?.userId)}
+              onClick={(e) => handleVerification(e, data?.userId)}
             >
               {data?.isVerified ? "Revoke Application" : "Approve Application"}
             </button>
 
             <button
               className="button button-lg log_btn w-50 mt-3 d-block"
-              style={{ backgroundColor: data?.accessPledre && "var(--theme-orange" }}
+              style={{
+                backgroundColor: data?.accessPledre && "var(--theme-orange",
+              }}
               type="submit"
-              onClick={(e) => approveApplication(e, data?.userId)}
+              onClick={(e) => handlePledreAccess(e, data?.userId)}
             >
-              {data?.accessPledre ? "Revoke Dashboard Access" : "Approve Dashboard Access"}
+              {data?.accessPledre
+                ? "Revoke Dashboard Access"
+                : "Approve Dashboard Access"}
             </button>
-
-            {/* <button
-              className="button button-lg log_btn w-50 mt-3"
-              style={{ backgroundColor: "red" }}
-              type="submit"
-              onClick={(e) => deleteAUser(e, data?.userId)}
-            >
-              Delete User
-            </button> */}
           </div>
         </div>
-
-
       </div>
     </Admin>
   );
@@ -1572,20 +1365,27 @@ export function ApproveStudent() {
 
 // APPROVE TEACHER COMPONENT
 export function Approve() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [kyc, setKyc] = useState({});
 
   const [loading, setLoading] = useState(false);
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
-  const { adminTeacherFunctions: { verify, verify_pledre, addMentor }, kycFunctions: { getATeacherKYC, getAMentorKYCById }, generalState, generalState: { pledre }, setGeneralState, commonFunctions: { deleteUser } } = useAuth();
+  const {
+    adminTeacherFunctions: { verify, verify_pledre, addMentor },
+    kycFunctions: { getATeacherKYC, getAMentorKYCById },
+    generalState,
+    generalState: { pledre },
+    setGeneralState,
+    commonFunctions: { deleteUser },
+  } = useAuth();
 
   console.log("mentors data", data);
   console.log("loggged in userdata", userdata);
 
   async function getMentorInfo(id) {
-    const userdata = getItem(KEY)
+    const userdata = getItem(KEY);
 
     try {
       setGeneralState((old) => {
@@ -1601,28 +1401,12 @@ export function Approve() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         //do somethings
-        setKyc(res.data)
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        setKyc(res.data);
+        toast.success(message);
         // navigate(-1)
       }
     } catch (error) {
-      toast.error(error.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      toast.error(error.message);
     } finally {
       setGeneralState((old) => {
         return {
@@ -1635,10 +1419,9 @@ export function Approve() {
 
   useEffect(() => {
     if (data) {
-      getMentorInfo(data.userId)
+      getMentorInfo(data.userId);
     }
-
-  }, [data])
+  }, [data]);
 
   const info = [
     {
@@ -1657,113 +1440,87 @@ export function Approve() {
 
   useEffect(() => {
     (async () => {
-      const teacherInfo = getItem("gotocourse-teacherDetails")
+      const teacherInfo = getItem("gotocourse-teacherDetails");
       let pledreInfo;
-      console.log("getting")
-      console.log({ pledre })
+      console.log("getting");
+      console.log({ pledre });
       try {
         if (pledre) {
-          console.log(pledre)
-          setGeneralState({ ...generalState, loading: true })
-          const pledRes = await pledre.getTeacherDetails(teacherInfo.email)
-          console.log({ pledRes })
+          console.log(pledre);
+          setGeneralState({ ...generalState, loading: true });
+          const pledRes = await pledre.getTeacherDetails(teacherInfo.email);
+          console.log({ pledRes });
           if (pledRes.email) {
-            pledreInfo = pledRes
+            pledreInfo = pledRes;
           } else {
-            pledreInfo = {}
+            pledreInfo = {};
           }
         }
       } catch (error) {
-        console.error(error.message)
+        console.error(error.message);
       } finally {
-        setGeneralState({ ...generalState, loading: false })
-
+        setGeneralState({ ...generalState, loading: false });
       }
 
-      localStorage.setItem("gotocourse-teacherDetails", JSON.stringify({ ...teacherInfo, pledre: pledreInfo }))
+      localStorage.setItem(
+        "gotocourse-teacherDetails",
+        JSON.stringify({ ...teacherInfo, pledre: pledreInfo })
+      );
       setData({ ...teacherInfo, pledre: pledreInfo });
-    }
-    )()
+    })();
   }, []);
+  console.log({ data });
 
   async function deleteUserHandler(e, email) {
     try {
-      setLoading(_ => true);
-      let value = window.confirm("Are you sure you want to delete this user?. This process is irreversible")
+      setLoading((_) => true);
+      let value = window.confirm(
+        "Are you sure you want to delete this user?. This process is irreversible"
+      );
       if (!value) return;
       const res = await deleteUser(userdata?.token, [email]);
       console.log(res);
       const { statusCode, message, success } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success(message);
         navigate(-1);
       }
     } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     } finally {
-      setLoading(_ => false);
+      setLoading((_) => false);
     }
   }
 
-
   async function handleVerification(e, type, id, pledreId) {
     e.preventDefault();
-    const userdata = getItem(KEY)
+    const userdata = getItem(KEY);
 
-    console.log({ pledreId })
+    console.log({ pledreId });
     let item = {
       userId: id,
-      pledreTeacherId: pledreId ? pledreId : null
+      pledreTeacherId: pledreId ? pledreId : null,
     };
 
     if (!data.accessPledre) {
       // give access and save pledre id to backend
       try {
-        setGeneralState((old) => { return { ...old, loading: true, }; });
-        if (!pledreId) throw new AdvancedError("User is not registered to your school", 0)
+        setGeneralState((old) => {
+          return { ...old, loading: true };
+        });
+        // if pledre sign up fails user pledreId won't exist.
+        if (!pledreId)
+          throw new AdvancedError("User is not registered to your school.", 0);
         const res = await verify_pledre(item, userdata?.token);
         const { message, success, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         else {
-          console.log(data.accessPledre)
-          setData({ ...data, accessPledre: !data.accessPledre })
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          setData({ ...data, accessPledre: !data.accessPledre });
+          toast.success(message);
         }
       } catch (error) {
-        toast.error(error.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
+        toast.error(error.message);
       } finally {
         setGeneralState((old) => {
           return {
@@ -1773,38 +1530,20 @@ export function Approve() {
         });
       }
     } else {
-      // revoke access and delete teacher from pledre     
+      // revoke access
       try {
-        setGeneralState((old) => { return { ...old, loading: true, }; });
-        // revoke acess
+        setGeneralState((old) => {
+          return { ...old, loading: true };
+        });
         const res = await verify_pledre(item, userdata?.token);
         const { message, success, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         else {
-          // remove from pledre
-          const PledRes = (data.accessPledre === true) && await pledre.deleteTeacher(data.pledre?._id)
-          console.log({ PledRes })
-          setData({ ...data, accessPledre: !data.accessPledre })
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          setData({ ...data, accessPledre: !data.accessPledre });
+          toast.success(message);
         }
       } catch (error) {
-        toast.error(error.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
+        toast.error(error.message);
       } finally {
         setGeneralState((old) => {
           return {
@@ -1813,19 +1552,16 @@ export function Approve() {
           };
         });
       }
-
     }
-
-
   }
-  async function approveApplication(e, id) {
+  async function approveApplication(e, id, pledreId) {
     e.preventDefault();
-    const userdata = getItem(KEY)
+    const userdata = getItem(KEY);
 
     let item = {
       userId: id,
+      pledreTeacherId: pledreId ? pledreId : null,
     };
-
     try {
       setGeneralState((old) => {
         return {
@@ -1838,29 +1574,16 @@ export function Approve() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         //do somethingtype s
-        localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
+        localStorage.setItem(
+          "gotocourse-teacherDetails",
+          JSON.stringify(res.data)
+        );
 
-        setData({ ...data, canTeach: !data?.canTeach })
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        setData({ ...data, canTeach: !data?.canTeach });
+        toast.success(message);
       }
     } catch (error) {
-      toast.error(error.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      toast.error(error.message);
     } finally {
       setGeneralState((old) => {
         return {
@@ -1871,10 +1594,9 @@ export function Approve() {
     }
   }
 
-
   async function conferMentorship(e, id, email) {
     e.preventDefault();
-    const userdata = getItem(KEY)
+    const userdata = getItem(KEY);
     let item = {
       teacherEmail: email,
     };
@@ -1890,28 +1612,10 @@ export function Approve() {
       const { message, success, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        //do somethings
-        // localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success(message);
       }
     } catch (error) {
-      toast.error(error.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      toast.error(error.message);
     } finally {
       setGeneralState((old) => {
         return {
@@ -1921,54 +1625,6 @@ export function Approve() {
       });
     }
   }
-  // async function approveKYC(e, id){
-  //   e.preventDefault();
-  //   const userdata = getItem(KEY)
-  //   try {
-  //     setGeneralState((old) => {
-  //       return {
-  //         ...old,
-  //         loading: true,
-  //       };
-  //     });
-
-  //     const res = await getATeacherKYC(item, userdata?.token);
-  //     const { message, success, statusCode } = res;
-  //     if (!success) throw new AdvancedError(message, statusCode);
-  //     else {
-  //       //do somethings
-  //       // localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(res.data))
-  //       toast.success(message, {
-  //         position: "top-right",
-  //         autoClose: 4000,
-  //         hideProgressBar: true,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.message, {
-  //       position: "top-right",
-  //       autoClose: 4000,
-  //       hideProgressBar: true,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //     }) 
-  //   } finally{
-  //       setGeneralState((old) => {
-  //         return {
-  //           ...old,
-  //           loading: false,
-  //         };
-  //       });
-  //   }
-  // }
-
-
   return (
     <Admin header="Approval">
       {loading && <Loader />}
@@ -1984,73 +1640,115 @@ export function Approve() {
           </div>
         </div>
         <div className={clsx["admin_profile_main"]}>
-          <h1>{data ? `${data?.firstName} ${data?.lastName}` : "Olu Jacobs"}</h1>
+          <h1>
+            {data ? `${data?.firstName} ${data?.lastName}` : "Olu Jacobs"}
+          </h1>
 
           <div className={clsx.admin__profile_info}>
             {info.map(({ title, content }, i) => (
               <Info title={title} content={content} key={i} />
             ))}
 
-<div className={clsx.kyc}>
-          {
-            kyc !== null && kyc.question && (
-              <>
-                <div className={clsx.title}>
-                  <p className={clsx.question}>Phone Number</p>
-                  <span className={clsx.answer}>{kyc.question?.phoneNumber}</span>
-                </div>
-                <div className={clsx.title}>
-                  <p className={clsx.question}>Certified</p>
-                  <span className={clsx.answer}>{kyc.question?.certified ? "true" : "false"}</span>
-                </div>
+            <div className={clsx.kyc}>
+              {kyc !== null && kyc.question && (
+                <>
+                  <div className={clsx.title}>
+                    <p className={clsx.question}>Phone Number</p>
+                    <span className={clsx.answer}>
+                      {kyc.question?.phoneNumber}
+                    </span>
+                  </div>
+                  <div className={clsx.title}>
+                    <p className={clsx.question}>Certified</p>
+                    <span className={clsx.answer}>
+                      {kyc.question?.certified ? "true" : "false"}
+                    </span>
+                  </div>
 
+                  <div className={clsx.title}>
+                    <p className={clsx.question}>Degree</p>
+                    <span className={clsx.answer}>{kyc.question?.degree}</span>
+                  </div>
 
-                <div className={clsx.title}>
-                  <p className={clsx.question}>Degree</p>
-                  <span className={clsx.answer}>{kyc.question?.degree}</span>
-                </div>
+                  <div className={clsx.title}>
+                    <p className={clsx.question}>Expertise</p>
+                    <span className={clsx.answer}>
+                      {kyc.question?.expertise}
+                    </span>
+                  </div>
 
-                <div className={clsx.title}>
-                  <p className={clsx.question}>Expertise</p>
-                  <span className={clsx.answer}>{kyc.question?.expertise}</span>
-                </div>
+                  <div className={clsx.title}>
+                    <p className={clsx.question}>Preferred Course</p>
+                    <span className={clsx.answer}>
+                      {kyc.question?.preferredCourse}
+                    </span>
+                  </div>
 
-                <div className={clsx.title}>
-                  <p className={clsx.question}>Preferred Course</p>
-                  <span className={clsx.answer}>{kyc.question?.preferredCourse}</span>
-                </div>
+                  <div className={clsx.title}>
+                    <p className={clsx.question}>Employment</p>
+                    <span className={clsx.answer}>
+                      {kyc.question?.employment}
+                    </span>
+                  </div>
 
-                <div className={clsx.title}>
-                  <p className={clsx.question}>Employment</p>
-                  <span className={clsx.answer}>{kyc.question?.employment}</span>
-                </div>
+                  <div className={clsx.title}>
+                    <p className={clsx.question}>Country</p>
+                    <span className={clsx.answer}>{kyc.question?.country}</span>
+                  </div>
 
-                <div className={clsx.title}>
-                  <p className={clsx.question}>Country</p>
-                  <span className={clsx.answer}>{kyc.question?.country}</span>
-                </div>
-
-                <div className={clsx.title}>
-                  <p className={clsx.question}>Region</p>
-                  <span className={clsx.answer}>{kyc.question?.region}</span>
-                </div>
-
-              </>
-            )
-          }
-        </div>
+                  <div className={clsx.title}>
+                    <p className={clsx.question}>Region</p>
+                    <span className={clsx.answer}>{kyc.question?.region}</span>
+                  </div>
+                </>
+              )}
+            </div>
 
             <div className="form-group my-3">
-              <label htmlFor="accessPledre" className="form-label generic_label">{data?.userType === "mentor" ? "Revoke Mentorship" : "Confer Mentorship"}</label>
-              <Switch onClick={(e) => conferMentorship(e, data?.userId, data?.email)} checked={data?.userType === "mentor" ? true : false} value="mentorship" />
+              <label
+                htmlFor="accessPledre"
+                className="form-label generic_label"
+              >
+                {data?.userType === "mentor"
+                  ? "Revoke Mentorship"
+                  : "Confer Mentorship"}
+              </label>
+              <Switch
+                onClick={(e) => conferMentorship(e, data?.userId, data?.email)}
+                checked={data?.userType === "mentor" ? true : false}
+                value="mentorship"
+              />
             </div>
             <div className="form-group my-3">
-              <label htmlFor="accessPledre" className="form-label generic_label">Access Dashboard</label>
-              <Switch onClick={(e) => handleVerification(e, "pledre", data?.userId, data?.pledre?._id)} checked={data?.accessPledre} value="pledre" />
+              <label
+                htmlFor="accessPledre"
+                className="form-label generic_label"
+              >
+                Access Dashboard
+              </label>
+              <Switch
+                onClick={(e) =>
+                  handleVerification(
+                    e,
+                    "pledre",
+                    data?.userId,
+                    data?.pledre?._id
+                  )
+                }
+                checked={data?.accessPledre}
+                value="pledre"
+              />
             </div>
             <div className="form-group my-3">
-              <label htmlFor="level" className="form-label generic_label">Assign Level</label>
-              <select name="level" id="level" className="form-select" style={{ width: "unset" }}>
+              <label htmlFor="level" className="form-label generic_label">
+                Assign Level
+              </label>
+              <select
+                name="level"
+                id="level"
+                className="form-select"
+                style={{ width: "unset" }}
+              >
                 <option value="">Select a level</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -2060,10 +1758,9 @@ export function Approve() {
               </select>
             </div>
 
-
             <div className={clsx.user__email}>
-              <button onClick={e => deleteUserHandler(e, data?.email)}>
-                <AiTwotoneDelete />  &nbsp; &nbsp;Delete User
+              <button onClick={(e) => deleteUserHandler(e, data?.email)}>
+                <AiTwotoneDelete /> &nbsp; &nbsp;Delete User
               </button>
             </div>
 
@@ -2071,7 +1768,9 @@ export function Approve() {
               className="button button-lg log_btn w-50 mt-3"
               style={{ backgroundColor: data?.canTeach && "red" }}
               type="submit"
-              onClick={(e) => approveApplication(e, data?.userId)}
+              onClick={(e) =>
+                approveApplication(e, data?.userId, data?.pledre?._id)
+              }
             >
               {data?.canTeach ? "Revoke Application" : "Approve Application"}
             </button>
@@ -2086,14 +1785,10 @@ export function Approve() {
             </button> */}
           </div>
         </div>
-
-       
       </div>
     </Admin>
   );
 }
-
-
 
 // USERINFOCARD COMPONENT
 export function UserInfoCard({
@@ -2133,41 +1828,62 @@ export function UserInfoCard({
   enrolled,
   packages = [],
   coursePrice,
-  showDetailsHandler = () => { return },
-  approveHandler = () => { return },
+  showDetailsHandler = () => {
+    return;
+  },
+  approveHandler = () => {
+    return;
+  },
 }) {
   return (
     <tr
       className={clsx.user__info_card}
-      onClick={(e) => ((comp === 'Category') || (comp === 'Courses')) ? showDetailsHandler(e, id) : approveHandler(e, email, details)}
+      onClick={(e) =>
+        comp === "Category" || comp === "Courses"
+          ? showDetailsHandler(e, id)
+          : approveHandler(e, email, details)
+      }
     >
       <td className={clsx.user__info}>{num + 1}.</td>
       {user && (
         <td className={clsx.user__details}>
-          {img && <img src={isAbsolute ? img : `https://loftywebtech.com/gotocourse/api/uploads/${img}`} alt="avatar" />}
+          {img && (
+            <img
+              src={
+                isAbsolute
+                  ? img
+                  : `https://loftywebtech.com/gotocourse/api/uploads/${img}`
+              }
+              alt="avatar"
+            />
+          )}
           <span>{`${firstName} ${lastName}`}</span>
         </td>
       )}
 
-      {(comp === "Courses" || comp === "History" || comp === "Teacher") && <td className={clsx.user__info}>{course}</td>}
+      {(comp === "Courses" || comp === "History" || comp === "Teacher") && (
+        <td className={clsx.user__info}>{course}</td>
+      )}
       {enrolled && <td className={clsx.user__info}>{enrolled}</td>}
       {comp === "History" && <td className={clsx.user__info}>{status}</td>}
 
-      {(comp === "Courses" || comp === "Category") && <td className={clsx.user__info}>{name}</td>}
+      {(comp === "Courses" || comp === "Category") && (
+        <td className={clsx.user__info}>{name}</td>
+      )}
 
       {(comp === "Courses" || date) && (
         <td className={clsx.user__date} style={{ padding: "2px 8px" }}>
           <span>{date}</span>
         </td>
       )}
-      {(comp === "History") && (
+      {comp === "History" && (
         <td className={clsx.user__date}>
           <span>{amount}</span>
         </td>
       )}
-      {(comp === "Courses") && (
+      {comp === "Courses" && (
         <td className={clsx.user__date}>
-          {packages.map(item => (
+          {packages.map((item) => (
             <div>{changeConstants(item.title)}</div>
           ))}
         </td>
@@ -2201,7 +1917,12 @@ export function UserInfoCard({
       )}
       {rating && (
         <td className={clsx.user__email}>
-          <Rating onClick={handleRating} ratingValue={starRating} size={18} initialValue={0} />
+          <Rating
+            onClick={handleRating}
+            ratingValue={starRating}
+            size={18}
+            initialValue={0}
+          />
         </td>
       )}
       {course_status && (
@@ -2221,8 +1942,9 @@ export function UserInfoCard({
       )}
       {unpaid && (
         <td className={clsx.user__button}>
-          <span style={{ color: 'red' }}>
-            -{new Intl.NumberFormat("en-us", {
+          <span style={{ color: "red" }}>
+            -
+            {new Intl.NumberFormat("en-us", {
               style: "currency",
               currency: "USD",
             }).format(unpaid)}
@@ -2238,9 +1960,7 @@ export function UserInfoCard({
       )}
       {type !== null && (
         <td className={clsx.user__button}>
-          <span>
-            {type}
-          </span>
+          <span>{type}</span>
         </td>
       )}
       {accessPledre !== null && (
@@ -2255,19 +1975,16 @@ export function UserInfoCard({
           <span>{level}</span>
         </td>
       )}
-      {
-        deleteUser && (
-          <td className={clsx.user__email}>
-            <button onClick={deleteUser}>
-              <AiTwotoneDelete />
-            </button>
-          </td>
-        )
-      }
+      {deleteUser && (
+        <td className={clsx.user__email}>
+          <button onClick={deleteUser}>
+            <AiTwotoneDelete />
+          </button>
+        </td>
+      )}
     </tr>
   );
 }
-
 
 // TEACHERS COMPONENT
 export function Teachers() {
@@ -2278,8 +1995,7 @@ export function Teachers() {
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const {
-
-    adminTeacherFunctions: { fetch }
+    adminTeacherFunctions: { fetch },
   } = useAuth();
   useEffect(() => {
     if (flag.current) return;
@@ -2292,7 +2008,7 @@ export function Teachers() {
         else {
           const { data } = res;
           //do somethings
-          setTeachers(_ => data);
+          setTeachers((_) => data);
           toast.success(message, {
             position: "top-right",
             autoClose: 4000,
@@ -2314,15 +2030,22 @@ export function Teachers() {
           progress: undefined,
         });
       } finally {
-        setLoading(_ => false);
+        setLoading((_) => false);
       }
     })();
     flag.current = true;
   }, []);
-  const tableHeaders = ["No", "Name", "Email", "Type", "Access Dashboard", "Level"];
+  const tableHeaders = [
+    "No",
+    "Name",
+    "Email",
+    "Type",
+    "Access Dashboard",
+    "Level",
+  ];
 
   function approveHandler(e, email, details) {
-    localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(details))
+    localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(details));
     if (email) navigate(`approve?email=${email}`);
   }
   return (
@@ -2332,7 +2055,14 @@ export function Teachers() {
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center flex-wrap">
             <h5>Mentors/Teachers</h5>
-            <button className="btn button-md" style={{ background: "var(--theme-blue)", color: "#fff" }} type="button" onClick={() => navigate("create/mentor")}>Add Mentor</button>
+            <button
+              className="btn button-md"
+              style={{ background: "var(--theme-blue)", color: "#fff" }}
+              type="button"
+              onClick={() => navigate("create/mentor")}
+            >
+              Add Mentor
+            </button>
           </div>
           <div className={`${clsx.admin__student_main}`}>
             <table className={`${clsx.admin__student_table}`}>
@@ -2342,29 +2072,31 @@ export function Teachers() {
                 ))}
               </thead>
               <tbody>
-                {teachers?.length > 0 && teachers?.map((teacher, i) => (
-                  <UserInfoCard
-                    key={i}
-                    user={true}
-                    firstName={teacher.firstName}
-                    lastName={teacher.lastName}
-                    img={teacher.profileImg}
-                    num={i}
-                    email={teacher.email}
-                    level={1}
-                    details={teacher}
-                    type={teacher.userType}
-                    approveHandler={approveHandler}
-                    accessPledre={teacher.accessPledre}
-                    isAbsolute={true}
-                  />
-                ))}
+                {teachers?.length > 0 &&
+                  teachers?.map((teacher, i) => (
+                    <UserInfoCard
+                      key={i}
+                      user={true}
+                      firstName={teacher.firstName}
+                      lastName={teacher.lastName}
+                      img={teacher.profileImg}
+                      num={i}
+                      email={teacher.email}
+                      level={1}
+                      details={teacher}
+                      type={teacher.userType}
+                      approveHandler={approveHandler}
+                      accessPledre={teacher.accessPledre}
+                      isAbsolute={true}
+                    />
+                  ))}
               </tbody>
             </table>
-            {teachers <= 0 && <div className="text-center">
-              <p style={{ textAlign: 'center' }}>No Teachers found</p>
-            </div>}
-
+            {teachers <= 0 && (
+              <div className="text-center">
+                <p style={{ textAlign: "center" }}>No Teachers found</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -2373,7 +2105,6 @@ export function Teachers() {
 }
 // MENTORS COMPONENT
 export function Mentors() {
-
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const flag = useRef(false);
@@ -2381,7 +2112,7 @@ export function Mentors() {
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const {
-    otherFunctions: { fetchMentors }
+    otherFunctions: { fetchMentors },
   } = useAuth();
   useEffect(() => {
     if (flag.current) return;
@@ -2398,7 +2129,7 @@ export function Mentors() {
           //do somethings
           if (data.length > 0) {
             console.log("teachers gotten", data);
-            setTeachers(_ => data);
+            setTeachers((_) => data);
             toast.success(message, {
               position: "top-right",
               autoClose: 4000,
@@ -2431,7 +2162,7 @@ export function Mentors() {
           progress: undefined,
         });
       } finally {
-        setLoading(_ => false);
+        setLoading((_) => false);
       }
     })();
     flag.current = true;
@@ -2440,7 +2171,7 @@ export function Mentors() {
   const tableHeaders = ["No", "Name", "Email", "Expertise"];
 
   function approveHandler(e, email, details) {
-    localStorage.setItem("gotocourse-mentorDetails", JSON.stringify(details))
+    localStorage.setItem("gotocourse-mentorDetails", JSON.stringify(details));
     if (email) navigate(`detail`);
   }
 
@@ -2464,33 +2195,34 @@ export function Mentors() {
                 ))}
               </thead>
               <tbody>
-                {teachers?.length > 0 && teachers?.map((teacher, i) => (
-                  <UserInfoCard
-                    key={i}
-                    user={true}
-                    firstName={teacher.mentorFirstName}
-                    lastName={teacher.mentorLastName}
-                    img={teacher.mentorImg}
-                    mentorId={teacher.mentorId}
-                    num={i}
-                    email={teacher.mentorEmail}
-                    level={teacher.expertise}
-                    details={teacher}
-                    approveHandler={approveHandler}
-                    isActive={null}
-                    isAbsolute={false}
-                    type={null}
+                {teachers?.length > 0 &&
+                  teachers?.map((teacher, i) => (
+                    <UserInfoCard
+                      key={i}
+                      user={true}
+                      firstName={teacher.mentorFirstName}
+                      lastName={teacher.mentorLastName}
+                      img={teacher.mentorImg}
+                      mentorId={teacher.mentorId}
+                      num={i}
+                      email={teacher.mentorEmail}
+                      level={teacher.expertise}
+                      details={teacher}
+                      approveHandler={approveHandler}
+                      isActive={null}
+                      isAbsolute={false}
+                      type={null}
 
-                  // accessPledre={teacher.accessPledre}
-                  />
-                ))}
+                      // accessPledre={teacher.accessPledre}
+                    />
+                  ))}
               </tbody>
             </table>
-            {teachers.length <= 0 &&
+            {teachers.length <= 0 && (
               <div className="text-center">
                 <p>No mentor page found</p>
               </div>
-            }
+            )}
           </div>
         </div>
       </div>
@@ -2498,10 +2230,12 @@ export function Mentors() {
   );
 }
 
-// ADD MENTORS COMPONENT 
+// ADD MENTORS COMPONENT
 
 export function AddMentor({ edit }) {
-  const { adminTeacherFunctions: { makeMentorPage, updateMentor } } = useAuth();
+  const {
+    adminTeacherFunctions: { makeMentorPage, updateMentor },
+  } = useAuth();
   const { getItem } = useLocalStorage();
 
   const [previewImage, setPreviewImage] = useState(false);
@@ -2511,7 +2245,7 @@ export function AddMentor({ edit }) {
   const [open, setOpen] = useState(false);
 
   function showUploadFormHandler() {
-    setOpen(_ => true)
+    setOpen((_) => true);
   }
 
   const [loading, setLoading] = useState(false);
@@ -2524,26 +2258,27 @@ export function AddMentor({ edit }) {
     experience: "",
     footnote: "",
     fee: "",
-
   });
 
-  const [bio, setBio] = useState("")
+  const [bio, setBio] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     if (edit) {
-      const editMentorData = getItem("gotocourse-mentorDetails")
-      setFormstate(editMentorData)
+      const editMentorData = getItem("gotocourse-mentorDetails");
+      setFormstate(editMentorData);
     }
-
-  }, [edit])
+  }, [edit]);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const formdata = { ...formstate, mentorBio: bio }
+    const formdata = { ...formstate, mentorBio: bio };
     setLoading(true);
     try {
-      const res = edit === "mentor" ? await updateMentor(formstate._id, formdata, userdata?.token,) : await makeMentorPage(userdata?.token, formdata);
+      const res =
+        edit === "mentor"
+          ? await updateMentor(formstate._id, formdata, userdata?.token)
+          : await makeMentorPage(userdata?.token, formdata);
       const { success, message, statusCode, data } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
@@ -2557,11 +2292,12 @@ export function AddMentor({ edit }) {
           progress: undefined,
         });
         if (edit === "mentor") {
-          localStorage.setItem("gotocourse-mentorDetails", JSON.stringify(data))
-          navigate(-1)
+          localStorage.setItem(
+            "gotocourse-mentorDetails",
+            JSON.stringify(data)
+          );
+          navigate(-1);
         }
-
-
       }
     } catch (err) {
       toast.error(err.message, {
@@ -2593,18 +2329,34 @@ export function AddMentor({ edit }) {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h3>Add Mentor</h3>
-          <UploadForm isOpen={open} setIsOpen={setOpen} setPreviewImage={setPreviewImage} />
+          <UploadForm
+            isOpen={open}
+            setIsOpen={setOpen}
+            setPreviewImage={setPreviewImage}
+          />
           <div className="row w-100 mt-4">
             <div className="col-12 d-flex justify-content-between align-items-center">
-              <div className={clsx.upload__file_box} onClick={showUploadFormHandler}>
+              <div
+                className={clsx.upload__file_box}
+                onClick={showUploadFormHandler}
+              >
                 <img src={vector} alt={"Placeholder"} />
                 <p>Upload Mentor image</p>
               </div>
-              {previewImage &&
+              {previewImage && (
                 <div className={clsx.upload__file_box}>
-                  <img src={previewImage} alt={"Placeholder"} style={{ width: "150px", height: "100px", objectFit: "cover", objectPosition: "top" }} />
+                  <img
+                    src={previewImage}
+                    alt={"Placeholder"}
+                    style={{
+                      width: "150px",
+                      height: "100px",
+                      objectFit: "cover",
+                      objectPosition: "top",
+                    }}
+                  />
                 </div>
-              }
+              )}
             </div>
           </div>
           <form className="form" style={{ width: "80%" }}>
@@ -2650,12 +2402,12 @@ export function AddMentor({ edit }) {
               <CKEditor
                 editor={ClassicEditor}
                 data={formstate.mentorBio}
-                onReady={editor => {
+                onReady={(editor) => {
                   // You can store the "editor" and use when it is needed.
                 }}
                 onChange={(event, editor) => {
                   const data = editor.getData();
-                  setBio(data)
+                  setBio(data);
                   // setFormstate({...formstate, mentorBio: data})
                 }}
               />
@@ -2709,17 +2461,18 @@ export function AddMentor({ edit }) {
         </div>
       </div>
     </Admin>
-
-  )
+  );
 }
-
 
 //MENTORS DETAILS COMPONENT
 export function MentorsDetail() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [data, setData] = useState(null);
   const { getItem } = useLocalStorage();
-  const { adminTeacherFunctions: { deleteMentor }, setGeneralState, } = useAuth();
+  const {
+    adminTeacherFunctions: { deleteMentor },
+    setGeneralState,
+  } = useAuth();
   const info = [
     {
       title: "Courses",
@@ -2735,21 +2488,16 @@ export function MentorsDetail() {
     },
   ];
 
-
-
   useEffect(() => {
-    const teacherInfo = getItem("gotocourse-mentorDetails")
+    const teacherInfo = getItem("gotocourse-mentorDetails");
     setData(teacherInfo);
   }, []);
 
   let accessPledre = false;
 
-
-
-
   async function deleteMentorPage(e, id) {
     e.preventDefault();
-    const userdata = getItem(KEY)
+    const userdata = getItem(KEY);
     let item = {
       userId: id,
     };
@@ -2775,7 +2523,7 @@ export function MentorsDetail() {
           draggable: true,
           progress: undefined,
         });
-        navigate(-1)
+        navigate(-1);
       }
     } catch (error) {
       toast.error(error.message, {
@@ -2786,7 +2534,7 @@ export function MentorsDetail() {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-      })
+      });
     } finally {
       setGeneralState((old) => {
         return {
@@ -2802,7 +2550,11 @@ export function MentorsDetail() {
         <div className={clsx["admin_profile_top"]}>
           <div className={clsx["admin_profile_top_img"]}>
             <img
-              src={data?.mentorImg ? `https://loftywebtech.com/gotocourse/api/uploads/${data?.mentorImg}` : avatar}
+              src={
+                data?.mentorImg
+                  ? `https://loftywebtech.com/gotocourse/api/uploads/${data?.mentorImg}`
+                  : avatar
+              }
               style={{ borderRadius: 10 }}
               width="100%"
               alt="Avatar"
@@ -2810,20 +2562,31 @@ export function MentorsDetail() {
           </div>
         </div>
         <div className={clsx["admin_profile_main"]}>
-          <h1>{data ? `${data?.mentorFirstName} ${data?.mentorLastName}` : ""}</h1>
+          <h1>
+            {data ? `${data?.mentorFirstName} ${data?.mentorLastName}` : ""}
+          </h1>
 
           <div className={clsx.admin__profile_info}>
             <div className={clsx.admin__info}>
               <span className={clsx.admin__info_title}>Email</span>
-              <span className={clsx.admin__info_content}>{data?.mentorEmail}</span>
+              <span className={clsx.admin__info_content}>
+                {data?.mentorEmail}
+              </span>
             </div>
             <div className={clsx.admin__info}>
               <span className={clsx.admin__info_title}>Expertise</span>
-              <span className={clsx.admin__info_content}>{data?.expertise}</span>
+              <span className={clsx.admin__info_content}>
+                {data?.expertise}
+              </span>
             </div>
             <div className={clsx.admin__info}>
               <span className={clsx.admin__info_title}>Bio</span>
-              <div className={clsx.admin__info_content} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data?.mentorBio) }} />
+              <div
+                className={clsx.admin__info_content}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(data?.mentorBio),
+                }}
+              />
             </div>
             <div className={clsx.admin__info}>
               <span className={clsx.admin__info_title}>Fees</span>
@@ -2842,7 +2605,7 @@ export function MentorsDetail() {
               className="button button-lg log_btn"
               type="submit"
               onClick={(e) => {
-                navigate("edit")
+                navigate("edit");
               }}
             >
               Edit
@@ -2856,12 +2619,14 @@ export function MentorsDetail() {
 
 // COURSES COMPONENT
 export function Courses() {
-  const { adminFunctions: { fetchCourses } } = useAuth();
+  const {
+    adminFunctions: { fetchCourses },
+  } = useAuth();
   const { getItem } = useLocalStorage();
   const navigate = useNavigate();
   const flag = useRef(false);
   let userdata = getItem(KEY);
-  const [courseList, setCourseList] = useState([])
+  const [courseList, setCourseList] = useState([]);
   const [loading, setLoading] = useState(true);
   const tableHeaders = [
     "No",
@@ -2906,17 +2671,15 @@ export function Courses() {
           progress: undefined,
         });
       } finally {
-        setLoading(_ => false);
+        setLoading((_) => false);
       }
-    })()
+    })();
     flag.current = true;
-  }, [])
+  }, []);
 
   function gotoCreateCourseHandler(e) {
     navigate("create");
   }
-
-
 
   function showDetailsHandler(e, id) {
     navigate(`details/${id}`);
@@ -2927,7 +2690,14 @@ export function Courses() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <h1 style={{ margin: 0 }}>All Courses</h1>  <button type="button" className="btn btn-primary px-5" onClick={gotoCreateCourseHandler}>Add Course</button>
+            <h1 style={{ margin: 0 }}>All Courses</h1>{" "}
+            <button
+              type="button"
+              className="btn btn-primary px-5"
+              onClick={gotoCreateCourseHandler}
+            >
+              Add Course
+            </button>
           </div>
 
           <div className={clsx.admin__student_main}>
@@ -2938,37 +2708,38 @@ export function Courses() {
                 ))}
               </thead>
               <tbody>
-                {courseList.length > 0 && courseList.map(
-                  (
-                    {
-                      category,
-                      name,
-                      price,
-                      status,
-                      type,
-                      approve,
-                      courseId,
-                      startDate,
-                      packages,
-                      endDate
-                    },
-                    i
-                  ) => (
-                    <UserInfoCard
-                      key={i}
-                      comp={"Courses"}
-                      num={i}
-                      name={category}
-                      course={name}
-                      rating={4}
-                      id={courseId}
-                      showDetailsHandler={showDetailsHandler}
-                      packages={packages}
-                      date={`${getDate(startDate)} - ${getDate(endDate)}`}
-                      isActive={status === "active" ? true : false}
-                    />
-                  )
-                )}
+                {courseList.length > 0 &&
+                  courseList.map(
+                    (
+                      {
+                        category,
+                        name,
+                        price,
+                        status,
+                        type,
+                        approve,
+                        courseId,
+                        startDate,
+                        packages,
+                        endDate,
+                      },
+                      i
+                    ) => (
+                      <UserInfoCard
+                        key={i}
+                        comp={"Courses"}
+                        num={i}
+                        name={category}
+                        course={name}
+                        rating={4}
+                        id={courseId}
+                        showDetailsHandler={showDetailsHandler}
+                        packages={packages}
+                        date={`${getDate(startDate)} - ${getDate(endDate)}`}
+                        isActive={status === "active" ? true : false}
+                      />
+                    )
+                  )}
               </tbody>
             </table>
           </div>
@@ -2983,7 +2754,6 @@ export function CreateCourse() {
   const location = useLocation();
   const [loader, setLoader] = useState(location.search ? true : false);
 
-
   return (
     <Admin header={location.search ? "Edit Course" : "Create Course"}>
       {/* {loader && <Loader />} */}
@@ -2995,11 +2765,20 @@ export function CreateCourse() {
 }
 
 // COURSE DETAILS COMPONENT
-export function CourseDetails({ }) {
+export function CourseDetails({}) {
   const navigate = useNavigate();
   const { getItem, updateItem } = useLocalStorage();
   let userdata = getItem(KEY);
-  const { generalState, setGeneralState, adminFunctions: { fetchCourses, deleteCourse, toggleCourseStatus, adminUpdateCourse } } = useAuth();
+  const {
+    generalState,
+    setGeneralState,
+    adminFunctions: {
+      fetchCourses,
+      deleteCourse,
+      toggleCourseStatus,
+      adminUpdateCourse,
+    },
+  } = useAuth();
   const flag = useRef(false);
   const [formstate, setFormstate] = useState({
     name: "",
@@ -3007,11 +2786,11 @@ export function CourseDetails({ }) {
     status: false,
     teacher: "",
     student: "",
-    instructors: []
-  })
+    instructors: [],
+  });
 
-  const [openprompt, setOpenprompt] = useState(false)
-  const [courseTutorId, setCourseTutorId] = useState(false)
+  const [openprompt, setOpenprompt] = useState(false);
+  const [courseTutorId, setCourseTutorId] = useState(false);
   const [loading, setLoading] = useState(true);
   const params = useParams();
 
@@ -3026,13 +2805,13 @@ export function CourseDetails({ }) {
         if (!success) throw new AdvancedError(message, statusCode);
         else {
           const { data } = res;
-          let course = data.find(d => d.courseId === params?.id);
-          setFormstate(old => {
+          let course = data.find((d) => d.courseId === params?.id);
+          setFormstate((old) => {
             return {
               ...old,
-              ...course
-            }
-          })
+              ...course,
+            };
+          });
           toast.success("Course Details fetched successfully", {
             position: "top-right",
             autoClose: 4000,
@@ -3054,29 +2833,26 @@ export function CourseDetails({ }) {
           progress: undefined,
         });
       } finally {
-        setLoading(_ => false);
+        setLoading((_) => false);
       }
-    })()
+    })();
     flag.current = true;
 
-
     return () => console.log("Leaving Details page");
-  }, [])
-
+  }, []);
 
   function changeHandler(e) {
     const { name, value } = e.target;
-    setFormstate(old => {
+    setFormstate((old) => {
       return {
         ...old,
-        [name]: value
-      }
-    })
+        [name]: value,
+      };
+    });
   }
 
-
   async function deleteCourseHandler(e) {
-    setLoading(_ => true);
+    setLoading((_) => true);
     try {
       const res = await deleteCourse(userdata?.token, params?.id);
       const { success, message, statusCode } = res;
@@ -3091,7 +2867,7 @@ export function CourseDetails({ }) {
           draggable: true,
           progress: undefined,
         });
-        navigate(-1)
+        navigate(-1);
       }
     } catch (err) {
       toast.error(err.message, {
@@ -3104,15 +2880,14 @@ export function CourseDetails({ }) {
         progress: undefined,
       });
     } finally {
-      setLoading(_ => false);
+      setLoading((_) => false);
     }
   }
 
-
-
   async function toggleCourseStatusHandler(e) {
-    setLoading(_ => true);
-    let pledId
+    console.log({ formstate });
+    setLoading((_) => true);
+    let pledId;
     try {
       if (formstate.status !== "active") {
         const pledRes = await generalState.pledre.addCourse({
@@ -3120,17 +2895,21 @@ export function CourseDetails({ }) {
           course_description: formstate.description,
           is_public: false,
           short_description: formstate.description,
-          price: formstate.price
-        })
-        console.log({ pledRes })
+          price: formstate.price,
+        });
+        console.log({ pledRes });
         if (pledRes.id) {
-          pledId = pledRes.id
-          const res = await toggleCourseStatus(userdata?.token, params?.id, { pledreCourseId: pledId });
-
-          // const res = await toggleCourseStatus(userdata?.token, params?.id, {});
+          pledId = pledRes.id;
+          const res = await toggleCourseStatus(userdata?.token, params?.id, {
+            pledreCourseId: pledId,
+          });
           const { success, message, statusCode } = res;
           if (!success) throw new AdvancedError(message, statusCode);
-          setFormstate({ ...formstate, status: "active" })
+          setFormstate({
+            ...formstate,
+            status: "active",
+            pledreCourseId: pledId,
+          });
 
           // NEEDS REMOVE COURSE API FROM PLEDRE
 
@@ -3144,12 +2923,13 @@ export function CourseDetails({ }) {
             progress: undefined,
           });
         }
-      }
-      else {
-        const res = await toggleCourseStatus(userdata?.token, params?.id, { pledreCourseId: pledId });
+      } else {
+        const res = await toggleCourseStatus(userdata?.token, params?.id, {
+          pledreCourseId: formstate.pledreCourseId,
+        });
         const { success, message, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
-        setFormstate({ ...formstate, status: "inactive" })
+        setFormstate({ ...formstate, status: "inactive" });
         toast.success(message, {
           position: "top-right",
           autoClose: 4000,
@@ -3171,50 +2951,58 @@ export function CourseDetails({ }) {
         progress: undefined,
       });
     } finally {
-      setLoading(_ => false);
+      setLoading((_) => false);
     }
   }
 
   function editCourseHandler(e) {
     setGeneralState({ ...generalState, courseInfo: formstate });
-    updateItem("gotocourse-courseEdit", formstate)
+    updateItem("gotocourse-courseEdit", formstate);
     navigate(`/admin/courses/create?edit=${params?.id}`);
   }
 
   function removeTutor(tutorId) {
-    setCourseTutorId(tutorId)
-    setOpenprompt(true)
+    setCourseTutorId(tutorId);
+    setOpenprompt(true);
   }
 
   function closeModal() {
-    setOpenprompt(false)
+    setOpenprompt(false);
   }
 
   async function deleteTutor() {
-    const newList = formstate.instructors.filter((tutor) => tutor.tutorId !== courseTutorId)
-    let updatedInstructors = []
-    let startDate = new Date(formstate.startDate).toISOString().split('T')[0]
-    let endDate = new Date(formstate.endDate).toISOString().split('T')[0]
-    const instrctors = newList.forEach(instructor => updatedInstructors.push(instructor.email))
+    const newList = formstate.instructors.filter(
+      (tutor) => tutor.tutorId !== courseTutorId
+    );
+    let updatedInstructors = [];
+    let startDate = new Date(formstate.startDate).toISOString().split("T")[0];
+    let endDate = new Date(formstate.endDate).toISOString().split("T")[0];
+    const instrctors = newList.forEach((instructor) =>
+      updatedInstructors.push(instructor.email)
+    );
 
     const formdata = {
       ...formstate,
       instructors: updatedInstructors,
       startDate,
       endDate,
-      categoryName: formstate.category
-    }
+      categoryName: formstate.category,
+    };
 
     try {
-      setLoading(true)
-      const res = await adminUpdateCourse(userdata?.token, formstate?.courseId, formdata)
+      setLoading(true);
+      const res = await adminUpdateCourse(
+        userdata?.token,
+        formstate?.courseId,
+        formdata
+      );
 
       const { success, message, statusCode } = res;
 
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        setFormstate({ ...formstate, instructors: newList })
-        setOpenprompt(false)
+        setFormstate({ ...formstate, instructors: newList });
+        setOpenprompt(false);
         toast.success(message, {
           position: "top-right",
           autoClose: 4000,
@@ -3244,9 +3032,26 @@ export function CourseDetails({ }) {
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <div className="d-flex justify-content-between align-items-center mb-5" style={{ width: "80%" }}>
-            <button type="button" className="btn btn-sm btn-danger px-3 py-2" style={{ fontSize: "0.8rem" }} onClick={deleteCourseHandler}>Delete Course</button>
-            <button type="button" className="btn btn-sm btn-primary px-3 py-2" style={{ fontSize: "0.8rem" }} onClick={editCourseHandler}>Edit Course</button>
+          <div
+            className="d-flex justify-content-between align-items-center mb-5"
+            style={{ width: "80%" }}
+          >
+            <button
+              type="button"
+              className="btn btn-sm btn-danger px-3 py-2"
+              style={{ fontSize: "0.8rem" }}
+              onClick={deleteCourseHandler}
+            >
+              Delete Course
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm btn-primary px-3 py-2"
+              style={{ fontSize: "0.8rem" }}
+              onClick={editCourseHandler}
+            >
+              Edit Course
+            </button>
           </div>
           <form className="form" style={{ width: "80%", margin: "20px 0px" }}>
             <Input
@@ -3259,7 +3064,10 @@ export function CourseDetails({ }) {
             />
 
             <div className={clsx.form_group}>
-              <label htmlFor={"description"} className="form-label generic_label">
+              <label
+                htmlFor={"description"}
+                className="form-label generic_label"
+              >
                 Description
               </label>
               <textarea
@@ -3274,16 +3082,25 @@ export function CourseDetails({ }) {
             <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
                 <label>Name of teachers</label>
-                {
-                  formstate.instructors.length > 0 ? formstate.instructors.map((t, i) => (
+                {formstate.instructors.length > 0 ? (
+                  formstate.instructors.map((t, i) => (
                     <div key={i}>
-                      <p>{i + 1}. &nbsp; {t.name}</p>
+                      <p>
+                        {i + 1}. &nbsp; {t.name}
+                      </p>
                       <div className={clsx.teachers__actions}>
-                        <span className={`${clsx.teachers__actions_delete} text-danger`} onClick={() => removeTutor(t.tutorId)}><AiOutlineDelete /> Delete</span>
+                        <span
+                          className={`${clsx.teachers__actions_delete} text-danger`}
+                          onClick={() => removeTutor(t.tutorId)}
+                        >
+                          <AiOutlineDelete /> Delete
+                        </span>
                       </div>
                     </div>
-                  )) : <p>{formstate.instructorName}</p>
-                }
+                  ))
+                ) : (
+                  <p>{formstate.instructorName}</p>
+                )}
                 <button type="button" className={clsx.form_group__button}>
                   Add Instructor
                 </button>
@@ -3318,15 +3135,21 @@ export function CourseDetails({ }) {
 
             <div className={clsx.form_group} style={{ marginTop: 40 }}>
               <label>Change Course Status</label>
-              <Switch onClick={toggleCourseStatusHandler} checked={formstate.status === "active" ? true : false} />
+              <Switch
+                onClick={toggleCourseStatusHandler}
+                checked={formstate.status === "active" ? true : false}
+              />
             </div>
-
           </form>
         </div>
-        <DeleteModal open={openprompt} close={closeModal} deleteTutor={deleteTutor} />
+        <DeleteModal
+          open={openprompt}
+          close={closeModal}
+          deleteTutor={deleteTutor}
+        />
       </div>
     </Admin>
-  )
+  );
 }
 
 // DELETE PROMPT MODAL
@@ -3377,26 +3200,29 @@ function DeleteModal({ open, close, deleteTutor }) {
         </div>
       </Box>
     </Modal>
-  )
+  );
 }
 // BOOTCAMPDETAILS COMPONENT
-export function BootcampDetails({ }) {
+export function BootcampDetails({}) {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
-  const { adminFunctions: { deleteBootcamp, fetchBootcamps, toggleBootcampStatus } } = useAuth();
+  
+  const { adminFunctions: { deleteBootcamp, fetchBootcamps, toggleBootcampStatus }, generalState } = useAuth();
+
   const flag = useRef(false);
   const [formstate, setFormstate] = useState({
     title: "",
     description: "",
     status: false,
     instructor: "",
-    student: ""
-  })
+    student: "",
+    price: null
+  });
   const [loading, setLoading] = useState(true);
   const [instructors, setInstructors] = useState([]);
   const students = ["James Segun"];
-  const params = useParams()
+  const params = useParams();
   //get user id
   useEffect(() => {
     //fetch bootcamp details for the id
@@ -3408,121 +3234,87 @@ export function BootcampDetails({ }) {
         if (!success) throw new AdvancedError(message, statusCode);
         else {
           const { data } = res;
-          let bootcamp = data.find(d => d.bootcampId === params?.id);
-          setFormstate(old => {
+          let bootcamp = data.find((d) => d.bootcampId === params?.id);
+          setFormstate((old) => {
             return {
               ...old,
               title: bootcamp.title,
               description: bootcamp.description,
-              status: bootcamp.isActive
-            }
-          })
-          setInstructors(_ => {
-            return [bootcamp.instructorName]
-          })
-          toast.success("Bootcamp Details fetched successfully", {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
+              status: bootcamp.isActive,
+              price: bootcamp.price
+            };
+          });
+          setInstructors((_) => {
+            return [bootcamp.instructorName];
           });
         }
       } catch (err) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       } finally {
-        setLoading(_ => false);
+        setLoading((_) => false);
       }
-    })()
+    })();
     flag.current = true;
     return () => console.log("Leaving Details page");
-  }, [])
-
+  }, []);
 
   function changeHandler(e) {
     const { name, value } = e.target;
-    setFormstate(old => {
+    setFormstate((old) => {
       return {
         ...old,
-        [name]: value
-      }
-    })
+        [name]: value,
+      };
+    });
   }
 
   async function toggleBootcampStatusHandler(e) {
-    setLoading(_ => true);
+    setLoading((_) => true);
     try {
-      const res = await toggleBootcampStatus(userdata?.token, params?.id);
-      const { message, statusCode, success } = res;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        setFormstate({ ...formstate, status: true })
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        // add class to pledre
+      const pledRes = await generalState.pledre.addCourse({
+        course_name: formstate.title,
+        course_description: formstate.description,
+        is_public: true,
+        short_description: formstate.description,
+        price: formstate.price,
+      })
+
+      console.log(pledRes._id)
+      if(pledRes._id){
+          console.log(pledRes._id)
+          const res = await toggleBootcampStatus(userdata?.token, {pledreCourseId: pledRes._id}, params?.id);
+          const { message, statusCode, success } = res;
+
+          if (!success) throw new AdvancedError(message, statusCode);
+          else {
+
+          setFormstate({ ...formstate, status: true });
+          toast.success(message);
+        }
+
       }
     } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     } finally {
-      setLoading(_ => false);
+      setLoading((_) => false);
     }
   }
 
-
   async function deleteBootcampHandler(e) {
-    setLoading(_ => true);
+    setLoading((_) => true);
     try {
       const res = await deleteBootcamp(userdata?.token, params?.id);
       const { message, success, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         navigate("/admin/bootcamps");
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success(message);
       }
     } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message)
     } finally {
-      setLoading(_ => false);
+      setLoading((_) => false);
     }
   }
 
@@ -3530,15 +3322,31 @@ export function BootcampDetails({ }) {
     navigate(`/admin/bootcamps/create?edit=${params?.id}`);
   }
 
-
   return (
     <Admin header="ADMIN">
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <div className="d-flex justify-content-between align-items-center mb-5" style={{ width: "80%" }}>
-            <button type="button" className="btn btn-sm btn-danger px-3 py-2" style={{ fontSize: "0.8rem" }} onClick={deleteBootcampHandler}>Delete Bootcamp</button>
-            <button type="button" className="btn btn-sm btn-primary px-3 py-2" style={{ fontSize: "0.8rem" }} onClick={editBootcampHandler}>Edit Bootcamp</button>
+          <div
+            className="d-flex justify-content-between align-items-center mb-5"
+            style={{ width: "80%" }}
+          >
+            <button
+              type="button"
+              className="btn btn-sm btn-danger px-3 py-2"
+              style={{ fontSize: "0.8rem" }}
+              onClick={deleteBootcampHandler}
+            >
+              Delete Bootcamp
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm btn-primary px-3 py-2"
+              style={{ fontSize: "0.8rem" }}
+              onClick={editBootcampHandler}
+            >
+              Edit Bootcamp
+            </button>
           </div>
           <form className="form" style={{ width: "80%", margin: "20px 0px" }}>
             <Input
@@ -3551,7 +3359,10 @@ export function BootcampDetails({ }) {
             />
 
             <div className={clsx.form_group}>
-              <label htmlFor={"description"} className="form-label generic_label">
+              <label
+                htmlFor={"description"}
+                className="form-label generic_label"
+              >
                 Description
               </label>
               <textarea
@@ -3618,31 +3429,41 @@ export function BootcampDetails({ }) {
             </div> */}
 
             <div className={clsx.form_group} style={{ marginTop: 40 }}>
-              <label>Change Bootcamp Status</label>
-              <Switch onClick={toggleBootcampStatusHandler} size="large" checked={formstate.status} />
+              <label>Change Class Status</label>
+              <Switch
+                onClick={toggleBootcampStatusHandler}
+                size="large"
+                checked={formstate.status}
+              />
             </div>
-
           </form>
         </div>
       </div>
     </Admin>
-  )
+  );
 }
-
-
 
 // BOOTCAMPS COMPONENT
 export function Bootcamps() {
-  const { adminFunctions: { fetchBootcamps } } = useAuth();
+  const {
+    adminFunctions: { fetchBootcamps },
+  } = useAuth();
   const { getItem } = useLocalStorage();
   const navigate = useNavigate();
   const flag = useRef(false);
   let userdata = getItem(KEY);
-  const [bootcamps, setBootcamps] = useState([])
+  const [bootcamps, setBootcamps] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
-  const tableHeaders = ["No", "Title", "Details", "Type", "Duration", "Date", "Time"];
+  const tableHeaders = [
+    "No",
+    "Title",
+    "Details",
+    "Type",
+    "Duration",
+    "Date",
+    "Time",
+  ];
 
   useEffect(() => {
     if (flag.current) return;
@@ -3653,35 +3474,18 @@ export function Bootcamps() {
         if (!success) throw new AdvancedError(message, statusCode);
         else if (statusCode === 1) {
           const { data } = res;
-          setBootcamps(_ => data);
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          setBootcamps((_) => data);
         } else {
           throw new AdvancedError(message, statusCode);
         }
       } catch (err) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       } finally {
-        setLoading(_ => false);
+        setLoading((_) => false);
       }
-    })()
+    })();
     flag.current = true;
-  }, [])
+  }, []);
 
   function gotoCreateCourseHandler(e) {
     navigate("create");
@@ -3691,12 +3495,19 @@ export function Bootcamps() {
     navigate("details/" + _id);
   }
   return (
-    <Admin header={"Bootcamps"}>
+    <Admin header={"Classes"}>
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <h1 style={{ margin: 0 }}>Bootcamps</h1>  <button type="button" className="btn btn-primary px-5" onClick={gotoCreateCourseHandler}>Add Bootcamp</button>
+            <h1 style={{ margin: 0 }}>Bootcamps</h1>{" "}
+            <button
+              type="button"
+              className="btn btn-primary px-5"
+              onClick={gotoCreateCourseHandler}
+            >
+              Add Bootcamp
+            </button>
           </div>
           <div className={clsx.admin__student_main}>
             <table className={clsx.admin__student_table}>
@@ -3706,22 +3517,40 @@ export function Bootcamps() {
                 ))}
               </thead>
               <tbody>
-                {bootcamps.length > 0 ? bootcamps.map(
-                  ({ title, duration, description, type, startTime, endTime, endDate, startDate, bootcampId, _id }, i) => (
-                    <BootcampRow
-                      key={i}
-                      index={i}
-                      title={title}
-                      detail={description}
-                      duration={duration}
-                      type={type}
-                      admin={false}
-                      clickHandler={e => detailHandler(e, bootcampId)}
-                      time={`${startTime} - ${endTime} CST`}
-                      date={`${getDate(startDate)} - ${getDate(endDate)}`}
-                    />
+                {bootcamps.length > 0 ? (
+                  bootcamps.map(
+                    (
+                      {
+                        title,
+                        duration,
+                        description,
+                        type,
+                        startTime,
+                        endTime,
+                        endDate,
+                        startDate,
+                        bootcampId,
+                        _id,
+                      },
+                      i
+                    ) => (
+                      <BootcampRow
+                        key={i}
+                        index={i}
+                        title={title}
+                        detail={description}
+                        duration={duration}
+                        type={type}
+                        admin={false}
+                        clickHandler={(e) => detailHandler(e, bootcampId)}
+                        time={`${startTime} - ${endTime} CST`}
+                        date={`${getDate(startDate)} - ${getDate(endDate)}`}
+                      />
+                    )
                   )
-                ) : <h1>No Bootcamps found</h1>}
+                ) : (
+                  <h1>No Bootcamps found</h1>
+                )}
               </tbody>
             </table>
           </div>
@@ -3731,10 +3560,11 @@ export function Bootcamps() {
   );
 }
 
-
 // CREATEBOOTCAMP COMPONENT
 export function CreateBootcamp() {
-  const { adminFunctions: { addBootcamp, fetchBootcamps, updateBootcamp }, } = useAuth();
+  const {
+    adminFunctions: { addBootcamp, fetchBootcamps, updateBootcamp },
+  } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const flag = useRef(false);
@@ -3751,7 +3581,7 @@ export function CreateBootcamp() {
     endTime: "",
     description: "",
     type: "",
-    instructor: ""
+    instructor: "",
   });
 
   useEffect(() => {
@@ -3765,14 +3595,14 @@ export function CreateBootcamp() {
           if (!success) throw new AdvancedError(message, statusCode);
           else if (statusCode === 1) {
             const { data } = res;
-            let found = data.find(d => d.bootcampId === id);
+            let found = data.find((d) => d.bootcampId === id);
             found.startDate = found.startDate.split("T")[0];
             found.endDate = found.endDate.split("T")[0];
             found.instructor = found.instructorName;
-            found.bootcampImg = found.bootcampImg.split("/").slice(-1)[0]
+            found.bootcampImg = found.bootcampImg.split("/").slice(-1)[0];
 
             delete found.instructorName;
-            setFormstate(_ => found);
+            setFormstate((_) => found);
             toast.success("Bootcamp found successfully", {
               position: "top-right",
               autoClose: 4000,
@@ -3796,14 +3626,14 @@ export function CreateBootcamp() {
             progress: undefined,
           });
         } finally {
-          setLoader(_ => false);
+          setLoader((_) => false);
         }
-      })()
+      })();
     }
     //do some coding
     flag.current = true;
     return () => console.log("Removing CreateBootcamp component");
-  }, [])
+  }, []);
 
   function changeHandler(e) {
     const { name, value } = e.target;
@@ -3820,15 +3650,25 @@ export function CreateBootcamp() {
     e.preventDefault();
     setLoading(true);
     try {
-      if (formstate.description === "" ||
+      if (
+        formstate.description === "" ||
         formstate.title === "" ||
         formstate.price === "" ||
-        formstate.duration === "" || formstate.endTime === "" ||
-        formstate.startTime === "" || formstate.startDate === "" ||
+        formstate.duration === "" ||
+        formstate.endTime === "" ||
+        formstate.startTime === "" ||
+        formstate.startDate === "" ||
         formstate.endDate === ""
-      ) throw new AdvancedError("All fields are required", 0);
+      )
+        throw new AdvancedError("All fields are required", 0);
 
-      const res = location.search ? await updateBootcamp(userdata?.token, location.search.split("=").reverse()[0], formstate) : await addBootcamp(userdata?.token, formstate);
+      const res = location.search
+        ? await updateBootcamp(
+            userdata?.token,
+            location.search.split("=").reverse()[0],
+            formstate
+          )
+        : await addBootcamp(userdata?.token, formstate);
       const { success, message, statusCode } = res;
 
       if (!success) throw new AdvancedError(message, statusCode);
@@ -3856,14 +3696,13 @@ export function CreateBootcamp() {
       });
     } finally {
       setLoading((_) => false);
-
     }
   }
   const [open, setOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(false);
 
   function showUploadFormHandler() {
-    setOpen(_ => true)
+    setOpen((_) => true);
   }
 
   return (
@@ -3871,18 +3710,34 @@ export function CreateBootcamp() {
       {loader && <Loader />}
       <div className={clsx.admin_profile}>
         <div className={clsx.edit__profile}>
-          <UploadForm isOpen={open} setIsOpen={setOpen} setPreviewImage={setPreviewImage} />
+          <UploadForm
+            isOpen={open}
+            setIsOpen={setOpen}
+            setPreviewImage={setPreviewImage}
+          />
           <div className="row w-100 mt-4">
             <div className="col-12 d-flex justify-content-between align-items-center">
-              <div className={clsx.upload__file_box} onClick={showUploadFormHandler}>
+              <div
+                className={clsx.upload__file_box}
+                onClick={showUploadFormHandler}
+              >
                 <img src={vector} alt={"Placeholder"} />
                 <p>Upload Bootcamp image</p>
               </div>
-              {previewImage &&
+              {previewImage && (
                 <div className={clsx.upload__file_box}>
-                  <img src={previewImage} alt={"Placeholder"} style={{ width: "150px", height: "100px", objectFit: "cover", objectPosition: "top" }} />
+                  <img
+                    src={previewImage}
+                    alt={"Placeholder"}
+                    style={{
+                      width: "150px",
+                      height: "100px",
+                      objectFit: "cover",
+                      objectPosition: "top",
+                    }}
+                  />
                 </div>
-              }
+              )}
             </div>
           </div>
           <form className="form" onSubmit={submitHandler}>
@@ -3952,12 +3807,9 @@ export function CreateBootcamp() {
                 />
               </div>
             </div>
-            <div className="row">
-            </div>
+            <div className="row"></div>
             <div className={clsx.form_group}>
-              <label htmlFor={"brief"}>
-                Description
-              </label>
+              <label htmlFor={"brief"}>Description</label>
               <textarea
                 rows="5"
                 name="description"
@@ -4012,32 +3864,43 @@ export function CreateBootcamp() {
 }
 
 // BOOTCAMPROW COMPONENT
-export function BootcampRow({ index, title, detail, time, date, type, duration, admin, clickHandler = null }) {
+export function BootcampRow({
+  index,
+  title,
+  detail,
+  time,
+  date,
+  type,
+  duration,
+  admin,
+  clickHandler = null,
+}) {
   return (
     <tr className={clsx.user__info_card} onClick={clickHandler}>
       <td className={clsx.user__info}>{index + 1}.</td>
       <td className={clsx.user__info}>{title}</td>
       <td className={clsx.user__info}>
-        <p className="restricted_line">
-          {detail}
-        </p>
+        <p className="restricted_line">{detail}</p>
       </td>
       <td className={clsx.user__info}>{type}</td>
       <td className={clsx.user__info}>{duration}</td>
       <td className={clsx.user__info}>{date}</td>
       <td className={clsx.user__info}>{time}</td>
-      {admin &&
+      {admin && (
         <td className={clsx.user__info}>
           <div className="d-flex align-items-center" style={{ gap: "1rem" }}>
-            <i style={{ fontSize: "24px", color: "var(--theme-orange)" }}><AiOutlineDelete /></i>
-            <i style={{ fontSize: "24px", color: "var(--theme-blue)" }}><AiTwotoneEdit /></i>
+            <i style={{ fontSize: "24px", color: "var(--theme-orange)" }}>
+              <AiOutlineDelete />
+            </i>
+            <i style={{ fontSize: "24px", color: "var(--theme-blue)" }}>
+              <AiTwotoneEdit />
+            </i>
           </div>
         </td>
-      }
+      )}
     </tr>
-  )
+  );
 }
-
 
 // ADDSYLLABUS COMPONENT
 function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
@@ -4060,12 +3923,12 @@ function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
   };
   function handleChange(e) {
     const { name, value } = e.target;
-    setNewSyllabus(old => {
+    setNewSyllabus((old) => {
       return {
         ...old,
-        [name]: value
-      }
-    })
+        [name]: value,
+      };
+    });
   }
 
   function addSyllabusHandler() {
@@ -4082,7 +3945,7 @@ function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
       });
     } else {
       addSyllabus(newSyllabus);
-      setOpen(_ => false);
+      setOpen((_) => false);
     }
   }
 
@@ -4132,20 +3995,29 @@ function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
   );
 }
 
-
-
-
 // FEES COMPONENT
 export function Fees() {
-  const { generalState, setGeneralState, adminFunctions: { fetchPayment }, } = useAuth();
+  const {
+    generalState,
+    setGeneralState,
+    adminFunctions: { fetchPayment },
+  } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const flag = useRef(false);
-  const [formstate, setFormstate] = useState([])
-  const tableHeaders = ["No", "Name", "Type", "Title", "Date", "Course Price", "Amount", "Status", "Due Date"];
-  const tableContents = [
-
+  const [formstate, setFormstate] = useState([]);
+  const tableHeaders = [
+    "No",
+    "Name",
+    "Type",
+    "Title",
+    "Date",
+    "Course Price",
+    "Amount",
+    "Status",
+    "Due Date",
   ];
+  const tableContents = [];
   useEffect(() => {
     if (flag.current) return;
 
@@ -4181,12 +4053,12 @@ export function Fees() {
         });
       } finally {
       }
-    })()
+    })();
 
     //do some coding
     flag.current = true;
     return () => console.log("Payments component");
-  }, [])
+  }, []);
 
   return (
     <Admin header={"Fees"}>
@@ -4202,21 +4074,35 @@ export function Fees() {
                 ))}
               </thead>
               <tbody>
-                {formstate?.map(({ name, courseName, coursePrice, amount, createdAt, dueDate, status, type }, i) => (
-                  <UserInfoCard
-                    key={i}
-                    num={i}
-                    enrolled={"John Doe"}
-                    comp="Category"
-                    name={type}
-                    coursePrice={createdAt ? getDate(createdAt) : ""}
-                    date={courseName}
-                    pack={coursePrice}
-                    start_date={amount}
-                    email={status}
-                    students={dueDate ? getDate(dueDate) : ""}
-                  />
-                ))}
+                {formstate?.map(
+                  (
+                    {
+                      name,
+                      courseName,
+                      coursePrice,
+                      amount,
+                      createdAt,
+                      dueDate,
+                      status,
+                      type,
+                    },
+                    i
+                  ) => (
+                    <UserInfoCard
+                      key={i}
+                      num={i}
+                      enrolled={"John Doe"}
+                      comp="Category"
+                      name={type}
+                      coursePrice={createdAt ? getDate(createdAt) : ""}
+                      date={courseName}
+                      pack={coursePrice}
+                      start_date={amount}
+                      email={status}
+                      students={dueDate ? getDate(dueDate) : ""}
+                    />
+                  )
+                )}
               </tbody>
             </table>
           </div>
@@ -4232,23 +4118,29 @@ export function Notification() {
   let userdata = getItem(KEY);
   const [loader, setLoader] = useState(false);
   const [load, setLoad] = useState(false);
-  const { generalState, setGeneralState, adminFunctions: { fetchNotifications, readNotifications } } = useAuth();
-  const [reload, setReload] = useState(false)
+  const {
+    generalState,
+    setGeneralState,
+    adminFunctions: { fetchNotifications, readNotifications },
+  } = useAuth();
+  const [reload, setReload] = useState(false);
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     if (flag.current) return;
     (async () => {
       try {
-        setLoader(true)
+        setLoader(true);
         const res = await fetchNotifications(userdata?.token);
         const { message, success, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
-        const { data } = res
+        const { data } = res;
         if (data.length > 0) {
-          setNotifications(data)
-          const unread = data.filter((notification) => notification.isRead !== true)
-          setGeneralState({ ...generalState, notifications: unread.length })
+          setNotifications(data);
+          const unread = data.filter(
+            (notification) => notification.isRead !== true
+          );
+          setGeneralState({ ...generalState, notifications: unread.length });
         }
       } catch (err) {
         toast.error(err.message, {
@@ -4261,21 +4153,21 @@ export function Notification() {
           progress: undefined,
         });
       } finally {
-        setLoader(_ => false);
+        setLoader((_) => false);
       }
-    })()
+    })();
     flag.current = true;
-  }, [reload])
+  }, [reload]);
 
   async function markAsRead(e) {
     e.preventDefault();
     try {
-      setLoad(true)
+      setLoad(true);
       const res = await readNotifications(userdata?.token);
       const { message, success, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
-      const { data } = res
-      setReload(true)
+      const { data } = res;
+      setReload(true);
       flag.current = false;
       toast.success(message, {
         position: "top-right",
@@ -4297,56 +4189,79 @@ export function Notification() {
         progress: undefined,
       });
     } finally {
-      setLoad(_ => false);
+      setLoad((_) => false);
     }
   }
 
   return (
     <Admin header={"Notifications"}>
-      <NotificationContent notifications={notifications} markAsRead={markAsRead} load={load} loader={loader} />
+      <NotificationContent
+        notifications={notifications}
+        markAsRead={markAsRead}
+        load={load}
+        loader={loader}
+      />
     </Admin>
   );
 }
 // NOTIFICATIONS COMPONENT
-export function NotificationContent({ notifications, markAsRead, load, loader }) {
+export function NotificationContent({
+  notifications,
+  markAsRead,
+  load,
+  loader,
+}) {
   return (
     <div className={clsx["admin_profile"]}>
       <div className={clsx.admin__student}>
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="mb-0">My notifications</h1>
-          {notifications.length > 0 &&
-            <motion.button whileHover={{
-              boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-              textShadow: "0px 0px 8px rgb(255, 255, 255)",
-            }} className="btn-plain mark_as_read p-1" style={{ fontSize: "14px" }} onClick={markAsRead}>{load ? <div className="spinner-border text-dark">
-              <div className="visually-hidden">Loading</div>
-            </div> : "Mark all as read"}</motion.button>
-          }
+          {notifications.length > 0 && (
+            <motion.button
+              whileHover={{
+                boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                textShadow: "0px 0px 8px rgb(255, 255, 255)",
+              }}
+              className="btn-plain mark_as_read p-1"
+              style={{ fontSize: "14px" }}
+              onClick={markAsRead}
+            >
+              {load ? (
+                <div className="spinner-border text-dark">
+                  <div className="visually-hidden">Loading</div>
+                </div>
+              ) : (
+                "Mark all as read"
+              )}
+            </motion.button>
+          )}
         </div>
         <div className={clsx.admin__student_main}>
-          {loader ? <div>
-            <Skeleton variant="rectangular" width={"100%"} height={58} />
-            <br />
-            <Skeleton variant="rectangular" width={"100%"} height={58} />
-            <br />
+          {loader ? (
+            <div>
+              <Skeleton variant="rectangular" width={"100%"} height={58} />
+              <br />
+              <Skeleton variant="rectangular" width={"100%"} height={58} />
+              <br />
 
-            <Skeleton variant="rectangular" width={"100%"} height={58} />
-          </div> :
-
-            notifications.length > 0 ? notifications.map((notification, index) => (
+              <Skeleton variant="rectangular" width={"100%"} height={58} />
+            </div>
+          ) : notifications.length > 0 ? (
+            notifications.map((notification, index) => (
               <div key={index} className={clsx["notification"]}>
                 <span>{getDate(notification.createdAt)}</span>
                 <span>{notification.message}</span>
                 {/* <button className={clsx.admin__notification_button} onClick={()=>handleRead(notification._id)} >Mark as read</button> */}
               </div>
-            )) : <p>No notifications found</p>
-          }
+            ))
+          ) : (
+            <p>No notifications found</p>
+          )}
         </div>
       </div>
     </div>
-  )
+  );
 }
-
 
 // EARNINGS
 export function Earnings() {
@@ -4355,7 +4270,11 @@ export function Earnings() {
   let userdata = getItem(KEY);
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([]);
-  const { generalState, setGeneralState, adminFunctions: { fetchEarnings } } = useAuth();
+  const {
+    generalState,
+    setGeneralState,
+    adminFunctions: { fetchEarnings },
+  } = useAuth();
 
   // const [notifications, setNotifications] = useState([]);
 
@@ -4364,8 +4283,8 @@ export function Earnings() {
 
     (async () => {
       try {
-        setLoading(_ => true);
-        let res = await fetchEarnings(userdata?.token)
+        setLoading((_) => true);
+        let res = await fetchEarnings(userdata?.token);
         const { success, message, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         else {
@@ -4380,7 +4299,7 @@ export function Earnings() {
             progress: undefined,
           });
           console.log(data);
-          setRows(_ => data);
+          setRows((_) => data);
         }
       } catch (err) {
         toast.error(err.message, {
@@ -4392,8 +4311,10 @@ export function Earnings() {
           draggable: true,
           progress: undefined,
         });
-      } finally { setLoading(_ => false); }
-    })()
+      } finally {
+        setLoading((_) => false);
+      }
+    })();
 
     // (async() => {
     //   try{
@@ -4421,7 +4342,7 @@ export function Earnings() {
     //   }
     // })()
     flag.current = true;
-  }, [])
+  }, []);
 
   return (
     <Admin header={"Earnings"}>
@@ -4446,8 +4367,6 @@ export function Earnings() {
   );
 }
 
-
-
 // STUDENT COMPONENT
 export function Student() {
   const [studentList, setStudentList] = useState([]);
@@ -4457,11 +4376,15 @@ export function Student() {
   const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
 
-  const { adminStudentFunctions: { fetch, verify, verify_pledre }, generalState: { loading }, setGeneralState, commonFunctions: { deleteUser } } = useAuth();
+  const {
+    adminStudentFunctions: { fetch, verify, verify_pledre },
+    generalState: { loading },
+    setGeneralState,
+    commonFunctions: { deleteUser },
+  } = useAuth();
 
   async function fetchStudents() {
     if (userdata) {
-
       try {
         const res = await fetch(userdata?.token);
         const { message, success, statusCode } = res;
@@ -4492,13 +4415,13 @@ export function Student() {
           progress: undefined,
         });
       } finally {
-        setLoader(_ => false);
+        setLoader((_) => false);
       }
     }
   }
   useEffect(() => {
     if (flag.current) return;
-    fetchStudents()
+    fetchStudents();
     flag.current = true;
   }, []);
 
@@ -4537,7 +4460,7 @@ export function Student() {
           progress: undefined,
         });
         // reload student list
-        fetchStudents()
+        fetchStudents();
       }
     } catch (error) {
       toast.error(error.message, {
@@ -4551,8 +4474,6 @@ export function Student() {
       });
     }
   }
-
-
 
   async function handlePledreAccess(id) {
     let item = {
@@ -4569,7 +4490,6 @@ export function Student() {
 
       const res = await verify_pledre(item, userdata?.token);
       const { message, success, statusCode } = res;
-
 
       setGeneralState((old) => {
         return {
@@ -4590,7 +4510,7 @@ export function Student() {
           draggable: true,
           progress: undefined,
         });
-        fetchStudents()
+        fetchStudents();
       }
     } catch (error) {
       toast.error(error.message, {
@@ -4609,7 +4529,7 @@ export function Student() {
     try {
       const v = window.confirm("Are you sure you want to delete " + email);
       if (!v) return;
-      setLoader(_ => true);
+      setLoader((_) => true);
       const res = await deleteUser(userdata?.token, [email]);
       console.log(res);
       const { statusCode, message, success } = res;
@@ -4636,19 +4556,24 @@ export function Student() {
         progress: undefined,
       });
     } finally {
-      setLoader(_ => false);
+      setLoader((_) => false);
       fetchStudents();
     }
   }
 
-
   function approveHandler(e, email, details) {
-    localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(details))
+    localStorage.setItem("gotocourse-studentDetails", JSON.stringify(details));
     if (email) navigate(`approve?email=${email}`);
   }
 
-
-  const tableHeaders = ["No", "Name", "Email", "Approve", "Access Dashboard", "Actions"];
+  const tableHeaders = [
+    "No",
+    "Name",
+    "Email",
+    "Approve",
+    "Access Dashboard",
+    "Actions",
+  ];
 
   console.log({ studentList });
   return (
@@ -4662,7 +4587,6 @@ export function Student() {
             <table className={clsx.admin__student_table}>
               <thead>
                 <tr>
-
                   {tableHeaders.map((el, i) => (
                     <th key={i}>{el}</th>
                   ))}
@@ -4670,33 +4594,31 @@ export function Student() {
               </thead>
               <tbody>
                 {studentList?.length > 0 &&
-                  studentList?.map(
-                    (
-                      student
-                      ,
-                      i
-                    ) => (
-                      <UserInfoCard
-                        key={i}
-                        name={student.name}
-                        firstName={student.firstName}
-                        lastName={student.lastName}
-                        img={student.profileImg}
-                        email={student.email}
-                        num={i}
-                        isActive={student.isVerified}
-                        accessPledre={student.accessPledre}
-                        user={true}
-                        type={null}
-                        deleteUser={e => deleteUserHandler(e, student.email)}
-                        handleVerification={() => handleVerification(student.userId)}
-                        handlePledreAccess={() => handlePledreAccess(student.userId)}
-                        isAbsolute={true}
-                        approveHandler={approveHandler}
-                        details={student}
-                      />
-                    )
-                  )}
+                  studentList?.map((student, i) => (
+                    <UserInfoCard
+                      key={i}
+                      name={student.name}
+                      firstName={student.firstName}
+                      lastName={student.lastName}
+                      img={student.profileImg}
+                      email={student.email}
+                      num={i}
+                      isActive={student.isVerified}
+                      accessPledre={student.accessPledre}
+                      user={true}
+                      type={null}
+                      deleteUser={(e) => console.Console.log(e)}
+                      handleVerification={(e) =>
+                        console.log(e)
+                      }
+                      handlePledreAccess={(e) =>
+                        console.log(e)
+                      }
+                      isAbsolute={true}
+                      approveHandler={approveHandler}
+                      details={student}
+                    />
+                  ))}
               </tbody>
             </table>
           </div>
@@ -4706,7 +4628,6 @@ export function Student() {
     </Admin>
   );
 }
-
 
 // PROFILEEDIT COMPONENT
 export function Edit() {
@@ -4749,8 +4670,8 @@ export function Edit() {
       else {
         const newItem = {
           ...userdata,
-          ...data
-        }
+          ...data,
+        };
         userdata = updateItem(KEY, newItem);
         toast.success(message, {
           position: "top-right",
@@ -4812,8 +4733,8 @@ export function Edit() {
         const { data } = res;
         const newValue = {
           ...userdata,
-          ...data
-        }
+          ...data,
+        };
         userdata = updateItem(KEY, newValue);
         toast.success(message, {
           position: "top-right",
@@ -4865,16 +4786,22 @@ export function Edit() {
                 onChange={changeImageHandler}
               />
               {imageUrl ? (
-                isUploading ?
+                isUploading ? (
                   <div className="spinner-border text-primary" role="status">
                     <span className="visually-hidden">Loading...</span>
-                  </div> :
+                  </div>
+                ) : (
                   <p
-                    style={{ cursor: isUploading && "not-allowed", color: "var(--theme-orange", fontWeight: "700" }}
+                    style={{
+                      cursor: isUploading && "not-allowed",
+                      color: "var(--theme-orange",
+                      fontWeight: "700",
+                    }}
                     onClick={changeProfilePictureHandler}
                   >
                     Click to Upload Photo
                   </p>
+                )
               ) : (
                 <p onClick={uploadPicture} style={{ cursor: "pointer" }}>
                   Select a photo to upload
@@ -4883,18 +4810,27 @@ export function Edit() {
             </div>
           </div>
           <div className={clsx.edit__picture}>
-            <button style={{
-              border: "1px dotted var(--theme-blue)",
-              outline: "none",
-              color: "var(--theme-blue)",
-              padding: "4px",
-              borderRadius: "8px"
-            }}
-              type="button" onClick={() => {
-                navigate("/change-password")
-              }}>Change Password</button>
+            <button
+              style={{
+                border: "1px dotted var(--theme-blue)",
+                outline: "none",
+                color: "var(--theme-blue)",
+                padding: "4px",
+                borderRadius: "8px",
+              }}
+              type="button"
+              onClick={() => {
+                navigate("/change-password");
+              }}
+            >
+              Change Password
+            </button>
           </div>
-          <form className="form" onSubmit={submitHandler} style={{ width: "min(100% - 0.5rem, 400px)" }}>
+          <form
+            className="form"
+            onSubmit={submitHandler}
+            style={{ width: "min(100% - 0.5rem, 400px)" }}
+          >
             <Input
               label="First name"
               name="firstName"
@@ -4968,19 +4904,15 @@ export function Edit() {
   );
 }
 
-
-
-
 // CHAT COMPONENT
 export function Chat() {
-
   const [loader, setLoader] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
-      setLoader(_ => false);
-    }, 2000)
-  }, [])
+      setLoader((_) => false);
+    }, 2000);
+  }, []);
 
   const [tabs, setTabs] = useState([
     {
@@ -5020,12 +4952,15 @@ export function Chat() {
   );
 }
 
-
-
 export const Admin = ({ children, header }) => {
-  const { generalState: { isMobile, showSidebar, loading }, generalState, setGeneralState, adminFunctions: { fetchNotifications, getMessages, getUnreadMessages } } = useAuth();
+  const {
+    generalState: { isMobile, showSidebar, loading },
+    generalState,
+    setGeneralState,
+    adminFunctions: { fetchNotifications, getMessages, getUnreadMessages },
+  } = useAuth();
   const { getItem } = useLocalStorage();
-  const [loader, setLoading] = useState(false)
+  const [loader, setLoading] = useState(false);
 
   const flag = useRef(false);
   let userdata = getItem(KEY);
@@ -5040,10 +4975,12 @@ export const Admin = ({ children, header }) => {
         const res = await fetchNotifications(userdata?.token);
         const { message, success, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
-        const { data } = res
+        const { data } = res;
         if (data.length > 0) {
-          const unread = data.filter((notification) => notification.isRead !== true)
-          setGeneralState({ ...generalState, notifications: unread.length })
+          const unread = data.filter(
+            (notification) => notification.isRead !== true
+          );
+          setGeneralState({ ...generalState, notifications: unread.length });
         }
       } catch (err) {
         toast.error(err.message, {
@@ -5056,30 +4993,17 @@ export const Admin = ({ children, header }) => {
           progress: undefined,
         });
       }
-    })()
+    })();
     flag.current = true;
-  }, [])
+  }, []);
 
   // fetch messages
-  const getMessage = useQuery(["fetch admin messages"], () => getUnreadMessages(userdata?.token), {
-    onError: (err) => {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
-    },
-    onSuccess: (res) => {
-
-      if (res.data?.statusCode === 2) {
-        localStorage.clear()
-      }
-      if (res.data?.statusCode !== 1) {
-        toast.error(res.data?.message, {
+  const getMessage = useQuery(
+    ["fetch admin messages"],
+    () => getUnreadMessages(userdata?.token),
+    {
+      onError: (err) => {
+        toast.error(err.message, {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: true,
@@ -5088,23 +5012,39 @@ export const Admin = ({ children, header }) => {
           draggable: true,
           progress: undefined,
         });
-      }
-      const unread = res.data.data?.filter((messages) => messages.status === "unread")
-      if (unread.length > 0) {
-        toast.info(`You have ${unread.length} messages `, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-      }
+      },
+      onSuccess: (res) => {
+        if (res.data?.statusCode === 2) {
+          localStorage.clear();
+        }
+        if (res.data?.statusCode !== 1) {
+          toast.error(res.data?.message, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+        const unread = res.data.data?.filter(
+          (messages) => messages.status === "unread"
+        );
+        if (unread.length > 0) {
+          toast.info(`You have ${unread.length} messages `, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      },
     }
-  })
-
-
+  );
 
   // useEffect(()=>{
   //   if(getOurMessages.data?.data?.statusCode === 2 ){
@@ -5123,21 +5063,18 @@ export const Admin = ({ children, header }) => {
   //   }
   // },[getOurMessages.data?.data?.status])
 
-
-
-
   useEffect(() => {
     // if(getMessage.data?.statusCode === 1){
     //   let msg = getMessage.data.data.filter(item=>item.status === "unread").length
     //   console.log({msg})
     //   setGeneralState({...generalState, messages: msg})
     // }
-  }, [getMessage.isFetched])
+  }, [getMessage.isFetched]);
 
   const admin = {
     title: "ADMIN",
-    logo: <FaUserLock size="2.5rem" color="#0C2191" />
-  }
+    logo: <FaUserLock size="2.5rem" color="#0C2191" />,
+  };
   return (
     <GuardedRoute>
       <div className={clsx["admin"]}>
@@ -5154,7 +5091,11 @@ export const Admin = ({ children, header }) => {
         />
         <Sidebar isMobile={isMobile} />
         <div className={clsx["admin_main"]}>
-          <Navbar content={admin} toggleSidebar={toggleSidebar} header={header} />
+          <Navbar
+            content={admin}
+            toggleSidebar={toggleSidebar}
+            header={header}
+          />
           {children}
         </div>
         {loading && <Loader />}

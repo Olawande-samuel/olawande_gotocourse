@@ -415,13 +415,11 @@ export function MyClasses(){
         flag.current = true;
     }, [])
 
-    console.log({ courseList })
     function gotoCreateCourseHandler(e) {
         navigate("create");
     }
     function detailHandler(e, _id) {
         // navigate("/bootcamps/details/"+_id);
-        console.log("clicked")
     }
 
     return (
@@ -479,7 +477,6 @@ export function Bootcamps() {
 
 
     const bootcamps = useQuery(["bootcamps"], () => studentboot());
-    console.log({ bootcamps });
 
     const tableHeaders = ["No", "Title", "Tutor", "Date", "Time"];
 
@@ -537,13 +534,11 @@ export function Bootcamps() {
         flag.current = true;
     }, [])
 
-    console.log({ courseList })
     function gotoCreateCourseHandler(e) {
         navigate("create");
     }
     function detailHandler(e, _id) {
         // navigate("/bootcamps/details/"+_id);
-        console.log("clicked")
     }
 
     return (
@@ -1031,9 +1026,7 @@ export function Fees() {
     const handleClose = () => setOpenPaymentModal(false);
 
 
-    // console.log("my userdata", userdata);
 
-    console.log({ course });
 
     const payNumber = ["1st", "2nd", "3rd", "4th"]
 
@@ -1129,25 +1122,20 @@ export function Fees() {
         ref.current = true
     }, [])
 
-    // console.log({ fees })
 
     const tableContents = fees.length > 0 ? fees : []
 
 
-    course.length > 0 && console.log("length", course[0].payments.length === 3);
 
 
     const filterpending = (data) => {
-        console.log("filter", data);
         let result = data.filter(c => c.status === "pending").reduce((sum, current) => sum + current.amount, 0)
-        console.log({ result });
 
         return result
     }
 
 
     const filterpaid = (data) => {
-        console.log("filter", data);
         let result = data.filter(c => c.status === "paid").reduce((sum, current) => sum + current.amount, 0)
         return result
     }
@@ -1156,7 +1144,6 @@ export function Fees() {
         setGeneralState({ ...generalState, loading: true })
         try {
             const res = await payStudentFees(userdata.token, paymentId)
-            console.log("pay res", res);
             setGeneralState({ ...generalState, loading: false })
             const { success, message, statusCode } = res;
             if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
@@ -1214,7 +1201,6 @@ export function Fees() {
 
 
                                 {d.payments.length > 1 ? d.payments.map((pay, i) => {
-                                    console.log("status", pay.status === "paid");
                                     return (<>
                                         <div className={clsx.payment__card}>
                                             <p>{payNumber[i]} installment</p>
@@ -1482,10 +1468,6 @@ export const Dashboard = () => {
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
 
 
-    console.log({ bootcamps });
-    console.log({ wishlistData })
-    console.log({ data })
-
     const topContent = [
         {
             id: 1,
@@ -1514,7 +1496,6 @@ export const Dashboard = () => {
     if (isSuccess) {
         topContent[0].value = data?.data?.length
     }
-    console.log(allCourses)
 
     return (
         <Students isMobile={isMobile} userdata={userdata} header={"Dashboard"} >
@@ -1793,7 +1774,6 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
                     if (isActive) {
                         if (response?.email) {
                             setPledreData(() => response)
-                            console.log(response)
                             localStorage.setItem("gotocourse-userdata", JSON.stringify({ ...user, pledre: response }))
                         }
                     }
@@ -1809,9 +1789,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
                         draggable: true,
                         progress: undefined,
                     });
-                } finally {
-                    console.log("pData done")
-                }
+                } 
             })()
         }
 
@@ -1907,47 +1885,43 @@ export function GotoDashboard({ loader, setLoading }) {
     const route = location.pathname.split("/")[1];
 
     async function gotodashboard() {
-        const data = getItem("gotocourse-userdata")
+        const data = getItem(KEY)
+        if(data.userType === "student" || data.userType === 'admin'){
+            if(generalState.pledre.loginUser && data.pledre?._id){
+                setLoading(true)
+                try{
+                    const response = await generalState.pledre.loginUser({
+                        user_id: data.pledre._id,
+                        user_type: route
+                    })
 
-        // console.log(data)
-        // if(data.userType === "student" || data.userType === 'admin'){
-        //     if(generalState.pledre.loginUser){
-        //         setLoading(true)
-        //         try{
-        //             const response = await generalState.pledre.loginUser({
-        //                 user_id: data.pledre._id,
-        //                 user_type: "student"
-        //             })
+                } catch(err){
+                    console.error(err)
+                }finally{
+                    setLoading(false)
+                }
+            }
+        } else if(data.pledre?.deleted === false && data.accessPledre){
+            if(generalState.pledre.loginUser){
+                setLoading(true)
+                try{
+                    const response = await generalState.pledre.loginUser({
+                        user_id: data.pledre._id,
+                        user_type: route
+                    })
 
-        //             console.log(response)
-        //         } catch(err){
-        //             console.error(err)
-        //         }finally{
-        //             console.log("done!!!")
-        //             setLoading(false)
-        //         }
-        //     }
-        // } else if(data.pledre?.deleted === false && data.accessPledre){
-        //     if(generalState.pledre.loginUser){
-        //         setLoading(true)
-        //         try{
-        //             const response = await generalState.pledre.loginUser({
-        //                 user_id: data.pledre._id,
-        //                 user_type: route
-        //             })
-
-        //             console.log(response)
-        //         } catch(err){
-        //             console.error(err)
-        //         }finally{
-        //             console.log("done!!!")
-        //             setLoading(false)
-        //         }
-        // }
-        // } 
-        // else {
-        //     throw new AdvancedError("User not authorized")
-        // }
+                    console.log(response)
+                } catch(err){
+                    console.error(err)
+                }finally{
+                    console.log("done!!!")
+                    setLoading(false)
+                }
+        }
+        } 
+        else {
+            throw new AdvancedError("User not authorized")
+        }
     }
     return (
         <>

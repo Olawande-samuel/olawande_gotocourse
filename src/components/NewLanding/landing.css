@@ -272,23 +272,30 @@
   
 }
 @media (max-width: 768px) {
+
   .stats {
-    min-height: 240px;
+    min-height: 100%;
+    height: 100%;
   }
+
   .stats_wrapper {
    display: grid;
    gap: 1rem;
    grid-template-columns: repeat(3, 1fr); 
    justify-content: center;
-   min-height: 240px;
+   min-height: 100%;
+   height: 100%;
   }
 }
 @media (max-width: 450px) {
+
   .stats_wrapper {
    display: grid;
    gap: 1rem;
    grid-template-columns: repeat(2, 1fr); 
    justify-content: center;
+   height: 100%;
+
   }
 }
 
