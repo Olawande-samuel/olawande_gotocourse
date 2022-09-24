@@ -2009,26 +2009,9 @@ export function Teachers() {
           const { data } = res;
           //do somethings
           setTeachers((_) => data);
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
         }
       } catch (err) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       } finally {
         setLoading((_) => false);
       }
@@ -2128,27 +2111,10 @@ export function Mentors() {
 
           //do somethings
           if (data.length > 0) {
-            console.log("teachers gotten", data);
             setTeachers((_) => data);
-            toast.success(message, {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
+            
           } else {
-            toast.success("No mentor page found", {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
+            toast.success("No mentor page found");
           }
         }
       } catch (err) {
@@ -2648,28 +2614,12 @@ export function Courses() {
         else if (statusCode === 1) {
           const { data } = res;
           setCourseList(data);
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          
         } else {
           throw new AdvancedError(message, statusCode);
         }
       } catch (err) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       } finally {
         setLoading((_) => false);
       }
@@ -2812,26 +2762,10 @@ export function CourseDetails({}) {
               ...course,
             };
           });
-          toast.success("Course Details fetched successfully", {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          
         }
       } catch (err) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       } finally {
         setLoading((_) => false);
       }
@@ -3604,28 +3538,12 @@ export function CreateBootcamp() {
 
             delete found.instructorName;
             setFormstate((_) => found);
-            toast.success("Bootcamp found successfully", {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
+            
           } else {
             throw new AdvancedError(message, statusCode);
           }
         } catch (err) {
-          toast.error(err.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.error(err.message);
         } finally {
           setLoader((_) => false);
         }
@@ -4030,28 +3948,12 @@ export function Fees() {
         else if (statusCode === 1) {
           const { data } = res;
           setFormstate(data);
-          toast.success("Fetched", {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          
         } else {
           throw new AdvancedError(message, statusCode);
         }
       } catch (err) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       } finally {
       }
     })();
@@ -4078,7 +3980,7 @@ export function Fees() {
                 {formstate?.map(
                   (
                     {
-                      name,
+                      studentName,
                       courseName,
                       coursePrice,
                       amount,
@@ -4092,13 +3994,13 @@ export function Fees() {
                     <UserInfoCard
                       key={i}
                       num={i}
-                      enrolled={"John Doe"}
+                      enrolled={studentName}
                       comp="Category"
                       name={type}
                       coursePrice={createdAt ? getDate(createdAt) : ""}
                       date={courseName}
-                      pack={coursePrice}
-                      start_date={amount}
+                      pack={`$ ${coursePrice}`}
+                      start_date={`$ ${amount}`}
                       email={status}
                       students={dueDate ? getDate(dueDate) : ""}
                     />
@@ -4144,15 +4046,7 @@ export function Notification() {
           setGeneralState({ ...generalState, notifications: unread.length });
         }
       } catch (err) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       } finally {
         setLoader((_) => false);
       }
@@ -4256,7 +4150,7 @@ export function NotificationContent({
               </div>
             ))
           ) : (
-            <p>No notifications found</p>
+            <p className="text-center">No notifications found</p>
           )}
         </div>
       </div>
@@ -4290,28 +4184,12 @@ export function Earnings() {
         if (!success) throw new AdvancedError(message, statusCode);
         else {
           let { data } = res;
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          
           console.log(data);
           setRows((_) => data);
         }
       } catch (err) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       } finally {
         setLoading((_) => false);
       }
@@ -4394,27 +4272,10 @@ export function Student() {
           const { data } = res;
           //do somethings
 
-          setStudentList(data);
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          setStudentList(data)
         }
       } catch (err) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       } finally {
         setLoader((_) => false);
       }
@@ -4451,28 +4312,12 @@ export function Student() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         //do somethings
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success(message);
         // reload student list
         fetchStudents();
       }
     } catch (error) {
-      toast.error(error.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(error.message);
     }
   }
 
@@ -4502,27 +4347,11 @@ export function Student() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         //do somethings
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success(message);
         fetchStudents();
       }
     } catch (error) {
-      toast.error(error.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(error.message);
     }
   }
 
@@ -4984,15 +4813,7 @@ export const Admin = ({ children, header }) => {
           setGeneralState({ ...generalState, notifications: unread.length });
         }
       } catch (err) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       }
     })();
     flag.current = true;
@@ -5004,44 +4825,21 @@ export const Admin = ({ children, header }) => {
     () => getUnreadMessages(userdata?.token),
     {
       onError: (err) => {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       },
       onSuccess: (res) => {
         if (res.data?.statusCode === 2) {
           localStorage.clear();
         }
         if (res.data?.statusCode !== 1) {
-          toast.error(res.data?.message, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.error(res.data?.message);
         }
         const unread = res.data.data?.filter(
           (messages) => messages.status === "unread"
         );
         if (unread.length > 0) {
-          toast.info(`You have ${unread.length} messages `, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.info(`You have ${unread.length} messages`);
+          setGeneralState({...generalState, chat: unread.length})
         }
       },
     }
@@ -5064,13 +4862,7 @@ export const Admin = ({ children, header }) => {
   //   }
   // },[getOurMessages.data?.data?.status])
 
-  useEffect(() => {
-    // if(getMessage.data?.statusCode === 1){
-    //   let msg = getMessage.data.data.filter(item=>item.status === "unread").length
-    //   console.log({msg})
-    //   setGeneralState({...generalState, messages: msg})
-    // }
-  }, [getMessage.isFetched]);
+
 
   const admin = {
     title: "ADMIN",

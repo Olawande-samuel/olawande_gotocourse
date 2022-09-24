@@ -51,8 +51,14 @@
   }
 }
 @media (min-width: 1500px){
- .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+ .container-xxxl, .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
     max-width: 80% !important;
+    height: 100%;
+  }
+}
+@media (min-width: 1700px){
+ .container-xxxl, .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+    max-width: 70% !important;
     height: 100%;
   }
 }

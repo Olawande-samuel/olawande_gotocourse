@@ -50,7 +50,8 @@ const Navbar = ({ background }) => {
       };
     });
     console.log(heightRef.current.clientHeight)
-  }, []);
+  }, []); 
+  
 
   const celebRoute = location.pathname.split("/")[1] === "lounge";
   const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";  

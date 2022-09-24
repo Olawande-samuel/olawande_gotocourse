@@ -57,7 +57,7 @@
     height: 100vh;
     flex: 1;
     background-color: var(--primary);
-    padding: 30px;
+    padding:  5px 30px 5px 30px;
     padding-bottom:1px ;
     overflow-y: hidden;
     display: flex;
@@ -70,7 +70,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .admin_profile_main h1 {

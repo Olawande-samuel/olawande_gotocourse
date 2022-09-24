@@ -176,6 +176,12 @@
     height: 87%;
   }
 }
+@media (min-width: 1700px) {
+  .newHero_right img {
+    height: 90%;
+    object-fit: contain;
+  }
+}
 
 @media (max-width: 600px) {
   .newBootcamp,

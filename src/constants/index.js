@@ -24,11 +24,13 @@ export const breakpoints = {
 
 
 export const baseURL = "https://loftywebtech.com/gotocourse/api/v1";
+// export const baseURL = process.env.REACT_APP_BASEURL;
 
 export const KEY = "gotocourse-userdata"
 export const VERIFICATION_KEY = "userAuthdata"
 export const AFFILIATE_KEY = "gotocourse-affiliate-data";
 export const IMAGEURL = "https://loftywebtech.com/gotocourse/api/uploads"
+// export const IMAGEURL = process.env.REACT_APP_IMAGEURL;
 export const COURSE_CATEGORY_KEY = 'gotocourse-course-category';
 
 export function getDate(date){

@@ -500,99 +500,120 @@ export const Home = () => {
                 <h1>Our Best Features</h1>
                 <p>Check out the features on Gotocourse that makes the teaching of technical skills seamless</p>
                 
-                <div className={clsx.best_features__content} style={{backgroundColor: "#E8EFFF"}}>
-                    <div className={clsx.image_container}>
-                        <img src={classroom} className={clsx.image} alt="Icon" />
-                    </div>
-                    <div className={clsx.image_card}>
-                        <span>
-                            <SiGoogleclassroom />
-                        </span>
-                        <h4>Classroom Management</h4>
-                        <p>We use an efficient classroom management tool that helps track student progress, ensure classes run smoothly without disruptions, and optimize learning for teachers and students. Our classroom management tools support proper and timely execution of curriculum development, teachers are able create notes, quizzes, upload files/videos,schedule live classes and have discussion with students in real time.</p>
-                    </div>
-                </div>
-
-                <div className={clsx.live_class}>
-                    <div className={clsx.image_card}>
-                        <span>
-                            <SiGoogleclassroom />
-                        </span>
-                        <h4>Live Class</h4>
-                        <p>Gotocourse online Classes and Bootcamps deliver industry-led curriculum and practical learning experiences to our students learning from anywhere. Explore a world of borderless learning and teaching of tech skills on Gotocourse, which eliminates the need for travel.</p>
-                    </div>
-                    <div className={clsx.live_class_image_small}>
-                        <img src={liveClassSmall} alt="Live Class small" />
-                    </div>
-                    <div className={clsx.live_class_image_big}>
-                        <img src={liveClassBig} alt="Live Class small" />
-                    </div>
-                </div>
-
-                <div className={clsx.creator}>
-                    <div className={clsx.creator_image_big}>
-                        <img src={creator} alt="Live Class small" />
-                    </div>
-                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                        <div className={clsx.creator_image_small}>
-                            <img src={creatorSmall} alt="Live Class small" />
+                <div  style={{backgroundColor: "#E8EFFF"}}>
+                    <div className="container-xxxl mx-auto">
+                        <div className={clsx.best_features__content}>
+                            <div className={clsx.image_container}>
+                                <img src={classroom} className={clsx.image} alt="Icon" />
+                            </div>
+                            <div className={clsx.image_card}>
+                                <span>
+                                    <SiGoogleclassroom />
+                                </span>
+                                <h4>Classroom Management</h4>
+                                <p>We use an efficient classroom management tool that helps track student progress, ensure classes run smoothly without disruptions, and optimize learning for teachers and students. Our classroom management tools support proper and timely execution of curriculum development, teachers are able create notes, quizzes, upload files/videos,schedule live classes and have discussion with students in real time.</p>
+                            </div>
                         </div>
                     </div>
-                    <div className={clsx.image_card}>
-                        <span>
-                            <SiGoogleclassroom />
-                        </span>
-                        <h4>Creator Suites</h4>
-                        <p>The built-in creator suite lets you effectively create and manage high-quality course materials and other content like video courses without expensive recording equipment and additional software—one of the excellent pros of Gotocourse.</p>
+                </div>
+                
+                <div className="container-xxxl mx-auto">
+                    <div className={clsx.live_class}>
+                        <div className={clsx.image_card}>
+                            <span>
+                                <SiGoogleclassroom />
+                            </span>
+                            <h4>Live Class</h4>
+                            <p>Gotocourse online Classes and Bootcamps deliver industry-led curriculum and practical learning experiences to our students learning from anywhere. Explore a world of borderless learning and teaching of tech skills on Gotocourse, which eliminates the need for travel.</p>
+                        </div>
+                        <div className={clsx.live_class_image_small}>
+                            <img src={liveClassSmall} alt="Live Class small" />
+                        </div>
+                        <div className={clsx.live_class_image_big}>
+                            <img src={liveClassBig} alt="Live Class small" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div style={{backgroundColor: "#E8EFFF"}}>
+                    <div className="container-xxxl mx-auto">
+                        <div className={clsx.creator}>
+                            <div className={clsx.creator_image_big}>
+                                <img src={creator} alt="Live Class small" />
+                            </div>
+                            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                <div className={clsx.creator_image_small}>
+                                    <img src={creatorSmall} alt="Live Class small" />
+                                </div>
+                            </div>
+                            <div className={clsx.image_card}>
+                                <span>
+                                    <SiGoogleclassroom />
+                                </span>
+                                <h4>Creator Suites</h4>
+                                <p>The built-in creator suite lets you effectively create and manage high-quality course materials and other content like video courses without expensive recording equipment and additional software—one of the excellent pros of Gotocourse.</p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-                <div className={clsx.best_features__content} style={{backgroundColor: "white", gridTemplateColumns: '0.8fr 1.1fr'}}>
-                    <div className={clsx.image_card}>
-                        <span>
-                            <SiGoogleclassroom />
-                        </span>
-                        <h4>Customization</h4>
-                        <p>You can modify the appearance of your classes, such as the images, colors, and layouts to suit your company’s or user’s preferences and requirements, and make the class tailored to fit a specific audience or target customer demography.</p>
+                <div className="container-xxxl mx-auto">
+                    <div className={clsx.best_features__content} style={{backgroundColor: "white", gridTemplateColumns: '0.8fr 1.1fr'}}>
+                        <div className={clsx.image_card}>
+                            <span>
+                                <SiGoogleclassroom />
+                            </span>
+                            <h4>Customization</h4>
+                            <p>You can modify the appearance of your classes, such as the images, colors, and layouts to suit your company’s or user’s preferences and requirements, and make the class tailored to fit a specific audience or target customer demography.</p>
+                        </div>
+                        <div className={clsx.image_container}>
+                            <img src={customization} className={clsx.image} alt="Icon" />
+                        </div>
                     </div>
-                    <div className={clsx.image_container}>
-                        <img src={customization} className={clsx.image} alt="Icon" />
+                </div>
+            </div>
+
+            <div style={{backgroundColor: "#E8EFFF"}}>
+                <div className="container-xxxl mx-auto">
+                    <div className={clsx.become_a_teacher}>
+                        <div className={clsx.become_a_teacher__left}>
+                            <img src={teacher} alt="Teacher" />
+                        </div>
+                        <div className={clsx.become_a_teacher__right}>
+                            <h3>Get access to customized
+                                dashboard to track Earnings,
+                                Student Enrolment to class, and
+                                Payment over a period of time.</h3>
+                            <Link to="/qualifications">
+                                <button>Become a teacher</button>
+                            </Link>
+                        </div>
                     </div>
                 </div>
-
             </div>
-
-            <div className={clsx.become_a_teacher}>
-                <div className={clsx.become_a_teacher__left}>
-                    <img src={teacher} alt="Teacher" />
-                </div>
-                <div className={clsx.become_a_teacher__right}>
-                    <h3>Get access to customized
-                        dashboard to track Earnings,
-                        Student Enrolment to class, and
-                        Payment over a period of time.</h3>
-                    <Link to="/qualifications">
-                        <button>Become a teacher</button>
-                    </Link>
-                </div>
-            </div>
-
-            <div className={clsx.frequently_asked_questions}>
-                <h1>Frequently Asked Questions</h1>
-                {/* <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo.</p> */}
-                <div className={clsx.frequently_asked_questions_container}>
-                    <Grid container spacing={4}>
-                        {
-                            faqs.map(({ question, answer }, i) => (
-                                <Grid item sm={12} md={6} key={i}>
-                                    <FaqComponent title={question} answer={answer} key={i} style={styles} />
-                                </Grid>
-                            ))
-                        }
-                    </Grid>
+            <div className="container-xxxl mx-auto">
+                <div className={clsx.frequently_asked_questions}>
+                    <h1>Frequently Asked Questions</h1>
+                    {/* <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qm risus ridiculus nunc adipiscing justo.</p> */}
+                    <div className={clsx.frequently_asked_questions_container}>
+                        <Grid container spacing={4}>
+                            {
+                                faqs.map(({ question, answer }, i) => (
+                                    <Grid item sm={12} md={6} key={i}>
+                                        <FaqComponent title={question} answer={answer} key={i} style={styles} />
+                                    </Grid>
+                                ))
+                            }
+                        </Grid>
+                    </div>
                 </div>
             </div>
-            <Reviews bgColor="var(--white)" reviews={reviews} />
+            <div className="container-xxxl mx-auto">
+                <Reviews bgColor="var(--white)" reviews={reviews} />
+            </div>
+
         </Layout>
     )
 }
