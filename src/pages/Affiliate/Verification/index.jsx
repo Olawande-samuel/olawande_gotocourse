@@ -85,7 +85,7 @@ export function Form({type}){
                             draggable: true,
                             progress: undefined,
                         });
-                        getItem(KEY, data);
+                        updateItem(VERIFICATION_KEY, data);
                         setTimeout(() => navigate(data.userType === 'teacher' ? `/teacher/on-boarding` : data.userType === 'student' ? `/user-onboarding`: `/${data.userType}`), 1000);
                     }
                 }catch(err){

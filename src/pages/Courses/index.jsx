@@ -29,6 +29,7 @@ import details from "../../images/course_details.png";
 import placeholder from "../../images/cybersecurity.webp";
 import {witnesses} from "../../components/Testimonials";
 import { changeConstants } from "../Dashboard/Teachers/CreateCourse";
+import { DetailsHero } from "../Bootcamp";
 export function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -243,7 +244,7 @@ const Card = ({ logo, name, description, iconImg }) => {
   );
 };
 
-export const  CourseCard = ({ courseImg, name, description, category, instructorName, color, background, show ,  course, courseId}) => {
+export const CourseCard = ({ courseImg, name, description, category, instructorName, color, background, show ,  course, courseId}) => {
   const navigate = useNavigate()
   return (
     <div className={`card ${style.course_card}`} style={{background:background, color:color, cursor: "pointer"}} onClick={()=>{
@@ -581,7 +582,7 @@ export const CourseDetail = ({preview}) => {
     
   },[categoryDetails?.name])
 
-  //NB: use dummy is no data exist
+  //NB: use dummy if no data exist
   useEffect(()=>{
     if(preview?.name) {
       categoryDetails = preview;
@@ -794,9 +795,9 @@ export const CourseProfile = ({preview}) => {
                 </span>
                 </p>
                 <div className="d-flex" style={{gap:"1rem"}}>
-                  <a href="#packages">
+                  {/* <a href="#packages">
                     <button className={`button ${style.btn}`}>Enroll</button>
-                  </a>
+                  </a> */}
                     {loading ? 
                   <div className="spinner-border text-primary" role="status" >
                     <span className="visually-hidden">Loading...</span>
@@ -1014,6 +1015,141 @@ export const CourseProfile = ({preview}) => {
     </Courses>
   );
 };
+export const NewCourseProfile = ({preview})=>{
+
+  const {generalState, setGeneralState, otherFunctions: {fetchCourse}, studentFunctions:{wishlistCourse}} = useAuth();
+  
+  const {getItem} = useLocalStorage()
+
+  const {id} = useParams()
+  const ref = useRef(false);
+  const navigate = useNavigate()
+  const [loading, setLoading]= useState(false)
+  const [courseProfile, setCourseProfile]= useState()
+
+  useEffect(()=>{
+    if(preview?.name) {
+      setCourseProfile(preview)
+    } else {
+      const id = localStorage.getItem("gotocourse-courseId");
+      if(id){
+        (async()=>{
+          try{
+          setGeneralState({...generalState, loading: true});
+          const res =  await fetchCourse(id)
+          const {success, message, statusCode} = res;
+          if(!success) throw new AdvancedError(message, statusCode);
+          else {
+            const {data} = res;
+            setCourseProfile(data)
+          }
+      }catch(err){
+        // toast.error(err.message, {
+        //   position: "top-right",
+        //   autoClose: 3000,
+        //   hideProgressBar: true,
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        //   progress: undefined,
+        // });
+      }finally {
+          setGeneralState({...generalState, loading: false});
+      }
+    })()
+      }
+    }
+    ref.current = true
+  },[id, preview])
+
+  function getDate(date){
+    return new Date(date).toDateString()
+  }
+
+  async function addToWishList(){
+    const data = getItem("gotocourse-courseInfo");
+
+    const  userData = getItem(KEY)
+    if(userData !== null){
+      try {
+        setLoading(true)
+        const response =  await wishlistCourse(data.courseId, userData?.token)
+        const {success, message, statusCode} = response
+        if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      }catch(error){
+        console.error(error)
+        toast.error(error.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }finally{
+        setLoading(false)
+      }
+      
+      
+    } else {
+      navigate("/login")
+    }
+  }
+
+  const courseData = {
+    title: 'New Course',
+    navHeight:"81",
+    details: {
+      title: 'Course Details',
+      description: 'Course Description',  
+      img:placeholder
+
+    },
+    loading: false,
+    addToWishList: ()=>{console.log("hello")},
+    handleBootstrapEnrollment: ()=>{console.log("hello")},
+  }
+  return (
+    <Courses>
+      <div className={style.new_courseProfile}>
+        <DetailsHero
+            loading={courseData.loading}
+            navHeight={courseData.navHeight}
+            title={courseProfile?.name}
+            description={courseProfile?.description}
+            img={courseProfile?.courseImg}
+            addToWishList={courseData.addToWishList}
+            handleBootstrapEnrollment={courseData.handleBootstrapEnrollment}
+          />
+          <section id="syllabus" className={style.syllabus}>
+            <h4 className={style.title}>Syllabus</h4>
+            <p>
+              This syllabus covers the relevant topics, assessment and projects you will need in your learning path for this course
+            </p>
+            <ul>
+              {courseProfile?.syllabus?.length > 0 && courseProfile.syllabus.slice(0, 3).map((item) => (
+                <li>
+                  <p>{item.title}</p>
+                  <p>{item.description}</p>
+                </li>
+              ))}
+            </ul>
+        </section>
+      </div>
+    </Courses>
+
+  )
+}
 
 export const PackageCard = ({item, courseId}) => {
   const {studentFunctions:{addCourse}} = useAuth();
@@ -1040,7 +1176,7 @@ export const PackageCard = ({item, courseId}) => {
             {item.description}
           </p>
         
-        <div className="text-center">
+        {/* <div className="text-center">
           <button
             className={`button button-md mx-auto ${style.package_button}`}
             onClick={enrollToCourse}
@@ -1055,7 +1191,7 @@ export const PackageCard = ({item, courseId}) => {
               </span>
             }
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

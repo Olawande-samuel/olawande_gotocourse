@@ -27,8 +27,12 @@
     padding-top: .5rem;
     height: min(100vh, 450px);
     width: 100%;
-    background: var(--blue-ish);
-    color: var(--theme-blue);
+    background: url("../../images/Rectangle5775.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-x: right;
+    background-position: center;
+    color: var(--white);
 }
 
 .jumbotron__cover {
@@ -83,7 +87,9 @@
     width: 80%;
     line-height: 1.4 ;
     font-weight: 600;
-    color: var(--theme-blue);
+    /* color: var(--theme-blue); */
+    color: var(--white);
+
     margin-bottom: 15px;
 }
 
@@ -92,7 +98,9 @@
     letter-spacing: 0.4px;
     width: 100%;
     margin-bottom: 2 0px;
-    color: var(--theme-blue);
+    /* color: var(--theme-blue); */
+    color: var(--white);
+
 }
 
 .jumbotron__absolute>div {
@@ -109,11 +117,15 @@
 
 
 .how_it_works,
-.frequently_asked_questions,
-.reviews {
-    padding: 50px;
+.frequently_asked_questions {
+    padding:  2rem 50px 0 50px;
     /* margin-bottom: 30px; */
 }
+.reviews{
+    padding:  0 50px 2rem 50px;
+
+}
+
 
 .best_features {
     /* background-color: var(--white); */
@@ -601,8 +613,6 @@
         padding-top: .5rem;
         height: min(100vh, 550px);
         width: 100%;
-        background: var(--blue-ish);
-        color: var(--theme-blue);
     }
    
     
@@ -768,4 +778,37 @@
     /* .rectangle_2 {
         top: calc((100% - 60%) + 120px);
     } */
+}
+
+
+
+/* CHECKLIST */
+
+.checklist {
+    background: url(../../images/become_teacher.png), rgba(1, 20, 113, 0.56);
+    background-blend-mode:multiply ;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.check_form {
+    background-color: #fff;
+    padding: 2rem 1rem;
+    width: min(100% - 2rem, 500px );
+    height: 100%;
+    overflow-y: scroll;
+}
+
+@media (max-width: 767px){
+    .checklist {
+        justify-content: center;
+        padding-block: 2rem;
+    }
+    .check_form {
+        border-radius: 10px;
+        padding-bottom: 1rem;
+    }
 }

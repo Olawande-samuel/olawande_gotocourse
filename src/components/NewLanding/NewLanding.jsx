@@ -268,7 +268,8 @@ function BootcampCard({data}){
       <div className="container newBootcamp_wrapper">
         <div className="newBootcamp_content">
           <div className="classes">
-            <p className="bg-white p-1 classes_title fw-bolder px-3">AVAILABLE CLASSES</p>
+            <p className="bg-white p-1 classes_title fw-bolder px-3 mb-0">AVAILABLE CLASSES</p>
+            <p className="bg-white p-1 classes_title fw-bolder px-3 mb-0" style={{fontSize:"0.8rem"}}>Classes we are presently enrolling for</p>
             <div className="classes_container">
               {
                 data?.slice(0,4).map(data=>(

@@ -6,7 +6,8 @@ import'@stripe/stripe-js'
 import Landing from './pages/Landing';
 import Out from "./pages/Out";
 
-import {Student, Fees, Teachers, Courses, Approve, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails, Chat as AdminChat, Profile as AdminProfile,
+
+import {Student, Fees, Teachers, Courses, Approve,ApproveStudent, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails, Chat as AdminChat,
   CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails, AddMentor,Mentors, MentorsDetail, Notification, Earnings as AdminEarning} from "./pages/Dashboard/Admin";
 
 import AdminDashboard from "./pages/Dashboard/Admin/Dashboard";
@@ -33,7 +34,7 @@ import HIW, {HIWStudent, HIWTeacher, HIWAffiliate}from "./pages/HowItWorks"
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
-import { Categories, CourseDetail, CourseList, CourseProfile } from "./pages/Courses";
+import { Categories, CourseDetail, CourseList, CourseProfile, NewCourseProfile } from "./pages/Courses";
 import {Home as BecomeATeacher, Profile} from "./pages/Teacher";
 import Career from "./pages/Career";
 import All, {Payment, PaymentStatus} from "./pages/Teacher/Teachers";
@@ -74,6 +75,8 @@ import SyllabusContextProvider from "./contexts/Syllabus";
 
 import { Suspense, lazy } from "react";
 import Loader from "./components/Loader";
+import CheckList from "./pages/Teacher/checkList";
+import Events from "./pages/Events";
 
 const Login = lazy(() => import("./pages/User/Login"))
 const SignUp = lazy(() => import("./pages/User/SignUp"))
@@ -140,6 +143,8 @@ function App() {
                 <Route path="students" element={<Students  />} />
                 <Route path="user-authentication" element={<Verification  />} />
                 <Route path="user-onboarding" element={<UserOnBoarding />} />   
+                <Route path="qualifications" element={<CheckList />} />   
+                <Route path="events" element={<Events />} />   
 
                 <Route path="classes" element={<Out />}>
                   <Route index element={<AvailableClasses />} />
@@ -235,12 +240,15 @@ function App() {
                   <Route path="chat" element={<TeacherChat />} />
                 </Route>
                 <Route path="categories" element={<Out />}>
-                  <Route index element={<Categories  />} />
+                  {/* <Route index element={<Categories  />} /> */}
+                  <Route index element={<CategoryHome  />} />
                   <Route path=":id" element={<Out />}  >
-                    <Route index element={<CourseDetail />} />
+                    {/* <Route index element={<CourseDetail />} /> */}
+                    <Route index element={<CategoryDetail />} />
                     <Route path="courses" element={<CourseList />} />
                     <Route path="courses/:profile" element={<Out />}>
                       <Route index element={<CourseProfile />} />
+                      {/* <Route index element={<NewCourseProfile />} /> */}
                       <Route path="payment" element={<Payment />} />
                     </Route>
                   </Route>
@@ -249,6 +257,7 @@ function App() {
                   <Route path="" element={<AdminDashboard />} />
                   <Route path="profile" element={<AdminProfile />} />
                   <Route path="students" element={<Student />} />
+                  <Route path="students/approve" element={<ApproveStudent />} />
                   <Route path="notifications" element={<Notification />} />
                   <Route path="fees" element={<Fees />} />
                   <Route path="teachers" element={<Teachers />} />

@@ -185,7 +185,7 @@
 
 /* bootcamp details */
 
-.bootcampTraining .hero, .bootcampTraining .new_hero {
+.bootcampTraining .hero, .bootcampTraining .new_hero, .new_hero {
     color: var(--white);
     background-origin: center;
     background-blend-mode: multiply !important;
@@ -193,7 +193,6 @@
     background-size:cover !important;
     background-position: center !important;
     height: min(100vh - 81px, 450px);
-
 
 }
 
@@ -212,6 +211,7 @@
     height:100%;
     place-items:center;
     place-content: center;
+    color: #fff;
 
 }
 .hero_content h4 {

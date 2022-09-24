@@ -199,7 +199,7 @@ td {
 }
 /* ******************************Nav****************************** */
 .nav {
-  padding: 1.2rem 0;
+  padding: .6rem 0;
   position: fixed;
   top: 0;
   left: 0;
@@ -542,7 +542,7 @@ border-radius: 13.5px !important;
 }
 .services  .title {
   line-height: 72px;
-  color:var(--text-color-dark) !important;
+  color:var(--theme-blue) !important;
 }
 
 .services .services_list {
@@ -1220,14 +1220,31 @@ font-size: 16px;
 /* .footer_container{
   align-items:end;
 } */
-.footer .footer_left,
+/* .footer .footer_left,
 .footer .footer_right {
   flex: 50%;
 }
 .footer .footer_left {
   display: grid;
   place-items: center;
+} */
+
+.footer .footer_left,
+.footer .footer_right {
+  flex: 50%;
 }
+
+.footer .footer_left{
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+/* .footer .footer_left {
+  display: grid;
+  place-items: center;
+} */
+
+
 .footer a {
   color: #fff;
 }
@@ -1365,6 +1382,10 @@ font-size: 16px;
   position: absolute;
   top: 5%;
   left: 3%;
+}
+
+.reset{
+  height: 100vh;
 }
 
 .signWrapper main {

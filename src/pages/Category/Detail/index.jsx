@@ -1,6 +1,7 @@
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import {useParams, useNavigate, Navigate} from "react-router-dom";
+
+import {useLocation, useNavigate, useParams, Navigate} from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import {MdNavigateNext} from "react-icons/md";
@@ -54,11 +55,10 @@ const DetailBody = styled.div`
 
 const DetailImage = styled.div`
     width: 100%;
-    background: ${props => props.background};
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    height: min(50vh, 600px);
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    background-position: center !important;
+    height: min(70vh, 600px);
     position: relative;
 
     & h2 {
@@ -254,26 +254,26 @@ const DetailCourseContainer = styled.div`
 
 const DetailCourses = styled.div`
     width: 100%;
-    overflow-x: scroll;
     display: flex;
     margin-bottom: 30px;
 `;
 
 const CourseCard = styled.div`
     padding: 5px;
-    margin: 15px;
+    // margin: 15px;
     cursor: pointer;
-    width: 300px;
+    // width: 300px;
 `;
 
 const CourseImageContainer = styled.div`
-    width: 300px;
-    height: 250px;
+    // width: 300px;
+    height: 180px;
     margin-bottom: 15px;
 
     & img {
         width: 100%;
         height: 100%;
+        object-fit: cover;
     }
 `;
 
@@ -301,71 +301,82 @@ const CourseDuration = styled.div`
 `;
 
 
-const Detail = () => {
-    const [details, setDetails] = useState(null);
 
-    const navigate = useNavigate();
+const Detail = ({preview}) => {
+    const [details, setDetails] = useState({});
     const [courses, setCourses] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const {otherFunctions: {fetchCategory, searchCategories}} = useAuth();
-    const params = useParams();
+    const [loading, setLoading] = useState(true);   
+    const location = useLocation();
 
 
+    const {generalState, setGeneralState, otherFunctions: {searchCategories}} = useAuth();
+    const [categoryCourses, setCategoryCourses]= useState([])
+    const {id} = useParams()
+    const ref = useRef(false);
+    const navigate = useNavigate()
 
-    useEffectOnMount(() => {
-        console.log("Category Details page is mounted");
-        // window.scrollTo(0,0);
-        if(!params) navigate(-1);
-        else {
-            (async() => {
-                try{
-                    const name = params.name;
-                    console.log(name);
-                    if(name.trim() === "") throw new AdvancedError("Invalid course name", 0);
-                    else{
-                        const res = await fetchCategory(name);
-                        const {success, message, statusCode} = res;
-                        if(!success) throw new AdvancedError(message, statusCode);
-                        else {
-                            const {data} = res;
-                            setDetails(_ => { return {...data}})
-                            console.log(data);
-                            toast.success(message, {
-                                position: "top-right",
-                                autoClose: 4000,
-                                hideProgressBar: true,
-                                closeOnClick: true,
-                                pauseOnHover: true,
-                                draggable: true,
-                                progress: undefined,
-                            });
-                            const r = await searchCategories(data?.name);
-                            console.log(r);
-                            const {message: msg, statusCode: code, success: s} = r;
-                            if(!s) throw new AdvancedError(msg, code);
-                            else{
-                                const {data} = r;
-                                setCourses(_ => [...data]);
-                            }
-                        }
-                    }
-                }catch(err){
-                    toast.error(err.message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                }finally{setLoading(_ => false)}
-            })()
+    // const [categoryDetails, setCategoryDetails]= useState({})
+
+    let categoryDetails = {}
+    
+    if(!preview?.name){
+      const data = localStorage.getItem("gotocourse-category")
+      if (data){
+        categoryDetails = JSON.parse(data)          
+      } else {
+        navigate("/not-found")
+      }
+    } else {
+      categoryDetails = preview          
+    }
+  
+    // fetch courses under each category
+    useEffect(()=>{
+      if(!preview?.name){
+  
+      if(ref.current) return
+        (async()=>{
+          if(categoryDetails){
+          try{
+  
+            setGeneralState({...generalState, loading: true})
+            const res = await searchCategories(categoryDetails?.name);
+            const {success, message, statusCode} = res;
+              if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+              if(res.data.length > 0){
+                setCategoryCourses(res.data) 
+            }
+          
+        }catch(err){
+            toast.error(err.message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+        }finally{
+          setGeneralState({...generalState, loading: false})
         }
-        return () => console.log("Category Details page is unmounted");
-    }, [])
-
-
+        } else {
+          navigate("/not-found")
+        }
+        })()
+        ref.current = true
+      } 
+      
+    },[categoryDetails?.name])
+  
+    //NB: use dummy if no data exist
+    useEffect(()=>{
+      if(preview?.name) {
+        categoryDetails = preview;
+      }
+    // ref.current = true
+    },[id, preview])
+  
     return (
         <Layout background="category">
             {/* {loading && <Loader />} */}
@@ -376,29 +387,30 @@ const Detail = () => {
                         <BreadcrumbLink to="/">
                             Home
                         </BreadcrumbLink>
-                        <BreadcrumbLink to="/categories/all">
+                        <BreadcrumbLink to="/categories">
                             Categories
                         </BreadcrumbLink>
-                        <BreadcrumbLink $isCurrentPage={true} to="#">{details ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</BreadcrumbLink>
+                        <BreadcrumbLink $isCurrentPage={true} to="#">{categoryDetails ? capitalize(categoryDetails?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</BreadcrumbLink>
                     </Breadcrumbs>
                 </CategoryTop>
                 <DetailBody>
-                    <DetailImage background={`linear-gradient(1.66deg, rgba(44, 43, 44, 0.83) 24.55%, rgba(12, 33, 145, 0) 115.79%), url(${details?.bannerImg})`}>
-                        <h2>{details ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</h2>
+
+                    <DetailImage style={{background: `linear-gradient(1.66deg, rgba(44, 43, 44, 0.83) 24.55%, rgba(12, 33, 145, 0) 115.79%), url(${categoryDetails?.bannerImg})`}}>
+                        <h2>{categoryDetails ? capitalize(categoryDetails?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</h2>
                     </DetailImage>
                     <DetailBodyContent>
                         <DetailLeft>
                             <DetailDescription>
-                                {details ? details.description : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}
+                                {categoryDetails ? categoryDetails.description : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}
                             </DetailDescription>
 
                             <NicheContainer>
-                                <Header>{details ? `${capitalize(details?.name)} Niche` : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</Header>
-                                <p>{details ? details.nicheDescription : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</p>
+                                <Header>{categoryDetails ? `${capitalize(categoryDetails?.name)} Niche` : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</Header>
+                                <p>{categoryDetails ? categoryDetails.nicheDescription : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</p>
                                 <Niches>
                                     {
-                                        details ? 
-                                        details.nicheItems.map(({name, description}, i) => (
+                                        categoryDetails ? 
+                                        categoryDetails.nicheItems.map(({name, description}, i) => (
                                         <Niche key={i}>
                                                 <Dot />
                                                 <NicheBody>
@@ -425,10 +437,10 @@ const Detail = () => {
                         <DetailRight>
                             <CareerCard>
                                 <Header>Career Prospect</Header>
-                                <p>{details ? details.career : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={50} />}</p>
+                                <p>{categoryDetails ? categoryDetails.career : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={50} />}</p>
                                 <ul>
                                     {
-                                        details ? details.careerList.map(({name, _id}, i) => (
+                                        categoryDetails ? categoryDetails.careerList.map(({name, _id}, i) => (
                                             <li key={i}>
                                                 <Dot />
                                                 {name}
@@ -447,85 +459,92 @@ const Detail = () => {
                     <DownloadButton>
                         Download Curriculum <FaDownload />
                     </DownloadButton>
-                    <DetailCourseContainer>
-                        <h2>{details ? `${capitalize(details?.name)} Courses` : <Skeleton animation="wave" variant="rectangular" width={300} height={30} /> }</h2>
-                        <p>{details ? details.nicheDescription : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</p>
-                        <DetailCourses>
-                          <Swiper
-                            // install Swiper modules
-                            modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-                            loop={true}
-                            speed={1500}
-                            autoplay={{delay:2500}}
-                            spaceBetween={0}
-                            slidesPerView={1}
-                            pagination={{ clickable: true }}
-                            scrollbar={{ draggable: true }}
-                            breakpoints={{
-                            320: {
-                                slidesPerView: 1,
-                                spaceBetween: 0,
-                            },
-                            // when window width is >= 640px
-                            575: {
-                                slidesPerView: 2,
-                                spaceBetween: 0,
-                            },
-                            700: {
-                                slidesPerView: 2.5,
-                                spaceBetween: 0,
-                            },
-                            1024: {
-                                slidesPerView: 3.5,
-                                spaceBetween: 5,
-                            },
-                            }}
-                            >
-                            {
-                                courses.length ? courses.map(({courseImg, endDate, startDate, name}, i) => (
-                                    <SwiperSlide key={i}>
-                                    <CourseCard onClick={e => navigate(`courses/${name}`)}>
-                                        <CourseImageContainer>
-                                            <img src={courseImg} alt="Course Image" />
-                                        </CourseImageContainer>
-                                        <CourseBody>
-                                            <h4>{name}</h4>
-                                            <CourseDuration>
-                                                <h6>Duration</h6>
-                                                <p>{`${getDate(startDate)} - ${getDate(endDate)}`}</p>
-                                            </CourseDuration>
-                                        </CourseBody>
-                                    </CourseCard>
-                                    </SwiperSlide>
-                                )) : Array(4).fill(undefined).map((_, i) => (
-                                    <SwiperSlide key={i}>
-                                    <CourseCard>
-                                        <CourseImageContainer>
-                                            <Skeleton animation="wave" variant="rectangular" width={"100%"} height={"100%"} />
-                                        </CourseImageContainer>
-                                        <CourseBody>
-                                            <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30}>
-                                                <h4>.</h4>
-                                            </Skeleton>
-                                            <CourseDuration>
+                    <div className="container">
+                        <DetailCourseContainer>
+                            <h2>{categoryDetails ? `${capitalize(categoryDetails?.name)} Courses` : <Skeleton animation="wave" variant="rectangular" width={300} height={30} /> }</h2>
+                            <p>{categoryDetails ? categoryDetails.nicheDescription : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</p>
+                            <DetailCourses>
+                            <Swiper
+                                // install Swiper modules
+                                modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+                                loop={true}
+                                speed={1500}
+                                autoplay={{delay:2500}}
+                                spaceBetween={0}
+                                slidesPerView={1}
+                                pagination={{ clickable: true }}
+                                scrollbar={{ draggable: true }}
+                                breakpoints={{
+                                    320: {
+                                        slidesPerView: 1,
+                                        spaceBetween: 0,
+                                    },
+                                    // when window width is >= 640px
+                                    575: {
+                                        slidesPerView: 2,
+                                        spaceBetween: 5,
+                                    },
+                                    700: {
+                                        slidesPerView: 2.5,
+                                        spaceBetween: 5,
+                                    },
+                                    1024: {
+                                        slidesPerView: 3.5,
+                                        spaceBetween: 5,
+                                    },
+                                }}
+                                >
+                                {
+                                    categoryCourses.length ? categoryCourses.map((course, i) => (
+                                        <SwiperSlide key={i}>
+                                        <CourseCard onClick={()=>{
+                                            localStorage.setItem("gotocourse-courseInfo", JSON.stringify(course))
+                                            localStorage.setItem("gotocourse-courseId", course.courseId)
+                                            navigate(`courses/${course.name.replace(/\s+/g, '-').toLowerCase()}`)
+                                        }} >
+                                            <CourseImageContainer>
+                                                <img src={course.courseImg} alt="Course Image" />
+                                            </CourseImageContainer>
+                                            <CourseBody>
+                                                <h4>{course.name}</h4>
+                                                {/* <CourseDuration>
+                                                    <h6>Duration</h6>
+                                                    <p>{`${getDate(course.startDate)} - ${getDate(course.endDate)}`}</p>
+                                                </CourseDuration> */}
+                                            </CourseBody>
+                                        </CourseCard>
+                                        </SwiperSlide>
+                                    )) : Array(4).fill(undefined).map((_, i) => (
+                                        <SwiperSlide key={i}>
+                                        <CourseCard>
+                                            <CourseImageContainer>
+                                                <Skeleton animation="wave" variant="rectangular" width={"100%"} height={"100%"} />
+                                            </CourseImageContainer>
+                                            <CourseBody>
                                                 <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30}>
-                                                    <h6>.</h6>
+                                                    <h4>.</h4>
                                                 </Skeleton>
-                                                <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30}>
-                                                    <p>.</p>
-                                                </Skeleton>
-                                            </CourseDuration>
-                                        </CourseBody>
-                                    </CourseCard>
-                                    </SwiperSlide>
-                                ))
-                            }
-                         </Swiper>
-                        </DetailCourses>
-                        <Link to="courses">
-                            View more <BiArrowToRight />
-                        </Link>
-                    </DetailCourseContainer>
+
+                                                <CourseDuration>
+                                                    <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30}>
+                                                        <h6>.</h6>
+                                                    </Skeleton>
+                                                    <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30}>
+                                                        <p>.</p>
+                                                    </Skeleton>
+                                                </CourseDuration>
+                                            </CourseBody>
+                                        </CourseCard>
+                                        </SwiperSlide>
+                                    ))
+                                }
+                            </Swiper>
+                            </DetailCourses>
+                            <Link to="courses">
+                                View more <BiArrowToRight />
+                            </Link>
+                        </DetailCourseContainer>
+                    </div>
                 </DetailBody>
             </DetailContainer>
         </Layout>

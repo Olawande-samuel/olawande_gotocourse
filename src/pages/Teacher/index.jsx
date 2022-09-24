@@ -571,7 +571,7 @@ export const Home = () => {
                         dashboard to track Earnings,
                         Student Enrolment to class, and
                         Payment over a period of time.</h3>
-                    <Link to="/teacher/signup">
+                    <Link to="/qualifications">
                         <button>Become a teacher</button>
                     </Link>
                 </div>

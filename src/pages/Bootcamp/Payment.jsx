@@ -344,7 +344,7 @@ export function PaymentModal({ token }) {
   );
 }
 
-const CheckoutForm = () => {
+export const CheckoutForm = () => {
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();

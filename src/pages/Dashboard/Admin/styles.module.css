@@ -20,6 +20,31 @@
     --letterSpacing: 0.6px;
 }
 
+.kyc, .kyc .title{
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+}
+
+.kyc .title span{
+    display: block;
+}
+
+.kyc .title .question{
+    font-size: 18px;
+    font-weight: 600;
+    padding: 0;
+    margin-bottom: 0 ;
+
+}
+
+.kyc .title .answer{
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0;
+
+}
+
 
 .admin {
     display: flex;
@@ -83,6 +108,9 @@
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+}
+.admin_profile_top_img img {
+    height: 100%;
 }
 .admin_profile_top_img {
     width: 120px;
