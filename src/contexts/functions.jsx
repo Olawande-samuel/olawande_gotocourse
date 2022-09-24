@@ -498,8 +498,8 @@ export const authFunctions = {
         return res
     } ,
     changePassword: async function(data, token){
-        const res = await axios.post(`${baseURL}/user/password/update`,
-        JSON.stringify(data),
+        const res = await axios.patch(`${baseURL}/user/profile/update`,
+        data,
         {
             headers: {
                 "Authorization": `Bearer ${token}`,
