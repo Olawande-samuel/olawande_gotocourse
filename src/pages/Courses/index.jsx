@@ -795,9 +795,9 @@ export const CourseProfile = ({preview}) => {
                 </span>
                 </p>
                 <div className="d-flex" style={{gap:"1rem"}}>
-                  <a href="#packages">
+                  {/* <a href="#packages">
                     <button className={`button ${style.btn}`}>Enroll</button>
-                  </a>
+                  </a> */}
                     {loading ? 
                   <div className="spinner-border text-primary" role="status" >
                     <span className="visually-hidden">Loading...</span>
@@ -1176,7 +1176,7 @@ export const PackageCard = ({item, courseId}) => {
             {item.description}
           </p>
         
-        <div className="text-center">
+        {/* <div className="text-center">
           <button
             className={`button button-md mx-auto ${style.package_button}`}
             onClick={enrollToCourse}
@@ -1191,7 +1191,7 @@ export const PackageCard = ({item, courseId}) => {
               </span>
             }
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

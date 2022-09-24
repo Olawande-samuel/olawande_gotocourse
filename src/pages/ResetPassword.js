@@ -85,8 +85,10 @@ const ResetPassword = () => {
       }
     };
     return (
-      <GuardedRoute>
-      <SignInWrapper>
+      <>
+
+       <GuardedRoute>
+       {/* <SignInWrapper> */}
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -98,6 +100,7 @@ const ResetPassword = () => {
           draggable
           pauseOnHover
         />
+
         
         <div className="form-wrapper w-100">
           <header>
@@ -158,10 +161,13 @@ const ResetPassword = () => {
             )}
           </form>
         </div>
-      </SignInWrapper>
+      {/* </SignInWrapper> */}
 
       </GuardedRoute>
+</>
     );
-}
+
+   
+  }
 
 export default ResetPassword
