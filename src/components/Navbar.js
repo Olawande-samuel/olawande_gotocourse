@@ -55,7 +55,9 @@ const Navbar = ({ background }) => {
   const celebRoute = location.pathname.split("/")[1] === "lounge";
   const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";  
   const categoryRoute = background === "category";
-  const landing = location.pathname.split("/")[1] !== celebRoute || !categoryRoute ;
+  const landing = location.pathname.split("/")[1] !== "lounge" && !categoryRoute;
+  console.log(location.pathname.split("/")[1] !== "lounge")
+
   function showDrop() { }
   return (
     <nav
