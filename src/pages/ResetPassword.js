@@ -44,8 +44,11 @@ const ResetPassword = () => {
         if(data.password.trim() === "") return;
         if(data.newPassword.trim() !== data.confirmPassword.trim()) throw new AdvancedError("Passwords don't match")
         if (!passReg.test(data.newPassword)) throw new AdvancedError("Invalid Password", 0);
-        
-        const response = await changePassword(data, userdata.token);
+        const pass =  {
+          password: data.password,
+          newPassword: data.newPassword
+        }
+        const response = await changePassword(pass, userdata.token);
         console.log({response})
 
         const {success, statusCode, message} = response.data;
@@ -85,8 +88,10 @@ const ResetPassword = () => {
       }
     };
     return (
-      <GuardedRoute>
-      <SignInWrapper>
+      <>
+
+       <GuardedRoute>
+       {/* <SignInWrapper> */}
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -98,6 +103,7 @@ const ResetPassword = () => {
           draggable
           pauseOnHover
         />
+
         
         <div className="form-wrapper w-100">
           <header>
@@ -158,10 +164,13 @@ const ResetPassword = () => {
             )}
           </form>
         </div>
-      </SignInWrapper>
+      {/* </SignInWrapper> */}
 
       </GuardedRoute>
+</>
     );
-}
+
+   
+  }
 
 export default ResetPassword
