@@ -27,10 +27,11 @@
     padding-top: .5rem;
     height: min(100vh, 450px);
     width: 100%;
-    /* background: var(--blue-ish); */
-    background: rgba(38, 80, 188, 0.56);
-    backdrop-filter: blur(54px);
-    /* color: var(--theme-blue); */
+    background: url("../../images/Rectangle5775.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-x: right;
+    background-position: center;
     color: var(--white);
 }
 
