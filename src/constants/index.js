@@ -29,6 +29,7 @@ export const KEY = "gotocourse-userdata"
 export const VERIFICATION_KEY = "userAuthdata"
 export const AFFILIATE_KEY = "gotocourse-affiliate-data";
 export const IMAGEURL = "https://loftywebtech.com/gotocourse/api/uploads"
+export const COURSE_CATEGORY_KEY = 'gotocourse-course-category';
 
 export function getDate(date){
   let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

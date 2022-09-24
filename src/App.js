@@ -6,6 +6,7 @@ import'@stripe/stripe-js'
 import Landing from './pages/Landing';
 import Out from "./pages/Out";
 
+
 import {Student, Fees, Teachers, Courses, Approve,ApproveStudent, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails, Chat as AdminChat,
   CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails, AddMentor,Mentors, MentorsDetail, Notification, Earnings as AdminEarning} from "./pages/Dashboard/Admin";
 
@@ -43,6 +44,7 @@ import {BootcampPayment} from "./pages/Bootcamp/Payment";
 import Policies, {TeachingPolicy, TermsOfUse, EndUserPolicy, Cookies} from "./pages/PrivacyPolicy";
 
 import {Category as CategoryHome, CategoryDetail} from "./pages/Category";
+import {CoursesHome, CourseDetails} from "./pages/Course";
 
 // import About from "./pages/About";
 // import Contact from "./pages/Contact";
@@ -125,7 +127,9 @@ function App() {
                 <Route path="about-us" element={<About />} />
                 <Route path="contact-us" element={<Contact />} />
                 <Route path="categories/all" element={<CategoryHome />} />
-                <Route path="category" element={<CategoryDetail />} />
+                <Route path="category/:name" element={<CategoryDetail />} />
+                <Route path="category/:name/courses" element={<CoursesHome />} />
+                <Route path="category/:name/courses/:course" element={<CourseDetails />} />
                 {/* <Route path="bootcamp-training" element={<TrainingBootcamp />} /> */}
                 <Route path="bootcamp-training" element={<NewBootcampDetailsComponent />} />
                 <Route path="bootcamp" element={<Bootcamp />} />
@@ -251,6 +255,7 @@ function App() {
                 </Route>
                 <Route path="admin">
                   <Route path="" element={<AdminDashboard />} />
+                  <Route path="profile" element={<AdminProfile />} />
                   <Route path="students" element={<Student />} />
                   <Route path="students/approve" element={<ApproveStudent />} />
                   <Route path="notifications" element={<Notification />} />

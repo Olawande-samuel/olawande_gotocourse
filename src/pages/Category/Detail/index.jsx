@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+
+import {useLocation, useNavigate, useParams, Navigate} from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import {MdNavigateNext} from "react-icons/md";
@@ -14,11 +15,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import Layout from "../../../components/Layout";
 import { useEffectOnMount } from "../../../hooks";
-import Loader from "../../../components/Loader";
 import { useAuth } from "../../../contexts/Auth";
 import { AdvancedError } from "../../../classes";
 import { capitalize, getDate } from "../../../constants";
-
 
 
 const DetailContainer = styled.div`
@@ -92,7 +91,7 @@ const DetailBodyContent = styled.div`
 `;
 
 const DetailLeft = styled.div`
-    width; 100%;
+    flex: 1;
     padding: 20px;
 
     @media screen and (max-width: 535px){
@@ -109,7 +108,7 @@ const DetailDescription = styled.p`
 `;
 
 const DetailRight = styled.div`
-    width: 100%;
+    // width: 100%;
 `;
 
 const CareerCard = styled.div`
@@ -302,6 +301,7 @@ const CourseDuration = styled.div`
 `;
 
 
+
 const Detail = ({preview}) => {
     const [details, setDetails] = useState({});
     const [courses, setCourses] = useState([]);
@@ -394,6 +394,7 @@ const Detail = ({preview}) => {
                     </Breadcrumbs>
                 </CategoryTop>
                 <DetailBody>
+
                     <DetailImage style={{background: `linear-gradient(1.66deg, rgba(44, 43, 44, 0.83) 24.55%, rgba(12, 33, 145, 0) 115.79%), url(${categoryDetails?.bannerImg})`}}>
                         <h2>{categoryDetails ? capitalize(categoryDetails?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</h2>
                     </DetailImage>
@@ -523,6 +524,7 @@ const Detail = ({preview}) => {
                                                 <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30}>
                                                     <h4>.</h4>
                                                 </Skeleton>
+
                                                 <CourseDuration>
                                                     <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30}>
                                                         <h6>.</h6>
