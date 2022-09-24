@@ -62,6 +62,11 @@ const Sidebar = ({isMobile}) => {
         },
         {
             icon: IoIosPerson,
+            path: "profile",
+            title: "My Profile"
+        },
+        {
+            icon: IoIosPerson,
             path: "students",
             title: "Students"
         },

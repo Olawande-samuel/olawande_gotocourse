@@ -37,6 +37,7 @@ import g3 from "../../images/bootcamps/g3.png";
 import { Payment } from "../Students";
 import { ReviewSection } from "../Courses";
 import { useQuery } from "@tanstack/react-query";
+import { Question } from "../Course/Details";
 
 const similarBootcamp = [
   {
@@ -628,6 +629,7 @@ export function NewBootcampDetailsComponent(){
         <section className={clsx.teacher}>
          <ReviewSection />
         </section>
+        <Question />
       </div>
     </Layout>
   );

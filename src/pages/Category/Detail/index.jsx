@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import styled from "styled-components";
-import {useLocation} from "react-router-dom";
+import {useParams, useNavigate, Navigate} from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import {MdNavigateNext} from "react-icons/md";
@@ -14,11 +14,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import Layout from "../../../components/Layout";
 import { useEffectOnMount } from "../../../hooks";
-import Loader from "../../../components/Loader";
 import { useAuth } from "../../../contexts/Auth";
 import { AdvancedError } from "../../../classes";
 import { capitalize, getDate } from "../../../constants";
-
 
 
 const DetailContainer = styled.div`
@@ -56,10 +54,11 @@ const DetailBody = styled.div`
 
 const DetailImage = styled.div`
     width: 100%;
+    background: ${props => props.background};
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    height: min(70vh, 600px);
+    height: min(50vh, 600px);
     position: relative;
 
     & h2 {
@@ -92,7 +91,7 @@ const DetailBodyContent = styled.div`
 `;
 
 const DetailLeft = styled.div`
-    width; 100%;
+    flex: 1;
     padding: 20px;
 
     @media screen and (max-width: 535px){
@@ -109,7 +108,7 @@ const DetailDescription = styled.p`
 `;
 
 const DetailRight = styled.div`
-    width: 100%;
+    // width: 100%;
 `;
 
 const CareerCard = styled.div`
@@ -304,59 +303,65 @@ const CourseDuration = styled.div`
 
 const Detail = () => {
     const [details, setDetails] = useState(null);
+
+    const navigate = useNavigate();
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const {otherFunctions: {fetchCategory, searchCategories}} = useAuth();
-    const location = useLocation();
+    const params = useParams();
 
 
 
     useEffectOnMount(() => {
         console.log("Category Details page is mounted");
-        (async() => {
-            try{
-                const name = location.search.split("=")[1];
-                console.log(name);
-                if(name.trim() === "") throw new AdvancedError("Invalid course name", 0);
-                else{
-                    const res = await fetchCategory(name);
-                    const {success, message, statusCode} = res;
-                    if(!success) throw new AdvancedError(message, statusCode);
-                    else {
-                        const {data} = res;
-                        setDetails(_ => { return {...data}})
-                        console.log(data);
-                        toast.success(message, {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
-                        const r = await searchCategories(data?.name);
-                        console.log(r);
-                        const {message: msg, statusCode: code, success: s} = r;
-                        if(!s) throw new AdvancedError(msg, code);
-                        else{
-                            const {data} = r;
-                            setCourses(_ => [...data]);
+        // window.scrollTo(0,0);
+        if(!params) navigate(-1);
+        else {
+            (async() => {
+                try{
+                    const name = params.name;
+                    console.log(name);
+                    if(name.trim() === "") throw new AdvancedError("Invalid course name", 0);
+                    else{
+                        const res = await fetchCategory(name);
+                        const {success, message, statusCode} = res;
+                        if(!success) throw new AdvancedError(message, statusCode);
+                        else {
+                            const {data} = res;
+                            setDetails(_ => { return {...data}})
+                            console.log(data);
+                            toast.success(message, {
+                                position: "top-right",
+                                autoClose: 4000,
+                                hideProgressBar: true,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            });
+                            const r = await searchCategories(data?.name);
+                            console.log(r);
+                            const {message: msg, statusCode: code, success: s} = r;
+                            if(!s) throw new AdvancedError(msg, code);
+                            else{
+                                const {data} = r;
+                                setCourses(_ => [...data]);
+                            }
                         }
                     }
-                }
-            }catch(err){
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            }finally{setLoading(_ => false)}
-        })()
+                }catch(err){
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }finally{setLoading(_ => false)}
+            })()
+        }
         return () => console.log("Category Details page is unmounted");
     }, [])
 
@@ -378,7 +383,7 @@ const Detail = () => {
                     </Breadcrumbs>
                 </CategoryTop>
                 <DetailBody>
-                    <DetailImage style={{background: `linear-gradient(1.66deg, rgba(44, 43, 44, 0.83) 24.55%, rgba(12, 33, 145, 0) 115.79%), url(${details?.bannerImg})`}}>
+                    <DetailImage background={`linear-gradient(1.66deg, rgba(44, 43, 44, 0.83) 24.55%, rgba(12, 33, 145, 0) 115.79%), url(${details?.bannerImg})`}>
                         <h2>{details ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</h2>
                     </DetailImage>
                     <DetailBodyContent>
@@ -479,7 +484,7 @@ const Detail = () => {
                             {
                                 courses.length ? courses.map(({courseImg, endDate, startDate, name}, i) => (
                                     <SwiperSlide key={i}>
-                                    <CourseCard>
+                                    <CourseCard onClick={e => navigate(`courses/${name}`)}>
                                         <CourseImageContainer>
                                             <img src={courseImg} alt="Course Image" />
                                         </CourseImageContainer>
@@ -517,7 +522,7 @@ const Detail = () => {
                             }
                          </Swiper>
                         </DetailCourses>
-                        <Link to="/courses">
+                        <Link to="courses">
                             View more <BiArrowToRight />
                         </Link>
                     </DetailCourseContainer>

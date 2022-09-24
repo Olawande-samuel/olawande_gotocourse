@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import {MdNavigateNext} from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Breadcrumbs, Skeleton } from "@mui/material";
 
@@ -9,9 +9,10 @@ import { Breadcrumbs, Skeleton } from "@mui/material";
 
 
 import Layout from "../../../components/Layout";
-import { useEffectOnMount } from "../../../hooks";
+import { useEffectOnMount, useLocalStorage } from "../../../hooks";
 import { useAuth } from "../../../contexts/Auth";
 import { AdvancedError } from "../../../classes";
+import { capitalize, getDate, COURSE_CATEGORY_KEY } from "../../../constants";
 
 
 
@@ -188,6 +189,8 @@ const Separator = styled.hr`
 const Category = () => {
     const {otherFunctions: {fetchCategories}} = useAuth();
     const [categories, setCategories] = useState([]);
+    const {updateItem} = useLocalStorage();
+    const navigate = useNavigate();
     const [search, setSearch] = useState("");
     useEffectOnMount(() => {
         console.log("Category is mounted");
@@ -225,6 +228,11 @@ const Category = () => {
         return () => console.log("Category page is unmounted");
     }, [])
 
+    const gotoCategoryHandler = (e, title) => {
+        updateItem(COURSE_CATEGORY_KEY, title);
+        navigate(`/category/${title}`);
+    }
+
 
     return (
         <Layout background="category">
@@ -249,7 +257,7 @@ const Category = () => {
                     {
                         categories.length !== 0 ? 
                         categories.filter(c => c.name.toLocaleLowerCase().includes(search)).map(({bannerImg, description, name}, i) => (
-                            <CategoryCard key={i} image={bannerImg} description={description} 
+                            <CategoryCard gotoCategory={gotoCategoryHandler} key={i} image={bannerImg} description={description} 
                             title={name} separator={(categories.length - 1) === i ? false : true} />
                         )) : Array(4).fill(undefined).map((_, i) => (
                             <Skeleton sx={{marginBottom: 10}} animation="wave" key={i} variant="rectangular" width={"100%"} height={350} />
@@ -262,7 +270,7 @@ const Category = () => {
 }
 
 
-function CategoryCard({image, title, description, separator}){
+function CategoryCard({image, title, description, separator, gotoCategory}){
     return (
         <>
             <Card>
@@ -272,9 +280,7 @@ function CategoryCard({image, title, description, separator}){
                 <CardBody>
                     <h2>{title}</h2>
                     <p>{description}</p>
-                    <Link to={`/category?name=${title}`}>
-                        <button>Learn more</button>
-                    </Link>
+                    <div><button onClick={e => gotoCategory(e, title)}>Learn more</button></div>
                 </CardBody>
             </Card>
             {separator && <Separator />}

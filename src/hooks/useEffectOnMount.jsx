@@ -9,7 +9,7 @@ const useEffectOnMount = (cb, dependencies=[]) => {
         if(flag.current) return;
         cb();
         flag.current = true;
-    }, dependencies);
+    }, [...dependencies]);
 } 
 
 
