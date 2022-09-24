@@ -1472,7 +1472,45 @@ export function ApproveStudent() {
             ))}
 
 
+            <div className={clsx.kyc}>
+              {
+                kyc !== null && kyc.question && (
+                  <>
+                    <div className={clsx.title}>
+                      <p className={clsx.question}>Phone Number</p>
+                      <span className={clsx.answer}>{kyc.question?.phoneNumber}</span>
+                    </div>
 
+
+                    <div className={clsx.title}>
+                      <p className={clsx.question}>Degree</p>
+                      <span className={clsx.answer}>{kyc.question?.degree}</span>
+                    </div>
+
+                    <div className={clsx.title}>
+                      <p className={clsx.question}>Experience</p>
+                      <span className={clsx.answer}>{kyc.question?.experience}</span>
+                    </div>
+
+                    <div className={clsx.title}>
+                      <p className={clsx.question}>Employment</p>
+                      <span className={clsx.answer}>{kyc.question?.employment}</span>
+                    </div>
+
+                    <div className={clsx.title}>
+                      <p className={clsx.question}>Country</p>
+                      <span className={clsx.answer}>{kyc.question?.country}</span>
+                    </div>
+
+                    <div className={clsx.title}>
+                      <p className={clsx.question}>Region</p>
+                      <span className={clsx.answer}>{kyc.question?.region}</span>
+                    </div>
+
+                  </>
+                )
+              }
+            </div>
 
 
             <div className={clsx.user__email}>
@@ -1526,45 +1564,7 @@ export function ApproveStudent() {
           </div>
         </div>
 
-        <div className={clsx.kyc}>
-          {
-            kyc !== null && kyc.question &&(
-              <>
-              <div className={clsx.title}>
-                 <p className={clsx.question}>Phone Number</p>
-                 <span className={clsx.answer}>{kyc.question?.phoneNumber}</span>
-               </div>
-             
-     
-               <div className={clsx.title}>
-                 <p className={clsx.question}>Degree</p>
-                 <span className={clsx.answer}>{kyc.question?.degree}</span>
-               </div>
-             
-               <div className={clsx.title}>
-                 <p className={clsx.question}>Experience</p>
-                 <span className={clsx.answer}>{kyc.question?.experience}</span>
-               </div>
 
-               <div className={clsx.title}>
-                 <p className={clsx.question}>Employment</p>
-                 <span className={clsx.answer}>{kyc.question?.employment}</span>
-               </div>
-
-               <div className={clsx.title}>
-                 <p className={clsx.question}>Country</p>
-                 <span className={clsx.answer}>{kyc.question?.country}</span>
-               </div>
-              
-               <div className={clsx.title}>
-                 <p className={clsx.question}>Region</p>
-                 <span className={clsx.answer}>{kyc.question?.region}</span>
-               </div>
-
-             </>
-            )
-          }
-        </div>
       </div>
     </Admin>
   );
@@ -1991,6 +1991,54 @@ export function Approve() {
               <Info title={title} content={content} key={i} />
             ))}
 
+<div className={clsx.kyc}>
+          {
+            kyc !== null && kyc.question && (
+              <>
+                <div className={clsx.title}>
+                  <p className={clsx.question}>Phone Number</p>
+                  <span className={clsx.answer}>{kyc.question?.phoneNumber}</span>
+                </div>
+                <div className={clsx.title}>
+                  <p className={clsx.question}>Certified</p>
+                  <span className={clsx.answer}>{kyc.question?.certified ? "true" : "false"}</span>
+                </div>
+
+
+                <div className={clsx.title}>
+                  <p className={clsx.question}>Degree</p>
+                  <span className={clsx.answer}>{kyc.question?.degree}</span>
+                </div>
+
+                <div className={clsx.title}>
+                  <p className={clsx.question}>Expertise</p>
+                  <span className={clsx.answer}>{kyc.question?.expertise}</span>
+                </div>
+
+                <div className={clsx.title}>
+                  <p className={clsx.question}>Preferred Course</p>
+                  <span className={clsx.answer}>{kyc.question?.preferredCourse}</span>
+                </div>
+
+                <div className={clsx.title}>
+                  <p className={clsx.question}>Employment</p>
+                  <span className={clsx.answer}>{kyc.question?.employment}</span>
+                </div>
+
+                <div className={clsx.title}>
+                  <p className={clsx.question}>Country</p>
+                  <span className={clsx.answer}>{kyc.question?.country}</span>
+                </div>
+
+                <div className={clsx.title}>
+                  <p className={clsx.question}>Region</p>
+                  <span className={clsx.answer}>{kyc.question?.region}</span>
+                </div>
+
+              </>
+            )
+          }
+        </div>
 
             <div className="form-group my-3">
               <label htmlFor="accessPledre" className="form-label generic_label">{data?.userType === "mentor" ? "Revoke Mentorship" : "Confer Mentorship"}</label>
@@ -2039,54 +2087,7 @@ export function Approve() {
           </div>
         </div>
 
-        <div className={clsx.kyc}>
-          {
-            kyc !== null && kyc.question &&(
-              <>
-              <div className={clsx.title}>
-                 <p className={clsx.question}>Phone Number</p>
-                 <span className={clsx.answer}>{kyc.question?.phoneNumber}</span>
-               </div>
-               <div className={clsx.title}>
-                 <p className={clsx.question}>Certified</p>
-                 <span className={clsx.answer}>{kyc.question?.certified ? "true" : "false"}</span>
-               </div>
-               
-     
-               <div className={clsx.title}>
-                 <p className={clsx.question}>Degree</p>
-                 <span className={clsx.answer}>{kyc.question?.degree}</span>
-               </div>
-
-               <div className={clsx.title}>
-                 <p className={clsx.question}>Expertise</p>
-                 <span className={clsx.answer}>{kyc.question?.expertise}</span>
-               </div>
-             
-               <div className={clsx.title}>
-                 <p className={clsx.question}>Preferred Course</p>
-                 <span className={clsx.answer}>{kyc.question?.preferredCourse}</span>
-               </div>
-
-               <div className={clsx.title}>
-                 <p className={clsx.question}>Employment</p>
-                 <span className={clsx.answer}>{kyc.question?.employment}</span>
-               </div>
-
-               <div className={clsx.title}>
-                 <p className={clsx.question}>Country</p>
-                 <span className={clsx.answer}>{kyc.question?.country}</span>
-               </div>
-              
-               <div className={clsx.title}>
-                 <p className={clsx.question}>Region</p>
-                 <span className={clsx.answer}>{kyc.question?.region}</span>
-               </div>
-
-             </>
-            )
-          }
-        </div>
+       
       </div>
     </Admin>
   );
