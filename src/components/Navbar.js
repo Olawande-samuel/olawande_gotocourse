@@ -55,7 +55,7 @@ const Navbar = ({ background }) => {
   const celebRoute = location.pathname.split("/")[1] === "lounge";
   const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";  
   const categoryRoute = background === "category";
-  const landing = location.pathname.split("/")[1] !== "lounge" && !categoryRoute;
+  const landing = location.pathname.split("/")[1] !== "lounge" ;
   console.log(location.pathname.split("/")[1] !== "lounge")
 
   function showDrop() { }
@@ -65,7 +65,7 @@ const Navbar = ({ background }) => {
       section="top"
       className={`nav navbar navbar-expand-lg ${ landing ? "navbar-light" : "navbar-dark"}`}
       style={{
-        background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : landing ? "var(--blue-ish)" : categoryRoute ? "var(--white)" : "var(--theme-blue)",
+        background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : landing ? "var(--blue-ish)" :  "var(--theme-blue)",
         color: confirmEmail || landing || categoryRoute ? "var(--theme-blue)" : "#fffff",
       }}
     >

@@ -7,7 +7,7 @@ import Landing from './pages/Landing';
 import Out from "./pages/Out";
 
 
-import {Student, Fees, Teachers, Courses, Approve,ApproveStudent, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails, Chat as AdminChat,
+import {Student, Fees, Profile as AdminProfile, Teachers, Courses, Approve,ApproveStudent, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails, Chat as AdminChat,
   CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails, AddMentor,Mentors, MentorsDetail, Notification, Earnings as AdminEarning} from "./pages/Dashboard/Admin";
 
 import AdminDashboard from "./pages/Dashboard/Admin/Dashboard";

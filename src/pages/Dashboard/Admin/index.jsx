@@ -3227,17 +3227,18 @@ export function BootcampDetails({}) {
   useEffect(() => {
     //fetch bootcamp details for the id
     if (flag.current) return;
-    (async () => {
+    (async () => { 
       try {
         const res = await fetchBootcamps(userdata?.token);
         const { message, statusCode, success } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         else {
+          
           const { data } = res;
           let bootcamp = data.find((d) => d.bootcampId === params?.id);
           setFormstate((old) => {
             return {
-              ...old,
+              ...old, 
               title: bootcamp.title,
               description: bootcamp.description,
               status: bootcamp.isActive,
