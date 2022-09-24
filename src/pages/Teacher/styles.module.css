@@ -29,6 +29,7 @@
     width: 100%;
     /* background: var(--blue-ish); */
     background: rgba(38, 80, 188, 0.56);
+    backdrop-filter: blur(54px);
     /* color: var(--theme-blue); */
     color: var(--white);
 }

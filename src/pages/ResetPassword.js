@@ -91,19 +91,18 @@ const ResetPassword = () => {
     <>
 
       <GuardedRoute>
-        <AuthLayout>
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+        <div className="signWrapper_background reset">
 
           <form onSubmit={onSubmit} className={clsx.form}>
             <header>
@@ -163,7 +162,7 @@ const ResetPassword = () => {
               </button>
             )}
           </form>
-        </AuthLayout>
+        </div>
       </GuardedRoute>
     </>
   );

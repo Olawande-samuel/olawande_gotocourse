@@ -4,6 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {BiArrowBack} from "react-icons/bi"
 import {Logo as ImageLogo, Logosm} from "../images/components/svgs"
 import {ToastContainer} from "react-toastify"
+
 const SignInWrapper = ({ image, children }) => {
   const navigate = useNavigate()
   return (
