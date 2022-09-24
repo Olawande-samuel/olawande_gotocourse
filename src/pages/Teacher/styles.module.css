@@ -613,8 +613,6 @@
         padding-top: .5rem;
         height: min(100vh, 550px);
         width: 100%;
-        background: var(--blue-ish);
-        color: var(--theme-blue);
     }
    
     
