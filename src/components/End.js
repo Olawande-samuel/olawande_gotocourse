@@ -14,14 +14,14 @@ const End = () => {
 
   return (
     <div className="end" style={{
-       background: celebRoute ?  "#000F62" : "var(--blue-ish)", color: !celebRoute ?  "var(--theme-blue)" :  "#fffff"
+       background: celebRoute ?  "#000F62" : "var(--blue-ish)", color: !celebRoute ?  "var(--theme-blue)" :  "#ffffff"
       }}>
-      <div className="container box d-flex  mx-auto" style={{color: !celebRoute ?  "var(--theme-blue)" :  "#fffff"}}>
+      <div className="container box d-flex  mx-auto" style={{color: !celebRoute ?  "var(--theme-blue)" :  "#ffffff"}}>
         <div className="end_left">
           <span> All rights reserved |</span>
           <span>&copy; 2022 Gotocourse Inc.</span>
         </div>
-        <div className="end_right d-flex" style={{color: !celebRoute ?  "var(--theme-blue)" :  "#fffff"}} color={!celebRoute ? "var(--theme-blue)":"#FFF"} >
+        <div className="end_right d-flex" style={{color: !celebRoute ?  "var(--theme-blue)" :  "#ffffff"}} color={!celebRoute ? "var(--theme-blue)":"#FFF"} >
           <a href={validateURL(facebook) ? facebook : ""}>
            <FaFacebook color={!celebRoute ? "var(--theme-blue)":"#FFF"} />
           </a>
