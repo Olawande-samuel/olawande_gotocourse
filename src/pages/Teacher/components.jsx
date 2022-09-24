@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 
 import clsx from "./styles.module.css";
-import teacher from "../../images/Group927.png"
+import teacher from "../../images/Group944.png"
 
 
 export function Jumbotron() {

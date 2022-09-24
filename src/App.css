@@ -1384,6 +1384,10 @@ font-size: 16px;
   left: 3%;
 }
 
+.reset{
+  height: 100vh;
+}
+
 .signWrapper main {
   width: min(100% - 2rem, 600px);
   /* margin: auto; */
