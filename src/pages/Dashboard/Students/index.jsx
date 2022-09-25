@@ -1887,11 +1887,14 @@ export function GotoDashboard({ loader, setLoading }) {
     async function gotodashboard() {
         const data = getItem(KEY)
         if(data.userType === "student" || data.userType === 'admin'){
-            if(generalState.pledre.loginUser && data.pledre?._id){
+            console.log("clicked")
+            console.log(generalState.pledre)
+
+            if(generalState.pledre.loginUser){
                 setLoading(true)
                 try{
                     const response = await generalState.pledre.loginUser({
-                        user_id: data.pledre._id,
+                        email: data.email,
                         user_type: route
                     })
 
@@ -1925,7 +1928,7 @@ export function GotoDashboard({ loader, setLoading }) {
     }
     return (
         <>
-            <i className="d-lg-none">
+            <i className="d-lg-none" style={{cursor:"pointer"}} onClick={gotodashboard} >
                 <SiGoogleclassroom size="1.5rem" color="#0C2191" />
             </i>
             <motion.button
@@ -1943,7 +1946,7 @@ export function GotoDashboard({ loader, setLoading }) {
                 </span>
                     :
                     <>
-                        <i className="me-1">
+                        <i className="me-1 ">
                             <SiGoogleclassroom size="1.5rem" />
                         </i>
                         <span className="d-none d-md-block">Go to Class</span>

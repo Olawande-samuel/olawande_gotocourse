@@ -315,13 +315,15 @@ export const CheckoutForm = () => {
       const result = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: "http://gotocourse.us/payment/success",
+          return_url: "https://gotocourse.us/payment/success",
         },
       });
 
-
-      result && setLoading(false);
       console.log({result})
+      result && setLoading(false);
+
+      console.log({result})
+      
       if (result.error) {
         toast.error(result.error.message, {
           position: "top-right",
