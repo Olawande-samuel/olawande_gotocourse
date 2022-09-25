@@ -382,80 +382,86 @@ const Detail = ({preview}) => {
             {/* {loading && <Loader />} */}
             <ToastContainer /> 
             <DetailContainer>
-                <CategoryTop>
-                    <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
-                        <BreadcrumbLink to="/">
-                            Home
-                        </BreadcrumbLink>
-                        <BreadcrumbLink to="/categories">
-                            Categories
-                        </BreadcrumbLink>
-                        <BreadcrumbLink $isCurrentPage={true} to="#">{categoryDetails ? capitalize(categoryDetails?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</BreadcrumbLink>
-                    </Breadcrumbs>
-                </CategoryTop>
+                <div className="container-xxl mx-auto">
+                    <CategoryTop>
+                        <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
+                            <BreadcrumbLink to="/">
+                                Home
+                            </BreadcrumbLink>
+                            <BreadcrumbLink to="/categories">
+                                Categories
+                            </BreadcrumbLink>
+                            <BreadcrumbLink $isCurrentPage={true} to="#">{categoryDetails ? capitalize(categoryDetails?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</BreadcrumbLink>
+                        </Breadcrumbs>
+                    </CategoryTop>
+                </div>
                 <DetailBody>
 
                     <DetailImage style={{background: `linear-gradient(1.66deg, rgba(44, 43, 44, 0.83) 24.55%, rgba(12, 33, 145, 0) 115.79%), url(${categoryDetails?.bannerImg})`}}>
                         <h2>{categoryDetails ? capitalize(categoryDetails?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</h2>
                     </DetailImage>
-                    <DetailBodyContent>
-                        <DetailLeft>
-                            <DetailDescription>
-                                {categoryDetails ? categoryDetails.description : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}
-                            </DetailDescription>
+                        <div className="container-xxxl mx-auto">
 
-                            <NicheContainer>
-                                <Header>{categoryDetails ? `${capitalize(categoryDetails?.name)} Niche` : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</Header>
-                                <p>{categoryDetails ? categoryDetails.nicheDescription : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</p>
-                                <Niches>
-                                    {
-                                        categoryDetails ? 
-                                        categoryDetails.nicheItems.map(({name, description}, i) => (
-                                        <Niche key={i}>
-                                                <Dot />
-                                                <NicheBody>
-                                                    <h6>{name}</h6>
-                                                    <p>{description}</p>
-                                                </NicheBody>
-                                        </Niche>)) : Array(4).fill(undefined).map((_, i) => (
-                                            <Niche key={i}>
-                                                <Dot />
-                                                <NicheBody>
-                                                <Skeleton animation="wave" variant="rectangular" width={"90%"} >
-                                                    <h6>.</h6>
-                                                </Skeleton>
-                                                <Skeleton animation="wave" variant="rectangular" width={"90%"} >
-                                                    <p>.</p>
-                                                </Skeleton>
-                                                </NicheBody>
-                                            </Niche>
-                                        ))
-                                    }
-                                </Niches>
-                            </NicheContainer>
-                        </DetailLeft>
-                        <DetailRight>
-                            <CareerCard>
-                                <Header>Career Prospect</Header>
-                                <p>{categoryDetails ? categoryDetails.career : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={50} />}</p>
-                                <ul>
-                                    {
-                                        categoryDetails ? categoryDetails.careerList.map(({name, _id}, i) => (
-                                            <li key={i}>
-                                                <Dot />
-                                                {name}
-                                            </li>
-                                        )) : Array(4).fill(undefined).map((_, i) => (
-                                            <li key={i}>
-                                                <Dot />
-                                                <Skeleton animation="wave" variant="rectangular" width={"100%"} height={50} />
-                                            </li>
-                                        ))
-                                    }
-                                </ul>
-                            </CareerCard>
-                        </DetailRight>
-                    </DetailBodyContent>
+                            <DetailBodyContent>
+                                <DetailLeft>
+                                    <DetailDescription>
+                                        {categoryDetails ? categoryDetails.description : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}
+                                    </DetailDescription>
+
+                                    <NicheContainer>
+                                        <Header>{categoryDetails ? `${capitalize(categoryDetails?.name)} Niche` : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</Header>
+                                        <p>{categoryDetails ? categoryDetails.nicheDescription : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</p>
+                                        <Niches>
+                                            {
+                                                categoryDetails ? 
+                                                categoryDetails.nicheItems.map(({name, description}, i) => (
+                                                <Niche key={i}>
+                                                        <Dot />
+                                                        <NicheBody>
+                                                            <h6>{name}</h6>
+                                                            <p>{description}</p>
+                                                        </NicheBody>
+                                                </Niche>)) : Array(4).fill(undefined).map((_, i) => (
+                                                    <Niche key={i}>
+                                                        <Dot />
+                                                        <NicheBody>
+                                                        <Skeleton animation="wave" variant="rectangular" width={"90%"} >
+                                                            <h6>.</h6>
+                                                        </Skeleton>
+                                                        <Skeleton animation="wave" variant="rectangular" width={"90%"} >
+                                                            <p>.</p>
+                                                        </Skeleton>
+                                                        </NicheBody>
+                                                    </Niche>
+                                                ))
+                                            }
+                                        </Niches>
+                                    </NicheContainer>
+                                </DetailLeft>
+                                <DetailRight>
+                                    <CareerCard>
+                                        <Header>Career Prospect</Header>
+                                        <p>{categoryDetails ? categoryDetails.career : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={50} />}</p>
+                                        <ul>
+                                            {
+                                                categoryDetails ? categoryDetails.careerList.map(({name, _id}, i) => (
+                                                    <li key={i}>
+                                                        <Dot />
+                                                        {name}
+                                                    </li>
+                                                )) : Array(4).fill(undefined).map((_, i) => (
+                                                    <li key={i}>
+                                                        <Dot />
+                                                        <Skeleton animation="wave" variant="rectangular" width={"100%"} height={50} />
+                                                    </li>
+                                                ))
+                                            }
+                                        </ul>
+                                    </CareerCard>
+                                </DetailRight>
+                            </DetailBodyContent>
+                        </div>
+
                     <DownloadButton>
                         Download Curriculum <FaDownload />
                     </DownloadButton>

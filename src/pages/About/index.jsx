@@ -75,44 +75,53 @@ const About = () => {
                         }
                     </div>
                 </div>
-
-                <div className={clsx.mission}>
-                    <div className={clsx.mission_left}>
-                        <h2>Our Mission</h2>
-                        <p>
-                        Creating access for Top industry experts to train 1 million tech professionals on high-in-demand tech skills needed to bridge the skills gap in the tech industry by 2027.
-                        </p>
-                    </div>
-                    <div className={clsx.mission_right}>
-                        <img src={mission} alt="Mission" />
+                <div style={{backgroundColor:" rgba(255, 241, 240, 0.5)"}}>
+                    <div className="container-xxl mx-auto">
+                        <div className={clsx.mission}>
+                            <div className={clsx.mission_left}>
+                                <h2>Our Mission</h2>
+                                <p>
+                                Creating access for Top industry experts to train 1 million tech professionals on high-in-demand tech skills needed to bridge the skills gap in the tech industry by 2027.
+                                </p>
+                            </div>
+                            <div className={clsx.mission_right}>
+                                <img src={mission} alt="Mission" />
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div className={clsx.committed}>
-                    <h2>Why are we committed to this?</h2>
-                    <div className={clsx.commited_content}>
-                        <div className={clsx.content_left}>
-                            <p>The tech skills gap is decimating the global workforce, putting workers and companies at risk, the gap keeps widening by the day. The world is advancing and professionals need to Upskill and Reskill to increase their knowledge, productivity on their jobs and take advantage of more lucrative professional opportunities in their chosen career path.</p>
-                            <p>Seeing this gap, and the frustration of long training duration coupled with high tuitions charged by traditional institutions and tech bootcamps faced by students, our commitment lies in imparting you with the necessary high-in-demand skills needed to land the high-paying job you so desire, with a plethora of tutors and mentors committed to your growth within the shortest period of time at a convenient cost.</p>
-                        </div>
-                        <div className={clsx.content_right}>
-                            <img src={committed} alt="Commited" />
+                    <div className="container-xxxl mx-auto">
+                        <h2>Why are we committed to this?</h2>
+                        <div className={clsx.commited_content}>
+                            <div className={clsx.content_left}>
+                                <p>The tech skills gap is decimating the global workforce, putting workers and companies at risk, the gap keeps widening by the day. The world is advancing and professionals need to Upskill and Reskill to increase their knowledge, productivity on their jobs and take advantage of more lucrative professional opportunities in their chosen career path.</p>
+                                <p>Seeing this gap, and the frustration of long training duration coupled with high tuitions charged by traditional institutions and tech bootcamps faced by students, our commitment lies in imparting you with the necessary high-in-demand skills needed to land the high-paying job you so desire, with a plethora of tutors and mentors committed to your growth within the shortest period of time at a convenient cost.</p>
+                            </div>
+                            <div className={clsx.content_right}>
+                                <img src={committed} alt="Commited" />
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 <div className={clsx.transform}>
                     <div>
                         <h2>Transforming lives, Businesses, and Nations through Tech skills training</h2>
                     </div>
                 </div>
+
                 <div className={clsx.committed}>
-                    <h2>Our Customer Demography</h2>
-                    <div className={clsx.commited_content}>
-                        <div className={clsx.mission_left} style={{justifyContent: 'center'}}>
-                            <p>Gotocourse targets offering training and mentorship to at least one million College graduates, Professionals who wants to Upskill and all Others looking to re-skill in tech to land high-paying tech jobs by 2027.</p>
-                        </div>
-                        <div className={clsx.content_right}>
-                            <img src={pie} alt="Demography" />
+                    <div className="container-xxxl mx-auto">
+                        <h2>Our Customer Demography</h2>
+                        <div className={clsx.commited_content}>
+                            <div className={clsx.mission_left} style={{justifyContent: 'center'}}>
+                                <p>Gotocourse targets offering training and mentorship to at least one million College graduates, Professionals who wants to Upskill and all Others looking to re-skill in tech to land high-paying tech jobs by 2027.</p>
+                            </div>
+                            <div className={clsx.content_right}>
+                                <img src={pie} alt="Demography" />
+                            </div>
                         </div>
                     </div>
                 </div>

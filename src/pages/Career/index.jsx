@@ -51,26 +51,28 @@ function JobOpening(){
     const jobs = ["Social Media Manger", "Virtual Assistant", "Product Markerter"]
     return (
         <div className={clsx.job_opening}>
+            <div className="container-xxxl mx-auto">
+                <div className={clsx.career_header}>
+                    <h2>JOB OPENINGS</h2>
+                    <h5 className={clsx.career_header_subtitle}>Would you love to join our team?</h5>
+                </div>
 
-            <div className={clsx.career_header}>
-                <h2>JOB OPENINGS</h2>
-                <h5 className={clsx.career_header_subtitle}>Would you love to join our team?</h5>
-            </div>
+                <div className={clsx.job_opening_jobs}>
+                    {
+                        jobs.map(job=>(
+                            <div className={clsx.job_opening_card}>
+                                <p>{job}</p>
 
-            <div className={clsx.job_opening_jobs}>
-                {
-                    jobs.map(job=>(
-                        <div className={clsx.job_opening_card}>
-                            <p>{job}</p>
+                                <div className="text-center">
+                                    <button>Apply now</button>
+                                </div>
 
-                            <div className="text-center">
-                                <button>Apply now</button>
                             </div>
-
-                        </div>
-                    ))
-                }
+                        ))
+                    }
+                </div>
             </div>
+
         </div>
     )
 }

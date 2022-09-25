@@ -74,54 +74,6 @@ export const BootcampPayment = () => {
   async function enrollToCourse(e) {
     e.preventDefault();
     const userData = getItem(KEY);
-    // e.preventDefault();
-    // if (userdata?.token) {
-    //   try {
-    //     setLoading(true);
-    //     const response = await addBootcamp(
-    //       { bootcampId: bootcampInfo.bootcampId },
-    //       userdata.token
-    //     );
-    //     const { success, message, statusCode } = response;
-    //     if (!success || statusCode !== 1)
-    //       throw new AdvancedError(message, statusCode);
-    //     const { data } = response;
-    //     console.log(data);
-    //     navigate("payment")
-    //     toast.success(message, {
-    //       position: "top-right",
-    //       autoClose: 4000,
-    //       hideProgressBar: true,
-    //       closeOnClick: true,
-    //       pauseOnHover: true,
-    //       draggable: true,
-    //       progress: undefined,
-    //     });
-    //     console.log(response);
-    //   } catch (error) {
-    //     toast.error(error.message, {
-    //       position: "top-right",
-    //       autoClose: 4000,
-    //       hideProgressBar: true,
-    //       closeOnClick: true,
-    //       pauseOnHover: true,
-    //       draggable: true,
-    //       progress: undefined,
-    //     });
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // } else {
-    //   toast.error("User must be logged in to register", {
-    //     position: "top-right",
-    //     autoClose: 4000,
-    //     hideProgressBar: true,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //   });
-    // }
     if (userData !== null) {
       const bootcampPaymentInfo = {
         bootcampId: bootcamp.bootcampId,
@@ -367,7 +319,9 @@ export const CheckoutForm = () => {
         },
       });
 
+
       result && setLoading(false);
+      console.log({result})
       if (result.error) {
         toast.error(result.error.message, {
           position: "top-right",
@@ -419,6 +373,22 @@ export const CheckoutForm = () => {
           )}
         </button>
       )}
+       <div className="cancel w-100 text-center my-3">
+        <button
+          className=""
+          style={{
+            color: "var(--theme-blue)",
+            border: "none",
+            outline: "none",
+            fontSize: "14px",
+          }}
+          onClick={() => {
+            navigate("/payment/error");
+          }}
+        >
+          Cancel
+        </button>
+      </div>
     </form>
   );
 };

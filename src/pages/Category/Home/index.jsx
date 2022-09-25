@@ -230,33 +230,35 @@ const Category = () => {
     return (
         <Layout background="category">
             <ToastContainer />
-            <CategoryContainer>
-                <CategoryTop>
-                    <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
-                        <BreadcrumbLink to="/">
-                            Home
-                        </BreadcrumbLink>
-                        <BreadcrumbLink to="#" $isCurrentPage={true}>
-                            Category
-                        </BreadcrumbLink>
-                    </Breadcrumbs>
-                    <Search>
-                        <SearchInput type="text" value={search} onChange={e => setSearch(e.target.value) && console.log(search)} placeholder="Search Category" />
-                        <SearchButton>Search</SearchButton>
-                    </Search>
-                </CategoryTop>
+            <div className="container-xxxl mx-auto">
+                <CategoryContainer>
+                    <CategoryTop>
+                        <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
+                            <BreadcrumbLink to="/">
+                                Home
+                            </BreadcrumbLink>
+                            <BreadcrumbLink to="#" $isCurrentPage={true}>
+                                Category
+                            </BreadcrumbLink>
+                        </Breadcrumbs>
+                        <Search>
+                            <SearchInput type="text" value={search} onChange={e => setSearch(e.target.value) && console.log(search)} placeholder="Search Category" />
+                            <SearchButton>Search</SearchButton>
+                        </Search>
+                    </CategoryTop>
 
-                <CategoryBody>
-                    {
+                    <CategoryBody>
+                        {
 
-                        categories.length !== 0 ? categories.map((category, i) => (
-                            <CategoryCard key={i} {...category} all={category} separator={(categories.length - 1) === i ? false : true} />
-                        )) : Array(4).fill(undefined).map((_, i) => (
-                            <Skeleton sx={{marginBottom: 10}} animation="wave" key={i} variant="rectangular" width={"100%"} height={350} />
-                        ))
-                    }
-                </CategoryBody>
-            </CategoryContainer>
+                            categories.length !== 0 ? categories.map((category, i) => (
+                                <CategoryCard key={i} {...category} all={category} separator={(categories.length - 1) === i ? false : true} />
+                            )) : Array(4).fill(undefined).map((_, i) => (
+                                <Skeleton sx={{marginBottom: 10}} animation="wave" key={i} variant="rectangular" width={"100%"} height={350} />
+                            ))
+                        }
+                    </CategoryBody>
+                </CategoryContainer>
+            </div>
         </Layout>
     )
 }

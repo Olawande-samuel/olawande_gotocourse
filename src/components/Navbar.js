@@ -27,7 +27,7 @@ const Navbar = ({ background }) => {
 
   const value = getItem(KEY);
   const location = useLocation();
-
+  const navigate = useNavigate();
   const toggleNav = () => {
     setShow(!show);
   };
@@ -171,8 +171,9 @@ const Navbar = ({ background }) => {
                 }}
                 transition={{ duration: 0.1 }}
                 onClick={()=>{
-                    localStorage.clear()
-                    window.location.reload()
+                    localStorage.clear();
+
+                    navigate("/login")
                 }}
               >
                 Logout

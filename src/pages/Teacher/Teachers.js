@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import {
@@ -514,6 +514,7 @@ const CheckoutForm = () => {
             )}
           </button>
       )}
+
     </form>
   );
 };
@@ -522,7 +523,9 @@ const CheckoutForm = () => {
 export const PaymentStatus = ({success}) => {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
-
+  const [loading, setLoading] = useState(true)
+  const {id} = useParams()
+  const {generalState, setGeneralState} = useAuth()
 
   const [status, setStatus]= useState({
     image: success ? Success : Failure,
@@ -530,6 +533,26 @@ export const PaymentStatus = ({success}) => {
     subtitle:success ? "You can start learning now": "Unable to process payment",
     action: success ? "Go to Dashboard" : "Try Again",
   })
+  
+  // useEffect(() => {
+  //   // enroll student to course
+  //   if(success){
+  //     setGeneralState({...generalState, loading: true})
+  //     (async()=>{
+  //       try {
+  //         if(generalState.pledre){
+  //           const res = await generalState.pledre.addCourseToStudent({
+  //             courseId:"",
+  //             studentId: "",
+  //           })
+  //           console.log(res)
+  //         }
+  //       } catch (err) {
+  //         console.err(err)
+  //       }
+  //     })()
+  //   }
+  // }, [success, id])
   
   const userdata = getItem("gotocourse-userdata")
   return (
@@ -549,6 +572,17 @@ export const PaymentStatus = ({success}) => {
         >
           {status.action}
         </button>
+        <div className="cancel w-100 text-center my-3">
+          <button className="" style={{ color: "var(--theme-blue)", border: "none", outline: "none", fontSize: "14px", }}
+            onClick={() => {
+              localStorage.removeItem("gotocourse-courseInfo")
+              localStorage.removeItem("gotocourse-bootcampdata")
+              navigate("/");
+            }}
+          >
+            Go Home
+          </button>
+        </div>
       </div>
     </div>
   );
