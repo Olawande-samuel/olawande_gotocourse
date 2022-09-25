@@ -162,7 +162,7 @@ const Navbar = ({ background }) => {
           </ul>
           {value?.token ? (
             <>
-            <li className="me-3">
+            <li className="me-3 nav_link">
               <motion.span 
                 style={{cursor: "pointer", color:confirmEmail || landing ? "#0C2191" : "rgba(255, 255, 255)"
               }}
@@ -191,7 +191,7 @@ const Navbar = ({ background }) => {
               whileHover={{
                 textShadow: "0px 0px 8px rgb(255, 255, 255)"
               }}
-                className="d-flex align-items-center"
+                className="d-flex align-items-center nav_link"
                 style={{ color:confirmEmail || landing ? "#0C2191" : "rgba(255, 255, 255)", fontSize: "16px" }}
               >
                 <i

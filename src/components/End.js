@@ -31,7 +31,7 @@ const End = () => {
           <a href={validateURL(twitter) ? twitter : ""}>
            <FaTwitter color={!celebRoute ? "var(--theme-blue)":"#FFF"}  />
           </a>
-          <a href="mailto:info@gotocourse.us">
+          <a href="mailto:info@gotocourse.com">
            <FaEnvelope color={!celebRoute ? "var(--theme-blue)":"#FFF"}  />
           </a>
         </div>

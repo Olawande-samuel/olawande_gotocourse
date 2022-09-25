@@ -43,6 +43,11 @@ const leftLink = [
     title: "Cookies",
     path: "/cookies"
   },
+  {
+    id: 7,
+    title: "Events",
+    path: "/events"
+  },
 ]
 
 const rightLink = [
@@ -51,17 +56,6 @@ const rightLink = [
     title: "About us",
     path: "/about-us"
   },
-  // {
-  //   id:2,
-  //   title:"Security",
-  //   path:"/"
-  // },
-
-  // {
-  //   id:4,
-  //   title:"Coverage",
-  //   path:"/"
-  // },
   {
     id: 5,
     title: "Careers",
@@ -182,82 +176,6 @@ const Footer = () => {
             </div>
         }
         <div className="footer_container d-flex justify-content-between">
-
-          {/* <div className="footer_left">
-            <div className="footer_top pt-2">
-              <Link to="/" onClick={() => window.scrollTo(0, 0)}>
-                <i className="d-none d-lg-block">
-                  <Logo color={!celebRoute ? "var(--theme-blue)" : "#fff"} />
-                </i>
-
-                <i className="d-lg-none">
-                  <Logosm color={!celebRoute ? "var(--theme-blue)" : "#fff"} />
-                </i>
-                <small className="text-end d-block" style={{ fontSize: '16px', color: !celebRoute ? "var(--theme-blue" : "#fff" }}>Learn without limits.</small>
-              </Link>
-            </div>
-          </div>
-
-          <div className="footer_right">
-            <div className=" d-flex flex-wrap justify-content-around">
-              <div className="first">
-                <ul>
-
-                  <li>Legal</li>
-
-                  {leftLink.map((link, index) => (
-                    // <Link to={link.path}>
-                    <HashLink key={index} to={link.path} scroll={el => scrollWithOffset(el)}
-                    >
-
-                      <motion.li
-
-                        whileHover={{
-                          scale: 1.2,
-                          originX: 0,
-                          color: "#F75C4E"
-
-                        }}
-                        transition={{
-                          stiffness: 300
-                        }}
-                        style={{ color: !celebRoute ? "var(--theme-blue" : "#FFF" }}
-                      >
-                        {link.title}
-                      </motion.li>
-                    </HashLink>
-
-                    // </Link>
-                  ))}
-                </ul>
-              </div>
-              <div className="second">
-                <ul>
-                  <li>Company</li>
-                  {rightLink.map((link, index) => (
-                    <Link key={index} to={link.path}>
-                      <motion.li
-                        whileHover={{
-                          scale: 1.2,
-                          originX: 0,
-                          color: "#F75C4E"
-                        }}
-                        transition={{
-                          stiffness: 300
-                        }}
-                        style={{ color: !celebRoute ? "var(--theme-blue" : "#FFF" }}
-                      >
-                        {link.title}
-                      </motion.li>
-                    </Link>
-                  ))}
-
-                </ul>
-              </div>
-
-            </div>
-          </div> */}
-
           <div className="footer_left">
             <div className="footer_top pt-2">
               <Link to="/" onClick={() => window.scrollTo(0, 0)}>
@@ -273,7 +191,6 @@ const Footer = () => {
             </div>
 
             <div className="second">
-
                 <ul>
                   <li>Categories</li>
                   {categories.data?.data?.map((link, index) => (
