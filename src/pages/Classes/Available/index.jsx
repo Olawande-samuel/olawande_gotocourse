@@ -110,7 +110,7 @@ const Available = () => {
                         <div className={clsx.classes_hero}>
 
                             <div className={clsx.classes_top_left}>
-                                <h2>The Best time to get trained in now</h2>
+                                <h2>The Best time to get trained is now</h2>
                                 <p>
                                     Choose from our available classes with new additions published regularly
                                 </p>
@@ -126,7 +126,7 @@ const Available = () => {
                 <div className={clsx.jumbotron}>
                     <div className={`container ${clsx.jumbotron__cover}`}>
                         <div className={clsx.jumbotron__absolute}>
-                            <h1>The Best time to get trained in now</h1>
+                            <h1>The Best time to get trained is now</h1>
                             <p>
                                 Choose from our available classes with new additions published regularly
                             </p>
