@@ -609,13 +609,6 @@
         max-width: 300px;
     }
 
-    /* .jumbotron__absolute h1 {
-        font-size: 1.05rem;
-    }
-
-    .jumbotron__absolute p {
-        font-size: 0.85rem;
-    } */
 }
 
 @media screen and (max-width: 355px) {
@@ -626,13 +619,7 @@
 }
 
 
-@media (width:280px) {
-    .jumbotron {
-        /* height: 180vh; */
-        /* border: 2px solid yellow; */
 
-    }  
-}
 @media (max-width: 988px) {
     .jumbotron {
         padding-top: .5rem;

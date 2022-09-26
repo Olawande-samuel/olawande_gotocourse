@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 
 
@@ -6,7 +6,7 @@ import clsx from "./styles.module.css";
 import { Reviews } from "../../Teacher/components";
 import Layout from "../../../components/Layout";
 import { useEffectOnMount } from "../../../hooks";
-import topGirl from "../../../images/classes_top_girl.png";
+// import topGirl from "../../../images/Girlwithhallow.png";
 import { useAuth } from "../../../contexts/Auth";
 import { Bootcamp, StudentViews } from "./components";
 import { AdvancedError } from "../../../classes";
@@ -14,7 +14,7 @@ import img from "../../../images/bola.png";
 import boySitting from "../../../images/boy_sitting.png";
 import { Link } from "react-router-dom";
 import PaginatedClasses from "./Paginated";
-
+import teacher from "../../../images/Girlwithhallow.png"
 
 const reviews = [
     {
@@ -38,7 +38,7 @@ const reviews = [
 ]
 
 const tabs = ["All Classes",
-//  "Data Science", "Project Management", "Cybersecurity & Assurance", "Digital Marketing"
+    //  "Data Science", "Project Management", "Cybersecurity & Assurance", "Digital Marketing"
 ]
 // const bootcamps = [
 //     {
@@ -75,21 +75,21 @@ const Available = () => {
     const [activeTab, setActiveTab] = useState(0);
     const [loading, setLoading] = useState(true);
     const [bootcamps, setBootcamps] = useState([]);
-    const {otherFunctions: {fetchBootcamps}} = useAuth();
+    const { otherFunctions: { fetchBootcamps } } = useAuth();
     useEffectOnMount(() => {
         console.log('Available classes showing');
-        (async() => {
-            try{
+        (async () => {
+            try {
                 const res = await fetchBootcamps();
-                const {success, message, statusCode} = res;
-                if(!success) throw new AdvancedError(message, statusCode);
+                const { success, message, statusCode } = res;
+                if (!success) throw new AdvancedError(message, statusCode);
                 else {
-                    const {data} = res;
+                    const { data } = res;
                     setBootcamps(_ => data.filter(d => d.isActive));
-                   
+
                 }
                 console.log(res);
-            }catch(err){
+            } catch (err) {
                 console.error(err)
             }
         })()
@@ -97,7 +97,7 @@ const Available = () => {
     }, [])
 
 
-    function switchTab(e, i){
+    function switchTab(e, i) {
         setActiveTab(_ => i);
     }
 
@@ -105,23 +105,41 @@ const Available = () => {
     return (
         <Layout>
             <div className={clsx.available_classes}>
-                    <div className={clsx.classes_top}>
-                        <div className="container">
-                            <div className={clsx.classes_hero}>
+                {/* <div className={clsx.classes_top}>
+                    <div className="container">
+                        <div className={clsx.classes_hero}>
+
                             <div className={clsx.classes_top_left}>
                                 <h2>The Best time to get trained in now</h2>
                                 <p>
                                     Choose from our available classes with new additions published regularly
                                 </p>
                             </div>
-                            <div className={clsx.classes_top_right}>
-                                <div className={clsx.top_right_layout}>
-                                    <img className={clsx.top_right_girl} src={topGirl} alt="Top Girl" />
-                                </div>
+                            <div className={clsx.top_right_layout}>
+        
                             </div>
                         </div>
                     </div>
+                </div> */}
+
+
+                <div className={clsx.jumbotron}>
+                    <div className={`container ${clsx.jumbotron__cover}`}>
+                        <div className={clsx.jumbotron__absolute}>
+                            <h1>The Best time to get trained in now</h1>
+                            <p>
+                                Choose from our available classes with new additions published regularly
+                            </p>
+                        </div>
+                        <div className={clsx.jumb_container}>
+                            <img src={teacher} alt="" />
+                        </div>
+
+                    </div>
                 </div>
+
+
+
                 <div className={clsx.classes_body}>
                     <div className="container">
                         <div className={clsx.tabs}>
@@ -133,7 +151,7 @@ const Available = () => {
                                 ))
                             }
                         </div>
-                       <PaginatedClasses list={bootcamps} />
+                        <PaginatedClasses list={bootcamps} />
                         {/* <div className={clsx.students}>
                             <h3>Students are viewing</h3>
                             <div className={clsx.student_views}>
@@ -167,15 +185,15 @@ const Available = () => {
 
 
 
-export function ClassLists({bootcamps}){
+export function ClassLists({ bootcamps }) {
     return (
         <div className={clsx.bootcamps}>
-        {
-            bootcamps?.map((item, i) => (
-                <Bootcamp key={i} {...item} all={item} />
-            ))
-        }
-    </div>
+            {
+                bootcamps?.map((item, i) => (
+                    <Bootcamp key={i} {...item} all={item} />
+                ))
+            }
+        </div>
     )
 }
 export default Available;
