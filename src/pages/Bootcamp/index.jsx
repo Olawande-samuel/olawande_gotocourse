@@ -649,6 +649,7 @@ export function DetailsHero({navHeight, title, description, addToWishList,handle
   </section>
   )
 }
+
 function Upcome({_id, title, duration, startTime, endTime, startDate, endDate, description, type, isActive, instructorId, bootcampImg, all}) {
   const { getItem } = useLocalStorage();
   const userdata = getItem("gotocourse-userdata");
