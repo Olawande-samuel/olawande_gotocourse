@@ -1455,7 +1455,7 @@ export function Chat() {
 export const Dashboard = () => {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
-    const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
+    const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps:fetchMyClasses }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
     // const { studentFunctions: { fetchBootcamps },  otherFunctions:{ fetchBootcamps: studentboot} } = useAuth();
 
     const navigate = useNavigate();
@@ -1463,21 +1463,22 @@ export const Dashboard = () => {
     const [loader, setLoading] = useState(false)
 
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
-    const { data, isSuccess } = useQuery(["fetch courses"], () => fetchCourses(userdata?.token))
+    const { data, isSuccess } = useQuery(["fetch my classes"], () => fetchMyClasses(userdata?.token))
     const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
 
+    console.log(data)
 
     const topContent = [
         {
             id: 1,
-            title: "Courses enrolled for",
+            title: "Classes enrolled for",
             logo: <Stu1 />,
             value: data?.data?.length ?? 0
         },
         {
             id: 2,
-            title: "Courses on wishlist",
+            title: "Classes on wishlist",
             logo: <Stu2 />,
             value: wishlistData?.data?.length ?? 0
         },
@@ -1501,7 +1502,6 @@ export const Dashboard = () => {
         <Students isMobile={isMobile} userdata={userdata} header={"Dashboard"} >
             <div className={clsx.students_profile}>
                 <DashboardTop content={topContent} />
-
                 <div className={clsx.students_profile_main}>
                     <AvailableCourses data={bootcamps?.data?.data ? bootcamps?.data?.data : []} />
                     <div className={`d-flex flex-wrap ${clsx.dashboard_courses}`}>
@@ -1513,8 +1513,8 @@ export const Dashboard = () => {
                                         <p className="text-muted">No item in wishlist</p>
                                         :
                                         wishlistData?.data?.map((item, i) => (
-                                            <li key={i}>{item.name}</li>
-                                        ))
+                                        <li key={i}>{item.name}</li>
+                                    ))
                                 }
 
                             </ul>
@@ -1542,9 +1542,9 @@ export const Dashboard = () => {
                                             <tr key={i}>
                                                 <td><span>{i + 1}</span></td>
                                                 <td>
-                                                    <span>{item.courseName}</span>
+                                                    <span>{item.bootcampName}</span>
                                                 </td>
-                                                <td><span>{item.coursePrice}</span></td>
+                                                <td><span>{item.amountPaid}</span></td>
                                                 <td>
                                                     <span className="d-block dashboard_table">
                                                         <GotoDashboard loader={loader} setLoading={setLoading} />
@@ -1618,7 +1618,7 @@ function AvailableCourses({ data }) {
                 <small className="mb-4 d-block">Select and enroll to a class to get started</small>
 
                 <div className={clsx["courseheader"]}>
-                    <div className={clsx["courseitem"]}>course</div>
+                    <div className={clsx["courseitem"]}>class</div>
                     <div className={clsx["courseitem"]}>start date</div>
                     <div className={clsx["courseitem"]}>program fee</div>
                     <div className={clsx["courseitem"]} />
@@ -1878,30 +1878,29 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
     )
 }
 
-export function GotoDashboard({ loader, setLoading }) {
+export function GotoDashboard() {
     const { getItem } = useLocalStorage();
-    const { generalState } = useAuth();
+    const { generalState, setGeneralState } = useAuth();
     const location = useLocation()
     const route = location.pathname.split("/")[1];
+    const [loading, setLoading]=useState(false)
 
     async function gotodashboard() {
         const data = getItem(KEY)
         if(data.userType === "student" || data.userType === 'admin'){
-            console.log("clicked")
-            console.log(generalState.pledre)
-
+            setLoading(true)
             if(generalState.pledre.loginUser){
-                setLoading(true)
                 try{
                     const response = await generalState.pledre.loginUser({
-                        email: data.email,
+                        // email: data.email,
+                        user_id: data.email,
                         user_type: route
                     })
 
                 } catch(err){
                     console.error(err)
                 }finally{
-                    setLoading(false)
+                    setLoading(false)                
                 }
             }
         } else if(data.pledre?.deleted === false && data.accessPledre){
@@ -1929,7 +1928,13 @@ export function GotoDashboard({ loader, setLoading }) {
     return (
         <>
             <i className="d-lg-none" style={{cursor:"pointer"}} onClick={gotodashboard} >
-                <SiGoogleclassroom size="1.5rem" color="#0C2191" />
+                {
+                    loading ? <span className="spinner-border text-primary">
+                    <span className="visually-hidden">loading</span>
+                    </span>
+                    :
+                    <SiGoogleclassroom size="1.5rem" color="#0C2191" />
+                }
             </i>
             <motion.button
                 whileHover={{
@@ -1941,7 +1946,7 @@ export function GotoDashboard({ loader, setLoading }) {
                 onClick={gotodashboard}
                 disable={true}
             >
-                {loader ? <span className="spinner-border text-light">
+                {loading ? <span className="spinner-border text-light">
                     <span className="visually-hidden">loading</span>
                 </span>
                     :
