@@ -1,158 +1,103 @@
 import React, {useEffect, useRef, useState} from "react";
 import {GoChevronRight} from "react-icons/go"
-
-
-
-import SwiperCore, { Navigation, Autoplay, Pagination, Scrollbar, A11y } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
-import "swiper/css";
+import mentorsBg from "../../../images/landmentors.png"
+import mentorsVid from "../../../images/mentorsVid.png"
+import {GiStarMedal} from "react-icons/gi"
 import { Link, useNavigate } from "react-router-dom";
 import {useAuth} from "../../../contexts/Auth"
 import { AdvancedError } from "../../../classes";
 
-// export const witnesses = [
-//   {
-//     id: 1,
-//     title:"Product Designer",
-//     content: "Discuss how to kickstart your career as a product designer",
-//     profile: mentor,
-//     location: "Sarah Grace",
-//     other:"11 years work experience"
+// import SwiperCore, { Navigation, Autoplay, Pagination, Scrollbar, A11y } from "swiper";
+// import { Swiper, SwiperSlide } from "swiper/react";
 
-//   },
-//   {
-//     id: 2,
-//     title:"Product Manager",
-//     content: "Discuss how to kickstart your career as a product manager",
-//     profile: mentor2,
-//     location: "Amanda George",
-//     other:"11 years work experience"
+// // Import Swiper styles
+// import "swiper/css";
 
-//   },
-//   {
-//     id: 3,
-//     title:"Business Analyst",
-//     content: "Discuss how to kickstart your career as a business analyst",
-//     profile: mentor3,
-//     location: "Cassandra Geoffrey",
-//     other:"11 years work experience"
-//   },
-//   {
-//     id: 4,
-//     title:"Data Scientist",
-//     content: "Discuss how to kickstart your career as a data scientist",
-//     profile: mentor2,
-//     location: "Patrick Quinn",
-//     other:"11 years work experience"
+// const Mentors = () => {
+//   const {generalState, setGeneralState, otherFunctions: {fetchMentors}} = useAuth();
+//   const [mentors, setMentors] = useState([])
+//   const ref = useRef(false);
 
-//   },
-//   {
-//     id: 5,
-//     title:"Web Designer",
-//     content: "Discuss how to kickstart your career web designer",
-//     profile: mentor2,
-//     location: "Cassandra Geoffrey",
-//     other:"11 years work experience"
+//   useEffect(()=>{
+//     if(ref.current) return
+//     (async()=>{
+//       try{
+//         setGeneralState({...generalState, loading: true})
+//         const res = await fetchMentors();
+//         const {success, message, statusCode, data} = res;
+//         setGeneralState({...generalState, loading: false})
+//           if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+//           if(data.length > 0){
+//             setMentors(data)
+//           }
+//     }catch(err){
+//         setGeneralState({...generalState, loading: false})
+//     }
+//     })()
+//     ref.current = true
+//   },[])
 
-//   },
-//   {
-//     id: 6,
-//     title:"Software Developer",
-//     content: "Discuss how to kickstart your career as a software development",
-//     profile: mentor3,
-//     location: "Niyi Adegoke",
-//     other:"13 years work experience"
-
-//   },
-// ];
-const Mentors = () => {
-  const {generalState, setGeneralState, otherFunctions: {fetchMentors}} = useAuth();
-  const [mentors, setMentors] = useState([])
-  const ref = useRef(false);
-
-
-  useEffect(()=>{
-    if(ref.current) return
-    (async()=>{
-      try{
-        setGeneralState({...generalState, loading: true})
-        const res = await fetchMentors();
-        const {success, message, statusCode, data} = res;
-        setGeneralState({...generalState, loading: false})
-          if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-          if(data.length > 0){
-            setMentors(data)
-          }
-    }catch(err){
-        setGeneralState({...generalState, loading: false})
-    }
-    })()
-    ref.current = true
-  },[])
-
-  SwiperCore.use([Autoplay])
-  return (
-    <section className="newMentors">
-        <div className="container">
-      <div className=" mentors_content">
-        <header className="text-center">
-          <h3 className="title" >Find Your Mentor, Accelerate Your Success</h3>
-          <p className="sub_title mx-auto" style={{width:"min(100% - 1rem, 1300px)"}}>
-          Gotocourse mentors are experts, and industry rock stars excited to share their tricks, tools, insights, and experince with you.
-          </p>
-        </header>
-        <Swiper
-          // install Swiper modules
-            modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-            loop={true}
-            speed={1500}
-            autoplay={{delay:2500}}
-            spaceBetween={0}
-            slidesPerView={1}
-            // navigation
-            pagination={{ clickable: true }}
-            scrollbar={{ draggable: true }}
-            breakpoints={{
-                // when window width is >= 320px
-                320: {
-                  slidesPerView: 1,
-                  spaceBetween: 0,
-                },
-                // when window width is >= 640px
-                575: {
-                  slidesPerView: 2,
-                  spaceBetween: 0,
-                },
-                700: {
-                  slidesPerView:2.5 ,
-                  spaceBetween: 0,
-                },
-                1024: {
-                  slidesPerView: 3.5,
-                  spaceBetween: 5,
-                },
-                1300: {
-                  slidesPerView: 4,
-                  spaceBetween: 5,
-                },
-            }}
-        >
-          {mentors.length> 0 && mentors.map((item, index) => (
-            <SwiperSlide key={index}>
-              <Card item={item} key={index} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-        {/* <div className="text-end w-100 my-4 ">
-        <Link to="/mentors" className="text-end text-secondary">Learn more <i><GoChevronRight /></i></Link>
-        </div> */}
-      </div>
-        </div>
-    </section>
-  );
-};
+//   SwiperCore.use([Autoplay])
+//   return (
+//     <section className="newMentors">
+//         <div className="container">
+//       <div className=" mentors_content">
+//         <header className="text-center">
+//           <h3 className="title" >Find Your Mentor, Accelerate Your Success</h3>
+//           <p className="sub_title mx-auto" style={{width:"min(100% - 1rem, 1300px)"}}>
+//           Gotocourse mentors are experts, and industry rock stars excited to share their tricks, tools, insights, and experince with you.
+//           </p>
+//         </header>
+//         <Swiper
+//           // install Swiper modules
+//             modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+//             loop={true}
+//             speed={1500}
+//             autoplay={{delay:2500}}
+//             spaceBetween={0}
+//             slidesPerView={1}
+//             // navigation
+//             pagination={{ clickable: true }}
+//             scrollbar={{ draggable: true }}
+//             breakpoints={{
+//                 // when window width is >= 320px
+//                 320: {
+//                   slidesPerView: 1,
+//                   spaceBetween: 0,
+//                 },
+//                 // when window width is >= 640px
+//                 575: {
+//                   slidesPerView: 2,
+//                   spaceBetween: 0,
+//                 },
+//                 700: {
+//                   slidesPerView:2.5 ,
+//                   spaceBetween: 0,
+//                 },
+//                 1024: {
+//                   slidesPerView: 3.5,
+//                   spaceBetween: 5,
+//                 },
+//                 1300: {
+//                   slidesPerView: 4,
+//                   spaceBetween: 5,
+//                 },
+//             }}
+//         >
+//           {mentors.length> 0 && mentors.map((item, index) => (
+//             <SwiperSlide key={index}>
+//               <Card item={item} key={index} />
+//             </SwiperSlide>
+//           ))}
+//         </Swiper>
+//         {/* <div className="text-end w-100 my-4 ">
+//         <Link to="/mentors" className="text-end text-secondary">Learn more <i><GoChevronRight /></i></Link>
+//         </div> */}
+//       </div>
+//         </div>
+//     </section>
+//   );
+// };
 
 export const Card = ({ item,type }) => {
   const navigate = useNavigate();
@@ -186,4 +131,65 @@ export const Card = ({ item,type }) => {
     </div>
   );
 };
+
+function Mentors(){
+  return(
+    <section className="newMentors">
+
+        <div className="newMentors_content">
+        <div className="container">
+
+          <header className="text-center">
+            <h3 className="title" >Find Your Mentor, Accelerate Your Success</h3>
+            <p className="sub_title mx-auto" style={{width:"min(100% - 1rem, 700px)"}}>
+            Gotocourse mentors are experts, and industry rock stars with years of experience that are excited to share their tricks, tools, insights, and experience with you.           </p>
+          </header>
+          {/* <div className="newMentors_content_mid">
+            <div className="newMentors_text">
+              <h4>Connect with Celebrity mentors, A-list mentors and Technical experts on Gotocourse</h4>
+            </div>
+            <div className="newMentors_vid ">
+              <img src={mentorsVid} alt="" />
+            </div>
+          </div> */}
+          </div>
+
+          <div className="newMentors_content_bottom mt-5">
+              <h4 className="bottom_title d-block text-center fw-bolder mb-4">Connect with</h4>
+              <div className="newMentors_content_bottom_card">
+                <Link to="/lounge" className="d-inline-flex">
+                <div className="newMentors_content_bottom_cards">
+                  <div className="bottom_card d-flex">
+                    <GiStarMedal color="#2F88FF" />
+                    <small>CELEBRITY MENTORS</small>
+                  </div>
+                </div>
+                </Link>
+                <Link to="/lounge" className="d-inline-flex">
+                <div className="newMentors_content_bottom_cards">
+                  <div className="bottom_card d-flex">
+                    <GiStarMedal color="#2F88FF" />
+                    <small>CAREER ADVISORS</small>
+                  </div>
+                </div>
+                </Link>
+                <Link to="/lounge" className="d-inline-flex">
+                <div className="newMentors_content_bottom_cards">
+                  <div className="bottom_card d-flex">
+                    <GiStarMedal color="#2F88FF" />
+                    <small>TECHNICAL EXPERTS</small>
+                  </div>
+                </div>
+                </Link>
+              </div> 
+              <div className="mt-5 d-flex justify-content-center">
+                <Link to="lounge" className="d-inline-flex">
+                  <button className="button p-2 px-5" style={{background:"var(--theme-orange)", borderRadius:"4px"}}>Explore Mentors Lounge</button>
+                </Link>
+              </div>
+          </div>
+      </div>
+    </section>
+  )
+}
 export default Mentors;

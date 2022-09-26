@@ -30,6 +30,8 @@ import { Box, Modal } from "@mui/material";
 import ChatComponent from "../Admin/Chat";
 
 import LogoutButton from "../../../components/LogoutButton";
+import { PaymentModal } from "../../Bootcamp/Payment";
+import PayModal from "../../../components/PayModal";
 
 
 
@@ -354,8 +356,117 @@ export function Edit() {
     )
 }
 
+export function MyClasses(){
+    const { studentFunctions: { fetchBootcamps }} = useAuth();
+
+    const navigate = useNavigate();
+    const { getItem } = useLocalStorage();
+
+    const flag = useRef(false);
+    let userdata = getItem(KEY);
+
+    const [courseList, setCourseList] = useState([])
+    const [loading, setLoading] = useState(true);
+
+
+    const tableHeaders = ["No", "Title", "Tutor", "Date", "Time"];
+
+    useEffect(() => {
+        if (flag.current) return;
+        (async () => {
+            try {
+                const res = await fetchBootcamps(userdata?.token);
+                const { message, success, statusCode } = res;
+                if (!success) throw new AdvancedError(message, statusCode);
+                else if (statusCode === 1) {
+                    const { data } = res;
+                    if (data.length > 0) {
+                        setCourseList(data);
+                    } else {
+
+                        toast.error("No bootcamp found", {
+                            position: "top-right",
+                            autoClose: 4000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+
+                } else {
+                    throw new AdvancedError(message, statusCode);
+                }
+            } catch (err) {
+                toast.error(err.message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            } finally {
+                setLoading(_ => false);
+            }
+        })()
+        flag.current = true;
+    }, [])
+
+    function gotoCreateCourseHandler(e) {
+        navigate("create");
+    }
+    function detailHandler(e, _id) {
+        // navigate("/bootcamps/details/"+_id);
+    }
+
+    return (
+        <Students header={"My Classes"}>
+            {loading && <Loader />}
+            <div className={clsx["students_profile"]}>
+                <div className={clsx.admin__student}>
+                    {/* <div className="d-flex justify-content-between align-items-center mb-4">
+                        <h4 style={{ margin: 0 }}>My Classes</h4>
+                    </div> */}
+                    <div className={clsx.admin__student_main}>
+                        {courseList?.length > 0 ? (
+                            <table className={clsx.admin__student_table}>
+                                <thead>
+                                    {tableHeaders.map((el, i) => (
+                                        <th key={i}>{el}</th>
+                                    ))}
+                                </thead>
+                                <tbody>
+                                    {courseList?.map(
+                                        // {_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}
+                                        ({ bootcampName,tutorName,startTime, endTime, endDate, startDate, bootcampId, bootcampImg, _id }, i) => (
+                                           <tr style={{padding:"1rem"}}>
+                                            <td>{i + 1}</td>
+                                            <td>{bootcampName}</td>
+                                            <td>{tutorName}</td>
+                                            <td>{getDate(startDate)}</td>
+                                            <td>{startTime}</td>
+                                           </tr>
+                                        )
+                                    )}
+                                    <p>
+                                    </p>
+                                </tbody>
+                            </table>
+                        ) : (<p className="lead">You haven't registered for a class</p>)
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </Students>
+    );
+}
+
 export function Bootcamps() {
-    const { studentFunctions: { fetchBootcamps } } = useAuth();
+    const { studentFunctions: { fetchBootcamps }, otherFunctions: { fetchBootcamps: studentboot } } = useAuth();
 
     const navigate = useNavigate();
     const { getItem } = useLocalStorage();
@@ -363,6 +474,9 @@ export function Bootcamps() {
     let userdata = getItem(KEY);
     const [courseList, setCourseList] = useState([])
     const [loading, setLoading] = useState(true);
+
+
+    const bootcamps = useQuery(["bootcamps"], () => studentboot());
 
     const tableHeaders = ["No", "Title", "Tutor", "Date", "Time"];
 
@@ -420,14 +534,13 @@ export function Bootcamps() {
         flag.current = true;
     }, [])
 
-    console.log({ courseList })
     function gotoCreateCourseHandler(e) {
         navigate("create");
     }
     function detailHandler(e, _id) {
         // navigate("/bootcamps/details/"+_id);
-        console.log("clicked")
     }
+
     return (
         <Students header={"Available Classes"}>
             {loading && <Loader />}
@@ -437,7 +550,7 @@ export function Bootcamps() {
                         <h3 style={{ margin: 0 }}>Available Classes</h3>
                     </div>
                     <div className={clsx.admin__student_main}>
-                        {courseList.length > 0 ? (
+                        {bootcamps.data?.data?.length > 0 ? (
                             <table className={clsx.admin__student_table}>
                                 <thead>
                                     {tableHeaders.map((el, i) => (
@@ -445,16 +558,20 @@ export function Bootcamps() {
                                     ))}
                                 </thead>
                                 <tbody>
-                                    {courseList.map(
-                                        ({ bootcampName, duration, tutorName, type, startTime, endTime, endDate, startDate, bootcampId, _id }, i) => (
+                                    {bootcamps.data?.data?.map(
+                                        // {_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}
+                                        ({ title, description, duration, instructorName, instructorId, type, startTime, endTime, endDate, startDate, bootcampId, bootcampImg, _id }, i) => (
                                             <BootcampRow
                                                 key={i}
                                                 index={i}
-                                                title={bootcampName}
-                                                detail={tutorName}
-                                                //   duration={duration}
-                                                //   type={type}
+                                                title={title}
+                                                description={description}
+                                                detail={instructorName}
+                                                instructorId={instructorId}
+                                                period={duration}
+                                                jobType={type}
                                                 admin={false}
+                                                bootcampImg={bootcampImg}
                                                 clickHandler={e => detailHandler(e, bootcampId)}
                                                 type={`${startTime} - ${endTime} CST`}
                                                 duration={`${getDate(startDate)} - ${getDate(endDate)}`}
@@ -897,11 +1014,83 @@ export function History() {
     )
 }
 export function Fees() {
-    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees } } = useAuth();
+    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees, fetchStudentFees, payStudentFees } } = useAuth();
     const { getItem } = useLocalStorage();
+    const [course, setCourse] = useState([])
     let userdata = getItem(KEY);
     const [fees, setFees] = useState([]);
     const ref = useRef(false)
+    const [openPaymentModal, setOpenPaymentModal] = useState(false)
+    const [stripeId, setStripeId] = useState("")
+
+    const handleClose = () => setOpenPaymentModal(false);
+
+
+
+
+    const payNumber = ["1st", "2nd", "3rd", "4th"]
+
+    const getmyFees = async (data) => {
+        setGeneralState({ ...generalState, loading: true })
+        try {
+            const res = await fetchStudentFees(data);
+            setGeneralState({ ...generalState, loading: false })
+            const { success, message, statusCode } = res;
+            if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+            else {
+                setCourse(res.data)
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        } catch (err) {
+            toast.error(err.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+
+    }
+
+    useEffect(() => {
+        if (userdata.token) {
+            (async () => {
+                setGeneralState({ ...generalState, loading: true })
+                try {
+                    const res = await fetchStudentFees(userdata?.token);
+                    setGeneralState({ ...generalState, loading: false })
+                    const { success, message, statusCode } = res;
+                    if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+                    else {
+                        setCourse(res.data)
+                    }
+                } catch (err) {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+
+            })()
+        }
+    }, [userdata.token])
+
     useEffect(() => {
         if (ref.current) return
         if (userdata) {
@@ -915,15 +1104,6 @@ export function Fees() {
                     else {
                         const { data } = res;
                         setFees(_ => data);
-                        toast.success(message, {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
                     }
                 } catch (err) {
                     toast.error(err.message, {
@@ -942,54 +1122,165 @@ export function Fees() {
         ref.current = true
     }, [])
 
-    console.log({ fees })
 
-    const tableHeaders = ["No", "Course", "Status", "Date", "Course Price", "Amount Paid", "Price Plan"]
     const tableContents = fees.length > 0 ? fees : []
+
+
+
+
+    const filterpending = (data) => {
+        let result = data.filter(c => c.status === "pending").reduce((sum, current) => sum + current.amount, 0)
+
+        return result
+    }
+
+
+    const filterpaid = (data) => {
+        let result = data.filter(c => c.status === "paid").reduce((sum, current) => sum + current.amount, 0)
+        return result
+    }
+
+    const handlePay = async (paymentId) => {
+        setGeneralState({ ...generalState, loading: true })
+        try {
+            const res = await payStudentFees(userdata.token, paymentId)
+            setGeneralState({ ...generalState, loading: false })
+            const { success, message, statusCode } = res;
+            if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+            else {
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+
+                setStripeId(res.data.clientSecret)
+                setOpenPaymentModal(true)
+                getmyFees(userdata.token)
+                // handleClose()
+
+            }
+        } catch (err) {
+            toast.error(err.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+
+    }
+
+
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Payments">
             <div className={clsx.students_profile}>
 
-                {/* {courses.length === 0 ? 
-                
-                <NoDetail text="Nothing to See here" />
-                 : */}
-                <div className="table-responsive">
+                <div className={clsx.payment_container}>
 
                     {
+                        course && course.length > 0 ? course.map((d, i) => (
+                            <div className={clsx.payment__content} key={d.courseId}>
 
-                        <table className="table table-borderless">
-                            <thead>
-                                <tr>
-                                    {
-                                        tableHeaders.map((el, i) => (
-                                            <th key={i}>{el}</th>
-                                        ))
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    tableContents.map(({ type, createdAt, dueDate, status, amount, courseName, coursePrice, paymentModel }, i) => (
-                                        <tr>
-                                            <td>{i + 1}</td>
-                                            <td>{courseName}</td>
-                                            <td>{status}</td>
-                                            <td>{new Date(createdAt).toLocaleDateString()}</td>
-                                            <td>{amount}</td>
-                                            <td>{coursePrice}</td>
-                                            <td>{paymentModel ? paymentModel : "Full Payment"}</td>
-                                        </tr>
+                                <div className={clsx.payment__title}>
+                                    <p>No</p>
+                                    <span>{i + 1}</span>
+                                </div>
 
-                                    ))
+                                <div className={clsx.payment__title}>
+                                    <p>Course</p>
+                                    <span>{d.courseName}</span>
+                                </div>
+
+
+                                {d.payments.length > 1 ? d.payments.map((pay, i) => {
+                                    return (<>
+                                        <div className={clsx.payment__card}>
+                                            <p>{payNumber[i]} installment</p>
+                                            <div className={clsx.payment__fee}>
+                                                <span>Fee</span>
+                                                <span className={clsx.clred}>${pay.amount}</span>
+                                            </div>
+                                            <div className={clsx.payment__fee}>
+                                                <span>Due Date:</span>
+                                                <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
+                                            </div>
+                                            <div className={clsx.payment__button}>
+                                                <button className={pay.status === "paid" ? clsx.bggreen : clsx.bgred} disabled={pay.status === "paid"} onClick={() => handlePay(pay._id)}>{pay.status === "paid" ? "paid" : "pay"} </button>
+                                            </div>
+                                        </div>
+
+
+                                    </>)
+                                }) : d.payments.length === 1 ? d.payments.map((pay, i) => (
+                                    <>
+                                        <div className={clsx.payment__card}>
+                                            <p>Full Payment</p>
+                                            <div className={clsx.payment__fee}>
+                                                <span>Fee</span>
+                                                <span className={clsx.clred}>${d.amount}</span>
+                                            </div>
+                                            <div className={clsx.payment__fee}>
+                                                <span>Due Date:</span>
+                                                <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
+                                            </div>
+                                            <div className={clsx.payment__button}>
+                                                <button className={clsx.bggreen} disabled={d.status === "paid"} onClick={() => handlePay(pay._id)}>Full Payment</button>
+                                            </div>
+                                        </div>
+
+                                        <div className={clsx.payment__empty}></div>
+                                        <div className={clsx.payment__empty}></div>
+                                    </>
+                                ))
+                                    :
+                                    <>
+                                    </>
                                 }
-                            </tbody>
-                        </table>
+
+                                {
+                                    d.payments.length > 0 && (
+                                        <>
+                                            <div className={clsx.payment__title}>
+                                                <p>Outstanding</p>
+                                                {/* <span>${d.amount}</span> */}
+                                                <span>${filterpending(d.payments)}</span>
+                                            </div>
+
+                                            <div className={clsx.payment__title}>
+                                                <p>Total payment</p>
+                                                {/* <span>$0</span> */}
+                                                <span>${filterpaid(d.payments)}</span>
+                                            </div>
+                                        </>
+                                    )
+                                }
+
+
+
+                            </div>
+
+                        ))
+                            :
+
+                            <>
+                                <h2>No errolled course</h2>
+                            </>
+
                     }
+
+
                 </div>
-
-
+                <PayModal token={stripeId} openPaymentModal={openPaymentModal} handleClose={handleClose} />
             </div>
+
         </Students>
     )
 }
@@ -1164,29 +1455,30 @@ export function Chat() {
 export const Dashboard = () => {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
-    const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
+    const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps:fetchMyClasses }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
+    // const { studentFunctions: { fetchBootcamps },  otherFunctions:{ fetchBootcamps: studentboot} } = useAuth();
 
     const navigate = useNavigate();
 
     const [loader, setLoading] = useState(false)
 
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
-    const { data, isSuccess } = useQuery(["fetch courses"], () => fetchCourses(userdata?.token))
+    const { data, isSuccess } = useQuery(["fetch my classes"], () => fetchMyClasses(userdata?.token))
     const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
+    const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
 
-    console.log({ wishlistData })
-    console.log({ data })
+    console.log(data)
 
     const topContent = [
         {
             id: 1,
-            title: "Courses enrolled for",
+            title: "Classes enrolled for",
             logo: <Stu1 />,
             value: data?.data?.length ?? 0
         },
         {
             id: 2,
-            title: "Courses on wishlist",
+            title: "Classes on wishlist",
             logo: <Stu2 />,
             value: wishlistData?.data?.length ?? 0
         },
@@ -1205,15 +1497,13 @@ export const Dashboard = () => {
     if (isSuccess) {
         topContent[0].value = data?.data?.length
     }
-    console.log(allCourses)
 
     return (
         <Students isMobile={isMobile} userdata={userdata} header={"Dashboard"} >
             <div className={clsx.students_profile}>
                 <DashboardTop content={topContent} />
-
                 <div className={clsx.students_profile_main}>
-                    <AvailableCourses data={allCourses?.data ? allCourses?.data : []} />
+                    <AvailableCourses data={bootcamps?.data?.data ? bootcamps?.data?.data : []} />
                     <div className={`d-flex flex-wrap ${clsx.dashboard_courses}`}>
                         <div className={clsx["dashboard_courses--right"]}>
                             <h6>Courses on wishlist</h6>
@@ -1223,8 +1513,8 @@ export const Dashboard = () => {
                                         <p className="text-muted">No item in wishlist</p>
                                         :
                                         wishlistData?.data?.map((item, i) => (
-                                            <li key={i}>{item.name}</li>
-                                        ))
+                                        <li key={i}>{item.name}</li>
+                                    ))
                                 }
 
                             </ul>
@@ -1252,9 +1542,9 @@ export const Dashboard = () => {
                                             <tr key={i}>
                                                 <td><span>{i + 1}</span></td>
                                                 <td>
-                                                    <span>{item.courseName}</span>
+                                                    <span>{item.bootcampName}</span>
                                                 </td>
-                                                <td><span>{item.coursePrice}</span></td>
+                                                <td><span>{item.amountPaid}</span></td>
                                                 <td>
                                                     <span className="d-block dashboard_table">
                                                         <GotoDashboard loader={loader} setLoading={setLoading} />
@@ -1284,31 +1574,31 @@ function AvailableCourses({ data }) {
     const tableData = [
         {
             id: 1,
-            title:"Data science",
+            title: "Data science",
             courseName: "Data science",
             // startDate: "Aug 30",
             startDate: "2015-03-25T12:00:00Z",
             fee: "20",
-            price:"20"
+            price: "20"
         },
 
         {
             id: 2,
-            title:"it technology",
+            title: "it technology",
             courseName: "Data science",
             // startDate: "Aug 30",
             startDate: "2015-03-25T12:00:00Z",
             fee: "20",
-            price:"20"
+            price: "20"
         },
         {
             id: 3,
-            title:"Data science",
+            title: "Data science",
             courseName: "Data science",
             // startDate: "Aug 30",
             startDate: "2015-03-25T12:00:00Z",
             fee: "20",
-            price:"20"
+            price: "20"
         }
     ]
 
@@ -1316,7 +1606,7 @@ function AvailableCourses({ data }) {
         e.preventDefault()
         const classInfo = item
         localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(classInfo))
-        navigate("/bootcamp")
+        navigate("/classes/class")
         // localStorage.setItem("gotocourse-courseInfo", JSON.stringify(courseInfo))
         // localStorage.setItem("gotocourse-courseId", courseInfo.courseId)
         // navigate(`/categories/${courseInfo.category?.split(" ").join("-")}/courses/${courseInfo.name.split(" ").join("-")}}`)
@@ -1328,14 +1618,14 @@ function AvailableCourses({ data }) {
                 <small className="mb-4 d-block">Select and enroll to a class to get started</small>
 
                 <div className={clsx["courseheader"]}>
-                    <div className={clsx["courseitem"]}>course</div>
+                    <div className={clsx["courseitem"]}>class</div>
                     <div className={clsx["courseitem"]}>start date</div>
                     <div className={clsx["courseitem"]}>program fee</div>
-                    <div className={clsx["courseitem"]}/>
+                    <div className={clsx["courseitem"]} />
                 </div>
 
                 <div className={clsx["coursebody"]}>
-                    {tableData?.length > 0 && tableData.map((item, i) => (
+                    {data?.length > 0 && data.map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
 
@@ -1375,9 +1665,9 @@ function AvailableCourses({ data }) {
 
             </div>
 
-        
 
-           
+
+
         </div>
     )
 }
@@ -1484,7 +1774,6 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
                     if (isActive) {
                         if (response?.email) {
                             setPledreData(() => response)
-                            console.log(response)
                             localStorage.setItem("gotocourse-userdata", JSON.stringify({ ...user, pledre: response }))
                         }
                     }
@@ -1500,9 +1789,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
                         draggable: true,
                         progress: undefined,
                     });
-                } finally {
-                    console.log("pData done")
-                }
+                } 
             })()
         }
 
@@ -1591,59 +1878,65 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
     )
 }
 
-export function GotoDashboard({ loader, setLoading }) {
+export function GotoDashboard() {
     const { getItem } = useLocalStorage();
-    const { generalState } = useAuth();
+    const { generalState, setGeneralState } = useAuth();
     const location = useLocation()
     const route = location.pathname.split("/")[1];
+    const [loading, setLoading]=useState(false)
 
     async function gotodashboard() {
-        const data = getItem("gotocourse-userdata")
+        const data = getItem(KEY)
+        if(data.userType === "student" || data.userType === 'admin'){
+            setLoading(true)
+            if(generalState.pledre.loginUser){
+                try{
+                    const response = await generalState.pledre.loginUser({
+                        email: data.email,
+                        // user_id: data.email,
+                        user_type: route
+                    })
 
-        // console.log(data)
-        // if(data.userType === "student" || data.userType === 'admin'){
-        //     if(generalState.pledre.loginUser){
-        //         setLoading(true)
-        //         try{
-        //             const response = await generalState.pledre.loginUser({
-        //                 user_id: data.pledre._id,
-        //                 user_type: "student"
-        //             })
+                } catch(err){
+                    console.error(err)
+                    toast.error("An error occured")
+                }finally{
+                    setLoading(false)                
+                }
+            }
+        } else if(data.pledre?.deleted === false && data.accessPledre){
+            if(generalState.pledre.loginUser){
+                setLoading(true)
+                try{
+                    const response = await generalState.pledre.loginUser({
+                        user_id: data.pledre._id,
+                        user_type: route
+                    })
 
-        //             console.log(response)
-        //         } catch(err){
-        //             console.error(err)
-        //         }finally{
-        //             console.log("done!!!")
-        //             setLoading(false)
-        //         }
-        //     }
-        // } else if(data.pledre?.deleted === false && data.accessPledre){
-        //     if(generalState.pledre.loginUser){
-        //         setLoading(true)
-        //         try{
-        //             const response = await generalState.pledre.loginUser({
-        //                 user_id: data.pledre._id,
-        //                 user_type: route
-        //             })
-
-        //             console.log(response)
-        //         } catch(err){
-        //             console.error(err)
-        //         }finally{
-        //             console.log("done!!!")
-        //             setLoading(false)
-        //         }
-        // }
-        // } 
-        // else {
-        //     throw new AdvancedError("User not authorized")
-        // }
+                    console.log(response)
+                } catch(err){
+                    console.error(err)
+                    toast.error("An error occured")
+                }finally{
+                    console.log("done!!!")
+                    setLoading(false)
+                }
+        }
+        } 
+        else {
+            throw new AdvancedError("User not authorized")
+        }
     }
     return (
         <>
-            <i className="d-lg-none">
-                <SiGoogleclassroom size="1.5rem" color="#0C2191" />
+            <i className="d-lg-none" style={{cursor:"pointer"}} onClick={gotodashboard} >
+                {
+                    loading ? <span className="spinner-border text-primary">
+                    <span className="visually-hidden">loading</span>
+                    </span>
+                    :
+                    <SiGoogleclassroom size="1.5rem" color="#0C2191" />
+                }
             </i>
             <motion.button
                 whileHover={{
@@ -1655,12 +1948,12 @@ export function GotoDashboard({ loader, setLoading }) {
                 onClick={gotodashboard}
                 disable={true}
             >
-                {loader ? <span className="spinner-border text-light">
+                {loading ? <span className="spinner-border text-light">
                     <span className="visually-hidden">loading</span>
                 </span>
                     :
                     <>
-                        <i className="me-1">
+                        <i className="me-1 ">
                             <SiGoogleclassroom size="1.5rem" />
                         </i>
                         <span className="d-none d-md-block">Go to Class</span>

@@ -9,7 +9,6 @@ import {KEY} from "../constants";
 const GuardedRoute = ({children}) => {
     const {getItem} = useLocalStorage();
     const value = getItem(KEY);
-    console.log(value);
     const location = useLocation();
     const route = location.pathname.split("/")[1];
     useEffect(() => {
@@ -18,7 +17,7 @@ const GuardedRoute = ({children}) => {
 
 
     if(value.token){
-        if(route === "teacher" || route === "student" || route === "affiliate"){
+        if(route === "teacher" || route === "student" || route === "affiliate"|| route === "change-password"){
             if(value.isVerified){
                 if(route === "teacher" && !value.canTeach){
                     localStorage.clear()

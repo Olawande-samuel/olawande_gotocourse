@@ -102,6 +102,7 @@ export default function Profile() {
                 src={userdata?.profileImg ? userdata.profileImg : avatar}
                 style={{ borderRadius: 10 }}
                 width="100%"
+                height="100%"
                 alt="Avatar"
               />
             </div>

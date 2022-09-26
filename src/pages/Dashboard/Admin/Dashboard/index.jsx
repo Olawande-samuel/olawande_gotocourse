@@ -161,15 +161,7 @@ const Dashboard = () => {
                             categories: categories.data
                         }
                     })
-                    toast.success("Data fetched successfully", {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+                   
                 }
             }catch(err){
                 console.log(err.statusCode, err.message);

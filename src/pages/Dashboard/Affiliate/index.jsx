@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef} from 'react'
 import { toast, ToastContainer } from 'react-toastify';
 import { AdvancedError } from '../../../classes';
 import Loader from '../../../components/Loader';
-import { KEY, AFFILIATE_KEY } from '../../../constants';
+import { KEY, AFFILIATE_KEY, VERIFICATION_KEY } from '../../../constants';
 import { GuardedRoute } from '../../../hoc';
 import { useLocalStorage } from '../../../hooks';
 import { Searchbar, Sidebar } from '../components';
@@ -47,6 +47,7 @@ export function Dashboard(){
         const {data} = res.data;
         setStats(_ => data);
         setLink(old => `${old}${data?.affiliateId}`)
+        getItem(AFFILIATE_KEY, data);
         return true;
       }else throw new AdvancedError(message, statusCode);
     }catch(err){
@@ -90,6 +91,17 @@ export function Dashboard(){
         //   setStats(_ => affiliateStats.data.data);
           
         // }
+        const fullName = userdata?.firstName + ' ' + userdata?.lastName;
+        let message = `Welcome ${fullName}`;
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }catch(err){
         toast.error(err.message, {
           position: "top-right",
@@ -107,7 +119,7 @@ export function Dashboard(){
     return () => {
       return console.log("Affiliate Dashboard unmounted")
     }
-  }, [stats])
+  }, [link])
 
   
 
@@ -173,7 +185,7 @@ export function Dashboard(){
     }
    
     return (
-        <Affiliates header="Dashboard">
+        <Affiliates header="Affiliate Dashboard">
           {loading && <Loader />}
             <div className={clsx["admin_profile"]}>
                 <div className={clsx.admin__student}>
@@ -210,23 +222,21 @@ export function Dashboard(){
 
 export function Sales(){
   const {getItem} = useLocalStorage();
-  let userdata = getItem(KEY);
-  const {  affiliatesFunctions:{fetchEarnings} } = useAuth();
+  let affiliateData = getItem(AFFILIATE_KEY);
+  const [sales, setSales] = useState([])
 
-  const getEarnings = useQuery(["fetchEarnings", userdata?.token], ()=>fetchEarnings(userdata?.token))
 
-  console.log({getEarnings})
   const gridContent = [
     {
         id:2,
         name:"sales",
-        value:35,
+        value:affiliateData?.sales ?? 0,
         icon:<FaShoppingBag  color="#304D74" size="2.5rem" />
     },
     {
         id:3,
         name:"revenue",
-        value:"3,000",
+        value:affiliateData?.earnings ?? 0,
         icon:<BiBarChartSquare color="#F75C4E"  size="2.5rem" />,
         amount: true
 
@@ -246,32 +256,38 @@ export function Sales(){
                           }
                     </div>
                 </div>
-                <AffiliateTable header={header} contentArray={contentArray} />
+                <AffiliateTable header={header} contentArray={sales} tableName="Sales" />
             </div>
         </Affiliates>
   )
 }
+
+
 export function Revenue(){
-  const gridContent = [
-        
+  const {getItem} = useLocalStorage();
+  let affiliateData = getItem(VERIFICATION_KEY);
+  const [revenue, setRevenue] = useState([])
+
+
+  const gridContent = [    
     {
         id:2,
         name:"sales",
-        value:35,
+        value:affiliateData?.sales ?? 0,
         icon:<FaShoppingBag  color="#304D74" size="2.5rem" />
     },
     {
         id:3,
-        name:"revenue",
-        value:"3,000",
+        name:"paid earnings",
+        value: affiliateData?.paidEarnings ?? 0,
         icon:<BiBarChartSquare color="#F75C4E"  size="2.5rem" />,
         amount: true
 
     },
     {
         id:4,
-        name:"income",
-        value:"1,500",
+        name:"unpaid earnings",
+        value:affiliateData?.unpaidEarnings ?? 0,
         icon:<FaMoneyBillWave color="#304D74"  size="2.5rem" />,
         amount: true
 
@@ -291,37 +307,41 @@ export function Revenue(){
                           }
                     </div>
                 </div>
-                <AffiliateTable header={header} contentArray={contentArray} />
+                <AffiliateTable header={header} contentArray={revenue} tableName="Revenue" />
             </div>
         </Affiliates>
   )
 }
 export function Income(){
-  const gridContent = [
-        
+  const {getItem} = useLocalStorage();
+  let affiliateData = getItem(VERIFICATION_KEY);
+  const [income, setIncome] = useState([]);
+
+
+  const gridContent = [    
     {
         id:2,
         name:"sales",
-        value:35,
+        value:affiliateData?.sales ?? 0,
         icon:<FaShoppingBag  color="#304D74" size="2.5rem" />
     },
     {
         id:3,
-        name:"revenue",
-        value:"3,000",
+        name:"paid earnings",
+        value: affiliateData?.paidEarnings ?? 0,
         icon:<BiBarChartSquare color="#F75C4E"  size="2.5rem" />,
         amount: true
 
     },
     {
         id:4,
-        name:"income",
-        value:"1,500",
+        name:"unpaid earnings",
+        value:affiliateData?.unpaidEarnings ?? 0,
         icon:<FaMoneyBillWave color="#304D74"  size="2.5rem" />,
         amount: true
 
     },
-]
+  ]
   return (
     <Affiliates header="Income">
             <div className={clsx["admin_profile"]}>
@@ -335,15 +355,15 @@ export function Income(){
                           }
                     </div>
                 </div>
-                <AffiliateTable header={header} contentArray={contentArray} />
+                <AffiliateTable header={header} contentArray={income} tableName="Income" />
             </div>
         </Affiliates>
   )
 }
 
-function AffiliateTable({header, contentArray=[]}){
+function AffiliateTable({header, contentArray, tableName}){
   return (
-    <div className="table-responsive">
+    contentArray.length ? (<div className="table-responsive">
       <table className="table table-borderless">
         <thead>
           <tr>
@@ -371,7 +391,7 @@ function AffiliateTable({header, contentArray=[]}){
           }
         </tbody>
       </table>
-    </div>
+    </div>) : <h3 style={{color: 'var(--gray', textAlign: 'center', marginTop: 80, fontWeight: '400', fontSize: '1.2rem'}}>No {tableName} found</h3>
   )
 }
 const header = ["No", "Date", "Title", "Amount", "Status"]

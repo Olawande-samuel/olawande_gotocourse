@@ -24,11 +24,14 @@ export const breakpoints = {
 
 
 export const baseURL = "https://loftywebtech.com/gotocourse/api/v1";
+// export const baseURL = process.env.REACT_APP_BASEURL;
 
 export const KEY = "gotocourse-userdata"
 export const VERIFICATION_KEY = "userAuthdata"
 export const AFFILIATE_KEY = "gotocourse-affiliate-data";
 export const IMAGEURL = "https://loftywebtech.com/gotocourse/api/uploads"
+// export const IMAGEURL = process.env.REACT_APP_IMAGEURL;
+export const COURSE_CATEGORY_KEY = 'gotocourse-course-category';
 
 export function getDate(date){
   let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -36,4 +39,11 @@ export function getDate(date){
   let [y, m, day] = d.split("-");
   m = months[parseInt(m) - 1];
   return `${m} ${day}`;
+}
+
+
+export const capitalize = (str) => {
+  let strArray = str.toLocaleLowerCase().split("");
+  strArray[0] = strArray[0].toLocaleUpperCase();
+  return strArray.join("");
 }

@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/Auth";
-
+import {motion} from "framer-motion"
 import placeholder from "../../images/cybersecurity.webp";
 import SwiperCore, {
   Navigation,
@@ -54,33 +54,34 @@ function a11yProps(index) {
 }
 
 export function Category() {
-
-
   return (
     <section className="newCategories">
       <div className="container-xxl">
-      <header>
-        <h1 className="newCategories_header">Popular Courses</h1>
+      <header className="newCategories_header_wrapper">
+        <h1 className="newCategories_header">A broad selection of courses</h1>
+        <p className="sub_title mx-auto text-start" style={{width:"min(100% - 1rem, 1300px)"}}>
+        Our 50+ tailored courses will teach you industry required skills in as little as 3 to 5 months—even if you don’t have any previous experience.
+        </p>
       </header>
       <TabsComp />
       
       </div>
     </section>
-  );
-}
+  ); 
 
-function CoursesContainer({ category }) {
+}
+function PopularContainer({ category, tab_number, popular }) {
   const {
-    otherFunctions: { fetchCategory, searchCategories },
+    otherFunctions: { fetchCourses, searchCategories },
   } = useAuth();
 
 
-  const courses = useQuery(["categ"], () => searchCategories(category?.name), {
-    notifyOnChangeProps:["category", "isFetching"]
+  const courses = useQuery(["popular"], () => fetchCourses(), {
+    notifyOnChangeProps:["all course", "isFetching"]
   })
 
   useEffect(()=>{
-    if(category){
+    if(category ){
       courses.refetch()
     }
   },[category])
@@ -89,13 +90,6 @@ function CoursesContainer({ category }) {
   return (
     <>
     {
-    courses.isFetching ? 
-    <div className="d-flex" style={{gap:"1rem"}}>
-     { [0, 0, 0].map((_, i)=>(
-        <Skeleton key={i} className="col-md-9 p-2 p-md-3 pe-md-4" variant='rectangular' width={350} height={250} animation="wave" sx={{borderTopLeftRadius: 10, borderTopRightRadius: 10}} />
-        ))}
-      </div>
-  :
     <Swiper
       // install Swiper modules
       modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
@@ -123,7 +117,7 @@ function CoursesContainer({ category }) {
           spaceBetween: 5,
         },
         1024: {
-          slidesPerView: 3.5,
+          slidesPerView: tab_number ? tab_number : 4,
           spaceBetween: 28,
         },
         1704: {
@@ -132,14 +126,103 @@ function CoursesContainer({ category }) {
         },
       }}
     >
-      {courses.data?.data?.map((course) => (
+      {
+        courses.isFetching ? 
+          <SwiperSlide>
+            <div className="d-flex" style={{gap:"1rem"}}>
+              { [0, 0, 0, 0].map((_, i)=>(
+                <Skeleton key={i} className="col-md-9 p-2 p-md-3 pe-md-4" variant='rectangular' width={250} height={200} animation="wave" sx={{borderTopLeftRadius: 10, borderTopRightRadius: 10}} />
+              ))}
+            </div>
+          </SwiperSlide>
+      :
+        courses.data?.data?.map((course) => (
           <SwiperSlide key={course.courseId}>
             <CategoryCard {...course} all={course} key={course.courseId} />
           </SwiperSlide>
-        ))}
+          ))
+      }
     </Swiper>
     }
     </>
+  
+  );
+}
+function CoursesContainer({ category, tab_number, popular }) {
+  const {
+    otherFunctions: { fetchCategory, searchCategories },
+  } = useAuth();
+
+
+  const courses = useQuery(["categ"], () => searchCategories(category?.name), {
+    notifyOnChangeProps:["category", "isFetching"]
+  })
+
+  useEffect(()=>{
+    if(category && popular !== true){
+      courses.refetch()
+    }
+  },[category])
+
+  
+  return (
+    <>
+    
+    <Swiper
+      // install Swiper modules
+      modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+      loop={true}
+      speed={1500}
+      autoplay={{ delay: 2000 }}
+      spaceBetween={0}
+      slidesPerView={1}
+      // navigation
+      pagination={{ clickable: true }}
+      scrollbar={{ draggable: true }}
+      breakpoints={{
+        // when window width is >= 320px
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 0,
+        },
+        // when window width is >= 640px
+        575: {
+          slidesPerView: 2,
+          spaceBetween: 5,
+        },
+        700: {
+          slidesPerView: 3,
+          spaceBetween: 5,
+        },
+        1024: {
+          slidesPerView: tab_number ? tab_number : 4,
+          spaceBetween: 28,
+        },
+        1704: {
+          slidesPerView: 4.5,
+          spaceBetween: 28,
+        },
+      }}
+    >
+
+    {
+      courses.isFetching ? 
+        <div className="d-flex" style={{gap:"1rem"}}>
+          { [0, 0, 0, 0].map((_, i)=>(
+            <SwiperSlide key={i}>
+              <Skeleton key={i} className="col-md-9 p-2 p-md-3 pe-md-4" variant='rectangular' width={250} height={200} animation="wave" sx={{borderTopLeftRadius: 10, borderTopRightRadius: 10}} />
+            </SwiperSlide>
+          ))}
+        </div>
+      :
+      courses.data?.data?.map((course) => (
+          <SwiperSlide key={course.courseId}>
+            <CategoryCard {...course} all={course} key={course.courseId} />
+          </SwiperSlide>
+      ))
+    }
+    </Swiper>
+  </>
   
   );
 }
@@ -164,6 +247,12 @@ export function TabsComp(){
         onChange={handleChange}
         aria-label="basic tabs example"
         variant="scrollable"
+
+        TabIndicatorProps={{sx:{backgroundColor: '#F75C4E'}}} 
+        sx={{
+          "& button": {color:'#F75C4E'},
+          "& button.Mui-selected": {color:'#F75C4E !important', fontWeight: 'bold'},
+        }}
       >
         <Tab
           label={"ALL CATEGORIES"}
@@ -186,48 +275,59 @@ export function TabsComp(){
         style={{ height: "100%", width: "100%", paddingBottom: "1rem" }}
         key={0}
       >
-        <Swiper
-          // install Swiper modules
-          modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-          loop={true}
-          speed={1500}
-          autoplay={{ delay: 2500 }}
-          spaceBetween={0}
-          slidesPerView={1}
-          // navigation
-          pagination={{ clickable: true }}
-          scrollbar={{ draggable: true }}
-          breakpoints={{
-            // when window width is >= 320px
-            320: {
-              slidesPerView: 1,
-              spaceBetween: 0,
-            },
-            // when window width is >= 640px
-            575: {
-              slidesPerView: 2,
-              spaceBetween: 5,
-            },
-            700: {
-              slidesPerView: 3,
-              spaceBetween: 5,
-            },
-            1024: {
-              slidesPerView: 3.5,
-              spaceBetween: 28,
-            },
-            1704: {
-              slidesPerView: 4.5,
-              spaceBetween: 28,
-            },
-          }}
-        >
-          {categories.data?.data?.map((item) => (
-            <SwiperSlide key={item.categoryId}>
-              <CategoryCard {...item} type="category" all={item} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+          <div className="popular_views border border-dark">
+            <Link to={`/categories`} className="d-inline-flex">
+              <motion.button
+                whileHover={{ 
+                  boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                  textShadow:"0px 0px 8px rgb(255, 255, 255)",
+                  backgroundColor: "#eee"
+                }}
+                className="btn-plain py-2 px-4  mb-4 rounded-0">Explore Categories</motion.button>
+            </Link>          <Swiper
+            // install Swiper modules
+            modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+            loop={true}
+            speed={1500}
+            autoplay={{ delay: 2500 }}
+            spaceBetween={0}
+            slidesPerView={1}
+            // navigation
+            pagination={{ clickable: true }}
+            scrollbar={{ draggable: true }}
+            breakpoints={{
+              // when window width is >= 320px
+              320: {
+                slidesPerView: 1,
+                spaceBetween: 0,
+              },
+              // when window width is >= 640px
+              575: {
+                slidesPerView: 2,
+                spaceBetween: 5,
+              },
+              700: {
+                slidesPerView: 3,
+                spaceBetween: 5,
+              },
+              1024: {
+                slidesPerView: 4,
+                spaceBetween: 28,
+              },
+              1704: {
+                slidesPerView: 4.5,
+                spaceBetween: 28,
+              },
+            }}
+          >
+            {categories.data?.data?.map((item) => (
+              <SwiperSlide key={item.categoryId}>
+                <CategoryCard {...item} type="category" all={item} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+        </div>
       </TabPanel>
 
       {categories.data?.data?.map((item, index) => (
@@ -237,9 +337,26 @@ export function TabsComp(){
           style={{ height: "100%", width: "100%" }}
           key={index + 1}
         >
-          <CoursesContainer courses={courses} category={item} />
+          <div className="popular_views border border-dark">
+            <h1 className="newCategories_header">Expand your opportunities with <span className="text-capitalize">{item.name.toLowerCase()}</span></h1>
+            <Link to={`/categories/${item.name}`} className="d-inline-flex">
+              <motion.button
+                whileHover={{ 
+                  boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                  textShadow:"0px 0px 8px rgb(255, 255, 255)",
+                  backgroundColor: "#eee"
+                }}
+                className="btn-plain py-2 px-4  mb-4 rounded-0">Explore <span className="text-capitalize">{item.name.toLowerCase()}</span></motion.button>
+            </Link>
+            <CoursesContainer courses={courses} category={item} key={index}  />
+          </div>
+
         </TabPanel>
       ))}
+      <div className="popular_views">
+        <h1 className="newCategories_header">Popular courses students are viewing</h1>
+        <PopularContainer tab_number={4} courses={courses} category={"CLOUD COMPUTING"} />
+      </div>
     </>
   )
 }
@@ -257,7 +374,6 @@ function CategoryCard({
   const navigate = useNavigate()
 
   function handleCourseSelect( type){        
-
     if(type === "category"){
       localStorage.setItem("gotocourse-category", JSON.stringify(all))
       navigate(`/categories/${name.split(" ").join("-").toLowerCase()}`)

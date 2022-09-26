@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {ToastContainer, toast} from "react-toastify";
 
 
@@ -33,12 +33,14 @@ const Verification = () => {
 }
 
 export function Form({type}){
-    const {getItem, removeItem, updateItem} = useLocalStorage();
+    const {getItem, updateItem} = useLocalStorage();
     let userdata = getItem(VERIFICATION_KEY);
+    const flag = useRef(false);
     const code1Ref = useRef([]);
     const navigate = useNavigate();
+    const location = useLocation();
     const {authFunctions: {verifyEmail, resendEmailOTP}, setGeneralState} = useAuth();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [formstate, setFormstate] = useState({
         code1: "",
         code2: "",
@@ -47,6 +49,64 @@ export function Form({type}){
         code5: "",
         code6: ""
     })
+    useEffect(() => {
+        if(flag.current) return;
+        if(location?.search){
+            const queryParams = location.search.split("?")[1].split("&") || [];
+            function getQueryParam(query, key){
+                let val = query.find(q => q.includes(key))
+                console.log(val);
+                if(!val) return "";
+                else {
+                    //at this point a value was found
+                    let value = val.split("=")[1];
+                    console.log(value);
+                    if(!value) return "";
+                    else return value;
+                }
+            }
+            (async () => {
+                try{
+                    let token = getQueryParam(queryParams, "token");
+                    let user = getQueryParam(queryParams, "user");
+                    let data = {userId: user, token};
+                    const res = await verifyEmail(data);
+                    const {message, statusCode, success} = res;
+                    if(!success) throw new AdvancedError(message, statusCode);
+                    else {
+                        console.log(res);
+                        const {data} = res;
+                        toast.success(message, {
+                            position: "top-right",
+                            autoClose: 4000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                        updateItem(VERIFICATION_KEY, data);
+                        setTimeout(() => navigate(data.userType === 'teacher' ? `/teacher/on-boarding` : data.userType === 'student' ? `/user-onboarding`: `/${data.userType}`), 1000);
+                    }
+                }catch(err){
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }finally{
+                    setLoading(_ => false);
+                }
+            })()
+        }else {
+            setLoading(_ => false);
+        }
+        flag.current = true;
+    }, [])
     console.log(userdata);
     const formSettings = [
         {
@@ -87,7 +147,6 @@ export function Form({type}){
         e.preventDefault();
 
         try{
-
             setLoading(_ => true);
             let d = `${formstate.code1}${formstate.code2}${formstate.code3}${formstate.code4}${formstate.code5}${formstate.code6}`;
             console.log({email: userdata.email, otp: d});

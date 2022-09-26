@@ -23,6 +23,7 @@
   --primary-dark: #023047;
   --dashboard-blue: #E5E4F8;
   --dashboard-pink: #FFF5F5;
+  --blue-ish: rgba(236, 239, 255, 0.99);
 }
 /* override bootstrap */
 
@@ -38,6 +39,11 @@
     height: 100%;
   }
 }
+@media (min-width: 991px){
+.container-lg, .container-md, .container-sm, .container {
+    max-width: 960px;
+}
+}
 @media (min-width: 1200px){
   .container-xl, .container-lg, .container-md, .container-sm, .container {
     max-width: 1250px !important;
@@ -45,8 +51,14 @@
   }
 }
 @media (min-width: 1500px){
- .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+ .container-xxxl, .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
     max-width: 80% !important;
+    height: 100%;
+  }
+}
+@media (min-width: 1700px){
+ .container-xxxl, .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+    max-width: 70% !important;
     height: 100%;
   }
 }
@@ -193,7 +205,7 @@ td {
 }
 /* ******************************Nav****************************** */
 .nav {
-  padding: 1.2rem 0;
+  padding: .6rem 0;
   position: fixed;
   top: 0;
   left: 0;
@@ -536,7 +548,7 @@ border-radius: 13.5px !important;
 }
 .services  .title {
   line-height: 72px;
-  color:var(--text-color-dark) !important;
+  color:var(--theme-blue) !important;
 }
 
 .services .services_list {
@@ -686,7 +698,20 @@ border-radius: 13.5px !important;
 
 /* ****************************Becoming************************************ */
 
+.becoming_header h2 {
+  position: relative;
+  line-height: 3.5rem;
+}
 
+.becoming_header h2::after {
+  content:"";
+  width:30%;
+  height: 10px;
+  background: var(--theme-orange);
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+}
 .becoming .left {
   display: flex;
   justify-content:center
@@ -948,13 +973,13 @@ border-radius: 13.5px !important;
 .testimonials .testimonials_text {
   font-family: "Lato", sans-serif;
   font-weight: 400;
-  font-size:  clamp(16px, 2.5vw,20px);
+  font-size:  16px;
   line-height: 30px;
   /* margin-bottom: 3.125rem; */
 }
 .testimonials .testimonials_name {
   font-family: "Lato", sans-serif;
-  font-size:  clamp(20px, 4vw, 24px);
+  font-size:  clamp(18px, 4vw, 20px);
 line-height: 42px;
 font-weight: 700;
 text-align: center;
@@ -964,7 +989,7 @@ color: var(--text-color-light);
 .testimonials .location {
   font-family: "Lato", sans-serif;
   font-weight: 300;
-font-size:  clamp(16px, 21px, 21px);
+font-size:  clamp(16px, 21px, 18px);
 line-height: 25px;
 }
 .testimonials .avatar {
@@ -996,7 +1021,7 @@ line-height: 25px;
 .testimonials .slides {
   width: min(100% - 1rem, 350px);
   line-height:37px;
-  height: 350px;
+  height: 320px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   padding: 2rem 1rem;
@@ -1074,7 +1099,7 @@ font-size: 16px;
 
 .faq {
   /* margin: 9.375rem 0 7.0625rem 0; */
-  margin: 4.375rem 0 7.0625rem 0;
+  margin: 4.375rem 0 1.0625rem 0;
 }
 .students .faq {
   margin: 0;
@@ -1086,9 +1111,10 @@ font-size: 16px;
 .faq  .faq_wrapper {
   width: 80%;
 }
+
 .faq .title{
   margin-bottom: 3.3rem;
-  color: var(--text-color-light) !important;
+  color: var(--theme-blue) !important;
 }
 .faq  .faq_acc button {
   font-weight: 500;
@@ -1200,14 +1226,31 @@ font-size: 16px;
 /* .footer_container{
   align-items:end;
 } */
-.footer .footer_left,
+/* .footer .footer_left,
 .footer .footer_right {
   flex: 50%;
 }
 .footer .footer_left {
   display: grid;
   place-items: center;
+} */
+
+.footer .footer_left,
+.footer .footer_right {
+  flex: 50%;
 }
+
+.footer .footer_left{
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+/* .footer .footer_left {
+  display: grid;
+  place-items: center;
+} */
+
+
 .footer a {
   color: #fff;
 }
@@ -1345,6 +1388,10 @@ font-size: 16px;
   position: absolute;
   top: 5%;
   left: 3%;
+}
+
+.reset{
+  height: 100vh;
 }
 
 .signWrapper main {
@@ -1992,13 +2039,13 @@ input[type="password"], input[type="text"], input[type="email"] {
   }
 
   .testimonials .slides {
-    height: auto;
+    height: auto !important;
   }
   .students .testimonials .slides {
     height: auto;
   }
  
-  
+   
   .end_left {
     text-align:center;
   }
@@ -2426,4 +2473,56 @@ tr th, thead td, td, td span  {
   border-radius:5px !important;
   border: none;
   outline: none;
+}
+
+/* PAGINATION */
+.paginateWrapper {
+  border: 1px solid #eee;
+  display: flex;
+  background:rgba(255, 255, 255, 1);
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  /* background: #eee; */
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  padding: 8px;
+  color:var(--theme-blue);
+}
+
+.activeClassName {
+  background: var(--theme-blue);
+  color: white;
+}
+.pageClassName {
+  border: 0.5px solid #eee;
+  padding: 2px 8px;
+}
+.paginateWrapper li {
+  font-size:16px;
+  font-weight:700;
+
+}
+.paginateWrapper li:last-child {
+  margin-left: 1rem;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.paginateWrapper li:first-child {
+  margin-right: 1rem;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.previousClassName,
+.nextClassName {
+  border: 1px solid #eee;
+  padding: 2px 4px;
+}
+.disabledClassName a {
+  color: darkgray;
+}
+.previousLinkClassName,
+.nextLinkClassName {
+  text-decoration: none;
 }

@@ -1,6 +1,11 @@
 import React from 'react'
-import { icons } from './Companies'
+// import { icons } from './Companies'
+import {Microsoft, PWC, Samsung, Verizon, Walmart,Shell, Uber, Shopify, Twitter, Tmobile, Slack, Mastercard, Facebook, Ey, Boa, Deloitte, KPMG, Google, Chase, Tesla, Geico, Lucid, Zoom, AWS, Tesco } from "../images/components/svgs"
 
+export const icons = [<Deloitte />, <Shopify />, <Google />, <Chase />,  <PWC />,<Microsoft />, <Samsung />, <Verizon />, <Walmart />,<Shell />, <Uber />,  <Tmobile />,<KPMG /> , <Twitter />, <Slack />,  <Tesco />, <Facebook />, <Ey />, <Boa />,
+<Tesla />, <Geico />, <AWS />, <Lucid />, <Zoom />,
+
+]
 const Experienced = () => {
   return (
     <section className="bootcamp" style={{padding: "3.3625rem 2.3625rem"}}>
@@ -8,7 +13,7 @@ const Experienced = () => {
       <div className="d-flex row  flex-md-row content justify-content-between">
           <div className="col-md-4">
             <header className="text-center text-lg-start ">
-              <h4 className="title" style={{fontSize:"27px"}} >Learn From Industries Best</h4>
+              <h4 className="title" style={{fontSize:"27px"}} >Learn From Industry Experts</h4>
             </header>
             <main className="mt-3">
               <p className="text paragraph">

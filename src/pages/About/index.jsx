@@ -6,6 +6,7 @@ import clsx from "./styles.module.css";
 import Layout from "../../components/Layout";
 import mission from "../../images/about_mission.png";
 import committed from "../../images/about_committed.png";
+import pie from "../../images/about_pi.png";
 
 
 const cardData = [
@@ -23,7 +24,7 @@ const cardData = [
         </svg>,
         bgColor: "#DDFFC2",
         color: "#56B93F",
-        content: "We partner with Top-notch industry experts and Mentors to deliver the quality learning experience needed to make your career change journey seamless."         
+        content: "We partner with Top-notch industry experts and Mentors to deliver the quality learning experience needed to make your career advancement or change journey seamless."         
     },
     {
         icon: <svg width="107" height="107" viewBox="0 0 107 107" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -51,7 +52,15 @@ const About = () => {
             <div className={clsx.about}>
                 <div className={clsx.about_jumbotron}>
                     <div className={clsx.about_top__absolute}>
-                        <h1>About us</h1>
+                        <header>
+                            <h1>About us</h1>
+                            {/* <hr /> */}
+                        </header>
+                        <svg viewBox="0 0 1512 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M-3 0H1527L1547 123.324C1547 123.324 1072.56 179.886 767 180C455.728 180.115 -3 123.324 -3 123.324V0Z" fill="#F75C4E" fill-opacity="0.54"/>
+                            <path d="M-3 0H1527L1547 112.978C1547 112.978 1072.56 164.795 767 164.899C455.728 165.005 -3 112.978 -3 112.978V0Z" fill="#0C2191" fill-opacity="0.83"/>
+                        </svg>
+
                     </div>
                 </div>
 
@@ -66,28 +75,53 @@ const About = () => {
                         }
                     </div>
                 </div>
-
-                <div className={clsx.mission}>
-                    <div className={clsx.mission_left}>
-                        <h2>Our Mission</h2>
-                        <p>
-                        Creating access for Top industry experts to train 1 million immigrants and college graduates on high in-demand technical skills needed to land high-paying jobs by 2027.
-                        </p>
-                    </div>
-                    <div className={clsx.mission_right}>
-                        <img src={mission} alt="Mission" />
+                <div style={{backgroundColor:" rgba(255, 241, 240, 0.5)"}}>
+                    <div className="container-xxl mx-auto">
+                        <div className={clsx.mission}>
+                            <div className={clsx.mission_left}>
+                                <h2>Our Mission</h2>
+                                <p>
+                                Creating access for Top industry experts to train 1 million tech professionals on high-in-demand tech skills needed to bridge the skills gap in the tech industry by 2027.
+                                </p>
+                            </div>
+                            <div className={clsx.mission_right}>
+                                <img src={mission} alt="Mission" />
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div className={clsx.committed}>
-                    <h2>Why are we committed to this?</h2>
-                    <div className={clsx.commited_content}>
-                        <div className={clsx.content_left}>
-                            <p>The number of immigrants and college graduates keeps increasing every day in the U.S and other parts of the world, there is a huge gap in technical skills for these sets of people to land the high-paying jobs they so desire.</p>
-                            <p>Seeing this gap, our commitment lies in impacting you with the necessary high-in-demand skills needed to land the high-paying job you so desire, with a plethora of tutors and mentors committed to your growth within the shortest period of time at a convenient cost.</p>
+                    <div className="container-xxxl mx-auto">
+                        <h2>Why are we committed to this?</h2>
+                        <div className={clsx.commited_content}>
+                            <div className={clsx.content_left}>
+                                <p>The tech skills gap is decimating the global workforce, putting workers and companies at risk, the gap keeps widening by the day. The world is advancing and professionals need to Upskill and Reskill to increase their knowledge, productivity on their jobs and take advantage of more lucrative professional opportunities in their chosen career path.</p>
+                                <p>Seeing this gap, and the frustration of long training duration coupled with high tuitions charged by traditional institutions and tech bootcamps faced by students, our commitment lies in imparting you with the necessary high-in-demand skills needed to land the high-paying job you so desire, with a plethora of tutors and mentors committed to your growth within the shortest period of time at a convenient cost.</p>
+                            </div>
+                            <div className={clsx.content_right}>
+                                <img src={committed} alt="Commited" />
+                            </div>
                         </div>
-                        <div className={clsx.content_right}>
-                            <img src={committed} alt="Commited" />
+                    </div>
+                </div>
+
+                <div className={clsx.transform}>
+                    <div>
+                        <h2>Transforming lives, Businesses, and Nations through Tech skills training</h2>
+                    </div>
+                </div>
+
+                <div className={clsx.committed}>
+                    <div className="container-xxxl mx-auto">
+                        <h2>Our Customer Demography</h2>
+                        <div className={clsx.commited_content}>
+                            <div className={clsx.mission_left} style={{justifyContent: 'center'}}>
+                                <p>Gotocourse targets offering training and mentorship to at least one million College graduates, Professionals who wants to Upskill and all Others looking to re-skill in tech to land high-paying tech jobs by 2027.</p>
+                            </div>
+                            <div className={clsx.content_right}>
+                                <img src={pie} alt="Demography" />
+                            </div>
                         </div>
                     </div>
                 </div>

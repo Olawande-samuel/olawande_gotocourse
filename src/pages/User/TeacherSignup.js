@@ -65,30 +65,28 @@ const TeacherSignup = () => {
       if (others.email.trim() === "" || others.password.trim() === "") throw new AdvancedError("Fields cannot be empty", 0);
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
-        const response = await register(others, "user");
-        console.log({response})
-        // const res = await pledre.addTeacherToSchool({
-        //   name:`${formstate.firstName} ${formstate.lastName}`,
-        //   email: formstate.email,
-        //   password:`${formstate.password}`
-        // })
-
-      
+        const response = await register(others, "user");  
       let { success, message, statusCode } = response;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
+        console.log({response})
+        const res = await pledre.addTeacherToSchool({
+          name:`${formstate.firstName} ${formstate.lastName}`,
+          email: formstate.email,
+          password:`${formstate.password}`
+        })
         const { data } = response;
-        // localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res))
-
+        if(res.approved){
+          localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res))
+        }
         updateItem(VERIFICATION_KEY, data);
-        
-        navigate("/user-authentication")
         setGeneralState((old) => {
           return {
             ...old,
             notification: message,
           };
         });
+        navigate(`/email`);
       }
     }catch(err){
       toast.error(err.message);
@@ -96,8 +94,6 @@ const TeacherSignup = () => {
       setLoading(_ => false);
     }
   }
-
-
   async function socialSignUp(token, type){
     try{
       const res = type === "google" ? await googleSignUp(token) : await facebookSignUp(token)
@@ -215,37 +211,37 @@ const TeacherSignup = () => {
           <h3 className="title">
           Register
           </h3>
-        </header>
-        <div className="social_signIn_wrapper">
-          <motion.button className="facebook d-block mb-3"
+      </header>
+      <div className="social_signIn_wrapper">
+        <motion.button className="facebook d-block mb-3"
+          whileHover={{ 
+            boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+            textShadow:"0px 0px 8px rgb(255, 255, 255)",
+            backgroundColor: "#eee"
+          }}
+          onClick={signUpWithGoogle}
+        >
+            <i className="me-4">
+                <img src={goo} alt="" width={25} height={25} />
+            </i>
+            Register with Google
+        </motion.button>
+        
+          <motion.button className="google d-block mb-3"
             whileHover={{ 
               boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
               textShadow:"0px 0px 8px rgb(255, 255, 255)",
               backgroundColor: "#eee"
             }}
-            onClick={signUpWithGoogle}
+            onClick={signUpWithFacebook}
           >
-              <i className="me-4">
-                  <img src={goo} alt="" width={25} height={25} />
+          <i className="me-2">
+                  <img src={face} alt="" width={25} height={25} />
               </i>
-              Register with Google
+              Register with Facebook
           </motion.button>
-          
-            <motion.button className="google d-block mb-3"
-              whileHover={{ 
-                boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
-                textShadow:"0px 0px 8px rgb(255, 255, 255)",
-                backgroundColor: "#eee"
-              }}
-              onClick={signUpWithFacebook}
-            >
-            <i className="me-2">
-                    <img src={face} alt="" width={25} height={25} />
-                </i>
-                Register with Facebook
-            </motion.button>
-          <small className="or d-block"><span>or</span></small>
-        </div>
+        <small className="or d-block"><span>or</span></small>
+      </div>
         <form action="" className="form" onSubmit={submitHandler}>
           <Input label="Full Name" handleChange={changeHandler} value={formstate.fullname} name="fullname" placeholder="Fullname" />
           <Input 

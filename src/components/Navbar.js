@@ -27,7 +27,7 @@ const Navbar = ({ background }) => {
 
   const value = getItem(KEY);
   const location = useLocation();
-
+  const navigate = useNavigate();
   const toggleNav = () => {
     setShow(!show);
   };
@@ -46,22 +46,28 @@ const Navbar = ({ background }) => {
     setGeneralState((old) => {
       return {
         ...old,
-        navHeight: heightRef.current.clientHeight,
+        navHeight: heightRef?.current?.clientHeight,
       };
     });
-  }, []);
+    console.log(heightRef.current.clientHeight)
+  }, []); 
+  
 
   const celebRoute = location.pathname.split("/")[1] === "lounge";
-  const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";
+  const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";  
+  const categoryRoute = background === "category";
+  const landing = location.pathname.split("/")[1] !== "lounge" ;
+  console.log(location.pathname.split("/")[1] !== "lounge")
+
   function showDrop() { }
   return (
     <nav
       ref={heightRef}
       section="top"
-      className="nav navbar navbar-expand-lg navbar-dark"
+      className={`nav navbar navbar-expand-lg ${ landing ? "navbar-light" : "navbar-dark"}`}
       style={{
-        background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : "var(--theme-blue)",
-        color: confirmEmail ? "var(--theme-blue)" : "#fffff",
+        background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : landing ? "var(--blue-ish)" :  "var(--theme-blue)",
+        color: confirmEmail || landing || categoryRoute ? "var(--theme-blue)" : "#fffff",
       }}
     >
       <ScrollToTop />
@@ -71,7 +77,8 @@ const Navbar = ({ background }) => {
           onClick={() => window.scrollTo(0, 0)}
           className="logo navbar-brand "
         >
-          {confirmEmail ? <Logosm color="var(--theme-blue)" /> : <Logosm />}
+          {confirmEmail || landing || categoryRoute ? <Logosm color="var(--theme-blue)" /> : <Logosm />}
+          <small className="d-block" style={{fontSize:"14px", color: landing ? "var(--theme-blue)" : "#fff"}}>Learn without limits</small>
         </Link>
         <button type="button" className="navbar-toggler " onClick={toggleNav}>
           <span className="navbar-toggler-icon"></span>
@@ -86,7 +93,7 @@ const Navbar = ({ background }) => {
               <li className="nav-item holder">
                 <Link className="link nav-link courses me-4" to="/categories"
                 style={{
-                  color:"rgba(255, 255, 255)"
+                  color: landing ? "var(--theme-blue)": "rgba(255, 255, 255)"
                 }}
                 >
                   Categories
@@ -131,18 +138,22 @@ const Navbar = ({ background }) => {
                 <li className="nav-item d-flex align-items-center nav_link">
                   <Link to="/become-a-teacher" className="link"
                    style={{
-                    color:confirmEmail ? "#0C2191" : "rgba(255, 255, 255)"
+                    color:confirmEmail || landing || categoryRoute ? "#0C2191" : "rgba(255, 255, 255)"
                   }}>
                     Become a Teacher
                   </Link>
                 </li>
                 <li className="nav-item d-flex align-items-center nav_link d-lg-none">
-                  <Link to="/login" className="link">
+                  <Link to="/login" className="link"
+                  style={{color:landing ? "var(--theme-blue)": "#fff"}}
+                  >
                     Sign In
                   </Link>
                 </li>
                 <li className="nav-item d-flex align-items-center nav_link d-lg-none">
-                  <Link to="/signup" className="link">
+                  <Link to="/signup" className="link"
+                  style={{color:landing ? "var(--theme-blue)": "#fff"}}
+                  >
                     Register as a Student
                   </Link>
                 </li>
@@ -151,11 +162,22 @@ const Navbar = ({ background }) => {
           </ul>
           {value?.token ? (
             <>
-            <li className="me-3">
-              <span className="text-white" onClick={()=>{
-                  localStorage.clear()
-                  window.location.reload()
-                }}>Logout</span>
+            <li className="me-3 nav_link">
+              <motion.span 
+                style={{cursor: "pointer", color:confirmEmail || landing ? "#0C2191" : "rgba(255, 255, 255)"
+              }}
+                whileHover={{
+                  textShadow: "0px 0px 8px rgb(255, 255, 255)",
+                }}
+                transition={{ duration: 0.1 }}
+                onClick={()=>{
+                    localStorage.clear();
+
+                    navigate("/login")
+                }}
+              >
+                Logout
+              </motion.span>
             </li>
             <Link
               to={`${value.userType === "admin"
@@ -165,18 +187,21 @@ const Navbar = ({ background }) => {
                   : "/teacher"
                 }`}
             >
-              <div
-                className="d-flex align-items-center"
-                style={{ color: "#fff", fontSize: "16px" }}
+              <motion.div
+              whileHover={{
+                textShadow: "0px 0px 8px rgb(255, 255, 255)"
+              }}
+                className="d-flex align-items-center nav_link"
+                style={{ color:confirmEmail || landing ? "#0C2191" : "rgba(255, 255, 255)", fontSize: "16px" }}
               >
                 <i
                   className="d-flex align-items-center justify-content-center me-2"
-                  style={{ color: "#fff" }}
+                  style={{ color:confirmEmail || landing ? "#0C2191" : "rgba(255, 255, 255)" }}
                 >
                   <FaRegUser />
                 </i>
                 <span>{value.firstName}</span>
-              </div>
+              </motion.div>
             </Link>
             </>
 

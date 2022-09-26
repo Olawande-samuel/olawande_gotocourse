@@ -100,32 +100,39 @@ const Landing = () => {
                     }
                 </div>
 
-                <div className={clsx.get_started}>
-                    <div className={clsx.get_started_left}>
-                        <img src={img01} alt={"Placeholder"} />
-                    </div>
-                    <div className={clsx.get_started_right}>
-                        <h3>Get access to your customized dashboard, track your best work and earnings</h3>
-                        <p>Track all your traffic, referrals, and payouts with a personalized dashboard</p>
-                        <div className={clsx.right_form}>
-                            <Link to="login">
-                                <button>Get started</button>
-                            </Link>
-                        </div>
+                <div style={{backgroundColor:"#EDFFF1"}}>
+                    <div className="container-xxxl mx-auto">
+                            <div className={clsx.get_started}>
+                                <div className={clsx.get_started_left}>
+                                    <img src={img01} alt={"Placeholder"} />
+                                </div>
+                                <div className={clsx.get_started_right}>
+                                    <h3>Get access to your customized dashboard, track your best work and earnings</h3>
+                                    <p>Track all your traffic, referrals, and payouts with a personalized dashboard</p>
+                                    <div className={clsx.right_form}>
+                                        <Link to="login">
+                                            <button>Get started</button>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                 </div>
 
-                <div className={clsx.start_now}>
-                    <div className={clsx.start_now__left}>
-                        <h2>Make use of this oppurtunity to change lives and make money in this house</h2>
-                        <p>Earn upto 5% on qualifying registration to our  program, our competitive conversion rate help 
-maximize earning.</p>
-                        <Link to="register">
-                            <button>Start now</button>
-                        </Link>
-                    </div>
-                    <div className={clsx.start_now__right}>
-                        <img src={cactus} alt="Cactus" />
+                <div style={{backgroundColor:"var(--theme-blue"}}>
+                    <div className="container-xxxl mx-auto">
+                        <div className={clsx.start_now}>
+                            <div className={clsx.start_now__left}>
+                                <h2>Make use of this oppurtunity to change lives and make money in this house</h2>
+                                <p>Earn upto 5% on qualifying registration to our  program, our competitive conversion rate help maximize earning.</p>
+                                <Link to="register">
+                                    <button>Start now</button>
+                                </Link>
+                            </div>
+                            <div className={clsx.start_now__right}>
+                                <img src={cactus} alt="Cactus" />
+                            </div>
+                        </div>
                     </div>
                 </div>
 

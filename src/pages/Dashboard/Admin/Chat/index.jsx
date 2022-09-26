@@ -276,7 +276,7 @@ const ChatBox = ({ userInfo, boxdata, checked, type , displayControl, setShowUse
   const [messageList, setMessageList] = useState([]);
   const [text, setText] = useState("");
 
-  const ourMessages = useQuery(["get private messages from user"], () => getMessages(userData.token,  userInfo?.userId ? userInfo?.userId : (userInfo?.fromUser ? userInfo?.fromUser : (userInfo?.teacherId ? userInfo?.teacherId : userInfo?._id))), {
+  const ourMessages = useQuery(["get private messages from user"], () => getMessages(userData.token,  userInfo?.userId ? userInfo?.userId : (userInfo?.fromUser ? userInfo?.fromUser : (userInfo?.teacherId ? userInfo?.teacherId : userInfo?.adminId))), {
     onSuccess: (res)=> {
       if(res.data){
         setMessageList(res.data)
@@ -384,7 +384,7 @@ const ChatBox = ({ userInfo, boxdata, checked, type , displayControl, setShowUse
 
     if(text){
       msgMutation.mutate({
-        toUser: userInfo.userId ? userInfo.userId : (userInfo.teacherId ? userInfo.teacherId : (userInfo.fromUser ? userInfo.fromUser :userInfo._id)),
+        toUser: userInfo.userId ? userInfo.userId : (userInfo.teacherId ? userInfo.teacherId : (userInfo.fromUser ? userInfo.fromUser :userInfo.adminId)),
         body: text
       })
     } else{

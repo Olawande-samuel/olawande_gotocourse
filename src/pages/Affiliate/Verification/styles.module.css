@@ -1,6 +1,6 @@
 .form {
     min-height: 50vh;
-    width: min(70%, 550px);
+    width: min(100%, 550px);
     margin: 20px auto;
     background-color: white;
     padding: 60px 40px;
@@ -74,6 +74,7 @@
     justify-content: center;
     margin-bottom: 30px;
     padding: 20px;
+    padding-inline:7px;
 }
 
 .code input {
@@ -105,7 +106,7 @@ input[type=number] {
 
 @media screen and (max-width: 645px){
     .form {
-        width: min(75%, 600px);
+        width: min(100%, 600px);
         padding: 40px 20px;
     }
     

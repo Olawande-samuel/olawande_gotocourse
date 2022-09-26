@@ -1,6 +1,8 @@
-import {createContext, useContext, useEffect, useState} from "react";
+import {createContext, useContext, useState} from "react";
 
 import { authFunctions, studentFunctions, adminFunctions, teacherFunctions, adminStudentFunctions, adminTeacherFunctions, otherFunctions, kycFunctions, affiliatesFunctions, commonFunctions } from "./functions";
+import { useEffectOnMount } from "../hooks";
+import { useEffect } from "react";
 
 const AuthContext = createContext();
 
@@ -22,12 +24,10 @@ const AuthContextProvider = ({children}) => {
     })
    
     useEffect(() => {
-        console.log("Rendering");
         if(!generalState.pledre && window.PledreAPI ){
             const Pledre = new window.PledreAPI(process.env.REACT_APP_PLEDRE_API, process.env.REACT_APP_PLEDRE_API_SECRET, process.env.REACT_APP_PLEDRE_URL)
             setGeneralState({...generalState, pledre: Pledre})
-
-            console.log(Pledre)
+            console.log(Pledre);
         }
         return () => console.log("Rerendering");
     }, [generalState]) 

@@ -271,7 +271,7 @@ function Graduate(){
     )
 }
 
-function Payment(){
+export function Payment(){
     return (
         <div className={style.payment}>
             <div className="container">
@@ -384,14 +384,14 @@ const schedule = [
     {
         id:1,
         title:"Join Gotocourse Live-changing Webinar",
-        subtext:"Pause your course and resume any time where you left of",
+        subtext:" Attend our webinar sessions to guide your decision making on the choice of a career path",
         img:SchWebinar,
         flip:"non"
     },
     {
         id:2,
         title:"Join a Cohort",
-        subtext:"Pause your course and resume any time where you left off",
+        subtext:"Learn and collaborate with like-minds on a project",
         img:SchCohort,
         flip:"flip"
     },

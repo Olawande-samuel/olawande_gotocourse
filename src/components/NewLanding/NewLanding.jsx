@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query";
 
 import Layout from "../Layout"
-import BootImg from "../../images/newbootcamp.webp"
+// import BootImg from "../../images/newbootcamp.webp"
+import BootImg from "../../images/bootcamps/allClasses.webp"
 // import HeroImg from "../../images/newHeroLatest.webp"
 import HeroImg from "../../images/newlanding.webp"
 import { useAuth } from "../../contexts/Auth"
@@ -19,8 +20,8 @@ import {motion} from 'framer-motion'
 
 import {getDate,KEY} from "../../constants"
 
-import Learning from "../../images/cohort.webp";
 // import Inperson from "../../images/newCareer.png"
+import Learning from "../../images/cohort.webp";
 import Inperson from "../../images/in-Person.webp"
 import Mento from "../../images/inPerson.webp";
 import Tech from "../../images/fast.webp";
@@ -50,20 +51,25 @@ import SwiperCore, {
   import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
   import { authentication, provider, facebookProvider } from "../../firebase-config.js"
 import LoginOptions from "./LoginOptions";
+import Overview from "./Overview";
+import BetterWay from "./BetterWay";
 
 const NewLanding = ()=>{
     return (
     <Layout background="blue">
         <Hero />
+        <Stats />
         <Experienced />
         <Category />
         <Benefits />
         <Bootcamp/>
-        <Learn type={"newLanding"} />
+        <Overview />
+        <BetterWay />
+        {/* <Learn type={"newLanding"} />
         <Self />
-        <Mentorship />
+        <Mentorship /> */}
         <Mentors />
-        <InPerson />
+        {/* <InPerson /> */}
         <Testimonials type="newLanding" />
         <Becoming />
         <Companies />
@@ -163,6 +169,47 @@ function Hero(){
     )
 }       
 
+function Stats(){
+  const statData = [
+    {
+      title: '20k+',
+      content:"students registered"
+    },
+    {
+      title: '98%',
+      content:"Completion & Retention rate"
+    },
+    {
+      title: '150+',
+      content:"Teachers & Mentors"
+    },
+    {
+      sup:"More than",
+      title: '89%',
+      content:"Tranined students already have jobs"
+    },
+    {
+      title: '50+',
+      content:"In-demand Courses"
+    },
+  ]
+  return(
+    <section className="stats">
+        <div className="stats_wrapper h-100">
+          {
+            statData.map((item, index) => (
+            <div className="stat" key={index + item.title}>
+              {item.sup && <small>{item.sup}</small>}
+              <h5>{item.title}</h5>
+              <small>{item.content}</small>
+            </div>
+            ))
+              
+            }
+        </div>
+    </section>
+  )
+}
 function Benefits(){
     return (
         <section className="wrapper services">
@@ -204,47 +251,74 @@ function Bootcamp(){
 
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
     return (
-        <Swiper
-          modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-          loop={true}
-          speed={1500}
-          autoplay={{ delay: 2800 }}
-          spaceBetween={0}
-          slidesPerView={1}
-          // navigation
-          pagination={{ clickable: true }}
-          scrollbar={{ draggable: true }}
-          breakpoints={{
-            // when window width is >= 320px
-            320: {
-              slidesPerView: 1,
-              spaceBetween: 0,
-            },
-            // when window width is >= 640px
-            575: {
-              slidesPerView: 1,
-              spaceBetween: 0,
-            },
-            700: {
-              slidesPerView: 1,
-              spaceBetween: 0
-            },
-            1024: {
-              slidesPerView: 1,
-              spaceBetween: 0,
-            },
-          }}
-        >
-          {bootcamps.data?.data?.map((item) => (
-            <SwiperSlide key={item.courseId}>
-              <BootcampCard {...item} all={item} key={item.courseId} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-        )
+      <>
+        
+        <BootcampCard data={bootcamps.data?.data} />
+        
+      </>
+  )
 }
 
-function BootcampCard({_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}){
+function BootcampCard({data}){
+    
+
+  
+    return (
+    <div className="newBootcamp" style={{ background:"url(" + BootImg+ ")", backgroundRepeat:"no-repeat", backgroundPosition:"right", backgroundSize:"cover"}}>
+      <div className="container newBootcamp_wrapper">
+        <div className="newBootcamp_content">
+          <div className="classes">
+            <p className="bg-white p-1 classes_title fw-bolder px-3 mb-0">AVAILABLE CLASSES</p>
+            <p className="bg-white p-1 classes_title fw-bolder px-3 mb-0" style={{fontSize:"0.8rem"}}>Classes we are presently enrolling for</p>
+            <div className="classes_container">
+              {
+                data?.slice(0,4).map((data,i)=>(
+                  <NewBootCampCard {...data} key={i} all={data} />
+                ))
+              }
+            </div>
+          </div>
+          <div className="others"></div>
+        </div>
+        <div className="d-flex justify-content-center">
+          <Link className="d-inline-flex" to="classes">
+            <button className="button newBootcamp_classes_button">Browse all classes</button>
+          </Link>
+        </div>
+      </div>
+    </div>
+    )
+  }
+
+  // {/* <div className="container d-flex flex-column justify-content-between">
+
+  // <header className="mb-5">
+  //     <h6>Upcoming Classes</h6>
+  // </header>
+  // <div className="newBootcamp_title mb-4">
+  //     <p className="mb-5">{title}</p>
+  //     <p>{description}</p>
+  // </div>
+  // <div className="newBootcamp_timing text-center">
+  //     <div className="newBootcamp_duration d-flex justify-content-center">
+  //         <p className="fw-bold">Duration:</p>
+  //         <p>{duration}</p>
+  //     </div>
+  //     <div className="newBootcamp_start d-flex justify-content-center">
+  //         <p className="fw-bold">Start Date:</p>
+  //         <p >{startDate && getDate(startDate)}</p>
+  //     </div>
+  //     <div className="newBootcamp_action">
+  //     <div onClick={handleNavigate}>
+  //         <button className=" newBootcamp_button">Register Today</button>
+  //     </div>
+  //     </div>
+  // </div>
+  // </div> */}
+
+
+
+  function NewBootCampCard({_id, title, duration, startTime, endTime, startDate, endDate, description, type, isActive, instructorId, bootcampImg, all}){
     const navigate = useNavigate()
     const {getItem}= useLocalStorage()
     const userdata = getItem(KEY)
@@ -256,45 +330,40 @@ function BootcampCard({_id, title, duration, startTime, endTime, startDate,endDa
             navigate("/login")
         }
         localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-        navigate("/bootcamp")
+        navigate("/classes/class")
 
      }
-    return (
-    <div className="newBootcamp" style={{
-        background:"linear-gradient(0deg, rgba(0, 23, 81, 0.7), rgba(0, 23, 81, 0.9)), url(" + BootImg+ ")",
-        backgroundPosition:"center", backgroundSize:"cover", backgroundRepeat:"no-repeat", 
-    
-    }}>
-        <div className="container d-flex flex-column justify-content-between">
-
-        <header className="mb-5">
-            <h6>Upcoming Classes</h6>
-        </header>
-        <div className="newBootcamp_title mb-4">
-            <p className="mb-5">{title}</p>
-            <p>{description}</p>
-        </div>
-        <div className="newBootcamp_timing text-center">
-            <div className="newBootcamp_duration d-flex justify-content-center">
-                <p className="fw-bold">Duration:</p>
-                <p>{duration}</p>
+     
+  return (
+    <div className="new_bootcamp_card my-3">
+      <div className="newBootcamp_img">
+        <img src={bootcampImg} alt="" />
+      </div>
+      <div className="newBootcampClasses_content">
+        <h6>{title}</h6>
+        <div className="time mb-4">
+            <div className="newBootcamp_duration">
+              <p>Duration</p>
+              <small>{duration}</small>
             </div>
-            <div className="newBootcamp_start d-flex justify-content-center">
-                <p className="fw-bold">Start Date:</p>
-                <p >{startDate && getDate(startDate)}</p>
-            </div>
-            <div className="newBootcamp_action">
-            <div onClick={handleNavigate}>
-                <button className=" newBootcamp_button">Register Today</button>
-            </div>
+            <div className="newBootcamp_StartDate">
+              <p>Start Date</p>
+              <small>{startDate && getDate(startDate)}</small>
             </div>
         </div>
-        </div>
+        <motion.button 
+          whileHover={{
+          boxShadow: "0px 0px 8px rgb(0, 0, 0)"
+        }}
+        transition={{ duration: 0.1 }}
+        className="btn-plain new_bootcamp_card_button" onClick={handleNavigate}>Learn more</motion.button>
+      </div>
     </div>
-    )
+  )
 }
 
-function Learn (){
+
+export function Learn ({better, content}){
    return (
     <section className="wrapper newLearning">
       <div className="container">
@@ -305,21 +374,25 @@ function Learn (){
                   <h2 className="title">Learn with a cohort</h2>
                 </header>
                 <p className="card-text newLearning-text mb-4">
-                    Join a classroom to take instructor led training, do projects with learning partners, take quizzes, and build work related portfolio
+                  { better ? content:"Join a classroom to take instructor-led training, do projects with learning partners, take quizzes, network, and build a work-related portfolio. Take an opportunity to learn with likeminds across the world and build a great career you will be proud of."}
                 </p>
-                <div>
-                  <Link to="/signup" style={{display:"inline-block"}}>
-                  <motion.button 
-                  className="btn-plain button-lg newLearning_button" type="button"
-                  whileHover={{ 
-                    boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
-                    textShadow:"0px 0px 8px rgb(255, 255, 255)"
-                  }}
-                  >
-                    Get Started Today
-                  </motion.button>
-                    </Link>
-                </div>
+                {
+                  !better &&
+                  <div>
+                    <Link to="/signup" style={{display:"inline-block"}}>
+                    <motion.button 
+                    className="btn-plain button-lg newLearning_button" type="button"
+                    whileHover={{ 
+                      boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                      textShadow:"0px 0px 8px rgb(255, 255, 255)"
+                    }}
+                    >
+                      Get Started Today
+                    </motion.button>
+                      </Link>
+                  </div>
+                }
+
                   
               </div>
             </div>
@@ -332,7 +405,7 @@ function Learn (){
    ) 
 }
 
-function Self(){
+export function Self({better, content}){
     return(
         <section className="wrapper transition newLearning newSelf">
       <div className="container">
@@ -353,22 +426,26 @@ function Self(){
                 <h2 className="title">Self paced Learning</h2>
               </header>
               <p className="newLearning-text mb-4">
-                Self-paced courses that allow you to complete assignments at your own pace, making it easier to balance coursework with your other personal and professional responsibilities.
+              { better ? content:"Learn on a flexible schedule at your own pace. Self-paced courses allow you to complete assignments at your own pace, making it easier to balance coursework with your other personal and professional commitments and responsibilities. You don’t have to worry about rigid learning schedules, learn at your pace and on your terms."}
               </p>
-              <div>
-                <Link to="/signup" style={{display:"inline-block"}}>
-                  <motion.button
-                    className="btn-plain newLearning_button button-lg"
-                    type="button"
-                    whileHover={{
-                      boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-                      textShadow: "0px 0px 8px rgb(255,255,255)",
-                    }}
-                   >
-                    Try Gotocourse
-                    </motion.button>
-                 </Link>
-                </div>
+              {
+                !better &&
+                <div>
+                  <Link to="/signup" style={{display:"inline-block"}}>
+                    <motion.button
+                      className="btn-plain newLearning_button button-lg"
+                      type="button"
+                      whileHover={{
+                        boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                        textShadow: "0px 0px 8px rgb(255,255,255)",
+                      }}
+                    >
+                      Try Gotocourse
+                      </motion.button>
+                  </Link>
+                  </div>
+              }
+
             </div>
           </motion.div>
         </div>
@@ -377,7 +454,7 @@ function Self(){
     )
 }
 
-function Mentorship (){
+export function Mentorship ({better, content}){
     
    return (
     <section className="wrapper learning newMentor">
@@ -389,21 +466,25 @@ function Mentorship (){
                   <h2 className="title">One-on-one mentorship</h2>
                 </header>
                 <p className=" newLearning-text mb-4">
-                    Challenge yourself with a one-on-one mentorship session with industry experts and professionals and grow your career.
+                  { better ? content:"Get an exclusive and fully immersive learning experience with our Celebrity, A-list, and Technical Experts Mentors. Challenge yourself with a one-on-one mentoring session with industry experts and professionals and grow your career."}
                 </p>
-                <div>
-                  <Link to="/signup" style={{display:"inline-block"}}>
-                  <motion.button 
-                  className="btn-plain button-lg newMentor_button" type="button"
-                  whileHover={{ 
-                    boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
-                    textShadow:"0px 0px 8px rgb(255, 255, 255)"
-                  }}
-                  >
-                    Get Started Today
-                  </motion.button>
-                    </Link>
-                </div>
+                {
+                  !better &&
+                  <div>
+                    <Link to="/signup" style={{display:"inline-block"}}>
+                    <motion.button 
+                    className="btn-plain button-lg newMentor_button" type="button"
+                    whileHover={{ 
+                      boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                      textShadow:"0px 0px 8px rgb(255, 255, 255)"
+                    }}
+                    >
+                      Get Started Today
+                    </motion.button>
+                      </Link>
+                  </div>
+                }
+
                   
               </div>
             </div>
@@ -415,7 +496,7 @@ function Mentorship (){
     </section>
    ) 
 }
-function InPerson (){
+export function InPerson ({better, content}){
    return (
     <section className="wrapper learning newLearning inPerson">
       <div className="container">
@@ -423,24 +504,27 @@ function InPerson (){
             <div className=" border-none newLearning_left">
               <div className="d-flex flex-column justify-content-center h-100">
                 <header className="mb-5">
-                  <h2 className="title">In person Training </h2>
+                  <h2 className="title">In-person Training </h2>
                 </header>
                 <p className="newLearning-text mb-4">
-                    Learn from experts by joining us in any of our physical locations.
+                { better ? content:"Take physical lectures on any of our campuses close to you. Enjoy hands-on and interactive expert lead training by joining us in any of our physical learning hubs, practicing new skills through case studies and role-plays, and getting real-time feedback from facilitators. You can’t go wrong joining our small group training on-site to learn and advance your career."}
                 </p>
-                <div>
-                  <Link to="/signup" style={{display:"inline-block"}}>
-                  <motion.button 
-                  className="btn-plain button-lg newLearning_button" type="button"
-                  whileHover={{ 
-                    boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
-                    textShadow:"0px 0px 8px rgb(255, 255, 255)"
-                  }}
-                  >
-                    Get Started Today
-                  </motion.button>
-                    </Link>
-                </div>
+                {
+                  !better &&
+                  <div>
+                    <Link to="/signup" style={{display:"inline-block"}}>
+                    <motion.button 
+                    className="btn-plain button-lg newLearning_button" type="button"
+                    whileHover={{ 
+                      boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                      textShadow:"0px 0px 8px rgb(255, 255, 255)"
+                    }}
+                    >
+                      Get Started Today
+                    </motion.button>
+                      </Link>
+                  </div>
+                }
                   
               </div>
             </div>

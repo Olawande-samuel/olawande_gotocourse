@@ -6,7 +6,7 @@ import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash, IoIosHelpBuoy} from
 import {BiCategory, BiBell, BiBarChartSquare, BiHelpCircle} from "react-icons/bi";
 import {MdOutlineAddReaction} from "react-icons/md";
 import {FaTwitch} from "react-icons/fa";
-import { useLocation, Link, NavLink} from "react-router-dom";
+import { useLocation, Link, NavLink, useNavigate} from "react-router-dom";
 import {FiGift, FiSend, FiBookOpen} from "react-icons/fi";
 import {FaRegMoneyBillAlt, FaMoneyBillWave} from "react-icons/fa";
 import {motion} from "framer-motion"
@@ -17,7 +17,7 @@ import { useLocalStorage } from "../../../hooks";
 
 import clsx from "./styles.module.css";
 import Logo from "../../../components/Logo";
-import { colors } from "../../../constants";
+import { colors, KEY } from "../../../constants";
 import { useAuth } from "../../../contexts/Auth";
 import LogoutButton from "../../../components/LogoutButton";
 import { LogoSidebar, Logosm } from "../../../images/components/svgs";
@@ -47,16 +47,23 @@ function SidebarItem({icon: Icon, title, isMobile, path,showBadge, ...props}){
 const Sidebar = ({isMobile}) => {
     const location = useLocation();
     const {generalState,  setGeneralState} = useAuth();
+    const navigate = useNavigate();
     const {getItem} = useLocalStorage()
+    let userdata = getItem(KEY);
     const route = location.pathname.split("/")[1];
     const [loading, setLoading] = useState(false)
-    // const sidebarItemRef = useRef(null);
+
 
     const data =  route === "admin" ? [
         {
             icon: IoIosHome,
             path: "",
             title: "Dashboard"
+        },
+        {
+            icon: IoIosPerson,
+            path: "profile",
+            title: "My Profile"
         },
         {
             icon: IoIosPerson,
@@ -91,7 +98,7 @@ const Sidebar = ({isMobile}) => {
         {
             icon: BiCategory,
             path: "bootcamps",
-            title: "Bootcamps"
+            title: "Classes"
         },
         {
             icon: BiBell,
@@ -131,6 +138,11 @@ const Sidebar = ({isMobile}) => {
             icon: BiCategory,
             path: "bootcamps",
             title: "Available Classes"
+        },
+        {
+            icon: BiCategory,
+            path: "myclasses",
+            title: "My Classes"
         },
         {
             icon: FiBookOpen,
@@ -251,7 +263,6 @@ const Sidebar = ({isMobile}) => {
     async function gotodashboard(){
         const data = getItem("gotocourse-userdata")
 
-        console.log(data)
         if(data.userType === "student" || data.userType === 'admin'){
             if(generalState.pledre.loginUser){
                 setLoading(true)
@@ -261,11 +272,9 @@ const Sidebar = ({isMobile}) => {
                         user_type: "student"
                     })
 
-                    console.log(response)
                 } catch(err){
                     console.error(err)
                 }finally{
-                    console.log("done!!!")
                     setLoading(false)
                 }
             }
@@ -278,11 +287,9 @@ const Sidebar = ({isMobile}) => {
                         user_type: route
                     })
 
-                    console.log(response)
                 } catch(err){
                     console.error(err)
                 }finally{
-                    console.log("done!!!")
                     setLoading(false)
                 }
             }
@@ -291,6 +298,7 @@ const Sidebar = ({isMobile}) => {
             throw new AdvancedError("User not authorized")
         }
     }
+    const page = location.pathname.split("/")[1];
     return (
         <>
         <div className={`${generalState.showSidebar ? clsx.open :clsx.close}  ${clsx.sidebar} sidebar `}>
@@ -331,6 +339,24 @@ const Sidebar = ({isMobile}) => {
                             }
                         </motion.button>
                     </div>
+                    {
+                        (page === 'affiliate' && (userdata?.userType === 'student' || userdata?.userType === 'teacher')) && (
+                            <div className="button_wrapper text-center" style={{marginTop:"4rem"}}>
+                                <motion.button 
+                                    whileHover={{
+                                        // boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                                        textShadow: "0px 0px 8px rgb(255, 255, 255)"
+                                    }}
+                                    className="btn btn-primary" 
+                                    style={{padding:"10px 30px", background:"var(--secondary)", border:"1px solid var(--secondary)"}}
+                                    onClick={e => navigate(`/${userdata?.userType}`)}
+                                    disable={true}
+                                >
+                                    Go to {userdata?.userType === 'student' ? "Student's" : "Teacher's"} Dashboard
+                                </motion.button>
+                            </div>
+                        )
+                    }
                     <div className="d-none">
                         <LogoutButton />
                     </div>

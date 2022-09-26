@@ -8,7 +8,7 @@
 
 .about_jumbotron {
     width: 100%;
-    height: min(60vh, 600px);
+    height: min(65vh, 600px);
     background: url("../../images/about_us.png");
     background-position: center;
     background-size: cover;
@@ -22,39 +22,58 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 40%;
-    background-color: rgba(12, 33, 145, 0.87);
+    height: 30%;
+    /* background-color: rgba(12, 33, 145, 0.87); */
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-
-
-
-.about_top__absolute h1 {
-    color: white;
-    position: relative;
+.about_top__absolute svg {
+    opacity: 0.87;
+    position: absolute;
+    top: 0;
 }
 
-.about_top__absolute h1::after {
+
+.about_top__absolute header h1{
+font-weight: 700;
+}
+.about_top__absolute header {
+    color: white;
     position: absolute;
+    bottom: 0;
+    right: 50%;
+    transform: translateX(50%);
+    z-index: 2;
+    opacity: 1;
+}
+
+.about_top__absolute hr {
+    /* position: absolute; */
     background: #F75C4E;
-    content: "";
+    /* content: ""; */
     min-width:100px;
     height: 10px;
-    position: absolute;
-    bottom: -10px;
-    right: 65%;
-    left: 0;
+    opacity: 1;
+    /* position: absolute; */
+    /* bottom: -10px; */
+    /* right: 65%; */
+    /* left: 0; */
 }
+ 
+@media (max-width:812px){
+    .about_top__absolute header {
+     top: 0;
+    }
 
+}
 
 .believe {
     background-color: rgba(157, 166, 186, 0.53);
     width: 100%;
-    padding: 40px;
-    display: flex;
+    padding-block: 40px;
+    padding-inline: clamp(0.75rem, 0.25rem + 2.5vw, 2.5rem);    display: flex;
     flex-direction: column;
     align-items: center;
 }
@@ -67,15 +86,24 @@
     width: 70%;
     letter-spacing: 0.4px;
     line-height: 1.5;
+    font-size: clamp(2.375rem, 2.125rem + 1.25vw, 3.25rem);
+    font-weight: 800;
 }
-
-
 .believe_cards {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 30px;
-    width: min(70vw, 80%);
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
 }
+
+@media (min-width: 912px) {
+
+    .believe_cards {
+        grid-gap: 30px;
+        width: min(70vw, 80%);
+    }
+}
+
 
 .believe_card {
     border-radius: 20px;
@@ -102,10 +130,12 @@
 
 .mission {
     background-color: rgba(255, 241, 240, 0.5);
-    display: grid;
+    display: flex;
+    flex-direction: column-reverse;
+
     width: 100%;
     padding: 50px  20px;
-    grid-template-columns: 1fr 1fr;
+    /* grid-template-columns: 1fr 1fr; */
     grid-gap: 40px;
 }
 
@@ -118,7 +148,7 @@
 .mission_left p {
     color: #515151;
     letter-spacing: 0.6px;
-    width: 80%;
+    width: 100%;
 }
 
 
@@ -153,10 +183,10 @@
 
 .commited_content {
     margin-top: 60px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column-reverse;    /* grid-template-columns: 1fr 1fr; */
     grid-gap: 30px;
-    padding: 20px;
+    padding: clamp(0.75rem, 0.6071rem + 0.7143vw, 1.25rem);;
 }
 
 .committed h2{
@@ -171,8 +201,10 @@
     height: 10px;
     position: absolute;
     bottom: -10px;
-    right: 40%;
-    left: 40%;
+    right: 50%;
+    /* left: 40%; */
+    transform: translateX(50%);
+    width: 180px;
     top: 55px;
 }
 
@@ -186,16 +218,64 @@
 .content_left {
     color: #515151;
     line-height: 2;
-    width: 80%;
+    width: 100%;
     padding: 20px;
 }
 
 
 
 
+.transform{
+    background: url(../../images/about_transform.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding-block: 2rem;
+    display: grid;
+    place-items: center;
+    height: min(70vh, 500px);
+}
+.transform div {
+    width: min(100% - .7rem, 550px);
+    margin: auto;
+}
+.transform div h2{
+    color: #fff;
+    font-size: clamp(2.375rem, 2.25rem + 0.625vw, 2.9125rem);
+    font-weight: 700;
+    text-align:center;
+}
 
+@media (min-width: 512px) {
 
+    .believe_cards {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        width: min(70vw, 80%);
+    }
+    .mission, .commited_content {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (min-width: 712px) {
 
+    .believe_cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 1rem;
+        width: min(70vw, 80%);
+    }
+    .mission_left p {
+        width: 100%;
+    }
+    .content_left {
+        color: #515151;
+        line-height: 2;
+        width: 80%;
+        padding: 20px;
+    }
+}
 
 @media screen and (max-width: 1332px) {
     .believe_cards {
