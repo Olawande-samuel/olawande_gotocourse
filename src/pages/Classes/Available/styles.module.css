@@ -75,10 +75,7 @@
     
     }
     .jumb_container img{
-       
         height: auto;
-       
-    
     }   
 }
 
@@ -159,6 +156,10 @@
     .jumbotron__absolute p {
         margin-bottom: 30px;
     }
+    .jumb_container img{
+        height: auto;
+        max-height: 400px;
+    } 
 
 }
 

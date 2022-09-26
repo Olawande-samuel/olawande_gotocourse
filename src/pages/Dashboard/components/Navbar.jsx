@@ -20,7 +20,7 @@ export default function Navbar({header, toggleSidebar, notification, content }){
             <div className="d-flex">
             <div className="hamburger me-3 align-items-center">
                 <i>
-                    <AiOutlineMenu style={{fontSize:"24px", color:"#0C2191"}} onClick={toggleSidebar} />
+                    <AiOutlineMenu style={{fontSize:"24px", color:"#0C2191", cursor:"pointer"}} onClick={toggleSidebar} />
                 </i>
             </div>
             <h6 className={clsx.title__header}>{header}</h6>
