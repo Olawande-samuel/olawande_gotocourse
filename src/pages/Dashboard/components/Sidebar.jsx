@@ -93,7 +93,7 @@ const Sidebar = ({isMobile}) => {
         {
             icon: IoIosHelpBuoy,
             path: "courses-categories",
-            title: "Course Catgories"
+            title: "Course Categories"
         },
         {
             icon: BiCategory,

@@ -886,10 +886,7 @@ export const Syllabus = ({
   const flag = useRef(false);
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const {
-    
-    adminTeacherFunctions: { fetch }
-  } = useAuth();
+  const { adminTeacherFunctions: { fetch } } = useAuth();
     function handleChange(e) {
       setNewInstructor(e.target.value);
     }
