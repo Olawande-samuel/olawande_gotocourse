@@ -1266,13 +1266,11 @@ export function Fees() {
 
 
                             </div>
-
                         ))
                             :
-
-                            <>
-                                <h2>No errolled course</h2>
-                            </>
+                        <>
+                            <h2>No enrolled course</h2>
+                        </>
 
                     }
 
@@ -1892,13 +1890,14 @@ export function GotoDashboard() {
             if(generalState.pledre.loginUser){
                 try{
                     const response = await generalState.pledre.loginUser({
-                        // email: data.email,
-                        user_id: data.email,
+                        email: data.email,
+                        // user_id: data.email,
                         user_type: route
                     })
 
                 } catch(err){
                     console.error(err)
+                    toast.error("An error occured")
                 }finally{
                     setLoading(false)                
                 }
@@ -1915,6 +1914,7 @@ export function GotoDashboard() {
                     console.log(response)
                 } catch(err){
                     console.error(err)
+                    toast.error("An error occured")
                 }finally{
                     console.log("done!!!")
                     setLoading(false)

@@ -3497,19 +3497,20 @@ export function Bootcamps() {
 
 // CREATEBOOTCAMP COMPONENT
 export function CreateBootcamp() {
-  const {
-    adminFunctions: { addBootcamp, fetchBootcamps, updateBootcamp },
-  } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const flag = useRef(false);
   const navigate = useNavigate();
+  const ref = useRef(false);
 
+  const { adminFunctions: { addBootcamp, fetchBootcamps, updateBootcamp, fetchCategories }, adminTeacherFunctions: { fetch }} = useAuth();
+  const [categories, setCategories] = useState([]); 
   const location = useLocation();
   const [loader, setLoader] = useState(location.search ? true : false);
   const [formstate, setFormstate] = useState({
     title: "",
     duration: "",
+    category:"",
     startDate: "",
     endDate: "",
     startTime: "",
@@ -3518,6 +3519,9 @@ export function CreateBootcamp() {
     type: "",
     instructor: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [teachers, setTeachers] = useState([]);
+
 
   useEffect(() => {
     if (flag.current) return;
@@ -3564,7 +3568,54 @@ export function CreateBootcamp() {
     });
   }
 
-  const [loading, setLoading] = useState(false);
+
+
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      if (ref.current) return;
+      (async () => {
+        try {
+          setLoading(true);
+          const res = await fetchCategories(userdata?.token);
+          const { success, message, statusCode } = res;
+
+          if (!success || statusCode !== 1)
+            throw new AdvancedError(message, statusCode);
+          const { data } = res;
+          setCategories(data);
+        } catch (err) {
+          toast.error(err.message);
+        } finally {
+          setLoading(false);
+        }
+      })();
+
+      ref.current = true;
+    }
+
+    return () => (mounted = false);
+  }, [userdata.token]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = userdata?.token;
+        const res = await fetch(token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          const { data } = res;
+          setTeachers(_=>  data);
+        }
+      } catch (err) {
+        toast.error(err.message);
+      }finally {
+        setLoading(_ => false);
+      }
+    })();
+  }, []);
+
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
@@ -3592,27 +3643,11 @@ export function CreateBootcamp() {
 
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success(message);
         navigate("/admin/bootcamps");
       }
     } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     } finally {
       setLoading((_) => false);
     }
@@ -3625,7 +3660,7 @@ export function CreateBootcamp() {
   }
 
   return (
-    <Admin header="Create Bootcamp">
+    <Admin header="Create Class">
       {loader && <Loader />}
       <div className={clsx.admin_profile}>
         <div className={clsx.edit__profile}>
@@ -3674,6 +3709,22 @@ export function CreateBootcamp() {
               handleChange={changeHandler}
               value={formstate.title}
             />
+             <div className={clsx.form_group}>
+                <label htmlFor={"package"}>Category</label>
+                <select
+                  rows="5"
+                  name="category"
+                  value={formstate.category}
+                  onChange={changeHandler}
+                  className="form-select generic_input"
+                >
+                  <option value="">Choose a Category</option>
+                  {categories.length > 0 &&
+                    categories.map((item, i) => (
+                      <option key={i} value={item.name}>{item.name}</option>
+                    ))}
+                </select>
+              </div>
             <Input
               label="Duration"
               name="duration"
@@ -3737,14 +3788,27 @@ export function CreateBootcamp() {
                 className="generic_input"
               ></textarea>
             </div>
-
-            <Input
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Instructor</label>
+              <select
+                name="instructor"
+                value={formstate.instructor}
+                onChange={changeHandler}
+                className="form-select generic_input"
+              >
+                <option value="">Choose an instructor</option>
+                {teachers.filter((teacher)=>teacher.userType !== "mentor").map(teacher=>(
+                  <option value={teacher.email}>{teacher.firstName} - {teacher.lastName}</option>
+                ))}
+              </select>
+            </div>
+            {/* <Input
               label="Instructor Email"
               name="instructor"
               type="text"
               handleChange={changeHandler}
               value={formstate.instructor}
-            />
+            /> */}
 
             <div className={clsx.form_group}>
               <label htmlFor={"package"}>Type</label>

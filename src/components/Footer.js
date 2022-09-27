@@ -201,7 +201,7 @@ const Footer = () => {
                         style={{ 
                           color: !celebRoute ? "var(--theme-blue)" : "#FFF",
                           lineHeight: "26px",
-                          fontSize: "11px",
+                          fontSize: "10px",
                         }}
                         whileHover={{
                           scale: 1.1,
@@ -245,9 +245,9 @@ const Footer = () => {
                         transition={{
                           stiffness: 300
                         }}
-                        style={{ color: !celebRoute ? "var(--theme-blue" : "#FFF" }}
+                        style={{ color: !celebRoute ? "var(--theme-blue" : "#FFF", fontSize:"10px", lineHeight:"26px" }}
                       >
-                        {link.title}
+                        {link.title.toUpperCase()}
                       </motion.li>
                     </HashLink>
 
@@ -269,9 +269,9 @@ const Footer = () => {
                         transition={{
                           stiffness: 300
                         }}
-                        style={{ color: !celebRoute ? "var(--theme-blue" : "#FFF" }}
+                        style={{ color: !celebRoute ? "var(--theme-blue" : "#FFF", fontSize:"10px", lineHeight:"26px" }}
                       >
-                        {link.title}
+                        {link.title.toUpperCase()}
                       </motion.li>
                     </Link>
                   ))}
