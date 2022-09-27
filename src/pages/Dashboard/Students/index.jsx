@@ -1266,13 +1266,11 @@ export function Fees() {
 
 
                             </div>
-
                         ))
                             :
-
-                            <>
-                                <h2>No errolled course</h2>
-                            </>
+                        <>
+                            <h2>No enrolled course</h2>
+                        </>
 
                     }
 
