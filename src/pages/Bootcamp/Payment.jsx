@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import {
@@ -302,11 +302,13 @@ export const CheckoutForm = () => {
   const elements = useElements();
   const [loading, setLoading] = useState(false);
   const [loadingComponent, setLoadingComponent] = useState(true);
+  const getItem = useLocalStorage();
 
   async function handlesubmit(e) {
     e.preventDefault();
     setLoading(true);
-
+    const classData = getItem("gotocourse-bootcampdata")
+    console.log(classData)
     try {
       if (!stripe || !elements) {
         return;
@@ -315,7 +317,7 @@ export const CheckoutForm = () => {
       const result = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: "https://gotocourse.us/payment/success",
+          return_url: `https://gotocourse.us/payment/success/${classData.pledreClassId}`,
         },
       });
 
@@ -398,6 +400,8 @@ export const CheckoutForm = () => {
 export const PaymentStatus = ({ success }) => {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
+  const {generalState, setGeneralState}= useAuth();
+  const { id } = useParams();
 
   const [status, setStatus] = useState({
     image: success ? Success : Failure,
@@ -409,6 +413,29 @@ export const PaymentStatus = ({ success }) => {
   });
 
   const userdata = getItem("gotocourse-userdata");
+   useEffect(() => {
+    // enroll student to course
+    if(success){
+      setGeneralState({...generalState, loading: true})
+      (async()=>{
+        try {
+          if(generalState.pledre){
+           const pledRes = await generalState.pledre.getStudentDetails(userdata.email);
+            console.log(pledRes)  
+            // if(pledRes._id){
+            //    const res = await generalState.pledre.addCourseToStudent({
+            // courseId:id,
+            // studentId: pledRes._id,
+            // })
+            // console.log(res)
+            // }
+          }
+        } catch (err) {
+          console.err(err)
+        }
+      })()
+    }
+  }, [success])
   return (
     <div className={style.paymentScreen}>
       <div className={style.paymentScreenBox}>

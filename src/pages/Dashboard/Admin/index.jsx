@@ -3435,7 +3435,7 @@ export function Bootcamps() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <h1 style={{ margin: 0 }}>Bootcamps</h1>{" "}
+            <h1 style={{ margin: 0 }}>Classes</h1>{" "}
             <button
               type="button"
               className="btn btn-primary px-5"
@@ -3507,10 +3507,11 @@ export function CreateBootcamp() {
   const [categories, setCategories] = useState([]); 
   const location = useLocation();
   const [loader, setLoader] = useState(location.search ? true : false);
+
   const [formstate, setFormstate] = useState({
     title: "",
     duration: "",
-    category:"",
+    categoryName:"",
     startDate: "",
     endDate: "",
     startTime: "",
@@ -3519,6 +3520,7 @@ export function CreateBootcamp() {
     type: "",
     instructor: "",
   });
+
   const [loading, setLoading] = useState(false);
   const [teachers, setTeachers] = useState([]);
 
@@ -3660,7 +3662,7 @@ export function CreateBootcamp() {
   }
 
   return (
-    <Admin header="Create Class">
+    <Admin header={location.search ? "Edit Class" : "Create Class"}>
       {loader && <Loader />}
       <div className={clsx.admin_profile}>
         <div className={clsx.edit__profile}>
@@ -3713,8 +3715,8 @@ export function CreateBootcamp() {
                 <label htmlFor={"package"}>Category</label>
                 <select
                   rows="5"
-                  name="category"
-                  value={formstate.category}
+                  name="categoryName"
+                  value={formstate.categoryName}
                   onChange={changeHandler}
                   className="form-select generic_input"
                 >

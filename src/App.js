@@ -37,10 +37,10 @@ import "react-multi-carousel/lib/styles.css";
 import { Categories, CourseDetail, CourseList, CourseProfile, NewCourseProfile } from "./pages/Courses";
 import {Home as BecomeATeacher, Profile} from "./pages/Teacher";
 import Career from "./pages/Career";
-import All, {Payment, PaymentStatus} from "./pages/Teacher/Teachers";
+import All, {Payment} from "./pages/Teacher/Teachers";
 
 import Bootcamp, {BootcampDetails as TrainingBootcamp, NewBootcampDetailsComponent} from "./pages/Bootcamp";
-import {BootcampPayment} from "./pages/Bootcamp/Payment";
+import {BootcampPayment, PaymentStatus} from "./pages/Bootcamp/Payment";
 import Policies, {TeachingPolicy, TermsOfUse, EndUserPolicy, Cookies} from "./pages/PrivacyPolicy";
 
 import {Category as CategoryHome, CategoryDetail} from "./pages/Category";
@@ -131,14 +131,16 @@ function App() {
                 <Route path="category/:name/courses" element={<CoursesHome />} />
                 <Route path="category/:name/courses/:course" element={<CourseDetails />} />
                 {/* <Route path="bootcamp-training" element={<TrainingBootcamp />} /> */}
-                <Route path="bootcamp-training" element={<NewBootcampDetailsComponent />} />
-                <Route path="bootcamp" element={<Bootcamp />} />
-                <Route path="bootcamp/payment" element={<BootcampPayment />} />
                 <Route path="forgot-password" element={<ForgotPassword />} />
                 <Route path="change-password" element={<ResetPassword />} />
                 <Route path="become-a-teacher" element={<BecomeATeacher />} />
-                <Route path="payment/success" element={<PaymentStatus success={true} />} />
+
+                <Route path="bootcamp-training" element={<NewBootcampDetailsComponent />} />
+                <Route path="bootcamp" element={<Bootcamp />} />
+                <Route path="bootcamp/payment" element={<BootcampPayment />} />
+                <Route path="payment/success/:id" element={<PaymentStatus success={true} />} />
                 <Route path="payment/error" element={<PaymentStatus />} />
+
                 <Route path="career" element={<Career />} />
                 <Route path="students" element={<Students  />} />
                 <Route path="user-authentication" element={<Verification  />} />

@@ -2246,6 +2246,38 @@ export const studentFunctions = {
             }
         }
     },
+    fetchBootcampFees: async function(token){
+        console.log("studentpaymenttoken", token);
+        try{
+            const res = await axios.get(`${baseURL}/student/bootcamps/enrollments/payments/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log("result payment", res);
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
 
     payStudentFees: async function(token, paymentId){
         // console.log({token});
