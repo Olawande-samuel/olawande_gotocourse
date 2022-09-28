@@ -1014,7 +1014,7 @@ export function History() {
     )
 }
 export function Fees() {
-    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees, fetchStudentFees, payStudentFees } } = useAuth();
+    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees, fetchStudentFees, fetchBootcampFees,payStudentFees}} = useAuth();
     const { getItem } = useLocalStorage();
     const [course, setCourse] = useState([])
     let userdata = getItem(KEY);
@@ -1068,13 +1068,15 @@ export function Fees() {
             (async () => {
                 setGeneralState({ ...generalState, loading: true })
                 try {
-                    const res = await fetchStudentFees(userdata?.token);
-                    setGeneralState({ ...generalState, loading: false })
-                    const { success, message, statusCode } = res;
-                    if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
-                    else {
-                        setCourse(res.data)
-                    }
+                    // const res = await fetchStudentFees(userdata?.token);
+                    const res = await Promise.all([fetchStudentFees(userdata?.token), fetchBootcampFees(userdata?.token)])
+                    console.log(res)
+                    // setGeneralState({ ...generalState, loading: false })
+                    // const { success, message, statusCode } = res;
+                    // if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+                    // else {
+                    //     setCourse(res.data)
+                    // }
                 } catch (err) {
                     toast.error(err.message, {
                         position: "top-right",
@@ -1269,7 +1271,7 @@ export function Fees() {
                         ))
                             :
                         <>
-                            <h2>No enrolled course</h2>
+                            <h2>You haven't enrolled to any class</h2>
                         </>
 
                     }
@@ -1536,7 +1538,7 @@ export const Dashboard = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {data?.data.map((item, i) => (
+                                        {data?.data.filter(data=>data.status === "paid").map((item, i) => (
                                             <tr key={i}>
                                                 <td><span>{i + 1}</span></td>
                                                 <td>
