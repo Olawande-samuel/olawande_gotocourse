@@ -169,7 +169,7 @@ function Hero(){
     )
 }       
 
-function Stats(){
+export function Stats(){
   const statData = [
     {
       title: '20k+',
