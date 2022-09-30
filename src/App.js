@@ -77,6 +77,7 @@ import { Suspense, lazy } from "react";
 import Loader from "./components/Loader";
 import CheckList from "./pages/Teacher/checkList";
 import Events from "./pages/Events";
+import Business from "./Business/pages/landing/business";
 
 const Login = lazy(() => import("./pages/User/Login"))
 const SignUp = lazy(() => import("./pages/User/SignUp"))
@@ -289,6 +290,7 @@ function App() {
                 </Route> 
 
             </Route>
+            <Route path="enterprise" element={<Business />} />
             <Route path="*" element={<h1 className="text-center">Page Not Found</h1>} />
           </Routes>
         </Suspense>
