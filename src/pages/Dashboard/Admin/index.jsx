@@ -3206,36 +3206,47 @@ export function BootcampDetails({}) {
   async function toggleBootcampStatusHandler(e) {
     setLoading((_) => true);
     try {
-        // add class to pledre
-      const pledRes = await generalState.pledre.addCourse({
-        course_name: formstate.title,
-        course_description: formstate.description,
-        is_public: true,
-        short_description: formstate.description,
-        price: formstate.price,
-      })
+      if( !formstate.pledreCourseId){
+        
+          // add class to pledre
+        const pledRes = await generalState.pledre.addCourse({
+          course_name: formstate.title,
+          course_description: formstate.description,
+          is_public: true,
+          short_description: formstate.description,
+          price: formstate.price,
+        })
 
-      console.log(pledRes._id)
-      if(pledRes._id){
-          console.log(pledRes._id)
-          const res = await toggleBootcampStatus(userdata?.token, {pledreCourseId: pledRes._id}, params?.id);
-          const { message, statusCode, success } = res;
+        console.log(pledRes._id)
+        if(pledRes._id){
+            console.log(pledRes._id)
+            const res = await toggleBootcampStatus(userdata?.token, {pledreCourseId: pledRes._id}, params?.id);
+            const { message, statusCode, success } = res;
 
-          if (!success) throw new AdvancedError(message, statusCode);
-          else {
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
 
+            setFormstate({ ...formstate, status: true });
+            toast.success(message);
+          }
+
+        }
+      }else{
+        const res = await toggleBootcampStatus(userdata?.token, {pledreCourseId: formstate.pledreCourseId}, params?.id);
+        const { message, statusCode, success } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
           setFormstate({ ...formstate, status: true });
           toast.success(message);
         }
-
       }
     } catch (err) {
       toast.error(err.message);
     } finally {
       setLoading((_) => false);
+    
     }
   }
-
   async function deleteBootcampHandler(e) {
     setLoading((_) => true);
     try {
@@ -3292,7 +3303,6 @@ export function BootcampDetails({}) {
               value={formstate.title}
               readOnly={true}
             />
-
             <div className={clsx.form_group}>
               <label
                 htmlFor={"description"}

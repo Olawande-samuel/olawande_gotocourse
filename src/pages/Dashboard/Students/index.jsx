@@ -1014,7 +1014,7 @@ export function History() {
     )
 }
 export function Fees() {
-    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees, fetchStudentFees, fetchBootcampFees,payStudentFees}} = useAuth();
+    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees, addBootcamp,  fetchStudentFees, fetchBootcampFees,payStudentFees}} = useAuth();
     const { getItem } = useLocalStorage();
     const [course, setCourse] = useState([])
     let userdata = getItem(KEY);
@@ -1039,57 +1039,34 @@ export function Fees() {
             if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
             else {
                 setCourse(res.data)
-                toast.success(message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+                toast.success(message);
             }
         } catch (err) {
-            toast.error(err.message, {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            toast.error(err.message);
         }
 
     }
 
+    async function fetchPayments(token){
+        setGeneralState({ ...generalState, loading: true })
+        try {
+            const res = await Promise.all([fetchStudentFees(token), fetchBootcampFees(token)])
+            console.log({res})
+            if(res.length > 0){
+                const myPayment = res[0].data.concat(res[1].data)
+                console.log(myPayment)
+                setCourse(myPayment)
+            }
+            setGeneralState({ ...generalState, loading: false })
+        } catch (err) {
+            toast.error(err.message);
+        }
+    }
+    
+
     useEffect(() => {
         if (userdata.token) {
-            (async () => {
-                setGeneralState({ ...generalState, loading: true })
-                try {
-                    // const res = await fetchStudentFees(userdata?.token);
-                    const res = await Promise.all([fetchStudentFees(userdata?.token), fetchBootcampFees(userdata?.token)])
-                    console.log(res)
-                    // setGeneralState({ ...generalState, loading: false })
-                    // const { success, message, statusCode } = res;
-                    // if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
-                    // else {
-                    //     setCourse(res.data)
-                    // }
-                } catch (err) {
-                    toast.error(err.message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                }
-
-            })()
+            fetchPayments(userdata.token)
         }
     }, [userdata.token])
 
@@ -1120,7 +1097,6 @@ export function Fees() {
                 }
             })()
         }
-
         ref.current = true
     }, [])
 
@@ -1142,45 +1118,31 @@ export function Fees() {
         return result
     }
 
-    const handlePay = async (paymentId) => {
+    const handlePay = async (paymentId, type) => {
         setGeneralState({ ...generalState, loading: true })
+        console.log({type})
         try {
-            const res = await payStudentFees(userdata.token, paymentId)
+            const res =  await payStudentFees(userdata.token, paymentId);
+            // const res = type === "course" ? await payStudentFees(userdata.token, paymentId) : await addBootcamp({bootcampId: paymentId}, userdata.token);
             setGeneralState({ ...generalState, loading: false })
             const { success, message, statusCode } = res;
             if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
             else {
-                toast.success(message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
 
                 setStripeId(res.data.clientSecret)
                 setOpenPaymentModal(true)
                 getmyFees(userdata.token)
+                // fetchPayments(userdata.token)
                 // handleClose()
 
             }
         } catch (err) {
-            toast.error(err.message, {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            toast.error(err.message);
         }
 
     }
 
-
+console.log(course);
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Payments">
             <div className={clsx.students_profile}>
@@ -1188,8 +1150,8 @@ export function Fees() {
                 <div className={clsx.payment_container}>
 
                     {
-                        course && course.length > 0 ? course.map((d, i) => (
-                            <div className={clsx.payment__content} key={d.courseId}>
+                        course?.length > 0 ? course.map((d, i) => (
+                            <div className={clsx.payment__content} key={d.applicationId ? d.applicationId : d.bootcampId}>
 
                                 <div className={clsx.payment__title}>
                                     <p>No</p>
@@ -1198,11 +1160,11 @@ export function Fees() {
 
                                 <div className={clsx.payment__title}>
                                     <p>Course</p>
-                                    <span>{d.courseName}</span>
+                                    <span>{d.courseName ? d.courseName : d.bootcampName}</span>
                                 </div>
 
 
-                                {d.payments.length > 1 ? d.payments.map((pay, i) => {
+                                {d.payments?.length > 1 ? d.payments?.map((pay, i) => {
                                     return (<>
                                         <div className={clsx.payment__card}>
                                             <p>{payNumber[i]} installment</p>
@@ -1215,13 +1177,13 @@ export function Fees() {
                                                 <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
                                             </div>
                                             <div className={clsx.payment__button}>
-                                                <button className={pay.status === "paid" ? clsx.bggreen : clsx.bgred} disabled={pay.status === "paid"} onClick={() => handlePay(pay._id)}>{pay.status === "paid" ? "paid" : "pay"} </button>
+                                                <button className={pay.status === "paid" ? clsx.bggreen : clsx.bgred} disabled={pay.status === "paid"} onClick={() => handlePay(pay._id, pay.type)}>{pay.status === "paid" ? "paid" : "pay"} </button>
                                             </div>
                                         </div>
 
 
                                     </>)
-                                }) : d.payments.length === 1 ? d.payments.map((pay, i) => (
+                                }) : d.payments?.length === 1 ? d.payments?.map((pay, i) => (
                                     <>
                                         <div className={clsx.payment__card}>
                                             <p>Full Payment</p>
@@ -1234,7 +1196,7 @@ export function Fees() {
                                                 <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
                                             </div>
                                             <div className={clsx.payment__button}>
-                                                <button className={clsx.bggreen} disabled={d.status === "paid"} onClick={() => handlePay(pay._id)}>Full Payment</button>
+                                                <button className={clsx.bggreen} disabled={d.status === "paid"} onClick={() => handlePay(pay._id, pay.type)}>Full Payment</button>
                                             </div>
                                         </div>
 
@@ -1248,7 +1210,7 @@ export function Fees() {
                                 }
 
                                 {
-                                    d.payments.length > 0 && (
+                                    d.payments?.length > 0 && (
                                         <>
                                             <div className={clsx.payment__title}>
                                                 <p>Outstanding</p>

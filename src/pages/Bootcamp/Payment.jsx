@@ -18,7 +18,7 @@ import { AdvancedError } from "../../classes";
 import Success from "../../images/paymentSuccess.png";
 import Failure from "../../images/Bad Gateway.png";
 import { changeConstants } from "../Dashboard/Teachers/CreateCourse";
-
+import Loader from "../../components/Loader"
 import Courses from "../Courses";
 import { GuardedRoute } from "../../hoc";
 
@@ -289,11 +289,13 @@ export function PaymentModal({ token }) {
   const options = {
     clientSecret: token,
   };
+
   return (
     <Elements stripe={stripePromise} options={options}>
       <CheckoutForm />
     </Elements>
   );
+
 }
 
 export const CheckoutForm = () => {
@@ -302,12 +304,12 @@ export const CheckoutForm = () => {
   const elements = useElements();
   const [loading, setLoading] = useState(false);
   const [loadingComponent, setLoadingComponent] = useState(true);
-  const getItem = useLocalStorage();
+  const {getItem} = useLocalStorage();
 
+  const classData = getItem("gotocourse-bootcampdata")
   async function handlesubmit(e) {
     e.preventDefault();
     setLoading(true);
-    const classData = getItem("gotocourse-bootcampdata")
     console.log(classData)
     try {
       if (!stripe || !elements) {
@@ -317,7 +319,7 @@ export const CheckoutForm = () => {
       const result = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `https://gotocourse.us/payment/success/${classData.pledreClassId}`,
+          return_url: `https://gotocourse.us/payment/success/${classData.pledreCourseId}`,
         },
       });
 
@@ -421,23 +423,27 @@ export const PaymentStatus = ({ success }) => {
         try {
           if(generalState.pledre){
            const pledRes = await generalState.pledre.getStudentDetails(userdata.email);
-            console.log(pledRes)  
-            // if(pledRes._id){
-            //    const res = await generalState.pledre.addCourseToStudent({
-            // courseId:id,
-            // studentId: pledRes._id,
-            // })
-            // console.log(res)
-            // }
+            console.log({pledRes})  
+            if(pledRes._id){
+               const res = await generalState.pledre.addCourseToStudent({
+            courseId:id,
+            studentId: pledRes._id,
+            })
+            console.log({res})
+            }
           }
         } catch (err) {
           console.err(err)
+        }finally {
+          setGeneralState({...generalState, loading: false})
+
         }
       })()
     }
   }, [success])
   return (
     <div className={style.paymentScreen}>
+      {generalState.loading && <Loader />}
       <div className={style.paymentScreenBox}>
         <div>
           <img src={status.image} alt="" className="img-fluid" />
