@@ -35,6 +35,7 @@ const Contact = () => {
                 <div className={clsx.contact_container}>
                     <div className={clsx.contact_left}>
                         <div className={clsx.contact_left__absolute}>
+                            <div>
                             <h2>Reach out to us today to discuss.</h2>
                             <ul>
                                 {
@@ -43,13 +44,14 @@ const Contact = () => {
                                     ))
                                 }
                             </ul>
+                            </div>
 
-                            <div className="my-5">
-                                <div className="my-4" style={{marginBottom: 15}}>
+                            <div style={{width: '100%', marginTop: 50}}>
+                                <div style={{marginBottom: 30}}>
                                     <h3>Call us today</h3>
                                     <p> +1 (832) 841-7659</p>
                                 </div>
-                                <div className="my-4">
+                                <div className="my-3">
                                     <h3>Training Center</h3>
                                     <p>If you would love to visit us, you can reach us here </p>
                                         
