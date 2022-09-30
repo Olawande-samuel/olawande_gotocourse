@@ -1,4 +1,5 @@
 import {Link, useNavigate} from "react-router-dom"
+import styled from "styled-components"
 import Image from "../../components/Image"
 import Layout from "../../components/Layout"
 import {useAuth} from "../../contexts/Auth"
@@ -25,6 +26,17 @@ import mentor from "../../images/celebs/mentor.png"
 import harrison from "../../images/celebs/harrison.png"
 import harrison2 from "../../images/celebs/harrison2.png"
 import celeb4 from "../../images/celebs/Rectangle 594.png"
+
+
+
+
+const ComingSoon = styled.button`
+    padding: 5px 15px;
+    background-color: #F75C4E;
+    color: var(--white);
+    margin-bottom: 20px;
+    border: none;
+`
 
   
 function RightMentor(){
@@ -273,10 +285,12 @@ export function TextandImage({direction, button, title, paragraph, btn_title, im
         </div>
     )
 }
-export function CelebCard({img, mentorImg, mentorFirstName, mentorLastName, expertise, fee, item}){
+export function CelebCard({img, mentorImg, title, mentorFirstName, mentorLastName, expertise, fee, item}){
     const navigate = useNavigate()
     return (
-        <div className={style.celebrity_card} onClick={()=>{
+        <div className={style.celebrity_card}
+        style={{filter: title === "Celebrity Mentors" && 'blur(60px)'}}
+         onClick={()=>{
             localStorage.setItem("gotocourse-viewMentor", JSON.stringify(item))
             navigate(`/lounge/mentors/all/${mentorFirstName}-${mentorLastName}`)
         }}>      
@@ -305,6 +319,9 @@ function Slider({title, data, size=4, midSize=4, gap=10}){
                         <span className={style.see_all}>See all</span>  
                     </Link>
                 </div>
+                { title === "Celebrity Mentors" && <ComingSoon>
+                    To be unveiled soon
+                </ComingSoon>}
                 <Swiper
                 // install Swiper modules
                     modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
@@ -347,7 +364,7 @@ function Slider({title, data, size=4, midSize=4, gap=10}){
                     >
                     {data?.length> 0 && data.map((item, index) => (
                         <SwiperSlide key={index}>
-                            <CelebCard {...item} key={index} item={item} />
+                            <CelebCard {...item} title={title} key={index} item={item} />
                         </SwiperSlide>
                     ))}
                     </Swiper>
