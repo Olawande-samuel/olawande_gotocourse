@@ -25,7 +25,7 @@
     /* height: 100vh; */
     /* border: 5px solid red; */
     padding-top: .5rem;
-    height: min(100vh, 450px);
+    height: min(100vh, 500px);
     width: 100%;
     background: url("../../images/Rectangle5775.png");
     background-size: cover;
@@ -639,6 +639,10 @@
 
     }
     .jumbotron__absolute p {
+        text-align: center;
+    }
+
+    .jumbotron__absolute h3 {
         text-align: center;
     }
 
