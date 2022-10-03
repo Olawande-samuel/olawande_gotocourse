@@ -85,6 +85,11 @@
   color: var(--theme-blue);
   font-size:  18px;
 }
+.payment_details_card  {
+  /* font-weight: 700; */
+  color: #000000;
+}
+
 .payment_details_card p {
   font-weight: 700;
 }
