@@ -220,7 +220,7 @@
     height: 85%;
   }
   .newHero_left header h1 {
-    margin-bottom: 2rem;
+    /* margin-bottom: 2rem; */
     font-weight: 900;
     font-size: 65px;
   }

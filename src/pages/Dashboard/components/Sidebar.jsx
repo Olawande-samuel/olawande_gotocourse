@@ -144,11 +144,11 @@ const Sidebar = ({isMobile}) => {
             path: "myclasses",
             title: "My Classes"
         },
-        {
-            icon: FiBookOpen,
-            path: "courses",
-            title: "My Courses"
-        },
+        // {
+        //     icon: FiBookOpen,
+        //     path: "courses",
+        //     title: "My Courses"
+        // },
        
         {
             icon: FiGift,

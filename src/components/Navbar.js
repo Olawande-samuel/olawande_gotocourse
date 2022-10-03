@@ -49,7 +49,6 @@ const Navbar = ({ background }) => {
         navHeight: heightRef?.current?.clientHeight,
       };
     });
-    console.log(heightRef.current.clientHeight)
   }, []); 
   
 
@@ -57,7 +56,6 @@ const Navbar = ({ background }) => {
   const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";  
   const categoryRoute = background === "category";
   const landing = location.pathname.split("/")[1] !== "lounge" ;
-  console.log(location.pathname.split("/")[1] !== "lounge")
 
   function showDrop() { }
   return (

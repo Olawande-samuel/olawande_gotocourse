@@ -88,7 +88,7 @@
     border-radius: 10px;
 }
 .success .success_header {
-    margin-bottom: 1rem ;
+    margin-bottom: 2rem ;
     text-align: center;
 }
 .success_header .success_h2 {
@@ -108,7 +108,7 @@
 
 /* LIVE CLASSES */
 .live_classes {
-    padding-top: 2rem;
+    padding-block: 2rem;
 }
 
 .live_classes h1, .quality h1 {
