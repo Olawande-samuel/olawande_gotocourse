@@ -242,6 +242,9 @@ function App() {
                   <Route path="courses/details/:id" element={<TeacherCourseInfo />} />
                   <Route path="chat" element={<TeacherChat />} />
                 </Route>
+
+
+                
                 <Route path="categories" element={<Out />}>
                   {/* <Route index element={<Categories  />} /> */}
                   <Route index element={<CategoryHome  />} />

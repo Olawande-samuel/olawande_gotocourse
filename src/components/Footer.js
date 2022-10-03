@@ -91,6 +91,11 @@ const rightLink = [
     title: "Mentors Lounge",
     path: "/lounge"
   },
+  {
+    id: 8,
+    title: "Enterprise",
+    path: "/enterprise"
+  },
 ]
 const Footer = () => {
   const location = useLocation();

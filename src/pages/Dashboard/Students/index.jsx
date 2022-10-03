@@ -1508,9 +1508,9 @@ export const Dashboard = () => {
                                                 </td>
                                                 <td><span>{item.amountPaid}</span></td>
                                                 <td>
-                                                    <span className="d-block dashboard_table">
+                                                    {/* <span className="d-block dashboard_table">
                                                         <GotoDashboard loader={loader} setLoading={setLoading} />
-                                                    </span>
+                                                    </span> */}
                                                 </td>
                                             </tr>
 
@@ -1522,7 +1522,7 @@ export const Dashboard = () => {
                     }
                 </div>
 
-                <Community />
+                {/* <Community /> */}
             </div>
         </Students>
     )
@@ -1866,12 +1866,13 @@ export function GotoDashboard() {
                     setLoading(false)                
                 }
             }
-        } else if(data.pledre?.deleted === false && data.accessPledre){
+        } else if(data.pledre?.deleted === false && (data.accessPledre || data.canTeach)){
             if(generalState.pledre.loginUser){
                 setLoading(true)
                 try{
                     const response = await generalState.pledre.loginUser({
-                        user_id: data.pledre._id,
+                        email: data.email,
+                        // user_id: data.email,
                         user_type: route
                     })
 
@@ -1883,7 +1884,7 @@ export function GotoDashboard() {
                     console.log("done!!!")
                     setLoading(false)
                 }
-        }
+            }
         } 
         else {
             throw new AdvancedError("User not authorized")

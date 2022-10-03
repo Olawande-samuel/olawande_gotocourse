@@ -297,7 +297,7 @@ const Dashboard = () => {
                 </div>
 
 
-                <div className={clsx.dashboard_fifth}>
+                {/* <div className={clsx.dashboard_fifth}>
                     <h3>Community</h3>
                     <div className={clsx.communities}>
                         {
@@ -307,7 +307,7 @@ const Dashboard = () => {
                         }
                     </div>
                     <p>See all </p>
-                </div>
+                </div> */}
             </div>
         </Admin>
     )

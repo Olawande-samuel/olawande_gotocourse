@@ -402,9 +402,9 @@ export const CheckoutForm = () => {
 export const PaymentStatus = ({ success }) => {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
-  const {generalState, setGeneralState}= useAuth();
+  const { generalState, setGeneralState } = useAuth();  
   const { id } = useParams();
-
+const [loading, setLoading]= useState(true)
   const [status, setStatus] = useState({
     image: success ? Success : Failure,
     title: success ? "Payment Successful" : "Payment Denied",
@@ -414,36 +414,34 @@ export const PaymentStatus = ({ success }) => {
     action: success ? "Go to Dashboard" : "Try Again",
   });
 
+  console.log(id)
   const userdata = getItem("gotocourse-userdata");
+
    useEffect(() => {
     // enroll student to course
     if(success){
-      setGeneralState({...generalState, loading: true})
       (async()=>{
         try {
           if(generalState.pledre){
            const pledRes = await generalState.pledre.getStudentDetails(userdata.email);
-            console.log({pledRes})  
             if(pledRes._id){
                const res = await generalState.pledre.addCourseToStudent({
-            courseId:id,
-            studentId: pledRes._id,
+                  course_id: id,
+                  student_id: pledRes._id,
             })
-            console.log({res})
             }
           }
         } catch (err) {
-          console.err(err)
+          console.error(err)
         }finally {
-          setGeneralState({...generalState, loading: false})
-
+          setLoading(false)
         }
       })()
     }
-  }, [success])
+  }, [success, id, generalState.pledre])
   return (
     <div className={style.paymentScreen}>
-      {generalState.loading && <Loader />}
+      {loading && <Loader />}
       <div className={style.paymentScreenBox}>
         <div>
           <img src={status.image} alt="" className="img-fluid" />

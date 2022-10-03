@@ -16,8 +16,8 @@ export function Jumbotron() {
         <div className={clsx.jumbotron}>
             <div className={`container ${clsx.jumbotron__cover}`}>
                 <div className={clsx.jumbotron__absolute}>
-                    <h1>TEACHERS ELIGIBILITY CHECK LIST</h1>
-                    <h3 className="fw-bold">Welcome to Gotocourse</h3>
+                    <h1>Welcome to Gotocourse</h1>
+                    {/* <h3 className="fw-bold"></h3> */}
                     <p>Before you begin your journey, check if you are eligible to teach on Gotocourse by answering  some questions</p>
                     <div className="w-100" style={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
                         <Link to="/qualifications">

@@ -37,7 +37,7 @@ export default function Navbar({header, toggleSidebar, notification, content }){
                     <IoNotificationsOutline size="1.5rem"  color="#0C2191" onClick={()=>navigate(`/${main}/notifications`)} style={{cursor:"pointer"}}  />
                 </Badge>
 
-                <GotoDashboard loader={loading} setLoading={setLoading} />
+                {/* <GotoDashboard loader={loading} setLoading={setLoading} /> */}
                 <LogoutButton />
             </div>
         </div>

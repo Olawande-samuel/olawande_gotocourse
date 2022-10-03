@@ -538,6 +538,9 @@ border-radius: 13.5px !important;
   padding:0 0 2.0625rem 0;
 }
 
+.becoming {
+  padding-top: 2.0625rem;
+}
 .services .left,
 .services .right {
   flex: 50%;
