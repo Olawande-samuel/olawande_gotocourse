@@ -1039,10 +1039,10 @@ export function Fees() {
             if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
             else {
                 setCourse(res.data)
-                toast.success(message);
             }
         } catch (err) {
-            toast.error(err.message);
+            console.error(err)
+            // toast.error(err.message);
         }
 
     }
@@ -1053,7 +1053,7 @@ export function Fees() {
             const res = await Promise.all([fetchStudentFees(token), fetchBootcampFees(token)])
             console.log({res})
             if(res.length > 0){
-                const myPayment = res[0].data.concat(res[1].data)
+                const myPayment = res[0].data?.concat(res[1].data)
                 console.log(myPayment)
                 setCourse(myPayment)
             }
@@ -1233,7 +1233,7 @@ console.log(course);
                         ))
                             :
                         <>
-                            <h2>You haven't enrolled to any class</h2>
+                            <h5 className="text-center">You haven't enrolled to any class</h5>
                         </>
 
                     }
