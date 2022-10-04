@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import { AiOutlinePaperClip, AiOutlinePlus } from 'react-icons/ai'
+import { AiFillClockCircle, AiOutlinePaperClip, AiOutlinePlus } from 'react-icons/ai'
 import { BiCaretDown, BiCaretRight } from 'react-icons/bi'
 import { BsPaperclip, BsThreeDotsVertical } from 'react-icons/bs'
 import { RiVideoAddFill } from 'react-icons/ri'
@@ -8,8 +8,8 @@ import { Logosm } from '../../../../images/components/svgs'
 import style from "./style.module.css"
 import "./console.css"
 import { IconButton, Tooltip } from '@mui/material'
-import { FaUsers } from 'react-icons/fa'
-import { MdLibraryAdd, MdMessage } from 'react-icons/md'
+import { FaCalendarAlt, FaUsers } from 'react-icons/fa'
+import { MdLibraryAdd, MdLocationOn, MdMessage } from 'react-icons/md'
 
 const iconData = [
     {
@@ -40,6 +40,7 @@ const Console = ({children}) => {
         <Sidebar />
         <main className={style.children}>
             {children}
+
         </main>
         <div className={style.icon_bar}>
                     
@@ -126,5 +127,7 @@ function Accord(){
         </div>
     )
 }
+
+
 
 export default Console
