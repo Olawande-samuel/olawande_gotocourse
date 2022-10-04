@@ -3,24 +3,33 @@ import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import '../classConsole/Content.css'
 import { IoMdCloudDownload } from 'react-icons/io';
 import Console from '../classConsole/index';
-import ModalContent from './index'
+import PopModalContent from './index'
 import { useState } from 'react'
 
 export default function Content() {
     const [show, setShow] = useState(false);
-    const Toggle = () => setShow(!show)
+    const [open, setOpen] = useState(false);
 
+    const Toggle = () => setShow(!show)
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+
+    const OpenToggle = () => setOpen(!open)
+    const closeSmall = () => setOpen(false);
+
 
     return (
         <>
             <Console
                 show={show}
+                open={open}
                 setShow={setShow}
+                closeSmall={closeSmall}
                 handleClose={handleClose}
                 handleShow={handleShow}
                 Toggle={Toggle}
+                OpenToggle={OpenToggle}
             >
                 <div className=''>
                     <section className="contentheader">
@@ -50,7 +59,7 @@ export default function Content() {
                     <section className="contenttop">
                         <div className="contentbutton">
                             <button className=''>Refresh</button>
-                            <button className=''>Add New +</button>
+                            <button className='' onClick={OpenToggle}>Add New +</button>
                         </div>
 
                     </section>
@@ -70,7 +79,7 @@ export default function Content() {
                 </div>
 
             </Console>
-             
+
 
 
         </>

@@ -36,6 +36,7 @@
 .class_sidebar p {
     color: #fff;
 }
+
 .class_sidebar {
     height: 100vh;
     overflow-y: auto;
@@ -53,6 +54,7 @@
     margin-top: 3rem;
     /* border: 2px solid red; */
 }
+
 .content_item {
     background: #004DB6;
     color: #fff;
@@ -60,18 +62,22 @@
     padding: .4rem;
 }
 
-.content_item_top, .content_list li {
+.content_item_top,
+.content_list li {
     padding: .4rem 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 .content_item_top i {
     cursor: pointer;
 }
+
 .content_item_top span {
     text-transform: uppercase;
 }
+
 .content_list {
     list-style: none;
     margin-top: 1rem;
@@ -84,10 +90,12 @@
     font-size: 14px;
     border: 1px solid;
 }
+
 .create_content_button {
     display: flex;
     justify-content: center;
 }
+
 .create_content_button button {
     display: flex;
     gap: .5rem;
@@ -120,6 +128,7 @@
 .live_class header {
     margin-bottom: 3rem;
 }
+
 .live_class header p {
     margin-bottom: 0;
     font-size: 14px;
@@ -130,7 +139,7 @@
     margin-bottom: 1rem;
 }
 
-.live_schedule { 
+.live_schedule {
     margin-bottom: 3rem;
     display: flex;
     gap: 1.3rem;
@@ -141,7 +150,7 @@
     border: 1px solid var(--theme-blue);
     background: #EEF5FF;
     padding: 8px 12px;
-    
+
 }
 
 .live_schedule button:first-child {
@@ -162,13 +171,71 @@
     flex-direction: column;
     gap: 2rem;
 }
+
 .live_card_schedule {
     display: flex;
     flex-direction: column;
-    gap: 1rem;   
+    gap: 1rem;
 }
 
-.live_card_schedule > div {
+.live_card_schedule>div {
     display: flex;
     gap: .5rem;
 }
+
+.modal__header {
+    /* border: 2px solid red; */
+
+}
+
+.modal__title {
+    /* border: 2px solid green !important; */
+    margin: 0 auto !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    font-size: 18px !important;
+    line-height: 39px !important;
+
+}
+
+.modal-header .btn-close {
+    margin: 0 !important;
+}
+
+.content__form {
+    /* border: 2px solid red; */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    color: #0C2191 !important;
+}
+
+.content__form svg {
+    color: #0C2191;
+}
+
+.contentform__btn {
+    width: 100%;
+    padding: 1rem;
+    color: #fff;
+    background: #0C2191;
+    border-radius: 10px;
+    outline: none;
+}
+
+.smallmodal {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.smalltitle {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 19px;
+
+    color: #0C2191;
+}
+
+
