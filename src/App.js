@@ -78,6 +78,7 @@ import Loader from "./components/Loader";
 import CheckList from "./pages/Teacher/checkList";
 import Events from "./pages/Events";
 import Business from "./Business/pages/landing/business";
+import Console from "./pages/Dashboard/components/classConsole";
 
 const Login = lazy(() => import("./pages/User/Login"))
 const SignUp = lazy(() => import("./pages/User/SignUp"))
@@ -101,6 +102,7 @@ const Verification  = lazy(()=>import("./pages/User/Verification"));
 const About =  lazy(()=> import("./pages/About"))
 const Contact =  lazy(()=> import("./pages/Contact"))
 const Settings =  lazy(()=> import("./pages/Dashboard/Admin/Settings"))
+const LiveClass = lazy(()=> import("./pages/Dashboard/components/Live/LiveClass"))
 
 
 
@@ -135,6 +137,9 @@ function App() {
                 <Route path="forgot-password" element={<ForgotPassword />} />
                 <Route path="change-password" element={<ResetPassword />} />
                 <Route path="become-a-teacher" element={<BecomeATeacher />} />
+                <Route path="live" element={<LiveClass />} />
+                <Route path="test" element={<Console />} />
+
 
                 <Route path="bootcamp-training" element={<NewBootcampDetailsComponent />} />
                 <Route path="bootcamp" element={<Bootcamp />} />
