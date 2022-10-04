@@ -17,7 +17,7 @@ const GuardedRoute = ({children}) => {
 
 
     if(value.token){
-        if(route === "teacher" || route === "student" || route === "affiliate"|| route === "change-password"){
+        if(route === "teacher" || route === "student" || route === "affiliate"|| route === "change-password" || route === "mentor"){
             if(value.isVerified){
                 if(route === "teacher" && !value.canTeach){
                     localStorage.clear()

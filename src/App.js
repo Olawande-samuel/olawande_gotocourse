@@ -78,6 +78,10 @@ import Loader from "./components/Loader";
 import CheckList from "./pages/Teacher/checkList";
 import Events from "./pages/Events";
 
+import {MentorsProfile, EditMentorsProfile, MentorsNotification, MentorsDashboard, MentorsEarnings, MentorsScheduler} from "./pages/Dashboard/Mentors";
+
+
+
 const Login = lazy(() => import("./pages/User/Login"))
 const SignUp = lazy(() => import("./pages/User/SignUp"))
 const AdminLogin = lazy(() => import("./pages/Admin/Login"))
@@ -100,6 +104,12 @@ const Verification  = lazy(()=>import("./pages/User/Verification"));
 const About =  lazy(()=> import("./pages/About"))
 const Contact =  lazy(()=> import("./pages/Contact"))
 const Settings =  lazy(()=> import("./pages/Dashboard/Admin/Settings"))
+
+
+//MENTORS
+// const {MentorsProfile} = lazy(() => import("./pages/Dashboard/Mentors"));
+
+
 
 
 
@@ -194,6 +204,16 @@ function App() {
                   <Route index element={<TeacherProfile type="mentors" />} />
                     {/* <Route path="payment" element={<Payment />} /> */}
                   </Route>
+                </Route>
+
+
+                <Route path="mentor" element={<Out />}>
+                  <Route index element={<MentorsDashboard />} />
+                  <Route path="profile" element={<MentorsProfile />} />
+                  <Route path="profile/edit" element={<EditMentorsProfile />} />
+                  <Route path="notifications" element={<MentorsNotification />} />
+                  <Route path="earnings" element={<MentorsEarnings />} />
+                  <Route path="scheduler" element={<MentorsScheduler />} />
                 </Route>
                 
                 <Route path="teachers" element={<Out/>}>
