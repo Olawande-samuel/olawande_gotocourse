@@ -126,20 +126,22 @@ export const BootcampPayment = () => {
   return (
     <Courses>
       {/* <GuardedRoute> */}
-      {/* <div className="container signWrapper_background"> */}
-      <div className="container">
+      <div className={`container `}>
         <section
-          className={`row justify-content-center align-items-center ${style.payment_main}`}
+          className={`row justify-content-center align-items-center`}
         >
           <div className="col-md-7 col-lg-5">
             {showStripeModal ? (
               <PaymentModal token={stripeId} />
             ) : (
               <div className={` card ${style.payment_details_card}`}>
-                {/* <div className="card"> */}
+               {/* <div> */}
+
                 <div className="card-body">
-                  {/* <div> */}
-                  {/* <div className={style.payment_card_top}> */}
+
+                {/* <div> */}
+
+
                   <div>
                     <div className="d-flex align-items-center justify-content-center w-100 py-1">
                       <h3 className={clsx.check}>Checkout Page</h3>
@@ -162,7 +164,7 @@ export const BootcampPayment = () => {
 
                   <div className="d-flex flex-column">
                     <span className={`fw-normal ${clsx.pay__tit}`} >Service Fee</span>
-                    <p  className={`text-capitalize fw-normal ${clsx.pay__inform} `}>$5</p>
+                    <p className={`text-capitalize fw-normal ${clsx.pay__inform} `}>$5</p>
                   </div>
 
                   <div className="d-flex flex-column justify-content-between">

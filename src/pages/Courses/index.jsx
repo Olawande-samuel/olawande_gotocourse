@@ -190,20 +190,25 @@ const Courses = ({ children }) => {
   const location = useLocation();
   const { generalState:{loading} } = useAuth()
   const bread = location.pathname?.split("/");
+
+
+  const payment = location.pathname.split('/')[3] === "payment"
   return (
+    <div className={` ${location.pathname?.split("/")[3] === "payment" && "pay_background"}`}>
+ 
     <Layout>
       <ScrollToTop />
-      <div className={`style.block ${location.pathname?.split("/")[3] === "payment" && "pay_background"}`} >
+      <div  className={`style.block`}>
         <ToastContainer />  
         <div className={`container`}>
           <div className={style.breadcrumbs_wrapper}>
             <nav arial-label="breadcrumb">
               <ol className="breadcrumb">
-                <li className="breadcrumb-item">
+                <li className={`breadcrumb-item ${payment && "breadpay" }`}>
                   <Link to="/">HOMEPAGE</Link>
                   </li>
                     {bread.filter(item=> item !== "").map((item, idx)=>(
-                      <li className="breadcrumb-item active text-uppercase">
+                      <li className={`breadcrumb-item ${payment ? "activewhite" : "active" } text-uppercase`}>
                         <NavLink  to={`${bread.slice(0, idx + 2).join("/")}`}>{item.split("-").join(" ")}</NavLink>
                       </li>
                     ))}
@@ -217,6 +222,7 @@ const Courses = ({ children }) => {
             <Loader />
         }
     </Layout>
+    </div>
   );
 };
 
