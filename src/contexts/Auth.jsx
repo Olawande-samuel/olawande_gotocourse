@@ -22,6 +22,8 @@ const AuthContextProvider = ({children}) => {
         pledre:""
         
     })
+
+    const [outstanding, setOutstanding] = useState(0)
    
     useEffect(() => {
         if(!generalState.pledre && window.PledreAPI ){
@@ -33,7 +35,7 @@ const AuthContextProvider = ({children}) => {
     }, [generalState]) 
 
     return (
-        <AuthContext.Provider value={{authFunctions, teacherFunctions, studentFunctions, adminFunctions, generalState, setGeneralState,affiliatesFunctions, adminStudentFunctions, adminTeacherFunctions, otherFunctions, kycFunctions, commonFunctions}}>
+        <AuthContext.Provider value={{authFunctions, teacherFunctions, studentFunctions, adminFunctions, generalState, setGeneralState,affiliatesFunctions, adminStudentFunctions, adminTeacherFunctions, otherFunctions, kycFunctions, commonFunctions, outstanding, setOutstanding}}>
             {children}
         </AuthContext.Provider>
     )

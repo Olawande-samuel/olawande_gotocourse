@@ -193,7 +193,7 @@ const Courses = ({ children }) => {
   return (
     <Layout>
       <ScrollToTop />
-      <div className={style.block}>
+      <div className={`style.block ${location.pathname?.split("/")[3] === "payment" && "pay_background"}`} >
         <ToastContainer />  
         <div className={`container`}>
           <div className={style.breadcrumbs_wrapper}>

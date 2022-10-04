@@ -21,6 +21,7 @@ import { changeConstants } from "../Dashboard/Teachers/CreateCourse";
 import Loader from "../../components/Loader"
 import Courses from "../Courses";
 import { GuardedRoute } from "../../hoc";
+import clsx from '../Bootcamp/Pay.module.css'
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
@@ -51,24 +52,24 @@ export const BootcampPayment = () => {
   function handleChange(e, type) {
     type === "select"
       ? setPaymentData({
-          ...paymentData,
-          fullPayment: e.target.value === "1" ? true : false,
-        })
+        ...paymentData,
+        fullPayment: e.target.value === "1" ? true : false,
+      })
       : setPaymentData({ ...paymentData, [e.target.name]: e.target.value });
   }
 
   function handleInstallmentChoice(e) {
     e.target.id === "2"
       ? setPaymentData({
-          ...paymentData,
-          installments: 2,
-          [e.target.name]: e.target.value,
-        })
+        ...paymentData,
+        installments: 2,
+        [e.target.name]: e.target.value,
+      })
       : setPaymentData({
-          ...paymentData,
-          installments: 4,
-          [e.target.name]: e.target.value,
-        });
+        ...paymentData,
+        installments: 4,
+        [e.target.name]: e.target.value,
+      });
   }
 
   async function enrollToCourse(e) {
@@ -125,46 +126,45 @@ export const BootcampPayment = () => {
   return (
     <Courses>
       {/* <GuardedRoute> */}
+      {/* <div className="container signWrapper_background"> */}
       <div className="container">
         <section
-          className={`row justify-content-center align-items-center ${style.paymeny_main}`}
+          className={`row justify-content-center align-items-center ${style.payment_main}`}
         >
           <div className="col-md-7 col-lg-5">
             {showStripeModal ? (
               <PaymentModal token={stripeId} />
             ) : (
               <div className={` card ${style.payment_details_card}`}>
+                {/* <div className="card"> */}
                 <div className="card-body">
-                  <div className={style.payment_card_top}>
-                    <div className="d-flex align-items-center">
-                      <div className={style.payment_profile}>
-                        {bootcamp.bootcampImg && (
-                          <img
-                            src={bootcamp.bootcampImg}
-                            alt=""
-                            className={style.payment_image}
-                          />
-                        )}
-                      </div>
+                  {/* <div> */}
+                  {/* <div className={style.payment_card_top}> */}
+                  <div>
+                    <div className="d-flex align-items-center justify-content-center w-100 py-1">
+                      <h3 className={clsx.check}>Checkout Page</h3>
                     </div>
                   </div>
-                  <hr />
+
+
                   <div className={style.payment_card_mid}>
-                    <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex flex-column">
+                      <span className={clsx.pay__tit}>Course</span>
                       <p
-                        className={`text-capitalize fw-normal ${style.payment_course}`}
+                        className={`text-capitalize fw-normal ${clsx.pay__inform} `}
                       >
                         {bootcamp.title}
                       </p>
-                      <p>${bootcamp?.price && bootcamp?.price}</p>
+                      {/* <p>${bootcamp?.price && bootcamp?.price}</p> */}
                     </div>
                   </div>
-                  <hr />
-                  <div className="d-flex justify-content-between align-items-center">
-                    <p className="fw-normal">Service Fee</p>
-                    <p>$5</p>
+
+
+                  <div className="d-flex flex-column">
+                    <span className={`fw-normal ${clsx.pay__tit}`} >Service Fee</span>
+                    <p  className={`text-capitalize fw-normal ${clsx.pay__inform} `}>$5</p>
                   </div>
-                  <hr />
+
                   <div className="d-flex flex-column justify-content-between">
                     <label
                       htmlFor="paymentType"
@@ -234,9 +234,9 @@ export const BootcampPayment = () => {
                   ) : (
                     ""
                   )}
-                  <div className="d-flex justify-content-between align-items-center">
-                    <p>Total</p>
-                    <p className={style.payment_total}>
+                  <div className="d-flex flex-column">
+                    <span className={clsx.pay__tit}>Total</span>
+                    <p className={clsx.pay__inform}>
                       ${bootcamp?.price && +bootcamp?.price + 5}
                     </p>
                   </div>
@@ -269,11 +269,16 @@ export const BootcampPayment = () => {
                         navigate(-2);
                       }}
                     >
-                      Cancel
+                      Go back
                     </button>
                   </div>
                 </div>
               </div>
+
+
+
+              // </div>
+
             )}
           </div>
         </section>
@@ -304,7 +309,7 @@ export const CheckoutForm = () => {
   const elements = useElements();
   const [loading, setLoading] = useState(false);
   const [loadingComponent, setLoadingComponent] = useState(true);
-  const {getItem} = useLocalStorage();
+  const { getItem } = useLocalStorage();
 
   const classData = getItem("gotocourse-bootcampdata")
   async function handlesubmit(e) {
@@ -323,11 +328,11 @@ export const CheckoutForm = () => {
         },
       });
 
-      console.log({result})
+      console.log({ result })
       result && setLoading(false);
 
-      console.log({result})
-      
+      console.log({ result })
+
       if (result.error) {
         toast.error(result.error.message, {
           position: "top-right",
@@ -379,7 +384,7 @@ export const CheckoutForm = () => {
           )}
         </button>
       )}
-       <div className="cancel w-100 text-center my-3">
+      <div className="cancel w-100 text-center my-3">
         <button
           className=""
           style={{
@@ -402,9 +407,9 @@ export const CheckoutForm = () => {
 export const PaymentStatus = ({ success }) => {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
-  const { generalState, setGeneralState } = useAuth();  
+  const { generalState, setGeneralState } = useAuth();
   const { id } = useParams();
-const [loading, setLoading]= useState(true)
+  const [loading, setLoading] = useState(true)
   const [status, setStatus] = useState({
     image: success ? Success : Failure,
     title: success ? "Payment Successful" : "Payment Denied",
@@ -417,23 +422,23 @@ const [loading, setLoading]= useState(true)
   console.log(id)
   const userdata = getItem("gotocourse-userdata");
 
-   useEffect(() => {
+  useEffect(() => {
     // enroll student to course
-    if(success){
-      (async()=>{
+    if (success) {
+      (async () => {
         try {
-          if(generalState.pledre){
-           const pledRes = await generalState.pledre.getStudentDetails(userdata.email);
-            if(pledRes._id){
-               const res = await generalState.pledre.addCourseToStudent({
-                  course_id: id,
-                  student_id: pledRes._id,
-            })
+          if (generalState.pledre) {
+            const pledRes = await generalState.pledre.getStudentDetails(userdata.email);
+            if (pledRes._id) {
+              const res = await generalState.pledre.addCourseToStudent({
+                course_id: id,
+                student_id: pledRes._id,
+              })
             }
           }
         } catch (err) {
           console.error(err)
-        }finally {
+        } finally {
           setLoading(false)
         }
       })()
@@ -461,12 +466,12 @@ const [loading, setLoading]= useState(true)
           onClick={() =>
             success
               ? navigate(
-                  userdata.userType === "student"
-                    ? "/student"
-                    : userdata.userType === "admin"
+                userdata.userType === "student"
+                  ? "/student"
+                  : userdata.userType === "admin"
                     ? "/admin"
                     : "/teacher"
-                )
+              )
               : navigate(-1)
           }
         >
