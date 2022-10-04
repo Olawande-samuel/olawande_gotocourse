@@ -1,0 +1,8 @@
+.presenting {
+    grid-column: span 4/ auto;;
+    grid-row: span 3/ auto;;
+}
+
+.others {
+    grid-column: span 1;
+}
