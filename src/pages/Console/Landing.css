@@ -1,0 +1,15 @@
+.landingcontent{
+    display: flex;
+    
+}
+
+.landingside{
+    flex: 1;
+    border: 2px solid red;
+
+}
+
+.landingmain{
+    flex:4;
+    border: 2px solid yellow;
+}

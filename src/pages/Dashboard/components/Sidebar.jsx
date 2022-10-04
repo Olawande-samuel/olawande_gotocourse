@@ -122,6 +122,11 @@ const Sidebar = ({isMobile}) => {
             icon:AiOutlineSetting,
             path: "settings",
             title: "Settings"
+        },
+        {
+            icon:AiOutlineSetting,
+            path: "../console",
+            title: "Console"
         }
     ] : route === "student" ?  [
         {
@@ -236,6 +241,11 @@ const Sidebar = ({isMobile}) => {
             icon: BiHelpCircle,
             path: "help",
             title: "Help"            
+        },
+        {
+            icon:AiOutlineSetting,
+            path: "../console",
+            title: "Console"
         }
     ] : [
         
