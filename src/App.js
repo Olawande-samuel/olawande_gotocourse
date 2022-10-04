@@ -51,7 +51,6 @@ import Policies, { TeachingPolicy, TermsOfUse, EndUserPolicy, Cookies } from "./
 
 import { Category as CategoryHome, CategoryDetail } from "./pages/Category";
 import { CoursesHome, CourseDetails } from "./pages/Course";
-import {Landing as ConsoleLanding} from './pages/Console/Landing'
 
 // import About from "./pages/About";
 // import Contact from "./pages/Contact";
@@ -85,6 +84,8 @@ import Loader from "./components/Loader";
 import CheckList from "./pages/Teacher/checkList";
 import Events from "./pages/Events";
 import Business from "./Business/pages/landing/business";
+// import Console from "./pages/Dashboard/components/classConsole";
+import Content from "./pages/Dashboard/components/classConsole/Content";
 
 const Login = lazy(() => import("./pages/User/Login"))
 const SignUp = lazy(() => import("./pages/User/SignUp"))
@@ -103,11 +104,12 @@ const TeacherOnBoarding = lazy(() => import("./pages/Teacher/OnBoarding"))
 const TeacherProfile = lazy(() => import("./pages/Teacher/TeacherProfile"))
 const TeacherSignup = lazy(() => import("./pages/User/TeacherSignup"))
 
-const UserOnBoarding = lazy(() => import("./pages/Students/OnBoarding"));
-const Verification = lazy(() => import("./pages/User/Verification"));
-const About = lazy(() => import("./pages/About"))
-const Contact = lazy(() => import("./pages/Contact"))
-const Settings = lazy(() => import("./pages/Dashboard/Admin/Settings"))
+const UserOnBoarding  = lazy(()=>import("./pages/Students/OnBoarding"));
+const Verification  = lazy(()=>import("./pages/User/Verification"));
+const About =  lazy(()=> import("./pages/About"))
+const Contact =  lazy(()=> import("./pages/Contact"))
+const Settings =  lazy(()=> import("./pages/Dashboard/Admin/Settings"))
+const LiveClass = lazy(()=> import("./pages/Dashboard/components/Live/LiveClass"))
 
 
 
@@ -123,25 +125,31 @@ function App() {
           <Routes>
             <Route path="/" element={<Out />}>
               <Route index element={<Landing />} />
-              <Route path="login" element={<Login />} />
-              <Route path="signup" element={<SignUp />} />
-              <Route path="email" element={<Email />} />
-              <Route path="confirm" element={<Confirm />} />
-              <Route path="privacy-policy" element={<Policies />} />
-              <Route path="terms-of-use" element={<TermsOfUse />} />
-              <Route path="cookies" element={<Cookies />} />
-              <Route path="end-user-policy" element={<EndUserPolicy />} />
-              <Route path="teaching-policy" element={<TeachingPolicy />} />
-              <Route path="about-us" element={<About />} />
-              <Route path="contact-us" element={<Contact />} />
-              <Route path="categories/all" element={<CategoryHome />} />
-              <Route path="category/:name" element={<CategoryDetail />} />
-              <Route path="category/:name/courses" element={<CoursesHome />} />
-              <Route path="category/:name/courses/:course" element={<CourseDetails />} />
-              {/* <Route path="bootcamp-training" element={<TrainingBootcamp />} /> */}
-              <Route path="forgot-password" element={<ForgotPassword />} />
-              <Route path="change-password" element={<ResetPassword />} />
-              <Route path="become-a-teacher" element={<BecomeATeacher />} />
+                <Route path="login" element={<Login />} />
+                <Route path="signup" element={<SignUp />} />
+                <Route path="email" element={<Email />} />
+                <Route path="confirm" element={<Confirm />} />
+                <Route path="privacy-policy" element={<Policies />} />
+                <Route path="terms-of-use" element={<TermsOfUse />} />
+                <Route path="cookies" element={<Cookies />} />
+                <Route path="end-user-policy" element={<EndUserPolicy />} />
+                <Route path="teaching-policy" element={<TeachingPolicy />} />
+                <Route path="about-us" element={<About />} />
+                <Route path="contact-us" element={<Contact />} />
+                <Route path="categories/all" element={<CategoryHome />} />
+                <Route path="category/:name" element={<CategoryDetail />} />
+                <Route path="category/:name/courses" element={<CoursesHome />} />
+                <Route path="category/:name/courses/:course" element={<CourseDetails />} />
+                {/* <Route path="bootcamp-training" element={<TrainingBootcamp />} /> */}
+                <Route path="forgot-password" element={<ForgotPassword />} />
+                <Route path="change-password" element={<ResetPassword />} />
+                <Route path="become-a-teacher" element={<BecomeATeacher />} />
+                <Route path="live" element={<LiveClass />} />
+
+                {/* <Route path="test" element={<Console />} /> */}
+                <Route path="test" element={<Content />} />
+
+
 
               <Route path="bootcamp-training" element={<NewBootcampDetailsComponent />} />
               <Route path="bootcamp" element={<Bootcamp />} />
@@ -233,10 +241,7 @@ function App() {
               </Route>
 
 
-              <Route path="console" element={<Out />}>
-              <Route index element={<ConsoleLanding />} />
-
-              </Route>
+  
 
 
               <Route path="affiliates" element={<AffiliateLanding />} />
