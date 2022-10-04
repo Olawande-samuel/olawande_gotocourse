@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { AiOutlinePaperClip, AiOutlinePlus } from 'react-icons/ai'
-import { BiCaretDown, BiCaretRight,BiCaretUp } from 'react-icons/bi'
+
+import {useState} from 'react'
+import { AiFillClockCircle, AiOutlinePaperClip, AiOutlinePlus } from 'react-icons/ai'
+import { BiCaretDown, BiCaretRight, BiCaretUp } from 'react-icons/bi'
 import { BsPaperclip, BsThreeDotsVertical } from 'react-icons/bs'
 import { RiVideoAddFill } from 'react-icons/ri'
 
@@ -8,9 +9,11 @@ import { Logosm } from '../../../../images/components/svgs'
 import style from "./style.module.css"
 import "./console.css"
 import { IconButton, Tooltip } from '@mui/material'
-import { FaUsers } from 'react-icons/fa'
-import { MdLibraryAdd, MdMessage } from 'react-icons/md'
+
+import { FaCalendarAlt, FaUsers } from 'react-icons/fa'
+import { MdLibraryAdd, MdLocationOn, MdMessage } from 'react-icons/md'
 import Modal from 'react-bootstrap/Modal';
+
 
 const iconData = [
     {
@@ -73,6 +76,7 @@ export const Console = ({ show, setShow, handleClose, handleShow, Toggle, childr
                     ))
                 }
             </div>
+
         </div>
     )
 }
@@ -240,5 +244,6 @@ export function ModalContent({ show, setShow, handleClose, handleShow }) {
         </div>
     )
 }
+
 
 export default Console
