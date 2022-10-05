@@ -41,8 +41,27 @@ export default function Navbar({ header, toggleSidebar, notification, content })
                     <IoNotificationsOutline size="1.5rem" color="#0C2191" onClick={() => navigate(`/${main}/notifications`)} style={{ cursor: "pointer" }} />
                 </Badge>
 
-                {payment && <span style={{background: "#DB4E18",
-padding: ".5rem", border: "1px solid #DB4E18", borderRadius: "5px", color:"#fff"}}>${outstanding}</span>}
+                {payment && (
+                   
+                        <span style={{
+                            fontSize:"14px",
+                            background: "#DB4E18",
+                            display:"flex",
+                            flexDirection:"column",
+                            padding: "0.2rem .5rem", 
+                            border: "1px solid #DB4E18",
+                             borderRadius: "5px", color: "#fff"
+                        }}>
+                            <span style={{
+                        color: "#fff",
+                        fontSize:"10px"
+
+                        }}>Total Oustanding</span> 
+                            
+                            
+                            ${outstanding}</span>
+                )}
+
 
                 {/* <GotoDashboard loader={loading} setLoading={setLoading} /> */}
                 <LogoutButton />

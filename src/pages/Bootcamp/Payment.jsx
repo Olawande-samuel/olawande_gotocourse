@@ -124,169 +124,171 @@ export const BootcampPayment = () => {
     }
   }
   return (
-    <Courses>
-      {/* <GuardedRoute> */}
-      <div className={`container `}>
-        <section
-          className={`row justify-content-center align-items-center`}
-        >
-          <div className="col-md-7 col-lg-5">
-            {showStripeModal ? (
-              <PaymentModal token={stripeId} />
-            ) : (
-              <div className={` card ${style.payment_details_card}`}>
-               {/* <div> */}
+    // <Courses>
+    // {/* <GuardedRoute> */ }
+    <div className={`pay_background `}>
+    <div className={`container row justify-content-center align-items-center`}>
+      <section
+        className={`row justify-content-center align-items-center`}
+      >
+        <div className="col-md-7 col-lg-5 ">
+          {showStripeModal ? (
+            <PaymentModal token={stripeId} />
+          ) : (
+            <div className={` card ${style.payment_details_card} `}>
+              {/* <div> */}
 
-                <div className="card-body">
+              <div className="card-body">
 
                 {/* <div> */}
 
 
-                  <div>
-                    <div className="d-flex align-items-center justify-content-center w-100 py-1">
-                      <h3 className={clsx.check}>Checkout Page</h3>
-                    </div>
-                  </div>
-
-
-                  <div className={style.payment_card_mid}>
-                    <div className="d-flex flex-column">
-                      <span className={clsx.pay__tit}>Course</span>
-                      <p
-                        className={`text-capitalize fw-normal ${clsx.pay__inform} `}
-                      >
-                        {bootcamp.title}
-                      </p>
-                      {/* <p>${bootcamp?.price && bootcamp?.price}</p> */}
-                    </div>
-                  </div>
-
-
-                  <div className="d-flex flex-column">
-                    <span className={`fw-normal ${clsx.pay__tit}`} >Service Fee</span>
-                    <p className={`text-capitalize fw-normal ${clsx.pay__inform} `}>$5</p>
-                  </div>
-
-                  <div className="d-flex flex-column justify-content-between">
-                    <label
-                      htmlFor="paymentType"
-                      className="form-label generic_label"
-                    >
-                      Choose a payment structure
-                    </label>
-                    <select
-                      name="fullPayment"
-                      onChange={(e) => handleChange(e, "select")}
-                      id="paymentType"
-                      className="form-select"
-                    >
-                      <option value="1">Full Payment</option>
-                      <option value="0">Installment</option>
-                    </select>
-                  </div>
-                  <hr />
-                  {paymentData.fullPayment === false ? (
-                    <>
-                      <div className="">
-                        <small
-                          className="text-info"
-                          style={{ fontSize: "12px" }}
-                        >
-                          *Fees must be paid in not more than four Installments.
-                          Each instalment carries a $100 extra charge
-                        </small>
-                        <div className="form-group">
-                          <input
-                            type="radio"
-                            name="initialPayment"
-                            id="2"
-                            onChange={handleInstallmentChoice}
-                            value={bootcamp?.price / 2 + 100}
-                          />
-                          <label
-                            htmlFor="2"
-                            className="form-label generic_label ms-2 "
-                          >
-                            Pay in two installments of{" "}
-                            {bootcamp?.price / 2 + 100} each
-                          </label>
-                        </div>
-                        <div className="text-center">
-                          <small className="text-center text-dark">or</small>
-                        </div>
-                        <div className="form-group">
-                          <input
-                            type="radio"
-                            name="initialPayment"
-                            id="4"
-                            onChange={handleInstallmentChoice}
-                            value={bootcamp?.price / 4 + 100}
-                          />
-                          <label
-                            htmlFor="4"
-                            className="form-label generic_label ms-2 "
-                          >
-                            Pay in four installments of{" "}
-                            {bootcamp?.price / 4 + 100} each
-                          </label>
-                        </div>
-                      </div>
-                      <hr />
-                    </>
-                  ) : (
-                    ""
-                  )}
-                  <div className="d-flex flex-column">
-                    <span className={clsx.pay__tit}>Total</span>
-                    <p className={clsx.pay__inform}>
-                      ${bootcamp?.price && +bootcamp?.price + 5}
-                    </p>
-                  </div>
-                  <button
-                    onClick={enrollToCourse}
-                    className="button w-100 button-md"
-                  >
-                    {loading ? (
-                      <div
-                        className="spinner-border text-primary"
-                        role="status"
-                        style={{ width: "2rem", height: "2rem" }}
-                      >
-                        <span className="visually-hidden">Loading...</span>
-                      </div>
-                    ) : (
-                      <span>Checkout</span>
-                    )}
-                  </button>
-                  <div className="cancel w-100 text-center my-3">
-                    <button
-                      className=""
-                      style={{
-                        color: "var(--theme-blue)",
-                        border: "none",
-                        outline: "none",
-                        fontSize: "14px",
-                      }}
-                      onClick={() => {
-                        navigate(-2);
-                      }}
-                    >
-                      Go back
-                    </button>
+                <div>
+                  <div className="d-flex align-items-center justify-content-center w-100 py-1">
+                    <h3 className={clsx.check}>Checkout Page</h3>
                   </div>
                 </div>
+
+
+                <div className={style.payment_card_mid}>
+                  <div className="d-flex flex-column">
+                    <span className={clsx.pay__tit}>Course</span>
+                    <p
+                      className={`text-capitalize fw-normal ${clsx.pay__inform} `}
+                    >
+                      {bootcamp.title}
+                    </p>
+                    {/* <p>${bootcamp?.price && bootcamp?.price}</p> */}
+                  </div>
+                </div>
+
+
+                <div className="d-flex flex-column">
+                  <span className={`fw-normal ${clsx.pay__tit}`} >Service Fee</span>
+                  <p className={`text-capitalize fw-normal ${clsx.pay__inform} `}>$5</p>
+                </div>
+
+                <div className="d-flex flex-column justify-content-between">
+                  <label
+                    htmlFor="paymentType"
+                    className="form-label generic_label"
+                  >
+                    Choose a payment structure
+                  </label>
+                  <select
+                    name="fullPayment"
+                    onChange={(e) => handleChange(e, "select")}
+                    id="paymentType"
+                    className="form-select"
+                  >
+                    <option value="1">Full Payment</option>
+                    <option value="0">Installment</option>
+                  </select>
+                </div>
+                <hr />
+                {paymentData.fullPayment === false ? (
+                  <>
+                    <div className="">
+                      <small
+                        className="text-info"
+                        style={{ fontSize: "12px" }}
+                      >
+                        *Fees must be paid in not more than four Installments.
+                        Each instalment carries a $100 extra charge
+                      </small>
+                      <div className="form-group">
+                        <input
+                          type="radio"
+                          name="initialPayment"
+                          id="2"
+                          onChange={handleInstallmentChoice}
+                          value={bootcamp?.price / 2 + 100}
+                        />
+                        <label
+                          htmlFor="2"
+                          className="form-label generic_label ms-2 "
+                        >
+                          Pay in two installments of{" "}
+                          {bootcamp?.price / 2 + 100} each
+                        </label>
+                      </div>
+                      <div className="text-center">
+                        <small className="text-center text-dark">or</small>
+                      </div>
+                      <div className="form-group">
+                        <input
+                          type="radio"
+                          name="initialPayment"
+                          id="4"
+                          onChange={handleInstallmentChoice}
+                          value={bootcamp?.price / 4 + 100}
+                        />
+                        <label
+                          htmlFor="4"
+                          className="form-label generic_label ms-2 "
+                        >
+                          Pay in four installments of{" "}
+                          {bootcamp?.price / 4 + 100} each
+                        </label>
+                      </div>
+                    </div>
+                    <hr />
+                  </>
+                ) : (
+                  ""
+                )}
+                <div className="d-flex flex-column">
+                  <span className={clsx.pay__tit}>Total</span>
+                  <p className={clsx.pay__inform}>
+                    ${bootcamp?.price && +bootcamp?.price + 5}
+                  </p>
+                </div>
+                <button
+                  onClick={enrollToCourse}
+                  className="button w-100 button-md"
+                >
+                  {loading ? (
+                    <div
+                      className="spinner-border text-primary"
+                      role="status"
+                      style={{ width: "2rem", height: "2rem" }}
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  ) : (
+                    <span>Checkout</span>
+                  )}
+                </button>
+                <div className="cancel w-100 text-center my-3">
+                  <button
+                    className=""
+                    style={{
+                      color: "var(--theme-blue)",
+                      border: "none",
+                      outline: "none",
+                      fontSize: "14px",
+                    }}
+                    onClick={() => {
+                      navigate(-2);
+                    }}
+                  >
+                    Go back
+                  </button>
+                </div>
               </div>
+            </div>
 
 
 
-              // </div>
+            // </div>
 
-            )}
-          </div>
-        </section>
-      </div>
-      {/* </GuardedRoute> */}
-    </Courses>
+          )}
+        </div>
+      </section>
+    </div>
+      {/* </GuardedRoute> */ }
+  {/* </Courses> */}
+    </div>
   );
 };
 

@@ -86,6 +86,9 @@ import Events from "./pages/Events";
 import Business from "./Business/pages/landing/business";
 // import Console from "./pages/Dashboard/components/classConsole";
 import Content from "./pages/Dashboard/components/classConsole/Content";
+import Quiz, {Preview} from "./pages/Dashboard/components/classConsole/Quiz";
+import Note from "./pages/Dashboard/components/classConsole/Note";
+
 import { Intermission, LiveClassInfo } from "./pages/Dashboard/components/classConsole/Liveclass";
 import Live from "./pages/Dashboard/Teachers/Live";
 
@@ -106,12 +109,12 @@ const TeacherOnBoarding = lazy(() => import("./pages/Teacher/OnBoarding"))
 const TeacherProfile = lazy(() => import("./pages/Teacher/TeacherProfile"))
 const TeacherSignup = lazy(() => import("./pages/User/TeacherSignup"))
 
-const UserOnBoarding  = lazy(()=>import("./pages/Students/OnBoarding"));
-const Verification  = lazy(()=>import("./pages/User/Verification"));
-const About =  lazy(()=> import("./pages/About"))
-const Contact =  lazy(()=> import("./pages/Contact"))
-const Settings =  lazy(()=> import("./pages/Dashboard/Admin/Settings"))
-const LiveClass = lazy(()=> import("./pages/Dashboard/components/Live/LiveClass"))
+const UserOnBoarding = lazy(() => import("./pages/Students/OnBoarding"));
+const Verification = lazy(() => import("./pages/User/Verification"));
+const About = lazy(() => import("./pages/About"))
+const Contact = lazy(() => import("./pages/Contact"))
+const Settings = lazy(() => import("./pages/Dashboard/Admin/Settings"))
+const LiveClass = lazy(() => import("./pages/Dashboard/components/Live/LiveClass"))
 
 
 
@@ -148,10 +151,10 @@ function App() {
                 <Route path="become-a-teacher" element={<BecomeATeacher />} />
 
                 {/* <Route path="test" element={<Console />} /> */}
-                <Route path="test" element={<Content />} />
-
-
-
+                 <Route path="test" element={<Content />}/>
+                <Route path="note" element={<Note />} />
+                <Route path="quiz" element={<Quiz />} />
+                <Route path="preview" element={<Preview />} />
               <Route path="bootcamp-training" element={<NewBootcampDetailsComponent />} />
               <Route path="bootcamp" element={<Bootcamp />} />
               <Route path="bootcamp/payment" element={<BootcampPayment />} />
@@ -252,7 +255,7 @@ function App() {
               </Route>
 
 
-  
+
 
 
               <Route path="affiliates" element={<AffiliateLanding />} />

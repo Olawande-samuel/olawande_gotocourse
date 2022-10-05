@@ -1,9 +1,10 @@
 
-import {useState} from 'react'
+import { useState } from 'react'
 import { AiFillClockCircle, AiOutlinePaperClip, AiOutlinePlus } from 'react-icons/ai'
 import { BiCaretDown, BiCaretRight, BiCaretUp } from 'react-icons/bi'
-import { BsPaperclip, BsThreeDotsVertical } from 'react-icons/bs'
+import { BsPaperclip, BsCameraReels, BsCloudUpload, BsPlayBtn, BsThreeDotsVertical } from 'react-icons/bs'
 import { RiVideoAddFill } from 'react-icons/ri'
+import { VscScreenNormal } from 'react-icons/vsc'
 
 import { Logosm } from '../../../../images/components/svgs'
 import style from "./style.module.css"
@@ -11,8 +12,10 @@ import "./console.css"
 import { IconButton, Tooltip } from '@mui/material'
 
 import { FaCalendarAlt, FaUsers } from 'react-icons/fa'
-import { MdLibraryAdd, MdLocationOn, MdMessage } from 'react-icons/md'
+import { MdAttachFile, MdLibraryAdd, MdLocationOn, MdMessage } from 'react-icons/md'
 import Modal from 'react-bootstrap/Modal';
+import { TextField, InputLabel, MenuItem, FormHelperText, FormControl, Select, FormControlLabel, Switch } from '@mui/material'
+
 
 
 const iconData = [
@@ -38,7 +41,38 @@ const iconData = [
     },
 ]
 
-export const Console = ({ show, setShow, handleClose, handleShow, Toggle, children }) => {
+const popIcon = [
+    {
+        id: 1,
+        icon: BsCameraReels,
+        title: "Record Camera"
+    },
+    {
+        id: 2,
+        icon: VscScreenNormal,
+        title: "Record Screen"
+    },
+    {
+        id: 3,
+        icon: RiVideoAddFill,
+        title: "Upload Video"
+    },
+
+    {
+        id: 4,
+        icon: BsCloudUpload,
+        title: "Upload File/Image"
+    },
+    {
+        id: 5,
+        icon: BsPlayBtn,
+        title: "Import from Creator suite"
+    },
+]
+
+
+
+export const Console = ({ open, show, closeSmall, setShow, handleClose, handleShow, Toggle, children }) => {
 
 
     return (
@@ -59,6 +93,8 @@ export const Console = ({ show, setShow, handleClose, handleShow, Toggle, childr
                 handleShow={handleShow}
                 Toggle={Toggle}
             />
+
+            <PopModalContent open={open} closeSmall={closeSmall}/>
 
             <main className={style.children}>
                 {/* {children} */}
@@ -152,46 +188,55 @@ function Accord() {
     )
 }
 
-export function ModalContent({ show, setShow, handleClose, handleShow }) {
+export function ModalContent({ show, handleClose }) {
     const [showMore, setShowMore] = useState(false)
+    const [type, setType] = useState("file")
 
     console.log("modal show", { show });
     return (
         <div>
             <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Add Content</Modal.Title>
+                <Modal.Header closeButton className={style.modal__header}>
+                    <Modal.Title className={style.modal__title}>Add Content</Modal.Title>
                 </Modal.Header>
+
                 <Modal.Body>
-                    <form>
-                        <label htmlFor="">Content type</label>
-                        <select name="" id="">
-                            <option value="file">File/Videos</option>
-                            <option value="Quiz">Quiz</option>
-                            <option value="note">Note</option>
-                        </select>
+                    <FormControl className={style.content__form}>
+                        <InputLabel id="Content Type">Content Type</InputLabel>
+                        <Select
+                            label="Content Type"
+                            labelId="Content Type"
+                            id="Content Type"
+                            value={type}
+                            onChange={(e) => setType(e.target.value)}>
+                            <MenuItem value="file">
+                                <i><MdAttachFile /></i>
+                                File/Videos
+                            </MenuItem>
+                            <MenuItem value="Quiz">Quiz</MenuItem>
+                            <MenuItem value="note">Note</MenuItem>
+                        </Select>
 
-                        <label htmlFor="">Content Title</label>
-                        <input type="text" placeholder='Content Title' />
 
-                        <label htmlFor="">Domain</label>
-                        <input type="text" placeholder='Domain' />
-                        <small>A Domain is a container for similar content. e.g "Introduction", "Day 1" or "Domain 1"
-                        </small>
+                        <TextField id="outlined-basic" label="Content Title" variant="outlined" placeholder='Content Title' />
+                        <TextField id="outlined-basic" label="Domain" variant="outlined" placeholder='Domain' />
+
+                        <FormHelperText>A Domain is a container for similar content. e.g "Introduction", "Day 1" or "Domain 1"
+                        </FormHelperText>
 
 
                         {/* accordion */}
 
-                        <div className={style.content_item}>
+                        <div className={style}>
                             <div className={style.content_item_top}>
                                 <span>Advance Options</span>
 
                                 <i>
                                     {
                                         showMore ?
-                                            <BiCaretDown onClick={() => setShowMore(!showMore)} />
-                                            :
                                             <BiCaretUp onClick={() => setShowMore(!showMore)} />
+                                            :
+                                            <BiCaretDown onClick={() => setShowMore(!showMore)} />
                                     }
                                 </i>
                             </div>
@@ -199,20 +244,24 @@ export function ModalContent({ show, setShow, handleClose, handleShow }) {
                             {
                                 showMore && (
                                     <div>
-                                        <label htmlFor="">Content Objective</label>
-                                        <input type="text" placeholder='Content Objective' />
-                                        <small>What will your student do/learn with this content</small>
 
-                                        <span>Lock course content</span>
-                                        <i><BsThreeDotsVertical /></i>
-                                        <small>Content is currently locked</small>
+                                        <TextField fullWidth id="outlined-basic" label="Content Objective" variant="outlined" placeholder='Content Objective' />
+                                        <FormHelperText>What will your student do/learn with this content</FormHelperText>
+
+                                        <FormControlLabel control={
+                                            <Switch defaultChecked />}
+                                            label="Lock course content"
+                                        />
+                                        <FormHelperText>Content is currently locked</FormHelperText>
 
 
+                                        <FormControlLabel control={
+                                            <Switch defaultChecked />}
+                                            label="Notify students on update"
+                                        />
 
-                                        <span>Notify students on update</span>
-                                        <i><BsThreeDotsVertical /></i>
-                                        <small>Email notification would be sent to student of the new
-                                            course and when the course locked status changes</small>
+                                        <FormHelperText>Email notification would be sent to student of the new
+                                            course and when the course locked status changes</FormHelperText>
                                     </div>
                                 )
                             }
@@ -221,24 +270,50 @@ export function ModalContent({ show, setShow, handleClose, handleShow }) {
 
 
 
+                        <button className={style.contentform__btn}>Submit</button>
 
-
-
-
-
-
-                        <button>Submit</button>
-
-                    </form>
+                    </FormControl>
                 </Modal.Body>
-                <Modal.Footer>
+                {/* <Modal.Footer>
                     <button variant="secondary" onClick={handleClose}>
                         Close
                     </button>
                     <button variant="primary" onClick={handleClose}>
                         Save Changes
                     </button>
-                </Modal.Footer>
+                </Modal.Footer> */}
+            </Modal>
+        </div>
+    )
+}
+
+
+
+export function PopModalContent({ open, closeSmall }) {
+
+    console.log("small modal show", { open });
+    console.log("small close show", { closeSmall });
+    return (
+        <div>
+            <Modal show={open} onHide={closeSmall} className="smallmodal">
+                {/* <Modal.Header closeButton className="modal__header">
+                </Modal.Header> */}
+                <Modal.Body>
+                    <div className="style.smallmodalbody">
+
+                        {
+                            popIcon.map(({ title, id, icon: Icon }) => (
+                                <Tooltip title={title} key={id}>
+                                    <IconButton className='popicons'>
+                                        <Icon size="1.5rem" color='#0C2191' />
+                                        <span className={style.smalltitle}>{title}</span>
+                                    </IconButton>
+                                </Tooltip>
+                            ))
+                        }
+                    </div>
+                </Modal.Body>
+
             </Modal>
         </div>
     )

@@ -118,9 +118,9 @@ font-size: 14px;
   color: var(--btn-color) !important;
 }
 
-.activewhite , .activewhite a , .breadpay a{
+/* .activewhite , .activewhite a , .breadpay a{
   color: var(--white) !important;
-}
+} */
 .backgroundColor{
   background: var(--btn-color);
   color: #fff !important;
@@ -1372,10 +1372,16 @@ font-size: 16px;
   background: url(./images/logup.webp);
   background-repeat:no-repeat;
   background-size: cover; 
-  /* border: 5px solid red; */
-  color: #ffffff;
+  /* display: flex;
+  align-items: center; */
+  border: 5px solid red;
+  /* color: #ffffff; */
 }
 
+.pay__border{
+  border: 5px solid yellow;
+
+}
 
 
 .signWrapper_logo{
@@ -2544,4 +2550,28 @@ tr th, thead td, td, td span  {
 .previousLinkClassName,
 .nextLinkClassName {
   text-decoration: none;
+}
+
+
+/* test modal  */
+.smallmodal{
+  top:30% !important;
+  left:-5% !important;
+  
+}
+
+.smallmodal .modal-dialog{
+  width: 270px !important;
+}
+
+.smallmodalbody {
+display: flex;
+flex-direction: column;
+gap: 1rem;
+}
+
+.popicons{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
