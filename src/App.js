@@ -161,7 +161,7 @@ function App() {
                 <Route path="become-a-teacher" element={<BecomeATeacher />} />
 
                 {/* <Route path="test" element={<Console />} /> */}
-                 <Route path="test" element={<Content />}/>
+                <Route path="test" element={<Content />}/>
                 <Route path="note" element={<Note />} />
                 <Route path="quiz" element={<Quiz />} />
                 <Route path="preview" element={<Preview />} />

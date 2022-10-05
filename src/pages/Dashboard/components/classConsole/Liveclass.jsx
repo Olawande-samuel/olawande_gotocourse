@@ -9,7 +9,7 @@ import "./console.css"
 import { FaCalendarAlt, } from 'react-icons/fa'
 import { MdLocationOn } from 'react-icons/md'
 import { Box, Modal, Switch } from '@mui/material'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 
 
 
@@ -132,15 +132,23 @@ export function ScheduleClass({open, setOpen}){
 
 export function Intermission(){
     const navigate = useNavigate()
+    const location = useLocation()
+    const student = location.pathname.split('/')[1] === "student"
+
+
+    console.log(student)
     return(
         <section className={style.intermission}>
             <nav className={style.intermission_nav}>
-                <button>    
-                    <span>
-                        Record
-                    </span>
-                    <i><BsRecordCircle /></i>
-                </button>
+                {
+                    !student &&
+                    <button>    
+                        <span>
+                            Record
+                        </span>
+                        <i><BsRecordCircle /></i>
+                    </button>
+                }
                 
                 <button onClick={()=>navigate(-1)}>Class Console</button>
             </nav>
@@ -150,10 +158,13 @@ export function Intermission(){
                     <button onClick={()=>navigate("/teacher/live-class/live")}>Join</button>
                     <small>Having issues joining?</small>
                 </div>
-                <div className={style.intermission_switch}>
-                    <Switch />
-                    <span>Notify students about live class starting</span>
-                </div>
+                {
+                    !student &&
+                    <div className={style.intermission_switch}>
+                        <Switch />
+                        <span>Notify students about live class starting</span>
+                    </div>
+                }
             </main>
         </section>
     )

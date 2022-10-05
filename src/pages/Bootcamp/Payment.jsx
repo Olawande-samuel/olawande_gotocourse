@@ -8,7 +8,7 @@ import {
   useElements,
   PaymentElement,
 } from "@stripe/react-stripe-js";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../contexts/Auth";
 import { KEY } from "../../constants";
 
@@ -127,7 +127,18 @@ export const BootcampPayment = () => {
     // <Courses>
     // {/* <GuardedRoute> */ }
     <div className={`pay_background `}>
-    <div className={`container row justify-content-center align-items-center`}>
+        <ToastContainer
+          position="top-right"
+          autoClose={4500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+    <div className={`container row justify-content-center align-items-center`} style={{minHeight:"100vh"}}>
       <section
         className={`row justify-content-center align-items-center`}
       >
@@ -138,7 +149,7 @@ export const BootcampPayment = () => {
             <div className={` card ${style.payment_details_card} `}>
               {/* <div> */}
 
-              <div className="card-body">
+              <div className="card-body pay_card">
 
                 {/* <div> */}
 
@@ -152,9 +163,9 @@ export const BootcampPayment = () => {
 
                 <div className={style.payment_card_mid}>
                   <div className="d-flex flex-column">
-                    <span className={clsx.pay__tit}>Course</span>
+                    <span className={clsx.pay__tit}>Class</span>
                     <p
-                      className={`text-capitalize fw-normal ${clsx.pay__inform} `}
+                      className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}
                     >
                       {bootcamp.title}
                     </p>
@@ -165,7 +176,7 @@ export const BootcampPayment = () => {
 
                 <div className="d-flex flex-column">
                   <span className={`fw-normal ${clsx.pay__tit}`} >Service Fee</span>
-                  <p className={`text-capitalize fw-normal ${clsx.pay__inform} `}>$5</p>
+                  <p className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}>25%</p>
                 </div>
 
                 <div className="d-flex flex-column justify-content-between">
@@ -194,7 +205,7 @@ export const BootcampPayment = () => {
                         style={{ fontSize: "12px" }}
                       >
                         *Fees must be paid in not more than four Installments.
-                        Each instalment carries a $100 extra charge
+                        Each installment carries a $100 extra charge
                       </small>
                       <div className="form-group">
                         <input
@@ -202,14 +213,14 @@ export const BootcampPayment = () => {
                           name="initialPayment"
                           id="2"
                           onChange={handleInstallmentChoice}
-                          value={bootcamp?.price / 2 + 100}
+                          value={(bootcamp?.price + (bootcamp?.price * (25 /100))) / 2 + 100}
                         />
                         <label
                           htmlFor="2"
                           className="form-label generic_label ms-2 "
                         >
                           Pay in two installments of{" "}
-                          {bootcamp?.price / 2 + 100} each
+                          {(bootcamp?.price + (bootcamp?.price * (25 /100))) / 2 + 100} each
                         </label>
                       </div>
                       <div className="text-center">
@@ -239,8 +250,8 @@ export const BootcampPayment = () => {
                 )}
                 <div className="d-flex flex-column">
                   <span className={clsx.pay__tit}>Total</span>
-                  <p className={clsx.pay__inform}>
-                    ${bootcamp?.price && +bootcamp?.price + 5}
+                  <p className={` px-3 ${clsx.pay__inform}`}>
+                    ${bootcamp?.price && +bootcamp?.price + (bootcamp?.price * (25 /100))}
                   </p>
                 </div>
                 <button
@@ -356,7 +367,7 @@ export const CheckoutForm = () => {
   }
 
   return (
-    <form onSubmit={handlesubmit}>
+    <form onSubmit={handlesubmit} className="pay_card rounded" style={{background: "#ffffff"}}>
       <PaymentElement
         onReady={() => {
           setLoadingComponent(false);

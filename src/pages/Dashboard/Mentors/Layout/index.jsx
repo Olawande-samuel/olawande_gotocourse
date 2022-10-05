@@ -75,7 +75,7 @@ export const Mentors = ({ children, header, loading }) => {
         logo: <FaChalkboardTeacher size="2.5rem" color="#0C2191" />
     }
 
-  
+   
   
     return (
       <GuardedRoute>

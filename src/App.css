@@ -31,6 +31,7 @@
   .container-md, .container-sm, .container {
     max-width: 92%;
     height: 100%;
+    margin: auto;
   }
 }
 @media (max-width: 769px){
@@ -1368,19 +1369,22 @@ font-size: 16px;
 }
 
 .pay_background {
-  height: 100vh;
+  min-height: 100vh;
   background: url(./images/logup.webp);
   background-repeat:no-repeat;
   background-size: cover; 
   /* display: flex;
   align-items: center; */
-  border: 5px solid red;
+  /* border: 5px solid red; */
   /* color: #ffffff; */
 }
 
 .pay__border{
   border: 5px solid yellow;
+}
 
+.pay_card {
+  padding: 1rem clamp(1.5rem, 1.0714rem + 2.1429vw, 3rem);;
 }
 
 
