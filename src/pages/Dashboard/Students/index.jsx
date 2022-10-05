@@ -32,6 +32,7 @@ import ChatComponent from "../Admin/Chat";
 import LogoutButton from "../../../components/LogoutButton";
 import { PaymentModal } from "../../Bootcamp/Payment";
 import PayModal from "../../../components/PayModal";
+import { LiveClassInfo } from "../components/classConsole/Liveclass";
 
 
 
@@ -1702,6 +1703,13 @@ export function DashboardTop({ content }) {
                 }
             </div>
         </div>
+    ) 
+}
+export function StudentLive(){
+    return(
+        <Students>
+            <LiveClassInfo type="student" />
+        </Students>
     )
 }
 

@@ -17,7 +17,7 @@ import AdminDashboard from "./pages/Dashboard/Admin/Dashboard";
 
 import {
   Dashboard as StudentDashboard, Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Fees as StudentFees,
-  Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat, Notification as StudentNotifications, MyClasses
+  Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat, Notification as StudentNotifications, MyClasses, StudentLive
 } from "./pages/Dashboard/Students";
 
 import StudentHelp from "./pages/Dashboard/Students/Help";
@@ -89,6 +89,9 @@ import Content from "./pages/Dashboard/components/classConsole/Content";
 import Quiz, {Preview} from "./pages/Dashboard/components/classConsole/Quiz";
 import Note from "./pages/Dashboard/components/classConsole/Note";
 
+import { Intermission, LiveClassInfo } from "./pages/Dashboard/components/classConsole/Liveclass";
+import Live from "./pages/Dashboard/Teachers/Live";
+
 const Login = lazy(() => import("./pages/User/Login"))
 const SignUp = lazy(() => import("./pages/User/SignUp"))
 const AdminLogin = lazy(() => import("./pages/Admin/Login"))
@@ -127,34 +130,31 @@ function App() {
           <Routes>
             <Route path="/" element={<Out />}>
               <Route index element={<Landing />} />
-              <Route path="login" element={<Login />} />
-              <Route path="signup" element={<SignUp />} />
-              <Route path="email" element={<Email />} />
-              <Route path="confirm" element={<Confirm />} />
-              <Route path="privacy-policy" element={<Policies />} />
-              <Route path="terms-of-use" element={<TermsOfUse />} />
-              <Route path="cookies" element={<Cookies />} />
-              <Route path="end-user-policy" element={<EndUserPolicy />} />
-              <Route path="teaching-policy" element={<TeachingPolicy />} />
-              <Route path="about-us" element={<About />} />
-              <Route path="contact-us" element={<Contact />} />
-              <Route path="categories/all" element={<CategoryHome />} />
-              <Route path="category/:name" element={<CategoryDetail />} />
-              <Route path="category/:name/courses" element={<CoursesHome />} />
-              <Route path="category/:name/courses/:course" element={<CourseDetails />} />
-              {/* <Route path="bootcamp-training" element={<TrainingBootcamp />} /> */}
-              <Route path="forgot-password" element={<ForgotPassword />} />
-              <Route path="change-password" element={<ResetPassword />} />
-              <Route path="become-a-teacher" element={<BecomeATeacher />} />
-              <Route path="live" element={<LiveClass />} />
+                <Route path="login" element={<Login />} />
+                <Route path="signup" element={<SignUp />} />
+                <Route path="email" element={<Email />} />
+                <Route path="confirm" element={<Confirm />} />
+                <Route path="privacy-policy" element={<Policies />} />
+                <Route path="terms-of-use" element={<TermsOfUse />} />
+                <Route path="cookies" element={<Cookies />} />
+                <Route path="end-user-policy" element={<EndUserPolicy />} />
+                <Route path="teaching-policy" element={<TeachingPolicy />} />
+                <Route path="about-us" element={<About />} />
+                <Route path="contact-us" element={<Contact />} />
+                <Route path="categories/all" element={<CategoryHome />} />
+                <Route path="category/:name" element={<CategoryDetail />} />
+                <Route path="category/:name/courses" element={<CoursesHome />} />
+                <Route path="category/:name/courses/:course" element={<CourseDetails />} />
+                {/* <Route path="bootcamp-training" element={<TrainingBootcamp />} /> */}
+                <Route path="forgot-password" element={<ForgotPassword />} />
+                <Route path="change-password" element={<ResetPassword />} />
+                <Route path="become-a-teacher" element={<BecomeATeacher />} />
 
-              <Route path="test" element={<Content />}/>
+                {/* <Route path="test" element={<Console />} /> */}
+                 <Route path="test" element={<Content />}/>
                 <Route path="note" element={<Note />} />
                 <Route path="quiz" element={<Quiz />} />
                 <Route path="preview" element={<Preview />} />
-
-
-
               <Route path="bootcamp-training" element={<NewBootcampDetailsComponent />} />
               <Route path="bootcamp" element={<Bootcamp />} />
               <Route path="bootcamp/payment" element={<BootcampPayment />} />
@@ -206,6 +206,11 @@ function App() {
                 <Route path="help" element={<StudentHelp />} />
                 <Route path="referral" element={<StudentReferral />} />
                 <Route path="notifications" element={<StudentNotifications />} />
+                <Route path="live-class" element={<Out />}>
+                  <Route index element={<StudentLive />} />
+                  <Route path="live" element={<LiveClass />} />
+                  <Route path="connect" element={<Intermission />} />
+                </Route>
               </Route>
 
               <Route path="mentors" element={<Out />}>
@@ -242,6 +247,11 @@ function App() {
                 <Route path="notifications" element={<TeacherNotifications />} />
                 <Route path="help" element={<TeachersHelp />} />
                 <Route path="referral" element={<TeacherReferral />} />
+                <Route path="live-class" element={<Out />}>
+                  <Route index element={<Live />} />
+                  <Route path="live" element={<LiveClass />} />
+                  <Route path="connect" element={<Intermission />} />
+                </Route>
               </Route>
 
 

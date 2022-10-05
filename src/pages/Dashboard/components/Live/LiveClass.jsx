@@ -19,6 +19,8 @@ import { AiOutlineInfoCircle } from 'react-icons/ai'
 import { FiUsers } from 'react-icons/fi'
 import { FaShapes } from 'react-icons/fa'
 import { Box, Modal } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 
 const data = [
@@ -130,11 +132,14 @@ const others = [
 const LiveClass = () => {
   const [showInfo, setShowInfo]= useState(false)
   const [open, setOpen]= useState(false)
+  const navigate = useNavigate()
   
   function handleActionClick(name){
     console.log(name)
     if(name === "Menu"){
       setOpen(!open)
+    } else if(name === "Leave Meeting"){
+      navigate(-1)
     }
   }
 
@@ -144,7 +149,9 @@ const LiveClass = () => {
     <section className={style.live_container}>
       <nav className={style.live_nav}>
         <div className="container">
-          <Logosm />
+          <Link to="/" className="d-inline-block">
+            <Logosm />
+          </Link>
           <div className={style.present_user}>
             <span className={style.present_profile}>
               <img src={mainuser} alt="" />
@@ -160,7 +167,7 @@ const LiveClass = () => {
           <div className="container-xxxl">
             {
               data.map((d, i)=>(
-                <div key={d.id} className={`${d.name === "presenting" ? "presenting" :"others"} ${style.user_box}`}>
+                <div key={d.id} className={`${d.name === "presenting" ? "presenting" :"not_presenting"} ${style.user_box}`}>
                   <img src={d.img} alt="" className='img-fluid' />
                   <span>{d.name}</span>
                 </div>

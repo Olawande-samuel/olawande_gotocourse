@@ -97,7 +97,7 @@ export const Console = ({ open, show, closeSmall, setShow, handleClose, handleSh
             <PopModalContent open={open} closeSmall={closeSmall}/>
 
             <main className={style.children}>
-                {children}
+                {/* {children} */}
             </main>
 
             <div className={style.icon_bar}>
@@ -147,7 +147,6 @@ function Sidebar({ Toggle }) {
 function Accord() {
 
     const [details, showDetails] = useState(false)
-
     return (
         <div className={style.content_item}>
             <div className={style.content_item_top}>
