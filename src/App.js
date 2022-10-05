@@ -86,7 +86,7 @@ import Events from "./pages/Events";
 import Business from "./Business/pages/landing/business";
 // import Console from "./pages/Dashboard/components/classConsole";
 import Content from "./pages/Dashboard/components/classConsole/Content";
-import Quiz from "./pages/Dashboard/components/classConsole/Quiz";
+import Quiz, {Preview} from "./pages/Dashboard/components/classConsole/Quiz";
 import Note from "./pages/Dashboard/components/classConsole/Note";
 
 const Login = lazy(() => import("./pages/User/Login"))
@@ -148,11 +148,10 @@ function App() {
               <Route path="become-a-teacher" element={<BecomeATeacher />} />
               <Route path="live" element={<LiveClass />} />
 
-              <Route path="test" element={<Content />}>
-                {/* <Route index element={<Content />} /> */}
-              </Route>
+              <Route path="test" element={<Content />}/>
                 <Route path="note" element={<Note />} />
                 <Route path="quiz" element={<Quiz />} />
+                <Route path="preview" element={<Preview />} />
 
 
 

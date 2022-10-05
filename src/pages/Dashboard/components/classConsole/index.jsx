@@ -296,16 +296,16 @@ export function PopModalContent({ open, closeSmall }) {
     console.log("small close show", { closeSmall });
     return (
         <div>
-            <Modal show={open} onHide={closeSmall}>
-                <Modal.Header closeButton className={style.modal__header}>
-                </Modal.Header>
+            <Modal show={open} onHide={closeSmall} className="smallmodal">
+                {/* <Modal.Header closeButton className="modal__header">
+                </Modal.Header> */}
                 <Modal.Body>
-                    <div className={style.smallmodal}>
+                    <div className="style.smallmodalbody">
 
                         {
                             popIcon.map(({ title, id, icon: Icon }) => (
                                 <Tooltip title={title} key={id}>
-                                    <IconButton>
+                                    <IconButton className='popicons'>
                                         <Icon size="1.5rem" color='#0C2191' />
                                         <span className={style.smalltitle}>{title}</span>
                                     </IconButton>

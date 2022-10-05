@@ -223,11 +223,6 @@
     outline: none;
 }
 
-.smallmodal {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
 
 .smalltitle {
     font-style: normal;

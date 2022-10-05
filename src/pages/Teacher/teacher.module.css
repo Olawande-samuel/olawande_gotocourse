@@ -87,7 +87,10 @@
 }
 .payment_details_card  {
   /* font-weight: 700; */
+  /* border: 2px solid green; */
+  border-radius: 10px;
   color: #000000;
+  /* width: 80%; */
 }
 
 .payment_details_card p {
