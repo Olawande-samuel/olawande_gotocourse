@@ -151,7 +151,7 @@ const Sidebar = ({isMobile}) => {
         },
         {
             icon: BiVideo,
-            path: "live",
+            path: "live-class",
             title: "Live Class"
         },
        
@@ -213,6 +213,11 @@ const Sidebar = ({isMobile}) => {
             icon: BiCategory,
             path: "bootcamps",
             title: "Bootcamps"
+        },
+        {
+            icon: BiVideo,
+            path: "live-class",
+            title: "Live Class"
         },
         {
             icon: IoIosCash,

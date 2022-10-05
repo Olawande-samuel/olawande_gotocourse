@@ -17,7 +17,7 @@ import AdminDashboard from "./pages/Dashboard/Admin/Dashboard";
 
 import {
   Dashboard as StudentDashboard, Profile as StudentProfile, Classes as StudentClasses, Wishlist, Edit as StudentEdit, Fees as StudentFees,
-  Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat, Notification as StudentNotifications, MyClasses
+  Courses as StudentCourses, History as StudentHistory, Bootcamps as StudentBootcamps, Chat as StudentChat, Notification as StudentNotifications, MyClasses, StudentLive
 } from "./pages/Dashboard/Students";
 
 import StudentHelp from "./pages/Dashboard/Students/Help";
@@ -86,6 +86,8 @@ import Events from "./pages/Events";
 import Business from "./Business/pages/landing/business";
 // import Console from "./pages/Dashboard/components/classConsole";
 import Content from "./pages/Dashboard/components/classConsole/Content";
+import { Intermission, LiveClassInfo } from "./pages/Dashboard/components/classConsole/Liveclass";
+import Live from "./pages/Dashboard/Teachers/Live";
 
 const Login = lazy(() => import("./pages/User/Login"))
 const SignUp = lazy(() => import("./pages/User/SignUp"))
@@ -144,7 +146,6 @@ function App() {
                 <Route path="forgot-password" element={<ForgotPassword />} />
                 <Route path="change-password" element={<ResetPassword />} />
                 <Route path="become-a-teacher" element={<BecomeATeacher />} />
-                <Route path="live" element={<LiveClass />} />
 
                 {/* <Route path="test" element={<Console />} /> */}
                 <Route path="test" element={<Content />} />
@@ -202,6 +203,11 @@ function App() {
                 <Route path="help" element={<StudentHelp />} />
                 <Route path="referral" element={<StudentReferral />} />
                 <Route path="notifications" element={<StudentNotifications />} />
+                <Route path="live-class" element={<Out />}>
+                  <Route index element={<StudentLive />} />
+                  <Route path="live" element={<LiveClass />} />
+                  <Route path="connect" element={<Intermission />} />
+                </Route>
               </Route>
 
               <Route path="mentors" element={<Out />}>
@@ -238,6 +244,11 @@ function App() {
                 <Route path="notifications" element={<TeacherNotifications />} />
                 <Route path="help" element={<TeachersHelp />} />
                 <Route path="referral" element={<TeacherReferral />} />
+                <Route path="live-class" element={<Out />}>
+                  <Route index element={<Live />} />
+                  <Route path="live" element={<LiveClass />} />
+                  <Route path="connect" element={<Intermission />} />
+                </Route>
               </Route>
 
 
