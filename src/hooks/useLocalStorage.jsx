@@ -32,11 +32,6 @@ const useLocalStorage = () => {
     }
     
 
-    useEffect(() => {
-        console.log("Rendering");
-        return () => console.log("Rerendering");
-    }, [])
-
     return {removeItem, updateItem, getItem};
 }
 

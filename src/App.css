@@ -117,6 +117,10 @@ font-size: 14px;
 .active {
   color: var(--btn-color) !important;
 }
+
+/* .activewhite , .activewhite a , .breadpay a{
+  color: var(--white) !important;
+} */
 .backgroundColor{
   background: var(--btn-color);
   color: #fff !important;
@@ -538,6 +542,9 @@ border-radius: 13.5px !important;
   padding:0 0 2.0625rem 0;
 }
 
+.becoming {
+  padding-top: 2.0625rem;
+}
 .services .left,
 .services .right {
   flex: 50%;
@@ -1360,6 +1367,23 @@ font-size: 16px;
   color: #ffffff;
 }
 
+.pay_background {
+  height: 100vh;
+  background: url(./images/logup.webp);
+  background-repeat:no-repeat;
+  background-size: cover; 
+  /* display: flex;
+  align-items: center; */
+  border: 5px solid red;
+  /* color: #ffffff; */
+}
+
+.pay__border{
+  border: 5px solid yellow;
+
+}
+
+
 .signWrapper_logo{
   display: grid;
   place-content: center;
@@ -1610,6 +1634,7 @@ input[type="password"], input[type="text"], input[type="email"] {
     text-align: center;
   } */
   .card-body {
+    /* border: 2px solid red; */
     padding: 0;
     padding-inline: 3px;
   }
@@ -2525,4 +2550,28 @@ tr th, thead td, td, td span  {
 .previousLinkClassName,
 .nextLinkClassName {
   text-decoration: none;
+}
+
+
+/* test modal  */
+.smallmodal{
+  top:30% !important;
+  left:-5% !important;
+  
+}
+
+.smallmodal .modal-dialog{
+  width: 270px !important;
+}
+
+.smallmodalbody {
+display: flex;
+flex-direction: column;
+gap: 1rem;
+}
+
+.popicons{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }

@@ -63,17 +63,17 @@ const NewLanding = ()=>{
         <Category />
         <Benefits />
         <Bootcamp/>
-        <Overview />
+        <Becoming />
         <BetterWay />
         {/* <Learn type={"newLanding"} />
         <Self />
-        <Mentorship /> */}
+      <Mentorship /> */}
         <Mentors />
         {/* <InPerson /> */}
         <Testimonials type="newLanding" />
-        <Becoming />
         <Companies />
         <Faq />
+        {/* <Overview /> */}
     </Layout> 
    )
 }
@@ -115,11 +115,11 @@ function Hero(){
                 <header className="">
                     <h1 className="newHero_left-header text-center">Upskill &amp; Reskill</h1>
                     {/* <h6 className="newHero_left-title text-center">Connect with industry experts from anywhere and for less cost</h6> */}
-                    <h6 className="newHero_left-title text-center mb-4 mb-lg-5">No. 1 platform to start and accelerate your tech career</h6>
+                    <h6 className="newHero_left-title text-center mb-4 mb-lg-5">No. 1 platform to teach and learn tech career skills</h6>
                     <div className="d-flex justify-content-center">
                       <ul>
-                        <li className="newHero_left-title text-start mb-2" style={{fontSize: "17px"}}>Learn from Industry Experts</li>
-                        <li className="newHero_left-title text-start mb-2" style={{fontSize: "17px"}}>Learn from Anywhere</li>
+                        <li className="newHero_left-title text-start mb-2" style={{fontSize: "17px"}}>Connect with Industry Experts</li>
+                        <li className="newHero_left-title text-start mb-2" style={{fontSize: "17px"}}>Connect from Anywhere</li>
                         <li className="newHero_left-title text-start mb-2" style={{fontSize: "17px"}}>Save Time, Save Cost!</li>
                       </ul>
                     </div>
@@ -169,7 +169,7 @@ function Hero(){
     )
 }       
 
-function Stats(){
+export function Stats(){
   const statData = [
     {
       title: '20k+',

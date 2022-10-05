@@ -49,7 +49,6 @@ const Navbar = ({ background }) => {
         navHeight: heightRef?.current?.clientHeight,
       };
     });
-    console.log(heightRef.current.clientHeight)
   }, []); 
   
 
@@ -57,7 +56,6 @@ const Navbar = ({ background }) => {
   const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";  
   const categoryRoute = background === "category";
   const landing = location.pathname.split("/")[1] !== "lounge" ;
-  console.log(location.pathname.split("/")[1] !== "lounge")
 
   function showDrop() { }
   return (
@@ -69,7 +67,7 @@ const Navbar = ({ background }) => {
         background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : landing ? "var(--blue-ish)" :  "var(--theme-blue)",
         color: confirmEmail || landing || categoryRoute ? "var(--theme-blue)" : "#fffff",
       }}
-    >
+    > 
       <ScrollToTop />
       <div className="container navbar-container align-items-center">
         <Link

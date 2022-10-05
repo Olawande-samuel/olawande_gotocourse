@@ -1205,7 +1205,7 @@ export function ApproveStudent() {
   }
 
   async function deleteUserHandler(e, email) {
-    console.log(e)
+    console.log(e);
     try {
       const v = window.confirm("Are you sure you want to delete " + email);
       if (!v) return;
@@ -1216,7 +1216,7 @@ export function ApproveStudent() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         navigate(-1);
-        console.log("deleted")
+        console.log("deleted");
         toast.success(message);
       }
     } catch (err) {
@@ -2112,7 +2112,6 @@ export function Mentors() {
           //do somethings
           if (data.length > 0) {
             setTeachers((_) => data);
-            
           } else {
             toast.success("No mentor page found");
           }
@@ -2614,7 +2613,6 @@ export function Courses() {
         else if (statusCode === 1) {
           const { data } = res;
           setCourseList(data);
-          
         } else {
           throw new AdvancedError(message, statusCode);
         }
@@ -2762,7 +2760,6 @@ export function CourseDetails({}) {
               ...course,
             };
           });
-          
         }
       } catch (err) {
         toast.error(err.message);
@@ -2792,27 +2789,11 @@ export function CourseDetails({}) {
       const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success(message);
         navigate(-1);
       }
     } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     } finally {
       setLoading((_) => false);
     }
@@ -2847,15 +2828,7 @@ export function CourseDetails({}) {
 
           // NEEDS REMOVE COURSE API FROM PLEDRE
 
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.success(message);
         }
       } else {
         const res = await toggleCourseStatus(userdata?.token, params?.id, {
@@ -2864,26 +2837,10 @@ export function CourseDetails({}) {
         const { success, message, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         setFormstate({ ...formstate, status: "inactive" });
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success(message);
       }
     } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     } finally {
       setLoading((_) => false);
     }
@@ -2937,26 +2894,10 @@ export function CourseDetails({}) {
       else {
         setFormstate({ ...formstate, instructors: newList });
         setOpenprompt(false);
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success(message);
       }
     } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     } finally {
       setLoading((_) => false);
     }
@@ -3114,7 +3055,7 @@ function DeleteModal({ open, close, deleteTutor }) {
           className="lead text-primary text-center"
           style={{ color: "var(--theme-blue)" }}
         >
-          Remove Instructor from Course?
+          Remove Instructor from Class?
         </h5>
         <div className="d-flex justify-content-around align-items-center mt-4">
           <button
@@ -3141,47 +3082,41 @@ export function BootcampDetails({}) {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
-  
-  const { adminFunctions: { deleteBootcamp, fetchBootcamps, toggleBootcampStatus }, generalState } = useAuth();
+
+  const {
+    adminFunctions: {
+      deleteBootcamp,
+      fetchBootcamps,
+      toggleBootcampStatus,
+      updateBootcamp,
+    },
+    generalState,
+  } = useAuth();
+  const [openprompt, setOpenprompt] = useState(false);
 
   const flag = useRef(false);
-  const [formstate, setFormstate] = useState({
-    title: "",
-    description: "",
-    status: false,
-    instructor: "",
-    student: "",
-    price: null
-  });
+  const [formstate, setFormstate] = useState();
   const [loading, setLoading] = useState(true);
   const [instructors, setInstructors] = useState([]);
   const students = ["James Segun"];
   const params = useParams();
+
   //get user id
   useEffect(() => {
     //fetch bootcamp details for the id
     if (flag.current) return;
-    (async () => { 
+    (async () => {
       try {
         const res = await fetchBootcamps(userdata?.token);
         const { message, statusCode, success } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         else {
-          
           const { data } = res;
           let bootcamp = data.find((d) => d.bootcampId === params?.id);
-          setFormstate((old) => {
-            return {
-              ...old, 
-              title: bootcamp.title,
-              description: bootcamp.description,
-              status: bootcamp.isActive,
-              price: bootcamp.price
-            };
-          });
-          setInstructors((_) => {
-            return [bootcamp.instructorName];
-          });
+          setFormstate({ ...formstate, ...bootcamp });
+          // setInstructors((_) => {
+          //   return [bootcamp.instructorName];
+          // });
         }
       } catch (err) {
         toast.error(err.message);
@@ -3206,37 +3141,45 @@ export function BootcampDetails({}) {
   async function toggleBootcampStatusHandler(e) {
     setLoading((_) => true);
     try {
-      if( !formstate.pledreCourseId){
-        
-          // add class to pledre
+      if (!formstate.pledreCourseId) {
+        // add class to pledre
         const pledRes = await generalState.pledre.addCourse({
           course_name: formstate.title,
           course_description: formstate.description,
           is_public: true,
           short_description: formstate.description,
           price: formstate.price,
-        })
+        });
 
-        console.log(pledRes._id)
-        if(pledRes._id){
-            console.log(pledRes._id)
-            const res = await toggleBootcampStatus(userdata?.token, {pledreCourseId: pledRes._id}, params?.id);
-            const { message, statusCode, success } = res;
+        if (pledRes._id) {
+          console.log(pledRes._id);
+          const res = await toggleBootcampStatus(
+            userdata?.token,
+            { pledreCourseId: pledRes._id },
+            params?.id
+          );
+          const { message, statusCode, success } = res;
 
-            if (!success) throw new AdvancedError(message, statusCode);
-            else {
-
-            setFormstate({ ...formstate, status: true });
+          if (!success) throw new AdvancedError(message, statusCode);
+          else {
+            setFormstate({
+              ...formstate,
+              isActive: res.isActive,
+              pledreCourseId: pledRes._id,
+            });
             toast.success(message);
           }
-
         }
-      }else{
-        const res = await toggleBootcampStatus(userdata?.token, {pledreCourseId: formstate.pledreCourseId}, params?.id);
+      } else {
+        const res = await toggleBootcampStatus(
+          userdata?.token,
+          { pledreCourseId: formstate.pledreCourseId },
+          params?.id
+        );
         const { message, statusCode, success } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         else {
-          setFormstate({ ...formstate, status: true });
+          setFormstate({ ...formstate, ...res.data, isActive: res.isActive });
           toast.success(message);
         }
       }
@@ -3244,7 +3187,6 @@ export function BootcampDetails({}) {
       toast.error(err.message);
     } finally {
       setLoading((_) => false);
-    
     }
   }
   async function deleteBootcampHandler(e) {
@@ -3258,7 +3200,7 @@ export function BootcampDetails({}) {
         toast.success(message);
       }
     } catch (err) {
-      toast.error(err.message)
+      toast.error(err.message);
     } finally {
       setLoading((_) => false);
     }
@@ -3266,6 +3208,90 @@ export function BootcampDetails({}) {
 
   function editBootcampHandler(e) {
     navigate(`/admin/bootcamps/create?edit=${params?.id}`);
+  }
+
+  function closeModal() {
+    setOpenprompt(false);
+  }
+
+  async function deleteTutor() {
+    let startDate = new Date(formstate.startDate).toISOString().split("T")[0];
+    let endDate = new Date(formstate.endDate).toISOString().split("T")[0];
+    const formdata = {
+      ...formstate,
+      instructor: "",
+      startDate,
+      endDate,
+    };
+    delete formdata.instructorName;
+    delete formdata.instructorId;
+    delete formdata.instructorEmail;
+
+    try {
+      setLoading(true);
+      const res = await updateBootcamp(
+        userdata?.token,
+        formstate?.bootcampId,
+        formdata
+      );
+      const { success, message, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        setFormstate({ ...formstate, instructor: "" });
+        setOpenprompt(false);
+        toast.success(message);
+      }
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading((_) => false);
+    }
+  }
+
+  async function addTutor(e) {
+    e.preventDefault();
+    let startDate = new Date(formstate.startDate).toISOString().split("T")[0];
+    let endDate = new Date(formstate.endDate).toISOString().split("T")[0];
+    const formdata = {
+      ...formstate,
+      startDate,
+      endDate,
+    };
+    delete formdata.instructorName;
+    delete formdata.instructorId;
+    delete formdata.instructorEmail;
+
+    let id = formdata.bootcampId ? formdata.bootcampId : formdata._id;
+    console.log(formstate.instructor)
+    try {
+      setLoading(true);
+      const res = await updateBootcamp(userdata?.token, id, formdata);
+      const { success, message, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        const teacherDetails = await generalState.pledre.getTeacherDetails(formdata.instructor);
+        console.log("id",formstate.pledreCourseId,)
+        if(teacherDetails._id){
+          const addTeachtoCourse = await generalState.pledre.addTeacherToCourse({
+            teacher_id: teacherDetails?._id,
+            course_id: formstate.pledreCourseId,
+          });
+          console.log({addTeachtoCourse})
+        }
+
+        setFormstate(res.data);
+        setOpenprompt(false);
+        toast.success(message);
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error(err.message);
+    } finally {
+      setLoading((_) => false);
+    }
+  }
+  function removeTutor(tutorId) {
+    setOpenprompt(true);
   }
 
   return (
@@ -3300,7 +3326,7 @@ export function BootcampDetails({}) {
               name="title"
               type="text"
               handleChange={changeHandler}
-              value={formstate.title}
+              value={formstate?.title}
               readOnly={true}
             />
             <div className={clsx.form_group}>
@@ -3313,39 +3339,51 @@ export function BootcampDetails({}) {
               <textarea
                 rows="5"
                 name="description"
-                value={formstate.description}
+                value={formstate?.description}
                 onChange={changeHandler}
                 className="form-control generic_input"
                 readOnly
               ></textarea>
             </div>
 
-            {/* <div className={clsx.form_group}>
+            <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
-                <label>Name of Instructors</label>
-                {
-                  instructors.map((t, i) => (
-                    <div key={i}>
-                      <p>{i + 1}. &nbsp; {t}</p> 
-                      <div className={clsx.teachers__actions}>
-                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
-                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
-                      </div>
-                    </div>
-                  ))
-                }
+                <label>Instructor</label>
+                {formstate?.instructorName && (
+                  <div>
+                    <p>
+                      {formstate?.instructorName} - {formstate?.instructorEmail}
+                    </p>
+                    {
+                    /* <div className={clsx.teachers__actions}>
+                      <span
+                        className={`${clsx.teachers__actions_delete} text-danger`}
+                        onClick={() => removeTutor(formstate?.instructorId)}
+                      >
+                        <AiOutlineDelete />
+                        Delete
+                      </span>
+                    </div> 
+                    
+                    */}
+                  </div>
+                )}
               </div>
               <Input
-                style={{margin: "0px !important"}}
+                style={{ margin: "0px !important" }}
                 name="instructor"
                 type="text"
                 handleChange={changeHandler}
-                value={formstate.instructor}
+                value={formstate?.instructor}
               />
-              <button type="button" className={clsx.form_group__button}>
-                Add Instructor
+              <button
+                type="button"
+                className={clsx.form_group__button}
+                onClick={addTutor}
+              >
+                Change/Add Instructor
               </button>
-            </div> */}
+            </div>
 
             {/* <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
@@ -3366,7 +3404,7 @@ export function BootcampDetails({}) {
                 name="student"
                 type="text"
                 handleChange={changeHandler}
-                value={formstate.student}
+                value={formstate?.student}
               />
               <button type="button" className={clsx.form_group__button}>
                 Add Student
@@ -3378,9 +3416,15 @@ export function BootcampDetails({}) {
               <Switch
                 onClick={toggleBootcampStatusHandler}
                 size="large"
-                checked={formstate.status}
+                checked={formstate?.isActive}
+                value={formstate?.isActive}
               />
             </div>
+            <DeleteModal
+              open={openprompt}
+              close={closeModal}
+              deleteTutor={deleteTutor}
+            />
           </form>
         </div>
       </div>
@@ -3451,7 +3495,7 @@ export function Bootcamps() {
               className="btn btn-primary px-5"
               onClick={gotoCreateCourseHandler}
             >
-              Add Bootcamp
+              Add Class
             </button>
           </div>
           <div className={clsx.admin__student_main}>
@@ -3494,7 +3538,7 @@ export function Bootcamps() {
                     )
                   )
                 ) : (
-                  <h1>No Bootcamps found</h1>
+                  <h1>No Class found</h1>
                 )}
               </tbody>
             </table>
@@ -3513,15 +3557,23 @@ export function CreateBootcamp() {
   const navigate = useNavigate();
   const ref = useRef(false);
 
-  const { adminFunctions: { addBootcamp, fetchBootcamps, updateBootcamp, fetchCategories }, adminTeacherFunctions: { fetch }} = useAuth();
-  const [categories, setCategories] = useState([]); 
+  const {
+    adminFunctions: {
+      addBootcamp,
+      fetchBootcamps,
+      updateBootcamp,
+      fetchCategories,
+    },
+    adminTeacherFunctions: { fetch },
+  } = useAuth();
+  const [categories, setCategories] = useState([]);
   const location = useLocation();
   const [loader, setLoader] = useState(location.search ? true : false);
 
   const [formstate, setFormstate] = useState({
     title: "",
     duration: "",
-    categoryName:"",
+    categoryName: "",
     startDate: "",
     endDate: "",
     startTime: "",
@@ -3533,7 +3585,6 @@ export function CreateBootcamp() {
 
   const [loading, setLoading] = useState(false);
   const [teachers, setTeachers] = useState([]);
-
 
   useEffect(() => {
     if (flag.current) return;
@@ -3554,7 +3605,6 @@ export function CreateBootcamp() {
 
             delete found.instructorName;
             setFormstate((_) => found);
-            
           } else {
             throw new AdvancedError(message, statusCode);
           }
@@ -3579,8 +3629,6 @@ export function CreateBootcamp() {
       };
     });
   }
-
-
 
   useEffect(() => {
     let mounted = true;
@@ -3618,12 +3666,12 @@ export function CreateBootcamp() {
         if (!success) throw new AdvancedError(message, statusCode);
         else {
           const { data } = res;
-          setTeachers(_=>  data);
+          setTeachers((_) => data);
         }
       } catch (err) {
         toast.error(err.message);
-      }finally {
-        setLoading(_ => false);
+      } finally {
+        setLoading((_) => false);
       }
     })();
   }, []);
@@ -3721,22 +3769,24 @@ export function CreateBootcamp() {
               handleChange={changeHandler}
               value={formstate.title}
             />
-             <div className={clsx.form_group}>
-                <label htmlFor={"package"}>Category</label>
-                <select
-                  rows="5"
-                  name="categoryName"
-                  value={formstate.categoryName}
-                  onChange={changeHandler}
-                  className="form-select generic_input"
-                >
-                  <option value="">Choose a Category</option>
-                  {categories.length > 0 &&
-                    categories.map((item, i) => (
-                      <option key={i} value={item.name}>{item.name}</option>
-                    ))}
-                </select>
-              </div>
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Category</label>
+              <select
+                rows="5"
+                name="categoryName"
+                value={formstate.categoryName}
+                onChange={changeHandler}
+                className="form-select generic_input"
+              >
+                <option value="">Choose a Category</option>
+                {categories.length > 0 &&
+                  categories.map((item, i) => (
+                    <option key={i} value={item.name}>
+                      {item.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
             <Input
               label="Duration"
               name="duration"
@@ -3800,8 +3850,8 @@ export function CreateBootcamp() {
                 className="generic_input"
               ></textarea>
             </div>
-            <div className={clsx.form_group}>
-              <label htmlFor={"package"}>Instructor</label>
+            {/* <div className={clsx.form_group}>
+              <label htmlFor={"instructor"}>Instructor</label>
               <select
                 name="instructor"
                 value={formstate.instructor}
@@ -3809,11 +3859,15 @@ export function CreateBootcamp() {
                 className="form-select generic_input"
               >
                 <option value="">Choose an instructor</option>
-                {teachers.filter((teacher)=>teacher.userType !== "mentor").map(teacher=>(
-                  <option value={teacher.email}>{teacher.firstName} - {teacher.lastName}</option>
-                ))}
+                {teachers
+                  .filter((teacher) => teacher.userType !== "mentor")
+                  .map((teacher) => (
+                    <option value={teacher.email}>
+                      {teacher.firstName} - {teacher.lastName}
+                    </option>
+                  ))}
               </select>
-            </div>
+            </div> */}
             {/* <Input
               label="Instructor Email"
               name="instructor"
@@ -4024,7 +4078,6 @@ export function Fees() {
         else if (statusCode === 1) {
           const { data } = res;
           setFormstate(data);
-          
         } else {
           throw new AdvancedError(message, statusCode);
         }
@@ -4260,7 +4313,7 @@ export function Earnings() {
         if (!success) throw new AdvancedError(message, statusCode);
         else {
           let { data } = res;
-          
+
           console.log(data);
           setRows((_) => data);
         }
@@ -4348,7 +4401,7 @@ export function Student() {
           const { data } = res;
           //do somethings
 
-          setStudentList(data)
+          setStudentList(data);
         }
       } catch (err) {
         toast.error(err.message);
@@ -4514,12 +4567,8 @@ export function Student() {
                       user={true}
                       type={null}
                       deleteUser={(e) => console.Console.log(e)}
-                      handleVerification={(e) =>
-                        console.log(e)
-                      }
-                      handlePledreAccess={(e) =>
-                        console.log(e)
-                      }
+                      handleVerification={(e) => console.log(e)}
+                      handlePledreAccess={(e) => console.log(e)}
                       isAbsolute={true}
                       approveHandler={approveHandler}
                       details={student}
@@ -4915,7 +4964,7 @@ export const Admin = ({ children, header }) => {
         );
         if (unread.length > 0) {
           toast.info(`You have ${unread.length} messages`);
-          setGeneralState({...generalState, chat: unread.length})
+          setGeneralState({ ...generalState, chat: unread.length });
         }
       },
     }
@@ -4937,8 +4986,6 @@ export const Admin = ({ children, header }) => {
   //     });
   //   }
   // },[getOurMessages.data?.data?.status])
-
-
 
   const admin = {
     title: "ADMIN",

@@ -13,11 +13,11 @@ const Experienced = () => {
       <div className="d-flex row  flex-md-row content justify-content-between">
           <div className="col-md-4">
             <header className="text-center text-lg-start ">
-              <h4 className="title" style={{fontSize:"27px"}} >Learn From Industry Experts</h4>
+              <h4 className="title" style={{fontSize:"27px"}} >Connect from anywhere with Industry Experts</h4>
             </header>
             <main className="mt-3">
               <p className="text paragraph">
-                Gotocourse Instructors are experienced practitioners who work at world's most innovative firms, you are going to  learn the most in-demand skills relevant in today’s workplace.
+                Instructors on Gotocourse are experienced practitioners who work at world's most innovative firms, you are going to learn the most in-demand skills relevant to today’s workplace.
               </p>
             </main>
           </div>

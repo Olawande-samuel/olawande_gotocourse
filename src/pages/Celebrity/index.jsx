@@ -289,13 +289,17 @@ export function CelebCard({img, mentorImg, title, mentorFirstName, mentorLastNam
     const navigate = useNavigate()
     return (
         <div className={style.celebrity_card}
-        style={{filter: title === "Celebrity Mentors" && 'blur(60px)'}}
+        
          onClick={()=>{
-            localStorage.setItem("gotocourse-viewMentor", JSON.stringify(item))
-            navigate(`/lounge/mentors/all/${mentorFirstName}-${mentorLastName}`)
+            // localStorage.setItem("gotocourse-viewMentor", JSON.stringify(item))
+            // navigate(`/lounge/mentors/all/${mentorFirstName}-${mentorLastName}`)
         }}>      
-            <img src={img ? img : `${IMAGEURL}/${mentorImg}`} alt={`${mentorFirstName} ${mentorLastName}`} className={style.card_img} />
-            <div className={style.card_content}>
+            <img 
+            style={{filter: title === "Celebrity Mentors" && 'blur(18px)'}}
+            src={img ? img : `${IMAGEURL}/${mentorImg}`} alt={`${mentorFirstName} ${mentorLastName}`} className={style.card_img} />
+            <div className={style.card_content} 
+            style={{filter: title === "Celebrity Mentors" && 'blur(18px)'}}
+            >
                 <h4>{`${mentorFirstName} ${mentorLastName}`}</h4>
                 <p>{expertise}</p>
                 <div className="d-flex justify-content-between">

@@ -22,18 +22,20 @@ const AuthContextProvider = ({children}) => {
         pledre:""
         
     })
+
+    const [outstanding, setOutstanding] = useState(0)
    
     useEffect(() => {
         if(!generalState.pledre && window.PledreAPI ){
             const Pledre = new window.PledreAPI(process.env.REACT_APP_PLEDRE_API, process.env.REACT_APP_PLEDRE_API_SECRET, process.env.REACT_APP_PLEDRE_URL)
             setGeneralState({...generalState, pledre: Pledre})
-            console.log(Pledre);
+            console.log(Pledre.addTeacherToCourse);
         }
         return () => console.log("Rerendering");
     }, [generalState]) 
 
     return (
-        <AuthContext.Provider value={{authFunctions, teacherFunctions, studentFunctions, adminFunctions, generalState, setGeneralState,affiliatesFunctions, adminStudentFunctions, adminTeacherFunctions, otherFunctions, kycFunctions, commonFunctions}}>
+        <AuthContext.Provider value={{authFunctions, teacherFunctions, studentFunctions, adminFunctions, generalState, setGeneralState,affiliatesFunctions, adminStudentFunctions, adminTeacherFunctions, otherFunctions, kycFunctions, commonFunctions, outstanding, setOutstanding}}>
             {children}
         </AuthContext.Provider>
     )
