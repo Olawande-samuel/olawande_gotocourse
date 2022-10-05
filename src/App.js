@@ -228,7 +228,7 @@ function App() {
                 <Route path=":id" element={<Out />} >
                   <Route index element={<TeacherProfile type="mentors" />} />
                 </Route>
-
+              </Route>
 
                 <Route path="mentor" element={<Out />}>
                   <Route index element={<MentorsDashboard />} />
@@ -238,9 +238,7 @@ function App() {
                   <Route path="earnings" element={<MentorsEarnings />} />
                   <Route path="scheduler" element={<MentorsScheduler />} />
                 </Route>
-                
-                
-              </Route>
+
               <Route path="teachers" element={<Out />}>
                 <Route index element={<All type="teachers" />} />
                 <Route path=":id" element={<Out />} >
