@@ -20,12 +20,12 @@
 }
 
 
-.teachers {
+.mentors {
     display: flex;
     align-items: center;
     width: 100%;
 }
-.teachers_main {
+.mentors_main {
     height: 100vh;
     flex: 1;
     background-color: var(--primary);
@@ -36,7 +36,7 @@
     width: 100%;
 }
 @media (min-width: 500px ){
-    .teachers_main {
+    .mentors_main {
         padding: 30px;
         padding-bottom: 8px;
     }

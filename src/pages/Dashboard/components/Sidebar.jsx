@@ -3,6 +3,8 @@ import {Badge} from "@mui/material"
 import { MdHistory} from "react-icons/md";
 import {AiOutlineClose, AiOutlineSetting, AiOutlineDashboard} from "react-icons/ai";
 import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash, IoIosHelpBuoy} from "react-icons/io";
+
+import {FaCalendarAlt} from "react-icons/fa";
 import {BiCategory, BiBell, BiBarChartSquare, BiHelpCircle, BiVideo} from "react-icons/bi";
 import {MdOutlineAddReaction} from "react-icons/md";
 import {FaTwitch} from "react-icons/fa";
@@ -25,7 +27,7 @@ import { LogoSidebar, Logosm } from "../../../images/components/svgs";
 
 
 //mini-components
-function SidebarItem({icon: Icon, title, isMobile, path,showBadge, ...props}){
+function SidebarItem({icon: Icon, title, path,showBadge, ...props}){
     const {generalState:{notifications, chat}} = useAuth(); 
 
     return (
@@ -34,9 +36,9 @@ function SidebarItem({icon: Icon, title, isMobile, path,showBadge, ...props}){
             <i>
                 <Icon className={clsx.sidebar_icon} color="white" size="1.5rem" />
             </i>
-            {isMobile && <span className={clsx.sidebar_item_title}>
+            <span className={clsx.sidebar_item_title}>
                 {title}
-            </span>}
+            </span>
         </Badge>
         </div>
     )
@@ -44,7 +46,7 @@ function SidebarItem({icon: Icon, title, isMobile, path,showBadge, ...props}){
 
 
 
-const Sidebar = ({isMobile}) => {
+const Sidebar = ({}) => {
     const location = useLocation();
     const {generalState,  setGeneralState} = useAuth();
     const navigate = useNavigate();
@@ -252,6 +254,50 @@ const Sidebar = ({isMobile}) => {
             path: "../console",
             title: "Console"
         }
+    ] : route === 'mentor' ? [
+            {
+                icon: AiOutlineDashboard,
+                path: "",
+                title: "Dashboard"
+            },
+            {
+                icon: IoIosPerson,
+                path: "profile",
+                title: "My Profile"
+            },
+            {
+                icon: IoIosCash,
+                path: "earnings",
+                title: "Earnings"
+            },
+            {
+                icon: MdOutlineAddReaction,
+                path: "referral",
+                title: "Referral"
+            },
+            {
+                icon: BiBell,
+                path: "notifications",
+                title: "Notifications",
+                showBadge:true,
+            },
+            {
+                icon: FaCalendarAlt,
+                path: "scheduler",
+                title: "Scheduler"
+            },
+            {
+                icon:IoIosChatbubbles,
+                path: "chat",
+                title: "Chat",
+                showBadge:true,
+    
+            },
+            {
+                icon: BiHelpCircle,
+                path: "help",
+                title: "Help"            
+            }
     ] : [
         
         {
@@ -328,9 +374,9 @@ const Sidebar = ({isMobile}) => {
             <div className={clsx.sidebar_items} id="sidebar__items">
                 {
                     data.map(({icon, path, title,showBadge, admin}, i) => (
-                        <NavLink onClick={toggleSidebar} to={`${route === "admin" ? '/admin' : route === 'student' ? '/student' : route === "teacher" ? '/teacher': '/affiliate'}${'/'+path}`}  key={i}>
+                        <NavLink onClick={toggleSidebar} to={`${route === "admin" ? '/admin' : route === 'student' ? '/student' : route === "teacher" ? '/teacher' : route === "mentor" ? '/mentor' : '/affiliate'}${'/'+path}`}  key={i}>
                             <SidebarItem location={location}
-                            isMobile={!isMobile} icon={icon} 
+                             icon={icon} 
                             title={title} path={path} showBadge={showBadge} admin={admin} />
                         </NavLink>
                     ))

@@ -92,6 +92,10 @@ import Note from "./pages/Dashboard/components/classConsole/Note";
 import { Intermission, LiveClassInfo } from "./pages/Dashboard/components/classConsole/Liveclass";
 import Live from "./pages/Dashboard/Teachers/Live";
 
+import {MentorsProfile, EditMentorsProfile, MentorsNotification, MentorsDashboard, MentorsEarnings, MentorsScheduler} from "./pages/Dashboard/Mentors";
+
+
+
 const Login = lazy(() => import("./pages/User/Login"))
 const SignUp = lazy(() => import("./pages/User/SignUp"))
 const AdminLogin = lazy(() => import("./pages/Admin/Login"))
@@ -115,6 +119,12 @@ const About = lazy(() => import("./pages/About"))
 const Contact = lazy(() => import("./pages/Contact"))
 const Settings = lazy(() => import("./pages/Dashboard/Admin/Settings"))
 const LiveClass = lazy(() => import("./pages/Dashboard/components/Live/LiveClass"))
+
+
+//MENTORS
+// const {MentorsProfile} = lazy(() => import("./pages/Dashboard/Mentors"));
+
+
 
 
 
@@ -217,15 +227,24 @@ function App() {
                 <Route index element={<All type="mentors" />} />
                 <Route path=":id" element={<Out />} >
                   <Route index element={<TeacherProfile type="mentors" />} />
-                  {/* <Route path="payment" element={<Payment />} /> */}
                 </Route>
-              </Route>
 
+
+                <Route path="mentor" element={<Out />}>
+                  <Route index element={<MentorsDashboard />} />
+                  <Route path="profile" element={<MentorsProfile />} />
+                  <Route path="profile/edit" element={<EditMentorsProfile />} />
+                  <Route path="notifications" element={<MentorsNotification />} />
+                  <Route path="earnings" element={<MentorsEarnings />} />
+                  <Route path="scheduler" element={<MentorsScheduler />} />
+                </Route>
+                
+                
+              </Route>
               <Route path="teachers" element={<Out />}>
                 <Route index element={<All type="teachers" />} />
                 <Route path=":id" element={<Out />} >
                   <Route index element={<TeacherProfile />} />
-                  {/* <Route path="payment" element={<Payment />} /> */}
                 </Route>
               </Route>
 
