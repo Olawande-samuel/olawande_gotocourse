@@ -933,18 +933,17 @@ export const Teachers = ({ children, isMobile, userdata, notification, header, l
     // }
 
     return ()=>{
-        isActive = false
-
+      isActive = false
     }
 },[pledre.baseUrl])
 
   const toggleSidebar = () => {
     setGeneralState({ ...generalState, showSidebar: !showSidebar });
   };
-  const [loader, setLoading] = useState(false)
+
 
   const teacher = {
-    title: userData.userType === "teacher" ? "TEACHER" : "MENTOR",
+    title: "TEACHER",
     logo: <FaChalkboardTeacher size="2.5rem" color="#0C2191" />
 }
 

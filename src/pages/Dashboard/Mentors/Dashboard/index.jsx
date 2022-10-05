@@ -74,7 +74,7 @@ const Dashboard = () =>{
       <DashboardTop content={topContent} />
         <div className={clsx.teachers_profile_dashboard}>
           <div className={`d-flex justify-content-between ${clsx.dashboard_courses}`}>
-            <div className={clsx["dashboard_courses--left"]}>
+            {/* <div className={clsx["dashboard_courses--left"]}>
                 <h6>My Classes</h6>
                 <ul>
                     {
@@ -111,7 +111,6 @@ const Dashboard = () =>{
                         ))
                     }
                 </ul> */}
-            </div>
           </div>
         <Community />
         </div>

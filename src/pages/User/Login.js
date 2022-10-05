@@ -90,7 +90,7 @@ const Login = () => {
         } else if(d.userType === "mentor"){
             if(d.isVerified){
               updateItem(KEY, d);
-              navigate("/teacher")
+              navigate("/mentor")
             } else {
               updateItem(VERIFICATION_KEY, d);
               navigate("/user-authentication")

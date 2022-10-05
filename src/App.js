@@ -78,7 +78,7 @@ import Loader from "./components/Loader";
 import CheckList from "./pages/Teacher/checkList";
 import Events from "./pages/Events";
 
-import {MentorsProfile, EditMentorsProfile, MentorsNotification, MentorsDashboard, MentorsEarnings, MentorsScheduler} from "./pages/Dashboard/Mentors";
+import {MentorsProfile, EditMentorsProfile, MentorsNotification, MentorsDashboard, MentorsEarnings, MentorsScheduler, MentorsChat, MentorsReferral, MentorsHelp} from "./pages/Dashboard/Mentors";
 
 
 
@@ -214,6 +214,9 @@ function App() {
                   <Route path="notifications" element={<MentorsNotification />} />
                   <Route path="earnings" element={<MentorsEarnings />} />
                   <Route path="scheduler" element={<MentorsScheduler />} />
+                  <Route path="chat" element={<MentorsChat />} />
+                  <Route path="referral" element={<MentorsReferral />} />
+                  <Route path="help" element={<MentorsHelp />} />
                 </Route>
                 
                 <Route path="teachers" element={<Out/>}>
