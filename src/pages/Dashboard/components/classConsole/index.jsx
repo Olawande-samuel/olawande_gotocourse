@@ -148,6 +148,33 @@ function Sidebar({ Toggle }) {
 
 function Accord() {
 
+    const data = [
+        {
+            id: 1,
+            icon: AiOutlinePaperClip,
+            title:"My file",
+            link:1,
+            type: "file",
+        },
+
+        {
+            id: 2,
+            icon: MdOutlineNote,
+            title:"My Note",
+            link:2,
+            type: "note",
+
+        }, 
+         
+        {
+            id: 3,
+            icon: VscNote,
+            title:"My Quiz",
+            link:3,
+            type: "quiz",
+
+        }
+    ]
     const [details, showDetails] = useState(false)
     return (
         <div className={style.content_item}>
@@ -167,27 +194,19 @@ function Accord() {
             {
                 details && (
                     <ul className={style.content_list}>
-                        <li>
-                            <Link to="/test/file">
-                                <i><AiOutlinePaperClip /></i>
-                                <span>My file</span>
-                                {/* <i><BsThreeDotsVertical /></i> */}
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/test/note">
-                                <i><MdOutlineNote /></i>
-                                <span>My note</span>
-                                {/* <i><BsThreeDotsVertical /></i> */}
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/test/quiz">
-                                <i><VscNote /></i>
-                                <span>My quiz</span>
-                                {/* <i><BsThreeDotsVertical /></i> */}
-                            </Link>
-                        </li>
+                        {
+                            
+                            data.map(({icon:Icon, title, link, id, type})=>(
+                                <li key={id}>
+                                    <Link to={`/test/${type}`}>
+                                        <i><Icon /></i>
+                                        <span>{title}</span> 
+                                        {/* <i><BsThreeDotsVertical /></i> */}
+                                    </Link>
+                                </li>
+
+                            ))
+                        }
                     </ul>
                 )
             }

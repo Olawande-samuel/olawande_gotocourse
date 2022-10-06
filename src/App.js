@@ -85,7 +85,7 @@ import CheckList from "./pages/Teacher/checkList";
 import Events from "./pages/Events";
 import Business from "./Business/pages/landing/business";
 // import Console from "./pages/Dashboard/components/classConsole";
-import Content from "./pages/Dashboard/components/classConsole/Content";
+import Content, { FileComponent, NoteComponent, QuizComponent } from "./pages/Dashboard/components/classConsole/Content";
 import Quiz, { Preview } from "./pages/Dashboard/components/classConsole/Quiz";
 import Note from "./pages/Dashboard/components/classConsole/Note";
 import File from "./pages/Dashboard/components/classConsole/File";
@@ -224,18 +224,18 @@ function App() {
 
               <Route path="test" element={<Out />}>
                 <Route index element={<Content />} />
-                {/* <Route path="file" element={<File />} />
-                <Route path="note" element={<Note />} />
-                <Route path="note" element={<Quiz />} /> */}
-                <Route path="preview" element={<Preview />} />
+                <Route path="file" element={<FileComponent />} />
+                <Route path="note" element={<NoteComponent />} />
+                <Route path="quiz" element={<Out />}>
+                  <Route index element={<QuizComponent />} />
+                  <Route path="preview" element={<Preview />} />
+                </Route>
               </Route>
 
               <Route path="mentors" element={<Out />}>
                 <Route index element={<All type="mentors" />} />
                 <Route path=":id" element={<Out />} >
                   <Route index element={<TeacherProfile type="mentors" />} />
-                    {/* <Route path="payment" element={<Payment />} /> */}
-                  </Route>
                 </Route>
               </Route>
 

@@ -277,7 +277,7 @@ export default function Quiz() {
                         </form>
 
                         <div className="textbtn">
-                            <button><Link to="/test/preview">Preview quiz</Link></button>
+                            <button><Link to="preview">Preview quiz</Link></button>
 
                         </div>
 

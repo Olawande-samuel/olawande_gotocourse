@@ -1,12 +1,12 @@
 import Console from '../classConsole/index';
 import { useState } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import File from './File';
 import Quiz from './Quiz';
 import Note from './Note';
 // import Out from '../../../Out';
 
-export default function Content() {
+export default function Content({type}) {
     const [show, setShow] = useState(false);
     const [open, setOpen] = useState(false);
     const [moduleOpen, setModuleOpen] = useState(false);
@@ -23,8 +23,27 @@ export default function Content() {
     const moduleClose = () => setModuleOpen(false)
 
 
-    const {pathname} = useLocation()
+    const location = useLocation()
+    const params = useParams()
 
+    console.log({params})
+    console.log(location)
+
+
+    function showType(params) {
+        switch (params.id) {
+            case "1":
+                return <File />    
+            case "2":
+                return <Note />
+                
+            break;
+            case "3":
+                return <Quiz />    
+            default:
+                return <File />
+        }    
+    }
 
     return (
         <>
@@ -42,17 +61,35 @@ export default function Content() {
                 toggleModule={toggleModule}
                 moduleClose={moduleClose}
             >
-                {/* <File  OpenToggle={OpenToggle}/> */}
-                <Quiz/>
-                {/* <Note/> */}
-                {/* <Out/> */}
-               
+              
+                <p>hello</p>   
 
             </Console>
-
 
 
         </>
     )
 
+}
+
+export function QuizComponent(){
+    return (
+        <Console>
+            <Quiz />
+        </Console>
+    )
+}
+export function FileComponent(){
+    return (
+        <Console>
+            <File />
+        </Console>
+    )
+}
+export function NoteComponent(){
+    return (
+        <Console>
+            <Note />
+        </Console>
+    )
 }
