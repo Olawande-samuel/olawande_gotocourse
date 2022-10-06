@@ -1,18 +1,12 @@
+import { NavLink } from 'react-router-dom'
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import '../classConsole/Content.css'
-import Console from './index';
-import style from "./style.module.css"
-import { BiCaretDown, BiCaretRight, BiCaretUp } from 'react-icons/bi'
-import { BsThreeDotsVertical } from 'react-icons/bs'
-import { AiOutlinePaperClip, } from 'react-icons/ai'
-import { NavLink } from 'react-router-dom';
+import { IoMdCloudDownload } from 'react-icons/io';
 
-import { useState } from 'react'
-
-export default function Note() {
-    const [details, showDetails] = useState(false)
+export default function File({ OpenToggle}){
     return (
-                <div className=''>
+        <>
+         <div className=''>
                     <section className="contentheader">
 
                         <div className="contenttitle">
@@ -20,7 +14,7 @@ export default function Note() {
 
                         </div>
                         <div className="contentcategory">
-                            <NavLink to="file" className={({ isActive }) => isActive ? "active" : undefined}>Note</NavLink>
+                            <NavLink to="file" className={({ isActive }) => isActive ? "active" : undefined}>File</NavLink>
                             <NavLink to="integration" className={({ isActive }) => isActive ? "active" : undefined}>Integration</NavLink>
                         </div>
 
@@ -30,31 +24,35 @@ export default function Note() {
                                 <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
                                     EXCEL FUNCTIONS 101
                                 </Breadcrumb.Item>
-                                <Breadcrumb.Item active>Note</Breadcrumb.Item>
+                                <Breadcrumb.Item active>CREAT COLUMN</Breadcrumb.Item>
                             </Breadcrumb>
 
                         </div>
 
                     </section>
 
-                    <small className='smallnote'>Make sure you constantly save your note as you type.</small>
-                    <main className='note'>
-                        <h4>Hey this is a demo note heading</h4>
-                        <p>This is a body text</p>
-                        <span>This is a body text</span>
-
-                        <div className="notebtn">
-                            <button>Save note</button>
+                    <section className="contenttop">
+                        <div className="contentbutton">
+                            <button className=''>Refresh</button>
+                            <button className='' onClick={OpenToggle}>Add New +</button>
                         </div>
 
+                    </section>
+
+                    <main className='contentbody'>
 
 
                     </main>
 
-
+                    <div className="contentbutton">
+                        <button className=''>Open</button>
+                        <div>
+                            <IoMdCloudDownload />
+                        </div>
+                    </div>
 
                 </div>
+        </>
 
-           
     )
 }

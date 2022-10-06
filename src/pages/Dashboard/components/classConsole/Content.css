@@ -109,9 +109,16 @@
     border: 3px solid red;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: .5rem;
     margin-top: 2rem;
 
+}
+
+.quiz__title {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    text-transform: uppercase;
 }
 
 .content__quiz {
@@ -130,14 +137,22 @@
     color: #000000;
 }
 
+.content__quiz input::placeholder {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+
+}
+
 .content__quiz input,
 .content__quiz select {
 
     background: #FFFFFF;
     border-radius: 10px;
     padding: 1rem;
-    border: 1px solid #FFFFFF;
-    outline: 1px solid #0C2191;
+    /* border: 1px solid #FFFFFF; */
+    /* outline: 1px solid #0C2191; */
+    border: none;
 
 }
 
@@ -155,6 +170,9 @@
 }
 
 .contentquiz__checkbbox {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
     color: #0C2191;
 
 }
@@ -164,6 +182,18 @@
     font-size: 12px;
     line-height: 19px;
 
+}
+
+.multiplechoice{
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    /* border: 2px solid red; */
+}
+
+.multiplechoice svg{
+    font-size: 2rem;
+    color: #000000;
 }
 
 .textbtn button {
@@ -224,22 +254,23 @@
     line-height: 18px;
 }
 
-.preview__content{
-    padding: 1.5rem ;
+.preview__content {
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
 }
 
-.preview__top{
+.preview__top {
     padding: 2rem 5rem;
 }
 
-.preview__bottom{
+.preview__bottom {
     padding: 2rem;
 }
 
-.preview__top, .preview__bottom{
+.preview__top,
+.preview__bottom {
     background: #C2DCFF;
     border-radius: 10px;
     color: #0C2191;
@@ -247,35 +278,37 @@
 
 }
 
-.preview__top h4, .preview__bottom h4{
+.preview__top h4,
+.preview__bottom h4 {
     font-weight: 700;
-font-size: 16px;
-line-height: 18px;
-text-transform: uppercase;
+    font-size: 16px;
+    line-height: 18px;
+    text-transform: uppercase;
 
 }
 
-.preview__top p{
+.preview__top p {
     font-weight: 400;
-font-size: 15px;
-line-height: 18px;
+    font-size: 15px;
+    line-height: 18px;
 }
 
-.preview__bottom h4{
+.preview__bottom h4 {
     text-align: center;
 }
 
-.preview__accord{
+.preview__accord {
     padding: .3rem 0;
 }
 
-.previewaccord__header button{
+.previewaccord__header button {
     font-weight: 400;
     font-size: 18px;
     line-height: 31px;
     color: #0C2191;
 }
-.previewbtn{
+
+.previewbtn {
     margin: 2rem 0;
     width: 100%;
     /* border: 2px solid red; */
@@ -285,7 +318,8 @@ line-height: 18px;
     align-items: center;
     gap: .5rem;
 }
-.previewbtn button{
+
+.previewbtn button {
     padding: 0.5rem 1rem;
     outline: none;
     font-weight: 400;
@@ -301,7 +335,7 @@ line-height: 18px;
 
 /* notes */
 
-.note{
+.note {
     position: relative;
     background: #D1E5FF;
     display: flex;
@@ -315,7 +349,7 @@ line-height: 18px;
 
 }
 
-.notebtn button{
+.notebtn button {
     position: absolute;
     bottom: 0;
     left: 50%;
@@ -331,6 +365,6 @@ line-height: 18px;
 
 }
 
-.smallnote{
-    color: #0C2191; 
+.smallnote {
+    color: #0C2191;
 }
