@@ -1,6 +1,6 @@
 import Console from '../classConsole/index';
 import { useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
 import File from './File';
 import Quiz from './Quiz';
 import Note from './Note';
@@ -34,9 +34,7 @@ export default function Content({type}) {
     return (
         <>
             <Console>
-              
-              <File  />  
-
+                <Outlet />
             </Console>
 
 
@@ -47,22 +45,18 @@ export default function Content({type}) {
 
 export function QuizComponent(){
     return (
-        <Console>
-            <Quiz />
-        </Console>
+        <Quiz />
     )
 }
+
 export function FileComponent(){
-    return (
-        <Console>
-            <File />
-        </Console>
+    return (    
+        <File />
     )
 }
+
 export function NoteComponent(){
     return (
-        <Console>
-            <Note />
-        </Console>
+        <Note />
     )
 }

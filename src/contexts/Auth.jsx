@@ -20,7 +20,7 @@ const AuthContextProvider = ({children}) => {
         notifications:0,
         chat:0,
         pledre:"", 
-        console: {
+        classConsole: {
             sidebar: false
         }
         

@@ -639,3 +639,12 @@
         padding: 26.67px 43px 19px 43px;
     }
 }
+
+
+/* ADMIN CLASS CONSOLE */
+.class_con_cards {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+}

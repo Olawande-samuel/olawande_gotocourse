@@ -23,6 +23,7 @@ import { colors, KEY } from "../../../constants";
 import { useAuth } from "../../../contexts/Auth";
 import LogoutButton from "../../../components/LogoutButton";
 import { LogoSidebar, Logosm } from "../../../images/components/svgs";
+import { SiGoogleclassroom } from "react-icons/si";
 
 
 
@@ -99,8 +100,13 @@ const Sidebar = ({}) => {
         },
         {
             icon: BiCategory,
-            path: "bootcamps",
+            path: "classes",
             title: "Classes"
+        },
+        {
+            icon: BiVideo,
+            path: "live-class",
+            title: "Live Class"
         },
         {
             icon: BiBell,
@@ -126,8 +132,8 @@ const Sidebar = ({}) => {
             title: "Settings"
         },
         {
-            icon:AiOutlineSetting,
-            path: "../console",
+            icon: SiGoogleclassroom,
+            path: "class-console",
             title: "Console"
         }
     ] : route === "student" ?  [
@@ -143,7 +149,7 @@ const Sidebar = ({}) => {
         },
         {
             icon: BiCategory,
-            path: "bootcamps",
+            path: "classes",
             title: "Available Classes"
         },
         {
@@ -191,6 +197,13 @@ const Sidebar = ({}) => {
 
         },
         {
+            icon:SiGoogleclassroom,
+            path: "class-console",
+            title: "Class Console",
+            showBadge:true,
+
+        },
+        {
             icon: BiHelpCircle,
             path: "help",
             title: "Help"            
@@ -213,8 +226,8 @@ const Sidebar = ({}) => {
         },
         {
             icon: BiCategory,
-            path: "bootcamps",
-            title: "Bootcamps"
+            path: "classes",
+            title: "Classes"
         },
         {
             icon: BiVideo,
@@ -250,8 +263,8 @@ const Sidebar = ({}) => {
             title: "Help"            
         },
         {
-            icon:AiOutlineSetting,
-            path: "../console",
+            icon: SiGoogleclassroom,
+            path: "class-console",
             title: "Console"
         }
     ] : route === 'mentor' ? [

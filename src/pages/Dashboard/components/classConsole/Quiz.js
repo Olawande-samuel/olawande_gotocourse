@@ -16,7 +16,7 @@ import { RiDeleteBinFill } from 'react-icons/ri';
 export function Preview() {
 
     return (
-        <Console>
+        <>
             <div className="goback">
                 <Link to="/"><AiOutlineArrowLeft /> class console</Link>
             </div>
@@ -61,7 +61,7 @@ export function Preview() {
 
             </div>
 
-        </Console>
+        </>
     )
 }
 

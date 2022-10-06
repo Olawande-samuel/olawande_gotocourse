@@ -63,7 +63,7 @@ export default function Navbar({ header, toggleSidebar, notification, content })
                 )}
 
 
-                <GotoDashboard loader={loading} setLoading={setLoading} />
+                {/* <GotoDashboard loader={loading} setLoading={setLoading} /> */}
                 <LogoutButton />
             </div>
         </div>

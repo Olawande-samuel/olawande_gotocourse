@@ -1,425 +1,530 @@
-import {useAuth} from '../../../../contexts/Auth'
+import { useAuth } from "../../../../contexts/Auth";
 
-import { useState, useRef } from 'react'
-import { AiFillClockCircle, AiOutlinePaperClip, AiOutlinePlus, AiOutlineMenu } from 'react-icons/ai'
-import { BiCaretDown, BiCaretRight, BiCaretUp } from 'react-icons/bi'
-import { BsPaperclip, BsCameraReels, BsCloudUpload, BsPlayBtn, BsThreeDotsVertical } from 'react-icons/bs'
-import { RiVideoAddFill } from 'react-icons/ri'
-import { VscNote, VscScreenNormal } from 'react-icons/vsc'
+import { useState, useRef } from "react";
+import {
+  AiFillClockCircle,
+  AiOutlinePaperClip,
+  AiOutlinePlus,
+  AiOutlineMenu,
+} from "react-icons/ai";
+import { BiCaretDown, BiCaretRight, BiCaretUp } from "react-icons/bi";
+import {
+  BsPaperclip,
+  BsCameraReels,
+  BsCloudUpload,
+  BsPlayBtn,
+  BsThreeDotsVertical,
+} from "react-icons/bs";
+import { RiVideoAddFill } from "react-icons/ri";
+import { VscNote, VscScreenNormal } from "react-icons/vsc";
 
-import { Logosm } from '../../../../images/components/svgs'
-import style from "./style.module.css"
-import "./console.css"
-import { IconButton, Tooltip } from '@mui/material'
+import { Logosm } from "../../../../images/components/svgs";
+import style from "./style.module.css";
+import "./console.css";
+import { IconButton, Tooltip } from "@mui/material";
 
-import { FaCalendarAlt, FaUsers } from 'react-icons/fa'
-import { MdAttachFile, MdLibraryAdd, MdLocationOn, MdMessage, MdOutlineNote } from 'react-icons/md'
-import Modal from 'react-bootstrap/Modal';
-import { TextField, InputLabel, MenuItem, FormHelperText, FormControl, Select, FormControlLabel, Switch } from '@mui/material'
+import { FaCalendarAlt, FaUsers } from "react-icons/fa";
+import {
+  MdAttachFile,
+  MdLibraryAdd,
+  MdLocationOn,
+  MdMessage,
+  MdOutlineNote,
+} from "react-icons/md";
+import Modal from "react-bootstrap/Modal";
+import {
+  TextField,
+  InputLabel,
+  MenuItem,
+  FormHelperText,
+  FormControl,
+  Select,
+  FormControlLabel,
+  Switch,
+} from "@mui/material";
 
-import { Link } from 'react-router-dom'
-import clsx from '../styles.module.css'
-import { NavLink, useLocation } from 'react-router-dom'
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import { Link, useNavigate } from "react-router-dom";
+import clsx from "../styles.module.css";
+import { NavLink, useLocation } from "react-router-dom";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 const iconData = [
-    {
-        id: 1,
-        icon: MdMessage,
-        title: "Mail"
-    },
-    {
-        id: 2,
-        icon: MdLibraryAdd,
-        title: "Creator suite"
-    },
-    {
-        id: 3,
-        icon: RiVideoAddFill,
-        title: "Live Class"
-    },
-    {
-        id: 4,
-        icon: FaUsers,
-        title: "Students"
-    },
-]
+  {
+    id: 1,
+    icon: MdMessage,
+    title: "Mail",
+  },
+  {
+    id: 2,
+    icon: MdLibraryAdd,
+    title: "Creator suite",
+  },
+  {
+    id: 3,
+    icon: RiVideoAddFill,
+    title: "Live Class",
+  },
+  {
+    id: 4,
+    icon: FaUsers,
+    title: "Students",
+  },
+];
 
 const popIcon = [
-    {
-        id: 1,
-        icon: BsCameraReels,
-        title: "Record Camera"
-    },
-    {
-        id: 2,
-        icon: VscScreenNormal,
-        title: "Record Screen"
-    },
-    {
-        id: 3,
-        icon: RiVideoAddFill,
-        title: "Upload Video"
-    },
+  {
+    id: 1,
+    icon: BsCameraReels,
+    title: "Record Camera",
+  },
+  {
+    id: 2,
+    icon: VscScreenNormal,
+    title: "Record Screen",
+  },
+  {
+    id: 3,
+    icon: RiVideoAddFill,
+    title: "Upload Video",
+  },
 
-    {
-        id: 4,
-        icon: BsCloudUpload,
-        title: "Upload File/Image"
-    },
-    {
-        id: 5,
-        icon: BsPlayBtn,
-        title: "Import from Creator suite"
-    },
-]
+  {
+    id: 4,
+    icon: BsCloudUpload,
+    title: "Upload File/Image",
+  },
+  {
+    id: 5,
+    icon: BsPlayBtn,
+    title: "Import from Creator suite",
+  },
+];
 
+export const Console = ({ children }) => {
+  const {
+    generalState: { classConsole },
+    generalState,
+    setGeneralState,
+  } = useAuth();
+  const { pathname } = useLocation();
+  const [side, setSide] = useState(false);
+  const [show, setShow] = useState(false);
+  const [moduleOpen, setModuleOpen] = useState(false);
 
+  const Toggle = () => setShow(!show);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
-export const Console = ({children }) => {
-    const {generalState:{console}, generalState, setGeneralState} = useAuth()
-    const { pathname } = useLocation()
-    const [side, setSide] = useState(false)
-    const [show, setShow] = useState(false);
-    const [moduleOpen, setModuleOpen] = useState(false);
-    
-    const Toggle = () => setShow(!show)
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-    
-    
+  const toggleModule = () => setModuleOpen(!moduleOpen);
+  const moduleClose = () => setModuleOpen(false);
 
+  const toggleSidebar = () =>
+    setGeneralState({
+      ...generalState,
+      classConsole: { ...classConsole, sidebar: !classConsole.sidebar },
+    });
 
-    const toggleModule = () => setModuleOpen(!moduleOpen)
-    const moduleClose = () => setModuleOpen(false)
+  const NoteAndFile =
+    pathname.split("/")[2] === "note"
+      ? "Note"
+      : pathname.split("/")[2] === "file"
+      ? "File"
+      : "";
+  const quizpath = pathname.split("/")[2] === "quiz" && "Quiz";
 
-    const toggleSidebar = () => setSide(!side)
+  const bread = pathname?.split("/");
 
-    const NoteAndFile = pathname.split('/')[2] === "note" ? "Note" : pathname.split('/')[2] === "file" ? "File" : ""
-    const quizpath = pathname.split('/')[2] === "quiz" && "Quiz"
-    return (
-        <div className={style.console}>
-            <Sidebar
-                show={show}
-                setShow={setShow}
-                handleClose={handleClose}
-                handleShow={handleShow}
-                Toggle={Toggle}
-                side={side}
+  return (
+    <div className={style.console}>
+      <Sidebar Toggle={Toggle} />
+      <ModalContent
+        show={show}
+        setShow={setShow}
+        handleClose={handleClose}
+        handleShow={handleShow}
+        Toggle={Toggle}
+        toggleModule={toggleModule}
+      />
 
-            />
-            <ModalContent
-                show={show}
-                setShow={setShow}
-                handleClose={handleClose}
-                handleShow={handleShow}
-                Toggle={Toggle}
-                toggleModule={toggleModule}
-            />
+      <ModuleModal moduleOpen={moduleOpen} moduleClose={moduleClose} />
 
-            <ModuleModal moduleOpen={moduleOpen} moduleClose={moduleClose} />
-
-            <main className={style.children}>
-                <section className="contentheader">
-
-                    <div className="contentnav">
-                        <div className="content__hamburger">
-                            <div className="hamburger me-3 align-items-center">
-                                <i>
-                                    <AiOutlineMenu style={{ fontSize: "24px", color: "#0C2191", cursor: "pointer" }} onClick={toggleSidebar} />
-                                </i>
-                            </div>
-                        </div>
-
-                        <div className="contenttitle">
-                            <h2>Class Console</h2>
-
-                        </div>
-                    </div>
-
-
-                    {
-                        NoteAndFile && NoteAndFile !== "" && (
-                            <div className="contentcategory">
-                                <NavLink to="file" className={({ isActive }) => isActive ? "active" : undefined}>{NoteAndFile}</NavLink>
-                                <NavLink to="integration" className={({ isActive }) => isActive ? "active" : undefined}>Integration</NavLink>
-                            </div>
-
-                        )
-                    }
-
-                    <div className="contentbreadcrumb">
-                        <Breadcrumb>
-                            <Breadcrumb.Item href="#">Dashboard</Breadcrumb.Item>
-                            <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-                                EXCEL FUNCTIONS 101
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item active>{quizpath || NoteAndFile}</Breadcrumb.Item>
-                        </Breadcrumb>
-
-                    </div>
-
-                </section>
-                {children}
-            </main>
-
-            <div className={style.icon_bar}>
-
-                {
-                    iconData.map(({ title, id, icon: Icon }) => (
-                        <Tooltip title={title} key={id}>
-                            <IconButton>
-                                <Icon size="1.5rem" color='#0C2191' />
-                            </IconButton>
-                        </Tooltip>
-                    ))
-                }
+      <main className={style.children}>
+        <section className="contentheader">
+          <div className="contentnav">
+            <div className="content__hamburger">
+              <div className="hamburger me-3 align-items-center">
+                <i>
+                  <AiOutlineMenu
+                    style={{
+                      fontSize: "24px",
+                      color: "#0C2191",
+                      cursor: "pointer",
+                    }}
+                    onClick={toggleSidebar}
+                  />
+                </i>
+              </div>
             </div>
 
+            <div className="contenttitle">
+              <h2>Class Console</h2>
+            </div>
+          </div>
+
+          {NoteAndFile && NoteAndFile !== "" && (
+            <div className="contentcategory">
+              <NavLink
+                to="file"
+                className={({ isActive }) => (isActive ? "active" : undefined)}
+              >
+                {NoteAndFile}
+              </NavLink>
+              <NavLink
+                to="integration"
+                className={({ isActive }) => (isActive ? "active" : undefined)}
+              >
+                Integration
+              </NavLink>
+            </div>
+          )}
+
+          <div className="contentbreadcrumb">
+            <nav arial-label="breadcrumb">
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item">
+                  <Link to={goBack(pathname)} style={{ color: "var(--theme-blue", textTransform:"uppercase" }}>
+                    Dashboard
+                  </Link>
+                </li>
+                {bread
+                  .filter((item) => item !== "")
+                  .map((item, idx) => (
+                    <li className="breadcrumb-item text-uppercase" key={idx}>
+                      <Link
+                        style={{ color: "var(--theme-blue" }}
+                        to={`${bread.slice(0, idx + 2).join("/")}`}
+                      >
+                        {item.split("-").join(" ")}
+                      </Link>
+                    </li>
+                  ))}
+              </ol>
+            </nav>
+          </div>
+        </section>
+        {children}
+      </main>
+
+      <div className={style.icon_bar}>
+        {iconData.map(({ title, id, icon: Icon }) => (
+          <Tooltip title={title} key={id}>
+            <IconButton>
+              <Icon size="1.5rem" color="#0C2191" />
+            </IconButton>
+          </Tooltip>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export function goBack(pathname) {
+  let pathArray = pathname.split("/")[1];
+
+  switch (pathArray) {
+    case "teacher":
+      return "/teacher";
+    case "student":
+      return "/student";
+    default:
+      return "/admin";
+  }
+}
+
+function Sidebar({ Toggle, side }) {
+  const {
+    generalState: { classConsole },
+    generalState,
+    setGeneralState,
+  } = useAuth();
+
+  console.log(generalState);
+
+  function closeSidebar() {
+    setGeneralState({
+      ...generalState,
+      classConsole: { ...classConsole, sidebar: !classConsole.sidebar },
+    });
+  }
+
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  function goBack() {
+    let pathArray = pathname.split("/")[1];
+
+    switch (pathArray) {
+      case "teacher":
+        return "/teacher";
+      case "student":
+        return "/student";
+      default:
+        return "/admin";
+    }
+  }
+  return (
+    // <article className={style.class_sidebar }>
+    <>
+      <article
+        className={`${classConsole.sidebar ? style.open : style.close} ${
+          style.class_sidebar
+        }`}
+      >
+        <Link to="/">
+          <Logosm />
+        </Link>
+
+        <div className={style.course_content}>
+          <p>Course content</p>
+          <Accord />
+          <Accord />
+          <Accord />
         </div>
-    )
+        <div className={style.create_content_button}>
+          <button onClick={Toggle}>
+            <i>
+              <AiOutlinePlus />
+            </i>
+            <span>New Content</span>
+            <i>
+              <BsThreeDotsVertical />
+            </i>
+          </button>
+        </div>
+
+        <Link className="d-inline-flex" to={goBack()}>
+          <button className={style.back_button}>Back</button>
+        </Link>
+      </article>
+      <div
+        onClick={closeSidebar}
+        className={`d-lg-none ${clsx.overlay} ${
+          classConsole.sidebar ? clsx.overlayopen : clsx.overlayclose
+        }`}
+      ></div>
+    </>
+  );
 }
-
-
-
-
-function Sidebar({ Toggle, side  }) {
-
-
-    return (
-        // <article className={style.class_sidebar }>
-        <article className={`${side ? style.open :style.close} ${style.class_sidebar }`}>
-            
-            <Logosm />
-            <div className={style.course_content}>
-                <p>Course content</p>
-                <Accord />
-                <Accord />
-                <Accord />
-            </div>
-            <div className={style.create_content_button}>
-                <button onClick={Toggle}>
-                    <i>
-                        <AiOutlinePlus />
-                    </i>
-                    <span>New Content</span>
-                    <i><BsThreeDotsVertical /></i>
-                </button>
-            </div>
-        </article>
-    )
-}
-
 
 function Accord() {
+  const data = [
+    {
+      id: 1,
+      icon: AiOutlinePaperClip,
+      title: "My file",
+      link: 1,
+      type: "file",
+    },
 
-    const data = [
-        {
-            id: 1,
-            icon: AiOutlinePaperClip,
-            title: "My file",
-            link: 1,
-            type: "file",
-        },
+    {
+      id: 2,
+      icon: MdOutlineNote,
+      title: "My Note",
+      link: 2,
+      type: "note",
+    },
 
-        {
-            id: 2,
-            icon: MdOutlineNote,
-            title: "My Note",
-            link: 2,
-            type: "note",
+    {
+      id: 3,
+      icon: VscNote,
+      title: "My Quiz",
+      link: 3,
+      type: "quiz",
+    },
+  ];
+  const [details, showDetails] = useState(false);
+  return (
+    <div className={style.content_item}>
+      <div className={style.content_item_top}>
+        <i>
+          {details ? (
+            <BiCaretDown onClick={() => showDetails(!details)} />
+          ) : (
+            <BiCaretRight onClick={() => showDetails(!details)} />
+          )}
+        </i>
+        <span>Test</span>
+        <i>
+          <BsThreeDotsVertical />
+        </i>
+      </div>
 
-        },
-
-        {
-            id: 3,
-            icon: VscNote,
-            title: "My Quiz",
-            link: 3,
-            type: "quiz",
-
-        }
-    ]
-    const [details, showDetails] = useState(false)
-    return (
-        <div className={style.content_item}>
-            <div className={style.content_item_top}>
+      {details && (
+        <ul className={style.content_list}>
+          {data.map(({ icon: Icon, title, link, id, type }) => (
+            <li key={id}>
+              <Link to={`${type}`}>
                 <i>
-                    {
-                        details ?
-                            <BiCaretDown onClick={() => showDetails(!details)} />
-                            :
-                            <BiCaretRight onClick={() => showDetails(!details)} />
-                    }
+                  <Icon />
                 </i>
-                <span>Test</span>
-                <i><BsThreeDotsVertical /></i>
-            </div>
-
-            {
-                details && (
-                    <ul className={style.content_list}>
-                        {
-
-                            data.map(({ icon: Icon, title, link, id, type }) => (
-                                <li key={id}>
-                                    <Link to={`/test/${type}`}>
-                                        <i><Icon /></i>
-                                        <span>{title}</span>
-                                        {/* <i><BsThreeDotsVertical /></i> */}
-                                    </Link>
-                                </li>
-
-                            ))
-                        }
-                    </ul>
-                )
-            }
-
-        </div>
-    )
+                <span>{title}</span>
+                {/* <i><BsThreeDotsVertical /></i> */}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 }
 
 export function ModalContent({ show, handleClose, toggleModule }) {
-    const [showMore, setShowMore] = useState(false)
-    const [type, setType] = useState("file")
-    let ref = useRef()
+  const [showMore, setShowMore] = useState(false);
+  const [type, setType] = useState("file");
+  let ref = useRef();
 
-    console.log("modal show", { show });
-    return (
-        <div>
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton className={style.modal__header}>
-                    <Modal.Title className={style.modal__title}>Add Content</Modal.Title>
-                </Modal.Header>
+  console.log("modal show", { show });
+  return (
+    <div>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton className={style.modal__header}>
+          <Modal.Title className={style.modal__title}>Add Content</Modal.Title>
+        </Modal.Header>
 
-                <Modal.Body>
-                    <div className={style.content__form}>
-                        <FormControl >
+        <Modal.Body>
+          <div className={style.content__form}>
+            <FormControl>
+              <InputLabel id="content-type-label">Content Type</InputLabel>
+              <Select
+                className="quizselect"
+                labelId="content-type-label"
+                id="content-type"
+                label="Content Type"
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+              >
+                <MenuItem value="file">
+                  <i>
+                    <MdAttachFile />
+                  </i>
+                  File/Videos
+                </MenuItem>
+                <MenuItem value="Quiz">
+                  <i>
+                    <VscNote />
+                  </i>
+                  Quiz
+                </MenuItem>
+                <MenuItem value="note">
+                  <i>
+                    <MdOutlineNote />
+                  </i>
+                  Note
+                </MenuItem>
+              </Select>
+            </FormControl>
 
-                            <InputLabel id="content-type-label">Content Type</InputLabel>
-                            <Select
-                                className='quizselect'
-                                labelId="content-type-label"
-                                id="content-type"
-                                label="Content Type"
-                                value={type}
-                                onChange={(e) => setType(e.target.value)}>
-                                <MenuItem value="file">
-                                    <i><MdAttachFile /></i>
-                                    File/Videos
-                                </MenuItem>
-                                <MenuItem value="Quiz">
-                                    <i><VscNote /></i>
-                                    Quiz
-                                </MenuItem>
-                                <MenuItem value="note">
-                                    <i><MdOutlineNote /></i>
-                                    Note
-                                </MenuItem>
-                            </Select>
-                        </FormControl>
+            <FormControl>
+              <TextField
+                fullWidth
+                id="outlined-basic"
+                label="Content Title"
+                variant="outlined"
+                placeholder="Content Title"
+              />
+            </FormControl>
 
-                        <FormControl>
-                            <TextField fullWidth id="outlined-basic" label="Content Title" variant="outlined" placeholder='Content Title' />
+            <FormControl>
+              <InputLabel id="domain-label">Domain</InputLabel>
+              <Select
+                labelId="domain-label"
+                id="domain"
+                label="Domain"
+                className="myselect"
+                ref={ref}
+                // MenuProps={{
+                //     style: {
+                //         zIndex: 4000
+                //     }
+                // }}
+                // value={type}
+                // onChange={(e) => setType(e.target.value)}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value="test">Test</MenuItem>
 
-                        </FormControl>
+                <button className={style.modulebtn} onClick={toggleModule}>
+                  + New Module
+                </button>
+              </Select>
 
-                        <FormControl>
+              <FormHelperText>
+                A Domain is a container for similar content. e.g "Introduction",
+                "Day 1" or "Domain 1"
+              </FormHelperText>
+            </FormControl>
 
-                            <InputLabel id="domain-label">Domain</InputLabel>
-                            <Select
-                                labelId="domain-label"
-                                id="domain"
-                                label="Domain"
-                                className="myselect"
-                                ref={ref}
-                            // MenuProps={{
-                            //     style: {
-                            //         zIndex: 4000
-                            //     }
-                            // }}
-                            // value={type}
-                            // onChange={(e) => setType(e.target.value)}
-                            >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                <MenuItem value="test">
-                                    Test
-                                </MenuItem>
+            {/* accordion */}
 
+            <div className={style}>
+              <div className={style.content_item_span}>
+                <span>Advance Options</span>
 
-                                <button className={style.modulebtn} onClick={toggleModule}>+ New Module</button>
+                <i>
+                  {showMore ? (
+                    <BiCaretUp onClick={() => setShowMore(!showMore)} />
+                  ) : (
+                    <BiCaretDown onClick={() => setShowMore(!showMore)} />
+                  )}
+                </i>
+              </div>
 
+              {showMore && (
+                <div>
+                  <TextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Content Objective"
+                    variant="outlined"
+                    placeholder="Content Objective"
+                  />
+                  <FormHelperText>
+                    What will your student do/learn with this content
+                  </FormHelperText>
 
-                            </Select>
+                  <div className={style.switchBorder}>
+                    <FormControlLabel
+                      control={<Switch defaultChecked />}
+                      label="Lock course content"
+                      labelPlacement="top"
+                    />
+                    <p className={style.formtext}>
+                      Content is currently locked
+                    </p>
+                  </div>
 
-                            <FormHelperText>A Domain is a container for similar content. e.g "Introduction", "Day 1" or "Domain 1"
-                            </FormHelperText>
-                        </FormControl>
+                  <div className={style.switchBorder}>
+                    <FormControlLabel
+                      control={<Switch defaultChecked />}
+                      label="Notify students on update"
+                      labelPlacement="top"
+                    />
 
+                    <p className={style.formtext}>
+                      Email notification would be sent to student of the new
+                      course and when the course locked status changes
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
 
-
-                        {/* accordion */}
-
-                        <div className={style}>
-                            <div className={style.content_item_span}>
-                                <span>Advance Options</span>
-
-                                <i>
-                                    {
-                                        showMore ?
-                                            <BiCaretUp onClick={() => setShowMore(!showMore)} />
-                                            :
-                                            <BiCaretDown onClick={() => setShowMore(!showMore)} />
-                                    }
-                                </i>
-                            </div>
-
-                            {
-                                showMore && (
-                                    <div>
-
-                                        <TextField fullWidth id="outlined-basic" label="Content Objective" variant="outlined" placeholder='Content Objective' />
-                                        <FormHelperText>What will your student do/learn with this content</FormHelperText>
-
-                                        <div className={style.switchBorder}>
-
-                                            <FormControlLabel control={
-                                                <Switch defaultChecked />}
-                                                label="Lock course content"
-                                                labelPlacement="top"
-                                            />
-                                            <p className={style.formtext}>Content is currently locked</p>
-                                        </div>
-
-                                        <div className={style.switchBorder}>
-                                            <FormControlLabel control={
-                                                <Switch defaultChecked />}
-                                                label="Notify students on update"
-                                                labelPlacement="top"
-                                            />
-
-                                            <p className={style.formtext}>Email notification would be sent to student of the new
-                                                course and when the course locked status changes</p>
-
-                                        </div>
-
-
-                                    </div>
-                                )
-                            }
-
-                        </div>
-
-
-
-                        <button className={style.contentform__btn}>Submit</button>
-
-                    </div>
-                </Modal.Body>
-                {/* <Modal.Footer>
+            <button className={style.contentform__btn}>Submit</button>
+          </div>
+        </Modal.Body>
+        {/* <Modal.Footer>
                     <button variant="secondary" onClick={handleClose}>
                         Close
                     </button>
@@ -427,90 +532,93 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                         Save Changes
                     </button>
                 </Modal.Footer> */}
-            </Modal>
-        </div >
-    )
+      </Modal>
+    </div>
+  );
 }
 
 export function ModuleModal({ moduleOpen, moduleClose }) {
+  console.log("small modal show", { moduleOpen });
+  console.log("small close show", { moduleClose });
+  return (
+    <div>
+      <Modal show={moduleOpen} onHide={moduleClose} className="modulemodal">
+        <Modal.Header className="module__header">
+          <p>Add Domain</p>
+          <small>
+            Domain are a combination of similar content e.g "Introduction", "Day
+            1"
+          </small>
+        </Modal.Header>
+        <Modal.Body>
+          <div
+          // className="style.smallmodalbody"
+          >
+            <FormControl className="textfield__gap">
+              <TextField
+                fullWidth
+                id="outlined-basic"
+                label="Domain Name"
+                variant="outlined"
+                placeholder="Domain Name"
+              />
 
-    console.log("small modal show", { moduleOpen });
-    console.log("small close show", { moduleClose });
-    return (
-        <div>
-            <Modal show={moduleOpen} onHide={moduleClose}
-                className="modulemodal"
-            >
-                <Modal.Header
-                    className="module__header"
-                >
-                    <p>Add Domain</p>
-                    <small>Domain are a combination of similar content e.g "Introduction", "Day 1"</small>
-                </Modal.Header>
-                <Modal.Body>
-                    <div
-                    // className="style.smallmodalbody"
-                    >
+              <TextField
+                fullWidth
+                id="outlined-basic"
+                label="Domain description"
+                variant="outlined"
+                placeholder="Domain Description(optional)"
+              />
+            </FormControl>
 
-                        <FormControl className='textfield__gap'>
+            <div className="contentbutton">
+              <button className="" onClick={() => console.log("clicking")}>
+                Submit
+              </button>
+            </div>
 
-                            <TextField fullWidth id="outlined-basic" label="Domain Name" variant="outlined" placeholder='Domain Name' />
-
-                            <TextField fullWidth id="outlined-basic" label="Domain description" variant="outlined" placeholder='Domain Description(optional)' />
-
-                        </FormControl>
-
-                        <div className="contentbutton">
-                            <button className='' onClick={() => console.log("clicking")}>Submit</button>
-                        </div>
-
-                        {/* <label htmlFor="Name">Notes</label>
+            {/* <label htmlFor="Name">Notes</label>
                             <input type="text" /> */}
-
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <button variant="secondary" className="module__cancel" onClick={moduleClose}>
-                        Cancel
-                    </button>
-
-                </Modal.Footer>
-
-            </Modal>
-        </div>
-    )
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            variant="secondary"
+            className="module__cancel"
+            onClick={moduleClose}
+          >
+            Cancel
+          </button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
 }
-
 
 export function PopModalContent({ open, closeSmall }) {
-
-    console.log("small modal show", { open });
-    console.log("small close show", { closeSmall });
-    return (
-        <div>
-            <Modal show={open} onHide={closeSmall} className="smallmodal">
-                {/* <Modal.Header closeButton className="modal__header">
+  console.log("small modal show", { open });
+  console.log("small close show", { closeSmall });
+  return (
+    <div>
+      <Modal show={open} onHide={closeSmall} className="smallmodal">
+        {/* <Modal.Header closeButton className="modal__header">
                 </Modal.Header> */}
-                <Modal.Body>
-                    <div className="style.smallmodalbody">
-
-                        {
-                            popIcon.map(({ title, id, icon: Icon }) => (
-                                <Tooltip title={title} key={id}>
-                                    <IconButton className='popicons'>
-                                        <Icon size="1.5rem" color='#0C2191' />
-                                        <span className={style.smalltitle}>{title}</span>
-                                    </IconButton>
-                                </Tooltip>
-                            ))
-                        }
-                    </div>
-                </Modal.Body>
-
-            </Modal>
-        </div>
-    )
+        <Modal.Body>
+          <div className="style.smallmodalbody">
+            {popIcon.map(({ title, id, icon: Icon }) => (
+              <Tooltip title={title} key={id}>
+                <IconButton className="popicons">
+                  <Icon size="1.5rem" color="#0C2191" />
+                  <span className={style.smalltitle}>{title}</span>
+                </IconButton>
+              </Tooltip>
+            ))}
+          </div>
+        </Modal.Body>
+      </Modal>
+    </div>
+  );
 }
 
-
-export default Console
+export default Console;

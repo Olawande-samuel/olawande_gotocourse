@@ -43,6 +43,7 @@ import EarningsTable from "./Earnings/Table";
 import LogoutButton from "../../../components/LogoutButton";
 import { GotoDashboard } from "../Students";
 import { BiQuestionMark } from "react-icons/bi";
+import { ClassesCard } from "../Teachers/Bootcamps";
 
 const KEY = "gotocourse-userdata";
 
@@ -3196,7 +3197,7 @@ export function BootcampDetails({}) {
       const { message, success, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        navigate("/admin/bootcamps");
+        navigate("/admin/classes");
         toast.success(message);
       }
     } catch (err) {
@@ -3207,7 +3208,7 @@ export function BootcampDetails({}) {
   }
 
   function editBootcampHandler(e) {
-    navigate(`/admin/bootcamps/create?edit=${params?.id}`);
+    navigate(`/admin/classes/create?edit=${params?.id}`);
   }
 
   function closeModal() {
@@ -3309,7 +3310,7 @@ export function BootcampDetails({}) {
               style={{ fontSize: "0.8rem" }}
               onClick={deleteBootcampHandler}
             >
-              Delete Bootcamp
+              Delete Class
             </button>
             <button
               type="button"
@@ -3317,7 +3318,7 @@ export function BootcampDetails({}) {
               style={{ fontSize: "0.8rem" }}
               onClick={editBootcampHandler}
             >
-              Edit Bootcamp
+              Edit Class
             </button>
           </div>
           <form className="form" style={{ width: "80%", margin: "20px 0px" }}>
@@ -3549,6 +3550,64 @@ export function Bootcamps() {
   );
 }
 
+// CLASS/BOOTCAMP CONSOLE 
+
+export function AdminClassConsole() {
+  const {
+    adminFunctions: { fetchBootcamps },
+  } = useAuth();
+  const { getItem } = useLocalStorage();
+  const navigate = useNavigate();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [bootcamps, setBootcamps] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (flag.current) return;
+    (async () => {
+      try {
+        const res = await fetchBootcamps(userdata?.token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else if (statusCode === 1) {
+          const { data } = res;
+          setBootcamps((_) => data);
+        } else {
+          throw new AdvancedError(message, statusCode);
+        }
+      } catch (err) {
+        toast.error(err.message);
+      } finally {
+        setLoading((_) => false);
+      }
+    })();
+    flag.current = true;
+  }, []);
+
+  return (
+    <Admin header={"Classes"}>
+      {loading && <Loader />}
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student_main}>
+          <div className={clsx.class_con_cards}>
+
+                {bootcamps.length > 0 ? (
+                  bootcamps.map(
+                    (item, i ) => (
+                     <ClassesCard {...item} />
+                    )
+                  )
+                ) : (
+                  <h4 className="text-center">No Class found</h4>
+                )}
+          </div>
+        </div>
+      </div>
+    </Admin>
+  );
+}
+
 // CREATEBOOTCAMP COMPONENT
 export function CreateBootcamp() {
   const { getItem } = useLocalStorage();
@@ -3704,7 +3763,7 @@ export function CreateBootcamp() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         toast.success(message);
-        navigate("/admin/bootcamps");
+        navigate("/admin/classes");
       }
     } catch (err) {
       toast.error(err.message);
@@ -3850,7 +3909,7 @@ export function CreateBootcamp() {
                 className="generic_input"
               ></textarea>
             </div>
-            {/* <div className={clsx.form_group}>
+            <div className={clsx.form_group}>
               <label htmlFor={"instructor"}>Instructor</label>
               <select
                 name="instructor"
@@ -3867,7 +3926,7 @@ export function CreateBootcamp() {
                     </option>
                   ))}
               </select>
-            </div> */}
+            </div>
             {/* <Input
               label="Instructor Email"
               name="instructor"

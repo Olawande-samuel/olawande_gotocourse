@@ -9,7 +9,7 @@ import Out from "./pages/Out";
 
 import {
   Student, Fees, Profile as AdminProfile, Teachers, Courses, Approve, ApproveStudent, Edit as AdminEdit, Category as AdminCategories, CategoryDetails as AdminCategoryDetails, Chat as AdminChat,
-  CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails, AddMentor, Mentors, MentorsDetail, Notification, Earnings as AdminEarning
+  CreateCourseCategory, CreateCourse as AdminCreateCourse, CourseDetails as AdminCourseDetails, Bootcamps, CreateBootcamp, BootcampDetails, AddMentor, Mentors, MentorsDetail, Notification, Earnings as AdminEarning, AdminClassConsole
 } from "./pages/Dashboard/Admin";
 
 import AdminDashboard from "./pages/Dashboard/Admin/Dashboard";
@@ -94,6 +94,7 @@ import { Intermission, LiveClassInfo } from "./pages/Dashboard/components/classC
 import Live from "./pages/Dashboard/Teachers/Live";
 
 import {MentorsProfile, EditMentorsProfile, MentorsNotification, MentorsDashboard, MentorsEarnings, MentorsScheduler, MentorsChat, MentorsReferral, MentorsHelp} from "./pages/Dashboard/Mentors";
+import { ConsoleClass } from "./pages/Dashboard/Teachers/Bootcamps";
 
 
 
@@ -222,8 +223,7 @@ function App() {
                 </Route>
               </Route>
 
-              <Route path="test" element={<Out />}>
-                <Route index element={<Content />} />
+              <Route path="test" element={<Content />}>
                 <Route path="file" element={<FileComponent />} />
                 <Route path="note" element={<NoteComponent />} />
                 <Route path="quiz" element={<Out />}>
@@ -264,9 +264,10 @@ function App() {
                 <Route path="login" element={<Login />} />
                 <Route path="on-boarding" element={<TeacherOnBoarding />} />
                 <Route path="signup" element={<TeacherSignup />} />
-                <Route path="classes" element={<TeacherClasses />} />
-                <Route path="bootcamps" element={<TeacherBootcamps />} />
-                <Route path="bootcamps/details/:id" element={<TeacherBootcampDetails />} />
+                <Route path="enrollments" element={<TeacherClasses />} />
+                
+                <Route path="classes" element={<TeacherBootcamps />} />
+                <Route path="classes/details/:id" element={<TeacherBootcampDetails />} />
                 <Route path="earnings" element={<Earnings />} />
                 <Route path="profile/edit" element={<TeacherEdit />} />
                 <Route path="courses" element={<TeacherCourses />} />
@@ -280,6 +281,17 @@ function App() {
                   <Route index element={<Live />} />
                   <Route path="live" element={<LiveClass />} />
                   <Route path="connect" element={<Intermission />} />
+                </Route>
+                <Route path="class-console" element={<Out />}>
+                  <Route index element={<ConsoleClass />} />
+                  <Route path=":id" element={<Content />}>
+                    <Route path="file" element={<FileComponent />} />
+                    <Route path="note" element={<NoteComponent />} />
+                    <Route path="quiz" element={<Out />}>
+                      <Route index element={<QuizComponent />} />
+                      <Route path="preview" element={<Preview />} />
+                    </Route>
+                  </Route>
                 </Route>
               </Route>
 
@@ -334,9 +346,9 @@ function App() {
                 <Route path="mentors" element={<Mentors />} />
                 <Route path="mentors/detail" element={<MentorsDetail />} />
                 <Route path="mentors/detail/edit" element={<AddMentor edit="mentor" />} />
-                <Route path="bootcamps" element={<Bootcamps />} />
-                <Route path="bootcamps/details/:id" element={<BootcampDetails />} />
-                <Route path="bootcamps/create" element={<CreateBootcamp />} />
+                <Route path="classes" element={<Bootcamps />} />
+                <Route path="classes/details/:id" element={<BootcampDetails />} />
+                <Route path="classes/create" element={<CreateBootcamp />} />
                 <Route path="courses" element={<Courses />} />
                 <Route path="courses/details/:id" element={<AdminCourseDetails />} />
                 <Route path="courses/create" element={<AdminCreateCourse />} />
@@ -350,6 +362,22 @@ function App() {
                 <Route path="settings" element={<Settings />} />
                 <Route path="earnings" element={<AdminEarning />} />
                 <Route path="affiliate" element={<AdminAffiliate />} />
+                <Route path="class-console" element={<Out />}>
+                  <Route index element={<AdminClassConsole />} />
+                  <Route path=":id" element={<Content />}>
+                    <Route path="file" element={<FileComponent />} />
+                    <Route path="note" element={<NoteComponent />} />
+                    <Route path="quiz" element={<Out />}>
+                      <Route index element={<QuizComponent />} />
+                      <Route path="preview" element={<Preview />} />
+                    </Route>
+                  </Route>
+                </Route>
+                <Route path="live-class" element={<Out />}>
+                  <Route index element={<Live />} />
+                  <Route path="live" element={<LiveClass />} />
+                  <Route path="connect" element={<Intermission />} />
+                </Route>
               </Route>
               <Route path="admin" element={<Out />}>
                 <Route path="login" element={<AdminLogin />} />
