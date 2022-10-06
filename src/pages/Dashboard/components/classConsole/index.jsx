@@ -4,7 +4,7 @@ import { AiFillClockCircle, AiOutlinePaperClip, AiOutlinePlus } from 'react-icon
 import { BiCaretDown, BiCaretRight, BiCaretUp } from 'react-icons/bi'
 import { BsPaperclip, BsCameraReels, BsCloudUpload, BsPlayBtn, BsThreeDotsVertical } from 'react-icons/bs'
 import { RiVideoAddFill } from 'react-icons/ri'
-import { VscScreenNormal } from 'react-icons/vsc'
+import { VscNote, VscScreenNormal } from 'react-icons/vsc'
 
 import { Logosm } from '../../../../images/components/svgs'
 import style from "./style.module.css"
@@ -12,11 +12,11 @@ import "./console.css"
 import { IconButton, Tooltip } from '@mui/material'
 
 import { FaCalendarAlt, FaUsers } from 'react-icons/fa'
-import { MdAttachFile, MdLibraryAdd, MdLocationOn, MdMessage } from 'react-icons/md'
+import { MdAttachFile, MdLibraryAdd, MdLocationOn, MdMessage, MdOutlineNote } from 'react-icons/md'
 import Modal from 'react-bootstrap/Modal';
 import { TextField, InputLabel, MenuItem, FormHelperText, FormControl, Select, FormControlLabel, Switch } from '@mui/material'
 
-
+import { Link } from 'react-router-dom'
 
 const iconData = [
     {
@@ -72,7 +72,7 @@ const popIcon = [
 
 
 
-export const Console = ({ open, show, closeSmall, setShow, handleClose, handleShow, Toggle, children }) => {
+export const Console = ({ open, show, closeSmall, setShow, handleClose, handleShow, Toggle, moduleOpen, setModuleOpen, toggleModule, moduleClose, children }) => {
 
 
     return (
@@ -92,9 +92,11 @@ export const Console = ({ open, show, closeSmall, setShow, handleClose, handleSh
                 handleClose={handleClose}
                 handleShow={handleShow}
                 Toggle={Toggle}
+                toggleModule={toggleModule}
             />
 
-            <PopModalContent open={open} closeSmall={closeSmall}/>
+            <PopModalContent open={open} closeSmall={closeSmall} />
+            <ModuleModal moduleOpen={moduleOpen} moduleClose={moduleClose} />
 
             <main className={style.children}>
                 {children}
@@ -166,19 +168,25 @@ function Accord() {
                 details && (
                     <ul className={style.content_list}>
                         <li>
-                            <i><AiOutlinePaperClip /></i>
-                            <span>Creating columns</span>
-                            <i><BsThreeDotsVertical /></i>
+                            <Link to="/test/file">
+                                <i><AiOutlinePaperClip /></i>
+                                <span>My file</span>
+                                {/* <i><BsThreeDotsVertical /></i> */}
+                            </Link>
                         </li>
                         <li>
-                            <i><AiOutlinePaperClip /></i>
-                            <span>Creating columns</span>
-                            <i><BsThreeDotsVertical /></i>
+                            <Link to="/test/note">
+                                <i><MdOutlineNote /></i>
+                                <span>My note</span>
+                                {/* <i><BsThreeDotsVertical /></i> */}
+                            </Link>
                         </li>
                         <li>
-                            <i><AiOutlinePaperClip /></i>
-                            <span>Creating columns</span>
-                            <i><BsThreeDotsVertical /></i>
+                            <Link to="/test/quiz">
+                                <i><VscNote /></i>
+                                <span>My quiz</span>
+                                {/* <i><BsThreeDotsVertical /></i> */}
+                            </Link>
                         </li>
                     </ul>
                 )
@@ -188,7 +196,7 @@ function Accord() {
     )
 }
 
-export function ModalContent({ show, handleClose }) {
+export function ModalContent({ show, handleClose, toggleModule }) {
     const [showMore, setShowMore] = useState(false)
     const [type, setType] = useState("file")
 
@@ -201,34 +209,67 @@ export function ModalContent({ show, handleClose }) {
                 </Modal.Header>
 
                 <Modal.Body>
-                    <FormControl className={style.content__form}>
-                        <InputLabel id="Content Type">Content Type</InputLabel>
-                        <Select
-                            label="Content Type"
-                            labelId="Content Type"
-                            id="Content Type"
-                            value={type}
-                            onChange={(e) => setType(e.target.value)}>
-                            <MenuItem value="file">
-                                <i><MdAttachFile /></i>
-                                File/Videos
-                            </MenuItem>
-                            <MenuItem value="Quiz">Quiz</MenuItem>
-                            <MenuItem value="note">Note</MenuItem>
-                        </Select>
+                    <div className={style.content__form}>
+                        <FormControl >
 
+                            <InputLabel id="content-type-label">Content Type</InputLabel>
+                            <Select
+                                className='quizselect'
+                                labelId="content-type-label"
+                                id="content-type"
+                                label="Content Type"
+                                value={type}
+                                onChange={(e) => setType(e.target.value)}>
+                                <MenuItem value="file">
+                                    <i><MdAttachFile /></i>
+                                    File/Videos
+                                </MenuItem>
+                                <MenuItem value="Quiz">
+                                    <i><VscNote /></i>
+                                    Quiz
+                                </MenuItem>
+                                <MenuItem value="note">
+                                    <i><MdOutlineNote /></i>
+                                    Note
+                                </MenuItem>
+                            </Select>
+                        </FormControl>
 
-                        <TextField id="outlined-basic" label="Content Title" variant="outlined" placeholder='Content Title' />
-                        <TextField id="outlined-basic" label="Domain" variant="outlined" placeholder='Domain' />
+                        <FormControl>
+                            <TextField fullWidth id="outlined-basic" label="Content Title" variant="outlined" placeholder='Content Title' />
 
-                        <FormHelperText>A Domain is a container for similar content. e.g "Introduction", "Day 1" or "Domain 1"
-                        </FormHelperText>
+                        </FormControl>
 
+                        <FormControl>
+
+                            <InputLabel id="domain-label">Domain</InputLabel>
+                            <Select
+                                labelId="domain-label"
+                                id="domain"
+                                label="Domain"
+                                className="myselect"
+                            // value={type}
+                            // onChange={(e) => setType(e.target.value)}
+                            >
+                                <MenuItem value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                <MenuItem value="test">
+                                    Test
+                                </MenuItem>
+
+                                <button className={style.modulebtn} onClick={toggleModule}>+ New Module</button>
+
+                            </Select>
+
+                            <FormHelperText>A Domain is a container for similar content. e.g "Introduction", "Day 1" or "Domain 1"
+                            </FormHelperText>
+                        </FormControl>
 
                         {/* accordion */}
 
                         <div className={style}>
-                            <div className={style.content_item_top}>
+                            <div className={style.content_item_span}>
                                 <span>Advance Options</span>
 
                                 <i>
@@ -248,20 +289,29 @@ export function ModalContent({ show, handleClose }) {
                                         <TextField fullWidth id="outlined-basic" label="Content Objective" variant="outlined" placeholder='Content Objective' />
                                         <FormHelperText>What will your student do/learn with this content</FormHelperText>
 
-                                        <FormControlLabel control={
-                                            <Switch defaultChecked />}
-                                            label="Lock course content"
-                                        />
-                                        <FormHelperText>Content is currently locked</FormHelperText>
+                                        <div className={style.switchBorder}>
+
+                                            <FormControlLabel control={
+                                                <Switch defaultChecked />}
+                                                label="Lock course content"
+                                                labelPlacement="top"
+                                            />
+                                            <p className={style.formtext}>Content is currently locked</p>
+                                        </div>
+
+                                        <div className={style.switchBorder}>
+                                            <FormControlLabel control={
+                                                <Switch defaultChecked />}
+                                                label="Notify students on update"
+                                                labelPlacement="top"
+                                            />
+
+                                            <p className={style.formtext}>Email notification would be sent to student of the new
+                                                course and when the course locked status changes</p>
+
+                                        </div>
 
 
-                                        <FormControlLabel control={
-                                            <Switch defaultChecked />}
-                                            label="Notify students on update"
-                                        />
-
-                                        <FormHelperText>Email notification would be sent to student of the new
-                                            course and when the course locked status changes</FormHelperText>
                                     </div>
                                 )
                             }
@@ -272,7 +322,7 @@ export function ModalContent({ show, handleClose }) {
 
                         <button className={style.contentform__btn}>Submit</button>
 
-                    </FormControl>
+                    </div>
                 </Modal.Body>
                 {/* <Modal.Footer>
                     <button variant="secondary" onClick={handleClose}>
@@ -283,10 +333,57 @@ export function ModalContent({ show, handleClose }) {
                     </button>
                 </Modal.Footer> */}
             </Modal>
-        </div>
+        </div >
     )
 }
 
+export function ModuleModal({ moduleOpen, moduleClose }) {
+
+    console.log("small modal show", { moduleOpen });
+    console.log("small close show", { moduleClose });
+    return (
+        <div>
+            <Modal show={moduleOpen} onHide={moduleClose}
+                className="modulemodal"
+            >
+                <Modal.Header
+                    className="module__header"
+                >
+                    <p>Add Domain</p>
+                    <small>Domain are a combination of similar content e.g "Introduction", "Day 1"</small>
+                </Modal.Header>
+                <Modal.Body>
+                    <div
+                    // className="style.smallmodalbody"
+                    >
+
+                        <FormControl className='textfield__gap'>
+                            <TextField fullWidth id="outlined-basic" label="Domain Name" variant="outlined" placeholder='Domain Name' />
+
+                            <TextField fullWidth id="outlined-basic" label="Domain description" variant="outlined" placeholder='Domain Description(optional)' />
+
+                        </FormControl>
+
+                        <div className="contentbutton">
+                            <button className=''>Submit</button>
+                        </div>
+
+                        {/* <label htmlFor="Name">Notes</label>
+                            <input type="text" /> */}
+
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button variant="secondary" className="module__cancel">
+                        Cancel
+                    </button>
+
+                </Modal.Footer>
+
+            </Modal>
+        </div>
+    )
+}
 
 
 export function PopModalContent({ open, closeSmall }) {
