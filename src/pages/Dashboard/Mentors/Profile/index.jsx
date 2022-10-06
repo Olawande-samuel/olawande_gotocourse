@@ -122,13 +122,13 @@ const Profile = () => {
                 height="100%"
                 alt="Avatar"
               />
-            </div>
-            <button
-              className={clsx.teachers_profile_top_button}
-              onClick={editProfileHandler}
-            >
-              <MdEdit /> &nbsp; Edit
+              <button
+                className={clsx.teachers_profile_top_button}
+                onClick={editProfileHandler}
+              >
+              <MdEdit />
             </button>
+            </div>
           </div>
           <div className={clsx.teachers_profile_main}>
             <h1 className={clsx.teachers__header} style={{ marginTop: 20 }}>
@@ -136,10 +136,11 @@ const Profile = () => {
             </h1>
   
             <div className={clsx.teachers__profile_info}>
+              <Info title="Email Address" content={userdata?.email} />
               <Info title="Brief Introduction" content={userdata?.bio} />
-              <Info title="Location" content={userdata?.location} />
-              <Info title="Courses" content={userdata?.courses} />
-              <Info title="Category" content={userdata?.category} />
+              <Info title="Location" content={userdata?.location.toUpperCase()} />
+              {/* <Info title="Courses" content={userdata?.courses} /> */}
+              {/* <Info title="Category" content={userdata?.category} /> */}
             </div>
           </div>
         </div>

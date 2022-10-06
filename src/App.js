@@ -93,7 +93,8 @@ import File from "./pages/Dashboard/components/classConsole/File";
 import { Intermission, LiveClassInfo } from "./pages/Dashboard/components/classConsole/Liveclass";
 import Live from "./pages/Dashboard/Teachers/Live";
 
-import { MentorsProfile, EditMentorsProfile, MentorsNotification, MentorsDashboard, MentorsEarnings, MentorsScheduler } from "./pages/Dashboard/Mentors";
+import {MentorsProfile, EditMentorsProfile, MentorsNotification, MentorsDashboard, MentorsEarnings, MentorsScheduler, MentorsChat, MentorsReferral, MentorsHelp} from "./pages/Dashboard/Mentors";
+
 
 
 
@@ -233,6 +234,8 @@ function App() {
                 <Route index element={<All type="mentors" />} />
                 <Route path=":id" element={<Out />} >
                   <Route index element={<TeacherProfile type="mentors" />} />
+                    {/* <Route path="payment" element={<Payment />} /> */}
+                  </Route>
                 </Route>
               </Route>
 
@@ -243,6 +246,9 @@ function App() {
                 <Route path="notifications" element={<MentorsNotification />} />
                 <Route path="earnings" element={<MentorsEarnings />} />
                 <Route path="scheduler" element={<MentorsScheduler />} />
+                <Route path="chat" element={<MentorsChat />} />
+                <Route path="referral" element={<MentorsReferral />} />
+                <Route path="help" element={<MentorsHelp />} />
               </Route>
 
               <Route path="teachers" element={<Out />}>

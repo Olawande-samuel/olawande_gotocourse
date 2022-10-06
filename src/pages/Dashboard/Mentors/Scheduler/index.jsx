@@ -209,9 +209,9 @@ const Scheduler = () => {
     return(
         <Layout header="Scheduler">
             <div className={clsx.teachers_profile}>
-                <DateContaainer>
-                    <p>{date.toString()}</p>
-                </DateContaainer>
+                {/* <DateContaainer>
+                    <p>{date.toString().substring(0, 16)}</p>
+                </DateContaainer> */}
                 <SchedulerContainer>
                     <h2>Create bookable session</h2>
                     <CalendarContainer>

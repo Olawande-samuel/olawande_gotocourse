@@ -401,7 +401,7 @@ const Sidebar = ({}) => {
                         </motion.button>
                     </div>
                     {
-                        (page === 'affiliate' && (userdata?.userType === 'student' || userdata?.userType === 'teacher')) && (
+                        (page === 'affiliate' && (userdata?.userType === 'student' || userdata?.userType === 'teacher' || userdata?.userType === 'mentor')) && (
                             <div className="button_wrapper text-center" style={{marginTop:"4rem"}}>
                                 <motion.button 
                                     whileHover={{
@@ -413,7 +413,7 @@ const Sidebar = ({}) => {
                                     onClick={e => navigate(`/${userdata?.userType}`)}
                                     disable={true}
                                 >
-                                    Go to {userdata?.userType === 'student' ? "Student's" : "Teacher's"} Dashboard
+                                    Go to {userdata?.userType === 'student' ? "Student's" : userdata?.userType === 'teacher' ? "Teacher's" : "Mentor's"} Dashboard
                                 </motion.button>
                             </div>
                         )
