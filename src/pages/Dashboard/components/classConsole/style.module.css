@@ -22,8 +22,28 @@
 }
 
 .console .class_sidebar {
-    flex: 20%;
+    /* flex: 20%; */
+    flex-shrink: 0;
+    width: 15rem;
+    /* border: 2px solid red; */
     /* position: fixed; */
+}
+
+.open{
+    left: 0
+}
+
+.close {
+  left: -1000px;
+}
+
+@media (max-width: 764px) {
+    .console .class_sidebar {
+        position: absolute;
+        /* display: none; */
+    }
+    
+    
 }
 
 .console .children {

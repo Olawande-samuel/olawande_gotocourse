@@ -70,25 +70,6 @@ export default function Quiz() {
     return (
         
                 <div className=''>
-                    <section className="contentheader">
-
-                        <div className="contenttitle">
-                            <h2>Class Console</h2>
-
-                        </div>
-
-                        <div className="contentbreadcrumb">
-                            <Breadcrumb>
-                                <Breadcrumb.Item href="#">Dashboard</Breadcrumb.Item>
-                                <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-                                    EXCEL FUNCTIONS 101
-                                </Breadcrumb.Item>
-                                <Breadcrumb.Item active>Quiz</Breadcrumb.Item>
-                            </Breadcrumb>
-
-                        </div>
-
-                    </section>
 
 
                     <main className='quiz__contentbody'>

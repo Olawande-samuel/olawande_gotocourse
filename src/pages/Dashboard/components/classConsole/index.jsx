@@ -1,6 +1,6 @@
 
-import { useState } from 'react'
-import { AiFillClockCircle, AiOutlinePaperClip, AiOutlinePlus } from 'react-icons/ai'
+import { useState, useRef } from 'react'
+import { AiFillClockCircle, AiOutlinePaperClip, AiOutlinePlus, AiOutlineMenu } from 'react-icons/ai'
 import { BiCaretDown, BiCaretRight, BiCaretUp } from 'react-icons/bi'
 import { BsPaperclip, BsCameraReels, BsCloudUpload, BsPlayBtn, BsThreeDotsVertical } from 'react-icons/bs'
 import { RiVideoAddFill } from 'react-icons/ri'
@@ -17,6 +17,9 @@ import Modal from 'react-bootstrap/Modal';
 import { TextField, InputLabel, MenuItem, FormHelperText, FormControl, Select, FormControlLabel, Switch } from '@mui/material'
 
 import { Link } from 'react-router-dom'
+import clsx from '../styles.module.css'
+import { NavLink, useLocation } from 'react-router-dom'
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
 const iconData = [
     {
@@ -73,8 +76,13 @@ const popIcon = [
 
 
 export const Console = ({ open, show, closeSmall, setShow, handleClose, handleShow, Toggle, moduleOpen, setModuleOpen, toggleModule, moduleClose, children }) => {
+    const { pathname } = useLocation()
+    const [side, setSide] = useState(false)
 
+    const toggleSidebar = () => setSide(!side)
 
+    const NoteAndFile = pathname.split('/')[2] === "note" ? "Note" : pathname.split('/')[2] === "file" ? "File" : ""
+    const quizpath = pathname.split('/')[2] === "quiz" && "Quiz"
     return (
         <div className={style.console}>
 
@@ -84,6 +92,7 @@ export const Console = ({ open, show, closeSmall, setShow, handleClose, handleSh
                 handleClose={handleClose}
                 handleShow={handleShow}
                 Toggle={Toggle}
+                side={side}
 
             />
             <ModalContent
@@ -99,6 +108,46 @@ export const Console = ({ open, show, closeSmall, setShow, handleClose, handleSh
             <ModuleModal moduleOpen={moduleOpen} moduleClose={moduleClose} />
 
             <main className={style.children}>
+                <section className="contentheader">
+
+                    <div className="contentnav">
+                        <div className="content__hamburger">
+                            <div className="hamburger me-3 align-items-center">
+                                <i>
+                                    <AiOutlineMenu style={{ fontSize: "24px", color: "#0C2191", cursor: "pointer" }} onClick={toggleSidebar} />
+                                </i>
+                            </div>
+                        </div>
+
+                        <div className="contenttitle">
+                            <h2>Class Console</h2>
+
+                        </div>
+                    </div>
+
+
+                    {
+                        NoteAndFile && NoteAndFile !== "" && (
+                            <div className="contentcategory">
+                                <NavLink to="file" className={({ isActive }) => isActive ? "active" : undefined}>{NoteAndFile}</NavLink>
+                                <NavLink to="integration" className={({ isActive }) => isActive ? "active" : undefined}>Integration</NavLink>
+                            </div>
+
+                        )
+                    }
+
+                    <div className="contentbreadcrumb">
+                        <Breadcrumb>
+                            <Breadcrumb.Item href="#">Dashboard</Breadcrumb.Item>
+                            <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
+                                EXCEL FUNCTIONS 101
+                            </Breadcrumb.Item>
+                            <Breadcrumb.Item active>{quizpath || NoteAndFile}</Breadcrumb.Item>
+                        </Breadcrumb>
+
+                    </div>
+
+                </section>
                 {children}
             </main>
 
@@ -120,11 +169,15 @@ export const Console = ({ open, show, closeSmall, setShow, handleClose, handleSh
 }
 
 
-function Sidebar({ Toggle }) {
+
+
+function Sidebar({ Toggle, side  }) {
 
 
     return (
-        <article className={style.class_sidebar}>
+        // <article className={style.class_sidebar }>
+        <article className={`${side ? style.open :style.close} ${style.class_sidebar }`}>
+            
             <Logosm />
             <div className={style.course_content}>
                 <p>Course content</p>
@@ -152,25 +205,25 @@ function Accord() {
         {
             id: 1,
             icon: AiOutlinePaperClip,
-            title:"My file",
-            link:1,
+            title: "My file",
+            link: 1,
             type: "file",
         },
 
         {
             id: 2,
             icon: MdOutlineNote,
-            title:"My Note",
-            link:2,
+            title: "My Note",
+            link: 2,
             type: "note",
 
-        }, 
-         
+        },
+
         {
             id: 3,
             icon: VscNote,
-            title:"My Quiz",
-            link:3,
+            title: "My Quiz",
+            link: 3,
             type: "quiz",
 
         }
@@ -195,12 +248,12 @@ function Accord() {
                 details && (
                     <ul className={style.content_list}>
                         {
-                            
-                            data.map(({icon:Icon, title, link, id, type})=>(
+
+                            data.map(({ icon: Icon, title, link, id, type }) => (
                                 <li key={id}>
                                     <Link to={`/test/${type}`}>
                                         <i><Icon /></i>
-                                        <span>{title}</span> 
+                                        <span>{title}</span>
                                         {/* <i><BsThreeDotsVertical /></i> */}
                                     </Link>
                                 </li>
@@ -218,6 +271,7 @@ function Accord() {
 export function ModalContent({ show, handleClose, toggleModule }) {
     const [showMore, setShowMore] = useState(false)
     const [type, setType] = useState("file")
+    let ref = useRef()
 
     console.log("modal show", { show });
     return (
@@ -267,6 +321,12 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                                 id="domain"
                                 label="Domain"
                                 className="myselect"
+                                ref={ref}
+                            // MenuProps={{
+                            //     style: {
+                            //         zIndex: 4000
+                            //     }
+                            // }}
                             // value={type}
                             // onChange={(e) => setType(e.target.value)}
                             >
@@ -277,13 +337,17 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                                     Test
                                 </MenuItem>
 
+
                                 <button className={style.modulebtn} onClick={toggleModule}>+ New Module</button>
+
 
                             </Select>
 
                             <FormHelperText>A Domain is a container for similar content. e.g "Introduction", "Day 1" or "Domain 1"
                             </FormHelperText>
                         </FormControl>
+
+
 
                         {/* accordion */}
 
@@ -377,6 +441,7 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
                     >
 
                         <FormControl className='textfield__gap'>
+
                             <TextField fullWidth id="outlined-basic" label="Domain Name" variant="outlined" placeholder='Domain Name' />
 
                             <TextField fullWidth id="outlined-basic" label="Domain description" variant="outlined" placeholder='Domain Description(optional)' />
@@ -384,7 +449,7 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
                         </FormControl>
 
                         <div className="contentbutton">
-                            <button className=''>Submit</button>
+                            <button className='' onClick={() => console.log("clicking")}>Submit</button>
                         </div>
 
                         {/* <label htmlFor="Name">Notes</label>
@@ -393,7 +458,7 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <button variant="secondary" className="module__cancel">
+                    <button variant="secondary" className="module__cancel" onClick={moduleClose}>
                         Cancel
                     </button>
 

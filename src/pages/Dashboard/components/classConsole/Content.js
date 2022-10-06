@@ -62,7 +62,7 @@ export default function Content({type}) {
                 moduleClose={moduleClose}
             >
               
-                <p>hello</p>   
+              <File  OpenToggle={OpenToggle}/>  
 
             </Console>
 

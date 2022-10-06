@@ -1,60 +1,74 @@
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import '../classConsole/Content.css'
-import Console from './index';
 import style from "./style.module.css"
-import { BiCaretDown, BiCaretRight, BiCaretUp } from 'react-icons/bi'
-import { BsThreeDotsVertical } from 'react-icons/bs'
-import { AiOutlinePaperClip, } from 'react-icons/ai'
 import { NavLink } from 'react-router-dom';
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import { useState } from 'react'
 
 export default function Note() {
     const [details, showDetails] = useState(false)
     return (
-                <div className=''>
-                    <section className="contentheader">
+        <div className=''>
+          
 
-                        <div className="contenttitle">
-                            <h2>Class Console</h2>
+            <small className='smallnote'>Make sure you constantly save your note as you type.</small>
+            <main className='note'>
+                <div className="texteditor">
+                    {/* <CKEditorContext context={Context}>
+                                    <h2>Using the CKeditor 5 context feature in React</h2>
+                                    <CKEditor
+                                        editor={ClassicEditor}
+                                        config={{
+                                            plugins: [Paragraph, Bold, Italic, Essentials],
+                                            toolbar: ['bold', 'italic']
+                                        }}
+                                        data="<p>Hello from the first editor working with the context!</p>"
+                                        onReady={editor => {
+                                            // You can store the "editor" and use when it is needed.
+                                            console.log('Editor1 is ready to use!', editor);
+                                        }}
+                                    />
 
-                        </div>
-                        <div className="contentcategory">
-                            <NavLink to="file" className={({ isActive }) => isActive ? "active" : undefined}>Note</NavLink>
-                            <NavLink to="integration" className={({ isActive }) => isActive ? "active" : undefined}>Integration</NavLink>
-                        </div>
+                                </CKEditorContext> */}
 
-                        <div className="contentbreadcrumb">
-                            <Breadcrumb>
-                                <Breadcrumb.Item href="#">Dashboard</Breadcrumb.Item>
-                                <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-                                    EXCEL FUNCTIONS 101
-                                </Breadcrumb.Item>
-                                <Breadcrumb.Item active>Note</Breadcrumb.Item>
-                            </Breadcrumb>
+                    <CKEditor
+                        editor={ClassicEditor}
+                        data="<p>Hello from CKEditor 5!</p>"
+                        onReady={editor => {
+                            // You can store the "editor" and use when it is needed.
+                            console.log('Editor is ready to use!', editor);
+                        }}
+                        onChange={(event, editor) => {
+                            const data = editor.getData();
+                            console.log({ event, editor, data });
+                        }}
+                        onBlur={(event, editor) => {
+                            console.log('Blur.', editor);
+                        }}
+                        onFocus={(event, editor) => {
+                            console.log('Focus.', editor);
+                        }}
+                    />
 
-                        </div>
-
-                    </section>
-
-                    <small className='smallnote'>Make sure you constantly save your note as you type.</small>
-                    <main className='note'>
-                        <h4>Hey this is a demo note heading</h4>
-                        <p>This is a body text</p>
-                        <span>This is a body text</span>
-
-                        <div className="notebtn">
-                            <button>Save note</button>
-                        </div>
-
-
-
-                    </main>
-
-
+                    <div className="notebtn">
+                        <button>Save note</button>
+                    </div>
 
                 </div>
 
-           
+
+
+
+
+
+            </main>
+
+
+
+        </div>
+
+
     )
 }

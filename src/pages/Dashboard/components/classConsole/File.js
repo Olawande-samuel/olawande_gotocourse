@@ -1,5 +1,4 @@
-import { NavLink } from 'react-router-dom'
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
+
 import '../classConsole/Content.css'
 import { IoMdCloudDownload } from 'react-icons/io';
 
@@ -7,29 +6,7 @@ export default function File({ OpenToggle}){
     return (
         <>
          <div className=''>
-                    <section className="contentheader">
-
-                        <div className="contenttitle">
-                            <h2>Class Console</h2>
-
-                        </div>
-                        <div className="contentcategory">
-                            <NavLink to="file" className={({ isActive }) => isActive ? "active" : undefined}>File</NavLink>
-                            <NavLink to="integration" className={({ isActive }) => isActive ? "active" : undefined}>Integration</NavLink>
-                        </div>
-
-                        <div className="contentbreadcrumb">
-                            <Breadcrumb>
-                                <Breadcrumb.Item href="#">Dashboard</Breadcrumb.Item>
-                                <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-                                    EXCEL FUNCTIONS 101
-                                </Breadcrumb.Item>
-                                <Breadcrumb.Item active>CREAT COLUMN</Breadcrumb.Item>
-                            </Breadcrumb>
-
-                        </div>
-
-                    </section>
+                    
 
                     <section className="contenttop">
                         <div className="contentbutton">
