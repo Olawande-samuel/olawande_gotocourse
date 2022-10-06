@@ -1,8 +1,14 @@
 
 import '../classConsole/Content.css'
 import { IoMdCloudDownload } from 'react-icons/io';
+import { PopModalContent } from '.';
+import { useState } from 'react';
 
-export default function File({ OpenToggle}){
+export default function File(){
+    const [open, setOpen] = useState(false);
+    const OpenToggle = () => setOpen(!open)
+    const closeSmall = () => setOpen(false);
+
     return (
         <>
          <div className=''>
@@ -29,6 +35,8 @@ export default function File({ OpenToggle}){
                     </div>
 
                 </div>
+                <PopModalContent open={open} closeSmall={closeSmall} />
+
         </>
 
     )

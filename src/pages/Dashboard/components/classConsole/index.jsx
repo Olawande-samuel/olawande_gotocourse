@@ -1,3 +1,4 @@
+import {useAuth} from '../../../../contexts/Auth'
 
 import { useState, useRef } from 'react'
 import { AiFillClockCircle, AiOutlinePaperClip, AiOutlinePlus, AiOutlineMenu } from 'react-icons/ai'
@@ -75,9 +76,22 @@ const popIcon = [
 
 
 
-export const Console = ({ open, show, closeSmall, setShow, handleClose, handleShow, Toggle, moduleOpen, setModuleOpen, toggleModule, moduleClose, children }) => {
+export const Console = ({children }) => {
+    const {generalState:{console}, generalState, setGeneralState} = useAuth()
     const { pathname } = useLocation()
     const [side, setSide] = useState(false)
+    const [show, setShow] = useState(false);
+    const [moduleOpen, setModuleOpen] = useState(false);
+    
+    const Toggle = () => setShow(!show)
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    
+    
+
+
+    const toggleModule = () => setModuleOpen(!moduleOpen)
+    const moduleClose = () => setModuleOpen(false)
 
     const toggleSidebar = () => setSide(!side)
 
@@ -85,7 +99,6 @@ export const Console = ({ open, show, closeSmall, setShow, handleClose, handleSh
     const quizpath = pathname.split('/')[2] === "quiz" && "Quiz"
     return (
         <div className={style.console}>
-
             <Sidebar
                 show={show}
                 setShow={setShow}
@@ -104,7 +117,6 @@ export const Console = ({ open, show, closeSmall, setShow, handleClose, handleSh
                 toggleModule={toggleModule}
             />
 
-            <PopModalContent open={open} closeSmall={closeSmall} />
             <ModuleModal moduleOpen={moduleOpen} moduleClose={moduleClose} />
 
             <main className={style.children}>

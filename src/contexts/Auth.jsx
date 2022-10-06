@@ -19,7 +19,10 @@ const AuthContextProvider = ({children}) => {
         loading: false,
         notifications:0,
         chat:0,
-        pledre:""
+        pledre:"", 
+        console: {
+            sidebar: false
+        }
         
     })
 

@@ -7,21 +7,7 @@ import Note from './Note';
 // import Out from '../../../Out';
 
 export default function Content({type}) {
-    const [show, setShow] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [moduleOpen, setModuleOpen] = useState(false);
-
-    const Toggle = () => setShow(!show)
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
-
-    const OpenToggle = () => setOpen(!open)
-    const closeSmall = () => setOpen(false);
-
-    const toggleModule = () => setModuleOpen(!moduleOpen)
-    const moduleClose = () => setModuleOpen(false)
-
+   
 
     const location = useLocation()
     const params = useParams()
@@ -47,22 +33,9 @@ export default function Content({type}) {
 
     return (
         <>
-            <Console
-                show={show}
-                open={open}
-                moduleOpen={moduleOpen}
-                setModuleOpen={setModuleOpen}
-                setShow={setShow}
-                closeSmall={closeSmall}
-                handleClose={handleClose}
-                handleShow={handleShow}
-                Toggle={Toggle}
-                OpenToggle={OpenToggle}
-                toggleModule={toggleModule}
-                moduleClose={moduleClose}
-            >
+            <Console>
               
-              <File  OpenToggle={OpenToggle}/>  
+              <File  />  
 
             </Console>
 
