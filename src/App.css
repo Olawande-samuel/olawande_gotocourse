@@ -31,6 +31,7 @@
   .container-md, .container-sm, .container {
     max-width: 92%;
     height: 100%;
+    margin: auto;
   }
 }
 @media (max-width: 769px){
@@ -117,6 +118,10 @@ font-size: 14px;
 .active {
   color: var(--btn-color) !important;
 }
+
+/* .activewhite , .activewhite a , .breadpay a{
+  color: var(--white) !important;
+} */
 .backgroundColor{
   background: var(--btn-color);
   color: #fff !important;
@@ -538,6 +543,9 @@ border-radius: 13.5px !important;
   padding:0 0 2.0625rem 0;
 }
 
+.becoming {
+  padding-top: 2.0625rem;
+}
 .services .left,
 .services .right {
   flex: 50%;
@@ -1360,6 +1368,26 @@ font-size: 16px;
   color: #ffffff;
 }
 
+.pay_background {
+  min-height: 100vh;
+  background: url(./images/logup.webp);
+  background-repeat:no-repeat;
+  background-size: cover; 
+  /* display: flex;
+  align-items: center; */
+  /* border: 5px solid red; */
+  /* color: #ffffff; */
+}
+
+.pay__border{
+  border: 5px solid yellow;
+}
+
+.pay_card {
+  padding: 1rem clamp(1.5rem, 1.0714rem + 2.1429vw, 3rem);;
+}
+
+
 .signWrapper_logo{
   display: grid;
   place-content: center;
@@ -1610,6 +1638,7 @@ input[type="password"], input[type="text"], input[type="email"] {
     text-align: center;
   } */
   .card-body {
+    /* border: 2px solid red; */
     padding: 0;
     padding-inline: 3px;
   }
@@ -2312,6 +2341,10 @@ input[type="password"], input[type="text"], input[type="email"] {
   row-gap: 1.5rem;
 }
 
+.quiz__editor .ck.ck-editor__top {
+  display: block;
+}
+
 /* ck editor */
 .ck.ck-editor__top {
   display: none;
@@ -2525,4 +2558,81 @@ tr th, thead td, td, td span  {
 .previousLinkClassName,
 .nextLinkClassName {
   text-decoration: none;
+}
+
+
+/* test modal  */
+.smallmodal{
+  top:30% !important;
+  left:-5% !important;
+  
+}
+.modulemodal{
+  z-index: 2000 !important;
+  top: 5% !important;
+  left: 10% !important;
+}
+
+.modulemodal .modal-content{
+  height: 400px !important;
+  width: 300px !important;
+}
+
+.module__header{
+  display: flex  !important;
+  flex-direction: column !important;
+  align-items: flex-start;
+}
+
+
+.module__header small{
+  font-size: 12px;
+}
+
+.module__cancel{
+  border: none;
+  outline: none;
+  color: var(--theme-blue);
+  font-size: 12px;
+
+}
+
+.modulebtn{
+  padding: 8px 12px;
+  color: var(--theme-blue);
+  border: none;
+  outline: none;
+  font-size: 12px;
+
+}
+
+.smallmodal .modal-dialog{
+  width: 270px !important;
+}
+
+.smallmodalbody {
+display: flex;
+flex-direction: column;
+gap: 1rem;
+}
+
+.popicons{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.MuiList-root{
+  text-align: center !important;
+
+}
+
+.MuiSelect-select, .MuiInputLabel-root{
+  color: #0C2191 !important
+}
+
+.textfield__gap{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }

@@ -63,17 +63,17 @@ const NewLanding = ()=>{
         <Category />
         <Benefits />
         <Bootcamp/>
-        <Overview />
+        <Becoming />
         <BetterWay />
         {/* <Learn type={"newLanding"} />
         <Self />
-        <Mentorship /> */}
+      <Mentorship /> */}
         <Mentors />
         {/* <InPerson /> */}
         <Testimonials type="newLanding" />
-        <Becoming />
         <Companies />
         <Faq />
+        {/* <Overview /> */}
     </Layout> 
    )
 }
@@ -113,18 +113,25 @@ function Hero(){
             </div>
             <div className="newHero_left">
                 <header className="">
-                    <h1 className="newHero_left-header text-center">Upskill &amp; Reskill</h1>
+                    <h1 className="newHero_left-header">Upskill &amp; Reskill</h1>
                     {/* <h6 className="newHero_left-title text-center">Connect with industry experts from anywhere and for less cost</h6> */}
-                    <h6 className="newHero_left-title text-center mb-4 mb-lg-5">No. 1 platform to start and accelerate your tech career</h6>
-                    <div className="d-flex justify-content-center">
+                    <h6 className="newHero_left-title mb-4 mb-lg-5">No. 1 platform to teach and learn tech career skills</h6>
+                    <div className=" new_hero_list d-flex justify-content-start">
                       <ul>
-                        <li className="newHero_left-title text-start mb-2" style={{fontSize: "17px"}}>Learn from Industry Experts</li>
-                        <li className="newHero_left-title text-start mb-2" style={{fontSize: "17px"}}>Learn from Anywhere</li>
-                        <li className="newHero_left-title text-start mb-2" style={{fontSize: "17px"}}>Save Time, Save Cost!</li>
+                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Learn from Industry Experts</li>
+                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Teach what you know</li>
+                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Connect from anywhere</li>
+                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Earn while teaching</li>
+                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Learn, Save time, Save cost</li>
                       </ul>
                     </div>
                 </header>
-                <div className="newHero_left-userSignin">
+                <div className="sign_up_cards d-flex w-100">
+                  <SignupCards title="STUDENTS" btn="Register to get started" link="/signup" />
+                  <SignupCards title="TEACHERS" btn="Sign up for free" link="/become-a-teacher" />
+                </div>
+                
+                {/* <div className="newHero_left-userSignin">
                     <motion.button className="facebook d-block mb-3"
                       whileHover={{ 
                         boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
@@ -162,14 +169,25 @@ function Hero(){
                             Sign Up With Email
                           </Link>
                         </motion.p>
-                </div>
+                </div> */}
             </div>
             </div>
         </section>
     )
 }       
 
-function Stats(){
+function SignupCards({title, btn, link}){
+  return (
+    <section className="sign_up_card">
+      <Link to={link}>    
+        <h5>{title}</h5>
+        <button>{btn}</button>
+      </Link>
+    </section>
+  )
+}
+
+export function Stats(){
   const statData = [
     {
       title: '20k+',

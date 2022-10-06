@@ -844,7 +844,7 @@ export const Dashboard = ()=>{
               </ul>
           </div>
         </div>
-      <Community />
+      {/* <Community /> */}
       </div>
     </div>
   </Teachers>
@@ -900,37 +900,29 @@ export const Teachers = ({ children, isMobile, userdata, notification, header, l
 
   useEffect(()=>{
     let isActive = true
-    // if(!pledredata.email && pledre.getStudentDetails){
+    if(!pledredata.email && pledre.getTeacherDetails){
 
-    //     (async()=>{
-    //         const user = getItem("gotocourse-userdata")
+        (async()=>{
+            const user = getItem("gotocourse-userdata")
             
-    //         try{
-    //             const response = await pledre.getStudentDetails(user.email)
-    //             if(isActive){
-    //                 if(response?.email){
-    //                     setPledreData(response )
-    //                     console.log(response)
-    //                     localStorage.setItem("gotocourse-userdata", JSON.stringify({...user, pledre: response}))
-    //                 }
-    //             }
+            try{
+                const response = await pledre.getTeacherDetails(user.email)
+                if(isActive){
+                    if(response?.email){
+                        setPledreData(response )
+                        console.log(response)
+                        localStorage.setItem("gotocourse-userdata", JSON.stringify({...user, pledre: response}))
+                    }
+                }
 
-    //         }catch(err){
-    //             console.error(err)
-    //             toast.error(err.message, {
-    //                 position: "top-right",
-    //                 autoClose: 4000,
-    //                 hideProgressBar: true,
-    //                 closeOnClick: true,
-    //                 pauseOnHover: true,
-    //                 draggable: true,
-    //                 progress: undefined,
-    //             });
-    //         }finally{
-    //             console.log("pData done")
-    //         }
-    //     })()
-    // }
+            }catch(err){
+                console.error(err)
+                toast.error(err.message);
+            }finally{
+                console.log("pData done")
+            }
+        })()
+    }
 
     return ()=>{
       isActive = false
@@ -950,15 +942,7 @@ export const Teachers = ({ children, isMobile, userdata, notification, header, l
 // fetch messages
 const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUnreadMessages(userData?.token), {
   onError: (err)=> {
-    toast.error(err.message,  {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    })
+    toast.error(err.message)
   },
   onSuccess: (res)=>{
     
@@ -966,28 +950,12 @@ const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUn
       localStorage.clear()
     }
     if(res.data?.statusCode !== 1){
-      toast.error(res.data?.message, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(res.data?.message);
     }
 
     const unread = res.data.data?.filter((messages)=>messages.status === "unread")
     if(unread.length > 0){
-      toast.info(`You have ${unread.length} messages `,  {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      toast.info(`You have ${unread.length} messages` )
     }
   }
 })

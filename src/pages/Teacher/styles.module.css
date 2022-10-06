@@ -801,30 +801,106 @@
 /* CHECKLIST */
 
 .checklist {
-    background: url(../../images/become_teacher.png), rgba(1, 20, 113, 0.56);
     background-blend-mode:multiply ;
     background-repeat: no-repeat;
     background-size: cover;
-    height: 100vh;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    min-height: 100vh;
+    background-color: #CCD0E8;
+}
+
+.checklist_hero {
+    height: min(100vh, 350px);
+    width: 100%;
+}
+
+
+.checklist_hero img {
+    width: 100%;
+    height: 100%;
 }
 .check_form {
-    background-color: #fff;
-    padding: 2rem 1rem;
-    width: min(100% - 2rem, 500px );
+    background: url(../../images/qualification_bg.png);    
+    padding: 2rem .7rem;
+    width: min(100% - 2rem, 700px );
     height: 100%;
-    overflow-y: scroll;
+    margin-inline: auto;
+
+}
+
+@media (min-width: 768px){
+    .check_form {
+        padding: 2rem 3rem;
+        width: min(100% - 2rem, 700px );
+    
+    }
+}
+@media (min-width: 1100px){
+    .check_form {
+        padding: 2rem 3rem;
+        width: min(100% - 2rem, 850px );
+    
+    }
+    .checklist_hero {
+        height: min(100vh, 450px);
+        width: 100%;
+    }
+}
+
+.question_card {
+    background: #fff;
+    padding: 1.5rem .8rem;
+    border-radius: 10px;
+    box-shadow: -1px 5px 13px 0px rgba(16,19,35,0.45);
+    -webkit-box-shadow: -1px 5px 13px 0px rgba(16,19,35,0.45);
+    -moz-box-shadow: -1px 5px 13px 0px rgba(16,19,35,0.45);
+}
+.question_card .tag {
+    color: red;
+}
+.question_card > label {
+    color:  #191046;
+    font-weight: 700;
+    margin-bottom: 1.5rem !important;
 }
 
 @media (max-width: 767px){
     .checklist {
         justify-content: center;
-        padding-block: 2rem;
+        padding-bottom: 2rem;
     }
     .check_form {
         border-radius: 10px;
         padding-bottom: 1rem;
     }
+}
+.check_label {
+    border: 1px solid black;
+    position: relative;
+    height: 40px;
+    width: 70px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.check_label span {
+    position: absolute;
+}
+.check_label input {
+    opacity: 0;
+    position: absolute;
+}
+.check_label input, .check_label span { 
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ width: 100%;
+ height: 100%;
+ border-radius: 10px;
+}
+.check_label:hover span {
+    background: #5A63F7;
+}
+
+.check_label input:checked + span {
+    background-color: var(--theme-blue);
+    color: #fff;
 }

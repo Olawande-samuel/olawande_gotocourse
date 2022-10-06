@@ -1,0 +1,27 @@
+.presenting {
+    grid-column: span 4/ auto;;
+    grid-row: span 3/ auto;;
+}
+
+.not_presenting {
+    grid-column: span 1;
+}
+
+@media (max-width: 800px) {
+    .presenting {
+        grid-column: span 3/ auto;;
+        grid-row: span 3/ auto;;
+    }
+}
+@media (max-width: 600px) {
+    .presenting {
+        grid-column: span 2/ auto;;
+        grid-row: span 3/ auto;;
+    }
+}
+@media (max-width: 449px) {
+    .presenting {
+        grid-column: span 1/ auto;;
+        grid-row: span 3/ auto;;
+    }
+}

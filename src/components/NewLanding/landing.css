@@ -45,7 +45,7 @@
 .newHero_left header h1 {
   margin-bottom: 0;
   font-weight: 900;
-  font-size: clamp(2.8125rem, 2.25rem + 1.8vw, 3.9375rem);
+  font-size: clamp(2.8125rem, 2.25rem + 1.8vw, 3.1375rem);
 }
 .newHero_left h6 {
   font-size: 16px;
@@ -109,6 +109,90 @@
   text-align: center;
 }
 
+.sign_up_cards {
+  margin-bottom: 2rem;
+}
+.sign_up_card:first-child {
+  margin-right: 42px;
+  background-color: #A1B0FF;
+  color: var(--theme-blue);
+
+
+}
+
+.sign_up_card {
+  padding: 1rem clamp(0.4rem, 0.2286rem + 0.8571vw, 1rem);
+  background: #FFDBD8;
+  color: var(--theme-orange);
+  border-radius: 8px;
+  position: relative;
+}
+
+.sign_up_card::after {
+  position: absolute;
+    content: "";
+    background-image: url(../../images/student_plug.png);
+    background-repeat: no-repeat;
+    background-size: 1.25rem;
+    height: 18px;
+    right: -40px;
+    width: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.sign_up_card:last-child::after {
+  position: absolute;
+    content: "";
+    background-image: url(../../images/teacher_plug.png);
+    background-repeat: no-repeat;
+    background-size: 1.25rem;
+    height: 18px;
+    left: -20px;
+    width: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.sign_up_card h5 {
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  font-size: clamp(1.125rem, 1.0179rem + 0.5357vw, 1.5rem); 
+}
+
+
+.sign_up_card:last-child button, .sign_up_card:last-child h5 { 
+  color: var(--theme-orange);
+ }
+
+.sign_up_card button {  
+  color: var(--theme-blue);
+  border: none;
+  border-radius: 8px;
+  padding: 8px clamp(0.375rem, 0.2679rem + 0.5357vw, 0.55rem);
+  font-weight: 500;
+  font-size: 13px;
+  box-shadow: -5.5872px 94.9824px 38.1792px rgba(0, 0, 0, 0.01), -3.7248px 54.0096px 32.592px rgba(0, 0, 0, 0.05), -1.8624px 24.2112px 24.2112px rgba(0, 0, 0, 0.09), 0px 5.5872px 13.0368px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 700px){
+.sign_up_cards, .new_hero_list, .newHero_left-title {
+  justify-content: center !important;
+}
+
+.newHero_left-header {
+  text-align: center;
+}
+
+}
+
+@media (min-width: 410px) {
+  .sign_up_card button {  
+    width: 160px;
+  
+  }
+}
 @media (min-width: 700px) {
   .newHero {
     height: 100%;
@@ -141,6 +225,8 @@
   .newHero .newHero_left-userSignin button {
     width: 90%;
   }
+
+
 }
 @media (min-wodth: 768px) {
   .newHero {
@@ -220,7 +306,7 @@
     height: 85%;
   }
   .newHero_left header h1 {
-    margin-bottom: 2rem;
+    /* margin-bottom: 2rem; */
     font-weight: 900;
     font-size: 65px;
   }

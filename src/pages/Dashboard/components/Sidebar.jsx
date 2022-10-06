@@ -3,8 +3,9 @@ import {Badge} from "@mui/material"
 import { MdHistory} from "react-icons/md";
 import {AiOutlineClose, AiOutlineSetting, AiOutlineDashboard} from "react-icons/ai";
 import {IoIosHome, IoIosPerson, IoIosChatbubbles, IoIosCash, IoIosHelpBuoy} from "react-icons/io";
-import {BiCategory, BiBell, BiBarChartSquare, BiHelpCircle} from "react-icons/bi";
+
 import {FaCalendarAlt} from "react-icons/fa";
+import {BiCategory, BiBell, BiBarChartSquare, BiHelpCircle, BiVideo} from "react-icons/bi";
 import {MdOutlineAddReaction} from "react-icons/md";
 import {FaTwitch} from "react-icons/fa";
 import { useLocation, Link, NavLink, useNavigate} from "react-router-dom";
@@ -123,6 +124,11 @@ const Sidebar = ({}) => {
             icon:AiOutlineSetting,
             path: "settings",
             title: "Settings"
+        },
+        {
+            icon:AiOutlineSetting,
+            path: "../console",
+            title: "Console"
         }
     ] : route === "student" ?  [
         {
@@ -146,9 +152,9 @@ const Sidebar = ({}) => {
             title: "My Classes"
         },
         {
-            icon: FiBookOpen,
-            path: "courses",
-            title: "My Courses"
+            icon: BiVideo,
+            path: "live-class",
+            title: "Live Class"
         },
        
         {
@@ -211,6 +217,11 @@ const Sidebar = ({}) => {
             title: "Bootcamps"
         },
         {
+            icon: BiVideo,
+            path: "live-class",
+            title: "Live Class"
+        },
+        {
             icon: IoIosCash,
             path: "earnings",
             title: "Earnings"
@@ -237,6 +248,11 @@ const Sidebar = ({}) => {
             icon: BiHelpCircle,
             path: "help",
             title: "Help"            
+        },
+        {
+            icon:AiOutlineSetting,
+            path: "../console",
+            title: "Console"
         }
     ] : route === 'mentor' ? [
             {
