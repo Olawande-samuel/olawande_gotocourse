@@ -115,7 +115,7 @@ function Hero(){
                 <header className="">
                     <h1 className="newHero_left-header">Upskill &amp; Reskill</h1>
                     {/* <h6 className="newHero_left-title text-center">Connect with industry experts from anywhere and for less cost</h6> */}
-                    <h6 className="newHero_left-title mb-4 mb-lg-5">No. 1 platform to teach and learn tech career skills</h6>
+                    <h6 className="newHero_left-title mb-4 mb-lg-5">No. 1 platform connecting Industry experts with learners</h6>
                     <div className=" new_hero_list d-flex justify-content-start">
                       <ul>
                         <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Learn from Industry Experts</li>
