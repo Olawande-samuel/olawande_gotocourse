@@ -544,7 +544,7 @@ border-radius: 13.5px !important;
 }
 
 .becoming {
-  padding-top: 2.0625rem;
+  padding-block: 4.0625rem;
 }
 .services .left,
 .services .right {
@@ -725,7 +725,7 @@ border-radius: 13.5px !important;
   justify-content:center
 }
 .becoming .left img {
-  max-height: 350px;
+  max-height: 450px;
   max-width: 100%;
   object-fit:cover;
   border-radius:10px;
