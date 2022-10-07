@@ -91,8 +91,10 @@ import Quiz, { Preview } from "./pages/Dashboard/components/classConsole/Quiz";
 import { Intermission, LiveClassInfo } from "./pages/Dashboard/components/classConsole/Liveclass";
 import Live from "./pages/Dashboard/Teachers/Live";
 
-import {MentorsProfile, EditMentorsProfile, MentorsNotification, MentorsDashboard, MentorsEarnings, MentorsScheduler, MentorsChat, MentorsReferral, MentorsHelp} from "./pages/Dashboard/Mentors";
+import { MentorsProfile, EditMentorsProfile, MentorsNotification, MentorsDashboard, MentorsEarnings, MentorsScheduler, MentorsChat, MentorsReferral, MentorsHelp } from "./pages/Dashboard/Mentors";
 import { ConsoleClass } from "./pages/Dashboard/Teachers/Bootcamps";
+import ConsoleClasses, { MyClass } from "./pages/Dashboard/components/classConsole/ConsoleClasses";
+import ConsoleAssessments from "./pages/Dashboard/components/classConsole/ConsoleAssessments";
 
 
 
@@ -230,6 +232,18 @@ function App() {
                 </Route>
               </Route>
 
+              <Route path="console" element={<Content />}>
+                <Route path="myclasses" element={<Out />} >
+                  <Route index element={<ConsoleClasses />} />
+                  <Route path=":id" element={<MyClass />} />
+                </Route>
+                <Route path="assessments" element={<ConsoleAssessments />} />
+                <Route path="liveclass" element={<Out />} />
+
+              </Route>
+
+
+
               <Route path="mentors" element={<Out />}>
                 <Route index element={<All type="mentors" />} />
                 <Route path=":id" element={<Out />} >
@@ -263,7 +277,7 @@ function App() {
                 <Route path="on-boarding" element={<TeacherOnBoarding />} />
                 <Route path="signup" element={<TeacherSignup />} />
                 <Route path="enrollments" element={<TeacherClasses />} />
-                
+
                 <Route path="classes" element={<TeacherBootcamps />} />
                 <Route path="classes/details/:id" element={<TeacherBootcampDetails />} />
                 <Route path="earnings" element={<Earnings />} />
