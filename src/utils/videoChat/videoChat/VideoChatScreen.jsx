@@ -8,7 +8,7 @@ import {  VscRecord } from 'react-icons/vsc'
 import { useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
 import useQuery from '../../../hooks/useQuery'
-import useSocket from '../../../hooks/useSocket'
+import useSocket from '../useSocket'
 import { Wrapper, Content, HeadBar, VideoWrapper, AddPeople, ControlItem, ControlWrapper, UserCallBlock,  } from './style'
 import { Peer } from "peerjs";
 import CONFIG from '../appConst'

@@ -54,12 +54,14 @@ import LoginOptions from "./LoginOptions";
 import Overview from "./Overview";
 import BetterWay from "./BetterWay";
 import { Seamless } from "./Seamless";
-
+import mygif  from "../../images/vyd.gif"
+import myvid from "../../images/vyd.mp4"
 const NewLanding = ()=>{
     return (
     <Layout background="blue">
         <Hero />
         <Stats />
+        <Gif />
         <Experienced />
         <Category />
         <Benefits />
@@ -81,6 +83,23 @@ const NewLanding = ()=>{
 }
 export default NewLanding
 
+
+
+function Gif(){
+  return (
+    <div className="container">
+      <div className="gif_wrapper w-100 h-100">
+        {/* <img src={mygif} alt="" /> */}
+
+        <video width="320" height="240" loop style={{width:"100%", height:"350px"}}>
+          <source src={myvid} type="video/mp4" />
+            Your browser does not support the video tag.
+        </video> 
+
+      </div>
+    </div>
+  )
+}
 
 function Hero(){
     const {  generalState: { navHeight }, studentFunctions: { googleSignup } } = useAuth();
