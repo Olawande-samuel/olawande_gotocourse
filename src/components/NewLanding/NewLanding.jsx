@@ -140,9 +140,9 @@ function Hero(){
                     <div className=" new_hero_list d-flex justify-content-start">
                       <ul>
                         <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Learn from Industry Experts</li>
-                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Access tools for tools for teaching</li>
+                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Access tools for teaching</li>
                         <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Connect from anywhere</li>
-                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Teach/Learn in-demand tech skills</li>
+                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Teach or Learn in-demand tech skills</li>
                         <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Learn, Save time, Save cost</li>
                       </ul>
                     </div>
