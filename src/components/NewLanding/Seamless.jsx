@@ -1,6 +1,8 @@
+import { SeamLessImg } from "./a"
+import seamless from "../../images/seamless_img.png"
 
 
-const Seamless = () => {
+export const Seamless = () => {
 
     const stay = [
         {
@@ -35,33 +37,28 @@ const Seamless = () => {
         },
     ]
   return (
-    <div className='betterway'>
-        <div className="container">
-            <header>
-                <h4>Gotocourse is an all-in-one platform that makes teaching and learning seamless</h4>
-                <p className="subtitle">Our courses are designed with you in mind and built around proven learning principles with real-life application, top-of-the-range technology, and fully immersive exchange with industry experts; everything you need to start and advance your career in tech.We have created tools to enhance course creation, class delivery and classroom management</p>
-            </header>
-            <div className="stay">
-                <div className="stay_left">
-                    <img src={""} alt="" />
-                </div>
-                <div className="stay_right">
-                    <ul>
-                    {
-                        stay.map((item, i) => (
-                            <Cards {...item} key={i}  />
-                        ))
-                    }
-                    </ul>
+    <div className="seamless">
+        <div className='betterway '>
+            <div className="container">
+                <header>
+                    <h4>Gotocourse is an all-in-one platform that makes teaching and learning seamless</h4>
+                    <p className="subtitle">We have created tools to enhance course creation, class delivery and classroom management</p>
+                </header>
+                <div className="stay">
+                    <div className="stay_left">
+                        <img src={seamless} alt="" />
+                    </div>
+                    <div className="stay_right">
+                        <ul>
+                        {
+                            stay.map((item, i) => (
+                                <Cards {...item} key={i}  />
+                            ))
+                        }
+                        </ul>
+                    </div>
                 </div>
             </div>
-            {/* <div className="betterway_learning_models">
-                {
-                    data.map((data, i)=>(
-                        <Models {...data} key={i} />
-                    ))
-                }
-            </div> */}
         </div>
     </div>
   )
@@ -71,7 +68,7 @@ function Cards({title, content}){
     return (
         <li className="betterway_card mb-3">
             <header>
-                <h5>{title}</h5>
+                <h6 className="fw-bold">{title}</h6>
             </header>
             <p>{content}</p>
         </li>

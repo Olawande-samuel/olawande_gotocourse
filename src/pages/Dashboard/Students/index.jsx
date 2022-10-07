@@ -1714,8 +1714,7 @@ export function StudentLive(){
 }
 
 export const Students = ({ children, isMobile, notification, userdata, header, loading }) => {
-    const [pledredata, setPledreData] = useState({})
-    const { generalState: { showSidebar, pledre }, generalState, setGeneralState, otherFunctions: { fetchCourses }, adminFunctions: { getUnreadMessages }, studentFunctions: { fetchNotifications, readNotifications } } = useAuth();
+    const { generalState: { showSidebar }, generalState, setGeneralState, otherFunctions: { fetchCourses }, adminFunctions: { getUnreadMessages }, studentFunctions: { fetchNotifications, readNotifications } } = useAuth();
     const { getItem } = useLocalStorage()
     const userData = getItem(KEY)
     const user = getItem("gotocourse-userdata")
@@ -1755,38 +1754,38 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
     // const {isLoading, data} = useQuery(["get courses"], ()=> fetchCourses())
 
 
-    useEffect(() => {
-        let isActive = true
-        if (!pledredata?.email && pledre.getStudentDetails) {
-            (async () => {
-                try {
-                    const response = await pledre.getStudentDetails(user?.email)
-                    if (isActive) {
-                        if (response?.email) {
-                            setPledreData(() => response)
-                            localStorage.setItem("gotocourse-userdata", JSON.stringify({ ...user, pledre: response }))
-                        }
-                    }
+    // useEffect(() => {
+    //     let isActive = true
+    //     if (!pledredata?.email && pledre.getStudentDetails) {
+    //         (async () => {
+    //             try {
+    //                 const response = await pledre.getStudentDetails(user?.email)
+    //                 if (isActive) {
+    //                     if (response?.email) {
+    //                         setPledreData(() => response)
+    //                         localStorage.setItem("gotocourse-userdata", JSON.stringify({ ...user, pledre: response }))
+    //                     }
+    //                 }
 
-                } catch (err) {
-                    console.error(err.message)
-                    toast.error(err.message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                }
-            })()
-        }
+    //             } catch (err) {
+    //                 console.error(err.message)
+    //                 toast.error(err.message, {
+    //                     position: "top-right",
+    //                     autoClose: 4000,
+    //                     hideProgressBar: true,
+    //                     closeOnClick: true,
+    //                     pauseOnHover: true,
+    //                     draggable: true,
+    //                     progress: undefined,
+    //                 });
+    //             }
+    //         })()
+    //     }
 
-        return () => {
-            isActive = false
-        }
-    }, [pledre.baseUrl])
+    //     return () => {
+    //         isActive = false
+    //     }
+    // }, [pledre.baseUrl])
 
 
     const student = {

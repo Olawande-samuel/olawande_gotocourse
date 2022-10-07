@@ -854,13 +854,11 @@ export const Dashboard = ()=>{
 
 export const Teachers = ({ children, isMobile, userdata, notification, header, loading }) => {
   const {
-    generalState: { showSidebar, pledre },
+    generalState: { showSidebar },
     generalState,
     setGeneralState,
     adminFunctions: {getUnreadMessages}, studentFunctions: {fetchNotifications }
   } = useAuth();
-
-  const [pledredata, setPledreData]= useState({})
 
   const {getItem} = useLocalStorage()
 
@@ -898,36 +896,6 @@ export const Teachers = ({ children, isMobile, userdata, notification, header, l
       flag.current = true;
   }, []);
 
-  useEffect(()=>{
-    let isActive = true
-    if(!pledredata.email && pledre.getTeacherDetails){
-
-        (async()=>{
-            const user = getItem("gotocourse-userdata")
-            
-            try{
-                const response = await pledre.getTeacherDetails(user.email)
-                if(isActive){
-                    if(response?.email){
-                        setPledreData(response )
-                        console.log(response)
-                        localStorage.setItem("gotocourse-userdata", JSON.stringify({...user, pledre: response}))
-                    }
-                }
-
-            }catch(err){
-                console.error(err)
-                toast.error(err.message);
-            }finally{
-                console.log("pData done")
-            }
-        })()
-    }
-
-    return ()=>{
-      isActive = false
-    }
-},[pledre.baseUrl])
 
   const toggleSidebar = () => {
     setGeneralState({ ...generalState, showSidebar: !showSidebar });

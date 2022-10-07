@@ -1106,38 +1106,39 @@ export function ApproveStudent() {
   ];
 
   useEffect(() => {
-    (async () => {
-      const studentInfo = getItem("gotocourse-studentDetails");
-      let pledreInfo;
-      console.log("getting");
-      console.log({ pledre });
-      try {
-        if (pledre) {
-          console.log(pledre);
-          setGeneralState({ ...generalState, loading: true });
-          const pledRes = await pledre.getStudentDetails(studentInfo.email);
-          console.log({ pledRes });
-          if (pledRes.email) {
-            pledreInfo = pledRes;
-          } else {
-            pledreInfo = {};
-          }
-        }
-      } catch (error) {
-        console.error(error.message);
-      } finally {
-        setGeneralState({ ...generalState, loading: false });
-      }
+    const studentInfo = getItem("gotocourse-studentDetails");
+    setData(studentInfo);
 
-      localStorage.setItem(
-        "gotocourse-studentDetails",
-        JSON.stringify({ ...studentInfo, pledre: pledreInfo })
-      );
-      setData({ ...studentInfo, pledre: pledreInfo });
-    })();
+    // (async () => {
+    //     let pledreInfo;
+    //     console.log("getting");
+    //     try {
+    //       if (pledre) {
+    //         console.log(pledre);
+    //         setGeneralState({ ...generalState, loading: true });
+    //         const pledRes = await pledre.getStudentDetails(studentInfo.email);
+    //         console.log({ pledRes });
+    //         if (pledRes.email) {
+    //           pledreInfo = pledRes;
+    //         } else {
+    //           pledreInfo = {};
+    //         }
+    //       }
+    //     } catch (error) {
+    //       console.error(error.message);
+    //     } finally {
+    //       setGeneralState({ ...generalState, loading: false });
+    //     }
+
+    //     localStorage.setItem(
+    //       "gotocourse-studentDetails",
+    //       JSON.stringify({ ...studentInfo, pledre: pledreInfo })
+    //     );
+  // })();
   }, []);
 
   async function handleVerification(e, id) {
+
     e.preventDefault();
     let item = {
       userId: id,
@@ -1153,12 +1154,6 @@ export function ApproveStudent() {
       const res = await verify(item, userdata?.token);
       const { message, success, statusCode } = res;
 
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: false,
-        };
-      });
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         //do somethings
@@ -1167,6 +1162,13 @@ export function ApproveStudent() {
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setGeneralState((old) => {
+        return {
+          ...old,
+          loading: false,
+        };
+      });
     }
   }
 
@@ -1345,7 +1347,7 @@ export function ApproveStudent() {
               {data?.isVerified ? "Revoke Application" : "Approve Application"}
             </button>
 
-            <button
+            {/* <button
               className="button button-lg log_btn w-50 mt-3 d-block"
               style={{
                 backgroundColor: data?.accessPledre && "var(--theme-orange",
@@ -1356,7 +1358,7 @@ export function ApproveStudent() {
               {data?.accessPledre
                 ? "Revoke Dashboard Access"
                 : "Approve Dashboard Access"}
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
@@ -1440,35 +1442,35 @@ export function Approve() {
   ];
 
   useEffect(() => {
-    (async () => {
-      const teacherInfo = getItem("gotocourse-teacherDetails");
-      let pledreInfo;
-      console.log("getting");
-      console.log({ pledre });
-      try {
-        if (pledre) {
-          console.log(pledre);
-          setGeneralState({ ...generalState, loading: true });
-          const pledRes = await pledre.getTeacherDetails(teacherInfo.email);
-          console.log({ pledRes });
-          if (pledRes.email) {
-            pledreInfo = pledRes;
-          } else {
-            pledreInfo = {};
-          }
-        }
-      } catch (error) {
-        console.error(error.message);
-      } finally {
-        setGeneralState({ ...generalState, loading: false });
-      }
+        const teacherInfo = getItem("gotocourse-teacherDetails");
+        setData(teacherInfo);
+  //   (async () => {
+  //     let pledreInfo;
+  //     console.log("getting");
+  //     console.log({ pledre });
+  //     try {
+  //       if (pledre) {
+  //         console.log(pledre);
+  //         setGeneralState({ ...generalState, loading: true });
+  //         const pledRes = await pledre.getTeacherDetails(teacherInfo.email);
+  //         console.log({ pledRes });
+  //         if (pledRes.email) {
+  //           pledreInfo = pledRes;
+  //         } else {
+  //           pledreInfo = {};
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error(error.message);
+  //     } finally {
+  //       setGeneralState({ ...generalState, loading: false });
+  //     }
 
-      localStorage.setItem(
-        "gotocourse-teacherDetails",
-        JSON.stringify({ ...teacherInfo, pledre: pledreInfo })
-      );
-      setData({ ...teacherInfo, pledre: pledreInfo });
-    })();
+  //     localStorage.setItem(
+  //       "gotocourse-teacherDetails",
+  //       JSON.stringify({ ...teacherInfo, pledre: pledreInfo })
+  //     );
+  //   })();
   }, []);
   console.log({ data });
 
@@ -1581,7 +1583,6 @@ export function Approve() {
         );
 
         setData({ ...data, canTeach: !data?.canTeach });
-        toast.success(message);
       }
     } catch (error) {
       toast.error(error.message);
@@ -1720,7 +1721,7 @@ export function Approve() {
                 value="mentorship"
               />
             </div>
-            <div className="form-group my-3">
+            {/* <div className="form-group my-3">
               <label
                 htmlFor="accessPledre"
                 className="form-label generic_label"
@@ -1739,7 +1740,7 @@ export function Approve() {
                 checked={data?.accessPledre}
                 value="pledre"
               />
-            </div>
+            </div> */}
             <div className="form-group my-3">
               <label htmlFor="level" className="form-label generic_label">
                 Assign Level
@@ -2806,19 +2807,18 @@ export function CourseDetails({}) {
     let pledId;
     try {
       if (formstate.status !== "active") {
-        const pledRes = await generalState.pledre.addCourse({
-          course_name: formstate.name,
-          course_description: formstate.description,
-          is_public: false,
-          short_description: formstate.description,
-          price: formstate.price,
-        });
-        console.log({ pledRes });
-        if (pledRes.id) {
-          pledId = pledRes.id;
-          const res = await toggleCourseStatus(userdata?.token, params?.id, {
-            pledreCourseId: pledId,
-          });
+        // const pledRes = await generalState.pledre.addCourse({
+        //   course_name: formstate.name,
+        //   course_description: formstate.description,
+        //   is_public: false,
+        //   short_description: formstate.description,
+        //   price: formstate.price,
+        // });
+        // console.log({ pledRes });
+        // if (pledRes.id) {
+          // pledId = pledRes.id;
+
+          const res = await toggleCourseStatus(userdata?.token, params?.id);
           const { success, message, statusCode } = res;
           if (!success) throw new AdvancedError(message, statusCode);
           setFormstate({
@@ -2826,15 +2826,12 @@ export function CourseDetails({}) {
             status: "active",
             pledreCourseId: pledId,
           });
-
-          // NEEDS REMOVE COURSE API FROM PLEDRE
-
           toast.success(message);
-        }
+
+        // }
       } else {
-        const res = await toggleCourseStatus(userdata?.token, params?.id, {
-          pledreCourseId: formstate.pledreCourseId,
-        });
+        
+        const res = await toggleCourseStatus(userdata?.token, params?.id);
         const { success, message, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         setFormstate({ ...formstate, status: "inactive" });
@@ -3143,20 +3140,8 @@ export function BootcampDetails({}) {
     setLoading((_) => true);
     try {
       if (!formstate.pledreCourseId) {
-        // add class to pledre
-        const pledRes = await generalState.pledre.addCourse({
-          course_name: formstate.title,
-          course_description: formstate.description,
-          is_public: true,
-          short_description: formstate.description,
-          price: formstate.price,
-        });
-
-        if (pledRes._id) {
-          console.log(pledRes._id);
           const res = await toggleBootcampStatus(
             userdata?.token,
-            { pledreCourseId: pledRes._id },
             params?.id
           );
           const { message, statusCode, success } = res;
@@ -3166,15 +3151,13 @@ export function BootcampDetails({}) {
             setFormstate({
               ...formstate,
               isActive: res.isActive,
-              pledreCourseId: pledRes._id,
             });
             toast.success(message);
           }
-        }
+        // }
       } else {
         const res = await toggleBootcampStatus(
           userdata?.token,
-          { pledreCourseId: formstate.pledreCourseId },
           params?.id
         );
         const { message, statusCode, success } = res;
@@ -3270,15 +3253,15 @@ export function BootcampDetails({}) {
       const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        const teacherDetails = await generalState.pledre.getTeacherDetails(formdata.instructor);
-        console.log("id",formstate.pledreCourseId,)
-        if(teacherDetails._id){
-          const addTeachtoCourse = await generalState.pledre.addTeacherToCourse({
-            teacher_id: teacherDetails?._id,
-            course_id: formstate.pledreCourseId,
-          });
-          console.log({addTeachtoCourse})
-        }
+        // const teacherDetails = await generalState.pledre.getTeacherDetails(formdata.instructor);
+        // console.log("id",formstate.pledreCourseId,)
+        // if(teacherDetails._id){
+        //   const addTeachtoCourse = await generalState.pledre.addTeacherToCourse({
+        //     teacher_id: teacherDetails?._id,
+        //     course_id: formstate.pledreCourseId,
+        //   });
+        //   console.log({addTeachtoCourse})
+        // }
 
         setFormstate(res.data);
         setOpenprompt(false);

@@ -339,7 +339,7 @@ export const CheckoutForm = () => {
       const result = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `https://gotocourse.us/payment/success/${classData.pledreCourseId}`,
+          return_url: `https://gotocourse.us/payment/success/`,
         },
       });
 
@@ -422,9 +422,9 @@ export const CheckoutForm = () => {
 export const PaymentStatus = ({ success }) => {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
-  const { generalState, setGeneralState } = useAuth();
   const { id } = useParams();
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+
   const [status, setStatus] = useState({
     image: success ? Success : Failure,
     title: success ? "Payment Successful" : "Payment Denied",
@@ -437,28 +437,29 @@ export const PaymentStatus = ({ success }) => {
   console.log(id)
   const userdata = getItem("gotocourse-userdata");
 
-  useEffect(() => {
-    // enroll student to course
-    if (success) {
-      (async () => {
-        try {
-          if (generalState.pledre) {
-            const pledRes = await generalState.pledre.getStudentDetails(userdata.email);
-            if (pledRes._id) {
-              const res = await generalState.pledre.addCourseToStudent({
-                course_id: id,
-                student_id: pledRes._id,
-              })
-            }
-          }
-        } catch (err) {
-          console.error(err)
-        } finally {
-          setLoading(false)
-        }
-      })()
-    }
-  }, [success, id, generalState.pledre])
+  // useEffect(() => {
+  //   // enroll student to course
+  //   if (success) {
+  //     (async () => {
+  //       try {
+  //         if (generalState.pledre) {
+  //           const pledRes = await generalState.pledre.getStudentDetails(userdata.email);
+  //           if (pledRes._id) {
+  //             const res = await generalState.pledre.addCourseToStudent({
+  //               course_id: id,
+  //               student_id: pledRes._id,
+  //             })
+  //           }
+  //         }
+  //       } catch (err) {
+  //         console.error(err)
+  //       } finally {
+  //         setLoading(false)
+  //       }
+  //     })()
+  //   }
+  // }, [success, id, generalState.pledre])
+
   return (
     <div className={style.paymentScreen}>
       {loading && <Loader />}

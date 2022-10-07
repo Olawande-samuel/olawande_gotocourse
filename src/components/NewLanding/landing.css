@@ -1290,11 +1290,37 @@
 
 
 @media (max-width:768px) {
-    .betterway_learning_models {
+    .betterway_learning_models .seamless .betterway_learning_models {
         display: grid;
         grid-template-columns:  1fr;
         gap: 2rem;
     }
+}
+
+
+.seamless .betterway{
+  background-color: #FFF;
+  padding: 3rem 0;
+}
+
+.seamless .stay_left {
+  background: inherit;
+}
+.seamless .stay_left img {
+  max-width: 100%;
+  max-height: 350px;
+  object-fit: contain;
+}
+
+.seamless ul {
+  list-style-type: none;
+  line-height: 20px;
+}
+.seamless .stay header {
+  margin-bottom: 0;
+}
+.seamless .stay header h6{
+  margin-bottom: 2px;
 }
 
 .models {

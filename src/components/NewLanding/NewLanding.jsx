@@ -53,6 +53,7 @@ import SwiperCore, {
 import LoginOptions from "./LoginOptions";
 import Overview from "./Overview";
 import BetterWay from "./BetterWay";
+import { Seamless } from "./Seamless";
 
 const NewLanding = ()=>{
     return (
@@ -62,6 +63,7 @@ const NewLanding = ()=>{
         <Experienced />
         <Category />
         <Benefits />
+        <Seamless />
         <Bootcamp/>
         <Becoming />
         <BetterWay />

@@ -87,8 +87,6 @@ import Business from "./Business/pages/landing/business";
 // import Console from "./pages/Dashboard/components/classConsole";
 import Content, { FileComponent, NoteComponent, QuizComponent } from "./pages/Dashboard/components/classConsole/Content";
 import Quiz, { Preview } from "./pages/Dashboard/components/classConsole/Quiz";
-import Note from "./pages/Dashboard/components/classConsole/Note";
-import File from "./pages/Dashboard/components/classConsole/File";
 
 import { Intermission, LiveClassInfo } from "./pages/Dashboard/components/classConsole/Liveclass";
 import Live from "./pages/Dashboard/Teachers/Live";
@@ -167,7 +165,7 @@ function App() {
               <Route path="bootcamp-training" element={<NewBootcampDetailsComponent />} />
               <Route path="bootcamp" element={<Bootcamp />} />
               <Route path="bootcamp/payment" element={<BootcampPayment />} />
-              <Route path="payment/success/:id" element={<PaymentStatus success={true} />} />
+              <Route path="payment/success" element={<PaymentStatus success={true} />} />
               <Route path="payment/error" element={<PaymentStatus />} />
 
               <Route path="career" element={<Career />} />

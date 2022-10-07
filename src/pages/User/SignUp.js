@@ -72,38 +72,41 @@ const SignUp = () => {
        throw new AdvancedError("Fields cannot be empty", 0);
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
-        // second dashboard
-        if(generalState.pledre){
-          const res = await generalState.pledre.signUpStudent({
-            name:`${data.firstName} ${data.lastName}`,
-            email: data.email,
-            password:`${data.password}`
-          })
-          console.log({res})
-          if(res.approved){
-            // main dashboard
-            const response = await register({...others, pledreStudentId: res._id}, "user");
-            // const response = await register({...others}, "user");
-            let { success, message, statusCode } = response;
-            if (!success) throw new AdvancedError(message, statusCode);
-            else {
-              const { data } = response;
-              // set item
-              updateItem(VERIFICATION_KEY, data);
-              localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res)) 
-              setGeneralState((old) => {
-                return {
-                  ...old,
-                  notification: message,
-                };
-              });
-              navigate(`/email`);
-            }
-          }
-
-        } else {
-          throw new AdvancedError("Something went wrong. Please try again", 0)
+      // main 
+        const response = await register({...others}, "user");
+        let { success, message, statusCode } = response;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          const { data } = response;
+          // set item
+          updateItem(VERIFICATION_KEY, data);
+          // localStorage.setItem("gotocourse-pledre-user", JSON.stringify(response)) 
+          setGeneralState((old) => {
+            return {
+              ...old,
+              notification: message,
+            };
+          });
+          navigate(`/email`);
         }
+
+        // second dashboard
+        // if(generalState.pledre){
+        //   const res = await generalState.pledre.signUpStudent({
+        //     name:`${data.firstName} ${data.lastName}`,
+        //     email: data.email,
+        //     password:`${data.password}`
+        //   })
+        //   console.log({res})
+        //   if(res.approved){
+            // main dashboard
+            // const response = await register({...others, pledreStudentId: res._id}, "user");
+            // main goes here ****
+          // }
+
+        // } else {
+        //   throw new AdvancedError("Something went wrong. Please try again", 0)
+        // }
     } catch (err) {
       console.error({err})
       toast.error(err.message);
