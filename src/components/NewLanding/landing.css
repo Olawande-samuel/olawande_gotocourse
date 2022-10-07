@@ -1372,11 +1372,11 @@
 
  @media screen and (min-width: 612px){
   .myVideo{ 
-    height: 450px !important;
+    height: 350px !important;
   }
  }
  @media screen and (min-width: 1900px){
   .myVideo{ 
-    height: 490px !important;
+    height: 400px !important;
   }
  }
