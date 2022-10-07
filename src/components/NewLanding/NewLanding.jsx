@@ -87,11 +87,11 @@ export default NewLanding
 
 function Gif(){
   return (
-    <div className="container">
+    <div className="container my-4">
       <div className="gif_wrapper w-100 h-100">
         {/* <img src={mygif} alt="" /> */}
 
-        <video width="320" height="240"  autoPlay loop  style={{width:"100%", height:"350px"}}>
+        <video width="320" height="240"  autoPlay muted loop  style={{width:"100%", height:"350px"}}>
           <source src={myvid} type="video/mp4" />
             Your browser does not support the video tag.
         </video> 
