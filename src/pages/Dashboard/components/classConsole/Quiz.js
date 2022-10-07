@@ -18,7 +18,7 @@ export function Preview() {
     return (
         <>
             <div className="goback">
-                <Link to="/"><AiOutlineArrowLeft /> class console</Link>
+                <Link to="/test/quiz"><AiOutlineArrowLeft /> class console</Link>
             </div>
 
             <div className='preview__content'>

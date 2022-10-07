@@ -48,6 +48,21 @@ import clsx from "../styles.module.css";
 import { NavLink, useLocation } from "react-router-dom";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 
+const studentIcon = [
+  {
+    id: 1,
+    icon: MdMessage,
+    title: "Mail",
+  },
+ 
+  {
+    id: 2,
+    icon: RiVideoAddFill,
+    title: "Live Class",
+  },
+
+];
+
 const iconData = [
   {
     id: 1,
@@ -128,9 +143,10 @@ export const Console = ({ children }) => {
     pathname.split("/")[2] === "note"
       ? "Note"
       : pathname.split("/")[2] === "file"
-      ? "File"
-      : "";
-  const quizpath = pathname.split("/")[2] === "quiz" && "Quiz";
+        ? "File"
+        : "";
+        const studentpath = pathname.split("/")[1] === "console";
+        const quizpath = pathname.split("/")[2] === "myclasses" ? "My Classes" : pathname.split("/")[2] === "liveclass" ? "Live Class" : pathname.split("/")[2]
 
   const bread = pathname?.split("/");
 
@@ -149,6 +165,7 @@ export const Console = ({ children }) => {
       <ModuleModal moduleOpen={moduleOpen} moduleClose={moduleClose} />
 
       <main className={style.children}>
+
         <section className="contentheader">
           <div className="contentnav">
             <div className="content__hamburger">
@@ -171,6 +188,14 @@ export const Console = ({ children }) => {
             </div>
           </div>
 
+          {
+            studentpath && (
+              <div className="studenttitle">
+                <h2>{quizpath}</h2>
+              </div>
+
+          )}
+
           {NoteAndFile && NoteAndFile !== "" && (
             <div className="contentcategory">
               <NavLink
@@ -188,41 +213,62 @@ export const Console = ({ children }) => {
             </div>
           )}
 
-          <div className="contentbreadcrumb">
-            <nav arial-label="breadcrumb">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <Link to={goBack(pathname)} style={{ color: "var(--theme-blue", textTransform:"uppercase" }}>
-                    Dashboard
-                  </Link>
-                </li>
-                {bread
-                  .filter((item) => item !== "")
-                  .map((item, idx) => (
-                    <li className="breadcrumb-item text-uppercase" key={idx}>
-                      <Link
-                        style={{ color: "var(--theme-blue" }}
-                        to={`${bread.slice(0, idx + 2).join("/")}`}
-                      >
-                        {item.split("-").join(" ")}
+          {
+            !studentpath && (
+
+              <div className="contentbreadcrumb">
+                <nav arial-label="breadcrumb">
+                  <ol className="breadcrumb">
+                    <li className="breadcrumb-item">
+                      <Link to={goBack(pathname)} style={{ color: "var(--theme-blue", textTransform: "uppercase" }}>
+                        Dashboard
                       </Link>
                     </li>
-                  ))}
-              </ol>
-            </nav>
-          </div>
+                    {bread
+                      .filter((item) => item !== "")
+                      .map((item, idx) => (
+                        <li className="breadcrumb-item text-uppercase" key={idx}>
+                          <Link
+                            style={{ color: "var(--theme-blue" }}
+                            to={`${bread.slice(0, idx + 2).join("/")}`}
+                          >
+                            {item.split("-").join(" ")}
+                          </Link>
+                        </li>
+                      ))}
+                  </ol>
+                </nav>
+              </div>
+            )
+          }
         </section>
         {children}
       </main>
 
       <div className={style.icon_bar}>
-        {iconData.map(({ title, id, icon: Icon }) => (
-          <Tooltip title={title} key={id}>
-            <IconButton>
-              <Icon size="1.5rem" color="#0C2191" />
-            </IconButton>
-          </Tooltip>
-        ))}
+
+        {
+          studentpath ? (
+            studentIcon.map(({ title, id, icon: Icon }) => (
+              <Tooltip title={title} key={id}>
+                <IconButton>
+                  <Icon size="1.5rem" color="#0C2191" />
+                </IconButton>
+              </Tooltip>
+            ))
+          ) 
+          :
+          (
+            iconData.map(({ title, id, icon: Icon }) => (
+              <Tooltip title={title} key={id}>
+                <IconButton>
+                  <Icon size="1.5rem" color="#0C2191" />
+                </IconButton>
+              </Tooltip>
+            ))
+          )
+        }
+        
       </div>
     </div>
   );
@@ -260,6 +306,8 @@ function Sidebar({ Toggle, side }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
+  const studentpath = pathname.split("/")[1] === "console";
+
   function goBack() {
     let pathArray = pathname.split("/")[1];
 
@@ -276,41 +324,86 @@ function Sidebar({ Toggle, side }) {
     // <article className={style.class_sidebar }>
     <>
       <article
-        className={`${classConsole.sidebar ? style.open : style.close} ${
-          style.class_sidebar
-        }`}
+        className={`${classConsole.sidebar ? style.open : style.close} ${style.class_sidebar
+          }`}
       >
         <Link to="/">
           <Logosm />
         </Link>
 
-        <div className={style.course_content}>
-          <p>Course content</p>
-          <Accord />
-          <Accord />
-          <Accord />
-        </div>
-        <div className={style.create_content_button}>
-          <button onClick={Toggle}>
-            <i>
-              <AiOutlinePlus />
-            </i>
-            <span>New Content</span>
-            <i>
-              <BsThreeDotsVertical />
-            </i>
-          </button>
-        </div>
+        {
+          !studentpath ? (
+            <>
+              <div className={style.course_content}>
+                <p>Course content</p>
+                <Accord />
+                <Accord />
+                <Accord />
+              </div>
+              <div className={`${style.create_content_button} ${style.white}`}>
+                <button onClick={Toggle}>
+                  <i>
+                    <AiOutlinePlus />
+                  </i>
+                  <span>New Content</span>
+                  <i>
+                    <BsThreeDotsVertical />
+                  </i>
+                </button>
+              </div>
 
-        <Link className="d-inline-flex" to={goBack()}>
-          <button className={style.back_button}>Back</button>
-        </Link>
+              <Link className="d-inline-flex" to={goBack()}>
+                <button className={style.back_button}>Back</button>
+              </Link>
+            </>
+
+          ) : (
+            <>
+              <div className={style.course_content}>
+
+                <div className={`${style.create_content_button} ${style.blue}`}>
+                  <button>
+                    <Link to={"/console/myclasses"}>
+
+                      <span>My Classes</span>
+
+                    </Link>
+                  </button>
+                </div>
+
+                <div className={`${style.create_content_button} ${style.blue}`}>
+                  <button >
+                    <Link to={"/console/assessments"}>
+                      <span>Assessments</span>
+                      <i>
+                        <BsThreeDotsVertical />
+                      </i>
+                    </Link>
+                  </button>
+                </div>
+
+                <div className={`${style.create_content_button} ${style.blue}`}>
+                  <button >
+                    <Link to={"/console/liveclass"}>
+                      <span>Live Classes</span>
+                      {/* <i>
+                      <BsThreeDotsVertical />
+                    </i> */}
+                    </Link>
+                  </button>
+                </div>
+
+              </div>
+
+            </>
+          )
+        }
+
       </article>
       <div
         onClick={closeSidebar}
-        className={`d-lg-none ${clsx.overlay} ${
-          classConsole.sidebar ? clsx.overlayopen : clsx.overlayclose
-        }`}
+        className={`d-lg-none ${clsx.overlay} ${classConsole.sidebar ? clsx.overlayopen : clsx.overlayclose
+          }`}
       ></div>
     </>
   );
@@ -442,13 +535,13 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 label="Domain"
                 className="myselect"
                 ref={ref}
-                // MenuProps={{
-                //     style: {
-                //         zIndex: 4000
-                //     }
-                // }}
-                // value={type}
-                // onChange={(e) => setType(e.target.value)}
+              // MenuProps={{
+              //     style: {
+              //         zIndex: 4000
+              //     }
+              // }}
+              // value={type}
+              // onChange={(e) => setType(e.target.value)}
               >
                 <MenuItem value="">
                   <em>None</em>

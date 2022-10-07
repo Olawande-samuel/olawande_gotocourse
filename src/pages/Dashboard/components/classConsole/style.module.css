@@ -135,14 +135,40 @@
     justify-content: center;
 }
 
+.white button{
+    color: var(--theme-blue);
+    background: #ffff;
+}
+
+.blue button{
+    background: #004DB6;;
+    color: #ffff;
+    /* border: 1px solid white; */
+}
+
+.blue button a{
+    color: #ffff;
+    width: 100%;
+}
+
+
+.blue button a:active{
+    color: #004DB6;;
+}
+
+.blue button:active{
+    color: #004DB6;;
+    background-color: #ffff;
+}
+
 .create_content_button button {
     display: flex;
     gap: .5rem;
     align-items: center;
     width: 100%;
     border-radius: 8px;
-    color: var(--theme-blue);
-    background: #ffff;
+    /* color: var(--theme-blue); */
+    /* background: #ffff; */
     padding: 10px 24px;
     border: none;
     font-size: 14px;
