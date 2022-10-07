@@ -57,7 +57,7 @@ const BetterWay = () => {
         <div className="container">
             <header>
                 <h4>Gotocourse promotes a better way to learn</h4>
-                <p className="subtitle">Our courses are designed with you in mind and built around proven learning principles with real-life application, top-of-the-range technology, and fully immersive exchange with industry experts; everything you need to start and advance your career in tech.</p>
+                <p className="subtitle">All courses are designed with you in mind and built around proven learning principles with real-life application, top-of-the-range technology, and fully immersive exchange with industry experts; everything you need to start and advance your career in tech.</p>
             </header>
             <div className="stay">
                 <div className="stay_left">

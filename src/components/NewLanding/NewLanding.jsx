@@ -62,13 +62,13 @@ const NewLanding = ()=>{
         <Hero />
         <Stats />
         <Gif />
+        <BetterWay />
         {/* <Experienced /> */}
         <Category />
         <Benefits />
-        <Seamless />
+        {/* <Seamless /> */}
         <Bootcamp/>
         <Becoming />
-        <BetterWay />
         {/* <Learn type={"newLanding"} />
         <Self />
       <Mentorship /> */}
@@ -91,7 +91,7 @@ function Gif(){
       <div className="gif_wrapper w-100 h-100">
         {/* <img src={mygif} alt="" /> */}
 
-        <video width="320" height="240"  autoPlay muted loop  style={{width:"100%", height:"350px"}}>
+        <video width="320" height="240"  autoPlay muted loop  style={{width:"100%"}} className="myVideo">
           <source src={myvid} type="video/mp4" />
             Your browser does not support the video tag.
         </video> 
@@ -140,15 +140,15 @@ function Hero(){
                     <div className=" new_hero_list d-flex justify-content-start">
                       <ul>
                         <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Learn from Industry Experts</li>
-                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Teach what you know</li>
+                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Access tools for tools for teaching</li>
                         <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Connect from anywhere</li>
-                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Earn while teaching</li>
+                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Teach/Learn in-demand tech skills</li>
                         <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Learn, Save time, Save cost</li>
                       </ul>
                     </div>
                 </header>
                 <div className="sign_up_cards d-flex w-100">
-                  <SignupCards title="STUDENTS" btn="Register to get started" link="/signup" />
+                  <SignupCards title="STUDENTS" btn="Register for free" link="/signup" />
                   <SignupCards title="TEACHERS" btn="Sign up for free" link="/become-a-teacher" />
                 </div>
                 

@@ -182,7 +182,7 @@
   justify-content: center !important;
 }
 
-.newHero_left-header {
+.newHero_left-header, .newHero_left-title {
   text-align: center;
 }
 
@@ -1369,3 +1369,14 @@
   }
  }
 
+
+ @media screen and (min-width: 612px){
+  .myVideo{ 
+    height: 450px !important;
+  }
+ }
+ @media screen and (min-width: 1900px){
+  .myVideo{ 
+    height: 490px !important;
+  }
+ }

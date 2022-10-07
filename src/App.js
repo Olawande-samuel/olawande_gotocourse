@@ -95,6 +95,7 @@ import { MentorsProfile, EditMentorsProfile, MentorsNotification, MentorsDashboa
 import { ConsoleClass } from "./pages/Dashboard/Teachers/Bootcamps";
 import ConsoleClasses, { MyClass } from "./pages/Dashboard/components/classConsole/ConsoleClasses";
 import ConsoleAssessments from "./pages/Dashboard/components/classConsole/ConsoleAssessments";
+import { CreateRoom, VideDiv } from "./utils/video";
 
 
 
@@ -162,6 +163,10 @@ function App() {
               <Route path="forgot-password" element={<ForgotPassword />} />
               <Route path="change-password" element={<ResetPassword />} />
               <Route path="become-a-teacher" element={<BecomeATeacher />} />
+
+              <Route path="tester" element={<CreateRoom />} />
+              <Route path="video-chat" element={<VideDiv />} />
+
 
 
               <Route path="bootcamp-training" element={<NewBootcampDetailsComponent />} />

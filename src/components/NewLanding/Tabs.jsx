@@ -55,7 +55,7 @@ function a11yProps(index) {
 
 export function Category() {
   return (
-    <section className="newCategories">
+    <section className="newCategories mt-4">
       <div className="container-xxl">
       <header className="newCategories_header_wrapper">
         <h1 className="newCategories_header">A broad selection of courses</h1>

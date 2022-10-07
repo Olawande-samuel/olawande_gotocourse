@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
-import CONFIG from '../Utils/appConst';
+import CONFIG from './appConst';
 
 const socket = io(CONFIG.socketUrl);
 
