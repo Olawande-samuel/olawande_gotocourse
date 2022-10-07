@@ -3,25 +3,35 @@
 const Seamless = () => {
 
     const stay = [
-        // {
-        //     title:"Gotocourse promotes a better way to learn ",
-        //     content:"Our courses are designed with you in mind and built around proven learning principles with real-life application, top-of-the-range technology, and fully immersive exchange with industry experts; everything you need to start and advance your career in tech."
-        // },
         {
-            title:"Learn and study on a flexible schedule",
-            content:"Be in charge of your time, learn and study at your own preferred time without the limitation of fixed lessons and physical classrooms. Set your career goals and milestone and get started on building a great career you will be proud of."
+            title:"Course creator",
+            content:"Create, upload and manage course content in simple and quick steps on the platform"
+        },
+        
+        {
+            title:"Live class",
+            content:"Host live classes with your students using the integrated live class feature"
+        },
+
+        {
+            title:"Meeting Scheduler",
+            content:"Schedule live sessions with your students and notify them of the scheduled sessions."
         },
         {
-            title:"Learn with a cohort",
-            content:"Join a classroom to take instructor led training, do projects with learning partners, take quizzes, and build work related portfolio"
+            title:"Class console",
+            content:"In-built chat system to enhance communication between teachers, students, and admin."
         },
         {
-            title:"Self-paced Learning",
-            content:"Self-paced courses that allow you to complete assignments at your own pace, making it easier to balance coursework with your other personal and professional responsibilities."
+            title:"Mailing system",
+            content:"Ease of dissemination of information to all users on the platform."
         },
         {
-            title:"One-On-One Mentorship",
-            content:"Challenge yourself with a one-on-one mentorship session with industry experts and professionals and grow your career."
+            title:"Quiz management system",
+            content:"Create and manage students' assessments to track their progress"
+        },
+        {
+            title:"Library",
+            content:"Upload files and video content for students' perusal from anywhere, at anytime"
         },
     ]
   return (
