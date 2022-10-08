@@ -248,7 +248,6 @@ function App() {
               </Route>
 
 
-
               <Route path="mentors" element={<Out />}>
                 <Route index element={<All type="mentors" />} />
                 <Route path=":id" element={<Out />} >

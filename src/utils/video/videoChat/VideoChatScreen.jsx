@@ -9,11 +9,12 @@ import {  VscRecord } from 'react-icons/vsc'
 import { Link, useLocation } from 'react-router-dom'
 import useQuery from '../useQuery'
 import useSocket from '../useSocket'
-import { Wrapper, Content, HeadBar, VideoWrapper, AddPeople, ControlItem, ControlWrapper, UserCallBlock,  } from './style'
+import { Wrapper, Content, HeadBar, VideoWrapper, AddPeople, ControlItem, ControlWrapper, UserCallBlock, MainWrapper,  } from './style'
 import { Peer } from "peerjs";
 import CONFIG from '../appConst'
 import { KEY } from '../../../constants'
 import { useLocalStorage } from '../../../hooks'
+import { Navbar } from '../../../pages/Dashboard/components/Live/LiveClass'
 
 const VideoChatScreen = ()  => {
     const { socket, sendPing } = useSocket()
@@ -186,15 +187,9 @@ const VideoChatScreen = ()  => {
     }, [userProfile.userId])
     return (
         <Wrapper>
-            <HeadBar>
-                <div className="banner">
-                    <img src="/assets/svg/logo.svg" alt="logo" />
-                    <Link to="/">TeamKonnect</Link>
-                </div>
-                <div className="head-img">
-                    <img src={userProfile.profileImg} alt="avatar" />
-                </div>
-            </HeadBar>
+            {/* <HeadBar> */}
+               <Navbar />
+            {/* </HeadBar> */}
             <Content>
                 <VideoWrapper className="video-section">
                     {/* <CallBlock>
@@ -216,31 +211,33 @@ const VideoChatScreen = ()  => {
                     <UserCallBlock>
                         <img src="https://images.unsplash.com/photo-1597199204011-e6e704645213?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2072&q=80" alt="person in video call" />
                     </UserCallBlock> */}
+                        <UserCallBlock>
+                            <video className="client-local-stream" src=""></video>
+                        </UserCallBlock>
+                        <ControlWrapper>
+                            <ControlItem>
+                                <VscRecord />
+                            </ControlItem>
+                            <ControlItem  onClick={togggleAudio}>
+                                {callSettingsState.audio ? <BsMic /> : <BsMicMute />}
+                            </ControlItem>
+                            <ControlItem>
+                                <MdPresentToAll />
+                            </ControlItem>
+                            <ControlItem onClick={togggleVideo}>
+                                {callSettingsState.video ? <BsCameraVideo /> : <BsCameraVideoOff />}
+                            </ControlItem>
+                            <ControlItem>
+                                <HiOutlinePhone />
+                            </ControlItem>
+                        </ControlWrapper>
+                        <AddPeople>
+                            <IoAdd />
+                            <span>Add people</span>
+                        </AddPeople>
 
-                    <UserCallBlock>
-                        <video className="client-local-stream" src=""></video>
-                    </UserCallBlock>
-                    <ControlWrapper>
-                        <ControlItem>
-                            <VscRecord />
-                        </ControlItem>
-                        <ControlItem  onClick={togggleAudio}>
-                            {callSettingsState.audio ? <BsMic /> : <BsMicMute />}
-                        </ControlItem>
-                        <ControlItem>
-                            <MdPresentToAll />
-                        </ControlItem>
-                        <ControlItem onClick={togggleVideo}>
-                            {callSettingsState.video ? <BsCameraVideo /> : <BsCameraVideoOff />}
-                        </ControlItem>
-                        <ControlItem>
-                            <HiOutlinePhone />
-                        </ControlItem>
-                    </ControlWrapper>
-                    <AddPeople>
-                        <IoAdd />
-                        <span>Add people</span>
-                    </AddPeople>
+
+                    
                 </VideoWrapper>
             </Content>
         </Wrapper>

@@ -147,22 +147,7 @@ const LiveClass = () => {
 
   return (
     <section className={style.live_container}>
-      <nav className={style.live_nav}>
-        <div className="container">
-          <Link to="/" className="d-inline-block">
-            <Logosm />
-          </Link>
-          <div className={style.present_user}>
-            <span className={style.present_profile}>
-              <img src={mainuser} alt="" />
-            </span>
-            <span>Marcus is presenting</span>
-          </div>
-          <div className={style.live_back_button}>
-            <button className={style.lb_button}>Class Console</button>
-          </div>
-        </div>
-      </nav>
+        <Navbar />
         <main className={style.main}>
           <div className="container-xxxl">
             {
@@ -211,7 +196,26 @@ const LiveClass = () => {
   )
 }
 
-
+export function Navbar(){
+  return (
+    <nav className={style.live_nav}>
+      <div className="container">
+        <Link to="/" className="d-inline-block">
+          <Logosm />
+        </Link>
+        <div className={style.present_user}>
+          <span className={style.present_profile}>
+            <img src={mainuser} alt="" />
+          </span>
+          <span>Marcus is presenting</span>
+        </div>
+        <div className={style.live_back_button}>
+          <button className={style.lb_button}>Class Console</button>
+        </div>
+      </div>
+  </nav>
+  )
+}
 
 function Info({open, setOpen}) {
   

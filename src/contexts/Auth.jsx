@@ -22,7 +22,8 @@ const AuthContextProvider = ({children}) => {
         pledre:"", 
         classConsole: {
             sidebar: false
-        }
+        },
+        scheduledClasses: []
         
     })
 

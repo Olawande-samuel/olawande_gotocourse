@@ -34,7 +34,7 @@
 }
 
 
-video {
+.help video {
     width: 400px;
     height: 350px;
 }
@@ -59,14 +59,14 @@ video {
 }
 
 @media screen and (max-width: 1245px){
-    video {
+    .help video {
         width: 350px;
     }
 }
 
 
 @media screen and (max-width: 1145px){
-    video {
+    .help video {
         width: 500px;
     }
 
@@ -77,26 +77,26 @@ video {
 
 
 @media screen and (max-width: 965px){
-    video {
+    .help video {
         width: 450px;
     }
 }
 
 @media screen and (max-width: 545px){
-    video {
+    .help video {
         width: 400px;
     }
 }
 
 @media screen and (max-width: 475px){
-    video {
+    .help video {
         width: 350px;
     }
 }
 
 
 @media screen and (max-width: 430px){
-    video {
+    .help video {
         width: 300px;
     }
 }
