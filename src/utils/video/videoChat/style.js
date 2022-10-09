@@ -65,8 +65,6 @@ export const Content = styled.div`
     justify-content: center;
     align-items: center;
     overflow-y: auto;
-    background:#191046;
-
 `;
 
 export const VideoWrapper = styled.div`
@@ -77,7 +75,7 @@ export const VideoWrapper = styled.div`
     max-width: 1080px;
     border-radius: 10px;
     gap: 10px;
-    background:#191046;
+    background-color: #222;
     height: 100%;
     position: relative;
     overflow: hidden;
@@ -166,10 +164,6 @@ export const UserCallBlock = styled.div`
     bottom: 90px;
     z-index: 999;
 
-    // GOTOCOURSE 
-    background:#191046;
-
-
     video {
         width: 100%;
         object-fit: cover;
@@ -179,14 +173,6 @@ export const UserCallBlock = styled.div`
         flex-direction: row;
         bottom: 20px;
     }
-`;
-
-export const MainWrapper = styled.main`
-    overflow: hidden;
-    z-index: 999;
-    // GOTOCOURSE 
-    background:#191046;
-
 `;
 
 export const AddPeople = styled.div`
@@ -235,23 +221,8 @@ export const ControlItem= styled.div`
     border-radius: 8px;
     cursor: pointer;
 
-
-    // GOTOCOURSE
-
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #535353;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #FFF;
-
-// END GOTOCOURSE
     :first-child {
         color: #F24E1E;
-
-        color: #fff
     }
     :last-child {
         width: 40px;
@@ -259,10 +230,6 @@ export const ControlItem= styled.div`
         border-radius: 50%;
         color: #fff;
         background-color: #FF3459;
-        // rotate: 135deg;
-
-        background-color: #FF4343;
-        width: 60px;
-        border-radius: 40px;
+        rotate: 135deg;
     }
 `;

@@ -56,15 +56,19 @@ import BetterWay from "./BetterWay";
 import { Seamless } from "./Seamless";
 import mygif  from "../../images/vyd.gif"
 import myvid from "../../images/vyd.mp4"
+import { AffiliatePro, TechPro } from "./TechPro";
 const NewLanding = ()=>{
     return (
     <Layout background="blue">
         <Hero />
+        <WhatweDo />
         <Stats />
-        <Gif />
+        <TechPro />
+        <AffiliatePro />
+        {/* <Gif /> */}
+        <Category />
         <BetterWay />
         {/* <Experienced /> */}
-        <Category />
         <Benefits />
         {/* <Seamless /> */}
         <Bootcamp/>
@@ -84,17 +88,32 @@ const NewLanding = ()=>{
 export default NewLanding
 
 
-
+function WhatweDo(){
+  return (
+    <section className="what_we_do">
+      <div className="container">
+        <header>
+          <h4 className="tet-center">What we do</h4>
+        </header>
+        <p className="text-center">
+          Gotocourse is a platform that connects tech educators with learners.  
+          Our platform has incredible tools for managing and organizing learning. 
+          We are leaders in connecting learners and instructor in 
+          virtual instructor-led training platform. Our  goal of virtual training 
+          settings is to replicate the traditional classroom or learning experience and this we 
+          have done successfully without limits.
+        </p>
+      </div>
+    </section>
+  )
+}
 function Gif(){
   return (
     <div className="container my-4">
       <div className="gif_wrapper w-100 h-100">
         {/* <img src={mygif} alt="" /> */}
 
-        <video width="320" height="240"  autoPlay muted loop  style={{width:"100%"}} className="myVideo">
-          <source src={myvid} type="video/mp4" />
-            Your browser does not support the video tag.
-        </video> 
+        <iframe width="100%" height="450" src="https://www.youtube.com/embed/pEDrOcroWLk?playlist=pEDrOcroWLk&loop=1&autoplay=1&mute=1&controls=0&showinfo=0&loop=1" title="Benefits of using gotocourse" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
       </div>
     </div>
@@ -233,19 +252,21 @@ export function Stats(){
     },
   ]
   return(
-    <section className="stats">
-        <div className="stats_wrapper h-100">
-          {
-            statData.map((item, index) => (
-            <div className="stat" key={index + item.title}>
-              {item.sup && <small>{item.sup}</small>}
-              <h5>{item.title}</h5>
-              <small>{item.content}</small>
-            </div>
-            ))
-              
-            }
-        </div>
+    <section className="stats_main">
+      <section className="stats">
+          <div className="stats_wrapper h-100">
+            {
+              statData.map((item, index) => (
+              <div className="stat" key={index + item.title}>
+                {item.sup && <small>{item.sup}</small>}
+                <h5>{item.title}</h5>
+                <small>{item.content}</small>
+              </div>
+              ))
+                
+              }
+          </div>
+      </section>
     </section>
   )
 }
@@ -257,7 +278,9 @@ function Benefits(){
                 <h2 className="title text-center">Benefits Of Learning At GotoCourse</h2>
                 {/* <p className="sub_title text-center mx-auto" style={{width:"min(100% - 1rem, 900px)"}}>Whether you're just starting out in the IT field, or ready to advance your career, Gotocourse can help you gain the expertise you need to succeed. </p> */}
               </header>
-          <div className="service_box_wrapper d-flex flex-wrap justify-content-center px-lg-5 mt-5">
+
+              <Gif />
+          {/* <div className="service_box_wrapper d-flex flex-wrap justify-content-center px-lg-5 mt-5">
               {serviceList.map(service =>(
                 <BenefitBox {...service} />
               ))}
@@ -266,7 +289,7 @@ function Benefits(){
           <Link to="/students">
             <button className="btn-plain benefits_button mx-auto">Learn more</button>
             </Link>
-          </div>
+          </div> */}
         </div>
       </section>
     )

@@ -120,6 +120,8 @@ const VideoChatScreen = ()  => {
 
         console.log("peer: ", myPeer)
         console.log("omo lofty")
+        console.log("omo", videoWrapper)
+
         myPeer.on('open', userId => {
             console.log("conntected to room with userId: ", userId)
             socket.emit('join-video-room', roomId, userId)
@@ -132,6 +134,9 @@ const VideoChatScreen = ()  => {
             remoteVideoWrapper.appendChild(remoteVideo)
             videoWrapper?.append(remoteVideoWrapper)
             
+
+            console.log("on call", videoWrapper)
+
             call.on('stream', userVideoStream => {
                 addVideoStream(remoteVideoWrapper, userVideoStream)
             })
@@ -149,6 +154,7 @@ const VideoChatScreen = ()  => {
 
         const connectToNewUser = (userId, stream) => {
             const call = myPeer.call(userId, stream)
+            console.log("1", videoWrapper)
 
             const remoteVideoWrapper = document.createElement('div')
             remoteVideoWrapper.classList.add("remote-users")
@@ -156,6 +162,7 @@ const VideoChatScreen = ()  => {
             remoteVideoWrapper.appendChild(remoteVideo)
             videoWrapper?.append(remoteVideoWrapper)
 
+            console.log({videoWrapper})
 
             call.on('stream', userVideoStream => {
                 console.log("recevied user video stream: ", userVideoStream)
