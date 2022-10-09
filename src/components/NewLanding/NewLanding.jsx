@@ -87,7 +87,6 @@ const NewLanding = ()=>{
 }
 export default NewLanding
 
-
 function WhatweDo(){
   return (
     <section className="what_we_do">

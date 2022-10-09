@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import affPro from "../../images/aff_pro.webp"
 import techPro from "../../images/tech_pro.webp"
-const Twocolumn = ({img, title, firstText, secondText, thirdText, btn}) => {
+const Twocolumn = ({img, title, firstText, secondText, thirdText, btn,link}) => {
 
     return (
     <section className="tech_pro">
@@ -20,7 +20,7 @@ const Twocolumn = ({img, title, firstText, secondText, thirdText, btn}) => {
                     thirdText && 
                     <p className='mt-2'>{thirdText}</p>
                 }
-                <Link to="/" className='d-inline-block'>
+                <Link to={link} className='d-inline-block'>
                     <button className="tech_pro_button">{btn}</button>
                 </Link>
             </div>
@@ -37,7 +37,8 @@ export function TechPro(){
         firstText:"Do you have Interest in teaching the next generation of Tech professionals? Collaborate with us.",
         secondText:"We provide you the platform and tools to teach what you love while creating an enriched and engaging experience with students.",
         btn:"Become an Educator",
-        img:techPro
+        img:techPro,
+        link:"/become-a-teacher"
     }
     
     return (
@@ -56,7 +57,8 @@ export function AffiliatePro(){
         secondText:"Gotocourse is a platform to recommend to your followers and subscribers.  Instructors on Gotocourse are experienced practitioners who work at world's most innovative firms. Your referrals are going to learn the most in-demand tech skills relevant to today’s workplace. ",
         thirdText:"Gotocourse has a tracking system that ensures you are compensated for all your referrals. Make use of this oppurtunity to change lives",
         btn:"Become an affiliate",
-        img: affPro
+        img: affPro,
+        link:"/affiliates"
         
     }
     
