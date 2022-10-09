@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import Layout from "../Layout"
 // import BootImg from "../../images/newbootcamp.webp"
-import BootImg from "../../images/bootcamps/allClasses.webp"
+import BootImg from "../../images/bootcamps/allClasses2.webp"
 // import HeroImg from "../../images/newHeroLatest.webp"
 import HeroImg from "../../images/newlanding.webp"
 import { useAuth } from "../../contexts/Auth"

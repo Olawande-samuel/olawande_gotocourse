@@ -346,6 +346,7 @@ const BgImage = styled.img`
     width: 400px;
     translate: 60% 60%;
     top: 50px;
+    z-index: -1;
 
     @media screen and (max-width: 903px){
         translate: 30% 90%;
@@ -515,30 +516,33 @@ const Detail = () => {
     const {otherFunctions: {searchCategories}} = useAuth();
     const params = useParams();
 
+    const courseName = params.profile.split("-").join(" ")
+    console.log({params})
 
 
     useEffectOnMount(() => {
         console.log("Course Details page is mounted");
         console.log(details);
         // window.scrollTo(0,0);
-        if(!params || !category) navigate(-1);
+        if(!params || !category.name) navigate(-1);
         else {
             (async() => {
                 try{
-                    console.log(params.course)
-                    const res = await searchCategories(category);
+                    console.log(courseName)
+                    const res = await searchCategories(category.name);
                     const {message, statusCode, success} = res;
                     if(!success) throw new AdvancedError(message, statusCode);
                     else {
                         const {data} = res;
                         console.log(data);
+                        let dets = data.find(d => d.name.toLocaleLowerCase() === courseName.toLocaleLowerCase());
+                        console.log({dets})
                         setDetails(_ => {
-                            let dets = data.find(d => d.name.trim().toLocaleLowerCase() === params.course.trim().toLocaleLowerCase());
                             return {
                                 ...dets
                             }
                         })
-                        setCourses(_ =>  [...data.filter(d => d.name.trim().toLocaleLowerCase() !== params.course.trim().toLocaleLowerCase())]);
+                        setCourses(_ =>  [...data.filter(d => d.name.trim().toLocaleLowerCase() !== courseName.trim().toLocaleLowerCase())]);
                         toast.success(message, {
                             position: "top-right",
                             autoClose: 4000,
@@ -578,26 +582,26 @@ const Detail = () => {
                         <BreadcrumbLink to="/categories/all">
                             Categories
                         </BreadcrumbLink>
-                        <BreadcrumbLink to={`/category/${encodeURIComponent(category)}`}>
-                            {capitalize(category)}
+                        <BreadcrumbLink to={`/category/${encodeURIComponent(category.name)}`}>
+                            {capitalize(category.name)}
                         </BreadcrumbLink>
-                        <BreadcrumbLink to={`/category/${encodeURIComponent(category)}/courses`}>
+                        <BreadcrumbLink to={`/category/${encodeURIComponent(category.name)}/courses`}>
                             Courses
                         </BreadcrumbLink>
-                        <BreadcrumbLink $isCurrentPage to="#">{details ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</BreadcrumbLink>
+                        <BreadcrumbLink $isCurrentPage to="#">{details?.name ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</BreadcrumbLink>
                     </Breadcrumbs>
                 </CourseTop>
                 <DetailBody>
                     <DetailImage background={`linear-gradient(1.66deg, rgba(44, 43, 44, 0.83) 24.55%, rgba(12, 33, 145, 0) 115.79%), url(${details?.courseImg})`}>
                         <DetailsHero>
-                            <h2>{details ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</h2>
+                            {/* <h2>{details ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</h2> */}
                             <DetailDescription>
                                 {details ? details.description : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}
                             </DetailDescription>
-                            <ButtonContainer>
+                            {/* <ButtonContainer>
                                 <Button $isCTA>Enroll now</Button>
                                 <Button>Add to wishlist</Button>
-                            </ButtonContainer>
+                            </ButtonContainer> */}
                         </DetailsHero>
                     </DetailImage>
                     <DetailBodyContent>
@@ -608,12 +612,12 @@ const Detail = () => {
                             </DetailDescription>
 
                             <NicheContainer>
-                                <Header>{details ? `${capitalize(details?.name)} Niche` : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</Header>
+                                {/* <Header>{details ? `${capitalize(details?.name)} Niche` : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</Header> */}
                                 <p>{details ? details.nicheDescription : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</p>
                                 <Niches>
                                     {
                                         details ? 
-                                        details.syllabus.map(({title, description}, i) => (
+                                        details.syllabus?.map(({title, description}, i) => (
                                         <Niche key={i}>
                                                 <Dot />
                                                 <NicheBody>
@@ -663,7 +667,7 @@ const Detail = () => {
                         Download Curriculum <FaDownload />
                     </DownloadButton> */}
                     <DetailCourseContainer>
-                        <h2>{details ? `Other ${capitalize(details?.name)} Courses` : <Skeleton animation="wave" variant="rectangular" width={300} height={30} /> }</h2>
+                        {/* <h2>{details ? `Other ${capitalize(details?.name)} Courses` : <Skeleton animation="wave" variant="rectangular" width={300} height={30} /> }</h2> */}
                         <DetailCourses>
                           <Swiper
                             // install Swiper modules
@@ -687,7 +691,7 @@ const Detail = () => {
                             },
                             700: {
                                 slidesPerView: 2.5,
-                                spaceBetween: 0,
+                                spaceBetween: 5,
                             },
                             1024: {
                                 slidesPerView: 3.5,

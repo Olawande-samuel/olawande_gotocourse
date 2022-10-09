@@ -96,6 +96,7 @@ import { ConsoleClass } from "./pages/Dashboard/Teachers/Bootcamps";
 import ConsoleClasses, { MyClass } from "./pages/Dashboard/components/classConsole/ConsoleClasses";
 import ConsoleAssessments from "./pages/Dashboard/components/classConsole/ConsoleAssessments";
 import { CreateRoom, VideDiv } from "./utils/video";
+import Detail from "./pages/Course/Details";
 
 
 
@@ -345,7 +346,8 @@ function App() {
                   <Route index element={<CategoryDetail />} />
                   <Route path="courses" element={<CourseList />} />
                   <Route path="courses/:profile" element={<Out />}>
-                    <Route index element={<CourseProfile />} />
+                    {/* <Route index element={<CourseProfile />} /> */}
+                    <Route index element={<Detail />} />
                     {/* <Route index element={<NewCourseProfile />} /> */}
                     <Route path="payment" element={<Payment />} />
                   </Route>
