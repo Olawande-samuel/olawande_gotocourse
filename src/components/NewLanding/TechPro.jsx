@@ -14,11 +14,11 @@ const Twocolumn = ({img, title, firstText, secondText, thirdText, btn,link}) => 
             </div>
             <div className="tech_pro_content">
                 <h6>{title}</h6>
-                <p>{firstText}</p>
-                <p>{secondText}</p>
+                <p className="d-none d-sm-block">{firstText}</p>
+                <p className="d-none d-sm-block">{secondText}</p>
                 {
                     thirdText && 
-                    <p className='mt-2'>{thirdText}</p>
+                    <p className='mt-2 d-none d-sm-block'>{thirdText}</p>
                 }
                 <Link to={link} className='d-inline-block'>
                     <button className="tech_pro_button">{btn}</button>
@@ -55,7 +55,7 @@ export function AffiliatePro(){
         title:"Make earning with the Gotocourse affiliate program",
         firstText:"Do you have interest in helping people achieve great success in their career?",
         secondText:"Gotocourse is a platform to recommend to your followers and subscribers.  Instructors on Gotocourse are experienced practitioners who work at world's most innovative firms. Your referrals are going to learn the most in-demand tech skills relevant to today’s workplace. ",
-        thirdText:"Gotocourse has a tracking system that ensures you are compensated for all your referrals. Make use of this oppurtunity to change lives",
+        thirdText:"Gotocourse has a tracking system that ensures you are compensated for all your referrals. Make use of this opportunity to change lives",
         btn:"Become an affiliate",
         img: affPro,
         link:"/affiliates"

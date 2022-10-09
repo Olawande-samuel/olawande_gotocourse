@@ -72,7 +72,7 @@ const NewLanding = ()=>{
         <Benefits />
         {/* <Seamless /> */}
         <Bootcamp/>
-        <Becoming />
+        {/* <Becoming /> */}
         {/* <Learn type={"newLanding"} />
         <Self />
       <Mentorship /> */}
@@ -97,7 +97,7 @@ function WhatweDo(){
         <p className="text-center">
           Gotocourse is a platform that connects tech educators with learners.  
           Our platform has incredible tools for managing and organizing learning. 
-          We are leaders in connecting learners and instructor in 
+          We are leader in connecting learners and instructors in 
           virtual instructor-led training platform. Our  goal of virtual training 
           settings is to replicate the traditional classroom or learning experience and this we 
           have done successfully without limits.
@@ -109,11 +109,9 @@ function WhatweDo(){
 function Gif(){
   return (
     <div className="container my-4">
-      <div className="gif_wrapper w-100 h-100">
+      <div className="gif_wrapper w-100 h-100 d-flex justify-content-center">
         {/* <img src={mygif} alt="" /> */}
-
-        <iframe width="100%" height="450" src="https://www.youtube.com/embed/pEDrOcroWLk?playlist=pEDrOcroWLk&loop=1&autoplay=1&mute=1&controls=0&showinfo=0&loop=1" title="Benefits of using gotocourse" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+        <iframe width="560" height="315" className="mx-auto"  src="https://www.youtube.com/embed/P3bNfb9Cri8?playlist=pEDrOcroWLk&rel=0&controls=1&showinfo=1" title="Benefits of using gotocourse" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
     </div>
   )
@@ -154,14 +152,14 @@ function Hero(){
                 <header className="">
                     <h1 className="newHero_left-header">Upskill &amp; Reskill</h1>
                     {/* <h6 className="newHero_left-title text-center">Connect with industry experts from anywhere and for less cost</h6> */}
-                    <h6 className="newHero_left-title mb-4 mb-lg-5">No. 1 platform connecting Industry experts with learners</h6>
+                    <h6 className="newHero_left-title mb-4 mb-lg-5">All-in-one platform for learning tech skills</h6>
                     <div className=" new_hero_list d-flex justify-content-start">
                       <ul>
                         <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Learn from Industry Experts</li>
                         <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Access tools for teaching</li>
                         <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Connect from anywhere</li>
-                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Teach or Learn in-demand tech skills</li>
-                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Learn, Save time, Save cost</li>
+                        {/* <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Teach or Learn in-demand tech skills</li>
+                        <li className="newHero_left-title text-start mb-0 " style={{fontWeight:"500",fontSize: "15px"}}>Learn, Save time, Save cost</li> */}
                       </ul>
                     </div>
                 </header>
@@ -274,7 +272,7 @@ function Benefits(){
         <section className="wrapper services">
         <div className="container">
               <header >
-                <h2 className="title text-center">Benefits Of Learning At GotoCourse</h2>
+                {/* <h2 className="title text-center">Benefits Of Learning At GotoCourse</h2> */}
                 {/* <p className="sub_title text-center mx-auto" style={{width:"min(100% - 1rem, 900px)"}}>Whether you're just starting out in the IT field, or ready to advance your career, Gotocourse can help you gain the expertise you need to succeed. </p> */}
               </header>
 
