@@ -81,7 +81,6 @@ const VideoChatScreen = ()  => {
     }
     
     const togggleAudio = async () => {
-
         if (callSettingsState.audio) {
             setVideoToggle({video: callSettingsState.video, audio: false})
             setCallSettingsState({...callSettingsState, audio: false})
@@ -93,14 +92,19 @@ const VideoChatScreen = ()  => {
 
     const videoWrapper = document.querySelector('.video-section')
 
+    console.log("firstomo", videoWrapper)
+
     function addVideoStream(videoWrapper, stream) {
+
         const video = videoWrapper.querySelector('video')
         video.srcObject = stream
         video.addEventListener('loadedmetadata', () => {
           video.play()
         })
-      }
-      const peers = {}
+    }
+    
+    const peers = {}
+    
     const startWebCam = async () => {
 
         const myVideo = document.querySelector('.client-local-stream')
@@ -126,6 +130,7 @@ const VideoChatScreen = ()  => {
             console.log("conntected to room with userId: ", userId)
             socket.emit('join-video-room', roomId, userId)
         })
+
         myPeer.on('call', call => {
             call.answer(localStream)
             const remoteVideoWrapper = document.createElement('div')
@@ -136,6 +141,7 @@ const VideoChatScreen = ()  => {
             
 
             console.log("on call", videoWrapper)
+            console.log("on call remote", remoteVideoWrapper)
 
             call.on('stream', userVideoStream => {
                 addVideoStream(remoteVideoWrapper, userVideoStream)
