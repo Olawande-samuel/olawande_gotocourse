@@ -54,7 +54,7 @@ const studentIcon = [
     icon: MdMessage,
     title: "Mail",
   },
- 
+
   {
     id: 2,
     icon: RiVideoAddFill,
@@ -146,6 +146,8 @@ export const Console = ({ children }) => {
         ? "File"
         : "";
         const studentpath = pathname.split("/")[1] === "console";
+        const suite = pathname.split("/")[2] === "suite";
+        const classroom = pathname.split("/")[2] === "classroom";
         const quizpath = pathname.split("/")[2] === "myclasses" ? "My Classes" : pathname.split("/")[2] === "liveclass" ? "Live Class" : pathname.split("/")[2]
 
   const bread = pathname?.split("/");
@@ -194,7 +196,7 @@ export const Console = ({ children }) => {
                 <h2>{quizpath}</h2>
               </div>
 
-          )}
+            )}
 
           {NoteAndFile && NoteAndFile !== "" && (
             <div className="contentcategory">
@@ -214,7 +216,7 @@ export const Console = ({ children }) => {
           )}
 
           {
-            !studentpath && (
+            !studentpath && !suite && !classroom &&(
 
               <div className="contentbreadcrumb">
                 <nav arial-label="breadcrumb">
@@ -256,19 +258,19 @@ export const Console = ({ children }) => {
                 </IconButton>
               </Tooltip>
             ))
-          ) 
-          :
-          (
-            iconData.map(({ title, id, icon: Icon }) => (
-              <Tooltip title={title} key={id}>
-                <IconButton>
-                  <Icon size="1.5rem" color="#0C2191" />
-                </IconButton>
-              </Tooltip>
-            ))
           )
+            :
+            (
+              iconData.map(({ title, id, icon: Icon }) => (
+                <Tooltip title={title} key={id}>
+                  <IconButton>
+                    <Icon size="1.5rem" color="#0C2191" />
+                  </IconButton>
+                </Tooltip>
+              ))
+            )
         }
-        
+
       </div>
     </div>
   );

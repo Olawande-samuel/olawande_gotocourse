@@ -476,11 +476,12 @@
 @media (max-width: 764px) {
     .excelbox {
         width: 100%;
-        
-    
-    
-    } 
-/* 
+
+
+
+    }
+
+    /* 
     .studenttitle h2 {
         
         width: 50%;
@@ -491,31 +492,33 @@
 @media (max-width: 768px) {
 
     .studenttitle h2 {
-        
+
         width: 30%;
         /* display: inline; */
-      
+
     }
 }
 
 @media (max-width: 375px) {
 
     .studenttitle h2 {
-        
+
         width: 40%;
         /* display: inline; */
-      
+
     }
 }
+
 @media (max-width: 280px) {
 
     .studenttitle h2 {
-        
+
         width: 50%;
         /* display: inline; */
-      
+
     }
 }
+
 .questionblue {
     background: #EBF3FF;
     color: #0C2191;
@@ -562,13 +565,15 @@
     line-height: 17px;
 }
 
-.assessbold, .assessinfo {
+.assessbold,
+.assessinfo {
     font-weight: 500;
     font-size: 20px;
     line-height: 29px;
 }
 
-.assesstop , .assessbottom{
+.assesstop,
+.assessbottom {
     width: 100%;
     /* border: 2px solid green; */
     padding: 1rem;
@@ -579,10 +584,10 @@
 
 }
 
-.assessbottom{
+.assessbottom {
     background: #FFFFFF;
-box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.25);
-border-radius: 15px;
+    box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
 }
 
 .assessbox {
@@ -618,10 +623,11 @@ border-radius: 15px;
         width: 100%;
     }
 
-    .assessbox ,.assessright {
+    .assessbox,
+    .assessright {
         /* border: 2px solid green; */
         flex-direction: column;
-      
+
     }
 }
 
@@ -640,6 +646,329 @@ border-radius: 15px;
 
 }
 
-.assessinfo{
+.assessinfo {
     align-self: flex-start;
+}
+
+
+/* suite  */
+
+.suite {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    gap: 3rem;
+    margin-top: 2rem;
+
+}
+
+
+
+.suite__top {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.suite__blue,
+.suite__orange {
+    padding: 1rem;
+}
+
+.suite__blue {
+    background: #2F80ED;
+    ;
+    color: #FFFFFF;
+    ;
+    border-radius: 20px;
+
+}
+
+.suite__orange {
+    background: #FFBBB5;
+    border-radius: 20px;
+}
+
+.suite__blue h4,
+.classroom__top h4 {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 44px;
+}
+
+.suite__blue p,
+.suite__orange p {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 24px;
+}
+
+.suite__form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.suite__input{
+    background: #D9D9D9; 
+    padding: .5rem 1rem;
+    border-radius: 10px ;
+
+}
+
+.suite__form input,
+.suite__form select {
+    background: #D9D9D9;
+    padding: 1rem;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 10px;
+
+}
+
+.suite__form button {
+    padding: 0.5rem 1rem;
+    outline: none;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 24px;
+    border: .3px solid #0C2191;
+    border-radius: 10px;
+    color: #FFFFFF;
+    background: #0C2191;
+}
+
+.suite__nav {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem;
+    align-items: center;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 29px;
+    color: #292D32;
+}
+
+.suite__navactive {
+    border-bottom: 2px solid #0C2191;
+    color: #0C2191;
+}
+
+.suite__boxcontainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.suite__dots {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.suite__dots svg {
+    color: #0C2191;
+}
+
+.suite__box {
+    flex-shrink: 0;
+    width: 40%;
+    background: #D8E8FF;
+    border-radius: 10px;
+    width: 40%;
+    padding: .5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.suite__img {
+    width: 100%;
+    height: 200px;
+    /* margin-left:-5px; */
+    /* margin: -100%; */
+}
+
+.suite__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+}
+
+.suite__title {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    color: #0C2191;
+}
+
+.suite__p {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 29px;
+}
+
+.suite__box span {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 23px;
+    color: #000000;
+
+}
+
+.suite__btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.suite__btn button {
+    padding: 0.5rem 1rem;
+    outline: none;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 24px;
+
+}
+
+
+.suite__btn button:nth-of-type(1) {
+    background: #FFFFFF;
+    color: #0C2191;
+    border: .3px solid #0C2191;
+    border-radius: 10px;
+}
+
+.suite__btn button:nth-of-type(2) {
+    outline: none;
+    border: none;
+    background: #D8E8FF;
+
+}
+
+.blue__button {
+    width: 200px;
+    margin: 0 auto;
+    padding: 0.5rem 1rem;
+    outline: none;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 24px;
+    border: .3px solid #0C2191;
+    border-radius: 10px;
+    color: #FFFFFF;
+    background: #0C2191;
+}
+
+@media (max-width: 768px) {
+    .suite {
+        width: 100%;
+    }
+
+    .suite__form {
+        flex-direction: column;
+        align-items: start;
+        gap: 1rem;
+
+    }
+
+    .suite__box {
+        width: 100%;
+    }
+}
+
+/* classroom  */
+.classroom__top {
+    color: #0C2191;
+}
+
+.classroom__top p {
+    width: 60%;
+}
+
+.classroom__detail {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+}
+
+.classroom__header {
+    background: #D8E8FF;
+    padding: 1rem 0.5rem;
+}
+
+.classroom__header div {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+    flex: 1.5;
+    /* border: 2px solid red; */
+}
+
+.classroom__header,
+.classroom__info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+}
+
+
+.classroom__header div:nth-of-type(1) {
+    flex: .5;
+    /* border: 2px solid green; */
+
+}
+
+.classroom__info {
+    padding: 1rem 0.5rem;
+    /* border: 2px solid green; */
+
+}
+
+.classroom__info:nth-of-type(3) {
+    background: #EFEFEF;
+}
+
+.classroom__info div {
+    flex: 1.5;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+    /* border: 2px solid red; */
+
+}
+
+.classroom__info div:nth-of-type(1) {
+    flex: .5;
+    /* border: 2px solid green; */
+
+}
+
+@media (max-width: 768px) {
+    
+.classroom__top p {
+    width: 100%;
+}
+
+    .classroom__header,
+    .classroom__info {
+        /* display: flex;
+        align-items: center;
+        gap: 1rem; */
+        flex-direction: column;
+
+    }
+
+    .classroom__info {
+        align-items: start;
+
+    }
+
 }
