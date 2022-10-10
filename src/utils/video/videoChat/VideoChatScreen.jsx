@@ -90,13 +90,14 @@ const VideoChatScreen = ()  => {
         }
     }
 
-    const videoWrapper = document.querySelector('.video-section')
+    // const videoWrapper = document.querySelector('.video-section')
 
-    console.log("firstomo", videoWrapper)
+    // console.log("firstomo", videoWrapper)
 
-    function addVideoStream(videoWrapper, stream) {
+    function addVideoStream(rvideoWrapper, stream) {
+        console.log({rvideoWrapper});
 
-        const video = videoWrapper.querySelector('video')
+        const video = rvideoWrapper.querySelector('video')
         video.srcObject = stream
         video.addEventListener('loadedmetadata', () => {
           video.play()
@@ -124,7 +125,7 @@ const VideoChatScreen = ()  => {
 
         console.log("peer: ", myPeer)
         console.log("omo lofty")
-        console.log("omo", videoWrapper)
+        // console.log("omo", videoWrapper)
 
         myPeer.on('open', userId => {
             console.log("conntected to room with userId: ", userId)
@@ -132,6 +133,7 @@ const VideoChatScreen = ()  => {
         })
 
         myPeer.on('call', call => {
+            const videoWrapper = document.querySelector('.video-section')
             call.answer(localStream)
             const remoteVideoWrapper = document.createElement('div')
             remoteVideoWrapper.classList.add("remote-users")
@@ -160,6 +162,9 @@ const VideoChatScreen = ()  => {
 
         const connectToNewUser = (userId, stream) => {
             const call = myPeer.call(userId, stream)
+
+            
+            const videoWrapper = document.querySelector('.video-section')
             console.log("1", videoWrapper)
 
             const remoteVideoWrapper = document.createElement('div')
@@ -168,7 +173,7 @@ const VideoChatScreen = ()  => {
             remoteVideoWrapper.appendChild(remoteVideo)
             videoWrapper?.append(remoteVideoWrapper)
 
-            console.log({videoWrapper})
+            console.log({remoteVideoWrapper})
 
             call.on('stream', userVideoStream => {
                 console.log("recevied user video stream: ", userVideoStream)
