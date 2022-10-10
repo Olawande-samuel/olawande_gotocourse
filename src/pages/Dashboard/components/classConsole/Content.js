@@ -43,20 +43,20 @@ export default function Content({type}) {
 
 }
 
-export function QuizComponent(){
-    return (
-        <Quiz />
-    )
-}
+// export function QuizComponent(){
+//     return (
+//         <Quiz />
+//     )
+// }
 
-export function FileComponent(){
-    return (    
-        <File />
-    )
-}
+// export function FileComponent(){
+//     return (    
+//         <File />
+//     )
+// }
 
-export function NoteComponent(){
-    return (
-        <Note />
-    )
-}
+// export function NoteComponent(){
+//     return (
+//         <Note />
+//     )
+// }
