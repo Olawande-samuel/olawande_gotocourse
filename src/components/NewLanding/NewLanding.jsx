@@ -3,60 +3,36 @@ import { useNavigate } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query";
 
 import Layout from "../Layout"
-// import BootImg from "../../images/newbootcamp.webp"
 import BootImg from "../../images/bootcamps/allClasses2.webp"
-// import HeroImg from "../../images/newHeroLatest.webp"
 import HeroImg from "../../images/newlanding.webp"
 import { useAuth } from "../../contexts/Auth"
 import "./landing.css"
 import { useLocalStorage } from "../../hooks";
-
-import Experienced from '../Experienced'
 import { Category } from "./Tabs"
-import { serviceList } from "../Services"
 // import Learn from "../Learn"
 import { Link } from "react-router-dom";
 import {motion} from 'framer-motion'
 
 import {getDate,KEY} from "../../constants"
-
-// import Inperson from "../../images/newCareer.png"
 import Learning from "../../images/cohort.webp";
 import Inperson from "../../images/in-Person.webp"
 import Mento from "../../images/inPerson.webp";
 import Tech from "../../images/fast.webp";
-// import Mento from "../../images/one-on-one.jpg";
 import Image from "../Image";
 import Testimonials from "../Testimonials"
-import Becoming  from "../Becoming"
 import Companies  from "../Companies"
 import Faq  from "../Faq"
 import Mentors  from "./Mentors/Mentors"
-import goo from "../../images/goo.png"
-import face from "../../images/face.png"
-import apple from "../../images/apple.png"
-
-import SwiperCore, {
-    Navigation,
-    Autoplay,
-    Pagination,
-    Scrollbar,
-    A11y,
-  } from "swiper";
-  import { Swiper, SwiperSlide } from "swiper/react";
-  
-  // Import Swiper styles
-  import "swiper/css";
-
-  import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-  import { authentication, provider, facebookProvider } from "../../firebase-config.js"
 import LoginOptions from "./LoginOptions";
-import Overview from "./Overview";
+
 import BetterWay from "./BetterWay";
-import { Seamless } from "./Seamless";
-import mygif  from "../../images/vyd.gif"
-import myvid from "../../images/vyd.mp4"
-import { AffiliatePro, TechPro } from "./TechPro";
+
+import vidPreview from "../../images/video_preview.png"
+import { AffiliatePro, TechPro, TrackPro } from "./TechPro";
+import { FiPlayCircle } from "react-icons/fi";
+import  Box from "@mui/material/Box";
+import  Modal from "@mui/material/Modal";
+
 const NewLanding = ()=>{
     return (
     <Layout background="blue">
@@ -65,28 +41,69 @@ const NewLanding = ()=>{
         <Stats />
         <TechPro />
         <AffiliatePro />
-        {/* <Gif /> */}
         <Category />
+        <VideoSection />
         <BetterWay />
+        <Mentors />
+        <TrackPro />
+        <Companies />
+        <Faq />
+        {/* <Gif /> */}
         {/* <Experienced /> */}
-        <Benefits />
+        {/* <Benefits /> */}
         {/* <Seamless /> */}
-        <Bootcamp/>
+        {/* <Bootcamp/> */}
         {/* <Becoming /> */}
         {/* <Learn type={"newLanding"} />
         <Self />
       <Mentorship /> */}
-        <Mentors />
         {/* <InPerson /> */}
-        <Testimonials type="newLanding" />
-        <Companies />
-        <Faq />
+        {/* <Testimonials type="newLanding" /> */}
         {/* <Overview /> */}
     </Layout> 
    )
 }
 export default NewLanding
+ 
+function VideoSection(){
+  const [open, setOpen]= useState(false)
+  return (
+    <section className="video_section">
+        <img src={vidPreview} alt="" />
+        <div className="video_content">
+          <h4 className="text-center">What is Gotocourse? See how it works</h4>
+          <i><FiPlayCircle size="6rem" onClick={()=>setOpen(true)} /></i>
+        </div>
+        <PopupVideo open={open} setOpen={setOpen} />
+    </section>
+  )
+}
 
+function PopupVideo({open, setOpen}){
+  const modalStyle = {
+    position: 'absolute',
+    bottom: '20%',
+    left: '50%',
+    transform: 'translate(-50%)',
+    width: "auto",
+    bgcolor: 'rgba(0, 0, 0, 0.3)',
+    boxShadow: 24,
+    p: 0,
+  };
+
+  return (
+    <Modal
+      open={open}
+      onClose={()=>setOpen(false)}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={modalStyle} className="popupmodal">
+        <iframe width="560" height="315" className="mx-auto"  src="https://www.youtube.com/embed/P3bNfb9Cri8?playlist=pEDrOcroWLk&autoplay=1&rel=0&controls=1&showinfo=1" title="Benefits of using gotocourse" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </Box>
+    </Modal>
+  )
+}
 function WhatweDo(){
   return (
     <section className="what_we_do">

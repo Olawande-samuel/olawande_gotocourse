@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 
 
 import affPro from "../../images/aff_pro.webp"
-import techPro from "../../images/tech_pro.webp"
+import techPro from "../../images/tech_pro.webp";
+import trackPro from "../../images/landing_dash.png"
 const Twocolumn = ({img, title, firstText, secondText, thirdText, btn,link}) => {
 
     return (
@@ -65,6 +66,33 @@ export function AffiliatePro(){
     return(
         <section className="affiliate_pro">
             <Twocolumn {...data} />
+        </section>
+    )
+}
+
+export function TrackPro(){
+    const data = {
+        title:"Track progress via student, teacher and Mentor dashboards",
+        firstText:"Interactive dashboards optimize learning experience for teachers, mentors and students",
+        btn:"Register now",
+        img: trackPro,
+        link:"/register"
+        
+    }
+    return(
+        <section className="trackPro">
+                <div className="container">
+                    <div className="track_pro_img_wrapper">
+                        <img src={data.img} alt="" className="track_pro_img" />
+                    </div>
+                    <div className="track_pro_content">
+                        <h6>{data.title}</h6>
+                        <p className="">{data.firstText}</p>
+                        <Link to={data.link} className='d-inline-block'>
+                            <button className="track_pro_button">{data.btn}</button>
+                        </Link>
+                    </div>
+                </div>
         </section>
     )
 }

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {useParams, useNavigate, Navigate} from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -283,7 +283,6 @@ const DetailCourseContainer = styled.div`
 
 const DetailCourses = styled.div`
     width: 100%;
-    overflow-x: scroll;
     display: flex;
     margin-bottom: 30px;
 `;
@@ -297,7 +296,7 @@ const CourseCard = styled.div`
 
 const CourseImageContainer = styled.div`
     width: 300px;
-    height: 250px;
+    height: 180px;
     margin-bottom: 15px;
 
     & img {
@@ -516,42 +515,33 @@ const Detail = () => {
     const {otherFunctions: {searchCategories}} = useAuth();
     const params = useParams();
 
-    const courseName = params.profile.split("-").join(" ")
-    console.log({params})
+    
+    const courseName = params.course ? params.course.split("-").join(" ") : params.profile.split("-").join(" ")
 
 
-    useEffectOnMount(() => {
-        console.log("Course Details page is mounted");
-        console.log(details);
+    useEffect(() => {
+        
+        
         // window.scrollTo(0,0);
         if(!params || !category.name) navigate(-1);
         else {
             (async() => {
                 try{
-                    console.log(courseName)
+                    
                     const res = await searchCategories(category.name);
                     const {message, statusCode, success} = res;
                     if(!success) throw new AdvancedError(message, statusCode);
                     else {
                         const {data} = res;
-                        console.log(data);
+                        
                         let dets = data.find(d => d.name.toLocaleLowerCase() === courseName.toLocaleLowerCase());
-                        console.log({dets})
+                        
                         setDetails(_ => {
                             return {
                                 ...dets
                             }
                         })
                         setCourses(_ =>  [...data.filter(d => d.name.trim().toLocaleLowerCase() !== courseName.trim().toLocaleLowerCase())]);
-                        toast.success(message, {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
                     }
                 }catch(err){
                     toast.error(err.message, {
@@ -566,8 +556,8 @@ const Detail = () => {
                 }
             })()
         }
-        return () => console.log("Course Details page is unmounted");
-    }, [params.course, details?.name])
+        return () => console.log("done")
+    }, [courseName, details?.name])
 
 
     return (
@@ -582,17 +572,17 @@ const Detail = () => {
                         <BreadcrumbLink to="/categories/all">
                             Categories
                         </BreadcrumbLink>
-                        <BreadcrumbLink to={`/category/${encodeURIComponent(category.name)}`}>
+                        <BreadcrumbLink to={`/category/${category.name.split(" ").join("-")}`}>
                             {capitalize(category.name)}
                         </BreadcrumbLink>
-                        <BreadcrumbLink to={`/category/${encodeURIComponent(category.name)}/courses`}>
+                        <BreadcrumbLink to={`/category/${category.name.split(" ").join("-")}/courses`}>
                             Courses
                         </BreadcrumbLink>
                         <BreadcrumbLink $isCurrentPage to="#">{details?.name ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</BreadcrumbLink>
                     </Breadcrumbs>
                 </CourseTop>
                 <DetailBody>
-                    <DetailImage background={`linear-gradient(1.66deg, rgba(44, 43, 44, 0.83) 24.55%, rgba(12, 33, 145, 0) 115.79%), url(${details?.courseImg})`}>
+                    <DetailImage background={`url(${details?.courseImg}), rgba(0, 0, 0, 0.7)`}>
                         <DetailsHero>
                             {/* <h2>{details ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</h2> */}
                             <DetailDescription>
@@ -617,6 +607,7 @@ const Detail = () => {
                                 <Niches>
                                     {
                                         details ? 
+                                        
                                         details.syllabus?.map(({title, description}, i) => (
                                         <Niche key={i}>
                                                 <Dot />
@@ -624,7 +615,11 @@ const Detail = () => {
                                                     <h6>{title}</h6>
                                                     <p>{description}</p>
                                                 </NicheBody>
-                                        </Niche>)) : Array(4).fill(undefined).map((_, i) => (
+                                        </Niche>)) 
+                                        
+                                        :
+                                        
+                                        Array(4).fill(undefined).map((_, i) => (
                                             <Niche key={i}>
                                                 <Dot />
                                                 <NicheBody>
@@ -702,16 +697,16 @@ const Detail = () => {
                             {
                                 courses.length ? courses.map(({courseImg, endDate, startDate, name}, i) => (
                                     <SwiperSlide key={i}>
-                                    <CourseCard onClick={e => navigate(`/category/${encodeURIComponent(category)}/courses/${encodeURIComponent(name)}`)}>
+                                    <CourseCard onClick={e => navigate(`/category/${category.name.split(" ").join("-")}/courses/${name.split(" ").join("-")}`)}>
                                         <CourseImageContainer>
-                                            <img src={courseImg} alt="Course Image" />
+                                            <img src={courseImg} alt={name} />
                                         </CourseImageContainer>
                                         <CourseBody>
                                             <h4>{name}</h4>
-                                            <CourseDuration>
+                                            {/* <CourseDuration>
                                                 <h6>Duration</h6>
-                                                <p>{`${getDate(startDate)} - ${getDate(endDate)}`}</p>
-                                            </CourseDuration>
+                                                 <p>{`${getDate(startDate)} - ${getDate(endDate)}`}</p> 
+                                            </CourseDuration> */}
                                         </CourseBody>
                                     </CourseCard>
                                     </SwiperSlide>
@@ -773,7 +768,7 @@ export function Question(){
 
     async function submitHandler(e){
         e.preventDefault();
-        console.log(formstate);
+        
     }
 
 

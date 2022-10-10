@@ -38,10 +38,10 @@ const Companies = () => {
   return (
     <section className="wrapper services">
       <div className="container">
-          <header >
-            <h2 className="title text-center">Some of the Companies Our Alumni Work</h2>
-          </header>
-        <div className="service_box_wrapper d-flex flex-wrap justify-content-center px-lg-5 mt-5" style={{gap:"1.5rem"}}>
+        <header >
+          <h2 className="title text-center">Some of the Companies Our Alumni Work</h2>
+        </header>
+        <div className="service_box_wrapper d-flex flex-wrap justify-content-center px-lg-5 mt-5">
             {
               compicons.map((icon, i)=>(
                 <div className="d-flex justify-content-center align-items-center" style={{width:"150px", height:"60px"}}>

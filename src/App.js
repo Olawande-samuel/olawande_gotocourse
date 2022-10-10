@@ -353,6 +353,8 @@ function App() {
                   </Route>
                 </Route>
               </Route>
+
+              
               <Route path="admin">
                 <Route path="" element={<AdminDashboard />} />
                 <Route path="profile" element={<AdminProfile />} />

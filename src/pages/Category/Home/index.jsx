@@ -194,11 +194,9 @@ const Category = () => {
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
     useEffectOnMount(() => {
-        console.log("Category is mounted");
         (async () => {
             try{
                 const res = await fetchCategories();
-                console.log(res);
                 const {success, message, statusCode} = res;
                 if(!success) throw new AdvancedError(message, statusCode);
                 else {
@@ -278,7 +276,7 @@ function CategoryCard({bannerImg, name, description, all, separator}){
                     <p>{description}</p>
 
                     <Link
-                     to={`/categories/${name?.split(" ").join("-").toLowerCase()}`}
+                     to={`/categories/${name?.trim().split(" ").join("-").toLowerCase()}`}
                      onClick={()=>{
                         localStorage.setItem("gotocourse-category", JSON.stringify(all))
                         navigate(`${name?.split(" ").join("-").toLowerCase()}`)

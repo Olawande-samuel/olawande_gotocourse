@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {MdNavigateNext} from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
@@ -154,17 +154,21 @@ const Course = () => {
     const navigate = useNavigate();
     const {getItem} = useLocalStorage();
     let category = getItem(COURSE_CATEGORY_KEY);
+
+
+   
+
     useEffectOnMount(() => {
-        console.log("Course is mounted");
-        console.log(category);
+        
+        
         (async () => {
             try{
-                const res = await searchCategories(category);
+                const res = await searchCategories(category.name);
                 const {message, statusCode, success} = res;
                 if(!success) throw new AdvancedError(message, statusCode);
                 else {
                     const {data} = res;
-                    console.log(data);
+                    
                     setCourses(_ =>  [...data]);
                     toast.success(message, {
                         position: "top-right",
@@ -193,7 +197,6 @@ const Course = () => {
 
 
     function gotoCourseHandler(e, name){
-        console.log(e.target);
         navigate(`${encodeURIComponent(name)}`)
     }
 
@@ -210,8 +213,8 @@ const Course = () => {
                         <BreadcrumbLink to="/categories/all">
                             Categories
                         </BreadcrumbLink>
-                        <BreadcrumbLink to={`/category/${encodeURIComponent(category)}`}>
-                            {capitalize(category)}
+                        <BreadcrumbLink to={`/category/${encodeURIComponent(category.name)}`}>
+                            {capitalize(category.name)}
                         </BreadcrumbLink>
                         <BreadcrumbLink to="#" $isCurrentPage>
                             Courses

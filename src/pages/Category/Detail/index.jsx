@@ -509,7 +509,7 @@ const Detail = ({preview}) => {
                                             navigate(`courses/${course.name.replace(/\s+/g, '-').toLowerCase()}`)
                                         }} >
                                             <CourseImageContainer>
-                                                <img src={course.courseImg} alt="Course Image" />
+                                                <img src={course.courseImg} alt={course.name} />
                                             </CourseImageContainer>
                                             <CourseBody>
                                                 <h4>{course.name}</h4>
