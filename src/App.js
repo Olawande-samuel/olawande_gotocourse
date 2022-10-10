@@ -232,21 +232,6 @@ function App() {
                 </Route>
               </Route>
 
-              {/* <Route path="test" element={<Content />}>
-                <Route path="file" element={<FileComponent />} />
-                <Route path="note" element={<NoteComponent />} />
-                <Route path="classroom" element={<Classroom />} />
-                <Route path="suite" element={<Suite />}>
-                <Route index element={<Processed />} />
-                <Route path="processed" element={<Processed />} />
-                  <Route path="pending" element={<Pending />} />
-                </Route>
-
-                <Route path="quiz" element={<Out />}>
-                  <Route index element={<QuizComponent />} />
-                  <Route path="preview" element={<Preview />} />
-                </Route>
-              </Route> */}
 
               <Route path="test" element={<Content />}>
                 <Route path="file" element={<File />} />
