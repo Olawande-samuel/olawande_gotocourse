@@ -1,6 +1,6 @@
 const  CONFIG = {
-    socketUrl: "https://gotocourse.loftywebtech.com",
-    peerUrl: "gotocourse.loftywebtech.com.com"
+    socketUrl: "https://onibatamall.com",
+    peerUrl: "onibatamall.com"
 }
 
 export default  CONFIG
