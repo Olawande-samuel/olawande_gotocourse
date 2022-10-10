@@ -311,11 +311,6 @@ function App() {
                   </Route>
                 </Route>
               </Route>
-
-
-
-
-
               <Route path="affiliates" element={<AffiliateLanding />} />
               <Route path="affiliates/register" element={<AffiliateRegister />} />
               <Route path="affiliates/login" element={<AffiliateLogin />} />
