@@ -87,6 +87,8 @@ import Business from "./Business/pages/landing/business";
 // import Console from "./pages/Dashboard/components/classConsole";
 import Content, { FileComponent, NoteComponent, QuizComponent } from "./pages/Dashboard/components/classConsole/Content";
 import Quiz, { Preview } from "./pages/Dashboard/components/classConsole/Quiz";
+import Suite, {Processed, Pending} from "./pages/Dashboard/components/classConsole/Suite";
+import Classroom from "./pages/Dashboard/components/classConsole/Classroom";
 
 import { Intermission, LiveClassInfo } from "./pages/Dashboard/components/classConsole/Liveclass";
 import Live from "./pages/Dashboard/Teachers/Live";
@@ -232,6 +234,13 @@ function App() {
               <Route path="test" element={<Content />}>
                 <Route path="file" element={<FileComponent />} />
                 <Route path="note" element={<NoteComponent />} />
+                <Route path="classroom" element={<Classroom />} />
+                <Route path="suite" element={<Suite />}>
+                <Route index element={<Processed />} />
+                <Route path="processed" element={<Processed />} />
+                  <Route path="pending" element={<Pending />} />
+                </Route>
+
                 <Route path="quiz" element={<Out />}>
                   <Route index element={<QuizComponent />} />
                   <Route path="preview" element={<Preview />} />
@@ -349,7 +358,7 @@ function App() {
                 </Route>
               </Route>
 
-              
+
               <Route path="admin">
                 <Route path="" element={<AdminDashboard />} />
                 <Route path="profile" element={<AdminProfile />} />
