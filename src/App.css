@@ -556,7 +556,9 @@ border-radius: 13.5px !important;
 }
 .services  .title {
   line-height: 72px;
-  color:var(--theme-blue) !important;
+  font-size: clamp(1.5rem, -0.875rem + 8.333vw, 1.705rem);
+  color: #000;
+  /* color:var(--theme-blue) !important; */
 }
 
 .services .services_list {
@@ -593,7 +595,7 @@ border-radius: 13.5px !important;
 .services .services_box {
   /* flex: 33.33% 0; */
   max-width:20rem;
-  margin:1.7rem;
+  /* margin:1.7rem; */
 }
 
 .services .services_box h4 {
@@ -1647,9 +1649,9 @@ input[type="password"], input[type="text"], input[type="email"] {
     flex: 50% 0;
     margin-bottom:1.5rem;
   }
-  .services .services_box {
+  /* .services .services_box {
     margin: 2rem 0;
-  }
+  } */
   
   .services .services_box p {
     text-align: center;

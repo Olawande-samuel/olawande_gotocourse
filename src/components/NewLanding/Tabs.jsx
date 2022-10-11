@@ -275,7 +275,7 @@ export function TabsComp(){
         style={{ height: "100%", width: "100%", paddingBottom: "1rem" }}
         key={0}
       >
-          <div className="popular_views border border-dark">
+          <div className="popular_views dark_border">
             <Link to={`/categories`} className="d-inline-flex">
               <motion.button
                 whileHover={{ 
@@ -283,7 +283,7 @@ export function TabsComp(){
                   textShadow:"0px 0px 8px rgb(255, 255, 255)",
                   backgroundColor: "#eee"
                 }}
-                className="btn-plain py-2 px-4  mb-4 rounded-0">Explore Categories</motion.button>
+                className="btn-plain new_categories_btn py-2 px-4 mb-4 rounded-0">Explore Categories</motion.button>
             </Link>          <Swiper
             // install Swiper modules
             modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
@@ -337,7 +337,7 @@ export function TabsComp(){
           style={{ height: "100%", width: "100%" }}
           key={index + 1}
         >
-          <div className="popular_views border border-dark">
+          <div className="popular_views dark_border">
             <h1 className="newCategories_header">Expand your opportunities with <span className="text-capitalize">{item.name.toLowerCase()}</span></h1>
             <Link to={`/categories/${item.name}`} className="d-inline-flex">
               <motion.button
@@ -384,7 +384,7 @@ function CategoryCard({
     }
 }
   return (
-    <div onClick={()=>handleCourseSelect(type)} >
+    <div onClick={()=>handleCourseSelect(type)} className="newCategories_card_wrapper" >
       <div
         className={`card newCategories_card`}
         style={{ cursor: "pointer", height: "100%" }}
@@ -402,7 +402,7 @@ function CategoryCard({
         />
         <div className={`card-body newCategories_card-body`}>
           <h6
-            className={`card-title newCategories_card-title text-center fw-bolder`}
+            className={`card-title newCategories_card-title text-center`}
           >
             {name}
           </h6>
