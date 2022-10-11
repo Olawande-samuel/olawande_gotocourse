@@ -146,7 +146,7 @@ function WhatweDo() {
           <h4 className="tet-center">Our Goal</h4>
         </header>
         <p className="text-center">
-          To connect 1 billion learners with  top tech educators globally in other help upskill, boost productivity and reduce the cost of learning.
+          To connect 1 billion learners with  top tech educators globally in order to help upskill, boost productivity and reduce the cost of learning.
         </p> 
       </div>
     </section>
