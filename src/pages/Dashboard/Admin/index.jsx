@@ -1851,11 +1851,7 @@ export function UserInfoCard({
         <td className={clsx.user__details}>
           {img && (
             <img
-              src={
-                isAbsolute
-                  ? img
-                  : `https://loftywebtech.com/gotocourse/api/uploads/${img}`
-              }
+              src={ isAbsolute ? img : `${process.env.REACT_APP_IMAGEURL}/${img}` }
               alt="avatar"
             />
           )}
@@ -2519,7 +2515,7 @@ export function MentorsDetail() {
             <img
               src={
                 data?.mentorImg
-                  ? `https://loftywebtech.com/gotocourse/api/uploads/${data?.mentorImg}`
+                  ? `${process.env.REACT_APP_IMAGEURL}/${data?.mentorImg}`
                   : avatar
               }
               style={{ borderRadius: 10 }}

@@ -88,7 +88,7 @@ const TeacherProfile = ({type}) => {
               <div className="g-3">
                 <div className={style.teacher_image}>
                   <div className={style.teacher_img_wrapper}>
-                    <img src={teacherProfile?.mentorImg ?`https://loftywebtech.com/gotocourse/api/uploads/${teacherProfile.mentorImg} ` : teacherProfile.profileImg} alt="" className={style.teacher_image} />
+                    <img src={teacherProfile?.mentorImg ?`${process.env.REACT_APP_IMAGEURL}/${teacherProfile.mentorImg} ` : teacherProfile.profileImg} alt="" className={style.teacher_image} />
                   </div>
                 </div>
 

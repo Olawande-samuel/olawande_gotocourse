@@ -117,8 +117,8 @@ export const Card = ({ item,type }) => {
   }
   return (
     <div className="px-1" style={{cursor: "pointer", height:"380px"}} onClick={gotoMentorPage}>
-      <div className="card mentor_image h-100 w-100 position-relative" style={{background:`url(${item?.mentorImg && `https://loftywebtech.com/gotocourse/api/uploads/${item?.mentorImg} `}), rgba(0, 0, 0, 0.5)`, backgroundRepeat:"no-repeat", backgroundPosition:"top", backgroundSize:"cover"}}>
-        {/* <img src={item?.mentorImg && `https://loftywebtech.com/gotocourse/api/uploads/${item?.mentorImg}`} alt="" className="card-img-top mentor_image" /> */}
+      <div className="card mentor_image h-100 w-100 position-relative" style={{background:`url(${item?.mentorImg && `${process.env.REACT_APP_IMAGEURL}/${item?.mentorImg} `}), rgba(0, 0, 0, 0.5)`, backgroundRepeat:"no-repeat", backgroundPosition:"top", backgroundSize:"cover"}}>
+        {/* <img src={item?.mentorImg && `${process.env.REACT_APP_IMAGEURL}/${item?.mentorImg}`} alt="" className="card-img-top mentor_image" /> */}
         <div className="card-body newMentors_card-body position-absolute w-100">
             <div className="d-flex flex-column justify-content-around h-100">
                 <h5 className="text-center">{`${item?.mentorFirstName}  ${item.mentorLastName} `}</h5>

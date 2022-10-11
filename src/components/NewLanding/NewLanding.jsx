@@ -49,12 +49,8 @@ import "swiper/css";
 
 import critical_skills from "../../images/landing/critical_skills.webp";
 import life_change from "../../images/landing/life_change.webp";
-import tell from "../../images/landing/tell.webp";
+import tell from "../../images/landing/mentor_landing.webp";
 
-import { signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
-import { authentication, provider, facebookProvider } from "../../firebase-config.js"
-import goo from "../../images/goo.png"
-import face from "../../images/face.png"
 
 const NewLanding = () => {
   return (
@@ -150,10 +146,8 @@ function WhatweDo() {
           <h4 className="tet-center">Our Goal</h4>
         </header>
         <p className="text-center">
-          To connect 1 billion learners with educators globally to learn in
-          demand tech skills in other to increase accesibility and reduce the
-          cost of learning.
-        </p>
+          To connect 1 billion learners with  top tech educators globally in other help upskill, boost productivity and reduce the cost of learning.
+        </p> 
       </div>
     </section>
   );
@@ -234,7 +228,7 @@ function Hero() {
     {
       id: 3,
       title: "Deliver life-changing teaching experiences",
-      subtitle: "We’ve got the solution:Incredible tools for managing and organizing  world-class training and development programs all on Gotocourse.",
+      subtitle: "We’ve got the solution: Incredible tools for managing and organizing  world-class training and development programs all on Gotocourse.",
       social: true,
       acctype: "teacher",
       img:life_change,

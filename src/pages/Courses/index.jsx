@@ -898,7 +898,7 @@ export const CourseProfile = ({preview}) => {
                 <div className="d-flex g-3">
                   <div className={style.card_left}>
                     <div className={style.profile_img_wrapper}>
-                      <img src={courseProfile?.instructorProfileImg ?`https://loftywebtech.com/gotocourse/api/uploads/${courseProfile?.instructorProfileImg }`: Algo} alt="" className={style.image} />
+                      <img src={courseProfile?.instructorProfileImg ?`${process.env.REACT_APP_IMAGEURL}/${courseProfile?.instructorProfileImg }`: Algo} alt="" className={style.image} />
                     </div>
                   </div>
 
