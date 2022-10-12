@@ -68,21 +68,25 @@ const iconData = [
     id: 1,
     icon: MdMessage,
     title: "Mail",
+    link: "/teacher/class-console/class/mail"
   },
   {
     id: 2,
     icon: MdLibraryAdd,
     title: "Creator suite",
+    link: "/teacher/class-console/class/creator-suite"
   },
   {
     id: 3,
     icon: RiVideoAddFill,
     title: "Live Class",
+    link:"/teacher/live-class "
   },
   {
     id: 4,
     icon: FaUsers,
     title: "Students",
+    link: "/teacher/class-console/class/students"
   },
 ];
 
@@ -261,10 +265,12 @@ export const Console = ({ children }) => {
           )
             :
             (
-              iconData.map(({ title, id, icon: Icon }) => (
+              iconData.map(({ title, id, icon: Icon, link }) => (
                 <Tooltip title={title} key={id}>
                   <IconButton>
-                    <Icon size="1.5rem" color="#0C2191" />
+                    <Link to={link} className="d-inline-flex">
+                      <Icon size="1.5rem" color="#0C2191" />
+                    </Link>
                   </IconButton>
                 </Tooltip>
               ))
