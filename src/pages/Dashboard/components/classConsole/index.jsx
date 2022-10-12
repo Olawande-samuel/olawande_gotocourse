@@ -80,7 +80,7 @@ const iconData = [
     id: 3,
     icon: RiVideoAddFill,
     title: "Live Class",
-    link:"/teacher/live-class "
+    link: "/teacher/live-class "
   },
   {
     id: 4,
@@ -143,18 +143,10 @@ export const Console = ({ children }) => {
       classConsole: { ...classConsole, sidebar: !classConsole.sidebar },
     });
 
-  const NoteAndFile =
-    pathname.split("/")[2] === "note"
-      ? "Note"
-      : pathname.split("/")[2] === "file"
-        ? "File"
-        : "";
-        const studentpath = pathname.split("/")[1] === "console";
-        const suite = pathname.split("/")[2] === "suite";
-        const classroom = pathname.split("/")[2] === "classroom";
-        const quizpath = pathname.split("/")[2] === "myclasses" ? "My Classes" : pathname.split("/")[2] === "liveclass" ? "Live Class" : pathname.split("/")[2]
 
-  const bread = pathname?.split("/");
+  const studentpath = pathname.split("/")[1] === "console";
+  const quizpath = pathname.split("/")[2] === "myclasses" ? "My Classes" : pathname.split("/")[2] === "liveclass" ? "Live Class" : pathname.split("/")[2]
+
 
   return (
     <div className={style.console}>
@@ -202,51 +194,7 @@ export const Console = ({ children }) => {
 
             )}
 
-          {NoteAndFile && NoteAndFile !== "" && (
-            <div className="contentcategory">
-              <NavLink
-                to="file"
-                className={({ isActive }) => (isActive ? "active" : undefined)}
-              >
-                {NoteAndFile}
-              </NavLink>
-              <NavLink
-                to="integration"
-                className={({ isActive }) => (isActive ? "active" : undefined)}
-              >
-                Integration
-              </NavLink>
-            </div>
-          )}
 
-          {
-            !studentpath && !suite && !classroom &&(
-
-              <div className="contentbreadcrumb">
-                <nav arial-label="breadcrumb">
-                  <ol className="breadcrumb">
-                    <li className="breadcrumb-item">
-                      <Link to={goBack(pathname)} style={{ color: "var(--theme-blue", textTransform: "uppercase" }}>
-                        Dashboard
-                      </Link>
-                    </li>
-                    {bread
-                      .filter((item) => item !== "")
-                      .map((item, idx) => (
-                        <li className="breadcrumb-item text-uppercase" key={idx}>
-                          <Link
-                            style={{ color: "var(--theme-blue" }}
-                            to={`${bread.slice(0, idx + 2).join("/")}`}
-                          >
-                            {item.split("-").join(" ")}
-                          </Link>
-                        </li>
-                      ))}
-                  </ol>
-                </nav>
-              </div>
-            )
-          }
         </section>
         {children}
       </main>
