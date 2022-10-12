@@ -4,6 +4,7 @@ import { Outlet, useLocation, useParams } from 'react-router-dom';
 import File from './File';
 import Quiz from './Quiz';
 import Note from './Note';
+import ChatModule from "./Chat";
 // import Out from '../../../Out';
 
 export default function Content({type}) {
@@ -36,8 +37,6 @@ export default function Content({type}) {
             <Console>
                 <Outlet />
             </Console>
-
-
         </>
     )
 
@@ -59,4 +58,8 @@ export function NoteComponent(){
     return (
         <Note />
     )
+}
+
+export function ChatComponent(){
+    return <ChatModule />
 }

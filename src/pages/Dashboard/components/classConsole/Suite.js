@@ -90,8 +90,8 @@ export default function Suite() {
                 </div>
 
                 <div className="suite__nav">
-                    <NavLink to={`processed`} className={({ isActive }) => (isActive ? "suite__navactive" : undefined)}>Processed
-
+                    <NavLink to={`processed`} className={({ isActive }) => (isActive ? "suite__navactive" : undefined)}>
+                        Processed
                     </NavLink>
                     <NavLink to={"pending"} className={({ isActive }) => (isActive ? "suite__navactive" : undefined)}>Pending</NavLink>
                 </div>
