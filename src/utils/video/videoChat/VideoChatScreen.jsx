@@ -234,19 +234,19 @@ const VideoChatScreen = ()  => {
                         </UserCallBlock>
                         <ControlWrapper>
                             <ControlItem>
-                                <VscRecord />
+                                <VscRecord size="1.5rem" />
                             </ControlItem>
                             <ControlItem  onClick={togggleAudio}>
-                                {callSettingsState.audio ? <BsMic /> : <BsMicMute />}
+                                {callSettingsState.audio ? <BsMic size="1.5rem" /> : <BsMicMute size="1.5rem" />}
                             </ControlItem>
                             <ControlItem>
-                                <MdPresentToAll />
+                                <MdPresentToAll size="1.5rem" />
                             </ControlItem>
                             <ControlItem onClick={togggleVideo}>
-                                {callSettingsState.video ? <BsCameraVideo /> : <BsCameraVideoOff />}
+                                {callSettingsState.video ? <BsCameraVideo size="1.5rem" /> : <BsCameraVideoOff size="1.5rem" />}
                             </ControlItem>
                             <ControlItem>
-                                <HiOutlinePhone />
+                                <HiOutlinePhone size="1.5rem" />
                             </ControlItem>
                         </ControlWrapper>
                         <AddPeople>

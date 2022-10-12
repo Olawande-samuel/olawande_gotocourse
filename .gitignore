@@ -9,7 +9,7 @@
 /coverage
 
 text.txt
-
+.env.production.txt
 # production
 /build
 

@@ -400,7 +400,7 @@ export const Syllabus = ({
                   className="generic_input"
                 ></textarea>
               </div>
-              <div className="d-flex flex-wrap" style={{ gap: ".5rem" }}>
+              {/* <div className="d-flex flex-wrap" style={{ gap: ".5rem" }}>
                 <div className="col-sm-4">
                   <Input
                     label="Start Date"
@@ -419,8 +419,8 @@ export const Syllabus = ({
                     value={formstate.endDate}
                   />
                 </div>
-              </div>
-              <div className={clsx.form_group}>
+              </div> */}
+              {/* <div className={clsx.form_group}>
                 <label htmlFor={"package"} className="form-label generic_label">
                   Packages
                 </label>
@@ -443,16 +443,16 @@ export const Syllabus = ({
                 ) : (
                   <h6>No Package available</h6>
                 )}
-              </div>
+              </div> */}
   
-              <button
+              {/* <button
                 className="btn btn-primary my-3"
                 style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
                 type="button"
                 onClick={openPackageModal}
               >
                 Add Package
-              </button>
+              </button> */}
   
               <div className={clsx.form_group}>
                 <label className="form-label generic_label">Syllabus</label>
@@ -484,7 +484,7 @@ export const Syllabus = ({
               >
                 Add Syllabus
               </button>
-              {
+              {/* {
                 type === "admin" && (
                   <>
                     {location.search &&
@@ -521,7 +521,7 @@ export const Syllabus = ({
                   </button>
                   </>
                 )
-              }
+              } */}
 
               <div className={clsx.form_group}>
                 <label htmlFor={"package"} className="form-label generic_label">

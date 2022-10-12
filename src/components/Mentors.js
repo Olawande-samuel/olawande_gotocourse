@@ -113,7 +113,7 @@ export const Card = ({ item,type }) => {
     <div className="px-1 mentors_new_card" style={{cursor: "pointer"}} onClick={gotoMentorPage}>
       <div className="card">
         <div className="card-body">
-        <div className="mentors_card_top" style={{background:`url(${item?.mentorImg && `https://loftywebtech.com/gotocourse/api/uploads/${item?.mentorImg} `}), rgba(0, 0, 0, 0.5)`}}>        
+        <div className="mentors_card_top" style={{background:`url(${item?.mentorImg && `${process.env.REACT_APP_IMAGEURL}/${item?.mentorImg} `}), rgba(0, 0, 0, 0.5)`}}>        
           <div>
             <h5 className="">{`${item?.mentorFirstName}  ${item?.mentorLastName && item?.mentorLastName} `}</h5>
             <p className="mentors_footnote" style={{fontSize:"14px"}}>{item?.footnote}</p>

@@ -58,13 +58,14 @@ export const  HeadBar = styled.div`
 
 
 export const Content = styled.div`
-    padding: 20px 8% 20px 8%;
+    padding: 20px 0;
     width: 100%;
     height: calc(100% - 90px);
     flex: 1;
     justify-content: center;
     align-items: center;
     overflow-y: auto;
+    background:#191046;
 `;
 
 export const VideoWrapper = styled.div`
@@ -72,19 +73,29 @@ export const VideoWrapper = styled.div`
     flex-direction: column;
     flex-wrap: wrap;
     width: 100%;
-    max-width: 1080px;
+    // max-width: 1080px;
     border-radius: 10px;
     gap: 10px;
-    background-color: #222;
+    background-color: #191046;
     height: 100%;
     position: relative;
     overflow: hidden;
     margin: 0px auto;
     padding: 10px;
-    
+
+    display: grid;
+    grid-template-columns:1fr;
+    grid-auto-rows: 250px;
+    gap: 1rem;
+    /* overflow-y: scroll; */
+    margin-inline: auto;
+    height: 100%;
 
     @media screen and (min-width: 880px) {
         flex-direction: row;
+        display:grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
     }
 
     /* video {
@@ -216,10 +227,20 @@ export const ControlItem= styled.div`
     height: 48px;
     border-radius: 4px;
 
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(40px);
+    // background: rgba(255, 255, 255, 0.6);
+    // backdrop-filter: blur(40px);
     border-radius: 8px;
     cursor: pointer;
+
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #535353;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+
 
     :first-child {
         color: #F24E1E;
@@ -230,6 +251,9 @@ export const ControlItem= styled.div`
         border-radius: 50%;
         color: #fff;
         background-color: #FF3459;
-        rotate: 135deg;
+        // rotate: 135deg;
+        background-color: #FF4343;
+    width: 60px;
+    border-radius: 40px;
     }
 `;

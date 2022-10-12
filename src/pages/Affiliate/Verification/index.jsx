@@ -49,6 +49,7 @@ export function Form({type}){
         code5: "",
         code6: ""
     })
+
     useEffect(() => {
         if(flag.current) return;
         if(location?.search){
@@ -85,7 +86,7 @@ export function Form({type}){
                             draggable: true,
                             progress: undefined,
                         });
-                        updateItem(VERIFICATION_KEY, data);
+                        updateItem(VERIFICATION_KEY, {...userdata, isVerified: true});
                         setTimeout(() => navigate(data.userType === 'teacher' ? `/teacher/on-boarding` : data.userType === 'student' ? `/user-onboarding`: `/${data.userType}`), 1000);
                     }
                 }catch(err){

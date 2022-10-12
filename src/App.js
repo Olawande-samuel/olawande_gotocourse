@@ -84,9 +84,11 @@ import Loader from "./components/Loader";
 import CheckList from "./pages/Teacher/checkList";
 import Events from "./pages/Events";
 import Business from "./Business/pages/landing/business";
-import Content from "./pages/Dashboard/components/classConsole/Content";
 import File from "./pages/Dashboard/components/classConsole/File";
 import Note from "./pages/Dashboard/components/classConsole/Note";
+
+import Content, { ChatComponent } from "./pages/Dashboard/components/classConsole/Content";
+
 import Quiz, { Preview } from "./pages/Dashboard/components/classConsole/Quiz";
 import Suite, {Processed, Pending} from "./pages/Dashboard/components/classConsole/Suite";
 import Classroom from "./pages/Dashboard/components/classConsole/Classroom";
@@ -100,6 +102,7 @@ import ConsoleClasses, { MyClass } from "./pages/Dashboard/components/classConso
 import ConsoleAssessments from "./pages/Dashboard/components/classConsole/ConsoleAssessments";
 import { CreateRoom, VideDiv } from "./utils/video";
 import Detail from "./pages/Course/Details";
+import AllCourses from "./pages/Courses/allcourses/AllCourses";
 
 
 
@@ -159,10 +162,11 @@ function App() {
               <Route path="teaching-policy" element={<TeachingPolicy />} />
               <Route path="about-us" element={<About />} />
               <Route path="contact-us" element={<Contact />} />
-              <Route path="categories/all" element={<CategoryHome />} />
+              <Route path="courses" element={<AllCourses />} />
+              {/* <Route path="categories/all" element={<CategoryHome />} />
               <Route path="category/:name" element={<CategoryDetail />} />
               <Route path="category/:name/courses" element={<CoursesHome />} />
-              <Route path="category/:name/courses/:course" element={<CourseDetails />} />
+              <Route path="category/:name/courses/:course" element={<CourseDetails />} /> */}
               {/* <Route path="bootcamp-training" element={<TrainingBootcamp />} /> */}
               <Route path="forgot-password" element={<ForgotPassword />} />
               <Route path="change-password" element={<ResetPassword />} />
@@ -171,6 +175,21 @@ function App() {
               <Route path="tester" element={<CreateRoom />} />
               <Route path="video-chat" element={<VideDiv />} />
 
+              <Route path="categories" element={<Out />}>
+                {/* <Route index element={<Categories  />} /> */}
+                <Route index element={<CategoryHome />} />
+                <Route path=":id" element={<Out />}  >
+                  {/* <Route index element={<CourseDetail />} /> */}
+                  <Route index element={<CategoryDetail />} />
+                  <Route path="courses" element={<CoursesHome />} />
+                  <Route path="courses/:profile" element={<Out />}>
+                    {/* <Route index element={<CourseProfile />} /> */}
+                    <Route index element={<Detail />} />
+                    {/* <Route index element={<NewCourseProfile />} /> */}
+                    <Route path="payment" element={<Payment />} />
+                  </Route>
+                </Route>
+              </Route>
 
 
               <Route path="bootcamp-training" element={<NewBootcampDetailsComponent />} />
@@ -237,6 +256,8 @@ function App() {
                 <Route path="file" element={<File />} />
                 <Route path="note" element={<Note />} />
                 <Route path="classroom" element={<Classroom />} />
+                <Route path='chat' element={<ChatComponent />} />
+
                 <Route path="suite" element={<Suite />}>
                 <Route index element={<Processed />} />
                 <Route path="processed" element={<Processed />} />
@@ -256,7 +277,6 @@ function App() {
                 </Route>
                 <Route path="assessments" element={<ConsoleAssessments />} />
                 <Route path="liveclass" element={<Out />} />
-
               </Route>
 
 
@@ -333,11 +353,6 @@ function App() {
                   </Route>
                 </Route>
               </Route>
-
-
-
-
-
               <Route path="affiliates" element={<AffiliateLanding />} />
               <Route path="affiliates/register" element={<AffiliateRegister />} />
               <Route path="affiliates/login" element={<AffiliateLogin />} />
@@ -360,22 +375,7 @@ function App() {
 
 
 
-              <Route path="categories" element={<Out />}>
-                {/* <Route index element={<Categories  />} /> */}
-                <Route index element={<CategoryHome />} />
-                <Route path=":id" element={<Out />}  >
-                  {/* <Route index element={<CourseDetail />} /> */}
-                  <Route index element={<CategoryDetail />} />
-                  <Route path="courses" element={<CourseList />} />
-                  <Route path="courses/:profile" element={<Out />}>
-                    {/* <Route index element={<CourseProfile />} /> */}
-                    <Route index element={<Detail />} />
-                    {/* <Route index element={<NewCourseProfile />} /> */}
-                    <Route path="payment" element={<Payment />} />
-                  </Route>
-                </Route>
-              </Route>
-
+             
 
               <Route path="admin">
                 <Route path="" element={<AdminDashboard />} />
