@@ -108,6 +108,16 @@ const Login = () => {
     }
   };
 
+  function gotoPledre(e){
+    console.log({pledre})
+    e.preventDefault();
+    let Data= {
+      email: data.email,
+      user_type: "student"
+    }
+
+    pledre.loginUser(Data)
+  }
 
   // SOCIAL LOGIN
   async function socialSignIn(token, type){
@@ -281,6 +291,7 @@ const Login = () => {
             </button>
           )
         }
+        {/* <button onClick={gotoPledre}>Click me</button> */}
       </form>
         <p className="mt-5">
           <span>Do not have an account? </span>
