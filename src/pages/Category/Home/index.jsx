@@ -189,13 +189,17 @@ const Separator = styled.hr`
 
 const Category = () => {
     const {otherFunctions: {fetchCategories}} = useAuth();
+    
+    const [loading, setLoading]= useState(false)
     const [categories, setCategories] = useState([]);
     const {updateItem} = useLocalStorage();
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
+
     useEffectOnMount(() => {
         (async () => {
             try{
+                setLoading(true)
                 const res = await fetchCategories();
                 const {success, message, statusCode} = res;
                 if(!success) throw new AdvancedError(message, statusCode);
@@ -214,6 +218,8 @@ const Category = () => {
                     draggable: true,
                     progress: undefined,
                 });
+            }finally {
+                setLoading(false)
             }
         })()
         return () => console.log("Category page is unmounted");
@@ -221,7 +227,7 @@ const Category = () => {
 
     const gotoCategoryHandler = (e, title) => {
         updateItem(COURSE_CATEGORY_KEY, title);
-        navigate(`/category/${title}`);
+        navigate(`/categories/${title}`);
     }
 
 
@@ -247,13 +253,17 @@ const Category = () => {
 
                     <CategoryBody>
                         {
-
+                            loading ? 
+                            Array(4).fill(undefined).map((_, i) => (
+                               <Skeleton sx={{marginBottom: 10}} animation="wave" key={i} variant="rectangular" width={"100%"} height={320} />
+                           ))
+                           :
                             categories.length !== 0 ? categories.map((category, i) => (
                                 <CategoryCard key={i} {...category} all={category} separator={(categories.length - 1) === i ? false : true} />
-                            )) : Array(4).fill(undefined).map((_, i) => (
-                                <Skeleton sx={{marginBottom: 10}} animation="wave" key={i} variant="rectangular" width={"100%"} height={350} />
-                            ))
+                            )):  <p className="text-center">No Category Found</p>
                         }
+                        
+
                     </CategoryBody>
                 </CategoryContainer>
             </div>

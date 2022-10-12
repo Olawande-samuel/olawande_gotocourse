@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {useParams, useNavigate, Navigate} from "react-router-dom";
+import {useParams, useNavigate, Navigate, useLocation} from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import {MdNavigateNext} from "react-icons/md";
@@ -41,9 +41,11 @@ const CourseTop = styled.div`
 
 const BreadcrumbLink = styled(Link)`
     color: ${props => props.$isCurrentPage ? '#0C2191' : '#666363'};
-    font-weight: 400;
-    font-size: 0.9rem;
+    font-weight: 700;
+    font-size: 0.7rem;
     cursor: ${(props) => props.$isCurrentPage ? 'not-allowed': 'pointer'};
+    text-transform: uppercase;
+
 
     &:hover {
         color: ${props => props.$isCurrentPage ? '#666363' : "#0C2191"}
@@ -514,34 +516,38 @@ const Detail = () => {
     const [courses, setCourses] = useState([]);
     const {otherFunctions: {searchCategories}} = useAuth();
     const params = useParams();
-
+    
+    const location = useLocation();
+    const routeCategory = location.pathname.split('/')[2]
+    const courseCategory = routeCategory.split("-").join(" ").toUpperCase()
     
     const courseName = params.course ? params.course.split("-").join(" ") : params.profile.split("-").join(" ")
+    console.log({courseName})
 
 
     useEffect(() => {
-        
-        
-        // window.scrollTo(0,0);
+        window.scrollTo(0,0);
         if(!params || !category.name) navigate(-1);
         else {
             (async() => {
                 try{
                     
-                    const res = await searchCategories(category.name);
+                    const res = await searchCategories(courseCategory);
                     const {message, statusCode, success} = res;
                     if(!success) throw new AdvancedError(message, statusCode);
                     else {
                         const {data} = res;
-                        
-                        let dets = data.find(d => d.name.toLocaleLowerCase() === courseName.toLocaleLowerCase());
-                        
+                        let dets = data.find(d => d.name.trim().toLocaleLowerCase() === courseName.trim().toLocaleLowerCase());
+                        if(!dets.courseId){
+                            navigate(-1)
+                        }
                         setDetails(_ => {
                             return {
                                 ...dets
                             }
                         })
                         setCourses(_ =>  [...data.filter(d => d.name.trim().toLocaleLowerCase() !== courseName.trim().toLocaleLowerCase())]);
+                        
                     }
                 }catch(err){
                     toast.error(err.message, {
@@ -560,6 +566,7 @@ const Detail = () => {
     }, [courseName, details?.name])
 
 
+    console.log({details})
     return (
         <Layout background="category">
             <ToastContainer /> 
@@ -569,13 +576,13 @@ const Detail = () => {
                         <BreadcrumbLink to="/">
                             Home
                         </BreadcrumbLink>
-                        <BreadcrumbLink to="/categories/all">
+                        <BreadcrumbLink to="/categories">
                             Categories
                         </BreadcrumbLink>
-                        <BreadcrumbLink to={`/category/${category.name.split(" ").join("-")}`}>
-                            {capitalize(category.name)}
+                        <BreadcrumbLink to={`/categories/${routeCategory}`}>
+                            {courseCategory}
                         </BreadcrumbLink>
-                        <BreadcrumbLink to={`/category/${category.name.split(" ").join("-")}/courses`}>
+                        <BreadcrumbLink to={`/categories/${routeCategory}/courses`}>
                             Courses
                         </BreadcrumbLink>
                         <BreadcrumbLink $isCurrentPage to="#">{details?.name ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</BreadcrumbLink>
@@ -697,7 +704,13 @@ const Detail = () => {
                             {
                                 courses.length ? courses.map(({courseImg, endDate, startDate, name}, i) => (
                                     <SwiperSlide key={i}>
-                                    <CourseCard onClick={e => navigate(`/category/${category.name.split(" ").join("-")}/courses/${name.split(" ").join("-")}`)}>
+                                    <CourseCard 
+                                        onClick={e => {
+                                        console.log(name)
+                                           navigate(`/categories/${details.category.split(" ").join("-").toLowerCase()}/courses/${name.trim().split(" ").join("-").toLowerCase()}`)
+                                            // navigate(`/categories/${details.category.split(" ").join("-").toLowerCase()}/courses/${name.split(" ").join("-")}`)
+                                        }}
+                                    >
                                         <CourseImageContainer>
                                             <img src={courseImg} alt={name} />
                                         </CourseImageContainer>
@@ -735,7 +748,7 @@ const Detail = () => {
                             }
                          </Swiper>
                         </DetailCourses>
-                        <Link to={`/category/${encodeURIComponent(category)}/courses`}>
+                        <Link to={`/categories/${encodeURIComponent(category)}/courses`}>
                             View more <BiArrowToRight />
                         </Link>
                     </DetailCourseContainer>

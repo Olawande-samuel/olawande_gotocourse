@@ -20,6 +20,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
+import { COURSE_CATEGORY_KEY } from '../../constants';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -89,61 +90,73 @@ function PopularContainer({ category, tab_number, popular }) {
   
   return (
     <>
-    {
-    <Swiper
-      // install Swiper modules
-      modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-      loop={true}
-      speed={1500}
-      autoplay={{ delay: 2000 }}
-      spaceBetween={0}
-      slidesPerView={1}
-      // navigation
-      pagination={{ clickable: true }}
-      scrollbar={{ draggable: true }}
-      breakpoints={{
-        // when window width is >= 320px
-        320: {
-          slidesPerView: 1,
-          spaceBetween: 0,
-        },
-        // when window width is >= 640px
-        575: {
-          slidesPerView: 2,
-          spaceBetween: 5,
-        },
-        700: {
-          slidesPerView: 3,
-          spaceBetween: 5,
-        },
-        1024: {
-          slidesPerView: tab_number ? tab_number : 4,
-          spaceBetween: 28,
-        },
-        1704: {
-          slidesPerView: 4.5,
-          spaceBetween: 28,
-        },
-      }}
-    >
       {
-        courses.isFetching ? 
-          <SwiperSlide>
-            <div className="d-flex" style={{gap:"1rem"}}>
-              { [0, 0, 0, 0].map((_, i)=>(
-                <Skeleton key={i} className="col-md-9 p-2 p-md-3 pe-md-4" variant='rectangular' width={250} height={200} animation="wave" sx={{borderTopLeftRadius: 10, borderTopRightRadius: 10}} />
-              ))}
-            </div>
-          </SwiperSlide>
-      :
-        courses.data?.data?.map((course) => (
-          <SwiperSlide key={course.courseId}>
-            <CategoryCard {...course} all={course} key={course.courseId} />
-          </SwiperSlide>
-          ))
+      <Swiper
+        // install Swiper modules
+        modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+        loop={true}
+        speed={1500}
+        autoplay={{ delay: 2000 }}
+        spaceBetween={0}
+        slidesPerView={1}
+        // navigation
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+        breakpoints={{
+          // when window width is >= 320px
+          320: {
+            slidesPerView: 1,
+            spaceBetween: 0,
+          },
+          // when window width is >= 640px
+          575: {
+            slidesPerView: 2,
+            spaceBetween: 5,
+          },
+          700: {
+            slidesPerView: 3,
+            spaceBetween: 5,
+          },
+          1024: {
+            slidesPerView: tab_number ? tab_number : 4,
+            spaceBetween: 28,
+          },
+          1704: {
+            slidesPerView: 4.5,
+            spaceBetween: 28,
+          },
+        }}
+      >
+        {
+          courses.isFetching ? 
+            <SwiperSlide>
+              <div className="d-flex" style={{gap:"1rem"}}>
+                { [0, 0, 0, 0].map((_, i)=>(
+                  <Skeleton key={i} className="col-md-9 p-2 p-md-3 pe-md-4" variant='rectangular' width={250} height={200} animation="wave" sx={{borderTopLeftRadius: 10, borderTopRightRadius: 10}} />
+                ))}
+              </div>
+            </SwiperSlide>
+        :
+          courses.data?.data?.map((course) => (
+            <SwiperSlide key={course.courseId}>
+              <CategoryCard {...course} all={course} key={course.courseId} />
+            </SwiperSlide>
+            ))
+        }
+        </Swiper>
+
       }
-    </Swiper>
-    }
+      <div className="d-flex">
+        <Link to={`/courses`} className="d-inline-flex ms-auto">
+          <motion.button
+            whileHover={{ 
+              boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+              textShadow:"0px 0px 8px rgb(255, 255, 255)",
+              backgroundColor: "#eee"
+            }}
+            className="btn-plain new_categories_btn py-2 px-4 mb-4 rounded-0">Explore Courses</motion.button>
+        </Link>   
+      </div>
     </>
   
   );
@@ -375,12 +388,12 @@ function CategoryCard({
 
   function handleCourseSelect( type){        
     if(type === "category"){
-      localStorage.setItem("gotocourse-category", JSON.stringify(all))
+      localStorage.setItem(COURSE_CATEGORY_KEY, JSON.stringify(all))
       navigate(`/categories/${name.split(" ").join("-").toLowerCase()}`)
     }else {
       localStorage.setItem("gotocourse-courseInfo", JSON.stringify(all))
       localStorage.setItem("gotocourse-courseId", all.courseId)
-      navigate(`/categories/${category?.split(" ").join("-")}/courses/${name.split(" ").join("-").toLowerCase()}}`)
+      navigate(`/categories/${all.category?.trim().split(" ").join("-").toLowerCase()}/courses/${name.trim().split(" ").join("-").toLowerCase()}`)
     }
 }
   return (
