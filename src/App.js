@@ -85,7 +85,7 @@ import CheckList from "./pages/Teacher/checkList";
 import Events from "./pages/Events";
 import Business from "./Business/pages/landing/business";
 // import Console from "./pages/Dashboard/components/classConsole";
-import Content, { FileComponent, NoteComponent, QuizComponent } from "./pages/Dashboard/components/classConsole/Content";
+import Content, { FileComponent, NoteComponent, QuizComponent, ChatComponent } from "./pages/Dashboard/components/classConsole/Content";
 import Quiz, { Preview } from "./pages/Dashboard/components/classConsole/Quiz";
 import Suite, {Processed, Pending} from "./pages/Dashboard/components/classConsole/Suite";
 import Classroom from "./pages/Dashboard/components/classConsole/Classroom";
@@ -235,6 +235,8 @@ function App() {
                 <Route path="file" element={<FileComponent />} />
                 <Route path="note" element={<NoteComponent />} />
                 <Route path="classroom" element={<Classroom />} />
+                <Route path='chat' element={<ChatComponent />} />
+
                 <Route path="suite" element={<Suite />}>
                 <Route index element={<Processed />} />
                 <Route path="processed" element={<Processed />} />
