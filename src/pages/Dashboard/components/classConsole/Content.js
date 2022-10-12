@@ -41,25 +41,24 @@ export default function Content({type}) {
     )
 
 }
-
-export function QuizComponent(){
-    return (
-        <Quiz />
-    )
-}
-
-export function FileComponent(){
-    return (    
-        <File />
-    )
-}
-
-export function NoteComponent(){
-    return (
-        <Note />
-    )
-}
-
 export function ChatComponent(){
     return <ChatModule />
 }
+
+// export function QuizComponent(){
+//     return (
+//         <Quiz />
+//     )
+// }
+
+// export function FileComponent(){
+//     return (    
+//         <File />
+//     )
+// }
+
+// export function NoteComponent(){
+//     return (
+//         <Note />
+//     )
+// }

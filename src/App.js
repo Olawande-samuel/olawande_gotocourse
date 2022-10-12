@@ -84,8 +84,11 @@ import Loader from "./components/Loader";
 import CheckList from "./pages/Teacher/checkList";
 import Events from "./pages/Events";
 import Business from "./Business/pages/landing/business";
-// import Console from "./pages/Dashboard/components/classConsole";
-import Content, { FileComponent, NoteComponent, QuizComponent, ChatComponent } from "./pages/Dashboard/components/classConsole/Content";
+import File from "./pages/Dashboard/components/classConsole/File";
+import Note from "./pages/Dashboard/components/classConsole/Note";
+
+import Content, { ChatComponent } from "./pages/Dashboard/components/classConsole/Content";
+
 import Quiz, { Preview } from "./pages/Dashboard/components/classConsole/Quiz";
 import Suite, {Processed, Pending} from "./pages/Dashboard/components/classConsole/Suite";
 import Classroom from "./pages/Dashboard/components/classConsole/Classroom";
@@ -248,9 +251,10 @@ function App() {
                 </Route>
               </Route>
 
+
               <Route path="test" element={<Content />}>
-                <Route path="file" element={<FileComponent />} />
-                <Route path="note" element={<NoteComponent />} />
+                <Route path="file" element={<File />} />
+                <Route path="note" element={<Note />} />
                 <Route path="classroom" element={<Classroom />} />
                 <Route path='chat' element={<ChatComponent />} />
 
@@ -261,7 +265,7 @@ function App() {
                 </Route>
 
                 <Route path="quiz" element={<Out />}>
-                  <Route index element={<QuizComponent />} />
+                  <Route index element={<Quiz />} />
                   <Route path="preview" element={<Preview />} />
                 </Route>
               </Route>
@@ -326,13 +330,24 @@ function App() {
                   <Route path="live" element={<LiveClass />} />
                   <Route path="connect" element={<Intermission />} />
                 </Route>
-                <Route path="class-console" element={<Out />}>
+                {/* <Route path="class-console" element={<Out />}>
                   <Route index element={<ConsoleClass />} />
                   <Route path=":id" element={<Content />}>
                     <Route path="file" element={<FileComponent />} />
                     <Route path="note" element={<NoteComponent />} />
                     <Route path="quiz" element={<Out />}>
                       <Route index element={<QuizComponent />} />
+                      <Route path="preview" element={<Preview />} />
+                    </Route>
+                  </Route>
+                </Route> */}
+                <Route path="class-console" element={<Out />}>
+                  <Route index element={<ConsoleClass />} />
+                  <Route path=":id" element={<Content />}>
+                    <Route path="file" element={<File />} />
+                    <Route path="note" element={<Note />} />
+                    <Route path="quiz" element={<Out />}>
+                      <Route index element={<Quiz />} />
                       <Route path="preview" element={<Preview />} />
                     </Route>
                   </Route>
@@ -389,13 +404,25 @@ function App() {
                 <Route path="settings" element={<Settings />} />
                 <Route path="earnings" element={<AdminEarning />} />
                 <Route path="affiliate" element={<AdminAffiliate />} />
-                <Route path="class-console" element={<Out />}>
+                {/* <Route path="class-console" element={<Out />}>
                   <Route index element={<AdminClassConsole />} />
                   <Route path=":id" element={<Content />}>
                     <Route path="file" element={<FileComponent />} />
                     <Route path="note" element={<NoteComponent />} />
                     <Route path="quiz" element={<Out />}>
                       <Route index element={<QuizComponent />} />
+                      <Route path="preview" element={<Preview />} />
+                    </Route>
+                  </Route>
+                </Route> */}
+
+                <Route path="class-console" element={<Out />}>
+                  <Route index element={<AdminClassConsole />} />
+                  <Route path=":id" element={<Content />}>
+                    <Route path="file" element={<File />} />
+                    <Route path="note" element={<Note />} />
+                    <Route path="quiz" element={<Out />}>
+                      <Route index element={<Quiz />} />
                       <Route path="preview" element={<Preview />} />
                     </Route>
                   </Route>
