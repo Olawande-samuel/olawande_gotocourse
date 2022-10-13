@@ -241,11 +241,11 @@ function CoursesContainer({ category, tab_number, popular }) {
 }
 
 export function TabsComp(){
-  const [value, setValue] = useState(0);
   const {
     otherFunctions: { fetchCategories, fetchCourses },
   } = useAuth();
-
+  
+  const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
