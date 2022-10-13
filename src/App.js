@@ -318,9 +318,14 @@ function App() {
                   <Route index element={<ConsoleClass />} />
                   <Route path="class" element={<Content />}>
                     <Route index element={<File />}  />
-                    <Route path="creator-suite" element={<Suite />}/>
-                     
-                    <Route path="students" element={<p>My students</p>} />
+
+                    <Route path="creator-suite" element={<Suite />}>
+                      <Route index element={<Processed />} />
+                      <Route path="processed" element={<Processed />} />
+                      <Route path="pending" element={<Pending />} />
+                    </Route>                    
+                    <Route path="classroom" element={<Classroom />} />
+
                     <Route path="mail" element={<ChatComponent />} />
                     <Route path="file" element={<File />} />
                     <Route path="note" element={<Note />} />

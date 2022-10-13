@@ -113,7 +113,7 @@ const Login = () => {
     e.preventDefault();
     let Data= {
       email: data.email,
-      user_type: "student"
+      user_type: "teacher"
     }
 
     pledre.loginUser(Data)
