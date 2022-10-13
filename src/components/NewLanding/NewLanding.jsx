@@ -243,7 +243,7 @@ function Hero() {
       social: true,
       acctype: "affiliate",
       img:tell,
-      color:"#F75C4E",
+      color:"#A1B0FF",
       link:"/lounge",
       link_btn:"Get started now"
     },

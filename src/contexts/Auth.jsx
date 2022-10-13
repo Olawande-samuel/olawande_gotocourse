@@ -21,7 +21,8 @@ const AuthContextProvider = ({children}) => {
         chat:0,
         pledre:"", 
         classConsole: {
-            sidebar: false
+            sidebar: false,
+            domains: []
         },
         scheduledClasses: []
         

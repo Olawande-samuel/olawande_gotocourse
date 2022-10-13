@@ -292,9 +292,12 @@ function Sidebar({ Toggle, side }) {
             <>
               <div className={style.course_content}>
                 <p>Course content</p>
-                <Accord />
-                <Accord />
-                <Accord />
+                {
+                  classConsole.domains.map(domain=>(
+                    <Accord  {...domain} />
+
+                  ))
+                }
               </div>
               <div className={`${style.create_content_button} ${style.white}`}>
                 <button onClick={Toggle}>
@@ -365,7 +368,7 @@ function Sidebar({ Toggle, side }) {
   );
 }
 
-function Accord() {
+function Accord({domain, content, moduleId}) {
   const data = [
     {
       id: 1,
@@ -402,7 +405,7 @@ function Accord() {
             <BiCaretRight onClick={() => showDetails(!details)} />
           )}
         </i>
-        <span>Test</span>
+        <span>{domain}</span>
         <i>
           <BsThreeDotsVertical />
         </i>
@@ -410,7 +413,7 @@ function Accord() {
 
       {details && (
         <ul className={style.content_list}>
-          {data.map(({ icon: Icon, title, link, id, type }) => (
+          {content.map(({ icon: Icon, title, link, id, type }) => (
             <li key={id}>
               <Link to={`${type}`}>
                 <i>
@@ -432,7 +435,22 @@ export function ModalContent({ show, handleClose, toggleModule }) {
   const [type, setType] = useState("file");
   let ref = useRef();
 
+  const [formstate, setFormstate]= useState({});
+
+  const {generalState, setGeneralState, generalState: { classConsole}} = useAuth();
   console.log("modal show", { show });
+
+  function handleChange(e){
+    setFormstate({...formstate, [ e.target.name]: e.target.value, type: type})
+  }
+  
+  function addContent(){
+
+    console.log("clicked")
+    let selectedDomain = classConsole.domains.find(d => d.domain === formstate.domain)
+    selectedDomain.content = [...selectedDomain.content, formstate]
+    console.log({selectedDomain})
+  }
   return (
     <div>
       <Modal show={show} onHide={handleClose}>
@@ -452,6 +470,12 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 value={type}
                 onChange={(e) => setType(e.target.value)}
               >
+                <MenuItem value="">
+                  <i>
+                    <MdAttachFile />
+                  </i>
+                  Select Content
+                </MenuItem>
                 <MenuItem value="file">
                   <i>
                     <MdAttachFile />
@@ -480,6 +504,9 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 label="Content Title"
                 variant="outlined"
                 placeholder="Content Title"
+                onChange={handleChange}
+                value={formstate.title}
+                name="title"
               />
             </FormControl>
 
@@ -491,18 +518,18 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 label="Domain"
                 className="myselect"
                 ref={ref}
-              // MenuProps={{
-              //     style: {
-              //         zIndex: 4000
-              //     }
-              // }}
-              // value={type}
-              // onChange={(e) => setType(e.target.value)}
+                onChange={handleChange}
+                name="domain"
+                value={formstate.domain}
               >
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value="test">Test</MenuItem>
+                {
+                  classConsole.domains?.map(domain =>(
+                    <MenuItem value={domain.domain}>{domain.domain}</MenuItem>
+                  ))
+                }
 
                 <button className={style.modulebtn} onClick={toggleModule}>
                   + New Module
@@ -570,7 +597,7 @@ export function ModalContent({ show, handleClose, toggleModule }) {
               )}
             </div>
 
-            <button className={style.contentform__btn}>Submit</button>
+            <button className={style.contentform__btn} onClick={addContent}>Submit</button>
           </div>
         </Modal.Body>
         {/* <Modal.Footer>
@@ -589,6 +616,17 @@ export function ModalContent({ show, handleClose, toggleModule }) {
 export function ModuleModal({ moduleOpen, moduleClose }) {
   console.log("small modal show", { moduleOpen });
   console.log("small close show", { moduleClose });
+  const {generalState, generalState:{classConsole}, setGeneralState} = useAuth()
+  const [formstate, setFormstate]= useState({})
+
+  function handleChange(e){
+    setFormstate({...formstate, [e.target.name]: e.target.value, content:[]})
+  }
+  function createModule(){
+    setGeneralState({...generalState, classConsole: {...generalState.classConsole, domains: [...generalState.classConsole.domains, formstate]}})
+    moduleClose()
+  }
+  console.log({generalState})
   return (
     <div>
       <Modal show={moduleOpen} onHide={moduleClose} className="modulemodal">
@@ -610,6 +648,8 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
                 label="Domain Name"
                 variant="outlined"
                 placeholder="Domain Name"
+                onChange={handleChange}
+                name="domain"
               />
 
               <TextField
@@ -618,11 +658,13 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
                 label="Domain description"
                 variant="outlined"
                 placeholder="Domain Description(optional)"
+                onChange={handleChange}
+                name="description"
               />
             </FormControl>
 
             <div className="contentbutton">
-              <button className="" onClick={() => console.log("clicking")}>
+              <button className="" onClick={createModule}>
                 Submit
               </button>
             </div>
