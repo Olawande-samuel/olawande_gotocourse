@@ -168,7 +168,6 @@
     display: flex;
     flex-direction: column;
     gap: .5rem;
-    margin-top: 2rem;
 
 }
 
@@ -197,7 +196,7 @@
 
 .content__quiz input::placeholder {
     font-weight: 400;
-    font-size: 20px;
+    font-size: 16px;
     line-height: 24px;
 
 }
@@ -209,9 +208,17 @@
     border-radius: 10px;
     padding: 1rem;
     /* border: 1px solid #FFFFFF; */
-    /* outline: 1px solid #0C2191; */
     border: none;
 
+}
+
+.content__quiz input:focus{
+    outline: 2px solid #004DB6;
+    ;
+
+}
+.accord__body{
+    margin-bottom: .5rem;
 }
 
 .accord__header button {
@@ -249,12 +256,25 @@
     /* border: 2px solid red; */
 }
 
+.multiplechoice input:nth-of-type(2){
+    background-color: #EEF5FF;
+    border-radius: 10px;
+    padding: 1rem;
+    /* border: 1px solid #FFFFFF; */
+    border: none;
+}
+
 .multiplechoice svg {
     font-size: 2rem;
     color: #000000;
 }
 
-.textbtn button {
+.textbtn{
+    margin: .5rem 0;
+
+}
+
+.prevbtn  button{
     background-color: #EEF5FF;
     color: #0C2191;
     padding: 0.5rem 1rem;
@@ -264,6 +284,11 @@
     font-size: 12px;
     line-height: 24px;
     margin: .5rem 0;
+}
+
+.prevbtn button a{
+    color: #0C2191;
+
 }
 
 .contenquiz__time {

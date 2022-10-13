@@ -71,7 +71,7 @@ export default function File() {
                 <Box sx={{ width: '100%' }}>
                     <Box sx={{ marginBottom: "2rem"}}>
                         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                            <Tab label="Note" {...a11yProps(0)} />
+                            <Tab label="File" {...a11yProps(0)} />
                             <Tab label="Integration" {...a11yProps(1)} />
                         </Tabs>
                     </Box>
