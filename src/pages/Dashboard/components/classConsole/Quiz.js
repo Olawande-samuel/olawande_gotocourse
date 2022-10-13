@@ -5,12 +5,12 @@ import Console from '../classConsole/index';
 import Accordion from 'react-bootstrap/Accordion';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Link } from 'react-router-dom';
 import { IoIosCheckmarkCircle } from 'react-icons/io';
 import { IoDocumentTextOutline, IoTimeSharp } from 'react-icons/io5';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { InputLabel, MenuItem, FormControl, Select, } from '@mui/material'
 import { RiDeleteBinFill } from 'react-icons/ri';
+import { Link, useLocation } from "react-router-dom";
 
 
 export function Preview() {
@@ -67,70 +67,116 @@ export function Preview() {
 
 
 export default function Quiz() {
+    const { pathname } = useLocation();
+    const bread = pathname?.split("/");
+
+    const studentpath = pathname.split("/")[1] === "console";
+    const suite = pathname.split("/")[2] === "suite";
+    const classroom = pathname.split("/")[2] === "classroom";
+
+    function goBack() {
+        let pathArray = pathname.split("/")[1];
+    
+        switch (pathArray) {
+          case "teacher":
+            return "/teacher";
+          case "student":
+            return "/student";
+          default:
+            return "/admin";
+        }
+      }
     return (
-        
-                <div className=''>
 
+        <div className=''>
+            {!studentpath && !suite && !classroom && (
 
-                    <main className='quiz__contentbody'>
-                        <p className='quiz__title'>Quiz</p>
-
-                        <form action="" className='content__quiz'>
-                            <label htmlFor="Name">Name of Quiz</label>
-                            <input type="text"
-                            // placeholder='Name of Quiz' 
-                            />
-
-                            <label htmlFor="Name">Notes</label>
-                            <input type="text"
-                            // placeholder='Notes' 
-                            />
-                            <small>Users will see this on the page before they start quiz. Should describe the quiz</small>
-
-                            <label htmlFor="date">Quiz deadline</label>
-                            <div className="contenquiz__time">
-                                <input type="date" />
-                                <input type="time" placeholder='Time' />
-
-                            </div>
-                            <small>For quizzes without deadline, use a date far in the future</small>
-
-                            <label htmlFor="time">Time Limit</label>
-                            <input type="time" />
-
-                            <label htmlFor="entries">Number of entries</label>
-                            <input type="number" id='entries' />
-                            <small>How many times can a student retry quiz?</small>
-
-
-
-                            <div className="display">
-
-                                {/* <Accordion defaultActiveKey="0">
-                                <Accordion.Item eventKey="0"> */}
-                                {[...Array(3)].map((x, id) => (
-
-
-                                    < Accordion >
-                                        <Accordion.Item eventKey={id}>
-                                            <Accordion.Header className="accord__header"> Question {id + 1} </Accordion.Header>
-                                            <Accordion.Body>
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                                                minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                                aliquip ex ea commodo consequat. Duis aute irure dolor in
-                                                reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                                                pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                                                culpa qui officia deserunt mollit anim id est laborum.
-                                            </Accordion.Body>
-                                        </Accordion.Item>
-                                    </Accordion>
-
+                <div className="contentbreadcrumb">
+                    <nav arial-label="breadcrumb">
+                        <ol className="breadcrumb">
+                            <li className="breadcrumb-item">
+                                <Link to={goBack(pathname)} style={{ color: "var(--theme-blue", textTransform: "uppercase" }}>
+                                    Dashboard
+                                </Link>
+                            </li>
+                            {bread
+                                .filter((item) => item !== "")
+                                .map((item, idx) => (
+                                    <li className="breadcrumb-item text-uppercase" key={idx}>
+                                        <Link
+                                            style={{ color: "var(--theme-blue" }}
+                                            to={`${bread.slice(0, idx + 2).join("/")}`}
+                                        >
+                                            {item.split("-").join(" ")}
+                                        </Link>
+                                    </li>
                                 ))}
-                            </div>
+                        </ol>
+                    </nav>
+                </div>
+            )
+            }
 
-                            <div className="texteditor quiz__editor">
-                                {/* <CKEditorContext context={Context}>
+
+            <main className='quiz__contentbody'>
+                <p className='quiz__title'>Quiz</p>
+
+                <form action="" className='content__quiz'>
+                    <label htmlFor="Name">Name of Quiz</label>
+                    <input type="text"
+                    // placeholder='Name of Quiz' 
+                    />
+
+                    <label htmlFor="Name">Notes</label>
+                    <input type="text"
+                    // placeholder='Notes' 
+                    />
+                    <small>Users will see this on the page before they start quiz. Should describe the quiz</small>
+
+                    <label htmlFor="date">Quiz deadline</label>
+                    <div className="contenquiz__time">
+                        <input type="date" />
+                        <input type="time" placeholder='Time' />
+
+                    </div>
+                    <small>For quizzes without deadline, use a date far in the future</small>
+
+                    <label htmlFor="time">Time Limit</label>
+                    <input type="time" />
+
+                    <label htmlFor="entries">Number of entries</label>
+                    <input type="number" id='entries' />
+                    <small>How many times can a student retry quiz?</small>
+
+
+
+                    <div className="display">
+
+                        {/* <Accordion defaultActiveKey="0">
+                                <Accordion.Item eventKey="0"> */}
+                        {[...Array(3)].map((x, id) => (
+
+
+                            < Accordion >
+                                <Accordion.Item eventKey={id}>
+                                    <Accordion.Header className="accord__header"> Question {id + 1} </Accordion.Header>
+                                    <Accordion.Body>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                        minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                        aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                        culpa qui officia deserunt mollit anim id est laborum.
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                            </Accordion>
+
+                        ))}
+                    </div>
+
+                    <div className="texteditor quiz__editor">
+                        {/* <CKEditorContext context={Context}>
                                     <h2>Using the CKeditor 5 context feature in React</h2>
                                     <CKEditor
                                         editor={ClassicEditor}
@@ -147,57 +193,57 @@ export default function Quiz() {
 
                                 </CKEditorContext> */}
 
-                                <CKEditor
-                                    editor={ClassicEditor}
-                                    data="<p>Hello from CKEditor 5!</p>"
-                                    onReady={editor => {
-                                        // You can store the "editor" and use when it is needed.
-                                        console.log('Editor is ready to use!', editor);
-                                    }}
-                                    onChange={(event, editor) => {
-                                        const data = editor.getData();
-                                        console.log({ event, editor, data });
-                                    }}
-                                    onBlur={(event, editor) => {
-                                        console.log('Blur.', editor);
-                                    }}
-                                    onFocus={(event, editor) => {
-                                        console.log('Focus.', editor);
-                                    }}
-                                />
+                        <CKEditor
+                            editor={ClassicEditor}
+                            data="<p>Hello from CKEditor 5!</p>"
+                            onReady={editor => {
+                                // You can store the "editor" and use when it is needed.
+                                console.log('Editor is ready to use!', editor);
+                            }}
+                            onChange={(event, editor) => {
+                                const data = editor.getData();
+                                console.log({ event, editor, data });
+                            }}
+                            onBlur={(event, editor) => {
+                                console.log('Blur.', editor);
+                            }}
+                            onFocus={(event, editor) => {
+                                console.log('Focus.', editor);
+                            }}
+                        />
 
-                                <div className="textbtn">
-                                    <button>Add attachment</button>
-                                </div>
-                            </div>
-
-
-                            {/* <FormControl> */}
-
-                            <InputLabel id="answertype-label">Answer Type</InputLabel>
-                            <Select
-                                labelId="answertype-label"
-                                id="answertype"
-                                label="Answer"
-                                className="myselect"
-                            // value={type}
-                            // onChange={(e) => setType(e.target.value)}
-                            >
-                                <MenuItem value="Objective" >
-                                    Objective
-                                </MenuItem>
-                                <MenuItem value="theory">
-                                    Theory
-                                </MenuItem>
-                                <MenuItem value="file">
-                                    File Upload
-                                </MenuItem>
-                            </Select>
-                            {/* </FormControl> */}
+                        <div className="textbtn">
+                            <button>Add attachment</button>
+                        </div>
+                    </div>
 
 
+                    {/* <FormControl> */}
 
-                            {/* <div className="contentquiz__checkbbox">
+                    <InputLabel id="answertype-label">Answer Type</InputLabel>
+                    <Select
+                        labelId="answertype-label"
+                        id="answertype"
+                        label="Answer"
+                        className="myselect"
+                    // value={type}
+                    // onChange={(e) => setType(e.target.value)}
+                    >
+                        <MenuItem value="Objective" >
+                            Objective
+                        </MenuItem>
+                        <MenuItem value="theory">
+                            Theory
+                        </MenuItem>
+                        <MenuItem value="file">
+                            File Upload
+                        </MenuItem>
+                    </Select>
+                    {/* </FormControl> */}
+
+
+
+                    {/* <div className="contentquiz__checkbbox">
 
                                 <legend htmlFor="time">Select the correct answer among the options using the checkbox</legend>
 
@@ -220,54 +266,54 @@ export default function Quiz() {
 
                             </div> */}
 
-                            <div className="contentquiz__checkbbox">
+                    <div className="contentquiz__checkbbox">
 
-                                <legend htmlFor="multiplechoice">Select the correct answer among the options using the checkbox</legend>
-                                {
-                                    [...Array(3)].map((x, id) => (
+                        <legend htmlFor="multiplechoice">Select the correct answer among the options using the checkbox</legend>
+                        {
+                            [...Array(3)].map((x, id) => (
 
-                                        <>
-                                            <div className='multiplechoice'>
-                                                <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
-                                                <input type="text" name="" id="" />
-                                                <RiDeleteBinFill />
+                                <>
+                                    <div className='multiplechoice'>
+                                        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
+                                        <input type="text" name="" id="" />
+                                        <RiDeleteBinFill />
 
-                                            </div>
-                                        </>
-                                    )
-                                    )
-                                }
-
-
-
-                                <div className="textbtn">
-                                    <button>Add Option</button>
-                                </div>
-
-                            </div>
+                                    </div>
+                                </>
+                            )
+                            )
+                        }
 
 
-                            <div className="footerbtn">
-                                <button>Save</button>
-                                <button>New Question</button>
-                            </div>
-
-
-
-
-                        </form>
 
                         <div className="textbtn">
-                            <button><Link to="preview">Preview quiz</Link></button>
-
+                            <button>Add Option</button>
                         </div>
 
+                    </div>
 
-                    </main>
+
+                    <div className="footerbtn">
+                        <button>Save</button>
+                        <button>New Question</button>
+                    </div>
 
 
+
+
+                </form>
+
+                <div className="textbtn">
+                    <button><Link to="preview">Preview quiz</Link></button>
 
                 </div>
+
+
+            </main>
+
+
+
+        </div>
 
     )
 }
