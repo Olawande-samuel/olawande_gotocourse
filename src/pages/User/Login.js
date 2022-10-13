@@ -113,7 +113,7 @@ const Login = () => {
     e.preventDefault();
     let Data= {
       email: data.email,
-      user_type: "student"
+      user_type: "teacher"
     }
 
     pledre.loginUser(Data)
@@ -291,7 +291,7 @@ const Login = () => {
             </button>
           )
         }
-        {/* <button onClick={gotoPledre}>Click me</button> */}
+        <button onClick={gotoPledre}>Click me</button>
       </form>
         <p className="mt-5">
           <span>Do not have an account? </span>

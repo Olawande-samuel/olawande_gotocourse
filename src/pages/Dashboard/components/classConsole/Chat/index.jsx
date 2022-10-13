@@ -100,8 +100,16 @@ const Group = styled.div`
 const ChatGroup = styled.div`
     width: 100%;
     height: 100%;
-`
 
+
+`
+const Createbutton = styled.button`
+    padding: 8px 24px;
+    background-color: var(--theme-blue);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+`
 const GroupTop = styled.div`
     width: 100%;
     color: var(--white);
@@ -450,7 +458,7 @@ const ChatModule = () => {
         return groups.map(g => {return {...g, showActions: false}});
     })
 
-    const tabs = ['Note', 'Active Chat', 'Mail'];
+    const tabs = ['Teams', 'Active Chat', 'Mail'];
 
     function toggleActionsHandler(e, index){
         setNewGroups(old => {
@@ -468,7 +476,7 @@ const ChatModule = () => {
       setValue(newValue);
     };
 
-    const tabContent = [ <ChatTab groups={newGroups} toggle={toggleActionsHandler} />, <div>No Content</div>, <MailTab /> ]
+    const tabContent = [ <ChatTab groups={newGroups} toggle={toggleActionsHandler} setShow={setShow} />, <div>No Content</div>, <MailTab /> ]
     
     return (
         <ChatContainer>
@@ -496,28 +504,19 @@ const ChatModule = () => {
                 ))}
 
             </Tabs>     
-                {
-                    tabContent.map((h, i) =>(
-                    <TabPanel
-                        value={value}
-                        index={i}
-                        style={{ height: "100%", width: "100%", paddingBottom: "1rem" }}
-                        key={i}
-                    >
-                            {h}
-                    </TabPanel>
+            {
+                tabContent.map((h, i) =>(
+                <TabPanel
+                    value={value}
+                    index={i}
+                    style={{ height: "100%", width: "100%", paddingBottom: "1rem" }}
+                    key={i}
+                >
+                        {h}
+                </TabPanel>
 
-                    ))
-                }
-
-            {/* <Tabs>
-                { tabs.map((t, i) => (<Tab $active={i === activeTab ? true : false} onClick={e => setActiveTab(old => i)} key={i}>{t}</Tab>)) }
-            </Tabs>
-            <Chatbody>
-                {
-                    activeTab === 0 ? (<ChatTab groups={newGroups} toggle={toggleActionsHandler} />) : activeTab === 2 ? <MailTab /> : <div>No Content</div>
-                }
-            </Chatbody> */}
+                ))
+            }
         </ChatContainer>
     )
 }
@@ -577,11 +576,12 @@ function MailTab(){
 
 
 
-function ChatTab({groups, toggle}){
+function ChatTab({groups, toggle, setShow}){
     return (
         <ChatGroup>
             <h2>Group</h2>
             <p>Breakout your students into teams to hold discussions, go live and collaborate with one another.</p>
+            <Createbutton onClick={()=> setShow(true)}>Create Group</Createbutton>
             <Groups>
                 {
                     groups.map(({title, description, participants, showActions}, i) => (

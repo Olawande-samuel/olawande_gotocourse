@@ -328,7 +328,7 @@ function App() {
                       <Route path="processed" element={<Processed />} />
                       <Route path="pending" element={<Pending />} />
                     </Route>                    
-                    <Route path="students" element={<p>My students</p>} />
+                    <Route path="classroom" element={<Classroom />} />
                     <Route path="mail" element={<ChatComponent />} />
                     <Route path="file" element={<File />} />
                     <Route path="note" element={<Note />} />

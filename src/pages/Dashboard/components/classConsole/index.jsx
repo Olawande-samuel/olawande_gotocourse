@@ -86,7 +86,7 @@ const iconData = [
     id: 4,
     icon: FaUsers,
     title: "Students",
-    link: "/teacher/class-console/class/students"
+    link: "/teacher/class-console/class/classroom"
   },
 ];
 
