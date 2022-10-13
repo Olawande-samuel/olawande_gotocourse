@@ -1,5 +1,6 @@
 .newHero {
-  background: var(--blue-ish);
+  /* background: var(--blue-ish); */
+  background: #fff;
   height: 100%;
   color: #ffffff;
   font-family: "Inter", sans-serif;
@@ -119,7 +120,7 @@
 
 .newHero_left small,
 .newHero_left p:last-child {
-  text-align: center;
+  text-align: center; 
 }
 
 .newHero_left__button button {

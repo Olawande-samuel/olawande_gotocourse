@@ -509,7 +509,7 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 name="title"
               />
             </FormControl>
-
+            
             <FormControl>
               <InputLabel id="domain-label">Domain</InputLabel>
               <Select
