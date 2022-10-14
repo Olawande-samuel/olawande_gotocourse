@@ -1,7 +1,9 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import {AiOutlineMore, AiOutlineArrowLeft} from "react-icons/ai";
-
+import {MdSearch} from 'react-icons/md';
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 
 import { useEffectOnMount } from "../../../../../hooks";
@@ -403,7 +405,118 @@ const MailBodyMain = styled.div`
 `;
 
 
+const ActiveChatContainer = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+`;
 
+
+const ActiveChatTop = styled.div`
+    display: flex;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const InputContainer = styled.div`
+    width: min(400px, 100% - 8rem);
+    display: flex;
+    align-item: center;
+    border: 1px solid rgba(130, 130, 130, .1);
+    padding: 10px;
+    border-radius: 20px;
+    margin-right: 20px;
+
+
+    & input {
+        padding: 4px;
+        line-height: 2;
+        border: none;
+        outline: none;
+        flex: 1;
+        text-align: center;
+    }
+
+    & svg {
+        font-size: 2.5rem;
+    }
+`;
+
+const Button = styled.button`
+    border: 1px solid var(--textBlue);
+    color: var(--textBlue);
+    padding: 10px 30px;
+    border-radius: 10px;
+    background-color: transparent;
+`;
+
+const ActiveChatBody = styled.div`
+    width: 100%;
+    height: 100%;
+    margin-top: 30px;
+`;
+
+const ActiveChatCard = styled.div`
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 20px;
+
+    & h3 {
+        margin-bottom: 20px;
+    }
+`;
+
+const UserCardContainer = styled.div`
+    display: flex;
+    border: 1px solid rgba(130, 130, 130, .1);
+    width: 100%;
+    cursor: pointer;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, .03);
+    }
+`;
+
+const UserAvatar = styled.span`
+    display:flex;
+    width: 80px;
+    height: 80px;
+    background-color: var(--textBlue);
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 800;
+    border-radius: 50%;
+    color: var(--white);
+`;
+
+const UserInfo = styled.div`
+    margin-left: 20px;
+
+    & h6 {
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+    }
+    & h3 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    & h5 {
+        font-size: 0.9rem;
+        margin: 0;
+        color: var(--gray);
+    }
+    & p {
+        font-size: 0.8rem;
+        margin: 0;
+    }
+`
 
 const ChatModule = () => {
     const [activeTab, setActiveTab] = useState(0);
@@ -437,7 +550,7 @@ const ChatModule = () => {
             </Tabs>
             <Chatbody>
                 {
-                    activeTab === 0 ? (<ChatTab groups={newGroups} toggle={toggleActionsHandler} />) : activeTab === 2 ? <MailTab /> : <div>No Content</div>
+                    activeTab === 0 ? (<ChatTab groups={newGroups} toggle={toggleActionsHandler} />) : activeTab === 2 ? <MailTab /> : activeTab === 1 ? <ActiveChat /> : <div>No Content</div>
                 }
             </Chatbody>
         </ChatContainer>
@@ -452,48 +565,122 @@ function MailTab(){
     return(
         <MailContainer>
             <MailBodyContainer>
-                <MailBody>
-                    <MailBodyTop>
-                        {
-                            tabs.map((t, i) => (<span key={i}>{t}</span>))
-                        }
-                    </MailBodyTop>
-                    <MailBodySecond>
-                        <Options>
-                            <Select>
-                                <option>Helvetica</option>
-                            </Select>
-                            <Select>
-                                <option>25px</option>
-                            </Select>
-                            <Select>
-                                <option>Heading 1</option>
-                            </Select>
-                        </Options>
-                        <Settings>
-                            <Setting>
-                                <b>B</b>
-                            </Setting>
-                            <Setting>
-                                <em>I</em>
-                            </Setting>
-                            <Setting>
-                                😃
-                            </Setting>
-                        </Settings>
-                    </MailBodySecond>
-                    <MailBodyMain>
-                        <textarea rows="15" value={mail} onChange={e => setMail(_ => e.target.value)}></textarea>
-                        <footer>
-                            <span>{mail.length} words</span>
-                        </footer>
-                    </MailBodyMain>
-                </MailBody>
+                <CKEditor
+                    editor={ClassicEditor}
+                    data="<p>Hello from CKEditor 5!</p>"
+                    onReady={editor => {
+                        // You can store the "editor" and use when it is needed.
+                        console.log('Editor is ready to use!', editor);
+                    }}
+                    onChange={(event, editor) => {
+                        const data = editor.getData();
+                        console.log({ event, editor, data });
+                    }}
+                    onBlur={(event, editor) => {
+                        console.log('Blur.', editor);
+                    }}
+                    onFocus={(event, editor) => {
+                        console.log('Focus.', editor);
+                    }}
+                />
             </MailBodyContainer>
             <MailButton>
                 <button>Send mail to all students</button>
             </MailButton>
         </MailContainer>
+    )
+}
+
+
+
+function ActiveChat(){
+    const [activeChats, setActiveChats] = useState([{
+        status: 'Student',
+        fullname: 'Rice Hansel',
+        number: '147-2-101',
+        lastsent: JSON.parse(JSON.stringify(new Date()))
+    }]);
+    const [teachers, setTeachers] = useState([{
+        status: 'Teacher',
+        fullname: 'Gretel Lard',
+        number: '147-2-101',
+    },{
+        status: 'Teacher',
+        fullname: 'Lorde Kim',
+        number: '147-2-101',
+    }]);
+    const [admins, setAdmins] = useState([
+        {
+            status: 'Admin',
+            fullname: 'Ade Clutch',
+            number: '147-2-101',
+        },
+        {
+            status: 'Admin',
+            fullname: 'Mix Maven',
+            number: '147-2-101',
+        },
+        {
+            status: 'Admin',
+            fullname: 'Max Hunt',
+            number: '147-2-101',
+        }
+    ]);
+    return(
+        <ActiveChatContainer>
+            <ActiveChatTop>
+                <InputContainer>
+                    <MdSearch />
+                    <input type="text" name="search" placeholder='Search for student' />
+                </InputContainer>
+                <Button>
+                    Refresh
+                </Button>
+            </ActiveChatTop>
+            <ActiveChatBody>
+                <ActiveChatCard>
+                    <h3>Active Chats</h3>
+                    {
+                        activeChats.map((data, i) => (
+                            <UserCard isChat key={i} {...data} />
+                        ))
+                    }
+                </ActiveChatCard>
+                <ActiveChatCard>
+                    <h3>Teachers</h3>
+                    {
+                        teachers.map((data, i) => (
+                            <UserCard key={i} {...data} />
+                        ))
+                    }
+                </ActiveChatCard>
+                <ActiveChatCard>
+                    <h3>Admins</h3>
+                    {
+                        admins.map((data, i) => (
+                            <UserCard key={i} {...data} />
+                        ))
+                    }
+                </ActiveChatCard>
+            </ActiveChatBody>
+        </ActiveChatContainer>
+    )
+}
+
+
+function UserCard({status, fullname, number, lastsent, isChat}){
+    return(
+        <UserCardContainer>
+            <UserAvatar>
+                {fullname.substring(0, 2)}
+            </UserAvatar>
+            <UserInfo>
+                <h6>{status}</h6>
+                <h3>{fullname}</h3>
+                <h5>{number}</h5>
+                {isChat && <p>Last sent: {lastsent}</p>}
+            </UserInfo>
+        </UserCardContainer>
     )
 }
 
