@@ -7,7 +7,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 
 import { useEffectOnMount } from "../../../../../hooks";
-
+import { Box, Tab, Tabs } from "@mui/material";
+import PropTypes from "prop-types";
 
 
 const groups = [
@@ -30,37 +31,37 @@ const groups = [
 
 
 const ChatContainer = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+    // width: 100%;
+    // height: 100%;
+    // display: flex;
+    // flex-direction: column;
 `;
 
-const Tabs = styled.div`
-    width: 100%;
-    display: flex;
-    padding: 20px;
-`;
+// const Tabs = styled.div`
+//     width: 100%;
+//     display: flex;
+//     padding: 20px;
+// `;
 
-const Tab = styled.span`
-    padding: 5px;
-    border-bottom: 4px solid ${props => props.$active ? 'var(--textBlue)' : 'transparent'};
-    cursor: pointer;
-    width: min(200px, 150px);
-    color: ${props => props.$active ? 'var(--textBlue)' : '#222'};
-    margin-right: 10px;
-    font-size: 1rem;
-    font-weight: ${props => props.$active ? 500: 400};
-    display: inline-block;
-    transition: border-bottom 0.5s ease-out, color 0.5s ease-out;
-    letter-spacing: 0.4px;
+// const Tab = styled.span`
+//     padding: 5px;
+//     border-bottom: 4px solid ${props => props.$active ? 'var(--textBlue)' : 'transparent'};
+//     cursor: pointer;
+//     width: min(200px, 150px);
+//     color: ${props => props.$active ? 'var(--textBlue)' : '#222'};
+//     margin-right: 10px;
+//     font-size: 1rem;
+//     font-weight: ${props => props.$active ? 500: 400};
+//     display: inline-block;
+//     transition: border-bottom 0.5s ease-out, color 0.5s ease-out;
+//     letter-spacing: 0.4px;
 
-    &:hover {
-        border-bottom: 4px solid var(--textBlue);
-        color: var(--textBlue);
-        font-weight: 500;
-    }
-`;
+//     &:hover {
+//         border-bottom: 4px solid var(--textBlue);
+//         color: var(--textBlue);
+//         font-weight: 500;
+//     }
+// `;
 
 
 const Chatbody = styled.div`
@@ -101,8 +102,16 @@ const Group = styled.div`
 const ChatGroup = styled.div`
     width: 100%;
     height: 100%;
-`
 
+
+`
+const Createbutton = styled.button`
+    padding: 8px 24px;
+    background-color: var(--theme-blue);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+`
 const GroupTop = styled.div`
     width: 100%;
     color: var(--white);
@@ -458,6 +467,38 @@ const ActiveChatBody = styled.div`
     height: 100%;
     margin-top: 30px;
 `;
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }} style={{ height: "100%" }}>
+            {children}
+          </Box>
+        )}
+      </div>
+    );
+  }
+  
+  TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+  };
+  
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`,
+    };
+  }
+  
 
 const ActiveChatCard = styled.div`
     width: 100%;
@@ -519,8 +560,9 @@ const UserInfo = styled.div`
 `
 
 const ChatModule = () => {
+
     const [activeTab, setActiveTab] = useState(0);
-    const [show, setShow] = useState(true);
+    const [show, setShow] = useState(false);
     useEffectOnMount(() => {
         console.log('ChatModule is mounted');
         return () => console.log('ChatModule is unmounted');
@@ -529,7 +571,7 @@ const ChatModule = () => {
         return groups.map(g => {return {...g, showActions: false}});
     })
 
-    const tabs = ['Note', 'Active Chat', 'Mail'];
+    const tabs = ['Teams', 'Active Chat', 'Mail'];
 
     function toggleActionsHandler(e, index){
         setNewGroups(old => {
@@ -542,17 +584,53 @@ const ChatModule = () => {
         })
     }
 
+    const [value, setValue] = useState(0);
+    const handleChange = (event, newValue) => {
+      setValue(newValue);
+    };
+
+    const tabContent = [ <ChatTab groups={newGroups} toggle={toggleActionsHandler} setShow={setShow} />, <div>No Content</div>, <MailTab /> ]
+    
     return (
         <ChatContainer>
             {show && <Modal setShow={setShow} />}
-            <Tabs>
-                { tabs.map((t, i) => (<Tab $active={i === activeTab ? true : false} onClick={e => setActiveTab(old => i)} key={i}>{t}</Tab>)) }
-            </Tabs>
-            <Chatbody>
-                {
-                    activeTab === 0 ? (<ChatTab groups={newGroups} toggle={toggleActionsHandler} />) : activeTab === 2 ? <MailTab /> : activeTab === 1 ? <ActiveChat /> : <div>No Content</div>
-                }
-            </Chatbody>
+
+            <Tabs
+                value={value}
+                onChange={handleChange}
+                aria-label="basic tabs example"
+                variant="scrollable"
+                TabIndicatorProps={{sx:{backgroundColor: '#F75C4E'}}} 
+                sx={{
+                "& button": {color:'#F75C4E'},
+                "& button.Mui-selected": {color:'#F75C4E !important', fontWeight: 'bold'},
+                }}
+               
+            >
+      
+                {tabs.map((h, i) => (
+                    <Tab
+                        key={i}
+                        label={h}
+                        className="text-capitalize fw-bold text-dark"
+                        {...a11yProps(i)}
+                    />
+                ))}
+
+            </Tabs>     
+            {
+                tabContent.map((h, i) =>(
+                <TabPanel
+                    value={value}
+                    index={i}
+                    style={{ height: "100%", width: "100%", paddingBottom: "1rem" }}
+                    key={i}
+                >
+                        {h}
+                </TabPanel>
+
+                ))
+            }
         </ChatContainer>
     )
 }
@@ -686,11 +764,13 @@ function UserCard({status, fullname, number, lastsent, isChat}){
 
 
 
-function ChatTab({groups, toggle}){
+
+function ChatTab({groups, toggle, setShow}){
     return (
         <ChatGroup>
             <h2>Group</h2>
             <p>Breakout your students into teams to hold discussions, go live and collaborate with one another.</p>
+            <Createbutton onClick={()=> setShow(true)}>Create Group</Createbutton>
             <Groups>
                 {
                     groups.map(({title, description, participants, showActions}, i) => (

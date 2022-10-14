@@ -43,10 +43,9 @@ import {
   Switch,
 } from "@mui/material";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,useLocation } from "react-router-dom";
 import clsx from "../styles.module.css";
-import { NavLink, useLocation } from "react-router-dom";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
+
 
 const studentIcon = [
   {
@@ -68,21 +67,25 @@ const iconData = [
     id: 1,
     icon: MdMessage,
     title: "Mail",
+    link: "/teacher/class-console/class/mail"
   },
   {
     id: 2,
     icon: MdLibraryAdd,
     title: "Creator suite",
+    link: "/teacher/class-console/class/creator-suite"
   },
   {
     id: 3,
     icon: RiVideoAddFill,
     title: "Live Class",
+    link: "/teacher/live-class "
   },
   {
     id: 4,
     icon: FaUsers,
     title: "Students",
+    link: "/teacher/class-console/class/classroom"
   },
 ];
 
@@ -139,18 +142,10 @@ export const Console = ({ children }) => {
       classConsole: { ...classConsole, sidebar: !classConsole.sidebar },
     });
 
-  const NoteAndFile =
-    pathname.split("/")[2] === "note"
-      ? "Note"
-      : pathname.split("/")[2] === "file"
-        ? "File"
-        : "";
-        const studentpath = pathname.split("/")[1] === "console";
-        const suite = pathname.split("/")[2] === "suite";
-        const classroom = pathname.split("/")[2] === "classroom";
-        const quizpath = pathname.split("/")[2] === "myclasses" ? "My Classes" : pathname.split("/")[2] === "liveclass" ? "Live Class" : pathname.split("/")[2]
 
-  const bread = pathname?.split("/");
+  const studentpath = pathname.split("/")[1] === "console";
+  const quizpath = pathname.split("/")[2] === "myclasses" ? "My Classes" : pathname.split("/")[2] === "liveclass" ? "Live Class" : pathname.split("/")[2]
+
 
   return (
     <div className={style.console}>
@@ -198,51 +193,7 @@ export const Console = ({ children }) => {
 
             )}
 
-          {NoteAndFile && NoteAndFile !== "" && (
-            <div className="contentcategory">
-              <NavLink
-                to="file"
-                className={({ isActive }) => (isActive ? "active" : undefined)}
-              >
-                {NoteAndFile}
-              </NavLink>
-              <NavLink
-                to="integration"
-                className={({ isActive }) => (isActive ? "active" : undefined)}
-              >
-                Integration
-              </NavLink>
-            </div>
-          )}
 
-          {
-            !studentpath && !suite && !classroom &&(
-
-              <div className="contentbreadcrumb">
-                <nav arial-label="breadcrumb">
-                  <ol className="breadcrumb">
-                    <li className="breadcrumb-item">
-                      <Link to={goBack(pathname)} style={{ color: "var(--theme-blue", textTransform: "uppercase" }}>
-                        Dashboard
-                      </Link>
-                    </li>
-                    {bread
-                      .filter((item) => item !== "")
-                      .map((item, idx) => (
-                        <li className="breadcrumb-item text-uppercase" key={idx}>
-                          <Link
-                            style={{ color: "var(--theme-blue" }}
-                            to={`${bread.slice(0, idx + 2).join("/")}`}
-                          >
-                            {item.split("-").join(" ")}
-                          </Link>
-                        </li>
-                      ))}
-                  </ol>
-                </nav>
-              </div>
-            )
-          }
         </section>
         {children}
       </main>
@@ -261,10 +212,12 @@ export const Console = ({ children }) => {
           )
             :
             (
-              iconData.map(({ title, id, icon: Icon }) => (
+              iconData.map(({ title, id, icon: Icon, link }) => (
                 <Tooltip title={title} key={id}>
                   <IconButton>
-                    <Icon size="1.5rem" color="#0C2191" />
+                    <Link to={link} className="d-inline-flex">
+                      <Icon size="1.5rem" color="#0C2191" />
+                    </Link>
                   </IconButton>
                 </Tooltip>
               ))
@@ -338,9 +291,12 @@ function Sidebar({ Toggle, side }) {
             <>
               <div className={style.course_content}>
                 <p>Course content</p>
-                <Accord />
-                <Accord />
-                <Accord />
+                {
+                  classConsole.domains.map(domain=>(
+                    <Accord  {...domain} />
+
+                  ))
+                }
               </div>
               <div className={`${style.create_content_button} ${style.white}`}>
                 <button onClick={Toggle}>
@@ -411,7 +367,7 @@ function Sidebar({ Toggle, side }) {
   );
 }
 
-function Accord() {
+function Accord({domain, content, moduleId}) {
   const data = [
     {
       id: 1,
@@ -448,7 +404,7 @@ function Accord() {
             <BiCaretRight onClick={() => showDetails(!details)} />
           )}
         </i>
-        <span>Test</span>
+        <span>{domain}</span>
         <i>
           <BsThreeDotsVertical />
         </i>
@@ -456,7 +412,7 @@ function Accord() {
 
       {details && (
         <ul className={style.content_list}>
-          {data.map(({ icon: Icon, title, link, id, type }) => (
+          {content.map(({ icon: Icon, title, link, id, type }) => (
             <li key={id}>
               <Link to={`${type}`}>
                 <i>
@@ -478,7 +434,22 @@ export function ModalContent({ show, handleClose, toggleModule }) {
   const [type, setType] = useState("file");
   let ref = useRef();
 
+  const [formstate, setFormstate]= useState({});
+
+  const {generalState, setGeneralState, generalState: { classConsole}} = useAuth();
   console.log("modal show", { show });
+
+  function handleChange(e){
+    setFormstate({...formstate, [ e.target.name]: e.target.value, type: type})
+  }
+  
+  function addContent(){
+
+    console.log("clicked")
+    let selectedDomain = classConsole.domains.find(d => d.domain === formstate.domain)
+    selectedDomain.content = [...selectedDomain.content, formstate]
+    console.log({selectedDomain})
+  }
   return (
     <div>
       <Modal show={show} onHide={handleClose}>
@@ -498,6 +469,12 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 value={type}
                 onChange={(e) => setType(e.target.value)}
               >
+                <MenuItem value="">
+                  <i>
+                    <MdAttachFile />
+                  </i>
+                  Select Content
+                </MenuItem>
                 <MenuItem value="file">
                   <i>
                     <MdAttachFile />
@@ -526,9 +503,12 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 label="Content Title"
                 variant="outlined"
                 placeholder="Content Title"
+                onChange={handleChange}
+                value={formstate.title}
+                name="title"
               />
             </FormControl>
-
+            
             <FormControl>
               <InputLabel id="domain-label">Domain</InputLabel>
               <Select
@@ -537,18 +517,18 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 label="Domain"
                 className="myselect"
                 ref={ref}
-              // MenuProps={{
-              //     style: {
-              //         zIndex: 4000
-              //     }
-              // }}
-              // value={type}
-              // onChange={(e) => setType(e.target.value)}
+                onChange={handleChange}
+                name="domain"
+                value={formstate.domain}
               >
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value="test">Test</MenuItem>
+                {
+                  classConsole.domains?.map(domain =>(
+                    <MenuItem value={domain.domain}>{domain.domain}</MenuItem>
+                  ))
+                }
 
                 <button className={style.modulebtn} onClick={toggleModule}>
                   + New Module
@@ -616,7 +596,7 @@ export function ModalContent({ show, handleClose, toggleModule }) {
               )}
             </div>
 
-            <button className={style.contentform__btn}>Submit</button>
+            <button className={style.contentform__btn} onClick={addContent}>Submit</button>
           </div>
         </Modal.Body>
         {/* <Modal.Footer>
@@ -635,6 +615,17 @@ export function ModalContent({ show, handleClose, toggleModule }) {
 export function ModuleModal({ moduleOpen, moduleClose }) {
   console.log("small modal show", { moduleOpen });
   console.log("small close show", { moduleClose });
+  const {generalState, generalState:{classConsole}, setGeneralState} = useAuth()
+  const [formstate, setFormstate]= useState({})
+
+  function handleChange(e){
+    setFormstate({...formstate, [e.target.name]: e.target.value, content:[]})
+  }
+  function createModule(){
+    setGeneralState({...generalState, classConsole: {...generalState.classConsole, domains: [...generalState.classConsole.domains, formstate]}})
+    moduleClose()
+  }
+  console.log({generalState})
   return (
     <div>
       <Modal show={moduleOpen} onHide={moduleClose} className="modulemodal">
@@ -656,6 +647,8 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
                 label="Domain Name"
                 variant="outlined"
                 placeholder="Domain Name"
+                onChange={handleChange}
+                name="domain"
               />
 
               <TextField
@@ -664,11 +657,13 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
                 label="Domain description"
                 variant="outlined"
                 placeholder="Domain Description(optional)"
+                onChange={handleChange}
+                name="description"
               />
             </FormControl>
 
             <div className="contentbutton">
-              <button className="" onClick={() => console.log("clicking")}>
+              <button className="" onClick={createModule}>
                 Submit
               </button>
             </div>

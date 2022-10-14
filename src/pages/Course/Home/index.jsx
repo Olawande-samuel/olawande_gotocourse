@@ -168,17 +168,7 @@ const Course = () => {
                 if(!success) throw new AdvancedError(message, statusCode);
                 else {
                     const {data} = res;
-                    
                     setCourses(_ =>  [...data]);
-                    toast.success(message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
                 }
             }catch(err){
                 toast.error(err.message, {
@@ -197,7 +187,8 @@ const Course = () => {
 
 
     function gotoCourseHandler(e, name){
-        navigate(`${encodeURIComponent(name)}`)
+        console.log(encodeURIComponent(name))
+        navigate(encodeURIComponent(name))
     }
 
 
@@ -210,10 +201,10 @@ const Course = () => {
                         <BreadcrumbLink to="/">
                             Home
                         </BreadcrumbLink>
-                        <BreadcrumbLink to="/categories/all">
+                        <BreadcrumbLink to="/categories">
                             Categories
                         </BreadcrumbLink>
-                        <BreadcrumbLink to={`/category/${encodeURIComponent(category.name)}`}>
+                        <BreadcrumbLink to={`/categories/${encodeURIComponent(category.name)}`}>
                             {capitalize(category.name)}
                         </BreadcrumbLink>
                         <BreadcrumbLink to="#" $isCurrentPage>

@@ -2681,7 +2681,7 @@ export function Courses() {
                         id={courseId}
                         showDetailsHandler={showDetailsHandler}
                         packages={packages}
-                        date={`${getDate(startDate)} - ${getDate(endDate)}`}
+                        date={`${startDate ? getDate(startDate):""} - ${endDate ? getDate(endDate):""}`}
                         isActive={status === "active" ? true : false}
                       />
                     )

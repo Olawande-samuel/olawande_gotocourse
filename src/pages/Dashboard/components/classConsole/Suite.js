@@ -6,6 +6,32 @@ import {
     BsThreeDotsVertical,
   } from "react-icons/bs";
   import { AiOutlineSearch } from 'react-icons/ai';
+  import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { Link, useLocation } from "react-router-dom";
+
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box sx={{ p: 3 }}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
 
 
 export function Processed() {
@@ -58,6 +84,19 @@ export function Pending() {
 }
 
 export default function Suite() {
+    const [value, setValue] = useState(0);
+
+    function a11yProps(index) {
+        return {
+            id: `simple-tab-${index}`,
+            'aria-controls': `simple-tabpanel-${index}`,
+        };
+    }
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
     return (
         <div className=''>
             <main className='suite'>
@@ -89,14 +128,25 @@ export default function Suite() {
 
                 </div>
 
-                <div className="suite__nav">
-                    <NavLink to={`processed`} className={({ isActive }) => (isActive ? "suite__navactive" : undefined)}>
-                        Processed
-                    </NavLink>
-                    <NavLink to={"pending"} className={({ isActive }) => (isActive ? "suite__navactive" : undefined)}>Pending</NavLink>
-                </div>
 
-                <Outlet />
+                 <Box sx={{ width: '100%' }}>
+                <Box >
+                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                        <Tab label="Processed" {...a11yProps(0)} />
+                        <Tab label="Pending" {...a11yProps(1)} />
+                    </Tabs>
+                </Box>
+               
+
+
+                <TabPanel value={value} index={0}>
+                    <Processed/>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                    <Pending/>
+                </TabPanel>
+
+            </Box>
 
 
 

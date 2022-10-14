@@ -223,7 +223,7 @@ function Hero() {
       img:critical_skills,
       color:"#F75C4E",
       link:"/signup",
-      link_btn:"Register now"
+      link_btn:"Register for free"
     },
     {
       id: 3,
@@ -243,7 +243,7 @@ function Hero() {
       social: true,
       acctype: "affiliate",
       img:tell,
-      color:"#FDB6B0",
+      color:"#A1B0FF",
       link:"/lounge",
       link_btn:"Get started now"
     },

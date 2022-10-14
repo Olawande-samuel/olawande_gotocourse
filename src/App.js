@@ -84,8 +84,11 @@ import Loader from "./components/Loader";
 import CheckList from "./pages/Teacher/checkList";
 import Events from "./pages/Events";
 import Business from "./Business/pages/landing/business";
-// import Console from "./pages/Dashboard/components/classConsole";
-import Content, { FileComponent, NoteComponent, QuizComponent, ChatComponent } from "./pages/Dashboard/components/classConsole/Content";
+import File from "./pages/Dashboard/components/classConsole/File";
+import Note from "./pages/Dashboard/components/classConsole/Note";
+
+import Content, { ChatComponent } from "./pages/Dashboard/components/classConsole/Content";
+
 import Quiz, { Preview } from "./pages/Dashboard/components/classConsole/Quiz";
 import Suite, {Processed, Pending} from "./pages/Dashboard/components/classConsole/Suite";
 import Classroom from "./pages/Dashboard/components/classConsole/Classroom";
@@ -99,6 +102,7 @@ import ConsoleClasses, { MyClass } from "./pages/Dashboard/components/classConso
 import ConsoleAssessments from "./pages/Dashboard/components/classConsole/ConsoleAssessments";
 import { CreateRoom, VideDiv } from "./utils/video";
 import Detail from "./pages/Course/Details";
+import AllCourses from "./pages/Courses/allcourses/AllCourses";
 
 
 
@@ -158,11 +162,7 @@ function App() {
               <Route path="teaching-policy" element={<TeachingPolicy />} />
               <Route path="about-us" element={<About />} />
               <Route path="contact-us" element={<Contact />} />
-              <Route path="categories/all" element={<CategoryHome />} />
-              <Route path="category/:name" element={<CategoryDetail />} />
-              <Route path="category/:name/courses" element={<CoursesHome />} />
-              <Route path="category/:name/courses/:course" element={<CourseDetails />} />
-              {/* <Route path="bootcamp-training" element={<TrainingBootcamp />} /> */}
+              <Route path="courses" element={<AllCourses />} />
               <Route path="forgot-password" element={<ForgotPassword />} />
               <Route path="change-password" element={<ResetPassword />} />
               <Route path="become-a-teacher" element={<BecomeATeacher />} />
@@ -170,7 +170,17 @@ function App() {
               <Route path="tester" element={<CreateRoom />} />
               <Route path="video-chat" element={<VideDiv />} />
 
-
+              <Route path="categories" element={<Out />}>
+                <Route index element={<CategoryHome />} />
+                <Route path=":id" element={<Out />}  >
+                  <Route index element={<CategoryDetail />} />
+                  <Route path="courses" element={<CoursesHome />} />
+                  <Route path="courses/:profile" element={<Out />}>
+                    <Route index element={<Detail />} />
+                    <Route path="payment" element={<Payment />} />
+                  </Route>
+                </Route>
+              </Route>
 
               <Route path="bootcamp-training" element={<NewBootcampDetailsComponent />} />
               <Route path="bootcamp" element={<Bootcamp />} />
@@ -232,19 +242,14 @@ function App() {
               </Route>
 
               <Route path="test" element={<Content />}>
-                <Route path="file" element={<FileComponent />} />
-                <Route path="note" element={<NoteComponent />} />
+                <Route path="file" element={<File />} />
+                <Route path="note" element={<Note />} />
                 <Route path="classroom" element={<Classroom />} />
                 <Route path='chat' element={<ChatComponent />} />
-
-                <Route path="suite" element={<Suite />}>
-                <Route index element={<Processed />} />
-                <Route path="processed" element={<Processed />} />
-                  <Route path="pending" element={<Pending />} />
-                </Route>
-
+                <Route path="suite" element={<Suite />} />
+                
                 <Route path="quiz" element={<Out />}>
-                  <Route index element={<QuizComponent />} />
+                  <Route index element={<Quiz />} />
                   <Route path="preview" element={<Preview />} />
                 </Route>
               </Route>
@@ -256,7 +261,6 @@ function App() {
                 </Route>
                 <Route path="assessments" element={<ConsoleAssessments />} />
                 <Route path="liveclass" element={<Out />} />
-
               </Route>
 
 
@@ -312,11 +316,21 @@ function App() {
                 </Route>
                 <Route path="class-console" element={<Out />}>
                   <Route index element={<ConsoleClass />} />
-                  <Route path=":id" element={<Content />}>
-                    <Route path="file" element={<FileComponent />} />
-                    <Route path="note" element={<NoteComponent />} />
+                  <Route path="class" element={<Content />}>
+                    <Route index element={<File />}  />
+
+                    <Route path="creator-suite" element={<Suite />}>
+                      <Route index element={<Processed />} />
+                      <Route path="processed" element={<Processed />} />
+                      <Route path="pending" element={<Pending />} />
+                    </Route>                    
+                    <Route path="classroom" element={<Classroom />} />
+
+                    <Route path="mail" element={<ChatComponent />} />
+                    <Route path="file" element={<File />} />
+                    <Route path="note" element={<Note />} />
                     <Route path="quiz" element={<Out />}>
-                      <Route index element={<QuizComponent />} />
+                      <Route index element={<Quiz />} />
                       <Route path="preview" element={<Preview />} />
                     </Route>
                   </Route>
@@ -344,22 +358,7 @@ function App() {
 
 
 
-              <Route path="categories" element={<Out />}>
-                {/* <Route index element={<Categories  />} /> */}
-                <Route index element={<CategoryHome />} />
-                <Route path=":id" element={<Out />}  >
-                  {/* <Route index element={<CourseDetail />} /> */}
-                  <Route index element={<CategoryDetail />} />
-                  <Route path="courses" element={<CourseList />} />
-                  <Route path="courses/:profile" element={<Out />}>
-                    {/* <Route index element={<CourseProfile />} /> */}
-                    <Route index element={<Detail />} />
-                    {/* <Route index element={<NewCourseProfile />} /> */}
-                    <Route path="payment" element={<Payment />} />
-                  </Route>
-                </Route>
-              </Route>
-
+             
 
               <Route path="admin">
                 <Route path="" element={<AdminDashboard />} />
@@ -388,13 +387,25 @@ function App() {
                 <Route path="settings" element={<Settings />} />
                 <Route path="earnings" element={<AdminEarning />} />
                 <Route path="affiliate" element={<AdminAffiliate />} />
-                <Route path="class-console" element={<Out />}>
+                {/* <Route path="class-console" element={<Out />}>
                   <Route index element={<AdminClassConsole />} />
                   <Route path=":id" element={<Content />}>
                     <Route path="file" element={<FileComponent />} />
                     <Route path="note" element={<NoteComponent />} />
                     <Route path="quiz" element={<Out />}>
                       <Route index element={<QuizComponent />} />
+                      <Route path="preview" element={<Preview />} />
+                    </Route>
+                  </Route>
+                </Route> */}
+
+                <Route path="class-console" element={<Out />}>
+                  <Route index element={<AdminClassConsole />} />
+                  <Route path=":id" element={<Content />}>
+                    <Route path="file" element={<File />} />
+                    <Route path="note" element={<Note />} />
+                    <Route path="quiz" element={<Out />}>
+                      <Route index element={<Quiz />} />
                       <Route path="preview" element={<Preview />} />
                     </Route>
                   </Route>

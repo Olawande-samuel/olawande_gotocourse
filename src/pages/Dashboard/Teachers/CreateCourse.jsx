@@ -92,8 +92,8 @@ export const Syllabus = ({
           setFormstate(courseData)
           if(courseData.courseImg){
             const imgArr = courseData.courseImg.split("/").slice(-1)
-            const startDate = new Date(courseData.startDate).toISOString().split('T')[0]
-            const endDate= new Date(courseData.endDate).toISOString().split('T')[0]
+            const startDate = courseData.startDate ? new Date(courseData.startDate).toISOString().split('T')[0] : ""
+            const endDate= courseData.endDate ? new Date(courseData.endDate).toISOString().split('T')[0] : ""
             setFormstate({...courseData, courseImg: imgArr[0], startDate, endDate})
           }
         }
