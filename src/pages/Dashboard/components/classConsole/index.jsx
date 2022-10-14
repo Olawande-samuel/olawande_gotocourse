@@ -45,6 +45,8 @@ import {
 
 import { Link, useNavigate,useLocation } from "react-router-dom";
 import clsx from "../styles.module.css";
+import { AdvancedError } from "../../../../classes";
+import { toast, ToastContainer } from "react-toastify";
 
 
 const studentIcon = [
@@ -394,6 +396,19 @@ function Accord({domain, content, moduleId}) {
     },
   ];
   const [details, showDetails] = useState(false);
+
+  function IconType(icon){
+    switch (icon) {
+      case "quiz":
+        return <VscNote />
+      case "note":
+        return <MdOutlineNote />
+      case "file":
+        return <AiOutlinePaperClip />
+      default:
+        break;
+    }
+  }
   return (
     <div className={style.content_item}>
       <div className={style.content_item_top}>
@@ -416,10 +431,10 @@ function Accord({domain, content, moduleId}) {
             <li key={id}>
               <Link to={`${type}`}>
                 <i>
-                  <Icon />
+                  {IconType(type)}
                 </i>
                 <span>{title}</span>
-                {/* <i><BsThreeDotsVertical /></i> */}
+                <i><BsThreeDotsVertical /></i>
               </Link>
             </li>
           ))}
@@ -444,14 +459,20 @@ export function ModalContent({ show, handleClose, toggleModule }) {
   }
   
   function addContent(){
+    if(!formstate.domain){
+      toast.error("Please select a domain") 
+      throw new AdvancedError("Please select a domain", 0)
+    }
 
     console.log("clicked")
     let selectedDomain = classConsole.domains.find(d => d.domain === formstate.domain)
     selectedDomain.content = [...selectedDomain.content, formstate]
+    handleClose()
     console.log({selectedDomain})
   }
   return (
     <div>
+     
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton className={style.modal__header}>
           <Modal.Title className={style.modal__title}>Add Content</Modal.Title>
@@ -469,10 +490,8 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 value={type}
                 onChange={(e) => setType(e.target.value)}
               >
-                <MenuItem value="">
-                  <i>
-                    <MdAttachFile />
-                  </i>
+                
+                <MenuItem  value="Select Content Type" defaultValue>
                   Select Content
                 </MenuItem>
                 <MenuItem value="file">
@@ -520,6 +539,7 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 onChange={handleChange}
                 name="domain"
                 value={formstate.domain}
+                required
               >
                 <MenuItem value="">
                   <em>None</em>
