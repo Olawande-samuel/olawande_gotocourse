@@ -315,6 +315,7 @@ export function Intermission() {
     function joinLiveClass(){
         // navigate(`/video-chat?room=${roomid}`, {
         //     state: {
+          
         //         roomId: roomid,
         //         owner: true
         //     }
