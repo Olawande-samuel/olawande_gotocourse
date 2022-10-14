@@ -148,6 +148,7 @@ export function ScheduleClass({ open, setOpen }) {
     startTime: "",
     endTime: "",
   });
+  const [loading, setLoading]= useState(false)
 
   function handleChange(e) {
     setFormstate({ ...formstate, [e.target.name]: e.target.value });
@@ -160,30 +161,39 @@ export function ScheduleClass({ open, setOpen }) {
       throw new AdvancedError("All fields are required", 0);
     }
     
-    
-    const res = await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
-        roomName: "myroom",
-        userId: user.userId
-    })
-    
-    console.log(res.data.data)
-
-    res.data.success && toast.success("Schedule created successfully")
-
-    localStorage.setItem("video-room", res.data.data._id)
-
-    setGeneralState({
-      ...generalState,
-      scheduledClasses: [...generalState.scheduledClasses, {...formstate, roomid: res.data.data._id}],
-    });
-
-    setFormstate({
-        startDate: "",
-        endDate: "",
-        startTime: "",
-        endTime: "",
-    });
-    setOpen(false);
+    try {
+      setLoading(true)
+      const res = await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
+          roomName: "myroom",
+          userId: "629a6a268034834a935aa518"
+          // userId: user.userId
+      })
+      
+      console.log(res.data.data)
+  
+      res.data.success && toast.success("Schedule created successfully")
+  
+      localStorage.setItem("video-room", res.data.data._id)
+  
+      setGeneralState({
+        ...generalState,
+        scheduledClasses: [...generalState.scheduledClasses, {...formstate, roomid: res.data.data._id}],
+      });
+  
+      setFormstate({
+          startDate: "",
+          endDate: "",
+          startTime: "",
+          endTime: "",
+      });
+      setOpen(false);
+      
+    } catch (error) {
+      console.error(error)
+      toast.error(error.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -303,12 +313,13 @@ export function Intermission() {
   
     const roomid = getItem("gotocourse-roomid")
     function joinLiveClass(){
-        navigate(`/video-chat?room=${roomid}`, {
-            state: {
-                roomId: roomid,
-                owner: true
-            }
-        })  
+        // navigate(`/video-chat?room=${roomid}`, {
+        //     state: {
+        //         roomId: roomid,
+        //         owner: true
+        //     }
+        // })  
+        navigate("/teacher/live-class/live")  
     }
   return (
     <section className={style.intermission}>

@@ -315,9 +315,7 @@ export default function Quiz() {
                                                                         </div>
 
                                                                     ))
-
                                                                 }
-
 
                                                                 <div className="prevbtn">
                                                                     <button onClick={(e) => {
