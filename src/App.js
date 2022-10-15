@@ -240,7 +240,6 @@ function App() {
                   <Route path="connect" element={<Intermission />} />
                 </Route>
               </Route>
-
               <Route path="test" element={<Content />}>
                 <Route path="file" element={<File />} />
                 <Route path="note" element={<Note />} />

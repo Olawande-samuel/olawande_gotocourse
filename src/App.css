@@ -2348,17 +2348,17 @@ input[type="password"], input[type="text"], input[type="email"] {
 }
 
 /* ck editor */
-.ck.ck-editor__top {
+/* .ck.ck-editor__top {
   display: none;
-}
+} */
 
 .ck.ck-editor__main{
-  height: 150px;
+  height: 180px;
   border-radius:8px;
 }
 
 .ck.ck-editor__main .ck-content {
-  height:150px;
+  height:180px;
   border-radius:8px;
   font-size: 14px;
 }

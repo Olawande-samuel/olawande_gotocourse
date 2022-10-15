@@ -1824,15 +1824,15 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
 
             const unread = res.data.data?.filter((messages) => messages.status === "unread")
             if (unread.length > 0) {
-                toast.info(`You have ${unread.length} messages `, {
-                    position: "top-right",
-                    autoClose: 3000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                })
+                // toast.info(`You have ${unread.length} messages `, {
+                //     position: "top-right",
+                //     autoClose: 3000,
+                //     hideProgressBar: true,
+                //     closeOnClick: true,
+                //     pauseOnHover: true,
+                //     draggable: true,
+                //     progress: undefined,
+                // })
             }
         }
     })

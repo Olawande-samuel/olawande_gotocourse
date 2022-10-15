@@ -14,6 +14,8 @@ import vector from "../../../images/vector.png";
 import UploadForm from "../../../components/UploadForm";
 import  {PreviewModal, Teachers} from "./index"
 import { BiTrash } from "react-icons/bi";
+import { CareerModal } from "../Admin";
+import Editor from "../components/Editor";
 
 
 export const Syllabus = ({
@@ -94,17 +96,19 @@ export const Syllabus = ({
             const imgArr = courseData.courseImg.split("/").slice(-1)
             const startDate = courseData.startDate ? new Date(courseData.startDate).toISOString().split('T')[0] : ""
             const endDate= courseData.endDate ? new Date(courseData.endDate).toISOString().split('T')[0] : ""
-            setFormstate({...courseData, courseImg: imgArr[0], startDate, endDate})
+            setFormstate({...courseData, courseImg: imgArr[0], startDate, endDate, careerList : courseData.careerList ? courseData.careerList : [] })
           }
         }
       }
     },[courseData.category])
 
     const { syllabuses, addtoSyllabus, setSyllabusses } = useSyllabus();
-    const [faq, setFaq] = useState(formstate?.faqs ?? []);
-    const [packageList, setPackageList] = useState([]);
+    const [bio, setBio] = useState("");
     const [instructorsList, setInstructorsList] = useState([]);
-  
+    const [showCareerModal, setShowCareerModal] = useState(false);
+    const [careerlist, setCareerlist] = useState({
+      name: "",
+    });
     const [categories, setCategories] = useState([]); 
     const [openImage, setOpenImage] = useState(false);
     const [openPackage, setOpenPackage] = useState(false);
@@ -138,6 +142,7 @@ export const Syllabus = ({
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
+    
     if(formstate?.courseId){
       try {
         let currentInstructor= [];
@@ -145,39 +150,25 @@ export const Syllabus = ({
         let formdata = {
           ...formstate,
           type:"PACKAGE",
+          description: bio,
           instructors:[...instructorsList, ...currentInstructor],
           categoryName: formstate.category
         }
         delete formdata.category
-        if ( formstate.name === "" || formstate.categoryName === "" || formstate.description === "" ) throw new AdvancedError("All fields are required", 0);
+        if ( formdata.name === "" || formdata.categoryName === "" || formdata.description === "" ) throw new AdvancedError("All fields are required", 0);
+        
         const res = type === "admin" ?
           await adminUpdateCourse( userdata?.token, formstate?.courseId,  formdata) 
         : await updateCourse( userdata?.token, formstate?.courseId, formdata, userdata.token );
 
         const { success, message, statusCode } = res;
-        if (!success) throw new AdvancedError(message, statusCode);
+        if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
         else {
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.success(message);
           navigate(type === "admin"? "/admin/courses":"/teacher/courses")
         }
       } catch (err) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       } finally {
         setLoading((_) => false);
       }
@@ -253,15 +244,7 @@ export const Syllabus = ({
             throw new AdvancedError(message, statusCode);
           const { data } = res;
           setCategories(data);
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+         
         } catch (err) {
           toast.error(err.message, {
             position: "top-right",
@@ -289,12 +272,6 @@ export const Syllabus = ({
   const handleClose = () => {
     setOpen(false);
   };
-  const openPackageModal = () => {
-    setOpenPackage(true);
-  };
-  const openInstructorModal = () => {
-    setOpenInstructor(true);
-  };
   const handleClosePackage = () => {
     setOpenPackage(false);
   };
@@ -313,19 +290,11 @@ export const Syllabus = ({
   function showUploadFormHandler() {
     setOpenImage((_) => true);
   }
-  function filterPackage(title, index) {
-    setPackageFilter(index);
-  }
+ 
   function deleteSyllabus(e){
     let newSyllabusArr = formstate.syllabus.filter((item, index) => (item.title + index) !== e)
     setFormstate({...formstate, syllabus:newSyllabusArr})
 
-  }
-  function deletePackage(e){
-    console.log(e)
-    let newPackageList = formstate.packages.filter((item, index) => (item.title + index) !== e)
-    console.log(newPackageList)
-    setFormstate({...formstate, packages:newPackageList})
   }
 
   function removeTeacher(e){
@@ -336,8 +305,48 @@ export const Syllabus = ({
     let faq = formstate.faqs.filter((item, index)=>(item.title + index) !== e)
     setFormstate({...formstate, faqs: faq})
   }
+  function careerChangeHandler(e) {
+    const { name, value } = e.target;
+    setCareerlist((old) => {
+      return {
+        ...old,
+        [name]: value,
+      };
+    });
+  }
+  function updateCareerHandler(e) {
+    if (careerlist.name.trim() !== "" || careerlist.description.trim() !== "") {
+      setFormstate({...formstate, careerList: [...formstate.careerList, careerlist]});
+      
+      setCareerlist((_) => {
+        return {
+          name: "",
+        };
+      });
 
+      setShowCareerModal((_) => false);
 
+      toast.success("Career added successfully", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else {
+      toast.error("All fields are required", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
 
     return (
      <>
@@ -387,39 +396,8 @@ export const Syllabus = ({
                     ))}
                 </select>
               </div>
-  
-              <div className={clsx.form_group}>
-                <label htmlFor={"brief"}>
-                  Brief Description of course content
-                </label>
-                <textarea
-                  rows="5"
-                  name="description"
-                  value={formstate.description}
-                  onChange={changeHandler}
-                  className="generic_input"
-                ></textarea>
-              </div>
-              {/* <div className="d-flex flex-wrap" style={{ gap: ".5rem" }}>
-                <div className="col-sm-4">
-                  <Input
-                    label="Start Date"
-                    name="startDate"
-                    type="date"
-                    handleChange={changeHandler}
-                    value={formstate.startDate }
-                  />
-                </div>
-                <div className="col-sm-4">
-                  <Input
-                    label="End Date"
-                    name="endDate"
-                    type="date"
-                    handleChange={changeHandler}
-                    value={formstate.endDate}
-                  />
-                </div>
-              </div> */}
+                <Editor initialState={formstate.description} title="Brief Description of course content" setBio={setBio} />
+
               {/* <div className={clsx.form_group}>
                 <label htmlFor={"package"} className="form-label generic_label">
                   Packages
@@ -484,46 +462,39 @@ export const Syllabus = ({
               >
                 Add Syllabus
               </button>
-              {/* {
-                type === "admin" && (
-                  <>
-                    {location.search &&
-                   <div className={clsx.form_group}>
-                    <label htmlFor={"package"} className="form-label generic_label">
-                      Current Instructors
-                    </label>
-                    {formstate.instructors?.length > 0 ? (
-                      formstate.instructors?.map((item, i) => ( <Syllabus key={i} title={item.name} deleteOption={removeTeacher} index={item.tutorId} />) )
-                    ) : (
-                      <h6>No instructor</h6>
-                    )}
-                    </div>
-                  }
-                  
-                  <div className={clsx.form_group}>
-                    <label htmlFor={"package"} className="form-label generic_label">
-                      New Instructors
-                    </label>
-                    {instructorsList.length > 0 ? (
-                      instructorsList.map((item, i) => <p key={1}>{item}</p>)
-                    ) : (
-                      <h6>No instructor</h6>
-                    )}
-                  </div>
-      
-                  <button
-                    className="btn btn-primary my-3"
-                    style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
-                    type="button"
-                    onClick={openInstructorModal}
-                  >
-                    Add Instructor
-                  </button>
-                  </>
-                )
-              } */}
-
               <div className={clsx.form_group}>
+              <label>Career Prospect</label>
+              {formstate.careerList?.length !== 0 ? (
+                formstate.careerList?.map(({ name }, i) => (
+                  <Syllabus key={i} title={name} />
+                ))
+              ) : (
+                <p
+                  className="m-0 text-danger"
+                  style={{ fontSize: "0.8rem", textIndent: 20 }}
+                >
+                  No career prospect found
+                </p>
+              )}
+            </div>
+            <button
+              type="button"
+              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
+              className={`btn btn-primary mb-3 ${clsx.addcareer_button}`}
+              onClick={(e) => setShowCareerModal((_) => true)}
+            >
+              Add Career List
+            </button>
+            <CareerModal
+              open={showCareerModal}
+              newCareer={careerlist}
+              setOpen={setShowCareerModal}
+              handleChange={careerChangeHandler}
+              updateCareer={updateCareerHandler}
+            />
+              
+
+              {/* <div className={clsx.form_group}>
                 <label htmlFor={"package"} className="form-label generic_label">
                   FAQ
                 </label>
@@ -545,16 +516,16 @@ export const Syllabus = ({
                 ) : (
                   <h6>No faq</h6>
                 )}
-              </div>
+              </div> */}
   
-              <button
+              {/* <button
                 className="btn btn-primary my-3"
                 style={{ backgroundColor: "var(--theme-blue)" }}
                 type="button"
                 onClick={openFaqModal}
               >
                 Add FAQ
-              </button>
+              </button> */}
               <div className="d-flex flex-wrap mt-3" style={{ gap: "1rem " }}>
                 {loading ? (
                   <button
@@ -652,7 +623,7 @@ export const Syllabus = ({
   </div>
   }
 
-  function AddSyllabus({ open, handleClose, formstate, setFormstate, addSyllabus }) {
+  export function AddSyllabus({ open, handleClose, formstate, setFormstate, addSyllabus }) {
     const [newSyllabus, setNewSyllabus] = useState({
       title: "",
       description: "",
@@ -693,7 +664,7 @@ export const Syllabus = ({
           progress: undefined,
         });
       } else {
-        setFormstate({...formstate, syllabus: [...formstate.syllabus, newSyllabus]});
+        setFormstate({...formstate, syllabus: [...formstate?.syllabus, newSyllabus]});
         setNewSyllabus({
           title: "",
           description: "",

@@ -217,7 +217,7 @@
     width: 80%
 }
 
-.edit__profile form div {
+.edit__profile form > div {
     margin: 15px 0px;
 }
 

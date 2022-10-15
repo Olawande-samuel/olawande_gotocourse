@@ -36,14 +36,15 @@ import vector from "../../../images/vector.png";
 import { CourseDetail } from "../../Courses";
 import Layout from "../../../components/Layout";
 import ChatComponent from "./Chat";
-import { changeConstants, CreateCourseMain } from "../Teachers/CreateCourse";
+import { AddSyllabus, changeConstants, CreateCourseMain } from "../Teachers/CreateCourse";
 import { AllEarnings } from "../Teachers/Earnings";
 
 import EarningsTable from "./Earnings/Table";
 import LogoutButton from "../../../components/LogoutButton";
 import { GotoDashboard } from "../Students";
-import { BiQuestionMark } from "react-icons/bi";
+import { BiQuestionMark, BiTrash } from "react-icons/bi";
 import { ClassesCard } from "../Teachers/Bootcamps";
+import Editor from "../components/Editor";
 
 const KEY = "gotocourse-userdata";
 
@@ -345,7 +346,7 @@ export function Category() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <h1 style={{ margin: 0 }}>All Category</h1>{" "}
+            <h4 style={{ margin: 0 }}>Categories</h4>{" "}
             <button
               className="btn btn-primary px-4"
               onClick={(e) => navigate("new")}
@@ -470,7 +471,7 @@ function NicheModal({ newNiche, updateNiche, open, setOpen, handleChange }) {
 }
 
 // CAREERMODAL COMPONENT
-function CareerModal({ newCareer, updateCareer, open, setOpen, handleChange }) {
+export function CareerModal({ newCareer, updateCareer, open, setOpen, handleChange }) {
   const style = {
     position: "absolute",
     top: "50%",
@@ -2976,32 +2977,6 @@ export function CourseDetails({}) {
               </div>
             </div>
 
-            {/* <div className={clsx.form_group}>
-              <div className={clsx.form_group__teachers}>
-                <label>Add Student</label>
-                {
-                  students.map((s, i) => (
-                    <div key={i}>
-                      <p>{i + 1}. &nbsp; {s}</p> 
-                      <div className={clsx.teachers__actions}>
-                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
-                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
-                      </div>
-                    </div>
-                  ))
-                }
-              </div>
-              <Input
-                name="student"
-                type="text"
-                handleChange={changeHandler}
-                value={formstate.student}
-              />
-              <button type="button" className={clsx.form_group__button}>
-                Add Student
-              </button>
-            </div> */}
-
             <div className={clsx.form_group} style={{ marginTop: 40 }}>
               <label>Change Course Status</label>
               <Switch
@@ -3135,34 +3110,18 @@ export function BootcampDetails({}) {
   async function toggleBootcampStatusHandler(e) {
     setLoading((_) => true);
     try {
-      if (!formstate.pledreCourseId) {
-          const res = await toggleBootcampStatus(
-            userdata?.token,
-            params?.id
-          );
-          const { message, statusCode, success } = res;
-
-          if (!success) throw new AdvancedError(message, statusCode);
-          else {
-            setFormstate({
-              ...formstate,
-              isActive: res.isActive,
-            });
-            toast.success(message);
-          }
-        // }
-      } else {
+       
         const res = await toggleBootcampStatus(
           userdata?.token,
+          {pledreClassId:""},
           params?.id
         );
         const { message, statusCode, success } = res;
-        if (!success) throw new AdvancedError(message, statusCode);
+        if (statusCode !== 1) throw new AdvancedError(message, statusCode);
         else {
-          setFormstate({ ...formstate, ...res.data, isActive: res.isActive });
-          toast.success(message);
+          setFormstate({ ...formstate, ...res.data, isActive: !formstate.isActive });
+          // toast.success(message);
         }
-      }
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -3273,7 +3232,7 @@ export function BootcampDetails({}) {
   function removeTutor(tutorId) {
     setOpenprompt(true);
   }
-
+ 
   return (
     <Admin header="ADMIN">
       {loading && <Loader />}
@@ -3316,14 +3275,11 @@ export function BootcampDetails({}) {
               >
                 Description
               </label>
-              <textarea
-                rows="5"
-                name="description"
-                value={formstate?.description}
-                onChange={changeHandler}
-                className="form-control generic_input"
-                readOnly
-              ></textarea>
+              <div className="border rounded" 
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(formstate?.description),
+                }} 
+              />
             </div>
 
             <div className={clsx.form_group}>
@@ -3349,6 +3305,7 @@ export function BootcampDetails({}) {
                   </div>
                 )}
               </div>
+              
               <Input
                 style={{ margin: "0px !important" }}
                 name="instructor"
@@ -3619,10 +3576,13 @@ export function CreateBootcamp() {
     description: "",
     type: "",
     instructor: "",
+    syllabus:[]
   });
 
   const [loading, setLoading] = useState(false);
   const [teachers, setTeachers] = useState([]);
+  const [bio, setBio] = useState("");
+
 
   useEffect(() => {
     if (flag.current) return;
@@ -3642,7 +3602,7 @@ export function CreateBootcamp() {
             found.bootcampImg = found.bootcampImg.split("/").slice(-1)[0];
 
             delete found.instructorName;
-            setFormstate((_) => found);
+            setFormstate({...formstate, ...found});
           } else {
             throw new AdvancedError(message, statusCode);
           }
@@ -3717,26 +3677,21 @@ export function CreateBootcamp() {
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
+    const formData =  {...formstate, description: bio}
     try {
       if (
-        formstate.description === "" ||
-        formstate.title === "" ||
-        formstate.price === "" ||
-        formstate.duration === "" ||
-        formstate.endTime === "" ||
-        formstate.startTime === "" ||
-        formstate.startDate === "" ||
-        formstate.endDate === ""
+        formData.description === "" ||
+        formData.title === "" ||
+        formData.price === "" 
       )
         throw new AdvancedError("All fields are required", 0);
-
       const res = location.search
         ? await updateBootcamp(
             userdata?.token,
             location.search.split("=").reverse()[0],
-            formstate
+            formData
           )
-        : await addBootcamp(userdata?.token, formstate);
+        : await addBootcamp(userdata?.token, formData);
       const { success, message, statusCode } = res;
 
       if (!success) throw new AdvancedError(message, statusCode);
@@ -3750,13 +3705,28 @@ export function CreateBootcamp() {
       setLoading((_) => false);
     }
   }
-  const [open, setOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState(false);
 
+  const [open, setOpen] = useState(false);
+  const [openSyllabus, setOpenSyllabus] = useState(false);
+  const [previewImage, setPreviewImage] = useState(false);
+  const { syllabuses, addtoSyllabus, setSyllabusses } = useSyllabus();
+
+  const openModal = () => {
+    setOpenSyllabus(true);
+  };
   function showUploadFormHandler() {
     setOpen((_) => true);
   }
 
+  function deleteSyllabus(e){
+    let newSyllabusArr = formstate.syllabus.filter((item, index) => (item.title + index) !== e)
+    setFormstate({...formstate, syllabus:newSyllabusArr})
+
+  }
+
+  const handleClose = () => {
+    setOpenSyllabus(false);
+  };
   return (
     <Admin header={location.search ? "Edit Class" : "Create Class"}>
       {loader && <Loader />}
@@ -3774,7 +3744,7 @@ export function CreateBootcamp() {
                 onClick={showUploadFormHandler}
               >
                 <img src={vector} alt={"Placeholder"} />
-                <p>Upload Bootcamp image</p>
+                <p>Upload Class Banner</p>
               </div>
               {previewImage && (
                 <div className={clsx.upload__file_box}>
@@ -3794,7 +3764,7 @@ export function CreateBootcamp() {
           </div>
           <form className="form" onSubmit={submitHandler}>
             <Input
-              label="Bootcamp image file name"
+              label="Class Banner file name"
               name="bootcampImg"
               type="text"
               handleChange={changeHandler}
@@ -3877,17 +3847,24 @@ export function CreateBootcamp() {
                 />
               </div>
             </div>
-            <div className="row"></div>
             <div className={clsx.form_group}>
               <label htmlFor={"brief"}>Description</label>
-              <textarea
-                rows="5"
-                name="description"
-                value={formstate.description}
-                onChange={changeHandler}
-                className="generic_input"
-              ></textarea>
+              <CKEditor
+                editor={ClassicEditor}
+                data={formstate.description}
+                onReady={(editor) => {
+                  console.log("editor")
+                  // You can store the "editor" and use when it is needed.
+                }}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  setBio(data);
+                  // setFormstate({...formstate, mentorBio: data})
+                }}
+              />
+              
             </div>
+            <Editor initialState={formstate.bio} title="Bio" setBio={setBio} />
             <div className={clsx.form_group}>
               <label htmlFor={"instructor"}>Instructor</label>
               <select
@@ -3906,14 +3883,34 @@ export function CreateBootcamp() {
                   ))}
               </select>
             </div>
-            {/* <Input
-              label="Instructor Email"
-              name="instructor"
-              type="text"
-              handleChange={changeHandler}
-              value={formstate.instructor}
-            /> */}
-
+         
+            <div className={clsx.form_group}>
+                <label className="form-label generic_label">Syllabus</label>
+                {formstate.syllabus?.length !== 0 ? (
+                  formstate.syllabus?.map(({ title, description, }, i) => (
+                    <div className={clsx.syllabus_container}>
+                        <h5>{title}</h5>
+                        <p>{description}</p>
+                        
+                          <p>
+                            <i className="text-danger" style={{cursor:"pointer"}} onClick={()=>deleteSyllabus(title + i)}>
+                              <BiTrash />
+                            </i>
+                          </p>
+                      </div>
+                  ))
+                ) : (
+                  <small className="ms-3">No syllabus found</small>
+                )}
+              </div>
+              <button
+                className="btn btn-primary my-3"
+                style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
+                type="button"
+                onClick={openModal}
+              >
+                Add Syllabus
+              </button>
             <div className={clsx.form_group}>
               <label htmlFor={"package"}>Type</label>
               <select
@@ -3943,6 +3940,15 @@ export function CreateBootcamp() {
                 {location.search ? "Update" : "Save"}
               </button>
             )}
+
+          <AddSyllabus
+            open={openSyllabus}
+            addSyllabus={addtoSyllabus}
+            formstate={formstate}
+            setFormstate={setFormstate}
+            setOpen={setOpen}
+            handleClose={handleClose}
+          />
           </form>
         </div>
       </div>
@@ -3967,7 +3973,9 @@ export function BootcampRow({
       <td className={clsx.user__info}>{index + 1}.</td>
       <td className={clsx.user__info}>{title}</td>
       <td className={clsx.user__info}>
-        <p className="restricted_line">{detail}</p>
+        <p className="restricted_line"  dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(detail),
+                }}/>
       </td>
       <td className={clsx.user__info}>{type}</td>
       <td className={clsx.user__info}>{duration}</td>
@@ -3990,103 +3998,102 @@ export function BootcampRow({
 }
 
 // ADDSYLLABUS COMPONENT
-function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
-  const [newSyllabus, setNewSyllabus] = useState({
-    title: "",
-    description: "",
-  });
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    minWidth: 600,
-    background: "#fff",
-    border: "1px solid #eee",
-    borderRadius: "10px",
-    boxShadow: 24,
-    p: 6,
-    padding: "4rem 2rem",
-  };
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setNewSyllabus((old) => {
-      return {
-        ...old,
-        [name]: value,
-      };
-    });
-  }
+// function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
+//   const [newSyllabus, setNewSyllabus] = useState({
+//     title: "",
+//     description: "",
+//   });
+//   const style = {
+//     position: "absolute",
+//     top: "50%",
+//     left: "50%",
+//     transform: "translate(-50%, -50%)",
+//     minWidth: 600,
+//     background: "#fff",
+//     border: "1px solid #eee",
+//     borderRadius: "10px",
+//     boxShadow: 24,
+//     p: 6,
+//     padding: "4rem 2rem",
+//   };
+//   function handleChange(e) {
+//     const { name, value } = e.target;
+//     setNewSyllabus((old) => {
+//       return {
+//         ...old,
+//         [name]: value,
+//       };
+//     });
+//   }
 
-  function addSyllabusHandler() {
-    const { title, description } = newSyllabus;
-    if (!title || !description) {
-      toast.error("Title and Description are required", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } else {
-      addSyllabus(newSyllabus);
-      setOpen((_) => false);
-    }
-  }
+//   function addSyllabusHandler() {
+//     const { title, description } = newSyllabus;
+//     if (!title || !description) {
+//       toast.error("Title and Description are required", {
+//         position: "top-right",
+//         autoClose: 4000,
+//         hideProgressBar: true,
+//         closeOnClick: true,
+//         pauseOnHover: true,
+//         draggable: true,
+//         progress: undefined,
+//       });
+//     } else {
+//       addSyllabus(newSyllabus);
+//       setOpen((_) => false);
+//     }
+//   }
 
-  return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box style={style}>
-        <h5
-          className="lead text-primary"
-          style={{ color: "var(--theme-blue)" }}
-        >
-          Add Syllabus
-        </h5>
-        <Input
-          label="Title"
-          name="title"
-          type="text"
-          handleChange={handleChange}
-          value={newSyllabus.title}
-        />
-        <div className="form-group my-3">
-          <label htmlFor="description" className="form-label generic_label">
-            Description
-          </label>
-          <textarea
-            rows="5"
-            id="description"
-            name="description"
-            className="form-control generic_input"
-            value={newSyllabus.description}
-            onChange={handleChange}
-          ></textarea>
-        </div>
-        <button
-          className="btn btn-primary my-3"
-          onClick={addSyllabusHandler}
-          style={{ backgroundColor: "var(--theme-blue)" }}
-        >
-          Add
-        </button>
-      </Box>
-    </Modal>
-  );
-}
+//   return (
+//     <Modal
+//       open={open}
+//       onClose={handleClose}
+//       aria-labelledby="modal-modal-title"
+//       aria-describedby="modal-modal-description"
+//     >
+//       <Box style={style}>
+//         <h5
+//           className="lead text-primary"
+//           style={{ color: "var(--theme-blue)" }}
+//         >
+//           Add Syllabus
+//         </h5>
+//         <Input
+//           label="Title"
+//           name="title"
+//           type="text"
+//           handleChange={handleChange}
+//           value={newSyllabus.title}
+//         />
+//         <div className="form-group my-3">
+//           <label htmlFor="description" className="form-label generic_label">
+//             Description
+//           </label>
+//           <textarea
+//             rows="5"
+//             id="description"
+//             name="description"
+//             className="form-control generic_input"
+//             value={newSyllabus.description}
+//             onChange={handleChange}
+//           ></textarea>
+//         </div>
+//         <button
+//           className="btn btn-primary my-3"
+//           onClick={addSyllabusHandler}
+//           style={{ backgroundColor: "var(--theme-blue)" }}
+//         >
+//           Add
+//         </button>
+//       </Box>
+//     </Modal>
+//   );
+// }
 
 // FEES COMPONENT
 export function Fees() {
   const {
-    generalState,
-    setGeneralState,
+   
     adminFunctions: { fetchPayment },
   } = useAuth();
   const { getItem } = useLocalStorage();
@@ -5001,7 +5008,7 @@ export const Admin = ({ children, header }) => {
           (messages) => messages.status === "unread"
         );
         if (unread.length > 0) {
-          toast.info(`You have ${unread.length} messages`);
+          // toast.info(`You have ${unread.length} messages`);
           setGeneralState({ ...generalState, chat: unread.length });
         }
       },

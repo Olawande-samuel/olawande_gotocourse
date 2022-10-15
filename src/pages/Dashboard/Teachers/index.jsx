@@ -923,7 +923,7 @@ const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUn
 
     const unread = res.data.data?.filter((messages)=>messages.status === "unread")
     if(unread.length > 0){
-      toast.info(`You have ${unread.length} messages` )
+      // toast.info(`You have ${unread.length} messages` )
     }
   }
 })

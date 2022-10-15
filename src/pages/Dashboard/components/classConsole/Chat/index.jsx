@@ -435,7 +435,7 @@ const InputContainer = styled.div`
     display: flex;
     align-item: center;
     border: 1px solid rgba(130, 130, 130, .1);
-    padding: 10px;
+    padding: 6px;
     border-radius: 20px;
     margin-right: 20px;
 
@@ -589,7 +589,7 @@ const ChatModule = () => {
       setValue(newValue);
     };
 
-    const tabContent = [ <ChatTab groups={newGroups} toggle={toggleActionsHandler} setShow={setShow} />, <div>No Content</div>, <MailTab /> ]
+    const tabContent = [ <ChatTab groups={newGroups} toggle={toggleActionsHandler} setShow={setShow} />, <ActiveChat />, <MailTab /> ]
     
     return (
         <ChatContainer>
