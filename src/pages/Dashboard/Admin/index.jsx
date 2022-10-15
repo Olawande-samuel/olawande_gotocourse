@@ -36,7 +36,11 @@ import vector from "../../../images/vector.png";
 import { CourseDetail } from "../../Courses";
 import Layout from "../../../components/Layout";
 import ChatComponent from "./Chat";
-import { AddSyllabus, changeConstants, CreateCourseMain } from "../Teachers/CreateCourse";
+import {
+  AddSyllabus,
+  changeConstants,
+  CreateCourseMain,
+} from "../Teachers/CreateCourse";
 import { AllEarnings } from "../Teachers/Earnings";
 
 import EarningsTable from "./Earnings/Table";
@@ -193,7 +197,7 @@ export function CategoryDetails({}) {
           </div>
           <form className="form" style={{ width: "80%", margin: "20px 0px" }}>
             <Input
-              label="Name of Course"
+              label="Name of Category"
               name="name"
               type="text"
               handleChange={changeHandler}
@@ -208,14 +212,12 @@ export function CategoryDetails({}) {
               >
                 Description
               </label>
-              <textarea
-                rows="5"
-                name="description"
-                value={formstate.description}
-                onChange={changeHandler}
-                className="form-control generic_input"
-                readOnly
-              ></textarea>
+              <div
+                className="border rounded p-3"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(formstate?.description),
+                }}
+              />
             </div>
 
             {/* <div className={clsx.form_group}>
@@ -292,7 +294,7 @@ export function Category() {
   const flag = useRef(false);
   const userdata = getItem(KEY);
   const tableHeaders = ["No", "Name of Category", "Date", "No of Student"];
-
+  const [search, setSearch]= useState("")
   useEffect(() => {
     if (flag.current) return;
     (async () => {
@@ -354,6 +356,11 @@ export function Category() {
               Add Category
             </button>
           </div>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <input type="search" name="search" id="search" className="form-control" value={search} onChange={(e)=>setSearch(e.target.value)} placeholder="search..." />
+            </div>
+          </div>
           <div className={` ${clsx.admin__student_main}`}>
             {categories.length > 0 ? (
               <table className={`${clsx.admin__student_table}`}>
@@ -364,7 +371,9 @@ export function Category() {
                 </thead>
                 <tbody>
                   {categories?.length > 0 &&
-                    categories?.map(
+                    categories?.filter(cat=> (
+                        cat.name.toLowerCase().includes(search.toLowerCase()) || cat.description.toLowerCase().includes(search.toLowerCase())
+                      )).map(
                       (
                         {
                           bannerImg,
@@ -471,7 +480,13 @@ function NicheModal({ newNiche, updateNiche, open, setOpen, handleChange }) {
 }
 
 // CAREERMODAL COMPONENT
-export function CareerModal({ newCareer, updateCareer, open, setOpen, handleChange }) {
+export function CareerModal({
+  newCareer,
+  updateCareer,
+  open,
+  setOpen,
+  handleChange,
+}) {
   const style = {
     position: "absolute",
     top: "50%",
@@ -614,6 +629,7 @@ export function CreateCourseCategory() {
   const location = useLocation();
   const [loader, setLoader] = useState(location.search ? true : false);
   const edit = location.search;
+  const [bio, setBio] = useState("");
 
   useEffect(() => {
     if (flag.current) return;
@@ -637,28 +653,12 @@ export function CreateCourseCategory() {
 
             data.nicheItems && setNichelists((_) => data.nicheItems);
             data.careerList && setCareerlists((_) => data.careerList);
-            toast.success(message, {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
+            toast.success(message);
           } else {
             throw new AdvancedError(message, statusCode);
           }
         } catch (err) {
-          toast.error(err.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.error(err.message);
         } finally {
           setLoader((_) => false);
         }
@@ -754,25 +754,9 @@ export function CreateCourseCategory() {
         };
       });
       setShowNicheModal((_) => false);
-      toast.success("Niche added successfully", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.success("Niche added successfully");
     } else {
-      toast.error("All fields are required", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error("All fields are required");
     }
   }
 
@@ -838,7 +822,7 @@ export function CreateCourseCategory() {
               handleChange={changeHandler}
               value={formstate.name.toUpperCase()}
             />
-            <Input
+            {/* <Input
               label="First Description"
               name="description"
               type="text"
@@ -851,7 +835,8 @@ export function CreateCourseCategory() {
               type="text"
               handleChange={changeHandler}
               value={formstate.niche}
-            />
+            /> */}
+            <Editor initialState={formstate.description} title="Description" setBio={setBio} />
             <div className={clsx.form_group}>
               <label htmlFor={"brief"}>Niche Description</label>
               <textarea
@@ -942,13 +927,13 @@ export function CreateCourseCategory() {
               value={formstate.bannerImg}
             />
 
-            <Input
+            {/* <Input
               label="Icon Image "
               name="iconImg"
               type="text"
               handleChange={changeHandler}
               value={formstate.iconImg}
-            />
+            /> */}
             <i className="text-danger">
               Make sure to upload the files and get the file name
             </i>
@@ -1135,11 +1120,10 @@ export function ApproveStudent() {
     //       "gotocourse-studentDetails",
     //       JSON.stringify({ ...studentInfo, pledre: pledreInfo })
     //     );
-  // })();
+    // })();
   }, []);
 
   async function handleVerification(e, id) {
-
     e.preventDefault();
     let item = {
       userId: id,
@@ -1443,35 +1427,35 @@ export function Approve() {
   ];
 
   useEffect(() => {
-        const teacherInfo = getItem("gotocourse-teacherDetails");
-        setData(teacherInfo);
-  //   (async () => {
-  //     let pledreInfo;
-  //     console.log("getting");
-  //     console.log({ pledre });
-  //     try {
-  //       if (pledre) {
-  //         console.log(pledre);
-  //         setGeneralState({ ...generalState, loading: true });
-  //         const pledRes = await pledre.getTeacherDetails(teacherInfo.email);
-  //         console.log({ pledRes });
-  //         if (pledRes.email) {
-  //           pledreInfo = pledRes;
-  //         } else {
-  //           pledreInfo = {};
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error(error.message);
-  //     } finally {
-  //       setGeneralState({ ...generalState, loading: false });
-  //     }
+    const teacherInfo = getItem("gotocourse-teacherDetails");
+    setData(teacherInfo);
+    //   (async () => {
+    //     let pledreInfo;
+    //     console.log("getting");
+    //     console.log({ pledre });
+    //     try {
+    //       if (pledre) {
+    //         console.log(pledre);
+    //         setGeneralState({ ...generalState, loading: true });
+    //         const pledRes = await pledre.getTeacherDetails(teacherInfo.email);
+    //         console.log({ pledRes });
+    //         if (pledRes.email) {
+    //           pledreInfo = pledRes;
+    //         } else {
+    //           pledreInfo = {};
+    //         }
+    //       }
+    //     } catch (error) {
+    //       console.error(error.message);
+    //     } finally {
+    //       setGeneralState({ ...generalState, loading: false });
+    //     }
 
-  //     localStorage.setItem(
-  //       "gotocourse-teacherDetails",
-  //       JSON.stringify({ ...teacherInfo, pledre: pledreInfo })
-  //     );
-  //   })();
+    //     localStorage.setItem(
+    //       "gotocourse-teacherDetails",
+    //       JSON.stringify({ ...teacherInfo, pledre: pledreInfo })
+    //     );
+    //   })();
   }, []);
   console.log({ data });
 
@@ -1852,7 +1836,9 @@ export function UserInfoCard({
         <td className={clsx.user__details}>
           {img && (
             <img
-              src={ isAbsolute ? img : `${process.env.REACT_APP_IMAGEURL}/${img}` }
+              src={
+                isAbsolute ? img : `${process.env.REACT_APP_IMAGEURL}/${img}`
+              }
               alt="avatar"
             />
           )}
@@ -1996,6 +1982,8 @@ export function Teachers() {
   const {
     adminTeacherFunctions: { fetch },
   } = useAuth();
+
+  const [search, setSearch] = useState("");
   useEffect(() => {
     if (flag.current) return;
     (async () => {
@@ -2046,6 +2034,17 @@ export function Teachers() {
               Add Mentor
             </button>
           </div>
+          <div className="d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
           <div className={`${clsx.admin__student_main}`}>
             <table className={`${clsx.admin__student_table}`}>
               <thead>
@@ -2055,23 +2054,34 @@ export function Teachers() {
               </thead>
               <tbody>
                 {teachers?.length > 0 &&
-                  teachers?.map((teacher, i) => (
-                    <UserInfoCard
-                      key={i}
-                      user={true}
-                      firstName={teacher.firstName}
-                      lastName={teacher.lastName}
-                      img={teacher.profileImg}
-                      num={i}
-                      email={teacher.email}
-                      level={1}
-                      details={teacher}
-                      type={teacher.userType}
-                      approveHandler={approveHandler}
-                      accessPledre={teacher.accessPledre}
-                      isAbsolute={true}
-                    />
-                  ))}
+                  teachers
+                    ?.filter(
+                      (teach) =>
+                        teach.firstName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        teach.lastName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        teach.email.toLowerCase().includes(search.toLowerCase())
+                    )
+                    .map((teacher, i) => (
+                      <UserInfoCard
+                        key={i}
+                        user={true}
+                        firstName={teacher.firstName}
+                        lastName={teacher.lastName}
+                        img={teacher.profileImg}
+                        num={i}
+                        email={teacher.email}
+                        level={1}
+                        details={teacher}
+                        type={teacher.userType}
+                        approveHandler={approveHandler}
+                        accessPledre={teacher.accessPledre}
+                        isAbsolute={true}
+                      />
+                    ))}
               </tbody>
             </table>
             {teachers <= 0 && (
@@ -2096,6 +2106,9 @@ export function Mentors() {
   const {
     otherFunctions: { fetchMentors },
   } = useAuth();
+
+  const [search, setSearch] = useState("");
+
   useEffect(() => {
     if (flag.current) return;
     (async () => {
@@ -2148,7 +2161,16 @@ export function Mentors() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center">
-            <h1>Mentors</h1>
+            <h1 className="mb-0">Mentors</h1>
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
             {/* <button className="btn button-md" style={{background:"var(--theme-blue)", color:"#fff"}} type="button" onClick={()=>navigate("create/mentor")}>Add Mentor</button> */}
           </div>
           <div className={` ${clsx.admin__student_main}`}>
@@ -2160,26 +2182,42 @@ export function Mentors() {
               </thead>
               <tbody>
                 {teachers?.length > 0 &&
-                  teachers?.map((teacher, i) => (
-                    <UserInfoCard
-                      key={i}
-                      user={true}
-                      firstName={teacher.mentorFirstName}
-                      lastName={teacher.mentorLastName}
-                      img={teacher.mentorImg}
-                      mentorId={teacher.mentorId}
-                      num={i}
-                      email={teacher.mentorEmail}
-                      level={teacher.expertise}
-                      details={teacher}
-                      approveHandler={approveHandler}
-                      isActive={null}
-                      isAbsolute={false}
-                      type={null}
+                  teachers
+                    ?.filter(
+                      (teach) =>
+                        teach.mentorFirstName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        teach.mentorLastName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        teach.mentorEmail
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        teach.expertise
+                          .toLowerCase()
+                          .includes(search.toLowerCase())
+                    )
+                    .map((teacher, i) => (
+                      <UserInfoCard
+                        key={i}
+                        user={true}
+                        firstName={teacher.mentorFirstName}
+                        lastName={teacher.mentorLastName}
+                        img={teacher.mentorImg}
+                        mentorId={teacher.mentorId}
+                        num={i}
+                        email={teacher.mentorEmail}
+                        level={teacher.expertise}
+                        details={teacher}
+                        approveHandler={approveHandler}
+                        isActive={null}
+                        isAbsolute={false}
+                        type={null}
 
-                      // accessPledre={teacher.accessPledre}
-                    />
-                  ))}
+                        // accessPledre={teacher.accessPledre}
+                      />
+                    ))}
               </tbody>
             </table>
             {teachers.length <= 0 && (
@@ -2528,7 +2566,7 @@ export function MentorsDetail() {
         <div className={clsx["admin_profile_main"]}>
           <h1>
             {data ? `${data?.mentorFirstName} ${data?.mentorLastName}` : ""}
-          </h1>
+          </h1>  
 
           <div className={clsx.admin__profile_info}>
             <div className={clsx.admin__info}>
@@ -2602,6 +2640,8 @@ export function Courses() {
     "Approval",
   ];
 
+  const [search, setSearch] = useState("");
+
   useEffect(() => {
     if (flag.current) return;
     (async () => {
@@ -2646,6 +2686,18 @@ export function Courses() {
               Add Course
             </button>
           </div>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <input
+                type="search"
+                name="search"
+                id="search"
+                className="form-control"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
 
           <div className={clsx.admin__student_main}>
             <table className={clsx.admin__student_table}>
@@ -2656,37 +2708,52 @@ export function Courses() {
               </thead>
               <tbody>
                 {courseList.length > 0 &&
-                  courseList.map(
-                    (
-                      {
-                        category,
-                        name,
-                        price,
-                        status,
-                        type,
-                        approve,
-                        courseId,
-                        startDate,
-                        packages,
-                        endDate,
-                      },
-                      i
-                    ) => (
-                      <UserInfoCard
-                        key={i}
-                        comp={"Courses"}
-                        num={i}
-                        name={category}
-                        course={name}
-                        rating={4}
-                        id={courseId}
-                        showDetailsHandler={showDetailsHandler}
-                        packages={packages}
-                        date={`${startDate ? getDate(startDate):""} - ${endDate ? getDate(endDate):""}`}
-                        isActive={status === "active" ? true : false}
-                      />
+                  courseList
+                    .filter(
+                      (course) =>
+                        course.category
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        course.name
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        course.status
+                          .toLowerCase()
+                          .includes(search.toLowerCase())
                     )
-                  )}
+                    .map(
+                      (
+                        {
+                          category,
+                          name,
+                          price,
+                          status,
+                          type,
+                          approve,
+                          courseId,
+                          startDate,
+                          packages,
+                          endDate,
+                        },
+                        i
+                      ) => (
+                        <UserInfoCard
+                          key={i}
+                          comp={"Courses"}
+                          num={i}
+                          name={category}
+                          course={name}
+                          rating={4}
+                          id={courseId}
+                          showDetailsHandler={showDetailsHandler}
+                          packages={packages}
+                          date={`${startDate ? getDate(startDate) : ""} - ${
+                            endDate ? getDate(endDate) : ""
+                          }`}
+                          isActive={status === "active" ? true : false}
+                        />
+                      )
+                    )}
               </tbody>
             </table>
           </div>
@@ -2813,21 +2880,20 @@ export function CourseDetails({}) {
         // });
         // console.log({ pledRes });
         // if (pledRes.id) {
-          // pledId = pledRes.id;
+        // pledId = pledRes.id;
 
-          const res = await toggleCourseStatus(userdata?.token, params?.id);
-          const { success, message, statusCode } = res;
-          if (!success) throw new AdvancedError(message, statusCode);
-          setFormstate({
-            ...formstate,
-            status: "active",
-            pledreCourseId: pledId,
-          });
-          toast.success(message);
+        const res = await toggleCourseStatus(userdata?.token, params?.id);
+        const { success, message, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        setFormstate({
+          ...formstate,
+          status: "active",
+          pledreCourseId: pledId,
+        });
+        toast.success(message);
 
         // }
       } else {
-        
         const res = await toggleCourseStatus(userdata?.token, params?.id);
         const { success, message, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
@@ -3110,18 +3176,21 @@ export function BootcampDetails({}) {
   async function toggleBootcampStatusHandler(e) {
     setLoading((_) => true);
     try {
-       
-        const res = await toggleBootcampStatus(
-          userdata?.token,
-          {pledreClassId:""},
-          params?.id
-        );
-        const { message, statusCode, success } = res;
-        if (statusCode !== 1) throw new AdvancedError(message, statusCode);
-        else {
-          setFormstate({ ...formstate, ...res.data, isActive: !formstate.isActive });
-          // toast.success(message);
-        }
+      const res = await toggleBootcampStatus(
+        userdata?.token,
+        { pledreClassId: "" },
+        params?.id
+      );
+      const { message, statusCode, success } = res;
+      if (statusCode !== 1) throw new AdvancedError(message, statusCode);
+      else {
+        setFormstate({
+          ...formstate,
+          ...res.data,
+          isActive: !formstate.isActive,
+        });
+        // toast.success(message);
+      }
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -3201,7 +3270,7 @@ export function BootcampDetails({}) {
     delete formdata.instructorEmail;
 
     let id = formdata.bootcampId ? formdata.bootcampId : formdata._id;
-    console.log(formstate.instructor)
+    console.log(formstate.instructor);
     try {
       setLoading(true);
       const res = await updateBootcamp(userdata?.token, id, formdata);
@@ -3223,7 +3292,7 @@ export function BootcampDetails({}) {
         toast.success(message);
       }
     } catch (err) {
-      console.error(err)
+      console.error(err);
       toast.error(err.message);
     } finally {
       setLoading((_) => false);
@@ -3232,7 +3301,7 @@ export function BootcampDetails({}) {
   function removeTutor(tutorId) {
     setOpenprompt(true);
   }
- 
+
   return (
     <Admin header="ADMIN">
       {loading && <Loader />}
@@ -3275,10 +3344,11 @@ export function BootcampDetails({}) {
               >
                 Description
               </label>
-              <div className="border rounded" 
+              <div
+                className="border rounded"
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(formstate?.description),
-                }} 
+                }}
               />
             </div>
 
@@ -3290,8 +3360,7 @@ export function BootcampDetails({}) {
                     <p>
                       {formstate?.instructorName} - {formstate?.instructorEmail}
                     </p>
-                    {
-                    /* <div className={clsx.teachers__actions}>
+                    {/* <div className={clsx.teachers__actions}>
                       <span
                         className={`${clsx.teachers__actions_delete} text-danger`}
                         onClick={() => removeTutor(formstate?.instructorId)}
@@ -3305,7 +3374,7 @@ export function BootcampDetails({}) {
                   </div>
                 )}
               </div>
-              
+
               <Input
                 style={{ margin: "0px !important" }}
                 name="instructor"
@@ -3380,7 +3449,7 @@ export function Bootcamps() {
   let userdata = getItem(KEY);
   const [bootcamps, setBootcamps] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [search, setSearch] = useState("");
   const tableHeaders = [
     "No",
     "Title",
@@ -3435,6 +3504,17 @@ export function Bootcamps() {
               Add Class
             </button>
           </div>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="search class"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
           <div className={clsx.admin__student_main}>
             <table className={clsx.admin__student_table}>
               <thead>
@@ -3444,36 +3524,40 @@ export function Bootcamps() {
               </thead>
               <tbody>
                 {bootcamps.length > 0 ? (
-                  bootcamps.map(
-                    (
-                      {
-                        title,
-                        duration,
-                        description,
-                        type,
-                        startTime,
-                        endTime,
-                        endDate,
-                        startDate,
-                        bootcampId,
-                        _id,
-                      },
-                      i
-                    ) => (
-                      <BootcampRow
-                        key={i}
-                        index={i}
-                        title={title}
-                        detail={description}
-                        duration={duration}
-                        type={type}
-                        admin={false}
-                        clickHandler={(e) => detailHandler(e, bootcampId)}
-                        time={`${startTime} - ${endTime} CST`}
-                        date={`${getDate(startDate)} - ${getDate(endDate)}`}
-                      />
+                  bootcamps
+                    .filter((boot) =>
+                      boot.title.toLowerCase().includes(search.toLowerCase())
                     )
-                  )
+                    .map(
+                      (
+                        {
+                          title,
+                          duration,
+                          description,
+                          type,
+                          startTime,
+                          endTime,
+                          endDate,
+                          startDate,
+                          bootcampId,
+                          _id,
+                        },
+                        i
+                      ) => (
+                        <BootcampRow
+                          key={i}
+                          index={i}
+                          title={title}
+                          detail={description}
+                          duration={duration}
+                          type={type}
+                          admin={false}
+                          clickHandler={(e) => detailHandler(e, bootcampId)}
+                          time={`${startTime} - ${endTime} CST`}
+                          date={`${getDate(startDate)} - ${getDate(endDate)}`}
+                        />
+                      )
+                    )
                 ) : (
                   <h1>No Class found</h1>
                 )}
@@ -3486,7 +3570,7 @@ export function Bootcamps() {
   );
 }
 
-// CLASS/BOOTCAMP CONSOLE 
+// CLASS/BOOTCAMP CONSOLE
 
 export function AdminClassConsole() {
   const {
@@ -3527,16 +3611,11 @@ export function AdminClassConsole() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student_main}>
           <div className={clsx.class_con_cards}>
-
-                {bootcamps.length > 0 ? (
-                  bootcamps.map(
-                    (item, i ) => (
-                     <ClassesCard {...item} />
-                    )
-                  )
-                ) : (
-                  <h4 className="text-center">No Class found</h4>
-                )}
+            {bootcamps.length > 0 ? (
+              bootcamps.map((item, i) => <ClassesCard {...item} />)
+            ) : (
+              <h4 className="text-center">No Class found</h4>
+            )}
           </div>
         </div>
       </div>
@@ -3576,13 +3655,12 @@ export function CreateBootcamp() {
     description: "",
     type: "",
     instructor: "",
-    syllabus:[]
+    syllabus: [],
   });
 
   const [loading, setLoading] = useState(false);
   const [teachers, setTeachers] = useState([]);
   const [bio, setBio] = useState("");
-
 
   useEffect(() => {
     if (flag.current) return;
@@ -3602,7 +3680,7 @@ export function CreateBootcamp() {
             found.bootcampImg = found.bootcampImg.split("/").slice(-1)[0];
 
             delete found.instructorName;
-            setFormstate({...formstate, ...found});
+            setFormstate({ ...formstate, ...found });
           } else {
             throw new AdvancedError(message, statusCode);
           }
@@ -3677,12 +3755,12 @@ export function CreateBootcamp() {
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
-    const formData =  {...formstate, description: bio}
+    const formData = { ...formstate, description: bio };
     try {
       if (
         formData.description === "" ||
         formData.title === "" ||
-        formData.price === "" 
+        formData.price === ""
       )
         throw new AdvancedError("All fields are required", 0);
       const res = location.search
@@ -3718,10 +3796,11 @@ export function CreateBootcamp() {
     setOpen((_) => true);
   }
 
-  function deleteSyllabus(e){
-    let newSyllabusArr = formstate.syllabus.filter((item, index) => (item.title + index) !== e)
-    setFormstate({...formstate, syllabus:newSyllabusArr})
-
+  function deleteSyllabus(e) {
+    let newSyllabusArr = formstate.syllabus.filter(
+      (item, index) => item.title + index !== e
+    );
+    setFormstate({ ...formstate, syllabus: newSyllabusArr });
   }
 
   const handleClose = () => {
@@ -3853,7 +3932,7 @@ export function CreateBootcamp() {
                 editor={ClassicEditor}
                 data={formstate.description}
                 onReady={(editor) => {
-                  console.log("editor")
+                  console.log("editor");
                   // You can store the "editor" and use when it is needed.
                 }}
                 onChange={(event, editor) => {
@@ -3862,7 +3941,6 @@ export function CreateBootcamp() {
                   // setFormstate({...formstate, mentorBio: data})
                 }}
               />
-              
             </div>
             <Editor initialState={formstate.bio} title="Bio" setBio={setBio} />
             <div className={clsx.form_group}>
@@ -3883,34 +3961,38 @@ export function CreateBootcamp() {
                   ))}
               </select>
             </div>
-         
+
             <div className={clsx.form_group}>
-                <label className="form-label generic_label">Syllabus</label>
-                {formstate.syllabus?.length !== 0 ? (
-                  formstate.syllabus?.map(({ title, description, }, i) => (
-                    <div className={clsx.syllabus_container}>
-                        <h5>{title}</h5>
-                        <p>{description}</p>
-                        
-                          <p>
-                            <i className="text-danger" style={{cursor:"pointer"}} onClick={()=>deleteSyllabus(title + i)}>
-                              <BiTrash />
-                            </i>
-                          </p>
-                      </div>
-                  ))
-                ) : (
-                  <small className="ms-3">No syllabus found</small>
-                )}
-              </div>
-              <button
-                className="btn btn-primary my-3"
-                style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
-                type="button"
-                onClick={openModal}
-              >
-                Add Syllabus
-              </button>
+              <label className="form-label generic_label">Syllabus</label>
+              {formstate.syllabus?.length !== 0 ? (
+                formstate.syllabus?.map(({ title, description }, i) => (
+                  <div className={clsx.syllabus_container}>
+                    <h5>{title}</h5>
+                    <p>{description}</p>
+
+                    <p>
+                      <i
+                        className="text-danger"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => deleteSyllabus(title + i)}
+                      >
+                        <BiTrash />
+                      </i>
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <small className="ms-3">No syllabus found</small>
+              )}
+            </div>
+            <button
+              className="btn btn-primary my-3"
+              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
+              type="button"
+              onClick={openModal}
+            >
+              Add Syllabus
+            </button>
             <div className={clsx.form_group}>
               <label htmlFor={"package"}>Type</label>
               <select
@@ -3941,14 +4023,14 @@ export function CreateBootcamp() {
               </button>
             )}
 
-          <AddSyllabus
-            open={openSyllabus}
-            addSyllabus={addtoSyllabus}
-            formstate={formstate}
-            setFormstate={setFormstate}
-            setOpen={setOpen}
-            handleClose={handleClose}
-          />
+            <AddSyllabus
+              open={openSyllabus}
+              addSyllabus={addtoSyllabus}
+              formstate={formstate}
+              setFormstate={setFormstate}
+              setOpen={setOpen}
+              handleClose={handleClose}
+            />
           </form>
         </div>
       </div>
@@ -3973,9 +4055,12 @@ export function BootcampRow({
       <td className={clsx.user__info}>{index + 1}.</td>
       <td className={clsx.user__info}>{title}</td>
       <td className={clsx.user__info}>
-        <p className="restricted_line"  dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(detail),
-                }}/>
+        <p
+          className="restricted_line"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(detail),
+          }}
+        />
       </td>
       <td className={clsx.user__info}>{type}</td>
       <td className={clsx.user__info}>{duration}</td>
@@ -4093,7 +4178,6 @@ export function BootcampRow({
 // FEES COMPONENT
 export function Fees() {
   const {
-   
     adminFunctions: { fetchPayment },
   } = useAuth();
   const { getItem } = useLocalStorage();
@@ -4428,7 +4512,7 @@ export function Student() {
   let userdata = getItem(KEY);
   const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
-
+  const [search, setSearch] = useState("");
   const {
     adminStudentFunctions: { fetch, verify, verify_pledre },
     generalState: { loading },
@@ -4461,110 +4545,6 @@ export function Student() {
     flag.current = true;
   }, []);
 
-  async function handleVerification(id) {
-    let item = {
-      userId: id,
-    };
-    try {
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: true,
-        };
-      });
-
-      const res = await verify(item, userdata?.token);
-      const { message, success, statusCode } = res;
-
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: false,
-        };
-      });
-
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        //do somethings
-        toast.success(message);
-        // reload student list
-        fetchStudents();
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  }
-
-  async function handlePledreAccess(id) {
-    let item = {
-      userId: id,
-    };
-
-    try {
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: true,
-        };
-      });
-
-      const res = await verify_pledre(item, userdata?.token);
-      const { message, success, statusCode } = res;
-
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: false,
-        };
-      });
-
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        //do somethings
-        toast.success(message);
-        fetchStudents();
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  }
-
-  async function deleteUserHandler(e, email) {
-    try {
-      const v = window.confirm("Are you sure you want to delete " + email);
-      if (!v) return;
-      setLoader((_) => true);
-      const res = await deleteUser(userdata?.token, [email]);
-      console.log(res);
-      const { statusCode, message, success } = res;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-    } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } finally {
-      setLoader((_) => false);
-      fetchStudents();
-    }
-  }
-
   function approveHandler(e, email, details) {
     localStorage.setItem("gotocourse-studentDetails", JSON.stringify(details));
     if (email) navigate(`approve?email=${email}`);
@@ -4585,7 +4565,18 @@ export function Student() {
       {loader && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <h1>All Students</h1>
+          <div className="d-flex justify-content-between">
+            <h1>All Students</h1>
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="search student"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
 
           <div className={`${clsx.admin__student_main}`}>
             <table className={clsx.admin__student_table}>
@@ -4598,27 +4589,38 @@ export function Student() {
               </thead>
               <tbody>
                 {studentList?.length > 0 &&
-                  studentList?.map((student, i) => (
-                    <UserInfoCard
-                      key={i}
-                      name={student.name}
-                      firstName={student.firstName}
-                      lastName={student.lastName}
-                      img={student.profileImg}
-                      email={student.email}
-                      num={i}
-                      isActive={student.isVerified}
-                      accessPledre={student.accessPledre}
-                      user={true}
-                      type={null}
-                      deleteUser={(e) => console.Console.log(e)}
-                      handleVerification={(e) => console.log(e)}
-                      handlePledreAccess={(e) => console.log(e)}
-                      isAbsolute={true}
-                      approveHandler={approveHandler}
-                      details={student}
-                    />
-                  ))}
+                  studentList
+                    ?.filter(
+                      (stu) =>
+                        stu.firstName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        stu.lastName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        stu.email.toLowerCase().includes(search.toLowerCase())
+                    )
+                    .map((student, i) => (
+                      <UserInfoCard
+                        key={i}
+                        name={student.name}
+                        firstName={student.firstName}
+                        lastName={student.lastName}
+                        img={student.profileImg}
+                        email={student.email}
+                        num={i}
+                        isActive={student.isVerified}
+                        accessPledre={student.accessPledre}
+                        user={true}
+                        type={null}
+                        deleteUser={(e) => console.Console.log(e)}
+                        handleVerification={(e) => console.log(e)}
+                        handlePledreAccess={(e) => console.log(e)}
+                        isAbsolute={true}
+                        approveHandler={approveHandler}
+                        details={student}
+                      />
+                    ))}
               </tbody>
             </table>
           </div>
