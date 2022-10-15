@@ -291,8 +291,10 @@ export function CelebCard({img, mentorImg, title, mentorFirstName, mentorLastNam
         <div className={style.celebrity_card}
         
          onClick={()=>{
-            // localStorage.setItem("gotocourse-viewMentor", JSON.stringify(item))
-            // navigate(`/lounge/mentors/all/${mentorFirstName}-${mentorLastName}`)
+            if(title !== "Celebrity Mentors" ){
+                localStorage.setItem("gotocourse-viewMentor", JSON.stringify(item))
+                navigate(`/lounge/mentors/all/${mentorFirstName}-${mentorLastName}`)
+            }
         }}>      
             <img 
             style={{filter: title === "Celebrity Mentors" && 'blur(18px)'}}
