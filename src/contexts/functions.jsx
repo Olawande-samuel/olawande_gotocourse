@@ -3451,3 +3451,192 @@ export const otherFunctions = {
         }
     },
 }
+
+export const consoleFunctions = {
+    fetchDomains: async function(token, id){
+        try{
+            const res = await axios.get(`${baseURL}/classes/domains/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    addDomain: async function(token, data){
+        try{
+            const res = await axios.post(`${baseURL}/classes/domain/add`, JSON.stringify(data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchContents: async function(token, domainId){
+        try{
+            const res = await axios.get(`${baseURL}/classes/contents/${domainId}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    addContent: async function(token, data){
+        try{
+            const res = await axios.post(`${baseURL}/classes/content/add`, JSON.stringify(data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    fetchQuiz: async function(token, domainId){
+        try{
+            const res = await axios.get(`${baseURL}/classes/domains/${domainId}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+    addQuiz: async function(token, data){
+        try{
+            const res = await axios.post(`${baseURL}/classes/content/quiz/add`, JSON.stringify(data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            }
+            return {
+                success: false,
+                message: err.message,
+                statusCode: err.statusCode
+            }
+        }
+    },
+}
