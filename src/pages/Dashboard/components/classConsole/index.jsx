@@ -56,12 +56,14 @@ const studentIcon = [
     id: 1,
     icon: MdMessage,
     title: "Mail",
+    link:""
   },
 
   {
     id: 2,
     icon: RiVideoAddFill,
     title: "Live Class",
+    link:"/student/live-class"
   },
 ];
 
@@ -145,7 +147,7 @@ export const Console = ({ children }) => {
       classConsole: { ...classConsole, sidebar: !classConsole.sidebar },
     });
 
-  const studentpath = pathname.split("/")[1] === "console";
+  const studentpath = pathname.split("/")[1] === "student";
   const quizpath =
     pathname.split("/")[2] === "myclasses"
       ? "My Classes"
@@ -248,7 +250,7 @@ function Sidebar({ Toggle, side }) {
   const navigate = useNavigate();
   const userdata = getItem(KEY);
   const courseId = localStorage.getItem(CLASSID);
-  const studentpath = pathname.split("/")[1] === "console";
+  const studentpath = pathname.split("/")[1] === "student";
 
   function closeSidebar() {
     setGeneralState({
@@ -315,7 +317,7 @@ function Sidebar({ Toggle, side }) {
             <div className={style.course_content}>
               <div className={`${style.create_content_button} ${style.blue}`}>
                 <button>
-                  <Link to={"/console/myclasses"}>
+                  <Link to={"myclasses"}>
                     <span>My Classes</span>
                   </Link>
                 </button>
@@ -323,7 +325,7 @@ function Sidebar({ Toggle, side }) {
 
               <div className={`${style.create_content_button} ${style.blue}`}>
                 <button>
-                  <Link to={"/console/assessments"}>
+                  <Link to={"assessments"}>
                     <span>Assessments</span>
                     <i>
                       <BsThreeDotsVertical />
@@ -334,7 +336,7 @@ function Sidebar({ Toggle, side }) {
 
               <div className={`${style.create_content_button} ${style.blue}`}>
                 <button>
-                  <Link to={"/console/liveclass"}>
+                  <Link to={"/student/live-class"}>
                     <span>Live Classes</span>
                     {/* <i>
                       <BsThreeDotsVertical />

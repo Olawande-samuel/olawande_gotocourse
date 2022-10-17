@@ -241,6 +241,16 @@ function App() {
                   <Route path="live" element={<LiveClass />} />
                   <Route path="connect" element={<Intermission />} />
                 </Route>
+
+                <Route path="console" element={<Content />}>
+                  <Route path="myclasses" element={<Out />} >
+                    <Route index element={<ConsoleClasses />} />
+                    {/* <Route path=":id" element={<MyClass />} /> */}
+                  </Route>
+                  <Route path="assessments" element={<ConsoleAssessments />} />
+                  <Route path="liveclass" element={<Out />} />
+                </Route>
+                <Route path="class-console/class" element={<StudentClassroom />} />
               </Route>
 
               <Route path="test" element={<Content />}>

@@ -40,7 +40,7 @@ export default function ConsoleClasses() {
             <main className='assessments'>
                 {
                     [...Array(4)].map((x, id) => (
-                        <Link to={`${id}`}>
+                        <Link to="/student/class-console/class">
                             <div className="assesstmentbox">
                                 <div className="excelbox">
                                     <img src={excel} alt="" />

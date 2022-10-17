@@ -96,15 +96,17 @@
 
 .affiliates__hero__img {
     flex: 4;
-    height: 380px;
+    height: 400px;
     width: 100%;
-    border-radius: 20.77px 0px 0px 0px;
+    /* border-top-left-radius: 20px; */
 }
 
 .affiliates__hero__img img {
     height: 100%;
     width: 100%;
     object-fit: cover;
+    border-top-left-radius: 20px;
+
 }
 
 
