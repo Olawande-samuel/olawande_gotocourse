@@ -36,38 +36,24 @@
 }
 
 
-.about_top__absolute header h1{
-font-weight: 700;
-}
-.about_top__absolute header {
-    color: white;
-    position: absolute;
-    bottom: 0;
-    right: 50%;
-    transform: translateX(50%);
-    z-index: 2;
-    opacity: 1;
-}
 
-.about_top__absolute hr {
-    /* position: absolute; */
-    background: #F75C4E;
-    /* content: ""; */
-    min-width:100px;
-    height: 10px;
-    opacity: 1;
-    /* position: absolute; */
-    /* bottom: -10px; */
-    /* right: 65%; */
-    /* left: 0; */
+.about_top__text{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    /* border: 2px solid red; */
+    transform: translate(-50%, -50%);
+
+}
+.about_top__text h2 {
+    color: #000F62;
+    font-weight: 700;
+    font-size: 2rem;
+    text-align: center;
 }
  
-@media (max-width:812px){
-    .about_top__absolute header {
-     top: 0;
-    }
 
-}
 
 .believe {
     background-color: rgba(157, 166, 186, 0.53);
@@ -97,8 +83,20 @@ font-weight: 700;
 
 }
 
+@media (max-width: 540px) {
+
+    .about_top__text{
+        top: 10%;
+        left: unset;
+        width: 100%;
+        transform: unset;
+    
+    }
+}
+
 @media (min-width: 912px) {
 
+   
     .believe_cards {
         grid-gap: 30px;
         width: min(70vw, 80%);
