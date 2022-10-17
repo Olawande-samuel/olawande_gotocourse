@@ -22,6 +22,7 @@ import {
 
 import StudentHelp from "./pages/Dashboard/Students/Help";
 import StudentReferral from "./pages/Dashboard/Students/Referral";
+import StudentClassroom from "./pages/Dashboard/Students/Classroom";
 
 
 import {
@@ -166,6 +167,7 @@ function App() {
               <Route path="forgot-password" element={<ForgotPassword />} />
               <Route path="change-password" element={<ResetPassword />} />
               <Route path="become-a-teacher" element={<BecomeATeacher />} />
+              <Route path="student/classroom" element={<StudentClassroom />} />
 
               <Route path="tester" element={<CreateRoom />} />
               <Route path="video-chat" element={<VideDiv />} />
@@ -419,6 +421,7 @@ function App() {
                 <Route path="login" element={<AdminLogin />} />
                 <Route path="signup" element={<AdminSignup />} />
               </Route>
+              
 
             </Route>
             <Route path="enterprise" element={<Business />} />

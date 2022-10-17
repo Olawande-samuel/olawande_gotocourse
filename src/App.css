@@ -13,7 +13,7 @@
   --text-color-lighter: #000;
   --btn-color: rgb(12, 33, 145);
   --accent-color: #023047;
-  --text-blue: #0C2191;
+  --text-blue: rgb(12, 33, 145);
   --greenish: #023047;
   --secondary: #2F80ED;
   --gray: #9DA6BA;
@@ -135,6 +135,9 @@ font-size: 14px;
 body {
   font-family: "Inter", sans-serif ;
   color: #000;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 a {
   text-decoration: none;
