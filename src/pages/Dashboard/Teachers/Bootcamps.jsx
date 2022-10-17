@@ -8,7 +8,7 @@ import clsx from "./styles.module.css";
 import { AdvancedError } from "../../../classes";
 import { useLocalStorage } from "../../../hooks";
 import { useAuth } from "../../../contexts/Auth";
-import {KEY} from "../../../constants"
+import {CLASSID, KEY} from "../../../constants"
 import Loader from "../../../components/Loader";
 import { BootcampRow } from "../Admin";
 import { Link } from "react-router-dom";
@@ -212,14 +212,14 @@ export function ConsoleClass() {
   }
 
 
-  export function ClassesCard({bootcampImg, title, description, all}){
+  export function ClassesCard({bootcampImg, title, description, bootcampId, all}){
     return (  
         <div className={clsx.class_con_card}>
           <img src={bootcampImg} alt="" className={clsx.class_con_img} />
           <h5>{title}</h5>
           <p className="clamp_text_sm">{description}</p>
           <div>
-            <Link className="d-inline-flex" to="class">
+            <Link className="d-inline-flex" to="class" onClick={()=> localStorage.setItem(CLASSID, bootcampId)}>
               <button className={clsx.class_con_button}>Open Class</button>
             </Link>
           </div>

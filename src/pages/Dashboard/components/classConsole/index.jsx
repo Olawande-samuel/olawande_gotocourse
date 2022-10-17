@@ -43,11 +43,13 @@ import {
   Switch,
 } from "@mui/material";
 
-import { Link, useNavigate,useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import clsx from "../styles.module.css";
 import { AdvancedError } from "../../../../classes";
 import { toast, ToastContainer } from "react-toastify";
-
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { CLASSID, KEY } from "../../../../constants";
+import { useLocalStorage } from "../../../../hooks";
 
 const studentIcon = [
   {
@@ -61,7 +63,6 @@ const studentIcon = [
     icon: RiVideoAddFill,
     title: "Live Class",
   },
-
 ];
 
 const iconData = [
@@ -69,25 +70,25 @@ const iconData = [
     id: 1,
     icon: MdMessage,
     title: "Mail",
-    link: "/teacher/class-console/class/mail"
+    link: "/teacher/class-console/class/mail",
   },
   {
     id: 2,
     icon: MdLibraryAdd,
     title: "Creator suite",
-    link: "/teacher/class-console/class/creator-suite"
+    link: "/teacher/class-console/class/creator-suite",
   },
   {
     id: 3,
     icon: RiVideoAddFill,
     title: "Live Class",
-    link: "/teacher/live-class "
+    link: "/teacher/live-class ",
   },
   {
     id: 4,
     icon: FaUsers,
     title: "Students",
-    link: "/teacher/class-console/class/classroom"
+    link: "/teacher/class-console/class/classroom",
   },
 ];
 
@@ -144,10 +145,13 @@ export const Console = ({ children }) => {
       classConsole: { ...classConsole, sidebar: !classConsole.sidebar },
     });
 
-
   const studentpath = pathname.split("/")[1] === "console";
-  const quizpath = pathname.split("/")[2] === "myclasses" ? "My Classes" : pathname.split("/")[2] === "liveclass" ? "Live Class" : pathname.split("/")[2]
-
+  const quizpath =
+    pathname.split("/")[2] === "myclasses"
+      ? "My Classes"
+      : pathname.split("/")[2] === "liveclass"
+      ? "Live Class"
+      : pathname.split("/")[2];
 
   return (
     <div className={style.console}>
@@ -164,7 +168,6 @@ export const Console = ({ children }) => {
       <ModuleModal moduleOpen={moduleOpen} moduleClose={moduleClose} />
 
       <main className={style.children}>
-
         <section className="contentheader">
           <div className="contentnav">
             <div className="content__hamburger">
@@ -187,45 +190,33 @@ export const Console = ({ children }) => {
             </div>
           </div>
 
-          {
-            studentpath && (
-              <div className="studenttitle">
-                <h2>{quizpath}</h2>
-              </div>
-
-            )}
-
-
+          {studentpath && (
+            <div className="studenttitle">
+              <h2>{quizpath}</h2>
+            </div>
+          )}
         </section>
         {children}
       </main>
 
       <div className={style.icon_bar}>
-
-        {
-          studentpath ? (
-            studentIcon.map(({ title, id, icon: Icon }) => (
+        {studentpath
+          ? studentIcon.map(({ title, id, icon: Icon }) => (
               <Tooltip title={title} key={id}>
                 <IconButton>
                   <Icon size="1.5rem" color="#0C2191" />
                 </IconButton>
               </Tooltip>
             ))
-          )
-            :
-            (
-              iconData.map(({ title, id, icon: Icon, link }) => (
-                <Tooltip title={title} key={id}>
-                  <IconButton>
-                    <Link to={link} className="d-inline-flex">
-                      <Icon size="1.5rem" color="#0C2191" />
-                    </Link>
-                  </IconButton>
-                </Tooltip>
-              ))
-            )
-        }
-
+          : iconData.map(({ title, id, icon: Icon, link }) => (
+              <Tooltip title={title} key={id}>
+                <IconButton>
+                  <Link to={link} className="d-inline-flex">
+                    <Icon size="1.5rem" color="#0C2191" />
+                  </Link>
+                </IconButton>
+              </Tooltip>
+            ))}
       </div>
     </div>
   );
@@ -249,21 +240,23 @@ function Sidebar({ Toggle, side }) {
     generalState: { classConsole },
     generalState,
     setGeneralState,
+    consoleFunctions: { fetchDomains },
   } = useAuth();
 
-  console.log(generalState);
+  const { pathname } = useLocation();
+  const { getItem } = useLocalStorage();
+  const navigate = useNavigate();
+  const userdata = getItem(KEY);
+  const courseId = localStorage.getItem(CLASSID);
+  const studentpath = pathname.split("/")[1] === "console";
 
+  console.log({ courseId });
   function closeSidebar() {
     setGeneralState({
       ...generalState,
       classConsole: { ...classConsole, sidebar: !classConsole.sidebar },
     });
   }
-
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
-
-  const studentpath = pathname.split("/")[1] === "console";
 
   function goBack() {
     let pathArray = pathname.split("/")[1];
@@ -277,99 +270,101 @@ function Sidebar({ Toggle, side }) {
         return "/admin";
     }
   }
+
+  const getDomains = useQuery(["fetch domains", courseId], () =>
+    fetchDomains(userdata.token, courseId)
+  );
+
   return (
     // <article className={style.class_sidebar }>
     <>
       <article
-        className={`${classConsole.sidebar ? style.open : style.close} ${style.class_sidebar
-          }`}
+        className={`${classConsole.sidebar ? style.open : style.close} ${
+          style.class_sidebar
+        }`}
       >
         <Link to="/">
           <Logosm />
         </Link>
 
-        {
-          !studentpath ? (
-            <>
-              <div className={style.course_content}>
-                <p>Course content</p>
-                {
-                  classConsole.domains.map(domain=>(
-                    <Accord  {...domain} />
+        {!studentpath ? (
+          <>
+            <div className={style.course_content}>
+              <p>Course content</p>
+              {getDomains?.data?.data?.map((domain) => (
+                <Accord {...domain} />
+              ))}
+            </div>
+            <div className={`${style.create_content_button} ${style.white}`}>
+              <button onClick={Toggle}>
+                <i>
+                  <AiOutlinePlus />
+                </i>
+                <span>New Content</span>
+                <i>
+                  <BsThreeDotsVertical />
+                </i>
+              </button>
+            </div>
 
-                  ))
-                }
-              </div>
-              <div className={`${style.create_content_button} ${style.white}`}>
-                <button onClick={Toggle}>
-                  <i>
-                    <AiOutlinePlus />
-                  </i>
-                  <span>New Content</span>
-                  <i>
-                    <BsThreeDotsVertical />
-                  </i>
+            <Link className="d-inline-flex" to={goBack()}>
+              <button className={style.back_button}>Back</button>
+            </Link>
+          </>
+        ) : (
+          <>
+            <div className={style.course_content}>
+              <div className={`${style.create_content_button} ${style.blue}`}>
+                <button>
+                  <Link to={"/console/myclasses"}>
+                    <span>My Classes</span>
+                  </Link>
                 </button>
               </div>
 
-              <Link className="d-inline-flex" to={goBack()}>
-                <button className={style.back_button}>Back</button>
-              </Link>
-            </>
-
-          ) : (
-            <>
-              <div className={style.course_content}>
-
-                <div className={`${style.create_content_button} ${style.blue}`}>
-                  <button>
-                    <Link to={"/console/myclasses"}>
-
-                      <span>My Classes</span>
-
-                    </Link>
-                  </button>
-                </div>
-
-                <div className={`${style.create_content_button} ${style.blue}`}>
-                  <button >
-                    <Link to={"/console/assessments"}>
-                      <span>Assessments</span>
-                      <i>
-                        <BsThreeDotsVertical />
-                      </i>
-                    </Link>
-                  </button>
-                </div>
-
-                <div className={`${style.create_content_button} ${style.blue}`}>
-                  <button >
-                    <Link to={"/console/liveclass"}>
-                      <span>Live Classes</span>
-                      {/* <i>
+              <div className={`${style.create_content_button} ${style.blue}`}>
+                <button>
+                  <Link to={"/console/assessments"}>
+                    <span>Assessments</span>
+                    <i>
                       <BsThreeDotsVertical />
-                    </i> */}
-                    </Link>
-                  </button>
-                </div>
-
+                    </i>
+                  </Link>
+                </button>
               </div>
 
-            </>
-          )
-        }
-
+              <div className={`${style.create_content_button} ${style.blue}`}>
+                <button>
+                  <Link to={"/console/liveclass"}>
+                    <span>Live Classes</span>
+                    {/* <i>
+                      <BsThreeDotsVertical />
+                    </i> */}
+                  </Link>
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </article>
       <div
         onClick={closeSidebar}
-        className={`d-lg-none ${clsx.overlay} ${classConsole.sidebar ? clsx.overlayopen : clsx.overlayclose
-          }`}
+        className={`d-lg-none ${clsx.overlay} ${
+          classConsole.sidebar ? clsx.overlayopen : clsx.overlayclose
+        }`}
       ></div>
     </>
   );
 }
 
-function Accord({domain, content, moduleId}) {
+function Accord({ name, _id, classId, description }) {
+  const { getItem } = useAuth();
+  const userdata = getItem(KEY);
+  const { consoleFunctions: { fetchContents }, } = useAuth();
+  const getDomainContent = useQuery(["getDomainContent", _id], () => fetchContents(userdata.token, _id) );
+
+  console.log({ getDomainContent });
+
   const data = [
     {
       id: 1,
@@ -397,14 +392,14 @@ function Accord({domain, content, moduleId}) {
   ];
   const [details, showDetails] = useState(false);
 
-  function IconType(icon){
+  function IconType(icon) {
     switch (icon) {
       case "quiz":
-        return <VscNote />
+        return <VscNote />;
       case "note":
-        return <MdOutlineNote />
+        return <MdOutlineNote />;
       case "file":
-        return <AiOutlinePaperClip />
+        return <AiOutlinePaperClip />;
       default:
         break;
     }
@@ -419,7 +414,7 @@ function Accord({domain, content, moduleId}) {
             <BiCaretRight onClick={() => showDetails(!details)} />
           )}
         </i>
-        <span>{domain}</span>
+        <span>{name}</span>
         <i>
           <BsThreeDotsVertical />
         </i>
@@ -427,17 +422,17 @@ function Accord({domain, content, moduleId}) {
 
       {details && (
         <ul className={style.content_list}>
-          {content.map(({ icon: Icon, title, link, id, type }) => (
+          {/* {content.map(({ icon: Icon, title, link, id, type }) => (
             <li key={id}>
               <Link to={`${type}`}>
-                <i>
-                  {IconType(type)}
-                </i>
+                <i>{IconType(type)}</i>
                 <span>{title}</span>
-                <i><BsThreeDotsVertical /></i>
+                <i>
+                  <BsThreeDotsVertical />
+                </i>
               </Link>
             </li>
-          ))}
+          ))} */}
         </ul>
       )}
     </div>
@@ -447,32 +442,51 @@ function Accord({domain, content, moduleId}) {
 export function ModalContent({ show, handleClose, toggleModule }) {
   const [showMore, setShowMore] = useState(false);
   const [type, setType] = useState("file");
+  const {getItem} = useLocalStorage();
+  const userdata = getItem(KEY)
   let ref = useRef();
+  const [formstate, setFormstate] = useState({
+    isLocked:false,
+    notifyStudents:false,
+  });
 
-  const [formstate, setFormstate]= useState({});
-
-  const {generalState, setGeneralState, generalState: { classConsole}} = useAuth();
-  console.log("modal show", { show });
-
-  function handleChange(e){
-    setFormstate({...formstate, [ e.target.name]: e.target.value, type: type})
+  const { generalState, setGeneralState, generalState: { classConsole, }, consoleFunctions:{addContent} } = useAuth();
+  const fetchDomains = useQuery(["fetchDomains"])
+  console.log(fetchDomains)
+  function handleChange(e) {
+    setFormstate({ ...formstate, [e.target.name]: e.target.value, type: type });
   }
-  
-  function addContent(){
-    if(!formstate.domain){
-      toast.error("Please select a domain") 
-      throw new AdvancedError("Please select a domain", 0)
+
+  const addContentMutation = useMutation(addContent, {
+    onSuccess: (res)=>{
+        console.log("add content", res)
+        handleClose();
+    },
+    onError: (err)=>{
+        console.error("error adding content", err )
     }
+  })
 
-    console.log("clicked")
-    let selectedDomain = classConsole.domains.find(d => d.domain === formstate.domain)
-    selectedDomain.content = [...selectedDomain.content, formstate]
-    handleClose()
-    console.log({selectedDomain})
+  function createContent() {
+    if (!formstate.domain) {
+      toast.error("Please select a domain");
+      throw new AdvancedError("Please select a domain", 0);
+    }
+    addContentMutation.mutate(userdata.token,formstate) 
   }
+
+  console.log({addContentMutation})
+
+  function handleNotifyStudent(){
+    setFormstate({...formstate, notifyStudents: !formstate.notifyStudents})
+  }
+  function handleIsLocked(){
+    setFormstate({...formstate, isLocked: !formstate.isLocked})
+  }
+
+  console.log({formstate});
   return (
     <div>
-     
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton className={style.modal__header}>
           <Modal.Title className={style.modal__title}>Add Content</Modal.Title>
@@ -487,11 +501,11 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 labelId="content-type-label"
                 id="content-type"
                 label="Content Type"
-                value={type}
-                onChange={(e) => setType(e.target.value)}
+                value={formstate.type}
+                onChange={handleChange}
+                name="type"
               >
-                
-                <MenuItem  value="Select Content Type" defaultValue>
+                <MenuItem value="Select Content Type" defaultValue>
                   Select Content
                 </MenuItem>
                 <MenuItem value="file">
@@ -527,7 +541,7 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 name="title"
               />
             </FormControl>
-            
+
             <FormControl>
               <InputLabel id="domain-label">Domain</InputLabel>
               <Select
@@ -537,18 +551,16 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 className="myselect"
                 ref={ref}
                 onChange={handleChange}
-                name="domain"
-                value={formstate.domain}
+                name="domainId"
+                value={formstate.domainId}
                 required
               >
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {
-                  classConsole.domains?.map(domain =>(
-                    <MenuItem value={domain.domain}>{domain.domain}</MenuItem>
-                  ))
-                }
+                {classConsole.domains?.map((domain) => (
+                  <MenuItem value={domain._id}>{domain.name}</MenuItem>
+                ))}
 
                 <button className={style.modulebtn} onClick={toggleModule}>
                   + New Module
@@ -584,6 +596,8 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                     label="Content Objective"
                     variant="outlined"
                     placeholder="Content Objective"
+                    name="objective"
+                    value={formstate.objective}
                   />
                   <FormHelperText>
                     What will your student do/learn with this content
@@ -591,9 +605,12 @@ export function ModalContent({ show, handleClose, toggleModule }) {
 
                   <div className={style.switchBorder}>
                     <FormControlLabel
-                      control={<Switch defaultChecked />}
+                      control={<Switch  />}
                       label="Lock course content"
                       labelPlacement="top"
+                      value="lock course"
+                      checked={formstate.isLocked}
+                      onClick={handleIsLocked}
                     />
                     <p className={style.formtext}>
                       Content is currently locked
@@ -602,7 +619,13 @@ export function ModalContent({ show, handleClose, toggleModule }) {
 
                   <div className={style.switchBorder}>
                     <FormControlLabel
-                      control={<Switch defaultChecked />}
+                      control={
+                           <Switch 
+                              onClick={handleNotifyStudent}
+                              checked={formstate.notifyStudents}
+                              value="notifyStudent"
+                           />
+                        }
                       label="Notify students on update"
                       labelPlacement="top"
                     />
@@ -616,7 +639,9 @@ export function ModalContent({ show, handleClose, toggleModule }) {
               )}
             </div>
 
-            <button className={style.contentform__btn} onClick={addContent}>Submit</button>
+            <button className={style.contentform__btn} onClick={createContent}>
+              Submit
+            </button>
           </div>
         </Modal.Body>
         {/* <Modal.Footer>
@@ -633,19 +658,32 @@ export function ModalContent({ show, handleClose, toggleModule }) {
 }
 
 export function ModuleModal({ moduleOpen, moduleClose }) {
-  console.log("small modal show", { moduleOpen });
-  console.log("small close show", { moduleClose });
-  const {generalState, generalState:{classConsole}, setGeneralState} = useAuth()
-  const [formstate, setFormstate]= useState({})
+   const {consoleFunctions:{addDomain }} = useAuth()
+   const {getItem} = useLocalStorage()
+   const [formstate, setFormstate] = useState({});
 
-  function handleChange(e){
-    setFormstate({...formstate, [e.target.name]: e.target.value, content:[]})
+   const  mutation = useMutation((token, state)=>addDomain(token, state), {
+      onSuccess: (res)=>{
+         console.log({res})
+         moduleClose();
+      }, 
+      onError: (err)=>{
+         console.error(err)
+      }
+   })
+
+   const userdata = getItem(KEY)
+   const classId = getItem(CLASSID)
+
+   function handleChange(e) {
+    setFormstate({ ...formstate, [e.target.name]: e.target.value })
+   }
+
+  function createModule() {
+   console.log("clicked")
+   mutation.mutate(userdata.token, {...formstate, classId})
   }
-  function createModule(){
-    setGeneralState({...generalState, classConsole: {...generalState.classConsole, domains: [...generalState.classConsole.domains, formstate]}})
-    moduleClose()
-  }
-  console.log({generalState})
+  
   return (
     <div>
       <Modal show={moduleOpen} onHide={moduleClose} className="modulemodal">
@@ -668,7 +706,8 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
                 variant="outlined"
                 placeholder="Domain Name"
                 onChange={handleChange}
-                name="domain"
+                name="name"
+                value={formstate.name}
               />
 
               <TextField
@@ -679,12 +718,20 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
                 placeholder="Domain Description(optional)"
                 onChange={handleChange}
                 name="description"
+                value={formstate.description}
               />
             </FormControl>
 
             <div className="contentbutton">
-              <button className="" onClick={createModule}>
-                Submit
+              <button className="" onClick={createModule} disabled={mutation.isLoading}>
+               {
+                  mutation.isLoading ?
+                   <div className="spinner-border" role="status">
+                   <span className="visually-hidden">Loading...</span>
+                 </div>
+                 : 
+                 <span>Submit</span>
+               }
               </button>
             </div>
 

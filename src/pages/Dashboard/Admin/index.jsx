@@ -294,7 +294,7 @@ export function Category() {
   const flag = useRef(false);
   const userdata = getItem(KEY);
   const tableHeaders = ["No", "Name of Category", "Date", "No of Student"];
-  const [search, setSearch]= useState("")
+  const [search, setSearch] = useState("");
   useEffect(() => {
     if (flag.current) return;
     (async () => {
@@ -358,7 +358,15 @@ export function Category() {
           </div>
           <div className="d-flex justify-content-between align-items-center mb-3">
             <div>
-                <input type="search" name="search" id="search" className="form-control" value={search} onChange={(e)=>setSearch(e.target.value)} placeholder="search..." />
+              <input
+                type="search"
+                name="search"
+                id="search"
+                className="form-control"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="search..."
+              />
             </div>
           </div>
           <div className={` ${clsx.admin__student_main}`}>
@@ -371,38 +379,46 @@ export function Category() {
                 </thead>
                 <tbody>
                   {categories?.length > 0 &&
-                    categories?.filter(cat=> (
-                        cat.name.toLowerCase().includes(search.toLowerCase()) || cat.description.toLowerCase().includes(search.toLowerCase())
-                      )).map(
-                      (
-                        {
-                          bannerImg,
-                          careerDescription,
-                          careerList,
-                          name,
-                          description,
-                          iconImg,
-                          categoryId,
-                          niche: nicheTitle,
-                          nicheDescription,
-                          nicheItems,
-                        },
-                        i
-                      ) => (
-                        <UserInfoCard
-                          key={i}
-                          comp="Category"
-                          name={name}
-                          num={i}
-                          date={"2022-06-26T00:00:00.000Z".split("T")[0]}
-                          students={90}
-                          id={categoryId}
-                          showDetailsHandler={(e) =>
-                            showDetailsHandler(e, name)
-                          }
-                        />
+                    categories
+                      ?.filter(
+                        (cat) =>
+                          cat.name
+                            .toLowerCase()
+                            .includes(search.toLowerCase()) ||
+                          cat.description
+                            .toLowerCase()
+                            .includes(search.toLowerCase())
                       )
-                    )}
+                      .map(
+                        (
+                          {
+                            bannerImg,
+                            careerDescription,
+                            careerList,
+                            name,
+                            description,
+                            iconImg,
+                            categoryId,
+                            niche: nicheTitle,
+                            nicheDescription,
+                            nicheItems,
+                          },
+                          i
+                        ) => (
+                          <UserInfoCard
+                            key={i}
+                            comp="Category"
+                            name={name}
+                            num={i}
+                            date={"2022-06-26T00:00:00.000Z".split("T")[0]}
+                            students={90}
+                            id={categoryId}
+                            showDetailsHandler={(e) =>
+                              showDetailsHandler(e, name)
+                            }
+                          />
+                        )
+                      )}
                 </tbody>
               </table>
             ) : (
@@ -836,7 +852,11 @@ export function CreateCourseCategory() {
               handleChange={changeHandler}
               value={formstate.niche}
             /> */}
-            <Editor initialState={formstate.description} title="Description" setBio={setBio} />
+            <Editor
+              initialState={formstate.description}
+              title="Description"
+              setBio={setBio}
+            />
             <div className={clsx.form_group}>
               <label htmlFor={"brief"}>Niche Description</label>
               <textarea
@@ -2566,7 +2586,7 @@ export function MentorsDetail() {
         <div className={clsx["admin_profile_main"]}>
           <h1>
             {data ? `${data?.mentorFirstName} ${data?.mentorLastName}` : ""}
-          </h1>  
+          </h1>
 
           <div className={clsx.admin__profile_info}>
             <div className={clsx.admin__info}>

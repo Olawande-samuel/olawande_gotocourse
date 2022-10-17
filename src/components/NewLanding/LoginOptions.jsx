@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { GiTeacher } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaBookReader } from "react-icons/fa";
-import { useMutation } from "@tanstack/react-query";
 import { ToastContainer, toast } from "react-toastify";
 
 import {

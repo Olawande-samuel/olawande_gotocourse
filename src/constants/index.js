@@ -30,6 +30,7 @@ export const AFFILIATE_KEY = "gotocourse-affiliate-data";
 export const VERIFICATION_KEY = "userAuthdata"
 export const COURSE_CATEGORY_KEY = 'gotocourse-category';
 
+export const CLASSID = "gotocourse-classid";
 // export const COURSE_CATEGORY_KEY = 'gotocourse-course-category';
 
 export function getDate(date){

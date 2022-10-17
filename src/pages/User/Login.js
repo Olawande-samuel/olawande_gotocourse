@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
-import {useMutation} from "@tanstack/react-query"
 import {motion} from "framer-motion"
 import { useLocalStorage } from "../../hooks";
 import { useAuth } from "../../contexts/Auth";
@@ -113,7 +112,7 @@ const Login = () => {
     e.preventDefault();
     let Data= {
       email: data.email,
-      user_type: "student"
+      user_type: "teacher"
     }
 
     pledre.loginUser(Data)
