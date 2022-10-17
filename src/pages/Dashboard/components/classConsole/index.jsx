@@ -673,7 +673,7 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
    })
 
    const userdata = getItem(KEY)
-   const classId = getItem(CLASSID)
+   // const classId = getItem(CLASSID)
 
    function handleChange(e) {
     setFormstate({ ...formstate, [e.target.name]: e.target.value })
@@ -681,7 +681,7 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
 
   function createModule() {
    console.log("clicked")
-   mutation.mutate(userdata.token, {...formstate, classId})
+   // mutation.mutate(userdata.token, {...formstate, classId})
   }
   
   return (
