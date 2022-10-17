@@ -240,6 +240,7 @@ function App() {
                   <Route path="connect" element={<Intermission />} />
                 </Route>
               </Route>
+
               <Route path="test" element={<Content />}>
                 <Route path="file" element={<File />} />
                 <Route path="note" element={<Note />} />
@@ -313,18 +314,12 @@ function App() {
                   <Route path="live" element={<LiveClass />} />
                   <Route path="connect" element={<Intermission />} />
                 </Route>
+
                 <Route path="class-console" element={<Out />}>
                   <Route index element={<ConsoleClass />} />
                   <Route path="class" element={<Content />}>
-                    <Route index element={<File />}  />
-
-                    <Route path="creator-suite" element={<Suite />}>
-                      <Route index element={<Processed />} />
-                      <Route path="processed" element={<Processed />} />
-                      <Route path="pending" element={<Pending />} />
-                    </Route>                    
+                    <Route path="creator-suite" element={<Suite />}/>          
                     <Route path="classroom" element={<Classroom />} />
-
                     <Route path="mail" element={<ChatComponent />} />
                     <Route path="file" element={<File />} />
                     <Route path="note" element={<Note />} />
@@ -335,6 +330,8 @@ function App() {
                   </Route>
                 </Route>
               </Route>
+
+              
               <Route path="affiliates" element={<AffiliateLanding />} />
               <Route path="affiliates/register" element={<AffiliateRegister />} />
               <Route path="affiliates/login" element={<AffiliateLogin />} />
@@ -386,17 +383,7 @@ function App() {
                 <Route path="settings" element={<Settings />} />
                 <Route path="earnings" element={<AdminEarning />} />
                 <Route path="affiliate" element={<AdminAffiliate />} />
-                {/* <Route path="class-console" element={<Out />}>
-                  <Route index element={<AdminClassConsole />} />
-                  <Route path=":id" element={<Content />}>
-                    <Route path="file" element={<FileComponent />} />
-                    <Route path="note" element={<NoteComponent />} />
-                    <Route path="quiz" element={<Out />}>
-                      <Route index element={<QuizComponent />} />
-                      <Route path="preview" element={<Preview />} />
-                    </Route>
-                  </Route>
-                </Route> */}
+               
 
                 <Route path="class-console" element={<Out />}>
                   <Route index element={<AdminClassConsole />} />
@@ -409,6 +396,7 @@ function App() {
                     </Route>
                   </Route>
                 </Route>
+
                 <Route path="live-class" element={<Out />}>
                   <Route index element={<Live />} />
                   <Route path="live" element={<LiveClass />} />

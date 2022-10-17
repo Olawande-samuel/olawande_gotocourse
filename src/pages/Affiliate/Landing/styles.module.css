@@ -47,7 +47,7 @@
 }
 
 
-.affiliate_top__absolute button {
+.affiliate_top__absolute button{
     border: none;
     cursor: pointer;
     background-color: #0C2191;
@@ -55,6 +55,56 @@
     padding: 15px 50px;
     font-weight: 400;
     color: white
+}
+
+.affiliates__hero {
+    background: #ECEFFF;
+    display: flex;
+    gap: 4rem;
+    padding: 40px;
+
+}
+
+.affiliates__hero__left {
+    flex: 6;
+}
+
+.affiliates__hero__left h2 {
+    color: #0C2191;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 38px;
+
+}
+
+.affiliates__hero__left p {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 30px;
+    margin: 2rem 0;
+
+}
+
+.affiliates__hero__left button {
+    border: none;
+    cursor: pointer;
+    background-color: #0C2191;
+    padding: 15px 50px;
+    font-weight: 400;
+    color: white
+}
+
+.affiliates__hero__img {
+    flex: 4;
+    height: 380px;
+    width: 100%;
+    border-radius: 20.77px 0px 0px 0px;
+}
+
+.affiliates__hero__img img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }
 
 
@@ -87,7 +137,7 @@
     color: #191046;
     text-align: center;
     line-height: 2;
-    font-weight:600;
+    font-weight: 600;
 }
 
 .get_started {
@@ -105,7 +155,7 @@
 
 
 .get_started_right {
-   margin-left: 50px;
+    margin-left: 50px;
 }
 
 .get_started_right h3 {
@@ -118,7 +168,7 @@
 .get_started_right p {
     color: #191046;
     width: 70%;
-    margin:0;
+    margin: 0;
     text-align: left;
     margin-bottom: 30px;
 }
@@ -136,7 +186,7 @@
     padding: 10.5px 20px;
     color: white;
     font-size: 0.85rem;
-    box-shadow: 0px 2px 5px rgba(0,0,0,0.3);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .start_now {
@@ -222,7 +272,7 @@
 
 .faq_answer {
     margin-left: 60px;
-    line-height:2;
+    line-height: 2;
     font-weight: 400;
 }
 
@@ -238,11 +288,11 @@
     .affiliate_cards {
         width: 100%;
     }
-     
+
     .get_started_right h3 {
         width: 90%;
     }
-     
+
     .get_started_right p {
         width: 90%;
     }
@@ -254,7 +304,7 @@
     .get_started_left img {
         width: 100%;
     }
-     
+
     .right_form button {
         padding: 10.5px 10px;
         /* width: 50%; */
@@ -262,12 +312,27 @@
 }
 
 
+
+@media (max-width:820px) {
+    .affiliates__hero{
+        flex-direction: column;
+    }  
+}
+
+@media (max-width:1024px) {
+    .affiliates__hero__img{
+        height: 440px;
+
+    }    
+}
+
+
 @media screen and (max-width: 1000px) {
     .affiliate_card {
         width: 250px;
     }
-    
-    
+
+
     .affiliate_card p {
         color: #191046;
         text-align: center;
@@ -277,26 +342,26 @@
     .get_started_right h3 {
         width: 100%;
     }
-     
+
     .get_started_right p {
         width: 100%;
     }
-     
+
     .right_form button {
         padding: 10.5px;
         /* width: 50%; */
     }
-    
+
 }
 
 
 
-@media screen and (max-width: 865px){
+@media screen and (max-width: 865px) {
     .affiliate_cards {
         flex-direction: column;
     }
-    
-    
+
+
     .affiliate_card {
         width: 450px;
         margin: 20px;
@@ -324,18 +389,20 @@
     .start_now__left {
         width: 100%;
     }
-    
+
     .start_now__left h2 {
         width: 100%;
     }
-    
+
     .start_now__left p {
         width: 100%;
     }
 }
 
 
-@media screen and (max-width: 765px){
+@media screen and (max-width: 765px) {
+    
+
     .affiliate_card {
         width: 450px;
     }
@@ -348,16 +415,16 @@
     .start_now {
         flex-direction: column;
     }
-    
+
     .start_now__left {
         width: 100%;
         margin-bottom: 30px
     }
-    
+
     .start_now__left h2 {
         width: 100%;
     }
-    
+
     .start_now__left p {
         width: 100%;
     }
@@ -368,8 +435,8 @@
         font-weight: 700;
         text-align: center;
     }
-    
-    
+
+
     .affiliate_top__absolute p {
         font-size: 1.1rem;
     }
@@ -377,19 +444,24 @@
 }
 
 
-@media screen and (max-width: 665px){
+@media screen and (max-width: 665px) {
     .affiliate_card {
         width: 400px;
     }
 }
 
-@media screen and (max-width: 465px){
+@media screen and (max-width: 465px) {
     .affiliate_card {
         width: 300px;
     }
+
+    .affiliates__hero{
+        padding: 20px;
+    }
 }
-@media screen and (min-width: 1440px){
-    .affiliate_top{
+
+@media screen and (min-width: 1440px) {
+    .affiliate_top {
         height: min(100vh, 850px);
     }
 }

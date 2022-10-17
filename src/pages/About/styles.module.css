@@ -127,6 +127,39 @@ font-weight: 700;
     text-align: center
 }
 
+.do{
+    padding: 20px 40px;
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+
+}
+.do h2 {
+    color: #0C2191;
+    margin-bottom: 40px;
+    position: relative;
+    text-align: center;
+}
+
+.do p{
+    text-align: center;
+}
+
+
+.do h2::after {
+    position: absolute;
+    background: #F75C4E;
+    content: "";
+    min-width:100px;
+    height: 10px;
+    position: absolute;
+    right: 50%;
+    transform: translateX(50%);
+    width: 180px;
+    top: 40px;
+
+
+}
 
 .mission {
     background-color: rgba(255, 241, 240, 0.5);
@@ -139,7 +172,7 @@ font-weight: 700;
     grid-gap: 40px;
 }
 
-.mission_left h2, .committed h2 {
+.mission_left h2, .committed h2, .do h2 {
     color: #0C2191;
     margin-bottom: 40px;
     position: relative;
@@ -162,6 +195,8 @@ font-weight: 700;
     bottom: -10px;
     right: 65%;
     left: 0;
+
+    
 }
 
 
