@@ -212,11 +212,13 @@ function Hero() {
         "Access tools for teaching",
         "Connect from anywhere",
       ],
-      img:HeroImg
+      img:tell,
+      // img:HeroImg
     },
     {
       id: 2,
-      title: "Get critical career skills",
+      title: "Get critical",
+      title2: "career skills",
       subtitle: "Start, switch, or advance your career with 50+ courses, Professional Certificates from top industry experts and leading bootcamps",
       social: true,
       acctype: "student",
@@ -227,7 +229,8 @@ function Hero() {
     },
     {
       id: 3,
-      title: "Deliver life-changing teaching experiences",
+      title: "Deliver life-changing",
+      title2: "teaching experiences",
       subtitle: "We’ve got the solution: Incredible tools for managing and organizing  world-class training and development programs all on Gotocourse.",
       social: true,
       acctype: "teacher",
@@ -238,7 +241,8 @@ function Hero() {
     },
     {
       id: 4,
-      title: "Change lives while you mentor on Gotocourse",
+      title: "Change lives while you",
+      title2: "mentor on Gotocourse",
       subtitle: "Streamline mentoring experience for you and your mentees, because everything’s in one place and accessible through a single link",
       social: true,
       acctype: "affiliate",
@@ -301,7 +305,7 @@ function Hero() {
   );
 }
 
-  function HeroContent({ overlay, setOverlay, logtype, title, signInWithFacebook, subtitle, img, list, acctype, social, color, link, link_btn }) {
+  function HeroContent({ overlay, setOverlay, logtype, title, title2, signInWithFacebook, subtitle, img, list, acctype, social, color, link, link_btn }) {
   return (
     <div className="container">
       {overlay && <LoginOptions closeOverlay={setOverlay} type={logtype} />}
@@ -314,7 +318,13 @@ function Hero() {
       </div>
       <div className="newHero_left">
         <header className="">
-          <h1 className="newHero_left-header mb-1">{title}</h1>
+          <h1 className="newHero_left-header mb-1">
+            <span>{title}</span>
+            {
+              title2 &&
+              <span className="d-block">{title2}</span>
+            }
+          </h1>
           <h6 className="newHero_left-title mb-4 mb-lg-5">
             {list && subtitle}
           </h6>

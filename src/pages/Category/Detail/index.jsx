@@ -299,9 +299,7 @@ const CourseDuration = styled.div`
 `;
 
 const Detail = ({ preview }) => {
-  const [details, setDetails] = useState({});
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
+
   const location = useLocation();
 
   const {
@@ -344,24 +342,13 @@ const Detail = ({ preview }) => {
 
             }
           } catch (err) {
-            toast.error(err.message, {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
+            console.error(err)
           } finally {
             setGeneralState({ ...generalState, loading: false });
           }
       })();
     }
   }, []);
-
-  //NB: use dummy if no data exist
-console.log({categoryDetails});
 
   return (
     <Layout background="category">

@@ -522,12 +522,12 @@ const Detail = () => {
     const courseCategory = routeCategory.split("-").join(" ").toUpperCase()
     
     const courseName = params.course ? params.course.split("-").join(" ") : params.profile.split("-").join(" ")
-    console.log({courseName})
+    
 
 
     useEffect(() => {
         window.scrollTo(0,0);
-        if(!params || !category.name) navigate(-1);
+        if(!params.profile && !category.name) navigate(-1);
         else {
             (async() => {
                 try{
@@ -538,8 +538,10 @@ const Detail = () => {
                     else {
                         const {data} = res;
                         let dets = data.find(d => d.name.trim().toLocaleLowerCase() === courseName.trim().toLocaleLowerCase());
+                        
                         if(!dets.courseId){
                             navigate(-1)
+
                         }
                         setDetails(_ => {
                             return {
@@ -550,15 +552,7 @@ const Detail = () => {
                         
                     }
                 }catch(err){
-                    toast.error(err.message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+                    console.error(err)
                 }
             })()
         }
@@ -566,7 +560,6 @@ const Detail = () => {
     }, [courseName, details?.name])
 
 
-    console.log({details})
     return (
         <Layout background="category">
             <ToastContainer /> 

@@ -47,7 +47,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import clsx from "../styles.module.css";
 import { AdvancedError } from "../../../../classes";
 import { toast, ToastContainer } from "react-toastify";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CLASSID, KEY } from "../../../../constants";
 import { useLocalStorage } from "../../../../hooks";
 
@@ -250,7 +250,6 @@ function Sidebar({ Toggle, side }) {
   const courseId = localStorage.getItem(CLASSID);
   const studentpath = pathname.split("/")[1] === "console";
 
-  console.log({ courseId });
   function closeSidebar() {
     setGeneralState({
       ...generalState,
@@ -308,7 +307,7 @@ function Sidebar({ Toggle, side }) {
             </div>
 
             <Link className="d-inline-flex" to={goBack()}>
-              <button className={style.back_button}>Back</button>
+              <button className={style.back_button} style={{width:"100%"}}>Back to Dashboard</button>
             </Link>
           </>
         ) : (
@@ -358,13 +357,12 @@ function Sidebar({ Toggle, side }) {
 }
 
 function Accord({ name, _id, classId, description }) {
-  const { getItem } = useAuth();
+  const { getItem } = useLocalStorage();
   const userdata = getItem(KEY);
   const { consoleFunctions: { fetchContents }, } = useAuth();
   const getDomainContent = useQuery(["getDomainContent", _id], () => fetchContents(userdata.token, _id) );
 
-  console.log({ getDomainContent });
-
+   console.log({getDomainContent});
   const data = [
     {
       id: 1,
@@ -443,23 +441,21 @@ export function ModalContent({ show, handleClose, toggleModule }) {
   const [showMore, setShowMore] = useState(false);
   const [type, setType] = useState("file");
   const {getItem} = useLocalStorage();
+  const classId = localStorage.getItem(CLASSID)
   const userdata = getItem(KEY)
   let ref = useRef();
+  const { generalState, setGeneralState, generalState: { classConsole, }, consoleFunctions:{addContent} } = useAuth();
   const [formstate, setFormstate] = useState({
     isLocked:false,
     notifyStudents:false,
   });
 
-  const { generalState, setGeneralState, generalState: { classConsole, }, consoleFunctions:{addContent} } = useAuth();
-  const fetchDomains = useQuery(["fetchDomains"])
-  console.log(fetchDomains)
-  function handleChange(e) {
-    setFormstate({ ...formstate, [e.target.name]: e.target.value, type: type });
-  }
+  const queryClient = useQueryClient()
+  const fetchDomains = useQuery(["fetch domains", classId], () => fetchDomains(userdata.token, classId))
 
-  const addContentMutation = useMutation(addContent, {
+  const addContentMutation = useMutation(([token, state])=>addContent(token, state), {
     onSuccess: (res)=>{
-        console.log("add content", res)
+        queryClient.invalidateQueries('fetch domains')
         handleClose();
     },
     onError: (err)=>{
@@ -467,15 +463,19 @@ export function ModalContent({ show, handleClose, toggleModule }) {
     }
   })
 
+  function handleChange(e) {
+    setFormstate({ ...formstate, [e.target.name]: e.target.value});
+  }
+
+
   function createContent() {
-    if (!formstate.domain) {
+    if (!formstate.domainId) {
       toast.error("Please select a domain");
       throw new AdvancedError("Please select a domain", 0);
     }
-    addContentMutation.mutate(userdata.token,formstate) 
+    addContentMutation.mutate([userdata.token, {...formstate, classId}]) 
   }
 
-  console.log({addContentMutation})
 
   function handleNotifyStudent(){
     setFormstate({...formstate, notifyStudents: !formstate.notifyStudents})
@@ -508,19 +508,19 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 <MenuItem value="Select Content Type" defaultValue>
                   Select Content
                 </MenuItem>
-                <MenuItem value="file">
+                <MenuItem value="FILE_VIDEO">
                   <i>
                     <MdAttachFile />
                   </i>
                   File/Videos
                 </MenuItem>
-                <MenuItem value="Quiz">
+                <MenuItem value="QUIZ">
                   <i>
                     <VscNote />
-                  </i>
+                  </i> 
                   Quiz
                 </MenuItem>
-                <MenuItem value="note">
+                <MenuItem value="NOTE">
                   <i>
                     <MdOutlineNote />
                   </i>
@@ -558,9 +558,12 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {classConsole.domains?.map((domain) => (
-                  <MenuItem value={domain._id}>{domain.name}</MenuItem>
-                ))}
+
+               {
+                  fetchDomains?.data?.data?.map((domain) => (
+                     <MenuItem value={domain._id}>{domain.name}</MenuItem>
+                  ))
+               }
 
                 <button className={style.modulebtn} onClick={toggleModule}>
                   + New Module
@@ -639,8 +642,13 @@ export function ModalContent({ show, handleClose, toggleModule }) {
               )}
             </div>
 
-            <button className={style.contentform__btn} onClick={createContent}>
-              Submit
+            <button className={style.contentform__btn} onClick={createContent} disabled={addContentMutation.isLoading}>
+               {
+                  addContentMutation.isLoading ? <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div> :
+                <span>Submit</span>
+               }
             </button>
           </div>
         </Modal.Body>
@@ -661,10 +669,11 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
    const {consoleFunctions:{addDomain }} = useAuth()
    const {getItem} = useLocalStorage()
    const [formstate, setFormstate] = useState({});
-
-   const  mutation = useMutation((token, state)=>addDomain(token, state), {
+   const queryClient = useQueryClient()
+ 
+   const  mutation = useMutation(([token, state])=>addDomain(token, state), {
       onSuccess: (res)=>{
-         console.log({res})
+         queryClient.invalidateQueries('fetch domains')
          moduleClose();
       }, 
       onError: (err)=>{
@@ -673,15 +682,14 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
    })
 
    const userdata = getItem(KEY)
-   // const classId = getItem(CLASSID)
+   const classId = localStorage.getItem(CLASSID)
 
    function handleChange(e) {
     setFormstate({ ...formstate, [e.target.name]: e.target.value })
    }
 
   function createModule() {
-   console.log("clicked")
-   // mutation.mutate(userdata.token, {...formstate, classId})
+   mutation.mutate([userdata.token, {...formstate, classId}])
   }
   
   return (
@@ -754,8 +762,7 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
 }
 
 export function PopModalContent({ open, closeSmall }) {
-  console.log("small modal show", { open });
-  console.log("small close show", { closeSmall });
+
   return (
     <div>
       <Modal show={open} onHide={closeSmall} className="smallmodal">

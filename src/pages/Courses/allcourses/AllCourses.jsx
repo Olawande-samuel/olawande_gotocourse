@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import { CourseWrapper, Main } from './style';
 
 import cybersecurity from "../../../images/cybersecurity.webp"
+import { COURSE_CATEGORY_KEY } from '../../../constants';
 const AllCourses = () => {
 
   return (
@@ -179,7 +180,7 @@ function Course({name, bannerImg, courseImg, all, type}){
   function handleNavigate(){     
 
   if(type === "category"){
-    localStorage.setItem("gotocourse-category", JSON.stringify(all))
+    localStorage.setItem(COURSE_CATEGORY_KEY, JSON.stringify(all))
     navigate(`/categories/${name.trim().split(" ").join("-").toLowerCase()}`)
   }else {
     localStorage.setItem("gotocourse-courseInfo", JSON.stringify(all))

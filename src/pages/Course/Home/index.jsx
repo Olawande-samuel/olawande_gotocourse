@@ -171,15 +171,7 @@ const Course = () => {
                     setCourses(_ =>  [...data]);
                 }
             }catch(err){
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+               console.error(err)
             }
         })()
         return () => console.log("Course page is unmounted");
@@ -187,7 +179,6 @@ const Course = () => {
 
 
     function gotoCourseHandler(e, name){
-        console.log(encodeURIComponent(name))
         navigate(encodeURIComponent(name))
     }
 
@@ -242,10 +233,10 @@ function CourseCard({image, name, description, separator, startDate, endDate, go
                 <CardBody>
                     <h2>{name}</h2>
                     <p>{description}</p>
-                    <Date>
+                    {/* <Date>
                         <h3>Date</h3>
                         <span>{`${getDate(startDate)} - ${getDate(endDate)}`}</span>
-                    </Date>
+                    </Date> */}
                 </CardBody>
             </Card>
             {separator && <Separator />}

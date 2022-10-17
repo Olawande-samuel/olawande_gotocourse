@@ -3568,13 +3568,16 @@ export const consoleFunctions = {
             
         }catch(err){
             if(err.statusCode === 2){
-                localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+                // localStorage.clear()
+                console.log("something went wrong")
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     fetchQuiz: async function(token, domainId){
