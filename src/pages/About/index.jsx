@@ -4,7 +4,8 @@ import React, { useEffect } from "react";
 
 import clsx from "./styles.module.css";
 import Layout from "../../components/Layout";
-import mission from "../../images/about_mission.png";
+import wwd from "../../images/wwd1.png";
+import mission from "../../images/mission1.png";
 import committed from "../../images/about_committed.png";
 import pie from "../../images/about_pi.png";
 
@@ -77,22 +78,33 @@ const About = () => {
                 </div>
                 <div className={clsx.do}>
                     <div className="container-xxxl mx-auto">
+                        <div className={clsx.do__content}>
 
-                        <h2>What we do</h2>
-                        <p>
-                            Gotocourse is a platform that connects tech educators with learners.  Our platform has incredible tools for managing and organizing learning. We are leaders in connecting learners and instructor in virtual instructor-led training platform. Our  goal of virtual training settings is to replicate the traditional classroom or learning experience and this we have done successfully without limits.                    </p>
+                            <div className={clsx.do__img}>
+                                    <img src={wwd} alt="Mission" />
+
+                            </div>
+
+                            <div className={clsx.do__text}>
+                                <h2>What we do</h2>
+                                <p>
+                                    Gotocourse is a platform that connects tech educators with learners.  Our platform has incredible tools for managing and organizing learning. We are leaders in connecting learners and instructor in virtual instructor-led training platform. Our  goal of virtual training settings is to replicate the traditional classroom or learning experience and this we have done successfully without limits.                    </p>
+
+                            </div>
+
+                        </div>
 
                     </div>
 
                 </div>
+
                 <div style={{ backgroundColor: " rgba(255, 241, 240, 0.5)" }}>
                     <div className="container-xxl mx-auto">
                         <div className={clsx.mission}>
                             <div className={clsx.mission_left}>
                                 <h2>Our Mission</h2>
                                 <p>
-                                    Creating access for Top industry experts to train 1 million tech professionals on high-in-demand tech skills needed to bridge the skills gap in the tech industry by 2027.
-                                </p>
+                                Creating accessibility to quality tech education to anyone, anywhere in order to create life long learning and bridge the skills gap in the tech industry.                                 </p>
                             </div>
                             <div className={clsx.mission_right}>
                                 <img src={mission} alt="Mission" />
