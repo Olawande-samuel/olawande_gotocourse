@@ -50,6 +50,7 @@ import "swiper/css";
 import critical_skills from "../../images/landing/critical_skills.webp";
 import life_change from "../../images/landing/life_change.webp";
 import tell from "../../images/landing/mentor_landing.webp";
+import newMen from "../../images/landing/newMen.png";
 
 
 const NewLanding = () => {
@@ -246,7 +247,7 @@ function Hero() {
       subtitle: "Streamline mentoring experience for you and your mentees, because everything’s in one place and accessible through a single link",
       social: true,
       acctype: "affiliate",
-      img:tell,
+      img:newMen,
       color:"#A1B0FF",
       link:"/lounge",
       link_btn:"Get started now"
