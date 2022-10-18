@@ -3987,8 +3987,7 @@ export function CreateBootcamp() {
                   handleChange={changeHandler}
                 />
               </div>
-            </div>
-               
+            </div>  
             <Editor
              initialState={formstate.description} 
              title="description" 
