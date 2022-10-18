@@ -3988,7 +3988,7 @@ export function CreateBootcamp() {
                 />
               </div>
             </div>  
-            <Editor
+            <Editor 
              initialState={formstate.description} 
              title="description" 
              setBio={setBio} />
