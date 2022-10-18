@@ -11,7 +11,7 @@ const AttachmentContainer = styled(Paper)`
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    background-color: transparent !important;
+    background-color: ${({$active}) => $active ? 'rgb(226, 231, 255)' : 'transparent !important' };
     border-radius: 10px !important;
     margin-bottom: 10px;
     padding: 10px;
@@ -45,7 +45,7 @@ const Locked = styled(MdOutlineLock)`
 `
 
 
-const Attachement = ({type, isLocked, title, isComplete}) => {
+const Attachement = ({type, isLocked, title, isComplete, active, changeActive}) => {
     let icon = React.useMemo(() => {
         return type ==='video' ? <MdAttachFile /> : type === 'note' ? <MdNote /> : <MdQuiz />
     }, [type])
@@ -55,7 +55,7 @@ const Attachement = ({type, isLocked, title, isComplete}) => {
     }, [isLocked])
 
     return (
-        <AttachmentContainer variant="outlined">
+        <AttachmentContainer variant="outlined" $active={active === title ? true : false} onClick={e => changeActive(title)}>
             <AttachmentInfo>
                 {icon}
                 <h5>{title}</h5>

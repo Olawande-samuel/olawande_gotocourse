@@ -30,7 +30,7 @@ const ModuleAttachments = styled.div`
 
 
 
-const Module = ({title, attachments}) => {
+const Module = ({title, attachments, changeActive, activeMedia}) => {
     return (
         <ModuleContainer>
             <ModuleInfo>
@@ -38,7 +38,7 @@ const Module = ({title, attachments}) => {
             </ModuleInfo>
             <ModuleAttachments>
                 {
-                    attachments.map((a, i) => (<Attachment key={i} {...a} />))
+                    attachments.map((a, i) => (<Attachment active={activeMedia} changeActive={changeActive} key={i} {...a} />))
                 }
             </ModuleAttachments>
         </ModuleContainer>

@@ -1,10 +1,10 @@
-import React from 'react';
+import {useState, useMemo} from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Breadcrumbs, IconButton, Paper } from "@mui/material";
 import {MdNavigateNext, MdShare, MdMoreVert} from "react-icons/md";
 import {BiCloudDownload} from "react-icons/bi";
-import {FaCaretRight} from 'react-icons/fa';
+import {FaCaretRight, FaCaretLeft} from 'react-icons/fa';
 
 
 
@@ -12,6 +12,7 @@ import {FaCaretRight} from 'react-icons/fa';
 import {Sidebar} from "./components";
 import { CustomButton } from './components/Sidebar';
 import { useEffectOnMount } from '../../../../hooks';
+import quiz from '../../../../images/classroom_quiz.svg';
 
 
 
@@ -141,10 +142,19 @@ const BodyActions = styled.div`
 `;
 
 
-const Action = styled.div`
+const VideoAction = styled.div`
     width: 100%;
     display: flex;
     justify-content: flex-end;
+    margin-top: 40px;
+`;
+
+
+const QuizAction = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 40px;
 `;
 
@@ -156,15 +166,215 @@ const NextButton = styled(CustomButton)`
         color: var(--textBlue);
         margin-left: 10px;
     }
+`;
+
+
+const PreviousButton = styled(NextButton)`
+    & svg {
+        margin-right: 10px;
+    }
 `
 
+const Quiz = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+`;
+
+
+const Note = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+`
+
+const QuizImageContainer = styled.div`
+    width: 425px;
+    height: 425px;
+`;
+
+const QuizImage = styled.img`
+    width: 100%;
+    height: 100%;
+`;
+const QuizButton = styled(CustomButton)`
+    background-color: #3f50b5 !important;
+    color: white !important;
+` 
+
+
+
+let mods = [
+    {
+        title: 'Cybersecurity',
+        attachments: [
+            {
+                type: 'video',
+                isLocked: false,
+                title: 'Test 2',
+                isComplete: true
+            }
+        ]
+    },
+    {
+        title: 'Benefits of Cybersecurity',
+        attachments: [
+            {
+                type: 'quiz',
+                isLocked: false,
+                title: 'Hey',
+                isComplete: false,
+            },
+            {
+                type: 'video',
+                isLocked: false,
+                title: 'Poll',
+                isComplete: false,
+            },
+        ]
+    },
+    {
+        title: 'Origin of the web',
+        attachments: [
+            {
+                type: 'video',
+                isLocked: false,
+                title: 'Bootcamp',
+                isComplete: true,
+            },
+            {
+                type: 'quiz',
+                isLocked: false,
+                title: 'my quiz',
+                isComplete: true,
+            },
+            {
+                type: 'video',
+                isLocked: false,
+                title: 'My video content',
+                isComplete: true,
+            },
+            {
+                type: 'note',
+                isLocked: true,
+                title: 'new note 1',
+                isComplete: true,
+            },
+            {
+                type: 'note',
+                isLocked: false,
+                title: 'new note 2',
+                isComplete: true,
+            },
+        ]
+    },
+    {
+        title: 'Unsafe Practices',
+        attachments: [
+            {
+                type: 'video',
+                isLocked: true,
+                title: 'Hello',
+                isComplete: false,
+            },
+            {
+                type: 'quiz',
+                isLocked: false,
+                title: 'Bllnbl',
+                isComplete: false,
+            },
+        ]
+    },
+    {
+        title: "Conclusion",
+        attachments: []
+    }
+];
 
 
 const Classroom = () => {
+    const [modules, setModules] = useState(() => mods);
+    let attachements = useMemo(() => {
+        return modules.map(m => m.attachments).flat();
+    }, [...modules]);
+    const [activeMedia, setActiveMedia] = useState(() => {
+        return attachements.find((_, i) => i === 0);
+    })
+    const active = useMemo(() => {
+        return activeMedia.title;
+    }, [activeMedia])
+    console.log({attachements, activeMedia, active})
     useEffectOnMount(() => {
         console.log('Student classroom is mounted');
         return () => console.log('Student classroom is unmounted')
     }, [])
+    const mediaContent = useMemo(() => {
+        return activeMedia?.type === 'video' ? 
+        (<Paper variant='outlined'>
+            <PaperTop>
+                <h5>shell.svg</h5>
+                <IconButton>
+                    <MdMoreVert />
+                </IconButton>
+            </PaperTop>
+            <PaperBody>
+                <BodyActions>
+                    <IconButton>
+                        <BiCloudDownload />
+                    </IconButton>
+                    <CustomButton>Open</CustomButton>
+                </BodyActions>
+            </PaperBody>
+        </Paper>) 
+        : activeMedia?.type === 'quiz' ? 
+        (<Quiz>
+            <QuizImageContainer>
+                <QuizImage src={quiz} alt="Quiz Image" />
+            </QuizImageContainer>
+            <QuizButton>Open Quiz</QuizButton>
+        </Quiz>) : 
+        (<Note>
+            <h4>Hey this is a demo note heading</h4>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat fuga ducimus perferendis commodi. Iste nisi neque blanditiis, officiis rerum iure unde molestiae optio pariatur fuga ipsa officia, doloremque ipsam voluptates?</p>
+        </Note>);
+    }, [activeMedia])
+
+    const mediaAction = useMemo(() => {
+        return activeMedia?.type === 'video' ? 
+        (<VideoAction>
+            <NextButton variant="outlined">
+                Next Content <FaCaretRight />
+            </NextButton>
+        </VideoAction>) 
+        : activeMedia?.type === 'quiz' ? 
+        (<QuizAction>
+            <PreviousButton variant="outlined">
+                <FaCaretLeft />  Previous Content
+            </PreviousButton>
+            <QuizButton>
+                Mark as Completed
+            </QuizButton>
+        </QuizAction>) : 
+        (<QuizAction>
+            <PreviousButton variant="outlined">
+                <FaCaretLeft />  Previous Content
+            </PreviousButton>
+            <NextButton variant="outlined">
+                Next Content <FaCaretRight />
+            </NextButton>
+        </QuizAction>)
+    }, [activeMedia])
+
+
+    function setActiveMediaHandler(title){
+        let newActive = attachements.find(a => a.title === title);
+        let active = {...newActive};
+        active.active = true;
+        setActiveMedia(_ => active);
+        console.log({newActive});
+    }
 
 
     return (
@@ -181,7 +391,7 @@ const Classroom = () => {
             </NavLeft>
         </Navbar>
         <ClassroomContainer>
-            <Sidebar />
+            <Sidebar modules={modules} activeMedia={active} changeActive={setActiveMediaHandler} />
             <ClassroomMain>
                 <ClassroomMainTop>
                     <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
@@ -192,37 +402,18 @@ const Classroom = () => {
                             Information Security Assurance
                         </BreadcrumbLink>
                         <BreadcrumbLink to="#" $isCurrentPage={true}>
-                            Test
+                            {activeMedia?.title}
                         </BreadcrumbLink>
                     </Breadcrumbs>
                 </ClassroomMainTop>
                 <ClassroomMainBody>
                     <BodyInfo>
-                        <h3>Introduction to Cybersecurity</h3>
+                        <h3>{activeMedia?.title}</h3>
                         <CustomButton>Ask tutor a question</CustomButton>
                     </BodyInfo>
                     <BodyContent>
-                        <Paper variant='outlined'>
-                            <PaperTop>
-                                <h5>shell.svg</h5>
-                                <IconButton>
-                                    <MdMoreVert />
-                                </IconButton>
-                            </PaperTop>
-                            <PaperBody>
-                                <BodyActions>
-                                    <IconButton>
-                                        <BiCloudDownload />
-                                    </IconButton>
-                                    <CustomButton>Open</CustomButton>
-                                </BodyActions>
-                            </PaperBody>
-                        </Paper>
-                        <Action>
-                            <NextButton variant="outlined">
-                                Next Content <FaCaretRight />
-                            </NextButton>
-                        </Action>
+                        {mediaContent}
+                        {mediaAction}
                     </BodyContent>
                 </ClassroomMainBody>
             </ClassroomMain>
