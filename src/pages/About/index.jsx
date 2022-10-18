@@ -52,11 +52,20 @@ const About = () => {
         <Layout>
             <div className={clsx.about}>
                 <div className={clsx.about_jumbotron}>
-                    <video src={about} autoPlay muted loop type="video/mp4"/>
+                    <div className={`container ${clsx.about_jumbotroncontainer}`}>
+                        <div className={clsx.about_top__text}>
+                            <h2>About Us</h2>
+                            <p>We believe in a world where anyone anywhere can access quality tech education without any limitations</p>
+                        </div>
 
-                    <div className={clsx.about_top__text}>
-                        <h2>We believe in a world where anyone anywhere can access quality tech education without any limitations</h2>
+                        <div className={clsx.about__video}>
+                            <video src={about} autoPlay muted loop type="video/mp4" />
+
+                        </div>
+
                     </div>
+
+
                 </div>
 
                 <div className={clsx.believe}>
