@@ -8,7 +8,7 @@ import wwd from "../../images/wwd1.png";
 import mission from "../../images/mission1.png";
 import committed from "../../images/about_committed.png";
 import pie from "../../images/about_pi.png";
-
+import about from '../../images/about.mp4'
 
 const cardData = [
     {
@@ -52,16 +52,10 @@ const About = () => {
         <Layout>
             <div className={clsx.about}>
                 <div className={clsx.about_jumbotron}>
-                    <div className={clsx.about_top__absolute}>
-                        <header>
-                            <h1>About us</h1>
-                            {/* <hr /> */}
-                        </header>
-                        <svg viewBox="0 0 1512 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M-3 0H1527L1547 123.324C1547 123.324 1072.56 179.886 767 180C455.728 180.115 -3 123.324 -3 123.324V0Z" fill="#F75C4E" fill-opacity="0.54" />
-                            <path d="M-3 0H1527L1547 112.978C1547 112.978 1072.56 164.795 767 164.899C455.728 165.005 -3 112.978 -3 112.978V0Z" fill="#0C2191" fill-opacity="0.83" />
-                        </svg>
+                    <video src={about} autoPlay muted loop type="video/mp4"/>
 
+                    <div className={clsx.about_top__text}>
+                        <h2>We believe in a world where anyone anywhere can access quality tech education without any limitations</h2>
                     </div>
                 </div>
 
@@ -81,7 +75,7 @@ const About = () => {
                         <div className={clsx.do__content}>
 
                             <div className={clsx.do__img}>
-                                    <img src={wwd} alt="Mission" />
+                                <img src={wwd} alt="Mission" />
 
                             </div>
 
@@ -104,7 +98,7 @@ const About = () => {
                             <div className={clsx.mission_left}>
                                 <h2>Our Mission</h2>
                                 <p>
-                                Creating accessibility to quality tech education to anyone, anywhere in order to create life long learning and bridge the skills gap in the tech industry.                                 </p>
+                                    Creating accessibility to quality tech education to anyone, anywhere in order to create life long learning and bridge the skills gap in the tech industry.                                 </p>
                             </div>
                             <div className={clsx.mission_right}>
                                 <img src={mission} alt="Mission" />

@@ -198,7 +198,7 @@ const Sidebar = ({}) => {
         },
         {
             icon:SiGoogleclassroom,
-            path: "class-console",
+            path: "console/myclasses",
             title: "Class Console",
             showBadge:true,
 

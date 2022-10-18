@@ -7,6 +7,7 @@ import { Button } from '@mui/material';
 
 
 import {Module} from './';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -76,7 +77,7 @@ export const CustomButton = styled(Button)`
 
 let modules = [
     {
-        title: 'test',
+        title: 'Cybersecurity',
         attachments: [
             {
                 type: 'video',
@@ -87,7 +88,7 @@ let modules = [
         ]
     },
     {
-        title: 'OOP',
+        title: 'Benefits of Cybersecurity',
         attachments: [
             {
                 type: 'quiz',
@@ -104,7 +105,7 @@ let modules = [
         ]
     },
     {
-        title: 'Class',
+        title: 'Origin of the web',
         attachments: [
             {
                 type: 'video',
@@ -139,7 +140,7 @@ let modules = [
         ]
     },
     {
-        title: 'Another',
+        title: 'Unsafe Practices',
         attachments: [
             {
                 type: 'video',
@@ -156,17 +157,18 @@ let modules = [
         ]
     },
     {
-        title: "Brolly",
+        title: "Conclusion",
         attachments: []
     }
 ]
 
 
 const Sidebar = () => {
+    const navigate = useNavigate()
     return (
         <SidebarContainer>
             <SidebarTop>
-                <BiArrowBack />
+                <BiArrowBack onClick={()=>navigate(-1)} />
                 Dashboard
             </SidebarTop>
             <SidebarBody>

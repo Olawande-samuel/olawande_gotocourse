@@ -100,8 +100,8 @@ const Landing = () => {
                         </h2>
                         <p>Do you have interest in helping people achieve  great success in their career?
                             Gotocourse is a platform to recommend to your followers and subscribers.  Instructors on Gotocourse are experienced practitioners who work at world's most innovative firms. Your referrals are going to learn the most in-demand tech skills relevant to today’s workplace.
-
-                            Gotocourse has a tracking system that ensures you are compensated for all your referrals. Make use of this oppurtunity to change lives</p>
+</p>
+                            <p>Gotocourse has a tracking system that ensures you are compensated for all your referrals. Make use of this oppurtunity to change lives</p>
 
                     <button>Become an Affiliate</button>
                     </div>

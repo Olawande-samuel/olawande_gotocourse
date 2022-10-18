@@ -198,7 +198,7 @@ const Classroom = () => {
                 </ClassroomMainTop>
                 <ClassroomMainBody>
                     <BodyInfo>
-                        <h3>Test</h3>
+                        <h3>Introduction to Cybersecurity</h3>
                         <CustomButton>Ask tutor a question</CustomButton>
                     </BodyInfo>
                     <BodyContent>
