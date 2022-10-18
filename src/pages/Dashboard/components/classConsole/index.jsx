@@ -362,7 +362,7 @@ function Accord({ name, _id, classId, description }) {
   const { getItem } = useLocalStorage();
   const userdata = getItem(KEY);
   const { consoleFunctions: { fetchContents }, } = useAuth();
-  const getDomainContent = useQuery(["getDomainContent", _id], () => fetchContents(userdata.token, _id) );
+  const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId) );
 
    console.log({getDomainContent});
   const data = [
@@ -394,12 +394,24 @@ function Accord({ name, _id, classId, description }) {
 
   function IconType(icon) {
     switch (icon) {
-      case "quiz":
+      case "QUIZ":
         return <VscNote />;
-      case "note":
+      case "NOTE":
         return <MdOutlineNote />;
-      case "file":
+      case "FILE_VIDEO":
         return <AiOutlinePaperClip />;
+      default:
+        break;
+    }
+  }
+  function routeType(type) {
+    switch (type) {
+      case "QUIZ":
+        return "quiz";
+      case "NOTE":
+        return "note";
+      case "FILE_VIDEO":
+        return "file";
       default:
         break;
     }
@@ -420,11 +432,12 @@ function Accord({ name, _id, classId, description }) {
         </i>
       </div>
 
-      {details && (
+      {
+        details && 
         <ul className={style.content_list}>
-          {/* {content.map(({ icon: Icon, title, link, id, type }) => (
+          {getDomainContent?.data?.data?.filter(item=> item.domain === _id).map(({ icon: Icon, title, link, id, type }) => (
             <li key={id}>
-              <Link to={`${type}`}>
+              <Link to={`${routeType(type)}`} className="d-flex justify-content-between">
                 <i>{IconType(type)}</i>
                 <span>{title}</span>
                 <i>
@@ -432,9 +445,9 @@ function Accord({ name, _id, classId, description }) {
                 </i>
               </Link>
             </li>
-          ))} */}
+          ))}
         </ul>
-      )}
+      }
     </div>
   );
 }

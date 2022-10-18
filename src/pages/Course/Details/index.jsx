@@ -18,6 +18,7 @@ import { AdvancedError } from "../../../classes";
 import { capitalize, getDate, COURSE_CATEGORY_KEY } from "../../../constants";
 import person from "../../../images/person_question.png";
 import pinkBg from "../../../images/course_bg_pink.png";
+import DOMPurify from "dompurify";
 
 
 
@@ -584,10 +585,10 @@ const Detail = () => {
                 <DetailBody>
                     <DetailImage background={`url(${details?.courseImg}), rgba(0, 0, 0, 0.7)`}>
                         <DetailsHero>
-                            {/* <h2>{details ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</h2> */}
-                            <DetailDescription>
+                            <h1>{details ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</h1>
+                            {/* <DetailDescription>
                                 {details ? details.description : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}
-                            </DetailDescription>
+                            </DetailDescription> */}
                             {/* <ButtonContainer>
                                 <Button $isCTA>Enroll now</Button>
                                 <Button>Add to wishlist</Button>
@@ -597,13 +598,12 @@ const Detail = () => {
                     <DetailBodyContent>
                         <DetailLeft>
                         <Header>Course Overview</Header>
-                            <DetailDescription>
-                                {details ? details.description : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}
-                            </DetailDescription>
+                            <DetailDescription dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(details?.description)}}  />
+                                {/* {details ? details.description : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />} */}
 
                             <NicheContainer>
-                                {/* <Header>{details ? `${capitalize(details?.name)} Niche` : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</Header> */}
-                                <p>{details ? details.nicheDescription : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</p>
+                                <Header>{details ? `${capitalize(details?.name)} Curriculum` : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</Header>
+                                {/* <p>{details ? details.nicheDescription : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</p> */}
                                 <Niches>
                                     {
                                         details ? 

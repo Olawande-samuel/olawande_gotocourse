@@ -102,6 +102,13 @@ font-size: 14px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.restricted_line_lg{
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .icon svg , .icon img{
   width: 150px;
   height: 40px;
