@@ -13,11 +13,20 @@ import { useNavigate } from 'react-router-dom';
 
 const SidebarContainer = styled.div`
     background-color: rgb(236, 239, 255);
-    width: 100%;
+    width: 300px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     height:100%;
+
+    position: ${({$mobile}) => $mobile && 'fixed'};
+    top: ${({$mobile}) => $mobile && 0};
+    left: ${({$mobile}) => $mobile && 0};
+    bottom: ${({$mobile}) => $mobile && 0};
+
+    @media screen and (max-width: 960px){
+        display: ${({$mobile}) => $mobile ? 'flex' : 'none'};
+    }
 `;
 
 
@@ -77,10 +86,10 @@ export const CustomButton = styled(Button)`
 
 
 
-const Sidebar = ({modules, changeActive, activeMedia}) => {
+const Sidebar = ({modules, changeActive, activeMedia, isMobile}) => {
     const navigate = useNavigate()
     return (
-        <SidebarContainer>
+        <SidebarContainer $mobile={isMobile}>
             <SidebarTop>
                 <BiArrowBack onClick={()=>navigate(-1)} />
                 Dashboard

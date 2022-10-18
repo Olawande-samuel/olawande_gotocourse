@@ -1,8 +1,8 @@
 import {useState, useMemo} from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Breadcrumbs, IconButton, Paper } from "@mui/material";
-import {MdNavigateNext, MdShare, MdMoreVert} from "react-icons/md";
+import { Breadcrumbs, IconButton, Paper, Backdrop } from "@mui/material";
+import {MdNavigateNext, MdShare, MdMoreVert, MdMenu} from "react-icons/md";
 import {BiCloudDownload} from "react-icons/bi";
 import {FaCaretRight, FaCaretLeft} from 'react-icons/fa';
 
@@ -25,6 +25,10 @@ const ClassroomContainer = styled.div`
     margin: 0;
     margin-top: 75px;
     overflow-y: hidden;
+
+    @media screen and (max-width: 960px){
+        grid-template-columns: 1fr;
+    }
 `;
 
 const BreadcrumbLink = styled(Link)`
@@ -202,7 +206,19 @@ const QuizImage = styled.img`
 const QuizButton = styled(CustomButton)`
     background-color: #3f50b5 !important;
     color: white !important;
-` 
+`;
+
+const MenuButton = styled(IconButton)`
+    display: none;
+
+    & svg {
+        color: var(--white);
+    }
+
+    @media screen and (max-width: 960px){
+        display: inline-block;
+    }
+`
 
 
 
@@ -295,6 +311,7 @@ let mods = [
 
 
 const Classroom = () => {
+    const [showMobile, setShowMobile] = useState(false);
     const [modules, setModules] = useState(() => mods);
     let attachements = useMemo(() => {
         return modules.map(m => m.attachments).flat();
@@ -380,7 +397,12 @@ const Classroom = () => {
     return (
         <>
         <Navbar>
-            <h5>Classroom</h5>
+            <div style={{display: 'flex', alignItems: 'center'}}>
+                <MenuButton onClick={e => setShowMobile(_ => true)}>
+                    <MdMenu />
+                </MenuButton>
+                <h5 style={{margin: 0}}>Classroom</h5>
+            </div>
             <NavLeft>
                 <IconButton>
                     <MdShare />
@@ -391,7 +413,14 @@ const Classroom = () => {
             </NavLeft>
         </Navbar>
         <ClassroomContainer>
-            <Sidebar modules={modules} activeMedia={active} changeActive={setActiveMediaHandler} />
+        <Backdrop
+        sx={{ color: '#fff', zIndex: 1000 }}
+        open={showMobile}
+        onClick={e => setShowMobile(_ => false)}
+        >
+            <Sidebar isMobile={true} modules={modules} activeMedia={active} changeActive={setActiveMediaHandler} />
+        </Backdrop>
+            <Sidebar isMobile={false} modules={modules} activeMedia={active} changeActive={setActiveMediaHandler} />
             <ClassroomMain>
                 <ClassroomMainTop>
                     <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">

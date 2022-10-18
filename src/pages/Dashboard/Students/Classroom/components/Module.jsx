@@ -18,6 +18,7 @@ const ModuleInfo = styled.div`
     border-bottom: 1px solid rgba(0,0,0,.12);
     width: 100%;
     padding: 20px;
+    color: #222;
 `;
 
 const ModuleAttachments = styled.div`
