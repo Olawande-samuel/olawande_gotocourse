@@ -38,6 +38,7 @@ import { Payment } from "../Students";
 import { ReviewSection } from "../Courses";
 import { useQuery } from "@tanstack/react-query";
 import { Question } from "../Course/Details";
+import DOMPurify from "dompurify";
 
 const similarBootcamp = [
   {
@@ -509,14 +510,16 @@ export function NewBootcampDetailsComponent(){
               <h3 className={clsx.section_title}>Program Overview</h3>
               <hr />
             </header>
-            <p>Data science is an interdisciplinary field that uses scientific methods, processes, algorithms and systems to extract knowledge and insights from noisy, structured and unstructured data, and apply knowledge and actionable insights from data across a broad range of application domains.</p>
+            <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(bootcampTrainingInfo?.description)}} />
             <div className={clsx.career_list}>
               <h6>Career Prospect</h6>
               <ul>
-                <li>Data mining engineer</li>
-                <li>Business intelligence analyst</li>
-                <li>Data architect</li>
-                <li>Senior data scientist</li>
+                {
+                  bootcampTrainingInfo?.careerList?.map(item=>(
+                    <li>{item}</li>
+                  )) 
+                }
+                
               </ul>
             </div>
           </div>
@@ -536,15 +539,15 @@ export function NewBootcampDetailsComponent(){
                 <h3 className={clsx.section_title}>Class Curriculum</h3>
                 <hr />
             </header>
-            <h5 className="lead" style={{color:"var(--theme-blue"}}>Data Science Niche</h5>
-                  <p>
+            <h5 className="lead" style={{color:"var(--theme-blue"}}>{bootcampTrainingInfo?.title} Curriculum</h5>
+                  {/* <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, impedit inventore debitis similique a magni quia facere, optio neque delectus pariatur quam. Nostrum quisquam error nemo autem numquam!
-                  </p>
+                  </p> */}
                   <ul>
-                    {curriculum.map((item) => (
+                    {bootcampTrainingInfo?.syllabus?.map((item) => (
                       <li>
                         <p className={clsx.niche}>{item.title}</p>
-                        <p className={clsx.niche}>{item.details}</p>
+                        <p className={clsx.niche}>{item.description}</p>
                       </li>
                     ))}
                   </ul>
@@ -595,9 +598,9 @@ export function NewBootcampDetailsComponent(){
             </div>
           </div>
         </section>
-        <section className={clsx.payment_options}>
+        {/* <section className={clsx.payment_options}>
           <Payment />
-        </section>
+        </section> */}
         <section className={clsx.teacher}>
          <ReviewSection />
         </section>
@@ -622,7 +625,7 @@ export function DetailsHero({navHeight, title, description, addToWishList,handle
     <div className={`container ${clsx.hero_content}`}>
       <div>
         <h4>{title ? title : "Data Science"}</h4>
-        <p>{description ? description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p>
+        {/* <p>{description ? description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p> */}
         <div className={clsx.hero_buttons}>
           <motion.button 
            whileHover={{

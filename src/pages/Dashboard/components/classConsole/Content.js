@@ -20,7 +20,7 @@ export default function Content({type}) {
             />
             <Console>
                 <Outlet />
-            </Console>
+            </Console> 
         </>
     )
 

@@ -3026,14 +3026,7 @@ export function CourseDetails({}) {
               >
                 Description
               </label>
-              <textarea
-                rows="5"
-                name="description"
-                value={formstate.description}
-                onChange={changeHandler}
-                className="form-control generic_input"
-                readOnly
-              ></textarea>
+              <div className="border rounded p-2" style={{background: "#e9ecef"}}  dangerouslySetInnerHTML={{__html: formstate.description}} />
             </div>
             <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
@@ -3676,6 +3669,7 @@ export function CreateBootcamp() {
     type: "",
     instructor: "",
     syllabus: [],
+    careerList:[]
   });
 
   const [loading, setLoading] = useState(false);
@@ -3701,6 +3695,7 @@ export function CreateBootcamp() {
 
             delete found.instructorName;
             setFormstate({ ...formstate, ...found });
+            setBio(found.description)
           } else {
             throw new AdvancedError(message, statusCode);
           }
@@ -3808,6 +3803,10 @@ export function CreateBootcamp() {
   const [openSyllabus, setOpenSyllabus] = useState(false);
   const [previewImage, setPreviewImage] = useState(false);
   const { syllabuses, addtoSyllabus, setSyllabusses } = useSyllabus();
+  const [showCareerModal, setShowCareerModal] = useState(false);
+    const [careerlist, setCareerlist] = useState({
+      name: "",
+    });
 
   const openModal = () => {
     setOpenSyllabus(true);
@@ -3816,6 +3815,7 @@ export function CreateBootcamp() {
     setOpen((_) => true);
   }
 
+  console.log({formstate})
   function deleteSyllabus(e) {
     let newSyllabusArr = formstate.syllabus.filter(
       (item, index) => item.title + index !== e
@@ -3826,6 +3826,48 @@ export function CreateBootcamp() {
   const handleClose = () => {
     setOpenSyllabus(false);
   };
+  function updateCareerHandler(e) {
+    if (careerlist.name.trim() !== "" || careerlist.description.trim() !== "") {
+      setFormstate({...formstate, careerList: [...formstate.careerList, careerlist]});
+      
+      setCareerlist((_) => {
+        return {
+          name: "",
+        };
+      });
+
+      setShowCareerModal((_) => false);
+
+      toast.success("Career added successfully", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else {
+      toast.error("All fields are required", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
+  function careerChangeHandler(e) {
+    const { name, value } = e.target;
+    setCareerlist((old) => {
+      return {
+        ...old,
+        [name]: value,
+      };
+    });
+  }
   return (
     <Admin header={location.search ? "Edit Class" : "Create Class"}>
       {loader && <Loader />}
@@ -3913,7 +3955,7 @@ export function CreateBootcamp() {
                 <Input
                   label="Starts By (CST)"
                   name="startTime"
-                  type="text"
+                  type="time"
                   handleChange={changeHandler}
                   value={formstate.startTime}
                 />
@@ -3922,7 +3964,7 @@ export function CreateBootcamp() {
                 <Input
                   label="Ends By (CST)"
                   name="endTime"
-                  type="text"
+                  type="time"
                   handleChange={changeHandler}
                   value={formstate.endTime}
                 />
@@ -3946,23 +3988,11 @@ export function CreateBootcamp() {
                 />
               </div>
             </div>
-            <div className={clsx.form_group}>
-              <label htmlFor={"brief"}>Description</label>
-              <CKEditor
-                editor={ClassicEditor}
-                data={formstate.description}
-                onReady={(editor) => {
-                  console.log("editor");
-                  // You can store the "editor" and use when it is needed.
-                }}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  setBio(data);
-                  // setFormstate({...formstate, mentorBio: data})
-                }}
-              />
-            </div>
-            <Editor initialState={formstate.bio} title="Bio" setBio={setBio} />
+               
+            <Editor
+             initialState={formstate.description} 
+             title="description" 
+             setBio={setBio} />
             <div className={clsx.form_group}>
               <label htmlFor={"instructor"}>Instructor</label>
               <select
@@ -3972,6 +4002,7 @@ export function CreateBootcamp() {
                 className="form-select generic_input"
               >
                 <option value="">Choose an instructor</option>
+                <option value="">None</option>
                 {teachers
                   .filter((teacher) => teacher.userType !== "mentor")
                   .map((teacher) => (
@@ -4013,6 +4044,36 @@ export function CreateBootcamp() {
             >
               Add Syllabus
             </button>
+            <div className={clsx.form_group}>
+              <label>Career Prospect</label>
+              {formstate.careerList?.length !== 0 ? (
+                formstate.careerList?.map(({ name }, i) => (
+                  <Syllabus key={i} title={name} />
+                ))
+              ) : (
+                <p
+                  className="m-0 text-danger"
+                  style={{ fontSize: "0.8rem", textIndent: 20 }}
+                >
+                  No career prospect found
+                </p>
+              )}
+            </div>
+            <button
+              type="button"
+              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
+              className={`btn btn-primary mb-3 ${clsx.addcareer_button}`}
+              onClick={(e) => setShowCareerModal((_) => true)}
+            >
+              Add Career Prospect
+            </button>
+            <CareerModal
+              open={showCareerModal}
+              newCareer={careerlist}
+              setOpen={setShowCareerModal}
+              handleChange={careerChangeHandler}
+              updateCareer={updateCareerHandler}
+            />
             <div className={clsx.form_group}>
               <label htmlFor={"package"}>Type</label>
               <select

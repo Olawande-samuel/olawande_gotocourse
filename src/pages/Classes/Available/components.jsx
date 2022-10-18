@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import clsx from "./styles.module.css";
 import { getDate } from "../../../constants";
+import DOMPurify from "dompurify";
 
 
 
@@ -28,7 +29,7 @@ export const Bootcamp = ({description, duration, bootcampImg, endDate, startDate
                     <div className={clsx.bootcamp_top}>
                         <div>
                             <h5>{title}</h5>
-                            <p>{description}</p>
+                            <p className="restricted_line_lg" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description),}} />
                         </div>
                         <div className={clsx.bootcamp_price}>
                             <h5>{new Intl.NumberFormat('en-us', {style: 'currency', currency: 'USD'}).format(price).split(".")[0]}</h5>
@@ -37,7 +38,7 @@ export const Bootcamp = ({description, duration, bootcampImg, endDate, startDate
                     <div className={clsx.bootcamp_bottom}>
                         <span className={clsx.meta_left}>
                             <h6>Duration</h6>
-                            <p>{duration}</p>
+                            <p >{duration}</p>
                         </span>
                         <span className={clsx.meta_right}>
                             <h6>Date</h6>
