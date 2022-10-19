@@ -13,11 +13,20 @@ import { useNavigate } from 'react-router-dom';
 
 const SidebarContainer = styled.div`
     background-color: rgb(236, 239, 255);
-    width: 100%;
+    width: 300px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     height:100%;
+
+    position: ${({$mobile}) => $mobile && 'fixed'};
+    top: ${({$mobile}) => $mobile && 0};
+    left: ${({$mobile}) => $mobile && 0};
+    bottom: ${({$mobile}) => $mobile && 0};
+
+    @media screen and (max-width: 960px){
+        display: ${({$mobile}) => $mobile ? 'flex' : 'none'};
+    }
 `;
 
 
@@ -75,98 +84,12 @@ export const CustomButton = styled(Button)`
 `;
 
 
-let modules = [
-    {
-        title: 'Cybersecurity',
-        attachments: [
-            {
-                type: 'video',
-                isLocked: false,
-                title: 'Test 2',
-                isComplete: true
-            }
-        ]
-    },
-    {
-        title: 'Benefits of Cybersecurity',
-        attachments: [
-            {
-                type: 'quiz',
-                isLocked: false,
-                title: 'Hey',
-                isComplete: false
-            },
-            {
-                type: 'video',
-                isLocked: false,
-                title: 'Poll',
-                isComplete: false
-            },
-        ]
-    },
-    {
-        title: 'Origin of the web',
-        attachments: [
-            {
-                type: 'video',
-                isLocked: false,
-                title: 'Bootcamp',
-                isComplete: true
-            },
-            {
-                type: 'quiz',
-                isLocked: false,
-                title: 'my quiz',
-                isComplete: true
-            },
-            {
-                type: 'video',
-                isLocked: false,
-                title: 'My video content',
-                isComplete: true
-            },
-            {
-                type: 'note',
-                isLocked: true,
-                title: 'new note',
-                isComplete: true
-            },
-            {
-                type: 'note',
-                isLocked: false,
-                title: 'new note',
-                isComplete: true
-            },
-        ]
-    },
-    {
-        title: 'Unsafe Practices',
-        attachments: [
-            {
-                type: 'video',
-                isLocked: true,
-                title: 'Hello',
-                isComplete: false
-            },
-            {
-                type: 'quiz',
-                isLocked: false,
-                title: 'Bllnbl',
-                isComplete: false
-            },
-        ]
-    },
-    {
-        title: "Conclusion",
-        attachments: []
-    }
-]
 
 
-const Sidebar = () => {
+const Sidebar = ({modules, changeActive, activeMedia, isMobile}) => {
     const navigate = useNavigate()
     return (
-        <SidebarContainer>
+        <SidebarContainer $mobile={isMobile}>
             <SidebarTop>
                 <BiArrowBack onClick={()=>navigate(-1)} />
                 Dashboard
@@ -180,7 +103,7 @@ const Sidebar = () => {
                     <Progress value="75" max="100" />
                 </ProgressContainer>
                 {
-                    modules.map(({title, attachments}, i) => <Module title={title} attachments={attachments} key={i} />)
+                    modules.map(({title, attachments}, i) => <Module title={title} activeMedia={activeMedia} attachments={attachments} changeActive={changeActive} key={i} />)
                 }
             </SidebarBody>
         </SidebarContainer>
