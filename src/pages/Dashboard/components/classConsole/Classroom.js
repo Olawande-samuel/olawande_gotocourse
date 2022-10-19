@@ -1,14 +1,97 @@
 import '../classConsole/Content.css'
-import { NavLink } from 'react-router-dom';
-import { AiOutlineSearch } from 'react-icons/ai';
+import { AiOutlineArrowLeft, AiOutlineSearch } from 'react-icons/ai';
+import Modal from "react-bootstrap/Modal";
+import { useState } from 'react';
+import '../classConsole/Content.css'
+import { useNavigate } from 'react-router-dom';
+import { MdAttachFile, MdOutlineNote } from 'react-icons/md';
+import { VscNote } from 'react-icons/vsc';
 
 
+const PopModal = ({ show, handleClose }) => {
+    const navigate = useNavigate()
+    return (
+        <>
+            <Modal show={show} onHide={handleClose} className="classroom__modal">
+                <Modal.Header closeButton >
+                    <Modal.Title className={``}>
+                        <div className='classroom__modalnav'>
+                            <AiOutlineArrowLeft />
+                            Student activity
+                        </div>
+                    </Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <div className='classroom__modalheader'>
+                        <h3>Olufunmilayo Adekaunsi Class Activity</h3>
+                        <p>Content student has opened</p>
+                    </div>
+
+                    <div className='classroom__modalcontent'>
+
+                        <div className='classroom__modalitem'>
+                            <p> <MdOutlineNote />new note</p>
+                            <span>Objective: Learn how to create a note</span>
+                            <span>Last opened on 10/2/2022.4:27:13 PM</span>
+                        </div>
+
+                        <div className='classroom__modalitem'>
+                            <p><MdAttachFile /> My video content</p>
+                            <span>Objective</span>
+                            <span>Last opened on 10/2/2022.4:27:13 PM</span>
+                        </div>
+
+                        <div className='classroom__modalitem'>
+                            <p> <VscNote />my quiz</p>
+                            <span>Objective:</span>
+                            <span>Last opened on 10/2/2022.4:27:13 PM</span>
+                        </div>
+
+                        <div className='classroom__modalitem'>
+                            <p> <MdOutlineNote />new note</p>
+                            <span>Objective: Learn how to create a note</span>
+                            <span>Last opened on 10/2/2022.4:27:13 PM</span>
+                        </div>
+
+                        <div className='classroom__modalitem'>
+                            <p><MdAttachFile /> My video content</p>
+                            <span>Objective</span>
+                            <span>Last opened on 10/2/2022.4:27:13 PM</span>
+                        </div>
+
+                        <div className='classroom__modalitem'>
+                            <p> <VscNote />my quiz</p>
+                            <span>Objective:</span>
+                            <span>Last opened on 10/2/2022.4:27:13 PM</span>
+                        </div>
+
+                    </div>
+
+
+
+                </Modal.Body>
+                <Modal.Footer className='classroom__modalfooter'>
+                    <div>
+                        Assessment score: 60
+                    </div>
+
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}
 
 
 
 export default function Classroom() {
+    const [show, setShow] = useState(false)
+    const Toggle = () => setShow(!show)
+    const handleClose = () => setShow(false)
     return (
         <div className=''>
+            <PopModal show={show} handleClose={handleClose} />
+
             <main className='suite'>
                 <div className="classroom__top">
                     <h4>Classroom students</h4>
@@ -18,7 +101,7 @@ export default function Classroom() {
 
                 <div className="suite__form">
                     <div className="suite__input">
-                        <AiOutlineSearch/>
+                        <AiOutlineSearch />
                         <input type="search" name="" id="" placeholder='Search for videos/files' />
 
                     </div>
@@ -37,7 +120,7 @@ export default function Classroom() {
                     </div>
                     {
                         [...Array(7)].map((x, id) => (
-                            <div className="classroom__info">
+                            <div className="classroom__info" onClick={Toggle}>
 
                                 <div>{id + 1}</div>
                                 <div>Olufunmilayo Adekaunsi</div>
