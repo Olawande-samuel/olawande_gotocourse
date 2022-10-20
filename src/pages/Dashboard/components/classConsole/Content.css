@@ -954,6 +954,11 @@
 
 }
 
+.classroom__info {
+   cursor: pointer;
+
+}
+
 
 .classroom__header div:nth-of-type(1) {
     flex: .5;
@@ -986,6 +991,62 @@
     /* border: 2px solid green; */
 
 }
+.classroom__modal .modal-content{
+    padding: 1rem 2rem;
+ 
+}
+
+.classroom__modalnav{
+    font-size: 16px;
+
+}
+
+.classroom__modalnav svg, .classroom__modalitem svg{
+   color: #0C2191;
+   margin-right: .5rem;
+
+}
+
+.classroom__modalheader h3{
+    font-size: 20px;
+
+}
+.classroom__modalcontent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 50vh;
+  overflow-y: scroll;
+
+}
+
+.classroom__modalitem p{
+    font-weight: 700;
+    margin: 0;
+
+}
+.classroom__modalitem span{
+   font-size: 12px;
+   display: block;
+}
+
+.classroom__modalitem span:nth-of-type(2){
+    color: grey
+}
+
+
+
+.classroom__modalfooter .modal-footer{
+    justify-content: flex-start !important;
+}
+ 
+
+.classroom__modalfooter div{
+    border: 2px solid #0C2191;
+    padding: .5rem 1rem;
+    
+}
+
 
 @media (max-width: 768px) {
     
