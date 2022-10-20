@@ -8,7 +8,7 @@ import wwd from "../../images/wwd1.png";
 import mission from "../../images/mission1.png";
 import committed from "../../images/about_committed.png";
 import pie from "../../images/about_pi.png";
-import about from '../../images/about.mp4'
+import about from '../../images/Untitled.mp4'
 
 const cardData = [
     {
@@ -69,7 +69,7 @@ const About = () => {
                 </div>
 
                 <div className={clsx.believe}>
-                    <h1>We believe in <br />learning without limit</h1>
+                    <h1>We believe in <br />learning without limits</h1>
                     <div className={clsx.believe_cards}>
 
                         {
