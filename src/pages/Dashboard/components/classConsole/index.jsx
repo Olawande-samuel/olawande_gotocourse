@@ -35,7 +35,6 @@ import Modal from "react-bootstrap/Modal";
 import {
   TextField,
   InputLabel,
-  MenuItem,
   FormHelperText,
   FormControl,
   Select,
@@ -50,6 +49,11 @@ import { toast, ToastContainer } from "react-toastify";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CLASSID, KEY } from "../../../../constants";
 import { useLocalStorage } from "../../../../hooks";
+
+
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 const studentIcon = [
   {
@@ -364,32 +368,32 @@ function Accord({ name, _id, classId, description }) {
   const { consoleFunctions: { fetchContents }, } = useAuth();
   const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId) );
 
-   console.log({getDomainContent});
-  const data = [
-    {
-      id: 1,
-      icon: AiOutlinePaperClip,
-      title: "My file",
-      link: 1,
-      type: "file",
-    },
 
-    {
-      id: 2,
-      icon: MdOutlineNote,
-      title: "My Note",
-      link: 2,
-      type: "note",
-    },
+  // const data = [
+  //   {
+  //     id: 1,
+  //     icon: AiOutlinePaperClip,
+  //     title: "My file",
+  //     link: 1,
+  //     type: "file",
+  //   },
 
-    {
-      id: 3,
-      icon: VscNote,
-      title: "My Quiz",
-      link: 3,
-      type: "quiz",
-    },
-  ];
+  //   {
+  //     id: 2,
+  //     icon: MdOutlineNote,
+  //     title: "My Note",
+  //     link: 2,
+  //     type: "note",
+  //   },
+
+  //   {
+  //     id: 3,
+  //     icon: VscNote,
+  //     title: "My Quiz",
+  //     link: 3,
+  //     type: "quiz",
+  //   },
+  // ];
   const [details, showDetails] = useState(false);
 
   function IconType(icon) {
@@ -416,6 +420,25 @@ function Accord({ name, _id, classId, description }) {
         break;
     }
   }
+  const domain = [
+    {
+      id: 1,
+      title:"Edit domain",
+    },
+    {
+      id: 2,
+      title:"Add Content",
+    },
+    {
+      id: 3,
+      title:"Lock all content",
+    },
+    {
+      id: 4,
+      title:"Delete Domain",
+    },
+    
+  ]
   return (
     <div className={style.content_item}>
       <div className={style.content_item_top}>
@@ -427,9 +450,8 @@ function Accord({ name, _id, classId, description }) {
           )}
         </i>
         <span>{name}</span>
-        <i>
-          <BsThreeDotsVertical />
-        </i>
+        <AccordMenu />
+
       </div>
 
       {
@@ -440,9 +462,7 @@ function Accord({ name, _id, classId, description }) {
               <Link to={`${routeType(type)}`} className="d-flex justify-content-between">
                 <i>{IconType(type)}</i>
                 <span>{title}</span>
-                <i>
-                  <BsThreeDotsVertical />
-                </i>
+                <AccordMenu />
               </Link>
             </li>
           ))}
@@ -450,6 +470,43 @@ function Accord({ name, _id, classId, description }) {
       }
     </div>
   );
+}
+
+function AccordMenu({id, content}){
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  }
+  return (
+    <div>
+      <i
+        id="basic-button"
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+        <BsThreeDotsVertical />
+      </i>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleClose}>Edit content</MenuItem>
+        <MenuItem onClick={handleClose}>Lock content</MenuItem>
+        <MenuItem onClick={handleClose}>Delete content</MenuItem>
+      </Menu>
+    </div>
+  )
 }
 
 export function ModalContent({ show, handleClose, toggleModule }) {

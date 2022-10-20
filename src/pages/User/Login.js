@@ -290,7 +290,7 @@ const Login = () => {
             </button>
           )
         }
-        <button onClick={gotoPledre}>Click me</button>
+        {/* <button onClick={gotoPledre}>Click me</button> */}
       </form>
         <p className="mt-5">
           <span>Do not have an account? </span>
