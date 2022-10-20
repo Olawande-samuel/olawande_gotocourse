@@ -1092,7 +1092,7 @@
   color: var(--theme-blue) !important;
   background: #fff;
   font-size: 15px;
-  padding: 0.725rem 2.5rem !important;
+  padding: 0.725rem .9rem !important;
 }
 
 @media (max-width: 575px) {

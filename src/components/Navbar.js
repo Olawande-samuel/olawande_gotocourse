@@ -16,6 +16,7 @@ import { useAuth } from "../contexts/Auth";
 import { useLocalStorage } from "../hooks";
 import { ScrollToTop } from "../pages/Courses";
 import LogoutButton from "./LogoutButton";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const KEY = "gotocourse-userdata";
 
@@ -55,20 +56,30 @@ const Navbar = ({ background }) => {
   const celebRoute = location.pathname.split("/")[1] === "lounge";
   const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";  
   const categoryRoute = background === "category";
-  const landing = location.pathname.split("/")[1] !== "lounge" && location.pathname.split("/")[1] !== "";
+  const landing = location.pathname.split("/")[1] !== "lounge";
   const mainpage = location.pathname.split("/")[1] === ""
   function showDrop() { }
+  
+  const [showBanner, setShowBanner] = useState(true)
   return (
     <nav
       ref={heightRef}
       section="top"
-      className={`nav navbar navbar-expand-lg ${ landing || mainpage ? "navbar-light" : "navbar-dark"}`}
+      className={`nav navbar navbar-expand-lg flex-column ${ landing || mainpage ? "navbar-light" : "navbar-dark"}`}
       style={{
-        background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : landing ? "var(--blue-ish)" :  mainpage ? "#fff": "var(--theme-blue)",
+        // background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : landing ? "var(--blue-ish)" :  mainpage ? "#fff": "var(--theme-blue)",
+        background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : landing ? "var(--blue-ish)" :  "var(--theme-blue)",
         color: confirmEmail || landing || categoryRoute ? "var(--theme-blue)" : "#fffff",
       }}
     > 
       <ScrollToTop />
+      {
+        (mainpage) && showBanner &&
+        <div className="d-flex align-items-center justify-content-center p-2 w-100 bg-white">
+          <p className="mb-0 fw-bold me-4">ENROLL NOW AT 50% FOR ALL CLASSES</p>
+          <i><AiOutlineCloseCircle size="1.5rem" onClick={()=>{setShowBanner(false)}} /> </i>
+        </div>
+      }
       <div className="container navbar-container align-items-center">
         <Link
           to="/"
@@ -85,19 +96,30 @@ const Navbar = ({ background }) => {
           className={`collapse navbar-collapse  justify-content-end  align-items-center mt-3 mt-lg-0 ${show ? "show" : ""
             }`}
           id="navbarNav"
-        >
+      >
           <ul className="navbar-nav me-5">
             {(location.pathname.split("/")[1] === "" || celebRoute) && (
-              <li className="nav-item holder">
-                <Link className="link nav-link courses me-4" to="/categories"
-                style={{
-                  color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
-                }}
-                >
-                  Categories
-                </Link>
-                {drop ? <NavList dropRef={dropRef} /> : null}
-              </li>
+              <>
+                <li className="nav-item holder">
+                  <Link className="link nav-link courses me-4" to="/categories"
+                  style={{
+                    color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
+                  }}
+                  >
+                    Categories
+                  </Link>
+                  {drop ? <NavList dropRef={dropRef} /> : null}
+                </li>
+                <li className="nav-item holder">
+                  <Link className="link nav-link courses me-4" to="/lounge"
+                  style={{
+                    color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
+                  }}
+                  >
+                    Mentor
+                  </Link>
+                </li>
+              </>
             )}
 
             {(confirmEmail) && (

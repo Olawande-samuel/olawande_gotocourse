@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from "./Navbar"
 import Footer from "./Footer"
 import End from "./End"
@@ -10,9 +10,9 @@ const Layout = ({ children, background }) => {
   const { pathname } = useLocation()
 
   const payment = pathname.split('/')[3] === "payment"
-
   return (
     <>
+
       <Navbar background={background} />
       <section className="layout_main" style={{ marginTop: `${+height - 1}px` }}>
         {children}

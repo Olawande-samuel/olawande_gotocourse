@@ -104,6 +104,7 @@ import ConsoleAssessments from "./pages/Dashboard/components/classConsole/Consol
 import { CreateRoom, VideDiv } from "./utils/video";
 import Detail from "./pages/Course/Details";
 import AllCourses from "./pages/Courses/allcourses/AllCourses";
+import { MainContainer } from "./pages/Dashboard/components/classConsole";
 
 
 
@@ -330,14 +331,17 @@ function App() {
                 <Route path="class-console" element={<Out />}>
                   <Route index element={<ConsoleClass />} />
                   <Route path="class" element={<Content />}>
-                    <Route path="creator-suite" element={<Suite />}/>          
-                    <Route path="classroom" element={<Classroom />} />
-                    <Route path="mail" element={<ChatComponent />} />
-                    <Route path="file" element={<File />} />
-                    <Route path="note" element={<Note />} />
-                    <Route path="quiz" element={<Out />}>
-                      <Route index element={<Quiz />} />
-                      <Route path="preview" element={<Preview />} />
+                    <Route path=":classId" element={<Out />}>
+                      <Route index element={<MainContainer />} />
+                      <Route path="creator-suite" element={<Suite />}/>          
+                      <Route path="classroom" element={<Classroom />} />
+                      <Route path="mail" element={<ChatComponent />} />
+                      <Route path="file" element={<File />} />
+                      <Route path="note" element={<Note />} />
+                      <Route path="quiz" element={<Out />}>
+                        <Route index element={<Quiz />} />
+                        <Route path="preview" element={<Preview />} />
+                      </Route>
                     </Route>
                   </Route>
                 </Route>

@@ -1,6 +1,6 @@
 import { useAuth } from "../../../../contexts/Auth";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   AiFillClockCircle,
   AiOutlinePaperClip,
@@ -42,7 +42,7 @@ import {
   Switch,
 } from "@mui/material";
 
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
 import clsx from "../styles.module.css";
 import { AdvancedError } from "../../../../classes";
 import { toast, ToastContainer } from "react-toastify";
@@ -54,7 +54,9 @@ import { useLocalStorage } from "../../../../hooks";
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-
+import File from "./File"
+import Quiz from "./Quiz"
+import Note from "./Note"
 const studentIcon = [
   {
     id: 1,
@@ -280,6 +282,12 @@ function Sidebar({ Toggle, side }) {
     fetchDomains(userdata.token, courseId)
   );
 
+  // useEffect(()=>{
+  //   if(getDomains?.data?.data?.length > 0){
+  //     console.log(getDomains.data.data[0])
+  //   }
+  // }, [getDomains?.data?.data])
+
   return (
     // <article className={style.class_sidebar }>
     <>
@@ -368,32 +376,12 @@ function Accord({ name, _id, classId, description }) {
   const { consoleFunctions: { fetchContents }, } = useAuth();
   const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId) );
 
+  useEffect(()=>{
+    if(getDomainContent?.data?.data?.length > 0){
+      console.log(getDomainContent.data.data[0])
+    }
+  }, [getDomainContent?.data?.data])
 
-  // const data = [
-  //   {
-  //     id: 1,
-  //     icon: AiOutlinePaperClip,
-  //     title: "My file",
-  //     link: 1,
-  //     type: "file",
-  //   },
-
-  //   {
-  //     id: 2,
-  //     icon: MdOutlineNote,
-  //     title: "My Note",
-  //     link: 2,
-  //     type: "note",
-  //   },
-
-  //   {
-  //     id: 3,
-  //     icon: VscNote,
-  //     title: "My Quiz",
-  //     link: 3,
-  //     type: "quiz",
-  //   },
-  // ];
   const [details, showDetails] = useState(false);
 
   function IconType(icon) {
@@ -855,6 +843,42 @@ export function PopModalContent({ open, closeSmall }) {
       </Modal>
     </div>
   );
+}
+
+export function MainContainer(){
+  const { consoleFunctions: { fetchContents }, } = useAuth();
+  const { getItem } = useLocalStorage();
+  const userdata = getItem(KEY);
+  const navigate = useNavigate();
+  const {classId} = useParams()
+  const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId) );
+
+  const [data, setData] = useState({})
+  useEffect(()=>{
+    if(getDomainContent?.data?.data?.length > 0){
+      console.log(getDomainContent.data.data[0])
+      navigate(`?content=${getDomainContent.data.data[0]._id}`)
+      setData(getDomainContent.data.data[0])
+    }
+
+  }, [getDomainContent?.data?.data])
+
+
+  switch (data.type) {
+    case "FILE_VIDEO":
+      return <File />;
+    case "QUIZ":
+      return <Quiz />;
+    case "NOTE":
+      return <Note /> ;
+    default:
+      return ;
+  }
+  return (
+      <div>
+          main
+      </div>
+  )
 }
 
 export default Console;

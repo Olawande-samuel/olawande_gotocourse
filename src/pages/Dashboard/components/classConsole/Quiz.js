@@ -13,6 +13,11 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Link, useLocation } from "react-router-dom";
+import { useEffect } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useAuth } from '../../../../contexts/Auth';
+import { KEY } from '../../../../constants';
+import { useLocalStorage } from '../../../../hooks';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -88,20 +93,23 @@ export function Preview() {
 
 
 export default function Quiz() {
-    const { pathname } = useLocation();
+    const { pathname, search } = useLocation();
     const bread = pathname?.split("/");
+
     const [type, setType] = useState("")
     const [checked, setChecked] = useState(false)
     const [optionsNumber, setOptionsNumber] = useState(1)
+
     const [addNew, setAddNew] = useState(1)
     const [value, setValue] = useState(0);
+    const [formstate, setFormstate] = useState({})
     const ref = useRef()
+    const  {getItem } = useLocalStorage()
+    const userdata = getItem(KEY)
+    const { consoleFunctions: { fetchQuiz, addQuiz }, } = useAuth();
 
-    console.log({ type });
+    let searchData = search.split("=").reverse()[0]
 
-    // const studentpath = pathname.split("/")[1] === "console";
-    // const suite = pathname.split("/")[2] === "suite";
-    // const classroom = pathname.split("/")[2] === "classroom";
 
     function a11yProps(index) {
         return {
@@ -114,6 +122,16 @@ export default function Quiz() {
         setValue(newValue);
     };
 
+   const quizAdd = useMutation(addQuiz, {
+    onSuccess: (res)=>{
+        console.log(res.data)
+    },
+    onError: (err)=>{
+        console.error(err)
+    }
+   })
+
+    const getContentfromQuery = useQuery(["quiz content", search], ()=>fetchQuiz(userdata.token, searchData))
 
     function goBack() {
         let pathArray = pathname.split("/")[1];
@@ -126,6 +144,11 @@ export default function Quiz() {
             default:
                 return "/admin";
         }
+    }
+
+    function submitForm(e){
+        e.preventDefault();
+
     }
     return (
 
@@ -169,7 +192,7 @@ export default function Quiz() {
                 <main className='quiz__contentbody'>
                     
 
-                    <form action="" className='content__quiz'>
+                    <form onSubmit={submitForm} className='content__quiz'>
                         <label htmlFor="Name">Name of Quiz</label>
                         <input type="text"
                         // placeholder='Name of Quiz' 

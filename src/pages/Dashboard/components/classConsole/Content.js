@@ -29,3 +29,4 @@ export default function Content({type}) {
 export function ChatComponent(){
     return <ChatModule />
 }
+

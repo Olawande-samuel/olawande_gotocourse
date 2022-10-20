@@ -3891,9 +3891,9 @@ export const consoleFunctions = {
             } 
         }
     },
-    fetchQuiz: async function(token, domainId){
+    fetchQuiz: async function(token, id){
         try{
-            const res = await axios.get(`${baseURL}/classes/domains/${domainId}`,
+            const res = await axios.get(`${baseURL}/classes/contents/quiz/${id}`,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,

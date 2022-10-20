@@ -219,7 +219,7 @@ export function ConsoleClass() {
           <h5>{title}</h5>
           <p className="clamp_text_sm">{description}</p>
           <div>
-            <Link className="d-inline-flex" to="class" onClick={()=> localStorage.setItem(CLASSID, bootcampId)}>
+            <Link className="d-inline-flex" to={`class/${bootcampId}`} onClick={()=> localStorage.setItem(CLASSID, bootcampId)}>
               <button className={clsx.class_con_button}>Open Class</button>
             </Link>
           </div>
