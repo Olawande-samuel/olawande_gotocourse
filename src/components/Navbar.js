@@ -61,6 +61,7 @@ const Navbar = ({ background }) => {
   function showDrop() { }
   
   const [showBanner, setShowBanner] = useState(true)
+  const mybanner = localStorage.getItem("gotocourse-banner")
   return (
     <nav
       ref={heightRef}
@@ -77,7 +78,10 @@ const Navbar = ({ background }) => {
         (mainpage) && showBanner &&
         <div className="d-flex align-items-center justify-content-center p-2 w-100 bg-white">
           <p className="mb-0 fw-bold me-4">ENROLL NOW AT 50% FOR ALL CLASSES</p>
-          <i><AiOutlineCloseCircle size="1.5rem" onClick={()=>{setShowBanner(false)}} /> </i>
+          <i><AiOutlineCloseCircle size="1.5rem" onClick={()=>{
+              setShowBanner(false)
+              localStorage.setItem("gotocourse-banner", false)
+            }} /> </i>
         </div>
       }
       <div className="container navbar-container align-items-center">
@@ -87,7 +91,7 @@ const Navbar = ({ background }) => {
           className="logo navbar-brand "
         >
           {confirmEmail || landing || categoryRoute || mainpage ? <Logosm color="var(--theme-blue)" /> :  <Logosm />}
-          <small className="d-block" style={{fontSize:"14px", color: landing || mainpage ? "var(--theme-blue)" : "#fff"}}>Learn without limits</small>
+          {/* <small className="d-block" style={{fontSize:"14px", color: landing || mainpage ? "var(--theme-blue)" : "#fff"}}>Learn without limits</small> */}
         </Link>
         <button type="button" className="navbar-toggler " onClick={toggleNav}>
           <span className="navbar-toggler-icon"></span>
