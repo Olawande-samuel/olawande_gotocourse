@@ -151,7 +151,7 @@ export const Syllabus = ({
         let formdata = {
           ...formstate,
           type:"PACKAGE",
-          description: bio,
+          description: bio ? bio : formstate.description,
           instructors:[...instructorsList, ...currentInstructor],
           categoryName: formstate.category
         }
@@ -910,15 +910,6 @@ export const Syllabus = ({
             const { data } = res;
             //do somethings
             setTeachers(_=>  data);
-            toast.success(message, {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
           }
         } catch (err) {
           toast.error(err.message, {

@@ -639,11 +639,11 @@ const Detail = () => {
                         <DetailRight>
                             <CareerCard>
                                 <Header>Career Prospect</Header>
-                                {/* <p>{details ? details.career : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={50} />}</p>
+                                {/* <p>{details ? details.career : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={50} />}</p> */}
                                 <ul>
                                     {
-                                        details ? details.careerList.map(({name, _id}, i) => (
-                                            <li key={i}>
+                                        details ? details?.careerList?.map(({name, _id}, i) => (
+                                            <li key={i} style={{fontSize: "1rem"}}>
                                                 <Dot />
                                                 {name}
                                             </li>
@@ -654,7 +654,7 @@ const Detail = () => {
                                             </li>
                                         ))
                                     }
-                                </ul> */}
+                                </ul>
                             </CareerCard>
                         </DetailRight>
                     </DetailBodyContent>

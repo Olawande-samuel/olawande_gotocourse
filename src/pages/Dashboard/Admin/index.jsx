@@ -3572,7 +3572,7 @@ export function Bootcamps() {
                       )
                     )
                 ) : (
-                  <h1>No Class found</h1>
+                  <h6>No Class found</h6>
                 )}
               </tbody>
             </table>
@@ -3627,7 +3627,7 @@ export function AdminClassConsole() {
             {bootcamps.length > 0 ? (
               bootcamps.map((item, i) => <ClassesCard {...item} />)
             ) : (
-              <h4 className="text-center">No Class found</h4>
+              <h6 className="text-center">No Class found</h6>
             )}
           </div>
         </div>

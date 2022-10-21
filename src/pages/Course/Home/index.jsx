@@ -13,6 +13,7 @@ import { useEffectOnMount, useLocalStorage } from "../../../hooks";
 import { useAuth } from "../../../contexts/Auth";
 import { AdvancedError } from "../../../classes";
 import {COURSE_CATEGORY_KEY, capitalize, getDate} from "../../../constants";
+import DOMPurify from "dompurify";
 
 
 
@@ -232,7 +233,7 @@ function CourseCard({image, name, description, separator, startDate, endDate, go
                 </CardImageContainer>
                 <CardBody>
                     <h2>{name}</h2>
-                    <p>{description}</p>
+                    <p  className="restricted_line_lg" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
                     {/* <Date>
                         <h3>Date</h3>
                         <span>{`${getDate(startDate)} - ${getDate(endDate)}`}</span>
