@@ -370,7 +370,7 @@
 }
 
 
-@media (min-width:768px) and (max-width:1024px){
+@media (min-width:540px) and (max-width:1024px){
     .wrap_content {
         /* border: 5px solid yellow; */
         display: block;
