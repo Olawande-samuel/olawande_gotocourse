@@ -340,7 +340,7 @@ function Hero() {
                       className="newHero_left-title text-start mb-0 "
                       style={{ fontWeight: "500", fontSize: "15px" }}
                     >
-                      {item}
+                       {item}
                     </li>
                   ))
                 }

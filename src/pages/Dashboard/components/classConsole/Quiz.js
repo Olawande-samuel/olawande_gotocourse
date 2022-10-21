@@ -102,7 +102,9 @@ export default function Quiz() {
 
     const [addNew, setAddNew] = useState(1)
     const [value, setValue] = useState(0);
-    const [formstate, setFormstate] = useState({})
+    const [formstate, setFormstate] = useState({
+        questions:[]
+    })
     const ref = useRef()
     const  {getItem } = useLocalStorage()
     const userdata = getItem(KEY)
@@ -143,9 +145,12 @@ export default function Quiz() {
                 return "/student";
             default:
                 return "/admin";
-        }
+        }   
     }
 
+    function handleContentChange(e){
+        setFormstate({...formstate, [e.target.name]: e.target.value})
+    }
     function submitForm(e){
         e.preventDefault();
 
@@ -190,33 +195,50 @@ export default function Quiz() {
                 <TabPanel value={value} index={0}>
 
                 <main className='quiz__contentbody'>
-                    
 
                     <form onSubmit={submitForm} className='content__quiz'>
                         <label htmlFor="Name">Name of Quiz</label>
                         <input type="text"
                         // placeholder='Name of Quiz' 
+                        name="title"
+                        id="title"
+                        value={formstate.title}
+                        onChange={handleContentChange}
                         />
 
                         <label htmlFor="Name">Notes</label>
                         <input type="text"
                         // placeholder='Notes' 
+                        name="note"
+                        id="note"
+                        value={formstate.note}
+                        onChange={handleContentChange}
                         />
                         <small>Users will see this on the page before they start quiz. Should describe the quiz</small>
 
                         <label htmlFor="date">Quiz deadline</label>
                         <div className="contenquiz__time">
-                            <input type="date" />
-                            <input type="time" placeholder='Time' />
+                            <input type="date" name="endDate" onChange={handleContentChange} />
+                            <input type="time" placeholder='Time' name="endTime" onChange={handleContentChange} />
 
                         </div>
                         <small>For quizzes without deadline, use a date far in the future</small>
 
                         <label htmlFor="time">Time Limit</label>
-                        <input type="time" />
+                        <input type="number" 
+                        name="timeLimit"
+                        id="timeLimit"
+                        value={formstate.timeLimit}
+                        onChange={handleContentChange}
+                        />
 
                         <label htmlFor="entries">Number of entries</label>
-                        <input type="number" id='entries' />
+                        <input type="number" id='entries'
+                           name="maxAttempts"
+                           value={formstate.maxAttempts}
+                           onChange={handleContentChange}
+                        
+                        />
                         <small>How many times can a student retry quiz?</small>
 
 
@@ -225,12 +247,12 @@ export default function Quiz() {
 
                             {/* <Accordion defaultActiveKey="0">
                                 <Accordion.Item eventKey="0"> */}
-                            {[...Array(1)].map((x, id) => (
+                            {formstate?.questions?.map((x, id) => (
 
 
                                 < Accordion >
                                     {
-                                        [...Array(addNew)].map((x, id) => (
+                                        formstate?.questions?.map((x, id) => (
                                             <Accordion.Item eventKey={id} className="accord__body">
                                                 <Accordion.Header className="accord__header"> Question {id + 1} </Accordion.Header>
                                                 <Accordion.Body>
@@ -253,7 +275,7 @@ export default function Quiz() {
                                                             <MenuItem value="multiple" >
                                                                 Multiple Choice
                                                             </MenuItem>
-                                                            <MenuItem value="checkbox" >
+                                                            <MenuItem value="checkbox" > 
                                                                 Checkbox
                                                             </MenuItem>
                                                             <MenuItem value="file">
@@ -262,10 +284,7 @@ export default function Quiz() {
                                                         </Select>
                                                     </FormControl>
 
-                                                    <div className="texteditor quiz__editor">
-
-
-                                                        <CKEditor
+                                                    <div className="texteditor quiz__editor">                                                        <CKEditor
                                                             editor={ClassicEditor}
                                                             data="<p>Hello from CKEditor 5!</p>"
                                                             onReady={editor => {
@@ -369,7 +388,7 @@ export default function Quiz() {
                             <button>Save</button>
                             <button onClick={(e) => {
                                 e.preventDefault()
-                                setAddNew(prev => prev + 1)
+                                setFormstate({...formstate, questions:[...formstate.questions, {title: ""}]})
 
                             }}>
                                 New Question

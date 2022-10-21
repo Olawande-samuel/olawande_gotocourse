@@ -224,6 +224,7 @@
     /* flex-direction:row-reverse; */
   }
   .newHero_left {
+    margin-top: 1rem;
     width: 50%;
   }
   .newHero_right {
