@@ -119,14 +119,17 @@ const About = () => {
                 <div className={clsx.committed}>
                     <div className="container-xxxl mx-auto">
                         <h2>Why are we committed to this?</h2>
-                        <div className={clsx.commited_content}>
-                            <div className={clsx.content_left}>
-                                <p>The tech skills gap is decimating the global workforce, putting workers and companies at risk, the gap keeps widening by the day. The world is advancing and professionals need to Upskill and Reskill to increase their knowledge, productivity on their jobs and take advantage of more lucrative professional opportunities in their chosen career path.</p>
-                                <p>Seeing this gap, and the frustration of long training duration coupled with high tuitions charged by traditional institutions and tech bootcamps faced by students, our commitment lies in imparting you with the necessary high-in-demand skills needed to land the high-paying job you so desire, with a plethora of tutors and mentors committed to your growth within the shortest period of time at a convenient cost.</p>
-                            </div>
-                            <div className={clsx.content_right}>
-                                <img src={committed} alt="Commited" />
-                            </div>
+                        <div className={clsx.wrap_content}>
+                            <p>
+                                <div className={clsx.wrap_right}>
+                                    <img src={committed} alt="Commited" />
+                                </div>
+                                The tech skills gap is decimating the global workforce, putting workers and companies at risk, the gap keeps widening by the day. The world is advancing and professionals need to Upskill and Reskill to increase their knowledge, productivity on their jobs and take advantage of more lucrative professional opportunities in their chosen career path.
+                                <br />
+
+                                Seeing this gap, and the frustration of long training duration coupled with high tuitions charged by traditional institutions and tech bootcamps faced by students, our commitment lies in imparting you with the necessary high-in-demand skills needed to land the high-paying job you so desire, with a plethora of tutors and mentors committed to your growth within the shortest period of time at a convenient cost.
+
+                            </p>
                         </div>
                     </div>
                 </div>
