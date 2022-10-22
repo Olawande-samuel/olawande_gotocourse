@@ -1,3 +1,4 @@
+import { Suspense, lazy } from "react";
 import Layout from "../../components/Layout"
 import style from "./style.module.css"
 import blob from "../../images/how-it-works/blob.png"
@@ -6,6 +7,22 @@ import affiliate from "../../images/how-it-works/affiliate.png"
 import student from "../../images/how-it-works/student.png"
 import teacher from "../../images/how-it-works/teacher.png"
 import vidcard from "../../images/how-it-works/videocard.png"
+import Loader from "../../components/Loader";
+// const studentRegister = lazy(() => import("../../images/videos/students/student_registration.mp4"))
+// const studentSignIn = lazy(() => import("../../images/videos/students/sign_in_student.mp4"))
+// const studentEnroll = lazy(() => import("../../images/videos/students/enroll_in_class.mp4"))
+// const studentWishlist = lazy(() => import("../../images/videos/students/add_items_to_wishlist.mp4"))
+// const studentProfile = lazy(() => import("../../images/videos/students/how_to_edit_profile.mp4"))
+// const studentNotification = lazy(() => import("../../images/videos/students/student_notification.mp4"))
+// const studentPayment = lazy(() => import("../../images/videos/students/student_history_and_payment.mp4"))
+// const studentLogout = lazy(() => import("../../images/videos/students/student_logout_final.mp4"))
+// const teacherRegister = lazy(() => import("../../images/videos/teachers/teacher_registration_final.mp4"))
+// const teacherSignIn = lazy(() => import("../../images/videos/teachers/teacher_sign_in_final.mp4"))
+// const teacherPassword = lazy(() => import("../../images/videos/teachers/password_change_-_teacher.mp4"))
+// const teacherResetPassword = lazy(() => import("../../images/videos/teachers/teacher_how_to_reset_password.mp4"))
+// const teacherProfile = lazy(() => import("../../images/videos/teachers/teacher_how_to_edit_profile.mp4"))
+// const teacherNotification = lazy(() => import("../../images/videos/teachers/teacher_notification_final_.mp4"))
+// const teacherLogout = lazy(() => import("../../images/videos/teachers/teacher_logout_final.mp4"))
 import studentRegister from '../../images/videos/students/student_registration.mp4'
 import studentSignIn from '../../images/videos/students/sign_in_student.mp4'
 import studentEnroll from '../../images/videos/students/enroll_in_class.mp4'
@@ -23,92 +40,92 @@ import teacherNotification from '../../images/videos/teachers/teacher_notificati
 import teacherLogout from '../../images/videos/teachers/teacher_logout_final.mp4'
 
 
-const HIW = ()=> {
+const HIW = () => {
     const data = {
-        title:"Complete guide to Gotocourse navigation as a mentor",
+        title: "Complete guide to Gotocourse navigation as a mentor",
         button: false,
         img: mentors
     }
-    const videos=[
+    const videos = [
         {
-            name:"register",
-            link:studentRegister
+            name: "register",
+            link: studentRegister
         },
         {
-            name:"login",
-            link:studentSignIn
+            name: "login",
+            link: studentSignIn
         },
         {
-            name:"enroll",
-            link:studentEnroll
+            name: "enroll",
+            link: studentEnroll
         },
         {
-            name:"wishlist",
-            link:studentWishlist
+            name: "wishlist",
+            link: studentWishlist
         },
         {
-            name:"Edit profile",
-            link:studentProfile
+            name: "Edit profile",
+            link: studentProfile
         },
         {
-            name:"notification",
-            link:studentNotification
+            name: "notification",
+            link: studentNotification
         },
         {
-            name:"payment",
-            link:studentPayment
-        }, 
+            name: "payment",
+            link: studentPayment
+        },
         {
-            name:"logout",
-            link:studentLogout
+            name: "logout",
+            link: studentLogout
         },
     ]
-    return  (
+    return (
         <Layout>
             <Hero {...data} />
-            <Instructional videos={videos}/>
+            <Instructional videos={videos} />
         </Layout>
     )
 }
-export function HIWStudent(){
+export function HIWStudent() {
     const data = {
-        title:"Complete guide to Gotocourse navigation as a student",
+        title: "Complete guide to Gotocourse navigation as a student",
         button: false,
         img: student
     }
 
-    const videos=[
+    const videos = [
         {
-            name:"How to register as a student",
-            link:studentRegister
+            name: "How to register as a student",
+            link: studentRegister
         },
         {
-            name:"How to sign in to your dashboard as a student",
-            link:studentSignIn
+            name: "How to sign in to your dashboard as a student",
+            link: studentSignIn
         },
         {
-            name:"How to enroll for a class as a student",
-            link:studentEnroll
+            name: "How to enroll for a class as a student",
+            link: studentEnroll
         },
         {
-            name:"How to add item to your wishlist as a student",
-            link:studentWishlist
+            name: "How to add item to your wishlist as a student",
+            link: studentWishlist
         },
         {
-            name:"How to edit your profile as a student",
-            link:studentProfile
+            name: "How to edit your profile as a student",
+            link: studentProfile
         },
         {
-            name:"How to check your notifications as a student",
-            link:studentNotification
+            name: "How to check your notifications as a student",
+            link: studentNotification
         },
         {
-            name:"How to check history and payment status",
-            link:studentPayment
-        }, 
+            name: "How to check history and payment status",
+            link: studentPayment
+        },
         {
-            name:"How to logout from student's dashboard",
-            link:studentLogout
+            name: "How to logout from student's dashboard",
+            link: studentLogout
         },
     ]
     return (
@@ -119,108 +136,108 @@ export function HIWStudent(){
             </div>
         </Layout>
     )
-} 
-export function HIWTeacher(){
+}
+export function HIWTeacher() {
     const data = {
-        title:"Complete guide to Gotocourse navigation as a teacher",
+        title: "Complete guide to Gotocourse navigation as a teacher",
         button: false,
         img: teacher
     }
-   
-    const videos=[
+
+    const videos = [
         {
-            name:"How to register as a teacher",
-            link:teacherRegister
+            name: "How to register as a teacher",
+            link: teacherRegister
         },
         {
-            name:"How to sign in to your dashboard as a teacher",
-            link:teacherSignIn 
+            name: "How to sign in to your dashboard as a teacher",
+            link: teacherSignIn
         },
         {
-            name:"How to change your password as a teacher",
-            link:teacherPassword
+            name: "How to change your password as a teacher",
+            link: teacherPassword
         },
         {
-            name:"How to reset your password as a teacher",
-            link:teacherResetPassword
+            name: "How to reset your password as a teacher",
+            link: teacherResetPassword
         },
         {
-            name:"How to edit your profile as a teacher",
-            link:teacherProfile
+            name: "How to edit your profile as a teacher",
+            link: teacherProfile
         },
         {
-            name:"How to check your notifications as a teacher",
-            link:teacherNotification
+            name: "How to check your notifications as a teacher",
+            link: teacherNotification
         },
         {
-            name:"How to logout from teacher's dashboard",
-            link:teacherLogout
+            name: "How to logout from teacher's dashboard",
+            link: teacherLogout
         },
     ]
- 
+
     return (
         <Layout>
             <div className={style.others}>
                 <Hero {...data} />
-                <Instructional videos={videos}/>
+                <Instructional videos={videos} />
             </div>
         </Layout>
     )
 }
-export function HIWAffiliate(){
+export function HIWAffiliate() {
     const data = {
-        title:"Complete guide to Gotocourse navigation as an affiliate",
+        title: "Complete guide to Gotocourse navigation as an affiliate",
         button: false,
         img: affiliate
     }
 
-    const videos=[
+    const videos = [
         {
-            name:"register",
-            link:studentRegister
+            name: "register",
+            link: studentRegister
         },
         {
-            name:"login",
-            link:studentSignIn
+            name: "login",
+            link: studentSignIn
         },
         {
-            name:"enroll",
-            link:studentEnroll
+            name: "enroll",
+            link: studentEnroll
         },
         {
-            name:"wishlist",
-            link:studentWishlist
+            name: "wishlist",
+            link: studentWishlist
         },
         {
-            name:"Edit profile",
-            link:studentProfile
+            name: "Edit profile",
+            link: studentProfile
         },
         {
-            name:"notification",
-            link:studentNotification
+            name: "notification",
+            link: studentNotification
         },
         {
-            name:"payment",
-            link:studentPayment
-        }, 
+            name: "payment",
+            link: studentPayment
+        },
         {
-            name:"logout",
-            link:studentLogout
+            name: "logout",
+            link: studentLogout
         },
     ]
     return (
         <Layout>
             <div className={style.others}>
                 <Hero {...data} />
-                <Instructional  videos={videos}/>
+                <Instructional videos={videos} />
             </div>
         </Layout>
     )
 }
 
 
-function Hero({title, img}){
-    
+function Hero({ title, img }) {
+
     return (
         <div className={style.hero}>
             <div className="container">
@@ -229,7 +246,7 @@ function Hero({title, img}){
                         <h2 className={style.text_section_header}>{title}</h2>
                     </div>
                     <div className={style.image_section}>
-                        <BlobImage img={img}  />
+                        <BlobImage img={img} />
                     </div>
                 </div>
             </div>
@@ -238,7 +255,7 @@ function Hero({title, img}){
 }
 
 
-function BlobImage({img}){
+function BlobImage({ img }) {
     return (
         <div>
             <div className={style.blob_images}>
@@ -249,35 +266,40 @@ function BlobImage({img}){
     )
 }
 
-function Instructional({videos}){
-    
+function Instructional({ videos }) {
+
     return (
         <div className={style.instructional_wrapper}>
             <div className="container">
                 <h2 className={style.instructional_header}>Instructional Videos</h2>
-                
+
                 <div className={style.instructional_grid}>
                     {
-                        videos.map((item, id)=>(
-                            <InstructionalCard item={item} key={id}/>
+                        videos.map((item, id) => (
+                            <InstructionalCard item={item} key={id} />
                         ))
                     }
                 </div>
+
             </div>
         </div>
     )
 }
 
-function InstructionalCard({item}){
-    console.log({item});
+function InstructionalCard({ item }) {
+    console.log({ item });
     return (
-        <div className={style.instructional_images}>
-            <div className={style.instructional_titles}>
-                <p className={style.instructional_type}>Videos</p>
-                <p>{item.name}</p>
+        // <Suspense fallback={<Loader />}>
+
+            <div className={style.instructional_images}>
+                <div className={style.instructional_titles}>
+                    <p className={style.instructional_type}>Videos</p>
+                    <p>{item.name}</p>
+                </div>
+                <video src={item.link} controls type="video/mp4" />
             </div>
-            <video src={item.link} controls type="video/mp4"/>
-        </div>
+        // </Suspense>
+
     )
 }
 
