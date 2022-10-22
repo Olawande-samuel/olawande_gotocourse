@@ -60,7 +60,7 @@ export function Category() {
       <div className="container-xxl">
       <header className="newCategories_header_wrapper">
         <h1 className="newCategories_header">A broad selection of courses</h1>
-        <p className="sub_title mx-auto text-start" style={{width:"min(100% - 1rem, 1300px)"}}>
+        <p className="sub_title text-start" style={{width:"min(100% - 1rem, 1300px)"}}>
         With over  50 tailored courses taught by industry experts on Gotocourse, you will be exposed to required skills required to launch or scale your career in as little as 3 to 5 months—even if you don’t have any previous experience.
         </p>
       </header>

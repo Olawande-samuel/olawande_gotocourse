@@ -1853,3 +1853,51 @@ left: 0;
     gap: 2rem;
   }
 }
+
+.our_mission {
+  padding-block: 2rem;
+
+}
+.our_mission header h6 {
+  color: var(--theme-blue);
+}
+.our_mission_content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+.our_mission_left {
+  display: flex;
+}
+.our_mission_content img {
+  max-width: 100%;
+  max-height: 380px;
+  margin-inline: auto;
+
+}
+.our_mission_content h6 {
+  font-weight: 700;
+}
+.our_mission_content ol {
+  padding-left: 1rem;
+}
+.our_mission_content button {
+  padding: 8px 20px;
+  border: none;
+  background: var(--theme-blue);
+  color: #fff;
+}
+
+@media screen and (min-width: 700px){
+  .our_mission_content {
+    flex-direction: row-reverse;
+  }
+ 
+  .our_mission_content > div {
+    flex-basis:50%;
+  }
+  .our_mission_content img {
+    max-height: 380px;
+  }
+}

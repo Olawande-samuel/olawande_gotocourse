@@ -8,21 +8,7 @@ import student from "../../images/how-it-works/student.png"
 import teacher from "../../images/how-it-works/teacher.png"
 import vidcard from "../../images/how-it-works/videocard.png"
 import Loader from "../../components/Loader";
-// const studentRegister = lazy(() => import("../../images/videos/students/student_registration.mp4"))
-// const studentSignIn = lazy(() => import("../../images/videos/students/sign_in_student.mp4"))
-// const studentEnroll = lazy(() => import("../../images/videos/students/enroll_in_class.mp4"))
-// const studentWishlist = lazy(() => import("../../images/videos/students/add_items_to_wishlist.mp4"))
-// const studentProfile = lazy(() => import("../../images/videos/students/how_to_edit_profile.mp4"))
-// const studentNotification = lazy(() => import("../../images/videos/students/student_notification.mp4"))
-// const studentPayment = lazy(() => import("../../images/videos/students/student_history_and_payment.mp4"))
-// const studentLogout = lazy(() => import("../../images/videos/students/student_logout_final.mp4"))
-// const teacherRegister = lazy(() => import("../../images/videos/teachers/teacher_registration_final.mp4"))
-// const teacherSignIn = lazy(() => import("../../images/videos/teachers/teacher_sign_in_final.mp4"))
-// const teacherPassword = lazy(() => import("../../images/videos/teachers/password_change_-_teacher.mp4"))
-// const teacherResetPassword = lazy(() => import("../../images/videos/teachers/teacher_how_to_reset_password.mp4"))
-// const teacherProfile = lazy(() => import("../../images/videos/teachers/teacher_how_to_edit_profile.mp4"))
-// const teacherNotification = lazy(() => import("../../images/videos/teachers/teacher_notification_final_.mp4"))
-// const teacherLogout = lazy(() => import("../../images/videos/teachers/teacher_logout_final.mp4"))
+
 import studentRegister from '../../images/videos/students/student_registration.mp4'
 import studentSignIn from '../../images/videos/students/sign_in_student.mp4'
 import studentEnroll from '../../images/videos/students/enroll_in_class.mp4'

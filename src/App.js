@@ -30,7 +30,6 @@ import {
   Courses as TeacherCourses, CreateCourse, Earnings, Bootcamps as TeacherBootcamps, BootcampDetails as TeacherBootcampDetails, CourseInfo as TeacherCourseInfo, Chat as TeacherChat, Notification as TeacherNotifications
 } from "./pages/Dashboard/Teachers";
 
-import TeachersHelp from "./pages/Dashboard/Teachers/Help";
 import TeacherReferral from "./pages/Dashboard/Teachers/Referral";
 
 import { Dashboard as AffiliatesDash, Sales, Income, Revenue } from "./pages/Dashboard/Affiliate"
@@ -133,6 +132,7 @@ const Contact = lazy(() => import("./pages/Contact"))
 const Settings = lazy(() => import("./pages/Dashboard/Admin/Settings"))
 const LiveClass = lazy(() => import("./pages/Dashboard/components/Live/LiveClass"))
 
+const TeachersHelp = lazy(()=>import("./pages/Dashboard/Teachers/Help")) ;
 
 //MENTORS
 // const {MentorsProfile} = lazy(() => import("./pages/Dashboard/Mentors"));

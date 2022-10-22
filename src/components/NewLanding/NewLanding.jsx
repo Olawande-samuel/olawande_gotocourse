@@ -60,6 +60,7 @@ const NewLanding = () => {
       <WhatweDo />
       <Stats />
       <Companies />
+      <Mission />
       <TechPro />
       <Category />
       <VideoSection />
@@ -889,3 +890,54 @@ export function InPerson({ better, content }) {
     </section>
   );
 }
+
+export function Mission(){
+  return (
+    <section className="our_mission">
+      <div className="container">
+        <header className="text-center">
+          <h3>Our Mission is to help you get started on the career you want</h3>
+          <h6>Here’s how Gotocourse works</h6>
+        </header>
+        <div className="our_mission_content">
+          <div className="our_mission_left">
+            <img src={Learning} alt="" />
+          </div>
+          <div className="our_mission_right">
+              <ol>
+                {
+                  ourmission.map(item=>(
+                      <li key={item.id}>
+                        <h6>{item.title}</h6>
+                        <p>{item.content}</p>
+                      </li>
+                  ))
+                }
+              </ol>
+              <div>
+                <button className="our_mission_button">Register now</button>
+              </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+const ourmission = [
+  {
+    id: 1,
+    title:"Register for free to get started",
+    content:"Register to access the interactive student’s dashboard"
+  },
+  {
+    id: 2,
+    title:"Select classes of your choice from available classes",
+    content:"Access your interactive student’s dashboard to select class of your choice from the listed classes starting"
+  },
+  {
+    id: 3,
+    title:"Enroll to class to get your training started",
+    content:"Start class immediately after completion of your enrolment to class"
+  },
+]
