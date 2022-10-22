@@ -3,58 +3,64 @@
     padding: 1.5rem 0 2rem 0;
     background: linear-gradient(180.9deg, #191046 18.68%, rgba(16, 51, 70, 0.95) 97.29%);
 }
+
 .others .hero {
     background: #EFF4FC;
     color: var(--theme-blue)
 }
 
 
-@media (min-width: 612px){
+@media (min-width: 612px) {
     .hero {
-        height:min(100vh - 81px, 500px);
-        padding: 2.5rem  0;
-    }
-    
-}
-@media (min-width: 712px){
-    .hero {
-        height:min(100vh - 81px, 450px);
+        height: min(100vh - 81px, 500px);
         padding: 2.5rem 0;
     }
-    
+
+}
+
+@media (min-width: 712px) {
+    .hero {
+        height: min(100vh - 81px, 450px);
+        padding: 2.5rem 0;
+    }
+
 }
 
 .textImage {
     display: flex;
-    flex-direction:column-reverse;
+    flex-direction: column-reverse;
     gap: 1.5rem;
     color: #fff;
 }
+
 .text_section_header {
     font-weight: 800;
     font-size: clamp(2.375rem, 1.4732rem + 3.5714vw, 3.1875rem);
     line-height: clamp(3.8rem, 1.875rem + 3.125vw, 4.6875rem);
 }
+
 .others .textImage .text_section_header {
-    color: var(--theme-blue );
+    color: var(--theme-blue);
 }
 
-@media (min-width: 612px){
+@media (min-width: 612px) {
     .textImage {
-        flex-direction:row;
+        flex-direction: row;
         justify-content: center;
-        align-items:center;
+        align-items: center;
         height: 100%;
     }
 
-    .textImage > div {
+    .textImage>div {
         flex-basis: 100%;
     }
-    .image_section > div {
+
+    .image_section>div {
         display: flex;
-        justify-content:flex-end
+        justify-content: flex-end
     }
 }
+
 .blob_images {
     position: relative;
     height: 360px;
@@ -63,55 +69,88 @@
     place-items: center;
 }
 
-.blob_images img{
+.blob_images img {
     position: absolute;
     max-width: 100%;
-    right:0;
+    right: 0;
     height: 100%;
 }
+
 .blob_images .blob_first_image {
     right: 10px;
 }
-.instructional_wrapper{
+
+.instructional_wrapper {
     padding: 2rem 0;
 }
 
-@media (max-width:575px){
-    .blob_images img{
+@media (max-width:575px) {
+    .blob_images img {
         height: 100%;
         inset: 0;
         margin: auto;
     }
+
     .blob_images .blob_first_image {
         right: 10px;
         left: -7px;
     }
 }
+
 .instructional_header {
     color: var(--theme-blue);
     font-size: clamp(1.6875rem, 1.9196rem + 1.3393vw, 2.225rem);
-    text-align:center;
+    text-align: center;
     margin-bottom: 2rem;
     font-weight: 800;
 }
+
 .instructional_grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
 }
-.instructional_images{
-    border: 1px solid;
+
+.instructional_titles {
+    display: flex;
+    gap: 2rem;
+    background: #D9D9D9;
+    padding: 1rem;
+    align-items: center;
 }
-.instructional_images img {
-    max-width:100%;
+
+.instructional_titles {
+    color: #000000;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
 }
+
+.instructional_type{
+    padding: .5rem;
+    background: #474646;
+    color: #FFFFFF;
+}
+
+
+
+.instructional_images {
+    width: 100%;
+    /* border: 5px solid green */
+}
+
+.instructional_images video {
+    width: 100%;
+}
+
+
 
 @media (min-width: 575px) {
     .instructional_grid {
+        width: 100%;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
         gap: 3rem;
+        /* border: 5px solid red */
     }
 }
-
-
