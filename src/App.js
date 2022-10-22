@@ -36,7 +36,7 @@ import { Dashboard as AffiliatesDash, Sales, Income, Revenue } from "./pages/Das
 import { Landing as AffiliateLanding, Register as AffiliateRegister, Login as AffiliateLogin, Verification as AffiliateVerification } from "./pages/Affiliate";
 import AdminAffiliate from "./pages/Dashboard/Admin/Affiliate";
 
-import HIW, { HIWStudent, HIWTeacher, HIWAffiliate } from "./pages/HowItWorks"
+import HIW, {HIWAffiliate } from "./pages/HowItWorks"
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
@@ -133,6 +133,10 @@ const Settings = lazy(() => import("./pages/Dashboard/Admin/Settings"))
 const LiveClass = lazy(() => import("./pages/Dashboard/components/Live/LiveClass"))
 
 const TeachersHelp = lazy(()=>import("./pages/Dashboard/Teachers/Help")) ;
+
+const HIWStudent = lazy(()=> import("./pages/HowItWorks")) 
+const  HIWTeacher = lazy(()=>import("./pages/HowItWorks")) 
+
 
 //MENTORS
 // const {MentorsProfile} = lazy(() => import("./pages/Dashboard/Mentors"));
