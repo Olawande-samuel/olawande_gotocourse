@@ -102,12 +102,15 @@ font-size: 14px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.restricted_line_lg{
+.restricted_line_lg {
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.newcourseCard.restricted_line_lg p:not(:first-child){
+  display: none;
 }
 .icon svg , .icon img{
   width: 150px;

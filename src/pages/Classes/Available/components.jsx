@@ -29,7 +29,7 @@ export const Bootcamp = ({description, duration, bootcampImg, endDate, startDate
                     <div className={clsx.bootcamp_top}>
                         <div>
                             <h5>{title}</h5>
-                            <p className="restricted_line_lg" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description),}} />
+                            <p className=" restricted_line_lg" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description),}} />
                         </div>
                         <div className={clsx.bootcamp_price}>
                             <h5>{new Intl.NumberFormat('en-us', {style: 'currency', currency: 'USD'}).format(price).split(".")[0]}</h5>

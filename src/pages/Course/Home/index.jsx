@@ -233,7 +233,7 @@ function CourseCard({image, name, description, separator, startDate, endDate, go
                 </CardImageContainer>
                 <CardBody>
                     <h2>{name}</h2>
-                    <p  className="restricted_line_lg" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
+                    <p  className="newcourseCard restricted_line_lg" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
                     {/* <Date>
                         <h3>Date</h3>
                         <span>{`${getDate(startDate)} - ${getDate(endDate)}`}</span>

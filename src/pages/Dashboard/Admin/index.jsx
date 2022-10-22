@@ -3770,7 +3770,7 @@ export function CreateBootcamp() {
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
-    const formData = { ...formstate, description: bio };
+    const formData = { ...formstate, description: bio ? bio : formstate.description };
     try {
       if (
         formData.description === "" ||
@@ -3936,6 +3936,23 @@ export function CreateBootcamp() {
                   ))}
               </select>
             </div>
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Subcategory</label>
+              <select
+                rows="5"
+                name="subCategory"
+                value={formstate.subCategory}
+                onChange={changeHandler}
+                className="form-select generic_input"
+              >
+                <option value="">Choose a Subcategory</option>
+                <option  value="in-demand">In-demand</option>
+                <option  value="1-2 weeks">1-2 weeks</option>
+                <option  value="certification">Certification</option>
+                <option  value="1 day">1 Day</option>
+                <option  value="free">Free</option>
+              </select>
+            </div>
             <Input
               label="Duration"
               name="duration"
@@ -3990,7 +4007,7 @@ export function CreateBootcamp() {
             </div>  
             <Editor 
              initialState={formstate.description} 
-             title="description" 
+             title="Description" 
              setBio={setBio} />
             <div className={clsx.form_group}>
               <label htmlFor={"instructor"}>Instructor</label>
