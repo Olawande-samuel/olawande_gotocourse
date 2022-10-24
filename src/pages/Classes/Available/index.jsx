@@ -140,11 +140,12 @@ const Available = () => {
                         
                         {
                             classType.map(item=>(
-
-                                <ClassTypeContainer
-                                    content={bootcamps} 
-                                    {...item}
-                                />
+                                <div key={item.id}>
+                                    <ClassTypeContainer
+                                        content={bootcamps} 
+                                        {...item}
+                                    />
+                                </div>
                             ))
                          }
                         {/* <Reviews reviews={reviews} bgColor="#fff" /> */}
@@ -182,28 +183,28 @@ export function ClassLists({ bootcamps }) {
 }
 
 export function ClassTypeContainer({mainHeading, subHeading, data,  content}){
-    
+    const ownData = content?.filter(item=> item.subCategory === data)
     return (
         <section className={`classType ${clsx.classType}`}>
             <header>
                 <h5 className="fw-bold">{mainHeading}</h5>
                 <p>{subHeading}</p>
             </header>
-
-            <ClassCarousel data={content} />
+            <ClassCarousel data={ownData} />
 
         </section>
     )
 }
 
 function ClassCarousel({data}){
+    console.log({data})
     return(
         <div className="classType_swiper">
             <Swiper
                 // install Swiper modules
                 modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-                loop={true}
-                speed={1500}
+                // loop={true}
+                speed={8500}
                 autoplay={{ delay: 2000 }}
                 spaceBetween={0}
                 slidesPerView={1}
@@ -214,12 +215,10 @@ function ClassCarousel({data}){
                 pagination={{ clickable: true }}
                 scrollbar={{ draggable: true }}
                 breakpoints={{
-                // when window width is >= 320px
                 320: {
                     slidesPerView: 1,
                     spaceBetween: 0,
                 },
-                // when window width is >= 640px
                 575: {
                     slidesPerView: 2,
                     spaceBetween: 5,
@@ -240,7 +239,7 @@ function ClassCarousel({data}){
             >
 
                 {data?.map(item=>(
-                <SwiperSlide>
+                <SwiperSlide key={item.bootcampId}>
                     <ClassCard {...item} all={data} />
                 </SwiperSlide>
                 ))}
