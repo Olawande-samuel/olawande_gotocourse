@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import Layout from "../Layout";
 import BootImg from "../../images/bootcamps/allClasses2.webp";
 import HeroImg from "../../images/newlanding.webp";
-import getStarted from "../../images/business/live.png"
+import getStarted from "../../images/easysteps.png"
 import { useAuth } from "../../contexts/Auth";
 import "./landing.css";
 import { useLocalStorage } from "../../hooks";

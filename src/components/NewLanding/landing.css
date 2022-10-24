@@ -1548,7 +1548,7 @@
 
 
 .professional {
-  padding-block: 2rem;
+  padding-block: 2.9rem;
 }
 .tech_pro > div {
   display: flex;
@@ -1862,6 +1862,8 @@ left: 0;
 }
 .our_mission header h6 {
   color: var(--theme-blue);
+  font-size: clamp(1rem, 0.9107rem + 0.4464vw, 1.3125rem);
+
 }
 .our_mission_content {
   display: flex;
