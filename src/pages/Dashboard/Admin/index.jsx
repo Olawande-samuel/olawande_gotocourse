@@ -3690,7 +3690,7 @@ export function CreateBootcamp() {
             let found = data.find((d) => d.bootcampId === id);
             found.startDate = found.startDate.split("T")[0];
             found.endDate = found.endDate.split("T")[0];
-            found.instructor = found.instructorName;
+            found.instructor = found.instructorEmail;
             found.bootcampImg = found.bootcampImg.split("/").slice(-1)[0];
 
             delete found.instructorName;

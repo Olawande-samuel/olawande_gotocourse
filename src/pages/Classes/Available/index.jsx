@@ -12,9 +12,22 @@ import { Bootcamp, StudentViews } from "./components";
 import { AdvancedError } from "../../../classes";
 import img from "../../../images/bola.png";
 import boySitting from "../../../images/boy_sitting.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PaginatedClasses from "./Paginated";
 import teacher from "../../../images/Girlwithhallow.png"
+
+
+import SwiperCore, {
+    Navigation,
+    Autoplay,
+    Pagination,
+    Scrollbar,
+    A11y,
+  } from "swiper";
+  import { Swiper, SwiperSlide } from "swiper/react";
+  
+  // Import Swiper styles
+  import "swiper/css";
 
 const reviews = [
     {
@@ -40,42 +53,14 @@ const reviews = [
 const tabs = ["All Classes",
     //  "Data Science", "Project Management", "Cybersecurity & Assurance", "Digital Marketing"
 ]
-// const bootcamps = [
-//     {
-//         image: bootcamp,
-//         title: "Coding Bootcamp",
-//         content: "Learn Coding in 10 weeks of online classes and be sure to set yourself up for high-paying jobs in your chosen career path on completion of your training.",
-//         duration: "10 weeks",
-//         startDate: "Sep 25",
-//         endDate: "Dec 04",
-//         price: 800
-//     },
-//     {
-//         image: bootcamp,
-//         title: "Coding Bootcamp",
-//         content: "Learn Coding in 10 weeks of online classes and be sure to set yourself up for high-paying jobs in your chosen career path on completion of your training.",
-//         duration: "10 weeks",
-//         startDate: "Sep 25",
-//         endDate: "Dec 04",
-//         price: 800
-//     },
-//     {
-//         image: bootcamp,
-//         title: "Coding Bootcamp",
-//         content: "Learn Coding in 10 weeks of online classes and be sure to set yourself up for high-paying jobs in your chosen career path on completion of your training.",
-//         duration: "10 weeks",
-//         startDate: "Sep 25",
-//         endDate: "Dec 04",
-//         price: 800
-//     },
-// ]
+
 
 
 const Available = () => {
-    const [activeTab, setActiveTab] = useState(0);
     const [loading, setLoading] = useState(true);
     const [bootcamps, setBootcamps] = useState([]);
     const { otherFunctions: { fetchBootcamps } } = useAuth();
+
     useEffectOnMount(() => {
         console.log('Available classes showing');
         (async () => {
@@ -97,32 +82,43 @@ const Available = () => {
     }, [])
 
 
-    function switchTab(e, i) {
-        setActiveTab(_ => i);
-    }
+    const classType= [
+        {
+            id: 1,
+            mainHeading:"Classes that get you ready for in demand career ",
+            subHeading:"Launch a new career in as little as 1- 6 months",
+            data:"in-demand"
+        },
+        {
+            id: 2,
+            mainHeading:"Classes you can complete in 1-2 weeks",
+            subHeading:"",
+            data:"1-2 weeks"
+        },
+        {
+            id: 3,
+            mainHeading:"Certification courses",
+            subHeading:"",
+            data:"certification"
+        },
+        {
+            id: 4,
+            mainHeading:"Classes you can complete in a day",
+            subHeading:"",
+            data:"1 day"
+        },
+        {
+            id: 5,
+            mainHeading:"Free classes",
+            subHeading:"",
+            data:"free"
+        },
+    ]
 
 
     return (
         <Layout>
             <div className={clsx.available_classes}>
-                {/* <div className={clsx.classes_top}>
-                    <div className="container">
-                        <div className={clsx.classes_hero}>
-
-                            <div className={clsx.classes_top_left}>
-                                <h2>The Best time to get trained is now</h2>
-                                <p>
-                                    Choose from our available classes with new additions published regularly
-                                </p>
-                            </div>
-                            <div className={clsx.top_right_layout}>
-        
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
-
-
                 <div className={clsx.jumbotron}>
                     <div className={`container ${clsx.jumbotron__cover}`}>
                         <div className={clsx.jumbotron__absolute}>
@@ -138,30 +134,19 @@ const Available = () => {
                     </div>
                 </div>
 
-
-
                 <div className={clsx.classes_body}>
-                    <div className="container">
-                        <div className={clsx.tabs}>
-                            {
-                                tabs.map((el, i) => (
-                                    <span key={i} onClick={e => switchTab(e, i)} className={activeTab === i ? clsx.active_tab : clsx.tab}>
-                                        {el}
-                                    </span>
-                                ))
-                            }
-                        </div>
-                        <PaginatedClasses list={bootcamps} />
-                        {/* <div className={clsx.students}>
-                            <h3>Students are viewing</h3>
-                            <div className={clsx.student_views}>
-                                {
-                                    bootcamps.reverse().map(({duration, bootcampImg, endDate, startDate, title, price}, i) => (
-                                        <StudentViews key={i} duration={duration} price={price} image={bootcampImg} endDate={endDate} startDate={startDate} title={title} />
-                                    ))
-                                }
-                            </div>
-                        </div> */}
+                    <div className="container-xxl">
+                        {/* <PaginatedClasses list={bootcamps} /> */}
+                        
+                        {
+                            classType.map(item=>(
+
+                                <ClassTypeContainer
+                                    content={bootcamps} 
+                                    {...item}
+                                />
+                            ))
+                         }
                         {/* <Reviews reviews={reviews} bgColor="#fff" /> */}
                         <div className={clsx.classes_start}>
                             <div className="container">
@@ -184,7 +169,6 @@ const Available = () => {
 }
 
 
-
 export function ClassLists({ bootcamps }) {
     return (
         <div className={clsx.bootcamps}>
@@ -196,4 +180,90 @@ export function ClassLists({ bootcamps }) {
         </div>
     )
 }
+
+export function ClassTypeContainer({mainHeading, subHeading, data,  content}){
+    
+    return (
+        <section className={`classType ${clsx.classType}`}>
+            <header>
+                <h5 className="fw-bold">{mainHeading}</h5>
+                <p>{subHeading}</p>
+            </header>
+
+            <ClassCarousel data={content} />
+
+        </section>
+    )
+}
+
+function ClassCarousel({data}){
+    return(
+        <div className="classType_swiper">
+            <Swiper
+                // install Swiper modules
+                modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+                loop={true}
+                speed={1500}
+                autoplay={{ delay: 2000 }}
+                spaceBetween={0}
+                slidesPerView={1}
+                navigation={{
+                    nextEl: '.review-swiper-button-next',
+                    prevEl: '.review-swiper-button-prev',
+                  }}
+                pagination={{ clickable: true }}
+                scrollbar={{ draggable: true }}
+                breakpoints={{
+                // when window width is >= 320px
+                320: {
+                    slidesPerView: 1,
+                    spaceBetween: 0,
+                },
+                // when window width is >= 640px
+                575: {
+                    slidesPerView: 2,
+                    spaceBetween: 5,
+                },
+                700: {
+                    slidesPerView: 3,
+                    spaceBetween: 5,
+                },
+                1024: {
+                    slidesPerView: 4,
+                    spaceBetween: 28,
+                },
+                1704: {
+                    slidesPerView: 4.5,
+                    spaceBetween: 28,
+                },
+                }}
+            >
+
+                {data?.map(item=>(
+                <SwiperSlide>
+                    <ClassCard {...item} all={data} />
+                </SwiperSlide>
+                ))}
+            </Swiper>
+            <i className="review-swiper-button-next"></i>
+            <i className="review-swiper-button-prev"></i>
+        </div>
+    )
+}
+
+function ClassCard({bootcampImg, title, all}){
+    const navigate = useNavigate();
+
+    function navigateToDetails(){
+        localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+        navigate("/classes/class")
+    }
+    return (
+        <div className={clsx.class_card} onClick={navigateToDetails}>
+            <img src={bootcampImg} alt="" className="img-fluid" />
+            <span>{title}</span>
+        </div>
+    )
+}
+
 export default Available;

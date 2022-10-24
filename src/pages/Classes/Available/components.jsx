@@ -10,9 +10,9 @@ import DOMPurify from "dompurify";
 
 
 export const Bootcamp = ({description, duration, bootcampImg, endDate, startDate, title, price, all}) => {
-    const navigate =useNavigate();
+    const navigate = useNavigate();
 
-    function navigateToDetails(){
+    function navigateToDetails(){ 
         localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
         navigate("/classes/class")
     }

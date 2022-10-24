@@ -915,7 +915,9 @@ export function Mission(){
                 }
               </ol>
               <div>
-                <button className="our_mission_button">Register now</button>
+                <Link className="d-block" to="/signup">
+                  <button className="our_mission_button">Register now</button>
+                </Link>
               </div>
           </div>
         </div>
