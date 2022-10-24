@@ -62,8 +62,8 @@ const NewLanding = () => {
       <Stats />
       <Companies />
       <Mission />
-      <TechPro />
       <Category />
+      <TechPro />
       <VideoSection />
       <Benefits />
       <Mentors />
