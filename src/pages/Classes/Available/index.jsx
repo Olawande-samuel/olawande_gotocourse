@@ -240,7 +240,7 @@ function ClassCarousel({data}){
 
                 {data?.map(item=>(
                 <SwiperSlide key={item.bootcampId}>
-                    <ClassCard {...item} all={data} />
+                    <ClassCard {...item} all={item} />
                 </SwiperSlide>
                 ))}
             </Swiper>
@@ -252,7 +252,7 @@ function ClassCarousel({data}){
 
 function ClassCard({bootcampImg, title, all}){
     const navigate = useNavigate();
-
+console.log({all});
     function navigateToDetails(){
         localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
         navigate("/classes/class")

@@ -597,4 +597,6 @@
 .classType header p {
     margin-bottom: 0;
 }
-
+.class_card {
+    cursor: pointer;
+}

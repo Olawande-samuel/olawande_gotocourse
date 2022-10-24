@@ -511,17 +511,21 @@ export function NewBootcampDetailsComponent(){
               <hr />
             </header>
             <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(bootcampTrainingInfo?.description)}} />
-            <div className={clsx.career_list}>
-              <h6>Career Prospect</h6>
-              <ul>
-                {
-                  bootcampTrainingInfo?.careerList?.map(item=>(
-                    <li>{item}</li>
-                  )) 
-                }
-                
-              </ul>
-            </div>
+            {
+              bootcampTrainingInfo?.careerList?.length > 0 &&
+
+              <div className={clsx.career_list}>
+                <h6>Career Prospect</h6>
+                <ul>
+                  {
+                    bootcampTrainingInfo?.careerList?.map(item=>(
+                      <li>{item}</li>
+                    )) 
+                  }
+                  
+                </ul>
+              </div>
+            }
           </div>
         </section>
         <section className={clsx.images}>
@@ -591,7 +595,7 @@ export function NewBootcampDetailsComponent(){
             </header>
             <div className={clsx.upcoming_card}>
               {
-                bootcamps.data?.data?.map((item,i)=>(
+                bootcamps.data?.data?.filter(d=>d.isActive).map((item,i)=>(
                     <Upcome {...item} all={item}/>
                 ))
               }

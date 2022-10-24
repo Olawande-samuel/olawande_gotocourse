@@ -4060,7 +4060,7 @@ export function CreateBootcamp() {
             >
               Add Syllabus
             </button>
-            <div className={clsx.form_group}>
+            {/* <div className={clsx.form_group}>
               <label>Career Prospect</label>
               {formstate.careerList?.length !== 0 ? (
                 formstate.careerList?.map(({ name }, i) => (
@@ -4082,7 +4082,7 @@ export function CreateBootcamp() {
               onClick={(e) => setShowCareerModal((_) => true)}
             >
               Add Career Prospect
-            </button>
+            </button> */}
             <CareerModal
               open={showCareerModal}
               newCareer={careerlist}
