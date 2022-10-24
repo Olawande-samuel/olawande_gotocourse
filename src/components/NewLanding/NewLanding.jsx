@@ -898,7 +898,7 @@ export function Mission(){
     <section className="our_mission">
       <div className="container">
         <header className="text-center">
-          <h6 className="fw-bold">Three easy steps to get started on Gotocourse</h6>
+          {/* <h6 className="fw-bold">Three easy steps to get started on Gotocourse</h6> */}
           {/* <h6>Here’s how Gotocourse works</h6> */}
         </header>
         <div className="our_mission_content">
@@ -906,6 +906,7 @@ export function Mission(){
             <img src={getStarted} alt="" />
           </div>
           <div className="our_mission_right">
+            <h6 className="fw-bold our_mission_header mb-3" >Three easy steps to get started on Gotocourse</h6>
               <ol>
                 {
                   ourmission.map(item=>(

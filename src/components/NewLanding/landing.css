@@ -1860,8 +1860,8 @@ left: 0;
   padding-block: 2.8rem;
 
 }
-.our_mission header h6 {
-  color: var(--theme-blue);
+.our_mission .our_mission_header {
+  /* color: var(--theme-blue); */
   font-size: clamp(1rem, 0.9107rem + 0.4464vw, 1.3125rem);
 
 }
