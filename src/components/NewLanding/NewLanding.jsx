@@ -146,10 +146,10 @@ function WhatweDo() {
     <section className="what_we_do">
       <div className="container">
         <header>
-          <h4 className="tet-center">Our Goal</h4>
+          <h4 className="text-center">Our Goal</h4>
         </header>
         <p className="text-center">
-          To be the No1 platform globally where millions of learners connect with top tech educators and bootcamps in order to help upskill, boost productivity and reduce the cost of learning.
+          To be the No1 global platform where millions of learners connect with top tech educators and bootcamps in order to help upskill, boost productivity and reduce the cost of learning.
         </p> 
       </div>
     </section>
@@ -898,7 +898,7 @@ export function Mission(){
     <section className="our_mission">
       <div className="container">
         <header className="text-center">
-          <h3>Three easy steps to get started on Gotocourse</h3>
+          <h6 className="fw-bold">Three easy steps to get started on Gotocourse</h6>
           {/* <h6>Here’s how Gotocourse works</h6> */}
         </header>
         <div className="our_mission_content">

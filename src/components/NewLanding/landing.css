@@ -1547,7 +1547,9 @@
 
 
 
-
+.professional {
+  padding-block: 2rem;
+}
 .tech_pro > div {
   display: flex;
   flex-direction: column;
@@ -1855,7 +1857,7 @@ left: 0;
 }
 
 .our_mission {
-  padding-block: 2rem;
+  padding-block: 2.8rem;
 
 }
 .our_mission header h6 {
@@ -1873,7 +1875,8 @@ left: 0;
 .our_mission_content img {
   max-width: 100%;
   max-height: 380px;
-  margin-inline: auto;
+  margin-inline: end;
+  width: 100%;
 
 }
 .our_mission_content h6 {

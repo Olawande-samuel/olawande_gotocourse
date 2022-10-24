@@ -39,7 +39,7 @@ const Companies = () => {
     <section className="wrapper services">
       <div className="container">
         <header className='mb-2' >
-          <h3 className=" text-center fw-bold" style={{color:"var(--theme-blue)"}}>Some of the Companies Our Alumni Work</h3>
+          <h6 className=" text-center fw-bold" style={{color:"var(--theme-blue)"}}>Some of the Companies Our Alumni Work</h6>
         </header>
         <div className="service_box_wrapper d-flex flex-wrap justify-content-center px-lg-5 mt-3" style={{gap:"1.5rem"}}>
             {
