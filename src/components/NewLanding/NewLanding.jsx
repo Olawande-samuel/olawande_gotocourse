@@ -149,7 +149,7 @@ function WhatweDo() {
           <h4 className="tet-center">Our Goal</h4>
         </header>
         <p className="text-center">
-          To be the No1 platform globally where millions of learners connect with top tech educator and bootcamps in order to help upskill, boost productivity and reduce the cost of learning.
+          To be the No1 platform globally where millions of learners connect with top tech educators and bootcamps in order to help upskill, boost productivity and reduce the cost of learning.
         </p> 
       </div>
     </section>
