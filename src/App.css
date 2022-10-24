@@ -570,8 +570,8 @@ border-radius: 13.5px !important;
 .services  .title {
   line-height: 72px;
   font-size: clamp(1.5rem, -0.875rem + 8.333vw, 1.705rem);
-  color: #000;
-  /* color:var(--theme-blue) !important; */
+  /* color: #000; */
+  color:var(--theme-blue) !important;
 }
 
 .services .services_list {
