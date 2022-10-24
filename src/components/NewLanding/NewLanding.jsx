@@ -152,6 +152,7 @@ function WhatweDo() {
         </p> 
       </div>
     </section>
+    
   );
 }
 function Gif() {

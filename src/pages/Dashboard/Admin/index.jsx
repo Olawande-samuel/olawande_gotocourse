@@ -17,7 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import DOMPurify from "dompurify";
 
-import { Sidebar, Searchbar, Navbar } from "../components";
+import { Sidebar, Navbar } from "../components";
 import clsx from "./styles.module.css";
 
 import avatar from "../../../images/teacher.png";
@@ -44,9 +44,8 @@ import {
 import { AllEarnings } from "../Teachers/Earnings";
 
 import EarningsTable from "./Earnings/Table";
-import LogoutButton from "../../../components/LogoutButton";
-import { GotoDashboard } from "../Students";
-import { BiQuestionMark, BiTrash } from "react-icons/bi";
+
+import { BiTrash } from "react-icons/bi";
 import { ClassesCard } from "../Teachers/Bootcamps";
 import Editor from "../components/Editor";
 
@@ -1093,10 +1092,9 @@ export function ApproveStudent() {
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const {
-    adminStudentFunctions: { fetch, verify, verify_pledre },
+    adminStudentFunctions: {  verify,  },
     kycFunctions: { getAStudentKYCById },
     generalState,
-    generalState: { pledre },
     setGeneralState,
     commonFunctions: { deleteUser },
   } = useAuth();
@@ -1177,41 +1175,6 @@ export function ApproveStudent() {
     }
   }
 
-  async function handlePledreAccess(e, id) {
-    e.preventDefault();
-    let item = {
-      userId: id,
-    };
-
-    try {
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: true,
-        };
-      });
-
-      const res = await verify_pledre(item, userdata?.token);
-      const { message, success, statusCode } = res;
-
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: false,
-        };
-      });
-
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        //do somethings
-        setData({ ...data, accessPledre: !data.accessPledre });
-        toast.success(message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  }
-
   async function deleteUserHandler(e, email) {
     console.log(e);
     try {
@@ -1252,11 +1215,11 @@ export function ApproveStudent() {
       else {
         //do somethings
         setKyc(res.data);
-        toast.success(message);
         // navigate(-1)
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error("No KYC found");
+      console.error(error)
     } finally {
       setGeneralState((old) => {
         return {
@@ -1292,9 +1255,9 @@ export function ApproveStudent() {
           </h1>
 
           <div className={clsx.admin__profile_info}>
-            {info.map(({ title, content }, i) => (
+            {/* {info.map(({ title, content }, i) => (
               <Info title={title} content={content} key={i} />
-            ))}
+            ))} */}
 
             <div className={clsx.kyc}>
               {kyc !== null && kyc.question && (
@@ -1345,25 +1308,12 @@ export function ApproveStudent() {
             </div>
             <button
               className="button button-lg log_btn w-50 mt-3"
-              style={{ backgroundColor: data?.isVerified && "red" }}
+              style={{ backgroundColor: data?.isVerified && "var(--theme-orange" }}
               type="submit"
               onClick={(e) => handleVerification(e, data?.userId)}
             >
-              {data?.isVerified ? "Revoke Application" : "Approve Application"}
+              {data?.isVerified ? "Revoke Access" : "Approve Access"}
             </button>
-
-            {/* <button
-              className="button button-lg log_btn w-50 mt-3 d-block"
-              style={{
-                backgroundColor: data?.accessPledre && "var(--theme-orange",
-              }}
-              type="submit"
-              onClick={(e) => handlePledreAccess(e, data?.userId)}
-            >
-              {data?.accessPledre
-                ? "Revoke Dashboard Access"
-                : "Approve Dashboard Access"}
-            </button> */}
           </div>
         </div>
       </div>
@@ -1410,11 +1360,10 @@ export function Approve() {
       else {
         //do somethings
         setKyc(res.data);
-        toast.success(message);
         // navigate(-1)
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error("No KYC Found");
     } finally {
       setGeneralState((old) => {
         return {
@@ -1652,9 +1601,9 @@ export function Approve() {
           </h1>
 
           <div className={clsx.admin__profile_info}>
-            {info.map(({ title, content }, i) => (
+            {/* {info.map(({ title, content }, i) => (
               <Info title={title} content={content} key={i} />
-            ))}
+            ))} */}
 
             <div className={clsx.kyc}>
               {kyc !== null && kyc.question && (
@@ -1726,26 +1675,6 @@ export function Approve() {
                 value="mentorship"
               />
             </div>
-            {/* <div className="form-group my-3">
-              <label
-                htmlFor="accessPledre"
-                className="form-label generic_label"
-              >
-                Access Dashboard
-              </label>
-              <Switch
-                onClick={(e) =>
-                  handleVerification(
-                    e,
-                    "pledre",
-                    data?.userId,
-                    data?.pledre?._id
-                  )
-                }
-                checked={data?.accessPledre}
-                value="pledre"
-              />
-            </div> */}
             <div className="form-group my-3">
               <label htmlFor="level" className="form-label generic_label">
                 Assign Level
@@ -4520,10 +4449,11 @@ export function Earnings() {
   let userdata = getItem(KEY);
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([]);
+  const [earnings, setEarnings]= useState([])
   const {
     generalState,
     setGeneralState,
-    adminFunctions: { fetchEarnings },
+    adminFunctions: { fetchEarnings, fetchWithdrawals },
   } = useAuth();
 
   // const [notifications, setNotifications] = useState([]);
@@ -4534,15 +4464,22 @@ export function Earnings() {
     (async () => {
       try {
         setLoading((_) => true);
-        let res = await fetchEarnings(userdata?.token);
-        const { success, message, statusCode } = res;
-        if (!success) throw new AdvancedError(message, statusCode);
-        else {
-          let { data } = res;
-
-          console.log(data);
-          setRows((_) => data);
-        }
+        let res = await Promise.all([fetchEarnings(userdata?.token), fetchWithdrawals(userdata?.token)]);
+          console.log({res})
+          const [earnings, withdrawals] = res
+          const { success, message, statusCode } = earnings;
+          if (!success) throw new AdvancedError(message, statusCode);
+          else {
+            let { data } = earnings;
+            console.log(data);
+            setEarnings(data)
+          }
+          const { success:WSuccess, message:WMessage, statusCode:WStatusCode } = withdrawals;
+          if (!WSuccess) throw new AdvancedError(WMessage, WStatusCode);
+          else {
+            let { data:WData } = withdrawals;
+            setRows(WData)
+          }
       } catch (err) {
         toast.error(err.message);
       } finally {
@@ -4550,33 +4487,10 @@ export function Earnings() {
       }
     })();
 
-    // (async() => {
-    //   try{
-    //     setLoader(true)
-    //     const res = await fetchNotifications(userdata?.token);
-    //     const {message, success, statusCode} = res;
-    //     if(!success) throw new AdvancedError(message, statusCode);
-    //     const {data} = res
-    //     if(data.length > 0) {
-    //       setNotifications(data)
-    //       setGeneralState({...generalState, notifications: 0})
-    //     }
-    //   }catch(err){
-    //     toast.error(err.message, {
-    //       position: "top-right",
-    //       autoClose: 4000,
-    //       hideProgressBar: true,
-    //       closeOnClick: true,
-    //       pauseOnHover: true,
-    //       draggable: true,
-    //       progress: undefined,
-    //     });
-    //   }finally{
-    //     setLoader(_ => false);
-    //   }
-    // })()
+    
     flag.current = true;
   }, []);
+
 
   return (
     <Admin header={"Earnings"}>
@@ -4584,7 +4498,7 @@ export function Earnings() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className={clsx.admin__student_main}>
-            <AllEarnings />
+            <AllEarnings earnings={earnings} />
           </div>
           <div className="py-3">
             <div className="d-flex justify-content-between flex-wrap">

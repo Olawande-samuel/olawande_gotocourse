@@ -144,9 +144,8 @@ const Dashboard = () => {
         (async() => {
             try{
                 const res = await Promise.all([fetchTeachers(userdata?.token), fetchStudents(userdata?.token), fetchCourses(userdata?.token), fetchCategories(userdata?.token)]);
-                console.log(res);
+                
                 const [teachers, students, courses, categories] = res;
-                console.log({teachers, students, courses, categories});
                 const {success, statusCode, message} = teachers;
                 if(!success) throw new AdvancedError(message, statusCode);
                 else {
