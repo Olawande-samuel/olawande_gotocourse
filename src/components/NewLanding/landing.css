@@ -1899,5 +1899,6 @@ left: 0;
   }
   .our_mission_content img {
     max-height: 380px;
+    object-fit: contain;
   }
 }

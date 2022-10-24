@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import Layout from "../Layout";
 import BootImg from "../../images/bootcamps/allClasses2.webp";
 import HeroImg from "../../images/newlanding.webp";
+import getStarted from "../../images/business/live.png"
 import { useAuth } from "../../contexts/Auth";
 import "./landing.css";
 import { useLocalStorage } from "../../hooks";
@@ -897,12 +898,12 @@ export function Mission(){
     <section className="our_mission">
       <div className="container">
         <header className="text-center">
-          <h3>Our Mission is to help you get started on the career you want</h3>
-          <h6>Here’s how Gotocourse works</h6>
+          <h3>Three easy steps to get started on the career you want</h3>
+          {/* <h6>Here’s how Gotocourse works</h6> */}
         </header>
         <div className="our_mission_content">
           <div className="our_mission_left">
-            <img src={Learning} alt="" />
+            <img src={getStarted} alt="" />
           </div>
           <div className="our_mission_right">
               <ol>
