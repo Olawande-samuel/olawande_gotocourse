@@ -1894,7 +1894,7 @@ left: 0;
   color: #fff;
 }
 
-@media screen and (min-width: 700px){
+@media screen and (min-width: 612px){
   .our_mission_content {
     flex-direction: row-reverse;
   }
