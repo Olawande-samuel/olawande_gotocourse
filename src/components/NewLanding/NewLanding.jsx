@@ -898,7 +898,7 @@ export function Mission(){
     <section className="our_mission">
       <div className="container">
         <header className="text-center">
-          <h3>Three easy steps to get started on the career you want</h3>
+          <h3>Three easy steps to get started on Gotocourse</h3>
           {/* <h6>Here’s how Gotocourse works</h6> */}
         </header>
         <div className="our_mission_content">
