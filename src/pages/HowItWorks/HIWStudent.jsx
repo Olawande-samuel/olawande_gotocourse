@@ -7,13 +7,6 @@ import studentProfile from '../../images/videos/students/how_to_edit_profile.mp4
 import studentNotification from '../../images/videos/students/student_notification.mp4'
 import studentPayment from '../../images/videos/students/student_history_and_payment.mp4'
 import studentLogout from '../../images/videos/students/student_logout_final.mp4'
-import teacherRegister from '../../images/videos/teachers/teacher_registration_final.mp4'
-import teacherSignIn from '../../images/videos/teachers/teacher_sign_in_final.mp4'
-import teacherPassword from '../../images/videos/teachers/password_change_-_teacher.mp4'
-import teacherResetPassword from '../../images/videos/teachers/teacher_how_to_reset_password.mp4'
-import teacherProfile from '../../images/videos/teachers/teacher_how_to_edit_profile.mp4'
-import teacherNotification from '../../images/videos/teachers/teacher_notification_final_.mp4'
-import teacherLogout from '../../images/videos/teachers/teacher_logout_final.mp4'
 import Layout from "../../components/Layout"
 import { Hero, Instructional } from "."
 import style from "./style.module.css"

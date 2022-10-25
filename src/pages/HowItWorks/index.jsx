@@ -4,6 +4,7 @@ import blob from "../../images/how-it-works/blob.png"
 import mentors from "../../images/how-it-works/mentors.png"
 import affiliate from "../../images/how-it-works/affiliate.png"
 
+
 import studentRegister from '../../images/videos/students/student_registration.mp4'
 import studentSignIn from '../../images/videos/students/sign_in_student.mp4'
 import studentEnroll from '../../images/videos/students/enroll_in_class.mp4'
@@ -15,7 +16,7 @@ import studentLogout from '../../images/videos/students/student_logout_final.mp4
 
 
 
-const HIW = () => {
+export function HIW() {
     const data = {
         title: "Complete guide to Gotocourse navigation as a mentor",
         button: false,
@@ -117,6 +118,7 @@ export function HIWAffiliate() {
 
 
 export function Hero({ title, img }) {
+    console.log({title});
 
     return (
         <div className={style.hero}>
@@ -183,4 +185,4 @@ export function InstructionalCard({ item }) {
     )
 }
 
-export default HIW
+// export default HIW

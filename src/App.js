@@ -36,7 +36,7 @@ import { Dashboard as AffiliatesDash, Sales, Income, Revenue } from "./pages/Das
 import { Landing as AffiliateLanding, Register as AffiliateRegister, Login as AffiliateLogin, Verification as AffiliateVerification } from "./pages/Affiliate";
 import AdminAffiliate from "./pages/Dashboard/Admin/Affiliate";
 
-import HIW, {HIWAffiliate } from "./pages/HowItWorks"
+import {HIW, HIWAffiliate } from "./pages/HowItWorks"
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
@@ -134,8 +134,8 @@ const LiveClass = lazy(() => import("./pages/Dashboard/components/Live/LiveClass
 
 const TeachersHelp = lazy(()=>import("./pages/Dashboard/Teachers/Help")) ;
 
-const HIWStudent = lazy(()=> import("./pages/HowItWorks")) 
-const  HIWTeacher = lazy(()=>import("./pages/HowItWorks")) 
+const HIWStudent = lazy(()=> import("./pages/HowItWorks/HIWStudent")) 
+const  HIWTeacher = lazy(()=>import("./pages/HowItWorks/HIWTeacher")) 
 
 
 //MENTORS
@@ -237,7 +237,8 @@ function App() {
                 <Route path="history" element={<StudentHistory />} />
                 <Route path="payment" element={<StudentFees />} />
                 <Route path="chat" element={<StudentChat />} />
-                <Route path="help" element={<StudentHelp />} />
+                {/* <Route path="help" element={<StudentHelp />} /> */}
+                <Route path="help" element={<HIWStudent />} />
                 <Route path="referral" element={<StudentReferral />} />
                 <Route path="notifications" element={<StudentNotifications />} />
 
@@ -324,7 +325,8 @@ function App() {
                 <Route path="courses/details/:id" element={<TeacherCourseInfo />} />
                 <Route path="chat" element={<TeacherChat />} />
                 <Route path="notifications" element={<TeacherNotifications />} />
-                <Route path="help" element={<TeachersHelp />} />
+                {/* <Route path="help" element={<TeachersHelp />} /> */}
+                <Route path="help" element={<HIWTeacher />} />
                 <Route path="referral" element={<TeacherReferral />} />
                 <Route path="live-class" element={<Out />}>
                   <Route index element={<Live />} />
