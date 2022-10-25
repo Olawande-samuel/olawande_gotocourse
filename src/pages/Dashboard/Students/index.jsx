@@ -1608,7 +1608,7 @@ function AvailableCourses({ data }) {
                 </div>
 
                 <div className={clsx["coursebody"]}>
-                    {data?.length > 0 && data.map((item, i) => (
+                    {data?.length > 0 && data.filter(item=>item.isActive).map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
 
