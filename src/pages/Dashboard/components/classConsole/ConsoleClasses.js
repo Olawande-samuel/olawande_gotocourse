@@ -2,9 +2,17 @@
 import '../classConsole/Content.css'
 import { Link, useParams } from 'react-router-dom';
 import excel from '../../../../images/excel.png'
+import { useAuth } from "../../../../contexts/Auth";
+import { useLocalStorage } from "../../../../hooks";
+import { useQuery } from "@tanstack/react-query"
+
+const KEY = 'gotocourse-userdata';
 
 export function MyClass() {
     const { id } = useParams
+    const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps: fetchMyClasses }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
+
+
     return (
         <div className=''>
             <main className='questionblue'>
@@ -35,17 +43,22 @@ export function MyClass() {
 }
 
 export default function ConsoleClasses() {
+    const { getItem } = useLocalStorage();
+    let userdata = getItem(KEY);
+    const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps: fetchMyClasses }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
+    const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
+    console.log(bootcamps?.data?.data);
     return (
         <div className=''>
             <main className='assessments'>
                 {
-                    [...Array(4)].map((x, id) => (
-                        <Link to="/student/class-console/class">
+                 bootcamps?.data?.data.length > 0  && bootcamps?.data?.data.map((x, id) => (
+                        <Link to="/student/class-console/class" key={x.bootcampId}>
                             <div className="assesstmentbox">
                                 <div className="excelbox">
-                                    <img src={excel} alt="" />
+                                    <img src={x.bootcampImg}alt="" />
                                 </div>
-                                <p>EXCEL FUNCTIONS 101 </p>
+                                <p>{x.title} </p>
 
                             </div>
                         </Link>
