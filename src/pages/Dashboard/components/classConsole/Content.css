@@ -263,9 +263,6 @@
     /* border: 2px solid red; */
 }
 
-.multiplechoice__addbtn{
-    /* border: 2px solid green; */
-}
 
 
 .multiplechoice__input svg {
@@ -278,6 +275,8 @@
     margin: .5rem 0;
 
 }
+
+
 
 .prevbtn  button{
     background-color: #EEF5FF;
@@ -339,7 +338,7 @@
     font-size: 12px;
     line-height: 24px;
     border: none;
-    /* width: 50%; */
+    width: 50%;
     color: #FFFFFF;
     background: #00A607;
 }

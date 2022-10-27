@@ -93,218 +93,211 @@ export function Preview() {
 
 
 
-const Child = ({ onChildSubmit, childIndex }) => {
-    const [value, setValue] = useState({
-        type: "",
-        checked: false,
-        answer: "",
-        noteValue: ""
-    })
+// const Child = ({ onChildSubmit, childIndex }) => {
+//     const [value, setValue] = useState({
+//         type: "",
+//         checked: false,
+//         answer: "",
+//         noteValue: ""
+//     })
 
-    const submitForm = (e) => {
-        e.preventDefault()
-        onChildSubmit(childIndex, value)
+//     const submitForm = (e) => {
+//         e.preventDefault()
+//         onChildSubmit(childIndex, value)
 
-    }
+//     }
 
-    const [inputList, setInputList] = useState([{
-        optionAnswer: "",
-    }])
+//     const [inputList, setInputList] = useState([{
+//         optionAnswer: "",
+//     }])
 
-    const handleInputChange = (e, index) => {
-        const { name, value } = e.target;
-        const list = [...inputList];
-        list[index][name] = value;
-        setInputList(list)
-    }
+//     const handleInputChange = (e, index) => {
+//         const { name, value } = e.target;
+//         const list = [...inputList];
+//         list[index][name] = value;
+//         setInputList(list)
+//     }
 
-    const handleRemoveClick = index => {
-        const list = [...inputList]
-        list.splice(index, 1);
-        setInputList(list)
-    }
+//     const handleRemoveClick = index => {
+//         const list = [...inputList]
+//         list.splice(index, 1);
+//         setInputList(list)
+//     }
 
-    const handleAddClick = () => {
-        setInputList([...inputList, {
-            optionAnswer: ""
-        }])
-    }
-
-
-    console.log({ inputList });
+//     const handleAddClick = () => {
+//         setInputList([...inputList, {
+//             optionAnswer: ""
+//         }])
+//     }
 
 
-
-
-    return (
-        <>
-            <Accordion >
-                <Accordion.Item eventKey={childIndex} className="accord__body">
-                    <Accordion.Header className="accord__header"> Question {childIndex + 1}</Accordion.Header>
-                    <Accordion.Body>
-                        <FormControl sx={{ m: 1, minWidth: 120 }} >
-                            <InputLabel id="answertype-label">Question Type</InputLabel>
-                            <Select
-                                // labelId="questiontype-label"
-                                // id="questiontype"
-                                // label="question"
-                                // className="myselect"
-                                value={value.type}
-                                name="type"
-                                onChange={(e) => setValue({ ...value, [e.target.name]: e.target.value })}
-                                displayEmpty
-                                inputProps={{ 'aria-label': "Without label" }}
-                                margin="dense"
-                            >
-                                <MenuItem value="theory">
-                                    Theory
-                                </MenuItem>
-                                <MenuItem value="multiple" >
-                                    Multiple Choice
-                                </MenuItem>
-                                <MenuItem value="checkbox" >
-                                    Checkbox
-                                </MenuItem>
-                                <MenuItem value="file">
-                                    File Upload
-                                </MenuItem>
-                            </Select>
-
-                            <div className="texteditor quiz__editor">                                                        <CKEditor
-                                editor={ClassicEditor}
-                                data="<p>Hello from CKEditor 5!</p>"
-                                onReady={editor => {
-                                    // You can store the "editor" and use when it is needed.
-                                    console.log('Editor is ready to use!', editor);
-                                }}
-                                onChange={(event, editor) => {
-                                    const data = editor.getData();
-                                    console.log({ event, editor, data });
-                                    setValue({
-                                        ...value,
-                                        noteValue: data
-                                    })
-
-                                }}
-                                onBlur={(event, editor) => {
-                                    console.log('Blur.', editor);
-                                }}
-                                onFocus={(event, editor) => {
-                                    console.log('Focus.', editor);
-                                }}
-                            />
-
-                                <div className='textbtn'>
-                                    <Button
-                                        variant="outlined"
-                                        component="label"
-                                        className=""
-                                        style={{ color: "#0C2191" }}>
-                                        Add attachment
-                                        <input hidden accept="image/*" multiple type="file" />
-                                    </Button>
-                                </div>
-
-                                <div >
-                                    <FormControlLabel
-                                        control={
-                                            <Switch
-                                                checked={value.checked}
-                                                name="checked"
-                                                onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })}
-                                            />}
-                                        label="Add an explanantion"
-                                    />
-
-                                    {
-                                        value.checked && (
-                                            <div className='content__quiz'>
-                                                <input type="text" id='' name="answer" placeholder='Explain the correct Answer ' onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })} />
-                                            </div>
-                                        )
-                                    }
-
-                                </div>
-                            </div>
-
-                            {
-                                ((value.type === "multiple") || (value.type === "checkbox")) && (
-                                    <div className="contentquiz__checkbbox">
-
-                                        <legend htmlFor="multiplechoice">Select the correct answer among the options using the checkbox</legend>
-
-
-                                        {
-                                            inputList.map((x, id) => (
-                                                <div className='multiplechoice'>
-                                                    <div className='multiplechoice__input'>
-
-                                                        <input
-                                                            type="checkbox"
-                                                            // value={value.optionCheck}
-                                                            name="optionCheck"
-                                                            onChange={e => handleInputChange(e, id)} />
-                                                        <input
-                                                            type="text"
-                                                            name="optionAnswer"
-                                                            value={x.optionAnswer}
-                                                            onChange={e => handleInputChange(e, id)} />
-
-                                                        {
-                                                            inputList.length !== 1 && <RiDeleteBinFill onClick={() => handleRemoveClick(id)} />
-
-                                                        }
-                                                    </div>
-
-                                                    <div className='multiplechoice__addbtn'>
-                                                        {
-                                                            inputList.length - 1 === id &&
-                                                            <div className="prevbtn">
-                                                                <button onClick={handleAddClick} >Add Option</button>
-                                                            </div>
-
-
-                                                        }
-                                                    </div>
-
-
-                                                </div>
-                                            )
-                                            )}
-
-                                    </div>
+//     console.log({ inputList });
 
 
 
-                                )
-                            }
-                            <div className="footerbtn">
-                                <button onClick={submitForm}>Save</button>
-                            </div>
+
+//     return (
+//         <>
+//             <Accordion >
+//                 <Accordion.Item eventKey={childIndex} className="accord__body">
+//                     <Accordion.Header className="accord__header"> Question {childIndex + 1}</Accordion.Header>
+//                     <Accordion.Body>
+//                         <FormControl sx={{ m: 1, minWidth: 120 }} >
+//                             <InputLabel id="answertype-label">Question Type</InputLabel>
+//                             <Select
+//                                 // labelId="questiontype-label"
+//                                 // id="questiontype"
+//                                 // label="question"
+//                                 // className="myselect"
+//                                 value={value.type}
+//                                 name="type"
+//                                 onChange={(e) => setValue({ ...value, [e.target.name]: e.target.value })}
+//                                 displayEmpty
+//                                 inputProps={{ 'aria-label': "Without label" }}
+//                                 margin="dense"
+//                             >
+//                                 <MenuItem value="theory">
+//                                     Theory
+//                                 </MenuItem>
+//                                 <MenuItem value="multiple" >
+//                                     Multiple Choice
+//                                 </MenuItem>
+//                                 <MenuItem value="checkbox" >
+//                                     Checkbox
+//                                 </MenuItem>
+//                                 <MenuItem value="file">
+//                                     File Upload
+//                                 </MenuItem>
+//                             </Select>
+
+//                             <div className="texteditor quiz__editor">                                                        <CKEditor
+//                                 editor={ClassicEditor}
+//                                 data="<p>Hello from CKEditor 5!</p>"
+//                                 onReady={editor => {
+//                                     // You can store the "editor" and use when it is needed.
+//                                     console.log('Editor is ready to use!', editor);
+//                                 }}
+//                                 onChange={(event, editor) => {
+//                                     const data = editor.getData();
+//                                     console.log({ event, editor, data });
+//                                     setValue({
+//                                         ...value,
+//                                         noteValue: data
+//                                     })
+
+//                                 }}
+//                                 onBlur={(event, editor) => {
+//                                     console.log('Blur.', editor);
+//                                 }}
+//                                 onFocus={(event, editor) => {
+//                                     console.log('Focus.', editor);
+//                                 }}
+//                             />
+
+//                                 <div className='textbtn'>
+//                                     <Button
+//                                         variant="outlined"
+//                                         component="label"
+//                                         className=""
+//                                         style={{ color: "#0C2191" }}>
+//                                         Add attachment
+//                                         <input hidden accept="image/*" multiple type="file" />
+//                                     </Button>
+//                                 </div>
+
+//                                 <div >
+//                                     <FormControlLabel
+//                                         control={
+//                                             <Switch
+//                                                 checked={value.checked}
+//                                                 name="checked"
+//                                                 onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })}
+//                                             />}
+//                                         label="Add an explanantion"
+//                                     />
+
+//                                     {
+//                                         value.checked && (
+//                                             <div className='content__quiz'>
+//                                                 <input type="text" id='' name="answer" placeholder='Explain the correct Answer ' onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })} />
+//                                             </div>
+//                                         )
+//                                     }
+
+//                                 </div>
+//                             </div>
+
+//                             {
+//                                 ((value.type === "multiple") || (value.type === "checkbox")) && (
+//                                     <div className="contentquiz__checkbbox">
+
+//                                         <legend htmlFor="multiplechoice">Select the correct answer among the options using the checkbox</legend>
 
 
-                        </FormControl>
+//                                         {
+//                                             inputList.map((x, id) => (
+//                                                 <div className='multiplechoice'>
+//                                                     <div className='multiplechoice__input'>
+
+//                                                         <input
+//                                                             type="checkbox"
+//                                                             // value={value.optionCheck}
+//                                                             name="optionCheck"
+//                                                             onChange={e => handleInputChange(e, id)} />
+//                                                         <input
+//                                                             type="text"
+//                                                             name="optionAnswer"
+//                                                             value={x.optionAnswer}
+//                                                             onChange={e => handleInputChange(e, id)} />
+
+//                                                         {
+//                                                             inputList.length !== 1 && <RiDeleteBinFill onClick={() => handleRemoveClick(id)} />
+
+//                                                         }
+//                                                     </div>
+
+//                                                     <div className='multiplechoice__addbtn'>
+//                                                         {
+//                                                             inputList.length - 1 === id &&
+//                                                             <div className="prevbtn">
+//                                                                 <button onClick={handleAddClick} >Add Option</button>
+//                                                             </div>
 
 
-                    </Accordion.Body>
-                </Accordion.Item>
-            </Accordion>
-        </>
-    )
-}
+//                                                         }
+//                                                     </div>
+
+
+//                                                 </div>
+//                                             )
+//                                             )}
+
+//                                     </div>
+
+
+
+//                                 )
+//                             }
+//                             <div className="footerbtn">
+//                                 <button onClick={submitForm}>Save</button>
+//                             </div>
+
+
+//                         </FormControl>
+
+
+//                     </Accordion.Body>
+//                 </Accordion.Item>
+//             </Accordion>
+//         </>
+//     )
+// }
 
 
 export default function Quiz() {
     const { pathname, search } = useLocation();
     const bread = pathname?.split("/");
-
-    const [val, setVal] = useState([])
-    const [mapOfValues, setMapOfValues] = useState({})
-
-
-    const [addNew, setAddNew] = useState(1)
     const [value, setValue] = useState(0);
-    const [formstate, setFormstate] = useState({})
 
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
@@ -312,6 +305,10 @@ export default function Quiz() {
     const { consoleFunctions: { fetchQuiz, addQuiz }, } = useAuth();
 
     let searchData = search.split("=").reverse()[0]
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
 
     function a11yProps(index) {
@@ -321,9 +318,6 @@ export default function Quiz() {
         };
     }
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
 
     const quizAdd = useMutation(addQuiz, {
         onSuccess: (res) => {
@@ -349,30 +343,97 @@ export default function Quiz() {
         }
     }
 
-    function handleContentChange(e) {
-        setFormstate({ ...formstate, [e.target.name]: e.target.value })
-    }
 
+    const [formData, setFormData] = useState({
+        title: "",
+        endDate: "",
+        endTime: "",
+        note: "",
+        timeLimit: "",
+        maxAttempts: "",
+        inputList: [
+            {
+                type: "",
+                noteValue: "",
+                checked: false,
+                multiple: [
+                    {
+                        optionAnswer: ""
+                    }
+                ]
 
-
-    // console.log({ val });
-    console.log({ mapOfValues });
-
-    const submit = (e) => {
-        e.preventDefault()
-        setVal([...val, <Child onChildSubmit={onChildSubmit} />])
-    }
-
-    const onChildSubmit = (childIndex, value) => {
-        setMapOfValues({
-            ...mapOfValues,
-            [childIndex]: {
-                ...formstate,
-                ...value
             }
-        })
+        ]
 
+    })
+
+    const handleInputChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = { ...formData }
+        list.inputList[index][name] = value;
+        console.log(list);
+        setFormData(list)
     }
+
+    const handleRemoveClick = index => {
+        // const list = [...inputList]
+        // list.splice(index, 1);
+        // setInputList(list)
+    }
+
+    const handleAddClick = (e) => {
+        e.preventDefault()
+        setFormData(
+            {
+                ...formData,
+                inputList: [
+                    ...formData.inputList,
+                    {
+                        type: "",
+                        noteValue: "",
+                        checked: false,
+                        answer: "",
+                        multiple: [{
+                            optionAnswer: ""
+                        }]
+                    }
+
+                ]
+            }
+        )
+        // setInputList([...inputList, {
+        //     optionAnswer: ""
+        // }])
+    }
+
+    const handleAddOptions = (e) => {
+        e.preventDefault()
+        setFormData(
+            {
+                ...formData,
+                inputList: [
+                    ...formData.inputList,
+                    {
+                        multiple: [
+                            ...formData.inputList.multiple,
+                            {
+                                optionAnswer: ""
+                            }
+                        ]
+                    }
+
+                ]
+            }
+        )
+        // setInputList([...inputList, {
+        //     optionAnswer: ""
+        // }])
+    }
+
+
+    console.log({ formData });
+
+
 
 
     return (
@@ -421,8 +482,8 @@ export default function Quiz() {
                                 // placeholder='Name of Quiz' 
                                 name="title"
                                 id="title"
-                                value={formstate.title}
-                                onChange={handleContentChange}
+                                value={formData.title}
+                                onChange={e => setFormData({ ...formData, [e.target.name]: e.target.value })}
                             />
 
                             <label htmlFor="Name">Notes</label>
@@ -430,15 +491,21 @@ export default function Quiz() {
                                 // placeholder='Notes' 
                                 name="note"
                                 id="note"
-                                value={formstate.note}
-                                onChange={handleContentChange}
+                                value={formData.note}
+                                onChange={e => setFormData({ ...formData, [e.target.name]: e.target.value })}
                             />
                             <small>Users will see this on the page before they start quiz. Should describe the quiz</small>
 
                             <label htmlFor="date">Quiz deadline</label>
                             <div className="contenquiz__time">
-                                <input type="date" name="endDate" value={formstate.endDate} onChange={handleContentChange} />
-                                <input type="time" placeholder='Time' name="endTime" value={formstate.endTime} onChange={handleContentChange} />
+                                <input type="date" name="endDate"
+                                    value={formData.endDate}
+                                    onChange={e => setFormData({ ...formData, [e.target.name]: e.target.value })}
+                                />
+                                <input type="time" placeholder='Time' name="endTime"
+                                    value={formData.endTime}
+                                    onChange={e => setFormData({ ...formData, [e.target.name]: e.target.value })}
+                                />
 
                             </div>
                             <small>For quizzes without deadline, use a date far in the future</small>
@@ -447,15 +514,15 @@ export default function Quiz() {
                             <input type="number"
                                 name="timeLimit"
                                 id="timeLimit"
-                                value={formstate.timeLimit}
-                                onChange={handleContentChange}
+                                value={formData.timeLimit}
+                                onChange={e => setFormData({ ...formData, [e.target.name]: e.target.value })}
                             />
 
                             <label htmlFor="entries">Number of entries</label>
                             <input type="number" id='entries'
                                 name="maxAttempts"
-                                value={formstate.maxAttempts}
-                                onChange={handleContentChange}
+                                value={formData.maxAttempts}
+                                onChange={e => setFormData({ ...formData, [e.target.name]: e.target.value })}
 
                             />
                             <small>How many times can a student retry quiz?</small>
@@ -463,30 +530,27 @@ export default function Quiz() {
 
 
                             <div className="display">
-
-                                {/* <Accordion defaultActiveKey="0">
-                                <Accordion.Item eventKey="0"> */}
-                                {/* {formstate?.questions?.map((x, id) => (
-
-
-                                    < Accordion >
-                                        {
-                                            formstate?.questions?.map((x, id) => (
+                                {
+                                    formData.inputList.map((x, id) => (
+                                        <>
+                                            <Accordion >
                                                 <Accordion.Item eventKey={id} className="accord__body">
-                                                    <Accordion.Header className="accord__header"> Question {id + 1} </Accordion.Header>
+                                                    <Accordion.Header className="accord__header"> Question {id + 1}</Accordion.Header>
                                                     <Accordion.Body>
-                                                        <FormControl sx={{ m: 1, minWidth: 120 }}>
+                                                        <FormControl sx={{ m: 1, minWidth: 120 }} >
                                                             <InputLabel id="answertype-label">Question Type</InputLabel>
                                                             <Select
                                                                 // labelId="questiontype-label"
                                                                 // id="questiontype"
                                                                 // label="question"
                                                                 // className="myselect"
-                                                                value={type}
-                                                                onChange={(e) => setType(e.target.value)}
+                                                                value={x.type}
+                                                                name="type"
                                                                 displayEmpty
                                                                 inputProps={{ 'aria-label': "Without label" }}
                                                                 margin="dense"
+                                                                onChange={e => handleInputChange(e, id)}
+
                                                             >
                                                                 <MenuItem value="theory">
                                                                     Theory
@@ -501,119 +565,167 @@ export default function Quiz() {
                                                                     File Upload
                                                                 </MenuItem>
                                                             </Select>
-                                                        </FormControl>
 
-                                                        <div className="texteditor quiz__editor">                                                        <CKEditor
-                                                            editor={ClassicEditor}
-                                                            data="<p>Hello from CKEditor 5!</p>"
-                                                            onReady={editor => {
-                                                                // You can store the "editor" and use when it is needed.
-                                                                console.log('Editor is ready to use!', editor);
-                                                            }}
-                                                            onChange={(event, editor) => {
-                                                                const data = editor.getData();
-                                                                console.log({ event, editor, data });
-                                                            }}
-                                                            onBlur={(event, editor) => {
-                                                                console.log('Blur.', editor);
-                                                            }}
-                                                            onFocus={(event, editor) => {
-                                                                console.log('Focus.', editor);
-                                                            }}
-                                                        />
+                                                            <div className="texteditor quiz__editor">                                                        <CKEditor
+                                                                editor={ClassicEditor}
+                                                                data="<p>Hello from CKEditor 5!</p>"
+                                                                onReady={editor => {
+                                                                    // You can store the "editor" and use when it is needed.
+                                                                    console.log('Editor is ready to use!', editor);
+                                                                }}
+                                                                onChange={(event, editor) => {
+                                                                    const data = editor.getData();
+                                                                    console.log({ event, editor, data });
+                                                                    const list = { ...formData }
+                                                                    list.inputList[id]['noteValue'] = data;
+                                                                    console.log(list);
+                                                                    setFormData(list)
+                                                                    // handleInputChange(event, id)
 
-                                                            <div className='textbtn'>
-                                                                <Button
-                                                                    variant="outlined"
-                                                                    component="label"
-                                                                    className=""
-                                                                    style={{ color: "#0C2191" }}>
-                                                                    Add attachment
-                                                                    <input hidden accept="image/*" multiple type="file" />
-                                                                </Button>
-                                                            </div>
+                                                                }}
+                                                                onBlur={(event, editor) => {
+                                                                    console.log('Blur.', editor);
+                                                                }}
+                                                                onFocus={(event, editor) => {
+                                                                    console.log('Focus.', editor);
+                                                                }}
+                                                            />
 
-                                                            <div >
-                                                                <FormControlLabel
-                                                                    control={
-                                                                        <Switch
-                                                                            checked={checked}
-                                                                            onChange={(e) => setChecked(e.target.checked)}
-                                                                        />}
-                                                                    label="Add an explanantion"
-                                                                />
+                                                                <div className='textbtn'>
+                                                                    <Button
+                                                                        variant="outlined"
+                                                                        component="label"
+                                                                        className=""
+                                                                        style={{ color: "#0C2191" }}>
+                                                                        Add attachment
+                                                                        <input hidden accept="image/*" multiple type="file" />
+                                                                    </Button>
+                                                                </div>
 
-                                                                {
-                                                                    checked && (
-                                                                        <div className='content__quiz'>
-                                                                            <input type="text" id='' placeholder='Explain the correct Answer ' />
+                                                                <div >
+                                                                    <FormControlLabel
+                                                                        control={
+                                                                            <Switch
+                                                                                checked={x.checked}
+                                                                                name="checked"
+                                                                                // onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })}
+                                                                                onChange={e => {
+                                                                                    const list = { ...formData }
+                                                                                    list.inputList[id]['checked'] = e.target.checked;
+                                                                                    console.log(list);
+                                                                                    setFormData(list)
+                                                                                }
+                                                                                }
+                                                                            />}
+                                                                        label="Add an explanantion"
+                                                                    />
 
-                                                                        </div>
-                                                                    )
-                                                                }
-
-                                                            </div>
-                                                        </div>
-
-                                                        {
-                                                            ((type === "multiple") || (type === "checkbox")) && (
-                                                                <div className="contentquiz__checkbbox">
-
-                                                                    <legend htmlFor="multiplechoice">Select the correct answer among the options using the checkbox</legend>
                                                                     {
-                                                                        [...Array(optionsNumber)].map((x, id) => (
-                                                                            <div className='multiplechoice' key={id} data-id={id} ref={ref}>
-                                                                                <input type="checkbox" id="checkbox" name="checkbox"
-                                                                                    value="Bike"
+                                                                        x.checked && (
+                                                                            <div className='content__quiz'>
+                                                                                <input type="text" id='' name="answer" placeholder='Explain the correct Answer '
+                                                                                    //  onChange={e => {
+                                                                                    //     const list = { ...formData }
+                                                                                    //     list.inputList[id]['answer'] = e.target.value;
+                                                                                    //     console.log(list);
+                                                                                    //     setFormData(list)
+                                                                                    // }
+                                                                                    // }
+                                                                                    onChange={e => handleInputChange(e, id)}
+
+                                                                                // onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })} 
                                                                                 />
-                                                                                <input type="text" name="" id="" />
-                                                                                <RiDeleteBinFill onClick={() => {
-                                                                                    console.log({ id });
-                                                                                    console.log("data", ref.current.getAttribute("data-id"));
-                                                                                    console.log(id === +(ref.current.getAttribute("data-id")));
-                                                                                }} />
-
                                                                             </div>
-
-                                                                        ))
+                                                                        )
                                                                     }
 
-                                                                    <div className="prevbtn">
-                                                                        <button onClick={(e) => {
-                                                                            e.preventDefault()
-                                                                            setOptionsNumber(prev => prev + 1)
+                                                                </div>
+                                                            </div>
 
-                                                                        }}>Add Option</button>
+                                                            {
+                                                                ((x.type === "multiple") || (x.type === "checkbox")) && (
+                                                                    <div className="contentquiz__checkbbox">
+
+                                                                        <legend htmlFor="multiplechoice">Select the correct answer among the options using the checkbox</legend>
+
+
+                                                                        {
+                                                                            formData.inputList[id].multiple.map((x, index) => (
+                                                                                <div className='multiplechoice'>
+                                                                                    <div className='multiplechoice__input'>
+
+                                                                                        <input
+                                                                                            type="checkbox"
+                                                                                            // value={value.optionCheck}
+                                                                                            name="optionCheck"
+                                                                                            onChange={e => handleInputChange(e, index)} />
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            name="optionAnswer"
+                                                                                            value={x.optionAnswer}
+                                                                                            onChange={e => handleInputChange(e, index)} />
+
+                                                                                        {
+                                                                                            formData.inputList[id].multiple.length !== 1 && <RiDeleteBinFill onClick={() => handleRemoveClick(index)} />
+
+                                                                                        }
+                                                                                    </div>
+
+                                                                                    <div className='multiplechoice__addbtn'>
+                                                                                        {
+                                                                                            formData.inputList[id].multiple.length - 1 === index &&
+                                                                                            <div className="prevbtn">
+                                                                                                <button onClick={handleAddOptions} >Add Option</button>
+                                                                                            </div>
+
+
+                                                                                        }
+                                                                                    </div>
+
+
+                                                                                </div>
+                                                                            )
+                                                                            )}
+
                                                                     </div>
 
-                                                                </div>
-                                                            )
-                                                        }
+
+
+                                                                )
+                                                            }
+                                                            {/* <div className="footerbtn">
+                                                                <button onClick={submitForm}>Save</button>
+                                                            </div> */}
+
+
+                                                        </FormControl>
+
 
                                                     </Accordion.Body>
                                                 </Accordion.Item>
+                                            </Accordion>
+                                            <div className="footerbtn2">
 
-                                            ))
-                                        }
-                                    </Accordion>
+                                                {
+                                                    formData.inputList.length - 1 === id && <button onClick={(e) => handleAddClick(e)}>
+                                                        New Questione
+                                                    </button>
+                                                }
 
-                                ))} */}
-                                {
-                                    val.map((value, index) =>
-                                        React.cloneElement(value, { key: index, childIndex: index })
-                                    )
-                                }
+                                            </div>
+
+                                        </>
+                                    ))}
 
 
 
                             </div>
 
 
-
-
-                            <div className="footerbtn2">
-                                <button onClick={submit}>New Question</button>
-
+                            <div className='footerbtn'>
+                                <button >
+                                    save
+                                </button>
                             </div>
 
 
