@@ -91,40 +91,9 @@ export function Preview() {
     )
 }
 
-const Option = ({ onOptionSubmit, childIndex }) => {
-    console.log(childIndex);
-    const [value, setValue] = useState({
-        optionCheck: false,
-        optionAnswer: "",
-    })
 
-    // console.log(va);
-
-    return (
-        <>
-            <div className='multiplechoice'>
-                <input
-                    type="checkbox"
-                    value={value.optionCheck}
-                    name="optionCheck"
-                    onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })}
-                />
-                <input
-                    type="text"
-                    name="optionAnswer" 
-                    value={value.optionAnswer} 
-                    onChange={(e) => setValue({ ...value, [e.target.name]: e.target.value })} />
-                <RiDeleteBinFill onClick={() => {
-
-                }} />
-
-            </div>
-        </>
-    )
-}
 
 const Child = ({ onChildSubmit, childIndex }) => {
-    const [val, setVal] = useState([])
     const [value, setValue] = useState({
         type: "",
         checked: false,
@@ -138,25 +107,35 @@ const Child = ({ onChildSubmit, childIndex }) => {
 
     }
 
-    // console.log({ value });
-    // console.log({ val });
+    const [inputList, setInputList] = useState([{
+        firstName: "",
+        lastName: ""
+    }])
 
-    const onOptionSubmit = (childIndex, value) => {
-        // value({
-        //     ...mapOfValues,
-        //     [childIndex]: value
-        // })
+    const handleInputChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = [...inputList];
+        list[index][name] = value;
+        setInputList(list)
     }
 
-    const AddOption = (e) => {
-        e.preventDefault()
-        setVal([...val, <Option onOptionSubmit={onOptionSubmit} />])
+    const handleRemoveClick = index => {
+        const list = [...inputList]
+        list.splice(index, 1);
+        setInputList(list)
     }
 
-    // const removeOption = (e) => {
-    //     e.preventDefault()
-    //     setVal(val.filter(val=> console.log(val)), )
-    // }
+    const handleAddClick = () => {
+        setInputList([...inputList, {
+            firstName: "",
+            lastName: ""
+        }])
+    }
+
+
+
+
+
 
     return (
         <>
@@ -257,16 +236,49 @@ const Child = ({ onChildSubmit, childIndex }) => {
 
 
                                         {
-                                            val.map((value, index) =>
-                                                React.cloneElement(value, { key: index, childIndex: index })
-                                            )
-                                        }
+                                            inputList.map((x, id) => (
+                                                <div className='multiplechoice'>
+                                                    <div className='multiplechoice__input'>
 
-                                        <div className="prevbtn">
-                                            <button onClick={AddOption}>Add Option</button>
-                                        </div>
+                                                        <input
+                                                            type="checkbox"
+                                                            // value={value.optionCheck}
+                                                            name="optionCheck"
+                                                            value={x.firstName}
+                                                            onChange={e => handleInputChange(e, id)} />
+                                                        <input
+                                                            type="text"
+                                                            name="optionAnswer"
+                                                        // value={value.optionAnswer}
+                                                        // onChange={(e) => setValue({ ...value, [e.target.name]: e.target.value })} 
+                                                        />
+
+                                                        {
+                                                            inputList.length !== 1 && <RiDeleteBinFill onClick={() => handleRemoveClick(id)} />
+                                                        
+                                                        }
+                                                    </div>
+
+                                                    <div className='multiplechoice__addbtn'>
+                                                        {
+                                                            inputList.length - 1 === id &&
+                                                            <div className="prevbtn">
+                                                                <button onClick={handleAddClick} >Add Option</button>
+                                                            </div>
+
+
+                                                        }
+                                                    </div>
+
+
+                                                </div>
+                                            )
+                                            )}
 
                                     </div>
+
+
+
                                 )
                             }
                             <div className="footerbtn">
