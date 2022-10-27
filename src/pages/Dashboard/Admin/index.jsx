@@ -5027,24 +5027,6 @@ export const Admin = ({ children, header }) => {
       },
     }
   );
-
-  // useEffect(()=>{
-  //   if(getOurMessages.data?.data?.statusCode === 2 ){
-  //     localStorage.clear()
-  //   }
-  //   if(getOurMessages.data?.data?.statusCode !== 1){
-  //     toast.error(getOurMessages.data?.data?.message, {
-  //       position: "top-right",
-  //       autoClose: 4000,
-  //       hideProgressBar: true,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //     });
-  //   }
-  // },[getOurMessages.data?.data?.status])
-
   const admin = {
     title: "ADMIN",
     logo: <FaUserLock size="2.5rem" color="#0C2191" />,

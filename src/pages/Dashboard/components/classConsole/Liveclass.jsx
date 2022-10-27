@@ -313,14 +313,14 @@ export function Intermission() {
   
     const roomid = getItem("gotocourse-roomid")
     function joinLiveClass(){
-        // navigate(`/video-chat?room=${roomid}`, {
-        //     state: {
+        navigate(`/video-chat?room=${roomid}`, {
+            state: {
           
-        //         roomId: roomid,
-        //         owner: true
-        //     }
-        // })  
-        navigate("/teacher/live-class/live")  
+                roomId: roomid,
+                owner: true
+            }
+        })  
+        // navigate("/teacher/live-class/live")  
     }
   return (
     <section className={style.intermission}>
