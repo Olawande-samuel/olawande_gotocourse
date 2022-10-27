@@ -91,8 +91,26 @@ export function Preview() {
     )
 }
 
+const Option = ({ onOPtionSubmit, childIndex }) => {
+    console.log(childIndex);
+    return (
+        <>
+            <div className='multiplechoice'>
+                <input type="checkbox" id="checkbox" name="checkbox"
+                    value="Bike"
+                />
+                <input type="text" name="" id="" />
+                <RiDeleteBinFill onClick={() => {
+
+                }} />
+
+            </div>
+        </>
+    )
+}
+
 const Child = ({ onChildSubmit, childIndex }) => {
-    const [optionsNumber, setOptionsNumber] = useState(1)
+    const [val, setVal] = useState([])
 
     const [value, setValue] = useState({
         type: "",
@@ -107,7 +125,25 @@ const Child = ({ onChildSubmit, childIndex }) => {
 
     }
 
-    console.log({ value });
+    // console.log({ value });
+    // console.log({ val });
+
+    const onOPtionSubmit = (childIndex, value) => {
+        // setMapOfValues({
+        //     ...mapOfValues,
+        //     [childIndex]: value
+        // })
+    }
+
+    const AddOption = (e) => {
+        e.preventDefault()
+        setVal([...val, <Option onOPtionSubmit={onOPtionSubmit} />])
+    }
+
+    // const removeOption = (e) => {
+    //     e.preventDefault()
+    //     setVal(val.filter(val=> console.log(val)), )
+    // }
 
     return (
         <>
@@ -205,28 +241,16 @@ const Child = ({ onChildSubmit, childIndex }) => {
                                     <div className="contentquiz__checkbbox">
 
                                         <legend htmlFor="multiplechoice">Select the correct answer among the options using the checkbox</legend>
+
+
                                         {
-                                            [...Array(optionsNumber)].map((x, id) => (
-                                                <div className='multiplechoice'>
-                                                    <input type="checkbox" id="checkbox" name="checkbox"
-                                                        value="Bike"
-                                                    />
-                                                    <input type="text" name="" id="" />
-                                                    <RiDeleteBinFill onClick={() => {
-                                                        console.log({ id });
-
-                                                    }} />
-
-                                                </div>
-
-                                            ))
+                                            val.map((value, index) =>
+                                                React.cloneElement(value, { key: index, childIndex: index })
+                                            )
                                         }
 
                                         <div className="prevbtn">
-                                            <button onClick={(e) => {
-                                                e.preventDefault()
-
-                                            }}>Add Option</button>
+                                            <button onClick={AddOption}>Add Option</button>
                                         </div>
 
                                     </div>
@@ -252,9 +276,6 @@ export default function Quiz() {
     const { pathname, search } = useLocation();
     const bread = pathname?.split("/");
 
-    // const [type, setType] = useState("")
-    // const [checked, setChecked] = useState(false)
-    // const [optionsNumber, setOptionsNumber] = useState(1)
     const [val, setVal] = useState([])
     const [mapOfValues, setMapOfValues] = useState({})
 
@@ -263,7 +284,6 @@ export default function Quiz() {
     const [value, setValue] = useState(0);
     const [formstate, setFormstate] = useState({})
 
-    const ref = useRef()
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
 
@@ -322,11 +342,6 @@ export default function Quiz() {
     }
 
     const onChildSubmit = (childIndex, value) => {
-        // setMapOfValues({
-        //     ...mapOfValues,
-        //     [childIndex]: value
-        // })
-
         setMapOfValues({
             ...mapOfValues,
             [childIndex]: {
@@ -336,7 +351,7 @@ export default function Quiz() {
         })
 
 
-        
+
 
     }
     return (
@@ -575,7 +590,7 @@ export default function Quiz() {
 
 
 
-                            <div className="footerbtn">
+                            <div className="footerbtn2">
                                 <button onClick={submit}>New Question</button>
 
                             </div>
