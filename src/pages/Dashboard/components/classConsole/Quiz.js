@@ -108,8 +108,7 @@ const Child = ({ onChildSubmit, childIndex }) => {
     }
 
     const [inputList, setInputList] = useState([{
-        firstName: "",
-        lastName: ""
+        optionAnswer: "",
     }])
 
     const handleInputChange = (e, index) => {
@@ -127,12 +126,12 @@ const Child = ({ onChildSubmit, childIndex }) => {
 
     const handleAddClick = () => {
         setInputList([...inputList, {
-            firstName: "",
-            lastName: ""
+            optionAnswer: ""
         }])
     }
 
 
+    console.log({ inputList });
 
 
 
@@ -244,18 +243,16 @@ const Child = ({ onChildSubmit, childIndex }) => {
                                                             type="checkbox"
                                                             // value={value.optionCheck}
                                                             name="optionCheck"
-                                                            value={x.firstName}
                                                             onChange={e => handleInputChange(e, id)} />
                                                         <input
                                                             type="text"
                                                             name="optionAnswer"
-                                                        // value={value.optionAnswer}
-                                                        // onChange={(e) => setValue({ ...value, [e.target.name]: e.target.value })} 
-                                                        />
+                                                            value={x.optionAnswer}
+                                                            onChange={e => handleInputChange(e, id)} />
 
                                                         {
                                                             inputList.length !== 1 && <RiDeleteBinFill onClick={() => handleRemoveClick(id)} />
-                                                        
+
                                                         }
                                                     </div>
 
