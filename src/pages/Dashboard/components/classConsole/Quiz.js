@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import '../classConsole/Content.css'
 import Accordion from 'react-bootstrap/Accordion';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -91,23 +91,182 @@ export function Preview() {
     )
 }
 
+const Child = ({ onChildSubmit, childIndex }) => {
+    const [optionsNumber, setOptionsNumber] = useState(1)
+
+    const [value, setValue] = useState({
+        type: "",
+        checked: false,
+        answer: "",
+        noteValue: ""
+    })
+
+    const submitForm = (e) => {
+        e.preventDefault()
+        onChildSubmit(childIndex, value)
+
+    }
+
+    console.log({ value });
+
+    return (
+        <>
+            <Accordion >
+                <Accordion.Item eventKey={childIndex} className="accord__body">
+                    <Accordion.Header className="accord__header"> Question {childIndex + 1}</Accordion.Header>
+                    <Accordion.Body>
+                        <FormControl sx={{ m: 1, minWidth: 120 }} >
+                            <InputLabel id="answertype-label">Question Type</InputLabel>
+                            <Select
+                                // labelId="questiontype-label"
+                                // id="questiontype"
+                                // label="question"
+                                // className="myselect"
+                                value={value.type}
+                                name="type"
+                                onChange={(e) => setValue({ ...value, [e.target.name]: e.target.value })}
+                                displayEmpty
+                                inputProps={{ 'aria-label': "Without label" }}
+                                margin="dense"
+                            >
+                                <MenuItem value="theory">
+                                    Theory
+                                </MenuItem>
+                                <MenuItem value="multiple" >
+                                    Multiple Choice
+                                </MenuItem>
+                                <MenuItem value="checkbox" >
+                                    Checkbox
+                                </MenuItem>
+                                <MenuItem value="file">
+                                    File Upload
+                                </MenuItem>
+                            </Select>
+
+                            <div className="texteditor quiz__editor">                                                        <CKEditor
+                                editor={ClassicEditor}
+                                data="<p>Hello from CKEditor 5!</p>"
+                                onReady={editor => {
+                                    // You can store the "editor" and use when it is needed.
+                                    console.log('Editor is ready to use!', editor);
+                                }}
+                                onChange={(event, editor) => {
+                                    const data = editor.getData();
+                                    console.log({ event, editor, data });
+                                    setValue({
+                                        ...value,
+                                        noteValue: data
+                                    })
+
+                                }}
+                                onBlur={(event, editor) => {
+                                    console.log('Blur.', editor);
+                                }}
+                                onFocus={(event, editor) => {
+                                    console.log('Focus.', editor);
+                                }}
+                            />
+
+                                <div className='textbtn'>
+                                    <Button
+                                        variant="outlined"
+                                        component="label"
+                                        className=""
+                                        style={{ color: "#0C2191" }}>
+                                        Add attachment
+                                        <input hidden accept="image/*" multiple type="file" />
+                                    </Button>
+                                </div>
+
+                                <div >
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={value.checked}
+                                                name="checked"
+                                                onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })}
+                                            />}
+                                        label="Add an explanantion"
+                                    />
+
+                                    {
+                                        value.checked && (
+                                            <div className='content__quiz'>
+                                                <input type="text" id='' name="answer" placeholder='Explain the correct Answer ' onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })} />
+                                            </div>
+                                        )
+                                    }
+
+                                </div>
+                            </div>
+
+                            {
+                                ((value.type === "multiple") || (value.type === "checkbox")) && (
+                                    <div className="contentquiz__checkbbox">
+
+                                        <legend htmlFor="multiplechoice">Select the correct answer among the options using the checkbox</legend>
+                                        {
+                                            [...Array(optionsNumber)].map((x, id) => (
+                                                <div className='multiplechoice'>
+                                                    <input type="checkbox" id="checkbox" name="checkbox"
+                                                        value="Bike"
+                                                    />
+                                                    <input type="text" name="" id="" />
+                                                    <RiDeleteBinFill onClick={() => {
+                                                        console.log({ id });
+
+                                                    }} />
+
+                                                </div>
+
+                                            ))
+                                        }
+
+                                        <div className="prevbtn">
+                                            <button onClick={(e) => {
+                                                e.preventDefault()
+
+                                            }}>Add Option</button>
+                                        </div>
+
+                                    </div>
+                                )
+                            }
+                            <div className="footerbtn">
+                                <button onClick={submitForm}>Save</button>
+                            </div>
+
+
+                        </FormControl>
+
+
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
+        </>
+    )
+}
+
 
 export default function Quiz() {
     const { pathname, search } = useLocation();
     const bread = pathname?.split("/");
 
-    const [type, setType] = useState("")
-    const [checked, setChecked] = useState(false)
-    const [optionsNumber, setOptionsNumber] = useState(1)
+    // const [type, setType] = useState("")
+    // const [checked, setChecked] = useState(false)
+    // const [optionsNumber, setOptionsNumber] = useState(1)
+    const [val, setVal] = useState([])
+    const [mapOfValues, setMapOfValues] = useState({})
+
 
     const [addNew, setAddNew] = useState(1)
     const [value, setValue] = useState(0);
-    const [formstate, setFormstate] = useState({
-        questions: []
-    })
+    const [formstate, setFormstate] = useState({})
+
     const ref = useRef()
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
+
     const { consoleFunctions: { fetchQuiz, addQuiz }, } = useAuth();
 
     let searchData = search.split("=").reverse()[0]
@@ -151,8 +310,33 @@ export default function Quiz() {
     function handleContentChange(e) {
         setFormstate({ ...formstate, [e.target.name]: e.target.value })
     }
-    function submitForm(e) {
-        e.preventDefault();
+
+
+
+    // console.log({ val });
+    console.log({ mapOfValues });
+
+    const submit = (e) => {
+        e.preventDefault()
+        setVal([...val, <Child onChildSubmit={onChildSubmit} />])
+    }
+
+    const onChildSubmit = (childIndex, value) => {
+        // setMapOfValues({
+        //     ...mapOfValues,
+        //     [childIndex]: value
+        // })
+
+        setMapOfValues({
+            ...mapOfValues,
+            [childIndex]: {
+                ...formstate,
+                ...value
+            }
+        })
+
+
+        
 
     }
     return (
@@ -166,7 +350,6 @@ export default function Quiz() {
                         <Tab label="Result" {...a11yProps(1)} />
                     </Tabs>
                 </Box>
-
 
                 <div className="contentbreadcrumb">
                     <nav arial-label="breadcrumb">
@@ -196,7 +379,7 @@ export default function Quiz() {
 
                     <main className='quiz__contentbody'>
 
-                        <form onSubmit={submitForm} className='content__quiz'>
+                        <form className='content__quiz'>
                             <label htmlFor="Name">Name of Quiz</label>
                             <input type="text"
                                 // placeholder='Name of Quiz' 
@@ -218,8 +401,8 @@ export default function Quiz() {
 
                             <label htmlFor="date">Quiz deadline</label>
                             <div className="contenquiz__time">
-                                <input type="date" name="endDate" onChange={handleContentChange} />
-                                <input type="time" placeholder='Time' name="endTime" onChange={handleContentChange} />
+                                <input type="date" name="endDate" value={formstate.endDate} onChange={handleContentChange} />
+                                <input type="time" placeholder='Time' name="endTime" value={formstate.endTime} onChange={handleContentChange} />
 
                             </div>
                             <small>For quizzes without deadline, use a date far in the future</small>
@@ -247,7 +430,7 @@ export default function Quiz() {
 
                                 {/* <Accordion defaultActiveKey="0">
                                 <Accordion.Item eventKey="0"> */}
-                                {formstate?.questions?.map((x, id) => (
+                                {/* {formstate?.questions?.map((x, id) => (
 
 
                                     < Accordion >
@@ -378,21 +561,23 @@ export default function Quiz() {
                                         }
                                     </Accordion>
 
-                                ))}
+                                ))} */}
+                                {
+                                    val.map((value, index) =>
+                                        React.cloneElement(value, { key: index, childIndex: index })
+                                    )
+                                }
+
+
+
                             </div>
 
 
 
 
                             <div className="footerbtn">
-                                <button>Save</button>
-                                <button onClick={(e) => {
-                                    e.preventDefault()
-                                    setFormstate({ ...formstate, questions: [...formstate.questions, { title: "" }] })
+                                <button onClick={submit}>New Question</button>
 
-                                }}>
-                                    New Question
-                                </button>
                             </div>
 
 
