@@ -91,15 +91,29 @@ export function Preview() {
     )
 }
 
-const Option = ({ onOPtionSubmit, childIndex }) => {
+const Option = ({ onOptionSubmit, childIndex }) => {
     console.log(childIndex);
+    const [value, setValue] = useState({
+        optionCheck: false,
+        optionAnswer: "",
+    })
+
+    // console.log(va);
+
     return (
         <>
             <div className='multiplechoice'>
-                <input type="checkbox" id="checkbox" name="checkbox"
-                    value="Bike"
+                <input
+                    type="checkbox"
+                    value={value.optionCheck}
+                    name="optionCheck"
+                    onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })}
                 />
-                <input type="text" name="" id="" />
+                <input
+                    type="text"
+                    name="optionAnswer" 
+                    value={value.optionAnswer} 
+                    onChange={(e) => setValue({ ...value, [e.target.name]: e.target.value })} />
                 <RiDeleteBinFill onClick={() => {
 
                 }} />
@@ -111,7 +125,6 @@ const Option = ({ onOPtionSubmit, childIndex }) => {
 
 const Child = ({ onChildSubmit, childIndex }) => {
     const [val, setVal] = useState([])
-
     const [value, setValue] = useState({
         type: "",
         checked: false,
@@ -128,8 +141,8 @@ const Child = ({ onChildSubmit, childIndex }) => {
     // console.log({ value });
     // console.log({ val });
 
-    const onOPtionSubmit = (childIndex, value) => {
-        // setMapOfValues({
+    const onOptionSubmit = (childIndex, value) => {
+        // value({
         //     ...mapOfValues,
         //     [childIndex]: value
         // })
@@ -137,7 +150,7 @@ const Child = ({ onChildSubmit, childIndex }) => {
 
     const AddOption = (e) => {
         e.preventDefault()
-        setVal([...val, <Option onOPtionSubmit={onOPtionSubmit} />])
+        setVal([...val, <Option onOptionSubmit={onOptionSubmit} />])
     }
 
     // const removeOption = (e) => {
@@ -350,10 +363,9 @@ export default function Quiz() {
             }
         })
 
-
-
-
     }
+
+
     return (
 
         <div className=''>
