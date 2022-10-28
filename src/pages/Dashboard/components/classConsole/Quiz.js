@@ -358,6 +358,7 @@ export default function Quiz() {
                 checked: false,
                 multiple: [
                     {
+                        optionCheck: false,
                         optionAnswer: ""
                     }
                 ]
@@ -393,9 +394,12 @@ export default function Quiz() {
                         noteValue: "",
                         checked: false,
                         answer: "",
-                        multiple: [{
-                            optionAnswer: ""
-                        }]
+                        multiple: [
+                            {
+                                optionCheck: false,
+                                optionAnswer: ""
+                            }
+                        ]
                     }
 
                 ]
@@ -408,23 +412,21 @@ export default function Quiz() {
 
     const handleAddOptions = (e) => {
         e.preventDefault()
-        setFormData(
-            {
-                ...formData,
-                inputList: [
-                    ...formData.inputList,
-                    {
-                        multiple: [
-                            ...formData.inputList.multiple,
-                            {
-                                optionAnswer: ""
-                            }
-                        ]
-                    }
+        let list = JSON.parse(JSON.stringify(formData))
+        console.log({list});
+        // setFormData(
+        //     {
+        //         ...formData,
+        //                 multiple: [
+        //                     ...formData.inputList.multiple,
+        //                     {
+        //                         optionCheck: false,
+        //                         optionAnswer: ""
+        //                     }
+        //                 ]
 
-                ]
-            }
-        )
+        //     }
+        // )
         // setInputList([...inputList, {
         //     optionAnswer: ""
         // }])
@@ -624,16 +626,7 @@ export default function Quiz() {
                                                                         x.checked && (
                                                                             <div className='content__quiz'>
                                                                                 <input type="text" id='' name="answer" placeholder='Explain the correct Answer '
-                                                                                    //  onChange={e => {
-                                                                                    //     const list = { ...formData }
-                                                                                    //     list.inputList[id]['answer'] = e.target.value;
-                                                                                    //     console.log(list);
-                                                                                    //     setFormData(list)
-                                                                                    // }
-                                                                                    // }
                                                                                     onChange={e => handleInputChange(e, id)}
-
-                                                                                // onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })} 
                                                                                 />
                                                                             </div>
                                                                         )
