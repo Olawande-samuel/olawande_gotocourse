@@ -355,7 +355,8 @@ export default function Quiz() {
             {
                 type: "",
                 noteValue: "",
-                checked: false,
+                showAnswer: false,
+                answer:"",
                 multiple: [
                     {
                         optionCheck: false,
@@ -397,7 +398,7 @@ export default function Quiz() {
                     {
                         type: "",
                         noteValue: "",
-                        checked: false,
+                        showAnswer: false,
                         answer: "",
                         multiple: [
                             {
@@ -607,12 +608,12 @@ export default function Quiz() {
                                                                     <FormControlLabel
                                                                         control={
                                                                             <Switch
-                                                                                checked={x.checked}
-                                                                                name="checked"
+                                                                                checked={x.showAnswer}
+                                                                                name="showAnswer"
                                                                                 // onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })}
                                                                                 onChange={e => {
                                                                                     const list = { ...formData }
-                                                                                    list.inputList[id]['checked'] = e.target.checked;
+                                                                                    list.inputList[id]['showAnswer'] = e.target.checked;
                                                                                     console.log(list);
                                                                                     setFormData(list)
                                                                                 }
@@ -622,7 +623,7 @@ export default function Quiz() {
                                                                     />
 
                                                                     {
-                                                                        x.checked && (
+                                                                        x.showAnswer && (
                                                                             <div className='content__quiz'>
                                                                                 <input type="text" id='' name="answer" placeholder='Explain the correct Answer '
                                                                                     onChange={e => handleInputChange(e, id)}
@@ -651,7 +652,10 @@ export default function Quiz() {
                                                                                             // value={value.optionCheck}
                                                                                             name="optionCheck"
                                                                                             onChange={e => {
-
+                                                                                                const list = { ...formData }
+                                                                                                list.inputList[id].multiple[index]['optionCheck'] = e.target.checked;
+                                                                                                console.log(list);
+                                                                                                setFormData(list)
                                                                                             }} />
                                                                                         <input
                                                                                             type="text"
@@ -659,7 +663,7 @@ export default function Quiz() {
                                                                                             value={x.optionAnswer}
                                                                                             onChange={e => {
                                                                                                 const list = { ...formData }
-                                                                                                list.inputList[id].multiple[index] = e.target.value
+                                                                                                list.inputList[id].multiple[index]['optionAnswer'] = e.target.value
                                                                                                 console.log(list);
                                                                                                 setFormData(list)
                                                                                             }} />
