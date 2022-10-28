@@ -368,6 +368,7 @@ export default function Quiz() {
 
     })
 
+
     const handleInputChange = (e, index) => {
         const { name, value } = e.target;
         const list = { ...formData }
@@ -376,7 +377,11 @@ export default function Quiz() {
         setFormData(list)
     }
 
-    const handleRemoveClick = index => {
+    const handleRemoveClick = (id, index) => {
+        const list = { ...formData }
+        list.inputList[id].multiple.splice(index, 1)
+        setFormData(list)
+
         // const list = [...inputList]
         // list.splice(index, 1);
         // setInputList(list)
@@ -410,23 +415,17 @@ export default function Quiz() {
         // }])
     }
 
-    const handleAddOptions = (e) => {
+    const handleAddOptions = (e, id, index) => {
         e.preventDefault()
-        let list = JSON.parse(JSON.stringify(formData))
-        console.log({list});
-        // setFormData(
-        //     {
-        //         ...formData,
-        //                 multiple: [
-        //                     ...formData.inputList.multiple,
-        //                     {
-        //                         optionCheck: false,
-        //                         optionAnswer: ""
-        //                     }
-        //                 ]
+        let list = { ...formData }
+        list.inputList[id].multiple.push({
+            optionCheck: false,
+            optionAnswer: ""
+        }
+        )
 
-        //     }
-        // )
+        setFormData(list)
+
         // setInputList([...inputList, {
         //     optionAnswer: ""
         // }])
@@ -651,15 +650,22 @@ export default function Quiz() {
                                                                                             type="checkbox"
                                                                                             // value={value.optionCheck}
                                                                                             name="optionCheck"
-                                                                                            onChange={e => handleInputChange(e, index)} />
+                                                                                            onChange={e => {
+
+                                                                                            }} />
                                                                                         <input
                                                                                             type="text"
                                                                                             name="optionAnswer"
                                                                                             value={x.optionAnswer}
-                                                                                            onChange={e => handleInputChange(e, index)} />
+                                                                                            onChange={e => {
+                                                                                                const list = { ...formData }
+                                                                                                list.inputList[id].multiple[index] = e.target.value
+                                                                                                console.log(list);
+                                                                                                setFormData(list)
+                                                                                            }} />
 
                                                                                         {
-                                                                                            formData.inputList[id].multiple.length !== 1 && <RiDeleteBinFill onClick={() => handleRemoveClick(index)} />
+                                                                                            formData.inputList[id].multiple.length !== 1 && <RiDeleteBinFill onClick={() => handleRemoveClick(id, index)} />
 
                                                                                         }
                                                                                     </div>
@@ -668,7 +674,7 @@ export default function Quiz() {
                                                                                         {
                                                                                             formData.inputList[id].multiple.length - 1 === index &&
                                                                                             <div className="prevbtn">
-                                                                                                <button onClick={handleAddOptions} >Add Option</button>
+                                                                                                <button onClick={(e) => handleAddOptions(e, id, index)} >Add Option</button>
                                                                                             </div>
 
 
