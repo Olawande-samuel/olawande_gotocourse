@@ -93,7 +93,7 @@ export const VideoWrapper = styled.div`
         height: 200px;
         width: 100%;
         object-fit: cover;
-        object-position: bottom;
+        // object-position: bottom;
 
     }
     /* video {

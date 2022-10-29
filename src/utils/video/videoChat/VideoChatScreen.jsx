@@ -20,11 +20,11 @@ const VideoChatScreen = ()  => {
     const { socket, sendPing } = useSocket()
     const location = useLocation();
     const {getItem} = useLocalStorage()
-    // const userProfile = useSelector((state) => state.user);
 
     const userProfile = getItem(KEY)
     const videoRef = useRef(null)
     const videoGridRef = useRef(null)
+
     const [callSettingsState, setCallSettingsState] = useState({
         video: true,
         audio: true,
@@ -32,23 +32,23 @@ const VideoChatScreen = ()  => {
     const query = useQuery();
     let roomId = query.get('room')
     
-    let isRoomOwner = false;
+    const [isRoomOwner, setIsRoomOwner] = useState(false)
 
     const chekForVideoRoom = async () => {
         if (location?.state?.owner) {
-            isRoomOwner = true
+            setIsRoomOwner( true)
             startWebCam()
             return;
         }
 
         const res = await axios.get(`${CONFIG.socketUrl}/v1/room/video/${roomId}`)
-        if (res.data.data.userId === userProfile.userId) {
-            isRoomOwner = true
+        if (res.data.data.userId == userProfile.userId) {
+            setIsRoomOwner( true)
 
             startWebCam()
             
         } else {
-            isRoomOwner = false
+            setIsRoomOwner( false)
             startWebCam()
         }
     }
@@ -70,19 +70,19 @@ const VideoChatScreen = ()  => {
     }
 
     const setVideoToggle = async ({video, audio}) => {
-        // const myVideo = document.querySelector('.client-local-stream')
-        const myVideo = videoRef.current
+        const myVideo = document.querySelector('.client-local-stream')
         // localStream = await navigator.mediaDevices.getUserMedia({ video: video, audio: audio})
         myVideo?.setAttribute("autoplay", "")
         myVideo?.setAttribute("playsInline", "")
 
         myVideo.srcObject = localStream
-        myVideo.addEventListener('loadedmetadata', () => {
-            myVideo.play()
+        myVideo?.addEventListener('loadedmetadata', () => {
+            myVideo?.play()
         })
     }
     
     const togggleAudio = async () => {
+
         if (callSettingsState.audio) {
             setVideoToggle({video: callSettingsState.video, audio: false})
             setCallSettingsState({...callSettingsState, audio: false})
@@ -92,27 +92,19 @@ const VideoChatScreen = ()  => {
         }
     }
 
-    // const videoWrapper = document.querySelector('.video-section')
-    const videoWrapper = videoGridRef.current
+    const videoWrapper = document.querySelector('.video-section')
 
-    // console.log("firstomo", videoWrapper)
-
-    function addVideoStream(rvideoWrapper, stream) {
-        console.log({rvideoWrapper});
-
-        const video = rvideoWrapper.querySelector('video')
+    function addVideoStream(videoWrapper, stream) {
+        const video = videoWrapper.querySelector('video')
         video.srcObject = stream
         video.addEventListener('loadedmetadata', () => {
           video.play()
         })
-    }
-    
-    const peers = {}
-    
+      }
+      const peers = {}
     const startWebCam = async () => {
 
-        // const myVideo = document.querySelector('.client-local-stream')
-        const myVideo = videoRef.current
+        const myVideo = document.querySelector('.client-local-stream')
         myVideo?.setAttribute("autoplay", "")
         myVideo?.setAttribute("playsInline", "")
         myVideo.muted = true;
@@ -129,15 +121,11 @@ const VideoChatScreen = ()  => {
 
         console.log("peer: ", myPeer)
         console.log("omo lofty")
-        // console.log("omo", videoWrapper)
-
         myPeer.on('open', userId => {
             console.log("conntected to room with userId: ", userId)
             socket.emit('join-video-room', roomId, userId)
         })
-
         myPeer.on('call', call => {
-            // const videoWrapper = document.querySelector('.video-section')
             call.answer(localStream)
             const remoteVideoWrapper = document.createElement('div')
             remoteVideoWrapper.classList.add("remote-users")
@@ -145,18 +133,14 @@ const VideoChatScreen = ()  => {
             remoteVideoWrapper.appendChild(remoteVideo)
             videoWrapper?.append(remoteVideoWrapper)
             
-
-            console.log("on call", videoWrapper)
-            console.log("on call remote", remoteVideoWrapper)
-
             call.on('stream', userVideoStream => {
                 addVideoStream(remoteVideoWrapper, userVideoStream)
             })
         })
 
         myVideo.srcObject = localStream
-        myVideo.addEventListener('loadedmetadata', () => {
-            myVideo.play()
+        myVideo?.addEventListener('loadedmetadata', () => {
+            myVideo?.play()
         })
 
         socket.on('new-user-join-video-room', (userId) => {
@@ -167,17 +151,12 @@ const VideoChatScreen = ()  => {
         const connectToNewUser = (userId, stream) => {
             const call = myPeer.call(userId, stream)
 
-            
-            // const videoWrapper = document.querySelector('.video-section')
-            console.log("1", videoWrapper)
-
             const remoteVideoWrapper = document.createElement('div')
             remoteVideoWrapper.classList.add("remote-users")
             const remoteVideo = document.createElement('video')
             remoteVideoWrapper.appendChild(remoteVideo)
             videoWrapper?.append(remoteVideoWrapper)
 
-            console.log({remoteVideoWrapper})
 
             call.on('stream', userVideoStream => {
                 console.log("recevied user video stream: ", userVideoStream)
@@ -199,7 +178,7 @@ const VideoChatScreen = ()  => {
     }
 
     const initRoom = () => {
-        if (userProfile.userId !== "") {
+        if (userProfile.userId != "") {
             chekForVideoRoom()
         }
     }
@@ -207,6 +186,7 @@ const VideoChatScreen = ()  => {
     useEffect(() => {
         initRoom()
     }, [userProfile.userId])
+
     return (
         <Wrapper>
             {/* <HeadBar> */}
