@@ -23,7 +23,8 @@ const VideoChatScreen = ()  => {
     // const userProfile = useSelector((state) => state.user);
 
     const userProfile = getItem(KEY)
-
+    const videoRef = useRef(null)
+    const videoGridRef = useRef(null)
     const [callSettingsState, setCallSettingsState] = useState({
         video: true,
         audio: true,
@@ -69,7 +70,8 @@ const VideoChatScreen = ()  => {
     }
 
     const setVideoToggle = async ({video, audio}) => {
-        const myVideo = document.querySelector('.client-local-stream')
+        // const myVideo = document.querySelector('.client-local-stream')
+        const myVideo = videoRef.current
         // localStream = await navigator.mediaDevices.getUserMedia({ video: video, audio: audio})
         myVideo?.setAttribute("autoplay", "")
         myVideo?.setAttribute("playsInline", "")
@@ -91,6 +93,7 @@ const VideoChatScreen = ()  => {
     }
 
     // const videoWrapper = document.querySelector('.video-section')
+    const videoWrapper = videoGridRef.current
 
     // console.log("firstomo", videoWrapper)
 
@@ -108,7 +111,8 @@ const VideoChatScreen = ()  => {
     
     const startWebCam = async () => {
 
-        const myVideo = document.querySelector('.client-local-stream')
+        // const myVideo = document.querySelector('.client-local-stream')
+        const myVideo = videoRef.current
         myVideo?.setAttribute("autoplay", "")
         myVideo?.setAttribute("playsInline", "")
         myVideo.muted = true;
@@ -133,7 +137,7 @@ const VideoChatScreen = ()  => {
         })
 
         myPeer.on('call', call => {
-            const videoWrapper = document.querySelector('.video-section')
+            // const videoWrapper = document.querySelector('.video-section')
             call.answer(localStream)
             const remoteVideoWrapper = document.createElement('div')
             remoteVideoWrapper.classList.add("remote-users")
@@ -164,7 +168,7 @@ const VideoChatScreen = ()  => {
             const call = myPeer.call(userId, stream)
 
             
-            const videoWrapper = document.querySelector('.video-section')
+            // const videoWrapper = document.querySelector('.video-section')
             console.log("1", videoWrapper)
 
             const remoteVideoWrapper = document.createElement('div')
@@ -209,50 +213,29 @@ const VideoChatScreen = ()  => {
                <Navbar />
             {/* </HeadBar> */}
             <Content>
-                <VideoWrapper className="video-section">
-                    {/* <CallBlock>
-                        <img src="https://images.unsplash.com/photo-1603112579965-e24332cc453a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" alt="person in video call" />
-                        <span>Vinay Gupta</span>
-                    </CallBlock>
-                    <CallBlock>
-                        <img src="https://images.unsplash.com/flagged/photo-1577125543470-61d192113f10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" alt="person in video call" />
-                        <span>Vinay Gupta</span>
-                    </CallBlock>
-                    <CallBlock>
-                        <img src="https://images.unsplash.com/photo-1595951960408-a7259baee032?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2444&q=80" alt="person in video call" />
-                        <span>Vinay Gupta</span>
-                    </CallBlock>
-                    <CallBlock>
-                        <img src="https://images.unsplash.com/photo-1612000529646-f424a2aa1bff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" alt="person in video call" />
-                        <span>Vinay Gupta</span>
-                    </CallBlock>
-                    <UserCallBlock>
-                        <img src="https://images.unsplash.com/photo-1597199204011-e6e704645213?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2072&q=80" alt="person in video call" />
-                    </UserCallBlock> */}
-                        <UserCallBlock>
-                            <video className="client-local-stream" src=""></video>
-                        </UserCallBlock>
-                        <ControlWrapper>
-                            <ControlItem>
-                                <VscRecord size="1.5rem" />
-                            </ControlItem>
-                            <ControlItem  onClick={togggleAudio}>
-                                {callSettingsState.audio ? <BsMic size="1.5rem" /> : <BsMicMute size="1.5rem" />}
-                            </ControlItem>
-                            <ControlItem>
-                                <MdPresentToAll size="1.5rem" />
-                            </ControlItem>
-                            <ControlItem onClick={togggleVideo}>
-                                {callSettingsState.video ? <BsCameraVideo size="1.5rem" /> : <BsCameraVideoOff size="1.5rem" />}
-                            </ControlItem>
-                            <ControlItem>
-                                <HiOutlinePhone size="1.5rem" />
-                            </ControlItem>
-                        </ControlWrapper>
-                        <AddPeople>
+                <VideoWrapper className="video-section" ref={videoGridRef}>
+                    <video ref={videoRef} className="client-local-stream" src=""></video>
+                    <ControlWrapper>
+                        <ControlItem>
+                            <VscRecord size="1.5rem" />
+                        </ControlItem>
+                        <ControlItem  onClick={togggleAudio}>
+                            {callSettingsState.audio ? <BsMic size="1.5rem" /> : <BsMicMute size="1.5rem" />}
+                        </ControlItem>
+                        <ControlItem>
+                            <MdPresentToAll size="1.5rem" />
+                        </ControlItem>
+                        <ControlItem onClick={togggleVideo}>
+                            {callSettingsState.video ? <BsCameraVideo size="1.5rem" /> : <BsCameraVideoOff size="1.5rem" />}
+                        </ControlItem>
+                        <ControlItem>
+                            <HiOutlinePhone size="1.5rem" />
+                        </ControlItem>
+                    </ControlWrapper>        
+                        {/* <AddPeople>
                             <IoAdd />
                             <span>Add people</span>
-                        </AddPeople>
+                        </AddPeople> */}
 
 
                     

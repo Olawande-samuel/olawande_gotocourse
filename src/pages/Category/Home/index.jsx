@@ -14,6 +14,7 @@ import { useEffectOnMount, useLocalStorage } from "../../../hooks";
 import { useAuth } from "../../../contexts/Auth";
 import { AdvancedError } from "../../../classes";
 import { capitalize, getDate, COURSE_CATEGORY_KEY } from "../../../constants";
+import DOMPurify from "dompurify";
 
 
 
@@ -283,8 +284,7 @@ function CategoryCard({bannerImg, name, description, all, separator}){
                 </CardImageContainer>
                 <CardBody>
                     <h2>{name}</h2>
-                    <p>{description}</p>
-
+                    <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
                     <Link
                      to={`/categories/${name?.trim().split(" ").join("-").toLowerCase()}`}
                      onClick={()=>{

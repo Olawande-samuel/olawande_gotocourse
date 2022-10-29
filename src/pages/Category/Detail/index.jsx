@@ -20,7 +20,8 @@ import Layout from "../../../components/Layout";
 import { useEffectOnMount } from "../../../hooks";
 import { useAuth } from "../../../contexts/Auth";
 import { AdvancedError } from "../../../classes";
-import { capitalize, COURSE_CATEGORY_KEY, getDate } from "../../../constants";
+import { capitalize, COURSE_CATEGORY_KEY, getDate, IMAGEURL } from "../../../constants";
+import DOMPurify from "dompurify";
 
 const DetailContainer = styled.div`
   width: 100%;
@@ -307,6 +308,7 @@ const Detail = ({ preview }) => {
     setGeneralState,
     otherFunctions: { searchCategories,fetchCategory },
   } = useAuth();
+  
   const [categoryCourses, setCategoryCourses] = useState([]);
   const { id } = useParams();
   const ref = useRef(false);
@@ -350,6 +352,15 @@ const Detail = ({ preview }) => {
     }
   }, []);
 
+  const returnImg = (img) =>{
+    if(preview.bannerImg === ""){
+      return "" 
+    }else if(preview.bannerImg){
+      return  `${IMAGEURL}${img}`
+    } 
+    return img
+  }
+
   return (
     <Layout background="category">
       {/* {loading && <Loader />} */}
@@ -378,7 +389,7 @@ const Detail = ({ preview }) => {
         <DetailBody>
           <DetailImage
             style={{
-              background: `linear-gradient(1.66deg, rgba(44, 43, 44, 0.83) 24.55%, rgba(12, 33, 145, 0) 115.79%), url(${categoryDetails?.bannerImg})`,
+              background: `linear-gradient(1.66deg, rgba(44, 43, 44, 0.83) 24.55%, rgba(12, 33, 145, 0) 115.79%), url(${returnImg(categoryDetails?.bannerImg)})`,
             }}
           >
             <h2>
@@ -398,18 +409,16 @@ const Detail = ({ preview }) => {
           <div className="container-xxxl mx-auto">
             <DetailBodyContent>
               <DetailLeft>
-                <DetailDescription>
                   {categoryDetails?.description ? (
-                    categoryDetails.description
+                    <DetailDescription  dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(categoryDetails.description)}}    />
                   ) : (
                     <Skeleton
                       animation="wave"
                       variant="rectangular"
                       width={"100%"}
                       height={30}
-                    />
+                      />
                   )}
-                </DetailDescription>
 
                 <NicheContainer>
                   <Header>

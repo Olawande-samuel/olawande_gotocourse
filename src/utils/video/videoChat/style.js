@@ -69,35 +69,33 @@ export const Content = styled.div`
 `;
 
 export const VideoWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    width: 100%;
-    // max-width: 1080px;
-    border-radius: 10px;
-    gap: 10px;
-    background-color: #191046;
+    overflow-y: hidden;
     height: 100%;
-    position: relative;
-    overflow: hidden;
-    margin: 0px auto;
-    padding: 10px;
-
     display: grid;
     grid-template-columns:1fr;
-    grid-auto-rows: 250px;
+    grid-auto-rows: 200px;
     gap: 1rem;
     /* overflow-y: scroll; */
     margin-inline: auto;
     height: 100%;
 
-    @media screen and (min-width: 880px) {
-        flex-direction: row;
-        display:grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-
+    // @media (max-width:1024px) {
+       
+    //         overflow-y: scroll;
+        
+    // }
+    @media (min-width:450px) {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 300px));
+           
     }
 
+    video {
+        height: 200px;
+        width: 100%;
+        object-fit: cover;
+        object-position: bottom;
+
+    }
     /* video {
         flex: 1;
         height: 50%;

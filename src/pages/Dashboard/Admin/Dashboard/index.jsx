@@ -37,24 +37,7 @@ const chartCards = [
 ]
 
 
-const categories = [
-    {
-        title: "Data Science",
-        value: "06"
-    },
-    {
-        title: "Project Management",
-        value: "01"
-    },
-    {
-        title: "Cybersecurity & Assurance",
-        value: "09"
-    },
-    {
-        title: "Digital Marketing",
-        value: "10"
-    },
-]
+
 
 
 const rundown = [

@@ -48,6 +48,7 @@ import EarningsTable from "./Earnings/Table";
 import { BiTrash } from "react-icons/bi";
 import { ClassesCard } from "../Teachers/Bootcamps";
 import Editor from "../components/Editor";
+import Detail from "../../Category/Detail";
 
 const KEY = "gotocourse-userdata";
 
@@ -91,15 +92,7 @@ export function CategoryDetails({}) {
               categoryId: data.categoryId,
             };
           });
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          
         }
       } catch (err) {
         toast.error(err.message, {
@@ -586,7 +579,8 @@ export function CategoryPreviewModal({ preview, open, setOpen }) {
         >
           <Layout>
             {preview ? (
-              <CourseDetail preview={preview} />
+              // <CourseDetail preview={preview} />
+              <Detail preview={preview} />
             ) : (
               <h3>No preview available!!!</h3>
             )}
@@ -624,11 +618,9 @@ export function CreateCourseCategory() {
   const [formstate, setFormstate] = useState({
     name: "",
     description: "",
-    niche: "",
     nicheDescription: "",
     career: "",
     bannerImg: "",
-    iconImg: "",
   });
 
   const [nichelist, setNichelist] = useState({
@@ -694,6 +686,7 @@ export function CreateCourseCategory() {
         importance: formstate.name.trim().toUpperCase(),
         nicheItems: [...nichelists],
         careerList: [...careerlists],
+        description: bio ? bio : formstate.description
       };
       const res = edit
         ? await updateCategory(userdata?.token, formstate.categoryId, data)
@@ -702,7 +695,7 @@ export function CreateCourseCategory() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         if (res?.data) {
-          const { data } = res;
+          const { data } = res; 
           toast.success(message, {
             position: "top-right",
             autoClose: 4000,
@@ -986,6 +979,7 @@ export function CreateCourseCategory() {
         <CategoryPreviewModal
           preview={{
             ...formstate,
+            description: bio,
             nicheItems: [...nichelists],
             careerList: [...careerlists],
           }}
@@ -4108,98 +4102,7 @@ export function BootcampRow({
   );
 }
 
-// ADDSYLLABUS COMPONENT
-// function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
-//   const [newSyllabus, setNewSyllabus] = useState({
-//     title: "",
-//     description: "",
-//   });
-//   const style = {
-//     position: "absolute",
-//     top: "50%",
-//     left: "50%",
-//     transform: "translate(-50%, -50%)",
-//     minWidth: 600,
-//     background: "#fff",
-//     border: "1px solid #eee",
-//     borderRadius: "10px",
-//     boxShadow: 24,
-//     p: 6,
-//     padding: "4rem 2rem",
-//   };
-//   function handleChange(e) {
-//     const { name, value } = e.target;
-//     setNewSyllabus((old) => {
-//       return {
-//         ...old,
-//         [name]: value,
-//       };
-//     });
-//   }
 
-//   function addSyllabusHandler() {
-//     const { title, description } = newSyllabus;
-//     if (!title || !description) {
-//       toast.error("Title and Description are required", {
-//         position: "top-right",
-//         autoClose: 4000,
-//         hideProgressBar: true,
-//         closeOnClick: true,
-//         pauseOnHover: true,
-//         draggable: true,
-//         progress: undefined,
-//       });
-//     } else {
-//       addSyllabus(newSyllabus);
-//       setOpen((_) => false);
-//     }
-//   }
-
-//   return (
-//     <Modal
-//       open={open}
-//       onClose={handleClose}
-//       aria-labelledby="modal-modal-title"
-//       aria-describedby="modal-modal-description"
-//     >
-//       <Box style={style}>
-//         <h5
-//           className="lead text-primary"
-//           style={{ color: "var(--theme-blue)" }}
-//         >
-//           Add Syllabus
-//         </h5>
-//         <Input
-//           label="Title"
-//           name="title"
-//           type="text"
-//           handleChange={handleChange}
-//           value={newSyllabus.title}
-//         />
-//         <div className="form-group my-3">
-//           <label htmlFor="description" className="form-label generic_label">
-//             Description
-//           </label>
-//           <textarea
-//             rows="5"
-//             id="description"
-//             name="description"
-//             className="form-control generic_input"
-//             value={newSyllabus.description}
-//             onChange={handleChange}
-//           ></textarea>
-//         </div>
-//         <button
-//           className="btn btn-primary my-3"
-//           onClick={addSyllabusHandler}
-//           style={{ backgroundColor: "var(--theme-blue)" }}
-//         >
-//           Add
-//         </button>
-//       </Box>
-//     </Modal>
-//   );
-// }
 
 // FEES COMPONENT
 export function Fees() {
