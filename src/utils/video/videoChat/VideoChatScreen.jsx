@@ -100,8 +100,10 @@ const VideoChatScreen = ()  => {
         video.addEventListener('loadedmetadata', () => {
           video.play()
         })
-      }
-      const peers = {}
+    }
+    
+    const peers = {}
+
     const startWebCam = async () => {
 
         const myVideo = document.querySelector('.client-local-stream')
@@ -121,12 +123,17 @@ const VideoChatScreen = ()  => {
 
         console.log("peer: ", myPeer)
         console.log("omo lofty")
+
         myPeer.on('open', userId => {
             console.log("conntected to room with userId: ", userId)
             socket.emit('join-video-room', roomId, userId)
         })
+
         myPeer.on('call', call => {
+            console.log("calling")
             call.answer(localStream)
+            const videoWrapper = document.querySelector('.video-section')
+
             const remoteVideoWrapper = document.createElement('div')
             remoteVideoWrapper.classList.add("remote-users")
             const remoteVideo = document.createElement('video')
@@ -134,7 +141,7 @@ const VideoChatScreen = ()  => {
             videoWrapper?.append(remoteVideoWrapper)
             
             call.on('stream', userVideoStream => {
-                addVideoStream(remoteVideoWrapper, userVideoStream)
+                addVideoStream(videoWrapper, userVideoStream)
             })
         })
 
@@ -149,7 +156,9 @@ const VideoChatScreen = ()  => {
         })
 
         const connectToNewUser = (userId, stream) => {
+            console.log("connecting to new user")
             const call = myPeer.call(userId, stream)
+            const videoWrapper = document.querySelector('.video-section')
 
             const remoteVideoWrapper = document.createElement('div')
             remoteVideoWrapper.classList.add("remote-users")
