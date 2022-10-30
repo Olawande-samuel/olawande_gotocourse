@@ -16,11 +16,11 @@ import { Sidebar, Searchbar, Navbar } from "../components";
 import clsx from "./styles.module.css";
 import { colors, getDate } from "../../../constants";
 import avatar from "../../../images/teacher.png"
-import { useAuth } from "../../../contexts/Auth";
 import { GuardedRoute } from "../../../hoc";
 import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
 import { BootcampRow, UserInfoCard, NotificationContent } from "../Admin";
+import { useAuth } from "../../../contexts/Auth";
 import { useLocalStorage } from "../../../hooks";
 import { FaRegTrashAlt, FaUserAlt } from "react-icons/fa";
 import { SiGoogleclassroom } from "react-icons/si";
@@ -594,9 +594,11 @@ export function Bootcamps() {
 }
 
 export function Classes() {
-    const { generalState: { isMobile } } = useAuth();
+    const { generalState: { isMobile }, otherFunctions: { fetchBootcamps } } = useAuth();
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
+    const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
+
     const data = [
         {
             title: "CyberSecurity",
@@ -617,7 +619,7 @@ export function Classes() {
     ]
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Classes">
-            <div className={clsx.students_profile}>
+            {/* <div className={clsx.students_profile}>
                 <div className={clsx.classes}>
                     {
                         data.map(({ numberOfLessons, title, date, time, isLive, color }, i) => (
@@ -626,6 +628,10 @@ export function Classes() {
                         ))
                     }
                 </div>
+            </div> */}
+
+            <div className={`${clsx.students_profile_main} ${clsx.student_bg}`}>
+                <AvailableCourses data={bootcamps?.data?.data ? bootcamps?.data?.data : []} />
             </div>
         </Students>
     )
@@ -1015,7 +1021,7 @@ export function History() {
     )
 }
 export function Fees() {
-    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees, addBootcamp, fetchStudentFees, fetchBootcampFees, payStudentFees }, setOutstanding,  } = useAuth();
+    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees, addBootcamp, fetchStudentFees, fetchBootcampFees, payStudentFees }, setOutstanding, } = useAuth();
     const { getItem } = useLocalStorage();
     const [course, setCourse] = useState([])
     let userdata = getItem(KEY);
@@ -1108,8 +1114,8 @@ export function Fees() {
 
     const all = () => {
         let pending = course.map((c => c.payments.filter(x => x.status === "pending")))
-        let individual_total = pending.map(d=> d.reduce((total, item) => total + item.amount, 0))
-        console.log( "all_total", individual_total.reduce((total, item) => total + item, 0) );
+        let individual_total = pending.map(d => d.reduce((total, item) => total + item.amount, 0))
+        console.log("all_total", individual_total.reduce((total, item) => total + item, 0));
         setOutstanding(individual_total.reduce((total, item) => total + item, 0))
 
     }
@@ -1121,7 +1127,7 @@ export function Fees() {
     //     let individual_total = pending.map(d=> d.reduce((total, item) => total + item.amount, 0))
     //     console.log( "all_total", individual_total.reduce((total, item) => total + item, 0) );
     //     setOutstanding(individual_total.reduce((total, item) => total + item, 0))
-   
+
     // }, [course]);
 
     // console.log({outstanding});
@@ -1253,9 +1259,9 @@ export function Fees() {
                         ))
                             :
 
-                        <>
-                            <h5 className="text-center">You haven't enrolled to any class</h5>
-                        </>
+                            <>
+                                <h5 className="text-center">You haven't enrolled to any class</h5>
+                            </>
 
                     }
 
@@ -1450,7 +1456,7 @@ export const Dashboard = () => {
     const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
 
-    console.log(data)
+    // console.log(data)
 
     const topContent = [
         {
@@ -1608,7 +1614,7 @@ function AvailableCourses({ data }) {
                 </div>
 
                 <div className={clsx["coursebody"]}>
-                    {data?.length > 0 && data.filter(item=>item.isActive).map((item, i) => (
+                    {data?.length > 0 && data.filter(item => item.isActive).map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
 
@@ -1703,10 +1709,10 @@ export function DashboardTop({ content }) {
                 }
             </div>
         </div>
-    ) 
+    )
 }
-export function StudentLive(){
-    return(
+export function StudentLive() {
+    return (
         <Students>
             <LiveClassInfo type="student" />
         </Students>
