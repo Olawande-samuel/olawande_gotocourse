@@ -539,7 +539,7 @@ export default function Quiz() {
                                                 <Accordion.Item eventKey={id} className="accord__body">
                                                     <Accordion.Header className="accord__header"> Question {id + 1}</Accordion.Header>
                                                     <Accordion.Body>
-                                                        <FormControl sx={{ m: 1, minWidth: 120 }} >
+                                                        <FormControl sx={{ m: 1, width: "100%" }} >
                                                             <InputLabel id="answertype-label">Question Type</InputLabel>
                                                             <Select
                                                                 // labelId="questiontype-label"
@@ -570,7 +570,7 @@ export default function Quiz() {
 
                                                             <div className="texteditor quiz__editor">                                                        <CKEditor
                                                                 editor={ClassicEditor}
-                                                                data="<p>Hello from CKEditor 5!</p>"
+                                                                data=""
                                                                 onReady={editor => {
                                                                     // You can store the "editor" and use when it is needed.
                                                                     console.log('Editor is ready to use!', editor);
@@ -711,7 +711,7 @@ export default function Quiz() {
 
                                                 {
                                                     formData.inputList.length - 1 === id && <button onClick={(e) => handleAddClick(e)}>
-                                                        New Questione
+                                                        New Question
                                                     </button>
                                                 }
 

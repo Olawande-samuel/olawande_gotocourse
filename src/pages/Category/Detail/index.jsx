@@ -353,9 +353,9 @@ const Detail = ({ preview }) => {
   }, []);
 
   const returnImg = (img) =>{
-    if(preview.bannerImg === ""){
+    if(preview?.bannerImg === ""){
       return "" 
-    }else if(preview.bannerImg){
+    }else if(preview?.bannerImg){
       return  `${IMAGEURL}${img}`
     } 
     return img
