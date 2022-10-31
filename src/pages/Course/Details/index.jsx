@@ -589,10 +589,10 @@ const Detail = () => {
                             {/* <DetailDescription>
                                 {details ? details.description : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}
                             </DetailDescription> */}
-                            <ButtonContainer>
+                            {/* <ButtonContainer>
                                 <Button $isCTA>Enroll now</Button>
                                 <Button>Add to wishlist</Button>
-                            </ButtonContainer>
+                            </ButtonContainer> */}
                         </DetailsHero>
                     </DetailImage>
                     <DetailBodyContent>
