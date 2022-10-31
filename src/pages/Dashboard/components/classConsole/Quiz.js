@@ -350,7 +350,7 @@ export default function Quiz() {
         endTime: "",
         note: "",
         timeLimit: "",
-        maxAttempts: "",
+        maxAttempts: 1,
         inputList: [
             {
                 type: "",
@@ -512,8 +512,9 @@ export default function Quiz() {
                             </div>
                             <small>For quizzes without deadline, use a date far in the future</small>
 
-                            <label htmlFor="time">Time Limit</label>
-                            <input type="number"
+                            <label htmlFor="timeLimit">Time Limit</label>
+                            <input 
+                            type="number"
                                 name="timeLimit"
                                 id="timeLimit"
                                 value={formData.timeLimit}

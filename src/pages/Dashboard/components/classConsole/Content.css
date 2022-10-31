@@ -331,6 +331,13 @@
     background: #0C2191;
 } */
 
+.footerbtn{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
 .footerbtn button{
     padding: 0.5rem 1rem;
     outline: none;
@@ -374,6 +381,9 @@
 
 .preview__top {
     padding: 2rem 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
 }
 
 .preview__bottom {
@@ -408,15 +418,14 @@
     text-align: center;
 }
 
-.preview__accord {
-    padding: .3rem 0;
-}
 
 .previewaccord__header button {
     font-weight: 400;
     font-size: 18px;
     line-height: 31px;
     color: #0C2191;
+
+
 }
 
 .previewbtn {
