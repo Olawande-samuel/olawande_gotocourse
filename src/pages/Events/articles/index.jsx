@@ -54,6 +54,45 @@ const Articles = () => {
                 </p>
 
             </Content>
+            <MoreLikeThis>
+                <header>
+                    <h4>You'll Like This</h4>
+                </header>
+
+                <section>
+                <div className={style.articles__container}>
+                        {
+                            [...Array(3)].map((x, id) => (
+                                <div className={style.articleitem}>
+                                    <div className={style.articleimg}>
+                                        <img src={articleimg} alt="" />
+
+                                    </div>
+
+                                    <div className={style.articleInfo}>
+                                        <div className={style.articleTop}>
+                                            <span style={{ fontSize: "12px", color: "#4100FA" }}>04.08.22</span>
+                                            <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} />
+
+                                        </div>
+                                        <h4>
+                                            How to modernize queues for the digital-⁠first consumer
+                                        </h4>
+                                        <p>
+                                            Christoffer Klemming, CEO and co-founder of Waitwhile, shares insights on how companies can boost customer satisfaction using learnings from psychological research.
+                                        </p>
+
+                                    </div>
+
+
+
+                                </div>
+
+                            ))
+                        }
+                    </div>
+                </section>
+            </MoreLikeThis>
         </section>
     </Layout>
   )

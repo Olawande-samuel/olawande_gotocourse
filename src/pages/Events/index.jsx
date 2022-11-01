@@ -8,6 +8,7 @@ import { IoCalendarSharp } from 'react-icons/io5'
 import { AiFillClockCircle } from 'react-icons/ai'
 import { BiTargetLock } from 'react-icons/bi'
 import { FaShareSquare } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 
 const Events = () => {
     return (
@@ -25,7 +26,7 @@ const Events = () => {
                     <div className={style.articles__container}>
                         {
                             [...Array(6)].map((x, id) => (
-                                <div className={style.articleitem}>
+                                <Link to={`articles/${id}`} className={style.articleitem}>
                                     <div className={style.articleimg}>
                                         <img src={articleimg} alt="" />
 
@@ -48,7 +49,7 @@ const Events = () => {
 
 
 
-                                </div>
+                                </Link>
 
                             ))
                         }

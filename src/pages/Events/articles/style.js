@@ -71,18 +71,22 @@ export const Content = styled.section`
         margin-top:3rem;
         color: #86868B;
         width:min(100%, 800px);
+        margin-inline: auto;
 
     }
 `
 export const MoreLikeThis = styled.section`
+    margin-block: 2rem;
 
     header {
         display:flex;
         justify-content: center;
+        margin-bottom: 1rem;
 
         h4 {
             font-weight: 700;
             text-align:center;
+            margin-bottom: 0;
         }
     }
 
