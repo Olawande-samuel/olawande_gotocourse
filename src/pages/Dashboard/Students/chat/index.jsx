@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { IoMdSend, IoIosAttach, IoMdCheckmark } from "react-icons/io";
+import { IoMdSend, IoMdCheckmark } from "react-icons/io";
 import { Box, Tabs, Tab } from "@mui/material";
 import PropTypes from "prop-types";
 import { useLocalStorage } from "../../../../hooks";
@@ -9,7 +9,7 @@ import clsx from "../../Admin/Chat/styles.module.css";
 import img from "../../../../images/john.png";
 import { Searchbar } from "../../components";
 
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { KEY } from "../../../../constants";
 import { AdvancedError } from "../../../../classes";
 import { toast } from "react-toastify";

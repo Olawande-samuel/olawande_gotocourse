@@ -46,7 +46,7 @@ const leftLink = [
   {
     id: 7,
     title: "Events",
-    path: "/events"
+    path: "/events&articles"
   },
 ]
 
@@ -91,6 +91,11 @@ const rightLink = [
     title: "Mentors Lounge",
     path: "/lounge"
   },
+  {
+    id: 8,
+    title: "Enterprise",
+    path: "/enterprise"
+  },
 ]
 const Footer = () => {
   const location = useLocation();
@@ -113,7 +118,8 @@ const Footer = () => {
   const categories = useQuery(["categories"], () => fetchCategories());
   return (
     <footer className="footer wrapper" style={{
-      background: celebRoute ? "#000F62" : "var(--blue-ish)", color: celebRoute ? "#fffff" : "var(--theme-blue)"
+      // background: celebRoute ? "#000F62" : "var(--blue-ish)", color: celebRoute ? "#fffff" : "var(--theme-blue)"
+      background: "var(--blue-ish)", color: "var(--theme-blue)"
 
     }}>
       <div className="container ">
@@ -123,7 +129,7 @@ const Footer = () => {
               <p className="text-center mb-5">Ready to become a mentor on Gotocourse?</p>
               <div className="join_button_wrapper justify-content-center align-items-center d-flex mb-3">
                 <Link to="/teacher/signup" onClick={() => window.scrollTo(0, 0)}>
-                  <button type="button" className="btn btn-outline-light px-lg-4 py-lg-3">
+                  <button type="button" className="btn btn-outline-primary px-lg-4 py-lg-3" style={{borderColor:"#0C2191", color:"#0C2191"}}>
                     Enroll as a mentor
                   </button>
                 </Link>
@@ -143,7 +149,8 @@ const Footer = () => {
                {students && <Link to="/students" onClick={() => window.scrollTo(0, 0)}>
                   <motion.button type="button"
                     className="btn btn-light px-lg-4 py-lg-3"
-                    style={{ color: celebRoute ? "#fff" : "var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)" }}
+                    // style={{ color: celebRoute ? "#fff" : "var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)" }}
+                    style={{ color: "var(--theme-blue)", background: "#fff", borderColor: "var(--theme-blue)" }}
                     whileHover={{
                       boxShadow: "0px 0px 8px rgb(0, 0, 0)",
                       textShadow: "0px 0px 8px rgb(255,255,255)",
@@ -160,7 +167,8 @@ const Footer = () => {
                 {teacher && <Link to="/become-a-teacher">
                   <motion.button type="button"
                     className="btn btn-light px-lg-4 py-lg-3"
-                    style={{ color: celebRoute ? "#fff" : "var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)" }}
+                    // style={{ color: celebRoute ? "#fff" : "var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)" }}
+                    style={{ color: "var(--theme-blue)", background: "#fff", borderColor: "var(--theme-blue)" }}
                     whileHover={{
                       boxShadow: "0px 0px 8px rgb(0, 0, 0)",
                       textShadow: "0px 0px 8px rgb(255,255,255)",
@@ -180,13 +188,16 @@ const Footer = () => {
             <div className="footer_top pt-2">
               <Link to="/" onClick={() => window.scrollTo(0, 0)}>
                 <i className="d-none d-lg-block">
-                  <Logo color={!celebRoute ? "var(--theme-blue)" : "#fff"} />
+                  {/* <Logo color={!celebRoute ? "var(--theme-blue)" : "#fff"} /> */}
+                  <Logo color={"var(--theme-blue)" } />
                 </i>
 
                 <i className="d-lg-none">
-                  <Logosm color={!celebRoute ? "var(--theme-blue)" : "#fff"} />
+                  {/* <Logosm color={!celebRoute ? "var(--theme-blue)" : "#fff"} /> */}
+                  <Logosm color={"var(--theme-blue)"} />
                 </i>
-                <small className="text-center d-block" style={{ fontSize: '16px', color: !celebRoute ? "var(--theme-blue" : "#fff" }}>Learn without limits.</small>
+                {/* <small className="text-center d-block" style={{ fontSize: '16px', color: !celebRoute ? "var(--theme-blue)" : "#fff" }}>Learn without limits.</small> */}
+                <small className="text-center d-block" style={{ fontSize: '16px', color:  "var(--theme-blue)"}}>Learn without limits.</small>
               </Link>
             </div>
 
@@ -199,7 +210,8 @@ const Footer = () => {
                     }}>
                       <motion.li
                         style={{ 
-                          color: !celebRoute ? "var(--theme-blue)" : "#FFF",
+                          // color: !celebRoute ? "var(--theme-blue)" : "#FFF",
+                          color:"var(--theme-blue)",
                           lineHeight: "26px",
                           fontSize: "10px",
                         }}
@@ -245,7 +257,8 @@ const Footer = () => {
                         transition={{
                           stiffness: 300
                         }}
-                        style={{ color: !celebRoute ? "var(--theme-blue" : "#FFF", fontSize:"10px", lineHeight:"26px" }}
+                        // style={{ color: !celebRoute ? "var(--theme-blue)" : "#FFF", fontSize:"10px", lineHeight:"26px" }}
+                        style={{ color:"var(--theme-blue)" , fontSize:"10px", lineHeight:"26px" }}
                       >
                         {link.title.toUpperCase()}
                       </motion.li>
@@ -269,7 +282,7 @@ const Footer = () => {
                         transition={{
                           stiffness: 300
                         }}
-                        style={{ color: !celebRoute ? "var(--theme-blue" : "#FFF", fontSize:"10px", lineHeight:"26px" }}
+                        style={{ color:  "var(--theme-blue)", fontSize:"10px", lineHeight:"26px" }}
                       >
                         {link.title.toUpperCase()}
                       </motion.li>

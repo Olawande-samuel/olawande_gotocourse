@@ -586,3 +586,17 @@
         margin: 0px;
     }
 }
+
+.classType{
+    padding-block:4rem ;
+}
+.classType header {
+    margin-bottom: 1rem !important;
+    padding-inline:2rem ;
+}
+.classType header p {
+    margin-bottom: 0;
+}
+.class_card {
+    cursor: pointer;
+}

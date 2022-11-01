@@ -37,24 +37,7 @@ const chartCards = [
 ]
 
 
-const categories = [
-    {
-        title: "Data Science",
-        value: "06"
-    },
-    {
-        title: "Project Management",
-        value: "01"
-    },
-    {
-        title: "Cybersecurity & Assurance",
-        value: "09"
-    },
-    {
-        title: "Digital Marketing",
-        value: "10"
-    },
-]
+
 
 
 const rundown = [
@@ -144,9 +127,8 @@ const Dashboard = () => {
         (async() => {
             try{
                 const res = await Promise.all([fetchTeachers(userdata?.token), fetchStudents(userdata?.token), fetchCourses(userdata?.token), fetchCategories(userdata?.token)]);
-                console.log(res);
+                
                 const [teachers, students, courses, categories] = res;
-                console.log({teachers, students, courses, categories});
                 const {success, statusCode, message} = teachers;
                 if(!success) throw new AdvancedError(message, statusCode);
                 else {
@@ -155,9 +137,9 @@ const Dashboard = () => {
                         return {
                             ...old,
                             earnings: 0,
-                            teachers: teachers.data.length,
-                            students: students.data.length,
-                            courses: courses.data.length,
+                            teachers: teachers.data?.length,
+                            students: students.data?.length,
+                            courses: courses.data?.length,
                             categories: categories.data
                         }
                     })
@@ -255,7 +237,7 @@ const Dashboard = () => {
                             {
                                 chartData.categories.map(({name, nicheItems}, i) => (
                                     <li key={i}>
-                                        {name} <span>{nicheItems.length}</span>
+                                        {name} <span>{nicheItems?.length}</span>
                                     </li>
                                 ))
                             }
@@ -297,7 +279,7 @@ const Dashboard = () => {
                 </div>
 
 
-                <div className={clsx.dashboard_fifth}>
+                {/* <div className={clsx.dashboard_fifth}>
                     <h3>Community</h3>
                     <div className={clsx.communities}>
                         {
@@ -307,7 +289,7 @@ const Dashboard = () => {
                         }
                     </div>
                     <p>See all </p>
-                </div>
+                </div> */}
             </div>
         </Admin>
     )

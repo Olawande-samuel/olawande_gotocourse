@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {MdNavigateNext} from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ import { useEffectOnMount, useLocalStorage } from "../../../hooks";
 import { useAuth } from "../../../contexts/Auth";
 import { AdvancedError } from "../../../classes";
 import {COURSE_CATEGORY_KEY, capitalize, getDate} from "../../../constants";
+import DOMPurify from "dompurify";
 
 
 
@@ -154,38 +155,24 @@ const Course = () => {
     const navigate = useNavigate();
     const {getItem} = useLocalStorage();
     let category = getItem(COURSE_CATEGORY_KEY);
+
+
+   
+
     useEffectOnMount(() => {
-        console.log("Course is mounted");
-        console.log(category);
+        
+        
         (async () => {
             try{
-                const res = await searchCategories(category);
+                const res = await searchCategories(category.name);
                 const {message, statusCode, success} = res;
                 if(!success) throw new AdvancedError(message, statusCode);
                 else {
                     const {data} = res;
-                    console.log(data);
                     setCourses(_ =>  [...data]);
-                    toast.success(message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
                 }
             }catch(err){
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+               console.error(err)
             }
         })()
         return () => console.log("Course page is unmounted");
@@ -193,8 +180,7 @@ const Course = () => {
 
 
     function gotoCourseHandler(e, name){
-        console.log(e.target);
-        navigate(`${encodeURIComponent(name)}`)
+        navigate(encodeURIComponent(name))
     }
 
 
@@ -207,11 +193,11 @@ const Course = () => {
                         <BreadcrumbLink to="/">
                             Home
                         </BreadcrumbLink>
-                        <BreadcrumbLink to="/categories/all">
+                        <BreadcrumbLink to="/categories">
                             Categories
                         </BreadcrumbLink>
-                        <BreadcrumbLink to={`/category/${encodeURIComponent(category)}`}>
-                            {capitalize(category)}
+                        <BreadcrumbLink to={`/categories/${encodeURIComponent(category.name)}`}>
+                            {capitalize(category.name)}
                         </BreadcrumbLink>
                         <BreadcrumbLink to="#" $isCurrentPage>
                             Courses
@@ -247,11 +233,11 @@ function CourseCard({image, name, description, separator, startDate, endDate, go
                 </CardImageContainer>
                 <CardBody>
                     <h2>{name}</h2>
-                    <p>{description}</p>
-                    <Date>
+                    <p  className="newcourseCard restricted_line_lg" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
+                    {/* <Date>
                         <h3>Date</h3>
                         <span>{`${getDate(startDate)} - ${getDate(endDate)}`}</span>
-                    </Date>
+                    </Date> */}
                 </CardBody>
             </Card>
             {separator && <Separator />}

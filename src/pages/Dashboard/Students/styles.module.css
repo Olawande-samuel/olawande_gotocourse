@@ -141,12 +141,22 @@
     align-items: center;
 }
 
+
 .dashboard_courses {
     display: flex;
-    justify-content: between;
+    justify-content: space-between;
     gap: 3rem;
     margin-top: 3rem;
 }
+.student_bg .dashboard_courses{
+    margin-top: unset;
+    overflow-y: scroll;
+    height: 400px;
+    /* border: 2px solid green; */
+
+}
+
+
 
 .dashboard_courses--left {
     flex: 1;
@@ -156,6 +166,15 @@
     overflow: scroll;
     min-height: 400px;
     max-height: 800px;
+
+}
+
+.student_bg .dashboard_courses--left{
+    background: unset;
+    /* border: 2px solid red; */
+    overflow: unset;
+    min-height: unset;
+    max-height: unset;
 
 }
 

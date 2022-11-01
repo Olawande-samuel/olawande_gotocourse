@@ -14,6 +14,7 @@ import { useEffectOnMount, useLocalStorage } from "../../../hooks";
 import { useAuth } from "../../../contexts/Auth";
 import { AdvancedError } from "../../../classes";
 import { capitalize, getDate, COURSE_CATEGORY_KEY } from "../../../constants";
+import DOMPurify from "dompurify";
 
 
 
@@ -189,16 +190,18 @@ const Separator = styled.hr`
 
 const Category = () => {
     const {otherFunctions: {fetchCategories}} = useAuth();
+    
+    const [loading, setLoading]= useState(false)
     const [categories, setCategories] = useState([]);
     const {updateItem} = useLocalStorage();
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
+
     useEffectOnMount(() => {
-        console.log("Category is mounted");
         (async () => {
             try{
+                setLoading(true)
                 const res = await fetchCategories();
-                console.log(res);
                 const {success, message, statusCode} = res;
                 if(!success) throw new AdvancedError(message, statusCode);
                 else {
@@ -216,6 +219,8 @@ const Category = () => {
                     draggable: true,
                     progress: undefined,
                 });
+            }finally {
+                setLoading(false)
             }
         })()
         return () => console.log("Category page is unmounted");
@@ -223,7 +228,7 @@ const Category = () => {
 
     const gotoCategoryHandler = (e, title) => {
         updateItem(COURSE_CATEGORY_KEY, title);
-        navigate(`/category/${title}`);
+        navigate(`/categories/${title}`);
     }
 
 
@@ -249,13 +254,17 @@ const Category = () => {
 
                     <CategoryBody>
                         {
-
+                            loading ? 
+                            Array(4).fill(undefined).map((_, i) => (
+                               <Skeleton sx={{marginBottom: 10}} animation="wave" key={i} variant="rectangular" width={"100%"} height={320} />
+                           ))
+                           :
                             categories.length !== 0 ? categories.map((category, i) => (
                                 <CategoryCard key={i} {...category} all={category} separator={(categories.length - 1) === i ? false : true} />
-                            )) : Array(4).fill(undefined).map((_, i) => (
-                                <Skeleton sx={{marginBottom: 10}} animation="wave" key={i} variant="rectangular" width={"100%"} height={350} />
-                            ))
+                            )):  <p className="text-center">No Category Found</p>
                         }
+                        
+
                     </CategoryBody>
                 </CategoryContainer>
             </div>
@@ -275,10 +284,9 @@ function CategoryCard({bannerImg, name, description, all, separator}){
                 </CardImageContainer>
                 <CardBody>
                     <h2>{name}</h2>
-                    <p>{description}</p>
-
+                    <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
                     <Link
-                     to={`/categories/${name?.split(" ").join("-").toLowerCase()}`}
+                     to={`/categories/${name?.trim().split(" ").join("-").toLowerCase()}`}
                      onClick={()=>{
                         localStorage.setItem("gotocourse-category", JSON.stringify(all))
                         navigate(`${name?.split(" ").join("-").toLowerCase()}`)

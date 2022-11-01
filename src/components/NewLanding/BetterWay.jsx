@@ -1,9 +1,9 @@
 import React from 'react'
-import betterway from "../../images/betterway.png";
-import Learning from "../../images/cohort.webp";
+import Learning from "../../images/anywhere.png";
 import Inperson from "../../images/in-Person.webp"
 import Mento from "../../images/inPerson.webp";
 import Tech from "../../images/fast.webp";
+import { Link } from 'react-router-dom';
 
 const BetterWay = () => {
 
@@ -55,35 +55,42 @@ const BetterWay = () => {
   return (
     <div className='betterway'>
         <div className="container">
-            <header>
+            {/* <header>
                 <h4>Gotocourse promotes a better way to learn</h4>
-                <p className="subtitle">Our courses are designed with you in mind and built around proven learning principles with real-life application, top-of-the-range technology, and fully immersive exchange with industry experts; everything you need to start and advance your career in tech.</p>
-            </header>
+                <p className="subtitle">All courses are designed with you in mind and built around proven learning principles with real-life application, top-of-the-range technology, and fully immersive exchange with industry experts; everything you need to start and advance your career in tech.</p>
+            </header> */}
             <div className="stay">
-                <div className="stay_left">
+                <div className="stay_left anywhere">
                     <img src={Learning} alt="" />
                 </div>
-                <div className="stay_right">
-                    <ul>
-                    {
-                        stay.map((item, i) => (
-                            <Cards {...item} key={i}  />
-                        ))
-                    }
-                    </ul>
+                <div className="stay_right anyright">
+                    <h6>Learn From Anywhere</h6>
+                    <p>Connect in real time  with classmates, teachers and mentors  from anywhere using Gotocourse integrated Live class feature</p>
+                    <div className="btn_wrapper">
+                        <Link to="/signup" className="d-inline-flex">
+                            <button>Get started</button>
+                        </Link>
+                    </div>
                 </div>
-            </div>
-            {/* <div className="betterway_learning_models">
-                {
-                    data.map((data, i)=>(
-                        <Models {...data} key={i} />
-                    ))
-                }
-            </div> */}
+            </div> 
         </div>
     </div>
   )
 }
+{/* <ul>
+{
+    stay.map((item, i) => (
+        <Cards {...item} key={i}  />
+    ))
+}
+</ul> */}
+{/* <div className="betterway_learning_models">
+{
+data.map((data, i)=>(
+    <Models {...data} key={i} />
+))
+}
+</div> */}
 
 function Cards({title, content}){
     return (
@@ -111,4 +118,6 @@ function Models({img, title, content}){
         </div>
     )
 }
+
+
 export default BetterWay

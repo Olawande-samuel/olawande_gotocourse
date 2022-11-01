@@ -16,8 +16,9 @@ export function Jumbotron() {
         <div className={clsx.jumbotron}>
             <div className={`container ${clsx.jumbotron__cover}`}>
                 <div className={clsx.jumbotron__absolute}>
-                    <h1>There Is No Successful Student Without A Teacher</h1>
-                    <p>Absolutely, no one can succeed in their practical lives without teachers. Students also need someone who can show simplify terms in real life. Not only as a coach, but start as a mentor to guide students along their academic lives.</p>
+                    <h1>Welcome to Gotocourse</h1>
+                    {/* <h3 className="fw-bold"></h3> */}
+                    <p>Before you begin your journey, check if you are eligible to teach on Gotocourse by answering  some questions</p>
                     <div className="w-100" style={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
                         <Link to="/qualifications">
 
@@ -29,7 +30,7 @@ export function Jumbotron() {
                                 whileHover={{
                                     scale: 1.1,
                                     textShadow: "0px 0px 8px rgb(255, 255, 255)"
-                                }}  >Become a teacher</motion.button>
+                                }}  >Check Eligibility</motion.button>
                         </Link>
 
                     </div>

@@ -28,11 +28,16 @@ export const commonFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
 }
@@ -56,11 +61,16 @@ export const kycFunctions = {
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {...res.data, success: true};
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     addStudentKYC: async function(_data, token){
@@ -78,11 +88,16 @@ export const kycFunctions = {
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {...res.data, success: true};
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     getAStudentKYC: async function(_data, token){
@@ -99,11 +114,16 @@ export const kycFunctions = {
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {...res.data, success: true};
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     getAStudentKYCById: async function(id, token){
@@ -120,11 +140,16 @@ export const kycFunctions = {
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {...res.data, success: true};
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     getAMentorKYC: async function(_data, token){
@@ -141,11 +166,16 @@ export const kycFunctions = {
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {...res.data, success: true};
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     getAMentorKYCById: async function(id, token){
@@ -162,11 +192,16 @@ export const kycFunctions = {
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {...res.data, success: true};
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     getAllStudentKYC: async function(_data, token){
@@ -183,11 +218,16 @@ export const kycFunctions = {
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {...res.data, success: true};
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     getAllMentorKYC: async function(_data, token){
@@ -204,11 +244,16 @@ export const kycFunctions = {
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {...res.data, success: true};
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     deleteStudentKYC: async function(_data, token, id){
@@ -225,11 +270,16 @@ export const kycFunctions = {
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {...res.data, success: true};
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     deleteMentorKYC: async function(_data, token, id){
@@ -246,11 +296,16 @@ export const kycFunctions = {
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {...res.data, success: true};
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
 }
@@ -328,11 +383,16 @@ export const authFunctions = {
             if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {...res.data, success: true};
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     register: async function(_data, type){
@@ -355,11 +415,16 @@ export const authFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     verifyEmail: async function(_data){
@@ -382,11 +447,16 @@ export const authFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     resendEmailOTP: async function(_data){
@@ -409,11 +479,16 @@ export const authFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
 
@@ -437,11 +512,16 @@ export const authFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     googleSignIn: async function(_data){
@@ -477,11 +557,16 @@ export const authFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     facebookSignIn: async function(_data){
@@ -537,11 +622,16 @@ export const adminTeacherFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     verify: async function(_data, token){
@@ -565,11 +655,16 @@ export const adminTeacherFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     verify_pledre: async function(_data, token){
@@ -593,11 +688,16 @@ export const adminTeacherFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     makeMentorPage: async function(token,  _data ){
@@ -621,11 +721,16 @@ export const adminTeacherFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     addMentor: async function(_data, token){
@@ -649,11 +754,16 @@ export const adminTeacherFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     updateMentor: async function(id, data, token){
@@ -677,11 +787,16 @@ export const adminTeacherFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     deleteMentor: async function(id, token){
@@ -704,11 +819,16 @@ export const adminTeacherFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
 
@@ -738,11 +858,16 @@ export const adminStudentFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     verify: async function(_data, token){
@@ -766,11 +891,16 @@ export const adminStudentFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     },
     verify_pledre: async function(_data, token){
@@ -794,11 +924,16 @@ export const adminStudentFunctions = {
             }
             
         }catch(err){
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
-            }
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
         }
     }
 
@@ -826,11 +961,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                message: err.message,
-                statusCode: 0,
-                success: false
+            } else {
+
+                return {
+                    message: err.message,
+                    statusCode: 0,
+                    success: false
+                }
             }
         }
     },
@@ -853,11 +990,42 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
+            } else {
+
+                return {
+                    message: err.message,
+                    statusCode: 0,
+                    success: false
+                }
             }
+        }
+    },
+    fetchWithdrawals: async function(token){
+        try{
+            const res = await axios.get(`${baseURL}/admin/teacher/withdrawals/fetch`, {
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status < 505;
+                }
+            })
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
-                message: err.message,
-                statusCode: 0,
-                success: false
+                ...res.data,
+                success: true
+            }
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    message: err.message,
+                    statusCode: 0,
+                    success: false
+                }
             }
         }
     },
@@ -884,11 +1052,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -915,11 +1085,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -945,11 +1117,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -976,11 +1150,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1006,11 +1182,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1036,11 +1214,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1066,11 +1246,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1097,11 +1279,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1127,11 +1311,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1158,11 +1344,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1188,11 +1376,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1218,11 +1408,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1248,11 +1440,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1278,11 +1472,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1308,11 +1504,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1339,11 +1537,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1369,11 +1569,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1399,11 +1601,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1429,11 +1633,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1458,11 +1664,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1489,11 +1697,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1518,11 +1728,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1549,11 +1761,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1580,11 +1794,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1609,11 +1825,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1640,11 +1858,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1671,11 +1891,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1700,11 +1922,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1731,11 +1955,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1762,11 +1988,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1791,11 +2019,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1822,11 +2052,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1852,11 +2084,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1897,11 +2131,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1927,11 +2163,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1957,11 +2195,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -1987,11 +2227,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2020,11 +2262,13 @@ export const adminFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2055,11 +2299,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2086,11 +2332,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2116,11 +2364,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2146,11 +2396,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2176,11 +2428,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2206,11 +2460,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2238,11 +2494,47 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
+        }
+    },
+    fetchBootcampFees: async function(token){
+        console.log("studentpaymenttoken", token);
+        try{
+            const res = await axios.get(`${baseURL}/student/bootcamps/enrollments/payments/fetch`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            console.log("result payment", res);
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2272,11 +2564,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2304,11 +2598,13 @@ export const studentFunctions = {
             console.error(err)
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2335,11 +2631,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2366,11 +2664,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2396,11 +2696,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2427,11 +2729,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2457,11 +2761,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2487,11 +2793,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2519,11 +2827,13 @@ export const studentFunctions = {
             console.error(err)
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2550,11 +2860,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2580,11 +2892,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2609,11 +2923,13 @@ export const studentFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2647,11 +2963,13 @@ export const teacherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2679,11 +2997,13 @@ export const teacherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2710,11 +3030,13 @@ export const teacherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2740,11 +3062,13 @@ export const teacherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2771,11 +3095,13 @@ export const teacherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2802,11 +3128,13 @@ export const teacherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2832,11 +3160,13 @@ export const teacherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2862,11 +3192,13 @@ export const teacherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2892,11 +3224,13 @@ export const teacherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2923,11 +3257,13 @@ export const teacherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2953,11 +3289,13 @@ export const teacherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -2983,11 +3321,13 @@ export const teacherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -3014,11 +3354,13 @@ export const teacherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -3051,11 +3393,13 @@ export const otherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -3082,11 +3426,13 @@ export const otherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -3112,11 +3458,13 @@ export const otherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -3142,11 +3490,13 @@ export const otherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -3173,11 +3523,13 @@ export const otherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -3204,11 +3556,13 @@ export const otherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -3234,11 +3588,13 @@ export const otherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -3263,11 +3619,13 @@ export const otherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -3292,11 +3650,13 @@ export const otherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -3321,11 +3681,13 @@ export const otherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -3350,11 +3712,13 @@ export const otherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
-            }
-            return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },
@@ -3410,11 +3774,215 @@ export const otherFunctions = {
         }catch(err){
             if(err.statusCode === 2){
                 localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
+        }
+    },
+}
+
+export const consoleFunctions = {
+    fetchDomains: async function(token, id){
+        try{
+            const res = await axios.get(`${baseURL}/classes/domains/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
-                success: false,
-                message: err.message,
-                statusCode: err.statusCode
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    addDomain: async function(token, data){
+        try{
+            const res = await axios.post(`${baseURL}/classes/domain/add`, JSON.stringify(data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    fetchContents: async function(token, domainId){
+        try{
+            const res = await axios.get(`${baseURL}/classes/contents/${domainId}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    addContent: async function(token, data){
+        try{
+            const res = await axios.post(`${baseURL}/classes/content/add`, JSON.stringify(data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+                console.log("something went wrong")
+            } else {
+                
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            } 
+        }
+    },
+    fetchQuiz: async function(token, id){
+        try{
+            const res = await axios.get(`${baseURL}/classes/contents/quiz/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    addQuiz: async function(token, data){
+        try{
+            const res = await axios.post(`${baseURL}/classes/content/quiz/add`, JSON.stringify(data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
             }
         }
     },

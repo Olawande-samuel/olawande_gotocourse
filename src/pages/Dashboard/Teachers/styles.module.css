@@ -400,10 +400,6 @@
     font-size: 1.15rem;
 }
 
-@media screen and (max-width: 767px){
-    
-}
-
 
 .syllabus_container {
     display: flex;
@@ -474,4 +470,43 @@
 }
 .earnings_card_wrapper > div {
     flex: 1 1 30%;
+}
+
+
+/* CLASS CONSOLE */
+
+
+.class_con_cards {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+}
+
+
+.class_con_card {
+    width: min(100%, 320px);
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 1rem;
+    border: 1px solid #eee;
+    box-shadow: 10px 10px 5px 0px rgba(240,240,240,0.75);
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(240,240,240,0.75);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(240,240,240,0.75);
+}
+.class_con_card h5{
+    font-weight: 700;
+}   
+.class_con_img {
+    max-height: 150px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.class_con_button {
+    border: none;
+    color: #fff;
+    background: var(--theme-orange);
+    padding: 8px 12px;
 }

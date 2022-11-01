@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
-import {useMutation} from "@tanstack/react-query"
 import {motion} from "framer-motion"
 import { useLocalStorage } from "../../hooks";
 import { useAuth } from "../../contexts/Auth";
@@ -90,7 +89,7 @@ const Login = () => {
         } else if(d.userType === "mentor"){
             if(d.isVerified){
               updateItem(KEY, d);
-              navigate("/teacher")
+              navigate("/mentor")
             } else {
               updateItem(VERIFICATION_KEY, d);
               navigate("/user-authentication")
@@ -108,6 +107,16 @@ const Login = () => {
     }
   };
 
+  function gotoPledre(e){
+    console.log({pledre})
+    e.preventDefault();
+    let Data= {
+      email: data.email,
+      user_type: "teacher"
+    }
+
+    pledre.loginUser(Data)
+  }
 
   // SOCIAL LOGIN
   async function socialSignIn(token, type){
@@ -281,6 +290,7 @@ const Login = () => {
             </button>
           )
         }
+        {/* <button onClick={gotoPledre}>Click me</button> */}
       </form>
         <p className="mt-5">
           <span>Do not have an account? </span>

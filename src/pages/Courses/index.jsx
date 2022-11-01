@@ -190,20 +190,25 @@ const Courses = ({ children }) => {
   const location = useLocation();
   const { generalState:{loading} } = useAuth()
   const bread = location.pathname?.split("/");
+
+
+  const payment = location.pathname.split('/')[3] === "payment"
   return (
+    <div className={` ${location.pathname?.split("/")[3] === "payment" && "pay_background"}`}>
+ 
     <Layout>
       <ScrollToTop />
-      <div className={style.block}>
+      <div  className={`style.block`}>
         <ToastContainer />  
         <div className={`container`}>
           <div className={style.breadcrumbs_wrapper}>
             <nav arial-label="breadcrumb">
               <ol className="breadcrumb">
-                <li className="breadcrumb-item">
+                <li className={`breadcrumb-item ${payment && "breadpay" }`}>
                   <Link to="/">HOMEPAGE</Link>
                   </li>
                     {bread.filter(item=> item !== "").map((item, idx)=>(
-                      <li className="breadcrumb-item active text-uppercase">
+                      <li className={`breadcrumb-item ${payment ? "activewhite" : "active" } text-uppercase`}>
                         <NavLink  to={`${bread.slice(0, idx + 2).join("/")}`}>{item.split("-").join(" ")}</NavLink>
                       </li>
                     ))}
@@ -217,6 +222,7 @@ const Courses = ({ children }) => {
             <Loader />
         }
     </Layout>
+    </div>
   );
 };
 
@@ -830,57 +836,10 @@ export const CourseProfile = ({preview}) => {
               <p className={style.paragraph}>
                 {courseProfile?.description}
               </p>
-              {/* <ul>
-                <li className={style.paragraph}>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo
-                  pariatur est exercitationem distinctio alias ducimus impedit?
-                  Aut asperiores pariatur porro quibusdam voluptate
-                  consequuntur, voluptas culpa ullam numquam fugiat officia
-                  autem.
-                </li>
-                <li className={style.paragraph}>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo
-                  pariatur est exercitationem distinctio alias ducimus impedit?
-                  Aut asperiores pariatur porro quibusdam voluptate
-                  consequuntur, voluptas culpa ullam.
-                </li>
-                <li className={style.paragraph}>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo
-                  pariatur est exercitationem distinctio alias ducimus impedit?
-                  Aut asperiores pariatur porro quibusdam voluptate
-                  consequuntur, voluptas.
-                </li>
-                <li className={style.paragraph}>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo
-                  pariatur est exercitationem distinctio alias ducimus impedit?
-                  Aut asperiores pariatur porro quibusdam.
-                </li>
-              </ul> */}
+             
             </div>
             <div className="col-md-5 col-lg-4">
-              {/* <ul>
-                <li>
-                  <div className="fw-bold">Lorem, ipsum dolor.</div>
-                  <p className={style.paragraph}>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Ipsam, itaque dolor.
-                  </p>
-                </li>
-                <li>
-                  <div className="fw-bold">Lorem, ipsum dolor.</div>
-                  <p className={style.paragraph}>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Ipsam, itaque dolor.
-                  </p>
-                </li>
-                <li>
-                  <div className="fw-bold">Lorem, ipsum dolor.</div>
-                  <div className={style.paragraph}>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Ipsam, itaque dolor.
-                  </div>
-                </li>
-              </ul> */}
+              
             </div>
           </div>
         </section>
@@ -892,7 +851,7 @@ export const CourseProfile = ({preview}) => {
                 <div className="d-flex g-3">
                   <div className={style.card_left}>
                     <div className={style.profile_img_wrapper}>
-                      <img src={courseProfile?.instructorProfileImg ?`https://loftywebtech.com/gotocourse/api/uploads/${courseProfile?.instructorProfileImg }`: Algo} alt="" className={style.image} />
+                      <img src={courseProfile?.instructorProfileImg ?`${process.env.REACT_APP_IMAGEURL}/${courseProfile?.instructorProfileImg }`: Algo} alt="" className={style.image} />
                     </div>
                   </div>
 

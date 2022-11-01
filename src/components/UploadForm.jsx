@@ -6,11 +6,11 @@ import clsx from "./globalStyles.module.css";
 import {useAuth} from "../contexts/Auth";
 import { AdvancedError } from "../classes";
 import { useLocalStorage } from "../hooks";
+import { KEY } from "../constants";
 
 
 
 
-const KEY = 'gotocourse-userdata';
 const UploadForm = ({isOpen, setIsOpen, setPreviewImage }) => {
     const navigate = useNavigate()
 

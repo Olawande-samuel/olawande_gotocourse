@@ -41,8 +41,17 @@ export const serviceList=[
   {
     id: 7,
     icon: <InPerson />,
-    title:"In-person training",
-    text:"Do you enjoy hand holding in person training ? Some of our trainings are available at our physical locations.",
+    title:"Self-paced Learning",
+    text:"Self-paced courses that allow you to complete assignments at your own pace, making it easier to balance coursework with other your other personal and professional responsibilities",
+    color:"blue"
+  
+  }, 
+ 
+  {
+    id: 8,
+    icon: <InPerson />,
+    title:"One-on-one mentorship",
+    text:"Challenge yourself with a one-on-one mentorship session with industry experts and professionals and grow your career",
     color:"blue"
   
   }, 

@@ -17,7 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import DOMPurify from "dompurify";
 
-import { Sidebar, Searchbar, Navbar } from "../components";
+import { Sidebar, Navbar } from "../components";
 import clsx from "./styles.module.css";
 
 import avatar from "../../../images/teacher.png";
@@ -36,13 +36,19 @@ import vector from "../../../images/vector.png";
 import { CourseDetail } from "../../Courses";
 import Layout from "../../../components/Layout";
 import ChatComponent from "./Chat";
-import { changeConstants, CreateCourseMain } from "../Teachers/CreateCourse";
+import {
+  AddSyllabus,
+  changeConstants,
+  CreateCourseMain,
+} from "../Teachers/CreateCourse";
 import { AllEarnings } from "../Teachers/Earnings";
 
 import EarningsTable from "./Earnings/Table";
-import LogoutButton from "../../../components/LogoutButton";
-import { GotoDashboard } from "../Students";
-import { BiQuestionMark } from "react-icons/bi";
+
+import { BiTrash } from "react-icons/bi";
+import { ClassesCard } from "../Teachers/Bootcamps";
+import Editor from "../components/Editor";
+import Detail from "../../Category/Detail";
 
 const KEY = "gotocourse-userdata";
 
@@ -86,15 +92,7 @@ export function CategoryDetails({}) {
               categoryId: data.categoryId,
             };
           });
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          
         }
       } catch (err) {
         toast.error(err.message, {
@@ -191,7 +189,7 @@ export function CategoryDetails({}) {
           </div>
           <form className="form" style={{ width: "80%", margin: "20px 0px" }}>
             <Input
-              label="Name of Course"
+              label="Name of Category"
               name="name"
               type="text"
               handleChange={changeHandler}
@@ -206,14 +204,12 @@ export function CategoryDetails({}) {
               >
                 Description
               </label>
-              <textarea
-                rows="5"
-                name="description"
-                value={formstate.description}
-                onChange={changeHandler}
-                className="form-control generic_input"
-                readOnly
-              ></textarea>
+              <div
+                className="border rounded p-3"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(formstate?.description),
+                }}
+              />
             </div>
 
             {/* <div className={clsx.form_group}>
@@ -290,7 +286,7 @@ export function Category() {
   const flag = useRef(false);
   const userdata = getItem(KEY);
   const tableHeaders = ["No", "Name of Category", "Date", "No of Student"];
-
+  const [search, setSearch] = useState("");
   useEffect(() => {
     if (flag.current) return;
     (async () => {
@@ -344,13 +340,26 @@ export function Category() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <h1 style={{ margin: 0 }}>All Category</h1>{" "}
+            <h4 style={{ margin: 0 }}>Categories</h4>{" "}
             <button
               className="btn btn-primary px-4"
               onClick={(e) => navigate("new")}
             >
               Add Category
             </button>
+          </div>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <input
+                type="search"
+                name="search"
+                id="search"
+                className="form-control"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="search..."
+              />
+            </div>
           </div>
           <div className={` ${clsx.admin__student_main}`}>
             {categories.length > 0 ? (
@@ -362,36 +371,46 @@ export function Category() {
                 </thead>
                 <tbody>
                   {categories?.length > 0 &&
-                    categories?.map(
-                      (
-                        {
-                          bannerImg,
-                          careerDescription,
-                          careerList,
-                          name,
-                          description,
-                          iconImg,
-                          categoryId,
-                          niche: nicheTitle,
-                          nicheDescription,
-                          nicheItems,
-                        },
-                        i
-                      ) => (
-                        <UserInfoCard
-                          key={i}
-                          comp="Category"
-                          name={name}
-                          num={i}
-                          date={"2022-06-26T00:00:00.000Z".split("T")[0]}
-                          students={90}
-                          id={categoryId}
-                          showDetailsHandler={(e) =>
-                            showDetailsHandler(e, name)
-                          }
-                        />
+                    categories
+                      ?.filter(
+                        (cat) =>
+                          cat.name
+                            .toLowerCase()
+                            .includes(search.toLowerCase()) ||
+                          cat.description
+                            .toLowerCase()
+                            .includes(search.toLowerCase())
                       )
-                    )}
+                      .map(
+                        (
+                          {
+                            bannerImg,
+                            careerDescription,
+                            careerList,
+                            name,
+                            description,
+                            iconImg,
+                            categoryId,
+                            niche: nicheTitle,
+                            nicheDescription,
+                            nicheItems,
+                          },
+                          i
+                        ) => (
+                          <UserInfoCard
+                            key={i}
+                            comp="Category"
+                            name={name}
+                            num={i}
+                            date={"2022-06-26T00:00:00.000Z".split("T")[0]}
+                            students={90}
+                            id={categoryId}
+                            showDetailsHandler={(e) =>
+                              showDetailsHandler(e, name)
+                            }
+                          />
+                        )
+                      )}
                 </tbody>
               </table>
             ) : (
@@ -469,7 +488,13 @@ function NicheModal({ newNiche, updateNiche, open, setOpen, handleChange }) {
 }
 
 // CAREERMODAL COMPONENT
-function CareerModal({ newCareer, updateCareer, open, setOpen, handleChange }) {
+export function CareerModal({
+  newCareer,
+  updateCareer,
+  open,
+  setOpen,
+  handleChange,
+}) {
   const style = {
     position: "absolute",
     top: "50%",
@@ -554,7 +579,8 @@ export function CategoryPreviewModal({ preview, open, setOpen }) {
         >
           <Layout>
             {preview ? (
-              <CourseDetail preview={preview} />
+              // <CourseDetail preview={preview} />
+              <Detail preview={preview} />
             ) : (
               <h3>No preview available!!!</h3>
             )}
@@ -592,11 +618,9 @@ export function CreateCourseCategory() {
   const [formstate, setFormstate] = useState({
     name: "",
     description: "",
-    niche: "",
     nicheDescription: "",
     career: "",
     bannerImg: "",
-    iconImg: "",
   });
 
   const [nichelist, setNichelist] = useState({
@@ -612,6 +636,7 @@ export function CreateCourseCategory() {
   const location = useLocation();
   const [loader, setLoader] = useState(location.search ? true : false);
   const edit = location.search;
+  const [bio, setBio] = useState("");
 
   useEffect(() => {
     if (flag.current) return;
@@ -635,28 +660,12 @@ export function CreateCourseCategory() {
 
             data.nicheItems && setNichelists((_) => data.nicheItems);
             data.careerList && setCareerlists((_) => data.careerList);
-            toast.success(message, {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
+            toast.success(message);
           } else {
             throw new AdvancedError(message, statusCode);
           }
         } catch (err) {
-          toast.error(err.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.error(err.message);
         } finally {
           setLoader((_) => false);
         }
@@ -677,6 +686,7 @@ export function CreateCourseCategory() {
         importance: formstate.name.trim().toUpperCase(),
         nicheItems: [...nichelists],
         careerList: [...careerlists],
+        description: bio ? bio : formstate.description
       };
       const res = edit
         ? await updateCategory(userdata?.token, formstate.categoryId, data)
@@ -685,7 +695,7 @@ export function CreateCourseCategory() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         if (res?.data) {
-          const { data } = res;
+          const { data } = res; 
           toast.success(message, {
             position: "top-right",
             autoClose: 4000,
@@ -752,25 +762,9 @@ export function CreateCourseCategory() {
         };
       });
       setShowNicheModal((_) => false);
-      toast.success("Niche added successfully", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.success("Niche added successfully");
     } else {
-      toast.error("All fields are required", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error("All fields are required");
     }
   }
 
@@ -836,7 +830,7 @@ export function CreateCourseCategory() {
               handleChange={changeHandler}
               value={formstate.name.toUpperCase()}
             />
-            <Input
+            {/* <Input
               label="First Description"
               name="description"
               type="text"
@@ -849,6 +843,11 @@ export function CreateCourseCategory() {
               type="text"
               handleChange={changeHandler}
               value={formstate.niche}
+            /> */}
+            <Editor
+              initialState={formstate.description}
+              title="Description"
+              setBio={setBio}
             />
             <div className={clsx.form_group}>
               <label htmlFor={"brief"}>Niche Description</label>
@@ -940,13 +939,13 @@ export function CreateCourseCategory() {
               value={formstate.bannerImg}
             />
 
-            <Input
+            {/* <Input
               label="Icon Image "
               name="iconImg"
               type="text"
               handleChange={changeHandler}
               value={formstate.iconImg}
-            />
+            /> */}
             <i className="text-danger">
               Make sure to upload the files and get the file name
             </i>
@@ -980,6 +979,7 @@ export function CreateCourseCategory() {
         <CategoryPreviewModal
           preview={{
             ...formstate,
+            description: bio,
             nicheItems: [...nichelists],
             careerList: [...careerlists],
           }}
@@ -1086,10 +1086,9 @@ export function ApproveStudent() {
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const {
-    adminStudentFunctions: { fetch, verify, verify_pledre },
+    adminStudentFunctions: {  verify,  },
     kycFunctions: { getAStudentKYCById },
     generalState,
-    generalState: { pledre },
     setGeneralState,
     commonFunctions: { deleteUser },
   } = useAuth();
@@ -1105,35 +1104,35 @@ export function ApproveStudent() {
   ];
 
   useEffect(() => {
-    (async () => {
-      const studentInfo = getItem("gotocourse-studentDetails");
-      let pledreInfo;
-      console.log("getting");
-      console.log({ pledre });
-      try {
-        if (pledre) {
-          console.log(pledre);
-          setGeneralState({ ...generalState, loading: true });
-          const pledRes = await pledre.getStudentDetails(studentInfo.email);
-          console.log({ pledRes });
-          if (pledRes.email) {
-            pledreInfo = pledRes;
-          } else {
-            pledreInfo = {};
-          }
-        }
-      } catch (error) {
-        console.error(error.message);
-      } finally {
-        setGeneralState({ ...generalState, loading: false });
-      }
+    const studentInfo = getItem("gotocourse-studentDetails");
+    setData(studentInfo);
 
-      localStorage.setItem(
-        "gotocourse-studentDetails",
-        JSON.stringify({ ...studentInfo, pledre: pledreInfo })
-      );
-      setData({ ...studentInfo, pledre: pledreInfo });
-    })();
+    // (async () => {
+    //     let pledreInfo;
+    //     console.log("getting");
+    //     try {
+    //       if (pledre) {
+    //         console.log(pledre);
+    //         setGeneralState({ ...generalState, loading: true });
+    //         const pledRes = await pledre.getStudentDetails(studentInfo.email);
+    //         console.log({ pledRes });
+    //         if (pledRes.email) {
+    //           pledreInfo = pledRes;
+    //         } else {
+    //           pledreInfo = {};
+    //         }
+    //       }
+    //     } catch (error) {
+    //       console.error(error.message);
+    //     } finally {
+    //       setGeneralState({ ...generalState, loading: false });
+    //     }
+
+    //     localStorage.setItem(
+    //       "gotocourse-studentDetails",
+    //       JSON.stringify({ ...studentInfo, pledre: pledreInfo })
+    //     );
+    // })();
   }, []);
 
   async function handleVerification(e, id) {
@@ -1152,12 +1151,6 @@ export function ApproveStudent() {
       const res = await verify(item, userdata?.token);
       const { message, success, statusCode } = res;
 
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: false,
-        };
-      });
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         //do somethings
@@ -1166,46 +1159,18 @@ export function ApproveStudent() {
       }
     } catch (error) {
       toast.error(error.message);
-    }
-  }
-
-  async function handlePledreAccess(e, id) {
-    e.preventDefault();
-    let item = {
-      userId: id,
-    };
-
-    try {
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: true,
-        };
-      });
-
-      const res = await verify_pledre(item, userdata?.token);
-      const { message, success, statusCode } = res;
-
+    } finally {
       setGeneralState((old) => {
         return {
           ...old,
           loading: false,
         };
       });
-
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        //do somethings
-        setData({ ...data, accessPledre: !data.accessPledre });
-        toast.success(message);
-      }
-    } catch (error) {
-      toast.error(error.message);
     }
   }
 
   async function deleteUserHandler(e, email) {
-    console.log(e)
+    console.log(e);
     try {
       const v = window.confirm("Are you sure you want to delete " + email);
       if (!v) return;
@@ -1216,7 +1181,7 @@ export function ApproveStudent() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         navigate(-1);
-        console.log("deleted")
+        console.log("deleted");
         toast.success(message);
       }
     } catch (err) {
@@ -1244,11 +1209,11 @@ export function ApproveStudent() {
       else {
         //do somethings
         setKyc(res.data);
-        toast.success(message);
         // navigate(-1)
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error("No KYC found");
+      console.error(error)
     } finally {
       setGeneralState((old) => {
         return {
@@ -1284,9 +1249,9 @@ export function ApproveStudent() {
           </h1>
 
           <div className={clsx.admin__profile_info}>
-            {info.map(({ title, content }, i) => (
+            {/* {info.map(({ title, content }, i) => (
               <Info title={title} content={content} key={i} />
-            ))}
+            ))} */}
 
             <div className={clsx.kyc}>
               {kyc !== null && kyc.question && (
@@ -1337,24 +1302,11 @@ export function ApproveStudent() {
             </div>
             <button
               className="button button-lg log_btn w-50 mt-3"
-              style={{ backgroundColor: data?.isVerified && "red" }}
+              style={{ backgroundColor: data?.isVerified && "var(--theme-orange" }}
               type="submit"
               onClick={(e) => handleVerification(e, data?.userId)}
             >
-              {data?.isVerified ? "Revoke Application" : "Approve Application"}
-            </button>
-
-            <button
-              className="button button-lg log_btn w-50 mt-3 d-block"
-              style={{
-                backgroundColor: data?.accessPledre && "var(--theme-orange",
-              }}
-              type="submit"
-              onClick={(e) => handlePledreAccess(e, data?.userId)}
-            >
-              {data?.accessPledre
-                ? "Revoke Dashboard Access"
-                : "Approve Dashboard Access"}
+              {data?.isVerified ? "Revoke Access" : "Approve Access"}
             </button>
           </div>
         </div>
@@ -1402,11 +1354,10 @@ export function Approve() {
       else {
         //do somethings
         setKyc(res.data);
-        toast.success(message);
         // navigate(-1)
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error("No KYC Found");
     } finally {
       setGeneralState((old) => {
         return {
@@ -1439,35 +1390,35 @@ export function Approve() {
   ];
 
   useEffect(() => {
-    (async () => {
-      const teacherInfo = getItem("gotocourse-teacherDetails");
-      let pledreInfo;
-      console.log("getting");
-      console.log({ pledre });
-      try {
-        if (pledre) {
-          console.log(pledre);
-          setGeneralState({ ...generalState, loading: true });
-          const pledRes = await pledre.getTeacherDetails(teacherInfo.email);
-          console.log({ pledRes });
-          if (pledRes.email) {
-            pledreInfo = pledRes;
-          } else {
-            pledreInfo = {};
-          }
-        }
-      } catch (error) {
-        console.error(error.message);
-      } finally {
-        setGeneralState({ ...generalState, loading: false });
-      }
+    const teacherInfo = getItem("gotocourse-teacherDetails");
+    setData(teacherInfo);
+    //   (async () => {
+    //     let pledreInfo;
+    //     console.log("getting");
+    //     console.log({ pledre });
+    //     try {
+    //       if (pledre) {
+    //         console.log(pledre);
+    //         setGeneralState({ ...generalState, loading: true });
+    //         const pledRes = await pledre.getTeacherDetails(teacherInfo.email);
+    //         console.log({ pledRes });
+    //         if (pledRes.email) {
+    //           pledreInfo = pledRes;
+    //         } else {
+    //           pledreInfo = {};
+    //         }
+    //       }
+    //     } catch (error) {
+    //       console.error(error.message);
+    //     } finally {
+    //       setGeneralState({ ...generalState, loading: false });
+    //     }
 
-      localStorage.setItem(
-        "gotocourse-teacherDetails",
-        JSON.stringify({ ...teacherInfo, pledre: pledreInfo })
-      );
-      setData({ ...teacherInfo, pledre: pledreInfo });
-    })();
+    //     localStorage.setItem(
+    //       "gotocourse-teacherDetails",
+    //       JSON.stringify({ ...teacherInfo, pledre: pledreInfo })
+    //     );
+    //   })();
   }, []);
   console.log({ data });
 
@@ -1580,7 +1531,6 @@ export function Approve() {
         );
 
         setData({ ...data, canTeach: !data?.canTeach });
-        toast.success(message);
       }
     } catch (error) {
       toast.error(error.message);
@@ -1645,9 +1595,9 @@ export function Approve() {
           </h1>
 
           <div className={clsx.admin__profile_info}>
-            {info.map(({ title, content }, i) => (
+            {/* {info.map(({ title, content }, i) => (
               <Info title={title} content={content} key={i} />
-            ))}
+            ))} */}
 
             <div className={clsx.kyc}>
               {kyc !== null && kyc.question && (
@@ -1717,26 +1667,6 @@ export function Approve() {
                 onClick={(e) => conferMentorship(e, data?.userId, data?.email)}
                 checked={data?.userType === "mentor" ? true : false}
                 value="mentorship"
-              />
-            </div>
-            <div className="form-group my-3">
-              <label
-                htmlFor="accessPledre"
-                className="form-label generic_label"
-              >
-                Access Dashboard
-              </label>
-              <Switch
-                onClick={(e) =>
-                  handleVerification(
-                    e,
-                    "pledre",
-                    data?.userId,
-                    data?.pledre?._id
-                  )
-                }
-                checked={data?.accessPledre}
-                value="pledre"
               />
             </div>
             <div className="form-group my-3">
@@ -1850,9 +1780,7 @@ export function UserInfoCard({
           {img && (
             <img
               src={
-                isAbsolute
-                  ? img
-                  : `https://loftywebtech.com/gotocourse/api/uploads/${img}`
+                isAbsolute ? img : `${process.env.REACT_APP_IMAGEURL}/${img}`
               }
               alt="avatar"
             />
@@ -1997,6 +1925,8 @@ export function Teachers() {
   const {
     adminTeacherFunctions: { fetch },
   } = useAuth();
+
+  const [search, setSearch] = useState("");
   useEffect(() => {
     if (flag.current) return;
     (async () => {
@@ -2047,6 +1977,17 @@ export function Teachers() {
               Add Mentor
             </button>
           </div>
+          <div className="d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
           <div className={`${clsx.admin__student_main}`}>
             <table className={`${clsx.admin__student_table}`}>
               <thead>
@@ -2056,23 +1997,34 @@ export function Teachers() {
               </thead>
               <tbody>
                 {teachers?.length > 0 &&
-                  teachers?.map((teacher, i) => (
-                    <UserInfoCard
-                      key={i}
-                      user={true}
-                      firstName={teacher.firstName}
-                      lastName={teacher.lastName}
-                      img={teacher.profileImg}
-                      num={i}
-                      email={teacher.email}
-                      level={1}
-                      details={teacher}
-                      type={teacher.userType}
-                      approveHandler={approveHandler}
-                      accessPledre={teacher.accessPledre}
-                      isAbsolute={true}
-                    />
-                  ))}
+                  teachers
+                    ?.filter(
+                      (teach) =>
+                        teach.firstName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        teach.lastName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        teach.email.toLowerCase().includes(search.toLowerCase())
+                    )
+                    .map((teacher, i) => (
+                      <UserInfoCard
+                        key={i}
+                        user={true}
+                        firstName={teacher.firstName}
+                        lastName={teacher.lastName}
+                        img={teacher.profileImg}
+                        num={i}
+                        email={teacher.email}
+                        level={1}
+                        details={teacher}
+                        type={teacher.userType}
+                        approveHandler={approveHandler}
+                        accessPledre={teacher.accessPledre}
+                        isAbsolute={true}
+                      />
+                    ))}
               </tbody>
             </table>
             {teachers <= 0 && (
@@ -2097,6 +2049,9 @@ export function Mentors() {
   const {
     otherFunctions: { fetchMentors },
   } = useAuth();
+
+  const [search, setSearch] = useState("");
+
   useEffect(() => {
     if (flag.current) return;
     (async () => {
@@ -2112,7 +2067,6 @@ export function Mentors() {
           //do somethings
           if (data.length > 0) {
             setTeachers((_) => data);
-            
           } else {
             toast.success("No mentor page found");
           }
@@ -2150,7 +2104,16 @@ export function Mentors() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center">
-            <h1>Mentors</h1>
+            <h1 className="mb-0">Mentors</h1>
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
             {/* <button className="btn button-md" style={{background:"var(--theme-blue)", color:"#fff"}} type="button" onClick={()=>navigate("create/mentor")}>Add Mentor</button> */}
           </div>
           <div className={` ${clsx.admin__student_main}`}>
@@ -2162,26 +2125,42 @@ export function Mentors() {
               </thead>
               <tbody>
                 {teachers?.length > 0 &&
-                  teachers?.map((teacher, i) => (
-                    <UserInfoCard
-                      key={i}
-                      user={true}
-                      firstName={teacher.mentorFirstName}
-                      lastName={teacher.mentorLastName}
-                      img={teacher.mentorImg}
-                      mentorId={teacher.mentorId}
-                      num={i}
-                      email={teacher.mentorEmail}
-                      level={teacher.expertise}
-                      details={teacher}
-                      approveHandler={approveHandler}
-                      isActive={null}
-                      isAbsolute={false}
-                      type={null}
+                  teachers
+                    ?.filter(
+                      (teach) =>
+                        teach.mentorFirstName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        teach.mentorLastName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        teach.mentorEmail
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        teach.expertise
+                          .toLowerCase()
+                          .includes(search.toLowerCase())
+                    )
+                    .map((teacher, i) => (
+                      <UserInfoCard
+                        key={i}
+                        user={true}
+                        firstName={teacher.mentorFirstName}
+                        lastName={teacher.mentorLastName}
+                        img={teacher.mentorImg}
+                        mentorId={teacher.mentorId}
+                        num={i}
+                        email={teacher.mentorEmail}
+                        level={teacher.expertise}
+                        details={teacher}
+                        approveHandler={approveHandler}
+                        isActive={null}
+                        isAbsolute={false}
+                        type={null}
 
-                      // accessPledre={teacher.accessPledre}
-                    />
-                  ))}
+                        // accessPledre={teacher.accessPledre}
+                      />
+                    ))}
               </tbody>
             </table>
             {teachers.length <= 0 && (
@@ -2518,7 +2497,7 @@ export function MentorsDetail() {
             <img
               src={
                 data?.mentorImg
-                  ? `https://loftywebtech.com/gotocourse/api/uploads/${data?.mentorImg}`
+                  ? `${process.env.REACT_APP_IMAGEURL}/${data?.mentorImg}`
                   : avatar
               }
               style={{ borderRadius: 10 }}
@@ -2604,6 +2583,8 @@ export function Courses() {
     "Approval",
   ];
 
+  const [search, setSearch] = useState("");
+
   useEffect(() => {
     if (flag.current) return;
     (async () => {
@@ -2614,7 +2595,6 @@ export function Courses() {
         else if (statusCode === 1) {
           const { data } = res;
           setCourseList(data);
-          
         } else {
           throw new AdvancedError(message, statusCode);
         }
@@ -2649,6 +2629,18 @@ export function Courses() {
               Add Course
             </button>
           </div>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <input
+                type="search"
+                name="search"
+                id="search"
+                className="form-control"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
 
           <div className={clsx.admin__student_main}>
             <table className={clsx.admin__student_table}>
@@ -2659,37 +2651,52 @@ export function Courses() {
               </thead>
               <tbody>
                 {courseList.length > 0 &&
-                  courseList.map(
-                    (
-                      {
-                        category,
-                        name,
-                        price,
-                        status,
-                        type,
-                        approve,
-                        courseId,
-                        startDate,
-                        packages,
-                        endDate,
-                      },
-                      i
-                    ) => (
-                      <UserInfoCard
-                        key={i}
-                        comp={"Courses"}
-                        num={i}
-                        name={category}
-                        course={name}
-                        rating={4}
-                        id={courseId}
-                        showDetailsHandler={showDetailsHandler}
-                        packages={packages}
-                        date={`${getDate(startDate)} - ${getDate(endDate)}`}
-                        isActive={status === "active" ? true : false}
-                      />
+                  courseList
+                    .filter(
+                      (course) =>
+                        course.category
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        course.name
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        course.status
+                          .toLowerCase()
+                          .includes(search.toLowerCase())
                     )
-                  )}
+                    .map(
+                      (
+                        {
+                          category,
+                          name,
+                          price,
+                          status,
+                          type,
+                          approve,
+                          courseId,
+                          startDate,
+                          packages,
+                          endDate,
+                        },
+                        i
+                      ) => (
+                        <UserInfoCard
+                          key={i}
+                          comp={"Courses"}
+                          num={i}
+                          name={category}
+                          course={name}
+                          rating={4}
+                          id={courseId}
+                          showDetailsHandler={showDetailsHandler}
+                          packages={packages}
+                          date={`${startDate ? getDate(startDate) : ""} - ${
+                            endDate ? getDate(endDate) : ""
+                          }`}
+                          isActive={status === "active" ? true : false}
+                        />
+                      )
+                    )}
               </tbody>
             </table>
           </div>
@@ -2762,7 +2769,6 @@ export function CourseDetails({}) {
               ...course,
             };
           });
-          
         }
       } catch (err) {
         toast.error(err.message);
@@ -2792,27 +2798,11 @@ export function CourseDetails({}) {
       const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success(message);
         navigate(-1);
       }
     } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     } finally {
       setLoading((_) => false);
     }
@@ -2824,66 +2814,37 @@ export function CourseDetails({}) {
     let pledId;
     try {
       if (formstate.status !== "active") {
-        const pledRes = await generalState.pledre.addCourse({
-          course_name: formstate.name,
-          course_description: formstate.description,
-          is_public: false,
-          short_description: formstate.description,
-          price: formstate.price,
+        // const pledRes = await generalState.pledre.addCourse({
+        //   course_name: formstate.name,
+        //   course_description: formstate.description,
+        //   is_public: false,
+        //   short_description: formstate.description,
+        //   price: formstate.price,
+        // });
+        // console.log({ pledRes });
+        // if (pledRes.id) {
+        // pledId = pledRes.id;
+
+        const res = await toggleCourseStatus(userdata?.token, params?.id);
+        const { success, message, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        setFormstate({
+          ...formstate,
+          status: "active",
+          pledreCourseId: pledId,
         });
-        console.log({ pledRes });
-        if (pledRes.id) {
-          pledId = pledRes.id;
-          const res = await toggleCourseStatus(userdata?.token, params?.id, {
-            pledreCourseId: pledId,
-          });
-          const { success, message, statusCode } = res;
-          if (!success) throw new AdvancedError(message, statusCode);
-          setFormstate({
-            ...formstate,
-            status: "active",
-            pledreCourseId: pledId,
-          });
+        toast.success(message);
 
-          // NEEDS REMOVE COURSE API FROM PLEDRE
-
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        }
+        // }
       } else {
-        const res = await toggleCourseStatus(userdata?.token, params?.id, {
-          pledreCourseId: formstate.pledreCourseId,
-        });
+        const res = await toggleCourseStatus(userdata?.token, params?.id);
         const { success, message, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         setFormstate({ ...formstate, status: "inactive" });
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success(message);
       }
     } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     } finally {
       setLoading((_) => false);
     }
@@ -2937,26 +2898,10 @@ export function CourseDetails({}) {
       else {
         setFormstate({ ...formstate, instructors: newList });
         setOpenprompt(false);
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success(message);
       }
     } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     } finally {
       setLoading((_) => false);
     }
@@ -3004,14 +2949,7 @@ export function CourseDetails({}) {
               >
                 Description
               </label>
-              <textarea
-                rows="5"
-                name="description"
-                value={formstate.description}
-                onChange={changeHandler}
-                className="form-control generic_input"
-                readOnly
-              ></textarea>
+              <div className="border rounded p-2" style={{background: "#e9ecef"}}  dangerouslySetInnerHTML={{__html: formstate.description}} />
             </div>
             <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
@@ -3040,32 +2978,6 @@ export function CourseDetails({}) {
                 </button>
               </div>
             </div>
-
-            {/* <div className={clsx.form_group}>
-              <div className={clsx.form_group__teachers}>
-                <label>Add Student</label>
-                {
-                  students.map((s, i) => (
-                    <div key={i}>
-                      <p>{i + 1}. &nbsp; {s}</p> 
-                      <div className={clsx.teachers__actions}>
-                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
-                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
-                      </div>
-                    </div>
-                  ))
-                }
-              </div>
-              <Input
-                name="student"
-                type="text"
-                handleChange={changeHandler}
-                value={formstate.student}
-              />
-              <button type="button" className={clsx.form_group__button}>
-                Add Student
-              </button>
-            </div> */}
 
             <div className={clsx.form_group} style={{ marginTop: 40 }}>
               <label>Change Course Status</label>
@@ -3114,7 +3026,7 @@ function DeleteModal({ open, close, deleteTutor }) {
           className="lead text-primary text-center"
           style={{ color: "var(--theme-blue)" }}
         >
-          Remove Instructor from Course?
+          Remove Instructor from Class?
         </h5>
         <div className="d-flex justify-content-around align-items-center mt-4">
           <button
@@ -3141,47 +3053,41 @@ export function BootcampDetails({}) {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
-  
-  const { adminFunctions: { deleteBootcamp, fetchBootcamps, toggleBootcampStatus }, generalState } = useAuth();
+
+  const {
+    adminFunctions: {
+      deleteBootcamp,
+      fetchBootcamps,
+      toggleBootcampStatus,
+      updateBootcamp,
+    },
+    generalState,
+  } = useAuth();
+  const [openprompt, setOpenprompt] = useState(false);
 
   const flag = useRef(false);
-  const [formstate, setFormstate] = useState({
-    title: "",
-    description: "",
-    status: false,
-    instructor: "",
-    student: "",
-    price: null
-  });
+  const [formstate, setFormstate] = useState();
   const [loading, setLoading] = useState(true);
   const [instructors, setInstructors] = useState([]);
   const students = ["James Segun"];
   const params = useParams();
+
   //get user id
   useEffect(() => {
     //fetch bootcamp details for the id
     if (flag.current) return;
-    (async () => { 
+    (async () => {
       try {
         const res = await fetchBootcamps(userdata?.token);
         const { message, statusCode, success } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         else {
-          
           const { data } = res;
           let bootcamp = data.find((d) => d.bootcampId === params?.id);
-          setFormstate((old) => {
-            return {
-              ...old, 
-              title: bootcamp.title,
-              description: bootcamp.description,
-              status: bootcamp.isActive,
-              price: bootcamp.price
-            };
-          });
-          setInstructors((_) => {
-            return [bootcamp.instructorName];
-          });
+          setFormstate({ ...formstate, ...bootcamp });
+          // setInstructors((_) => {
+          //   return [bootcamp.instructorName];
+          // });
         }
       } catch (err) {
         toast.error(err.message);
@@ -3206,28 +3112,36 @@ export function BootcampDetails({}) {
   async function toggleBootcampStatusHandler(e) {
     setLoading((_) => true);
     try {
-        // add class to pledre
-      const pledRes = await generalState.pledre.addCourse({
-        course_name: formstate.title,
-        course_description: formstate.description,
-        is_public: true,
-        short_description: formstate.description,
-        price: formstate.price,
-      })
-
-      console.log(pledRes._id)
-      if(pledRes._id){
-          console.log(pledRes._id)
-          const res = await toggleBootcampStatus(userdata?.token, {pledreCourseId: pledRes._id}, params?.id);
-          const { message, statusCode, success } = res;
-
-          if (!success) throw new AdvancedError(message, statusCode);
-          else {
-
-          setFormstate({ ...formstate, status: true });
-          toast.success(message);
-        }
-
+      const res = await toggleBootcampStatus(
+        userdata?.token,
+        { pledreClassId: "" },
+        params?.id
+      );
+      const { message, statusCode, success } = res;
+      if (statusCode !== 1) throw new AdvancedError(message, statusCode);
+      else {
+        setFormstate({
+          ...formstate,
+          ...res.data,
+          isActive: !formstate.isActive,
+        });
+        // toast.success(message);
+      }
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading((_) => false);
+    }
+  }
+  async function deleteBootcampHandler(e) {
+    setLoading((_) => true);
+    try {
+      const res = await deleteBootcamp(userdata?.token, params?.id);
+      const { message, success, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        navigate("/admin/classes");
+        toast.success(message);
       }
     } catch (err) {
       toast.error(err.message);
@@ -3236,25 +3150,92 @@ export function BootcampDetails({}) {
     }
   }
 
-  async function deleteBootcampHandler(e) {
-    setLoading((_) => true);
+  function editBootcampHandler(e) {
+    navigate(`/admin/classes/create?edit=${params?.id}`);
+  }
+
+  function closeModal() {
+    setOpenprompt(false);
+  }
+
+  async function deleteTutor() {
+    let startDate = new Date(formstate.startDate).toISOString().split("T")[0];
+    let endDate = new Date(formstate.endDate).toISOString().split("T")[0];
+    const formdata = {
+      ...formstate,
+      instructor: "",
+      startDate,
+      endDate,
+    };
+    delete formdata.instructorName;
+    delete formdata.instructorId;
+    delete formdata.instructorEmail;
+
     try {
-      const res = await deleteBootcamp(userdata?.token, params?.id);
-      const { message, success, statusCode } = res;
+      setLoading(true);
+      const res = await updateBootcamp(
+        userdata?.token,
+        formstate?.bootcampId,
+        formdata
+      );
+      const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        navigate("/admin/bootcamps");
+        setFormstate({ ...formstate, instructor: "" });
+        setOpenprompt(false);
         toast.success(message);
       }
     } catch (err) {
-      toast.error(err.message)
+      toast.error(err.message);
     } finally {
       setLoading((_) => false);
     }
   }
 
-  function editBootcampHandler(e) {
-    navigate(`/admin/bootcamps/create?edit=${params?.id}`);
+  async function addTutor(e) {
+    e.preventDefault();
+    let startDate = new Date(formstate.startDate).toISOString().split("T")[0];
+    let endDate = new Date(formstate.endDate).toISOString().split("T")[0];
+    const formdata = {
+      ...formstate,
+      startDate,
+      endDate,
+    };
+    delete formdata.instructorName;
+    delete formdata.instructorId;
+    delete formdata.instructorEmail;
+
+    let id = formdata.bootcampId ? formdata.bootcampId : formdata._id;
+    console.log(formstate.instructor);
+    try {
+      setLoading(true);
+      const res = await updateBootcamp(userdata?.token, id, formdata);
+      const { success, message, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        // const teacherDetails = await generalState.pledre.getTeacherDetails(formdata.instructor);
+        // console.log("id",formstate.pledreCourseId,)
+        // if(teacherDetails._id){
+        //   const addTeachtoCourse = await generalState.pledre.addTeacherToCourse({
+        //     teacher_id: teacherDetails?._id,
+        //     course_id: formstate.pledreCourseId,
+        //   });
+        //   console.log({addTeachtoCourse})
+        // }
+
+        setFormstate(res.data);
+        setOpenprompt(false);
+        toast.success(message);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message);
+    } finally {
+      setLoading((_) => false);
+    }
+  }
+  function removeTutor(tutorId) {
+    setOpenprompt(true);
   }
 
   return (
@@ -3272,7 +3253,7 @@ export function BootcampDetails({}) {
               style={{ fontSize: "0.8rem" }}
               onClick={deleteBootcampHandler}
             >
-              Delete Bootcamp
+              Delete Class
             </button>
             <button
               type="button"
@@ -3280,7 +3261,7 @@ export function BootcampDetails({}) {
               style={{ fontSize: "0.8rem" }}
               onClick={editBootcampHandler}
             >
-              Edit Bootcamp
+              Edit Class
             </button>
           </div>
           <form className="form" style={{ width: "80%", margin: "20px 0px" }}>
@@ -3289,10 +3270,9 @@ export function BootcampDetails({}) {
               name="title"
               type="text"
               handleChange={changeHandler}
-              value={formstate.title}
+              value={formstate?.title}
               readOnly={true}
             />
-
             <div className={clsx.form_group}>
               <label
                 htmlFor={"description"}
@@ -3300,42 +3280,52 @@ export function BootcampDetails({}) {
               >
                 Description
               </label>
-              <textarea
-                rows="5"
-                name="description"
-                value={formstate.description}
-                onChange={changeHandler}
-                className="form-control generic_input"
-                readOnly
-              ></textarea>
+              <div
+                className="border rounded"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(formstate?.description),
+                }}
+              />
             </div>
 
-            {/* <div className={clsx.form_group}>
+            <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
-                <label>Name of Instructors</label>
-                {
-                  instructors.map((t, i) => (
-                    <div key={i}>
-                      <p>{i + 1}. &nbsp; {t}</p> 
-                      <div className={clsx.teachers__actions}>
-                        <span className={`${clsx.teachers__actions_delete} text-danger`}><AiOutlineDelete />    Delete</span>
-                        <span className={`${clsx.teachers__actions_edit}`}><AiTwotoneEdit />    Edit</span>
-                      </div>
-                    </div>
-                  ))
-                }
+                <label>Instructor</label>
+                {formstate?.instructorName && (
+                  <div>
+                    <p>
+                      {formstate?.instructorName} - {formstate?.instructorEmail}
+                    </p>
+                    {/* <div className={clsx.teachers__actions}>
+                      <span
+                        className={`${clsx.teachers__actions_delete} text-danger`}
+                        onClick={() => removeTutor(formstate?.instructorId)}
+                      >
+                        <AiOutlineDelete />
+                        Delete
+                      </span>
+                    </div> 
+                    
+                    */}
+                  </div>
+                )}
               </div>
+
               <Input
-                style={{margin: "0px !important"}}
+                style={{ margin: "0px !important" }}
                 name="instructor"
                 type="text"
                 handleChange={changeHandler}
-                value={formstate.instructor}
+                value={formstate?.instructor}
               />
-              <button type="button" className={clsx.form_group__button}>
-                Add Instructor
+              <button
+                type="button"
+                className={clsx.form_group__button}
+                onClick={addTutor}
+              >
+                Change/Add Instructor
               </button>
-            </div> */}
+            </div>
 
             {/* <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
@@ -3356,7 +3346,7 @@ export function BootcampDetails({}) {
                 name="student"
                 type="text"
                 handleChange={changeHandler}
-                value={formstate.student}
+                value={formstate?.student}
               />
               <button type="button" className={clsx.form_group__button}>
                 Add Student
@@ -3368,9 +3358,15 @@ export function BootcampDetails({}) {
               <Switch
                 onClick={toggleBootcampStatusHandler}
                 size="large"
-                checked={formstate.status}
+                checked={formstate?.isActive}
+                value={formstate?.isActive}
               />
             </div>
+            <DeleteModal
+              open={openprompt}
+              close={closeModal}
+              deleteTutor={deleteTutor}
+            />
           </form>
         </div>
       </div>
@@ -3389,7 +3385,7 @@ export function Bootcamps() {
   let userdata = getItem(KEY);
   const [bootcamps, setBootcamps] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [search, setSearch] = useState("");
   const tableHeaders = [
     "No",
     "Title",
@@ -3435,14 +3431,25 @@ export function Bootcamps() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <h1 style={{ margin: 0 }}>Bootcamps</h1>{" "}
+            <h1 style={{ margin: 0 }}>Classes</h1>{" "}
             <button
               type="button"
               className="btn btn-primary px-5"
               onClick={gotoCreateCourseHandler}
             >
-              Add Bootcamp
+              Add Class
             </button>
+          </div>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="search class"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
           </div>
           <div className={clsx.admin__student_main}>
             <table className={clsx.admin__student_table}>
@@ -3453,38 +3460,42 @@ export function Bootcamps() {
               </thead>
               <tbody>
                 {bootcamps.length > 0 ? (
-                  bootcamps.map(
-                    (
-                      {
-                        title,
-                        duration,
-                        description,
-                        type,
-                        startTime,
-                        endTime,
-                        endDate,
-                        startDate,
-                        bootcampId,
-                        _id,
-                      },
-                      i
-                    ) => (
-                      <BootcampRow
-                        key={i}
-                        index={i}
-                        title={title}
-                        detail={description}
-                        duration={duration}
-                        type={type}
-                        admin={false}
-                        clickHandler={(e) => detailHandler(e, bootcampId)}
-                        time={`${startTime} - ${endTime} CST`}
-                        date={`${getDate(startDate)} - ${getDate(endDate)}`}
-                      />
+                  bootcamps
+                    .filter((boot) =>
+                      boot.title.toLowerCase().includes(search.toLowerCase())
                     )
-                  )
+                    .map(
+                      (
+                        {
+                          title,
+                          duration,
+                          description,
+                          type,
+                          startTime,
+                          endTime,
+                          endDate,
+                          startDate,
+                          bootcampId,
+                          _id,
+                        },
+                        i
+                      ) => (
+                        <BootcampRow
+                          key={i}
+                          index={i}
+                          title={title}
+                          detail={description}
+                          duration={duration}
+                          type={type}
+                          admin={false}
+                          clickHandler={(e) => detailHandler(e, bootcampId)}
+                          time={`${startTime} - ${endTime} CST`}
+                          date={`${getDate(startDate)} - ${getDate(endDate)}`}
+                        />
+                      )
+                    )
                 ) : (
-                  <h1>No Bootcamps found</h1>
+                  <h6>No Class found</h6>
                 )}
               </tbody>
             </table>
@@ -3495,21 +3506,84 @@ export function Bootcamps() {
   );
 }
 
+// CLASS/BOOTCAMP CONSOLE
+
+export function AdminClassConsole() {
+  const {
+    adminFunctions: { fetchBootcamps },
+  } = useAuth();
+  const { getItem } = useLocalStorage();
+  const navigate = useNavigate();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [bootcamps, setBootcamps] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (flag.current) return;
+    (async () => {
+      try {
+        const res = await fetchBootcamps(userdata?.token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else if (statusCode === 1) {
+          const { data } = res;
+          setBootcamps((_) => data);
+        } else {
+          throw new AdvancedError(message, statusCode);
+        }
+      } catch (err) {
+        toast.error(err.message);
+      } finally {
+        setLoading((_) => false);
+      }
+    })();
+    flag.current = true;
+  }, []);
+
+  return (
+    <Admin header={"Classes"}>
+      {loading && <Loader />}
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student_main}>
+          <div className={clsx.class_con_cards}>
+            {bootcamps.length > 0 ? (
+              bootcamps.map((item, i) => <ClassesCard {...item} />)
+            ) : (
+              <h6 className="text-center">No Class found</h6>
+            )}
+          </div>
+        </div>
+      </div>
+    </Admin>
+  );
+}
+
 // CREATEBOOTCAMP COMPONENT
 export function CreateBootcamp() {
-  const {
-    adminFunctions: { addBootcamp, fetchBootcamps, updateBootcamp },
-  } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const flag = useRef(false);
   const navigate = useNavigate();
+  const ref = useRef(false);
 
+  const {
+    adminFunctions: {
+      addBootcamp,
+      fetchBootcamps,
+      updateBootcamp,
+      fetchCategories,
+    },
+    adminTeacherFunctions: { fetch },
+  } = useAuth();
+  const [categories, setCategories] = useState([]);
   const location = useLocation();
   const [loader, setLoader] = useState(location.search ? true : false);
+
   const [formstate, setFormstate] = useState({
     title: "",
     duration: "",
+    categoryName: "",
     startDate: "",
     endDate: "",
     startTime: "",
@@ -3517,7 +3591,13 @@ export function CreateBootcamp() {
     description: "",
     type: "",
     instructor: "",
+    syllabus: [],
+    careerList:[]
   });
+
+  const [loading, setLoading] = useState(false);
+  const [teachers, setTeachers] = useState([]);
+  const [bio, setBio] = useState("");
 
   useEffect(() => {
     if (flag.current) return;
@@ -3533,12 +3613,12 @@ export function CreateBootcamp() {
             let found = data.find((d) => d.bootcampId === id);
             found.startDate = found.startDate.split("T")[0];
             found.endDate = found.endDate.split("T")[0];
-            found.instructor = found.instructorName;
+            found.instructor = found.instructorEmail;
             found.bootcampImg = found.bootcampImg.split("/").slice(-1)[0];
 
             delete found.instructorName;
-            setFormstate((_) => found);
-            
+            setFormstate({ ...formstate, ...found });
+            setBio(found.description)
           } else {
             throw new AdvancedError(message, statusCode);
           }
@@ -3564,47 +3644,134 @@ export function CreateBootcamp() {
     });
   }
 
-  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      if (ref.current) return;
+      (async () => {
+        try {
+          setLoading(true);
+          const res = await fetchCategories(userdata?.token);
+          const { success, message, statusCode } = res;
+
+          if (!success || statusCode !== 1)
+            throw new AdvancedError(message, statusCode);
+          const { data } = res;
+          setCategories(data);
+        } catch (err) {
+          toast.error(err.message);
+        } finally {
+          setLoading(false);
+        }
+      })();
+
+      ref.current = true;
+    }
+
+    return () => (mounted = false);
+  }, [userdata.token]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = userdata?.token;
+        const res = await fetch(token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          const { data } = res;
+          setTeachers((_) => data);
+        }
+      } catch (err) {
+        toast.error(err.message);
+      } finally {
+        setLoading((_) => false);
+      }
+    })();
+  }, []);
+
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
+    const formData = { ...formstate, description: bio ? bio : formstate.description };
     try {
       if (
-        formstate.description === "" ||
-        formstate.title === "" ||
-        formstate.price === "" ||
-        formstate.duration === "" ||
-        formstate.endTime === "" ||
-        formstate.startTime === "" ||
-        formstate.startDate === "" ||
-        formstate.endDate === ""
+        formData.description === "" ||
+        formData.title === "" ||
+        formData.price === ""
       )
         throw new AdvancedError("All fields are required", 0);
-
       const res = location.search
         ? await updateBootcamp(
             userdata?.token,
             location.search.split("=").reverse()[0],
-            formstate
+            formData
           )
-        : await addBootcamp(userdata?.token, formstate);
+        : await addBootcamp(userdata?.token, formData);
       const { success, message, statusCode } = res;
 
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        navigate("/admin/bootcamps");
+        toast.success(message);
+        navigate("/admin/classes");
       }
     } catch (err) {
-      toast.error(err.message, {
+      toast.error(err.message);
+    } finally {
+      setLoading((_) => false);
+    }
+  }
+
+  const [open, setOpen] = useState(false);
+  const [openSyllabus, setOpenSyllabus] = useState(false);
+  const [previewImage, setPreviewImage] = useState(false);
+  const { syllabuses, addtoSyllabus, setSyllabusses } = useSyllabus();
+  const [showCareerModal, setShowCareerModal] = useState(false);
+    const [careerlist, setCareerlist] = useState({
+      name: "",
+    });
+
+  const openModal = () => {
+    setOpenSyllabus(true);
+  };
+  function showUploadFormHandler() {
+    setOpen((_) => true);
+  }
+
+  console.log({formstate})
+  function deleteSyllabus(e) {
+    let newSyllabusArr = formstate.syllabus.filter(
+      (item, index) => item.title + index !== e
+    );
+    setFormstate({ ...formstate, syllabus: newSyllabusArr });
+  }
+
+  const handleClose = () => {
+    setOpenSyllabus(false);
+  };
+  function updateCareerHandler(e) {
+    if (careerlist.name.trim() !== "" || careerlist.description.trim() !== "") {
+      setFormstate({...formstate, careerList: [...formstate.careerList, careerlist]});
+      
+      setCareerlist((_) => {
+        return {
+          name: "",
+        };
+      });
+
+      setShowCareerModal((_) => false);
+
+      toast.success("Career added successfully", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else {
+      toast.error("All fields are required", {
         position: "top-right",
         autoClose: 4000,
         hideProgressBar: true,
@@ -3613,19 +3780,19 @@ export function CreateBootcamp() {
         draggable: true,
         progress: undefined,
       });
-    } finally {
-      setLoading((_) => false);
     }
   }
-  const [open, setOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState(false);
-
-  function showUploadFormHandler() {
-    setOpen((_) => true);
+  function careerChangeHandler(e) {
+    const { name, value } = e.target;
+    setCareerlist((old) => {
+      return {
+        ...old,
+        [name]: value,
+      };
+    });
   }
-
   return (
-    <Admin header="Create Bootcamp">
+    <Admin header={location.search ? "Edit Class" : "Create Class"}>
       {loader && <Loader />}
       <div className={clsx.admin_profile}>
         <div className={clsx.edit__profile}>
@@ -3641,7 +3808,7 @@ export function CreateBootcamp() {
                 onClick={showUploadFormHandler}
               >
                 <img src={vector} alt={"Placeholder"} />
-                <p>Upload Bootcamp image</p>
+                <p>Upload Class Banner</p>
               </div>
               {previewImage && (
                 <div className={clsx.upload__file_box}>
@@ -3661,7 +3828,7 @@ export function CreateBootcamp() {
           </div>
           <form className="form" onSubmit={submitHandler}>
             <Input
-              label="Bootcamp image file name"
+              label="Class Banner file name"
               name="bootcampImg"
               type="text"
               handleChange={changeHandler}
@@ -3674,6 +3841,41 @@ export function CreateBootcamp() {
               handleChange={changeHandler}
               value={formstate.title}
             />
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Category</label>
+              <select
+                rows="5"
+                name="categoryName"
+                value={formstate.categoryName}
+                onChange={changeHandler}
+                className="form-select generic_input"
+              >
+                <option value="">Choose a Category</option>
+                {categories.length > 0 &&
+                  categories.map((item, i) => (
+                    <option key={i} value={item.name}>
+                      {item.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Subcategory</label>
+              <select
+                rows="5"
+                name="subCategory"
+                value={formstate.subCategory}
+                onChange={changeHandler}
+                className="form-select generic_input"
+              >
+                <option value="">Choose a Subcategory</option>
+                <option  value="in-demand">In-demand</option>
+                <option  value="1-2 weeks">1-2 weeks</option>
+                <option  value="certification">Certification</option>
+                <option  value="1 day">1 Day</option>
+                <option  value="free">Free</option>
+              </select>
+            </div>
             <Input
               label="Duration"
               name="duration"
@@ -3693,7 +3895,7 @@ export function CreateBootcamp() {
                 <Input
                   label="Starts By (CST)"
                   name="startTime"
-                  type="text"
+                  type="time"
                   handleChange={changeHandler}
                   value={formstate.startTime}
                 />
@@ -3702,7 +3904,7 @@ export function CreateBootcamp() {
                 <Input
                   label="Ends By (CST)"
                   name="endTime"
-                  type="text"
+                  type="time"
                   handleChange={changeHandler}
                   value={formstate.endTime}
                 />
@@ -3725,27 +3927,92 @@ export function CreateBootcamp() {
                   handleChange={changeHandler}
                 />
               </div>
-            </div>
-            <div className="row"></div>
+            </div>  
+            <Editor 
+             initialState={formstate.description} 
+             title="Description" 
+             setBio={setBio} />
             <div className={clsx.form_group}>
-              <label htmlFor={"brief"}>Description</label>
-              <textarea
-                rows="5"
-                name="description"
-                value={formstate.description}
+              <label htmlFor={"instructor"}>Instructor</label>
+              <select
+                name="instructor"
+                value={formstate.instructor}
                 onChange={changeHandler}
-                className="generic_input"
-              ></textarea>
+                className="form-select generic_input"
+              >
+                <option value="">Choose an instructor</option>
+                <option value="">None</option>
+                {teachers
+                  .filter((teacher) => teacher.userType !== "mentor")
+                  .map((teacher) => (
+                    <option value={teacher.email}>
+                      {teacher.firstName} - {teacher.lastName}
+                    </option>
+                  ))}
+              </select>
             </div>
 
-            <Input
-              label="Instructor Email"
-              name="instructor"
-              type="text"
-              handleChange={changeHandler}
-              value={formstate.instructor}
-            />
+            <div className={clsx.form_group}>
+              <label className="form-label generic_label">Syllabus</label>
+              {formstate.syllabus?.length !== 0 ? (
+                formstate.syllabus?.map(({ title, description }, i) => (
+                  <div className={clsx.syllabus_container}>
+                    <h5>{title}</h5>
+                    <p>{description}</p>
 
+                    <p>
+                      <i
+                        className="text-danger"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => deleteSyllabus(title + i)}
+                      >
+                        <BiTrash />
+                      </i>
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <small className="ms-3">No syllabus found</small>
+              )}
+            </div>
+            <button
+              className="btn btn-primary my-3"
+              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
+              type="button"
+              onClick={openModal}
+            >
+              Add Syllabus
+            </button>
+            {/* <div className={clsx.form_group}>
+              <label>Career Prospect</label>
+              {formstate.careerList?.length !== 0 ? (
+                formstate.careerList?.map(({ name }, i) => (
+                  <Syllabus key={i} title={name} />
+                ))
+              ) : (
+                <p
+                  className="m-0 text-danger"
+                  style={{ fontSize: "0.8rem", textIndent: 20 }}
+                >
+                  No career prospect found
+                </p>
+              )}
+            </div>
+            <button
+              type="button"
+              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
+              className={`btn btn-primary mb-3 ${clsx.addcareer_button}`}
+              onClick={(e) => setShowCareerModal((_) => true)}
+            >
+              Add Career Prospect
+            </button> */}
+            <CareerModal
+              open={showCareerModal}
+              newCareer={careerlist}
+              setOpen={setShowCareerModal}
+              handleChange={careerChangeHandler}
+              updateCareer={updateCareerHandler}
+            />
             <div className={clsx.form_group}>
               <label htmlFor={"package"}>Type</label>
               <select
@@ -3775,6 +4042,15 @@ export function CreateBootcamp() {
                 {location.search ? "Update" : "Save"}
               </button>
             )}
+
+            <AddSyllabus
+              open={openSyllabus}
+              addSyllabus={addtoSyllabus}
+              formstate={formstate}
+              setFormstate={setFormstate}
+              setOpen={setOpen}
+              handleClose={handleClose}
+            />
           </form>
         </div>
       </div>
@@ -3799,7 +4075,12 @@ export function BootcampRow({
       <td className={clsx.user__info}>{index + 1}.</td>
       <td className={clsx.user__info}>{title}</td>
       <td className={clsx.user__info}>
-        <p className="restricted_line">{detail}</p>
+        <p
+          className="restricted_line"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(detail),
+          }}
+        />
       </td>
       <td className={clsx.user__info}>{type}</td>
       <td className={clsx.user__info}>{duration}</td>
@@ -3821,104 +4102,11 @@ export function BootcampRow({
   );
 }
 
-// ADDSYLLABUS COMPONENT
-function AddSyllabus({ open, handleClose, addSyllabus, setOpen }) {
-  const [newSyllabus, setNewSyllabus] = useState({
-    title: "",
-    description: "",
-  });
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    minWidth: 600,
-    background: "#fff",
-    border: "1px solid #eee",
-    borderRadius: "10px",
-    boxShadow: 24,
-    p: 6,
-    padding: "4rem 2rem",
-  };
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setNewSyllabus((old) => {
-      return {
-        ...old,
-        [name]: value,
-      };
-    });
-  }
 
-  function addSyllabusHandler() {
-    const { title, description } = newSyllabus;
-    if (!title || !description) {
-      toast.error("Title and Description are required", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } else {
-      addSyllabus(newSyllabus);
-      setOpen((_) => false);
-    }
-  }
-
-  return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box style={style}>
-        <h5
-          className="lead text-primary"
-          style={{ color: "var(--theme-blue)" }}
-        >
-          Add Syllabus
-        </h5>
-        <Input
-          label="Title"
-          name="title"
-          type="text"
-          handleChange={handleChange}
-          value={newSyllabus.title}
-        />
-        <div className="form-group my-3">
-          <label htmlFor="description" className="form-label generic_label">
-            Description
-          </label>
-          <textarea
-            rows="5"
-            id="description"
-            name="description"
-            className="form-control generic_input"
-            value={newSyllabus.description}
-            onChange={handleChange}
-          ></textarea>
-        </div>
-        <button
-          className="btn btn-primary my-3"
-          onClick={addSyllabusHandler}
-          style={{ backgroundColor: "var(--theme-blue)" }}
-        >
-          Add
-        </button>
-      </Box>
-    </Modal>
-  );
-}
 
 // FEES COMPONENT
 export function Fees() {
   const {
-    generalState,
-    setGeneralState,
     adminFunctions: { fetchPayment },
   } = useAuth();
   const { getItem } = useLocalStorage();
@@ -3948,7 +4136,6 @@ export function Fees() {
         else if (statusCode === 1) {
           const { data } = res;
           setFormstate(data);
-          
         } else {
           throw new AdvancedError(message, statusCode);
         }
@@ -4165,10 +4352,11 @@ export function Earnings() {
   let userdata = getItem(KEY);
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([]);
+  const [earnings, setEarnings]= useState([])
   const {
     generalState,
     setGeneralState,
-    adminFunctions: { fetchEarnings },
+    adminFunctions: { fetchEarnings, fetchWithdrawals },
   } = useAuth();
 
   // const [notifications, setNotifications] = useState([]);
@@ -4179,15 +4367,22 @@ export function Earnings() {
     (async () => {
       try {
         setLoading((_) => true);
-        let res = await fetchEarnings(userdata?.token);
-        const { success, message, statusCode } = res;
-        if (!success) throw new AdvancedError(message, statusCode);
-        else {
-          let { data } = res;
-          
-          console.log(data);
-          setRows((_) => data);
-        }
+        let res = await Promise.all([fetchEarnings(userdata?.token), fetchWithdrawals(userdata?.token)]);
+          console.log({res})
+          const [earnings, withdrawals] = res
+          const { success, message, statusCode } = earnings;
+          if (!success) throw new AdvancedError(message, statusCode);
+          else {
+            let { data } = earnings;
+            console.log(data);
+            setEarnings(data)
+          }
+          const { success:WSuccess, message:WMessage, statusCode:WStatusCode } = withdrawals;
+          if (!WSuccess) throw new AdvancedError(WMessage, WStatusCode);
+          else {
+            let { data:WData } = withdrawals;
+            setRows(WData)
+          }
       } catch (err) {
         toast.error(err.message);
       } finally {
@@ -4195,33 +4390,10 @@ export function Earnings() {
       }
     })();
 
-    // (async() => {
-    //   try{
-    //     setLoader(true)
-    //     const res = await fetchNotifications(userdata?.token);
-    //     const {message, success, statusCode} = res;
-    //     if(!success) throw new AdvancedError(message, statusCode);
-    //     const {data} = res
-    //     if(data.length > 0) {
-    //       setNotifications(data)
-    //       setGeneralState({...generalState, notifications: 0})
-    //     }
-    //   }catch(err){
-    //     toast.error(err.message, {
-    //       position: "top-right",
-    //       autoClose: 4000,
-    //       hideProgressBar: true,
-    //       closeOnClick: true,
-    //       pauseOnHover: true,
-    //       draggable: true,
-    //       progress: undefined,
-    //     });
-    //   }finally{
-    //     setLoader(_ => false);
-    //   }
-    // })()
+    
     flag.current = true;
   }, []);
+
 
   return (
     <Admin header={"Earnings"}>
@@ -4229,7 +4401,7 @@ export function Earnings() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <div className={clsx.admin__student_main}>
-            <AllEarnings />
+            <AllEarnings earnings={earnings} />
           </div>
           <div className="py-3">
             <div className="d-flex justify-content-between flex-wrap">
@@ -4254,7 +4426,7 @@ export function Student() {
   let userdata = getItem(KEY);
   const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
-
+  const [search, setSearch] = useState("");
   const {
     adminStudentFunctions: { fetch, verify, verify_pledre },
     generalState: { loading },
@@ -4272,7 +4444,7 @@ export function Student() {
           const { data } = res;
           //do somethings
 
-          setStudentList(data)
+          setStudentList(data);
         }
       } catch (err) {
         toast.error(err.message);
@@ -4286,110 +4458,6 @@ export function Student() {
     fetchStudents();
     flag.current = true;
   }, []);
-
-  async function handleVerification(id) {
-    let item = {
-      userId: id,
-    };
-    try {
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: true,
-        };
-      });
-
-      const res = await verify(item, userdata?.token);
-      const { message, success, statusCode } = res;
-
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: false,
-        };
-      });
-
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        //do somethings
-        toast.success(message);
-        // reload student list
-        fetchStudents();
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  }
-
-  async function handlePledreAccess(id) {
-    let item = {
-      userId: id,
-    };
-
-    try {
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: true,
-        };
-      });
-
-      const res = await verify_pledre(item, userdata?.token);
-      const { message, success, statusCode } = res;
-
-      setGeneralState((old) => {
-        return {
-          ...old,
-          loading: false,
-        };
-      });
-
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        //do somethings
-        toast.success(message);
-        fetchStudents();
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  }
-
-  async function deleteUserHandler(e, email) {
-    try {
-      const v = window.confirm("Are you sure you want to delete " + email);
-      if (!v) return;
-      setLoader((_) => true);
-      const res = await deleteUser(userdata?.token, [email]);
-      console.log(res);
-      const { statusCode, message, success } = res;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-    } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } finally {
-      setLoader((_) => false);
-      fetchStudents();
-    }
-  }
 
   function approveHandler(e, email, details) {
     localStorage.setItem("gotocourse-studentDetails", JSON.stringify(details));
@@ -4411,7 +4479,18 @@ export function Student() {
       {loader && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <h1>All Students</h1>
+          <div className="d-flex justify-content-between">
+            <h1>All Students</h1>
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="search student"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
 
           <div className={`${clsx.admin__student_main}`}>
             <table className={clsx.admin__student_table}>
@@ -4424,31 +4503,38 @@ export function Student() {
               </thead>
               <tbody>
                 {studentList?.length > 0 &&
-                  studentList?.map((student, i) => (
-                    <UserInfoCard
-                      key={i}
-                      name={student.name}
-                      firstName={student.firstName}
-                      lastName={student.lastName}
-                      img={student.profileImg}
-                      email={student.email}
-                      num={i}
-                      isActive={student.isVerified}
-                      accessPledre={student.accessPledre}
-                      user={true}
-                      type={null}
-                      deleteUser={(e) => console.Console.log(e)}
-                      handleVerification={(e) =>
-                        console.log(e)
-                      }
-                      handlePledreAccess={(e) =>
-                        console.log(e)
-                      }
-                      isAbsolute={true}
-                      approveHandler={approveHandler}
-                      details={student}
-                    />
-                  ))}
+                  studentList
+                    ?.filter(
+                      (stu) =>
+                        stu.firstName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        stu.lastName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        stu.email.toLowerCase().includes(search.toLowerCase())
+                    )
+                    .map((student, i) => (
+                      <UserInfoCard
+                        key={i}
+                        name={student.name}
+                        firstName={student.firstName}
+                        lastName={student.lastName}
+                        img={student.profileImg}
+                        email={student.email}
+                        num={i}
+                        isActive={student.isVerified}
+                        accessPledre={student.accessPledre}
+                        user={true}
+                        type={null}
+                        deleteUser={(e) => console.Console.log(e)}
+                        handleVerification={(e) => console.log(e)}
+                        handlePledreAccess={(e) => console.log(e)}
+                        isAbsolute={true}
+                        approveHandler={approveHandler}
+                        details={student}
+                      />
+                    ))}
               </tbody>
             </table>
           </div>
@@ -4838,32 +4924,12 @@ export const Admin = ({ children, header }) => {
           (messages) => messages.status === "unread"
         );
         if (unread.length > 0) {
-          toast.info(`You have ${unread.length} messages`);
-          setGeneralState({...generalState, chat: unread.length})
+          // toast.info(`You have ${unread.length} messages`);
+          setGeneralState({ ...generalState, chat: unread.length });
         }
       },
     }
   );
-
-  // useEffect(()=>{
-  //   if(getOurMessages.data?.data?.statusCode === 2 ){
-  //     localStorage.clear()
-  //   }
-  //   if(getOurMessages.data?.data?.statusCode !== 1){
-  //     toast.error(getOurMessages.data?.data?.message, {
-  //       position: "top-right",
-  //       autoClose: 4000,
-  //       hideProgressBar: true,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //     });
-  //   }
-  // },[getOurMessages.data?.data?.status])
-
-
-
   const admin = {
     title: "ADMIN",
     logo: <FaUserLock size="2.5rem" color="#0C2191" />,

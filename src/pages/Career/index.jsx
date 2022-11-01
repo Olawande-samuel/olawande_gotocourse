@@ -10,7 +10,7 @@ import benefit from "../../images/careers/benefits.png";
 import knowledge from "../../images/careers/knowledge.png";
 import teaching from "../../images/careers/teaching.png";
 import { Link } from "react-router-dom";
-
+import tick from "../../images/student/check.png";
 
 
 
@@ -124,9 +124,27 @@ function Benefit(){
             >
                 <div className={clsx.benefit_text}>
                     <div className={clsx.benefit_list_container}>
-                        <p className={clsx.benefit_list}>The work culture should be filled here</p>
-                        <p className={clsx.benefit_list}>The core values of the organisation should be here</p>
-                        <p className={clsx.benefit_list}>Benefits of working with Gotocourse</p>
+                        <p className={clsx.benefit_list}><img src={tick} alt="Tick" /> Our work culture plays an important role in bringing out the best out of our employees <br />
+                        <ul>
+                            <li>Employee friendly polices</li>
+                            <li>Recognition of top performers</li>
+                            <li>Team bonding</li>
+                        </ul>
+                        </p>
+                        <p className={clsx.benefit_list}><img src={tick} alt="Tick" />Our Core Values inform how employees conduct their life both personally and professionally <br />
+                        <ul>
+                            <li>Innovation</li>
+                            <li>Growth</li>
+                            <li>Service</li>
+                            <li>Impact</li>
+                            <li>Self-Improvement</li>
+                        </ul>
+                        </p>
+                        <p className={clsx.benefit_list}><img src={tick} alt="Tick" />Benefits of working at Gotocourse <br />
+                        <ul>
+                            <li>Gotocourse is one of the best places for you to start and advance your career within a short period and get hands-on skills relevant in today’s workplace as an employee</li>
+                        </ul>
+                        </p>
                     </div>
                 </div>
             </TextCard>

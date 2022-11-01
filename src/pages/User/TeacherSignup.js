@@ -70,15 +70,16 @@ const TeacherSignup = () => {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         console.log({response})
-        const res = await pledre.addTeacherToSchool({
-          name:`${formstate.firstName} ${formstate.lastName}`,
-          email: formstate.email,
-          password:`${formstate.password}`
-        })
+        // const res = await pledre.addTeacherToSchool({
+        //   name:`${formstate.firstName} ${formstate.lastName}`,
+        //   email: formstate.email,
+        //   password:`${formstate.password}`
+        // })
+        // if(res.approved){
+          //   localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res))
+          // }
+        
         const { data } = response;
-        if(res.approved){
-          localStorage.setItem("gotocourse-pledre-user", JSON.stringify(res))
-        }
         updateItem(VERIFICATION_KEY, data);
         setGeneralState((old) => {
           return {
@@ -94,6 +95,7 @@ const TeacherSignup = () => {
       setLoading(_ => false);
     }
   }
+
   async function socialSignUp(token, type){
     try{
       const res = type === "google" ? await googleSignUp(token) : await facebookSignUp(token)

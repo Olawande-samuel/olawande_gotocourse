@@ -183,18 +183,11 @@
     position: relative;
     padding-left: 40px;
 }
-.benefit_list::before {
-    content:"";
-    position: absolute;
+.benefit_list img {
     width: 1.55rem;
     height: 1.55rem;
-    background:url(../../images/student/check.png);
-    background-size:1.55rem;
-    background-repeat:no-repeat;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-
+    position: relative;
+    left: -1.55rem;
 }
 
 .benefit .career_header h2::after, .commitment .career_header h2::after{

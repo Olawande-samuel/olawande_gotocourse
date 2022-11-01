@@ -16,6 +16,7 @@ import { useAuth } from "../contexts/Auth";
 import { useLocalStorage } from "../hooks";
 import { ScrollToTop } from "../pages/Courses";
 import LogoutButton from "./LogoutButton";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const KEY = "gotocourse-userdata";
 
@@ -49,36 +50,48 @@ const Navbar = ({ background }) => {
         navHeight: heightRef?.current?.clientHeight,
       };
     });
-    console.log(heightRef.current.clientHeight)
   }, []); 
   
 
   const celebRoute = location.pathname.split("/")[1] === "lounge";
   const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";  
   const categoryRoute = background === "category";
-  const landing = location.pathname.split("/")[1] !== "lounge" ;
-  console.log(location.pathname.split("/")[1] !== "lounge")
-
+  const landing = location.pathname.split("/")[1] !== "lounge";
+  const mainpage = location.pathname.split("/")[1] === ""
   function showDrop() { }
+  
+  const [showBanner, setShowBanner] = useState(true)
+  const mybanner = localStorage.getItem("gotocourse-banner")
   return (
     <nav
       ref={heightRef}
       section="top"
-      className={`nav navbar navbar-expand-lg ${ landing ? "navbar-light" : "navbar-dark"}`}
+      className={`nav navbar navbar-expand-lg flex-column ${ landing || mainpage ? "navbar-light" : "navbar-dark"}`}
       style={{
+        // background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : landing ? "var(--blue-ish)" :  mainpage ? "#fff": "var(--theme-blue)",
         background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : landing ? "var(--blue-ish)" :  "var(--theme-blue)",
         color: confirmEmail || landing || categoryRoute ? "var(--theme-blue)" : "#fffff",
       }}
-    >
+    > 
       <ScrollToTop />
+      {
+        (mainpage) && showBanner &&
+        <div className="d-flex align-items-center justify-content-center p-2 w-100 bg-white">
+          <p className="mb-0 fw-bold me-4">ENROLL NOW AT 50% FOR ALL CLASSES</p>
+          <i><AiOutlineCloseCircle size="1.5rem" onClick={()=>{
+              setShowBanner(false)
+              localStorage.setItem("gotocourse-banner", false)
+            }} /> </i>
+        </div>
+      }
       <div className="container navbar-container align-items-center">
         <Link
           to="/"
           onClick={() => window.scrollTo(0, 0)}
           className="logo navbar-brand "
         >
-          {confirmEmail || landing || categoryRoute ? <Logosm color="var(--theme-blue)" /> : <Logosm />}
-          <small className="d-block" style={{fontSize:"14px", color: landing ? "var(--theme-blue)" : "#fff"}}>Learn without limits</small>
+          {confirmEmail || landing || categoryRoute || mainpage ? <Logosm color="var(--theme-blue)" /> :  <Logosm />}
+          {/* <small className="d-block" style={{fontSize:"14px", color: landing || mainpage ? "var(--theme-blue)" : "#fff"}}>Learn without limits</small> */}
         </Link>
         <button type="button" className="navbar-toggler " onClick={toggleNav}>
           <span className="navbar-toggler-icon"></span>
@@ -87,19 +100,30 @@ const Navbar = ({ background }) => {
           className={`collapse navbar-collapse  justify-content-end  align-items-center mt-3 mt-lg-0 ${show ? "show" : ""
             }`}
           id="navbarNav"
-        >
+      >
           <ul className="navbar-nav me-5">
             {(location.pathname.split("/")[1] === "" || celebRoute) && (
-              <li className="nav-item holder">
-                <Link className="link nav-link courses me-4" to="/categories"
-                style={{
-                  color: landing ? "var(--theme-blue)": "rgba(255, 255, 255)"
-                }}
-                >
-                  Categories
-                </Link>
-                {drop ? <NavList dropRef={dropRef} /> : null}
-              </li>
+              <>
+                <li className="nav-item holder">
+                  <Link className="link nav-link courses me-4" to="/categories"
+                  style={{
+                    color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
+                  }}
+                  >
+                    Categories
+                  </Link>
+                  {drop ? <NavList dropRef={dropRef} /> : null}
+                </li>
+                <li className="nav-item holder">
+                  <Link className="link nav-link courses me-4" to="/lounge"
+                  style={{
+                    color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
+                  }}
+                  >
+                    Mentor
+                  </Link>
+                </li>
+              </>
             )}
 
             {(confirmEmail) && (
@@ -138,21 +162,21 @@ const Navbar = ({ background }) => {
                 <li className="nav-item d-flex align-items-center nav_link">
                   <Link to="/become-a-teacher" className="link"
                    style={{
-                    color:confirmEmail || landing || categoryRoute ? "#0C2191" : "rgba(255, 255, 255)"
+                    color:confirmEmail || landing || categoryRoute || mainpage ? "#0C2191" : "rgba(255, 255, 255)"
                   }}>
                     Become a Teacher
                   </Link>
                 </li>
                 <li className="nav-item d-flex align-items-center nav_link d-lg-none">
                   <Link to="/login" className="link"
-                  style={{color:landing ? "var(--theme-blue)": "#fff"}}
+                  style={{color:landing || mainpage ? "var(--theme-blue)": "#fff"}}
                   >
                     Sign In
                   </Link>
                 </li>
                 <li className="nav-item d-flex align-items-center nav_link d-lg-none">
                   <Link to="/signup" className="link"
-                  style={{color:landing ? "var(--theme-blue)": "#fff"}}
+                  style={{color:landing || mainpage ? "var(--theme-blue)": "#fff"}}
                   >
                     Register as a Student
                   </Link>
@@ -164,7 +188,7 @@ const Navbar = ({ background }) => {
             <>
             <li className="me-3 nav_link">
               <motion.span 
-                style={{cursor: "pointer", color:confirmEmail || landing ? "#0C2191" : "rgba(255, 255, 255)"
+                style={{cursor: "pointer", color:confirmEmail || landing || mainpage ? "#0C2191" : "rgba(255, 255, 255)"
               }}
                 whileHover={{
                   textShadow: "0px 0px 8px rgb(255, 255, 255)",
@@ -192,11 +216,11 @@ const Navbar = ({ background }) => {
                 textShadow: "0px 0px 8px rgb(255, 255, 255)"
               }}
                 className="d-flex align-items-center nav_link"
-                style={{ color:confirmEmail || landing ? "#0C2191" : "rgba(255, 255, 255)", fontSize: "16px" }}
+                style={{ color:confirmEmail || landing || mainpage ? "#0C2191" : "rgba(255, 255, 255)", fontSize: "16px" }}
               >
                 <i
                   className="d-flex align-items-center justify-content-center me-2"
-                  style={{ color:confirmEmail || landing ? "#0C2191" : "rgba(255, 255, 255)" }}
+                  style={{ color:confirmEmail || landing || mainpage ? "#0C2191" : "rgba(255, 255, 255)" }}
                 >
                   <FaRegUser />
                 </i>

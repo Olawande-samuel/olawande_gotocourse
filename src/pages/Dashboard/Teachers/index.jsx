@@ -754,12 +754,13 @@ function ClassesCard({ numberOfLessons, title, date, time, isLive, color }) {
 export const Dashboard = ()=>{
 
   const navigate = useNavigate();
-  const { generalState: { isMobile }, teacherFunctions: { fetchApplications, fetchCourses, earnings }, } = useAuth();
+  const { generalState: { isMobile }, teacherFunctions: { fetchApplications, fetchCourses, earnings , fetchBootcamps}, } = useAuth();
 
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
 
-  const {isLoading, isError, isSuccess, data, error} = useQuery(["teacher courses"], () => fetchCourses(userdata.token))
+  // const {isLoading, isError, isSuccess, data, error} = useQuery(["teacher courses"], () => fetchCourses(userdata.token))
+  const {isLoading, isError, isSuccess, data, error} = useQuery(["teacher bootcamp"], () => fetchBootcamps(userdata.token))
 
   if(data?.statusCode === 0){
     toast.error(data?.message, {
@@ -773,6 +774,8 @@ export const Dashboard = ()=>{
     });
   }
 
+
+
   console.log({data})
 
     const topContent =[
@@ -784,7 +787,7 @@ export const Dashboard = ()=>{
       },
       {
           id:2,
-          title:"Courses created",
+          title:"Classes",
           logo: <Stu2 />,
           value:  0
       },
@@ -814,11 +817,11 @@ export const Dashboard = ()=>{
                       //     <p className="text-muted">You haven't registered for a course</p>
                       //   </li> 
                       //   :
-                      [1, 2, 3, 4].map((item, i)=>(
-                          <li key={i} className={` ${clsx["dashboard_class--wrapper"]}`}>
+                    data?.data.map((item, i)=>(
+                          <li key={item.bootcampId} className={` ${clsx["dashboard_class--wrapper"]}`}>
                               <div className={clsx["dashboard_class--details"]}>
-                                <p>Basics of Mobile UX</p>
-                                <p>01:00pm</p>
+                                <p>{item.title}</p>
+                                <p>{item.startTime}</p>
                               </div>
                               <div className={`d-flex justify-content-between ${clsx["dashboard_class--action"]}`}>
                                 <button className={`btn-plain ${clsx.completed}`}>Completed</button>
@@ -830,7 +833,7 @@ export const Dashboard = ()=>{
                   }
               </ul>
           </div>
-          <div className={clsx["dashboard_courses--right"]}>
+          {/* <div className={clsx["dashboard_courses--right"]}>
               <h6>My Courses</h6>
               <ul>
                   {
@@ -842,9 +845,9 @@ export const Dashboard = ()=>{
                       ))
                   }
               </ul>
-          </div>
+          </div> */}
         </div>
-      <Community />
+      {/* <Community /> */}
       </div>
     </div>
   </Teachers>
@@ -854,13 +857,11 @@ export const Dashboard = ()=>{
 
 export const Teachers = ({ children, isMobile, userdata, notification, header, loading }) => {
   const {
-    generalState: { showSidebar, pledre },
+    generalState: { showSidebar },
     generalState,
     setGeneralState,
     adminFunctions: {getUnreadMessages}, studentFunctions: {fetchNotifications }
   } = useAuth();
-
-  const [pledredata, setPledreData]= useState({})
 
   const {getItem} = useLocalStorage()
 
@@ -898,68 +899,21 @@ export const Teachers = ({ children, isMobile, userdata, notification, header, l
       flag.current = true;
   }, []);
 
-  useEffect(()=>{
-    let isActive = true
-    // if(!pledredata.email && pledre.getStudentDetails){
-
-    //     (async()=>{
-    //         const user = getItem("gotocourse-userdata")
-            
-    //         try{
-    //             const response = await pledre.getStudentDetails(user.email)
-    //             if(isActive){
-    //                 if(response?.email){
-    //                     setPledreData(response )
-    //                     console.log(response)
-    //                     localStorage.setItem("gotocourse-userdata", JSON.stringify({...user, pledre: response}))
-    //                 }
-    //             }
-
-    //         }catch(err){
-    //             console.error(err)
-    //             toast.error(err.message, {
-    //                 position: "top-right",
-    //                 autoClose: 4000,
-    //                 hideProgressBar: true,
-    //                 closeOnClick: true,
-    //                 pauseOnHover: true,
-    //                 draggable: true,
-    //                 progress: undefined,
-    //             });
-    //         }finally{
-    //             console.log("pData done")
-    //         }
-    //     })()
-    // }
-
-    return ()=>{
-        isActive = false
-
-    }
-},[pledre.baseUrl])
 
   const toggleSidebar = () => {
     setGeneralState({ ...generalState, showSidebar: !showSidebar });
   };
-  const [loader, setLoading] = useState(false)
+
 
   const teacher = {
-    title: userData.userType === "teacher" ? "TEACHER" : "MENTOR",
+    title: "TEACHER",
     logo: <FaChalkboardTeacher size="2.5rem" color="#0C2191" />
 }
 
 // fetch messages
 const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUnreadMessages(userData?.token), {
   onError: (err)=> {
-    toast.error(err.message,  {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    })
+    toast.error(err.message)
   },
   onSuccess: (res)=>{
     
@@ -967,28 +921,12 @@ const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUn
       localStorage.clear()
     }
     if(res.data?.statusCode !== 1){
-      toast.error(res.data?.message, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(res.data?.message);
     }
 
     const unread = res.data.data?.filter((messages)=>messages.status === "unread")
     if(unread.length > 0){
-      toast.info(`You have ${unread.length} messages `,  {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
+      // toast.info(`You have ${unread.length} messages` )
     }
   }
 })

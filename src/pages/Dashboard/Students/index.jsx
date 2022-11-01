@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { MdEdit, MdPersonAdd } from "react-icons/md"
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -16,11 +16,11 @@ import { Sidebar, Searchbar, Navbar } from "../components";
 import clsx from "./styles.module.css";
 import { colors, getDate } from "../../../constants";
 import avatar from "../../../images/teacher.png"
-import { useAuth } from "../../../contexts/Auth";
 import { GuardedRoute } from "../../../hoc";
 import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
 import { BootcampRow, UserInfoCard, NotificationContent } from "../Admin";
+import { useAuth } from "../../../contexts/Auth";
 import { useLocalStorage } from "../../../hooks";
 import { FaRegTrashAlt, FaUserAlt } from "react-icons/fa";
 import { SiGoogleclassroom } from "react-icons/si";
@@ -32,6 +32,7 @@ import ChatComponent from "../Admin/Chat";
 import LogoutButton from "../../../components/LogoutButton";
 import { PaymentModal } from "../../Bootcamp/Payment";
 import PayModal from "../../../components/PayModal";
+import { LiveClassInfo } from "../components/classConsole/Liveclass";
 
 
 
@@ -356,8 +357,8 @@ export function Edit() {
     )
 }
 
-export function MyClasses(){
-    const { studentFunctions: { fetchBootcamps }} = useAuth();
+export function MyClasses() {
+    const { studentFunctions: { fetchBootcamps } } = useAuth();
 
     const navigate = useNavigate();
     const { getItem } = useLocalStorage();
@@ -441,14 +442,14 @@ export function MyClasses(){
                                 <tbody>
                                     {courseList?.map(
                                         // {_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}
-                                        ({ bootcampName,tutorName,startTime, endTime, endDate, startDate, bootcampId, bootcampImg, _id }, i) => (
-                                           <tr style={{padding:"1rem"}}>
-                                            <td>{i + 1}</td>
-                                            <td>{bootcampName}</td>
-                                            <td>{tutorName}</td>
-                                            <td>{getDate(startDate)}</td>
-                                            <td>{startTime}</td>
-                                           </tr>
+                                        ({ bootcampName, tutorName, startTime, endTime, endDate, startDate, bootcampId, bootcampImg, _id }, i) => (
+                                            <tr style={{ padding: "1rem" }}>
+                                                <td>{i + 1}</td>
+                                                <td>{bootcampName}</td>
+                                                <td>{tutorName}</td>
+                                                <td>{getDate(startDate)}</td>
+                                                <td>{startTime}</td>
+                                            </tr>
                                         )
                                     )}
                                     <p>
@@ -593,9 +594,11 @@ export function Bootcamps() {
 }
 
 export function Classes() {
-    const { generalState: { isMobile } } = useAuth();
+    const { generalState: { isMobile }, otherFunctions: { fetchBootcamps } } = useAuth();
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
+    const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
+
     const data = [
         {
             title: "CyberSecurity",
@@ -616,7 +619,7 @@ export function Classes() {
     ]
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Classes">
-            <div className={clsx.students_profile}>
+            {/* <div className={clsx.students_profile}>
                 <div className={clsx.classes}>
                     {
                         data.map(({ numberOfLessons, title, date, time, isLive, color }, i) => (
@@ -625,6 +628,10 @@ export function Classes() {
                         ))
                     }
                 </div>
+            </div> */}
+
+            <div className={`${clsx.students_profile_main} ${clsx.student_bg}`}>
+                <AvailableCourses data={bootcamps?.data?.data ? bootcamps?.data?.data : []} />
             </div>
         </Students>
     )
@@ -1014,7 +1021,7 @@ export function History() {
     )
 }
 export function Fees() {
-    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees, fetchStudentFees, payStudentFees } } = useAuth();
+    const { generalState: { isMobile }, generalState, setGeneralState, studentFunctions: { fetchFees, addBootcamp, fetchStudentFees, fetchBootcampFees, payStudentFees }, setOutstanding, } = useAuth();
     const { getItem } = useLocalStorage();
     const [course, setCourse] = useState([])
     let userdata = getItem(KEY);
@@ -1039,55 +1046,35 @@ export function Fees() {
             if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
             else {
                 setCourse(res.data)
-                toast.success(message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
             }
         } catch (err) {
-            toast.error(err.message, {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            console.error(err)
+            // toast.error(err.message);
         }
 
     }
 
+    async function fetchPayments(token) {
+        setGeneralState({ ...generalState, loading: true })
+        try {
+            const res = await Promise.all([fetchStudentFees(token), fetchBootcampFees(token)])
+            console.log({ res })
+            if (res.length > 0) {
+                const myPayment = res[0].data.concat(res[1].data)
+
+                console.log(myPayment)
+                setCourse(myPayment)
+            }
+            setGeneralState({ ...generalState, loading: false })
+        } catch (err) {
+            toast.error(err.message);
+        }
+    }
+
+
     useEffect(() => {
         if (userdata.token) {
-            (async () => {
-                setGeneralState({ ...generalState, loading: true })
-                try {
-                    const res = await fetchStudentFees(userdata?.token);
-                    setGeneralState({ ...generalState, loading: false })
-                    const { success, message, statusCode } = res;
-                    if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
-                    else {
-                        setCourse(res.data)
-                    }
-                } catch (err) {
-                    toast.error(err.message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                }
-
-            })()
+            fetchPayments(userdata.token)
         }
     }, [userdata.token])
 
@@ -1118,7 +1105,6 @@ export function Fees() {
                 }
             })()
         }
-
         ref.current = true
     }, [])
 
@@ -1126,13 +1112,31 @@ export function Fees() {
     const tableContents = fees.length > 0 ? fees : []
 
 
+    const all = () => {
+        let pending = course.map((c => c.payments.filter(x => x.status === "pending")))
+        let individual_total = pending.map(d => d.reduce((total, item) => total + item.amount, 0))
+        console.log("all_total", individual_total.reduce((total, item) => total + item, 0));
+        setOutstanding(individual_total.reduce((total, item) => total + item, 0))
 
+    }
+    all()
+
+
+    // const Outstanding = useMemo(() => {
+    //     let pending = course.map((c => c.payments.filter(x => x.status === "pending")))
+    //     let individual_total = pending.map(d=> d.reduce((total, item) => total + item.amount, 0))
+    //     console.log( "all_total", individual_total.reduce((total, item) => total + item, 0) );
+    //     setOutstanding(individual_total.reduce((total, item) => total + item, 0))
+
+    // }, [course]);
+
+    // console.log({outstanding});
 
     const filterpending = (data) => {
         let result = data.filter(c => c.status === "pending").reduce((sum, current) => sum + current.amount, 0)
-
         return result
     }
+
 
 
     const filterpaid = (data) => {
@@ -1140,45 +1144,31 @@ export function Fees() {
         return result
     }
 
-    const handlePay = async (paymentId) => {
+    const handlePay = async (paymentId, type) => {
         setGeneralState({ ...generalState, loading: true })
+        console.log({ type })
         try {
-            const res = await payStudentFees(userdata.token, paymentId)
+            const res = await payStudentFees(userdata.token, paymentId);
+            // const res = type === "course" ? await payStudentFees(userdata.token, paymentId) : await addBootcamp({bootcampId: paymentId}, userdata.token);
             setGeneralState({ ...generalState, loading: false })
             const { success, message, statusCode } = res;
             if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
             else {
-                toast.success(message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
 
                 setStripeId(res.data.clientSecret)
                 setOpenPaymentModal(true)
                 getmyFees(userdata.token)
+                // fetchPayments(userdata.token)
                 // handleClose()
 
             }
         } catch (err) {
-            toast.error(err.message, {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            toast.error(err.message);
         }
 
     }
 
-
+    console.log({ course });
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Payments">
             <div className={clsx.students_profile}>
@@ -1186,8 +1176,8 @@ export function Fees() {
                 <div className={clsx.payment_container}>
 
                     {
-                        course && course.length > 0 ? course.map((d, i) => (
-                            <div className={clsx.payment__content} key={d.courseId}>
+                        course?.length > 0 ? course.map((d, i) => (
+                            <div className={clsx.payment__content} key={d.applicationId ? d.applicationId : d.bootcampId}>
 
                                 <div className={clsx.payment__title}>
                                     <p>No</p>
@@ -1196,11 +1186,11 @@ export function Fees() {
 
                                 <div className={clsx.payment__title}>
                                     <p>Course</p>
-                                    <span>{d.courseName}</span>
+                                    <span>{d.courseName ? d.courseName : d.bootcampName}</span>
                                 </div>
 
 
-                                {d.payments.length > 1 ? d.payments.map((pay, i) => {
+                                {d.payments?.length > 1 ? d.payments?.map((pay, i) => {
                                     return (<>
                                         <div className={clsx.payment__card}>
                                             <p>{payNumber[i]} installment</p>
@@ -1213,13 +1203,13 @@ export function Fees() {
                                                 <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
                                             </div>
                                             <div className={clsx.payment__button}>
-                                                <button className={pay.status === "paid" ? clsx.bggreen : clsx.bgred} disabled={pay.status === "paid"} onClick={() => handlePay(pay._id)}>{pay.status === "paid" ? "paid" : "pay"} </button>
+                                                <button className={pay.status === "paid" ? clsx.bggreen : clsx.bgred} disabled={pay.status === "paid"} onClick={() => handlePay(pay._id, pay.type)}>{pay.status === "paid" ? "paid" : "pay"} </button>
                                             </div>
                                         </div>
 
 
                                     </>)
-                                }) : d.payments.length === 1 ? d.payments.map((pay, i) => (
+                                }) : d.payments?.length === 1 ? d.payments?.map((pay, i) => (
                                     <>
                                         <div className={clsx.payment__card}>
                                             <p>Full Payment</p>
@@ -1232,7 +1222,7 @@ export function Fees() {
                                                 <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
                                             </div>
                                             <div className={clsx.payment__button}>
-                                                <button className={clsx.bggreen} disabled={d.status === "paid"} onClick={() => handlePay(pay._id)}>Full Payment</button>
+                                                <button className={clsx.bggreen} disabled={d.status === "paid"} onClick={() => handlePay(pay._id, pay.type)}>Full Payment</button>
                                             </div>
                                         </div>
 
@@ -1246,7 +1236,7 @@ export function Fees() {
                                 }
 
                                 {
-                                    d.payments.length > 0 && (
+                                    d.payments?.length > 0 && (
                                         <>
                                             <div className={clsx.payment__title}>
                                                 <p>Outstanding</p>
@@ -1266,12 +1256,11 @@ export function Fees() {
 
 
                             </div>
-
                         ))
                             :
 
                             <>
-                                <h2>No errolled course</h2>
+                                <h5 className="text-center">You haven't enrolled to any class</h5>
                             </>
 
                     }
@@ -1455,7 +1444,7 @@ export function Chat() {
 export const Dashboard = () => {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
-    const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps:fetchMyClasses }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
+    const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps: fetchMyClasses }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
     // const { studentFunctions: { fetchBootcamps },  otherFunctions:{ fetchBootcamps: studentboot} } = useAuth();
 
     const navigate = useNavigate();
@@ -1467,7 +1456,7 @@ export const Dashboard = () => {
     const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
 
-    console.log(data)
+    // console.log(data)
 
     const topContent = [
         {
@@ -1513,8 +1502,8 @@ export const Dashboard = () => {
                                         <p className="text-muted">No item in wishlist</p>
                                         :
                                         wishlistData?.data?.map((item, i) => (
-                                        <li key={i}>{item.name}</li>
-                                    ))
+                                            <li key={i}>{item.name}</li>
+                                        ))
                                 }
 
                             </ul>
@@ -1538,7 +1527,7 @@ export const Dashboard = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {data?.data.map((item, i) => (
+                                        {data?.data.filter(data => data.status === "paid").map((item, i) => (
                                             <tr key={i}>
                                                 <td><span>{i + 1}</span></td>
                                                 <td>
@@ -1546,9 +1535,9 @@ export const Dashboard = () => {
                                                 </td>
                                                 <td><span>{item.amountPaid}</span></td>
                                                 <td>
-                                                    <span className="d-block dashboard_table">
+                                                    {/* <span className="d-block dashboard_table">
                                                         <GotoDashboard loader={loader} setLoading={setLoading} />
-                                                    </span>
+                                                    </span> */}
                                                 </td>
                                             </tr>
 
@@ -1560,7 +1549,7 @@ export const Dashboard = () => {
                     }
                 </div>
 
-                <Community />
+                {/* <Community /> */}
             </div>
         </Students>
     )
@@ -1625,7 +1614,7 @@ function AvailableCourses({ data }) {
                 </div>
 
                 <div className={clsx["coursebody"]}>
-                    {data?.length > 0 && data.map((item, i) => (
+                    {data?.length > 0 && data.filter(item => item.isActive).map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
 
@@ -1722,10 +1711,16 @@ export function DashboardTop({ content }) {
         </div>
     )
 }
+export function StudentLive() {
+    return (
+        <Students>
+            <LiveClassInfo type="student" />
+        </Students>
+    )
+}
 
 export const Students = ({ children, isMobile, notification, userdata, header, loading }) => {
-    const [pledredata, setPledreData] = useState({})
-    const { generalState: { showSidebar, pledre }, generalState, setGeneralState, otherFunctions: { fetchCourses }, adminFunctions: { getUnreadMessages }, studentFunctions: { fetchNotifications, readNotifications } } = useAuth();
+    const { generalState: { showSidebar }, generalState, setGeneralState, otherFunctions: { fetchCourses }, adminFunctions: { getUnreadMessages }, studentFunctions: { fetchNotifications, readNotifications } } = useAuth();
     const { getItem } = useLocalStorage()
     const userData = getItem(KEY)
     const user = getItem("gotocourse-userdata")
@@ -1765,38 +1760,38 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
     // const {isLoading, data} = useQuery(["get courses"], ()=> fetchCourses())
 
 
-    useEffect(() => {
-        let isActive = true
-        if (!pledredata?.email && pledre.getStudentDetails) {
-            (async () => {
-                try {
-                    const response = await pledre.getStudentDetails(user?.email)
-                    if (isActive) {
-                        if (response?.email) {
-                            setPledreData(() => response)
-                            localStorage.setItem("gotocourse-userdata", JSON.stringify({ ...user, pledre: response }))
-                        }
-                    }
+    // useEffect(() => {
+    //     let isActive = true
+    //     if (!pledredata?.email && pledre.getStudentDetails) {
+    //         (async () => {
+    //             try {
+    //                 const response = await pledre.getStudentDetails(user?.email)
+    //                 if (isActive) {
+    //                     if (response?.email) {
+    //                         setPledreData(() => response)
+    //                         localStorage.setItem("gotocourse-userdata", JSON.stringify({ ...user, pledre: response }))
+    //                     }
+    //                 }
 
-                } catch (err) {
-                    console.error(err.message)
-                    toast.error(err.message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                } 
-            })()
-        }
+    //             } catch (err) {
+    //                 console.error(err.message)
+    //                 toast.error(err.message, {
+    //                     position: "top-right",
+    //                     autoClose: 4000,
+    //                     hideProgressBar: true,
+    //                     closeOnClick: true,
+    //                     pauseOnHover: true,
+    //                     draggable: true,
+    //                     progress: undefined,
+    //                 });
+    //             }
+    //         })()
+    //     }
 
-        return () => {
-            isActive = false
-        }
-    }, [pledre.baseUrl])
+    //     return () => {
+    //         isActive = false
+    //     }
+    // }, [pledre.baseUrl])
 
 
     const student = {
@@ -1835,15 +1830,15 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
 
             const unread = res.data.data?.filter((messages) => messages.status === "unread")
             if (unread.length > 0) {
-                toast.info(`You have ${unread.length} messages `, {
-                    position: "top-right",
-                    autoClose: 3000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                })
+                // toast.info(`You have ${unread.length} messages `, {
+                //     position: "top-right",
+                //     autoClose: 3000,
+                //     hideProgressBar: true,
+                //     closeOnClick: true,
+                //     pauseOnHover: true,
+                //     draggable: true,
+                //     progress: undefined,
+                // })
             }
         }
     })
@@ -1883,59 +1878,60 @@ export function GotoDashboard() {
     const { generalState, setGeneralState } = useAuth();
     const location = useLocation()
     const route = location.pathname.split("/")[1];
-    const [loading, setLoading]=useState(false)
+    const [loading, setLoading] = useState(false)
 
     async function gotodashboard() {
         const data = getItem(KEY)
-        if(data.userType === "student" || data.userType === 'admin'){
+        if (data.userType === "student" || data.userType === 'admin') {
             setLoading(true)
-            if(generalState.pledre.loginUser){
-                try{
+            if (generalState.pledre.loginUser) {
+                try {
                     const response = await generalState.pledre.loginUser({
                         email: data.email,
                         // user_id: data.email,
                         user_type: route
                     })
 
-                } catch(err){
+                } catch (err) {
                     console.error(err)
                     toast.error("An error occured")
-                }finally{
-                    setLoading(false)                
+                } finally {
+                    setLoading(false)
                 }
             }
-        } else if(data.pledre?.deleted === false && data.accessPledre){
-            if(generalState.pledre.loginUser){
+        } else if (data.pledre?.deleted === false && (data.accessPledre || data.canTeach)) {
+            if (generalState.pledre.loginUser) {
                 setLoading(true)
-                try{
+                try {
                     const response = await generalState.pledre.loginUser({
-                        user_id: data.pledre._id,
+                        email: data.email,
+                        // user_id: data.email,
                         user_type: route
                     })
 
                     console.log(response)
-                } catch(err){
+                } catch (err) {
                     console.error(err)
                     toast.error("An error occured")
-                }finally{
+                } finally {
                     console.log("done!!!")
                     setLoading(false)
                 }
+            }
         }
-        } 
         else {
             throw new AdvancedError("User not authorized")
         }
     }
     return (
         <>
-            <i className="d-lg-none" style={{cursor:"pointer"}} onClick={gotodashboard} >
+            <i className="d-lg-none" style={{ cursor: "pointer" }} onClick={gotodashboard} >
                 {
                     loading ? <span className="spinner-border text-primary">
-                    <span className="visually-hidden">loading</span>
+                        <span className="visually-hidden">loading</span>
                     </span>
-                    :
-                    <SiGoogleclassroom size="1.5rem" color="#0C2191" />
+                        :
+                        <SiGoogleclassroom size="1.5rem" color="#0C2191" />
                 }
             </i>
             <motion.button

@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {useParams, useNavigate, Navigate} from "react-router-dom";
+import {useParams, useNavigate, Navigate, useLocation} from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import {MdNavigateNext} from "react-icons/md";
@@ -18,6 +18,7 @@ import { AdvancedError } from "../../../classes";
 import { capitalize, getDate, COURSE_CATEGORY_KEY } from "../../../constants";
 import person from "../../../images/person_question.png";
 import pinkBg from "../../../images/course_bg_pink.png";
+import DOMPurify from "dompurify";
 
 
 
@@ -41,9 +42,11 @@ const CourseTop = styled.div`
 
 const BreadcrumbLink = styled(Link)`
     color: ${props => props.$isCurrentPage ? '#0C2191' : '#666363'};
-    font-weight: 400;
-    font-size: 0.9rem;
+    font-weight: 700;
+    font-size: 0.7rem;
     cursor: ${(props) => props.$isCurrentPage ? 'not-allowed': 'pointer'};
+    text-transform: uppercase;
+
 
     &:hover {
         color: ${props => props.$isCurrentPage ? '#666363' : "#0C2191"}
@@ -283,7 +286,6 @@ const DetailCourseContainer = styled.div`
 
 const DetailCourses = styled.div`
     width: 100%;
-    overflow-x: scroll;
     display: flex;
     margin-bottom: 30px;
 `;
@@ -297,7 +299,7 @@ const CourseCard = styled.div`
 
 const CourseImageContainer = styled.div`
     width: 300px;
-    height: 250px;
+    height: 180px;
     margin-bottom: 15px;
 
     & img {
@@ -346,6 +348,7 @@ const BgImage = styled.img`
     width: 400px;
     translate: 60% 60%;
     top: 50px;
+    z-index: -1;
 
     @media screen and (max-width: 903px){
         translate: 30% 90%;
@@ -514,56 +517,48 @@ const Detail = () => {
     const [courses, setCourses] = useState([]);
     const {otherFunctions: {searchCategories}} = useAuth();
     const params = useParams();
+    
+    const location = useLocation();
+    const routeCategory = location.pathname.split('/')[2]
+    const courseCategory = routeCategory.split("-").join(" ").toUpperCase()
+    
+    const courseName = params.course ? params.course.split("-").join(" ") : params.profile.split("-").join(" ")
+    
 
 
-
-    useEffectOnMount(() => {
-        console.log("Course Details page is mounted");
-        console.log(details);
-        // window.scrollTo(0,0);
-        if(!params || !category) navigate(-1);
+    useEffect(() => {
+        window.scrollTo(0,0);
+        if(!params.profile && !category.name) navigate(-1);
         else {
             (async() => {
                 try{
-                    console.log(params.course)
-                    const res = await searchCategories(category);
+                    
+                    const res = await searchCategories(courseCategory);
                     const {message, statusCode, success} = res;
                     if(!success) throw new AdvancedError(message, statusCode);
                     else {
                         const {data} = res;
-                        console.log(data);
+                        let dets = data.find(d => d.name.trim().toLocaleLowerCase() === courseName.trim().toLocaleLowerCase());
+                        
+                        if(!dets.courseId){
+                            navigate(-1)
+
+                        }
                         setDetails(_ => {
-                            let dets = data.find(d => d.name.trim().toLocaleLowerCase() === params.course.trim().toLocaleLowerCase());
                             return {
                                 ...dets
                             }
                         })
-                        setCourses(_ =>  [...data.filter(d => d.name.trim().toLocaleLowerCase() !== params.course.trim().toLocaleLowerCase())]);
-                        toast.success(message, {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
+                        setCourses(_ =>  [...data.filter(d => d.name.trim().toLocaleLowerCase() !== courseName.trim().toLocaleLowerCase())]);
+                        
                     }
                 }catch(err){
-                    toast.error(err.message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+                    console.error(err)
                 }
             })()
         }
-        return () => console.log("Course Details page is unmounted");
-    }, [params.course, details?.name])
+        return () => console.log("done")
+    }, [courseName, details?.name])
 
 
     return (
@@ -575,52 +570,56 @@ const Detail = () => {
                         <BreadcrumbLink to="/">
                             Home
                         </BreadcrumbLink>
-                        <BreadcrumbLink to="/categories/all">
+                        <BreadcrumbLink to="/categories">
                             Categories
                         </BreadcrumbLink>
-                        <BreadcrumbLink to={`/category/${encodeURIComponent(category)}`}>
-                            {capitalize(category)}
+                        <BreadcrumbLink to={`/categories/${routeCategory}`}>
+                            {courseCategory}
                         </BreadcrumbLink>
-                        <BreadcrumbLink to={`/category/${encodeURIComponent(category)}/courses`}>
+                        <BreadcrumbLink to={`/categories/${routeCategory}/courses`}>
                             Courses
                         </BreadcrumbLink>
-                        <BreadcrumbLink $isCurrentPage to="#">{details ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</BreadcrumbLink>
+                        <BreadcrumbLink $isCurrentPage to="#">{details?.name ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</BreadcrumbLink>
                     </Breadcrumbs>
                 </CourseTop>
                 <DetailBody>
-                    <DetailImage background={`linear-gradient(1.66deg, rgba(44, 43, 44, 0.83) 24.55%, rgba(12, 33, 145, 0) 115.79%), url(${details?.courseImg})`}>
+                    <DetailImage background={`url(${details?.courseImg}), rgba(0, 0, 0, 0.7)`}>
                         <DetailsHero>
-                            <h2>{details ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</h2>
-                            <DetailDescription>
+                            <h1>{details ? capitalize(details?.name) : <Skeleton animation="wave" variant="rectangular" width={100} height={30} />}</h1>
+                            {/* <DetailDescription>
                                 {details ? details.description : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}
-                            </DetailDescription>
-                            <ButtonContainer>
+                            </DetailDescription> */}
+                            {/* <ButtonContainer>
                                 <Button $isCTA>Enroll now</Button>
                                 <Button>Add to wishlist</Button>
-                            </ButtonContainer>
+                            </ButtonContainer> */}
                         </DetailsHero>
                     </DetailImage>
                     <DetailBodyContent>
                         <DetailLeft>
                         <Header>Course Overview</Header>
-                            <DetailDescription>
-                                {details ? details.description : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}
-                            </DetailDescription>
+                            <DetailDescription dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(details?.description)}}  />
+                                {/* {details ? details.description : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />} */}
 
                             <NicheContainer>
-                                <Header>{details ? `${capitalize(details?.name)} Niche` : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</Header>
-                                <p>{details ? details.nicheDescription : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</p>
+                                <Header>{details ? `${capitalize(details?.name)} Curriculum` : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</Header>
+                                {/* <p>{details ? details.nicheDescription : <Skeleton animation="wave" variant="rectangular" width={"100%"} height={30} />}</p> */}
                                 <Niches>
                                     {
                                         details ? 
-                                        details.syllabus.map(({title, description}, i) => (
+                                        
+                                        details.syllabus?.map(({title, description}, i) => (
                                         <Niche key={i}>
                                                 <Dot />
                                                 <NicheBody>
                                                     <h6>{title}</h6>
                                                     <p>{description}</p>
                                                 </NicheBody>
-                                        </Niche>)) : Array(4).fill(undefined).map((_, i) => (
+                                        </Niche>)) 
+                                        
+                                        :
+                                        
+                                        Array(4).fill(undefined).map((_, i) => (
                                             <Niche key={i}>
                                                 <Dot />
                                                 <NicheBody>
@@ -663,7 +662,7 @@ const Detail = () => {
                         Download Curriculum <FaDownload />
                     </DownloadButton> */}
                     <DetailCourseContainer>
-                        <h2>{details ? `Other ${capitalize(details?.name)} Courses` : <Skeleton animation="wave" variant="rectangular" width={300} height={30} /> }</h2>
+                        {/* <h2>{details ? `Other ${capitalize(details?.name)} Courses` : <Skeleton animation="wave" variant="rectangular" width={300} height={30} /> }</h2> */}
                         <DetailCourses>
                           <Swiper
                             // install Swiper modules
@@ -687,7 +686,7 @@ const Detail = () => {
                             },
                             700: {
                                 slidesPerView: 2.5,
-                                spaceBetween: 0,
+                                spaceBetween: 5,
                             },
                             1024: {
                                 slidesPerView: 3.5,
@@ -698,16 +697,22 @@ const Detail = () => {
                             {
                                 courses.length ? courses.map(({courseImg, endDate, startDate, name}, i) => (
                                     <SwiperSlide key={i}>
-                                    <CourseCard onClick={e => navigate(`/category/${encodeURIComponent(category)}/courses/${encodeURIComponent(name)}`)}>
+                                    <CourseCard 
+                                        onClick={e => {
+                                        console.log(name)
+                                           navigate(`/categories/${details.category.split(" ").join("-").toLowerCase()}/courses/${name.trim().split(" ").join("-").toLowerCase()}`)
+                                            // navigate(`/categories/${details.category.split(" ").join("-").toLowerCase()}/courses/${name.split(" ").join("-")}`)
+                                        }}
+                                    >
                                         <CourseImageContainer>
-                                            <img src={courseImg} alt="Course Image" />
+                                            <img src={courseImg} alt={name} />
                                         </CourseImageContainer>
                                         <CourseBody>
                                             <h4>{name}</h4>
-                                            <CourseDuration>
+                                            {/* <CourseDuration>
                                                 <h6>Duration</h6>
-                                                <p>{`${getDate(startDate)} - ${getDate(endDate)}`}</p>
-                                            </CourseDuration>
+                                                 <p>{`${getDate(startDate)} - ${getDate(endDate)}`}</p> 
+                                            </CourseDuration> */}
                                         </CourseBody>
                                     </CourseCard>
                                     </SwiperSlide>
@@ -736,7 +741,7 @@ const Detail = () => {
                             }
                          </Swiper>
                         </DetailCourses>
-                        <Link to={`/category/${encodeURIComponent(category)}/courses`}>
+                        <Link to={`/categories/${encodeURIComponent(category)}/courses`}>
                             View more <BiArrowToRight />
                         </Link>
                     </DetailCourseContainer>
@@ -769,7 +774,7 @@ export function Question(){
 
     async function submitHandler(e){
         e.preventDefault();
-        console.log(formstate);
+        
     }
 
 
