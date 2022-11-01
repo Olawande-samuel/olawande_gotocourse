@@ -38,7 +38,6 @@ const StyledCalendar = styled(Calendar)`
 
     & button {
         padding: 20px;
-        color: var(--white);
         font-weight: 500;
         font-size: 1.2rem;
 
@@ -53,7 +52,7 @@ const StyledCalendar = styled(Calendar)`
 
 const Booking = styled.div`
     width: 100%;
-    height: 90vh;
+    min-height: 90vh;
     background: linear-gradient(180.9deg, #191046 18.68%, rgba(16, 51, 70, 0.95) 97.29%);
     padding: 30px;
     margin: 0;
@@ -79,7 +78,7 @@ const CalendarContainer = styled.div`
     border-radius: 10px;
     padding: 20px;
     max-width: 900px;
-    height: 60vh;
+    min-height: 60vh;
     margin-bottom: 20px;
     display: flex;
     gap: 20px;
@@ -166,9 +165,10 @@ const TextArea = styled.textarea`
 `
 
 
-const CalendarLeft = styled.div`;
+const CalendarLeft = styled.div` 
     flex: 1;
     height: 100%;
+
     & h3 {
         color: var(--white);
         font-weight: 700;
@@ -221,7 +221,7 @@ const BookingContainer = styled.div`
     display: flex;
     align-items: center;
     flex: 1;
-    height: 100vh;
+    /* height: 100vh; */
     gap: 30px;
     padding: 20px;
     margin-top: 20px;
@@ -265,9 +265,10 @@ const TimeZone = styled.div`
     }
 
     & div {
-        background: transparent;
+        /* background: transparent; */
         border: none;
-        color: var(--white);
+        /* color: var(--white); */
+        color: #000;
         cursor: pointer;
         outline: none;
 
