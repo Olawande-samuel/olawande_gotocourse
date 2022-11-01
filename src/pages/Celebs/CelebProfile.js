@@ -64,7 +64,7 @@ gap: 3rem;
     }
 
 
-    .stat{
+    .mentorstat{
         padding:2rem 0.2rem;
 
         .num{
@@ -155,12 +155,17 @@ gap: 3rem;
             object-fit:contain;
         }
 
-        .stat{
+        .mentormentorstat{
             height: 20vh;
-
+            
+            span {
+                color: #fff !important;
+            }
             .num, .light{
                 max-width: 100%;
+                
             }
+
         }
     }
 
@@ -529,7 +534,7 @@ export default function CelebProfile() {
                         <div className="img">
                             <img className="bigimage" src={mentorData?.img ? mentorData.img : `${IMAGEURL}/${mentorData.mentorImg}`} alt="" />
 
-                            <div className="stat">
+                            <div className="mentorstat">
 
                                 <div className="num">
                                     <span>5.0</span>
