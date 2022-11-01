@@ -46,7 +46,7 @@ const leftLink = [
   {
     id: 7,
     title: "Events",
-    path: "/events"
+    path: "/events&articles"
   },
 ]
 

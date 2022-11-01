@@ -137,9 +137,9 @@ const Dashboard = () => {
                         return {
                             ...old,
                             earnings: 0,
-                            teachers: teachers.data.length,
-                            students: students.data.length,
-                            courses: courses.data.length,
+                            teachers: teachers.data?.length,
+                            students: students.data?.length,
+                            courses: courses.data?.length,
                             categories: categories.data
                         }
                     })
@@ -237,7 +237,7 @@ const Dashboard = () => {
                             {
                                 chartData.categories.map(({name, nicheItems}, i) => (
                                     <li key={i}>
-                                        {name} <span>{nicheItems.length}</span>
+                                        {name} <span>{nicheItems?.length}</span>
                                     </li>
                                 ))
                             }

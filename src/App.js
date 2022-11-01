@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.css"
-import { Route, Routes } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 import './App.css';
 import '@stripe/stripe-js'
 
@@ -104,6 +104,7 @@ import { CreateRoom, VideDiv } from "./utils/video";
 import Detail from "./pages/Course/Details";
 import AllCourses from "./pages/Courses/allcourses/AllCourses";
 import { MainContainer } from "./pages/Dashboard/components/classConsole";
+import Articles from "./pages/Events/articles";
 
 
 
@@ -200,7 +201,11 @@ function App() {
               <Route path="user-authentication" element={<Verification />} />
               <Route path="user-onboarding" element={<UserOnBoarding />} />
               <Route path="qualifications" element={<CheckList />} />
-              <Route path="events" element={<Events />} />
+              
+              <Route path="events&articles" element={<Out />}>
+                <Route index element={<Events />}  />
+                <Route path="articles/:id" element={<Articles />} />
+              </Route>
 
               <Route path="classes" element={<Out />}>
                 <Route index element={<AvailableClasses />} />

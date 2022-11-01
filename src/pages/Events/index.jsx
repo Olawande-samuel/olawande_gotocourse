@@ -34,7 +34,7 @@ const Events = () => {
                                     <div className={style.articleInfo}>
                                         <div className={style.articleTop}>
                                             <span style={{ fontSize: "12px", color: "#4100FA" }}>04.08.22</span>
-                                            <FaShareSquare style={{ fontSize: "2rem", color: "#0C2191" }} />
+                                            <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} />
 
                                         </div>
                                         <h4>
