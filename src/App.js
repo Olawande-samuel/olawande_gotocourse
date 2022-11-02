@@ -82,7 +82,7 @@ import SyllabusContextProvider from "./contexts/Syllabus";
 import { Suspense, lazy } from "react";
 import Loader from "./components/Loader";
 import CheckList from "./pages/Teacher/checkList";
-import Events from "./pages/Events";
+import Events, { Event } from "./pages/Events";
 import Business from "./Business/pages/landing/business";
 import File from "./pages/Dashboard/components/classConsole/File";
 import Note from "./pages/Dashboard/components/classConsole/Note";
@@ -204,6 +204,7 @@ function App() {
               
               <Route path="events&articles" element={<Out />}>
                 <Route index element={<Events />}  />
+                <Route path=":id" element={<Event />} />
                 <Route path="articles/:id" element={<Articles />} />
               </Route>
 
