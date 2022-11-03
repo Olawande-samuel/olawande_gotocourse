@@ -52,7 +52,7 @@ export default function ConsoleClasses() {
         <div className=''>
             <main className='assessments'>
                 {
-                 bootcamps?.data?.data.length > 0  && bootcamps?.data?.data.map((x, id) => (
+                 bootcamps?.data?.data?.length > 0  && bootcamps?.data?.data.map((x, id) => (
                         <Link to="/student/class-console/class" key={x.bootcampId}>
                             <div className="assesstmentbox">
                                 <div className="excelbox">

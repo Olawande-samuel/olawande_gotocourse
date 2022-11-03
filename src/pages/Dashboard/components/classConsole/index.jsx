@@ -42,7 +42,7 @@ import {
   Switch,
 } from "@mui/material";
 
-import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
+import { Link, useNavigate, useLocation, useParams, useSearchParams } from "react-router-dom";
 import clsx from "../styles.module.css";
 import { AdvancedError } from "../../../../classes";
 import { toast, ToastContainer } from "react-toastify";
@@ -105,27 +105,32 @@ const popIcon = [
     id: 1,
     icon: BsCameraReels,
     title: "Record Camera",
+    type:""
   },
   {
     id: 2,
     icon: VscScreenNormal,
     title: "Record Screen",
+    type:""
   },
   {
     id: 3,
     icon: RiVideoAddFill,
     title: "Upload Video",
+    type:"file"
   },
 
   {
     id: 4,
     icon: BsCloudUpload,
     title: "Upload File/Image",
+    type:"file"
   },
   {
     id: 5,
     icon: BsPlayBtn,
     title: "Import from Creator suite",
+    type:""
   },
 ];
 
@@ -371,6 +376,7 @@ function Sidebar({ Toggle, side }) {
 }
 
 function Accord({ name, _id, classId, description }) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { getItem } = useLocalStorage();
   const userdata = getItem(KEY);
   const { consoleFunctions: { fetchContents }, } = useAuth();
@@ -427,6 +433,11 @@ function Accord({ name, _id, classId, description }) {
     },
     
   ]
+
+  function handleContentNavigation(...args){
+    setSearchParams({"content": args[0]})
+  }
+
   return (
     <div className={style.content_item}>
       <div className={style.content_item_top}>
@@ -445,13 +456,13 @@ function Accord({ name, _id, classId, description }) {
       {
         details && 
         <ul className={style.content_list}>
-          {getDomainContent?.data?.data?.filter(item=> item.domain === _id).map(({ icon: Icon, title, link, id, type }) => (
-            <li key={id}>
-              <Link to={`${routeType(type)}`} className="d-flex justify-content-between">
+          {getDomainContent?.data?.data?.filter(item=> item.domain === _id).map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
+            <li key={_id} onClick={()=>handleContentNavigation(_id, type, domain, classId)} className="d-flex justify-content-between">
+              {/* <Link to={`${routeType(type)}`} className="d-flex justify-content-between"> */}
                 <i>{IconType(type)}</i>
                 <span>{title}</span>
                 <AccordMenu />
-              </Link>
+              {/* </Link> */}
             </li>
           ))}
         </ul>
@@ -544,7 +555,6 @@ export function ModalContent({ show, handleClose, toggleModule }) {
     setFormstate({...formstate, isLocked: !formstate.isLocked})
   }
 
-  console.log({formstate});
   return (
     <div>
       <Modal show={show} onHide={handleClose}>
@@ -821,7 +831,14 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
   );
 }
 
-export function PopModalContent({ open, closeSmall }) {
+export function PopModalContent({ open, closeSmall, openUpload }) {
+  function handleClick(type){
+    console.log(type)
+    if(type === "file"){
+      openUpload(true)
+    }
+
+  }
 
   return (
     <div>
@@ -829,9 +846,9 @@ export function PopModalContent({ open, closeSmall }) {
         {/* <Modal.Header closeButton className="modal__header">
                 </Modal.Header> */}
         <Modal.Body>
-          <div className="style.smallmodalbody">
-            {popIcon.map(({ title, id, icon: Icon }) => (
-              <Tooltip title={title} key={id}>
+          <div className="style.smallmodalbody" >
+            {popIcon.map(({ title, id, type, icon: Icon }) => (
+              <Tooltip title={title} key={id} onClick={()=>handleClick(type)}>
                 <IconButton className="popicons">
                   <Icon size="1.5rem" color="#0C2191" />
                   <span className={style.smalltitle}>{title}</span>
@@ -847,23 +864,33 @@ export function PopModalContent({ open, closeSmall }) {
 
 export function MainContainer(){
   const { consoleFunctions: { fetchContents }, } = useAuth();
+  
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const { getItem } = useLocalStorage();
   const userdata = getItem(KEY);
   const navigate = useNavigate();
   const {classId} = useParams()
-  const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId) );
 
+  const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId) );
   const [data, setData] = useState({})
+  const contentid = searchParams.get("content")
+
   useEffect(()=>{
     if(getDomainContent?.data?.data?.length > 0){
-      console.log(getDomainContent.data.data[0])
-      navigate(`?content=${getDomainContent.data.data[0]._id}`)
-      setData(getDomainContent.data.data[0])
+      if(contentid){
+          let content = getDomainContent.data.data.find(item=> item._id === contentid);
+          setData(content)
+      } else{
+        console.log(getDomainContent.data.data[0])
+        navigate(`?content=${getDomainContent.data.data[0]._id}`)
+        setData(getDomainContent.data.data[0])
+      }
     }
 
-  }, [getDomainContent?.data?.data])
+  }, [getDomainContent?.data?.data, contentid])
 
-
+  console.log({data})
   switch (data.type) {
     case "FILE_VIDEO":
       return <File />;
@@ -874,11 +901,7 @@ export function MainContainer(){
     default:
       return ;
   }
-  return (
-      <div>
-          main
-      </div>
-  )
+ 
 }
 
 export default Console;
