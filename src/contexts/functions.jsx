@@ -4121,7 +4121,7 @@ export const consoleFunctions = {
         }
     },
 
-joinGroup:  async function (token, id){
+    joinGroup:  async function (token, id){
         try{
             const res = await axios.post(`${baseURL}/classes/group/join/${id}`,
             {
@@ -4153,9 +4153,7 @@ joinGroup:  async function (token, id){
                 }
             }
         }
-    }
-
-
+    },
 
    addNote: async function(token, data){
         try{
