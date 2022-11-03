@@ -8,8 +8,8 @@ export default function Content({type}) {
     return (
         <>
             <ToastContainer
-                position="top-right"
-                autoClose={5000}
+                position="bottom-center"
+                autoClose={3500}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick

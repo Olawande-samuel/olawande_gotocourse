@@ -386,7 +386,8 @@ export default function Quiz() {
                                                                 </MenuItem>
                                                             </Select>
 
-                                                            <div className="texteditor quiz__editor">                                                        <CKEditor
+                                                            <div className="texteditor quiz__editor">                  
+                                                                <CKEditor
                                                                 editor={ClassicEditor}
                                                                 data=""
                                                                 onReady={editor => {

@@ -94,6 +94,8 @@ const popIcon = [
 ];
 
 export const Console = ({ children }) => {
+  const {classId} = useParams()
+
   const studentIcon = [
   {
     id: 1,
@@ -115,32 +117,29 @@ const iconData = [
     id: 1,
     icon: MdMessage,
     title: "Mail",
-    link: "/teacher/class-console/class/mail",
+    link: `/teacher/class-console/class/${classId}/mail`,
   },
   {
     id: 2,
     icon: MdLibraryAdd,
     title: "Creator suite",
-    link: "/teacher/class-console/class/creator-suite",
+    link: `/teacher/class-console/class/${classId}/creator-suite`,
   },
   {
     id: 3,
     icon: RiVideoAddFill,
     title: "Live Class",
-    link: "/teacher/live-class ",
+    link: `/teacher/live-class`,
   },
   {
     id: 4,
     icon: FaUsers,
     title: "Students",
-    link: "/teacher/class-console/class/classroom",
+    link: `/teacher/class-console/class/${classId}/classroom`,
   },
 ];
-  const {
-    generalState: { classConsole },
-    generalState,
-    setGeneralState,
-  } = useAuth();
+  const { generalState: { classConsole }, generalState, setGeneralState, } = useAuth();
+
   const { pathname } = useLocation();
   const [side, setSide] = useState(false);
   const [show, setShow] = useState(false);

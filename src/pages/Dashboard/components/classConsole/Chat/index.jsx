@@ -10,7 +10,8 @@ import { Box, Tab, Tabs } from "@mui/material";
 import PropTypes from "prop-types";
 import { useAuth } from "../../../../../contexts/Auth";
 import { KEY } from "../../../../../constants";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 
 const groups = [
@@ -574,6 +575,7 @@ const ChatModule = () => {
 
     const [activeTab, setActiveTab] = useState(0);
     const [show, setShow] = useState(false);
+
     useEffectOnMount(() => {
         console.log('ChatModule is mounted');
         return () => console.log('ChatModule is unmounted');
@@ -661,21 +663,48 @@ const ChatModule = () => {
 
 
 function MailTab(){
-    const [mail, setMail] = useState('');
-    const tabs = ['File', 'Edit', 'View', 'Insert', 'Format', 'Tools', 'Table', 'Help'];
+    
+    
+    const {getItem} = useLocalStorage()
+    const {classId} = useParams()
+    const [formstate,setFormstate] = useState('');
+
+    const userdata = getItem(KEY)
+    const {consoleFunctions: {messageAllStudents}} = useAuth();
+
+    const mutation = useMutation(([token, id, data])=>messageAllStudents(token, id, data), {
+        onSuccess: (res)=>{
+            console.log(res);
+            if(res.success){
+                toast.success(res.message);
+            }
+        },
+        onError: (err)=> console.error(err)
+    })
+
+    function sendMail(e){
+        e.preventDefault();
+        if(formstate){
+            mutation.mutate([userdata.token, classId, {body:formstate}])
+        } else {
+            toast.error("Cannot send an empty message")
+        }
+
+    }
     return(
         <MailContainer>
+            
             <MailBodyContainer>
                 <CKEditor
                     editor={ClassicEditor}
-                    data="<p>Hello from CKEditor 5!</p>"
+                    data=""
                     onReady={editor => {
                         // You can store the "editor" and use when it is needed.
                         console.log('Editor is ready to use!', editor);
                     }}
                     onChange={(event, editor) => {
                         const data = editor.getData();
-                        console.log({ event, editor, data });
+                        setFormstate(data)
                     }}
                     onBlur={(event, editor) => {
                         console.log('Blur.', editor);
@@ -686,7 +715,16 @@ function MailTab(){
                 />
             </MailBodyContainer>
             <MailButton>
-                <button>Send mail to all students</button>
+                <button onClick={sendMail}>
+                    {
+                        mutation.isLoading ?
+                        <div className="spinner-border text-white">
+                            <div className="visually-hidden">Loading</div>
+                        </div>
+                        :
+                        <span>Send mail to all students</span>
+                    }
+                </button>
             </MailButton>
         </MailContainer>
     )
@@ -784,7 +822,6 @@ function UserCard({status, fullname, number, lastsent, isChat}){
         </UserCardContainer>
     )
 }
-
 
 
 
