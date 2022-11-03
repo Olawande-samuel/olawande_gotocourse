@@ -352,13 +352,13 @@ const Classroom = () => {
     const fetchDomains = useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id))
     const getDomainContent = useQuery(["getDomainContent", id], () => fetchStudentContents(userdata.token, id));
     const fetchFile = useQuery(["fetch file", id], () => fetchStudentFile(userdata.token, id))
-    const fetchNotee = useQuery(["fetch file", id], () => fetchStudentNotee(userdata.token, id))
+    const fetchNotee = useQuery(["fetch file", id], () => fetchStudentNote(userdata.token, id))
     const getQuiz = useQuery(["quiz content", id], () => fetchStudentQuiz(userdata.token, id), {
         onSuccess: (res)=> {
             console.log("successful query")
             console.log(res)
             if(res.data.length > 0){
-                setFormData({...res.data[0]})
+                // setFormData({...res.data[0]})
             }
         }
     } )
