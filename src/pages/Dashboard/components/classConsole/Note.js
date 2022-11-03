@@ -6,9 +6,15 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 
 import { useState } from 'react'
+import Editor from '../Editor';
+import { useAuth } from '../../../../contexts/Auth';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { KEY } from '../../../../constants';
+import { useLocalStorage } from '../../../../hooks';
+import { useEffect } from 'react';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -31,15 +37,50 @@ function TabPanel(props) {
 }
 
 export default function Note() {
-    const [value, setValue] = useState(0);
+    const [searchParams, setSearchParams] = useSearchParams();
 
+    const {getItem} = useLocalStorage()
+    const [value, setValue] = useState(0);
+    const[formstate, setFormstate]= useState({
+        body:"",
+        title:""
+    })
+    const userdata = getItem(KEY)
+    const [ note, setNote] = useState("")
     const { pathname } = useLocation();
     const bread = pathname?.split("/");
+    const {consoleFunctions: {addNote, fetchNote}} = useAuth()
+    const contentId = searchParams.get("content")
+
+    const {classId} = useParams()
 
 
-    const studentpath = pathname.split("/")[1] === "console";
-    const suite = pathname.split("/")[2] === "suite";
-    const classroom = pathname.split("/")[2] === "classroom";
+    const mutation = useMutation(([token, data])=> addNote(token, data), {
+        onSuccess: (res)=> console.log({res}),
+        onError: (err)=> console.error(err)
+    })
+
+    const noteQuery = useQuery([fetchNote, contentId, userdata.token],() => fetchNote(userdata.token, contentId), {
+        onSuccess: (res)=> {
+            console.log(res)
+            if(res.data?.length > 0){
+                setFormstate({...formstate, body: res.data[0].body})
+            }
+            
+        }
+    })
+
+    useEffect(() => {
+        setFormstate({...formstate, contentId, classId})
+    
+      return () => {
+        
+      }
+    }, [contentId, classId])
+    
+    // const studentpath = pathname.split("/")[1] === "console";
+    // const suite = pathname.split("/")[2] === "suite";
+    // const classroom = pathname.split("/")[2] === "classroom";
 
     function a11yProps(index) {
         return {
@@ -63,7 +104,14 @@ export default function Note() {
           default:
             return "/admin";
         }
-      }
+    }
+
+    function handleSubmit(e){
+        e.preventDefault()
+        mutation.mutate([userdata.token, {...formstate, body: note}])
+    }
+    
+    console.log({formstate})
     return (
         <div className=''>
             <Box sx={{ width: '100%' }}>
@@ -103,48 +151,38 @@ export default function Note() {
                 <TabPanel value={value} index={0}>
                     <small className='smallnote'>Make sure you constantly save your note as you type.</small>
                     <main className='note'>
-                        <div className="texteditor">
-                            {/* <CKEditorContext context={Context}>
-                                    <h2>Using the CKeditor 5 context feature in React</h2>
-                                    <CKEditor
-                                        editor={ClassicEditor}
-                                        config={{
-                                            plugins: [Paragraph, Bold, Italic, Essentials],
-                                            toolbar: ['bold', 'italic']
-                                        }}
-                                        data="<p>Hello from the first editor working with the context!</p>"
-                                        onReady={editor => {
-                                            // You can store the "editor" and use when it is needed.
-                                            console.log('Editor1 is ready to use!', editor);
-                                        }}
-                                    />
+                        <form  onSubmit={handleSubmit}>
+                            <div className="texteditor">
+                                {/* <CKEditorContext context={Context}>
+                                        <h2>Using the CKeditor 5 context featzure in React</h2>
+                                        <CKEditor
+                                            editor={ClassicEditor}
+                                            config={{
+                                                plugins: [Paragraph, Bold, Italic, Essentials],
+                                                toolbar: ['bold', 'italic']
+                                            }}
+                                            data="<p>Hello from the first editor working with the context!</p>"
+                                            onReady={editor => {
+                                                // You can store the "editor" and use when it is needed.
+                                                console.log('Editor1 is ready to use!', editor);
+                                            }}
+                                        />
 
-                                </CKEditorContext> */}
+                                    </CKEditorContext> */}
+                                <Editor initialState={formstate?.body} title="" setBio={setNote} />
 
-                            <CKEditor
-                                editor={ClassicEditor}
-                                data="<p>Hello from CKEditor 5!</p>"
-                                onReady={editor => {
-                                    // You can store the "editor" and use when it is needed.
-                                    console.log('Editor is ready to use!', editor);
-                                }}
-                                onChange={(event, editor) => {
-                                    const data = editor.getData();
-                                    console.log({ event, editor, data });
-                                }}
-                                onBlur={(event, editor) => {
-                                    console.log('Blur.', editor);
-                                }}
-                                onFocus={(event, editor) => {
-                                    console.log('Focus.', editor);
-                                }}
-                            />
-
-                            <div className="notebtn">
-                                <button>Save note</button>
+                                <div className="notebtn">
+                                    <button>{
+                                            
+                                                mutation.isLoading ? <div className="spinner-border text-white">
+                                                    <div className="visually-hidden">Loading</div>
+                                                </div>
+                                            :
+                                            <span>Save note</span>
+                                        }</button>
+                                </div>
                             </div>
-
-                        </div>
+                        </form>
 
 
 
