@@ -38,7 +38,7 @@ function TabPanel(props) {
 
 export default function File() {
     const { pathname, search } = useLocation();
-
+    
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(0);
     const [openUpload, setOpenUpload]= useState(false)
