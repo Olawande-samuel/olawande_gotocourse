@@ -1,14 +1,15 @@
 import React from 'react'
 import Layout from "../../components/Layout"
 import style from "./style.module.css"
-import event from "../../images/events/hanging.png"
+import profile from "../../images/events/profile.png"
 import card from "../../images/events/eventcard.png"
 import articleimg from "../../images/events/article.png"
-import { IoCalendarSharp } from 'react-icons/io5'
+import { IoCalendarSharp, IoTimeSharp } from 'react-icons/io5'
 import { AiFillClockCircle } from 'react-icons/ai'
 import { BiTargetLock } from 'react-icons/bi'
 import { FaShareSquare } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import { MdMyLocation } from 'react-icons/md'
 
 const Events = () => {
     return (
@@ -91,7 +92,7 @@ const Events = () => {
 
                         <div className={style.upcoming_events}>
                             {[1, 2, 3, 4].map((event, index) => (
-                                <Upcoming />
+                                <Upcoming key={index} id={index} />
                             ))}
                         </div>
                     </div>
@@ -115,7 +116,7 @@ const Events = () => {
 }
 
 
-function Upcoming() {
+function Upcoming({ id }) {
     return (
         <div className={style.upcoming_event}>
             <div className={style.upcoming_event_left}>
@@ -151,7 +152,11 @@ function Upcoming() {
                         </span>
                         <span>Online</span>
                     </div>
-                    <button className={style.event_button}>Learn More</button>
+                    <button className={style.event_button}>
+                        <Link to={`${id}`}>
+                            Learn More
+                        </Link>
+                    </button>
                 </div>
             </div>
         </div>
@@ -182,6 +187,98 @@ function Ondemand() {
                 </div>
             </div>
         </div>
+    )
+}
+
+export function Event() {
+    return (
+        <Layout>
+            <div className={`container p-4 ${style.event}`}>
+                <div className={style.eventimage}>
+                    <img src={card} alt="" />
+                </div>
+
+                <div className={style.eventinfo}>
+
+                    <div className={style.eventTop}>
+                        <h2>
+                            An Introduction to Design Thinking (with Maureen Herben)
+                        </h2>
+                        <button className={style.event_button}>
+                            Register
+                        </button>
+                        <div className={style.eventTime}>
+                            <div>
+                                <IoCalendarSharp />
+                                <span>27 September 2022</span>
+                            </div>
+                            <div >
+                                <IoTimeSharp />
+                                <span>2:00pm</span>
+                            </div>
+
+                            <div>
+                                <MdMyLocation />
+                                <span>Online</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div className={style.eventMiddle}>
+                        <h2>About This Event</h2>
+                        <p>
+                            So what exactly is Design Thinking?
+                            <hr style={{ height: "0px" }} />
+
+                            And how do I go about using this process in my day-to-day work?
+                            <br/>
+                            If you’ve been asking yourself these questions, we’ve got the perfect live event for you!
+                            <br/>
+                            Join Senior Product Designer Maureen Herben as she walks you through the Design
+                            <br />
+                            Thinking process from start to finish.
+                            <br/>
+                            You’ll learn exactly what the process involves and in what contexts it is particularly useful.
+                            <br />
+
+                            Maureen will also analyze the relationship between UX design and Design Thinking, and discuss real-world case studies that beautifully illustrate the process in action.
+                            <br/>
+                            All sound a little overwhelming?
+                            <br />
+                            Don’t worry—this live event is perfect for beginners and pros alike.
+                            <br/>
+                            We’ll also be having a Q&A at the end to answer all your burning questions.
+                            <br/>
+                            Look forward to seeing you there!
+                        </p>
+                    </div>
+
+                    <div className={style.eventBottom}>
+                        <h2>FEATURED PRESENTERS</h2>
+                        <div className={style.eventProfiles}>
+                            {[...Array(2)].map((x, id) => (
+                                <div className={style.eventProfile}>
+                                    <div className={style.eventprofileimg}>
+                                        <img src={profile} alt="" />
+                                    </div>
+                                    <div className={style.eventprofiletext}>
+                                        <p>Amandler- Daesigner at Microsoft</p>
+                                        <span>
+                                            Grow your knowledge, tap into a new skill, or learn how to forge a tech career from scratch.
+                                        </span>
+                                    </div>
+                                </div>
+
+                            ))}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </Layout>
     )
 }
 

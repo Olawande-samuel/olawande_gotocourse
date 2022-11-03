@@ -4,11 +4,13 @@ import {AiOutlineMore, AiOutlineArrowLeft} from "react-icons/ai";
 import {MdSearch} from 'react-icons/md';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
-
-import { useEffectOnMount } from "../../../../../hooks";
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useEffectOnMount, useLocalStorage } from "../../../../../hooks";
 import { Box, Tab, Tabs } from "@mui/material";
 import PropTypes from "prop-types";
+import { useAuth } from "../../../../../contexts/Auth";
+import { KEY } from "../../../../../constants";
+import { useLocation } from "react-router-dom";
 
 
 const groups = [
@@ -560,6 +562,15 @@ const UserInfo = styled.div`
 `
 
 const ChatModule = () => {
+    const { pathname, search } = useLocation();
+    const { getItem } = useLocalStorage()
+    const userdata = getItem(KEY)
+    let path = pathname.split("/")
+    let classId = path[path.length -1]
+
+    console.log({userdata});
+
+    const { consoleFunctions: { fetchGroups, addGroup, joinGroup }, } = useAuth();
 
     const [activeTab, setActiveTab] = useState(0);
     const [show, setShow] = useState(false);
@@ -584,10 +595,22 @@ const ChatModule = () => {
         })
     }
 
+
     const [value, setValue] = useState(0);
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
+
+
+    const getContentfromQuery = useQuery(["all groups"], () => fetchGroups(userdata.token, classId), {
+        onSuccess: (res)=> {
+            console.log("successful query")
+            console.log(res)
+
+        }
+    } )
+
+    console.log({getContentfromQuery})
 
     const tabContent = [ <ChatTab groups={newGroups} toggle={toggleActionsHandler} setShow={setShow} />, <ActiveChat />, <MailTab /> ]
     

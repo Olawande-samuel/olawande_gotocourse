@@ -36,7 +36,7 @@ import { Dashboard as AffiliatesDash, Sales, Income, Revenue } from "./pages/Das
 import { Landing as AffiliateLanding, Register as AffiliateRegister, Login as AffiliateLogin, Verification as AffiliateVerification } from "./pages/Affiliate";
 import AdminAffiliate from "./pages/Dashboard/Admin/Affiliate";
 
-import {HIW, HIWAffiliate } from "./pages/HowItWorks"
+import { HIW, HIWAffiliate } from "./pages/HowItWorks"
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
@@ -82,7 +82,7 @@ import SyllabusContextProvider from "./contexts/Syllabus";
 import { Suspense, lazy } from "react";
 import Loader from "./components/Loader";
 import CheckList from "./pages/Teacher/checkList";
-import Events from "./pages/Events";
+import Events, { Event } from "./pages/Events";
 import Business from "./Business/pages/landing/business";
 import File from "./pages/Dashboard/components/classConsole/File";
 import Note from "./pages/Dashboard/components/classConsole/Note";
@@ -90,7 +90,7 @@ import Note from "./pages/Dashboard/components/classConsole/Note";
 import Content, { ChatComponent } from "./pages/Dashboard/components/classConsole/Content";
 
 import Quiz, { Preview } from "./pages/Dashboard/components/classConsole/Quiz";
-import Suite, {Processed, Pending} from "./pages/Dashboard/components/classConsole/Suite";
+import Suite, { Processed, Pending } from "./pages/Dashboard/components/classConsole/Suite";
 import Classroom from "./pages/Dashboard/components/classConsole/Classroom";
 
 import { Intermission, LiveClassInfo } from "./pages/Dashboard/components/classConsole/Liveclass";
@@ -133,10 +133,10 @@ const Contact = lazy(() => import("./pages/Contact"))
 const Settings = lazy(() => import("./pages/Dashboard/Admin/Settings"))
 const LiveClass = lazy(() => import("./pages/Dashboard/components/Live/LiveClass"))
 
-const TeachersHelp = lazy(()=>import("./pages/Dashboard/Teachers/Help")) ;
+const TeachersHelp = lazy(() => import("./pages/Dashboard/Teachers/Help"));
 
-const HIWStudent = lazy(()=> import("./pages/HowItWorks/HIWStudent")) 
-const  HIWTeacher = lazy(()=>import("./pages/HowItWorks/HIWTeacher")) 
+const HIWStudent = lazy(() => import("./pages/HowItWorks/HIWStudent"))
+const HIWTeacher = lazy(() => import("./pages/HowItWorks/HIWTeacher"))
 
 
 //MENTORS
@@ -174,7 +174,7 @@ function App() {
               <Route path="change-password" element={<ResetPassword />} />
               <Route path="become-a-teacher" element={<BecomeATeacher />} />
               <Route path="student/classroom" element={<StudentClassroom />} />
- 
+
               <Route path="tester" element={<CreateRoom />} />
               <Route path="video-chat" element={<VideDiv />} />
 
@@ -201,9 +201,10 @@ function App() {
               <Route path="user-authentication" element={<Verification />} />
               <Route path="user-onboarding" element={<UserOnBoarding />} />
               <Route path="qualifications" element={<CheckList />} />
-              
+
               <Route path="events&articles" element={<Out />}>
-                <Route index element={<Events />}  />
+                <Route index element={<Events />} />
+                <Route path=":id" element={<Event />} />
                 <Route path="articles/:id" element={<Articles />} />
               </Route>
 
@@ -258,6 +259,7 @@ function App() {
                     <Route index element={<ConsoleClasses />} />
                     {/* <Route path=":id" element={<MyClass />} /> */}
                   </Route>
+                  <Route path="class-console/class/mail" element={<ChatComponent />} />
                   <Route path="assessments" element={<ConsoleAssessments />} />
                   <Route path="liveclass" element={<Out />} />
                 </Route>
@@ -270,7 +272,7 @@ function App() {
                 <Route path="classroom" element={<Classroom />} />
                 <Route path='chat' element={<ChatComponent />} />
                 <Route path="suite" element={<Suite />} />
-                
+
                 <Route path="quiz" element={<Out />}>
                   <Route index element={<Quiz />} />
                   <Route path="preview" element={<Preview />} />
@@ -344,7 +346,7 @@ function App() {
                   <Route path="class" element={<Content />}>
                     <Route path=":classId" element={<Out />}>
                       <Route index element={<MainContainer />} />
-                      <Route path="creator-suite" element={<Suite />}/>          
+                      <Route path="creator-suite" element={<Suite />} />
                       <Route path="classroom" element={<Classroom />} />
                       <Route path="mail" element={<ChatComponent />} />
                       <Route path="file" element={<File />} />
@@ -358,7 +360,7 @@ function App() {
                 </Route>
               </Route>
 
-              
+
               <Route path="affiliates" element={<AffiliateLanding />} />
               <Route path="affiliates/register" element={<AffiliateRegister />} />
               <Route path="affiliates/login" element={<AffiliateLogin />} />
@@ -381,7 +383,7 @@ function App() {
 
 
 
-             
+
 
               <Route path="admin">
                 <Route path="" element={<AdminDashboard />} />
@@ -410,7 +412,7 @@ function App() {
                 <Route path="settings" element={<Settings />} />
                 <Route path="earnings" element={<AdminEarning />} />
                 <Route path="affiliate" element={<AdminAffiliate />} />
-               
+
 
                 <Route path="class-console" element={<Out />}>
                   <Route index element={<AdminClassConsole />} />
@@ -434,7 +436,7 @@ function App() {
                 <Route path="login" element={<AdminLogin />} />
                 <Route path="signup" element={<AdminSignup />} />
               </Route>
-              
+
 
             </Route>
             <Route path="enterprise" element={<Business />} />

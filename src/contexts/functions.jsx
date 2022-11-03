@@ -4052,7 +4052,112 @@ export const consoleFunctions = {
             }
         }
     },
-    addNote: async function(token, data){
+    fetchGroups: async function(token, id){
+        try{
+            const res = await axios.get(`${baseURL}/classes/groups/${id}`,
+
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    addGroup:  async function(token, id){
+        try{
+            const res = await axios.post(`${baseURL}/classes/group/add`,
+
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+
+joinGroup:  async function (token, id){
+        try{
+            const res = await axios.post(`${baseURL}/classes/group/join/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    }
+
+
+
+   addNote: async function(token, data){
         try{
             const res = await axios.post(`${baseURL}/classes/content/note/add`, JSON.stringify(data),
             {
@@ -4085,6 +4190,7 @@ export const consoleFunctions = {
             }
         }
     },
+
     fetchNote: async function(token, id){
         try{
             const res = await axios.get(`${baseURL}/classes/contents/notes/${id}`,
