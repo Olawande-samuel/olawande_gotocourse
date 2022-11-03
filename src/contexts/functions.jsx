@@ -4052,7 +4052,75 @@ export const consoleFunctions = {
             }
         }
     },
+    addNote: async function(token, data){
+        try{
+            const res = await axios.post(`${baseURL}/classes/content/note/add`, JSON.stringify(data),
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    fetchNote: async function(token, id){
+        try{
+            const res = await axios.get(`${baseURL}/classes/contents/notes/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
     fetchGroups: async function(token, id){
+        console.log(id);
+        console.log(token);
         try{
             const res = await axios.get(`${baseURL}/classes/groups/${id}`,
 
@@ -4120,7 +4188,6 @@ export const consoleFunctions = {
             }
         }
     },
-
     joinGroup:  async function (token, id){
         try{
             const res = await axios.post(`${baseURL}/classes/group/join/${id}`,
@@ -4154,10 +4221,42 @@ export const consoleFunctions = {
             }
         }
     },
-
-   addNote: async function(token, data){
+    fetchStudentDomains: async function(token, id){
         try{
-            const res = await axios.post(`${baseURL}/classes/content/note/add`, JSON.stringify(data),
+            const res = await axios.get(`${baseURL}/classes/student/domains/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },  
+    fetchStudentContents: async function(token, domainId){
+        try{
+            const res = await axios.get(`${baseURL}/classes/student/contents/${domainId}`,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -4188,10 +4287,75 @@ export const consoleFunctions = {
             }
         }
     },
-
-    fetchNote: async function(token, id){
+    fetchStudentQuiz: async function(token, id){
         try{
-            const res = await axios.get(`${baseURL}/classes/contents/notes/${id}`,
+            const res = await axios.get(`${baseURL}/classes/students/contents/quiz/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },  
+    fetchStudentFile: async function(token, id){
+        try{
+            const res = await axios.get(`${baseURL}/classes/student/contents/files/${id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+        
+
+            if(res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+            
+        }catch(err){
+            if(err.statusCode === 2){
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    fetchStudentNote: async function(token, id){
+        try{
+            const res = await axios.get(`${baseURL}/classes/student/contents/notes/${id}`,
             {
                 headers: {
                     "Authorization": `Bearer ${token}`,

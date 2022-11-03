@@ -1453,8 +1453,8 @@ export const Dashboard = () => {
 
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
     const { data, isSuccess } = useQuery(["fetch my classes"], () => fetchMyClasses(userdata?.token))
-    const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
-    const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
+    // const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
+    // const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
 
     // console.log(data)
 
@@ -1492,7 +1492,7 @@ export const Dashboard = () => {
             <div className={clsx.students_profile}>
                 <DashboardTop content={topContent} />
                 <div className={clsx.students_profile_main}>
-                    <AvailableCourses data={bootcamps?.data?.data ? bootcamps?.data?.data : []} />
+                    <AvailableCourses data={data?.data ? data?.data : []} />
                     <div className={`d-flex flex-wrap ${clsx.dashboard_courses}`}>
                         <div className={clsx["dashboard_courses--right"]}>
                             <h6>Courses on wishlist</h6>
@@ -1600,6 +1600,7 @@ function AvailableCourses({ data }) {
         // localStorage.setItem("gotocourse-courseId", courseInfo.courseId)
         // navigate(`/categories/${courseInfo.category?.split(" ").join("-")}/courses/${courseInfo.name.split(" ").join("-")}}`)
     }
+    console.log({data});
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
@@ -1614,12 +1615,13 @@ function AvailableCourses({ data }) {
                 </div>
 
                 <div className={clsx["coursebody"]}>
-                    {data?.length > 0 && data.filter(item => item.isActive).map((item, i) => (
+                {/* {data?.length > 0 && data.filter(item => item.isActive).map((item, i) => ( */}
+                    {data?.length > 0 && data.map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
 
                             <div className={clsx["courseitem"]}>
-                                <span>{item.title}</span>
+                                <span>{item.bootcampName}</span>
 
                             </div>
 
@@ -1628,7 +1630,7 @@ function AvailableCourses({ data }) {
                             </div>
 
                             <div className={clsx["courseitem"]}>
-                                <span>$ {item.price}</span>
+                                <span>$ {item.bootcampPrice}</span>
 
                             </div>
 

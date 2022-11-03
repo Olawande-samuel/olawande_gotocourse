@@ -13,23 +13,23 @@ import { KEY } from "../../../../../constants";
 import { useLocation } from "react-router-dom";
 
 
-const groups = [
-    {
-        title: 'Group A',
-        description: 'Hold discussions, go live and collaborate with one another',
-        participants: 20
-    },
-    {
-        title: 'Group A',
-        description: 'Hold discussions, go live and collaborate with one another',
-        participants: 20
-    },
-    {
-        title: 'Group A',
-        description: 'Hold discussions, go live and collaborate with one another',
-        participants: 20
-    },
-]
+// const groups = [
+//     {
+//         title: 'Group A',
+//         description: 'Hold discussions, go live and collaborate with one another',
+//         participants: 20
+//     },
+//     {
+//         title: 'Group A',
+//         description: 'Hold discussions, go live and collaborate with one another',
+//         participants: 20
+//     },
+//     {
+//         title: 'Group A',
+//         description: 'Hold discussions, go live and collaborate with one another',
+//         participants: 20
+//     },
+// ]
 
 
 const ChatContainer = styled.div`
@@ -86,7 +86,7 @@ const Groups = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 20px;
-    margin-top: 80px;
+    margin: 30px 0;
 
     @media screen and (max-width: 1225px){
         grid-template-columns: 1fr 1fr;
@@ -561,14 +561,17 @@ const UserInfo = styled.div`
     }
 `
 
-const ChatModule = () => {
+const StudentChatModule = () => {
     const { pathname, search } = useLocation();
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
     let path = pathname.split("/")
     let classId = path[path.length -1]
+    console.log(classId);
 
-    const { consoleFunctions: { fetchGroups, addGroup, joinGroup }, } = useAuth();
+    console.log({userdata});
+
+    const { consoleFunctions: { fetchGroups, joinGroup }, } = useAuth();
 
     const [activeTab, setActiveTab] = useState(0);
     const [show, setShow] = useState(false);
@@ -576,21 +579,29 @@ const ChatModule = () => {
         console.log('ChatModule is mounted');
         return () => console.log('ChatModule is unmounted');
     }, [])
-    const [newGroups, setNewGroups] = useState(_ => {
-        return groups.map(g => {return {...g, showActions: false}});
-    })
+    // const [newGroups, setNewGroups] = useState(_ => {
+    //     return groups.map(g => {return {...g, showActions: false}});
+    // })
+
+    const [newGroups, setNewGroups] = useState([])
 
     const tabs = ['Teams', 'Active Chat', 'Mail'];
 
+    // function toggleActionsHandler(e, index){
+    //     setNewGroups(old => {
+    //         let copy = [...old];
+    //         let foundIndex = copy.findIndex((_, i) => i === index);
+    //         let innerCopy = {...copy[foundIndex]};
+    //         innerCopy.showActions = !innerCopy.showActions;
+    //         copy[foundIndex] = innerCopy;
+    //         console.log(copy[foundIndex]);
+    //         return copy;
+    //     })
+    // }
+
+
     function toggleActionsHandler(e, index){
-        setNewGroups(old => {
-            let copy = [...old];
-            let foundIndex = copy.findIndex((_, i) => i === index);
-            let innerCopy = {...copy[foundIndex]};
-            innerCopy.showActions = !innerCopy.showActions;
-            copy[foundIndex] = innerCopy;
-            return copy;
-        })
+       
     }
 
 
@@ -600,14 +611,16 @@ const ChatModule = () => {
     };
 
 
-    const getContentfromQuery = useQuery(["all groups"], () => fetchGroups(userdata.token, classId), {
+    const getAllGroupsQuery = useQuery(["all groups"], () => fetchGroups(userdata?.token, classId), {
         onSuccess: (res)=> {
             console.log("successful query")
-            console.log(res)
+            console.log(res.data)
+            setNewGroups(res.data)
 
         }
     } )
 
+  
 
     const tabContent = [ <ChatTab groups={newGroups} toggle={toggleActionsHandler} setShow={setShow} />, <ActiveChat />, <MailTab /> ]
     
@@ -786,31 +799,69 @@ function UserCard({status, fullname, number, lastsent, isChat}){
 
 
 function ChatTab({groups, toggle, setShow}){
+    const { getItem } = useLocalStorage();
+    let userdata = getItem(KEY);
+    const { generalState: { isMobile }, consoleFunctions: { joinGroup } } = useAuth();
+
+    const joinGroupQuery = useMutation(([token, data])=>joinGroup(token, data), {
+        onSuccess: (res) => {
+            console.log(res.data)
+        },
+        onError: (err) => {
+            console.error(err)
+        }
+    })
     return (
         <ChatGroup>
-            <h2>Group</h2>
-            <p>Breakout your students into teams to hold discussions, go live and collaborate with one another.</p>
-            <Createbutton onClick={()=> setShow(true)}>Create Group</Createbutton>
+            <h2>My Group</h2>
             <Groups>
                 {
-                    groups.map(({title, description, participants, showActions}, i) => (
-                        <Group key={i}>
+                    groups.map(({title, description, students, classId, _id}, i) => (
+                        <Group key={_id}>
                             <GroupTop>
                                 <h2>{title}</h2>
                                 <span onClick={e => toggle(e, i)}>
                                     <AiOutlineMore />
-                                    <GroupDropdown $show={showActions ? true : false}>
+                                    {/* <GroupDropdown $show={showActions ? true : false}>
                                         <li>Edit</li>
                                         <li>Archive</li>
-                                    </GroupDropdown>
+                                    </GroupDropdown> */}
                                 </span>
                             </GroupTop>
                             <GroupBody>
                                 <h3>{title}</h3>
                                 <p>{description}</p>
                                 <footer>
-                                    <span>{participants} participants</span>
-                                    <button>Open team</button>
+                                    <span>{students} participants</span>
+                                    <button onClick={() =>  joinGroupQuery.mutate([userdata.token, _id])}>Open team</button>
+                                </footer>
+                            </GroupBody>
+                        </Group>
+                    ))
+                }
+            </Groups>
+
+            <h2>All Group</h2>
+            <Groups>
+                {
+                    groups.map(({title, description, students,classId, _id}, i) => (
+                        <Group key={_id}>
+                            <GroupTop>
+                                <h2>{title}</h2>
+                                <span onClick={e => toggle(e, i)}>
+                                    <AiOutlineMore />
+                                    {/* <GroupDropdown $show={showActions ? true : false}>
+                                        <li>Edit</li>
+                                        <li>Archive</li>
+                                    </GroupDropdown> */}
+                                </span>
+                            </GroupTop>
+                            <GroupBody>
+                                <h3>{title}</h3>
+                                <p>{description}</p>
+                                <footer>
+                                    <span>{students} participants</span>
+                                    <button onClick={() =>  joinGroupQuery.mutate([userdata.token, _id])}>Open team</button>
                                 </footer>
                             </GroupBody>
                         </Group>
@@ -867,4 +918,4 @@ function Modal({setShow}){
 }
 
 
-export default ChatModule;
+export default StudentChatModule;

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
 import { Breadcrumbs, IconButton, Paper, Backdrop, Tooltip } from "@mui/material";
@@ -12,8 +12,11 @@ import { RiVideoAddFill } from "react-icons/ri";
 
 import { Sidebar } from "./components";
 import { CustomButton } from './components/Sidebar';
-import { useEffectOnMount } from '../../../../hooks';
+import { useEffectOnMount, useLocalStorage } from '../../../../hooks';
 import quiz from '../../../../images/classroom_quiz.svg';
+import { useAuth } from '../../../../contexts/Auth';
+import { KEY } from '../../../../constants';
+import { useQuery } from '@tanstack/react-query';
 
 
 const Container = styled.div`
@@ -334,21 +337,60 @@ let mods = [
 const Classroom = () => {
     const [showMobile, setShowMobile] = useState(false);
     const [modules, setModules] = useState(() => mods);
+    // const [modules, setModules] = useState([]);
+    const { getItem } = useLocalStorage()
+    const userdata = getItem(KEY)
+    let location = useLocation()
+
+    const classDetail = location.state.bootcamp
+    console.log(classDetail);
+    const { id } = useParams()
+    console.log(id);
+
+    const { consoleFunctions: { fetchStudentDomains, fetchStudentContents, fetchStudentQuiz, fetchStudentFile, fetchStudentNote  }, } = useAuth();
+
+    const fetchDomains = useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id))
+    const getDomainContent = useQuery(["getDomainContent", id], () => fetchStudentContents(userdata.token, id));
+    const fetchFile = useQuery(["fetch file", id], () => fetchStudentFile(userdata.token, id))
+    const fetchNotee = useQuery(["fetch file", id], () => fetchStudentNotee(userdata.token, id))
+    const getQuiz = useQuery(["quiz content", id], () => fetchStudentQuiz(userdata.token, id), {
+        onSuccess: (res)=> {
+            console.log("successful query")
+            console.log(res)
+            if(res.data.length > 0){
+                setFormData({...res.data[0]})
+            }
+        }
+    } )
+
+    // useEffect(() => {
+    //     if (getDomainContent?.data?.data?.length > 0) {
+    //         setModules(getDomainContent?.data?.data)
+    //       }
+
+    //   }, [getDomainContent?.data?.data])
+
+
     let attachements = useMemo(() => {
         return modules.map(m => m.attachments).flat();
     }, [...modules]);
+
     const [activeMedia, setActiveMedia] = useState(() => {
         return attachements.find((_, i) => i === 0);
     })
+
     const active = useMemo(() => {
         return activeMedia.title;
     }, [activeMedia])
+
+
     console.log({ attachements, activeMedia, active })
+
+
     useEffectOnMount(() => {
         console.log('Student classroom is mounted');
         return () => console.log('Student classroom is unmounted')
     }, [])
-
 
 
 
@@ -419,12 +461,7 @@ const Classroom = () => {
         console.log({ newActive });
     }
 
-    let location = useLocation()
-
-    const classDetail = location.state.bootcamp
-    console.log(classDetail);
-    const { id } = useParams()
-    console.log(id);
+   
 
     return (
         <Container>
