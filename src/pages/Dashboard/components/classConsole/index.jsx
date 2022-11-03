@@ -62,14 +62,14 @@ const studentIcon = [
     id: 1,
     icon: MdMessage,
     title: "Mail",
-    link:""
+    link: "/student/console/class-console/class/mail"
   },
 
   {
     id: 2,
     icon: RiVideoAddFill,
     title: "Live Class",
-    link:"/student/live-class"
+    link: "/student/live-class"
   },
 ];
 
@@ -105,32 +105,32 @@ const popIcon = [
     id: 1,
     icon: BsCameraReels,
     title: "Record Camera",
-    type:""
+    type: ""
   },
   {
     id: 2,
     icon: VscScreenNormal,
     title: "Record Screen",
-    type:""
+    type: ""
   },
   {
     id: 3,
     icon: RiVideoAddFill,
     title: "Upload Video",
-    type:"file"
+    type: "file"
   },
 
   {
     id: 4,
     icon: BsCloudUpload,
     title: "Upload File/Image",
-    type:"file"
+    type: "file"
   },
   {
     id: 5,
     icon: BsPlayBtn,
     title: "Import from Creator suite",
-    type:""
+    type: ""
   },
 ];
 
@@ -163,8 +163,8 @@ export const Console = ({ children }) => {
     pathname.split("/")[2] === "myclasses"
       ? "My Classes"
       : pathname.split("/")[2] === "liveclass"
-      ? "Live Class"
-      : pathname.split("/")[2];
+        ? "Live Class"
+        : pathname.split("/")[2];
 
   return (
     <div className={style.console}>
@@ -214,22 +214,24 @@ export const Console = ({ children }) => {
 
       <div className={style.icon_bar}>
         {studentpath
-          ? studentIcon.map(({ title, id, icon: Icon }) => (
-              <Tooltip title={title} key={id}>
-                <IconButton>
+          ? studentIcon.map(({ title, id, icon: Icon, link }) => (
+            <Tooltip title={title} key={id}>
+              <IconButton>
+                <Link to={link} className="d-inline-flex">
                   <Icon size="1.5rem" color="#0C2191" />
-                </IconButton>
-              </Tooltip>
-            ))
+                </Link>
+              </IconButton>
+            </Tooltip>
+          ))
           : iconData.map(({ title, id, icon: Icon, link }) => (
-              <Tooltip title={title} key={id}>
-                <IconButton>
-                  <Link to={link} className="d-inline-flex">
-                    <Icon size="1.5rem" color="#0C2191" />
-                  </Link>
-                </IconButton>
-              </Tooltip>
-            ))}
+            <Tooltip title={title} key={id}>
+              <IconButton>
+                <Link to={link} className="d-inline-flex">
+                  <Icon size="1.5rem" color="#0C2191" />
+                </Link>
+              </IconButton>
+            </Tooltip>
+          ))}
       </div>
     </div>
   );
@@ -297,9 +299,8 @@ function Sidebar({ Toggle, side }) {
     // <article className={style.class_sidebar }>
     <>
       <article
-        className={`${classConsole.sidebar ? style.open : style.close} ${
-          style.class_sidebar
-        }`}
+        className={`${classConsole.sidebar ? style.open : style.close} ${style.class_sidebar
+          }`}
       >
         <Link to="/">
           <Logosm />
@@ -326,7 +327,7 @@ function Sidebar({ Toggle, side }) {
             </div>
 
             <Link className="d-inline-flex" to={goBack()}>
-              <button className={style.back_button} style={{width:"100%"}}>Back to Dashboard</button>
+              <button className={style.back_button} style={{ width: "100%" }}>Back to Dashboard</button>
             </Link>
           </>
         ) : (
@@ -367,9 +368,8 @@ function Sidebar({ Toggle, side }) {
       </article>
       <div
         onClick={closeSidebar}
-        className={`d-lg-none ${clsx.overlay} ${
-          classConsole.sidebar ? clsx.overlayopen : clsx.overlayclose
-        }`}
+        className={`d-lg-none ${clsx.overlay} ${classConsole.sidebar ? clsx.overlayopen : clsx.overlayclose
+          }`}
       ></div>
     </>
   );
@@ -380,10 +380,10 @@ function Accord({ name, _id, classId, description }) {
   const { getItem } = useLocalStorage();
   const userdata = getItem(KEY);
   const { consoleFunctions: { fetchContents }, } = useAuth();
-  const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId) );
+  const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId));
 
-  useEffect(()=>{
-    if(getDomainContent?.data?.data?.length > 0){
+  useEffect(() => {
+    if (getDomainContent?.data?.data?.length > 0) {
       console.log(getDomainContent.data.data[0])
     }
   }, [getDomainContent?.data?.data])
@@ -417,25 +417,25 @@ function Accord({ name, _id, classId, description }) {
   const domain = [
     {
       id: 1,
-      title:"Edit domain",
+      title: "Edit domain",
     },
     {
       id: 2,
-      title:"Add Content",
+      title: "Add Content",
     },
     {
       id: 3,
-      title:"Lock all content",
+      title: "Lock all content",
     },
     {
       id: 4,
-      title:"Delete Domain",
+      title: "Delete Domain",
     },
-    
+
   ]
 
-  function handleContentNavigation(...args){
-    setSearchParams({"content": args[0]})
+  function handleContentNavigation(...args) {
+    setSearchParams({ "content": args[0] })
   }
 
   return (
@@ -454,14 +454,14 @@ function Accord({ name, _id, classId, description }) {
       </div>
 
       {
-        details && 
+        details &&
         <ul className={style.content_list}>
-          {getDomainContent?.data?.data?.filter(item=> item.domain === _id).map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
-            <li key={_id} onClick={()=>handleContentNavigation(_id, type, domain, classId)} className="d-flex justify-content-between">
+          {getDomainContent?.data?.data?.filter(item => item.domain === _id).map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
+            <li key={_id} onClick={() => handleContentNavigation(_id, type, domain, classId)} className="d-flex justify-content-between">
               {/* <Link to={`${routeType(type)}`} className="d-flex justify-content-between"> */}
-                <i>{IconType(type)}</i>
-                <span>{title}</span>
-                <AccordMenu />
+              <i>{IconType(type)}</i>
+              <span>{title}</span>
+              <AccordMenu />
               {/* </Link> */}
             </li>
           ))}
@@ -471,7 +471,7 @@ function Accord({ name, _id, classId, description }) {
   );
 }
 
-function AccordMenu({id, content}){
+function AccordMenu({ id, content }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -511,31 +511,31 @@ function AccordMenu({id, content}){
 export function ModalContent({ show, handleClose, toggleModule }) {
   const [showMore, setShowMore] = useState(false);
   const [type, setType] = useState("file");
-  const {getItem} = useLocalStorage();
+  const { getItem } = useLocalStorage();
   const classId = localStorage.getItem(CLASSID)
   const userdata = getItem(KEY)
   let ref = useRef();
-  const { generalState, setGeneralState, generalState: { classConsole, }, consoleFunctions:{addContent} } = useAuth();
+  const { generalState, setGeneralState, generalState: { classConsole, }, consoleFunctions: { addContent } } = useAuth();
   const [formstate, setFormstate] = useState({
-    isLocked:false,
-    notifyStudents:false,
+    isLocked: false,
+    notifyStudents: false,
   });
 
   const queryClient = useQueryClient()
   const fetchDomains = useQuery(["fetch domains", classId], () => fetchDomains(userdata.token, classId))
 
-  const addContentMutation = useMutation(([token, state])=>addContent(token, state), {
-    onSuccess: (res)=>{
-        queryClient.invalidateQueries('fetch domains')
-        handleClose();
+  const addContentMutation = useMutation(([token, state]) => addContent(token, state), {
+    onSuccess: (res) => {
+      queryClient.invalidateQueries('fetch domains')
+      handleClose();
     },
-    onError: (err)=>{
-        console.error("error adding content", err )
+    onError: (err) => {
+      console.error("error adding content", err)
     }
   })
 
   function handleChange(e) {
-    setFormstate({ ...formstate, [e.target.name]: e.target.value});
+    setFormstate({ ...formstate, [e.target.name]: e.target.value });
   }
 
 
@@ -544,15 +544,15 @@ export function ModalContent({ show, handleClose, toggleModule }) {
       toast.error("Please select a domain");
       throw new AdvancedError("Please select a domain", 0);
     }
-    addContentMutation.mutate([userdata.token, {...formstate, classId}]) 
+    addContentMutation.mutate([userdata.token, { ...formstate, classId }])
   }
 
 
-  function handleNotifyStudent(){
-    setFormstate({...formstate, notifyStudents: !formstate.notifyStudents})
+  function handleNotifyStudent() {
+    setFormstate({ ...formstate, notifyStudents: !formstate.notifyStudents })
   }
-  function handleIsLocked(){
-    setFormstate({...formstate, isLocked: !formstate.isLocked})
+  function handleIsLocked() {
+    setFormstate({ ...formstate, isLocked: !formstate.isLocked })
   }
 
   return (
@@ -587,7 +587,7 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 <MenuItem value="QUIZ">
                   <i>
                     <VscNote />
-                  </i> 
+                  </i>
                   Quiz
                 </MenuItem>
                 <MenuItem value="NOTE">
@@ -629,11 +629,11 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                   <em>None</em>
                 </MenuItem>
 
-               {
+                {
                   fetchDomains?.data?.data?.map((domain) => (
-                     <MenuItem value={domain._id}>{domain.name}</MenuItem>
+                    <MenuItem value={domain._id}>{domain.name}</MenuItem>
                   ))
-               }
+                }
 
                 <button className={style.modulebtn} onClick={toggleModule}>
                   + New Module
@@ -678,7 +678,7 @@ export function ModalContent({ show, handleClose, toggleModule }) {
 
                   <div className={style.switchBorder}>
                     <FormControlLabel
-                      control={<Switch  />}
+                      control={<Switch />}
                       label="Lock course content"
                       labelPlacement="top"
                       value="lock course"
@@ -693,12 +693,12 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                   <div className={style.switchBorder}>
                     <FormControlLabel
                       control={
-                           <Switch 
-                              onClick={handleNotifyStudent}
-                              checked={formstate.notifyStudents}
-                              value="notifyStudent"
-                           />
-                        }
+                        <Switch
+                          onClick={handleNotifyStudent}
+                          checked={formstate.notifyStudents}
+                          value="notifyStudent"
+                        />
+                      }
                       label="Notify students on update"
                       labelPlacement="top"
                     />
@@ -713,12 +713,12 @@ export function ModalContent({ show, handleClose, toggleModule }) {
             </div>
 
             <button className={style.contentform__btn} onClick={createContent} disabled={addContentMutation.isLoading}>
-               {
-                  addContentMutation.isLoading ? <div className="spinner-border" role="status">
+              {
+                addContentMutation.isLoading ? <div className="spinner-border" role="status">
                   <span className="visually-hidden">Loading...</span>
                 </div> :
-                <span>Submit</span>
-               }
+                  <span>Submit</span>
+              }
             </button>
           </div>
         </Modal.Body>
@@ -736,32 +736,32 @@ export function ModalContent({ show, handleClose, toggleModule }) {
 }
 
 export function ModuleModal({ moduleOpen, moduleClose }) {
-   const {consoleFunctions:{addDomain }} = useAuth()
-   const {getItem} = useLocalStorage()
-   const [formstate, setFormstate] = useState({});
-   const queryClient = useQueryClient()
- 
-   const  mutation = useMutation(([token, state])=>addDomain(token, state), {
-      onSuccess: (res)=>{
-         queryClient.invalidateQueries('fetch domains')
-         moduleClose();
-      }, 
-      onError: (err)=>{
-         console.error(err)
-      }
-   })
+  const { consoleFunctions: { addDomain } } = useAuth()
+  const { getItem } = useLocalStorage()
+  const [formstate, setFormstate] = useState({});
+  const queryClient = useQueryClient()
 
-   const userdata = getItem(KEY)
-   const classId = localStorage.getItem(CLASSID)
+  const mutation = useMutation(([token, state]) => addDomain(token, state), {
+    onSuccess: (res) => {
+      queryClient.invalidateQueries('fetch domains')
+      moduleClose();
+    },
+    onError: (err) => {
+      console.error(err)
+    }
+  })
 
-   function handleChange(e) {
+  const userdata = getItem(KEY)
+  const classId = localStorage.getItem(CLASSID)
+
+  function handleChange(e) {
     setFormstate({ ...formstate, [e.target.name]: e.target.value })
-   }
+  }
 
   function createModule() {
-   mutation.mutate([userdata.token, {...formstate, classId}])
+    mutation.mutate([userdata.token, { ...formstate, classId }])
   }
-  
+
   return (
     <div>
       <Modal show={moduleOpen} onHide={moduleClose} className="modulemodal">
@@ -802,14 +802,14 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
 
             <div className="contentbutton">
               <button className="" onClick={createModule} disabled={mutation.isLoading}>
-               {
+                {
                   mutation.isLoading ?
-                   <div className="spinner-border" role="status">
-                   <span className="visually-hidden">Loading...</span>
-                 </div>
-                 : 
-                 <span>Submit</span>
-               }
+                    <div className="spinner-border" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    :
+                    <span>Submit</span>
+                }
               </button>
             </div>
 
@@ -832,9 +832,9 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
 }
 
 export function PopModalContent({ open, closeSmall, openUpload }) {
-  function handleClick(type){
+  function handleClick(type) {
     console.log(type)
-    if(type === "file"){
+    if (type === "file") {
       openUpload(true)
     }
 
@@ -848,7 +848,7 @@ export function PopModalContent({ open, closeSmall, openUpload }) {
         <Modal.Body>
           <div className="style.smallmodalbody" >
             {popIcon.map(({ title, id, type, icon: Icon }) => (
-              <Tooltip title={title} key={id} onClick={()=>handleClick(type)}>
+              <Tooltip title={title} key={id} onClick={() => handleClick(type)}>
                 <IconButton className="popicons">
                   <Icon size="1.5rem" color="#0C2191" />
                   <span className={style.smalltitle}>{title}</span>
@@ -862,26 +862,26 @@ export function PopModalContent({ open, closeSmall, openUpload }) {
   );
 }
 
-export function MainContainer(){
+export function MainContainer() {
   const { consoleFunctions: { fetchContents }, } = useAuth();
-  
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { getItem } = useLocalStorage();
   const userdata = getItem(KEY);
   const navigate = useNavigate();
-  const {classId} = useParams()
+  const { classId } = useParams()
 
-  const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId) );
+  const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId));
   const [data, setData] = useState({})
   const contentid = searchParams.get("content")
 
-  useEffect(()=>{
-    if(getDomainContent?.data?.data?.length > 0){
-      if(contentid){
-          let content = getDomainContent.data.data.find(item=> item._id === contentid);
-          setData(content)
-      } else{
+  useEffect(() => {
+    if (getDomainContent?.data?.data?.length > 0) {
+      if (contentid) {
+        let content = getDomainContent.data.data.find(item => item._id === contentid);
+        setData(content)
+      } else {
         console.log(getDomainContent.data.data[0])
         navigate(`?content=${getDomainContent.data.data[0]._id}`)
         setData(getDomainContent.data.data[0])
@@ -890,18 +890,18 @@ export function MainContainer(){
 
   }, [getDomainContent?.data?.data, contentid])
 
-  console.log({data})
+  console.log({ data })
   switch (data.type) {
     case "FILE_VIDEO":
       return <File />;
     case "QUIZ":
       return <Quiz />;
     case "NOTE":
-      return <Note /> ;
+      return <Note />;
     default:
-      return ;
+      return;
   }
- 
+
 }
 
 export default Console;
