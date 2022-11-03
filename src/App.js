@@ -257,13 +257,13 @@ function App() {
                 <Route path="console" element={<Content />}>
                   <Route path="myclasses" element={<Out />} >
                     <Route index element={<ConsoleClasses />} />
-                    {/* <Route path=":id" element={<MyClass />} /> */}
+                    <Route path=":id" element={<ChatComponent />} />
                   </Route>
-                  <Route path="class-console/class/mail" element={<ChatComponent />} />
                   <Route path="assessments" element={<ConsoleAssessments />} />
                   <Route path="liveclass" element={<Out />} />
                 </Route>
-                <Route path="class-console/class" element={<StudentClassroom />} />
+                <Route path="class-console/class/:id" element={<StudentClassroom />} />
+
               </Route>
 
               <Route path="test" element={<Content />}>

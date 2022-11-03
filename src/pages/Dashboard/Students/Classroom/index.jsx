@@ -1,21 +1,42 @@
-import {useState, useMemo} from 'react';
+import { useState, useMemo } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { Breadcrumbs, IconButton, Paper, Backdrop } from "@mui/material";
-import {MdNavigateNext, MdShare, MdMoreVert, MdMenu} from "react-icons/md";
-import {BiCloudDownload} from "react-icons/bi";
-import {FaCaretRight, FaCaretLeft} from 'react-icons/fa';
+import { Link, useParams } from 'react-router-dom';
+import { Breadcrumbs, IconButton, Paper, Backdrop, Tooltip } from "@mui/material";
+import { MdNavigateNext, MdShare, MdMoreVert, MdMenu, MdMessage } from "react-icons/md";
+import { BiCloudDownload } from "react-icons/bi";
+import { FaCaretRight, FaCaretLeft } from 'react-icons/fa';
+import { useLocation } from 'react-router-dom';
+import { RiVideoAddFill } from "react-icons/ri";
 
 
 
-
-import {Sidebar} from "./components";
+import { Sidebar } from "./components";
 import { CustomButton } from './components/Sidebar';
 import { useEffectOnMount } from '../../../../hooks';
 import quiz from '../../../../images/classroom_quiz.svg';
 
 
+const Container = styled.div`
+position: relative;
 
+`
+const IconContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: .8rem .4rem;
+    width: 50px;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    border: 1px solid var(--theme-blue);
+    border-radius: 10px;
+    background: #EEF5FF;
+    box-shadow: 0px 203px 81px rgba(0, 0, 0, 0.01), 0px 114px 68px rgba(0, 0, 0, 0.05), 0px 51px 51px rgba(0, 0, 0, 0.09), 0px 13px 28px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
+`
 
 const ClassroomContainer = styled.div`
     width: 100%;
@@ -35,7 +56,7 @@ const BreadcrumbLink = styled(Link)`
     color: ${props => props.$isCurrentPage ? '#0C2191' : '#666363'};
     font-weight: 400;
     font-size: 0.9rem;
-    cursor: ${(props) => props.$isCurrentPage ? 'not-allowed': 'pointer'};
+    cursor: ${(props) => props.$isCurrentPage ? 'not-allowed' : 'pointer'};
 
     &:hover {
         color:#0C2191
@@ -322,132 +343,178 @@ const Classroom = () => {
     const active = useMemo(() => {
         return activeMedia.title;
     }, [activeMedia])
-    console.log({attachements, activeMedia, active})
+    console.log({ attachements, activeMedia, active })
     useEffectOnMount(() => {
         console.log('Student classroom is mounted');
         return () => console.log('Student classroom is unmounted')
     }, [])
+
+
+
+
+
     const mediaContent = useMemo(() => {
-        return activeMedia?.type === 'video' ? 
-        (<Paper variant='outlined'>
-            <PaperTop>
-                <h5>shell.svg</h5>
-                <IconButton>
-                    <MdMoreVert />
-                </IconButton>
-            </PaperTop>
-            <PaperBody>
-                <BodyActions>
+        return activeMedia?.type === 'video' ?
+            (<Paper variant='outlined'>
+                <PaperTop>
+                    <h5>shell.svg</h5>
                     <IconButton>
-                        <BiCloudDownload />
+                        <MdMoreVert />
                     </IconButton>
-                    <CustomButton>Open</CustomButton>
-                </BodyActions>
-            </PaperBody>
-        </Paper>) 
-        : activeMedia?.type === 'quiz' ? 
-        (<Quiz>
-            <QuizImageContainer>
-                <QuizImage src={quiz} alt="Quiz Image" />
-            </QuizImageContainer>
-            <QuizButton>Open Quiz</QuizButton>
-        </Quiz>) : 
-        (<Note>
-            <h4>Hey this is a demo note heading</h4>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat fuga ducimus perferendis commodi. Iste nisi neque blanditiis, officiis rerum iure unde molestiae optio pariatur fuga ipsa officia, doloremque ipsam voluptates?</p>
-        </Note>);
+                </PaperTop>
+                <PaperBody>
+                    <BodyActions>
+                        <IconButton>
+                            <BiCloudDownload />
+                        </IconButton>
+                        <CustomButton>Open</CustomButton>
+                    </BodyActions>
+                </PaperBody>
+            </Paper>)
+            : activeMedia?.type === 'quiz' ?
+                (<Quiz>
+                    <QuizImageContainer>
+                        <QuizImage src={quiz} alt="Quiz Image" />
+                    </QuizImageContainer>
+                    <QuizButton>Open Quiz</QuizButton>
+                </Quiz>) :
+                (<Note>
+                    <h4>Hey this is a demo note heading</h4>
+                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat fuga ducimus perferendis commodi. Iste nisi neque blanditiis, officiis rerum iure unde molestiae optio pariatur fuga ipsa officia, doloremque ipsam voluptates?</p>
+                </Note>);
     }, [activeMedia])
 
     const mediaAction = useMemo(() => {
-        return activeMedia?.type === 'video' ? 
-        (<VideoAction>
-            <NextButton variant="outlined">
-                Next Content <FaCaretRight />
-            </NextButton>
-        </VideoAction>) 
-        : activeMedia?.type === 'quiz' ? 
-        (<QuizAction>
-            <PreviousButton variant="outlined">
-                <FaCaretLeft />  Previous Content
-            </PreviousButton>
-            <QuizButton>
-                Mark as Completed
-            </QuizButton>
-        </QuizAction>) : 
-        (<QuizAction>
-            <PreviousButton variant="outlined">
-                <FaCaretLeft />  Previous Content
-            </PreviousButton>
-            <NextButton variant="outlined">
-                Next Content <FaCaretRight />
-            </NextButton>
-        </QuizAction>)
+        return activeMedia?.type === 'video' ?
+            (<VideoAction>
+                <NextButton variant="outlined">
+                    Next Content <FaCaretRight />
+                </NextButton>
+            </VideoAction>)
+            : activeMedia?.type === 'quiz' ?
+                (<QuizAction>
+                    <PreviousButton variant="outlined">
+                        <FaCaretLeft />  Previous Content
+                    </PreviousButton>
+                    <QuizButton>
+                        Mark as Completed
+                    </QuizButton>
+                </QuizAction>) :
+                (<QuizAction>
+                    <PreviousButton variant="outlined">
+                        <FaCaretLeft />  Previous Content
+                    </PreviousButton>
+                    <NextButton variant="outlined">
+                        Next Content <FaCaretRight />
+                    </NextButton>
+                </QuizAction>)
     }, [activeMedia])
 
 
-    function setActiveMediaHandler(title){
+    function setActiveMediaHandler(title) {
         let newActive = attachements.find(a => a.title === title);
-        let active = {...newActive};
+        let active = { ...newActive };
         active.active = true;
         setActiveMedia(_ => active);
-        console.log({newActive});
+        console.log({ newActive });
     }
 
+    let location = useLocation()
+
+    const classDetail = location.state.bootcamp
+    console.log(classDetail);
+    const { id } = useParams()
+    console.log(id);
 
     return (
-        <>
-        <Navbar>
-            <div style={{display: 'flex', alignItems: 'center'}}>
-                <MenuButton onClick={e => setShowMobile(_ => true)}>
-                    <MdMenu />
-                </MenuButton>
-                <h5 style={{margin: 0}}>Classroom</h5>
-            </div>
-            <NavLeft>
-                <IconButton>
-                    <MdShare />
-                </IconButton>
-                <IconButton>
-                    <MdMoreVert />
-                </IconButton>
-            </NavLeft>
-        </Navbar>
-        <ClassroomContainer>
-        <Backdrop
-        sx={{ color: '#fff', zIndex: 1000 }}
-        open={showMobile}
-        onClick={e => setShowMobile(_ => false)}
-        >
-            <Sidebar isMobile={true} modules={modules} activeMedia={active} changeActive={setActiveMediaHandler} />
-        </Backdrop>
-            <Sidebar isMobile={false} modules={modules} activeMedia={active} changeActive={setActiveMediaHandler} />
-            <ClassroomMain>
-                <ClassroomMainTop>
-                    <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
-                        <BreadcrumbLink to="/">
-                            Dashboard
-                        </BreadcrumbLink>
-                        <BreadcrumbLink to="#">
-                            Information Security Assurance
-                        </BreadcrumbLink>
-                        <BreadcrumbLink to="#" $isCurrentPage={true}>
-                            {activeMedia?.title}
-                        </BreadcrumbLink>
-                    </Breadcrumbs>
-                </ClassroomMainTop>
-                <ClassroomMainBody>
-                    <BodyInfo>
-                        <h3>{activeMedia?.title}</h3>
-                        <CustomButton>Ask tutor a question</CustomButton>
-                    </BodyInfo>
-                    <BodyContent>
-                        {mediaContent}
-                        {mediaAction}
-                    </BodyContent>
-                </ClassroomMainBody>
-            </ClassroomMain>
-        </ClassroomContainer>
-        </>
+        <Container>
+            <Navbar>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <MenuButton onClick={e => setShowMobile(_ => true)}>
+                        <MdMenu />
+                    </MenuButton>
+                    <h5 style={{ margin: 0 }}>Classroom</h5>
+                </div>
+                <NavLeft>
+                    <IconButton>
+                        <MdShare />
+                    </IconButton>
+                    <IconButton>
+                        <MdMoreVert />
+                    </IconButton>
+                </NavLeft>
+            </Navbar>
+            <ClassroomContainer>
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: 1000 }}
+                    open={showMobile}
+                    onClick={e => setShowMobile(_ => false)}
+                >
+                    <Sidebar isMobile={true} modules={modules} activeMedia={active} changeActive={setActiveMediaHandler} />
+                </Backdrop>
+                <Sidebar isMobile={false} modules={modules} activeMedia={active} changeActive={setActiveMediaHandler} />
+                <ClassroomMain>
+                    <ClassroomMainTop>
+                        <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
+                            <BreadcrumbLink to="/">
+                                Dashboard
+                            </BreadcrumbLink>
+                            <BreadcrumbLink to="#">
+                                {classDetail?.title}
+                            </BreadcrumbLink>
+                            <BreadcrumbLink to="#" $isCurrentPage={true}>
+                                {activeMedia?.title}
+                            </BreadcrumbLink>
+                        </Breadcrumbs>
+                    </ClassroomMainTop>
+                    <ClassroomMainBody>
+                        <BodyInfo>
+                            <h3>{activeMedia?.title}</h3>
+                            <CustomButton>Ask tutor a question</CustomButton>
+                        </BodyInfo>
+                        <BodyContent>
+                            {mediaContent}
+                            {mediaAction}
+                        </BodyContent>
+                    </ClassroomMainBody>
+                </ClassroomMain>
+            </ClassroomContainer>
+
+            <IconComponent classId={id}/>
+        </Container>
+    )
+}
+
+
+const IconComponent = ({ classId }) => {
+    const studentIcon = [
+        {
+            id: 1,
+            icon: MdMessage,
+            title: "Mail",
+            link: `/student/console/myclasses/${classId}`
+        },
+
+        {
+            id: 2,
+            icon: RiVideoAddFill,
+            title: "Live Class",
+            link: "/student/live-class"
+        },
+    ];
+    return (
+        <IconContainer className='iconbar'>
+            {studentIcon.map(({ title, id, icon: Icon, link }) => (
+                <Tooltip title={title} key={id}>
+                    <IconButton>
+                        <Link to={link} className="d-inline-flex">
+                            <Icon size="1.5rem" color="#0C2191" />
+                        </Link>
+                    </IconButton>
+                </Tooltip>
+            ))
+            }
+        </IconContainer>
     )
 }
 

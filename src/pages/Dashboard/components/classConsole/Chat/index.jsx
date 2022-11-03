@@ -567,6 +567,7 @@ const ChatModule = () => {
     const userdata = getItem(KEY)
     let path = pathname.split("/")
     let classId = path[path.length -1]
+    console.log(classId);
 
     console.log({userdata});
 
@@ -605,7 +606,7 @@ const ChatModule = () => {
     const getContentfromQuery = useQuery(["all groups"], () => fetchGroups(userdata.token, classId), {
         onSuccess: (res)=> {
             console.log("successful query")
-            console.log(res)
+            console.log(res.data)
 
         }
     } )
