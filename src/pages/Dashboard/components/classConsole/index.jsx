@@ -57,7 +57,44 @@ import MenuItem from '@mui/material/MenuItem';
 import File from "./File"
 import Quiz from "./Quiz"
 import Note from "./Note"
-const studentIcon = [
+
+
+const popIcon = [
+  {
+    id: 1,
+    icon: BsCameraReels,
+    title: "Record Camera",
+    type: ""
+  },
+  {
+    id: 2,
+    icon: VscScreenNormal,
+    title: "Record Screen",
+    type: ""
+  },
+  {
+    id: 3,
+    icon: RiVideoAddFill,
+    title: "Upload Video",
+    type: "file"
+  },
+
+  {
+    id: 4,
+    icon: BsCloudUpload,
+    title: "Upload File/Image",
+    type: "file"
+  },
+  {
+    id: 5,
+    icon: BsPlayBtn,
+    title: "Import from Creator suite",
+    type: ""
+  },
+];
+
+export const Console = ({ children }) => {
+  const studentIcon = [
   {
     id: 1,
     icon: MdMessage,
@@ -99,42 +136,6 @@ const iconData = [
     link: "/teacher/class-console/class/classroom",
   },
 ];
-
-const popIcon = [
-  {
-    id: 1,
-    icon: BsCameraReels,
-    title: "Record Camera",
-    type: ""
-  },
-  {
-    id: 2,
-    icon: VscScreenNormal,
-    title: "Record Screen",
-    type: ""
-  },
-  {
-    id: 3,
-    icon: RiVideoAddFill,
-    title: "Upload Video",
-    type: "file"
-  },
-
-  {
-    id: 4,
-    icon: BsCloudUpload,
-    title: "Upload File/Image",
-    type: "file"
-  },
-  {
-    id: 5,
-    icon: BsPlayBtn,
-    title: "Import from Creator suite",
-    type: ""
-  },
-];
-
-export const Console = ({ children }) => {
   const {
     generalState: { classConsole },
     generalState,
