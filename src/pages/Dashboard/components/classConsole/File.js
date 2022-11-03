@@ -8,6 +8,12 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Link, useLocation } from "react-router-dom";
+import UploadForm from './components/upload';
+import { useAuth } from '../../../../contexts/Auth';
+import { useLocalStorage } from '../../../../hooks';
+import { KEY } from '../../../../constants';
+import { useQuery } from '@tanstack/react-query';
+import { IconButton, Modal, stepContentClasses, Tooltip } from '@mui/material';
 
 
 function TabPanel(props) {
@@ -31,16 +37,24 @@ function TabPanel(props) {
 }
 
 export default function File() {
+    const { pathname, search } = useLocation();
+
     const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(0);
+    const [openUpload, setOpenUpload]= useState(false)
+    const [fileData, setFileData]= useState([])
+    const {consoleFunctions: {fetchFile}} = useAuth()
+    const {getItem} = useLocalStorage()
+    
+    const bread = pathname?.split("/");
+    let path = pathname.split("/")
+    let classId = path[path.length -1]
+    let searchData = search.split("=").reverse()[0]
+    
+    const userdata = getItem(KEY)
+    
     const OpenToggle = () => setOpen(!open)
     const closeSmall = () => setOpen(false);
-
-    const [value, setValue] = useState(0);
-
-    const { pathname } = useLocation();
-    const bread = pathname?.split("/");
-
-
     function a11yProps(index) {
         return {
             id: `simple-tab-${index}`,
@@ -65,6 +79,16 @@ export default function File() {
         }
     }
 
+    const getFiles = useQuery(["file content", search, searchData], () => fetchFile(userdata.token, searchData), {
+        onSuccess: (res)=> {
+            console.log("successful query")
+            console.log(res)
+            if(res.data?.length > 0){
+                setFileData(res.data)
+            }
+            
+        }
+    } )
     return (
         <>
             <div className=''>
@@ -112,8 +136,12 @@ export default function File() {
                         </section>
 
                         <main className='contentbody'>
+                            {
+                                fileData?.map(item=>(
+                                    <FileCard {...item} key={item._id} />
 
-
+                                ))
+                            }
                         </main>
 
                         <div className="contentbutton">
@@ -122,6 +150,7 @@ export default function File() {
                                 <IoMdCloudDownload />
                             </div>
                         </div>
+                        <UploadForm isOpen={openUpload} setIsOpen={setOpenUpload} uploadType="content"  />
                     </TabPanel>
 
                     <TabPanel value={value} index={1}>
@@ -134,9 +163,75 @@ export default function File() {
 
 
             </div>
-            <PopModalContent open={open} closeSmall={closeSmall} />
+            <PopModalContent open={open} closeSmall={closeSmall} openUpload={setOpenUpload} />
 
         </>
 
+    )
+}
+
+
+
+
+function FileCard({title, fileName, contentId}){
+    const [open, setOpen] = useState(false)
+    const [content, setContent] = useState("")
+
+    function openContent(){
+        setOpen(true)
+        setContent(fileName)
+    }
+    return (
+        <div className="filecard">
+            <div>
+                <p>{title}</p>
+                {/* <p>options</p> */}
+            </div>
+            <div>
+                <i>
+                    <a href={fileName} download>
+                        <Tooltip title="download">
+                            <IconButton>
+                                <IoMdCloudDownload size="1.5rem"  color="var(--theme-blue)"/>
+                            </IconButton>
+                        </Tooltip>
+                    </a>
+                </i>
+                <button onClick={openContent}>Open</button>
+            </div>
+            <ViewModal open={open} setOpen={setOpen} file={content} />
+        </div>
+    )
+}
+
+function ViewModal({open, setOpen, file}){
+    const style = {
+        position: "absolute",
+        bottom: 0,
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "100%",
+        height: "80%",
+        background: "#fff",
+        border: "1px solid #eee",
+        borderRadius: "10px",
+        boxShadow: 24,
+        p: 6,
+        padding: "4rem 2rem",
+      };
+    
+      return (
+        <Modal
+          open={open}
+          onClose={(e) => {
+            setOpen((_) => false);
+          }}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box style={style}>
+            <img src={file} alt="" className="w-100 h-100" />
+          </Box>
+          </Modal>
     )
 }

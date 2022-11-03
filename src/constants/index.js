@@ -47,3 +47,4 @@ export const capitalize = (str) => {
   strArray[0] = strArray[0].toLocaleUpperCase();
   return strArray.join("");
 }
+
