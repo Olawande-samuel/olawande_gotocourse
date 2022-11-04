@@ -105,6 +105,8 @@ import Detail from "./pages/Course/Details";
 import AllCourses from "./pages/Courses/allcourses/AllCourses";
 import { MainContainer } from "./pages/Dashboard/components/classConsole";
 import Articles from "./pages/Events/articles";
+import StudentChatModule from "./pages/Dashboard/components/classConsole/Chat/student";
+
 import { GroupContent } from "./pages/Dashboard/components/classConsole/Chat";
 
 
@@ -258,13 +260,13 @@ function App() {
                 <Route path="console" element={<Content />}>
                   <Route path="myclasses" element={<Out />} >
                     <Route index element={<ConsoleClasses />} />
-                    {/* <Route path=":id" element={<MyClass />} /> */}
+                    <Route path=":id" element={<StudentChatModule />} />
                   </Route>
-                  <Route path="class-console/class/mail" element={<ChatComponent />} />
                   <Route path="assessments" element={<ConsoleAssessments />} />
                   <Route path="liveclass" element={<Out />} />
                 </Route>
-                <Route path="class-console/class" element={<StudentClassroom />} />
+                <Route path="class-console/class/:id" element={<StudentClassroom />} />
+
               </Route>
 
               <Route path="test" element={<Content />}>

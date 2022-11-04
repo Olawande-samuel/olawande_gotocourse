@@ -1,6 +1,6 @@
 
 import '../classConsole/Content.css'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import excel from '../../../../images/excel.png'
 import { useAuth } from "../../../../contexts/Auth";
 import { useLocalStorage } from "../../../../hooks";
@@ -45,23 +45,28 @@ export function MyClass() {
 export default function ConsoleClasses() {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
-    const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps: fetchMyClasses }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
-    const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
-    console.log(bootcamps?.data?.data);
+    const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps }  } = useAuth();
+    const { data, isSuccess } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
+    console.log({data});
+    let navigate = useNavigate()
     return (
         <div className=''>
             <main className='assessments'>
                 {
-                 bootcamps?.data?.data?.length > 0  && bootcamps?.data?.data.map((x, id) => (
-                        <Link to="/student/class-console/class" key={x.bootcampId}>
-                            <div className="assesstmentbox">
-                                <div className="excelbox">
-                                    <img src={x.bootcampImg}alt="" />
-                                </div>
-                                <p>{x.title} </p>
-
+                    data?.data?.length > 0 && data?.data.map((x, id) => (
+                        <div className="assesstmentbox" key={x.bootcampId} style={{ cursor: "pointer" }} onClick={() => {
+                            navigate(`/student/class-console/class/${x.bootcampId}`, {
+                                state: {
+                                    bootcamp: x
+                                }
+                            })
+                        }}>
+                            <div className="excelbox">
+                                <img src={`${process.env.REACT_APP_IMAGEURL}${x.bootcampImg}`} alt="" />
                             </div>
-                        </Link>
+                            <p>{x.title} </p>
+
+                        </div>
 
                     ))
                 }
