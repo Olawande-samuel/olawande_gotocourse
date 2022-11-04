@@ -105,6 +105,7 @@ import Detail from "./pages/Course/Details";
 import AllCourses from "./pages/Courses/allcourses/AllCourses";
 import { MainContainer } from "./pages/Dashboard/components/classConsole";
 import Articles from "./pages/Events/articles";
+import { GroupContent } from "./pages/Dashboard/components/classConsole/Chat";
 
 
 
@@ -348,7 +349,11 @@ function App() {
                       <Route index element={<MainContainer />} />
                       <Route path="creator-suite" element={<Suite />} />
                       <Route path="classroom" element={<Classroom />} />
-                      <Route path="mail" element={<ChatComponent />} />
+                      <Route path="mail" element={<Out />}>
+                        <Route index element={<ChatComponent />} />
+                        <Route path="details" element={<GroupContent />} />
+                        <Route path="group/:id" element={<GroupContent />} />
+                      </Route>
                       <Route path="file" element={<File />} />
                       <Route path="note" element={<Note />} />
                       <Route path="quiz" element={<Out />}>
