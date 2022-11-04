@@ -64,7 +64,7 @@ export default function ConsoleClasses() {
                             <div className="excelbox">
                                 <img src={`${process.env.REACT_APP_IMAGEURL}${x.bootcampImg}`} alt="" />
                             </div>
-                            <p>{x.title} </p>
+                            <p>{x.bootcampName} </p>
 
                         </div>
 

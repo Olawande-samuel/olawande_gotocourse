@@ -245,146 +245,42 @@ const MenuButton = styled(IconButton)`
 `
 
 
-
-let mods = [
-    {
-        title: 'Cybersecurity',
-        attachments: [
-            {
-                type: 'video',
-                isLocked: false,
-                title: 'Test 2',
-                isComplete: true
-            }
-        ]
-    },
-    {
-        title: 'Benefits of Cybersecurity',
-        attachments: [
-            {
-                type: 'quiz',
-                isLocked: false,
-                title: 'Hey',
-                isComplete: false,
-            },
-            {
-                type: 'video',
-                isLocked: false,
-                title: 'Poll',
-                isComplete: false,
-            },
-        ]
-    },
-    {
-        title: 'Origin of the web',
-        attachments: [
-            {
-                type: 'video',
-                isLocked: false,
-                title: 'Bootcamp',
-                isComplete: true,
-            },
-            {
-                type: 'quiz',
-                isLocked: false,
-                title: 'my quiz',
-                isComplete: true,
-            },
-            {
-                type: 'video',
-                isLocked: false,
-                title: 'My video content',
-                isComplete: true,
-            },
-            {
-                type: 'note',
-                isLocked: true,
-                title: 'new note 1',
-                isComplete: true,
-            },
-            {
-                type: 'note',
-                isLocked: false,
-                title: 'new note 2',
-                isComplete: true,
-            },
-        ]
-    },
-    {
-        title: 'Unsafe Practices',
-        attachments: [
-            {
-                type: 'video',
-                isLocked: true,
-                title: 'Hello',
-                isComplete: false,
-            },
-            {
-                type: 'quiz',
-                isLocked: false,
-                title: 'Bllnbl',
-                isComplete: false,
-            },
-        ]
-    },
-    {
-        title: "Conclusion",
-        attachments: []
-    }
-];
-
-
 const Classroom = () => {
     const [showMobile, setShowMobile] = useState(false);
-    const [modules, setModules] = useState(() => mods);
-    // const [modules, setModules] = useState([]);
+    // const [modules, setModules] = useState(() => mods);
+    const [modules, setModules] = useState([]);
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
     let location = useLocation()
 
     const classDetail = location.state.bootcamp
-    console.log(classDetail);
+    // console.log(classDetail);
     const { id } = useParams()
-    console.log(id);
+    // console.log(id);
 
-    const { consoleFunctions: { fetchStudentDomains, fetchStudentContents, fetchStudentQuiz, fetchStudentFile, fetchStudentNote  }, } = useAuth();
+    const { consoleFunctions: { fetchStudentDomains, fetchStudentContents, fetchStudentQuiz, fetchStudentFile, fetchStudentNote }, } = useAuth();
 
-    const fetchDomains = useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id))
-    const getDomainContent = useQuery(["getDomainContent", id], () => fetchStudentContents(userdata.token, id));
-    const fetchFile = useQuery(["fetch file", id], () => fetchStudentFile(userdata.token, id))
-    const fetchNotee = useQuery(["fetch file", id], () => fetchStudentNote(userdata.token, id))
-    const getQuiz = useQuery(["quiz content", id], () => fetchStudentQuiz(userdata.token, id), {
-        onSuccess: (res)=> {
-            console.log("successful query")
-            console.log(res)
-            if(res.data.length > 0){
-                // setFormData({...res.data[0]})
-            }
+    const fetchstudentDomains = useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id), {
+        onSuccess: (res) => {
+            // console.log(res)
+            setModules(res.data)
         }
-    } )
-
-    // useEffect(() => {
-    //     if (getDomainContent?.data?.data?.length > 0) {
-    //         setModules(getDomainContent?.data?.data)
-    //       }
-
-    //   }, [getDomainContent?.data?.data])
-
-
-    let attachements = useMemo(() => {
-        return modules.map(m => m.attachments).flat();
-    }, [...modules]);
-
-    const [activeMedia, setActiveMedia] = useState(() => {
-        return attachements.find((_, i) => i === 0);
     })
 
-    const active = useMemo(() => {
-        return activeMedia.title;
-    }, [activeMedia])
+    // let attachements = useMemo(() => {
+    //     return modules.map(m => m.attachments).flat();
+    // }, [...modules]);
+
+    // const [activeMedia, setActiveMedia] = useState(() => {
+    //     return attachements.find((_, i) => i === 0);
+    // })
+
+    // const active = useMemo(() => {
+    //     return activeMedia.title;
+    // }, [activeMedia])
 
 
-    console.log({ attachements, activeMedia, active })
+    // console.log({ attachements, activeMedia, active })
 
 
     useEffectOnMount(() => {
@@ -395,71 +291,76 @@ const Classroom = () => {
 
 
 
-    const mediaContent = useMemo(() => {
-        return activeMedia?.type === 'video' ?
-            (<Paper variant='outlined'>
-                <PaperTop>
-                    <h5>shell.svg</h5>
-                    <IconButton>
-                        <MdMoreVert />
-                    </IconButton>
-                </PaperTop>
-                <PaperBody>
-                    <BodyActions>
-                        <IconButton>
-                            <BiCloudDownload />
-                        </IconButton>
-                        <CustomButton>Open</CustomButton>
-                    </BodyActions>
-                </PaperBody>
-            </Paper>)
-            : activeMedia?.type === 'quiz' ?
-                (<Quiz>
-                    <QuizImageContainer>
-                        <QuizImage src={quiz} alt="Quiz Image" />
-                    </QuizImageContainer>
-                    <QuizButton>Open Quiz</QuizButton>
-                </Quiz>) :
-                (<Note>
-                    <h4>Hey this is a demo note heading</h4>
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat fuga ducimus perferendis commodi. Iste nisi neque blanditiis, officiis rerum iure unde molestiae optio pariatur fuga ipsa officia, doloremque ipsam voluptates?</p>
-                </Note>);
-    }, [activeMedia])
+    // const mediaContent = useMemo(() => {
+    //     return activeMedia?.type === 'video' ?
+    //         (<Paper variant='outlined'>
+    //             <PaperTop>
+    //                 <h5>shell.svg</h5>
+    //                 <IconButton>
+    //                     <MdMoreVert />
+    //                 </IconButton>
+    //             </PaperTop>
+    //             <PaperBody>
+    //                 <BodyActions>
+    //                     <IconButton>
+    //                         <BiCloudDownload />
+    //                     </IconButton>
+    //                     <CustomButton>Open</CustomButton>
+    //                 </BodyActions>
+    //             </PaperBody>
+    //         </Paper>)
+    //         : activeMedia?.type === 'quiz' ?
+    //             (<Quiz>
+    //                 <QuizImageContainer>
+    //                     <QuizImage src={quiz} alt="Quiz Image" />
+    //                 </QuizImageContainer>
+    //                 <QuizButton>Open Quiz</QuizButton>
+    //             </Quiz>) :
+    //             (<Note>
+    //                 <h4>Hey this is a demo note heading</h4>
+    //                 <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat fuga ducimus perferendis commodi. Iste nisi neque blanditiis, officiis rerum iure unde molestiae optio pariatur fuga ipsa officia, doloremque ipsam voluptates?</p>
+    //             </Note>);
+    // }, [activeMedia])
 
-    const mediaAction = useMemo(() => {
-        return activeMedia?.type === 'video' ?
-            (<VideoAction>
-                <NextButton variant="outlined">
-                    Next Content <FaCaretRight />
-                </NextButton>
-            </VideoAction>)
-            : activeMedia?.type === 'quiz' ?
-                (<QuizAction>
-                    <PreviousButton variant="outlined">
-                        <FaCaretLeft />  Previous Content
-                    </PreviousButton>
-                    <QuizButton>
-                        Mark as Completed
-                    </QuizButton>
-                </QuizAction>) :
-                (<QuizAction>
-                    <PreviousButton variant="outlined">
-                        <FaCaretLeft />  Previous Content
-                    </PreviousButton>
-                    <NextButton variant="outlined">
-                        Next Content <FaCaretRight />
-                    </NextButton>
-                </QuizAction>)
-    }, [activeMedia])
+    // const mediaAction = useMemo(() => {
+    //     return activeMedia?.type === 'video' ?
+    //         (<VideoAction>
+    //             <NextButton variant="outlined">
+    //                 Next Content <FaCaretRight />
+    //             </NextButton>
+    //         </VideoAction>)
+    //         : activeMedia?.type === 'quiz' ?
+    //             (<QuizAction>
+    //                 <PreviousButton variant="outlined">
+    //                     <FaCaretLeft />  Previous Content
+    //                 </PreviousButton>
+    //                 <QuizButton>
+    //                     Mark as Completed
+    //                 </QuizButton>
+    //             </QuizAction>) :
+    //             (<QuizAction>
+    //                 <PreviousButton variant="outlined">
+    //                     <FaCaretLeft />  Previous Content
+    //                 </PreviousButton>
+    //                 <NextButton variant="outlined">
+    //                     Next Content <FaCaretRight />
+    //                 </NextButton>
+    //             </QuizAction>)
+    // }, [activeMedia])
 
 
     function setActiveMediaHandler(title) {
-        let newActive = attachements.find(a => a.title === title);
-        let active = { ...newActive };
-        active.active = true;
-        setActiveMedia(_ => active);
-        console.log({ newActive });
+        // let newActive = attachements.find(a => a.title === title);
+        // let active = { ...newActive };
+        // active.active = true;
+        // setActiveMedia(_ => active);
+        // console.log({ newActive });
     }
+
+    const changeActive = (type, id) => {
+        console.log({ type }, { id });
+    }
+
 
    
 
@@ -487,9 +388,16 @@ const Classroom = () => {
                     open={showMobile}
                     onClick={e => setShowMobile(_ => false)}
                 >
-                    <Sidebar isMobile={true} modules={modules} activeMedia={active} changeActive={setActiveMediaHandler} />
+                    <Sidebar isMobile={true} modules={modules}
+                        // activeMedia={active} 
+                        // changeActive={setActiveMediaHandler} 
+                    />
                 </Backdrop>
-                <Sidebar isMobile={false} modules={modules} activeMedia={active} changeActive={setActiveMediaHandler} />
+                <Sidebar
+                    isMobile={false} modules={modules}
+                // activeMedia={active} 
+                // changeActive={setActiveMediaHandler} 
+                />
                 <ClassroomMain>
                     <ClassroomMainTop>
                         <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
@@ -497,27 +405,27 @@ const Classroom = () => {
                                 Dashboard
                             </BreadcrumbLink>
                             <BreadcrumbLink to="#">
-                                {classDetail?.title}
+                                {classDetail?.bootcampName}
                             </BreadcrumbLink>
                             <BreadcrumbLink to="#" $isCurrentPage={true}>
-                                {activeMedia?.title}
+                                {/* {activeMedia?.title} */}
                             </BreadcrumbLink>
                         </Breadcrumbs>
                     </ClassroomMainTop>
                     <ClassroomMainBody>
                         <BodyInfo>
-                            <h3>{activeMedia?.title}</h3>
+                            {/* <h3>{activeMedia?.title}</h3> */}
                             <CustomButton>Ask tutor a question</CustomButton>
                         </BodyInfo>
                         <BodyContent>
-                            {mediaContent}
-                            {mediaAction}
+                            {/* {mediaContent} */}
+                            {/* {mediaAction} */}
                         </BodyContent>
                     </ClassroomMainBody>
                 </ClassroomMain>
             </ClassroomContainer>
 
-            <IconComponent classId={id}/>
+            <IconComponent classId={id} />
         </Container>
     )
 }
