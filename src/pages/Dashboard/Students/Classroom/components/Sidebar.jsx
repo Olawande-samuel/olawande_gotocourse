@@ -87,7 +87,7 @@ export const CustomButton = styled(Button)`
 
 
 
-const Sidebar = ({ modules, changeActive, activeMedia, isMobile }) => {
+const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData }) => {
     const navigate = useNavigate()
    
 
@@ -114,6 +114,7 @@ const Sidebar = ({ modules, changeActive, activeMedia, isMobile }) => {
                     attachments={module} 
                     changeActive={changeActive} 
                     key={module._id} 
+                    fetchData={fetchData}
                     />)
                 }
             </SidebarBody>

@@ -4333,7 +4333,7 @@ export const consoleFunctions = {
     },
     fetchStudentQuiz: async function (token, id) {
         try {
-            const res = await axios.get(`${baseURL}/classes/students/contents/quiz/${id}`,
+            const res = await axios.get(`${baseURL}/classes/student/contents/quiz/${id}`,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,

@@ -35,7 +35,7 @@ const ModuleAttachments = styled.div`
 
 
 
-const Module = ({title, attachments, changeActive, activeMedia }) => {
+const Module = ({title, attachments, changeActive, activeMedia, fetchData }) => {
 
     const [attach, setAttach] =useState([])
     const { getItem } = useLocalStorage()
@@ -60,6 +60,7 @@ const Module = ({title, attachments, changeActive, activeMedia }) => {
             <ModuleAttachments>
                 {
                     attach.map((a, i) => (<Attachment active={activeMedia} changeActive={changeActive}  
+                        fetchData={fetchData}
                          key={i} {...a} />))
                 }
             </ModuleAttachments>

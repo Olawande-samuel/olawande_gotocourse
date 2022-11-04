@@ -47,22 +47,11 @@ const Locked = styled(MdOutlineLock)`
     color: rgba(0,0,0,.2);
 `
 
-// classId: "633347903dbdcdac3cc97eba"
-// createdAt: "2022-10-17T12:26:22.576Z"
-// domain: "634d1c4c15011228d10abf31"
-// isLocked: false
-// notifyStudents: false
-// objective: ""
-// title: "pool"
-// tutorId: "6336e2547a6cddc303e0fecb"
-// type: "QUIZ"
-// updatedAt: "2022-10-17T12:26:22.576Z"
-// __v: 0
-// _id: "634d49ee15011228d10b1c4f"
+
 
 
 const Attachement = ({type, _id, isLocked, title,  domain, classId,
-    // fetchData,
+    fetchData,
      isComplete, active, changeActive  }) => {
    
         const { getItem } = useLocalStorage()
@@ -80,23 +69,7 @@ const Attachement = ({type, _id, isLocked, title,  domain, classId,
 
     
 
-    const fetchData = async (type, info) => {
-        if (type === "QUIZ") {
-            const { data } = await fetchStudentQuiz(userdata.token, info)
-            console.log({ data });
 
-        }
-        else if (type === "NOTE") {
-            const { data } = await fetchStudentNote(userdata.token, info)
-            console.log({ data });
-
-
-        } else {
-            const { data } = await fetchStudentFile(userdata.token, info)
-            console.log({ data });
-
-        }
-    }
 
     return (
         <AttachmentContainer variant="outlined" $active={active === title ? true : false} onClick={e => {

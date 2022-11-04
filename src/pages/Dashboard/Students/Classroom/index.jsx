@@ -247,16 +247,17 @@ const MenuButton = styled(IconButton)`
 
 const Classroom = () => {
     const [showMobile, setShowMobile] = useState(false);
-    // const [modules, setModules] = useState(() => mods);
     const [modules, setModules] = useState([]);
+    const [file, setFile] = useState([])
+    const [quiz, setQuiz] = useState([])
+    const [note, setNote] = useState([])
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
     let location = useLocation()
+    const [pickedType, setPickedType] = useState("")
 
     const classDetail = location.state.bootcamp
-    // console.log(classDetail);
     const { id } = useParams()
-    // console.log(id);
 
     const { consoleFunctions: { fetchStudentDomains, fetchStudentContents, fetchStudentQuiz, fetchStudentFile, fetchStudentNote }, } = useAuth();
 
@@ -349,6 +350,49 @@ const Classroom = () => {
     // }, [activeMedia])
 
 
+
+
+    const mediaContent = useMemo(() => {
+        if (pickedType === "NOTE") {
+            return (
+                // note.length > 0 && note.map(
+                <Note>
+                    <h4>Hey this is a demo note heading</h4>
+                    {/* {note.body} */}
+                </Note>
+                // )
+
+            )
+
+        } else if (pickedType === "FILE") {
+            return (
+                // file.length > 0 && file.map((x, id) =>
+                    <Note key={id}>
+                        <h4>Hey this is a demo file heading</h4>
+                        {/* {x.fileName} */}
+                    </Note>
+                // )
+
+            )
+        }
+        else if (pickedType === "QUIZ") {
+            return (
+
+                // file.length > 0 && file.map(
+                (<Quiz>
+                    <QuizImageContainer>
+                        <QuizImage src={quiz} alt="Quiz Image" />
+                    </QuizImageContainer>
+                    <QuizButton>Open Quiz</QuizButton>
+                </Quiz>)
+                // :
+
+                // )
+            )
+        }
+    }, [setPickedType])
+
+
     function setActiveMediaHandler(title) {
         // let newActive = attachements.find(a => a.title === title);
         // let active = { ...newActive };
@@ -362,7 +406,26 @@ const Classroom = () => {
     }
 
 
-   
+    const fetchData = async (type, info) => {
+        if (type === "QUIZ") {
+            const { data } = await fetchStudentQuiz(userdata.token, info)
+            console.log({ data });
+            setQuiz(data)
+
+        }
+        else if (type === "NOTE") {
+            const { data } = await fetchStudentNote(userdata.token, info)
+            console.log({ data });
+            setNote(data)
+
+        } else {
+            const { data } = await fetchStudentFile(userdata.token, info)
+            console.log({ data });
+            setFile(data)
+        }
+
+
+    }
 
     return (
         <Container>
@@ -391,12 +454,14 @@ const Classroom = () => {
                     <Sidebar isMobile={true} modules={modules}
                         // activeMedia={active} 
                         // changeActive={setActiveMediaHandler} 
+                        fetchData={fetchData}
                     />
                 </Backdrop>
                 <Sidebar
                     isMobile={false} modules={modules}
-                // activeMedia={active} 
-                // changeActive={setActiveMediaHandler} 
+                    // activeMedia={active} 
+                    // changeActive={setActiveMediaHandler} 
+                    fetchData={fetchData}
                 />
                 <ClassroomMain>
                     <ClassroomMainTop>
@@ -418,7 +483,7 @@ const Classroom = () => {
                             <CustomButton>Ask tutor a question</CustomButton>
                         </BodyInfo>
                         <BodyContent>
-                            {/* {mediaContent} */}
+                            {mediaContent}
                             {/* {mediaAction} */}
                         </BodyContent>
                     </ClassroomMainBody>
