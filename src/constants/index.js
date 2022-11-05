@@ -41,6 +41,14 @@ export function getDate(date){
   return `${m} ${day}`;
 }
 
+export function getTime(time){
+    if(time){
+      let d = time.split("T")[1];
+      return d;
+    }
+    return ""
+  
+}
 
 export const capitalize = (str) => {
   let strArray = str?.toLocaleLowerCase().split("");

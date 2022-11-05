@@ -204,7 +204,7 @@ function FileCard({title, fileName, contentId}){
     )
 }
 
-function ViewModal({open, setOpen, file}){
+export function ViewModal({open, setOpen, file, creator}){
     const style = {
         position: "absolute",
         bottom: 0,
@@ -230,7 +230,7 @@ function ViewModal({open, setOpen, file}){
           aria-describedby="modal-modal-description"
         >
           <Box style={style}>
-            <img src={file} alt="" className="w-100 h-100" />
+            <img src={creator ? `${process.env.REACT_APP_IMAGEURL}${file}` : file} alt="" className="w-100 h-100" />
           </Box>
           </Modal>
     )

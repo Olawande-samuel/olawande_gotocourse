@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { Paper } from '@mui/material';
 import {MdAttachFile, MdNote, MdQuiz, MdOutlineLock, MdCheckCircle} from 'react-icons/md';
+import { useLocalStorage } from '../../../../../hooks';
+import { KEY } from '../../../../../constants';
+import { useAuth } from '../../../../../contexts/Auth';
 
 
 
@@ -45,17 +48,35 @@ const Locked = styled(MdOutlineLock)`
 `
 
 
-const Attachement = ({type, isLocked, title, isComplete, active, changeActive}) => {
+
+
+const Attachement = ({type, _id, isLocked, title,  domain, classId,
+    fetchData,
+     isComplete, active, changeActive  }) => {
+   
+        const { getItem } = useLocalStorage()
+        const userdata = getItem(KEY)
+    
+        const { consoleFunctions: { fetchStudentQuiz, fetchStudentFile, fetchStudentNote }, } = useAuth();
+
     let icon = React.useMemo(() => {
-        return type ==='video' ? <MdAttachFile /> : type === 'note' ? <MdNote /> : <MdQuiz />
+        return type ==="FILE_VIDEO" ? <MdAttachFile /> : type === "NOTE" ? <MdNote /> : <MdQuiz />
     }, [type])
 
     let statusIcon = React.useMemo(() => {
         return isLocked ? <Locked /> : <CompleteIcon $isComplete={isComplete} />
     }, [isLocked])
 
+    
+
+
+
     return (
-        <AttachmentContainer variant="outlined" $active={active === title ? true : false} onClick={e => changeActive(title)}>
+        <AttachmentContainer variant="outlined" $active={active === title ? true : false} onClick={e => {
+            // changeActive(title)
+            fetchData(type, _id, title) 
+        }
+    }>
             <AttachmentInfo>
                 {icon}
                 <h5>{title}</h5>
