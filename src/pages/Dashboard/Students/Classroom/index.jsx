@@ -198,7 +198,7 @@ const QuizAction = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 40px;
+    margin: 40px 0;
 `;
 
 
@@ -369,16 +369,16 @@ ul{
 
 `
 
- {/* <QuizImageContainer>
+{/* <QuizImageContainer>
             <QuizImage src={quiz} alt="Quiz Image" />
         </QuizImageContainer>
         <QuizButton>Open Quiz</QuizButton> */}
 
-const QuizContent = ({ q, id}) => {
+const QuizContent = ({ q, id }) => {
     return (
         <>
             <Quiz key={id}>
-               
+
                 <QuizInfo>
                     <p>Description: </p>
                     <span>{q.note}</span>
@@ -404,7 +404,7 @@ const QuizContent = ({ q, id}) => {
                                 </QuesHeader>
 
                                 <QuestionOptions>
-                                    <h4>{ques.title}?</h4>
+                                    <h4 dangerouslySetInnerHTML={{ __html: `${ques.title}` }}></h4>
                                     {ques?.options && ques?.options.length > 0 && ques?.options.map((opt, i) => (
                                         <Answer>
                                             <label for="vehicle1">
@@ -422,14 +422,16 @@ const QuizContent = ({ q, id}) => {
                                             </label>
 
                                         </Answer>
-                                    ))}
-                                    <QuizAction>
-                                        <QuizButton>
-                                            Mark as Completed
-                                        </QuizButton>
-                                    </QuizAction>
-                                </QuestionOptions>
 
+                                    ))}
+
+                                </QuestionOptions>
+                                <QuizAction>
+
+                                    <QuizButton>
+                                        Submit
+                                    </QuizButton>
+                                </QuizAction>
 
                             </Accordion.Body>
                         </Accordion.Item>
@@ -443,19 +445,24 @@ const QuizContent = ({ q, id}) => {
     )
 }
 
-const NoteComponent = ({ noteContent , itemsPerPage}) => {
-   
+const NoteComponent = ({ noteContent, itemsPerPage }) => {
+
     return (
         <NotecContainer>
             {noteContent?.map((n, id) => (
                 < Note key={id}>
                     {/* <h4>Hey this is a demo note heading</h4> */}
-                    <p>
-                        {n.body}
-                    </p>
+                    <p dangerouslySetInnerHTML={{ __html: n.body }}></p>
+
                 </Note>
             ))
             }
+            <QuizAction>
+
+                <QuizButton>
+                    Mark as Completed
+                </QuizButton>
+            </QuizAction>
         </NotecContainer>
     )
 }
@@ -628,20 +635,11 @@ const Classroom = () => {
                         <BodyContent>
                             {pickedType === "FILE" && <>
                                 {fileContent.length > 0 && fileContent.map((x, id) => (
-                                    <FileComponent x={x} id={id}/>
+                                    <FileComponent x={x} id={id} />
 
 
                                 ))
                                 }
-
-                            <QuizAction>
-                                    <PreviousButton variant="outlined">
-                                        <FaCaretLeft />  Previous Content
-                                    </PreviousButton>
-                                    <NextButton variant="outlined">
-                                        Next Content <FaCaretRight />
-                                    </NextButton>
-                                </QuizAction> 
                             </>
                             }
 
@@ -650,29 +648,33 @@ const Classroom = () => {
                                 {quizContent.length > 0 && quizContent.map((q, id) => (
                                     <QuizContent q={q} id={id} />
                                 ))}
-                                <QuizAction>
-                                    <PreviousButton variant="outlined">
-                                        <FaCaretLeft />  Previous Content
-                                    </PreviousButton>
-                                    <NextButton variant="outlined">
-                                        Next Content <FaCaretRight />
-                                    </NextButton>
-                                </QuizAction>
+
 
 
                             </>
 
                             }
 
-                        
+
 
                             {pickedType === "NOTE" && <>
                                 {noteContent.length > 0 && <NoteComponent noteContent={noteContent} />}
 
-                
+
                             </>
 
                             }
+
+                            <QuizAction>
+                                <PreviousButton variant="outlined">
+                                    <FaCaretLeft />  Previous Content
+                                </PreviousButton>
+                                <NextButton variant="outlined">
+                                    Next Content <FaCaretRight />
+                                </NextButton>
+                            </QuizAction>
+
+
 
                         </BodyContent>
                     </ClassroomMainBody>

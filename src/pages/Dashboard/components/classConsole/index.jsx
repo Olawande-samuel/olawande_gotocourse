@@ -205,7 +205,7 @@ const iconData = [
 
           {studentpath && (
             <div className="studenttitle">
-              <h2>{quizpath}</h2>
+              {/* <h2>{quizpath}</h2> */}
             </div>
           )}
         </section>
