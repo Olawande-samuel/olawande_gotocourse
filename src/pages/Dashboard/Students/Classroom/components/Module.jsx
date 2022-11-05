@@ -5,7 +5,11 @@ import {MdCollectionsBookmark} from 'react-icons/md';
 
 
 import {Attachment} from "./";
-
+import { useLocalStorage } from '../../../../../hooks';
+import { KEY } from '../../../../../constants';
+import { useAuth } from '../../../../../contexts/Auth';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 const ModuleContainer = styled.div`
     display: flex;
@@ -31,7 +35,23 @@ const ModuleAttachments = styled.div`
 
 
 
-const Module = ({title, attachments, changeActive, activeMedia}) => {
+const Module = ({title, attachments, changeActive, activeMedia, fetchData }) => {
+
+    const [attach, setAttach] =useState([])
+    const { getItem } = useLocalStorage()
+    const userdata = getItem(KEY)
+    const { consoleFunctions: { fetchStudentContents }, } = useAuth();
+
+    const fetchContents = useQuery(["fetch content", attachments.classId], () => fetchStudentContents(userdata.token, attachments.classId), {
+        onSuccess: (res) => {
+            // console.log(res)
+            setAttach(res.data)
+
+        }
+    })
+    // console.log({attachments}); // module info
+    // console.log({attach});
+
     return (
         <ModuleContainer>
             <ModuleInfo>
@@ -39,7 +59,9 @@ const Module = ({title, attachments, changeActive, activeMedia}) => {
             </ModuleInfo>
             <ModuleAttachments>
                 {
-                    attachments.map((a, i) => (<Attachment active={activeMedia} changeActive={changeActive} key={i} {...a} />))
+                    attach.map((a, i) => (<Attachment active={activeMedia} changeActive={changeActive}  
+                        fetchData={fetchData}
+                         key={i} {...a} />))
                 }
             </ModuleAttachments>
         </ModuleContainer>

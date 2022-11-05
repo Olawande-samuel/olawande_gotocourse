@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import {AiOutlineMore, AiOutlineArrowLeft} from "react-icons/ai";
-import {MdSearch} from 'react-icons/md';
+import { AiOutlineMore, AiOutlineArrowLeft } from "react-icons/ai";
+import { MdSearch } from 'react-icons/md';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import { useAuth } from "../../../../../contexts/Auth";
 import { KEY } from "../../../../../constants";
 import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 
 // const groups = [
@@ -472,35 +473,35 @@ const ActiveChatBody = styled.div`
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <Box sx={{ p: 3 }} style={{ height: "100%" }}>
-            {children}
-          </Box>
-        )}
-      </div>
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box sx={{ p: 3 }} style={{ height: "100%" }}>
+                    {children}
+                </Box>
+            )}
+        </div>
     );
-  }
-  
-  TabPanel.propTypes = {
+}
+
+TabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.number.isRequired,
     value: PropTypes.number.isRequired,
-  };
-  
-  function a11yProps(index) {
+};
+
+function a11yProps(index) {
     return {
-      id: `simple-tab-${index}`,
-      "aria-controls": `simple-tabpanel-${index}`,
+        id: `simple-tab-${index}`,
+        "aria-controls": `simple-tabpanel-${index}`,
     };
-  }
-  
+}
+
 
 const ActiveChatCard = styled.div`
     width: 100%;
@@ -566,10 +567,10 @@ const StudentChatModule = () => {
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
     let path = pathname.split("/")
-    let classId = path[path.length -1]
+    let classId = path[path.length - 1]
     console.log(classId);
 
-    console.log({userdata});
+    console.log({ userdata });
 
     const { consoleFunctions: { fetchGroups, joinGroup }, } = useAuth();
 
@@ -600,30 +601,30 @@ const StudentChatModule = () => {
     // }
 
 
-    function toggleActionsHandler(e, index){
-       
+    function toggleActionsHandler(e, index) {
+
     }
 
 
     const [value, setValue] = useState(0);
     const handleChange = (event, newValue) => {
-      setValue(newValue);
+        setValue(newValue);
     };
 
 
     const getAllGroupsQuery = useQuery(["all groups"], () => fetchGroups(userdata?.token, classId), {
-        onSuccess: (res)=> {
+        onSuccess: (res) => {
             console.log("successful query")
             console.log(res.data)
             setNewGroups(res.data)
 
         }
-    } )
+    })
 
-  
 
-    const tabContent = [ <ChatTab groups={newGroups} toggle={toggleActionsHandler} setShow={setShow} />, <ActiveChat />, <MailTab /> ]
-    
+
+    const tabContent = [<ChatTab groups={newGroups} toggle={toggleActionsHandler} setShow={setShow} />, <ActiveChat />, <MailTab />]
+
     return (
         <ChatContainer>
             {show && <Modal setShow={setShow} />}
@@ -633,14 +634,14 @@ const StudentChatModule = () => {
                 onChange={handleChange}
                 aria-label="basic tabs example"
                 variant="scrollable"
-                TabIndicatorProps={{sx:{backgroundColor: '#F75C4E'}}} 
+                TabIndicatorProps={{ sx: { backgroundColor: '#F75C4E' } }}
                 sx={{
-                "& button": {color:'#F75C4E'},
-                "& button.Mui-selected": {color:'#F75C4E !important', fontWeight: 'bold'},
+                    "& button": { color: '#F75C4E' },
+                    "& button.Mui-selected": { color: '#F75C4E !important', fontWeight: 'bold' },
                 }}
-               
+
             >
-      
+
                 {tabs.map((h, i) => (
                     <Tab
                         key={i}
@@ -650,17 +651,17 @@ const StudentChatModule = () => {
                     />
                 ))}
 
-            </Tabs>     
+            </Tabs>
             {
-                tabContent.map((h, i) =>(
-                <TabPanel
-                    value={value}
-                    index={i}
-                    style={{ height: "100%", width: "100%", paddingBottom: "1rem" }}
-                    key={i}
-                >
+                tabContent.map((h, i) => (
+                    <TabPanel
+                        value={value}
+                        index={i}
+                        style={{ height: "100%", width: "100%", paddingBottom: "1rem" }}
+                        key={i}
+                    >
                         {h}
-                </TabPanel>
+                    </TabPanel>
 
                 ))
             }
@@ -670,10 +671,10 @@ const StudentChatModule = () => {
 
 
 
-function MailTab(){
+function MailTab() {
     const [mail, setMail] = useState('');
     const tabs = ['File', 'Edit', 'View', 'Insert', 'Format', 'Tools', 'Table', 'Help'];
-    return(
+    return (
         <MailContainer>
             <MailBodyContainer>
                 <CKEditor
@@ -704,7 +705,7 @@ function MailTab(){
 
 
 
-function ActiveChat(){
+function ActiveChat() {
     const [activeChats, setActiveChats] = useState([{
         status: 'Student',
         fullname: 'Rice Hansel',
@@ -715,7 +716,7 @@ function ActiveChat(){
         status: 'Teacher',
         fullname: 'Gretel Lard',
         number: '147-2-101',
-    },{
+    }, {
         status: 'Teacher',
         fullname: 'Lorde Kim',
         number: '147-2-101',
@@ -737,7 +738,7 @@ function ActiveChat(){
             number: '147-2-101',
         }
     ]);
-    return(
+    return (
         <ActiveChatContainer>
             <ActiveChatTop>
                 <InputContainer>
@@ -779,8 +780,8 @@ function ActiveChat(){
 }
 
 
-function UserCard({status, fullname, number, lastsent, isChat}){
-    return(
+function UserCard({ status, fullname, number, lastsent, isChat }) {
+    return (
         <UserCardContainer>
             <UserAvatar>
                 {fullname.substring(0, 2)}
@@ -798,28 +799,42 @@ function UserCard({status, fullname, number, lastsent, isChat}){
 
 
 
-function ChatTab({groups, toggle, setShow}){
+function ChatTab({ groups, toggle, setShow }) {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
-    const { generalState: { isMobile }, consoleFunctions: { joinGroup } } = useAuth();
+    const { generalState: { isMobile }, consoleFunctions: { joinGroup, fetchUserGroupstatus } } = useAuth();
 
-    const joinGroupQuery = useMutation(([token, data])=>joinGroup(token, data), {
-        onSuccess: (res) => {
-            console.log(res.data)
-        },
-        onError: (err) => {
-            console.error(err)
+    console.log({ groups });
+  
+const userGroupStatus = useQuery(["fetch file", userdata.id], () => fetchUserGroupstatus(userdata.token, userdata.id), {
+    onSuccess: (res) => {
+        console.log("successful query group")
+        console.log(res)
+    }
+})
+
+
+    const joinGroupBtn = async (e, id, classId) => {
+        e.preventDefault()
+        try {
+            console.log("token", userdata?.token);
+            console.log("id",id);
+            const { data } = await joinGroup(userdata?.token, id, classId)
+            console.log({ data });
+
+        } catch (error) {
+            console.log(error);
         }
-    })
+    }
     return (
         <ChatGroup>
             <h2>My Group</h2>
             <Groups>
                 {
-                    groups.map(({title, description, students, classId, _id}, i) => (
-                        <Group key={_id}>
+                    groups.map((group, i) => (
+                        <Group key={group._id}>
                             <GroupTop>
-                                <h2>{title}</h2>
+                                <h2>{group.title}</h2>
                                 <span onClick={e => toggle(e, i)}>
                                     <AiOutlineMore />
                                     {/* <GroupDropdown $show={showActions ? true : false}>
@@ -829,11 +844,11 @@ function ChatTab({groups, toggle, setShow}){
                                 </span>
                             </GroupTop>
                             <GroupBody>
-                                <h3>{title}</h3>
-                                <p>{description}</p>
+                                <h3>{group.title}</h3>
+                                <p>{group.description}</p>
                                 <footer>
-                                    <span>{students} participants</span>
-                                    <button onClick={() =>  joinGroupQuery.mutate([userdata.token, _id])}>Open team</button>
+                                    <span>{group.students} participants</span>
+                                    <button onClick={e => joinGroupBtn(e, group._id, group)}>Open team</button>
                                 </footer>
                             </GroupBody>
                         </Group>
@@ -844,7 +859,7 @@ function ChatTab({groups, toggle, setShow}){
             <h2>All Group</h2>
             <Groups>
                 {
-                    groups.map(({title, description, students,classId, _id}, i) => (
+                    groups.map(({ title, description, students, classId, _id }, i) => (
                         <Group key={_id}>
                             <GroupTop>
                                 <h2>{title}</h2>
@@ -861,7 +876,7 @@ function ChatTab({groups, toggle, setShow}){
                                 <p>{description}</p>
                                 <footer>
                                     <span>{students} participants</span>
-                                    <button onClick={() =>  joinGroupQuery.mutate([userdata.token, _id])}>Open team</button>
+                                    <button onClick={e => joinGroupBtn(e, _id)}>Open team</button>
                                 </footer>
                             </GroupBody>
                         </Group>
@@ -874,7 +889,7 @@ function ChatTab({groups, toggle, setShow}){
 
 
 
-function Modal({setShow}){
+function Modal({ setShow }) {
     const [formstate, setFormstate] = useState({
         title: '',
         description: ''
@@ -902,7 +917,7 @@ function Modal({setShow}){
                 </ModalTop>
                 <ModalBody>
                     {
-                        inputs.map(({type, name, placeholder, value}, i) => (
+                        inputs.map(({ type, name, placeholder, value }, i) => (
                             <FormContainer key={i}>
                                 <Input type={type} value={value} name={name} placeholder={placeholder} />
                             </FormContainer>

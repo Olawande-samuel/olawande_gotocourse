@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import {BiArrowBack} from 'react-icons/bi';
+import { BiArrowBack } from 'react-icons/bi';
 import { Button } from '@mui/material';
 
 
 
 
-import {Module} from './';
+import { Module } from './';
 import { useNavigate } from 'react-router-dom';
+
 
 
 
@@ -19,13 +20,13 @@ const SidebarContainer = styled.div`
     flex-direction: column;
     height:100%;
 
-    position: ${({$mobile}) => $mobile && 'fixed'};
-    top: ${({$mobile}) => $mobile && 0};
-    left: ${({$mobile}) => $mobile && 0};
-    bottom: ${({$mobile}) => $mobile && 0};
+    position: ${({ $mobile }) => $mobile && 'fixed'};
+    top: ${({ $mobile }) => $mobile && 0};
+    left: ${({ $mobile }) => $mobile && 0};
+    bottom: ${({ $mobile }) => $mobile && 0};
 
     @media screen and (max-width: 960px){
-        display: ${({$mobile}) => $mobile ? 'flex' : 'none'};
+        display: ${({ $mobile }) => $mobile ? 'flex' : 'none'};
     }
 `;
 
@@ -86,29 +87,42 @@ export const CustomButton = styled(Button)`
 
 
 
-const Sidebar = ({modules, changeActive, activeMedia, isMobile}) => {
+const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData }) => {
     const navigate = useNavigate()
+   
+
     return (
         <SidebarContainer $mobile={isMobile}>
             <SidebarTop>
-                <BiArrowBack onClick={()=>navigate(-1)} />
+                <BiArrowBack onClick={() => navigate(-1)} />
                 Dashboard
             </SidebarTop>
             <SidebarBody>
-                <CustomButton sx={{marginInline: 'auto', width: '50%'}}>
+                <CustomButton sx={{ marginInline: 'auto', width: '50%' }}>
                     Refresh topics
                 </CustomButton>
                 <ProgressContainer>
                     <p>Progress: 75%</p>
                     <Progress value="75" max="100" />
                 </ProgressContainer>
+            
                 {
-                    modules.map(({title, attachments}, i) => <Module title={title} activeMedia={activeMedia} attachments={attachments} changeActive={changeActive} key={i} />)
+                modules.map((module) => 
+                    <Module 
+                    title={module.name}
+                    activeMedia={activeMedia} 
+                    attachments={module} 
+                    changeActive={changeActive} 
+                    key={module._id} 
+                    fetchData={fetchData}
+                    />)
                 }
             </SidebarBody>
         </SidebarContainer>
     )
 }
+
+
 
 
 
