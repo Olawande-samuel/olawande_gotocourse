@@ -354,7 +354,7 @@ function App() {
                       <Route path="mail" element={<Out />}>
                         <Route index element={<ChatComponent />} />
                         <Route path="details" element={<GroupContent />} />
-                        <Route path="group/:id" element={<GroupContent />} />
+                        <Route path="group/:groupID" element={<GroupContent />} />
                       </Route>
                       <Route path="file" element={<File />} />
                       <Route path="note" element={<Note />} />
