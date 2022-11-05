@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
 import { Breadcrumbs, IconButton, Paper, Backdrop, Tooltip } from "@mui/material";
@@ -7,12 +7,11 @@ import { BiCloudDownload } from "react-icons/bi";
 import { FaCaretRight, FaCaretLeft } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 import { RiVideoAddFill } from "react-icons/ri";
-
-
-
+import Accordion from 'react-bootstrap/Accordion';
+import ReactPaginate from 'react-paginate';
 import { Sidebar } from "./components";
 import { CustomButton } from './components/Sidebar';
-import { useEffectOnMount, useLocalStorage } from '../../../../hooks';
+import { useLocalStorage } from '../../../../hooks';
 import quiz from '../../../../images/classroom_quiz.svg';
 import { useAuth } from '../../../../contexts/Auth';
 import { KEY } from '../../../../constants';
@@ -122,6 +121,15 @@ const BodyContent = styled.div`
     margin-top: 30px;
     display: flex;
     flex-direction: column;
+    gap: 4rem;
+    // border: 2px solid green;
+
+    .paper{
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        // border: 2px solid yellow;
+    }
 `
 
 const BodyInfo = styled.div`
@@ -134,32 +142,39 @@ const BodyInfo = styled.div`
 
     & h3 {
         font-size: 1rem;
-        font-weight: 300;
+        font-weight: 500;
     }
 `;
 
 
 const PaperTop = styled.div`
     width: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    
 
     & h5 {
         font-weight: 300;
         font-size: 0.9rem;
         margin: 0;
     }
+    div{
+
+        padding: .3rem;
+
+    }
+
+    &>:first-child{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+    }
 `;
 
-const PaperBody = styled.div`
-    width: 100%;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-`;
+
 
 
 const BodyActions = styled.div`
@@ -245,12 +260,264 @@ const MenuButton = styled(IconButton)`
 `
 
 
+const FileName = styled.div`
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: .5rem 0.4rem;
+border: 1px solid rgba(0, 0, 0, 0.12);
+
+p{
+    font-size: 14px;
+}
+
+`
+const FileDisplay = styled.div`
+width: 100%;
+height: 300px;
+// border: 2px solid red;
+
+video{
+    width:100%;
+    height: 100%;
+
+}
+
+img{
+    width: 100%;
+    height: 100%;
+}
+
+
+`
+const QuizInfo = styled.div`
+padding: 1rem;
+border: 2px solid red;
+border: 1px solid #004DB6;
+font-size: 16px;
+border-radius: 10px;
+background: #EEF5FF;
+box-shadow: 0px 203px 81px rgba(0, 0, 0, 0.01), 0px 114px 68px rgba(0, 0, 0, 0.05), 0px 51px 51px rgba(0, 0, 0, 0.09), 0px 13px 28px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
+p{
+
+}
+
+span{
+
+}
+
+
+
+`
+
+const QuesHeader = styled.div`
+p{
+    font-size: 14px;
+    color: black;
+    span{
+        color: #004DB6;
+        font-size: 12px;
+        font-weight: 700;
+    }
+}
+
+
+`
+
+const QuestionOptions = styled.div`
+    h4{
+        color: #004DB6;
+        font-size: 18px;
+        font-weight: 700; 
+    }
+
+`
+
+const Answer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    input{
+        margin: 0 .5rem;
+    }
+
+`
+
+const NotecContainer = styled.div`
+// border: 2px solid red;
+padding: .5rem 1rem; 
+p{
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 30px;
+}
+
+ul{
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    margin: 1rem 0; 
+
+    li a{
+        padding : 1rem 2rem;
+        color: var(--textBlue);
+        border: 1px solid #3f50b5;
+    }
+}
+
+
+
+`
+
+ {/* <QuizImageContainer>
+            <QuizImage src={quiz} alt="Quiz Image" />
+        </QuizImageContainer>
+        <QuizButton>Open Quiz</QuizButton> */}
+
+const QuizContent = ({ q, id}) => {
+    return (
+        <>
+            <Quiz key={id}>
+               
+                <QuizInfo>
+                    <p>Description: </p>
+                    <span>{q.note}</span>
+                    <p>Max Attempts: <span>{q.maxAttempts}</span></p>
+                    <p>Duration: <span>{new Date(q?.endDate).toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    })}</span></p>
+                    <p>Number of submissions:  <span>1/1</span> </p>
+                    <p> Provisional Result (based on Objective): <span>0.00%</span></p>
+                </QuizInfo>
+
+            </Quiz>
+            <div>
+                {q.questions.length > 0 && q.questions.map((ques, index) => (
+                    <Accordion >
+                        <Accordion.Item eventKey={id} className="accord__body">
+                            <Accordion.Header className="accord__header"> Question {id + 1}</Accordion.Header>
+                            <Accordion.Body>
+                                <QuesHeader className="queshead">
+                                    <p>Type: <span>{ques.type}</span></p>
+                                    <p>Grade: <span>{ques.grade}</span></p>
+                                </QuesHeader>
+
+                                <QuestionOptions>
+                                    <h4>{ques.title}?</h4>
+                                    {ques?.options && ques?.options.length > 0 && ques?.options.map((opt, i) => (
+                                        <Answer>
+                                            <label for="vehicle1">
+                                                <input
+                                                    type="checkbox"
+                                                    value={opt.title}
+                                                    // name="isAnswer"
+                                                    onChange={e => {
+                                                        // const list = { ...formData }
+                                                        // list.questions[id].options[index]['isAnswer'] = e.target.checked;
+                                                        // console.log(list);
+                                                        // setFormData(list)
+                                                    }} />
+                                                {opt.title}
+                                            </label>
+
+                                        </Answer>
+                                    ))}
+                                    <QuizAction>
+                                        <QuizButton>
+                                            Mark as Completed
+                                        </QuizButton>
+                                    </QuizAction>
+                                </QuestionOptions>
+
+
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    </Accordion>
+                ))}
+
+            </div>
+
+
+        </>
+    )
+}
+
+const NoteComponent = ({ noteContent , itemsPerPage}) => {
+   
+    return (
+        <NotecContainer>
+            {noteContent?.map((n, id) => (
+                < Note key={id}>
+                    {/* <h4>Hey this is a demo note heading</h4> */}
+                    <p>
+                        {n.body}
+                    </p>
+                </Note>
+            ))
+            }
+        </NotecContainer>
+    )
+}
+
+
+const FileComponent = ({ x, id }) => {
+    const getExtention = (val) => {
+
+        if (val.includes("svg", "png", "avif", "webp")) {
+            console.log("image");
+            return "image"
+
+        }
+        else if (val.includes("mp4", "3gp", "mkv")) return "video"
+        else return ""
+    }
+    return (
+        <Paper variant='outlined' key={id} className="paper">
+            <PaperTop>
+                <div>
+                    <h5>{x.title}</h5>
+                    <IconButton>
+                        <MdMoreVert />
+                    </IconButton>
+
+                </div>
+                <div>
+                    <BodyActions>
+                        <IconButton>
+                            <BiCloudDownload />
+                        </IconButton>
+                        <CustomButton>Open</CustomButton>
+                    </BodyActions>
+                </div>
+            </PaperTop>
+
+            <FileName>
+                <p>{x.fileName}</p>
+                <IconButton>
+                    <MdMoreVert />
+                </IconButton>
+            </FileName>
+
+            <FileDisplay>
+                {getExtention(x.fileName) === "image" ? <img src={x.fileName} alt="" /> :
+                    <video src={x.fileName}></video>
+                }
+
+            </FileDisplay>
+
+        </Paper>
+    )
+}
+
+
 const Classroom = () => {
     const [showMobile, setShowMobile] = useState(false);
     const [modules, setModules] = useState([]);
-    const [file, setFile] = useState([])
-    const [quiz, setQuiz] = useState([])
-    const [note, setNote] = useState([])
+    const [fileContent, setFileContent] = useState([])
+    const [title, setTitle] = useState("")
+    const [quizContent, setQuizContent] = useState([])
+    const [noteContent, setNoteContent] = useState([])
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
     let location = useLocation()
@@ -259,7 +526,7 @@ const Classroom = () => {
     const classDetail = location.state.bootcamp
     const { id } = useParams()
 
-    const { consoleFunctions: { fetchStudentDomains, fetchStudentContents, fetchStudentQuiz, fetchStudentFile, fetchStudentNote }, } = useAuth();
+    const { consoleFunctions: { fetchStudentDomains, fetchStudentQuiz, fetchStudentFile, fetchStudentNote }, } = useAuth();
 
     const fetchstudentDomains = useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id), {
         onSuccess: (res) => {
@@ -268,164 +535,40 @@ const Classroom = () => {
         }
     })
 
-    // let attachements = useMemo(() => {
-    //     return modules.map(m => m.attachments).flat();
-    // }, [...modules]);
 
-    // const [activeMedia, setActiveMedia] = useState(() => {
-    //     return attachements.find((_, i) => i === 0);
-    // })
-
-    // const active = useMemo(() => {
-    //     return activeMedia.title;
-    // }, [activeMedia])
-
-
-    // console.log({ attachements, activeMedia, active })
-
-
-    useEffectOnMount(() => {
-        console.log('Student classroom is mounted');
-        return () => console.log('Student classroom is unmounted')
-    }, [])
-
-
-
-
-    // const mediaContent = useMemo(() => {
-    //     return activeMedia?.type === 'video' ?
-    //         (<Paper variant='outlined'>
-    //             <PaperTop>
-    //                 <h5>shell.svg</h5>
-    //                 <IconButton>
-    //                     <MdMoreVert />
-    //                 </IconButton>
-    //             </PaperTop>
-    //             <PaperBody>
-    //                 <BodyActions>
-    //                     <IconButton>
-    //                         <BiCloudDownload />
-    //                     </IconButton>
-    //                     <CustomButton>Open</CustomButton>
-    //                 </BodyActions>
-    //             </PaperBody>
-    //         </Paper>)
-    //         : activeMedia?.type === 'quiz' ?
-    //             (<Quiz>
-    //                 <QuizImageContainer>
-    //                     <QuizImage src={quiz} alt="Quiz Image" />
-    //                 </QuizImageContainer>
-    //                 <QuizButton>Open Quiz</QuizButton>
-    //             </Quiz>) :
-    //             (<Note>
-    //                 <h4>Hey this is a demo note heading</h4>
-    //                 <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat fuga ducimus perferendis commodi. Iste nisi neque blanditiis, officiis rerum iure unde molestiae optio pariatur fuga ipsa officia, doloremque ipsam voluptates?</p>
-    //             </Note>);
-    // }, [activeMedia])
-
-    // const mediaAction = useMemo(() => {
-    //     return activeMedia?.type === 'video' ?
-    //         (<VideoAction>
-    //             <NextButton variant="outlined">
-    //                 Next Content <FaCaretRight />
-    //             </NextButton>
-    //         </VideoAction>)
-    //         : activeMedia?.type === 'quiz' ?
-    //             (<QuizAction>
-    //                 <PreviousButton variant="outlined">
-    //                     <FaCaretLeft />  Previous Content
-    //                 </PreviousButton>
-    //                 <QuizButton>
-    //                     Mark as Completed
-    //                 </QuizButton>
-    //             </QuizAction>) :
-    //             (<QuizAction>
-    //                 <PreviousButton variant="outlined">
-    //                     <FaCaretLeft />  Previous Content
-    //                 </PreviousButton>
-    //                 <NextButton variant="outlined">
-    //                     Next Content <FaCaretRight />
-    //                 </NextButton>
-    //             </QuizAction>)
-    // }, [activeMedia])
-
-
-
-
-    const mediaContent = useMemo(() => {
-        if (pickedType === "NOTE") {
-            return (
-                // note.length > 0 && note.map(
-                <Note>
-                    <h4>Hey this is a demo note heading</h4>
-                    {/* {note.body} */}
-                </Note>
-                // )
-
-            )
-
-        } else if (pickedType === "FILE") {
-            return (
-                // file.length > 0 && file.map((x, id) =>
-                    <Note key={id}>
-                        <h4>Hey this is a demo file heading</h4>
-                        {/* {x.fileName} */}
-                    </Note>
-                // )
-
-            )
-        }
-        else if (pickedType === "QUIZ") {
-            return (
-
-                // file.length > 0 && file.map(
-                (<Quiz>
-                    <QuizImageContainer>
-                        <QuizImage src={quiz} alt="Quiz Image" />
-                    </QuizImageContainer>
-                    <QuizButton>Open Quiz</QuizButton>
-                </Quiz>)
-                // :
-
-                // )
-            )
-        }
-    }, [setPickedType])
-
-
-    function setActiveMediaHandler(title) {
-        // let newActive = attachements.find(a => a.title === title);
-        // let active = { ...newActive };
-        // active.active = true;
-        // setActiveMedia(_ => active);
-        // console.log({ newActive });
-    }
-
-    const changeActive = (type, id) => {
-        console.log({ type }, { id });
-    }
-
-
-    const fetchData = async (type, info) => {
+    const fetchData = async (type, info, title) => {
         if (type === "QUIZ") {
             const { data } = await fetchStudentQuiz(userdata.token, info)
-            console.log({ data });
-            setQuiz(data)
+            // console.log({ data });
+            setPickedType("QUIZ")
+            setTitle(title)
+            setQuizContent(data)
+            setNoteContent([])
+            setFileContent([])
 
         }
         else if (type === "NOTE") {
             const { data } = await fetchStudentNote(userdata.token, info)
-            console.log({ data });
-            setNote(data)
+            // console.log({ data });
+            setPickedType("NOTE")
+            setTitle(title)
+            setNoteContent(data)
+            setQuizContent([])
+            setFileContent([])
 
         } else {
             const { data } = await fetchStudentFile(userdata.token, info)
-            console.log({ data });
-            setFile(data)
+            // console.log({ data });
+            setPickedType("FILE")
+            setTitle(title)
+            setFileContent(data)
+            setQuizContent([])
+            setNoteContent([])
         }
-
-
     }
+
+
+
 
     return (
         <Container>
@@ -473,18 +616,64 @@ const Classroom = () => {
                                 {classDetail?.bootcampName}
                             </BreadcrumbLink>
                             <BreadcrumbLink to="#" $isCurrentPage={true}>
-                                {/* {activeMedia?.title} */}
+                                {title}
                             </BreadcrumbLink>
                         </Breadcrumbs>
                     </ClassroomMainTop>
                     <ClassroomMainBody>
                         <BodyInfo>
-                            {/* <h3>{activeMedia?.title}</h3> */}
+                            <h3>{title}</h3>
                             <CustomButton>Ask tutor a question</CustomButton>
                         </BodyInfo>
                         <BodyContent>
-                            {mediaContent}
-                            {/* {mediaAction} */}
+                            {pickedType === "FILE" && <>
+                                {fileContent.length > 0 && fileContent.map((x, id) => (
+                                    <FileComponent x={x} id={id}/>
+
+
+                                ))
+                                }
+
+                            <QuizAction>
+                                    <PreviousButton variant="outlined">
+                                        <FaCaretLeft />  Previous Content
+                                    </PreviousButton>
+                                    <NextButton variant="outlined">
+                                        Next Content <FaCaretRight />
+                                    </NextButton>
+                                </QuizAction> 
+                            </>
+                            }
+
+
+                            {pickedType === "QUIZ" && <>
+                                {quizContent.length > 0 && quizContent.map((q, id) => (
+                                    <QuizContent q={q} id={id} />
+                                ))}
+                                <QuizAction>
+                                    <PreviousButton variant="outlined">
+                                        <FaCaretLeft />  Previous Content
+                                    </PreviousButton>
+                                    <NextButton variant="outlined">
+                                        Next Content <FaCaretRight />
+                                    </NextButton>
+                                </QuizAction>
+
+
+                            </>
+
+                            }
+
+                        
+
+                            {pickedType === "NOTE" && <>
+                                {noteContent.length > 0 && <NoteComponent noteContent={noteContent} />}
+
+                
+                            </>
+
+                            }
+
                         </BodyContent>
                     </ClassroomMainBody>
                 </ClassroomMain>

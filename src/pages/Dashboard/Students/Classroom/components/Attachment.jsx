@@ -74,7 +74,7 @@ const Attachement = ({type, _id, isLocked, title,  domain, classId,
     return (
         <AttachmentContainer variant="outlined" $active={active === title ? true : false} onClick={e => {
             // changeActive(title)
-            fetchData(type, _id) 
+            fetchData(type, _id, title) 
         }
     }>
             <AttachmentInfo>
