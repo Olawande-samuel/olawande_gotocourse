@@ -359,7 +359,7 @@
     font-size: 12px;
     line-height: 24px;
     border: none;
-    width: 50%;
+    width: 100%;
     color: #FFFFFF;
     background: #0C2191;
 }
@@ -1157,3 +1157,6 @@
     background-color: rgb(236, 236, 236);
 
 }
+
+
+

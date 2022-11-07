@@ -555,10 +555,10 @@ export default function Quiz() {
 
                         </form>
 
-                        <div className="prevbtn">
+                        {/* <div className="prevbtn">
                             <button><Link to="preview">Preview quiz</Link></button>
 
-                        </div>
+                        </div> */}
 
 
                     </main>

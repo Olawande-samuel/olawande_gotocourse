@@ -1,5 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { Outlet, Route, Routes } from "react-router-dom";
+
+import 'react-quill/dist/quill.snow.css';
 import './App.css';
 import '@stripe/stripe-js'
 

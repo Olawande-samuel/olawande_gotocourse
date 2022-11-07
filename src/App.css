@@ -2742,3 +2742,12 @@ gap: 1rem;
   transform: translateY(-50%);
   cursor: pointer;
 }
+
+
+.texteditor .ql-container {
+  min-height: 50vh;
+}
+
+.texteditor .ql-editor p {
+  margin-bottom: .5rem !important;
+}
