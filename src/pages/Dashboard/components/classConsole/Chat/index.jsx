@@ -966,7 +966,7 @@ function Modal({setShow}){
     )
 }
 
-const ContentContainer = styled.section`
+export const ContentContainer = styled.section`
   padding: 10px; 
   height: 100vh;
   /* overflow-y: scroll; */
@@ -985,24 +985,24 @@ const ContentContainer = styled.section`
 
 `
 
-const GroupChat = styled.main`
+export const GroupChat = styled.main`
     position: relative;
     height: 100%;
 
 `
-const StudentList = styled.aside`
+export const StudentList = styled.aside`
     height: 100%;
     /* overflow-y: scroll; */
 `
 
-const SenderContainer = styled.div`
+export const SenderContainer = styled.div`
     position: absolute;
     bottom: 0;
     right: 0;
     left: 0;
     padding-block:1rem;
 `
-const Sender = styled.div`
+export const Sender = styled.div`
     position: relative;
 
     input {
@@ -1011,18 +1011,18 @@ const Sender = styled.div`
 
     }
 `
-const Send = styled.div`
+export const Send = styled.div`
     position: absolute;
     right: 0;
     top: 50%;
     transform: translateY(-50%);
 `
 
-const Title  = styled.header`
+export const Title  = styled.header`
 
 `
 
-const ChatBox = styled.div`
+export const ChatBox = styled.div`
     overflow-y: scroll;
     min-height: 70vh;
 `
@@ -1078,7 +1078,7 @@ export function GroupContent(){
 }
 
 
-const ChatInfo = styled.div`
+export const ChatInfo = styled.div`
     display: flex;
     padding: .8rem;
     margin-block: .5rem;
@@ -1087,7 +1087,7 @@ const ChatInfo = styled.div`
 
 `
 
-const UserImage = styled.div`
+export const UserImage = styled.div`
     margin-right: 1rem;
     border-radius:50%;
     width: ${(props) => props.aside ? "30px" : "50px"};
@@ -1098,7 +1098,7 @@ const UserImage = styled.div`
 
     
 `
-const ChatDetails = styled.div`
+export const ChatDetails = styled.div`
     h6 {
         color: var(--theme-blue);
         font-weight: 700;
@@ -1109,8 +1109,7 @@ const ChatDetails = styled.div`
         margin-bottom: 0;
     }
 `
-
-function ChatContent({title, user, type}){
+ function ChatContent({title, user, type}){
     return (
         <ChatInfo>
             <UserImage>
@@ -1124,10 +1123,10 @@ function ChatContent({title, user, type}){
     )
 }
 
-const ChatStudentList = styled.div`
+export const ChatStudentList = styled.div`
     
 `
-const StudentSearch = styled.div`
+export const StudentSearch = styled.div`
     border: 1px solid #ababab;
     border-radius: 4px;
     padding: .3rem;
@@ -1151,9 +1150,9 @@ const StudentSearch = styled.div`
         }
     }
 `
-const StudentsContainer = styled.div``
+export const StudentsContainer = styled.div``
 const RequestContainer = styled.div``
-const ActionButton = styled.button`
+export const ActionButton = styled.button`
     border:none;
     outline:none;
     background: transparent;

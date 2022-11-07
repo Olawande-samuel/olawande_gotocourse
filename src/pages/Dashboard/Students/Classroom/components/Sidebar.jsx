@@ -90,19 +90,19 @@ const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData }) =>
     const navigate = useNavigate()
     let elementRef = createRef(null)
     // console.log({elementRef});
-    console.log("children", elementRef.current);
+    // console.log("children", elementRef.current);
     // console.log("children", elementRef.current.children);
     const [chid, setChid] = useState([])
     // console.log({chid});
 
-    // useEffect(() => {
-    //     if(elementRef){
-    //         // console.log("node",ReactDOM.findDOMNode(elementRef.current));
-    //         // setChid( ReactDOM.findDOMNode(elementRef.current.children))
+    useEffect(() => {
+        if(elementRef){
+            console.log("node",ReactDOM.findDOMNode(elementRef.current));
+            // setChid( ReactDOM.findDOMNode(elementRef.current.children))
             
-    //     }
+        }
 
-    // },[elementRef])
+    },[elementRef])
 
     return (
         <SidebarContainer $mobile={isMobile}>

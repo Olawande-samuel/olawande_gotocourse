@@ -45,12 +45,12 @@ const Module = ({title, attachments, changeActive, activeMedia, fetchData }) => 
 
     const fetchContents = useQuery(["fetch content", attachments.classId], () => fetchStudentContents(userdata.token, attachments.classId), {
         onSuccess: (res) => {
-            console.log({res})
+            // console.log({res})
             setAttach(res.data)
 
         }
     })
-    console.log({attachments}); // module info
+    // console.log({attachments}); // module info
     // console.log({attach});
 
   

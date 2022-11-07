@@ -537,7 +537,7 @@ const Classroom = () => {
 
     const fetchstudentDomains = useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id), {
         onSuccess: (res) => {
-            console.log(res)
+            // console.log(res)
             setModules(res.data)
         }
     })

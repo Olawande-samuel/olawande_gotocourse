@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { AiOutlineMore, AiOutlineArrowLeft } from "react-icons/ai";
-import { MdSearch } from 'react-icons/md';
+import { MdSearch, MdSend } from 'react-icons/md';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -12,6 +12,9 @@ import { useAuth } from "../../../../../contexts/Auth";
 import { KEY } from "../../../../../constants";
 import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { ActionButton, ChatBox, ChatDetails, ChatInfo, ChatStudentList, ContentContainer, GroupChat, Send, Sender, SenderContainer, StudentsContainer, StudentSearch, Title, UserImage, StudentList } from ".";
+import { FaSearch, FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 
 // const groups = [
@@ -586,9 +589,9 @@ const StudentChatModule = () => {
 
     const [newGroups, setNewGroups] = useState([])
 
-    const tabs = ['Teams', 'Active Chat', 'Mail'];
+    const tabs = ['Teams', 'Active Chat'];
 
-    function toggleActionsHandler(e, index){
+    function toggleActionsHandler(e, index) {
         setNewGroups(old => {
             // let copy = [...old];
             // let foundIndex = copy.findIndex((_, i) => i === index);
@@ -623,7 +626,7 @@ const StudentChatModule = () => {
 
 
 
-    const tabContent = [<ChatTab groups={newGroups} toggle={toggleActionsHandler} setShow={setShow} />, <ActiveChat />, <MailTab />]
+    const tabContent = [<ChatTab groups={newGroups} toggle={toggleActionsHandler} setShow={setShow} />, <ActiveChat />]
 
     return (
         <ChatContainer>
@@ -671,41 +674,54 @@ const StudentChatModule = () => {
 
 
 
-function MailTab() {
-    const [mail, setMail] = useState('');
-    const tabs = ['File', 'Edit', 'View', 'Insert', 'Format', 'Tools', 'Table', 'Help'];
+function ChatContent({ title, user, type }) {
     return (
-        <MailContainer>
-            <MailBodyContainer>
-                <CKEditor
-                    editor={ClassicEditor}
-                    data="<p>Hello from CKEditor 5!</p>"
-                    onReady={editor => {
-                        // You can store the "editor" and use when it is needed.
-                        console.log('Editor is ready to use!', editor);
-                    }}
-                    onChange={(event, editor) => {
-                        const data = editor.getData();
-                        console.log({ event, editor, data });
-                    }}
-                    onBlur={(event, editor) => {
-                        console.log('Blur.', editor);
-                    }}
-                    onFocus={(event, editor) => {
-                        console.log('Focus.', editor);
-                    }}
-                />
-            </MailBodyContainer>
-            <MailButton>
-                <button>Send mail to all students</button>
-            </MailButton>
-        </MailContainer>
+        <ChatInfo>
+            <UserImage>
+                <FaUser size="1.5rem" color="#fff" />
+            </UserImage>
+            <ChatDetails>
+                <h6>Tayo</h6>
+                <p>Hello</p>
+            </ChatDetails>
+        </ChatInfo>
+    )
+}
+
+function ChatAside() {
+    return (
+        <ChatStudentList>
+            <StudentSearch>
+                <input type="search" placeholder="Search student list" />
+                <div>
+                    <div></div>
+                    <FaSearch />
+                </div>
+            </StudentSearch>
+            <StudentsContainer>
+                <h6>Students <span>(1)</span></h6>
+                <div>
+                    <ChatInfo>
+                        <UserImage aside={true}>
+                            <FaUser size=".7rem" color="#fff" />
+                        </UserImage>
+                        <ChatDetails>
+                            <h6>Student</h6>
+                            <small>student@mail.com</small>
+                        </ChatDetails>
+                        {/* <ActionButton>
+                            Remove
+                        </ActionButton> */}
+                    </ChatInfo>
+                </div>
+            </StudentsContainer>
+
+        </ChatStudentList>
     )
 }
 
 
-
-function ActiveChat() {
+export function ActiveChat() {
     const [activeChats, setActiveChats] = useState([{
         status: 'Student',
         fullname: 'Rice Hansel',
@@ -738,44 +754,37 @@ function ActiveChat() {
             number: '147-2-101',
         }
     ]);
+
+
+
+    const handleChange = () => {
+
+    }
     return (
-        <ActiveChatContainer>
-            <ActiveChatTop>
-                <InputContainer>
-                    <MdSearch />
-                    <input type="text" name="search" placeholder='Search for student' />
-                </InputContainer>
-                <Button>
-                    Refresh
-                </Button>
-            </ActiveChatTop>
-            <ActiveChatBody>
-                <ActiveChatCard>
-                    <h3>Active Chats</h3>
-                    {
-                        activeChats.map((data, i) => (
-                            <UserCard isChat key={i} {...data} />
-                        ))
-                    }
-                </ActiveChatCard>
-                <ActiveChatCard>
-                    <h3>Teachers</h3>
-                    {
-                        teachers.map((data, i) => (
-                            <UserCard key={i} {...data} />
-                        ))
-                    }
-                </ActiveChatCard>
-                <ActiveChatCard>
-                    <h3>Admins</h3>
-                    {
-                        admins.map((data, i) => (
-                            <UserCard key={i} {...data} />
-                        ))
-                    }
-                </ActiveChatCard>
-            </ActiveChatBody>
-        </ActiveChatContainer>
+        <ContentContainer>
+            <GroupChat>
+                <SenderContainer>
+                    <Title>
+                        <h4>Group name</h4>
+                    </Title>
+                    <ChatBox>
+                        <ChatContent />
+                        <ChatContent />
+                    </ChatBox>
+                    <Sender>
+                        <input type="text" name="msg" id="msg" className="form-control" onChange={handleChange} />
+                        <Send>
+                            <i>
+                                <MdSend size="1.5rem" />
+                            </i>
+                        </Send>
+                    </Sender>
+                </SenderContainer>
+            </GroupChat>
+            <StudentList>
+                <ChatAside />
+            </StudentList>
+        </ContentContainer>
     )
 }
 
@@ -805,20 +814,20 @@ function ChatTab({ groups, toggle, setShow }) {
     const { generalState: { isMobile }, consoleFunctions: { joinGroup, fetchUserGroupstatus } } = useAuth();
 
     console.log({ groups });
-  
-const userGroupStatus = useQuery(["fetch file", userdata.id], () => fetchUserGroupstatus(userdata.token, userdata.id), {
-    onSuccess: (res) => {
-        console.log("successful query group")
-        console.log(res)
-    }
-})
+
+    const userGroupStatus = useQuery(["fetch file", userdata.id], () => fetchUserGroupstatus(userdata.token, userdata.id), {
+        onSuccess: (res) => {
+            console.log("successful query group")
+            console.log(res)
+        }
+    })
 
 
     const joinGroupBtn = async (e, id, classId) => {
         e.preventDefault()
         try {
             console.log("token", userdata?.token);
-            console.log("id",id);
+            console.log("id", id);
             const { data } = await joinGroup(userdata?.token, id, classId)
             console.log({ data });
 
@@ -826,6 +835,8 @@ const userGroupStatus = useQuery(["fetch file", userdata.id], () => fetchUserGro
             console.log(error);
         }
     }
+
+    const userjoinedgroup = true
     return (
         <ChatGroup>
             <h2>My Group</h2>
@@ -848,7 +859,18 @@ const userGroupStatus = useQuery(["fetch file", userdata.id], () => fetchUserGro
                                 <p className="restricted_line">{group.description}</p>
                                 <footer>
                                     <span>{group.students} participants</span>
-                                    <button onClick={e => joinGroupBtn(e, group._id, group)}>Open team</button>
+                                    {/* <button onClick={e => joinGroupBtn(e, group._id, group)}>Open team</button> */}
+
+                                    {userjoinedgroup ?
+                                        <button >
+                                            <Link to={`chat`}>
+                                            Open team
+                                            </Link>
+                                            
+                                            </button> :
+                                        <button onClick={e => joinGroupBtn(e, group._id, group)}>Join team</button>
+
+                                    }
                                 </footer>
                             </GroupBody>
                         </Group>
@@ -873,7 +895,7 @@ const userGroupStatus = useQuery(["fetch file", userdata.id], () => fetchUserGro
                             </GroupTop>
                             <GroupBody>
                                 <h3>{title}</h3>
-                                <p>{description}</p>
+                                <p className="restricted_line">{description}</p>
                                 <footer>
                                     <span>{students} participants</span>
                                     <button onClick={e => joinGroupBtn(e, _id)}>Open team</button>

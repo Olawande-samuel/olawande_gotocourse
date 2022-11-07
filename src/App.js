@@ -105,7 +105,7 @@ import Detail from "./pages/Course/Details";
 import AllCourses from "./pages/Courses/allcourses/AllCourses";
 import { MainContainer } from "./pages/Dashboard/components/classConsole";
 import Articles from "./pages/Events/articles";
-import StudentChatModule from "./pages/Dashboard/components/classConsole/Chat/student";
+import StudentChatModule, { ActiveChat } from "./pages/Dashboard/components/classConsole/Chat/student";
 
 import { GroupContent } from "./pages/Dashboard/components/classConsole/Chat";
 
@@ -261,6 +261,8 @@ function App() {
                   <Route path="myclasses" element={<Out />} >
                     <Route index element={<ConsoleClasses />} />
                     <Route path=":id" element={<StudentChatModule />} />
+                    <Route path=":id/chat" element={<ActiveChat />} />
+                    
                   </Route>
                   <Route path="assessments" element={<ConsoleAssessments />} />
                   <Route path="liveclass" element={<Out />} />
