@@ -158,6 +158,10 @@ const iconData = [
       classConsole: { ...classConsole, sidebar: !classConsole.sidebar },
     });
 
+
+    const studentAssessMent =  pathname.includes("/student/console/myclasses");
+    console.log({studentAssessMent});
+
   const studentpath = pathname.split("/")[1] === "student";
   const quizpath =
     pathname.split("/")[2] === "myclasses"
@@ -203,16 +207,16 @@ const iconData = [
             </div>
           </div>
 
-          {studentpath && (
+          {!studentAssessMent && studentpath && (
             <div className="studenttitle">
-              {/* <h2>{quizpath}</h2> */}
+              <h2>{quizpath}</h2>
             </div>
           )}
         </section>
         {children}
       </main>
 
-      <div className={style.icon_bar}>
+      <div className={`${style.icon_bar} ${studentAssessMent && style.none}`}>
         {studentpath
           ? studentIcon.map(({ title, id, icon: Icon, link }) => (
             <Tooltip title={title} key={id}>
@@ -377,6 +381,7 @@ function Sidebar({ Toggle, side }) {
 
 function Accord({ name, _id, classId, description }) {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { getItem } = useLocalStorage();
   const userdata = getItem(KEY);
   const { consoleFunctions: { fetchContents }, } = useAuth();
@@ -435,7 +440,8 @@ function Accord({ name, _id, classId, description }) {
   ]
 
   function handleContentNavigation(...args) {
-    setSearchParams({ "content": args[0] })
+    navigate(`/teacher/class-console/class/${args[3]}?content=${args[0]}`)
+    // setSearchParams({ "content": args[0] })
   }
 
   return (
@@ -457,7 +463,7 @@ function Accord({ name, _id, classId, description }) {
         details &&
         <ul className={style.content_list}>
           {getDomainContent?.data?.data?.filter(item => item.domain === _id).map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
-            <li key={_id} onClick={() => handleContentNavigation(_id, type, domain, classId)} className="d-flex justify-content-between">
+            <li key={_id} onClick={() => handleContentNavigation(_id, type, domain, classId)} className="d-flex justify-content-between" style={{cursor:"pointer"}}>
               {/* <Link to={`${routeType(type)}`} className="d-flex justify-content-between"> */}
               <i>{IconType(type)}</i>
               <span>{title}</span>

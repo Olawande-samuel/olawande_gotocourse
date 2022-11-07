@@ -16,6 +16,10 @@ import { KEY } from '../../../../constants';
 import { useLocalStorage } from '../../../../hooks';
 import { useEffect } from 'react';
 
+
+import ReactQuill from 'react-quill';
+
+
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -28,8 +32,8 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                <Box sx={{ p: 2 }}>
+                    <Box>{children}</Box>
                 </Box>
             )}
         </div>
@@ -112,6 +116,8 @@ export default function Note() {
     }
     
     console.log({formstate})
+    const [content, setContent] = useState("")
+
     return (
         <div className=''>
             <Box sx={{ width: '100%' }}>
@@ -169,28 +175,7 @@ export default function Note() {
                                         />
 
                                     </CKEditorContext> */}
-                                <CKEditor
-                                    editor={ClassicEditor}
-                                    data={formstate?.body}
-                                    onReady={editor => {
-                                        // You can store the "editor" and use when it is needed.
-                                        console.log('Editor is ready to use!', editor);
-                                    }}
-                                    onChange={(event, editor) => {
-                                        const data = editor.getData();
-                                        console.log({ event, editor, data });
-                                        setNote(data)
-                                        // handleInputChange(event, id)
-
-                                    }}
-                                    onBlur={(event, editor) => {
-                                        console.log('Blur.', editor);
-                                    }}
-                                    onFocus={(event, editor) => {
-                                        console.log('Focus.', editor);
-                                    }}
-                                />
-
+                                    <ReactQuill theme="snow" value={formstate?.body} onChange={setNote} />
                                 <div className="notebtn">
                                     <button>{
                                             

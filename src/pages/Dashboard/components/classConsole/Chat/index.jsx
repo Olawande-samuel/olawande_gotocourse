@@ -13,6 +13,7 @@ import { KEY } from "../../../../../constants";
 import { useLocation, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { FaSearch, FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 
 const groups = [
@@ -825,7 +826,8 @@ function UserCard({status, fullname, number, lastsent, isChat}){
 
 function ChatTab(){
     const { consoleFunctions: { fetchGroups, addGroup, joinGroup }, } = useAuth();
-    const { pathname, search } = useLocation();
+    const location = useLocation();
+
     const { getItem } = useLocalStorage()
 
     const userdata = getItem(KEY)
@@ -854,7 +856,7 @@ function ChatTab(){
             <Createbutton onClick={()=> setShow(true)}>Create Group</Createbutton>
             <Groups>
                 {
-                    groups.map(({title, description, participants, showActions}, i) => (
+                    groups.map(({title, description, participants, showActions, _id}, i) => (
                         <Group key={i}>
                             <GroupTop>
                                 <h2>{title}</h2>
@@ -872,7 +874,9 @@ function ChatTab(){
                                 <p className="restricted_line">{description}</p>
                                 <footer>
                                     <span>{participants} participants</span>
-                                    <button>Open team</button>
+                                    <Link to={`group/${_id}`} className="d-inline-flex">
+                                        <button>Open team</button>
+                                    </Link>
                                 </footer>
                             </GroupBody>
                         </Group>
@@ -968,14 +972,14 @@ function Modal({setShow}){
 
 export const ContentContainer = styled.section`
   padding: 10px; 
-  height: 100vh;
+  height: 85vh;
   /* overflow-y: scroll; */
   display: flex;
 
   > main {
     flex-basis: 70%;
     padding-inline:1rem;
-    min-height: 80vh
+    /* min-height: 80vh */
   }
 
   > aside { 
@@ -988,6 +992,10 @@ export const ContentContainer = styled.section`
 export const GroupChat = styled.main`
     position: relative;
     height: 100%;
+    
+    > div {
+        height: 100%;
+    }
 
 `
 export const StudentList = styled.aside`
@@ -996,15 +1004,17 @@ export const StudentList = styled.aside`
 `
 
 export const SenderContainer = styled.div`
-    position: absolute;
+    /* position: absolute;
     bottom: 0;
     right: 0;
-    left: 0;
+    left: 0; */
     padding-block:1rem;
 `
 export const Sender = styled.div`
-    position: relative;
-
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     input {
         padding: .5rem;
         padding-right: 1.5rem
@@ -1016,27 +1026,43 @@ export const Send = styled.div`
     right: 0;
     top: 50%;
     transform: translateY(-50%);
+
+    i > svg {
+        cursor: pointer;
+    }
 `
 
 export const Title  = styled.header`
-
+    margin-bottom: 1.5rem;
 `
 
 export const ChatBox = styled.div`
     overflow-y: scroll;
-    min-height: 70vh;
+    height: 85%;
 `
 export function GroupContent(){
     const {getItem} = useLocalStorage();
-
+    const {groupID} = useParams()
     const userdata = getItem(KEY)
-    const {teacherConsoleFunctions: { sendMessage}} = useAuth()
+    const {teacherConsoleFunctions: { sendMessage, fetchMessages}} = useAuth()                      
+    const [messageList, setMessageList] = useState([])
 
     const [body, setBody] = useState("")
 
+    const queryClient = useQueryClient()
+    const fetchGroupMessages = useQuery(["group message", groupID, userdata?.token], ()=>fetchMessages(userdata.token, groupID), {
+        onSuccess: (res)=> {
+            setMessageList(res.data)
+
+        }
+    })
 
     const mutation = useMutation(([usertoken, groupId, data]) => sendMessage(usertoken, groupId, data), {
-        onSuccess: (res)=> console.log(res),
+        onSuccess: (res)=> {
+            console.log(res)
+            setMessageList([...messageList, res.data])
+            queryClient.invalidateQueries("group message")
+        },
         onError: (err)=> console.error(err)
     })
     
@@ -1047,7 +1073,9 @@ export function GroupContent(){
 
     function send(e){
         e.preventDefault();
-        mutation.mutate([userdata.token, , {body}])
+        mutation.mutate([userdata.token, groupID, {body}])
+        setBody("")
+
     }
     return (
         <ContentContainer>
@@ -1057,14 +1085,17 @@ export function GroupContent(){
                         <h4>Group name</h4>
                     </Title>
                     <ChatBox>
-                        <ChatContent />
-                        <ChatContent />
+                        {
+                            messageList?.map(item=>(
+                                <ChatContent {...item} key={item._id} />
+                            ))
+                        }
                     </ChatBox>
                     <Sender>
-                        <input type="text" name="msg" id="msg" className="form-control" onChange={handleChange} />
+                        <input type="text" name="msg" id="msg" className="form-control" onChange={handleChange} value={body} />
                         <Send>
                             <i>
-                                <MdSend size="1.5rem" />
+                                <MdSend size="1.5rem" onClick={send} color="var(--theme-blue)" />
                             </i>
                         </Send>
                     </Sender>
@@ -1109,15 +1140,16 @@ export const ChatDetails = styled.div`
         margin-bottom: 0;
     }
 `
- function ChatContent({title, user, type}){
+
+function ChatContent({title, user, body, fromUser, isTutor, type}){
     return (
         <ChatInfo>
             <UserImage>
                 <FaUser size="1.5rem" color="#fff" />
             </UserImage>
             <ChatDetails>
-                <h6>Teacher</h6>
-                <p>Hello</p>
+                <h6>{isTutor ? "Teacher": fromUser}</h6>
+                <p>{body}</p>
             </ChatDetails>
         </ChatInfo>
     )
@@ -1161,6 +1193,35 @@ export const ActionButton = styled.button`
     font-size:14px;
 `
 function ChatAside(){
+    
+    const {getItem}= useLocalStorage();
+    const {teacherConsoleFunctions: {fetchGroupStudents, approveStudent}} = useAuth()
+    const {groupID}= useParams();
+
+    const userdata = getItem(KEY);
+    const [studentList, setStudentList] = useState([]);
+    const queryClient = useQueryClient()
+
+    const fetchStudents = useQuery(["group students", userdata?.token], ()=>fetchGroupStudents( userdata?.token, groupID), {
+        onSuccess: (res)=> {
+            if(res.data?.length > 0 ) {
+                setStudentList(res.data)
+            }
+        }
+    })
+
+    const approveMutation = useMutation(([token, id, data])=>approveStudent(token, id, data), {
+        onSuccess: (res)=> {console.log(res)
+            queryClient.invalidateQueries("group students")
+        },
+        onError: (err)=> console.error(err)
+    })
+
+
+    function approveApplication(e, id){
+        e.preventDefault()
+        approveMutation.mutate([userdata.token, id, {data:""}])
+    }
     return (
         <ChatStudentList>
             <StudentSearch>
@@ -1171,24 +1232,46 @@ function ChatAside(){
                 </div>
             </StudentSearch>
             <StudentsContainer>
-                <h6>Students <span>(1)</span></h6>
+                <h6>Students <span>({studentList?.filter(student=> student.isApproved === true).length})</span></h6>
                 <div>
-                    <ChatInfo>
-                        <UserImage aside={true}>
-                            <FaUser size=".7rem" color="#fff" />
-                        </UserImage>
-                        <ChatDetails>
-                            <h6>Student</h6>
-                            <small>student@mail.com</small>
-                        </ChatDetails>
-                        <ActionButton>
-                            Remove
-                        </ActionButton>
-                    </ChatInfo>
+                    {
+                        studentList?.filter(student=> student.isApproved === true).map(student=>(
+                            <ChatInfo>
+                                <UserImage aside={true}>
+                                    <FaUser size=".7rem" color="#fff" />
+                                </UserImage>
+                                <ChatDetails>
+                                    <h6>{student?.studentName}</h6>
+                                    <small>{student.studentEmail}</small>
+                                </ChatDetails>
+                                <ActionButton>
+                                    Remove
+                                </ActionButton>
+                            </ChatInfo>
+                        ))
+                    } 
                 </div>
             </StudentsContainer>
             <RequestContainer>
-                <h6>Requests <span>(0)</span></h6>
+                <h6>Requests <span>({studentList?.filter(student=> student.isApproved !== true).length})</span></h6>
+                <div>
+                {
+                        studentList?.filter(student=> student.isApproved !== true).map(student=>(
+                            <ChatInfo>
+                                <UserImage aside={true}>
+                                    <FaUser size=".7rem" color="#fff" />
+                                </UserImage>
+                                <ChatDetails>
+                                    <h6>{student?.studentName}</h6>
+                                    <small>{student.studentEmail}</small>
+                                </ChatDetails>
+                                <ActionButton onClick={(e)=>approveApplication(e, student.memberId)}>
+                                    Approve
+                                </ActionButton>
+                            </ChatInfo>
+                        ))
+                    }
+                </div>
             </RequestContainer>
         </ChatStudentList>
     )

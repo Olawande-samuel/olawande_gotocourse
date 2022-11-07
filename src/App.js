@@ -1,5 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { Outlet, Route, Routes } from "react-router-dom";
+
+import 'react-quill/dist/quill.snow.css';
 import './App.css';
 import '@stripe/stripe-js'
 
@@ -356,7 +358,7 @@ function App() {
                       <Route path="mail" element={<Out />}>
                         <Route index element={<ChatComponent />} />
                         <Route path="details" element={<GroupContent />} />
-                        <Route path="group/:id" element={<GroupContent />} />
+                        <Route path="group/:groupID" element={<GroupContent />} />
                       </Route>
                       <Route path="file" element={<File />} />
                       <Route path="note" element={<Note />} />

@@ -20,7 +20,7 @@
     padding: 0.5rem;
     color: #fff;
     text-align: center;
-    margin: 0 auto;
+    margin: 0 auto 1.5rem;
     /* border: 2px solid red; */
 
 
@@ -359,7 +359,7 @@
     font-size: 12px;
     line-height: 24px;
     border: none;
-    width: 50%;
+    width: 100%;
     color: #FFFFFF;
     background: #0C2191;
 }
@@ -1157,3 +1157,6 @@
     background-color: rgb(236, 236, 236);
 
 }
+
+
+

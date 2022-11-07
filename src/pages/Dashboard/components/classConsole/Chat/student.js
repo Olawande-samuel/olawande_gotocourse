@@ -674,15 +674,15 @@ const StudentChatModule = () => {
 
 
 
-function ChatContent({ title, user, type }) {
+function ChatContent({title, user, body, fromUser, isTutor, type}){
     return (
         <ChatInfo>
             <UserImage>
                 <FaUser size="1.5rem" color="#fff" />
             </UserImage>
             <ChatDetails>
-                <h6>Tayo</h6>
-                <p>Hello</p>
+                <h6>{isTutor ? "Teacher": fromUser}</h6>
+                <p>{body}</p>
             </ChatDetails>
         </ChatInfo>
     )

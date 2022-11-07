@@ -63,6 +63,8 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
         onSuccess: (res)=> {
             console.log(res)
             setData(null)
+            setFile(null)
+            setImageUrl(null)
             queryClient.invalidateQueries("file content")
         },
         onError: (err)=> console.error(err)
@@ -117,7 +119,25 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
 
     return(
         isOpen && 
-        (<div className={clsx.upload_file__background} onClick={e => {
+        (
+            <UploadFormContent
+            setIsOpen={setIsOpen}
+            data={data}
+            triggerUpload={triggerUpload}
+            changeHandler={changeHandler}
+            file={file}
+            imageUrl={imageUrl}
+            loading={loading}
+            copy={copy}
+            uploadFileHandler={uploadFileHandler}
+            />
+        )
+    )
+}
+
+export function UploadFormContent({setIsOpen, data, triggerUpload, changeHandler, file, imageUrl, loading, copy, uploadFileHandler}){
+    return (
+        <div className={clsx.upload_file__background} onClick={e => {
             if(e.target === e.currentTarget) {
                 setIsOpen(_ => false);
             }
@@ -154,7 +174,7 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
                     </div>
                 )}
             </div>
-        </div>)
+        </div>
     )
 }
 
