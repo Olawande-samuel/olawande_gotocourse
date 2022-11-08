@@ -3869,11 +3869,11 @@ export function CreateBootcamp() {
                 className="form-select generic_input"
               >
                 <option value="">Choose a Subcategory</option>
-                <option  value="in-demand">In-demand</option>
-                <option  value="1-2 weeks">1-2 weeks</option>
-                <option  value="certification">Certification</option>
-                <option  value="1 day">1 Day</option>
-                <option  value="free">Free</option>
+                <option  value="UPSKILL_COURSES">Upskill Courses</option>
+                <option  value="IN_DEMAND">In Demand Career Courses</option>
+                <option  value="EXECUTIVE_COURSES">Executive Courses</option>
+                <option  value="SHORT_COURSES">Short Courses</option>
+                <option  value="TECH_ENTREPRENEURSHIP">Tech entrepreneurship courses</option>
               </select>
             </div>
             <Input

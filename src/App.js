@@ -109,7 +109,7 @@ import { MainContainer } from "./pages/Dashboard/components/classConsole";
 import Articles from "./pages/Events/articles";
 import StudentChatModule, { ActiveChat } from "./pages/Dashboard/components/classConsole/Chat/student";
 
-import { GroupContent } from "./pages/Dashboard/components/classConsole/Chat";
+import { GroupContent, MailDetail } from "./pages/Dashboard/components/classConsole/Chat";
 
 
 
@@ -359,6 +359,7 @@ function App() {
                         <Route index element={<ChatComponent />} />
                         <Route path="details" element={<GroupContent />} />
                         <Route path="group/:groupID" element={<GroupContent />} />
+                        <Route path="chat/:userId" element={<MailDetail />} />
                       </Route>
                       <Route path="file" element={<File />} />
                       <Route path="note" element={<Note />} />

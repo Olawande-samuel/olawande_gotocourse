@@ -95,8 +95,6 @@ const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData, comp
     let elementRef = createRef(null)
     // console.log({ AttachmentLength }); // module info
 
-
-
     const ProgressResult = useMemo(() => {
         let result = (Math.floor((completed / AttachmentLength) * 100))
         return result

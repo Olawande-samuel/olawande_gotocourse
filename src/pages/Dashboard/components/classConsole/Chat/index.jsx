@@ -10,7 +10,7 @@ import { Box, Tab, Tabs } from "@mui/material";
 import PropTypes from "prop-types";
 import { useAuth } from "../../../../../contexts/Auth";
 import { KEY } from "../../../../../constants";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { FaSearch, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -764,6 +764,17 @@ function ActiveChat(){
             number: '147-2-101',
         }
     ]);
+
+    const {getItem} = useLocalStorage()
+    const {adminFunctions:{getUnreadMessages}} = useAuth()
+    const userdata = getItem(KEY)
+    const allMessages = useQuery(userdata?.token && ["get unread messages"], () => getUnreadMessages(userdata?.token), {
+        onSuccess: (res)=>{
+            console.log({res})
+        }
+      })
+    
+    console.log({allMessages})
     return(
         <ActiveChatContainer>
             <ActiveChatTop>
@@ -779,8 +790,8 @@ function ActiveChat(){
                 <ActiveChatCard>
                     <h3>Active Chats</h3>
                     {
-                        activeChats.map((data, i) => (
-                            <UserCard isChat key={i} {...data} />
+                        allMessages.data?.data?.data?.map((data, i) => (
+                            <UserCard isChat key={i} {...data} all={data} />
                         ))
                     }
                 </ActiveChatCard>
@@ -806,19 +817,78 @@ function ActiveChat(){
 }
 
 
-function UserCard({status, fullname, number, lastsent, isChat}){
+function UserCard({status, fullname, number, lastsent, isChat, user,fromUser, body,messageId, all}){
+    const navigate = useNavigate()
     return(
-        <UserCardContainer>
+        <UserCardContainer onClick={()=>{
+            localStorage.setItem("gotocourse-chat-info", JSON.stringify(all))
+            navigate(`chat/${all.fromUser}`)
+
+        }}>
             <UserAvatar>
-                {fullname.substring(0, 2)}
+                {user?.fullName.substring(0, 2)}
             </UserAvatar>
             <UserInfo>
                 <h6>{status}</h6>
-                <h3>{fullname}</h3>
-                <h5>{number}</h5>
-                {isChat && <p>Last sent: {lastsent}</p>}
+                <h3>{user?.fullName}</h3>
+                <h5>{fromUser}</h5>
+                {/* {isChat && <p>Last sent: {lastsent}</p>} */}
             </UserInfo>
         </UserCardContainer>
+    )
+}
+export function MailDetail(){
+    
+    const {getItem} = useLocalStorage();
+
+    const userdata = getItem(KEY)
+    const chatData = getItem("gotocourse-chat-info")
+
+    const { adminFunctions: { getMessages, sendMessage, readMessage } } = useAuth()
+
+    const[body, setBody] = useState("")
+
+    const {userId} = useParams()
+    console.log({userId})
+
+    const fetchMessages = useQuery(["messageList", userdata.token, chatData?.fromUser], ()=>getMessages(userdata.token, chatData?.fromUser), {
+        onSuccess: (res)=>console.log(res),
+        onError: (err)=>console.error(err)
+    })
+
+    function handleChange(e){
+        setBody(e.target.value);
+    }
+
+    function send(){
+
+    }
+
+    return(
+        <ContentContainer>
+        <GroupChat>
+            <SenderContainer>
+                <Title>
+                    <h4>Chat</h4>
+                </Title>
+                <ChatBox>
+                    {
+                        fetchMessages?.data?.data?.data?.map(item=>(
+                            <ChatContent {...item} key={item._id} />
+                        ))
+                    }
+                </ChatBox>
+                <Sender>
+                    <input type="text" name="msg" id="msg" className="form-control" onChange={handleChange} value={body} />
+                    <Send>
+                        <i>
+                            <MdSend size="1.5rem" onClick={send} color="var(--theme-blue)" />
+                        </i>
+                    </Send>
+                </Sender>
+            </SenderContainer>
+        </GroupChat>
+        </ContentContainer>
     )
 }
 
@@ -886,7 +956,6 @@ function ChatTab(){
         </ChatGroup>
     )
 }
-
 
 
 function Modal({setShow}){
@@ -1141,14 +1210,14 @@ export const ChatDetails = styled.div`
     }
 `
 
-function ChatContent({title, user, body, fromUser, isTutor, type}){
+function ChatContent({title, user, body, fromUser, isTutor,type}){
     return (
         <ChatInfo>
             <UserImage>
                 <FaUser size="1.5rem" color="#fff" />
             </UserImage>
             <ChatDetails>
-                <h6>{isTutor ? "Teacher": fromUser}</h6>
+                <h6>{isTutor ? "Teacher": user?.fullName}</h6>
                 <p>{body}</p>
             </ChatDetails>
         </ChatInfo>

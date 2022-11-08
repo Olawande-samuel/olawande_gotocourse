@@ -528,7 +528,7 @@ export function NewBootcampDetailsComponent(){
             }
           </div>
         </section>
-        <section className={clsx.images}>
+        {/* <section className={clsx.images}>
          <div className="container">
           <div className={clsx.img_grid}>
             <img src={g1} alt="" className="img-fluid" />
@@ -536,7 +536,7 @@ export function NewBootcampDetailsComponent(){
             <img src={g3} alt="" className="img-fluid" />
           </div>
          </div>
-        </section>
+        </section> */}
         <section className={clsx.requirement}>
           <div className="container">
             <header>
