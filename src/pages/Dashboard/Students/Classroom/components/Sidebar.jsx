@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { createRef } from 'react';
+import * as ReactDOM from 'react-dom'
 import styled from 'styled-components';
 import { BiArrowBack } from 'react-icons/bi';
 import { Button } from '@mui/material';
-
-
-
-
 import { Module } from './';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 
 
@@ -89,7 +88,21 @@ export const CustomButton = styled(Button)`
 
 const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData }) => {
     const navigate = useNavigate()
-   
+    let elementRef = createRef(null)
+    // console.log({elementRef});
+    console.log("children", elementRef.current);
+    // console.log("children", elementRef.current.children);
+    const [chid, setChid] = useState([])
+    // console.log({chid});
+
+    // useEffect(() => {
+    //     if(elementRef){
+    //         // console.log("node",ReactDOM.findDOMNode(elementRef.current));
+    //         // setChid( ReactDOM.findDOMNode(elementRef.current.children))
+            
+    //     }
+
+    // },[elementRef])
 
     return (
         <SidebarContainer $mobile={isMobile}>
@@ -105,18 +118,21 @@ const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData }) =>
                     <p>Progress: 75%</p>
                     <Progress value="75" max="100" />
                 </ProgressContainer>
+                <div ref={elementRef}>
+                    {
+                        modules.map((module) =>
+                            <Module
+                                title={module.name}
+                                activeMedia={activeMedia}
+                                attachments={module}
+                                changeActive={changeActive}
+                                key={module._id}
+                                fetchData={fetchData}
+                            />)
+                    }
+
+                </div>
             
-                {
-                modules.map((module) => 
-                    <Module 
-                    title={module.name}
-                    activeMedia={activeMedia} 
-                    attachments={module} 
-                    changeActive={changeActive} 
-                    key={module._id} 
-                    fetchData={fetchData}
-                    />)
-                }
             </SidebarBody>
         </SidebarContainer>
     )

@@ -394,25 +394,37 @@ function SignupCards({ title, btn, link }) {
 export function Stats() {
   const statData = [
     {
-      title: "20k+",
-      content: "students registered",
+      title: "20+",
+      content: "trained",
     },
+    // {
+    //   title: "20k+",
+    //   content: "students registered",
+    // },
     {
       title: "98%",
       content: "Completion & Retention rate",
     },
     {
-      title: "150+",
-      content: "Teachers & Mentors",
+      title: "300+",
+      content: "Teachers",
     },
+    // {
+    //   title: "150+",
+    //   content: "Teachers & Mentors",
+    // },
     {
       sup: "More than",
       title: "89%",
       content: "Tranined students already have jobs",
     },
+    // {
+    //   title: "50+",
+    //   content: "In-demand Courses",
+    // },
     {
-      title: "50+",
-      content: "In-demand Courses",
+      title: "500",
+      content: "Courses",
     },
   ];
   return (

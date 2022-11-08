@@ -359,7 +359,7 @@
     font-size: 12px;
     line-height: 24px;
     border: none;
-    width: 50%;
+    width: 100%;
     color: #FFFFFF;
     background: #0C2191;
 }
@@ -721,7 +721,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 80%;
+    width: 95%;
     gap: 3rem;
     margin-top: 2rem;
 
@@ -770,8 +770,10 @@
 
 .suite__form {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    gap: .5rem;
 }
 
 .suite__input{
@@ -833,9 +835,9 @@
 }
 
 .suite__boxcontainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 250px));   
+     gap: 2rem 1rem ;
 }
 
 .suite__dots {
@@ -849,10 +851,9 @@
 
 .suite__box {
     flex-shrink: 0;
-    width: 40%;
     background: #D8E8FF;
     border-radius: 10px;
-    width: 40%;
+    width: 100%;
     padding: .5rem;
     display: flex;
     flex-direction: column;
@@ -1156,4 +1157,15 @@
 .filecard > div:last-child button:hover {
     background-color: rgb(236, 236, 236);
 
+}
+
+
+
+.video_controls {
+    z-index: 2;
+    color: red;
+    position: fixed;
+    inset: auto auto 20px 50%;
+    transform: translate(-50%, 0px);
+    
 }

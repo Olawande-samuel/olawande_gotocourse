@@ -588,17 +588,17 @@ const StudentChatModule = () => {
 
     const tabs = ['Teams', 'Active Chat', 'Mail'];
 
-    // function toggleActionsHandler(e, index){
-    //     setNewGroups(old => {
-    //         let copy = [...old];
-    //         let foundIndex = copy.findIndex((_, i) => i === index);
-    //         let innerCopy = {...copy[foundIndex]};
-    //         innerCopy.showActions = !innerCopy.showActions;
-    //         copy[foundIndex] = innerCopy;
-    //         console.log(copy[foundIndex]);
-    //         return copy;
-    //     })
-    // }
+    function toggleActionsHandler(e, index){
+        setNewGroups(old => {
+            // let copy = [...old];
+            // let foundIndex = copy.findIndex((_, i) => i === index);
+            // let innerCopy = {...copy[foundIndex]};
+            // innerCopy.showActions = !innerCopy.showActions;
+            // copy[foundIndex] = innerCopy;
+            // console.log(copy[foundIndex]);
+            // return copy;
+        })
+    }
 
 
     function toggleActionsHandler(e, index) {
@@ -845,7 +845,7 @@ const userGroupStatus = useQuery(["fetch file", userdata.id], () => fetchUserGro
                             </GroupTop>
                             <GroupBody>
                                 <h3>{group.title}</h3>
-                                <p>{group.description}</p>
+                                <p className="restricted_line">{group.description}</p>
                                 <footer>
                                     <span>{group.students} participants</span>
                                     <button onClick={e => joinGroupBtn(e, group._id, group)}>Open team</button>
