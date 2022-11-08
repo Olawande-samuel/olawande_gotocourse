@@ -817,7 +817,6 @@ function ChatTab({ groups, toggle, setShow }) {
 
     const userGroupStatus = useQuery(["fetch file", userdata.id], () => fetchUserGroupstatus(userdata.token, userdata.id), {
         onSuccess: (res) => {
-            console.log("successful query group")
             console.log(res)
         }
     })
@@ -836,7 +835,7 @@ function ChatTab({ groups, toggle, setShow }) {
         }
     }
 
-    const userjoinedgroup = true
+    const userjoinedgroup = false
     return (
         <ChatGroup>
             <h2>My Group</h2>

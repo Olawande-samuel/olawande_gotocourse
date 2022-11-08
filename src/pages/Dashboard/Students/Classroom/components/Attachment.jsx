@@ -2,9 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Paper } from '@mui/material';
 import {MdAttachFile, MdNote, MdQuiz, MdOutlineLock, MdCheckCircle} from 'react-icons/md';
-import { useLocalStorage } from '../../../../../hooks';
-import { KEY } from '../../../../../constants';
-import { useAuth } from '../../../../../contexts/Auth';
 
 
 
@@ -54,10 +51,7 @@ const Attachement = ({type, _id, isLocked, title,  domain, classId,
     fetchData,
      isComplete, active, changeActive  }) => {
    
-        const { getItem } = useLocalStorage()
-        const userdata = getItem(KEY)
     
-        const { consoleFunctions: { fetchStudentQuiz, fetchStudentFile, fetchStudentNote }, } = useAuth();
 
     let icon = React.useMemo(() => {
         return type ==="FILE_VIDEO" ? <MdAttachFile /> : type === "NOTE" ? <MdNote /> : <MdQuiz />
