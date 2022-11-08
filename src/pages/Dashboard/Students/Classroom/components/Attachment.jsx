@@ -49,17 +49,21 @@ const Locked = styled(MdOutlineLock)`
 
 const Attachement = ({type, _id, isLocked, title,  domain, classId,
     fetchData,
-     isComplete, active, changeActive  }) => {
+     marked, active, changeActive  }) => {
    
-    
+    // console.log({_id});
 
     let icon = React.useMemo(() => {
         return type ==="FILE_VIDEO" ? <MdAttachFile /> : type === "NOTE" ? <MdNote /> : <MdQuiz />
     }, [type])
 
+    // let statusIcon = React.useMemo(() => {
+    //     return marked ? <isLocked /> : <CompleteIcon $isComplete={marked} />
+    // }, [isLocked])
+
     let statusIcon = React.useMemo(() => {
-        return isLocked ? <Locked /> : <CompleteIcon $isComplete={isComplete} />
-    }, [isLocked])
+        return marked ? <CompleteIcon $isComplete={marked}  /> : <Locked />  
+    }, [marked])
 
     
 

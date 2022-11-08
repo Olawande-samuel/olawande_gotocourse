@@ -35,10 +35,13 @@ const ModuleAttachments = styled.div`
 
 
 
-const Module = ({ title, attachments, changeActive, activeMedia, fetchData ,AttachmentLength, setaAllattachmentLength}) => {
+const Module = ({ title, attachments, changeActive, activeMedia, fetchData, setaAllattachmentLength, 
+    // allAttachment, setAllattachment ,
+    attach, setAttach
+}) => {
 
 
-    const [attach, setAttach] = useState([])
+    // const [attach, setAttach] = useState([])
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
     const { consoleFunctions: { fetchStudentContents }, } = useAuth();
@@ -46,16 +49,21 @@ const Module = ({ title, attachments, changeActive, activeMedia, fetchData ,Atta
     const fetchContents = useQuery(["fetch content", attachments.classId], () => fetchStudentContents(userdata.token, attachments.classId), {
         onSuccess: (res) => {
             // console.log("result ", { res })
-            setAttach(res.data)
+            setAttach(res.data.map((x, id) => (
+                {
 
+                    ...x,
+                    marked: false,
 
+                }
+            )))
         }
     })
 
     useEffect(() => {
-        console.log({attach});
+        console.log({ attach });
         setaAllattachmentLength(attach.length)
-    },[attach])
+    }, [attach])
 
 
     return (

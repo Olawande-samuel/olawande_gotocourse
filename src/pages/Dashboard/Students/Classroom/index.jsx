@@ -381,6 +381,7 @@ ul{
         <QuizButton>Open Quiz</QuizButton> */}
 
 const QuizContent = ({ q, id }) => {
+    console.log({q});
     return (
         <>
             <Quiz key={id}>
@@ -451,28 +452,42 @@ const QuizContent = ({ q, id }) => {
     )
 }
 
-const NoteComponent = ({ noteContent, completed, setCompleted, AttachmentLength }) => {
+const NoteComponent = ({ noteContent, completed, setCompleted, AttachmentLength, attach, setAttach }) => {
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
     const { consoleFunctions: { markAsCompleted } } = useAuth();
     const ref = useRef()
-    console.log({ completed });
+    // console.log({ completed });
+    // console.log({ noteContent });
 
     const handleCompleted = async (id, index) => {
         const { success } = await markAsCompleted(userdata?.token, id)
         // console.log({success});
         if (success) {
-            console.log(ref.current);
+            // console.log(ref.current);
+            // console.log("note id", noteContent[0].contentId);
             setCompleted((prev) => prev < AttachmentLength ? prev + 1 : prev)
+            setAttach(attach.map(val => {
+                console.log(val._id === noteContent[0].contentId);
+                if (val._id === noteContent[0].contentId) {
+                     val = {
+                        ...val,
+                        marked: true
+                    }
+                } 
+                return val
+            }))
+           
             ref.current.style.display = "none";
 
 
         }
 
-     
+
     }
 
     let note = noteContent[noteContent?.length - 1]
+    console.log({note});
 
     return (
         <NotecContainer>
@@ -559,6 +574,8 @@ const FileComponent = ({ x, id }) => {
 const Classroom = () => {
     const [showMobile, setShowMobile] = useState(false);
     const [modules, setModules] = useState([]);
+    // const [allAttachment, setAllattachment] = useState([])
+    const [attach, setAttach] = useState([])
     const [AttachmentLength, setaAllattachmentLength] = useState(0)
     const [fileContent, setFileContent] = useState([])
     const [title, setTitle] = useState("")
@@ -596,7 +613,7 @@ const Classroom = () => {
         }
         else if (type === "NOTE") {
             const { data } = await fetchStudentNote(userdata.token, info)
-            // console.log({ data });
+            console.log({ data });
             setPickedType("NOTE")
             setTitle(title)
             setNoteContent(data)
@@ -620,7 +637,7 @@ const Classroom = () => {
 
     const handleFileCompleted = async (id, index) => {
         const { success } = await markAsCompleted(userdata?.token, id)
-        if(success){
+        if (success) {
             setCompleted((prev) => prev < AttachmentLength ? prev + 1 : prev)
             fileRef.current.style.display = "none";
 
@@ -632,8 +649,19 @@ const Classroom = () => {
 
     const handleQuizCompleted = async (id, index) => {
         const { success } = await markAsCompleted(userdata?.token, id)
-        if(success){
+        if (success) {
             setCompleted((prev) => prev < AttachmentLength ? prev + 1 : prev)
+            setAttach(attach.map(val => {
+                // console.log(val._id === index);
+                if (val._id === id) {
+                     val = {
+                        ...val,
+                        marked: true
+                    }
+                } 
+                return val
+            }))
+           
             quizRef.current.style.display = "none";
 
         }
@@ -673,6 +701,10 @@ const Classroom = () => {
                         completed={completed}
                         AttachmentLength={AttachmentLength}
                         setaAllattachmentLength={setaAllattachmentLength}
+                        // allAttachment={allAttachment}
+                        // setAllattachment={setAllattachment}
+                        attach={attach}
+                        setAttach={setAttach}
                     />
                 </Backdrop>
                 <Sidebar
@@ -683,7 +715,10 @@ const Classroom = () => {
                     completed={completed}
                     AttachmentLength={AttachmentLength}
                     setaAllattachmentLength={setaAllattachmentLength}
-
+                    // allAttachment={allAttachment}
+                    //  setAllattachment={setAllattachment}
+                    attach={attach}
+                    setAttach={setAttach}
                 />
                 <ClassroomMain>
                     <ClassroomMainTop>
@@ -726,12 +761,12 @@ const Classroom = () => {
 
                             {pickedType === "QUIZ" && <>
                                 {quizContent.length > 0 && quizContent.map((q, id) => (
-                                    <QuizContent q={q} id={id} />
+                                    <QuizContent q={q} id={id} key={id}/>
                                 ))}
                                 {quizContent.length > 0 && (
                                     //  <button ref={quizRef} onClick={() => handleQuizCompleted(quizContent[0].contentId)}>{quizContent[0].contentId}</button>
 
-                                    <QuizAction >
+                                    <QuizAction>
                                         <QuizButton ref={quizRef} onClick={() => handleQuizCompleted(quizContent[0].contentId)}>
                                             Mark as Completed
                                         </QuizButton>
@@ -745,8 +780,13 @@ const Classroom = () => {
 
 
                             {pickedType === "NOTE" && <>
-                                {noteContent.length > 0 && <NoteComponent noteContent={noteContent} completed={completed} setCompleted={setCompleted}
+                                {noteContent.length > 0 && <NoteComponent
+                                    noteContent={noteContent}
+                                    completed={completed}
+                                    setCompleted={setCompleted}
                                     AttachmentLength={AttachmentLength}
+                                    attach={attach}
+                                    setAttach={setAttach}
                                 />
                                 }
 

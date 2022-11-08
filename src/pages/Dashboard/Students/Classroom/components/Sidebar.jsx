@@ -87,17 +87,20 @@ export const CustomButton = styled(Button)`
 
 
 
-const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData, completed, AttachmentLength, setaAllattachmentLength }) => {
+const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData, completed, AttachmentLength, setaAllattachmentLength,
+    // allAttachment, setAllattachment ,
+    attach, setAttach
+}) => {
     const navigate = useNavigate()
     let elementRef = createRef(null)
     // console.log({ AttachmentLength }); // module info
 
- 
+
 
     const ProgressResult = useMemo(() => {
         let result = (Math.floor((completed / AttachmentLength) * 100))
         return result
-    },[completed, AttachmentLength])
+    }, [completed, AttachmentLength])
 
     return (
         <SidebarContainer $mobile={isMobile}>
@@ -125,6 +128,10 @@ const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData, comp
                                 fetchData={fetchData}
                                 AttachmentLength={AttachmentLength}
                                 setaAllattachmentLength={setaAllattachmentLength}
+                                // allAttachment={allAttachment}
+                                // setAllattachment={setAllattachment}
+                                attach={attach}
+                                setAttach={setAttach}
                             />)
                     }
 
