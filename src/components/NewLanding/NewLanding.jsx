@@ -394,7 +394,7 @@ function SignupCards({ title, btn, link }) {
 export function Stats() {
   const statData = [
     {
-      title: "20+",
+      title: "20k+",
       content: "Trained Students",
     },
     // {

@@ -1210,7 +1210,7 @@ export const ChatDetails = styled.div`
     }
 `
 
-function ChatContent({title, user, body, fromUser, isTutor,type}){
+function ChatContent({title, user, body, fromUser, isTutor, type}){
     return (
         <ChatInfo>
             <UserImage>
