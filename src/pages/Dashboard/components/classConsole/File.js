@@ -81,8 +81,7 @@ export default function File() {
 
     const getFiles = useQuery(["file content", search, searchData], () => fetchFile(userdata.token, searchData), {
         onSuccess: (res)=> {
-            console.log("successful query")
-            console.log(res)
+         
             if(res.data?.length > 0){
                 setFileData(res.data)
             }
@@ -144,12 +143,12 @@ export default function File() {
                             }
                         </main>
 
-                        <div className="contentbutton">
+                        {/* <div className="contentbutton">
                             <button className=''>Open</button>
                             <div>
                                 <IoMdCloudDownload />
                             </div>
-                        </div>
+                        </div> */}
                         <UploadForm isOpen={openUpload} setIsOpen={setOpenUpload} uploadType="content"  />
                     </TabPanel>
 
@@ -204,7 +203,7 @@ function FileCard({title, fileName, contentId}){
     )
 }
 
-export function ViewModal({open, setOpen, file, creator}){
+export function ViewModal({open, setOpen, file, creator, type}){
     const style = {
         position: "absolute",
         bottom: 0,
@@ -230,7 +229,13 @@ export function ViewModal({open, setOpen, file, creator}){
           aria-describedby="modal-modal-description"
         >
           <Box style={style}>
-            <img src={creator ? `${process.env.REACT_APP_IMAGEURL}${file}` : file} alt="" className="w-100 h-100" />
+            <p>{file}</p>
+            {
+                type === "video/mp4" ? 
+                <video src={`${process.env.REACT_APP_IMAGEURL}${file}`} controls autoPlay style={{width: "100%", height:"100%", border:"1px solid #eee", borderRadius:"8px"}}></video>            
+                :
+                <img src={creator ? `${process.env.REACT_APP_IMAGEURL}${file}` : file} alt="" className="w-100 h-100" style={{objectFit:"contain"}} />
+            }
           </Box>
           </Modal>
     )
