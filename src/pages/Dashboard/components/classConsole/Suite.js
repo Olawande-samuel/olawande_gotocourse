@@ -785,11 +785,6 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
         }
     }
 
-    
-
-
-    
-
     const style = {
         position: "absolute",
         bottom: 0,
@@ -826,7 +821,6 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
               <div className='position-relative'>
                 <small className="mb-3">Screen Record</small>
                 <div className="mb-3">
-
                 <span className="text-muted">Stream Status:</span>
                   <span className="fw-bold text-uppercase" style={{color:"var(--theme-blue)"}}>{status}</span>
                 </div>
@@ -837,7 +831,7 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
                         <>
                             
                             <div className="my-3" style={{width:"min(100%, 450px)"}}> 
-                                <input type="text" name="title" id="title " className="form-control"  placeholder='Enter file name' value={fileName} onChange={(e)=>setFileName(e.target.value)} />
+                                <input type="text" name="title" id="title " className="form-control"  placeholder='Enter file name' value={fileName} onChange={(e)=>setFileName(e.target.value)} onBlur={()=>console.log("blurred")} onFocus={()=>console.log("focused")} />
                             </div>
                             <video src={previewData} controls autoPlay style={{width: "100%", height:"100%", aspectRatio:"3/1"}}  /> 
                             

@@ -26,7 +26,7 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false)
     const contentId = searchParams.get("content")
-
+    const [filename, setFilename] = useState("")
     const {classId} = useParams()
 
     async function uploadFileHandler(e){
@@ -34,6 +34,7 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
             setLoading(true)
             const formdata = new FormData();
             formdata.append('file', file, file.name);
+            console.log(file.name)
             const res = await uploadFile(formdata, value?.token);
             setLoading(false)
 
@@ -42,7 +43,7 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
             else {
 
                 const {data} = res;
-                createFileContent(data.name, data.fileId)
+                createFileContent(data.name, data.fileId, file.name)
                 setIsOpen(false)
                 setData(_ => data.name);
                 toast.success(message)
@@ -72,14 +73,14 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
 
     // create content after upload
 
-    function createFileContent(file){
+    function createFileContent(file, fileId, fileName){
         if(uploadType === "content"){
             // call file upload function
             mutation.mutate([value?.token, {
                 classId,
                 contentId,
                 fileName:file,
-                title:"File"
+                title:filename ? filename : fileName
             }])
         }
     }
@@ -130,12 +131,14 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
             loading={loading}
             copy={copy}
             uploadFileHandler={uploadFileHandler}
+            filename={filename}
+            setFilename={setFilename}
             />
         )
     )
 }
 
-export function UploadFormContent({setIsOpen, data, triggerUpload, changeHandler, file, imageUrl, loading, copy, uploadFileHandler}){
+export function UploadFormContent({setIsOpen, data, triggerUpload, changeHandler, file, imageUrl, loading, copy, uploadFileHandler, filename, setFilename}){
     return (
         <div className={clsx.upload_file__background} onClick={e => {
             if(e.target === e.currentTarget) {
@@ -149,18 +152,21 @@ export function UploadFormContent({setIsOpen, data, triggerUpload, changeHandler
                 <input className="w-100" style={{cursor: "pointer"}} type="text" readOnly value={data} onClick={e => copy(e.currentTarget.value)} />
                 </>
                 }
-                <div className={clsx.upload_file} onClick={triggerUpload}>
-                    <input type="file" onChange={changeHandler} id="uploadFile" />
-                    {
-                        file ? 
+                {
+                        file &&
                         <>
-                            <h5 className="fw-bold" style={{color:"var(--theme-orange)"}}>Click on Upload button</h5>
+                            <input type="text" name="filename" id="filename" className="form-control mb-4" placeholder="Enter file name" value={filename} onChange={(e)=>setFilename(e.target.value)} />
+                            {/* <h5 className="fw-bold" style={{color:"var(--theme-orange)", fontSize:"16px"}}>Click on Upload button</h5> */}
                         </>
-                         :
-                         <h5 className="text-dark ">Choose a file </h5>
-                    
-                    }
-                </div>
+                }   
+                {
+                    !file &&
+                    <div className={clsx.upload_file} onClick={triggerUpload}>
+                        <input type="file" onChange={changeHandler} id="uploadFile" />
+                        <h5 className="text-dark ">Choose a file </h5>
+                        
+                    </div>
+                }
 
                 {imageUrl && (
                     <div className={clsx.upload_final}>

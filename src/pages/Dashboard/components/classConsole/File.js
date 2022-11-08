@@ -149,11 +149,12 @@ export default function File() {
                         {/* <div className="contentbutton">
                             <button className=''>Open</button>
                             <div>
-                                <IoMdCloudDownload />
+                            <IoMdCloudDownload />
                             </div>
                         </div> */}
+                        <UploadVideoRecording  isVideoOpen={videoOpen} setIsVideoOpen={setVideoOpen}  uploadType="content" fileCreate={true} />
+                        <UploadScreenRecording isScreenOpen={screenOpen} setIsScreenOpen={setScreenOpen}  uploadType="content" fileCreate={true}  />
                         <UploadForm isOpen={openUpload} setIsOpen={setOpenUpload} uploadType="content"  />
-                        
                     </TabPanel>
 
                     <TabPanel value={value} index={1}>

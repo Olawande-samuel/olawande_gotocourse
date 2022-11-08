@@ -58,7 +58,6 @@ import File from "./File"
 import Quiz from "./Quiz"
 import Note from "./Note"
 import { GiTrumpet } from "react-icons/gi";
-import { UploadScreenRecording, UploadVideoRecording } from "./Suite";
 
 
 const popIcon = [
@@ -881,16 +880,17 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
   );
 }
 
-export function PopModalContent({ open, closeSmall, openUpload }) {
-  const [videoOpen, setVideoOpen] = useState(false)
-  const [screenOpen, setScreenOpen] = useState(false)
+export function PopModalContent({ open, closeSmall, openUpload, setScreenOpen, setVideoOpen }) {
   function handleClick(type) {
     console.log(type)
     if (type === "file") {
+      closeSmall()
       openUpload(true)
     }else if(type === "video"){
+      closeSmall()
       setVideoOpen(true)
     } else if(type === "screen"){
+      closeSmall()
       setScreenOpen(true)
     }
 
@@ -912,8 +912,6 @@ export function PopModalContent({ open, closeSmall, openUpload }) {
               </Tooltip>
             ))}
           </div>
-          <UploadVideoRecording  isVideoOpen={videoOpen} setIsVideoOpen={setVideoOpen}  uploadType="content" fileCreate={true} />
-          <UploadScreenRecording isScreenOpen={screenOpen} setIsScreenOpen={setScreenOpen}  uploadType="content" fileCreate={true}  />
         </Modal.Body>
       </Modal>
     </div>
