@@ -23,7 +23,7 @@ import style from "./style.module.css";
 import "./console.css";
 import { IconButton, Tooltip } from "@mui/material";
 
-import { FaCalendarAlt, FaUsers } from "react-icons/fa";
+import { FaCalendarAlt, FaPlus, FaUsers } from "react-icons/fa";
 import {
   MdAttachFile,
   MdLibraryAdd,
@@ -57,6 +57,7 @@ import MenuItem from '@mui/material/MenuItem';
 import File from "./File"
 import Quiz from "./Quiz"
 import Note from "./Note"
+import { GiTrumpet } from "react-icons/gi";
 
 
 const popIcon = [
@@ -64,13 +65,13 @@ const popIcon = [
     id: 1,
     icon: BsCameraReels,
     title: "Record Camera",
-    type: ""
+    type: "video"
   },
   {
     id: 2,
     icon: VscScreenNormal,
     title: "Record Screen",
-    type: ""
+    type: "screen"
   },
   {
     id: 3,
@@ -379,14 +380,15 @@ function Sidebar({ Toggle, side }) {
   );
 }
 
-function Accord({ name, _id, classId, description }) {
+export function Accord ({ name, _id, classId, description, creator,contentName, originalName, setOpen }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
   const userdata = getItem(KEY);
-  const { consoleFunctions: { fetchContents }, } = useAuth();
+  const { consoleFunctions: { fetchContents, addFile }, } = useAuth();
   const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId));
-
+  const queryClient = useQueryClient()
+  
   useEffect(() => {
     if (getDomainContent?.data?.data?.length > 0) {
       console.log(getDomainContent.data.data[0])
@@ -443,6 +445,27 @@ function Accord({ name, _id, classId, description }) {
     navigate(`/teacher/class-console/class/${args[3]}?content=${args[0]}`)
     // setSearchParams({ "content": args[0] })
   }
+  // ADD CONTENT FROM CREATOR SUITE
+  const mutation = useMutation(([token, data])=>addFile(token, data), {
+    onSuccess: (res)=> {
+        console.log(res)
+        setOpen(false)
+        queryClient.invalidateQueries("file content")
+    },
+    onError: (err)=> console.error(err)
+})
+
+// create content after upload
+
+function addSuiteContentToClass(id, contentName, originalName){
+        // call file upload function
+        mutation.mutate([userdata?.token, {
+            classId,
+            contentId: id,
+            fileName:contentName,
+            title:originalName
+        }])
+}
 
   return (
     <div className={style.content_item}>
@@ -461,17 +484,41 @@ function Accord({ name, _id, classId, description }) {
 
       {
         details &&
-        <ul className={style.content_list}>
-          {getDomainContent?.data?.data?.filter(item => item.domain === _id).map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
-            <li key={_id} onClick={() => handleContentNavigation(_id, type, domain, classId)} className="d-flex justify-content-between" style={{cursor:"pointer"}}>
-              {/* <Link to={`${routeType(type)}`} className="d-flex justify-content-between"> */}
-              <i>{IconType(type)}</i>
-              <span>{title}</span>
-              <AccordMenu />
-              {/* </Link> */}
-            </li>
-          ))}
-        </ul>
+        (
+          
+            creator ? 
+                mutation.isLoading  ?
+
+                <div className="spinner-border text-white">
+                  <div className="visually-hidden">Loading...</div>
+                </div>
+                :
+                <ul className={style.content_list}>
+                  {getDomainContent?.data?.data?.filter(item => item.domain === _id).filter(item=> item.type === "FILE_VIDEO").map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
+                    <li key={_id} className="d-flex justify-content-between position-relative" style={{cursor:"pointer"}}>
+                      <i>{IconType(type)}</i>
+                      <span>{title}</span>
+                      <AccordMenu />
+                    
+                        <i style={{position: "absolute", right: "10px", top: "50%", transform:"translateY(-50%)", zIndex:"200"}} onClick={() => addSuiteContentToClass(_id, contentName, originalName, classId)}>
+                          <FaPlus size="1.5rem" color="#fff" />
+                        </i>                  
+                    </li>
+                  ))}
+                </ul>
+              
+            :
+            <ul className={style.content_list}>
+              {getDomainContent?.data?.data?.filter(item => item.domain === _id).map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
+                <li key={_id} onClick={() => handleContentNavigation(_id, type, domain, classId)} className="d-flex justify-content-between" style={{cursor:"pointer"}}>
+                  <i>{IconType(type)}</i>
+                  <span>{title}</span>
+                  <AccordMenu />
+                  
+                </li>
+              ))}
+            </ul>
+        )
       }
     </div>
   );
@@ -837,11 +884,18 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
   );
 }
 
-export function PopModalContent({ open, closeSmall, openUpload }) {
+export function PopModalContent({ open, closeSmall, openUpload, setScreenOpen, setVideoOpen }) {
   function handleClick(type) {
     console.log(type)
     if (type === "file") {
+      closeSmall()
       openUpload(true)
+    }else if(type === "video"){
+      closeSmall()
+      setVideoOpen(true)
+    } else if(type === "screen"){
+      closeSmall()
+      setScreenOpen(true)
     }
 
   }

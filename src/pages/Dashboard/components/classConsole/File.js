@@ -14,6 +14,7 @@ import { useLocalStorage } from '../../../../hooks';
 import { KEY } from '../../../../constants';
 import { useQuery } from '@tanstack/react-query';
 import { IconButton, Modal, stepContentClasses, Tooltip } from '@mui/material';
+import { UploadScreenRecording, UploadVideoRecording } from './Suite';
 
 
 function TabPanel(props) {
@@ -42,6 +43,8 @@ export default function File() {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(0);
     const [openUpload, setOpenUpload]= useState(false)
+    const [screenOpen, setScreenOpen]= useState(false)
+    const [videoOpen, setVideoOpen]= useState(false)
     const [fileData, setFileData]= useState([])
     const {consoleFunctions: {fetchFile}} = useAuth()
     const {getItem} = useLocalStorage()
@@ -81,8 +84,7 @@ export default function File() {
 
     const getFiles = useQuery(["file content", search, searchData], () => fetchFile(userdata.token, searchData), {
         onSuccess: (res)=> {
-            console.log("successful query")
-            console.log(res)
+         
             if(res.data?.length > 0){
                 setFileData(res.data)
             }
@@ -144,12 +146,14 @@ export default function File() {
                             }
                         </main>
 
-                        <div className="contentbutton">
+                        {/* <div className="contentbutton">
                             <button className=''>Open</button>
                             <div>
-                                <IoMdCloudDownload />
+                            <IoMdCloudDownload />
                             </div>
-                        </div>
+                        </div> */}
+                        <UploadVideoRecording  isVideoOpen={videoOpen} setIsVideoOpen={setVideoOpen}  uploadType="content" fileCreate={true} />
+                        <UploadScreenRecording isScreenOpen={screenOpen} setIsScreenOpen={setScreenOpen}  uploadType="content" fileCreate={true}  />
                         <UploadForm isOpen={openUpload} setIsOpen={setOpenUpload} uploadType="content"  />
                     </TabPanel>
 
@@ -163,8 +167,7 @@ export default function File() {
 
 
             </div>
-            <PopModalContent open={open} closeSmall={closeSmall} openUpload={setOpenUpload} />
-
+            <PopModalContent open={open} closeSmall={closeSmall} openUpload={setOpenUpload} setVideoOpen={setVideoOpen} setScreenOpen={setScreenOpen} />
         </>
 
     )
@@ -204,7 +207,7 @@ function FileCard({title, fileName, contentId}){
     )
 }
 
-export function ViewModal({open, setOpen, file, creator}){
+export function ViewModal({open, setOpen, file, creator, type}){
     const style = {
         position: "absolute",
         bottom: 0,
@@ -230,7 +233,13 @@ export function ViewModal({open, setOpen, file, creator}){
           aria-describedby="modal-modal-description"
         >
           <Box style={style}>
-            <img src={creator ? `${process.env.REACT_APP_IMAGEURL}${file}` : file} alt="" className="w-100 h-100" />
+            <p>{file}</p>
+            {
+                type === "video/mp4" ? 
+                <video src={`${process.env.REACT_APP_IMAGEURL}${file}`} controls autoPlay style={{width: "100%", height:"100%", border:"1px solid #eee", borderRadius:"8px"}}></video>            
+                :
+                <img src={creator ? `${process.env.REACT_APP_IMAGEURL}${file}` : file} alt="" className="w-100 h-100" style={{objectFit:"contain"}} />
+            }
           </Box>
           </Modal>
     )
