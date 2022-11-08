@@ -14,6 +14,7 @@ import { useLocalStorage } from '../../../../hooks';
 import { KEY } from '../../../../constants';
 import { useQuery } from '@tanstack/react-query';
 import { IconButton, Modal, stepContentClasses, Tooltip } from '@mui/material';
+import { UploadScreenRecording, UploadVideoRecording } from './Suite';
 
 
 function TabPanel(props) {
@@ -42,6 +43,8 @@ export default function File() {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(0);
     const [openUpload, setOpenUpload]= useState(false)
+    const [screenOpen, setScreenOpen]= useState(false)
+    const [videoOpen, setVideoOpen]= useState(false)
     const [fileData, setFileData]= useState([])
     const {consoleFunctions: {fetchFile}} = useAuth()
     const {getItem} = useLocalStorage()
@@ -163,7 +166,8 @@ export default function File() {
 
             </div>
             <PopModalContent open={open} closeSmall={closeSmall} openUpload={setOpenUpload} />
-
+            <UploadVideoRecording  isVideoOpen={videoOpen} setIsVideoOpen={setVideoOpen}  uploadType="content" fileCreate={true} />
+            <UploadScreenRecording isScreenOpen={screenOpen} setIsScreenOpen={setScreenOpen}  uploadType="content" fileCreate={true}  />
         </>
 
     )

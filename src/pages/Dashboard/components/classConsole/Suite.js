@@ -493,7 +493,7 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
         )
     )
 }
-const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewImage, uploadType }) => {
+export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewImage, uploadType, fileCreate }) => {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const queryClient = useQueryClient()
@@ -690,7 +690,7 @@ const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewImage, upl
           </Modal>
     )
 }
-const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreviewImage, uploadType }) => {
+export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreviewImage, uploadType, fileCreate }) => {
 
     const queryClient = useQueryClient()
 

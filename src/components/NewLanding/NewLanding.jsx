@@ -395,7 +395,7 @@ export function Stats() {
   const statData = [
     {
       title: "20+",
-      content: "trained",
+      content: "Trained Students",
     },
     // {
     //   title: "20k+",
@@ -406,7 +406,7 @@ export function Stats() {
       content: "Completion & Retention rate",
     },
     {
-      title: "300+",
+      title: "300+", 
       content: "Teachers",
     },
     // {
@@ -425,6 +425,10 @@ export function Stats() {
     {
       title: "500",
       content: "Courses",
+    },
+    {
+      title: "20",
+      content: "Countries",
     },
   ];
   return (
