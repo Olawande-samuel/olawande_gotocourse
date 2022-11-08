@@ -57,6 +57,8 @@ import MenuItem from '@mui/material/MenuItem';
 import File from "./File"
 import Quiz from "./Quiz"
 import Note from "./Note"
+import { GiTrumpet } from "react-icons/gi";
+import { UploadScreenRecording, UploadVideoRecording } from "./Suite";
 
 
 const popIcon = [
@@ -64,13 +66,13 @@ const popIcon = [
     id: 1,
     icon: BsCameraReels,
     title: "Record Camera",
-    type: ""
+    type: "video"
   },
   {
     id: 2,
     icon: VscScreenNormal,
     title: "Record Screen",
-    type: ""
+    type: "screen"
   },
   {
     id: 3,
@@ -880,10 +882,16 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
 }
 
 export function PopModalContent({ open, closeSmall, openUpload }) {
+  const [videoOpen, setVideoOpen] = useState(false)
+  const [screenOpen, setScreenOpen] = useState(false)
   function handleClick(type) {
     console.log(type)
     if (type === "file") {
       openUpload(true)
+    }else if(type === "video"){
+      setVideoOpen(true)
+    } else if(type === "screen"){
+      setScreenOpen(true)
     }
 
   }
@@ -904,6 +912,8 @@ export function PopModalContent({ open, closeSmall, openUpload }) {
               </Tooltip>
             ))}
           </div>
+          <UploadVideoRecording  isVideoOpen={videoOpen} setIsVideoOpen={setVideoOpen}  uploadType="content" fileCreate={true} />
+          <UploadScreenRecording isScreenOpen={screenOpen} setIsScreenOpen={setScreenOpen}  uploadType="content" fileCreate={true}  />
         </Modal.Body>
       </Modal>
     </div>

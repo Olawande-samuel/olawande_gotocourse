@@ -693,8 +693,9 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
 export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreviewImage, uploadType, fileCreate }) => {
 
     const queryClient = useQueryClient()
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    const {adminFunctions: {uploadFile}, teacherConsoleFunctions: {addFile}} = useAuth();
+    const {adminFunctions: {uploadFile}, teacherConsoleFunctions: {addFile}, consoleFunctions: {addFile: addMainFile}} = useAuth();
     const {getItem} = useLocalStorage();
     const value = getItem(KEY);
     
@@ -703,6 +704,10 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
 
     const [videoData, setVideoData] = useState(null)
     const [previewData, setPreviewData] = useState(null)
+    const contentId = searchParams.get("content")
+
+
+
     const { status, startRecording, stopRecording, mediaBlobUrl, previewStream } = useReactMediaRecorder({ screen: true, audio: true, onStop: (blobUrl, blob) => {setVideoData(blob)
         setPreviewData(blobUrl)
     },
@@ -750,15 +755,33 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
         onError: (err)=> console.error(err)
     })
 
+    const addMainFileMutation = useMutation(([token, data])=>addMainFile(token, data), {
+        onSuccess: (res)=> {
+            console.log(res)
+            
+            queryClient.invalidateQueries("file content")
+        },
+        onError: (err)=> console.error(err)
+    })
+
     // create content after upload
 
     function createFileContent(file){
         if(uploadType === "content"){
             // call file upload function
-            mutation.mutate([value?.token, {
-                classId,
-                fileId:file,
-            }])
+            if(fileCreate) {
+                addMainFileMutation.mutate([value?.token, {
+                    classId,
+                    contentId,
+                    fileName:file,
+                    title:fileName
+                }])
+            } else {
+                mutation.mutate([value?.token, {
+                    classId,
+                    fileId:file,
+                }])
+            }
         }
     }
 
@@ -813,7 +836,7 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
                         previewData &&
                         <>
                             
-                            <div className="my-1" style={{width:"min(100%, 450px)"}}> 
+                            <div className="my-3" style={{width:"min(100%, 450px)"}}> 
                                 <input type="text" name="title" id="title " className="form-control"  placeholder='Enter file name' value={fileName} onChange={(e)=>setFileName(e.target.value)} />
                             </div>
                             <video src={previewData} controls autoPlay style={{width: "100%", height:"100%", aspectRatio:"3/1"}}  /> 

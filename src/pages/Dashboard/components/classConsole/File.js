@@ -153,6 +153,7 @@ export default function File() {
                             </div>
                         </div> */}
                         <UploadForm isOpen={openUpload} setIsOpen={setOpenUpload} uploadType="content"  />
+                        
                     </TabPanel>
 
                     <TabPanel value={value} index={1}>
@@ -165,9 +166,7 @@ export default function File() {
 
 
             </div>
-            <PopModalContent open={open} closeSmall={closeSmall} openUpload={setOpenUpload} />
-            <UploadVideoRecording  isVideoOpen={videoOpen} setIsVideoOpen={setVideoOpen}  uploadType="content" fileCreate={true} />
-            <UploadScreenRecording isScreenOpen={screenOpen} setIsScreenOpen={setScreenOpen}  uploadType="content" fileCreate={true}  />
+            <PopModalContent open={open} closeSmall={closeSmall} openUpload={setOpenUpload} setVideoOpen={setVideoOpen} setScreenOpen={setScreenOpen} />
         </>
 
     )
