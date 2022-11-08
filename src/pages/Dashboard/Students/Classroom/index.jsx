@@ -639,6 +639,17 @@ const Classroom = () => {
         const { success } = await markAsCompleted(userdata?.token, id)
         if (success) {
             setCompleted((prev) => prev < AttachmentLength ? prev + 1 : prev)
+            setAttach(attach.map(val => {
+                // console.log(val._id === index);
+                if (val._id === id) {
+                     val = {
+                        ...val,
+                        marked: true
+                    }
+                } 
+                return val
+            }))
+           
             fileRef.current.style.display = "none";
 
         }
