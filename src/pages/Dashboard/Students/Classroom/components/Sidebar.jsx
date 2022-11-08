@@ -7,6 +7,7 @@ import { Module } from './';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { useMemo } from 'react';
 
 
 
@@ -86,23 +87,20 @@ export const CustomButton = styled(Button)`
 
 
 
-const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData }) => {
+const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData, completed, AttachmentLength, setaAllattachmentLength,
+    // allAttachment, setAllattachment ,
+    attach, setAttach
+}) => {
     const navigate = useNavigate()
     let elementRef = createRef(null)
-    // console.log({elementRef});
-    console.log("children", elementRef.current);
-    // console.log("children", elementRef.current.children);
-    const [chid, setChid] = useState([])
-    // console.log({chid});
+    // console.log({ AttachmentLength }); // module info
 
-    // useEffect(() => {
-    //     if(elementRef){
-    //         // console.log("node",ReactDOM.findDOMNode(elementRef.current));
-    //         // setChid( ReactDOM.findDOMNode(elementRef.current.children))
-            
-    //     }
 
-    // },[elementRef])
+
+    const ProgressResult = useMemo(() => {
+        let result = (Math.floor((completed / AttachmentLength) * 100))
+        return result
+    }, [completed, AttachmentLength])
 
     return (
         <SidebarContainer $mobile={isMobile}>
@@ -115,8 +113,8 @@ const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData }) =>
                     Refresh topics
                 </CustomButton>
                 <ProgressContainer>
-                    <p>Progress: 75%</p>
-                    <Progress value="75" max="100" />
+                    <p>Progress: {ProgressResult}%</p>
+                    <Progress value={ProgressResult} max="100" />
                 </ProgressContainer>
                 <div ref={elementRef}>
                     {
@@ -128,11 +126,17 @@ const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData }) =>
                                 changeActive={changeActive}
                                 key={module._id}
                                 fetchData={fetchData}
+                                AttachmentLength={AttachmentLength}
+                                setaAllattachmentLength={setaAllattachmentLength}
+                                // allAttachment={allAttachment}
+                                // setAllattachment={setAllattachment}
+                                attach={attach}
+                                setAttach={setAttach}
                             />)
                     }
 
                 </div>
-            
+
             </SidebarBody>
         </SidebarContainer>
     )

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import {MdCollectionsBookmark} from 'react-icons/md';
+import { MdCollectionsBookmark } from 'react-icons/md';
 
 
 
-import {Attachment} from "./";
+import { Attachment } from "./";
 import { useLocalStorage } from '../../../../../hooks';
 import { KEY } from '../../../../../constants';
 import { useAuth } from '../../../../../contexts/Auth';
@@ -35,25 +35,36 @@ const ModuleAttachments = styled.div`
 
 
 
-const Module = ({title, attachments, changeActive, activeMedia, fetchData }) => {
-   
+const Module = ({ title, attachments, changeActive, activeMedia, fetchData, setaAllattachmentLength, 
+    // allAttachment, setAllattachment ,
+    attach, setAttach
+}) => {
 
-    const [attach, setAttach] =useState([])
+
+    // const [attach, setAttach] = useState([])
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
     const { consoleFunctions: { fetchStudentContents }, } = useAuth();
 
     const fetchContents = useQuery(["fetch content", attachments.classId], () => fetchStudentContents(userdata.token, attachments.classId), {
         onSuccess: (res) => {
-            console.log({res})
-            setAttach(res.data)
+            // console.log("result ", { res })
+            setAttach(res.data.map((x, id) => (
+                {
 
+                    ...x,
+                    marked: false,
+
+                }
+            )))
         }
     })
-    console.log({attachments}); // module info
-    // console.log({attach});
 
-  
+    useEffect(() => {
+        console.log({ attach });
+        setaAllattachmentLength(attach.length)
+    }, [attach])
+
 
     return (
         <ModuleContainer  >
@@ -62,14 +73,14 @@ const Module = ({title, attachments, changeActive, activeMedia, fetchData }) => 
             </ModuleInfo>
             <ModuleAttachments>
                 {
-                    attach.map((a, i) => (<Attachment active={activeMedia} changeActive={changeActive}  
+                    attach.filter(a => a.domain === attachments._id).map((a, i) => (<Attachment active={activeMedia} changeActive={changeActive}
                         fetchData={fetchData}
-                         key={i} {...a} />))
+                        key={i} {...a} />))
                 }
             </ModuleAttachments>
         </ModuleContainer>
     )
-} 
+}
 
 
 

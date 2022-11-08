@@ -2,9 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Paper } from '@mui/material';
 import {MdAttachFile, MdNote, MdQuiz, MdOutlineLock, MdCheckCircle} from 'react-icons/md';
-import { useLocalStorage } from '../../../../../hooks';
-import { KEY } from '../../../../../constants';
-import { useAuth } from '../../../../../contexts/Auth';
 
 
 
@@ -52,20 +49,21 @@ const Locked = styled(MdOutlineLock)`
 
 const Attachement = ({type, _id, isLocked, title,  domain, classId,
     fetchData,
-     isComplete, active, changeActive  }) => {
+     marked, active, changeActive  }) => {
    
-        const { getItem } = useLocalStorage()
-        const userdata = getItem(KEY)
-    
-        const { consoleFunctions: { fetchStudentQuiz, fetchStudentFile, fetchStudentNote }, } = useAuth();
+    // console.log({_id});
 
     let icon = React.useMemo(() => {
         return type ==="FILE_VIDEO" ? <MdAttachFile /> : type === "NOTE" ? <MdNote /> : <MdQuiz />
     }, [type])
 
+    // let statusIcon = React.useMemo(() => {
+    //     return marked ? <isLocked /> : <CompleteIcon $isComplete={marked} />
+    // }, [isLocked])
+
     let statusIcon = React.useMemo(() => {
-        return isLocked ? <Locked /> : <CompleteIcon $isComplete={isComplete} />
-    }, [isLocked])
+        return marked ? <CompleteIcon $isComplete={marked}  /> : <Locked />  
+    }, [marked])
 
     
 

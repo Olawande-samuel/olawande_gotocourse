@@ -159,6 +159,10 @@ const iconData = [
       classConsole: { ...classConsole, sidebar: !classConsole.sidebar },
     });
 
+
+    const studentAssessMent =  pathname.includes("/student/console/myclasses");
+    console.log({studentAssessMent});
+
   const studentpath = pathname.split("/")[1] === "student";
   const quizpath =
     pathname.split("/")[2] === "myclasses"
@@ -204,16 +208,16 @@ const iconData = [
             </div>
           </div>
 
-          {studentpath && (
+          {!studentAssessMent && studentpath && (
             <div className="studenttitle">
-              {/* <h2>{quizpath}</h2> */}
+              <h2>{quizpath}</h2>
             </div>
           )}
         </section>
         {children}
       </main>
 
-      <div className={style.icon_bar}>
+      <div className={`${style.icon_bar} ${studentAssessMent && style.none}`}>
         {studentpath
           ? studentIcon.map(({ title, id, icon: Icon, link }) => (
             <Tooltip title={title} key={id}>

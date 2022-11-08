@@ -16,6 +16,7 @@ import quiz from '../../../../images/classroom_quiz.svg';
 import { useAuth } from '../../../../contexts/Auth';
 import { KEY } from '../../../../constants';
 import { useQuery } from '@tanstack/react-query';
+import { useRef } from 'react';
 
 
 const Container = styled.div`
@@ -242,9 +243,14 @@ const QuizImage = styled.img`
     width: 100%;
     height: 100%;
 `;
-const QuizButton = styled(CustomButton)`
-    background-color: #3f50b5 !important;
-    color: white !important;
+const QuizButton = styled.button`
+    background-color: #3f50b5 ;
+    color: white ;
+    border: none;
+    outline: none;
+    padding: .5rem;
+    font-size: 12px;
+    border-radius: 5px;
 `;
 
 const MenuButton = styled(IconButton)`
@@ -375,6 +381,7 @@ ul{
         <QuizButton>Open Quiz</QuizButton> */}
 
 const QuizContent = ({ q, id }) => {
+    console.log({q});
     return (
         <>
             <Quiz key={id}>
@@ -383,7 +390,7 @@ const QuizContent = ({ q, id }) => {
                     <p>Description: </p>
                     <span>{q.note}</span>
                     <p>Max Attempts: <span>{q.maxAttempts}</span></p>
-                    <p>Duration: <span>{new Date(q?.endDate).toLocaleTimeString('en-US', {
+                    <p>Deadline: <span>{new Date(q?.endDate).toLocaleTimeString('en-US', {
                         hour: '2-digit',
                         minute: '2-digit'
                     })}</span></p>
@@ -445,30 +452,72 @@ const QuizContent = ({ q, id }) => {
     )
 }
 
-const NoteComponent = ({ noteContent, itemsPerPage }) => {
+const NoteComponent = ({ noteContent, completed, setCompleted, AttachmentLength, attach, setAttach }) => {
+    const { getItem } = useLocalStorage()
+    const userdata = getItem(KEY)
+    const { consoleFunctions: { markAsCompleted } } = useAuth();
+    const ref = useRef()
+    // console.log({ completed });
+    // console.log({ noteContent });
+
+    const handleCompleted = async (id, index) => {
+        const { success } = await markAsCompleted(userdata?.token, id)
+        // console.log({success});
+        if (success) {
+            // console.log(ref.current);
+            // console.log("note id", noteContent[0].contentId);
+            setCompleted((prev) => prev < AttachmentLength ? prev + 1 : prev)
+            setAttach(attach.map(val => {
+                console.log(val._id === noteContent[0].contentId);
+                if (val._id === noteContent[0].contentId) {
+                     val = {
+                        ...val,
+                        marked: true
+                    }
+                } 
+                return val
+            }))
+           
+            ref.current.style.display = "none";
+
+
+        }
+
+
+    }
+
+    let note = noteContent[noteContent?.length - 1]
+    console.log({note});
 
     return (
         <NotecContainer>
-            {noteContent?.map((n, id) => (
-                < Note key={id}>
+
+            <div>
+                < Note >
                     {/* <h4>Hey this is a demo note heading</h4> */}
-                    <p dangerouslySetInnerHTML={{ __html: n.body }}></p>
+                    <p dangerouslySetInnerHTML={{ __html: note.body }}></p>
 
                 </Note>
-            ))
-            }
-            <QuizAction>
+                {/* { note && <button ref={ref} onClick={() => handleCompleted(note.contentId)}>{note.contentId}</button>} */}
+                {
+                    note &&
+                    <QuizAction>
+                        <QuizButton ref={ref} onClick={() => handleCompleted(note.contentId)}>
+                            Mark as Completed
+                        </QuizButton>
+                    </QuizAction>
+                }
+            </div>
 
-                <QuizButton>
-                    Mark as Completed
-                </QuizButton>
-            </QuizAction>
+
         </NotecContainer>
     )
 }
 
 
 const FileComponent = ({ x, id }) => {
+
+
     const getExtention = (val) => {
 
         if (val.includes("svg", "png", "avif", "webp")) {
@@ -480,40 +529,44 @@ const FileComponent = ({ x, id }) => {
         else return ""
     }
     return (
-        <Paper variant='outlined' key={id} className="paper">
-            <PaperTop>
-                <div>
-                    <h5>{x.title}</h5>
+        <div>
+            <Paper variant='outlined' key={id} className="paper">
+                <PaperTop>
+                    <div>
+                        <h5>{x.title}</h5>
+                        <IconButton>
+                            <MdMoreVert />
+                        </IconButton>
+
+                    </div>
+                    <div>
+                        <BodyActions>
+                            <IconButton>
+                                <BiCloudDownload />
+                            </IconButton>
+                            <CustomButton>Open</CustomButton>
+                        </BodyActions>
+                    </div>
+                </PaperTop>
+
+                <FileName>
+                    <p>{x.fileName}</p>
                     <IconButton>
                         <MdMoreVert />
                     </IconButton>
+                </FileName>
 
-                </div>
-                <div>
-                    <BodyActions>
-                        <IconButton>
-                            <BiCloudDownload />
-                        </IconButton>
-                        <CustomButton>Open</CustomButton>
-                    </BodyActions>
-                </div>
-            </PaperTop>
+                <FileDisplay>
+                    {getExtention(x.fileName) === "image" ? <img src={x.fileName} alt="" /> :
+                        <video src={x.fileName}></video>
+                    }
 
-            <FileName>
-                <p>{x.fileName}</p>
-                <IconButton>
-                    <MdMoreVert />
-                </IconButton>
-            </FileName>
+                </FileDisplay>
 
-            <FileDisplay>
-                {getExtention(x.fileName) === "image" ? <img src={x.fileName} alt="" /> :
-                    <video src={x.fileName}></video>
-                }
 
-            </FileDisplay>
+            </Paper>
 
-        </Paper>
+        </div>
     )
 }
 
@@ -521,6 +574,9 @@ const FileComponent = ({ x, id }) => {
 const Classroom = () => {
     const [showMobile, setShowMobile] = useState(false);
     const [modules, setModules] = useState([]);
+    // const [allAttachment, setAllattachment] = useState([])
+    const [attach, setAttach] = useState([])
+    const [AttachmentLength, setaAllattachmentLength] = useState(0)
     const [fileContent, setFileContent] = useState([])
     const [title, setTitle] = useState("")
     const [quizContent, setQuizContent] = useState([])
@@ -529,15 +585,16 @@ const Classroom = () => {
     const userdata = getItem(KEY)
     let location = useLocation()
     const [pickedType, setPickedType] = useState("")
+    let [completed, setCompleted] = useState(0);
 
     const classDetail = location.state.bootcamp
     const { id } = useParams()
 
-    const { consoleFunctions: { fetchStudentDomains, fetchStudentQuiz, fetchStudentFile, fetchStudentNote }, } = useAuth();
+    const { consoleFunctions: { fetchStudentDomains, fetchStudentQuiz, fetchStudentFile, fetchStudentNote, markAsCompleted }, } = useAuth();
 
     const fetchstudentDomains = useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id), {
         onSuccess: (res) => {
-            console.log(res)
+            // console.log(res)
             setModules(res.data)
         }
     })
@@ -556,7 +613,7 @@ const Classroom = () => {
         }
         else if (type === "NOTE") {
             const { data } = await fetchStudentNote(userdata.token, info)
-            // console.log({ data });
+            console.log({ data });
             setPickedType("NOTE")
             setTitle(title)
             setNoteContent(data)
@@ -574,6 +631,54 @@ const Classroom = () => {
         }
     }
 
+    const quizRef = useRef()
+    const fileRef = useRef()
+
+
+    const handleFileCompleted = async (id, index) => {
+        const { success } = await markAsCompleted(userdata?.token, id)
+        if (success) {
+            setCompleted((prev) => prev < AttachmentLength ? prev + 1 : prev)
+            setAttach(attach.map(val => {
+                // console.log(val._id === index);
+                if (val._id === id) {
+                     val = {
+                        ...val,
+                        marked: true
+                    }
+                } 
+                return val
+            }))
+           
+            fileRef.current.style.display = "none";
+
+        }
+
+
+    }
+
+
+    const handleQuizCompleted = async (id, index) => {
+        const { success } = await markAsCompleted(userdata?.token, id)
+        if (success) {
+            setCompleted((prev) => prev < AttachmentLength ? prev + 1 : prev)
+            setAttach(attach.map(val => {
+                // console.log(val._id === index);
+                if (val._id === id) {
+                     val = {
+                        ...val,
+                        marked: true
+                    }
+                } 
+                return val
+            }))
+           
+            quizRef.current.style.display = "none";
+
+        }
+
+
+    }
 
 
     return (
@@ -604,6 +709,13 @@ const Classroom = () => {
                         // activeMedia={active} 
                         // changeActive={setActiveMediaHandler} 
                         fetchData={fetchData}
+                        completed={completed}
+                        AttachmentLength={AttachmentLength}
+                        setaAllattachmentLength={setaAllattachmentLength}
+                        // allAttachment={allAttachment}
+                        // setAllattachment={setAllattachment}
+                        attach={attach}
+                        setAttach={setAttach}
                     />
                 </Backdrop>
                 <Sidebar
@@ -611,6 +723,13 @@ const Classroom = () => {
                     // activeMedia={active} 
                     // changeActive={setActiveMediaHandler} 
                     fetchData={fetchData}
+                    completed={completed}
+                    AttachmentLength={AttachmentLength}
+                    setaAllattachmentLength={setaAllattachmentLength}
+                    // allAttachment={allAttachment}
+                    //  setAllattachment={setAllattachment}
+                    attach={attach}
+                    setAttach={setAttach}
                 />
                 <ClassroomMain>
                     <ClassroomMainTop>
@@ -639,16 +758,31 @@ const Classroom = () => {
 
                                 ))
                                 }
+
+                                {fileContent.length > 0 &&
+                                    <QuizAction >
+                                        <QuizButton ref={fileRef} onClick={() => handleFileCompleted(fileContent[0].contentId)}>
+                                            Mark as Completed
+                                        </QuizButton>
+                                    </QuizAction>
+                                }
                             </>
                             }
 
 
                             {pickedType === "QUIZ" && <>
                                 {quizContent.length > 0 && quizContent.map((q, id) => (
-                                    <QuizContent q={q} id={id} />
+                                    <QuizContent q={q} id={id} key={id}/>
                                 ))}
+                                {quizContent.length > 0 && (
+                                    //  <button ref={quizRef} onClick={() => handleQuizCompleted(quizContent[0].contentId)}>{quizContent[0].contentId}</button>
 
-
+                                    <QuizAction>
+                                        <QuizButton ref={quizRef} onClick={() => handleQuizCompleted(quizContent[0].contentId)}>
+                                            Mark as Completed
+                                        </QuizButton>
+                                    </QuizAction>
+                                )}
 
                             </>
 
@@ -657,7 +791,15 @@ const Classroom = () => {
 
 
                             {pickedType === "NOTE" && <>
-                                {noteContent.length > 0 && <NoteComponent noteContent={noteContent} />}
+                                {noteContent.length > 0 && <NoteComponent
+                                    noteContent={noteContent}
+                                    completed={completed}
+                                    setCompleted={setCompleted}
+                                    AttachmentLength={AttachmentLength}
+                                    attach={attach}
+                                    setAttach={setAttach}
+                                />
+                                }
 
 
                             </>

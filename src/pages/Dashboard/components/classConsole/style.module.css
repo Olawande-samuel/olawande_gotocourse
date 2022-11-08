@@ -148,6 +148,10 @@
 
 }
 
+.none{
+    display: none;
+}
+
 .content_list li:hover {
     background: #fff;
     color: var(--theme-blue);
