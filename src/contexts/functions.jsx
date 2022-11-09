@@ -2139,7 +2139,7 @@ export const adminFunctions = {
                     statusCode: err.statusCode
                 }
             }
-        }
+        } 
     },
     sendMessage: async function (token, data) {
         try {
