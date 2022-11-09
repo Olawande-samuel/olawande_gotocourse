@@ -3749,6 +3749,18 @@ export function CreateBootcamp() {
     );
     setFormstate({ ...formstate, syllabus: newSyllabusArr });
   }
+  function deletePackage(e) {
+    let newPackagesArr = formstate.packages.filter(
+      (item, index) => item.title + index !== e
+    );
+    setFormstate({ ...formstate, packages: newPackagesArr });
+  }
+  function deleteCareer(e) {
+    let newCareerArr = formstate.careerList.filter(
+      (item, index) => item.name + index !== e
+    );
+    setFormstate({ ...formstate, careerList: newCareerArr });
+  }
 
   const handleClose = () => {
     setOpenSyllabus(false);
@@ -3933,14 +3945,14 @@ export function CreateBootcamp() {
                         <h5>{changeConstants(item.title)}</h5>
                         {<p>{item.price}</p>}
                         <p>{item.description}</p>
-                        {/* {
+                        {
                           location.search && 
                           <p>
                             <i className="text-danger" style={{cursor:"pointer"}} onClick={()=>deletePackage(item.title + index)}>
                               <BiTrash />
                             </i>
                           </p>
-                        } */}
+                        }
                       </div>
                   ))
                 ) : (
@@ -4065,7 +4077,19 @@ export function CreateBootcamp() {
               <label>Career Prospect</label>
               {formstate.careerList?.length !== 0 ? (
                 formstate.careerList?.map(({ name }, i) => (
-                  <Syllabus key={i} title={name} />
+                  // <Syllabus key={i} title={name} />
+                  <div className={clsx.syllabus_container}>
+                    <h5>{name}</h5>
+                    <p>
+                      <i
+                        className="text-danger"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => deleteCareer(name + i)}
+                      >
+                        <BiTrash />
+                      </i>
+                    </p>
+                  </div>
                 ))
               ) : (
                 <p
