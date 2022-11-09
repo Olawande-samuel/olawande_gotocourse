@@ -37,6 +37,7 @@ import { CourseDetail } from "../../Courses";
 import Layout from "../../../components/Layout";
 import ChatComponent from "./Chat";
 import {
+  AddPackage,
   AddSyllabus,
   changeConstants,
   CreateCourseMain,
@@ -49,6 +50,7 @@ import { BiTrash } from "react-icons/bi";
 import { ClassesCard } from "../Teachers/Bootcamps";
 import Editor from "../components/Editor";
 import Detail from "../../Category/Detail";
+import ReactQuill from "react-quill";
 
 const KEY = "gotocourse-userdata";
 
@@ -3561,6 +3563,7 @@ export function AdminClassConsole() {
 
 // CREATEBOOTCAMP COMPONENT
 export function CreateBootcamp() {
+
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const flag = useRef(false);
@@ -3592,7 +3595,8 @@ export function CreateBootcamp() {
     type: "",
     instructor: "",
     syllabus: [],
-    careerList:[]
+    careerList:[],
+    packages:[]
   });
 
   const [loading, setLoading] = useState(false);
@@ -3791,6 +3795,17 @@ export function CreateBootcamp() {
       };
     });
   }
+
+  const [openPackage, setOpenPackage] = useState(false);
+  // PACKAGES 
+  function openPackageModal(){
+    setOpenPackage(true)
+  }
+  function handleClosePackage(){
+    setOpenPackage(false)
+  }
+
+  console.log({formstate})
   return (
     <Admin header={location.search ? "Edit Class" : "Create Class"}>
       {loader && <Loader />}
@@ -3883,6 +3898,22 @@ export function CreateBootcamp() {
               handleChange={changeHandler}
               value={formstate.duration}
             />
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Type</label>
+              <select
+                rows="5"
+                name="type"
+                value={formstate.type}
+                onChange={changeHandler}
+                className="form-select generic_input"
+              >
+                <option value="">Choose price type</option>
+                <option  value="FLAT">Flat</option>
+                <option  value="PACKAGE">Package</option>
+                
+              </select>
+            </div>
+            { formstate.type === "FLAT" ?
             <Input
               label="Price"
               name="price"
@@ -3890,6 +3921,49 @@ export function CreateBootcamp() {
               handleChange={changeHandler}
               value={formstate.price}
             />
+            :
+            (formstate.type === "PACKAGE" ?
+            <div className={clsx.form_group}>
+                <label htmlFor={"package"} className="form-label generic_label">
+                  Packages
+                </label>
+                {formstate.packages?.length > 0 ? (
+                  formstate.packages?.map((item, index) => (
+                     <div className={clsx.syllabus_container}>
+                        <h5>{changeConstants(item.title)}</h5>
+                        {<p>{item.price}</p>}
+                        <p>{item.description}</p>
+                        {/* {
+                          location.search && 
+                          <p>
+                            <i className="text-danger" style={{cursor:"pointer"}} onClick={()=>deletePackage(item.title + index)}>
+                              <BiTrash />
+                            </i>
+                          </p>
+                        } */}
+                      </div>
+                  ))
+                ) : (
+                  <h6>No Package available</h6>
+                )}
+                <button
+                className="btn btn-primary my-3"
+                style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
+                type="button"
+                onClick={openPackageModal}
+              >
+                Add Package
+              </button>
+              <AddPackage
+                openPackage={openPackage}
+                addPackage={setFormstate}
+                list={formstate}
+                setOpen={setOpen}
+                handleClosePackage={handleClosePackage}
+              />
+              </div>
+             : "")
+              }
             <div className="d-flex flex-wrap">
               <div className="col-sm-6 col-md-3 pe-2 ">
                 <Input
@@ -3928,10 +4002,14 @@ export function CreateBootcamp() {
                 />
               </div>
             </div>  
+            {/* <div className={clsx.editor_container}>
+              <ReactQuill theme="snow" value={formstate?.description} onChange={setBio} />
+            </div> */}
             <Editor 
              initialState={formstate.description} 
              title="Description" 
              setBio={setBio} />
+
             <div className={clsx.form_group}>
               <label htmlFor={"instructor"}>Instructor</label>
               <select
@@ -3983,7 +4061,7 @@ export function CreateBootcamp() {
             >
               Add Syllabus
             </button>
-            {/* <div className={clsx.form_group}>
+            <div className={clsx.form_group}>
               <label>Career Prospect</label>
               {formstate.careerList?.length !== 0 ? (
                 formstate.careerList?.map(({ name }, i) => (
@@ -4005,7 +4083,7 @@ export function CreateBootcamp() {
               onClick={(e) => setShowCareerModal((_) => true)}
             >
               Add Career Prospect
-            </button> */}
+            </button>
             <CareerModal
               open={showCareerModal}
               newCareer={careerlist}
@@ -4013,7 +4091,10 @@ export function CreateBootcamp() {
               handleChange={careerChangeHandler}
               updateCareer={updateCareerHandler}
             />
-            <div className={clsx.form_group}>
+            
+  
+              
+            {/* <div className={clsx.form_group}>
               <label htmlFor={"package"}>Type</label>
               <select
                 rows="5"
@@ -4026,7 +4107,7 @@ export function CreateBootcamp() {
                 <option value="full time">Full Time</option>
                 <option value="part time">Part-Time</option>
               </select>
-            </div>
+            </div> */}
 
             {loading ? (
               <button className="button button-lg log_btn w-100 mt-3">

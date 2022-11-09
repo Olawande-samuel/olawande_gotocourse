@@ -723,7 +723,7 @@ export const Syllabus = ({
       </Modal>
     );
   }
-  function AddPackage({ openPackage, handleClosePackage, list, addPackage }) {
+  export function AddPackage({ openPackage, handleClosePackage, list, addPackage }) {
     const [newPackage, setNewPackage] = useState({
       title: "",
       price: "",

@@ -838,7 +838,7 @@ function UserCard({status, fullname, number, lastsent, isChat, user,fromUser, bo
     )
 }
 export function MailDetail(){
-    
+    const queryClient = useQueryClient()
     const {getItem} = useLocalStorage();
 
     const userdata = getItem(KEY)
@@ -849,10 +849,18 @@ export function MailDetail(){
     const[body, setBody] = useState("")
 
     const {userId} = useParams()
-    console.log({userId})
 
-    const fetchMessages = useQuery(["messageList", userdata.token, chatData?.fromUser], ()=>getMessages(userdata.token, chatData?.fromUser), {
+    const fetchMessages = useQuery(["messageList", userdata.token, chatData?.fromUser], ()=>getMessages(userdata.token, userId), {
         onSuccess: (res)=>console.log(res),
+        onError: (err)=>console.error(err)
+    })
+
+    const mutation = useMutation(([token, data])=>sendMessage(token, data), {
+        onSuccess: (res)=>{
+            queryClient.invalidateQueries("messageList")
+            setBody("")
+            console.log(res)
+        },
         onError: (err)=>console.error(err)
     })
 
@@ -861,7 +869,10 @@ export function MailDetail(){
     }
 
     function send(){
-
+        mutation.mutate([userdata.token, {
+            toUser: userId,
+            body
+        }])
     }
 
     return(
@@ -873,7 +884,7 @@ export function MailDetail(){
                 </Title>
                 <ChatBox>
                     {
-                        fetchMessages?.data?.data?.data?.map(item=>(
+                        fetchMessages?.data?.data?.map(item=>(
                             <ChatContent {...item} key={item._id} />
                         ))
                     }
@@ -1082,15 +1093,15 @@ export const SenderContainer = styled.div`
 export const Sender = styled.div`
     position: absolute;
     bottom: 0;
-    left: 0;
-    right: 0;
+    left: 10px;
+    right: 20px;
     input {
         padding: .5rem;
         padding-right: 1.5rem
 
     }
 `
-export const Send = styled.div`
+export const Send = styled.form`
     position: absolute;
     right: 0;
     top: 50%;
