@@ -487,7 +487,7 @@ const NoteComponent = ({ noteContent, completed, setCompleted, AttachmentLength,
     }
 
     let note = noteContent[noteContent?.length - 1]
-    console.log({note});
+    // console.log({note});
 
     return (
         <NotecContainer>

@@ -25,7 +25,7 @@ import { useLocalStorage } from "../../../hooks";
 import { FaRegTrashAlt, FaUserAlt } from "react-icons/fa";
 import { SiGoogleclassroom } from "react-icons/si";
 import { IoMdChatboxes } from "react-icons/io";
-import { Box, Modal } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Modal, Select } from "@mui/material";
 
 import ChatComponent from "../Admin/Chat";
 
@@ -433,29 +433,120 @@ export function MyClasses() {
                     </div> */}
                     <div className={clsx.admin__student_main}>
                         {courseList?.length > 0 ? (
-                            <table className={clsx.admin__student_table}>
-                                <thead>
-                                    {tableHeaders.map((el, i) => (
-                                        <th key={i}>{el}</th>
-                                    ))}
-                                </thead>
-                                <tbody>
-                                    {courseList?.map(
-                                        // {_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}
-                                        ({ bootcampName, tutorName, startTime, endTime, endDate, startDate, bootcampId, bootcampImg, _id }, i) => (
-                                            <tr style={{ padding: "1rem" }}>
-                                                <td>{i + 1}</td>
-                                                <td>{bootcampName}</td>
-                                                <td>{tutorName}</td>
-                                                <td>{getDate(startDate)}</td>
-                                                <td>{startTime}</td>
-                                            </tr>
-                                        )
-                                    )}
-                                    <p>
-                                    </p>
-                                </tbody>
-                            </table>
+                            // <table className={clsx.admin__student_table}>
+                            //     <thead>
+                            //         {tableHeaders.map((el, i) => (
+                            //             <th key={i}>{el}</th>
+                            //         ))}
+                            //     </thead>
+                            //     <tbody>
+                            //         {courseList?.map(
+                            //             // {_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}
+                            //             ({ bootcampName, tutorName, startTime, endTime, endDate, startDate, bootcampId, bootcampImg, _id }, i) => (
+                            //                 <tr style={{ padding: "1rem" }}>
+                            //                     <td>{i + 1}</td>
+                            //                     <td>{bootcampName}</td>
+                            //                     <td>{tutorName}</td>
+                            //                     <td>{getDate(startDate)}</td>
+                            //                     <td>{startTime}</td>
+                            //                 </tr>
+                            //             )
+                            //         )}
+                            //         <p>
+                            //         </p>
+                            //     </tbody>
+                            // </table>
+                           
+                            <div className={` ${clsx.dashboard_courses}`}>
+                            <div className={clsx["dashboard_courses--left"]}>
+                                <h6 style={{ marginBottom: ".5rem" }}>Available Classes</h6>
+                                <small className="mb-4 d-block">Select and enroll to a class to get started</small>
+                
+                                <div className={clsx["courseheader"]}>
+                                    <div className={clsx["courseitem"]}> No</div>
+                                    <div className={clsx["courseitem"]}>Courses/Certification</div>
+                                    <div className={clsx["courseitem"]}>SubContent</div>
+                                    <div className={clsx["courseitem"]}>Duration</div>
+                                    <div className={clsx["courseitem"]}>
+                                        <FormControl fullWidth size="small">
+                                            <InputLabel id="demo-simple-select-label">Fee</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                // value={age}
+                                                label="fee"
+                                            // onChange={handleChange}
+                                            >
+                                                <MenuItem value={30}>POUNDS</MenuItem>
+                                                <MenuItem value={10}>USD</MenuItem>
+                                                <MenuItem value={20}>EURO</MenuItem>
+                                                <MenuItem value={20}>NAIRA</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                    <div className={clsx["courseitem"]} />
+                                </div>
+                
+                                <div className={clsx["coursebody"]}>
+                                    {/* {data?.length > 0 && data.filter(item => item.isActive).map((item, i) => ( */}
+                                    {courseList?.length > 0 && courseList.map((item, i) => (
+                
+                                        <div className={clsx["coursecontent"]} key={i}>
+                                            <div className={clsx["courseitem"]}>
+                                                <span>{i + 1}</span>
+                
+                                            </div>
+                
+                                            <div className={clsx["courseitem"]}>
+                                                <span>{item.bootcampName}</span>
+                
+                                            </div>
+                
+                
+                                            <div className={clsx["courseitem"]}>
+                                                <span>{item.startDate && getDate(item.startDate)}</span>
+                                            </div>
+                
+                                            <div className={clsx["courseitem"]}>
+                                                <span>{item.startDate && getDate(item.startDate)}</span>
+                                            </div>
+                
+                                            <div className={clsx["courseitem"]}>
+                                                <span>$ {item.bootcampPrice}</span>
+                
+                                            </div>
+                
+                                            <div className={clsx["courseitem"]}>
+                                                <div className={clsx.classes_button}>
+                                                    <button className="d-flex align-items-center" 
+                                                    // onClick={(e) => handleCourseSelect(e, item)}
+                                                    >
+                                                        <i><BsQuestionCircle /></i>
+                                                        <span>Learn more</span>
+                                                    </button>
+                                                    <button className="d-flex align-items-center" 
+                                                    // onClick={(e) => handleCourseSelect(e, item)}
+                                                    >
+                                                        <i><BsDownload /></i>
+                                                        <span>Enroll</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                
+                
+                                        </div>
+                                    ))
+                                    }
+                
+                                </div>
+                
+                            </div>
+                
+                
+                
+                
+                        </div>
+                            
                         ) : (<p className="lead">You haven't registered for a class</p>)
                         }
 
@@ -1560,36 +1651,6 @@ function AvailableCourses({ data }) {
     const navigate = useNavigate()
     // const tableHeader = ["Courses", "Start Date", "Program Fee", ""]
 
-    const tableData = [
-        {
-            id: 1,
-            title: "Data science",
-            courseName: "Data science",
-            // startDate: "Aug 30",
-            startDate: "2015-03-25T12:00:00Z",
-            fee: "20",
-            price: "20"
-        },
-
-        {
-            id: 2,
-            title: "it technology",
-            courseName: "Data science",
-            // startDate: "Aug 30",
-            startDate: "2015-03-25T12:00:00Z",
-            fee: "20",
-            price: "20"
-        },
-        {
-            id: 3,
-            title: "Data science",
-            courseName: "Data science",
-            // startDate: "Aug 30",
-            startDate: "2015-03-25T12:00:00Z",
-            fee: "20",
-            price: "20"
-        }
-    ]
 
     function handleCourseSelect(e, item) {
         e.preventDefault()
@@ -1600,7 +1661,7 @@ function AvailableCourses({ data }) {
         // localStorage.setItem("gotocourse-courseId", courseInfo.courseId)
         // navigate(`/categories/${courseInfo.category?.split(" ").join("-")}/courses/${courseInfo.name.split(" ").join("-")}}`)
     }
-    console.log({data});
+    // console.log({ data });
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
@@ -1608,21 +1669,48 @@ function AvailableCourses({ data }) {
                 <small className="mb-4 d-block">Select and enroll to a class to get started</small>
 
                 <div className={clsx["courseheader"]}>
-                    <div className={clsx["courseitem"]}>class</div>
-                    <div className={clsx["courseitem"]}>start date</div>
-                    <div className={clsx["courseitem"]}>program fee</div>
+                    <div className={clsx["courseitem"]}> No</div>
+                    <div className={clsx["courseitem"]}>Courses/Certification</div>
+                    <div className={clsx["courseitem"]}>SubContent</div>
+                    <div className={clsx["courseitem"]}>Duration</div>
+                    <div className={clsx["courseitem"]}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel id="demo-simple-select-label">Fee</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                // value={age}
+                                label="fee"
+                            // onChange={handleChange}
+                            >
+                                <MenuItem value={30}>POUNDS</MenuItem>
+                                <MenuItem value={10}>USD</MenuItem>
+                                <MenuItem value={20}>EURO</MenuItem>
+                                <MenuItem value={20}>NAIRA</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
                     <div className={clsx["courseitem"]} />
                 </div>
 
                 <div className={clsx["coursebody"]}>
-                {/* {data?.length > 0 && data.filter(item => item.isActive).map((item, i) => ( */}
+                    {/* {data?.length > 0 && data.filter(item => item.isActive).map((item, i) => ( */}
                     {data?.length > 0 && data.map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
+                            <div className={clsx["courseitem"]}>
+                                <span>{i + 1}</span>
+
+                            </div>
 
                             <div className={clsx["courseitem"]}>
                                 <span>{item.bootcampName}</span>
 
+                            </div>
+
+
+                            <div className={clsx["courseitem"]}>
+                                <span>{item.startDate && getDate(item.startDate)}</span>
                             </div>
 
                             <div className={clsx["courseitem"]}>
