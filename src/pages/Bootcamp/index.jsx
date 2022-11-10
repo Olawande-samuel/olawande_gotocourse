@@ -519,7 +519,7 @@ export function NewBootcampDetailsComponent(){
                 <ul>
                   {
                     bootcampTrainingInfo?.careerList?.map(item=>(
-                      <li>{item}</li>
+                      <li>{item.name}</li>
                     )) 
                   }
                   

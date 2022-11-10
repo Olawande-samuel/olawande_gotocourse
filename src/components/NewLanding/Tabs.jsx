@@ -363,13 +363,12 @@ export function TabsComp(){
             </Link>
             <CoursesContainer courses={courses} category={item} key={index}  />
           </div>
-
         </TabPanel>
       ))}
-      <div className="popular_views">
+      {/* <div className="popular_views">
         <h1 className="newCategories_header">Popular courses students are viewing</h1>
         <PopularContainer tab_number={4} courses={courses} category={"CLOUD COMPUTING"} />
-      </div>
+      </div> */}
     </>
   )
 }

@@ -22,6 +22,7 @@ import { useAuth } from "../../../contexts/Auth";
 import { AdvancedError } from "../../../classes";
 import { capitalize, COURSE_CATEGORY_KEY, getDate, IMAGEURL } from "../../../constants";
 import DOMPurify from "dompurify";
+import { useQuery } from "@tanstack/react-query";
 
 const DetailContainer = styled.div`
   width: 100%;
@@ -306,7 +307,7 @@ const Detail = ({ preview }) => {
   const {
     generalState,
     setGeneralState,
-    otherFunctions: { searchCategories,fetchCategory },
+    otherFunctions: { searchCategories, fetchCategory, fetchBootcamps },
   } = useAuth();
   
   const [categoryCourses, setCategoryCourses] = useState([]);
@@ -325,6 +326,8 @@ const Detail = ({ preview }) => {
     }
   }, [preview]);
 
+  const queryClass = useQuery(["fetchclasses"], fetchBootcamps())
+  
   // fetch courses under each category
   useEffect(() => {
     if (!preview?.name) {

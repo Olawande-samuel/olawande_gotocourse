@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import Layout from "../Layout";
 import BootImg from "../../images/bootcamps/allClasses2.webp";
 import HeroImg from "../../images/newlanding.webp";
-import getStarted from "../../images/easysteps.png"
+import getStarted from "../../images/easysteps.png";
 import { useAuth } from "../../contexts/Auth";
 import "./landing.css";
 import { useLocalStorage } from "../../hooks";
@@ -28,7 +28,7 @@ import betterway from "../../images/betterway.png";
 import BetterWay from "./BetterWay";
 
 import vidPreview from "../../images/video_preview.png";
-import {TechPro, TrackPro } from "./TechPro";
+import { TechPro, TrackPro } from "./TechPro";
 import { FiPlayCircle } from "react-icons/fi";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -47,12 +47,18 @@ import SwiperCore, {
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
-
 import critical_skills from "../../images/landing/critical_skills.webp";
 import life_change from "../../images/landing/life_change.webp";
 import tell from "../../images/landing/mentor_landing.webp";
 import newMen from "../../images/landing/newMen.png";
-
+import GreatOpportunities from "./GreatOpportunities";
+import ShortCourses from "./ShortCourses";
+import ExecutiveClasses from "./ExecutiveClasses";
+import IndemandClasses from "./IndemandClasses";
+import UpskillCourse from "./UpskillCourse";
+import VirtualTraining from "./VirtualTraining";
+import LiveWebinars from "./LiveWebinars";
+import Success from "./Success";
 
 const NewLanding = () => {
   return (
@@ -63,13 +69,21 @@ const NewLanding = () => {
       <Companies />
       <Mission />
       <Category />
-      <TechPro />
-      <VideoSection />
+      <GreatOpportunities />
       <Benefits />
+      <ShortCourses />
+      <ExecutiveClasses />
+      <IndemandClasses />
+      <UpskillCourse />
+      <VideoSection />
+      <VirtualTraining />
       <Mentors />
+      <TechPro />
       {/* <TeachingBenefits /> */}
       <TrackPro />
       <BetterWay />
+      <LiveWebinars /> 
+      <Success />
       <Faq />
       {/* <AffiliatePro /> */}
       {/* <Gif /> */}
@@ -149,11 +163,12 @@ function WhatweDo() {
           <h4 className="text-center">Our Goal</h4>
         </header>
         <p className="text-center">
-          To be the No1 global platform where millions of learners connect with top tech educators and bootcamps in order to help upskill, boost productivity and reduce the cost of learning.
-        </p> 
+          To be the No1 global platform where millions of learners connect with
+          top tech educators and bootcamps in order to help upskill, boost
+          productivity and reduce the cost of learning.
+        </p>
       </div>
     </section>
-    
   );
 }
 function Gif() {
@@ -216,44 +231,47 @@ function Hero() {
         "Access tools for teaching",
         "Connect from anywhere",
       ],
-      img:tell,
+      img: tell,
       // img:HeroImg
     },
     {
       id: 2,
       title: "Get critical",
       title2: "career skills",
-      subtitle: "Start, switch, or advance your career with 50+ courses, Professional Certificates from top industry experts and leading bootcamps",
+      subtitle:
+        "Start, switch, or advance your career with 50+ courses, Professional Certificates from top industry experts and leading bootcamps",
       social: true,
       acctype: "student",
-      img:critical_skills,
-      color:"#F75C4E",
-      link:"/signup",
-      link_btn:"Register for free"
+      img: critical_skills,
+      color: "#F75C4E",
+      link: "/signup",
+      link_btn: "Register for free",
     },
     {
       id: 3,
       title: "Deliver life-changing",
       title2: "teaching experiences",
-      subtitle: "We’ve got the solution: Incredible tools for managing and organizing  world-class training and development programs all on Gotocourse.",
+      subtitle:
+        "We’ve got the solution: Incredible tools for managing and organizing  world-class training and development programs all on Gotocourse.",
       social: true,
       acctype: "teacher",
-      img:life_change,
-      color:"#66BFE6",
-      link:"/become-a-teacher",
-      link_btn:"Become a teacher"
+      img: life_change,
+      color: "#66BFE6",
+      link: "/become-a-teacher",
+      link_btn: "Become a teacher",
     },
     {
       id: 4,
       title: "Change lives while you",
       title2: "mentor on Gotocourse",
-      subtitle: "Streamline mentoring experience for you and your mentees, because everything’s in one place and accessible through a single link",
+      subtitle:
+        "Streamline mentoring experience for you and your mentees, because everything’s in one place and accessible through a single link",
       social: true,
       acctype: "affiliate",
-      img:newMen,
-      color:"#A1B0FF",
-      link:"/lounge",
-      link_btn:"Get started now"
+      img: newMen,
+      color: "#A1B0FF",
+      link: "/lounge",
+      link_btn: "Get started now",
     },
   ];
   return (
@@ -290,91 +308,99 @@ function Hero() {
           },
         }}
       >
-        {
-          heroData.map(item=>(
-            <SwiperSlide key={item.id}>
-              <HeroContent
-                overlay={overlay}
-                setOverlay={setOverlay}
-                logtype={logtype}
-                {...item}
-              />
-            </SwiperSlide>
-          ))
-
-        }
-          
+        {heroData.map((item) => (
+          <SwiperSlide key={item.id}>
+            <HeroContent
+              overlay={overlay}
+              setOverlay={setOverlay}
+              logtype={logtype}
+              {...item}
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </section>
   );
 }
 
-  function HeroContent({ overlay, setOverlay, logtype, title, title2, signInWithFacebook, subtitle, img, list, acctype, social, color, link, link_btn }) {
+function HeroContent({
+  overlay,
+  setOverlay,
+  logtype,
+  title,
+  title2,
+  signInWithFacebook,
+  subtitle,
+  img,
+  list,
+  acctype,
+  social,
+  color,
+  link,
+  link_btn,
+}) {
   return (
     <div className="container">
       {overlay && <LoginOptions closeOverlay={setOverlay} type={logtype} />}
       <div className={`newHero_right ${social && "newHero_right_single"}`}>
-        <img
-          className="newHero_right-image"
-          src={img}
-          alt={title}
-        />
+        <img className="newHero_right-image" src={img} alt={title} />
       </div>
       <div className="newHero_left">
         <header className="">
           <h1 className="newHero_left-header mb-1">
             <span>{title}</span>
-            {
-              title2 &&
-              <span className="d-block">{title2}</span>
-            }
+            {title2 && <span className="d-block">{title2}</span>}
           </h1>
           <h6 className="newHero_left-title mb-4 mb-lg-5">
             {list && subtitle}
           </h6>
-            {
-              list ? 
+          {list ? (
             <div className=" new_hero_list d-flex justify-content-start">
               <ul>
-                {
-                  list && list.map((item, i)=>(
+                {list &&
+                  list.map((item, i) => (
                     <li
-                    key={i}
+                      key={i}
                       className="newHero_left-title text-start mb-0 "
                       style={{ fontWeight: "500", fontSize: "15px" }}
                     >
-                       {item}
+                      {item}
                     </li>
-                  ))
-                }
+                  ))}
               </ul>
             </div>
-            :<h6 className="newHero_left-title mb-4 mb-lg-3 ms-0" style={{width: "min(100%, 700px)"}}>{subtitle}</h6>
-            } 
+          ) : (
+            <h6
+              className="newHero_left-title mb-4 mb-lg-3 ms-0"
+              style={{ width: "min(100%, 700px)" }}
+            >
+              {subtitle}
+            </h6>
+          )}
         </header>
-        {
-          social ? 
-
-            <div className="newHero_left__button w-100 d-flex">
-              <Link className="d-inline-flex mx-auto ms-sm-0 d-flex justify-content-center w-100 justify-content-md-start" to={link}>
-                <button style={{background: color}}>{link_btn}</button>
-              </Link>
-            </div>
-
-              :
-            <div className="sign_up_cards d-flex w-100">
-              <SignupCards
-                title="STUDENTS"
-                btn="Register for free"
-                link="/signup"
-              />
-              <SignupCards
-                title="TEACHERS"
-                btn="Sign up for free"
-                link="/become-a-teacher"
-              />
-            </div>
-        }
+        {social ? (
+          <div className="newHero_left__button w-100 d-flex">
+            <Link
+              className="d-inline-flex mx-auto ms-sm-0 d-flex justify-content-center w-100 justify-content-md-start"
+              to={link}
+            >
+              <button style={{ background: color }}>{link_btn}</button>
+            </Link>
+          </div>
+        ) : (
+          <div className="sign_up_cards d-flex w-100">
+            <SignupCards
+              title="STUDENTS"
+              btn="Register for free"
+              link="/signup"
+            />
+            <SignupCards
+              title="TEACHERS"
+              btn="Sign up for free"
+              link="/become-a-teacher"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -406,7 +432,7 @@ export function Stats() {
       content: "Completion & Retention rate",
     },
     {
-      title: "300+", 
+      title: "300+",
       content: "Teachers",
     },
     // {
@@ -909,7 +935,7 @@ export function InPerson({ better, content }) {
   );
 }
 
-export function Mission(){
+export function Mission() {
   return (
     <section className="our_mission">
       <div className="container">
@@ -922,43 +948,45 @@ export function Mission(){
             <img src={getStarted} alt="" />
           </div>
           <div className="our_mission_right">
-            <h6 className="fw-bold our_mission_header mb-3" >Three easy steps to get started on Gotocourse</h6>
-              <ol>
-                {
-                  ourmission.map(item=>(
-                      <li key={item.id}>
-                        <h6>{item.title}</h6>
-                        <p>{item.content}</p>
-                      </li>
-                  ))
-                }
-              </ol>
-              <div>
-                <Link className="d-block" to="/signup">
-                  <button className="our_mission_button">Register now</button>
-                </Link>
-              </div>
+            <h6 className="fw-bold our_mission_header mb-3">
+              Three easy steps to get started on Gotocourse
+            </h6>
+            <ol>
+              {ourmission.map((item) => (
+                <li key={item.id}>
+                  <h6>{item.title}</h6>
+                  <p>{item.content}</p>
+                </li>
+              ))}
+            </ol>
+            <div>
+              <Link className="d-block" to="/signup">
+                <button className="our_mission_button">Register now</button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 const ourmission = [
   {
     id: 1,
-    title:"Register for free to get started",
-    content:"Register to access the interactive student’s dashboard"
+    title: "Register for free to get started",
+    content: "Register to access the interactive student’s dashboard",
   },
   {
     id: 2,
-    title:"Select classes of your choice from available classes",
-    content:"Access your interactive student’s dashboard to select class of your choice from the listed classes starting"
+    title: "Select classes of your choice from available classes",
+    content:
+      "Access your interactive student’s dashboard to select class of your choice from the listed classes starting",
   },
   {
     id: 3,
-    title:"Enroll to class to get your training started",
-    content:"Start class immediately after completion of your enrolment to class"
+    title: "Enroll to class to get your training started",
+    content:
+      "Start class immediately after completion of your enrolment to class",
   },
-]
+];
