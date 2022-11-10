@@ -69,6 +69,7 @@ export default function Note() {
             console.log(res)
             if(res.data?.length > 0){
                 setFormstate({...formstate, body: res.data[0].body})
+                setNote(res.data[0].body)
             }
             
         }
@@ -175,7 +176,7 @@ export default function Note() {
                                         />
 
                                     </CKEditorContext> */}
-                                    <ReactQuill theme="snow" value={formstate?.body} onChange={setNote} />
+                                    <ReactQuill theme="snow" value={note} onChange={setNote} />
                                 <div className="notebtn">
                                     <button>{
                                             

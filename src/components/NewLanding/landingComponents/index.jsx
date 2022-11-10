@@ -87,3 +87,90 @@ export function TechPreCard({title, tag, ratings, totalRatings}) {
         </TechCard>
     )
 }
+
+
+// EXECUTIVE EDUCATION
+
+
+const ExecutiveCard = styled.div`
+    
+    border: .5px solid #eee;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    
+`
+
+const ColoredTop = styled.div`
+    flex: 20%;
+    background-color: ${(props)=>props.color};
+`
+const ContentBottom = styled.div`
+    position: relative;
+    flex: 80%;
+    font-size: 14px;
+
+    h6 {
+        font-size:1rem;
+        font-weight: 700;
+    }
+    .star {
+        position:absolute;
+        left: 10%;
+        top: -20px;
+    }
+`
+
+export function ExeEducation(){
+    return (
+        <ExecutiveCard>
+            <ColoredTop/>
+            <ContentBottom>
+                <div className="star"></div>
+                <h6>Cloud Architect</h6>
+                <div>
+                    <span>11 Months</span>
+                    <span>11 Courses</span>
+                </div>
+                <ul>
+                    <li>31 tools & Rigorous curriculum</li>
+                    <li>Master's certificate</li>
+                    <li>Certification Aligned with Silver Microsoft Partner & 2 more</li>
+                </ul>
+            </ContentBottom>
+        </ExecutiveCard>
+    )
+}
+
+
+// INDEMAND
+
+const InDemandCard = styled.div`
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+
+`
+
+
+
+// UPSKILL COURSES
+
+const UpCoursesCard = styled.div`
+    border: 2.2648px solid rgba(0, 114, 239, 0.5);
+    padding: clamp(0.03125rem, -0.2813rem + 1.5625vw, 1.125rem);
+    
+`
+
+export function UpskillCourseCard(params) {
+    return (
+        <UpCoursesCard>
+            <h5>Products</h5>
+            <small>Turn your content into a polished online course, subscription, or any other digital product you can imagine. </small>
+            <a href="/">Explore <i></i></a>
+        </UpCoursesCard>
+    )
+}   

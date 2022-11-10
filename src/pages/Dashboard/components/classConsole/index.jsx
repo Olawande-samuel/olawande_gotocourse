@@ -422,10 +422,10 @@ export function Accord ({ name, _id, classId, description, creator,contentName, 
     }
   }
   const domain = [
-    {
-      id: 1,
-      title: "Edit domain",
-    },
+    // {
+    //   id: 1,
+    //   title: "Edit domain",
+    // },
     {
       id: 2,
       title: "Add Content",
@@ -553,7 +553,7 @@ function AccordMenu({ id, content }) {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>Edit content</MenuItem>
+        {/* <MenuItem onClick={handleClose}>Edit content</MenuItem> */}
         <MenuItem onClick={handleClose}>Lock content</MenuItem>
         <MenuItem onClick={handleClose}>Delete content</MenuItem>
       </Menu>
