@@ -188,9 +188,14 @@ function App() {
                 <Route path=":id" element={<Out />}  >
                   <Route index element={<CategoryDetail />} />
                   <Route path="courses" element={<CoursesHome />} />
-                  <Route path="courses/:profile" element={<Out />}>
-                    <Route index element={<Detail />} />
-                    <Route path="payment" element={<Payment />} />
+                  <Route path="courses/:profile/:id" element={<Out />}>
+                    <Route index element={<NewBootcampDetailsComponent />} />
+                    <Route path="payment" element={<BootcampPayment />} />
+                    <Route path="payment/success" element={<PaymentStatus success={true} />} />
+                    <Route path="payment/error" element={<PaymentStatus />} />
+                    {/* FORMERLY COURSES */}
+                    {/* <Route index element={<Detail />} /> */}
+                    {/* <Route path="payment" element={<Payment />} /> */}
                   </Route>
                 </Route>
               </Route>

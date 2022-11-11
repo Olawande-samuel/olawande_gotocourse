@@ -326,7 +326,16 @@ const Detail = ({ preview }) => {
     }
   }, [preview]);
 
-  const queryClass = useQuery(["fetchclasses"], fetchBootcamps())
+  const queryClass = useQuery(["fetchclasses"], fetchBootcamps, {
+    onSuccess: (res)=>{
+      console.log(res)
+      res.data?.filter(item => item.category === courseCategory)
+      console.log()
+    },
+    onError: (error)=>{
+      console.error(error)
+    }
+  })
   
   // fetch courses under each category
   useEffect(() => {
@@ -594,28 +603,14 @@ const Detail = ({ preview }) => {
                         <SwiperSlide key={i}>
                           <CourseCard
                             onClick={() => {
-                              localStorage.setItem(
-                                "gotocourse-courseInfo",
-                                JSON.stringify(course)
-                              );
-                              localStorage.setItem(
-                                "gotocourse-courseId",
-                                course.courseId
-                              );
-                              navigate(
-                                `courses/${course.name
-                                  .trim()
-                                  .split(" ")
-                                  .join("-")
-                                  .toLowerCase()}`
-                              );
+                              navigate(`courses/${course.title.trim().split(" ").join("-").toLowerCase()}/${course.bootcampId.trim()}`)
                             }}
                           >
                             <CourseImageContainer>
-                              <img src={course.courseImg} alt={course.name} />
+                              <img src={course.courseImg} alt={course.title} />
                             </CourseImageContainer>
                             <CourseBody>
-                              <h4>{course.name}</h4>
+                              <h4>{course.title}</h4>
                               
                             </CourseBody>
                           </CourseCard>

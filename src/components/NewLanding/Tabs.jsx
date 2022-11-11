@@ -163,14 +163,19 @@ function PopularContainer({ category, tab_number, popular }) {
 }
 function CoursesContainer({ category, tab_number, popular }) {
   const {
-    otherFunctions: { fetchCategory, searchCategories },
+    otherFunctions: { fetchCategory, searchCategories, fetchBootcamps },
   } = useAuth();
 
 
   const courses = useQuery(["categ"], () => searchCategories(category?.name), {
     notifyOnChangeProps:["category", "isFetching"]
   })
+  const classes = useQuery(["fetch classes", category], () => fetchBootcamps(), {
+    notifyOnChangeProps:["category", "isFetching"]
+  })
 
+console.log(classes.data?.data?.filter( c => c.category === category))
+console.log({category})
   useEffect(()=>{
     if(category && popular !== true){
       courses.refetch()
@@ -219,7 +224,7 @@ function CoursesContainer({ category, tab_number, popular }) {
     >
 
     {
-      courses.isFetching ? 
+      classes.isFetching ? 
         <div className="d-flex" style={{gap:"1rem"}}>
           { [0, 0, 0, 0].map((_, i)=>(
             <SwiperSlide key={i}>
@@ -228,9 +233,9 @@ function CoursesContainer({ category, tab_number, popular }) {
           ))}
         </div>
       :
-      courses.data?.data?.map((course) => (
+      classes.data?.data?.filter( c => c.category === category.name && c.isActive).map((course) => (
           <SwiperSlide key={course.courseId}>
-            <CategoryCard {...course} all={course} key={course.courseId} />
+            <CategoryCard {...course} all={course} key={course.bootcampId} />
           </SwiperSlide>
       ))
     }
@@ -376,6 +381,9 @@ export function TabsComp(){
 function CategoryCard({
   type,
   bannerImg,
+  bootcampImg,
+  title,
+  bootcampId,
   courseId,
   courseImg,
   name,
@@ -392,7 +400,7 @@ function CategoryCard({
     }else {
       localStorage.setItem("gotocourse-courseInfo", JSON.stringify(all))
       localStorage.setItem("gotocourse-courseId", all.courseId)
-      navigate(`/categories/${all.category?.trim().split(" ").join("-").toLowerCase()}/courses/${name.trim().split(" ").join("-").toLowerCase()}`)
+      navigate(`/categories/${all.category?.trim().split(" ").join("-").toLowerCase()}/courses/${title.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}`)
     }
 }
   return (
@@ -403,12 +411,7 @@ function CategoryCard({
       >
         <img
           src={
-            type === "category"
-              ? bannerImg
-              : courseImg
-              ? courseImg
-              : placeholder
-          }
+            type === "category" ? bannerImg : bootcampImg ? bootcampImg : placeholder }
           alt=""
           className={`card-img-top newCategories_image`}
         />
@@ -416,7 +419,7 @@ function CategoryCard({
           <h6
             className={`card-title newCategories_card-title text-center`}
           >
-            {name}
+            {name ? name : title}
           </h6>
           {/* <h6 className={`card-subtitle `}>{category}</h6> */}
           {/* add line-clamp to this v */}

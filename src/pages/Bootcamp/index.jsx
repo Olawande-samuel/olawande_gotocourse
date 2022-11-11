@@ -18,7 +18,7 @@ import Layout from "../../components/Layout";
 import clsx from "./styles.module.css";
 import { useLocalStorage } from "../../hooks";
 import { getDate } from "../../constants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BootcampImage from "../../images/bootcamp.webp";
 import Teacher from "../../images/bootcamps/teacher.png";
 import Cyber from "../../images/bootcamps/bootcamp_cyber.png";
@@ -450,15 +450,26 @@ export function NewBootcampDetailsComponent(){
   const userdata = getItem("gotocourse-userdata");
 
   const {studentFunctions: {wishlistCourse}, otherFunctions: { fetchBootcamps }} = useAuth()
-  const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
+  const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
+    onSuccess: res =>{
+      console.log({res})
+      if(res.data){
+        setBootcampTrainingInfo(res.data.find(item=> item.bootcampId === id))
+        console.log(res.data.find(item=> item.bootcampId === id))
+        return
+      }
+      setBootcampTrainingInfo({})
+
+    },
+    onError: err => console.error(err)
+  
+  });
+
   const navigate =  useNavigate();
 
-  useEffect(() => {
-    if (bootcampTraining) {
-      setBootcampTrainingInfo(bootcampTraining);
-    }
-    return () => console.log("BootcampDetails is unmounted");
-  }, []);
+  const {id} = useParams()
+
+
   const {
     generalState: { navHeight },
   } = useAuth();
