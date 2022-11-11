@@ -1,5 +1,7 @@
-import React from 'react'
+import { useQuery } from '@tanstack/react-query'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import { useAuth } from '../../contexts/Auth'
 import { ClassTypeComponent, TechPreCard } from './landingComponents'
 
 const Grid = styled.div`
@@ -17,12 +19,31 @@ const Grid = styled.div`
     }
     `
 const ShortCourses = () => {
+    const { otherFunctions: {fetchBootcamps }, } = useAuth();
+    const [shorts, setShorts] = useState([])
+    
+    const classes = useQuery(["fetch classes"], () => fetchBootcamps(), {
+        notifyOnChangeProps:["category", "isFetching"],
+
+        onSuccess: (res)=>{
+            if(res.data.length > 0){
+                const short = res.data.filter(item=>item.subCategory === "SHORT_COURSES");
+                const tech = res.data.filter(item=>item.subCategory === "TECH_ENTREPRENEURSHIP");
+                
+                const threeShorts = short?.slice(0, 3)
+                const threeTech = tech?.slice(0, 3)
+
+                const myContent = threeShorts.concat(threeTech)
+                setShorts(myContent)
+            }
+        }
+    })
   return (
     <ClassTypeComponent {...data}>
         <Grid>
             {
-                [...Array(6)].map(item=>(
-                    <TechPreCard />
+                shorts?.map(item => (
+                    <TechPreCard {...item} />
                 ))
             }
         </Grid>

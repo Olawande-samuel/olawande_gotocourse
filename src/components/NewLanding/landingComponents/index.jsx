@@ -1,16 +1,25 @@
-import { BsStarFill } from "react-icons/bs"
+import { BsCalendar3, BsStarFill } from "react-icons/bs"
 import  styled  from  "styled-components"
 import great from "../../../images/landing/executive.png"
 import techie from "../../../images/landing/career_courses.png"
 import webimage from "../../../images/landing/webinar.png"
+import DOMPurify from "dompurify"
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import { useState } from "react"
+import { Box } from "@mui/material"
+
 // GREAT OPPORTUNITIES
 
 const ImageCard = styled.div`
     position: relative;
+    background:#000;
 
     img {
         width:100%;
         height: 100%;
+        opacity: 0.6;
     }
 
     p {
@@ -50,6 +59,7 @@ const TechCard = styled.div`
         font-weight: 700;
         color: #272C37;
         margin-bottom: 1.7rem;
+        text-transform: capitalize;
         
     }
     
@@ -61,20 +71,20 @@ const TechCard = styled.div`
 
 
 
-        .tech_info {
-            display: flex;
-            flex-wrap:wrap;
-            margin-top: 2rem;
-            font-size: 14px;
-            color: #636363;
+    .tech_info {
+        display: flex;
+        flex-wrap:wrap;
+        margin-top: 2rem;
+        font-size: 14px;
+        color: #636363;
 
-            .divider {
-                width: 1px;
-                height: 20px;
-                background-color:#D2D6DE;
-                margin-inline: 1.5rem;
-            }
+        .divider {
+            width: 1px;
+            height: 20px;
+            background-color:#D2D6DE;
+            margin-inline: 1.5rem;
         }
+    }
     
 
     .bar {
@@ -105,25 +115,83 @@ const TechCard = styled.div`
     :nth-child(6) .bar{
         background:#F1C44A;
     }
+    button {
+        border: none;
+        outline: none;
+        padding: 3px 4px;
+        color:var(--theme-blue);
+        background: #fff;
+        margin-top: 1rem;
+    }
+
+    
 
 `
 
-export function TechPreCard({title, tag, ratings, totalRatings}) {
+export function TechPreCard({title, duration, price, packages, description, tag, ratings, totalRatings}) {
+
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+  
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+  
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+    
     return (
         <TechCard>
-            <h6>AWS Solutions Architect</h6>
+            <h6>{title}</h6>
             <div>
                 <span className="tag">
                     ADVANCED
                 </span>
                 <div className="tech_info">
-                    <span>4.30 (7495 Ratings)</span>
+                    <span>
+                        <i className="me-1"><BsCalendar3 /></i>
+                        {duration}
+                    </span>
                     <div className="divider"></div>
-                    <span>31490 Learners</span>
+                    <span>$ {packages.length > 0 ? packages[0].price : price}</span>
+                </div>
+                <div>
+                    <button aria-describedby={id} variant="contained" onClick={handleClick}>Learn more</button>
                 </div>
             </div>
             <div className="bar"></div>
+            <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                vertical: 'center',
+                horizontal: 'left',
+                }}
+            >
+                <Box sx={{ p: 2 }} className="pop_container">
+                    <header>
+                        <h5 className="fw-bold text-capitalize">{title}</h5>
+                    </header>
+                    <div>
+                        <div className="d-flex justify-content-between mb-3">
+                            <span className="fw-bold">{duration}</span>
+                            <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
+                        </div>
+                        <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
+                        <div className="pop_action">
+                            <button>Enroll Now</button>    
+                            <button>Wishlist</button>    
+                        </div>
+                    </div>
+                </Box>
+            </Popover>
         </TechCard>
+        
     )
 }
 
@@ -143,7 +211,7 @@ const ExecutiveCard = styled.div`
 const ColoredTop = styled.div`
     flex: 30%;
     height: 20%;
-    background: ${(props)=>props.colorr === "reddish" ? "radial-gradient(50% 50% at 50% 50%, #FF9195 0%, #FF5D63 66%)" : (props.colorr === "blue" ? "radial-gradient(50% 50% at 50% 50%, #00C5E3 0%, #0099C3 99%)" : "radial-gradient(50% 50% at 50% 50%, #F4C652 0%, #D2AC00 92%)")};
+    background: ${(props)=>props.colorr === 0 ? "radial-gradient(50% 50% at 50% 50%, #FF9195 0%, #FF5D63 66%)" : (props.colorr === 1 ? "radial-gradient(50% 50% at 50% 50%, #00C5E3 0%, #0099C3 99%)" : "radial-gradient(50% 50% at 50% 50%, #F4C652 0%, #D2AC00 92%)")};
     /* background: radial-gradient(50% 50% at 50% 50%, #FF9195 0%, #FF5D63 66%); */
     p{
         visibility: hidden;
@@ -176,10 +244,10 @@ const ContentBottom = styled.div`
     }
 `
 
-export function ExeEducation({title, date, courses, list, color }){
+export function ExeEducation({title, date, duration, price, packages, courses, list, color, i }){
     return (
         <ExecutiveCard>
-            <ColoredTop colorr={color}>
+            <ColoredTop colorr={i}>
                 <p>gotocourse</p>
             </ColoredTop>
             <ContentBottom>
@@ -188,12 +256,12 @@ export function ExeEducation({title, date, courses, list, color }){
                 </div>
                 <h6>{title}</h6>
                 <div className="d-flex justify-content-between my-4">
-                    <span>{date}</span>
-                    <span>{courses}</span>
+                    <span>{duration}</span>
+                    <span>$ {packages.length > 0 ? packages[0].price : price}</span>
                 </div>
                 <ul>
                     {
-                        list.map((item)=>(
+                        list?.map((item)=>(
                             <li>{item}</li>
 
                         ))
@@ -243,6 +311,10 @@ const InDemandCard = styled.div`
             font-size:12px;
             display:flex;
             justify-content: space-between;
+            
+            span:first-child {
+                text-transform: capitalize;
+            }
         }
 
         ul {
@@ -265,18 +337,18 @@ const InDemandCard = styled.div`
         }
     }
 `
-export function InDemand(){
+export function InDemand({title, bootcampImg, duration, price, packages, }){
     return (
         <InDemandCard>
             <div className="top_content">
-                <h6>Business Analytics with Excel</h6>
-                <img src={techie} alt="" />
+                <h6>{title}</h6>
+                <img src={bootcampImg} alt="" />
             </div>
             <div className="mid_content">
                 <div className="mid_stats">
-                    <span>4.6</span>
-                    <span>356k</span>
-                    <span>4hr</span>
+                    <span>{packages.length > 0 ? packages[0].title.toLowerCase() : "Cohort"}</span>
+                    <span>$ {packages.length > 0 ? packages[0].price : price}</span>
+                    <span>{duration}</span>
                 </div>
                 <ul>
                     <li>Completion certificate</li>
@@ -300,26 +372,82 @@ const UpCoursesCard = styled.div`
     border: 2.2648px solid rgba(0, 114, 239, 0.5);
     padding: clamp(0.03125rem, -0.2813rem + 1.5625vw, 1.125rem);
     border-radius: 8px;
+    
+    small {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
     h5 {
         font-weight: 800;
         color: #0072EF;
+        text-transform: capitalize;
     }
-    a {
+    button {
         color:#0072EF;
         font-size:14px;
+        border:none;
+        outline:none;
+        background:#fff;
     }
     
 `
 
-export function UpskillCourseCard(params) {
+export function UpskillCourseCard({title, description, duration, price, packages }) {
+    
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+  
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+  
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
     return (
         <UpCoursesCard>
-            <h5>Products</h5>
-            <small>Turn your content into a polished online course, subscription, or any other digital product you can imagine. </small>
-            <div>
-                <a href="/">Explore <i></i></a>
+            <h5>{title.toLowerCase()}</h5>
+            <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
+            <div className="d-flex justify-content-between my-3">
+                <small>{duration}</small>
+                <small>$ {packages.length > 0 ? packages[0].price : price}</small>
             </div>
+            <div>
+                <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>
+            </div>
+            <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                vertical: 'center',
+                horizontal: 'left',
+                }}
+            >
+                <Box sx={{ p: 2 }} className="pop_container">
+                    <header>
+                        <h5 className="fw-bold text-capitalize">{title}</h5>
+                    </header>
+                    <div>
+                        <div className="d-flex justify-content-between mb-3">
+                            <span className="fw-bold">{duration}</span>
+                            <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
+                        </div>
+                        <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
+                        <div className="pop_action">
+                            <button>Enroll Now</button>    
+                            <button>Wishlist</button>    
+                        </div>
+                    </div>
+                </Box>
+            </Popover>
         </UpCoursesCard>
     )
 }   
@@ -576,3 +704,39 @@ export function ClassTypeComponent({children, header:head, header2, subtext, bot
 }
 
 
+
+
+export default function BasicPopover() {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
+  return (
+    <div>
+      <Button aria-describedby={id} variant="contained" onClick={handleClick}>
+        Open Popover
+      </Button>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
+      </Popover>
+    </div>
+  );
+}

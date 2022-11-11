@@ -1,5 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import React from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
+import { useAuth } from '../../contexts/Auth'
 import { ClassTypeComponent, UpskillCourseCard } from './landingComponents'
 
 const Grid = styled.div`
@@ -17,12 +20,28 @@ const Grid = styled.div`
     }
     `
 const UpskillCourse = () => {
+
+    const { otherFunctions: {fetchBootcamps }, } = useAuth();
+    const [shorts, setShorts] = useState([])
+      
+    const classes = useQuery(["fetch classes"], () => fetchBootcamps(), {
+          notifyOnChangeProps:["category", "isFetching"],
+  
+          onSuccess: (res)=>{
+              if(res.data.length > 0){
+                  const uppers = res.data.filter(item=>item.subCategory === "UPSKILL_COURSES");
+                  setShorts(uppers)
+                  console.log(uppers)
+              }
+          }
+    })
+
   return (
     <ClassTypeComponent {...data}>
         <Grid>
             {
-                [...Array(6)].map(item=>(
-                    <UpskillCourseCard />
+                shorts?.filter(item=>item.isActive).slice(0, 6).map(item=>(
+                    <UpskillCourseCard {...item} />
                 ))
             }
         </Grid>

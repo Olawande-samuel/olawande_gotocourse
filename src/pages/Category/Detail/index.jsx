@@ -329,8 +329,7 @@ const Detail = ({ preview }) => {
   const queryClass = useQuery(["fetchclasses"], fetchBootcamps, {
     onSuccess: (res)=>{
       console.log(res)
-      res.data?.filter(item => item.category === courseCategory)
-      console.log()
+      setCategoryCourses(res.data?.filter(item => item.category === courseCategory))
     },
     onError: (error)=>{
       console.error(error)
@@ -351,7 +350,7 @@ const Detail = ({ preview }) => {
                 if (!success || statusCode !== 1)
                   throw new AdvancedError(message, statusCode);
                 if (res.data.length > 0) {
-                  setCategoryCourses(res.data);
+                  // setCategoryCourses(res.data);
                 }
 
             }
@@ -607,7 +606,7 @@ const Detail = ({ preview }) => {
                             }}
                           >
                             <CourseImageContainer>
-                              <img src={course.courseImg} alt={course.title} />
+                              <img src={course.bootcampImg} alt={course.title} />
                             </CourseImageContainer>
                             <CourseBody>
                               <h4>{course.title}</h4>

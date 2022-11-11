@@ -1,5 +1,8 @@
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import { useState } from "react";
 import styled from "styled-components";
+import { useAuth } from "../../contexts/Auth";
 import { ClassTypeComponent, InDemand } from "./landingComponents";
 
 const Grid = styled.div`
@@ -9,9 +12,10 @@ const Grid = styled.div`
   row-gap: 3rem;
   justify-content: space-around;
 
-  @media screen and (max-width: 660px) {
-    grid-template-columns: repeat(auto-fit, minmax(min(200px, 240px), 240px));
-    justify-content: space-around;
+  @media screen and (max-width: 930px) {
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 240px), 240px));
+    justify-content: space-evenly;
+    gap: 1rem;
   }
   /*
     @media screen and (max-width:500px){
@@ -20,12 +24,27 @@ const Grid = styled.div`
     } */
 `;
 const IndemandClasses = () => {
+  const { otherFunctions: {fetchBootcamps }, } = useAuth();
+  const [shorts, setShorts] = useState([])
+    
+  const classes = useQuery(["fetch classes"], () => fetchBootcamps(), {
+        notifyOnChangeProps:["category", "isFetching"],
+
+        onSuccess: (res)=>{
+            if(res.data.length > 0){
+                const exe = res.data.filter(item=>item.subCategory === "IN_DEMAND");
+                setShorts(exe)
+            }
+        }
+  })
   return (
     <ClassTypeComponent {...data}>
       <Grid>
-        {[...Array(3)].map((item) => (
-          <InDemand />
-        ))}
+        {
+          shorts?.filter(item=>item.isActive).slice(0,3).map((item) => (
+            <InDemand {...item} />
+          ))
+        }
       </Grid>
     </ClassTypeComponent>
   );

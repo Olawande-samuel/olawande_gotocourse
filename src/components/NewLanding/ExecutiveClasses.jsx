@@ -1,5 +1,7 @@
-import React from 'react'
+import { useQuery } from '@tanstack/react-query'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import { useAuth } from '../../contexts/Auth'
 import { ClassTypeComponent, ExeEducation } from './landingComponents'
 
 const Grid = styled.div`
@@ -19,12 +21,25 @@ const Grid = styled.div`
     } */
     `
 const ExecutiveClasses = () => {
+    const { otherFunctions: {fetchBootcamps }, } = useAuth();
+    const [shorts, setShorts] = useState([])
+    
+    const classes = useQuery(["fetch classes"], () => fetchBootcamps(), {
+        notifyOnChangeProps:["category", "isFetching"],
+
+        onSuccess: (res)=>{
+            if(res.data.length > 0){
+                const exe = res.data.filter(item=>item.subCategory === "EXECUTIVE_COURSES");
+                setShorts(exe)
+            }
+        }
+    })
   return (
     <ClassTypeComponent {...data}>
         <Grid>
             {
-                data.content.map(item=>(
-                    <ExeEducation {...item} />
+                shorts?.slice(0, 3).map((item,i)=>(
+                    <ExeEducation {...item} i={i} />
                 ))
             }
         </Grid>

@@ -94,7 +94,6 @@ export function CategoryDetails({}) {
               categoryId: data.categoryId,
             };
           });
-          
         }
       } catch (err) {
         toast.error(err.message, {
@@ -688,7 +687,7 @@ export function CreateCourseCategory() {
         importance: formstate.name.trim().toUpperCase(),
         nicheItems: [...nichelists],
         careerList: [...careerlists],
-        description: bio ? bio : formstate.description
+        description: bio ? bio : formstate.description,
       };
       const res = edit
         ? await updateCategory(userdata?.token, formstate.categoryId, data)
@@ -697,7 +696,7 @@ export function CreateCourseCategory() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         if (res?.data) {
-          const { data } = res; 
+          const { data } = res;
           toast.success(message, {
             position: "top-right",
             autoClose: 4000,
@@ -1088,7 +1087,7 @@ export function ApproveStudent() {
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const {
-    adminStudentFunctions: {  verify,  },
+    adminStudentFunctions: { verify },
     kycFunctions: { getAStudentKYCById },
     generalState,
     setGeneralState,
@@ -1215,7 +1214,7 @@ export function ApproveStudent() {
       }
     } catch (error) {
       toast.error("No KYC found");
-      console.error(error)
+      console.error(error);
     } finally {
       setGeneralState((old) => {
         return {
@@ -1304,7 +1303,9 @@ export function ApproveStudent() {
             </div>
             <button
               className="button button-lg log_btn w-50 mt-3"
-              style={{ backgroundColor: data?.isVerified && "var(--theme-orange" }}
+              style={{
+                backgroundColor: data?.isVerified && "var(--theme-orange",
+              }}
               type="submit"
               onClick={(e) => handleVerification(e, data?.userId)}
             >
@@ -2951,7 +2952,11 @@ export function CourseDetails({}) {
               >
                 Description
               </label>
-              <div className="border rounded p-2" style={{background: "#e9ecef"}}  dangerouslySetInnerHTML={{__html: formstate.description}} />
+              <div
+                className="border rounded p-2"
+                style={{ background: "#e9ecef" }}
+                dangerouslySetInnerHTML={{ __html: formstate.description }}
+              />
             </div>
             <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
@@ -3563,7 +3568,6 @@ export function AdminClassConsole() {
 
 // CREATEBOOTCAMP COMPONENT
 export function CreateBootcamp() {
-
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const flag = useRef(false);
@@ -3595,8 +3599,8 @@ export function CreateBootcamp() {
     type: "",
     instructor: "",
     syllabus: [],
-    careerList:[],
-    packages:[]
+    careerList: [],
+    packages: [],
   });
 
   const [loading, setLoading] = useState(false);
@@ -3622,7 +3626,7 @@ export function CreateBootcamp() {
 
             delete found.instructorName;
             setFormstate({ ...formstate, ...found });
-            setBio(found.description)
+            setBio(found.description);
           } else {
             throw new AdvancedError(message, statusCode);
           }
@@ -3697,7 +3701,10 @@ export function CreateBootcamp() {
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
-    const formData = { ...formstate, description: bio ? bio : formstate.description };
+    const formData = {
+      ...formstate,
+      description: bio ? bio : formstate.description,
+    };
     try {
       if (
         formData.description === "" ||
@@ -3731,9 +3738,9 @@ export function CreateBootcamp() {
   const [previewImage, setPreviewImage] = useState(false);
   const { syllabuses, addtoSyllabus, setSyllabusses } = useSyllabus();
   const [showCareerModal, setShowCareerModal] = useState(false);
-    const [careerlist, setCareerlist] = useState({
-      name: "",
-    });
+  const [careerlist, setCareerlist] = useState({
+    name: "",
+  });
 
   const openModal = () => {
     setOpenSyllabus(true);
@@ -3742,7 +3749,7 @@ export function CreateBootcamp() {
     setOpen((_) => true);
   }
 
-  console.log({formstate})
+  console.log({ formstate });
   function deleteSyllabus(e) {
     let newSyllabusArr = formstate.syllabus.filter(
       (item, index) => item.title + index !== e
@@ -3767,8 +3774,11 @@ export function CreateBootcamp() {
   };
   function updateCareerHandler(e) {
     if (careerlist.name.trim() !== "" || careerlist.description.trim() !== "") {
-      setFormstate({...formstate, careerList: [...formstate.careerList, careerlist]});
-      
+      setFormstate({
+        ...formstate,
+        careerList: [...formstate.careerList, careerlist],
+      });
+
       setCareerlist((_) => {
         return {
           name: "",
@@ -3809,15 +3819,15 @@ export function CreateBootcamp() {
   }
 
   const [openPackage, setOpenPackage] = useState(false);
-  // PACKAGES 
-  function openPackageModal(){
-    setOpenPackage(true)
+  // PACKAGES
+  function openPackageModal() {
+    setOpenPackage(true);
   }
-  function handleClosePackage(){
-    setOpenPackage(false)
+  function handleClosePackage() {
+    setOpenPackage(false);
   }
 
-  console.log({formstate})
+  console.log({ formstate });
   return (
     <Admin header={location.search ? "Edit Class" : "Create Class"}>
       {loader && <Loader />}
@@ -3896,11 +3906,13 @@ export function CreateBootcamp() {
                 className="form-select generic_input"
               >
                 <option value="">Choose a Subcategory</option>
-                <option  value="UPSKILL_COURSES">Upskill Courses</option>
-                <option  value="IN_DEMAND">In Demand Career Courses</option>
-                <option  value="EXECUTIVE_COURSES">Executive Courses</option>
-                <option  value="SHORT_COURSES">Short Courses</option>
-                <option  value="TECH_ENTREPRENEURSHIP">Tech entrepreneurship courses</option>
+                <option value="UPSKILL_COURSES">Upskill Courses</option>
+                <option value="IN_DEMAND">In Demand Career Courses</option>
+                <option value="EXECUTIVE_COURSES">Executive Courses</option>
+                <option value="SHORT_COURSES">Short Courses</option>
+                <option value="TECH_ENTREPRENEURSHIP">
+                  Tech entrepreneurship courses
+                </option>
               </select>
             </div>
             <Input
@@ -3920,62 +3932,67 @@ export function CreateBootcamp() {
                 className="form-select generic_input"
               >
                 <option value="">Choose price type</option>
-                <option  value="FLAT">Flat</option>
-                <option  value="PACKAGE">Package</option>
-                
+                <option value="FLAT">Flat</option>
+                <option value="PACKAGE">Package</option>
               </select>
             </div>
-            { formstate.type === "FLAT" ?
-            <Input
-              label="Price"
-              name="price"
-              type="number"
-              handleChange={changeHandler}
-              value={formstate.price}
-            />
-            :
-            (formstate.type === "PACKAGE" ?
-            <div className={clsx.form_group}>
+            {formstate.type === "FLAT" ? (
+              <Input
+                label="Price"
+                name="price"
+                type="number"
+                handleChange={changeHandler}
+                value={formstate.price}
+              />
+            ) : formstate.type === "PACKAGE" ? (
+              <div className={clsx.form_group}>
                 <label htmlFor={"package"} className="form-label generic_label">
                   Packages
                 </label>
                 {formstate.packages?.length > 0 ? (
                   formstate.packages?.map((item, index) => (
-                     <div className={clsx.syllabus_container}>
-                        <h5>{changeConstants(item.title)}</h5>
-                        {<p>{item.price}</p>}
-                        <p>{item.description}</p>
-                        {
-                          location.search && 
-                          <p>
-                            <i className="text-danger" style={{cursor:"pointer"}} onClick={()=>deletePackage(item.title + index)}>
-                              <BiTrash />
-                            </i>
-                          </p>
-                        }
-                      </div>
+                    <div className={clsx.syllabus_container}>
+                      <h5>{changeConstants(item.title)}</h5>
+                      {<p>{item.price}</p>}
+                      <p>{item.description}</p>
+                      {location.search && (
+                        <p>
+                          <i
+                            className="text-danger"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => deletePackage(item.title + index)}
+                          >
+                            <BiTrash />
+                          </i>
+                        </p>
+                      )}
+                    </div>
                   ))
                 ) : (
                   <h6>No Package available</h6>
                 )}
                 <button
-                className="btn btn-primary my-3"
-                style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
-                type="button"
-                onClick={openPackageModal}
-              >
-                Add Package
-              </button>
-              <AddPackage
-                openPackage={openPackage}
-                addPackage={setFormstate}
-                list={formstate}
-                setOpen={setOpen}
-                handleClosePackage={handleClosePackage}
-              />
+                  className="btn btn-primary my-3"
+                  style={{
+                    backgroundColor: "var(--theme-blue)",
+                    fontSize: "14px",
+                  }}
+                  type="button"
+                  onClick={openPackageModal}
+                >
+                  Add Package
+                </button>
+                <AddPackage
+                  openPackage={openPackage}
+                  addPackage={setFormstate}
+                  list={formstate}
+                  setOpen={setOpen}
+                  handleClosePackage={handleClosePackage}
+                />
               </div>
-             : "")
-              }
+            ) : (
+              ""
+            )}
             <div className="d-flex flex-wrap">
               <div className="col-sm-6 col-md-3 pe-2 ">
                 <Input
@@ -4013,14 +4030,15 @@ export function CreateBootcamp() {
                   handleChange={changeHandler}
                 />
               </div>
-            </div>  
+            </div>
             {/* <div className={clsx.editor_container}>
               <ReactQuill theme="snow" value={formstate?.description} onChange={setBio} />
             </div> */}
-            <Editor 
-             initialState={formstate.description} 
-             title="Description" 
-             setBio={setBio} />
+            <Editor
+              initialState={formstate.description}
+              title="Description"
+              setBio={setBio}
+            />
 
             <div className={clsx.form_group}>
               <label htmlFor={"instructor"}>Instructor</label>
@@ -4102,7 +4120,7 @@ export function CreateBootcamp() {
             </div>
             <button
               type="button"
-              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
+              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
               className={`btn btn-primary mb-3 ${clsx.addcareer_button}`}
               onClick={(e) => setShowCareerModal((_) => true)}
             >
@@ -4115,9 +4133,7 @@ export function CreateBootcamp() {
               handleChange={careerChangeHandler}
               updateCareer={updateCareerHandler}
             />
-            
-  
-              
+
             {/* <div className={clsx.form_group}>
               <label htmlFor={"package"}>Type</label>
               <select
@@ -4206,8 +4222,6 @@ export function BootcampRow({
     </tr>
   );
 }
-
-
 
 // FEES COMPONENT
 export function Fees() {
@@ -4457,7 +4471,7 @@ export function Earnings() {
   let userdata = getItem(KEY);
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([]);
-  const [earnings, setEarnings]= useState([])
+  const [earnings, setEarnings] = useState([]);
   const {
     generalState,
     setGeneralState,
@@ -4472,22 +4486,29 @@ export function Earnings() {
     (async () => {
       try {
         setLoading((_) => true);
-        let res = await Promise.all([fetchEarnings(userdata?.token), fetchWithdrawals(userdata?.token)]);
-          console.log({res})
-          const [earnings, withdrawals] = res
-          const { success, message, statusCode } = earnings;
-          if (!success) throw new AdvancedError(message, statusCode);
-          else {
-            let { data } = earnings;
-            console.log(data);
-            setEarnings(data)
-          }
-          const { success:WSuccess, message:WMessage, statusCode:WStatusCode } = withdrawals;
-          if (!WSuccess) throw new AdvancedError(WMessage, WStatusCode);
-          else {
-            let { data:WData } = withdrawals;
-            setRows(WData)
-          }
+        let res = await Promise.all([
+          fetchEarnings(userdata?.token),
+          fetchWithdrawals(userdata?.token),
+        ]);
+        console.log({ res });
+        const [earnings, withdrawals] = res;
+        const { success, message, statusCode } = earnings;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          let { data } = earnings;
+          console.log(data);
+          setEarnings(data);
+        }
+        const {
+          success: WSuccess,
+          message: WMessage,
+          statusCode: WStatusCode,
+        } = withdrawals;
+        if (!WSuccess) throw new AdvancedError(WMessage, WStatusCode);
+        else {
+          let { data: WData } = withdrawals;
+          setRows(WData);
+        }
       } catch (err) {
         toast.error(err.message);
       } finally {
@@ -4495,10 +4516,8 @@ export function Earnings() {
       }
     })();
 
-    
     flag.current = true;
   }, []);
-
 
   return (
     <Admin header={"Earnings"}>
