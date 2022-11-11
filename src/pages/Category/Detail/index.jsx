@@ -227,7 +227,7 @@ const DetailCourseContainer = styled.div`
         font-weight: 700;
         font-size: 32px;
         text-align: center;
-        margin-bottom; 20px;
+        margin-bottom: 10px;
     }
 
     & > p {
@@ -256,13 +256,18 @@ const DetailCourses = styled.div`
   width: 100%;
   display: flex;
   margin-bottom: 30px;
+  
+  div {
+    width: 100%;
+  }
 `;
 
 const CourseCard = styled.div`
   padding: 5px;
   // margin: 15px;
   cursor: pointer;
-  // width: 300px;
+   /* width: 300px; */
+
 `;
 
 const CourseImageContainer = styled.div`
@@ -570,7 +575,7 @@ const Detail = ({ preview }) => {
                 <Swiper
                   // install Swiper modules
                   modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-                  loop={true}
+                  loop={false}
                   speed={1500}
                   autoplay={{ delay: 2500 }}
                   spaceBetween={0}
@@ -597,8 +602,9 @@ const Detail = ({ preview }) => {
                     },
                   }}
                 >
-                  {categoryCourses.length
-                    ? categoryCourses.map((course, i) => (
+                  {
+                  categoryCourses.length
+                    ? categoryCourses.filter(item => item.isActive).map((course, i) => (
                         <SwiperSlide key={i}>
                           <CourseCard
                             onClick={() => {
@@ -615,7 +621,8 @@ const Detail = ({ preview }) => {
                           </CourseCard>
                         </SwiperSlide>
                       ))
-                    : Array(4)
+                    : 
+                    Array(4)
                         .fill(undefined)
                         .map((_, i) => (
                           <SwiperSlide key={i}>
