@@ -51,6 +51,11 @@ import critical_skills from "../../images/landing/critical_skills.webp";
 import life_change from "../../images/landing/life_change.webp";
 import tell from "../../images/landing/mentor_landing.webp";
 import newMen from "../../images/landing/newMen.png";
+
+import afford from "../../images/landing/affordable.png";
+import critical from "../../images/landing/critical.png";
+import interactive from "../../images/landing/interactive.png";
+
 import GreatOpportunities from "./GreatOpportunities";
 import ShortCourses from "./ShortCourses";
 import ExecutiveClasses from "./ExecutiveClasses";
@@ -59,6 +64,7 @@ import UpskillCourse from "./UpskillCourse";
 import VirtualTraining from "./VirtualTraining";
 import LiveWebinars from "./LiveWebinars";
 import Success from "./Success";
+import { useEffect } from "react";
 
 const NewLanding = () => {
   return (
@@ -192,10 +198,71 @@ function Gif() {
 }
 
 function Hero() {
-  const {
-    generalState: { navHeight },
-    studentFunctions: { googleSignup },
-  } = useAuth();
+  const COOKEY = "gotocourse_landing"
+  const [heroValue, setHeroValue] = useState(0)
+
+  function setCookie(cname, cvalue) {
+    document.cookie = `${cname}=${cvalue}; path=/`;
+  }
+
+  function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  function changeImage(cookieValue) {
+
+    switch (cookieValue) {
+      case "number1":
+          setHeroValue(1)
+          setCookie(COOKEY, "number2")
+
+        break;
+      case "number2":
+        setHeroValue(2)
+        setCookie(COOKEY, "number3")
+
+        break;
+      case "number3":
+        setHeroValue(0)
+        setCookie(COOKEY, "number1")
+
+        break;
+      default:
+        setHeroValue(0)
+        break;
+    }
+  }
+  let getter = getCookie(COOKEY)
+  useEffect(()=>{
+    console.log({getter})
+    const interval = setInterval(() => {
+      console.log('This will run every 20 mins!');
+        if(getter !== ""){
+          changeImage(getter)
+    
+        } else {
+          setCookie(COOKEY, "number1")
+        }
+    }, 20*60*1000);
+
+    return () => clearInterval(interval);
+  },[getter])
+
+  console.log({heroValue})
+
+  const { generalState: { navHeight }, studentFunctions: { googleSignup }, } = useAuth();
   const [overlay, setOverlay] = useState(false);
   const [logtype, setLogType] = useState(null);
 
@@ -239,38 +306,37 @@ function Hero() {
       title: "Get critical",
       title2: "career skills",
       subtitle:
-        "Start, switch, or advance your career with 50+ courses, Professional Certificates from top industry experts and leading bootcamps",
+        "We are one of the world’s most comprehensive online learning platform putting learners' needs ahead. Learning on Go2course transforms how you think and what you can do, and translates directly into the real world.",
       social: true,
       acctype: "student",
-      img: critical_skills,
+      img: critical,
       color: "#F75C4E",
       link: "/signup",
-      link_btn: "Register for free",
+      link_btn: "Get Started",
     },
     {
       id: 3,
-      title: "Deliver life-changing",
-      title2: "teaching experiences",
+      title: "Engaging & Fully Interactive",
+      title2: "online Lectures",
       subtitle:
-        "We’ve got the solution: Incredible tools for managing and organizing  world-class training and development programs all on Gotocourse.",
+        "We provide relevant knowledge and teach skills needed in ever changing world through a highly interactive and engaging learning system that is flexible enough to accommodate the schedule of individual students.",
       social: true,
       acctype: "teacher",
-      img: life_change,
+      img: interactive,
       color: "#66BFE6",
-      link: "/become-a-teacher",
-      link_btn: "Become a teacher",
+      link: "/sign-up",
+      link_btn: "Get Started",
     },
     {
       id: 4,
-      title: "Change lives while you",
-      title2: "mentor on Gotocourse",
-      subtitle:
-        "Streamline mentoring experience for you and your mentees, because everything’s in one place and accessible through a single link",
+      title: "Over 300 Courses for your career",
+      title2: "growth at an affordable cost!",
+      subtitle: "Whether you are starting newly or upgrading your skills this is the best place to learn. No need of without putting your life on hold. You can study anywhere, everywhere and at any time, Gotocourse is your ideal destination of growing your tech and business skills.",
       social: true,
       acctype: "affiliate",
-      img: newMen,
+      img: afford,
       color: "#A1B0FF",
-      link: "/lounge",
+      link: "/sign-up",
       link_btn: "Get started now",
     },
   ];
@@ -279,46 +345,14 @@ function Hero() {
       className="newHero d-flex position-relative"
       style={{ marginTop: navHeight }}
     >
-      <Swiper
-        // install Swiper modules
-        modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-        loop={true}
-        speed={1500}
-        autoplay={{ delay: 5000 }}
-        spaceBetween={0}
-        slidesPerView={1}
-        // navigation
-        pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
-        breakpoints={{
-          // when window width is >= 320px
-          320: {
-            slidesPerView: 1,
-            spaceBetween: 0,
-          },
-          // when window width is >= 640px
-          575: {
-            slidesPerView: 1,
-          },
-          700: {
-            slidesPerView: 1,
-          },
-          1024: {
-            slidesPerView: 1,
-          },
-        }}
-      >
-        {heroData.map((item) => (
-          <SwiperSlide key={item.id}>
+     
             <HeroContent
               overlay={overlay}
               setOverlay={setOverlay}
               logtype={logtype}
-              {...item}
+              {...heroData[heroValue]}
             />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+         
     </section>
   );
 }

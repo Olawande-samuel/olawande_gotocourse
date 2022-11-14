@@ -9,6 +9,9 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useState } from "react"
 import { Box } from "@mui/material"
+import { useEffect } from "react"
+import { shortPopUpContent } from "../ShortCourses"
+import { inDemandPopUpContent } from "../IndemandClasses"
 
 // GREAT OPPORTUNITIES
 
@@ -143,6 +146,12 @@ export function TechPreCard({title, duration, price, packages, description, tag,
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
     
+
+    useEffect(()=>{
+        const ownListItem = shortPopUpContent.filter(item=> item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
+        console.log({ownListItem})
+    },[title])
+
     return (
         <TechCard>
             <h6>{title}</h6>
@@ -205,73 +214,138 @@ const ExecutiveCard = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
-    
-`
+    box-shadow: -10px 159px 64px rgba(0, 0, 0, 0.01), -6px 89px 54px rgba(0, 0, 0, 0.05), -3px 40px 40px rgba(0, 0, 0, 0.09), -1px 10px 22px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    /* transition: all .2s ease-in-out;
 
-const ColoredTop = styled.div`
-    flex: 30%;
-    height: 20%;
-    background: ${(props)=>props.colorr === 0 ? "radial-gradient(50% 50% at 50% 50%, #FF9195 0%, #FF5D63 66%)" : (props.colorr === 1 ? "radial-gradient(50% 50% at 50% 50%, #00C5E3 0%, #0099C3 99%)" : "radial-gradient(50% 50% at 50% 50%, #F4C652 0%, #D2AC00 92%)")};
-    /* background: radial-gradient(50% 50% at 50% 50%, #FF9195 0%, #FF5D63 66%); */
-    p{
-        visibility: hidden;
+    &:hover {
+        transform: scale(1.1)
+    } */
+    img {
+        height: 150px;
+        flex: 40%;
+        /* height: 30%; */
+        max-width:100%;
     }
-`
-const ContentBottom = styled.div`
-    position: relative;
-    flex: 70%;
-    height: 80%;
-    font-size: 14px;
-    padding:clamp(0.625rem, 0.5179rem + 0.5357vw, 1rem);
-    padding-top:2rem;
-    padding-right: 2rem;
-
+    > div {
+        flex: 60%;
+        /* height: 70%; */
+    }
     h6 {
-        font-size:1rem;
         font-weight: 700;
+        margin-bottom: .4rem;
+        text-transform: capitalize;
+        transition: all .2s ease-in-out;
+
+        &:hover {
+            color: var(--theme-orange)
+        }
     }
-    .star {
-        position:absolute;
-        left: 10%;
-        top: -20px;
-        background: #fff;
-        height: 40px;
-        width: 40px;
-        border-radius:50%;
+    .description{
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        font-size: 12.5px;
+    }
+    .exe_content {
+        padding: 2rem;
+        padding-bottom: .8rem;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        flex-direction: column;
+        justify-content: space-between;
+        
+        span {
+            font-size: 13px;
+        }
     }
 `
 
-export function ExeEducation({title, date, duration, price, packages, courses, list, color, i }){
-    return (
-        <ExecutiveCard>
-            <ColoredTop colorr={i}>
-                <p>gotocourse</p>
-            </ColoredTop>
-            <ContentBottom>
-                <div className="star">
-                    <BsStarFill color="#FFCE31" size="1.5rem" />
-                </div>
-                <h6>{title}</h6>
-                <div className="d-flex justify-content-between my-4">
-                    <span>{duration}</span>
-                    <span>$ {packages.length > 0 ? packages[0].price : price}</span>
-                </div>
-                <ul>
-                    {
-                        list?.map((item)=>(
-                            <li>{item}</li>
 
-                        ))
-                    }
-                </ul>
-            </ContentBottom>
+
+export function ExeEducation({title, date, bootcampImg, description, duration, price, packages, courses, list, color, i }){
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+  
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+  
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
+
+    return (
+        <ExecutiveCard >
+            <img src={bootcampImg} alt="" className="exe_image" />
+            <div className="exe_content">
+                <div className="">
+                    <h6 aria-describedby={id}  onClick={handleClick}>{title}</h6>
+                    <div className="description">
+                        <p dangerouslySetInnerHTML={{__html: description}} />
+
+                    </div>
+                </div>
+                <div className="d-flex justify-content-between align-items-center">
+                <span>$ {packages.length > 0 ? packages[0].price : price}</span>
+                    <span>{duration}</span>
+                </div>
+            </div>
+            <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                vertical: 'center',
+                horizontal: 'left',
+                }}
+            >
+                <Box sx={{ p: 2 }} className="pop_container">
+                    <header>
+                        <h5 className="fw-bold text-capitalize">{title}</h5>
+                    </header>
+                    <div>
+                        <div className="d-flex justify-content-between mb-3">
+                            <span className="fw-bold">{duration}</span>
+                            <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
+                        </div>
+                        <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
+                        <div className="pop_action">
+                            <button>Enroll Now</button>    
+                            <button>Wishlist</button>    
+                        </div>
+                    </div>
+                </Box>
+            </Popover>
         </ExecutiveCard>
     )
 }
 
+{/* <ColoredTop colorr={i}>
+    <p>gotocourse</p>
+</ColoredTop>
+<ContentBottom>
+    <div className="star">
+        <BsStarFill color="#FFCE31" size="1.5rem" />
+    </div>
+    <h6>{title}</h6>
+    <div className="d-flex justify-content-between my-4">
+        <span>{duration}</span>
+        <span>$ {packages.length > 0 ? packages[0].price : price}</span>
+    </div>
+    <ul>
+        {
+            list?.map((item)=>(
+                <li>{item}</li>
+
+            ))
+        }
+    </ul>
+</ContentBottom> */}
 
 // INDEMAND
 
@@ -337,7 +411,31 @@ const InDemandCard = styled.div`
         }
     }
 `
-export function InDemand({title, bootcampImg, duration, price, packages, }){
+export function InDemand({title, bootcampImg, duration, price, packages, description}){
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [data, setData] = useState({});
+
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+  
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+  
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+    
+
+    useEffect(()=>{
+        const ownListItem = inDemandPopUpContent.filter(item=> item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
+
+        if(ownListItem.length > 0){
+            setData(ownListItem[0])
+        }
+
+    },[title])
+    
     return (
         <InDemandCard>
             <div className="top_content">
@@ -356,10 +454,46 @@ export function InDemand({title, bootcampImg, duration, price, packages, }){
                 </ul>
             </div>
             <div className="cta">
-                <span>View course</span>
+                <span aria-describedby={id} variant="contained" onClick={handleClick}>View course</span>
                 <div className="ct_bar"></div>
                 <span>Start Learning</span>
             </div>
+            <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                vertical: 'center',
+                horizontal: 'left',
+                }}
+            >
+                <Box sx={{ p: 2 }} className="pop_container">
+                    <header>
+                        <h5 className="fw-bold text-capitalize">{title}</h5>
+                    </header>
+                    <div>
+                        <div className="d-flex justify-content-between mb-3">
+                            <span className="fw-bold">{duration}</span>
+                            <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
+                        </div>
+                        <p>{data.title}</p>
+                        <ul>
+                            {
+                                data?.list?.map(li=>(
+                                    <li>{li}</li>
+
+                                ))
+                            }
+                        </ul>
+                        {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+                        <div className="pop_action">
+                            <button>Enroll Now</button>    
+                            <button>Wishlist</button>    
+                        </div>
+                    </div>
+                </Box>
+            </Popover>
         </InDemandCard>
     )
 }
@@ -369,10 +503,20 @@ export function InDemand({title, bootcampImg, duration, price, packages, }){
 // UPSKILL COURSES
 
 const UpCoursesCard = styled.div`
-    border: 2.2648px solid rgba(0, 114, 239, 0.5);
+    /* border: 2.2648px solid rgba(0, 114, 239, 0.5);
     padding: clamp(0.03125rem, -0.2813rem + 1.5625vw, 1.125rem);
-    border-radius: 8px;
+    border-radius: 8px; */
+    display: flex;
+    flex-direction:column;
+    box-shadow: -10px 159px 64px rgba(0, 0, 0, 0.01), -6px 90px 54px rgba(0, 0, 0, 0.05), -3px 40px 40px rgba(0, 0, 0, 0.09), -1px 10px 22px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
     
+    img {
+        height: 130px;
+        max-width: 100%;
+        object-fit:cover;
+        object-position: center;
+        border: 1.5px solid #FFCE31;
+    }
     small {
         display: -webkit-box;
         -webkit-line-clamp: 3;
@@ -383,8 +527,10 @@ const UpCoursesCard = styled.div`
 
     h5 {
         font-weight: 800;
-        color: #0072EF;
         text-transform: capitalize;
+        font-size: 16px;
+        margin-block: .7rem 3rem;
+
     }
     button {
         color:#0072EF;
@@ -393,10 +539,13 @@ const UpCoursesCard = styled.div`
         outline:none;
         background:#fff;
     }
+    .up_content {
+        padding-inline: 1.5rem;
+    }
     
 `
 
-export function UpskillCourseCard({title, description, duration, price, packages }) {
+export function UpskillCourseCard({title, bootcampImg, description, duration, price, packages }) {
     
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -412,14 +561,17 @@ export function UpskillCourseCard({title, description, duration, price, packages
     const id = open ? 'simple-popover' : undefined;
     return (
         <UpCoursesCard>
-            <h5>{title.toLowerCase()}</h5>
-            <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
-            <div className="d-flex justify-content-between my-3">
-                <small>{duration}</small>
-                <small>$ {packages.length > 0 ? packages[0].price : price}</small>
-            </div>
-            <div>
-                <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>
+            <img src={bootcampImg} alt="" />
+            <div className="up_content">
+                <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title.toLowerCase()}</h5>
+                {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+                <div className="d-flex justify-content-between my-3">
+                    <small>{duration}</small>
+                    <small>$ {packages.length > 0 ? packages[0].price : price}</small>
+                </div>
+                {/* <div>
+                    <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>
+                </div> */}
             </div>
             <Popover
                 id={id}

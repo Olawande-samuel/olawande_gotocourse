@@ -6,7 +6,8 @@ import { ClassTypeComponent, ExeEducation } from './landingComponents'
 
 const Grid = styled.div`
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(250px, 300px), 300px));
+    justify-content: space-around;
     gap: 1.5rem;
     row-gap:3rem;
 
@@ -38,7 +39,7 @@ const ExecutiveClasses = () => {
     <ClassTypeComponent {...data}>
         <Grid>
             {
-                shorts?.slice(0, 3).map((item,i)=>(
+                shorts?.filter(item => item.isActive).slice(0, 3).map((item,i)=>(
                     <ExeEducation {...item} i={i} />
                 ))
             }
@@ -89,3 +90,5 @@ const data = {
     bottomTitle:"View  more executive education > "
   }
 export default ExecutiveClasses
+
+

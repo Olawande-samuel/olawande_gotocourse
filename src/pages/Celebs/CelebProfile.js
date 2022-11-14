@@ -21,7 +21,7 @@ const MainContainer = styled.div`
 background: #191046;
 min-height: 200vh;
 color: #FFFFFF;
-font-family: 'Inter', sans-serif;
+font-family: 'Raleway', sans-serif;
 font-style: normal;
 font-weight: 400;
 

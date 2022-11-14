@@ -7,17 +7,19 @@ import { ClassTypeComponent, UpskillCourseCard } from './landingComponents'
 
 const Grid = styled.div`
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
     gap: 1.5rem;
     row-gap:3rem;
+    justify-content:space-around;
+    
 
-    @media screen and (max-width:710px){
+    /* @media screen and (max-width:710px){
         grid-template-columns: repeat(2, 1fr);
     }
     @media screen and (max-width:500px){
         grid-template-columns: min(100%, 380px);
         justify-content:center;
-    }
+    } */
     `
 const UpskillCourse = () => {
 
@@ -31,7 +33,7 @@ const UpskillCourse = () => {
               if(res.data.length > 0){
                   const uppers = res.data.filter(item=>item.subCategory === "UPSKILL_COURSES");
                   setShorts(uppers)
-                  console.log(uppers)
+                  console.log({uppers})
               }
           }
     })
@@ -40,7 +42,7 @@ const UpskillCourse = () => {
     <ClassTypeComponent {...data}>
         <Grid>
             {
-                shorts?.filter(item=>item.isActive).slice(0, 6).map(item=>(
+                shorts?.filter(item=>item.isActive).slice(0, 4).map(item=>(
                     <UpskillCourseCard {...item} />
                 ))
             }

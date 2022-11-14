@@ -42,7 +42,7 @@ const ShortCourses = () => {
     <ClassTypeComponent {...data}>
         <Grid>
             {
-                shorts?.map(item => (
+                shorts?.filter(item => item.isActive).map(item => (
                     <TechPreCard {...item} />
                 ))
             }
@@ -58,3 +58,350 @@ const data = {
     bottomTitle:"View  more short courses  & Tech entreprenuership education > "
   }
 export default ShortCourses
+
+
+export const shortPopUpContent = [ 
+
+    {
+        ownedBy:"Introduction Content Marketing",
+        title: "Learn the art of crafting contents to directly interact with consumers withour any intermediaries.",
+        list: ["You will learn how content marketing startegy works for any business.","You will learn actionable steps towards growing business with contents.", "You will be able to generate leads for businesses successfully." ]
+    },
+    {
+        ownedBy:"Use Canva to Create Desktop and Mobile-friendly web pages",
+        title:"Learn how to create mobile-friendly web pages with Canva to reach the growing number of mobile users.",
+        list: [
+            "You will be able to design desktop and mobile-friendly web pages and prepare them for publishing.",
+            "You will learn how to build single-page, multiple-page web pages and landing pages using Canva URLs or URL shorteners.",
+            "You will be a professional Canva navigator."
+        ]
+    },
+    {
+        ownedBy:"Brand Management: Aligning Business, Brand and Behavior",
+        title: "Master brand management by establishing and maintaining a credible image of a brand, overseeing brand sales, and building a brand reputation!",
+        list: ["You will learn what is branding and how to develop your brand strategy",
+        "You will learn how to build a brand identity that aligns with the company's goals.",
+        "You will be a professional and creative brand manager."]
+    },
+    {
+        ownedBy:"Social Media Management & Marketing",
+        title:"Master how to build and execute online marketing strategy for business, and how to improve your website’s performance using SEO.",
+        list:[ "You will master the tools and tactics to reach your target audience online, drive more traffic to your website and convert those visitors into leads.", "You will learn how to build an effective landing page that converts visitors into leads.",
+        ]
+    },
+    {
+        ownedBy:"Establishing Product market fit",
+        title:"Master the art of marketing products to customers buying, utilizing, and recommending the product in sufficient numbers to support the product's expansion and profitability.",
+        list:[
+            "You will learn the key elements of a product marketing plan, the importance of knowing your customers, and how o reach them.  and more.",
+            "You will learn how to develop promotional strategies and tactics, and create the right messages for the right audiences.",
+            "You will also master how to use data to create a marketing strategy, pricing strategies, and sales promotions.",
+        ]
+    },
+    {
+        ownedBy:"Graphic design for Freelancing",
+        title:"Master how to tell a story with your visuals. Creating a visual representation of designs that conveys meaning and feeling, making your clients glad they choose you!",
+        list:[
+            "You will learn how to use the elements of design to create better visual storytelling.",
+            "You will learn how to draw, shade and render and sort, develop your own style and signature.",
+            "You will become a brilliant graphics designer.",
+        ]
+    },
+    {
+        id:8,
+        ownedBy:"Agile Project Development",
+        title:"Master the continual approach to software development projects by optimizing responses and ensuring they are acted upon.",
+        list:[
+            "You will master how to develop a model for continual improvement in software development projects.",
+            "You will absorb how to identify and mitigate risks in your project through the use of data",
+            "You will learn the best practices for managing projects from beginning to end.",
+        ]
+    },
+    {
+        id:9,
+        ownedBy:"Introduction to Risk management",
+        title:"Master the skill of balancing between taking and reducing the inevitable threats of any organization.",
+        list:[
+            "You will learn how to deal with the most common threats you will encounter in an organization and understand the values of reducing threats in an organization",
+            "You will master how to lead and manage a team to design a balanced strategy.",
+        ]
+    },
+    {
+        id:10,
+        ownedBy:" Mastering Affiliate Marketing",
+        title:"Master the concept of advertising by the practice of paying outside publications to direct customers to a company's goods and services.",
+        list:[
+            "What you will learn in this course",
+            
+            "You will learn how to build an audience and create advertising campaigns.",
+            "You will learn the definition of advertising, the different types of advertising, and why companies use it, and choose the right platforms for your advertising.",
+            "You will also learn how to create effective ads that meet your goals. ",
+        ]
+    },
+    {
+        id:11,
+        ownedBy:"Cyber Threat Intelligence",
+        title:"Master the art of analyzing data using tools and techniques to produce insightful data about current or emerging threats aimed at the firm to assist reduce risks.",
+        list:[
+            
+            "You will learn how to analyze data using tools and techniques to produce insightful data about current or emerging threats aimed at the firm",
+            "You will learn how to produce reports that contain information about threats and risks so that they can be shared with others",
+            "You will learn how to use data mining techniques for finding patterns in large amounts of information.",
+        ]
+    },
+    {
+        id:12,
+        ownedBy:"Cloud Computing Basics for Everyone",
+        title:"Master the future of computing; delivering computing services over the Internet to speed up innovation.",
+        list:[
+            "You will learn the basics of cloud computing and the key concepts.",
+            "You will learn how to use Google Cloud services such as App Engine, BigQuery, and Spanner, how to use the Google Cloud Platform Console.",
+            "You will learn the difference between Infrastructure as a Service (IaaS), Software as a Service (SaaS), and Platform as a Service (PaaS)",
+        ]
+    },
+    {
+        id:13,
+        ownedBy:"Product Ideation, Design, and Management Specialization",
+        title:"Discover product ideas by cultivating your entrepreneurial mindset, investigating the industry and competitive analysis, and comprehending the principles of value innovation.",
+        list:[            
+            "You will learn how to thoroughly understand your target market, the unmet needs of your market, your value proposition, the feature set of your product, and the user experience. ",
+            "You will learn how to develop prototypes and minimal viable products (MVPs), as well as the financial plans to support their development and delivery, you may turn your concepts into reality.",
+        ]
+    },
+    {
+        id:14,
+        ownedBy:"Data Visualization with Power BI",
+        title:"Learn how to utilize data visualization to bring your data to life and become a great storyteller of the insights it contains with Power Bi application software.",
+        list:[
+            "You will learn how to use the Power Bi application software to create data visualizations that are engaging and informative.",
+            "You will learn how to bring your data to life through data dashboards, interactive reports, charts, graphs, and other visual representations.",
+            "You will become a professional visual analyst.",
+        ]
+    },
+    {
+        id:15,
+        ownedBy:"A to Z Facebook Marketing",
+        title:"Master the details of managing business' Facebook accounts, using Meta's Business Suite to make more sales.",
+        list:[
+            "You will learn how to create an online presence, grow a following, and maintain your social media presence.",
+            "You will learn how to create powerful social media brand presences and develop successful social media postings.",
+            "You will master how to create profitable Facebook ad campaigns using Meta Ads Manager.",
+            "You will be able to analyze and evaluate the evaluate outcomes of your social media posts and marketing efforts.",
+        ]
+    },
+    {
+        id:16,
+        ownedBy:"Agile Project Development",
+        title:"Master the continual approach to software development projects by optimizing responses and ensuring they are acted upon.",
+        list:[
+            "You will master how to develop a model for continual improvement in software development projects.",
+            "You will absorb how to identify and mitigate risks in your project through the use of data",
+            "You will learn the best practices for managing projects from beginning to end.",
+        ]
+    },
+    {
+        id:17,
+        ownedBy:"Why Scrum",
+        title:"Master the exemplary importance of Scrum framework proven methodology for developing software.",
+        list:[
+            
+
+            "You will learn how Scrum provides you with the knowledge and skills required to successfully implement Scrum in your organization.",
+            "You will learn how Scrum can help you build products of the highest quality within an expedited time frame.",
+        ]
+    },
+    {
+        id:18,
+        ownedBy:"Mastering Scrum with other Agile Methodologies",
+        title:"Master the fundamentals of Agile Scrum and get ready to take your next step in becoming a Certified Professional.",
+        list:[
+            "You will learn the fundamentals, tenets, and procedures of agile methodologies, as well as Scrum and Extreme Programming frameworks.",
+            "You will be able to understand and use Scrum more effectively.",
+            "You will also be able to oversee information sharing among Scrum team members.",
+        ]
+    },
+    {
+        id:19,
+        ownedBy:"Linkedin Marketing for Biusiness",
+        title:"Learn about branding, public relations, SEO, analytics, social media, and email marketing. Learn how to create, implement, and measure a winning marketing strategy with LinkedIn's top tools.",
+        list:[
+            
+
+            "You will learn how to use LinkedIn’s top tools - InMail, Sales Navigator, Lead Accelerator, and Job Search - to reach the right audience at the right time with the right message.",
+            "You will also learn the essential components of a marketing strategy and how to create one that works for your business.",
+            "You will master the fundamentals of marketing, including public relations, SEO, analytics, and social media",
+            "You will become a professional LinkedIn marketer.",
+        ]
+    },
+    {
+        id:20,
+        ownedBy:"SEO & Email marketing",
+        title:"Master the skill of engaging your customers and include it into your marketing strategy. Engaging your audience and giving them the impression that they have a genuine relationship with you.",
+        list:[
+            
+
+            "You will discover how to transform necessary emails, such as transactional communications and newsletters, into targeted, revenue-generating emails that your consumers truly want to read.",
+            "You'll discover how to improve every area of your email marketing strategy, from timing and tone to subject lines and personalization",
+            "You will also learn how to monitor and change your plan in order to achieve your objectives.",
+        ]
+    },
+    {
+        id:21,
+        ownedBy:"How to advertise on Instagram",
+        title:"Learn how to successfully place advertisements on Meta's Instagram profiles; how to create an Instagram audience and advertise to them in a way that doesn't represent some hurried ad placement strategy.",
+        list:[
+            
+
+            "You will be shown how to develop a campaign and create engaging content for Instagram advertising.",
+            "You will learn how to use various tools and see how to target certain populations, set a budget, and run planned campaigns.",
+            "You will also discover how to use Instagram Stories and Instant Experience advertisements to boost your marketing and user engagement.",
+        ]
+    },
+    {
+        id:22,
+        ownedBy:"Mastering effective Google ads campaig",
+        title:"Effective google ads campaign optimization. You will learn:",
+        list:[
+            
+            "Setting Up Google Search Ads",
+            "The Basics of Google Search Campaigns",
+            "Installing Google Tools in the website",
+            "Optimizing Google Search Ads campaigns",
+            "How To Optimize Campaigns in Google Ads",
+        ]
+    },
+    {
+        id:23,
+        ownedBy:"Introduction to Ecommerce marketing",
+        title:"Boosting online sales and achieving higher conversion. You will learn:",
+        list:[
+            
+            "Build a Digital Marketing Strategy.",
+            "Find Your Online Audience.",
+            "Create a Website in 24 Hours.",
+            "Drive Targeted Traffic.",
+            "Build an Email List.",
+            "Analyze Website Data.",
+            "Create Converting Google Ads.",
+            "Create Converting Facebook Ads.",
+            "Create a Content Strategy Plan.",
+        ]
+    },
+    {
+        id:24,
+        ownedBy:"Understanding Help Desk",
+        title:"Helpdesk training. What you will learn:",
+        list:[
+            
+            "Articulate processes and information related to IT fundamentals in the context of providing technical support.  ",
+            "Demonstrate systematic and effective troubleshooting and problem-solving skills.  ",
+            "Use diagnostic tools and tracking systems to solve and log customer issues.  ",
+            "Apply customer service skills and a customer support mindset, including conflict mitigation and de-escalation skills.  ",
+
+        ]
+    },
+    {
+        id:25,
+        ownedBy:"Introduction to Blockchain technology",
+        title:"Blockchain technology.",
+        list:[
+            "What is a Blockchain",
+            "Blockchain Fundamentals",
+            "What is Cryptography",
+            "What is Cryptographic Hash?",
+            "How distributed P2P networks are working",
+            "What is Bitcoin",
+            "Bitcoins monetary policy",
+            "How Bitcoin mining works",
+            "Blockchain in Healthcare",
+            "Blockchain in Finance",
+            "Blockchain in Energy",
+            "Blockchain and Internet",
+            "Blockchain in Supply Chain",
+            "Blockchain in Real Estate",
+            "Blockchain in Retail",
+            "Blockchain in Education",
+            "Blockchain in Data Storage",
+            "Blockchain in Government",
+
+        ]
+    },
+    {
+        id:26,
+        ownedBy:"Effective Report writing",
+        title:"Step by step Report writing skill",
+        list:[
+            
+            "Save time when planning a report by knowing the essential questions to ask",
+            "Increase the impact of a report by understanding its purpose",
+            "Structure complex information and ideas confidently and quickly (under five minutes)",
+            "Decide what sections to include in the report - and what should go where",
+            "Delight readers by making the report easy to navigate and digest",
+            "Create a visually attractive report that's kind to the eye",
+
+        ]
+    },
+    {
+        id:27,
+        ownedBy:"Communicating Effectively",
+        title:"Effective  Communication skills for all Business communication needs. You will learn",
+        list:[
+            
+        "Improve Communication Skills",
+        "Improve Speaking Skills",
+        "Improve Listening Skills",
+        "Improve Writing Skills",
+        "Improve Presentation Skills",
+        "How to speak clearly and concisely",
+        "How to listen carefully and professionally",
+        "How to write effectively",
+        "How to write quality content",
+        "How to prepare effectively for presentations",
+        "How to deliver a quality presentation",
+        ]
+    },
+    {
+        id:28,
+        ownedBy:"Developing effective research proposal",
+        title:"Approach to writing a research grant proposal.",
+        list:[
+            
+            "How to find appropriate funding opportunities for your research ideas",
+            "How to write a complete research grant proposal with attachments",
+            "How to compile and submit a complete research grant applicatio",
+        ]
+    },
+    {
+        id:29,
+        ownedBy:"Developing startegy plan for new action plan",
+        title:"Achieve a strategic planning capability that will drive strategy and enhance value in any business environment.",
+        list:[
+
+            "You will learn the importance of Strategy and Alignment to an entity.",
+            "You will learn how to develop, conduct, and control strategic planning in your organizational system, or in your entrepreneurial endeavors.",
+            "learn about the risk related influences that the strategic planner is exposed to.",
+            "You will leave the course with a deep understanding of a robust Strategic Planning Framework, and the ability to write Strategic Planning Report.",
+        ]
+    },
+    {
+        id:30,
+        ownedBy:"Principles and Tools to Boost Your Productivity",
+        title:"Productivity maximization through body, mind and environment optimization",
+        list:[
+            
+            "How to develop a productive mindset and stay motivated",
+            "How to enhance personal productivity skill",
+            "Learn how to achieve bigger goals in less time",
+
+        ]
+    },
+    {
+        id:31,
+        ownedBy:"Mastering Copywriting",
+        title:"Secret to Effective writing to grow business and career.",
+        list:[
+            "Learn how to write Powerful headlines",
+            "Effective strategy to high level copywriting ",
+        ]
+    },
+]

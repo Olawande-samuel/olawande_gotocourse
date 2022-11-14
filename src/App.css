@@ -143,7 +143,7 @@ font-size: 14px;
   box-sizing: border-box;
 }
 body {
-  font-family: "Inter", sans-serif ;
+  font-family: "Raleway", sans-serif ;
   color: #000;
   margin: 0;
   padding: 0;
@@ -994,14 +994,14 @@ border-radius: 13.5px !important;
   position: relative;
 }
 .testimonials .testimonials_text {
-  font-family: "Lato", sans-serif;
+  font-family: "Raleway", sans-serif;
   font-weight: 400;
   font-size:  16px;
   line-height: 30px;
   /* margin-bottom: 3.125rem; */
 }
 .testimonials .testimonials_name {
-  font-family: "Lato", sans-serif;
+  font-family: "Raleway", sans-serif;
   font-size:  clamp(18px, 4vw, 20px);
 line-height: 42px;
 font-weight: 700;
@@ -1010,7 +1010,7 @@ color: var(--text-color-light);
 }
 
 .testimonials .location {
-  font-family: "Lato", sans-serif;
+  font-family: "Raleway", sans-serif;
   font-weight: 300;
 font-size:  clamp(16px, 21px, 18px);
 line-height: 25px;
@@ -1064,7 +1064,7 @@ line-height: 25px;
   
 }
 .students .testimonials .testimonials_text {
-  font-family: "Lato", sans-serif;
+  font-family: "Raleway", sans-serif;
   font-weight: 400;
   font-size:  16px;
   line-height: 28px;
@@ -1920,7 +1920,7 @@ input[type="password"], input[type="text"], input[type="email"] {
   }
 
   .testimonials_text {
-    font-family: "Lato", sans-serif;
+    font-family: "Raleway", sans-serif;
     font-weight: 400;
     font-size: 18px;
     line-height: 25px;

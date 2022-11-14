@@ -3667,7 +3667,8 @@ export function CreateBootcamp() {
           const { data } = res;
           setCategories(data);
         } catch (err) {
-          toast.error(err.message);
+          console.error(err);
+          toast.error("An error occured");
         } finally {
           setLoading(false);
         }
