@@ -835,7 +835,7 @@ function ChatTab({ groups, toggle, setShow }) {
         }
     }
 
-    const userjoinedgroup = false
+    const userjoinedgroup = true
     return (
         <ChatGroup>
             <h2>My Group</h2>

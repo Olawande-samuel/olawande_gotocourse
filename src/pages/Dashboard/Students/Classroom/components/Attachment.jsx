@@ -62,7 +62,7 @@ const Attachement = ({type, _id, isLocked, title,  domain, classId,
     // }, [isLocked])
 
     let statusIcon = React.useMemo(() => {
-        return marked ? <CompleteIcon $isComplete={marked}  /> : <Locked />  
+        return marked ? <CompleteIcon $isComplete={marked}  /> : <CompleteIcon />  
     }, [marked])
 
     
