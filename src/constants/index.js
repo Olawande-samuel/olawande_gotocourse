@@ -56,3 +56,21 @@ export const capitalize = (str) => {
   return strArray.join("");
 }
 
+export function gotoclassPayment(title, category, bootcampId, navigate){
+  if(title.trim().toLowerCase().includes("/")){
+       let newTitle = title.trim().split("/").join("-").toLowerCase()
+       navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/payment`)
+  } else {
+      navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${title.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/payment`)
+  }
+
+}
+export function gotoclass(title, category, bootcampId, navigate){
+  if(title.trim().toLowerCase().includes("/")){
+       let newTitle = title.trim().split("/").join("-").toLowerCase()
+       navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}`)
+  } else {
+      navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${title.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}`)
+  }
+
+}

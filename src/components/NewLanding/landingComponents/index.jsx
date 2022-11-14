@@ -12,6 +12,14 @@ import { Box } from "@mui/material"
 import { useEffect } from "react"
 import { shortPopUpContent } from "../ShortCourses"
 import { inDemandPopUpContent } from "../IndemandClasses"
+import { useNavigate } from "react-router-dom"
+import { getDate, gotoclass, gotoclassPayment, KEY } from "../../../constants"
+import { useAuth } from "../../../contexts/Auth"
+import { useLocalStorage } from "../../../hooks"
+import { useMutation } from "@tanstack/react-query"
+import { border } from "@mui/system"
+import { toast } from "react-toastify"
+import { changeConstants } from "../../../pages/Dashboard/Teachers/CreateCourse"
 
 // GREAT OPPORTUNITIES
 
@@ -65,11 +73,19 @@ const TechCard = styled.div`
         text-transform: capitalize;
         
     }
-    
+    > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+    }
     .tag {
         padding: 4px 8px;
         background-color: #E2EDF9;
         color: #6C7480;
+        display: inline-flex;
+        width:fit-content;
+        text-transform: uppercase;
     }
 
 
@@ -157,7 +173,7 @@ export function TechPreCard({title, duration, price, packages, description, tag,
             <h6>{title}</h6>
             <div>
                 <span className="tag">
-                    ADVANCED
+                    {changeConstants(packages[0]?.title)}
                 </span>
                 <div className="tech_info">
                     <span>
@@ -263,7 +279,7 @@ const ExecutiveCard = styled.div`
 
 
 
-export function ExeEducation({title, date, bootcampImg, description, duration, price, packages, courses, list, color, i }){
+export function ExeEducation({title, date, bootcampImg, category, description, bootcampId, duration, price, packages, courses, list, color, i }){
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleClick = (event) => {
@@ -277,7 +293,28 @@ export function ExeEducation({title, date, bootcampImg, description, duration, p
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
+    // Call to Action
+    const navigate= useNavigate();
+    const [data, setData] = useState({});
+    const {getItem} = useLocalStorage();
 
+    const userdata = getItem(KEY)
+    const {studentFunctions: {wishlistCourse}} = useAuth()
+    const mutation = useMutation(([id, usertoken])=>wishlistCourse(id, usertoken), {
+        onSuccess: (res)=>{
+            console.log({res})
+        },
+        onError: (err)=>console.error(err)
+    })
+
+    function addToWishlist(){
+        if(userdata.token){
+            mutation.mutate([bootcampId, userdata.token])
+            return
+        } else {
+            navigate("/login")
+        }
+    }
     return (
         <ExecutiveCard >
             <img src={bootcampImg} alt="" className="exe_image" />
@@ -315,8 +352,8 @@ export function ExeEducation({title, date, bootcampImg, description, duration, p
                         </div>
                         <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
                         <div className="pop_action">
-                            <button>Enroll Now</button>    
-                            <button>Wishlist</button>    
+                            <button onClick={()=> gotoclassPayment(title, category, bootcampId, navigate)}>Enroll Now</button>    
+                            <button onClick={addToWishlist}>Wishlist</button>    
                         </div>
                     </div>
                 </Box>
@@ -404,6 +441,9 @@ const InDemandCard = styled.div`
         font-size: 13px;
         margin-top: 1rem;
 
+        span {
+            cursor: pointer
+        }
         .ct_bar{
             width:1px;
             height:100%;
@@ -411,18 +451,25 @@ const InDemandCard = styled.div`
         }
     }
 `
-export function InDemand({title, bootcampImg, duration, price, packages, description}){
+export function InDemand({title, bootcampImg, category, duration, price, packages, bootcampId,description, startDate}){
     const [anchorEl, setAnchorEl] = useState(null);
+    const navigate= useNavigate();
     const [data, setData] = useState({});
+    const {getItem} = useLocalStorage();
 
+    const userdata = getItem(KEY)
+    const {studentFunctions: {wishlistCourse}} = useAuth()
+
+
+    
     const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
+        setAnchorEl(event.currentTarget);
     };
-  
+    
     const handleClose = () => {
-      setAnchorEl(null);
+        setAnchorEl(null);
     };
-  
+
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
     
@@ -435,7 +482,29 @@ export function InDemand({title, bootcampImg, duration, price, packages, descrip
         }
 
     },[title])
+
+    const mutation = useMutation(([id, usertoken])=>wishlistCourse(id, usertoken), {
+        onSuccess: (res)=>{
+            console.log({res})
+        },
+        onError: (err)=>console.error(err)
+    })
+
+    function addToWishlist(){
+        if(userdata.token){
+            mutation.mutate([bootcampId, userdata.token])
+            return
+        } else {
+            navigate("/login")
+        }
+    }
+  
     
+
+
+  
+    
+ 
     return (
         <InDemandCard>
             <div className="top_content">
@@ -456,7 +525,7 @@ export function InDemand({title, bootcampImg, duration, price, packages, descrip
             <div className="cta">
                 <span aria-describedby={id} variant="contained" onClick={handleClick}>View course</span>
                 <div className="ct_bar"></div>
-                <span>Start Learning</span>
+                <span onClick={()=> gotoclassPayment(title, category, bootcampId, navigate)}>Start Learning</span>
             </div>
             <Popover
                 id={id}
@@ -488,8 +557,17 @@ export function InDemand({title, bootcampImg, duration, price, packages, descrip
                         </ul>
                         {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
                         <div className="pop_action">
-                            <button>Enroll Now</button>    
-                            <button>Wishlist</button>    
+                            <button onClick={()=> gotoclass(title, category, bootcampId, navigate) }>Enroll Now</button>    
+                            {/* <button>Starting: {getDate(startDate)}</button>     */}
+                            <button onClick={addToWishlist}>
+                                {
+                                    mutation.isLoading ? <div className="spinner-border text-white">
+                                        <div className="visually-hidden">Loading...</div>
+                                    </div>
+                                    :
+                                    <span>Wishlist</span>
+                                }
+                            </button>    
                         </div>
                     </div>
                 </Box>

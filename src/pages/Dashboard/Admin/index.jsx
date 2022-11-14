@@ -3401,6 +3401,7 @@ export function Bootcamps() {
     "Duration",
     "Date",
     "Time",
+    "price"
   ];
 
   useEffect(() => {
@@ -3484,6 +3485,8 @@ export function Bootcamps() {
                           startDate,
                           bootcampId,
                           _id,
+                          packages,
+                          price
                         },
                         i
                       ) => (
@@ -3498,6 +3501,8 @@ export function Bootcamps() {
                           clickHandler={(e) => detailHandler(e, bootcampId)}
                           time={`${startTime} - ${endTime} CST`}
                           date={`${getDate(startDate)} - ${getDate(endDate)}`}
+                          packages={packages}
+                          price={price}
                         />
                       )
                     )
@@ -4191,7 +4196,11 @@ export function BootcampRow({
   duration,
   admin,
   clickHandler = null,
+  packages,
+  price
 }) {
+  console.log({packages})
+  console.log({price})
   return (
     <tr className={clsx.user__info_card} onClick={clickHandler}>
       <td className={clsx.user__info}>{index + 1}.</td>
@@ -4208,6 +4217,7 @@ export function BootcampRow({
       <td className={clsx.user__info}>{duration}</td>
       <td className={clsx.user__info}>{date}</td>
       <td className={clsx.user__info}>{time}</td>
+      <td className={clsx.user__info}>{packages?.length > 0 ? packages[0].price : price}</td>
       {admin && (
         <td className={clsx.user__info}>
           <div className="d-flex align-items-center" style={{ gap: "1rem" }}>

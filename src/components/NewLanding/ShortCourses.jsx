@@ -27,9 +27,10 @@ const ShortCourses = () => {
 
         onSuccess: (res)=>{
             if(res.data.length > 0){
-                const short = res.data.filter(item=>item.subCategory === "SHORT_COURSES");
+                const short = res.data.filter(item=>item.subCategory === "SHORT_COURSES" && item.isActive);
                 const tech = res.data.filter(item=>item.subCategory === "TECH_ENTREPRENEURSHIP");
                 
+                console.log({short})
                 const threeShorts = short?.slice(0, 3)
                 const threeTech = tech?.slice(0, 3)
 
