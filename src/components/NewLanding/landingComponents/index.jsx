@@ -85,6 +85,8 @@ const TechCard = styled.div`
         background-color: #E2EDF9;
         color: #6C7480;
         display: inline-flex;
+        display: grid;
+        place-items:center;
         width:fit-content;
         text-transform: uppercase;
     }
@@ -144,12 +146,32 @@ const TechCard = styled.div`
         background: #fff;
         margin-top: 1rem;
     }
+    .top_content {
+        display: flex;
+        gap: 0.3rem;
+        margin-bottom: 1rem;
+        justify-content:space-between;
 
+        h6 {
+            flex:60%;
+            font-weight: 700;
+
+        }
+
+        img{
+            flex:40%;
+            height: 50px;
+            max-width:120px;
+            border-radius:18px;
+            object-fit: cover;
+            object-position: top;
+        }
+    }
     
 
 `
 
-export function TechPreCard({title, duration, price, packages, description, tag, ratings, totalRatings}) {
+export function TechPreCard({title, duration, price, packages,bootcampImg, description, tag, ratings, totalRatings}) {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -178,9 +200,12 @@ export function TechPreCard({title, duration, price, packages, description, tag,
         <TechCard>
             <h6>{title}</h6>
             <div>
-                <span className="tag">
-                    {changeConstants(packages[0]?.title)}
-                </span>
+                <div className="top_content">
+                    <span className="tag">
+                        {changeConstants(packages[0]?.title)}
+                    </span>
+                        <img src={bootcampImg} alt="" />
+                </div>
                 <div className="tech_info">
                     <span>
                         <i className="me-1"><BsCalendar3 /></i>
@@ -421,6 +446,7 @@ const InDemandCard = styled.div`
         img{
             flex:40%;
             height: 50px;
+            max-width:120px;
             border-radius:18px;
             object-fit: cover;
             object-position: top;
@@ -457,7 +483,7 @@ const InDemandCard = styled.div`
         span:first-child {
             cursor: pointer;
             transition: color .3s ease; 
-            
+
             :hover {
                 color: var(--theme-blue)
             }
@@ -920,17 +946,17 @@ const WebinarWrapper = styled.div`
 
 `
 
-export function LiveWebinarCard({img, title, place, time}){
+export function LiveWebinarCard({img, title, place, date,time}){
     return (
         <WebinarWrapper>
             <div className="img_top">
                 <img src={webimage} alt="" />
             </div>
             <div className="content">
-                <h6>A preview of sp certificate</h6>
+                <h6>{title}</h6>
                 <div>
                     <p>Gotocourse</p>
-                    <p>Monday, 09 Nov 22 | 9:00PM(CST) - 10PM(CST)</p>
+                    <p>{date} | {time}</p>
                 </div>
             </div>
             <div>

@@ -32,8 +32,10 @@ const IndemandClasses = () => {
 
         onSuccess: (res)=>{
             if(res.data.length > 0){
-                const exe = res.data.filter(item=>item.subCategory === "IN_DEMAND");
-                setShorts(exe)
+              const exe = res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.isActive);
+
+              setShorts(exe)
+              console.log({exe})
             }
         }
   })
@@ -51,7 +53,7 @@ const IndemandClasses = () => {
 };
 const data = {
   header: "",
-  header2:"Explore In demand career courses",
+  header2:"Explore In demand career courses >",
   subtext:"Develop Tech skills most needed by companies and increase your earnings",
   content: [],
   bottomTitle:"View more In demand career courses"

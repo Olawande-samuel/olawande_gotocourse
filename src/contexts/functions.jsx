@@ -2238,7 +2238,6 @@ export const adminFunctions = {
         }
     },
 
-
     deleteAUser: async function (token, data) {
         console.log({ data });
         try {
