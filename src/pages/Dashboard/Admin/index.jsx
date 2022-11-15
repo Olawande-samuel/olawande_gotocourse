@@ -3406,6 +3406,8 @@ export function Bootcamps() {
     "price"
   ];
 
+
+  console.log({bootcamps});
   useEffect(() => {
     if (flag.current) return;
     (async () => {

@@ -38,6 +38,8 @@ const ExecutiveClasses = () => {
             }
         }
     })
+
+    console.log({shorts});
   return (
     <ClassTypeComponent {...data}>
         <Grid>

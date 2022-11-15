@@ -2,13 +2,12 @@ import { useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useAuth } from '../../contexts/Auth'
-import { ClassTypeComponent, TechPreCard } from './landingComponents'
+import { ClassTypeComponent, Short, TechPreCard } from './landingComponents'
 
 const Grid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    row-gap:3rem;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
 
     @media screen and (max-width:710px){
         grid-template-columns: repeat(2, 1fr);
@@ -28,9 +27,13 @@ const ShortCourses = () => {
         onSuccess: (res)=>{
             if(res.data.length > 0){
                 const short = res.data.filter(item=>item.subCategory === "SHORT_COURSES" && item.isActive);
+                // console.log({short});
                 const tech = res.data.filter(item=>item.subCategory === "TECH_ENTREPRENEURSHIP" && item.isActive);
-                const threeShorts = short?.slice(0, 3)
-                const threeTech = tech?.slice(0, 3)
+
+                // console.log({tech});
+                const threeShorts = short?.slice(0, 4)
+                const threeTech = tech?.slice(0, 4)
+                // console.log({threeTech});
                 const myContent = threeShorts.concat(threeTech)
                 setShorts(myContent)
             }
@@ -41,7 +44,8 @@ const ShortCourses = () => {
         <Grid>
             {
                 shorts?.filter(item => item.isActive).map(item => (
-                    <TechPreCard {...item} />
+                    // <TechPreCard {...item} />
+                    <Short {...item}/>
                 ))
             }
         </Grid>
