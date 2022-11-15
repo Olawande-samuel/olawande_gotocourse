@@ -84,7 +84,7 @@ const NewLanding = () => {
       <UpskillCourse />
       <VideoSection />
       <BetterWay />
-      <Mentors />
+      {/* <Mentors /> */}
       <TechPro />
       {/* <VirtualTraining /> */}
       <LiveWebinars /> 
