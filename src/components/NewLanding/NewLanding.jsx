@@ -1013,19 +1013,19 @@ export function Mission() {
 const ourmission = [
   {
     id: 1,
-    title: "Register for free to get started",
-    content: "Register to access the interactive student’s dashboard",
+    title: "Register for free to get started.",
+    content: "Register to access the interactive student's dashboard",
   },
   {
     id: 2,
-    title: "Select classes of your choice from available classes",
+    title: "Select the course(s) of your choice from avaliable courses",
     content:
-      "Access your interactive student’s dashboard to select class of your choice from the listed classes starting",
+      "Access your interactive dashboard to select the course of your choice from the listed courses on the schedule",
   },
   {
     id: 3,
-    title: "Enroll to class to get your training started",
+    title: "Enroll to your selected course",
     content:
-      "Start class immediately after completion of your enrolment to class",
+      "Start the class on the designated date after completing your enrollment to the course.",
   },
 ];
