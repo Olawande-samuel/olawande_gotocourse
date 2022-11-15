@@ -693,7 +693,7 @@ const UpCoursesCard = styled.div`
             justify-content: space-between;
             gap: 1rem;
             font-size: 13px;
-            margin-top: 1rem;
+            // margin-top: 1rem;
     
             span:first-child {
                 cursor: pointer;

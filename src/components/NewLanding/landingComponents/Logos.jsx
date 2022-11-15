@@ -26,7 +26,7 @@ import { Link } from "react-router-dom";
 
 
 const Section = styled.section`
-    padding-block: 2rem;
+    padding-block: 5rem;
  
     header {
         margin-bottom: 4rem;
