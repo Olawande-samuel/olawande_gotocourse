@@ -3,18 +3,21 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useAuth } from '../../contexts/Auth'
 import { ClassTypeComponent, ExeEducation } from './landingComponents'
+import exec1 from "../../images/landing/exe1.png"
+import exec2 from "../../images/landing/exe2.png"
+import exec3 from "../../images/landing/exe3.png"
 
 const Grid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(250px, 300px), 300px));
-    justify-content: space-around;
-    gap: 1.5rem;
-    row-gap:3rem;
+     display: grid;
+  grid-template-columns: repeat(4, 280px);
+  gap: 1.5rem;
+  justify-content: space-around;
 
-     @media screen and (max-width:660px){
-        grid-template-columns: repeat(auto-fit, minmax(min(200px, 240px), 240px));
-        justify-content: center;
-    }
+  @media screen and (max-width: 930px) {
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 240px), 240px));
+    justify-content: space-evenly;
+    gap: 1rem;
+  }
     /*
     @media screen and (max-width:500px){
         grid-template-columns: min(100%, 380px);
@@ -39,8 +42,8 @@ const ExecutiveClasses = () => {
     <ClassTypeComponent {...data}>
         <Grid>
             {
-                shorts?.filter(item => item.isActive).slice(0, 3).map((item,i)=>(
-                    <ExeEducation {...item} i={i} />
+                shorts?.filter(item => item.isActive).slice(0, 8).map((item,i)=>(
+                    <ExeEducation {...item} i={i} img={data.content[i]} />
                 ))
             }
         </Grid>
@@ -53,39 +56,7 @@ const data = {
     header2:"Explore executive  education",
     subtext:"Acquire strategic skills to boost business growth",
     content: [
-        {
-            title: "Cloud Architect",
-            date: "11 Months",
-            courses: "11 Courses",
-            color:"reddish",
-            list: [
-                "31 tools & Rigorous curriculum",
-                "Master's certificate",
-                "Certification Aligned with Silver Microsoft Partner & 2 more"
-            ]
-        },
-        {
-            title: "Artificial Intelligence Engineer",
-            date: "11 Months",
-            courses: "9 Courses",
-            color:"blue",
-            list: [
-                "9 tools & Rigorous curriculum",
-                "Master's certificate",
-                "In Collaboration With IBM"
-            ]
-        },
-        {
-            title: "Digital Marketing Specialist",
-            date: "11 Months",
-            courses: "14 Courses",
-            color:"",
-            list: [
-                "29 tools & Rigorous curriculum",
-                "Master's certificate",
-                "Certification Alignment Facebook Blueprint_New_White, Google"
-            ]
-        },
+        exec1, exec2, exec3
     ],
     bottomTitle:"View  more executive education > "
   }

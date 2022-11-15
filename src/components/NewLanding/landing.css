@@ -1355,7 +1355,7 @@
   /* width: 100%; */
   /* max-height: 450px; */
   border-top-right-radius: 40px;
-  /* object-fit: fill; */
+  /* object-fit: cover; */
 }
 .stay_left.anywhere img {
   max-height: 350px;
@@ -1365,8 +1365,7 @@
   .stay_left img {
     max-width: 450px;
     border-top-right-radius: 40px;
-    /* object-fit: fill; */
-  } 
+} 
   .stay_left.anywhere { 
     background-position-x: center;
     background-size: 58%;
@@ -1382,9 +1381,11 @@
   } 
 }
 
-@media (min-width: 701px) and (max-width: 900px){
+@media (min-width: 700px) and (max-width: 900px){
   .stay_left img {
     object-fit: cover;
+    object-position:right;
+
   }
 }
 

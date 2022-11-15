@@ -7,7 +7,7 @@ import { ClassTypeComponent, InDemand } from "./landingComponents";
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 280px);
+  grid-template-columns: repeat(4, 280px);
   gap: 2.5rem;
   row-gap: 3rem;
   justify-content: space-around;
@@ -33,7 +33,6 @@ const IndemandClasses = () => {
         onSuccess: (res)=>{
             if(res.data.length > 0){
                 const exe = res.data.filter(item=>item.subCategory === "IN_DEMAND");
-                console.log({exe})
                 setShorts(exe)
             }
         }
@@ -42,7 +41,7 @@ const IndemandClasses = () => {
     <ClassTypeComponent {...data}>
       <Grid>
         {
-          shorts?.filter(item=>item.isActive).slice(0,3).map((item) => (
+          shorts?.filter(item=>item.isActive).slice(0,6).map((item) => (
             <InDemand {...item} />
           ))
         }
@@ -222,162 +221,6 @@ export const inDemandPopUpContent = [
       "You will you will learn how to develop and implement policies and procedures to protect an organization’s information assets.",
       "You will you will learn how ensure organizational compliance with various regulations and standards.",
       "You will you will learn how to identify, assess, and respond to threats and vulnerabilities in an organization.",
-    ]
-  },
-  {
-    id: 16,
-    ownedBy:"",
-    title:"Learn how to mine from the lucrative tech market with or without the knowledge of coding.In this course, you will be equipped on:",
-    list: [
-      
-      "How to identify high-potential opportunities in the tech industry",
-      "High profit making strategies",
-      "Risk management affiliated with your field.",
-      "How to advertise and promote your services to clients and investors",
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
-    ]
-  },
-  {
-    id: 17,
-    ownedBy:"",
-    title:"",
-    list: [
-    
     ]
   },
   {

@@ -74,3 +74,25 @@ export function gotoclass(title, category, bootcampId, navigate){
   }
 
 }
+export function changeConstants(name){
+  if(name === "SELF_PACED") return "Self-paced"
+  if(name === "COHORT") return "Cohort"
+  if(name === "MENTORSHIP") return "One-on-One"
+  if(name === "PHYSICAL") return "In-person Training"
+  return name
+}
+
+export function changeSubCategory(sub){
+  if(sub === "UPSKILL_COURSES") return "Upskill"
+  
+  if(sub === "IN_DEMAND") return "In-Demand"
+  
+  if(sub === "EXECUTIVE_COURSES") return "Executive"
+  
+  if(sub === "SHORT_COURSES") return "Short"
+
+  if(sub === "TECH_ENTREPRENEURSHIP") return "Tech Enterpreneurship"
+  
+  return sub
+  
+}
