@@ -62,7 +62,7 @@ const BetterWay = () => {
             <div className="stay">
                 
                 <div className="stay_right anyright">
-                    <h6>Gotocourse Business</h6>
+                    <h6 style={{}}>Gotocourse Business</h6>
                     <p>Upskill your team to improve your teams productivity</p>
                     <ul>
                         <li>Take advantage of Gotoocurse White-label interactive LMS</li>
