@@ -722,7 +722,7 @@ const ShortCard = styled.div`
     flex-direction:column;
     flex-shrink:0;
     width: 280px;
-    height: 400px;
+    height: 300px;
     // border: 2px solid red;
     box-shadow: -10px 159px 64px rgba(0, 0, 0, 0.01), -6px 90px 54px rgba(0, 0, 0, 0.05), -3px 40px 40px rgba(0, 0, 0, 0.09), -1px 10px 22px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
     
