@@ -53,10 +53,10 @@ const IndemandClasses = () => {
 };
 const data = {
   header: "",
-  header2:"Explore In demand career courses >",
+  header2:"Explore In demand career courses",
   subtext:"Develop Tech skills most needed by companies and increase your earnings",
   content: [],
-  bottomTitle:"View more In demand career courses"
+  bottomTitle:"View more In demand career courses >"
 }
 export default IndemandClasses;
 

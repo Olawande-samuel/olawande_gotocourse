@@ -65,6 +65,7 @@ import VirtualTraining from "./VirtualTraining";
 import LiveWebinars from "./LiveWebinars";
 import Success from "./Success";
 import { useEffect } from "react";
+import Logos from "./landingComponents/Logos";
 
 const NewLanding = () => {
   return (
@@ -83,6 +84,7 @@ const NewLanding = () => {
       <UpskillCourse />
       <VideoSection />
       {/* <VirtualTraining /> */}
+      <Logos />
       <Mentors />
       <TechPro />
       {/* <TeachingBenefits /> */}

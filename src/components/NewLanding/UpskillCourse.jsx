@@ -177,7 +177,7 @@ export const upskillAltData = [
 
 const data = {
     header: "",
-    header2:"Explore In Upskill courses >",
+    header2:"Explore In Upskill courses",
     subtext:"Increase your earning  potential by upgrading your skillsets.",
     content: [
         {
@@ -205,7 +205,7 @@ const data = {
             description:"Optimize and scale your business with Kajabi’s fully-automated marketing campaigns and funnels.",
         },
     ],
-    bottomTitle: "View more Upskill courses"
+    bottomTitle: "View more Upskill courses >"
 }
 
 export default UpskillCourse
