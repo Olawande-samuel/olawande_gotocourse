@@ -51,7 +51,7 @@ const VirtualTraining = () => {
     <VirtSection>
         <div className="container">
             <header>
-                <h6>UPCOMING VIRTUAL LIVE TRAINING COURSES</h6>
+                <h6>VIRTUAL LIVE TRAINING COURSES</h6>
             </header>
             <div className="virtual_content">
                 <div className="virt_Card_wrapper">

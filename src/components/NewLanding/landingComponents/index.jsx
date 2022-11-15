@@ -20,6 +20,7 @@ import { useMutation } from "@tanstack/react-query"
 import { border } from "@mui/system"
 import { toast } from "react-toastify"
 import { changeConstants } from "../../../pages/Dashboard/Teachers/CreateCourse"
+import { upskillAltData } from "../UpskillCourse"
 
 // GREAT OPPORTUNITIES
 
@@ -93,6 +94,7 @@ const TechCard = styled.div`
     .tech_info {
         display: flex;
         flex-wrap:wrap;
+        justify-content:space-between;
         margin-top: 2rem;
         font-size: 14px;
         color: #636363;
@@ -162,10 +164,14 @@ export function TechPreCard({title, duration, price, packages, description, tag,
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
     
+    const [data,setData] = useState({})
 
     useEffect(()=>{
-        const ownListItem = shortPopUpContent.filter(item=> item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
-        console.log({ownListItem})
+        const shortListItem = shortPopUpContent.filter(item=> item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
+        if(shortListItem.length > 0){
+            setData(shortListItem[0])
+        }
+        console.log({shortListItem})
     },[title])
 
     return (
@@ -207,7 +213,14 @@ export function TechPreCard({title, duration, price, packages, description, tag,
                             <span className="fw-bold">{duration}</span>
                             <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
                         </div>
-                        <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
+                        <p>{data.title}</p>
+                        <ul>
+                            {
+                                data?.list?.map((item,i)=>(
+                                    <li key={i}>{item}</li>
+                                ))
+                            }
+                        </ul>
                         <div className="pop_action">
                             <button>Enroll Now</button>    
                             <button>Wishlist</button>    
@@ -279,7 +292,7 @@ const ExecutiveCard = styled.div`
 
 
 
-export function ExeEducation({title, date, bootcampImg, category, description, bootcampId, duration, price, packages, courses, list, color, i }){
+export function ExeEducation({title, date, img, bootcampImg, category, description, bootcampId, duration, price, packages, courses, list, color, i }){
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleClick = (event) => {
@@ -317,10 +330,10 @@ export function ExeEducation({title, date, bootcampImg, category, description, b
     }
     return (
         <ExecutiveCard >
-            <img src={bootcampImg} alt="" className="exe_image" />
+            <img src={img} alt="" className="exe_image" />
             <div className="exe_content">
                 <div className="">
-                    <h6 aria-describedby={id}  onClick={handleClick}>{title}</h6>
+                    <h6 aria-describedby={id}  onClick={()=>gotoclass(title, category, bootcampId, navigate)}>{title}</h6>
                     <div className="description">
                         <p dangerouslySetInnerHTML={{__html: description}} />
 
@@ -331,7 +344,7 @@ export function ExeEducation({title, date, bootcampImg, category, description, b
                     <span>{duration}</span>
                 </div>
             </div>
-            <Popover
+            {/* <Popover
                 id={id}
                 open={open}
                 anchorEl={anchorEl}
@@ -352,12 +365,12 @@ export function ExeEducation({title, date, bootcampImg, category, description, b
                         </div>
                         <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
                         <div className="pop_action">
-                            <button onClick={()=> gotoclassPayment(title, category, bootcampId, navigate)}>Enroll Now</button>    
+                            <button >Enroll Now</button>    
                             <button onClick={addToWishlist}>Wishlist</button>    
                         </div>
                     </div>
                 </Box>
-            </Popover>
+            </Popover> */}
         </ExecutiveCard>
     )
 }
@@ -500,10 +513,6 @@ export function InDemand({title, bootcampImg, category, duration, price, package
     }
   
     
-
-
-  
-    
  
     return (
         <InDemandCard>
@@ -608,6 +617,7 @@ const UpCoursesCard = styled.div`
         text-transform: capitalize;
         font-size: 16px;
         margin-block: .7rem 3rem;
+        cursor: pointer;
 
     }
     button {
@@ -623,7 +633,7 @@ const UpCoursesCard = styled.div`
     
 `
 
-export function UpskillCourseCard({title, bootcampImg, description, duration, price, packages }) {
+export function UpskillCourseCard({title, bootcampImg,bootcampId, description, duration, price, packages }) {
     
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -637,6 +647,38 @@ export function UpskillCourseCard({title, bootcampImg, description, duration, pr
   
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
+
+    
+    // Call to Action
+    const navigate= useNavigate();
+    const [data, setData] = useState({});
+    const {getItem} = useLocalStorage();
+
+    const userdata = getItem(KEY)
+    const {studentFunctions: {wishlistCourse}} = useAuth()
+    const mutation = useMutation(([id, usertoken])=>wishlistCourse(id, usertoken), {
+        onSuccess: (res)=>{
+            console.log({res})
+        },
+        onError: (err)=>console.error(err)
+    })
+
+    function addToWishlist(){
+        if(userdata.token){
+            mutation.mutate([bootcampId, userdata.token])
+            return
+        } else {
+            navigate("/login")
+        }
+    }
+    useEffect(()=>{
+        const ownListItem = upskillAltData.filter(item=> item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
+        if(ownListItem.length > 0){
+            setData(ownListItem[0])
+        }
+
+    },[title])
+    
     return (
         <UpCoursesCard>
             <img src={bootcampImg} alt="" />
@@ -670,7 +712,15 @@ export function UpskillCourseCard({title, bootcampImg, description, duration, pr
                             <span className="fw-bold">{duration}</span>
                             <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
                         </div>
-                        <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
+                            <p>{data.title}</p>
+                            <ul>
+                                {
+                                    data?.list?.map((item,i)=>(
+                                        <li key={i}>{item}</li>
+                                    ))
+                                }
+                            </ul>
+                        {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
                         <div className="pop_action">
                             <button>Enroll Now</button>    
                             <button>Wishlist</button>    

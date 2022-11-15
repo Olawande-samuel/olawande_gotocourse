@@ -28,12 +28,9 @@ const ShortCourses = () => {
         onSuccess: (res)=>{
             if(res.data.length > 0){
                 const short = res.data.filter(item=>item.subCategory === "SHORT_COURSES" && item.isActive);
-                const tech = res.data.filter(item=>item.subCategory === "TECH_ENTREPRENEURSHIP");
-                
-                console.log({short})
+                const tech = res.data.filter(item=>item.subCategory === "TECH_ENTREPRENEURSHIP" && item.isActive);
                 const threeShorts = short?.slice(0, 3)
                 const threeTech = tech?.slice(0, 3)
-
                 const myContent = threeShorts.concat(threeTech)
                 setShorts(myContent)
             }
@@ -403,6 +400,213 @@ export const shortPopUpContent = [
         list:[
             "Learn how to write Powerful headlines",
             "Effective strategy to high level copywriting ",
+        ]
+    },
+    {
+        id:32,
+        ownedBy:"Introduction to Tech Entrepreneurship",
+        title:"Learn how to mine from the lucrative tech market with or without the knowledge of coding.In this course, you will be equipped on:",
+        list:[
+            
+            "How to identify high-potential opportunities in the tech industry",
+            "High profit making strategies",
+            "Risk management affiliated with your field.",
+            "How to advertise and promote your services to clients and investors",
+        ]
+    },
+    {
+        id:33,
+        ownedBy:"How To Start, Launch, sustain and scale A 6 Figure Freelancing Business ",
+        title:"Be a 6 Figure earner through Freelancing. Master how to earn during the slow-seasons and choose the best paying rates as you sharpen your skills.You will learn how to",
+        list:[
+            
+            "Start off in the freelance industry with good rates",
+            "Bargain with clients and close deals",
+            "Find high paying clients and build long-lasting client-freelancer relationships.",
+        ]
+    },
+    {
+        id:34,
+        ownedBy:"Creative Design like a Pro",
+        title:"We will help you learn to design like a Pro. Master the art and psychology of designing. After this course:",
+        list:[
+            
+            "You will be able to build and sharpen the skill of design storytelling ",
+            "You will have practical knowledge on the nitty-gritty of color theory",
+            "You will be able to use major design applications like Adobe Illustrator, Photoshop, and Adobe Creative Suite.",
+        ]
+    },
+    {
+        id:35,
+        ownedBy:"Make 6 figure with Affliate Marketing  working 2-3hrs daily",
+        title:"Learn proven methods of researching your target audience to make profitable sales on certain platforms.",
+        list:[
+        
+            "You will be able to use our special sales funnel to increase consumer sales",
+            "You will learn how to use top affiliate marketing softwares.",
+        ]
+    },
+    {
+        id:36,
+        ownedBy:"How to Start, Launch, a 6 figure whatsapp moneymaking business",
+        title:"Discover multiple ways to earn money on WhatsApp. Make Whatsapp your side hustle by marketing goods for high-paying clients. ",
+        list:[
+            
+
+            "You will be able to capitalize on Whatsapp and earn passive income daily",
+            "You will learn how  to leverage your existing contacts ",
+            "You will learn how to add high-value clients to your WhatsApp clients.",
+        ]
+    },
+    {
+        id:37,
+        ownedBy:"Be a rockstar with Domain flipping Business",
+        title:"Master how to make a good side hustle out of trading web domains, how to find the best opportunities and leverage them. In this course: ",
+        list:[
+            
+            "You will learn the basics of domain flipping ",
+            "You will have access to our step-by-step guide on what type of domain to trade, how and  when to trade, ",
+            "and the best clients to sell to",
+        ]
+    },
+    {
+        id:38,
+        ownedBy:"Smile to bank with YouTube Profitable Business",
+        title:"Learn how to set up a YouTube channel and monetize your content effectively. After this course:",
+        list:[
+            
+
+
+            "You will be able to set up and build a Youtube Channel ",
+            "You  will be able to market your Youtube videos ",
+            "You will be able to use YouTube Optimisation tools to increase traffic on your channel.",
+        ]
+    },
+    {
+        id:39,
+        ownedBy:"How to start a high premium freelancing business",
+        title:"Learn the basics of starting a freelance business, the best freelancing platforms and how to secure deals within your first month of enrolling. You will learn to:",
+        list:[
+            
+        "Close profitable deals",
+        "Choose convenient rates for your services",
+        "Market your services and pitch yourself to high-value clients",
+        ]
+    },
+    {
+        id:40,
+        ownedBy:"How to create a proftable Digital products",
+        title:"Learn how to brainstorm digital product ideas, bring it to life and  build an audience for your business.",
+        list:[
+            
+            "You will be able to get ideas for your digital products and how to tailor them to consumer satisfaction.",
+            "You will learn how to research your target market and  buying trends in your target market.",
+        ]
+    },
+    {
+        id:41,
+        ownedBy:"Find your path to Copywriting like a Pro",
+        title:"Master psychological tools used in writing. You can use these tools to win over clients in business, storytelling, blog writing, creative writing, and others. ",
+        list:[
+            
+            "You will learn how to convince your buyers to buy your products.",
+            "You will learn how to use writing  psychology to influence consumer decisions.",
+            "You will learn how to conduct in depth research on your target audience.",
+
+        ]
+    },
+    {
+        id:42,
+        ownedBy:"Be a rockstar Virtual Assistant ",
+        title:"Master the art of offering clients administrative services and become a rockstar in it.",
+        list:[
+            
+
+            "You will learn how to become a valued admin, how to communicate effectively with clients, and how to handle the stress that comes with running an administrative business. ",
+            "You will also get practical tips on how you can streamline your day-to-day job so that you can take on more clients and make more money.",
+            "You will also learn how to organize and maintain a client’s records, set up and manage their accounting systems.",
+
+        ]
+    },
+    {
+        id:43,
+        ownedBy:"High income social management busiess",
+        title:"Learn about the commercial aspects of managing social companies and projects.",
+        list:[
+            
+            "You will learn how to make your social enterprise or project viable by offering services and things t hat people want, as well as gaining skills in accounting and finance, marketing, sales, and business planning.",
+            "You will be able to identify the critical components of a successful social enterprise, such as marketing, sales, and business planning.",
+            "You'll also learn how to manage the financial aspects of a business or project, as well as ",
+            "how to create an income stream that benefits both you and your stakeholders.",
+        ]
+    },
+    {
+        id:44,
+        ownedBy:"Start a 6 figure Lead generation business",
+        title:"Master the process of attracting prospects to your business, increasing their interest through nurturing, and generating six figures on a regular basis.",
+        list:[
+            
+
+            "You will discover how to turn a prospect into a customer.",
+            "You will learn how to create effective marketing messages and how to deliver them.",
+            "You will discover the significance of developing sales funnels that guide prospects through your sales process.",
+            "You will advance to the level of professional lead generator.",
+        ]
+    },
+    {
+        id:45,
+        ownedBy:"Build  a winning Ghost writing  business",
+        title:"Learn the fundamentals of ghostwriting, ghosting it right, and succeeding in the business!",
+        list:[
+            
+            "You'll learn how to assess a client's requirements, price your services, and manage projects.",
+            "You'll discover how to build an effective brand, how to get clients, and what they expect from you.",
+            "You will also obtain a thorough awareness of the legal issues of ghostwriting, such as copyright law, contract law, defamation, and libel.",
+        ]
+    },
+    {
+        id:46,
+        ownedBy:"Digital marketing Rockstar",
+        title:"Learn how to acquire new customers, engage them through different digital platforms, a nd generate transactions such as sales and customer loyalty.",
+        list:[
+            
+
+            "You will discover the marketing funnel and how it influences the consumer journey.",
+            "You'll also discover how to boost sales, cut costs, and boost your ROI.",
+            "You will learn how to design an effective marketing plan that is aligned with your business goals, as well as how to create successful content that attracts customers and drives conversions.",
+        ]
+    },
+    {
+        id:47,
+        ownedBy:"Learn tricks and tools for managing Online Community to success",
+        title:"Set up and execute social media and communication programs to fit with marketing strategy.",
+        list:[
+            
+            "You'll discover how trade secrets and tools can help you become an online community manager superstar.",
+            "You will learn how to build and manage a successful social media strategy, as well as the relationship between your brand and its online presence.",
+            "You will also learn how to assess the efficacy of your efforts and make necessary changes.",
+        ]
+    },
+    {
+        id:48,
+        ownedBy:"Amazon Money making machine",
+        title:"Learn the top way of making money on amazon with the amazon money making machine",
+        list:[
+            
+
+            "You will learn how to make money on amazon with the amazon money-making",
+            "machine and how you can build a passive income by selling on amazon.",
+            "You will also learn how to find products that are in demand and sell them on amazon for profit.",
+        ]
+    },
+    {
+        id:49,
+        ownedBy:"How to close sales on High ticket products",
+        title:"Learn the technique of helping businesses in selling premium items or services.",
+        list:[
+            "You will discover how to increase ticket sales.",
+            "You will learn high-quality strategies for acquiring high-ticket clients.",
+            "You will also learn how to use social ticket sales.",
         ]
     },
 ]

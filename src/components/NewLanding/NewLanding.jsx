@@ -116,7 +116,7 @@ function VideoSection() {
       <img src={vidPreview} alt="" />
       <div className="video_content">
         <h4 className="text-center fw-bold">
-          What is Gotocourse? See how it works
+        Gotocourse brings the new way to learn tech and business skills. Learn more
         </h4>
         <i>
           <FiPlayCircle size="6rem" onClick={() => setOpen(true)} />
