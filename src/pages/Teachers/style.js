@@ -96,3 +96,25 @@ export const ItWorksList = styled.div`
         color:#464646;
     }
 `
+
+export const BestTools = styled.section`
+    padding-block: 2rem;
+
+    header {
+        margin-bottom: 2rem;
+        color: var(--theme-blue);
+        text-align:center;
+        
+        p {
+            text-align: center;
+            width: min(100% - .2rem, 550px);
+        }
+    }
+   
+`
+
+export const TextContent = styled.div`
+    .logo {}
+`
+
+// export const 

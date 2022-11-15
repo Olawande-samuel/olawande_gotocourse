@@ -872,7 +872,7 @@ export function Short({ title, bootcampImg, bootcampId, description, duration, p
         }
     }
     useEffect(() => {
-        const ownListItem = upskillAltData.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
+        const ownListItem = shortPopUpContent.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
         if (ownListItem.length > 0) {
             setData(ownListItem[0])
         }
@@ -1207,7 +1207,7 @@ export function LiveWebinarCard({ img, title, place, date, time }) {
     return (
         <WebinarWrapper>
             <div className="img_top">
-                <img src={webimage} alt="" />
+                <img src={img} alt="" />
             </div>
             <div className="content">
                 <h6>{title}</h6>

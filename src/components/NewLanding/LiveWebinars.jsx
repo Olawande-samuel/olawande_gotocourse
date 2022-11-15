@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { ClassTypeComponent, LiveWebinarCard } from './landingComponents'
-
+import blockChain from "../../images/landing/executive/Blockchain.jpeg"
+import social from "../../images/landing/executive/socialAttack.jpeg"
+import techCareer from "../../images/landing/executive/tech_career.jpeg"
 const Grid = styled.div`
     display: grid;
     gap: 1rem;
@@ -45,6 +47,7 @@ const data = {
             title:"How to own your career in technology",
             date:"Dec 3 ,2022",
             time:"10am CST",
+            img:techCareer,
             description:"Technology Industry is changing rapidly and a lot of transformation happens every 3 years. People are expected to work with the pace of change that occurs. In this webinar, the discussion will be about how we adapt to the pace and intensity in which the change happens. The webinar will focus on how much one needs to learn, what are the different areas to pursue within the industry, and how do we cope up and work collaboratively for growth.",
             list:[
                 "How to adapt to the changes",
@@ -60,6 +63,7 @@ const data = {
             title:"Blockchain as a career option",
             date:"Dec 5, 2022",
             time:"3pm CST",
+            img: blockChain,
             description:"As a lot of young talent is deciding their next career move, Bhooma will discuss what is the future of Blockchain and distributed technologies. She will also discuss the kind of demand she is seeing in the market and what are the skill sets that are most relevant to her clients. Blockchain is still an emerging technology with a steep learning curve and aspirants have to be ready to pick up new skills. ",
             list:[
                 "Blockchain as a technology is evolving very fast and you will never have learnt it all",
@@ -71,6 +75,7 @@ const data = {
         },
         {
             id:3,
+            img: social,
             title:"How to Prevent Social Engineering Attacks ",
             date:"Nov 6, 2022",
             time:"10am CST",

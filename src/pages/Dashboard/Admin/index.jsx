@@ -668,7 +668,7 @@ export function CreateCourseCategory() {
   const [open, setOpen] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
   const [previewImage, setPreviewImage] = useState(false);
-
+ 
   const [showCareerModal, setShowCareerModal] = useState(false);
   const [showNicheModal, setShowNicheModal] = useState(false);
   const [loading, setLoading] = useState(false);
