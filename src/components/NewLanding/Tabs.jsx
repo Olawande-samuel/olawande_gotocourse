@@ -302,7 +302,8 @@ export function TabsComp(){
                   backgroundColor: "#eee"
                 }}
                 className="btn-plain new_categories_btn py-2 px-4 mb-4 rounded-0">Explore Categories</motion.button>
-            </Link>          <Swiper
+            </Link>          
+            <Swiper
             // install Swiper modules
             modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
             loop={false}

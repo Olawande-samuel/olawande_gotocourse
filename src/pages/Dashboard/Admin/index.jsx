@@ -544,6 +544,62 @@ export function CareerModal({
     </Modal>
   );
 }
+// CAREERMODAL COMPONENT
+export function PopUpModal({
+  newCareer,
+  updateCareer,
+  open,
+  setOpen,
+  handleChange,
+}) {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    minWidth: 600,
+    background: "#fff",
+    border: "1px solid #eee",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 6,
+    padding: "4rem 2rem",
+  };
+
+  return (
+    <Modal
+      open={open}
+      onClose={(e) => {
+        setOpen((_) => false);
+      }}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box style={style}>
+        <h5
+          className="lead text-primary"
+          style={{ color: "var(--theme-blue)" }}
+        >
+          Add Popup
+        </h5>
+        <Input
+          label="Name"
+          name="name"
+          type="text"
+          handleChange={handleChange}
+          value={newCareer}
+        />
+        <button
+          className="btn btn-primary my-3"
+          onClick={updateCareer}
+          style={{ backgroundColor: "var(--theme-blue)" }}
+        >
+          Add
+        </button>
+      </Box>
+    </Modal>
+  );
+}
 
 // CATEGORYPREVIEWMODAL COMPONENT
 export function CategoryPreviewModal({ preview, open, setOpen }) {
@@ -3613,6 +3669,7 @@ export function CreateBootcamp() {
     syllabus: [],
     careerList: [],
     packages: [],
+    popupArr:[]
   });
 
   const [loading, setLoading] = useState(false);
@@ -3751,10 +3808,13 @@ export function CreateBootcamp() {
   const [previewImage, setPreviewImage] = useState(false);
   const { syllabuses, addtoSyllabus, setSyllabusses } = useSyllabus();
   const [showCareerModal, setShowCareerModal] = useState(false);
+  const [showPopupModal, setShowPopupModal] = useState(false);
   const [careerlist, setCareerlist] = useState({
     name: "",
   });
-
+  
+  const [popupList, setPopupList] = useState("")
+  
   const openModal = () => {
     setOpenSyllabus(true);
   };
@@ -3780,6 +3840,12 @@ export function CreateBootcamp() {
       (item, index) => item.name + index !== e
     );
     setFormstate({ ...formstate, careerList: newCareerArr });
+  }
+  function deletePopup(e) {
+    let newPopupArr = formstate.popupArr.filter(
+      (item, index) => item + index !== e
+    );
+    setFormstate({ ...formstate, popupArr: newPopupArr });
   }
 
   const handleClose = () => {
@@ -3830,6 +3896,37 @@ export function CreateBootcamp() {
       };
     });
   }
+
+  function updatePopupHandler(e) {
+    if (popupList.trim() !== "") {
+      setFormstate({
+        ...formstate,
+        popupArr: [...formstate.popupArr, popupList],
+      });
+
+      setPopupList("");
+
+      setShowPopupModal((_) => false);
+
+      
+    } else {
+      toast.error("All fields are required", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }
+  function popupChangeHandler(e) {
+    console.log(e.target.value)
+    setPopupList(e.target.value);
+  }
+  
+  console.log({popupList})
 
   const [openPackage, setOpenPackage] = useState(false);
   // PACKAGES
@@ -4139,12 +4236,61 @@ export function CreateBootcamp() {
             >
               Add Career Prospect
             </button>
+            <Input
+              label="Popup Title"
+              name="popupTitle"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.popupTitle}
+            />
+            <div className={clsx.form_group}>
+              <label>Popup List</label>
+              {formstate.popupArr?.length !== 0 ? (
+                formstate.popupArr?.map((name , i) => (
+                  // <Syllabus key={i} title={name} />
+                  <div className={clsx.syllabus_container}>
+                    <h5>{name}</h5>
+                    <p>
+                      <i
+                        className="text-danger"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => deletePopup(name + i)}
+                      >
+                        <BiTrash />
+                      </i>
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <p
+                  className="m-0 text-danger"
+                  style={{ fontSize: "0.8rem", textIndent: 20 }}
+                >
+                  No Popup list found
+                </p>
+              )}
+            </div>
+            <button
+              type="button"
+              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
+              className={`btn btn-primary mb-3 ${clsx.addcareer_button}`}
+              onClick={(e) => setShowPopupModal((_) => true)}
+            >
+              Add Pop Up
+            </button>
             <CareerModal
               open={showCareerModal}
               newCareer={careerlist}
               setOpen={setShowCareerModal}
               handleChange={careerChangeHandler}
               updateCareer={updateCareerHandler}
+            />
+            <PopUpModal
+              open={showPopupModal}
+              newCareer={popupList}
+              setOpen={setShowPopupModal}
+              handleChange={popupChangeHandler}
+              updateCareer={updatePopupHandler}
             />
 
             {/* <div className={clsx.form_group}>

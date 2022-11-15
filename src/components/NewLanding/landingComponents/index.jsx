@@ -313,6 +313,14 @@ const ExecutiveCard = styled.div`
             font-size: 13px;
         }
     }
+    .route_to_class {
+        cursor: pointer;
+        color: var(--theme-blue);
+        
+        :hover {
+            color: var(--theme-orange);
+        }
+    }
 `
 
 
@@ -367,6 +375,9 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
                 <div className="d-flex justify-content-between align-items-center">
                     <span>$ {packages.length > 0 ? packages[0].price : price}</span>
                     <span>{duration}</span>
+                </div>
+                <div className="route_to_class">
+                    <span onClick={()=>gotoclass(title, category, bootcampId, navigate)}>Learn more</span>
                 </div>
             </div>
             {/* <Popover
@@ -659,16 +670,7 @@ const UpCoursesCard = styled.div`
         cursor: pointer;
 
     }
-    > div .cta {
-        font-size: 14px;
-        border: none;
-        outline: none;
-        background:#fff;
-
-        :hover {
-            color: var(--theme-blue);
-        }
-    }
+     
     button {
         color:#0072EF;
         font-size:14px;
@@ -711,6 +713,32 @@ const UpCoursesCard = styled.div`
             }
         }
     }
+    .ct_bar{
+            width:1px;
+            height:100%;
+            background: #333;
+    }
+
+    .foot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        .cta {
+        font-size: 14px;
+        border: none;
+        outline: none;
+        background:#fff;
+
+            :hover {
+                color: var(--theme-blue);
+            }
+        }
+        span {
+            font-size:14px;
+            color: var(--theme-orange)
+        }
+    } 
     
 `
 
@@ -935,8 +963,11 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, description,
                 </div>
 
                 {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-                <div>
+                <div className="foot">
                     <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button>
+                    <div className="ct_bar"></div>
+
+                    <span>{changeConstants(packages[0]?.title)}</span>
                 </div>
                 {/* <div>
                     <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>
