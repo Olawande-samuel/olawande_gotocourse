@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { ClassTypeComponent, LiveWebinarCard } from './landingComponents'
-import blockChain from "../../images/landing/executive/Blockchain.webp"
-import social from "../../images/landing/executive/socialAttack.webp"
-import techCareer from "../../images/landing/executive/tech_career.webp"
+import blockChain from "../../images/landing/executive/Blockchain.jpeg"
+import social from "../../images/landing/executive/socialAttack.jpeg"
+import techCareer from "../../images/landing/executive/tech_career.jpeg"
 const Grid = styled.div`
     display: grid;
     gap: 1rem;
