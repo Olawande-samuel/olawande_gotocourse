@@ -5,17 +5,19 @@ import { useAuth } from '../../contexts/Auth'
 import { ClassTypeComponent, Short, TechPreCard } from './landingComponents'
 
 const Grid = styled.div`
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
+    gap: 1.5rem;
+    justify-content:space-around;
+    
 
-    @media screen and (max-width:710px){
+    /* @media screen and (max-width:710px){
         grid-template-columns: repeat(2, 1fr);
     }
     @media screen and (max-width:500px){
         grid-template-columns: min(100%, 380px);
         justify-content:center;
-    }
+    } */
     `
 const ShortCourses = () => {
     const { otherFunctions: {fetchBootcamps }, } = useAuth();
@@ -27,10 +29,11 @@ const ShortCourses = () => {
         onSuccess: (res)=>{
             if(res.data.length > 0){
                 const short = res.data.filter(item=>item.subCategory === "SHORT_COURSES" && item.isActive);
-                // console.log({short});
-                const tech = res.data.filter(item=>item.subCategory === "TECH_ENTREPRENEURSHIP" && item.isActive);
+                console.log({short});
+                let tech = res.data.filter(item=>item.subCategory === "TECH_ENTREPRENEURSHIP" && item.isActive);
 
-                // console.log({tech});
+                console.log({tech});
+                tech = tech.filter(d => d.title !== "Creative Design like a Pro")
                 const threeShorts = short?.slice(0, 4)
                 const threeTech = tech?.slice(0, 4)
                 // console.log({threeTech});

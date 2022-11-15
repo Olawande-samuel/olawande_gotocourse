@@ -377,7 +377,7 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
                     <span>{duration}</span>
                 </div>
                 <div className="route_to_class">
-                    <span onClick={()=>gotoclass(title, category, bootcampId, navigate)}>Learn more</span>
+                    <span onClick={() => gotoclass(title, category, bootcampId, navigate)}>Learn more</span>
                 </div>
             </div>
             {/* <Popover
@@ -749,8 +749,8 @@ const ShortCard = styled.div`
     display: flex;
     flex-direction:column;
     flex-shrink:0;
-    width: 280px;
-    height: 400px;
+    // width: 250px;
+    // height: 250px;
     // border: 2px solid red;
     box-shadow: -10px 159px 64px rgba(0, 0, 0, 0.01), -6px 90px 54px rgba(0, 0, 0, 0.05), -3px 40px 40px rgba(0, 0, 0, 0.09), -1px 10px 22px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
     
@@ -934,6 +934,7 @@ export function Short({ title, bootcampImg, bootcampId, description, duration, p
                     </div>
                 </Box>
             </Popover>
+
         </ShortCard>
     )
 }
@@ -1247,17 +1248,63 @@ const SuccessWrapper = styled.div`
         /* padding-left: 1rem; */
     }
 
+    .readmore{
+        color: var(--theme-blue);
+        
+            &:hover{
+                cursor: pointer;
+                color: black;
+            }
+    }
+
 
 `
 
 export function SuccessCard({ icon, description }) {
-    return (
+
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
+    return (<>
         <SuccessWrapper>
             <div className="icon_wrapper">
                 <img src={icon} alt="" />
             </div>
-            <p className="content">{description}</p>
+            <p className="restricted_line">{description}</p>
+            <span onClick={handleClick} className="readmore">read more</span>
         </SuccessWrapper>
+        <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+                vertical: 'center',
+                horizontal: 'left',
+            }}
+        >
+            <Box sx={{ p: 2 }} className="pop_container">
+
+                <SuccessWrapper>
+                    <div className="icon_wrapper">
+                        <img src={icon} alt="" />
+                    </div>
+                    <p className="content">{description}</p>
+                </SuccessWrapper>
+            </Box>
+        </Popover>
+    </>
     )
 }
 
