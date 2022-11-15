@@ -9,7 +9,6 @@ const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
     gap: 1.5rem;
-    row-gap:3rem;
     justify-content:space-around;
     
 
@@ -41,7 +40,7 @@ const UpskillCourse = () => {
     <ClassTypeComponent {...data}>
         <Grid>
             {
-                shorts?.filter(item=>item.isActive).slice(0, 4).map(item=>(
+                shorts?.filter(item=>item.isActive).slice(0, 8).map(item=>(
                     <UpskillCourseCard {...item} />
                 ))
             }

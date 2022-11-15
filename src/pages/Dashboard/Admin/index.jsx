@@ -27,7 +27,7 @@ import { useSyllabus } from "../../../contexts/Syllabus";
 import { GuardedRoute } from "../../../hoc";
 import { AdvancedError } from "../../../classes";
 import { useLocalStorage } from "../../../hooks";
-import { getDate } from "../../../constants";
+import { changeSubCategory, getDate } from "../../../constants";
 import Input from "../../../components/Input";
 import Loader from "../../../components/Loader";
 import UploadForm from "../../../components/UploadForm";
@@ -3398,6 +3398,8 @@ export function Bootcamps() {
     "Title",
     "Details",
     "Type",
+    "Category",
+    "Sub-Category",
     "Duration",
     "Date",
     "Time",
@@ -3469,7 +3471,7 @@ export function Bootcamps() {
               <tbody>
                 {bootcamps.length > 0 ? (
                   bootcamps
-                    .filter((boot) =>
+                    .filter((boot) => 
                       boot.title.toLowerCase().includes(search.toLowerCase())
                     )
                     .map(
@@ -3482,11 +3484,12 @@ export function Bootcamps() {
                           startTime,
                           endTime,
                           endDate,
-                          startDate,
+                          startDate, 
                           bootcampId,
                           _id,
                           packages,
-                          price
+                          price,
+                          category, subCategory
                         },
                         i
                       ) => (
@@ -3503,6 +3506,8 @@ export function Bootcamps() {
                           date={`${getDate(startDate)} - ${getDate(endDate)}`}
                           packages={packages}
                           price={price}
+                          category={category}
+                          subCategory={subCategory}
                         />
                       )
                     )
@@ -4197,7 +4202,8 @@ export function BootcampRow({
   admin,
   clickHandler = null,
   packages,
-  price
+  price,
+  category, subCategory
 }) {
   console.log({packages})
   console.log({price})
@@ -4214,6 +4220,8 @@ export function BootcampRow({
         />
       </td>
       <td className={clsx.user__info}>{type}</td>
+      <td className={clsx.user__info}>{category}</td>
+      <td className={clsx.user__info}>{subCategory && changeSubCategory(subCategory)}</td>
       <td className={clsx.user__info}>{duration}</td>
       <td className={clsx.user__info}>{date}</td>
       <td className={clsx.user__info}>{time}</td>

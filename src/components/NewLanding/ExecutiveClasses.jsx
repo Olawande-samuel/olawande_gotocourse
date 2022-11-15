@@ -8,16 +8,16 @@ import exec2 from "../../images/landing/exe2.png"
 import exec3 from "../../images/landing/exe3.png"
 
 const Grid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(250px, 300px), 300px));
-    justify-content: space-around;
-    gap: 1.5rem;
-    row-gap:3rem;
+     display: grid;
+  grid-template-columns: repeat(4, 280px);
+  gap: 1.5rem;
+  justify-content: space-around;
 
-     @media screen and (max-width:660px){
-        grid-template-columns: repeat(auto-fit, minmax(min(200px, 240px), 240px));
-        justify-content: center;
-    }
+  @media screen and (max-width: 930px) {
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 240px), 240px));
+    justify-content: space-evenly;
+    gap: 1rem;
+  }
     /*
     @media screen and (max-width:500px){
         grid-template-columns: min(100%, 380px);
@@ -42,7 +42,7 @@ const ExecutiveClasses = () => {
     <ClassTypeComponent {...data}>
         <Grid>
             {
-                shorts?.filter(item => item.isActive).slice(0, 3).map((item,i)=>(
+                shorts?.filter(item => item.isActive).slice(0, 8).map((item,i)=>(
                     <ExeEducation {...item} i={i} img={data.content[i]} />
                 ))
             }

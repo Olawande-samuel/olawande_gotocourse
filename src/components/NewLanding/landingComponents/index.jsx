@@ -330,7 +330,7 @@ export function ExeEducation({title, date, img, bootcampImg, category, descripti
     }
     return (
         <ExecutiveCard >
-            <img src={img} alt="" className="exe_image" />
+            <img src={img ? img : bootcampImg} alt="" className="exe_image" />
             <div className="exe_content">
                 <div className="">
                     <h6 aria-describedby={id}  onClick={()=>gotoclass(title, category, bootcampId, navigate)}>{title}</h6>
@@ -454,8 +454,16 @@ const InDemandCard = styled.div`
         font-size: 13px;
         margin-top: 1rem;
 
-        span {
-            cursor: pointer
+        span:first-child {
+            cursor: pointer;
+            transition: color .3s ease; 
+            
+            :hover {
+                color: var(--theme-blue)
+            }
+        }
+        span:last-child {
+            color: var(--theme-orange)
         }
         .ct_bar{
             width:1px;
@@ -534,7 +542,8 @@ export function InDemand({title, bootcampImg, category, duration, price, package
             <div className="cta">
                 <span aria-describedby={id} variant="contained" onClick={handleClick}>View course</span>
                 <div className="ct_bar"></div>
-                <span onClick={()=> gotoclassPayment(title, category, bootcampId, navigate)}>Start Learning</span>
+                {/* <span onClick={()=> gotoclassPayment(title, category, bootcampId, navigate)}>Live Online</span> */}
+                <span>Live Online</span>
             </div>
             <Popover
                 id={id}
@@ -598,7 +607,8 @@ const UpCoursesCard = styled.div`
     box-shadow: -10px 159px 64px rgba(0, 0, 0, 0.01), -6px 90px 54px rgba(0, 0, 0, 0.05), -3px 40px 40px rgba(0, 0, 0, 0.09), -1px 10px 22px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
     
     img {
-        height: 130px;
+        height: 40%;
+        min-height: 40%;
         max-width: 100%;
         object-fit:cover;
         object-position: center;
@@ -616,9 +626,19 @@ const UpCoursesCard = styled.div`
         font-weight: 800;
         text-transform: capitalize;
         font-size: 16px;
-        margin-block: .7rem 3rem;
+        margin-block: .7rem;
         cursor: pointer;
 
+    }
+    > div .cta {
+        font-size: 14px;
+        border: none;
+        outline: none;
+        background:#fff;
+
+        :hover {
+            color: var(--theme-blue);
+        }
     }
     button {
         color:#0072EF;
@@ -629,6 +649,12 @@ const UpCoursesCard = styled.div`
     }
     .up_content {
         padding-inline: 1.5rem;
+        padding-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content:space-between;
+        height: 60%;
+        /* height: -webkit-fill-available; */
     }
     
 `
@@ -683,11 +709,17 @@ export function UpskillCourseCard({title, bootcampImg,bootcampId, description, d
         <UpCoursesCard>
             <img src={bootcampImg} alt="" />
             <div className="up_content">
-                <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title.toLowerCase()}</h5>
+                <div>
+                    <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title.toLowerCase()}</h5>
+                    <div className="d-flex justify-content-between">
+                        <small>{duration}</small>
+                        <small>$ {packages.length > 0 ? packages[0].price : price}</small>
+                    </div>
+                </div>
+
                 {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-                <div className="d-flex justify-content-between my-3">
-                    <small>{duration}</small>
-                    <small>$ {packages.length > 0 ? packages[0].price : price}</small>
+                <div>
+                    <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button>
                 </div>
                 {/* <div>
                     <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>

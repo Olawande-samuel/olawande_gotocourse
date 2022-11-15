@@ -7,7 +7,7 @@ import { ClassTypeComponent, InDemand } from "./landingComponents";
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 280px);
+  grid-template-columns: repeat(4, 280px);
   gap: 2.5rem;
   row-gap: 3rem;
   justify-content: space-around;
@@ -41,7 +41,7 @@ const IndemandClasses = () => {
     <ClassTypeComponent {...data}>
       <Grid>
         {
-          shorts?.filter(item=>item.isActive).slice(0,3).map((item) => (
+          shorts?.filter(item=>item.isActive).slice(0,6).map((item) => (
             <InDemand {...item} />
           ))
         }
