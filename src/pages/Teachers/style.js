@@ -113,4 +113,8 @@ export const BestTools = styled.section`
    
 `
 
+export const TextContent = styled.div`
+    .logo {}
+`
+
 // export const 
