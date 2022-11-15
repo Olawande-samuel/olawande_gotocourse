@@ -899,7 +899,41 @@ export function Short({ title, bootcampImg, bootcampId, description, duration, p
                     <span>Self-Paced</span>
                 </div>
             </div>
-
+            <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'center',
+                    horizontal: 'left',
+                }}
+            >
+                <Box sx={{ p: 2 }} className="pop_container">
+                    <header>
+                        <h5 className="fw-bold text-capitalize">{title}</h5>
+                    </header>
+                    <div>
+                        <div className="d-flex justify-content-between mb-3">
+                            <span className="fw-bold">{duration}</span>
+                            <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
+                        </div>
+                        <p>{data.title}</p>
+                        <ul>
+                            {
+                                data?.list?.map((item, i) => (
+                                    <li key={i}>{item}</li>
+                                ))
+                            }
+                        </ul>
+                        {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+                        <div className="pop_action">
+                            <button>Enroll Now</button>
+                            <button>Wishlist</button>
+                        </div>
+                    </div>
+                </Box>
+            </Popover>
         </ShortCard>
     )
 }
