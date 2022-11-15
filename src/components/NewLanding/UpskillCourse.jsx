@@ -177,7 +177,7 @@ export const upskillAltData = [
 
 const data = {
     header: "",
-    header2:"Explore In Upskill courses",
+    header2:"Explore In Upskill courses >",
     subtext:"Increase your earning  potential by upgrading your skillsets.",
     content: [
         {
