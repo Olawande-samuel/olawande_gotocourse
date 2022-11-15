@@ -1172,7 +1172,7 @@ export function LiveWebinarCard({ img, title, place, date, time }) {
     return (
         <WebinarWrapper>
             <div className="img_top">
-                <img src={webimage} alt="" />
+                <img src={img} alt="" />
             </div>
             <div className="content">
                 <h6>{title}</h6>
