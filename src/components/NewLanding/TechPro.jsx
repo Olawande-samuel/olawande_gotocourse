@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 
 import affPro from "../../images/aff_pro.webp"
-import techPro from "../../images/tech_pro.webp";
+import techPro from "../../images/instructor.png";
 import trackPro from "../../images/landing_dash.png"
 const Twocolumn = ({img, title, firstText, secondText, thirdText, btn,link}) => {
 

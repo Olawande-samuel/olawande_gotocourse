@@ -1,5 +1,5 @@
 import React from 'react'
-import Learning from "../../images/anywhere.png";
+import Learning from "../../images/business.png";
 import Inperson from "../../images/in-Person.webp"
 import Mento from "../../images/inPerson.webp";
 import Tech from "../../images/fast.webp";
