@@ -577,9 +577,11 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
                 </ul>
             </div>
             <div className="cta">
-                <span aria-describedby={id} variant="contained" onClick={handleClick}>View course</span>
+                {/* <span aria-describedby={id} variant="contained" onClick={handleClick}>View course</span> */}
+                <span onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</span>
                 <div className="ct_bar"></div>
                 {/* <span onClick={()=> gotoclassPayment(title, category, bootcampId, navigate)}>Live Online</span> */}
+
                 <span>Live Online</span>
             </div>
             <Popover
@@ -833,7 +835,7 @@ const ShortCard = styled.div`
     
 `
 
-export function Short({ title, bootcampImg, bootcampId, description, duration, price, packages }) {
+export function Short({ title, bootcampImg, bootcampId, description, popupTitle, popupArr, duration, price, packages, endDate }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -858,7 +860,7 @@ export function Short({ title, bootcampImg, bootcampId, description, duration, p
     const { studentFunctions: { wishlistCourse } } = useAuth()
     const mutation = useMutation(([id, usertoken]) => wishlistCourse(id, usertoken), {
         onSuccess: (res) => {
-            console.log({ res })
+            // console.log({ res })
         },
         onError: (err) => console.error(err)
     })
@@ -911,21 +913,26 @@ export function Short({ title, bootcampImg, bootcampId, description, duration, p
             >
                 <Box sx={{ p: 2 }} className="pop_container">
                     <header>
-                        <h5 className="fw-bold text-capitalize">{title}</h5>
+                    {/* <h5 className="fw-bold text-capitalize">{popupTitle}</h5> */}
+                    <h5 className="fw-bold text-capitalize">{title}</h5>
+                        <p style={{ marginTop: "1rem" }}>Starting Date: <span>{new Date(endDate).toDateString()}</span></p>
+
                     </header>
                     <div>
-                        <div className="d-flex justify-content-between mb-3">
-                            <span className="fw-bold">{duration}</span>
-                            <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
-                        </div>
-                        <p>{data.title}</p>
+                        {/* <p>{data.title}</p> */}
                         <ul>
                             {
-                                data?.list?.map((item, i) => (
+                                popupArr?.map((item, i) => (
                                     <li key={i}>{item}</li>
                                 ))
                             }
                         </ul>
+                        <div className="d-flex justify-content-between mb-3">
+                            <span>Self-Paced</span>
+                            <span className="fw-bold">{duration}</span>
+                            <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
+                        </div>
+                        <h6>Ready to register?</h6>
                         {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
                         <div className="pop_action">
                             <button>Enroll Now</button>
@@ -939,7 +946,7 @@ export function Short({ title, bootcampImg, bootcampId, description, duration, p
     )
 }
 
-export function UpskillCourseCard({ title, bootcampImg, bootcampId, description, duration, price, packages }) {
+export function UpskillCourseCard({ title, bootcampImg, bootcampId, description, duration, price, packages, popupTitle, popupArr }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -1020,17 +1027,17 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, description,
             >
                 <Box sx={{ p: 2 }} className="pop_container">
                     <header>
-                        <h5 className="fw-bold text-capitalize">{title}</h5>
+                        <h5 className="fw-bold text-capitalize">{popupTitle}</h5>
                     </header>
                     <div>
-                        <div className="d-flex justify-content-between mb-3">
+                        {/* <div className="d-flex justify-content-between mb-3">
                             <span className="fw-bold">{duration}</span>
                             <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
-                        </div>
-                        <p>{data.title}</p>
+                        </div> */}
+                        {/* <p>{data.title}</p> */}
                         <ul>
                             {
-                                data?.list?.map((item, i) => (
+                                popupArr?.map((item, i) => (
                                     <li key={i}>{item}</li>
                                 ))
                             }

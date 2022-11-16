@@ -24,6 +24,15 @@ const Grid = styled.div`
         justify-content:center;
     } */
     `
+export const ProgramPage = () => {
+    return(
+        <>
+        id
+        </>
+    )
+
+}  
+
 const ExecutiveClasses = () => {
     const { otherFunctions: {fetchBootcamps }, } = useAuth();
     const [shorts, setShorts] = useState([])

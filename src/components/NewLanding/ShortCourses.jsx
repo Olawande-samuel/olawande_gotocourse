@@ -19,6 +19,7 @@ const Grid = styled.div`
         justify-content:center;
     } */
     `
+
 const ShortCourses = () => {
     const { otherFunctions: {fetchBootcamps }, } = useAuth();
     const [shorts, setShorts] = useState([])
@@ -36,7 +37,7 @@ const ShortCourses = () => {
                 tech = tech.filter(d => d.title !== "Creative Design like a Pro")
                 const threeShorts = short?.slice(0, 4)
                 const threeTech = tech?.slice(0, 4)
-                // console.log({threeTech});
+                console.log({threeTech});
                 const myContent = threeShorts.concat(threeTech)
                 setShorts(myContent)
             }
