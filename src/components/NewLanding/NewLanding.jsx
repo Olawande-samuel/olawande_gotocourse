@@ -117,10 +117,10 @@ function VideoSection() {
     <section className="video_section">
       <img src={vidPreview} alt="" />
       <div className="video_content">
-        <h4 className="text-center fw-bold mb-0" style={{ marginInline: "auto"}}>
+        <h4 className="text-center fw-bold mb-0 text-white" style={{ marginInline: "auto"}}>
           Gotocourse brings the new way to learn tech and business skills.
         </h4>
-        <h4 className="text-center fw-bold mb-1" style={{ marginInline: "auto"}}>
+        <h4 className="text-center fw-bold mb-1 text-white" style={{ marginInline: "auto"}}>
           Learn more
         </h4>
         <i>
