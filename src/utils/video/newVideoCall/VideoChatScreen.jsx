@@ -104,8 +104,8 @@ const VideoChatScreen = ()  => {
 
     const videoWrapper = document.querySelector('.video-section')
 
-    function addVideoStream(videoWrapper, stream) {
-        const video = videoWrapper.querySelector('video')
+    function addVideoStream(videoWrap, stream) {
+        const video = videoWrap.querySelector('video')
         video.srcObject = stream
         video.addEventListener('loadedmetadata', () => {
           video.play()
@@ -257,11 +257,12 @@ const VideoChatScreen = ()  => {
         myPeer.current.on('call', call => {
             if (call.peer.split('-')[0] != "presentation") {
                 call.answer(localStream.current)
+                const videoWra = document.querySelector('.video-section')
                 const remoteVideoWrapper = document.createElement('div')
                 remoteVideoWrapper.classList.add("remote-users")
                 const remoteVideo = document.createElement('video')
                 remoteVideoWrapper.appendChild(remoteVideo)
-                videoWrapper?.append(remoteVideoWrapper)
+                videoWra?.append(remoteVideoWrapper)
 
                 console.log("caller user: ", call.peer)
 
@@ -310,19 +311,20 @@ const VideoChatScreen = ()  => {
                     console.log("I am user is presenting")
                     presentationPeer.current?.call(userId, presentationStream.current);
                 }
-            } else if (userProfile.userId != userId.split('-')[1]) {
+            } else if (userProfile.userId !== userId.split('-')[1]) {
                 connectToUserRemotePresentation(userId)
             }
         })
 
         const connectToNewUser = (userId, stream) => {
             myCall = myPeer.current?.call(userId, stream)
+            const videoWrap = document.querySelector('.video-section')
 
             const remoteVideoWrapper = document.createElement('div')
             remoteVideoWrapper.classList.add("remote-users")
             const remoteVideo = document.createElement('video')
             remoteVideoWrapper.appendChild(remoteVideo)
-            videoWrapper?.append(remoteVideoWrapper)
+            videoWrap?.append(remoteVideoWrapper)
 
 
             myCall?.on('stream', userVideoStream => {
@@ -413,18 +415,18 @@ const VideoChatScreen = ()  => {
             <Navbar />
             <Content>
                 <VideoWrapper>
-                    {/* <div onClick={closeRecordedModal} className="recoreded-media">
+                    <div onClick={closeRecordedModal} className="recoreded-media">
                         <video ref={recordedVideoRef} src=""></video>
                     </div>
                     <UserPresentation isPresenting={isPresenting}>
                         <video className="client-presentation-stream" src="" muted={true}></video>
-                    </UserPresentation> */}
-                    {/* <StreamWrapper isPresenting={isPresenting} className="video-section"> */}
+                    </UserPresentation>
+                    <StreamWrapper isPresenting={isPresenting} className="video-section">
+                    </StreamWrapper>
                        
-                        <UserCallBlock>
-                            <video className="client-local-stream" src="" muted={true}></video>
-                        </UserCallBlock>
-                    {/* </StreamWrapper> */}
+                    <UserCallBlock>
+                        <video className="client-local-stream" src="" muted={true}></video>
+                    </UserCallBlock>
 
                     <ControlWrapper>
                         <ControlItem onClick={() => {

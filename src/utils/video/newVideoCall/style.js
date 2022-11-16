@@ -83,7 +83,7 @@ export const VideoWrapper = styled.div`
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
        
     
-    grid-auto-rows: 150px;
+    grid-auto-rows: 250px;
     gap: 1rem;
     /* overflow-y: scroll; */
     margin-inline: auto;
@@ -169,7 +169,7 @@ export const StreamWrapper = styled.div`
     background:#191046;
     position: relative;
     overflow: hidden;
-    padding: 10px;
+    /* padding: 10px; */
     
 
     @media screen and (min-width: 880px) {
@@ -257,7 +257,10 @@ export const UserCallBlock = styled.div`
 
     video {
         width: 100%;
+        height: 100%;
         object-fit: cover;
+        border-radius: 10px;
+
     }
 
     @media screen and (min-width: 880px) {
