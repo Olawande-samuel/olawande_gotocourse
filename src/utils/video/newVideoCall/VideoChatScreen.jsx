@@ -5,19 +5,22 @@ import { HiOutlinePhone } from 'react-icons/hi'
 import {  IoAdd } from 'react-icons/io5'
 import { MdPresentToAll } from 'react-icons/md'
 import {  VscRecord } from 'react-icons/vsc'
-import { useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
-import useQuery from '../../../hooks/useQuery'
-import useSocket from '../../../hooks/useSocket'
+import useSocket from '../useSocket'
 import { Wrapper, Content, HeadBar, VideoWrapper, AddPeople, ControlItem, ControlWrapper, UserCallBlock, UserPresentation, StreamWrapper,  } from './style'
 import { MediaConnection, Peer } from "peerjs";
-import CONFIG from '../../../Utils/appConst'
+import CONFIG from '../appConst'
+import { useLocalStorage } from '../../../hooks'
+import { KEY } from '../../../constants'
+import useQuery from '../useQuery'
 
 const VideoChatScreen = ()  => {
     const { socket, sendPing } = useSocket()
     const location = useLocation();
-    const userProfile = useSelector((state) => state.user);
-    const [isPresenting, setIsPresenting] = useState<boolean>(false);
+    const {getItem} = useLocalStorage()
+    const userProfile = getItem(KEY)
+
+    const [isPresenting, setIsPresenting] = useState(false);
     const [callSettingsState, setCallSettingsState] = useState({
         video: true,
         audio: true,
@@ -28,9 +31,7 @@ const VideoChatScreen = ()  => {
 
     const connectionUserId = useRef(userProfile.userId)
 
-    const connectionStateRef = useRef<{
-        hasJoinedPresentation: boolean
-    }>({
+    const connectionStateRef = useRef({
         hasJoinedPresentation: false
     })
 
@@ -170,10 +171,10 @@ const VideoChatScreen = ()  => {
         console.log(res.data)
     }
 
-    const presentationStream = useRef<MediaStream | null>(null);
-    const presentationPeer = useRef<Peer | null>(null);
-    const myPeer = useRef<Peer | null>(null);
-    const presentationPeers = useRef<any>({})
+    const presentationStream = useRef(null);
+    const presentationPeer = useRef(null);
+    const myPeer = useRef(null);
+    const presentationPeers = useRef({})
 
     function startCapture() {
         const presentationId = "presentation-"+ connectionUserId.current
@@ -204,7 +205,7 @@ const VideoChatScreen = ()  => {
             presentationPeer.current.on('call', call => {
                 console.log("presentation caller user: ", call.peer)
                 presentationPeers.current[call.peer] = call
-                call.answer(presentationStream.current!)
+                call.answer(presentationStream?.current)
 
                 call.on('stream', userVideoStream => {
                     console.log("remote presentation viewer sent sream: ", userVideoStream)
@@ -229,14 +230,14 @@ const VideoChatScreen = ()  => {
         
     }
 
-    const [remoteUserPresentingProccessing, setRemoteUserPresentingProccessing] = useState<boolean>(false)
+    const [remoteUserPresentingProccessing, setRemoteUserPresentingProccessing] = useState(false)
 
-    const peers = useRef<any>({})
+    const peers = useRef({})
     const startWebCam = async () => {
-        const myVideo: HTMLVideoElement | null = document.querySelector('.client-local-stream')
+        const myVideo  = document.querySelector('.client-local-stream')
         myVideo?.setAttribute("autoplay", "")
         myVideo?.setAttribute("playsInline", "")
-        myVideo!.muted = true;
+        myVideo.muted = true;
 
         // localStream.current = await navigator.mediaDevices.getUserMedia({ video: true, audio: true})
 
@@ -254,7 +255,7 @@ const VideoChatScreen = ()  => {
         })
         myPeer.current.on('call', call => {
             if (call.peer.split('-')[0] != "presentation") {
-                call.answer(localStream.current!)
+                call.answer(localStream.current)
                 const remoteVideoWrapper = document.createElement('div')
                 remoteVideoWrapper.classList.add("remote-users")
                 const remoteVideo = document.createElement('video')
@@ -273,17 +274,17 @@ const VideoChatScreen = ()  => {
                     remoteVideoWrapper.remove();
                 })
             } else if (userProfile.userId != call.peer.split('-')[1]) {
-                call.answer(localStream.current!)
+                call.answer(localStream.current)
                 setIsPresenting(true)
                 call?.on('stream', presentationStream => {
                     console.log("recevied presentation stream: ", presentationStream)
-                    const presentationVideo: HTMLVideoElement | null = document.querySelector('.client-presentation-stream')
+                    const presentationVideo = document.querySelector('.client-presentation-stream')
                     presentationVideo?.setAttribute("autoplay", "")
                     presentationVideo?.setAttribute("playsInline", "")
-                    presentationVideo!.muted = true;
-                    presentationVideo!.srcObject = presentationStream
-                    presentationVideo!.addEventListener('loadedmetadata', () => {
-                        presentationVideo!.play()
+                    presentationVideo.muted = true;
+                    presentationVideo.srcObject = presentationStream
+                    presentationVideo.addEventListener('loadedmetadata', () => {
+                        presentationVideo.play()
                     })
                     setRemoteUserPresentingProccessing(false)
                 })
@@ -294,9 +295,9 @@ const VideoChatScreen = ()  => {
             }
         })
 
-        myVideo!.srcObject = localStream.current
-        myVideo!.addEventListener('loadedmetadata', () => {
-            myVideo!.play()
+        myVideo.srcObject = localStream.current
+        myVideo.addEventListener('loadedmetadata', () => {
+            myVideo.play()
         })
 
         socket.on('new-user-join-video-room', (userId) => {
@@ -306,14 +307,14 @@ const VideoChatScreen = ()  => {
                 console.log("presentation state: ", isPresenting)
                 if (presentationStream.current?.getVideoTracks()[0].enabled) {
                     console.log("I am user is presenting")
-                    presentationPeer.current?.call(userId, presentationStream.current!);
+                    presentationPeer.current?.call(userId, presentationStream.current);
                 }
             } else if (userProfile.userId != userId.split('-')[1]) {
                 connectToUserRemotePresentation(userId)
             }
         })
 
-        const connectToNewUser = (userId: any, stream: any) => {
+        const connectToNewUser = (userId, stream) => {
             myCall = myPeer.current?.call(userId, stream)
 
             const remoteVideoWrapper = document.createElement('div')
@@ -334,21 +335,21 @@ const VideoChatScreen = ()  => {
             peers.current[userId] = myCall
         }
 
-        const connectToUserRemotePresentation = (presentaterUserId: any) => {
+        const connectToUserRemotePresentation = (presentaterUserId) => {
             const presentationId = "presentation-"+ connectionUserId.current
             console.log(`lofty presentation id:  ${presentationId}`)
-            myCall = myPeer.current?.call(presentaterUserId, localStream.current!)
+            myCall = myPeer.current?.call(presentaterUserId, localStream.current)
 
             setIsPresenting(true)
             myCall?.on('stream', presentationStream => {
                 console.log("recevied presentation stream: ", presentationStream)
-                const presentationVideo: HTMLVideoElement | null = document.querySelector('.client-presentation-stream')
+                const presentationVideo = document.querySelector('.client-presentation-stream')
                 presentationVideo?.setAttribute("autoplay", "")
                 presentationVideo?.setAttribute("playsInline", "")
-                presentationVideo!.muted = true;
-                presentationVideo!.srcObject = presentationStream
-                presentationVideo!.addEventListener('loadedmetadata', () => {
-                    presentationVideo!.play()
+                presentationVideo.muted = true;
+                presentationVideo.srcObject = presentationStream
+                presentationVideo.addEventListener('loadedmetadata', () => {
+                    presentationVideo.play()
                 })
                 setRemoteUserPresentingProccessing(false)
             })
