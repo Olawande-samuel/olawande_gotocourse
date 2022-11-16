@@ -526,13 +526,6 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
 
 
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
@@ -590,51 +583,7 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
 
                 <span>Live Online</span>
             </div>
-            <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'center',
-                    horizontal: 'left',
-                }}
-            >
-                <Box sx={{ p: 2 }} className="pop_container">
-                    <header>
-                        <h5 className="fw-bold text-capitalize">{title}</h5>
-                    </header>
-                    <div>
-                        <div className="d-flex justify-content-between mb-3">
-                            <span className="fw-bold">{duration}</span>
-                            <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
-                        </div>
-                        <p>{data.title}</p>
-                        <ul>
-                            {
-                                data?.list?.map(li => (
-                                    <li>{li}</li>
-
-                                ))
-                            }
-                        </ul>
-                        {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-                        <div className="pop_action">
-                            <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>Enroll Now</button>
-                            {/* <button>Starting: {getDate(startDate)}</button>     */}
-                            <button onClick={addToWishlist}>
-                                {
-                                    mutation.isLoading ? <div className="spinner-border text-white">
-                                        <div className="visually-hidden">Loading...</div>
-                                    </div>
-                                        :
-                                        <span>Wishlist</span>
-                                }
-                            </button>
-                        </div>
-                    </div>
-                </Box>
-            </Popover>
+           
         </InDemandCard>
     )
 }
@@ -841,7 +790,7 @@ const ShortCard = styled.div`
     
 `
 
-export function Short({ title, bootcampImg, bootcampId, description, popupTitle, popupArr, duration, price, packages, endDate }) {
+export function Short({ title, bootcampImg, bootcampId, description, popupTitle, popupArr, duration, price, packages, endDate , all}) {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -879,6 +828,16 @@ export function Short({ title, bootcampImg, bootcampId, description, popupTitle,
             navigate("/login")
         }
     }
+
+    async function handleBootstrapEnrollment(e) {
+        e.preventDefault();
+        if (userdata?.token) {
+          localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+          navigate("payment")
+        } else {
+          navigate("/login")
+        }
+      }
     useEffect(() => {
         const ownListItem = shortPopUpContent.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
         if (ownListItem.length > 0) {
@@ -941,8 +900,8 @@ export function Short({ title, bootcampImg, bootcampId, description, popupTitle,
                         <h6>Ready to register?</h6>
                         {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
                         <div className="skillaction">
-                            <button>Enroll Now</button>
-                            <button>Wishlist</button>
+                            <button onClick={handleBootstrapEnrollment}>Enroll Now</button>
+                            <button onClick={addToWishlist}>Wishlist</button>
                         </div>
                     </div>
                 </Box>
@@ -952,7 +911,7 @@ export function Short({ title, bootcampImg, bootcampId, description, popupTitle,
     )
 }
 
-export function UpskillCourseCard({ title, bootcampImg, bootcampId, description, duration, price, packages, popupTitle, popupArr }) {
+export function UpskillCourseCard({ title, bootcampImg, bootcampId, description, duration, price, packages, popupTitle, popupArr, all }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -966,6 +925,7 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, description,
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
+//   console.log({all});
 
 
     // Call to Action
@@ -997,6 +957,16 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, description,
         }
 
     }, [title])
+
+    async function handleBootstrapEnrollment(e) {
+        e.preventDefault();
+        if (userdata?.token) {
+          localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+          navigate("payment")
+        } else {
+          navigate("/login")
+        }
+      }
 
     return (
         <UpCoursesCard>
@@ -1050,8 +1020,8 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, description,
                         </ul>
                         {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
                         <div className="pop_action">
-                            <button>Enroll Now</button>
-                            <button>Wishlist</button>
+                            <button onClick={addToWishlist}>Enroll Now</button>
+                            <button onClick={handleBootstrapEnrollment}>Wishlist</button>
                         </div>
                     </div>
                 </Box>

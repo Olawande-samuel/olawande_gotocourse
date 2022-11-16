@@ -44,7 +44,7 @@ const IndemandClasses = () => {
       <Grid>
         {
           shorts?.filter(item=>item.isActive).slice(0,8).map((item) => (
-            <InDemand {...item} />
+            <InDemand {...item} all={item}/>
           ))
         }
       </Grid>

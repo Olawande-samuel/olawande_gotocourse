@@ -734,6 +734,8 @@ export function Upcome({ _id, title, duration, category, subCategory, bootcampId
   const userdata = getItem("gotocourse-userdata");
   const navigate = useNavigate();
 
+  // console.log({all});
+
   async function handleBootstrapEnrollment(e) {
     e.preventDefault();
     if (userdata?.token) {

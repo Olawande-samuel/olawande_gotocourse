@@ -49,7 +49,7 @@ const UpskillCourse = () => {
         <Grid>
             {
                 shorts?.filter(item=>item.isActive).slice(0, 8).map(item=>(
-                    <UpskillCourseCard {...item} />
+                    <UpskillCourseCard {...item} all={item}/>
                 ))
             }
         </Grid>

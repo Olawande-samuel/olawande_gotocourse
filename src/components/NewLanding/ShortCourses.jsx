@@ -56,7 +56,7 @@ const ShortCourses = () => {
             {
                 shorts?.filter(item => item.isActive).map(item => (
                     // <TechPreCard {...item} />
-                    <Short {...item}/>
+                    <Short {...item} all={item}/>
                 ))
             }
         </Grid>
