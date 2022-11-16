@@ -58,7 +58,6 @@ export const  HeadBar = styled.div`
 
 
 export const Content = styled.div`
-    padding: 20px 8% 20px 8%;
     width: 100%;
     height: calc(100% - 90px);
     flex: 1;
@@ -68,20 +67,27 @@ export const Content = styled.div`
 `;
 
 export const VideoWrapper = styled.div`
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: flex-end; */
     width: 100%;
-    max-width: 1080px;
-    border-radius: 10px;
     gap: 10px;
-    background-color: #222;
+    background:#191046;
     height: 100%;
     position: relative;
     overflow: hidden;
     margin: 0px auto;
     padding: 10px 10px 88px 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+       
+    
+    grid-auto-rows: 150px;
+    gap: 1rem;
+    /* overflow-y: scroll; */
+    margin-inline: auto;
+    height: 100%;
 
     .recoreded-media {
         display: none;
@@ -160,7 +166,7 @@ export const StreamWrapper = styled.div`
     /* flex: 1; */
     border-radius: 10px;
     gap: 10px;
-    background-color: #444;
+    background:#191046;
     position: relative;
     overflow: hidden;
     padding: 10px;
@@ -239,7 +245,7 @@ export const CallBlock = styled.div`
 `;
 
 export const UserCallBlock = styled.div`
-    width: 130px;
+    /* width: 130px;
     height: 80px;
     position: absolute;
     border-radius: 10px;
@@ -247,7 +253,7 @@ export const UserCallBlock = styled.div`
     box-shadow: 0px 0px 10px -2px #ccc;
     right: 20px;
     bottom: 20px;
-    z-index: 999;
+    z-index: 999; */
 
     video {
         width: 100%;
@@ -320,16 +326,14 @@ export const ControlWrapper = styled.div`
     z-index: 9999;
 `;
 export const ControlItem = styled.div`
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #535353;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 4px;
-
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(40px);
-    border-radius: 8px;
+    color: #fff;
     cursor: pointer;
 
     :first-child {

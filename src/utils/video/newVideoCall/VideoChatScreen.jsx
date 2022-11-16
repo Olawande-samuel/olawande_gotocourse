@@ -13,6 +13,7 @@ import CONFIG from '../appConst'
 import { useLocalStorage } from '../../../hooks'
 import { KEY } from '../../../constants'
 import useQuery from '../useQuery'
+import { Navbar } from '../../../pages/Dashboard/components/Live/LiveClass'
 
 const VideoChatScreen = ()  => {
     const { socket, sendPing } = useSocket()
@@ -129,7 +130,7 @@ const VideoChatScreen = ()  => {
     const [isRecording, setIsRecording] = useState(false)
 
     const closeRecordedModal = (e) => {
-        if (e.target != recordedVideoRef.current) {
+        if (e.target !== recordedVideoRef.current) {
             recordedVideoRef.current.parentNode.style.display = "none"
         }
     }
@@ -400,7 +401,7 @@ const VideoChatScreen = ()  => {
     }, [userProfile.userId])
     return (
         <Wrapper>
-            <HeadBar>
+            {/* <HeadBar>
                 <div className="banner">
                     <img src="/assets/svg/logo.svg" alt="logo" />
                     <Link to="/home">TeamKonnect</Link>
@@ -408,40 +409,22 @@ const VideoChatScreen = ()  => {
                 <div className="head-img">
                     <img src={userProfile.profileImg} alt="avatar" />
                 </div>
-            </HeadBar>
+            </HeadBar> */}
+            <Navbar />
             <Content>
                 <VideoWrapper>
-                     <div onClick={closeRecordedModal} className="recoreded-media">
+                    {/* <div onClick={closeRecordedModal} className="recoreded-media">
                         <video ref={recordedVideoRef} src=""></video>
                     </div>
                     <UserPresentation isPresenting={isPresenting}>
                         <video className="client-presentation-stream" src="" muted={true}></video>
-                    </UserPresentation>
-                    <StreamWrapper isPresenting={isPresenting} className="video-section">
-                        {/* <CallBlock>
-                            <img src="https://images.unsplash.com/photo-1603112579965-e24332cc453a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" alt="person in video call" />
-                            <span>Vinay Gupta</span>
-                        </CallBlock>
-                        <CallBlock>
-                            <img src="https://images.unsplash.com/flagged/photo-1577125543470-61d192113f10?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" alt="person in video call" />
-                            <span>Vinay Gupta</span>
-                        </CallBlock>
-                        <CallBlock>
-                            <img src="https://images.unsplash.com/photo-1595951960408-a7259baee032?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2444&q=80" alt="person in video call" />
-                            <span>Vinay Gupta</span>
-                        </CallBlock>
-                        <CallBlock>
-                            <img src="https://images.unsplash.com/photo-1612000529646-f424a2aa1bff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" alt="person in video call" />
-                            <span>Vinay Gupta</span>
-                        </CallBlock> */}
-                        {/*" <UserCallBlock>
-                            <img src="https://images.unsplash.com/photo-1597199204011-e6e704645213?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2072&q=80" alt="person in video call" />
-                        </UserCallBlock> */}
-
+                    </UserPresentation> */}
+                    {/* <StreamWrapper isPresenting={isPresenting} className="video-section"> */}
+                       
                         <UserCallBlock>
                             <video className="client-local-stream" src="" muted={true}></video>
                         </UserCallBlock>
-                    </StreamWrapper>
+                    {/* </StreamWrapper> */}
 
                     <ControlWrapper>
                         <ControlItem onClick={() => {
@@ -466,10 +449,7 @@ const VideoChatScreen = ()  => {
                             <HiOutlinePhone />
                         </ControlItem>
                     </ControlWrapper>
-                    <AddPeople>
-                        <IoAdd />
-                        <span>Add people</span>
-                    </AddPeople>
+                    
                 </VideoWrapper>
             </Content>
         </Wrapper>
