@@ -324,7 +324,7 @@ const VideoChatScreen = ()  => {
             remoteVideoWrapper.classList.add("remote-users")
             const remoteVideo = document.createElement('video')
             remoteVideoWrapper.appendChild(remoteVideo)
-            videoWrap?.append(remoteVideoWrapper)
+            videoWrapper?.append(remoteVideoWrapper)
 
 
             myCall?.on('stream', userVideoStream => {
