@@ -51,6 +51,8 @@ const IndemandClasses = () => {
     </ClassTypeComponent>
   );
 };
+
+
 const data = {
   header: "",
   header2:"Explore In demand career courses",

@@ -110,6 +110,7 @@ import Articles from "./pages/Events/articles";
 import StudentChatModule, { ActiveChat } from "./pages/Dashboard/components/classConsole/Chat/student";
 
 import { GroupContent, MailDetail } from "./pages/Dashboard/components/classConsole/Chat";
+import { ProgramPage } from "./components/NewLanding/ExecutiveClasses";
 
 
 

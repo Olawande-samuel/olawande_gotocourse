@@ -2775,6 +2775,25 @@ gap: 1rem;
   background: var(--theme-blue);
 
 }
+
+
+.skillaction {
+  display: flex;
+  gap: 1rem;
+}
+
+.skillaction button {
+  padding:8px 12px;
+  flex: 25%;
+  border: .5px solid #EEE;
+  color: #fff;
+  background: var(--theme-orange);
+
+}
+.skillaction button:first-child {
+  background: var(--theme-blue);
+
+}
 .pop_description {
   display: -webkit-box;
   -webkit-line-clamp: 8;
