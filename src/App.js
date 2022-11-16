@@ -145,7 +145,7 @@ const TeachersHelp = lazy(() => import("./pages/Dashboard/Teachers/Help"));
 
 const HIWStudent = lazy(() => import("./pages/HowItWorks/HIWStudent"))
 const HIWTeacher = lazy(() => import("./pages/HowItWorks/HIWTeacher"))
-
+const TeachersLanding = lazy(()=> import("./pages/Teachers"))
 
 //MENTORS
 // const {MentorsProfile} = lazy(() => import("./pages/Dashboard/Mentors"));
@@ -181,6 +181,7 @@ function App() {
               <Route path="forgot-password" element={<ForgotPassword />} />
               <Route path="change-password" element={<ResetPassword />} />
               <Route path="become-a-teacher" element={<BecomeATeacher />} />
+              {/* <Route path="become-a-teacher" element={<TeachersLanding />} /> */}
               <Route path="student/classroom" element={<StudentClassroom />} />
 
               <Route path="tester" element={<CreateRoom />} />

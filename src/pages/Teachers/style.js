@@ -105,16 +105,94 @@ export const BestTools = styled.section`
         color: var(--theme-blue);
         text-align:center;
         
+        
         p {
             text-align: center;
             width: min(100% - .2rem, 550px);
+            margin-inline: auto;
+        }
+    }
+    section{
+        
+        padding-block: 2rem;
+        
+        :nth-child(even){
+            background:#E8EFFF;
+            color: red;
+
+            .grid .img_container{
+                order: 2;
+            }
+        }
+        :nth-child(odd){
+            color: green;
+             .grid  .img_container{
+                
+                order: 1;
+            }
+             .grid  .text_container{
+                order: 2;
+            }
+
+        }
+    }
+
+    @media (min-width: 512px){
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
         }
     }
    
 `
 
 export const TextContent = styled.div`
-    .logo {}
+    .logo {
+
+        margin-bottom: 0;
+
+        img {
+            max-width: 100%;
+            height: 100%;
+        }
+    }
+
+
+    h6 {
+        color: var(--theme-blue);
+
+    }
+
+    p {
+        margin-bottom: 1rem;
+        font-size:14px;
+    }
 `
+
+export const ImageContent = styled.div`
+
+    display: flex;
+
+    img {
+        width: 100%; 
+        height: 100%;
+        max-height: 350px;
+        max-width: 450px;
+        /* margin: auto; */
+        @media (min-width: 512px){
+            
+           margin:auto;
+        }
+    }
+
+
+    @media (max-width: 512px){
+       max-height: 500px;
+    }
+
+`
+
 
 // export const 
