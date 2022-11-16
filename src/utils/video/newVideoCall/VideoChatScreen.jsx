@@ -6,21 +6,19 @@ import {  IoAdd } from 'react-icons/io5'
 import { MdPresentToAll } from 'react-icons/md'
 import {  VscRecord } from 'react-icons/vsc'
 import { Link, useLocation } from 'react-router-dom'
+import useQuery from '../useQuery'
 import useSocket from '../useSocket'
 import { Wrapper, Content, HeadBar, VideoWrapper, AddPeople, ControlItem, ControlWrapper, UserCallBlock, UserPresentation, StreamWrapper,  } from './style'
 import { MediaConnection, Peer } from "peerjs";
 import CONFIG from '../appConst'
-import { useLocalStorage } from '../../../hooks'
 import { KEY } from '../../../constants'
-import useQuery from '../useQuery'
-import { Navbar } from '../../../pages/Dashboard/components/Live/LiveClass'
+import { useLocalStorage } from '../../../hooks'
 
 const VideoChatScreen = ()  => {
     const { socket, sendPing } = useSocket()
     const location = useLocation();
     const {getItem} = useLocalStorage()
-    const userProfile = getItem(KEY)
-
+    const userProfile = getItem(KEY);
     const [isPresenting, setIsPresenting] = useState(false);
     const [callSettingsState, setCallSettingsState] = useState({
         video: true,
@@ -104,8 +102,8 @@ const VideoChatScreen = ()  => {
 
     const videoWrapper = document.querySelector('.video-section')
 
-    function addVideoStream(videoWrap, stream) {
-        const video = videoWrap.querySelector('video')
+    function addVideoStream(videoWrapper, stream) {
+        const video = videoWrapper.querySelector('video')
         video.srcObject = stream
         video.addEventListener('loadedmetadata', () => {
           video.play()
@@ -206,7 +204,7 @@ const VideoChatScreen = ()  => {
             presentationPeer.current.on('call', call => {
                 console.log("presentation caller user: ", call.peer)
                 presentationPeers.current[call.peer] = call
-                call.answer(presentationStream?.current)
+                call.answer(presentationStream.current)
 
                 call.on('stream', userVideoStream => {
                     console.log("remote presentation viewer sent sream: ", userVideoStream)
@@ -235,7 +233,7 @@ const VideoChatScreen = ()  => {
 
     const peers = useRef({})
     const startWebCam = async () => {
-        const myVideo  = document.querySelector('.client-local-stream')
+        const myVideo = document.querySelector('.client-local-stream')
         myVideo?.setAttribute("autoplay", "")
         myVideo?.setAttribute("playsInline", "")
         myVideo.muted = true;
@@ -255,14 +253,13 @@ const VideoChatScreen = ()  => {
             socket.emit('join-video-room', roomId, userId)
         })
         myPeer.current.on('call', call => {
-            if (call.peer.split('-')[0] != "presentation") {
+            if (call.peer.split('-')[0] !== "presentation") {
                 call.answer(localStream.current)
-                const videoWra = document.querySelector('.video-section')
                 const remoteVideoWrapper = document.createElement('div')
                 remoteVideoWrapper.classList.add("remote-users")
                 const remoteVideo = document.createElement('video')
                 remoteVideoWrapper.appendChild(remoteVideo)
-                videoWra?.append(remoteVideoWrapper)
+                videoWrapper?.append(remoteVideoWrapper)
 
                 console.log("caller user: ", call.peer)
 
@@ -275,7 +272,7 @@ const VideoChatScreen = ()  => {
                 call?.on('close', () => {
                     remoteVideoWrapper.remove();
                 })
-            } else if (userProfile.userId != call.peer.split('-')[1]) {
+            } else if (userProfile.userId !== call.peer.split('-')[1]) {
                 call.answer(localStream.current)
                 setIsPresenting(true)
                 call?.on('stream', presentationStream => {
@@ -304,7 +301,7 @@ const VideoChatScreen = ()  => {
 
         socket.on('new-user-join-video-room', (userId) => {
             console.log("new user joined room: ", userId)
-            if (userId.split('-')[0] != "presentation") {
+            if (userId.split('-')[0] !== "presentation") {
                 connectToNewUser(userId, localStream.current)
                 console.log("presentation state: ", isPresenting)
                 if (presentationStream.current?.getVideoTracks()[0].enabled) {
@@ -318,7 +315,6 @@ const VideoChatScreen = ()  => {
 
         const connectToNewUser = (userId, stream) => {
             myCall = myPeer.current?.call(userId, stream)
-            const videoWrap = document.querySelector('.video-section')
 
             const remoteVideoWrapper = document.createElement('div')
             remoteVideoWrapper.classList.add("remote-users")
@@ -380,7 +376,7 @@ const VideoChatScreen = ()  => {
                 peers.current[userId].close()
                 console.log("omo peer: ", peers.current)
 
-                if (userProfile.userId != userId.split('-')[1]) {
+                if (userProfile.userId !== userId.split('-')[1]) {
                     setIsPresenting(false)
                 }
             }
@@ -392,7 +388,7 @@ const VideoChatScreen = ()  => {
     }
 
     const initRoom = () => {
-        if (userProfile.userId != "") {
+        if (userProfile.userId !== "") {
             chekForVideoRoom()
         }
     }
@@ -403,7 +399,7 @@ const VideoChatScreen = ()  => {
     }, [userProfile.userId])
     return (
         <Wrapper>
-            {/* <HeadBar>
+            <HeadBar>
                 <div className="banner">
                     <img src="/assets/svg/logo.svg" alt="logo" />
                     <Link to="/home">TeamKonnect</Link>
@@ -411,22 +407,21 @@ const VideoChatScreen = ()  => {
                 <div className="head-img">
                     <img src={userProfile.profileImg} alt="avatar" />
                 </div>
-            </HeadBar> */}
-            <Navbar />
+            </HeadBar>
             <Content>
                 <VideoWrapper>
-                    <div onClick={closeRecordedModal} className="recoreded-media">
+                     <div onClick={closeRecordedModal} className="recoreded-media">
                         <video ref={recordedVideoRef} src=""></video>
                     </div>
                     <UserPresentation isPresenting={isPresenting}>
                         <video className="client-presentation-stream" src="" muted={true}></video>
                     </UserPresentation>
                     <StreamWrapper isPresenting={isPresenting} className="video-section">
+                        
                     </StreamWrapper>
-                       
-                    <UserCallBlock>
-                        <video className="client-local-stream" src="" muted={true}></video>
-                    </UserCallBlock>
+                        <UserCallBlock>
+                            <video className="client-local-stream" src="" muted={true}></video>
+                        </UserCallBlock>
 
                     <ControlWrapper>
                         <ControlItem onClick={() => {
@@ -451,7 +446,10 @@ const VideoChatScreen = ()  => {
                             <HiOutlinePhone />
                         </ControlItem>
                     </ControlWrapper>
-                    
+                    <AddPeople>
+                        <IoAdd />
+                        <span>Add people</span>
+                    </AddPeople>
                 </VideoWrapper>
             </Content>
         </Wrapper>
