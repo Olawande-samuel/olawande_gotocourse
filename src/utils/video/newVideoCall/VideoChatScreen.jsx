@@ -13,6 +13,7 @@ import { MediaConnection, Peer } from "peerjs";
 import CONFIG from '../appConst'
 import { KEY } from '../../../constants'
 import { useLocalStorage } from '../../../hooks'
+import { Navbar } from '../../../pages/Dashboard/components/Live/LiveClass'
 
 const VideoChatScreen = ()  => {
     const { socket, sendPing } = useSocket()
@@ -399,7 +400,7 @@ const VideoChatScreen = ()  => {
     }, [userProfile.userId])
     return (
         <Wrapper>
-            <HeadBar>
+            {/* <HeadBar>
                 <div className="banner">
                     <img src="/assets/svg/logo.svg" alt="logo" />
                     <Link to="/home">TeamKonnect</Link>
@@ -407,9 +408,10 @@ const VideoChatScreen = ()  => {
                 <div className="head-img">
                     <img src={userProfile.profileImg} alt="avatar" />
                 </div>
-            </HeadBar>
+            </HeadBar> */}
+            <Navbar />
             <Content>
-                <VideoWrapper>
+                <VideoWrapper> 
                      <div onClick={closeRecordedModal} className="recoreded-media">
                         <video ref={recordedVideoRef} src=""></video>
                     </div>
@@ -418,10 +420,10 @@ const VideoChatScreen = ()  => {
                     </UserPresentation>
                     <StreamWrapper isPresenting={isPresenting} className="video-section">
                         
-                    </StreamWrapper>
                         <UserCallBlock>
                             <video className="client-local-stream" src="" muted={true}></video>
                         </UserCallBlock>
+                    </StreamWrapper>
 
                     <ControlWrapper>
                         <ControlItem onClick={() => {
