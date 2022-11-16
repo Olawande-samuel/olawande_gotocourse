@@ -22,6 +22,7 @@ import { toast } from "react-toastify"
 import { changeConstants } from "../../../pages/Dashboard/Teachers/CreateCourse"
 import { upskillAltData } from "../UpskillCourse"
 import { Link } from "react-router-dom"
+import { AiOutlineCheck } from "react-icons/ai"
 
 // GREAT OPPORTUNITIES
 
@@ -51,7 +52,7 @@ const ImageCard = styled.div`
 export function GreatImage({ img, title, link }) {
 
 
-  
+
     return (
         <ImageCard>
             <Link to={link}>
@@ -442,78 +443,95 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
 // INDEMAND
 
 const InDemandCard = styled.div`
-    
+    // border: 2px solid red;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 1rem clamp(0.625rem, 0.5179rem + 0.5357vw, 1rem);
+    // padding: 1rem clamp(0.625rem, 0.5179rem + 0.5357vw, 1rem);
     box-shadow: -9px 150px 60px rgba(0, 0, 0, 0.01), -5px 85px 51px rgba(0, 0, 0, 0.05), -2px 38px 38px rgba(0, 0, 0, 0.09), -1px 9px 21px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
-
-    .top_content {
-        display: flex;
-        gap: 0.3rem;
-        margin-bottom: 1rem;
-
-        h6 {
-            flex:60%;
-            font-weight: 700;
-
-        }
+    .img{
+        width: 100%;
+        height: 150px;
 
         img{
-            flex:40%;
-            height: 50px;
-            max-width:120px;
-            border-radius:18px;
+            width:100%;
+            height: 100%;
             object-fit: cover;
-            object-position: top;
         }
-    } 
-    .mid_content{
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        
-        .mid_stats {
-            font-size:12px;
-            display:flex;
-            justify-content: space-between;
+    }
+
+    .content{
+        padding: .5rem;
+
+
+        h6 {
+            font-weight: 700;
+            padding: .5rem 0;
+        }
+
+        .mid_content{
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
             
-            span:first-child {
-                text-transform: capitalize;
+            .mid_stats {
+                font-size:14px;
+                display:flex;
+                justify-content: space-between;
+                
+                span:first-child {
+                    text-transform: capitalize;
+                }
+            }
+
+            .checks{
+
+                p{
+                    font-weight: 500;
+                    font-size: 13.6101px;
+                    line-height: 16px;
+                }
+
+                .icon{
+                    color: var(--theme-blue);
+                }
+            }
+         
+            
+        }
+
+        .view{
+            display: flex;
+            justify-content: flex-end;
+            padding: .5rem 0;
+            width: 100%;
+
+            button{
+                border: 1px solid;
+                padding: .5rem ;
+                outline: none;
+                font-size: 13.6101px;
+                line-height: 16px;
             }
         }
 
-        ul {
-            font-size: 13px;
-            font-weight:500
-        }
-        
-    }
-    .cta {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        font-size: 13px;
-        margin-top: 1rem;
+        .contentbtn{
 
-        span:first-child {
-            cursor: pointer;
-            transition: color .3s ease; 
-
-            :hover {
-                color: var(--theme-blue)
+            button{
+                width:100%;
+                color: white;  
+                background-color: var(--btn-color);     
+                border: none;
+                outline: none;
+                font-size: 13.6101px;
+                line-height: 16px;
+                padding: .5rem 0;
             }
         }
-        span:last-child {
-            color: var(--theme-orange)
-        }
-        .ct_bar{
-            width:1px;
-            height:100%;
-            background: #333;
-        }
+
+
     }
+  
 `
 export function InDemand({ title, bootcampImg, category, duration, price, packages, bootcampId, description, startDate }) {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -560,30 +578,35 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
 
     return (
         <InDemandCard>
-            <div className="top_content">
-                <h6>{title}</h6>
+            <div className="img">
                 <img src={bootcampImg} alt="" />
             </div>
-            <div className="mid_content">
-                <div className="mid_stats">
-                    <span>{packages.length > 0 ? packages[0].title.toLowerCase() : "Cohort"}</span>
-                    <span>$ {packages.length > 0 ? packages[0].price : price}</span>
-                    <span>{duration}</span>
-                </div>
-                <ul>
-                    <li>Completion certificate</li>
-                    <li>Earn upto $138k</li>
-                </ul>
-            </div>
-            <div className="cta">
-                {/* <span aria-describedby={id} variant="contained" onClick={handleClick}>View course</span> */}
-                <span onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</span>
-                <div className="ct_bar"></div>
-                {/* <span onClick={()=> gotoclassPayment(title, category, bootcampId, navigate)}>Live Online</span> */}
+            <div className="content">
+                <h6>{title}</h6>
 
-                <span>Live Online</span>
+                <div className="mid_content">
+                    <div className="mid_stats">
+                        <span>{packages.length > 0 ? packages[0].title.toLowerCase() : "Cohort"}</span>
+                        <span>$ {packages.length > 0 ? packages[0].price : price}</span>
+                        <span>{duration}</span>
+                    </div>
+                    <div className="checks">
+                        <p> <AiOutlineCheck className="icon" />Completion certificate</p>
+                        <p><AiOutlineCheck className="icon" /> Earn upto $138k</p>
+                    </div>
+                </div>
+
+                <div className="view">
+                    <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
+                </div>
+
+                <div className="contentbtn">
+                    <button>Start Learning</button>
+                </div>
+
             </div>
-           
+
+
         </InDemandCard>
     )
 }
@@ -790,7 +813,7 @@ const ShortCard = styled.div`
     
 `
 
-export function Short({ title, bootcampImg, bootcampId, description, popupTitle, popupArr, duration, price, packages, endDate , all}) {
+export function Short({ title, bootcampImg, bootcampId, description, popupTitle, popupArr, duration, price, packages, endDate, all }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -832,12 +855,12 @@ export function Short({ title, bootcampImg, bootcampId, description, popupTitle,
     async function handleBootstrapEnrollment(e) {
         e.preventDefault();
         if (userdata?.token) {
-          localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-          navigate("payment")
+            localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+            navigate("payment")
         } else {
-          navigate("/login")
+            navigate("/login")
         }
-      }
+    }
     useEffect(() => {
         const ownListItem = shortPopUpContent.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
         if (ownListItem.length > 0) {
@@ -925,7 +948,7 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, description,
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
-//   console.log({all});
+    //   console.log({all});
 
 
     // Call to Action
@@ -961,12 +984,12 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, description,
     async function handleBootstrapEnrollment(e) {
         e.preventDefault();
         if (userdata?.token) {
-          localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-          navigate("payment")
+            localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+            navigate("payment")
         } else {
-          navigate("/login")
+            navigate("/login")
         }
-      }
+    }
 
     return (
         <UpCoursesCard>
