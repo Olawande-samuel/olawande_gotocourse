@@ -11,10 +11,16 @@ const Grid = styled.div`
     gap: 1.5rem;
     justify-content:space-around;
     
-
-    /* @media screen and (max-width:710px){
-        grid-template-columns: repeat(2, 1fr);
+    @media screen and (max-width: 2560px) {
+        grid-template-columns: repeat(4, 230px);
+        justify-content: space-evenly;
+        gap: 1rem;
+      }
+    
+      @media screen and (max-width:768px){
+        grid-template-columns: repeat(2, 230px);
     }
+
     @media screen and (max-width:500px){
         grid-template-columns: min(100%, 380px);
         justify-content:center;
@@ -30,7 +36,7 @@ const UpskillCourse = () => {
   
           onSuccess: (res)=>{
               if(res.data.length > 0){
-                console.log("data", res.data);
+                // console.log("data", res.data);
                   const uppers = res.data.filter(item=>item.subCategory === "UPSKILL_COURSES" && item.isActive);
                   console.log({uppers});
                   setShorts(uppers)
@@ -207,7 +213,9 @@ const data = {
             description:"Optimize and scale your business with Kajabi’s fully-automated marketing campaigns and funnels.",
         },
     ],
-    bottomTitle: "View more Upskill courses >"
+    bottomTitle: "View more Upskill courses >",
+    bottomLink:`category/UPSKILL_COURSES`
+
 }
 
 export default UpskillCourse

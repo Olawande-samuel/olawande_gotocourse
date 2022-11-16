@@ -10,14 +10,21 @@ const Grid = styled.div`
     gap: 1.5rem;
     justify-content:space-around;
     
+    @media screen and (max-width: 2560px) {
+        grid-template-columns: repeat(4, 230px);
+        justify-content: space-evenly;
+        gap: 1rem;
+      }
 
-    /* @media screen and (max-width:710px){
-        grid-template-columns: repeat(2, 1fr);
+ @media screen and (max-width:768px){
+        grid-template-columns: repeat(2, 280px);
     }
+
+
     @media screen and (max-width:500px){
         grid-template-columns: min(100%, 380px);
         justify-content:center;
-    } */
+    } 
     `
 
 const ShortCourses = () => {
@@ -30,14 +37,14 @@ const ShortCourses = () => {
         onSuccess: (res)=>{
             if(res.data.length > 0){
                 const short = res.data.filter(item=>item.subCategory === "SHORT_COURSES" && item.isActive);
-                console.log({short});
+                // console.log({short});
                 let tech = res.data.filter(item=>item.subCategory === "TECH_ENTREPRENEURSHIP" && item.isActive);
 
-                console.log({tech});
+                // console.log({tech});
                 tech = tech.filter(d => d.title !== "Creative Design like a Pro")
                 const threeShorts = short?.slice(0, 4)
                 const threeTech = tech?.slice(0, 4)
-                console.log({threeTech});
+                // console.log({threeTech});
                 const myContent = threeShorts.concat(threeTech)
                 setShorts(myContent)
             }
@@ -61,7 +68,9 @@ const data = {
     header2:"& Tech entreprenuership education ",
     subtext:"Knowledge boost within 1-14 days",
     content: [],
-    bottomTitle:"View  more short courses  & Tech entreprenuership education > "
+    bottomTitle:"View  more short courses > ",
+    bottomLink:`category/SHORT_COURSES`
+
   }
 export default ShortCourses
 

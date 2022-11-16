@@ -60,27 +60,27 @@ const data = [
     {
         img:exec,
         title:"Executive Education",
-        link:""
+        link:"/category/EXECUTIVE_COURSES"
     },
     {
         img:short,
         title:"Short Courses",
-        link:""
+        link:"/category/SHORT_COURSES"
     },
     {
         img:inD,
         title:"In demand career courses",
-        link:""
+        link:"/category/IN_DEMAND"
     },
     {
         img:up,
         title:"Upskill Courses",
-        link:""
+        link:"/category/UPSKILL_COURSES"
     },
     {
         img:tech,
         title:"Teach Entrepreneurship Education",
-        link:""
+        link:"/category/TECH_ENTREPRENEURSHIP"
     },
 ]
 

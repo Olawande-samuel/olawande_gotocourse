@@ -21,6 +21,7 @@ import { border } from "@mui/system"
 import { toast } from "react-toastify"
 import { changeConstants } from "../../../pages/Dashboard/Teachers/CreateCourse"
 import { upskillAltData } from "../UpskillCourse"
+import { Link } from "react-router-dom"
 
 // GREAT OPPORTUNITIES
 
@@ -47,11 +48,16 @@ const ImageCard = styled.div`
         text-align: center;
     }
 `
-export function GreatImage({ img, title }) {
+export function GreatImage({ img, title, link }) {
+
+
+  
     return (
         <ImageCard>
-            <img src={img} alt="" />
-            <p>{title}</p>
+            <Link to={link}>
+                <img src={img} alt="" />
+                <p>{title}</p>
+            </Link>
         </ImageCard>
     )
 }
@@ -1331,6 +1337,13 @@ const ClassWrapper = styled.section`
         }
         
     }
+
+    .bottom{
+        display: flex;
+        margin-top: 1rem;
+        justify-content: flex-end;
+
+    }
 `
 
 export function ClassTypeComponent({ children, header: head, header2, subtext, bottomTitle, bottomLink }) {
@@ -1345,7 +1358,10 @@ export function ClassTypeComponent({ children, header: head, header2, subtext, b
                 <article>
                     {children}
                 </article>
-                <p className="text-center mt-4">{bottomTitle}</p>
+                <div className="bottom">
+                    <Link to={bottomLink ? bottomLink : "/"} className="text-center mt-4">{bottomTitle}</Link>
+
+                </div>
             </div>
         </ClassWrapper>
     )
