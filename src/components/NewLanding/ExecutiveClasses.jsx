@@ -18,59 +18,55 @@ const Grid = styled.div`
     justify-content: space-evenly;
     gap: 1rem;
   }
+
+
+
     /*
     @media screen and (max-width:500px){
         grid-template-columns: min(100%, 380px);
         justify-content:center;
     } */
-    `
-export const ProgramPage = () => {
-    return(
-        <>
-        id
-        </>
-    )
-
-}  
+`
 
 const ExecutiveClasses = () => {
-    const { otherFunctions: {fetchBootcamps }, } = useAuth();
+    const { otherFunctions: { fetchBootcamps }, } = useAuth();
     const [shorts, setShorts] = useState([])
-    
-    const classes = useQuery(["fetch classes"], () => fetchBootcamps(), {
-        notifyOnChangeProps:["category", "isFetching"],
 
-        onSuccess: (res)=>{
-            if(res.data.length > 0){
-                const exe = res.data.filter(item=>item.subCategory === "EXECUTIVE_COURSES");
+    const classes = useQuery(["fetch classes"], () => fetchBootcamps(), {
+        notifyOnChangeProps: ["category", "isFetching"],
+
+        onSuccess: (res) => {
+            if (res.data.length > 0) {
+                const exe = res.data.filter(item => item.subCategory === "EXECUTIVE_COURSES");
                 setShorts(exe)
             }
         }
     })
 
-    console.log({shorts});
-  return (
-    <ClassTypeComponent {...data}>
-        <Grid>
-            {
-                shorts?.filter(item => item.isActive).slice(0, 8).map((item,i)=>(
-                    <ExeEducation {...item} i={i} img={data.content[i]} />
-                ))
-            }
-        </Grid>
-    </ClassTypeComponent>
-  )
+    // console.log({ shorts });
+    return (
+        <ClassTypeComponent {...data}>
+            <Grid>
+                {
+                    shorts?.filter(item => item.isActive).slice(0, 8).map((item, i) => (
+                        <ExeEducation {...item} i={i} img={data.content[i]} />
+                    ))
+                }
+            </Grid>
+        </ClassTypeComponent>
+    )
 }
 
 const data = {
     header: "",
-    header2:"Explore executive  education",
-    subtext:"Acquire strategic skills to boost business growth",
+    header2: "Explore executive  education",
+    subtext: "Acquire strategic skills to boost business growth",
     content: [
         exec1, exec2, exec3
     ],
-    bottomTitle:"View  more executive education > "
-  }
+    bottomTitle: "View  more executive education > ",
+    bottomLink: `category/EXECUTIVE_COURSES`
+}
 export default ExecutiveClasses
 
 

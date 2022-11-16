@@ -44,7 +44,7 @@ const IndemandClasses = () => {
       <Grid>
         {
           shorts?.filter(item=>item.isActive).slice(0,8).map((item) => (
-            <InDemand {...item} />
+            <InDemand {...item} all={item}/>
           ))
         }
       </Grid>
@@ -58,7 +58,9 @@ const data = {
   header2:"Explore In demand career courses",
   subtext:"Develop Tech skills most needed by companies and increase your earnings",
   content: [],
-  bottomTitle:"View more In demand career courses >"
+  bottomTitle:"View more In demand career courses >",
+  bottomLink:`category/IN_DEMAND`
+
 }
 export default IndemandClasses;
 

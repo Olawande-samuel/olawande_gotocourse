@@ -111,6 +111,8 @@ import StudentChatModule, { ActiveChat } from "./pages/Dashboard/components/clas
 
 import { GroupContent, MailDetail } from "./pages/Dashboard/components/classConsole/Chat";
 import { ProgramPage } from "./components/NewLanding/ExecutiveClasses";
+import CourseComponent from "./pages/Courses/allcourses/Course";
+import UpComingComponent from "./pages/Bootcamp/Upcoming";
 
 
 
@@ -183,6 +185,12 @@ function App() {
 
               <Route path="tester" element={<CreateRoom />} />
               <Route path="video-chat" element={<VideDiv />} />
+
+              <Route path="category" element={<Out />} >
+                <Route index element={<CourseComponent />} />
+                <Route path="upcoming" element={<UpComingComponent />} />
+                <Route path=":id" element={<CourseComponent />} />
+              </Route>
 
               <Route path="categories" element={<Out />}>
                 <Route index element={<CategoryHome />} />
@@ -270,7 +278,7 @@ function App() {
                     <Route index element={<ConsoleClasses />} />
                     <Route path=":id" element={<StudentChatModule />} />
                     <Route path=":id/chat" element={<ActiveChat />} />
-                    
+
                   </Route>
                   <Route path="assessments" element={<ConsoleAssessments />} />
                   <Route path="liveclass" element={<Out />} />

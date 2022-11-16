@@ -512,7 +512,7 @@ export function NewBootcampDetailsComponent() {
     console.log(event.currentTarget);
   };
 
-  // console.log({ bootcampTrainingInfo });
+  console.log({ bootcampTrainingInfo });
   // console.log("all", bootcamps.data?.data);
 
   const similar = bootcamps.data?.data.filter(d => (d.subCategory === bootcampTrainingInfo.subCategory) && d.isActive && (d.bootcampId !== bootcampTrainingInfo.bootcampId))
@@ -533,6 +533,7 @@ export function NewBootcampDetailsComponent() {
           description={bootcampTrainingInfo?.description}
           img={bootcampTrainingInfo?.bootcampImg}
           endDate={bootcampTrainingInfo.endDate}
+          startDate={bootcampTrainingInfo.startDate}
           addToWishList={addToWishList}
           handleBootstrapEnrollment={handleBootstrapEnrollment}
         />
@@ -645,7 +646,7 @@ export function NewBootcampDetailsComponent() {
               ))}
             </div>
             <div className={clsx.viewmore}>
-              <Link to="/">View More <BsArrowRight /></Link>
+              <Link to={`/category/${bootcampTrainingInfo.subCategory}`}>View More <BsArrowRight /></Link>
             </div>
 
           </div>
@@ -656,17 +657,17 @@ export function NewBootcampDetailsComponent() {
           <div className="container">
             <header>
               <h3 className={clsx.section_title}>Similar upcoming classes</h3>
-              <hr />
+              {/* <hr /> */}
             </header>
             <div className={clsx.upcoming_card}>
               {
-                upcoming && upcoming.length > 0 && upcoming.splice(0,4).map((item, i) => (
+                upcoming && upcoming.length > 0 && upcoming.splice(0, 4).map((item, i) => (
                   <Upcome {...item} all={item} />
                 ))
               }
-               <div className={clsx.viewmore}>
-                  <Link to="/">View More <BsArrowRight /></Link>
-                </div>
+              <div className={clsx.viewmore}>
+                <Link to="/category/upcoming">View More <BsArrowRight /></Link>
+              </div>
             </div>
           </div>
         </section>
@@ -683,7 +684,7 @@ export function NewBootcampDetailsComponent() {
 }
 
 
-export function DetailsHero({ navHeight, title, description, addToWishList, handleBootstrapEnrollment, loading, img, endDate }) {
+export function DetailsHero({ navHeight, title, description, addToWishList, handleBootstrapEnrollment, loading, img, endDate, startDate }) {
 
   return (
     <section
@@ -699,7 +700,7 @@ export function DetailsHero({ navHeight, title, description, addToWishList, hand
           <h4>{title ? title : "Data Science"}</h4>
           <p className="restricted_line" dangerouslySetInnerHTML={{ __html: description }}></p>
           {/* <p>{description ? description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p> */}
-          <p style={{ marginTop: "2rem" }}>Starting Date: <span>{new Date(endDate).toDateString()}</span></p>
+          <p style={{ marginTop: "2rem", fontSize: "1.5rem" }}>Starting Date: <span>{new Date(startDate).toDateString()}</span></p>
 
           <div className={clsx.hero_buttons}>
             <motion.button
@@ -728,10 +729,12 @@ export function DetailsHero({ navHeight, title, description, addToWishList, hand
   )
 }
 
-function Upcome({ _id, title, duration, category, bootcampId, startTime, endTime, startDate, endDate, description, type, isActive, instructorId, bootcampImg, all }) {
+export function Upcome({ _id, title, duration, category, subCategory, bootcampId, startTime, endTime, startDate, endDate, description, type, isActive, instructorId, bootcampImg, all }) {
   const { getItem } = useLocalStorage();
   const userdata = getItem("gotocourse-userdata");
   const navigate = useNavigate();
+
+  // console.log({all});
 
   async function handleBootstrapEnrollment(e) {
     e.preventDefault();
@@ -744,18 +747,29 @@ function Upcome({ _id, title, duration, category, bootcampId, startTime, endTime
   }
   return (
     <div className={clsx.upcome}>
-      <p>{title}</p>
-      <div>
-        <p>Date</p>
-        <p>{startDate ? getDate(startDate) : ""} - {endDate ? getDate(endDate) : ""}</p>
+      <div  className={clsx.upcomeitem}>
+        <p>{title}</p>
+
       </div>
-      <div>
+      <div className={clsx.upcomeitem}>
+        <p>Category</p>
+        <p style={{ textTransform: "capitalize" }}>{category}</p>
+      </div>
+      <div className={clsx.upcomeitem}>
+        <p>Subcategory</p>
+        <p style={{ textTransform: "capitalize" }}>{subCategory && subCategory.split("_").join(" ")}</p>
+      </div>
+      <div className={clsx.upcomeitem}>
+        <p>Start Date</p>
+        <p>{startDate ? getDate(startDate) : ""}</p>
+      </div>
+      <div className={clsx.upcomeitem}>
         <p>Duration</p>
         <p>{duration}</p>
       </div>
-      <div>
+      <div className={clsx.upcomeitem}>
         {/* <button onClick={handleBootstrapEnrollment}>Enroll now</button> */}
-        <button onClick={() => gotoclass(title, category,bootcampId, navigate)}>learn More</button>
+        <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>learn More</button>
       </div>
     </div>
   )
