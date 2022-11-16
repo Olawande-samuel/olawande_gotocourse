@@ -913,8 +913,8 @@ export function Short({ title, bootcampImg, bootcampId, description, popupTitle,
             >
                 <Box sx={{ p: 2 }} className="pop_container">
                     <header>
-                    {/* <h5 className="fw-bold text-capitalize">{popupTitle}</h5> */}
-                    <h5 className="fw-bold text-capitalize">{title}</h5>
+                        {/* <h5 className="fw-bold text-capitalize">{popupTitle}</h5> */}
+                        <h5 className="fw-bold text-capitalize">{title}</h5>
                         <p style={{ marginTop: "1rem" }}>Starting Date: <span>{new Date(endDate).toDateString()}</span></p>
 
                     </header>
@@ -934,7 +934,7 @@ export function Short({ title, bootcampImg, bootcampId, description, popupTitle,
                         </div>
                         <h6>Ready to register?</h6>
                         {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-                        <div className="pop_action">
+                        <div className="skillaction">
                             <button>Enroll Now</button>
                             <button>Wishlist</button>
                         </div>
