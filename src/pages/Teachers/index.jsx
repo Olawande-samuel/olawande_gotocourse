@@ -1,5 +1,5 @@
 import Layout from "../../components/Layout"
-import { BestTools, Hero, ImageContent, ItWorks, ItWorksList, TextContent } from "./style"
+import { BestTools, Hero, ImageContent, ItWorks, ItWorksList, MainHeader, TextContent } from "./style"
 
 import hang from "../../images/Teachers/hang.png";
 import hiw from "../../images/Teachers/hiw.png";
@@ -19,41 +19,82 @@ const Teachers = ()=> {
     return(
         <Layout>
             <Hero>
-                
+                <header>
+                    <h1>Gotocourse is everything you need to teach what you love!</h1>
+                    <p>Before you begin your journey, check if you are eligible to teach on Gotocourse by answering  some questions</p>
+                    <div className="d-flex">
+                        <button>Check Eligibility</button>
+                    </div>
+                </header>
+                <div className="position-relative">
+                    <div className="img_wrapper">
+                        <img src={hang} alt="" />
+                    </div>
+                </div>
             </Hero>
             <ItWorks>
-                <ItWorksList></ItWorksList>
-            </ItWorks>
+                <div className="container">
+                        <MainHeader>
+                            <h2>How It Works</h2>
+                            <p>Check incredible tools created on Gotocourse to make teaching cost effective</p>
+                        </MainHeader>
+                        <div className="content">
+                            <div className="list_content">
+                                <ItWorksList>
+                                    <div className="number">1</div>
+                                    <h5>Enroll to teach</h5>
+                                    <small>Enroll to teach on Gotocourse and get approved by Gotocourse course standardization team.</small>
+                                </ItWorksList>
+                                <ItWorksList>
+                                    <div className="number">2</div>
+                                    <h5>Enroll to teach</h5>
+                                    <small>Enroll to teach on Gotocourse and get approved by Gotocourse course standardization team.</small>
+                                </ItWorksList>
+                                <ItWorksList>
+                                    <div className="number">3</div>
+                                    <h5>Enroll to teach</h5>
+                                    <small>Enroll to teach on Gotocourse and get approved by Gotocourse course standardization team.</small>
+                                </ItWorksList>
+
+                            </div>
+                            <div className="img_wrapper">
+                                <img src={hiw} alt="" />
+                            </div>
+                        </div>
+                    </div>
+                </ItWorks>
             <BestTools>
-                <header>
-                    <h5>Our Best tools</h5>
+                <MainHeader>
+                    <h2>Our Best tools</h2>
                     <p>Check incredible tools created on Gotocourse to make teaching cost effective</p>
-                </header>
-                <BestCards />
-                <BestCards />
-                <BestCards />
-                <BestCards />
+                </MainHeader>
+                {
+                    data.map(item=>(
+                        <BestCards {...item} />
+
+                    ))
+                }
             </BestTools>
         </Layout>
     )
 }
 
 
-function BestCards(){
+function BestCards({title, p1, p2, logo, img}){
     return (
         <section>
             <div className="container">
                 <div className="grid">
                     <ImageContent className="img_container">
-                        <img src={unlimited} alt="" />
+                        <img src={img} alt="" />
                     </ImageContent>
                     <TextContent className="text_container">
                         <div className="logo">
-                            <img src={Meetifix} alt="" />
+                            <img src={logo} alt="" />
                         </div>
-                        <h6>Hold unlimited live classes</h6>
-                        <p>Teach great skills with the best teachers live online. Unlock the power of real-time learning without any barrier.</p>
-                        <p></p>
+                        <h4>{title}</h4>
+                        <p>{p1}</p>
+                        <p>{p2}</p>
                     </TextContent>
                 </div>
             </div>
@@ -78,7 +119,7 @@ const data = [
         p1:"Quikonnet is also a simple two-way interaction tool for teachers to Clear doubts, broadcast announcements, or just send some motivational messages.",
         p2:"",
         logo: Quikonnet,
-        img: Quikonnet,
+        img: mail,
 
     },
     {
@@ -87,35 +128,28 @@ const data = [
         p1:"It is extremely simple to use and works smoothly even on low bandwidth.  Your students can see all assignments on the assignment page and all study materials (e.g., notes, documents, photos, and videos) can be uploaded and saved on Classpodia." ,
         p2:"Your students  have unlimited  access to study material on any device, anytime and  anywhere hence, they  are able to maximise their learning with  the provided study material after every class and any time they  need it.",
         logo: Classpodia,
-        img:""
+        img:onDgo
     },
     {
         id:4,
         title: "Student record system",
         p1:"Enjoy personalized performance reports. This friendly feature helps to send reminders, and take attendance automatically. It also makes daily basis and common tasks like sorting students into groups, recording assessments/attendance, and contacting students quick and easy. Students can also download gradesheets, attendance particulars etc as a CSV or PDF file." ,
-        p2:"Your students  have unlimited  access to study material on any device, anytime and  anywhere hence, they  are able to maximise their learning with  the provided study material after every class and any time they  need it.",
-        logo: Classpodia,
-        img: Classpodia
+        p2:"",
+        logo: Rekordia,
+        img: record
     },
     {
         id:5,
         title: "Quizim",
         p1:"Create a quiz in a few seconds or take secure online quizes on any device, anywhere and at any time . Create quizzes in multiple choice tests, checkboxes, upload file attachment or assessment papers and have access to grades in real time just when made available." ,
-        logo: Classpodia,
-        img:""
-    },
-    {
-        id:6,
-        title: "Quizim",
-        p1:"Create a quiz in a few seconds or take secure online quizes on any device, anywhere and at any time . Create quizzes in multiple choice tests, checkboxes, upload file attachment or assessment papers and have access to grades in real time just when made available." ,
-        logo: Classpodia,
-        img:""
+        logo: Quizim,
+        img:record
     },
     {
         id:7,
         title: "Create course contents with the use of a single tool",
         p1:"This is a powerful educator’s companion designed to help course creators create their videos, course outline, and other material that will aid students leaning." ,
         logo: Classpodia,
-        img:""
+        img:onDgo
     },
 ]

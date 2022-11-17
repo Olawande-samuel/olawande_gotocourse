@@ -180,8 +180,8 @@ function App() {
               <Route path="courses" element={<AllCourses />} />
               <Route path="forgot-password" element={<ForgotPassword />} />
               <Route path="change-password" element={<ResetPassword />} />
-              <Route path="become-a-teacher" element={<BecomeATeacher />} />
-              {/* <Route path="become-a-teacher" element={<TeachersLanding />} /> */}
+              {/* <Route path="become-a-teacher" element={<BecomeATeacher />} /> */}
+              <Route path="become-a-teacher" element={<TeachersLanding />} />
               <Route path="student/classroom" element={<StudentClassroom />} />
 
               <Route path="tester" element={<CreateRoom />} />

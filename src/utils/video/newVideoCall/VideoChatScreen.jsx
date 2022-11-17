@@ -104,6 +104,8 @@ const VideoChatScreen = ()  => {
     const videoWrapper = document.querySelector('.video-section')
 
     function addVideoStream(videoWrapper, stream) {
+            console.log({videoWrapper})
+
         const video = videoWrapper.querySelector('video')
         video.srcObject = stream
         video.addEventListener('loadedmetadata', () => {
@@ -164,7 +166,7 @@ const VideoChatScreen = ()  => {
         const res = await axios.post("https://loftywebtech.com/gotocourse/api/v1/file/upload", videoData, {
             headers: {
                 "Content-Type": "multipart/form-data",
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjJhOWZiNWRhMzNhMjUzZjY3N2M0ZDdmIiwiZW1haWwiOiJhZG1pbjFAZ21haWwuY29tIn0sImlhdCI6MTY2ODM3MDM4OSwiZXhwIjoxNjY4NDU2Nzg5fQ.Yc-SSARTi84NLWGqKVPwCmBsM7wTp2zy-bGvb4w8RO8"
+                "Authorization": userProfile.token
             }
         })
 
@@ -263,6 +265,7 @@ const VideoChatScreen = ()  => {
                 videoWrapper?.append(remoteVideoWrapper)
 
                 console.log("caller user: ", call.peer)
+                console.log("remotevid: ", remoteVideoWrapper)
 
                 peers.current[call.peer] = call
                 
@@ -315,20 +318,24 @@ const VideoChatScreen = ()  => {
         })
 
         const connectToNewUser = (userId, stream) => {
+            console.log("new user joining call")
+            console.log(myPeer.current)
             myCall = myPeer.current?.call(userId, stream)
+            // const videoWrapper = document.querySelector('.video-section')
 
             const remoteVideoWrapper = document.createElement('div')
             remoteVideoWrapper.classList.add("remote-users")
             const remoteVideo = document.createElement('video')
             remoteVideoWrapper.appendChild(remoteVideo)
-            videoWrapper?.append(remoteVideoWrapper)
+            videoWrapper.append(remoteVideoWrapper)
+            
+            console.log({videoWrapper})
 
-
-            myCall?.on('stream', userVideoStream => {
+            myCall.on('stream', userVideoStream => {
                 console.log("recevied user video stream: ", userVideoStream)
                 addVideoStream(remoteVideoWrapper, userVideoStream)
             })
-            myCall?.on('close', () => {
+            myCall.on('close', () => {
                 remoteVideoWrapper.remove();
             })
 
@@ -448,10 +455,10 @@ const VideoChatScreen = ()  => {
                             <HiOutlinePhone />
                         </ControlItem>
                     </ControlWrapper>
-                    <AddPeople>
+                    {/* <AddPeople>
                         <IoAdd />
                         <span>Add people</span>
-                    </AddPeople>
+                    </AddPeople> */}
                 </VideoWrapper>
             </Content>
         </Wrapper>
