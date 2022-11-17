@@ -427,7 +427,7 @@ const VideoChatScreen = ()  => {
             </HeadBar> */}
             <Navbar />
             <Content>
-                <VideoWrapper> 
+                <VideoWrapper isPresenting={isPresenting}> 
                      <div onClick={closeRecordedModal} className="recoreded-media">
                         <video ref={recordedVideoRef} src=""></video>
                     </div>

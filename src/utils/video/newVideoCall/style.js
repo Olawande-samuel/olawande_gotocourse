@@ -80,15 +80,20 @@ export const VideoWrapper = styled.div`
     margin: 0px auto;
     padding: 10px 10px 88px 10px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-       
-    
-    grid-auto-rows: 250px;
+    grid-template-columns: ${props => props.isPresenting ? '65% 30%' : '1fr'};
+
+    /* grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));     */
+    /* grid-auto-rows: 250px; */
     gap: 1rem;
     /* overflow-y: scroll; */
     margin-inline: auto;
     height: 100%;
 
+    @media screen and (max-width: 600px){
+        grid-template-columns: 1fr
+    };
+
+    
     .recoreded-media {
         display: none;
         justify-content: center;
@@ -133,7 +138,7 @@ export const VideoWrapper = styled.div`
         img {
             min-height: 100%;
             min-width: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         span {
@@ -151,7 +156,7 @@ export const VideoWrapper = styled.div`
         video {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
     }
 `;
@@ -162,19 +167,24 @@ export const StreamWrapper = styled.div`
     flex-direction: column;
     flex-wrap: wrap;
     width: 100%;
-    height: ${props => props.isPresenting ? '180px' : '100%'};
+    height: 100%;
+    /* height: ${props => props.isPresenting ? '180px' : '100%'}; */
     /* flex: 1; */
     border-radius: 10px;
     gap: 10px;
     background:#191046;
     position: relative;
     overflow: hidden;
-    /* padding: 10px; */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-auto-rows: 250px;
+    gap: 1rem;
+
     
 
     @media screen and (min-width: 880px) {
         flex-direction: row;
-        width: ${props => props.isPresenting ? '240px' : '100%'};
+        /* width: ${props => props.isPresenting ? '240px' : '100%'}; */
         height: 100%;
     }
 
@@ -196,7 +206,7 @@ export const StreamWrapper = styled.div`
         img {
             min-height: 100%;
             min-width: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         span {
@@ -214,7 +224,7 @@ export const StreamWrapper = styled.div`
         video {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
     }
 `;
@@ -228,7 +238,7 @@ export const CallBlock = styled.div`
     img {
         min-height: 100%;
         min-width: 100%;
-        object-fit: cover;
+        object-fit: contain;
     }
 
     span {
@@ -254,11 +264,11 @@ export const UserCallBlock = styled.div`
     right: 20px;
     bottom: 20px;
     z-index: 999; */
-
+    height:100%;
     video {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         border-radius: 10px;
 
     }
