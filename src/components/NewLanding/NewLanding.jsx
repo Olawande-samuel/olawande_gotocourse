@@ -251,7 +251,7 @@ function Hero() {
   }
   let getter = getCookie(COOKEY)
   useEffect(()=>{
-    console.log({getter})
+    // console.log({getter})
     const interval = setInterval(() => {
       console.log('This will run every 20 mins!');
         if(getter !== ""){
@@ -265,7 +265,7 @@ function Hero() {
     return () => clearInterval(interval);
   },[getter])
 
-  console.log({heroValue})
+  // console.log({heroValue})
 
   const { generalState: { navHeight }, studentFunctions: { googleSignup }, } = useAuth();
   const [overlay, setOverlay] = useState(false);

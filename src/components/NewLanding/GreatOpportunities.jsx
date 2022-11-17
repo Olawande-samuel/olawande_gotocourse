@@ -45,8 +45,8 @@ const GreatOpportunities = () => {
             </header>
             <article>
                 {
-                    data.map(item=>(
-                        <GreatImage {...item} />
+                    data.map((item,id)=>(
+                        <GreatImage {...item} key={id}/>
                     ))
 
                 }

@@ -178,9 +178,21 @@ const TechCard = styled.div`
 
 `
 
-export function TechPreCard({ title, duration, price, packages, bootcampImg, description, tag, ratings, totalRatings }) {
+export function TechPreCard({ title, duration, price, packages, category, bootcampImg, bootcampId, description, tag, ratings, totalRatings, all }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
+    const { getItem } = useLocalStorage();
+
+    const userdata = getItem(KEY)
+    const { studentFunctions: { wishlistCourse } } = useAuth()
+    const mutation = useMutation(([id, usertoken]) => wishlistCourse(id, usertoken), {
+        onSuccess: (res) => {
+            console.log({ res })
+        },
+        onError: (err) => console.error(err)
+    })
+
+    let navigate = useNavigate()
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -194,6 +206,26 @@ export function TechPreCard({ title, duration, price, packages, bootcampImg, des
     const id = open ? 'simple-popover' : undefined;
 
     const [data, setData] = useState({})
+
+    function addToWishlist() {
+        if (userdata.token) {
+            mutation.mutate([bootcampId, userdata.token])
+            return
+        } else {
+            navigate("/login")
+        }
+    }
+
+    async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
+        console.log(title, category, bootcampId);
+        e.preventDefault();
+        if (userdata?.token) {
+            localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+            gotoclassPayment(title, category, bootcampId, navigate)
+        } else {
+            navigate("/login")
+        }
+    }
 
     useEffect(() => {
         const shortListItem = shortPopUpContent.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
@@ -254,8 +286,8 @@ export function TechPreCard({ title, duration, price, packages, bootcampImg, des
                             }
                         </ul>
                         <div className="pop_action">
-                            <button>Enroll Now</button>
-                            <button>Wishlist</button>
+                            <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
+                            <button onClick={addToWishlist}>Wishlist</button>
                         </div>
                     </div>
                 </Box>
@@ -813,7 +845,7 @@ const ShortCard = styled.div`
     
 `
 
-export function Short({ title, bootcampImg, bootcampId, description, popupTitle, popupArr, duration, price, packages, endDate, all }) {
+export function Short({ title, bootcampImg, bootcampId, category, description, popupTitle, popupArr, duration, price, packages, endDate, all }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -852,11 +884,12 @@ export function Short({ title, bootcampImg, bootcampId, description, popupTitle,
         }
     }
 
-    async function handleBootstrapEnrollment(e) {
+    async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
+        console.log(title, category, bootcampId);
         e.preventDefault();
         if (userdata?.token) {
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-            navigate("payment")
+            gotoclassPayment(title, category, bootcampId, navigate)
         } else {
             navigate("/login")
         }
@@ -923,7 +956,7 @@ export function Short({ title, bootcampImg, bootcampId, description, popupTitle,
                         <h6>Ready to register?</h6>
                         {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
                         <div className="skillaction">
-                            <button onClick={handleBootstrapEnrollment}>Enroll Now</button>
+                            <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
                             <button onClick={addToWishlist}>Wishlist</button>
                         </div>
                     </div>
@@ -934,7 +967,7 @@ export function Short({ title, bootcampImg, bootcampId, description, popupTitle,
     )
 }
 
-export function UpskillCourseCard({ title, bootcampImg, bootcampId, description, duration, price, packages, popupTitle, popupArr, all }) {
+export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, description, duration, price, packages, popupTitle, popupArr, all }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -981,11 +1014,12 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, description,
 
     }, [title])
 
-    async function handleBootstrapEnrollment(e) {
+    async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
+        console.log(title, category, bootcampId);
         e.preventDefault();
         if (userdata?.token) {
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-            navigate("payment")
+            gotoclassPayment(title, category, bootcampId, navigate)
         } else {
             navigate("/login")
         }
@@ -1043,8 +1077,8 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, description,
                         </ul>
                         {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
                         <div className="pop_action">
-                            <button onClick={addToWishlist}>Enroll Now</button>
-                            <button onClick={handleBootstrapEnrollment}>Wishlist</button>
+                            <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
+                            <button onClick={addToWishlist}>Wishlist</button>
                         </div>
                     </div>
                 </Box>
