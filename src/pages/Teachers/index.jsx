@@ -1,5 +1,5 @@
 import Layout from "../../components/Layout"
-import { BestTools, Hero, ImageContent, ItWorks, ItWorksList, MainHeader, TextContent } from "./style"
+import { AllInOne, BestTools, Customised, FAQ, Hero, ImageContent, ItWorks, ItWorksList, MainHeader, TextContent } from "./style"
 
 import hang from "../../images/Teachers/hang.png";
 import hiw from "../../images/Teachers/hiw.png";
@@ -8,14 +8,35 @@ import onDgo from "../../images/Teachers/onDgo.png";
 import record from "../../images/Teachers/record.png";
 import customised from "../../images/Teachers/customised.png";
 import unlimited from "../../images/Teachers/unlimited.png";
+import creator from "../../images/Teachers/creator.png";
+import quiz from "../../images/Teachers/quiz.png";
 
 import Meetifix from "../../images/landing/icons/Meetifix.png"
 import Rekordia from "../../images/landing/icons/Rekordia.png"
 import Quikonnet from "../../images/landing/icons/Quikonnet.png"
 import Classpodia from "../../images/landing/icons/Classpodia.png"
 import Quizim from "../../images/landing/icons/Quizim.png"
+import creatzion from "../../images/Teachers/creatzion.png"
+
+import arrow from "../../images/Teachers/arrow.png"
+import { Reviews } from "../Teacher/components";
+import { faqs, reviews } from "../Teacher";
+import { FaqComponent } from "../../components/Faq";
+import teacher from "../../images/become_teacher02.png";
 
 const Teachers = ()=> {
+    const styles = {
+        title: {
+            color: "#0C2191 !important",
+            fontSize: 18,
+            marginBottom: 15
+        },
+        answer: {
+            fontSize: 14,
+            fontWeight: 400,
+            letterSpacing: 0.4
+        }
+    }
     return(
         <Layout>
             <Hero>
@@ -75,6 +96,70 @@ const Teachers = ()=> {
                     ))
                 }
             </BestTools>
+            <AllInOne>
+                <div className="container">
+                    <header>
+                        <h4>All in one platform making teaching organized, cost effective borderless and collaborative </h4>
+                    </header>
+
+                    <div className="bar">
+                        <div className="icon">
+                            <img src={Meetifix} alt="" />
+                        </div>
+                        <div className="icon">
+                            <img src={Quikonnet} alt="" />
+                        </div>
+                        <div className="icon">
+                            <img src={Rekordia} alt="" />
+                        </div>
+                        <div className="icon">
+                            <img src={Classpodia} alt="" />
+                        </div>
+                        <div className="icon">
+                            <img src={creatzion} alt="" />
+                        </div>
+                        <div className="quizim">
+                            <img src={Quizim} alt="" />
+                        </div>
+                        <div className="arrow_container">
+                            <img src={arrow} alt="" />
+                            <p>Go<span>2</span>course</p>
+                        </div>
+                    </div> 
+                </div>
+            </AllInOne>
+            <Customised>
+                <div className="container">
+                    <div className="content">
+                        <div className="img_wrapper">
+                            <img src={teacher} alt="" />
+                        </div>
+                        <div className="text_content">
+                            <h3>Get access to customized dashboard to track Earnings, Student Enrolment to class, and Payment over a period of time.</h3>
+                            <button>Become A Teacher</button>
+                        </div>
+
+                    </div>
+                </div>
+            </Customised>
+            <FAQ>
+                <div className="container">
+                    <header>
+                        <h3>Frequently Asked Questions</h3>
+                    </header>
+                    <div className="content">
+                            {
+                                faqs.map(({ question, answer }, i) => (
+                                        <FaqComponent title={question} answer={answer} key={i} style={styles} />
+                                ))
+                            }
+
+                    </div>
+                </div>
+                </FAQ>
+                <div className="container-xxxl mx-auto">
+                <Reviews bgColor="var(--white)" reviews={reviews} />
+            </div>
         </Layout>
     )
 }
@@ -143,13 +228,13 @@ const data = [
         title: "Quizim",
         p1:"Create a quiz in a few seconds or take secure online quizes on any device, anywhere and at any time . Create quizzes in multiple choice tests, checkboxes, upload file attachment or assessment papers and have access to grades in real time just when made available." ,
         logo: Quizim,
-        img:record
+        img:quiz
     },
     {
         id:7,
         title: "Create course contents with the use of a single tool",
         p1:"This is a powerful educator’s companion designed to help course creators create their videos, course outline, and other material that will aid students leaning." ,
-        logo: Classpodia,
-        img:onDgo
+        logo: creatzion,
+        img:creator
     },
 ]

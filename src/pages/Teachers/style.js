@@ -290,4 +290,202 @@ export const ImageContent = styled.div`
 `
 
 
-// export const 
+export const AllInOne =styled.section`
+    padding-block: 2rem;
+
+    header {
+        margin-bottom: 2rem;
+        
+        h4 {
+            width: min(100% - .2rem, 550px);
+            margin-inline: auto;
+            color: #000;
+        }
+    
+    }
+
+    .bar {
+        position: relative;
+        border-radius: 8px;
+        padding: 1rem clamp(1rem, 0.4286rem + 2.8571vw, 3rem);;
+        background: var(--theme-blue);
+        display: flex;
+        justify-content: space-between;
+        align-items:center;
+        margin-bottom: 180px;
+
+
+        .quizim {
+            position:absolute;
+            right: -25px;
+            top: 50%;
+            transform:translateY(-50%);
+            width: 50px;
+            height: 50px;
+            
+            img {
+                max-width: 100%;
+            }
+        }
+        .arrow_container {
+            position: absolute;
+            height: 150px;
+            width: 300px;
+            bottom: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction:column;
+            align-items:center;
+            /* justify-content:; */
+
+            img {
+                height: 100px;
+                width: 40px;
+            }
+
+            p{
+                font-size: 40px;
+                font-weight: 800;
+                color: var(--theme-blue);
+                text-transform: uppercase;
+            }
+            span {
+                font-size: 40px;
+                color: var(--theme-orange);
+            }
+        }
+    }
+
+    .icon{
+
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+
+        :nth-child(1){
+            background-color: #FFE1FE;
+        }
+
+        :nth-child(2){
+            background-color: #FFF0EF;
+        }
+
+        :nth-child(3){
+            background-color: #C3D4FF;
+        }
+
+        :nth-child(4){
+            background-color: #FFD9CF;
+        }
+
+        :nth-child(5){
+            background-color: #B1EAFF;
+        }
+
+        img {
+            max-width: 100%;
+            margin-bottom: 0;
+            object-fit:contain;
+        }
+
+    }
+
+
+`
+
+
+export const Customised = styled.section`
+    padding-block:2rem;
+    background: #E8EFFF;
+
+    
+
+    .content {
+        display: grid;
+        gap: 1rem;
+        .img_wrapper{ 
+            display: flex;
+            justify-content: center;
+            
+            img {
+                max-height:450px;
+                max-width:100%;
+
+            }
+        }
+
+
+        .text_content {
+            
+            h3 {
+                font-weight: 500;
+                margin-bottom: 1rem;
+            }
+
+            button {
+                padding: 1rem 2rem;
+                background-color: var(--theme-blue);
+                color: #fff;
+                border-radius: 4px;
+                border: none;
+                outline: none;
+            }
+
+            
+        }
+        @media screen and (min-width: 612px){
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            align-items: center;
+            
+            img {
+                min-height:500px;
+                max-height: 550px;
+            }
+        }
+    }
+
+
+
+
+`
+
+
+export const FAQ = styled.section`
+
+    padding-block: 3rem;
+
+    header {
+        margin-bottom: 3rem;
+
+        h3 {
+            color: var(--theme-blue);
+            text-align:center;
+        
+        }
+    }
+
+    .content{
+        display: grid;
+        gap: 1rem;
+
+        .faq-comp {  
+            margin-bottom: 1.5rem;
+        
+            ::after {
+                display: none;
+
+            }
+        }
+        @media screen and (min-width: 600px){
+            grid-column-gap: 3rem;
+            grid-template-columns: repeat(2, 1fr)
+        }
+    }
+
+
+`

@@ -177,8 +177,8 @@ export const StreamWrapper = styled.div`
     overflow-y: auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-auto-rows: 250px;
-    gap: 1rem;
+    grid-auto-rows: 150px;
+    gap: .3rem;
 
     
 

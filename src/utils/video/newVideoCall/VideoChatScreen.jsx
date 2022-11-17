@@ -425,7 +425,7 @@ const VideoChatScreen = ()  => {
                     <img src={userProfile.profileImg} alt="avatar" />
                 </div>
             </HeadBar> */}
-            <Navbar />
+            <Navbar user={userProfile} />
             <Content>
                 <VideoWrapper isPresenting={isPresenting}> 
                      <div onClick={closeRecordedModal} className="recoreded-media">
