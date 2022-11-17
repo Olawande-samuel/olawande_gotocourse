@@ -101,10 +101,14 @@ const VideoChatScreen = ()  => {
         }
     }
 
-    const videoWrapper = document.querySelector('.video-section')
+    let videoWrapper
+
+    useEffect(()=>{
+        videoWrapper = document.querySelector('.video-section');
+    },[])
 
     function addVideoStream(videoWrapper, stream) {
-            console.log({videoWrapper})
+        console.log({videoWrapper})
 
         const video = videoWrapper.querySelector('video')
         video.srcObject = stream
@@ -257,11 +261,16 @@ const VideoChatScreen = ()  => {
         })
         myPeer.current.on('call', call => {
             if (call.peer.split('-')[0] !== "presentation") {
+                
+
+
                 call.answer(localStream.current)
                 const remoteVideoWrapper = document.createElement('div')
                 remoteVideoWrapper.classList.add("remote-users")
                 const remoteVideo = document.createElement('video')
                 remoteVideoWrapper.appendChild(remoteVideo)
+                console.log("runnin on call")
+                console.log({videoWrapper})
                 videoWrapper?.append(remoteVideoWrapper)
 
                 console.log("caller user: ", call.peer)
