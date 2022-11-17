@@ -7,7 +7,7 @@ import DOMPurify from "dompurify"
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Box } from "@mui/material"
 import { useEffect } from "react"
 import { shortPopUpContent } from "../ShortCourses"
@@ -23,6 +23,8 @@ import { changeConstants } from "../../../pages/Dashboard/Teachers/CreateCourse"
 import { upskillAltData } from "../UpskillCourse"
 import { Link } from "react-router-dom"
 import { AiOutlineCheck } from "react-icons/ai"
+import { AdvancedError } from "../../../classes"
+import { useMemo } from "react"
 
 // GREAT OPPORTUNITIES
 
@@ -184,13 +186,65 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
     const { getItem } = useLocalStorage();
 
     const userdata = getItem(KEY)
-    const { studentFunctions: { wishlistCourse } } = useAuth()
-    const mutation = useMutation(([id, usertoken]) => wishlistCourse(id, usertoken), {
-        onSuccess: (res) => {
-            console.log({ res })
-        },
-        onError: (err) => console.error(err)
-    })
+    //wishlist
+
+    const flag = useRef(false);
+    let [wishlistState, setWishlistState] = useState({})
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist } } = useAuth()
+
+    async function addToWishlist() {
+        setGeneralState({ ...generalState, loading: true })
+
+        if (userdata !== null) {
+            try {
+                const response = await addwishlistCourse(bootcampId, userdata?.token)
+                const { success, message, statusCode } = response
+                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+                const { data } = response
+                setWishlistState(data)
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setGeneralState({ ...generalState, loading: false })
+
+            }
+
+
+        } else {
+            navigate("/login")
+        }
+    }
+
+
+
+    async function getWishList() {
+        try {
+            const res = await fetchWishlist(userdata?.token);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+                const { data } = res;
+                if (data.length > 0) {
+                    setWishlistState(data.find(d => d.courseId === bootcampId));
+                } else {
+
+                }
+
+            } else {
+                throw new AdvancedError(message, statusCode);
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
+        }
+    }
+
+    useEffect(() => {
+        if (flag.current) return;
+        getWishList()
+        flag.current = true;
+    }, [])
+
 
     let navigate = useNavigate()
 
@@ -207,20 +261,13 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
 
     const [data, setData] = useState({})
 
-    function addToWishlist() {
-        if (userdata.token) {
-            mutation.mutate([bootcampId, userdata.token])
-            return
-        } else {
-            navigate("/login")
-        }
-    }
+
 
     async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
         console.log(title, category, bootcampId);
         e.preventDefault();
         if (userdata?.token) {
-            localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+            // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
             gotoclassPayment(title, category, bootcampId, navigate)
         } else {
             navigate("/login")
@@ -380,26 +427,8 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
 
     // Call to Action
     const navigate = useNavigate();
-    const [data, setData] = useState({});
     const { getItem } = useLocalStorage();
 
-    const userdata = getItem(KEY)
-    const { studentFunctions: { wishlistCourse } } = useAuth()
-    const mutation = useMutation(([id, usertoken]) => wishlistCourse(id, usertoken), {
-        onSuccess: (res) => {
-            console.log({ res })
-        },
-        onError: (err) => console.error(err)
-    })
-
-    function addToWishlist() {
-        if (userdata.token) {
-            mutation.mutate([bootcampId, userdata.token])
-            return
-        } else {
-            navigate("/login")
-        }
-    }
     return (
         <ExecutiveCard >
             <img src={img ? img : bootcampImg} alt="" className="exe_image" />
@@ -419,33 +448,7 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
                     <span onClick={() => gotoclass(title, category, bootcampId, navigate)}>Learn more</span>
                 </div>
             </div>
-            {/* <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                vertical: 'center',
-                horizontal: 'left',
-                }}
-            >
-                <Box sx={{ p: 2 }} className="pop_container">
-                    <header>
-                        <h5 className="fw-bold text-capitalize">{title}</h5>
-                    </header>
-                    <div>
-                        <div className="d-flex justify-content-between mb-3">
-                            <span className="fw-bold">{duration}</span>
-                            <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
-                        </div>
-                        <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
-                        <div className="pop_action">
-                            <button >Enroll Now</button>    
-                            <button onClick={addToWishlist}>Wishlist</button>    
-                        </div>
-                    </div>
-                </Box>
-            </Popover> */}
+
         </ExecutiveCard>
     )
 }
@@ -572,7 +575,6 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
     const { getItem } = useLocalStorage();
 
     const userdata = getItem(KEY)
-    const { studentFunctions: { wishlistCourse } } = useAuth()
 
 
 
@@ -590,21 +592,7 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
 
     }, [title])
 
-    const mutation = useMutation(([id, usertoken]) => wishlistCourse(id, usertoken), {
-        onSuccess: (res) => {
-            console.log({ res })
-        },
-        onError: (err) => console.error(err)
-    })
 
-    function addToWishlist() {
-        if (userdata.token) {
-            mutation.mutate([bootcampId, userdata.token])
-            return
-        } else {
-            navigate("/login")
-        }
-    }
 
 
 
@@ -867,33 +855,102 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
     const { getItem } = useLocalStorage();
 
     const userdata = getItem(KEY)
-    const { studentFunctions: { wishlistCourse } } = useAuth()
-    const mutation = useMutation(([id, usertoken]) => wishlistCourse(id, usertoken), {
-        onSuccess: (res) => {
-            // console.log({ res })
-        },
-        onError: (err) => console.error(err)
-    })
 
-    function addToWishlist() {
-        if (userdata.token) {
-            mutation.mutate([bootcampId, userdata.token])
-            return
+    //wishlist
+
+    const flag = useRef(false);
+    let [wishlistState, setWishlistState] = useState({})
+
+    console.log({wishlistState});
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
+
+    async function addToWishlist() {
+        setGeneralState({ ...generalState, loading: true })
+
+        if (userdata !== null) {
+            try {
+                const response = await addwishlistCourse(bootcampId, userdata?.token)
+                const { success, message, statusCode } = response
+                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+                const { data } = response
+                console.log({data});
+                setWishlistState(data)
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setGeneralState({ ...generalState, loading: false })
+
+            }
+
+
         } else {
             navigate("/login")
         }
     }
 
+
+
+    async function getWishList() {
+        try {
+            const res = await fetchWishlist(userdata?.token);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+                const { data } = res;
+                if (data.length > 0) {
+                    console.log("wih" , {data});
+                    setWishlistState(data.find(d => d.courseId === bootcampId));
+                } else {
+
+                }
+
+            } else {
+                throw new AdvancedError(message, statusCode);
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
+        }
+    }
+
+    useEffect(() => {
+        if (flag.current) return;
+        getWishList()
+        flag.current = true;
+    }, [])
+
+
+
+    async function removeCourse(e) {
+        e.preventDefault();
+        try {
+            const res = await deleteFromWishlist(userdata?.token, bootcampId)
+            const { success, message, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+                const { data } = res;
+                handleClose()
+            }
+        } catch (err) {
+           
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+        }
+    }
+
+
     async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
-        console.log(title, category, bootcampId);
+        console.log(title, category, bootcampId, { all });
         e.preventDefault();
         if (userdata?.token) {
-            localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+            // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
             gotoclassPayment(title, category, bootcampId, navigate)
         } else {
             navigate("/login")
         }
     }
+
+
     useEffect(() => {
         const ownListItem = shortPopUpContent.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
         if (ownListItem.length > 0) {
@@ -957,7 +1014,25 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                         {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
                         <div className="skillaction">
                             <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
-                            <button onClick={addToWishlist}>Wishlist</button>
+
+                            <button onClick={addToWishlist}>
+                                {
+                                    loading ?
+                                        <div className="spinner-border" role="status">
+                                            <span className="visually-hidden">Loading...</span>
+                                        </div>
+                                        :
+                                        wishlistState ? "Remove wishlist" : "Wishlist"
+
+                                }
+
+                            </button>
+
+
+                            {/* {wishlistState ? <button onClick={removeCourse}> Remove wishlist </button> : <button onClick={addToWishlist}> Wishlist </button>} */}
+
+
+
                         </div>
                     </div>
                 </Box>
@@ -990,22 +1065,65 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
     const { getItem } = useLocalStorage();
 
     const userdata = getItem(KEY)
-    const { studentFunctions: { wishlistCourse } } = useAuth()
-    const mutation = useMutation(([id, usertoken]) => wishlistCourse(id, usertoken), {
-        onSuccess: (res) => {
-            console.log({ res })
-        },
-        onError: (err) => console.error(err)
-    })
+    //wishlist
 
-    function addToWishlist() {
-        if (userdata.token) {
-            mutation.mutate([bootcampId, userdata.token])
-            return
+    const flag = useRef(false);
+    let [wishlistState, setWishlistState] = useState({})
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist } } = useAuth()
+
+    async function addToWishlist() {
+        setGeneralState({ ...generalState, loading: true })
+
+        if (userdata !== null) {
+            try {
+                const response = await addwishlistCourse(bootcampId, userdata?.token)
+                const { success, message, statusCode } = response
+                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+                const { data } = response
+                setWishlistState(data)
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setGeneralState({ ...generalState, loading: false })
+
+            }
+
+
         } else {
             navigate("/login")
         }
     }
+
+
+
+    async function getWishList() {
+        try {
+            const res = await fetchWishlist(userdata?.token);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+                const { data } = res;
+                if (data.length > 0) {
+                    setWishlistState(data.find(d => d.courseId === bootcampId));
+                } else {
+
+                }
+
+            } else {
+                throw new AdvancedError(message, statusCode);
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
+        }
+    }
+
+    useEffect(() => {
+        if (flag.current) return;
+        getWishList()
+        flag.current = true;
+    }, [])
+
     useEffect(() => {
         const ownListItem = upskillAltData.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
         if (ownListItem.length > 0) {
@@ -1018,7 +1136,7 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
         console.log(title, category, bootcampId);
         e.preventDefault();
         if (userdata?.token) {
-            localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+            // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
             gotoclassPayment(title, category, bootcampId, navigate)
         } else {
             navigate("/login")

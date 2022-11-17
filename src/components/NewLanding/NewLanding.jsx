@@ -538,8 +538,8 @@ function Benefits() {
           </div>
           <div className="stay_right">
             <div className="services_list">
-              {serviceList.map((service) => (
-                <BenefitBox {...service} />
+              {serviceList.map((service, i) => (
+                <BenefitBox {...service} key={i}/>
               ))}
             </div>
             <div className=" mt-4">

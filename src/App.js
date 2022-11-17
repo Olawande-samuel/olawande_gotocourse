@@ -441,7 +441,7 @@ function App() {
                 <Route path="affiliate" element={<AdminAffiliate />} />
 
 
-                <Route path="class-console" element={<Out />}>
+                {/* <Route path="class-console" element={<Out />}>
                   <Route index element={<AdminClassConsole />} />
                   <Route path=":id" element={<Content />}>
                     <Route path="file" element={<File />} />
@@ -449,6 +449,29 @@ function App() {
                     <Route path="quiz" element={<Out />}>
                       <Route index element={<Quiz />} />
                       <Route path="preview" element={<Preview />} />
+                    </Route>
+                  </Route>
+                </Route> */}
+
+                <Route path="class-console" element={<Out />}>
+                  <Route index element={<AdminClassConsole />} />
+                  <Route path="class" element={<Content />}>
+                    <Route path=":classId" element={<Out />}>
+                      <Route index element={<MainContainer />} />
+                      <Route path="creator-suite" element={<Suite />} />
+                      <Route path="classroom" element={<Classroom />} />
+                      <Route path="mail" element={<Out />}>
+                        <Route index element={<ChatComponent />} />
+                        <Route path="details" element={<GroupContent />} />
+                        <Route path="group/:groupID" element={<GroupContent />} />
+                        <Route path="chat/:userId" element={<MailDetail />} />
+                      </Route>
+                      <Route path="file" element={<File />} />
+                      <Route path="note" element={<Note />} />
+                      <Route path="quiz" element={<Out />}>
+                        <Route index element={<Quiz />} />
+                        <Route path="preview" element={<Preview />} />
+                      </Route>
                     </Route>
                   </Route>
                 </Route>

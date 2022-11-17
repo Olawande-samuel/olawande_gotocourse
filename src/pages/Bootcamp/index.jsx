@@ -451,7 +451,8 @@ export function NewBootcampDetailsComponent() {
   const userdata = getItem("gotocourse-userdata");
 
 
-  const { studentFunctions: { wishlistCourse }, otherFunctions: { fetchBootcamps } } = useAuth()
+  const { studentFunctions: { wishlistCourse , addwishlistCourse}, otherFunctions: { fetchBootcamps } } = useAuth()
+
   const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
     onSuccess: res => {
       // console.log({res})
@@ -484,12 +485,14 @@ export function NewBootcampDetailsComponent() {
       navigate("/login")
     }
   }
+
+
   async function addToWishList() {
 
     if (userdata !== null) {
       try {
         setLoading(true)
-        const response = await wishlistCourse(bootcampTraining.bootcampId, userdata?.token)
+        const response = await addwishlistCourse(bootcampTraining.bootcampId, userdata?.token)
         const { success, message, statusCode } = response
         if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
         toast.success(message)
@@ -554,8 +557,8 @@ export function NewBootcampDetailsComponent() {
                     <p>{ bootcampTrainingInfo?.careerTitle}</p>
                     <ul>
                       {
-                        bootcampTrainingInfo?.careerList?.map(item => (
-                          <li>{item.name}</li>
+                        bootcampTrainingInfo?.careerList?.map((item, i) => (
+                          <li key={i}>{item.name}</li>
                         ))
                       }
 
@@ -740,7 +743,7 @@ export function Upcome({ _id, title, duration, category, subCategory, bootcampId
   async function handleBootstrapEnrollment(e) {
     e.preventDefault();
     if (userdata?.token) {
-      localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+      // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
       navigate("payment")
     } else {
       navigate("/login")
