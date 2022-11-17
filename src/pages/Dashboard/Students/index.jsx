@@ -424,7 +424,7 @@ export function MyClasses() {
     }
 
     return (
-        <Students header={"My Classes"}>
+        <Students header={"My Courses"}>
             {loading && <Loader />}
             <div className={clsx["students_profile"]}>
                 <div className={clsx.admin__student}>
@@ -459,13 +459,15 @@ export function MyClasses() {
                            
                             <div className={` ${clsx.dashboard_courses}`}>
                             <div className={clsx["dashboard_courses--left"]}>
-                                <h6 style={{ marginBottom: ".5rem" }}>Available Classes</h6>
-                                <small className="mb-4 d-block">Select and enroll to a class to get started</small>
+                                <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
+                                <small className="mb-4 d-block">Select and enroll for a class to get started</small>
                 
                                 <div className={clsx["courseheader"]}>
                                     <div className={clsx["courseitem"]}> No</div>
-                                    <div className={clsx["courseitem"]}>Courses/Certification</div>
-                                    <div className={clsx["courseitem"]}>SubContent</div>
+                                    <div className={clsx["courseitem"]}>Courses</div>
+                                    <div className={clsx["courseitem"]}>Category</div>
+                                    <div className={clsx["courseitem"]}>Subcategory</div>
+                                    <div className={clsx["courseitem"]}>Start Date</div>
                                     <div className={clsx["courseitem"]}>Duration</div>
                                     <div className={clsx["courseitem"]}>
                                         <FormControl fullWidth size="small">
@@ -547,7 +549,7 @@ export function MyClasses() {
                 
                         </div>
                             
-                        ) : (<p className="lead">You haven't registered for a class</p>)
+                        ) : (<p className="lead">You haven't registered for a course</p>)
                         }
 
                     </div>
@@ -634,12 +636,12 @@ export function Bootcamps() {
     }
 
     return (
-        <Students header={"Available Classes"}>
+        <Students header={"Available Courses"}>
             {loading && <Loader />}
             <div className={clsx["students_profile"]}>
                 <div className={clsx.admin__student}>
                     <div className="d-flex justify-content-between align-items-center mb-4">
-                        <h3 style={{ margin: 0 }}>Available Classes</h3>
+                        <h3 style={{ margin: 0 }}>Available Courses</h3>
                     </div>
                     <div className={clsx.admin__student_main}>
                         {bootcamps.data?.data?.length > 0 ? (
@@ -674,7 +676,7 @@ export function Bootcamps() {
                                     </p>
                                 </tbody>
                             </table>
-                        ) : (<p className="lead">No Class Available </p>)
+                        ) : (<p className="lead">No Course Available </p>)
                         }
 
                     </div>
@@ -690,26 +692,9 @@ export function Classes() {
     let userdata = getItem(KEY);
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
 
-    const data = [
-        {
-            title: "CyberSecurity",
-            numberOfLessons: 10,
-            date: "Apr 5",
-            time: "5pm",
-            isLive: false,
-            color: colors.info
-        },
-        {
-            title: "Branding",
-            numberOfLessons: 10,
-            date: "Apr 5",
-            time: "5pm",
-            isLive: true,
-            color: colors.greenish
-        },
-    ]
+
     return (
-        <Students isMobile={isMobile} userdata={userdata} header="Classes">
+        <Students isMobile={isMobile} userdata={userdata} header="Courses">
             {/* <div className={clsx.students_profile}>
                 <div className={clsx.classes}>
                     {
@@ -1552,13 +1537,13 @@ export const Dashboard = () => {
     const topContent = [
         {
             id: 1,
-            title: "Classes enrolled for",
+            title: "Courses enrolled for",
             logo: <Stu1 />,
             value: data?.data?.length ?? 0
         },
         {
             id: 2,
-            title: "Classes on wishlist",
+            title: "Courses on wishlist",
             logo: <Stu2 />,
             value: wishlistData?.data?.length ?? 0
         },
@@ -1603,7 +1588,7 @@ export const Dashboard = () => {
                 </div>
                 <div className={`${clsx.dashboard_course_details}`}>
                     <div className="d-flex justify-content-between align-items-center">
-                        <h6>Classes paid for</h6>
+                        <h6>Courses paid for</h6>
                     </div>
                     {/* <CourseTable courses={data?.data} type="dashboard" /> */}
                     {
@@ -1665,13 +1650,15 @@ function AvailableCourses({ data }) {
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
-                <h6 style={{ marginBottom: ".5rem" }}>Available Classes</h6>
-                <small className="mb-4 d-block">Select and enroll to a class to get started</small>
+                <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
+                <small className="mb-4 d-block">Select and enroll for a course to get started</small>
 
                 <div className={clsx["courseheader"]}>
                     <div className={clsx["courseitem"]}> No</div>
-                    <div className={clsx["courseitem"]}>Courses/Certification</div>
-                    <div className={clsx["courseitem"]}>SubContent</div>
+                    <div className={clsx["courseitem"]}>Courses</div>
+                    <div className={clsx["courseitem"]}>Category</div>
+                    <div className={clsx["courseitem"]}>Subcategory</div>
+                    <div className={clsx["courseitem"]}>Start Date</div>
                     <div className={clsx["courseitem"]}>Duration</div>
                     <div className={clsx["courseitem"]}>
                         <FormControl fullWidth size="small">

@@ -49,7 +49,7 @@ const ExecutiveClasses = () => {
             <Grid>
                 {
                     shorts?.filter(item => item.isActive).slice(0, 8).map((item, i) => (
-                        <ExeEducation {...item} i={i} img={data.content[i]} />
+                        <ExeEducation {...item} i={i} img={data.content[i]}  key={item.bootcampId}/>
                     ))
                 }
             </Grid>

@@ -3926,7 +3926,7 @@ export function CreateBootcamp() {
     setPopupList(e.target.value);
   }
   
-  console.log({popupList})
+  // console.log({popupList})
 
   const [openPackage, setOpenPackage] = useState(false);
   // PACKAGES
@@ -4201,6 +4201,22 @@ export function CreateBootcamp() {
             >
               Add Syllabus
             </button>
+         
+            <Input
+              label="Career Title"
+              name="careerTitle"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.careerTitle}
+            />
+            <button
+              type="button"
+              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
+              className={`btn btn-primary mb-3 ${clsx.addcareer_button}`}
+              onClick={(e) => setShowCareerModal((_) => true)}
+            >
+              Add Career Prospect
+            </button>
             <div className={clsx.form_group}>
               <label>Career Prospect</label>
               {formstate.careerList?.length !== 0 ? (
@@ -4228,14 +4244,6 @@ export function CreateBootcamp() {
                 </p>
               )}
             </div>
-            <button
-              type="button"
-              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
-              className={`btn btn-primary mb-3 ${clsx.addcareer_button}`}
-              onClick={(e) => setShowCareerModal((_) => true)}
-            >
-              Add Career Prospect
-            </button>
             <Input
               label="Popup Title"
               name="popupTitle"
@@ -4270,6 +4278,7 @@ export function CreateBootcamp() {
                 </p>
               )}
             </div>
+
             <button
               type="button"
               style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}

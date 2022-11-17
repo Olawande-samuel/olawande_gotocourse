@@ -551,6 +551,7 @@ export function NewBootcampDetailsComponent() {
                   bootcampTrainingInfo?.careerList?.length > 0 &&
                   <div className={clsx.career_list}>
                     <h4>Career Prospect</h4>
+                    <p>{ bootcampTrainingInfo?.careerTitle}</p>
                     <ul>
                       {
                         bootcampTrainingInfo?.careerList?.map(item => (

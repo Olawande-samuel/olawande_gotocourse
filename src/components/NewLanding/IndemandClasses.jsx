@@ -35,7 +35,7 @@ const IndemandClasses = () => {
               const exe = res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.isActive);
 
               setShorts(exe)
-              console.log({exe})
+              // console.log({exe})
             }
         }
   })
@@ -44,7 +44,7 @@ const IndemandClasses = () => {
       <Grid>
         {
           shorts?.filter(item=>item.isActive).slice(0,8).map((item) => (
-            <InDemand {...item} all={item}/>
+            <InDemand {...item} all={item} key={item.bootcampId}/>
           ))
         }
       </Grid>
