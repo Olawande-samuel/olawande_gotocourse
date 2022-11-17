@@ -33,7 +33,7 @@ function SidebarItem({icon: Icon, title, path,showBadge, ...props}){
 
     return (
         <div className={clsx.sidebar_item} {...props}>
-        <Badge alignItems="center" badgeContent={showBadge ? path === "notifications" ? notifications : chat : 0} color="secondary" >
+        <Badge alignitems="center" badgeContent={showBadge ? path === "notifications" ? notifications : chat : 0} color="secondary" >
             <i>
                 <Icon className={clsx.sidebar_icon} color="white" size="1.5rem" />
             </i>
@@ -150,12 +150,12 @@ const Sidebar = ({}) => {
         {
             icon: BiCategory,
             path: "classes",
-            title: "Available Classes"
+            title: "Available Courses"
         },
         {
             icon: BiCategory,
             path: "myclasses",
-            title: "My Classes"
+            title: "My Courses"
         },
         {
             icon: BiVideo,

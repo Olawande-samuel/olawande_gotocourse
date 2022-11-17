@@ -38,7 +38,7 @@ const UpskillCourse = () => {
               if(res.data.length > 0){
                 // console.log("data", res.data);
                   const uppers = res.data.filter(item=>item.subCategory === "UPSKILL_COURSES" && item.isActive);
-                  console.log({uppers});
+                //   console.log({uppers});
                   setShorts(uppers)
               }
           }
@@ -49,7 +49,7 @@ const UpskillCourse = () => {
         <Grid>
             {
                 shorts?.filter(item=>item.isActive).slice(0, 8).map(item=>(
-                    <UpskillCourseCard {...item} all={item}/>
+                    <UpskillCourseCard {...item} all={item} key={item.bootcampId}/>
                 ))
             }
         </Grid>
