@@ -448,16 +448,16 @@ const VideoChatScreen = ()  => {
                             } else {
                                 stopRecording()
                             }
-                        }}>
+                        }}  isOn={!isRecording}>
                             <VscRecord />
                         </ControlItem>
-                        <ControlItem onClick={togggleAudio}>
-                            {callSettingsState.audio ? <BsMic /> : <BsMicMute />}
+                        <ControlItem onClick={togggleAudio} isOn={callSettingsState.audio}>
+                            {callSettingsState.audio ? <BsMic /> : <BsMicMute  />}
                         </ControlItem>
-                        <ControlItem onClick={() => startCapture()}>
+                        <ControlItem onClick={() => startCapture()} isOn={true}>
                             <MdPresentToAll />
                         </ControlItem>
-                        <ControlItem onClick={togggleVideo}>
+                        <ControlItem onClick={togggleVideo} isOn={callSettingsState.video}>
                             {callSettingsState.video ? <BsCameraVideo /> : <BsCameraVideoOff />}
                         </ControlItem>
                         <ControlItem>

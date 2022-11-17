@@ -89,7 +89,7 @@ export const VideoWrapper = styled.div`
     margin-inline: auto;
     height: 100%;
 
-    @media screen and (max-width: 600px){
+    @media screen and (max-width: 800px){
         grid-template-columns: 1fr
     };
 
@@ -174,7 +174,7 @@ export const StreamWrapper = styled.div`
     gap: 10px;
     background:#191046;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     grid-auto-rows: 250px;
@@ -343,6 +343,7 @@ export const ControlItem = styled.div`
     height: 40px;
     border-radius: 50%;
     background: #535353;
+    background: ${props => props.isOn ? "#535353" : "red"};
     display: flex;
     justify-content: center;
     align-items: center;
