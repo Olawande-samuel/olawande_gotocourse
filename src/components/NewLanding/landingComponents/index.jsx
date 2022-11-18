@@ -1079,9 +1079,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                                     }
 
                                 </button>
-
                                 :
-
                                 <button onClick={addToWishlist}>
                                     {
                                         loading ?
@@ -1534,7 +1532,7 @@ const SuccessWrapper = styled.div`
 
 `
 
-export function SuccessCard({ icon, description }) {
+export function SuccessCard({ icon, title, description }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -1555,6 +1553,7 @@ export function SuccessCard({ icon, description }) {
             <div className="icon_wrapper">
                 <img src={icon} alt="" />
             </div>
+            <h6 className="fw-bold" style={{fontSize: "18px"}}>{title}</h6>
             <p className="restricted_line">{description}</p>
             <span onClick={handleClick} className="readmore">read more</span>
         </SuccessWrapper>

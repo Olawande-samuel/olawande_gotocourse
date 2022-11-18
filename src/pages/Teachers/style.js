@@ -547,9 +547,53 @@ export const FAQ = styled.section`
         }
         @media screen and (min-width: 600px){
             grid-column-gap: 3rem;
-            grid-template-columns: repeat(2, 1fr)
+            grid-template-columns: repeat(2, 1fr);
         }
     }
 
+
+`
+export const ReviewContainer =  styled.section`
+    background:#E8EFFF;
+    padding-block: 2rem;
+
+    > div > div {
+        background-color:#E8EFFF !important;
+    }
+    .swiper-slide > div {
+        height: 100%;
+    }
+    .swiper-slide {
+        height: auto !important;
+
+    }
+
+`
+
+export const Ready = styled.section`
+    padding-block: 2rem;
+    display: grid;
+    place-items:center;
+    min-height: 300px;
+
+
+    h4{
+        color: var(--theme-blue);
+        font-weight: 700;
+        width: min(100%, 550px);
+        margin-inline: auto;
+        margin-bottom: 2rem;
+        text-align: center;
+        font-size: clamp(1.6rem, 1.7143rem + 1.4286vw, 2.5rem);
+    }
+
+    button {
+        background: var(--theme-blue);
+        color: #fff;
+        padding: 10px 28px;
+        border-radius: 40px;
+        border: none;
+        outline: none;
+    }
 
 `

@@ -5,7 +5,7 @@ import { HiOutlinePhone } from 'react-icons/hi'
 import {  IoAdd } from 'react-icons/io5'
 import { MdPresentToAll } from 'react-icons/md'
 import {  VscRecord } from 'react-icons/vsc'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import useQuery from '../useQuery'
 import useSocket from '../useSocket'
 import { Wrapper, Content, HeadBar, VideoWrapper, AddPeople, ControlItem, ControlWrapper, UserCallBlock, UserPresentation, StreamWrapper,  } from './style'
@@ -25,6 +25,7 @@ const VideoChatScreen = ()  => {
         video: true,
         audio: true,
     })
+    const navigate = useNavigate()
     const query = useQuery();
     let roomId = query.get('room')
     let isRoomOwner = false;
@@ -414,6 +415,15 @@ const VideoChatScreen = ()  => {
         initRoom()
         connectionUserId.current = userProfile.userId
     }, [userProfile.userId])
+
+    function handleNavigation(){
+        userProfile.userType === "student" ? 
+        window.location.assign("/student")
+        :
+        userProfile.userType === "teacher" ? 
+        window.location.assign("/teacher"): userProfile.userType === "admin" ? window.location.assign("/admin") : window.location.assign("/")
+
+    }
     return (
         <Wrapper>
             {/* <HeadBar>
@@ -460,7 +470,7 @@ const VideoChatScreen = ()  => {
                         <ControlItem onClick={togggleVideo} isOn={callSettingsState.video}>
                             {callSettingsState.video ? <BsCameraVideo /> : <BsCameraVideoOff />}
                         </ControlItem>
-                        <ControlItem>
+                        <ControlItem onClick={handleNavigation}>
                             <HiOutlinePhone />
                         </ControlItem>
                     </ControlWrapper>

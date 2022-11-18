@@ -1,5 +1,8 @@
 import Layout from "../../components/Layout"
-import { TeacherHero, AllInOne, BestTools, Customised, FAQ, Hero, ImageContent, ItWorks, ItWorksList, MainHeader, TextContent } from "./style"
+
+
+import { TeacherHero, AllInOne, BestTools, Customised, FAQ, Hero, ImageContent, ItWorks, ItWorksList, MainHeader, Ready, ReviewContainer, TextContent } from "./style"
+
 
 import hang from "../../images/Teachers/hang.png";
 import hiw from "../../images/Teachers/hiw.png";
@@ -172,10 +175,18 @@ const Teachers = () => {
 
                     </div>
                 </div>
-            </FAQ>
-            <div className="container-xxxl mx-auto">
-                <Reviews bgColor="var(--white)" reviews={reviews} />
-            </div>
+
+
+                </FAQ>
+                <ReviewContainer>
+                    <div className="container-xxxl mx-auto teacher_review">
+                        <Reviews bgColor="var(--white)" reviews={reviews} />
+                    </div>  
+                </ReviewContainer>
+                <Ready>
+                    <h4>Ready to start creating unlimited courses on Gotocourse?</h4>
+                    <button>Get started for free</button>
+                </Ready>
         </Layout>
     )
 }
