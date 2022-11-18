@@ -449,11 +449,12 @@ export function NewBootcampDetailsComponent() {
 
   const bootcampTraining = getItem("gotocourse-bootcampdata");
   const userdata = getItem("gotocourse-userdata");
+  const { id } = useParams()
 
 
   const { studentFunctions: { wishlistCourse , addwishlistCourse}, otherFunctions: { fetchBootcamps } } = useAuth()
 
-  const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
+  const bootcamps = useQuery(["bootcamps", id], () => fetchBootcamps(), {
     onSuccess: res => {
       // console.log({res})
       if (res.data) {
@@ -470,7 +471,6 @@ export function NewBootcampDetailsComponent() {
 
   const navigate = useNavigate();
 
-  const { id } = useParams()
 
 
   const {

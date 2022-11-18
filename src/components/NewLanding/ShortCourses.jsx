@@ -32,7 +32,7 @@ const ShortCourses = () => {
     const [shorts, setShorts] = useState([])
     
     const classes = useQuery(["fetch classes"], () => fetchBootcamps(), {
-        notifyOnChangeProps:["category", "isFetching"],
+        // notifyOnChangeProps:["category", "isFetching"],
 
         onSuccess: (res)=>{
             if(res.data.length > 0){
