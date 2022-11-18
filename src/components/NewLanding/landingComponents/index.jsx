@@ -190,7 +190,7 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
 
     const flag = useRef(false);
     let [wishlistState, setWishlistState] = useState({})
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist } } = useAuth()
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
 
     async function addToWishlist() {
         setGeneralState({ ...generalState, loading: true })
@@ -261,7 +261,24 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
 
     const [data, setData] = useState({})
 
+    async function removeCourse(e) {
+        e.preventDefault();
+        try {
+            setGeneralState({ ...generalState, loading: true })
+            const res = await deleteFromWishlist(userdata?.token, bootcampId)
+            const { success, message, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+                const { data } = res;
+                setWishlistState({})
+                handleClose()
+            }
+        } catch (err) {
 
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+        }
+    }
 
     async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
         console.log(title, category, bootcampId);
@@ -334,7 +351,37 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
                         </ul>
                         <div className="pop_action">
                             <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
-                            <button onClick={addToWishlist}>Wishlist</button>
+                            {
+                                (userdata.token && wishlistState) ? 
+
+                                <button onClick={removeCourse}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Remove wishlist"
+
+                                    }
+
+                                </button>
+
+                                :
+
+                                <button onClick={addToWishlist}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Wishlist"
+
+                                    }
+
+                                </button>
+                            }
                         </div>
                     </div>
                 </Box>
@@ -924,11 +971,13 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
     async function removeCourse(e) {
         e.preventDefault();
         try {
+            setGeneralState({ ...generalState, loading: true })
             const res = await deleteFromWishlist(userdata?.token, bootcampId)
             const { success, message, statusCode } = res;
             if (!success) throw new AdvancedError(message, statusCode);
             else {
                 const { data } = res;
+                setWishlistState({})
                 handleClose()
             }
         } catch (err) {
@@ -1049,8 +1098,6 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
 
 
 
-                            {/* {wishlistState ? <button onClick={removeCourse}> Remove wishlist </button> : <button onClick={addToWishlist}> Wishlist </button>} */}
-
 
 
                         </div>
@@ -1089,7 +1136,7 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
 
     const flag = useRef(false);
     let [wishlistState, setWishlistState] = useState({})
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist } } = useAuth()
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
 
     async function addToWishlist() {
         setGeneralState({ ...generalState, loading: true })
@@ -1151,6 +1198,25 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
         }
 
     }, [title])
+
+    async function removeCourse(e) {
+        e.preventDefault();
+        try {
+            setGeneralState({ ...generalState, loading: true })
+            const res = await deleteFromWishlist(userdata?.token, bootcampId)
+            const { success, message, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+                const { data } = res;
+                setWishlistState({})
+                handleClose()
+            }
+        } catch (err) {
+
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+        }
+    }
 
     async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
         console.log(title, category, bootcampId);
@@ -1216,7 +1282,37 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
                         {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
                         <div className="pop_action">
                             <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
-                            <button onClick={addToWishlist}>Wishlist</button>
+                            {
+                                (userdata.token && wishlistState) ? 
+
+                                <button onClick={removeCourse}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Remove wishlist"
+
+                                    }
+
+                                </button>
+
+                                :
+
+                                <button onClick={addToWishlist}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Wishlist"
+
+                                    }
+
+                                </button>
+                            }
                         </div>
                     </div>
                 </Box>
