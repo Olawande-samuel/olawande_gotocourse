@@ -93,207 +93,6 @@ export function Preview() {
 
 
 
-// const Child = ({ onChildSubmit, childIndex }) => {
-//     const [value, setValue] = useState({
-//         type: "",
-//         checked: false,
-//         answer: "",
-//         noteValue: ""
-//     })
-
-//     const submitForm = (e) => {
-//         e.preventDefault()
-//         onChildSubmit(childIndex, value)
-
-//     }
-
-//     const [inputList, setInputList] = useState([{
-//         optionAnswer: "",
-//     }])
-
-//     const handleInputChange = (e, index) => {
-//         const { name, value } = e.target;
-//         const list = [...inputList];
-//         list[index][name] = value;
-//         setInputList(list)
-//     }
-
-//     const handleRemoveClick = index => {
-//         const list = [...inputList]
-//         list.splice(index, 1);
-//         setInputList(list)
-//     }
-
-//     const handleAddClick = () => {
-//         setInputList([...inputList, {
-//             optionAnswer: ""
-//         }])
-//     }
-
-
-//     console.log({ inputList });
-
-
-
-
-//     return (
-//         <>
-//             <Accordion >
-//                 <Accordion.Item eventKey={childIndex} className="accord__body">
-//                     <Accordion.Header className="accord__header"> Question {childIndex + 1}</Accordion.Header>
-//                     <Accordion.Body>
-//                         <FormControl sx={{ m: 1, minWidth: 120 }} >
-//                             <InputLabel id="answertype-label">Question Type</InputLabel>
-//                             <Select
-//                                 // labelId="questiontype-label"
-//                                 // id="questiontype"
-//                                 // label="question"
-//                                 // className="myselect"
-//                                 value={value.type}
-//                                 name="type"
-//                                 onChange={(e) => setValue({ ...value, [e.target.name]: e.target.value })}
-//                                 displayEmpty
-//                                 inputProps={{ 'aria-label': "Without label" }}
-//                                 margin="dense"
-//                             >
-//                                 <MenuItem value="theory">
-//                                     Theory
-//                                 </MenuItem>
-//                                 <MenuItem value="multiple" >
-//                                     Multiple Choice
-//                                 </MenuItem>
-//                                 <MenuItem value="checkbox" >
-//                                     Checkbox
-//                                 </MenuItem>
-//                                 <MenuItem value="file">
-//                                     File Upload
-//                                 </MenuItem>
-//                             </Select>
-
-//                             <div className="texteditor quiz__editor">                                                        <CKEditor
-//                                 editor={ClassicEditor}
-//                                 data="<p>Hello from CKEditor 5!</p>"
-//                                 onReady={editor => {
-//                                     // You can store the "editor" and use when it is needed.
-//                                     console.log('Editor is ready to use!', editor);
-//                                 }}
-//                                 onChange={(event, editor) => {
-//                                     const data = editor.getData();
-//                                     console.log({ event, editor, data });
-//                                     setValue({
-//                                         ...value,
-//                                         noteValue: data
-//                                     })
-
-//                                 }}
-//                                 onBlur={(event, editor) => {
-//                                     console.log('Blur.', editor);
-//                                 }}
-//                                 onFocus={(event, editor) => {
-//                                     console.log('Focus.', editor);
-//                                 }}
-//                             />
-
-//                                 <div className='textbtn'>
-//                                     <Button
-//                                         variant="outlined"
-//                                         component="label"
-//                                         className=""
-//                                         style={{ color: "#0C2191" }}>
-//                                         Add attachment
-//                                         <input hidden accept="image/*" multiple type="file" />
-//                                     </Button>
-//                                 </div>
-
-//                                 <div >
-//                                     <FormControlLabel
-//                                         control={
-//                                             <Switch
-//                                                 checked={value.checked}
-//                                                 name="checked"
-//                                                 onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })}
-//                                             />}
-//                                         label="Add an explanantion"
-//                                     />
-
-//                                     {
-//                                         value.checked && (
-//                                             <div className='content__quiz'>
-//                                                 <input type="text" id='' name="answer" placeholder='Explain the correct Answer ' onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })} />
-//                                             </div>
-//                                         )
-//                                     }
-
-//                                 </div>
-//                             </div>
-
-//                             {
-//                                 ((value.type === "multiple") || (value.type === "checkbox")) && (
-//                                     <div className="contentquiz__checkbbox">
-
-//                                         <legend htmlFor="multiplechoice">Select the correct answer among the options using the checkbox</legend>
-
-
-//                                         {
-//                                             inputList.map((x, id) => (
-//                                                 <div className='multiplechoice'>
-//                                                     <div className='multiplechoice__input'>
-
-//                                                         <input
-//                                                             type="checkbox"
-//                                                             // value={value.optionCheck}
-//                                                             name="optionCheck"
-//                                                             onChange={e => handleInputChange(e, id)} />
-//                                                         <input
-//                                                             type="text"
-//                                                             name="optionAnswer"
-//                                                             value={x.optionAnswer}
-//                                                             onChange={e => handleInputChange(e, id)} />
-
-//                                                         {
-//                                                             inputList.length !== 1 && <RiDeleteBinFill onClick={() => handleRemoveClick(id)} />
-
-//                                                         }
-//                                                     </div>
-
-//                                                     <div className='multiplechoice__addbtn'>
-//                                                         {
-//                                                             inputList.length - 1 === id &&
-//                                                             <div className="prevbtn">
-//                                                                 <button onClick={handleAddClick} >Add Option</button>
-//                                                             </div>
-
-
-//                                                         }
-//                                                     </div>
-
-
-//                                                 </div>
-//                                             )
-//                                             )}
-
-//                                     </div>
-
-
-
-//                                 )
-//                             }
-//                             <div className="footerbtn">
-//                                 <button onClick={submitForm}>Save</button>
-//                             </div>
-
-
-//                         </FormControl>
-
-
-//                     </Accordion.Body>
-//                 </Accordion.Item>
-//             </Accordion>
-//         </>
-//     )
-// }
-
-
 export default function Quiz() {
     const { pathname, search } = useLocation();
     const bread = pathname?.split("/");
@@ -303,9 +102,14 @@ export default function Quiz() {
     const userdata = getItem(KEY)
 
     const { consoleFunctions: { fetchQuiz, addQuiz }, } = useAuth();
-
+    let path = pathname.split("/")
+    let classId = path[path.length -1]
     let searchData = search.split("=").reverse()[0]
 
+    useEffect(()=>{
+        setFormData({...formData, classId, contentId: searchData})
+    },[classId, searchData])
+ 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -319,7 +123,7 @@ export default function Quiz() {
     }
 
 
-    const quizAdd = useMutation(addQuiz, {
+    const quizAdd = useMutation(([token, data])=>addQuiz(token, data), {
         onSuccess: (res) => {
             console.log(res.data)
         },
@@ -328,7 +132,17 @@ export default function Quiz() {
         }
     })
 
-    const getContentfromQuery = useQuery(["quiz content", search], () => fetchQuiz(userdata.token, searchData))
+    const getContentfromQuery = useQuery(["quiz content", search, searchData], () => fetchQuiz(userdata.token, searchData), {
+        onSuccess: (res)=> {
+            console.log("successful query")
+            console.log(res)
+            if(res.data.length > 0){
+                setFormData({...res.data[0]})
+            }
+        }
+    } )
+
+    console.log({getContentfromQuery})
 
     function goBack() {
         let pathArray = pathname.split("/")[1];
@@ -345,22 +159,24 @@ export default function Quiz() {
 
 
     const [formData, setFormData] = useState({
+        classId:"",
+        contentId:"",
         title: "",
         endDate: "",
         endTime: "",
         note: "",
         timeLimit: "",
         maxAttempts: 1,
-        inputList: [
+        questions: [
             {
                 type: "",
-                noteValue: "",
+                title: "",
                 showAnswer: false,
                 answer:"",
-                multiple: [
+                options: [
                     {
-                        optionCheck: false,
-                        optionAnswer: ""
+                        isAnswer: false,
+                        title: ""
                     }
                 ]
 
@@ -373,17 +189,17 @@ export default function Quiz() {
     const handleInputChange = (e, index) => {
         const { name, value } = e.target;
         const list = { ...formData }
-        list.inputList[index][name] = value;
+        list.questions[index][name] = value;
         console.log(list);
         setFormData(list)
     }
 
     const handleRemoveClick = (id, index) => {
         const list = { ...formData }
-        list.inputList[id].multiple.splice(index, 1)
+        list.questions[id].options.splice(index, 1)
         setFormData(list)
 
-        // const list = [...inputList]
+        // const list = [...questions]
         // list.splice(index, 1);
         // setInputList(list)
     }
@@ -393,17 +209,17 @@ export default function Quiz() {
         setFormData(
             {
                 ...formData,
-                inputList: [
-                    ...formData.inputList,
+                questions: [
+                    ...formData.questions,
                     {
                         type: "",
-                        noteValue: "",
+                        title: "",
                         showAnswer: false,
                         answer: "",
-                        multiple: [
+                        options: [
                             {
-                                optionCheck: false,
-                                optionAnswer: ""
+                                isAnswer: false,
+                                title: ""
                             }
                         ]
                     }
@@ -411,31 +227,35 @@ export default function Quiz() {
                 ]
             }
         )
-        // setInputList([...inputList, {
-        //     optionAnswer: ""
+        // setInputList([...questions, {
+        //     title: ""
         // }])
     }
 
     const handleAddOptions = (e, id, index) => {
         e.preventDefault()
         let list = { ...formData }
-        list.inputList[id].multiple.push({
-            optionCheck: false,
-            optionAnswer: ""
+        list.questions[id].options.push({
+            isAnswer: false,
+            title: ""
         }
         )
 
         setFormData(list)
 
-        // setInputList([...inputList, {
-        //     optionAnswer: ""
+        // setInputList([...questions, {
+        //     title: ""
         // }])
     }
 
 
     console.log({ formData });
 
+    function handleSubmit(e){
+        e.preventDefault();
+        quizAdd.mutate([userdata.token, formData])
 
+    }
 
 
     return (
@@ -478,7 +298,7 @@ export default function Quiz() {
 
                     <main className='quiz__contentbody'>
 
-                        <form className='content__quiz'>
+                        <form className='content__quiz' onSubmit={handleSubmit}>
                             <label htmlFor="Name">Name of Quiz</label>
                             <input type="text"
                                 // placeholder='Name of Quiz' 
@@ -529,12 +349,9 @@ export default function Quiz() {
 
                             />
                             <small>How many times can a student retry quiz?</small>
-
-
-
                             <div className="display">
                                 {
-                                    formData.inputList.map((x, id) => (
+                                    formData?.questions?.map((x, id) => (
                                         <>
                                             <Accordion >
                                                 <Accordion.Item eventKey={id} className="accord__body">
@@ -555,10 +372,10 @@ export default function Quiz() {
                                                                 onChange={e => handleInputChange(e, id)}
 
                                                             >
-                                                                <MenuItem value="theory">
+                                                                <MenuItem value="THEORY">
                                                                     Theory
                                                                 </MenuItem>
-                                                                <MenuItem value="multiple" >
+                                                                <MenuItem value="MULTIPLE_CHOICE" >
                                                                     Multiple Choice
                                                                 </MenuItem>
                                                                 <MenuItem value="checkbox" >
@@ -569,7 +386,8 @@ export default function Quiz() {
                                                                 </MenuItem>
                                                             </Select>
 
-                                                            <div className="texteditor quiz__editor">                                                        <CKEditor
+                                                            <div className="texteditor quiz__editor">                  
+                                                                <CKEditor
                                                                 editor={ClassicEditor}
                                                                 data=""
                                                                 onReady={editor => {
@@ -580,7 +398,7 @@ export default function Quiz() {
                                                                     const data = editor.getData();
                                                                     console.log({ event, editor, data });
                                                                     const list = { ...formData }
-                                                                    list.inputList[id]['noteValue'] = data;
+                                                                    list.questions[id]['title'] = data;
                                                                     console.log(list);
                                                                     setFormData(list)
                                                                     // handleInputChange(event, id)
@@ -614,7 +432,7 @@ export default function Quiz() {
                                                                                 // onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })}
                                                                                 onChange={e => {
                                                                                     const list = { ...formData }
-                                                                                    list.inputList[id]['showAnswer'] = e.target.checked;
+                                                                                    list.questions[id]['showAnswer'] = e.target.checked;
                                                                                     console.log(list);
                                                                                     setFormData(list)
                                                                                 }
@@ -637,47 +455,47 @@ export default function Quiz() {
                                                             </div>
 
                                                             {
-                                                                ((x.type === "multiple") || (x.type === "checkbox")) && (
+                                                                ((x.type === "MULTIPLE_CHOICE") || (x.type === "checkbox")) && (
                                                                     <div className="contentquiz__checkbbox">
 
                                                                         <legend htmlFor="multiplechoice">Select the correct answer among the options using the checkbox</legend>
 
 
                                                                         {
-                                                                            formData.inputList[id].multiple.map((x, index) => (
+                                                                            formData.questions[id].options.map((x, index) => (
                                                                                 <div className='multiplechoice'>
                                                                                     <div className='multiplechoice__input'>
 
                                                                                         <input
                                                                                             type="checkbox"
-                                                                                            // value={value.optionCheck}
-                                                                                            name="optionCheck"
+                                                                                            // value={value.isAnswer}
+                                                                                            name="isAnswer"
                                                                                             onChange={e => {
                                                                                                 const list = { ...formData }
-                                                                                                list.inputList[id].multiple[index]['optionCheck'] = e.target.checked;
+                                                                                                list.questions[id].options[index]['isAnswer'] = e.target.checked;
                                                                                                 console.log(list);
                                                                                                 setFormData(list)
                                                                                             }} />
                                                                                         <input
                                                                                             type="text"
-                                                                                            name="optionAnswer"
-                                                                                            value={x.optionAnswer}
+                                                                                            name="title"
+                                                                                            value={x.title}
                                                                                             onChange={e => {
                                                                                                 const list = { ...formData }
-                                                                                                list.inputList[id].multiple[index]['optionAnswer'] = e.target.value
+                                                                                                list.questions[id].options[index]['title'] = e.target.value
                                                                                                 console.log(list);
                                                                                                 setFormData(list)
                                                                                             }} />
 
                                                                                         {
-                                                                                            formData.inputList[id].multiple.length !== 1 && <RiDeleteBinFill onClick={() => handleRemoveClick(id, index)} />
+                                                                                            formData.questions[id].options.length !== 1 && <RiDeleteBinFill onClick={() => handleRemoveClick(id, index)} />
 
                                                                                         }
                                                                                     </div>
 
                                                                                     <div className='multiplechoice__addbtn'>
                                                                                         {
-                                                                                            formData.inputList[id].multiple.length - 1 === index &&
+                                                                                            formData.questions[id].options.length - 1 === index &&
                                                                                             <div className="prevbtn">
                                                                                                 <button onClick={(e) => handleAddOptions(e, id, index)} >Add Option</button>
                                                                                             </div>
@@ -708,14 +526,21 @@ export default function Quiz() {
                                                     </Accordion.Body>
                                                 </Accordion.Item>
                                             </Accordion>
-                                            <div className="footerbtn2">
+                                            <div className="d-flex justify-content-between mt-4" style={{gap:" 1rem"}}>
+                                                <div className="footerbtn2">
+                                                    {
+                                                        formData.questions.length - 1 === id && <button onClick={(e) => handleAddClick(e)}>
+                                                            New Question
+                                                        </button>
+                                                    }
 
-                                                {
-                                                    formData.inputList.length - 1 === id && <button onClick={(e) => handleAddClick(e)}>
-                                                        New Question
+
+                                                </div>
+                                                <div className='footerbtn'>
+                                                    <button >
+                                                        save
                                                     </button>
-                                                }
-
+                                                </div>
                                             </div>
 
                                         </>
@@ -726,21 +551,16 @@ export default function Quiz() {
                             </div>
 
 
-                            <div className='footerbtn'>
-                                <button >
-                                    save
-                                </button>
-                            </div>
 
 
 
 
                         </form>
 
-                        <div className="prevbtn">
+                        {/* <div className="prevbtn">
                             <button><Link to="preview">Preview quiz</Link></button>
 
-                        </div>
+                        </div> */}
 
 
                     </main>

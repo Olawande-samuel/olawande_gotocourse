@@ -1,14 +1,19 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import {AiOutlineMore, AiOutlineArrowLeft} from "react-icons/ai";
-import {MdSearch} from 'react-icons/md';
+import {MdSearch, MdSend} from 'react-icons/md';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
-
-import { useEffectOnMount } from "../../../../../hooks";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffectOnMount, useLocalStorage } from "../../../../../hooks";
 import { Box, Tab, Tabs } from "@mui/material";
 import PropTypes from "prop-types";
+import { useAuth } from "../../../../../contexts/Auth";
+import { KEY } from "../../../../../constants";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import { FaSearch, FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 
 const groups = [
@@ -560,9 +565,17 @@ const UserInfo = styled.div`
 `
 
 const ChatModule = () => {
+    const { pathname, search } = useLocation();
+    const { getItem } = useLocalStorage()
+    const userdata = getItem(KEY)
+    let path = pathname.split("/")
+    let classId = path[path.length -1]
+
+    const { consoleFunctions: { fetchGroups, addGroup, joinGroup }, } = useAuth();
 
     const [activeTab, setActiveTab] = useState(0);
     const [show, setShow] = useState(false);
+
     useEffectOnMount(() => {
         console.log('ChatModule is mounted');
         return () => console.log('ChatModule is unmounted');
@@ -574,6 +587,7 @@ const ChatModule = () => {
     const tabs = ['Teams', 'Active Chat', 'Mail'];
 
     function toggleActionsHandler(e, index){
+
         setNewGroups(old => {
             let copy = [...old];
             let foundIndex = copy.findIndex((_, i) => i === index);
@@ -584,16 +598,26 @@ const ChatModule = () => {
         })
     }
 
+
     const [value, setValue] = useState(0);
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
 
+
+    const getContentfromQuery = useQuery(["all groups"], () => fetchGroups(userdata.token, classId), {
+        onSuccess: (res)=> {
+            console.log("successful query")
+            console.log(res)
+
+        }
+    } )
+
+
     const tabContent = [ <ChatTab groups={newGroups} toggle={toggleActionsHandler} setShow={setShow} />, <ActiveChat />, <MailTab /> ]
     
     return (
         <ChatContainer>
-            {show && <Modal setShow={setShow} />}
 
             <Tabs
                 value={value}
@@ -638,21 +662,48 @@ const ChatModule = () => {
 
 
 function MailTab(){
-    const [mail, setMail] = useState('');
-    const tabs = ['File', 'Edit', 'View', 'Insert', 'Format', 'Tools', 'Table', 'Help'];
+    
+    
+    const {getItem} = useLocalStorage()
+    const {classId} = useParams()
+    const [formstate,setFormstate] = useState('');
+
+    const userdata = getItem(KEY)
+    const {consoleFunctions: {messageAllStudents}} = useAuth();
+
+    const mutation = useMutation(([token, id, data])=>messageAllStudents(token, id, data), {
+        onSuccess: (res)=>{
+            console.log(res);
+            if(res.success){
+                toast.success(res.message);
+            }
+        },
+        onError: (err)=> console.error(err)
+    })
+
+    function sendMail(e){
+        e.preventDefault();
+        if(formstate){
+            mutation.mutate([userdata.token, classId, {body:formstate}])
+        } else {
+            toast.error("Cannot send an empty message")
+        }
+
+    }
     return(
         <MailContainer>
+            
             <MailBodyContainer>
                 <CKEditor
                     editor={ClassicEditor}
-                    data="<p>Hello from CKEditor 5!</p>"
+                    data=""
                     onReady={editor => {
                         // You can store the "editor" and use when it is needed.
                         console.log('Editor is ready to use!', editor);
                     }}
                     onChange={(event, editor) => {
                         const data = editor.getData();
-                        console.log({ event, editor, data });
+                        setFormstate(data)
                     }}
                     onBlur={(event, editor) => {
                         console.log('Blur.', editor);
@@ -663,7 +714,16 @@ function MailTab(){
                 />
             </MailBodyContainer>
             <MailButton>
-                <button>Send mail to all students</button>
+                <button onClick={sendMail}>
+                    {
+                        mutation.isLoading ?
+                        <div className="spinner-border text-white">
+                            <div className="visually-hidden">Loading</div>
+                        </div>
+                        :
+                        <span>Send mail to all students</span>
+                    }
+                </button>
             </MailButton>
         </MailContainer>
     )
@@ -704,6 +764,17 @@ function ActiveChat(){
             number: '147-2-101',
         }
     ]);
+
+    const {getItem} = useLocalStorage()
+    const {adminFunctions:{getUnreadMessages}} = useAuth()
+    const userdata = getItem(KEY)
+    const allMessages = useQuery(userdata?.token && ["get unread messages"], () => getUnreadMessages(userdata?.token), {
+        onSuccess: (res)=>{
+            console.log({res})
+        }
+      })
+    
+    console.log({allMessages})
     return(
         <ActiveChatContainer>
             <ActiveChatTop>
@@ -719,8 +790,8 @@ function ActiveChat(){
                 <ActiveChatCard>
                     <h3>Active Chats</h3>
                     {
-                        activeChats.map((data, i) => (
-                            <UserCard isChat key={i} {...data} />
+                        allMessages.data?.data?.data?.map((data, i) => (
+                            <UserCard isChat key={i} {...data} all={data} />
                         ))
                     }
                 </ActiveChatCard>
@@ -746,38 +817,132 @@ function ActiveChat(){
 }
 
 
-function UserCard({status, fullname, number, lastsent, isChat}){
+function UserCard({status, fullname, number, lastsent, isChat, user,fromUser, body,messageId, all}){
+    const navigate = useNavigate()
     return(
-        <UserCardContainer>
+        <UserCardContainer onClick={()=>{
+            localStorage.setItem("gotocourse-chat-info", JSON.stringify(all))
+            navigate(`chat/${all.fromUser}`)
+
+        }}>
             <UserAvatar>
-                {fullname.substring(0, 2)}
+                {user?.fullName.substring(0, 2)}
             </UserAvatar>
             <UserInfo>
                 <h6>{status}</h6>
-                <h3>{fullname}</h3>
-                <h5>{number}</h5>
-                {isChat && <p>Last sent: {lastsent}</p>}
+                <h3>{user?.fullName}</h3>
+                <h5>{fromUser}</h5>
+                {/* {isChat && <p>Last sent: {lastsent}</p>} */}
             </UserInfo>
         </UserCardContainer>
+    )
+}
+export function MailDetail(){
+    const queryClient = useQueryClient()
+    const {getItem} = useLocalStorage();
+
+    const userdata = getItem(KEY)
+    const chatData = getItem("gotocourse-chat-info")
+
+    const { adminFunctions: { getMessages, sendMessage, readMessage } } = useAuth()
+
+    const[body, setBody] = useState("")
+
+    const {userId} = useParams()
+
+    const fetchMessages = useQuery(["messageList", userdata.token, chatData?.fromUser], ()=>getMessages(userdata.token, userId), {
+        onSuccess: (res)=>console.log(res),
+        onError: (err)=>console.error(err)
+    })
+
+    const mutation = useMutation(([token, data])=>sendMessage(token, data), {
+        onSuccess: (res)=>{
+            queryClient.invalidateQueries("messageList")
+            setBody("")
+            console.log(res)
+        },
+        onError: (err)=>console.error(err)
+    })
+
+    function handleChange(e){
+        setBody(e.target.value);
+    }
+
+    function send(){
+        mutation.mutate([userdata.token, {
+            toUser: userId,
+            body
+        }])
+    }
+
+    return(
+        <ContentContainer>
+        <GroupChat>
+            <SenderContainer>
+                <Title>
+                    <h4>Chat</h4>
+                </Title>
+                <ChatBox>
+                    {
+                        fetchMessages?.data?.data?.map(item=>(
+                            <ChatContent {...item} key={item._id} />
+                        ))
+                    }
+                </ChatBox>
+                <Sender>
+                    <input type="text" name="msg" id="msg" className="form-control" onChange={handleChange} value={body} />
+                    <Send>
+                        <i>
+                            <MdSend size="1.5rem" onClick={send} color="var(--theme-blue)" />
+                        </i>
+                    </Send>
+                </Sender>
+            </SenderContainer>
+        </GroupChat>
+        </ContentContainer>
     )
 }
 
 
 
+function ChatTab(){
+    const { consoleFunctions: { fetchGroups, addGroup, joinGroup }, } = useAuth();
+    const location = useLocation();
 
-function ChatTab({groups, toggle, setShow}){
+    const { getItem } = useLocalStorage()
+
+    const userdata = getItem(KEY)
+    const {classId} = useParams()
+    const [groups, setGroups]= useState([])
+    const [show, setShow]= useState(false)
+
+    const getContentfromQuery = useQuery(["all groups"], () => fetchGroups(userdata.token, classId), {
+        onSuccess: (res)=> {
+            console.log("successful query")
+            console.log({res})
+            if(res.data?.length > 0){
+                setGroups(res.data)
+            }
+        },
+
+        onError: (err)=>console.error(err)
+    } )
+
     return (
         <ChatGroup>
+            {show && <Modal setShow={setShow} />}
+
             <h2>Group</h2>
             <p>Breakout your students into teams to hold discussions, go live and collaborate with one another.</p>
             <Createbutton onClick={()=> setShow(true)}>Create Group</Createbutton>
             <Groups>
                 {
-                    groups.map(({title, description, participants, showActions}, i) => (
+                    groups.map(({title, description, participants, showActions, _id}, i) => (
                         <Group key={i}>
                             <GroupTop>
                                 <h2>{title}</h2>
-                                <span onClick={e => toggle(e, i)}>
+                                {/* <span onClick={e => toggle(e, i)}> */}
+                                <span>
                                     <AiOutlineMore />
                                     <GroupDropdown $show={showActions ? true : false}>
                                         <li>Edit</li>
@@ -787,10 +952,12 @@ function ChatTab({groups, toggle, setShow}){
                             </GroupTop>
                             <GroupBody>
                                 <h3>{title}</h3>
-                                <p>{description}</p>
+                                <p className="restricted_line">{description}</p>
                                 <footer>
                                     <span>{participants} participants</span>
-                                    <button>Open team</button>
+                                    <Link to={`group/${_id}`} className="d-inline-flex">
+                                        <button>Open team</button>
+                                    </Link>
                                 </footer>
                             </GroupBody>
                         </Group>
@@ -802,12 +969,14 @@ function ChatTab({groups, toggle, setShow}){
 }
 
 
-
 function Modal({setShow}){
     const [formstate, setFormstate] = useState({
         title: '',
         description: ''
     })
+    const {classId} = useParams()
+    const queryClient = useQueryClient()
+
     const inputs = [
         {
             type: 'text',
@@ -822,6 +991,30 @@ function Modal({setShow}){
             value: formstate.description
         },
     ]
+    const {getItem} = useLocalStorage()
+    const {consoleFunctions: {addGroup}} = useAuth()
+
+    const userdata = getItem(KEY)
+
+
+    const mutation = useMutation(([token, data])=>addGroup(token, data), {
+        onSuccess: (res) => {
+            console.log(res)
+            setShow(_ => false)    
+            queryClient.invalidateQueries("all groups")
+
+        },
+        onError: (err)=> console.error(err)
+    })
+
+    function createTeam(e){
+        e.preventDefault();
+        mutation.mutate([userdata.token, {...formstate, classId}])
+    }
+
+    function handleChange(e){
+        setFormstate({...formstate, [e.target.name]: e.target.value})
+    }
     return (
         <ModalContainer>
             <ModalContent>
@@ -833,12 +1026,23 @@ function Modal({setShow}){
                     {
                         inputs.map(({type, name, placeholder, value}, i) => (
                             <FormContainer key={i}>
-                                <Input type={type} value={value} name={name} placeholder={placeholder} />
+                                <Input type={type} value={value} name={name} placeholder={placeholder} onChange={handleChange} />
                             </FormContainer>
                         ))
                     }
                     <FormContainer>
-                        <button>Create</button>
+                        <button onClick={createTeam}>
+                             {
+                                mutation.isLoading ? 
+
+                                <div className="spinner-border text-white">
+                                    <div className="visually-hidden">Loading</div>
+                                </div>
+                                :
+                                <span>Create</span>
+                             }
+
+                        </button>
                     </FormContainer>
                 </ModalBody>
             </ModalContent>
@@ -846,5 +1050,310 @@ function Modal({setShow}){
     )
 }
 
+export const ContentContainer = styled.section`
+  padding: 10px; 
+  height: 85vh;
+  /* overflow-y: scroll; */
+  display: flex;
 
+  > main {
+    flex-basis: 70%;
+    padding-inline:1rem;
+    /* min-height: 80vh */
+  }
+
+  > aside { 
+    flex-basis: 30%;
+    padding-inline:1rem;
+  }
+
+`
+
+export const GroupChat = styled.main`
+    position: relative;
+    height: 100%;
+    
+    > div {
+        height: 100%;
+    }
+
+`
+export const StudentList = styled.aside`
+    height: 100%;
+    /* overflow-y: scroll; */
+`
+
+export const SenderContainer = styled.div`
+    /* position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0; */
+    padding-block:1rem;
+`
+export const Sender = styled.div`
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+    right: 20px;
+    input {
+        padding: .5rem;
+        padding-right: 1.5rem
+
+    }
+`
+export const Send = styled.form`
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+
+    i > svg {
+        cursor: pointer;
+    }
+`
+
+export const Title  = styled.header`
+    margin-bottom: 1.5rem;
+`
+
+export const ChatBox = styled.div`
+    overflow-y: scroll;
+    height: 85%;
+`
+export function GroupContent(){
+    const {getItem} = useLocalStorage();
+    const {groupID} = useParams()
+    const userdata = getItem(KEY)
+    const {teacherConsoleFunctions: { sendMessage, fetchMessages}} = useAuth()                      
+    const [messageList, setMessageList] = useState([])
+
+    const [body, setBody] = useState("")
+
+    const queryClient = useQueryClient()
+    const fetchGroupMessages = useQuery(["group message", groupID, userdata?.token], ()=>fetchMessages(userdata.token, groupID), {
+        onSuccess: (res)=> {
+            setMessageList(res.data)
+
+        }
+    })
+
+    const mutation = useMutation(([usertoken, groupId, data]) => sendMessage(usertoken, groupId, data), {
+        onSuccess: (res)=> {
+            console.log(res)
+            setMessageList([...messageList, res.data])
+            queryClient.invalidateQueries("group message")
+        },
+        onError: (err)=> console.error(err)
+    })
+    
+    
+    function handleChange(e){
+        setBody(e.target.value)
+    }
+
+    function send(e){
+        e.preventDefault();
+        mutation.mutate([userdata.token, groupID, {body}])
+        setBody("")
+
+    }
+    return (
+        <ContentContainer>
+            <GroupChat>
+                <SenderContainer>
+                    <Title>
+                        <h4>Group name</h4>
+                    </Title>
+                    <ChatBox>
+                        {
+                            messageList?.map(item=>(
+                                <ChatContent {...item} key={item._id} />
+                            ))
+                        }
+                    </ChatBox>
+                    <Sender>
+                        <input type="text" name="msg" id="msg" className="form-control" onChange={handleChange} value={body} />
+                        <Send>
+                            <i>
+                                <MdSend size="1.5rem" onClick={send} color="var(--theme-blue)" />
+                            </i>
+                        </Send>
+                    </Sender>
+                </SenderContainer>
+            </GroupChat>
+            <StudentList>
+                <ChatAside />
+            </StudentList>
+        </ContentContainer>    
+    )
+}
+
+
+export const ChatInfo = styled.div`
+    display: flex;
+    padding: .8rem;
+    margin-block: .5rem;
+    border: 1px solid #ababab;
+    border-radius: 10px;
+
+`
+
+export const UserImage = styled.div`
+    margin-right: 1rem;
+    border-radius:50%;
+    width: ${(props) => props.aside ? "30px" : "50px"};
+    height: ${(props) => props.aside ? "30px" : "50px"};
+    background-color: var(--theme-blue);
+    display: grid;
+    place-items:center;
+
+    
+`
+export const ChatDetails = styled.div`
+    h6 {
+        color: var(--theme-blue);
+        font-weight: 700;
+        margin-bottom: .3rem;
+    }
+
+    p {
+        margin-bottom: 0;
+    }
+`
+
+function ChatContent({title, user, body, fromUser, isTutor, type}){
+    return (
+        <ChatInfo>
+            <UserImage>
+                <FaUser size="1.5rem" color="#fff" />
+            </UserImage>
+            <ChatDetails>
+                <h6>{isTutor ? "Teacher": user?.fullName}</h6>
+                <p>{body}</p>
+            </ChatDetails>
+        </ChatInfo>
+    )
+}
+
+export const ChatStudentList = styled.div`
+    
+`
+export const StudentSearch = styled.div`
+    border: 1px solid #ababab;
+    border-radius: 4px;
+    padding: .3rem;
+    display: flex;
+    margin-bottom: 2rem;
+
+    input {
+        border:none;
+        outline: none;
+        margin-right: 1rem;
+    }
+    > div {
+        display: flex;
+        align-items: center;
+        gap: .8rem;
+
+        > div  {
+            width: 1px;
+            height: 100%;
+            background-color: #ababab;
+        }
+    }
+`
+export const StudentsContainer = styled.div``
+const RequestContainer = styled.div``
+export const ActionButton = styled.button`
+    border:none;
+    outline:none;
+    background: transparent;
+    color: red;
+    margin-left: auto;
+    font-size:14px;
+`
+function ChatAside(){
+    
+    const {getItem}= useLocalStorage();
+    const {teacherConsoleFunctions: {fetchGroupStudents, approveStudent}} = useAuth()
+    const {groupID}= useParams();
+
+    const userdata = getItem(KEY);
+    const [studentList, setStudentList] = useState([]);
+    const queryClient = useQueryClient()
+
+    const fetchStudents = useQuery(["group students", userdata?.token], ()=>fetchGroupStudents( userdata?.token, groupID), {
+        onSuccess: (res)=> {
+            if(res.data?.length > 0 ) {
+                setStudentList(res.data)
+            }
+        }
+    })
+
+    const approveMutation = useMutation(([token, id, data])=>approveStudent(token, id, data), {
+        onSuccess: (res)=> {console.log(res)
+            queryClient.invalidateQueries("group students")
+        },
+        onError: (err)=> console.error(err)
+    })
+
+
+    function approveApplication(e, id){
+        e.preventDefault()
+        approveMutation.mutate([userdata.token, id, {data:""}])
+    }
+    return (
+        <ChatStudentList>
+            <StudentSearch>
+                <input type="search"  placeholder="Search student list"/>
+                <div>
+                    <div></div>
+                    <FaSearch />
+                </div>
+            </StudentSearch>
+            <StudentsContainer>
+                <h6>Students <span>({studentList?.filter(student=> student.isApproved === true).length})</span></h6>
+                <div>
+                    {
+                        studentList?.filter(student=> student.isApproved === true).map(student=>(
+                            <ChatInfo>
+                                <UserImage aside={true}>
+                                    <FaUser size=".7rem" color="#fff" />
+                                </UserImage>
+                                <ChatDetails>
+                                    <h6>{student?.studentName}</h6>
+                                    <small>{student.studentEmail}</small>
+                                </ChatDetails>
+                                <ActionButton>
+                                    Remove
+                                </ActionButton>
+                            </ChatInfo>
+                        ))
+                    } 
+                </div>
+            </StudentsContainer>
+            <RequestContainer>
+                <h6>Requests <span>({studentList?.filter(student=> student.isApproved !== true).length})</span></h6>
+                <div>
+                {
+                        studentList?.filter(student=> student.isApproved !== true).map(student=>(
+                            <ChatInfo>
+                                <UserImage aside={true}>
+                                    <FaUser size=".7rem" color="#fff" />
+                                </UserImage>
+                                <ChatDetails>
+                                    <h6>{student?.studentName}</h6>
+                                    <small>{student.studentEmail}</small>
+                                </ChatDetails>
+                                <ActionButton onClick={(e)=>approveApplication(e, student.memberId)}>
+                                    Approve
+                                </ActionButton>
+                            </ChatInfo>
+                        ))
+                    }
+                </div>
+            </RequestContainer>
+        </ChatStudentList>
+    )
+}
 export default ChatModule;

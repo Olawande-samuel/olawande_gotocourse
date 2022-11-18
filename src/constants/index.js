@@ -41,9 +41,58 @@ export function getDate(date){
   return `${m} ${day}`;
 }
 
+export function getTime(time){
+    if(time){
+      let d = time.split("T")[1];
+      return d;
+    }
+    return ""
+  
+}
 
 export const capitalize = (str) => {
   let strArray = str?.toLocaleLowerCase().split("");
   strArray[0] = strArray[0].toLocaleUpperCase();
   return strArray.join("");
+}
+
+export function gotoclassPayment(title, category, bootcampId, navigate){
+  if(title.trim().toLowerCase().includes("/")){
+       let newTitle = title.trim().split("/").join("-").toLowerCase()
+       navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/payment`)
+  } else {
+      navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${title.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/payment`)
+  }
+
+}
+export function gotoclass(title, category, bootcampId, navigate){
+  if(title.trim().toLowerCase().includes("/")){
+       let newTitle = title.trim().split("/").join("-").toLowerCase()
+       navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}`)
+  } else {
+      navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${title.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}`)
+  }
+
+}
+export function changeConstants(name){
+  if(name === "SELF_PACED") return "Self-paced"
+  if(name === "COHORT") return "Cohort"
+  if(name === "MENTORSHIP") return "One-on-One"
+  if(name === "PHYSICAL") return "In-person Training"
+  return name
+}
+
+export function changeSubCategory(sub){
+  if(sub === "UPSKILL_COURSES") return "Upskill"
+  
+  if(sub === "IN_DEMAND") return "In-Demand"
+  
+  if(sub === "EXECUTIVE_COURSES") return "Executive"
+  
+  if(sub === "SHORT_COURSES") return "Short"
+
+  if(sub === "TECH_ENTREPRENEURSHIP") return "Tech Enterpreneurship"
+  
+  return sub
+  
 }

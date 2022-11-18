@@ -14,25 +14,25 @@ const End = () => {
 
   return (
     <div className="end" style={{
-       background: celebRoute ?  "#000F62" : "var(--blue-ish)", color: !celebRoute ?  "var(--theme-blue)" :  "#ffffff"
+       background: "var(--blue-ish)", color: "var(--theme-blue)" 
       }}>
-      <div className="container box d-flex  mx-auto" style={{color: !celebRoute ?  "var(--theme-blue)" :  "#ffffff"}}>
+      <div className="container box d-flex  mx-auto" style={{color:  "var(--theme-blue)"}}>
         <div className="end_left">
           <span> All rights reserved |</span>
           <span>&copy; 2022 Gotocourse Inc.</span>
         </div>
-        <div className="end_right d-flex" style={{color: !celebRoute ?  "var(--theme-blue)" :  "#ffffff"}} color={!celebRoute ? "var(--theme-blue)":"#FFF"} >
+        <div className="end_right d-flex" style={{color: "var(--theme-blue)"}} color={ "var(--theme-blue)"} >
           <a href={validateURL(facebook) ? facebook : ""}>
-           <FaFacebook color={!celebRoute ? "var(--theme-blue)":"#FFF"} />
+           <FaFacebook color={ "var(--theme-blue)"} />
           </a>
           <a href={validateURL(insta) ? insta : ""}>
-           <FaInstagram color={!celebRoute ? "var(--theme-blue)":"#FFF"}  />
+           <FaInstagram color={ "var(--theme-blue)"}  />
           </a>
           <a href={validateURL(twitter) ? twitter : ""}>
-           <FaTwitter color={!celebRoute ? "var(--theme-blue)":"#FFF"}  />
-          </a>
+           <FaTwitter color={ "var(--theme-blue)"}  />
+          </a> 
           <a href="mailto:info@gotocourse.com">
-           <FaEnvelope color={!celebRoute ? "var(--theme-blue)":"#FFF"}  />
+           <FaEnvelope color={ "var(--theme-blue)"}  />
           </a>
         </div>
       </div>

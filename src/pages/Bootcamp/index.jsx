@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BiCalendar } from "react-icons/bi";
 
 import SwiperCore, {
@@ -12,13 +12,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-creative";
 import { toast } from "react-toastify";
-import {motion} from "framer-motion"
+import { motion } from "framer-motion"
 
 import Layout from "../../components/Layout";
 import clsx from "./styles.module.css";
 import { useLocalStorage } from "../../hooks";
-import { getDate } from "../../constants";
-import { useNavigate } from "react-router-dom";
+import { getDate, gotoclass } from "../../constants";
+import { useNavigate, useParams } from "react-router-dom";
 import BootcampImage from "../../images/bootcamp.webp";
 import Teacher from "../../images/bootcamps/teacher.png";
 import Cyber from "../../images/bootcamps/bootcamp_cyber.png";
@@ -39,6 +39,9 @@ import { ReviewSection } from "../Courses";
 import { useQuery } from "@tanstack/react-query";
 import { Question } from "../Course/Details";
 import DOMPurify from "dompurify";
+import { useMemo } from "react";
+import { Link } from "react-router-dom";
+import { BsArrowRight } from "react-icons/bs";
 
 const similarBootcamp = [
   {
@@ -91,69 +94,66 @@ const Bootcamp = () => {
   }
   return (
     <Layout>
-        {/* <div className="container"> */}
-            <div className={` ${clsx.container}  d-flex justify-content-between`}>
-                <div className={clsx.bootcamp}>
-                   <div className={clsx.bootcamp_content}>
-                    <h2>{bootcampInfo?.title}</h2>
-                    <p>
-                        {bootcampInfo?.description
-                        ? bootcampInfo?.description
-                        : bootcampInfo?.content}
-                    </p>
-                    <div className={clsx.bootcamp_details}>
-                        <div>
-                          <p>Duration</p>
-                          <span>
-                              {bootcampInfo?.duration ? bootcampInfo?.duration : "10 weeks"}
-                          </span>
-                        </div>
-                        <div>
-                          <p>Date</p>
-                          <span>{`${
-                              bootcampInfo?.startDate
-                              ? getDate(bootcampInfo?.startDate)
-                              : "Jun 26"
-                          } - ${
-                              bootcampInfo?.endDate
-                              ? getDate(bootcampInfo?.endDate)
-                              : "Sept 04"
-                          }`}</span>
-                        </div>
-                        <div>
-                          <p>Price</p>
-                          <span>
-                              $ {bootcampInfo?.price ? bootcampInfo?.price : "TBD"}
-                          </span>
-                        </div>
-                    </div>
-                    {bootcampInfo?.instructorName ? (
-                        <button type="submit" onClick={handleBootstrapEnrollment}>
-                        {loading ? (
-                            <div className="spinner-border text-light">
-                            <div className="visually-hidden">loading</div>
-                            </div>
-                        ) : (
-                            "Apply Now"
-                        )}
-                        </button>
-                    ) : null}
-                    </div>
+      {/* <div className="container"> */}
+      <div className={` ${clsx.container}  d-flex justify-content-between`}>
+        <div className={clsx.bootcamp}>
+          <div className={clsx.bootcamp_content}>
+            <h2>{bootcampInfo?.title}</h2>
+            <p>
+              {bootcampInfo?.description
+                ? bootcampInfo?.description
+                : bootcampInfo?.content}
+            </p>
+            <div className={clsx.bootcamp_details}>
+              <div>
+                <p>Duration</p>
+                <span>
+                  {bootcampInfo?.duration ? bootcampInfo?.duration : "10 weeks"}
+                </span>
+              </div>
+              <div>
+                <p>Date</p>
+                <span>{`${bootcampInfo?.startDate
+                  ? getDate(bootcampInfo?.startDate)
+                  : "Jun 26"
+                  } - ${bootcampInfo?.endDate
+                    ? getDate(bootcampInfo?.endDate)
+                    : "Sept 04"
+                  }`}</span>
+              </div>
+              <div>
+                <p>Price</p>
+                <span>
+                  $ {bootcampInfo?.price ? bootcampInfo?.price : "TBD"}
+                </span>
+              </div>
+            </div>
+            {bootcampInfo?.instructorName ? (
+              <button type="submit" onClick={handleBootstrapEnrollment}>
+                {loading ? (
+                  <div className="spinner-border text-light">
+                    <div className="visually-hidden">loading</div>
+                  </div>
+                ) : (
+                  "Apply Now"
+                )}
+              </button>
+            ) : null}
+          </div>
 
-                </div>
-                <div className={clsx.bootcamp_image}>
-                    <div
-                        className={clsx.image_container}
-                        style={{
-                        backgroundImage: `url(${
-                            bootcampInfo?.image
-                            ? bootcampInfo?.image
-                            : bootcampInfo?.bootcampImg
-                        })`,
-                        }}
-                    ></div>
-                </div>
-            {/* </div> */}
+        </div>
+        <div className={clsx.bootcamp_image}>
+          <div
+            className={clsx.image_container}
+            style={{
+              backgroundImage: `url(${bootcampInfo?.image
+                ? bootcampInfo?.image
+                : bootcampInfo?.bootcampImg
+                })`,
+            }}
+          ></div>
+        </div>
+        {/* </div> */}
       </div>
     </Layout>
   );
@@ -183,9 +183,8 @@ export const BootcampDetails = () => {
           className={clsx.hero}
           style={{
             height: `min(calc(100vh - ${navHeight}px ), 550px)`,
-            background: `url(${
-              bootcampTraining?.image ? bootcampTraining?.image : BootcampImg
-            }), rgba(0, 0, 0, 0.7)`,
+            background: `url(${bootcampTraining?.image ? bootcampTraining?.image : BootcampImg
+              }), rgba(0, 0, 0, 0.7)`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
           }}
@@ -417,51 +416,62 @@ function Card({ title, image }) {
   );
 }
 
-const curriculum = [ 
+const curriculum = [
   {
     title: "Genetic algorithms",
-    details:"A technique used for optimization that is inspired by the process of natural evolution or “survival of the fittest.”Often described as a type of “evolutionary algorithm,” these algorithms are well-suited for solving nonlinear problems."
+    details: "A technique used for optimization that is inspired by the process of natural evolution or “survival of the fittest.”Often described as a type of “evolutionary algorithm,” these algorithms are well-suited for solving nonlinear problems."
   },
   {
     title: "Machine learning",
-    details:"A subspecialty of computer science (within a field historically called “artificial intelligence”) concerned with the design and development of algorithms that allow computers to evolve behaviors based on empirical data."
+    details: "A subspecialty of computer science (within a field historically called “artificial intelligence”) concerned with the design and development of algorithms that allow computers to evolve behaviors based on empirical data."
   },
   {
     title: "Pattern recognition",
-    details:"It is a set of machine learning techniques that assign some sort of output value (or label) to a given input value (or instance) according to a specific algorithm."
+    details: "It is a set of machine learning techniques that assign some sort of output value (or label) to a given input value (or instance) according to a specific algorithm."
   },
   {
     title: "Regression",
-    details:"A set of statistical techniques to determine how the value of the dependent variable changes when one or more independent variables is modified. Often used for forecasting or prediction."
+    details: "A set of statistical techniques to determine how the value of the dependent variable changes when one or more independent variables is modified. Often used for forecasting or prediction."
   },
   {
     title: "Time series analysis",
-    details:"Set of techniques from both statistics and signal processing for analyzing sequences of data points, representing values at successive times, to extract meaningful characteristics from the data."
+    details: "Set of techniques from both statistics and signal processing for analyzing sequences of data points, representing values at successive times, to extract meaningful characteristics from the data."
   }
 ]
 
 
-export function NewBootcampDetailsComponent(){
+
+
+export function NewBootcampDetailsComponent() {
   const [bootcampTrainingInfo, setBootcampTrainingInfo] = useState({});
-  const [loading, setLoading] = useState(false)
   const { getItem } = useLocalStorage();
+  let [wishlistState, setWishlistState] = useState({})
 
   const bootcampTraining = getItem("gotocourse-bootcampdata");
   const userdata = getItem("gotocourse-userdata");
+  const { id } = useParams()
 
-  const {studentFunctions: {wishlistCourse}, otherFunctions: { fetchBootcamps }} = useAuth()
-  const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
-  const navigate =  useNavigate();
+  const flag = useRef(false);
 
-  useEffect(() => {
-    if (bootcampTraining) {
-      setBootcampTrainingInfo(bootcampTraining);
-    }
-    return () => console.log("BootcampDetails is unmounted");
-  }, []);
-  const {
-    generalState: { navHeight },
-  } = useAuth();
+  const {generalState: { isMobile, loading, navHeight }, setGeneralState, generalState, studentFunctions: { wishlistCourse , addwishlistCourse, deleteFromWishlist, fetchWishlist}, otherFunctions: { fetchBootcamps } } = useAuth()
+
+  const bootcamps = useQuery(["bootcamps", id], () => fetchBootcamps(), {
+    onSuccess: res => {
+      // console.log({res})
+      if (res.data) {
+        setBootcampTrainingInfo(res.data.find(item => item.bootcampId === id))
+        // console.log(res.data.find(item => item.bootcampId === id))
+        return
+      }
+      setBootcampTrainingInfo({})
+
+    },
+    onError: err => console.error(err)
+
+  });
+
+  const navigate = useNavigate();
+
 
   async function handleBootstrapEnrollment(e) {
     e.preventDefault();
@@ -471,27 +481,93 @@ export function NewBootcampDetailsComponent(){
       navigate("/login")
     }
   }
-  async function addToWishList(){
-  
-    if(userdata !== null){
+
+
+  async function addToWishList() {
+
+    if (userdata !== null) {
       try {
-        setLoading(true)
-        const response =  await wishlistCourse(bootcampTraining.bootcampId, userdata?.token)
-        const {success, message, statusCode} = response
-        if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+        setGeneralState({ ...generalState, loading: true })
+        const response = await addwishlistCourse(id, userdata?.token)
+        const { success, message, statusCode } = response
+        if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
         toast.success(message)
-      }catch(error){
+        const { data } = response
+        setWishlistState(data)
+      } catch (error) {
         console.error(error)
         toast.error(error.message);
-      }finally{
-        setLoading(false)
+      } finally {
+        setGeneralState({ ...generalState, loading: false });
+
       }
-      
-      
+
+
     } else {
       navigate("/login")
     }
   }
+
+  async function getWishList() {
+    try {
+      const res = await fetchWishlist(userdata?.token);
+      const { message, success, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else if (statusCode === 1) {
+        const { data } = res;
+        if (data.length > 0) {
+          setWishlistState(data.find(d => d.courseId === id));
+        } else {
+          console.log("err"); 
+
+        }
+
+      } else {
+        throw new AdvancedError(message, statusCode);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+    }
+  }
+
+  async function removeCourse(e) {
+    e.preventDefault();
+    try {
+      setGeneralState({ ...generalState, loading: true })
+      const res = await deleteFromWishlist(userdata?.token, id)
+      const { success, message, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      console.log("setting to {}");
+        setWishlistState({})
+    } catch (err) {
+
+    } finally {
+      setGeneralState({ ...generalState, loading: false });
+    }
+  }
+
+  const handleClick = (event) => {
+    console.log(event.currentTarget);
+  };
+
+  // console.log({ bootcampTrainingInfo });
+  // console.log("all", bootcamps.data?.data);
+
+  useEffect(() => {
+    if (flag.current) return;
+    getWishList()
+    flag.current = true;
+}, [])
+
+  const similar = bootcamps.data?.data.filter(d => (d.subCategory === bootcampTrainingInfo.subCategory) && d.isActive && (d.bootcampId !== bootcampTrainingInfo.bootcampId))
+  const upcoming = bootcamps.data?.data?.filter(d => d.isActive)
+
+
+  const courseType = bootcampTrainingInfo?.subCategory === "IN_DEMAND" ? "In-Demand Courses" :
+    bootcampTrainingInfo?.subCategory === "SHORT_COURSES" ? "Short Courses" :
+      bootcampTrainingInfo?.subCategory === "UPSKILL_COURSES" ? "Upskill Courses" : "Executive Courses"
+
   return (
     <Layout>
       <div className={clsx.bootcampTraining}>
@@ -501,63 +577,64 @@ export function NewBootcampDetailsComponent(){
           title={bootcampTrainingInfo?.title}
           description={bootcampTrainingInfo?.description}
           img={bootcampTrainingInfo?.bootcampImg}
-            addToWishList={addToWishList}
+          endDate={bootcampTrainingInfo.endDate}
+          startDate={bootcampTrainingInfo.startDate}
+          addToWishList={addToWishList}
           handleBootstrapEnrollment={handleBootstrapEnrollment}
+          wishlistState={wishlistState}
+          removeCourse={removeCourse}
+          userdata={userdata}
         />
         <section className={clsx.to_learn}>
           <div className="container">
-            <header>
-              <h3 className={clsx.section_title}>Program Overview</h3>
-              <hr />
-            </header>
-            <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(bootcampTrainingInfo?.description)}} />
-            {
-              bootcampTrainingInfo?.careerList?.length > 0 &&
+            <div className={clsx.classDescription}>
 
-              <div className={clsx.career_list}>
-                <h6>Career Prospect</h6>
-                <ul>
-                  {
-                    bootcampTrainingInfo?.careerList?.map(item=>(
-                      <li>{item}</li>
-                    )) 
-                  }
-                  
-                </ul>
+              <div className={clsx.classDescriptionLeft}>
+                <h4 className={clsx.section_title}>Course Overview</h4>
+                <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(bootcampTrainingInfo?.description) }} />
               </div>
-            }
+
+              <div className={clsx.classDescriptionRight}>
+                {
+                  bootcampTrainingInfo?.careerList?.length > 0 &&
+                  <div className={clsx.career_list}>
+                    <h4>Career Prospect</h4>
+                    <p>{ bootcampTrainingInfo?.careerTitle}</p>
+                    <ul>
+                      {
+                        bootcampTrainingInfo?.careerList?.map((item, i) => (
+                          <li key={i}>{item.name}</li>
+                        ))
+                      }
+
+                    </ul>
+                  </div>
+                }
+              </div >
+
+            </div>
+
           </div>
         </section>
-        <section className={clsx.images}>
-         <div className="container">
-          <div className={clsx.img_grid}>
-            <img src={g1} alt="" className="img-fluid" />
-            <img src={g2} alt="" className="img-fluid" />
-            <img src={g3} alt="" className="img-fluid" />
-          </div>
-         </div>
-        </section>
+
         <section className={clsx.requirement}>
           <div className="container">
-            <header>
-                <h3 className={clsx.section_title}>Class Curriculum</h3>
-                <hr />
-            </header>
-            <h5 className="lead" style={{color:"var(--theme-blue"}}>{bootcampTrainingInfo?.title} Curriculum</h5>
-                  {/* <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, impedit inventore debitis similique a magni quia facere, optio neque delectus pariatur quam. Nostrum quisquam error nemo autem numquam!
-                  </p> */}
-                  <ul>
-                    {bootcampTrainingInfo?.syllabus?.map((item) => (
-                      <li>
-                        <p className={clsx.niche}>{item.title}</p>
-                        <p className={clsx.niche}>{item.description}</p>
-                      </li>
-                    ))}
-                  </ul>
+            <h4>Syllabus</h4>
+            <div>
+              <ul>
+                {bootcampTrainingInfo?.syllabus?.map((item) => (
+                  <li>
+                    <p className={clsx.niche}>{item.title}</p>
+                    <p className={clsx.niche}>{item.description}</p>
+                  </li>
+                ))}
+              </ul>
+
+            </div>
+
           </div>
         </section>
-        <section className={clsx.process}>
+        {/* <section className={clsx.process}>
           <div className="container">
             <header>
               <h3 className={clsx.section_title}>Our Process</h3>
@@ -586,19 +663,60 @@ export function NewBootcampDetailsComponent(){
             </div>
 
           </div>
+        </section> */}
+
+        <section >
+          <div className="container">
+            <h4>Other {courseType}</h4>
+            <div className={clsx.otherCourseGrid}>
+              {similar && similar.length > 0 && similar?.splice(0, 4).map((item, i) => (
+                <div className={clsx.otherCourseCard}>
+
+                  <img src={item.bootcampImg} alt="" />
+                  <div className={clsx.up_content}>
+                    <div>
+                      <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{item.title.toLowerCase()}</h5>
+                      <div className="d-flex justify-content-between">
+                        <small>{item.duration}</small>
+                        <small>$ {item.packages.length > 0 ? item.packages[0].price : item.price}</small>
+                      </div>
+                    </div>
+
+                    {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+                    <div className={clsx.cta}>
+                      <span onClick={() => gotoclass(item.title, item.category, item.bootcampId, navigate)}>Learn more</span>
+                      <div className={clsx.ct_bar}></div>
+                      {/* <span onClick={()=> gotoclassPayment(title, category, bootcampId, navigate)}>Live Online</span> */}
+                      <span>Self-Paced</span>
+                    </div>
+                  </div>
+
+                </div>
+              ))}
+            </div>
+            <div className={clsx.viewmore}>
+              <Link to={`/category/${bootcampTrainingInfo.subCategory}`}>View More <BsArrowRight /></Link>
+            </div>
+
+          </div>
+
+
         </section>
         <section className={clsx.upcoming_classes}>
           <div className="container">
             <header>
               <h3 className={clsx.section_title}>Similar upcoming classes</h3>
-              <hr />
+              {/* <hr /> */}
             </header>
             <div className={clsx.upcoming_card}>
               {
-                bootcamps.data?.data?.filter(d=>d.isActive).map((item,i)=>(
-                    <Upcome {...item} all={item}/>
+                upcoming && upcoming.length > 0 && upcoming.splice(0, 4).map((item, i) => (
+                  <Upcome {...item} all={item} />
                 ))
               }
+              <div className={clsx.viewmore}>
+                <Link to="/category/upcoming">View More <BsArrowRight /></Link>
+              </div>
             </div>
           </div>
         </section>
@@ -606,7 +724,7 @@ export function NewBootcampDetailsComponent(){
           <Payment />
         </section> */}
         <section className={clsx.teacher}>
-         <ReviewSection />
+          <ReviewSection />
         </section>
         <Question />
       </div>
@@ -615,75 +733,127 @@ export function NewBootcampDetailsComponent(){
 }
 
 
-export function DetailsHero({navHeight, title, description, addToWishList,handleBootstrapEnrollment, loading, img}){
-  
+export function DetailsHero({ navHeight, title, description, addToWishList, handleBootstrapEnrollment, loading, img, endDate, startDate , wishlistState, removeCourse, userdata}) {
+console.log({wishlistState});
   return (
     <section
-    className={clsx.new_hero}
-    style={{
-      height: `min(calc(100vh - ${navHeight}px ), 450px)`,
-      background: `url(${img  ? img: NewBootcampImage}), rgba(0,0,0,0.6) no-repeat`
+      className={clsx.new_hero}
+      style={{
+        height: `min(calc(100vh - ${navHeight}px ), 450px)`,
+        background: `url(${img ? img : NewBootcampImage}), rgba(0,0,0,0.6) no-repeat`
 
-    }}
-  >
-    <div className={`container ${clsx.hero_content}`}>
-      <div>
-        <h4>{title ? title : "Data Science"}</h4>
-        {/* <p>{description ? description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p> */}
-        <div className={clsx.hero_buttons}>
-          <motion.button 
-           whileHover={{
-            boxShadow: "0px 0px 8px rgb(225, 225, 225)"
-          }}
-          transition={{ duration: 0.1 }}
-          onClick={handleBootstrapEnrollment}>Enroll now</motion.button>
-          <motion.button 
-           whileHover={{
-            boxShadow: "0px 0px 8px rgb(225, 225, 225)"
-          }}
-          transition={{ duration: 0.1 }}
-            onClick={addToWishList}
-          >
-            {
-              loading ? <div className="spinner-border"></div>
-              :
-              "Add to wishlist"
+      }}
+    >
+      <div className={`container ${clsx.hero_content}`}>
+        <div>
+          <h4>{title}</h4>
+          <p className="restricted_line" dangerouslySetInnerHTML={{ __html: description }}></p>
+          {/* <p>{description ? description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p> */}
+          <p style={{ marginTop: "2rem", fontSize: "1.5rem" }}>Starting Date: <span>{new Date(startDate).toDateString()}</span></p>
+
+          <div className={clsx.hero_buttons}>
+            <motion.button
+              whileHover={{
+                boxShadow: "0px 0px 8px rgb(225, 225, 225)"
+              }}
+              transition={{ duration: 0.1 }}
+              onClick={handleBootstrapEnrollment}>Enroll now</motion.button>
+            {/* <motion.button
+              whileHover={{
+                boxShadow: "0px 0px 8px rgb(225, 225, 225)"
+              }}
+              transition={{ duration: 0.1 }}
+              onClick={addToWishList}
+            >
+              {
+                loading ? <div className="spinner-border"></div>
+                  :
+                  "Add to wishlist"
+              }
+            </motion.button> */}
+
+{
+              (userdata.token && wishlistState) ?
+
+                <button onClick={removeCourse}>
+                  {
+                    loading ?
+                      <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      :
+                      "Remove wishlist"
+
+                  }
+
+                </button>
+
+                :
+
+                <button onClick={addToWishList}>
+                  {
+                    loading ?
+                      <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      :
+                      "Wishlist"
+
+                  }
+
+                </button>
             }
-          </motion.button>
+
+
+
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
   )
 }
 
-function Upcome({_id, title, duration, startTime, endTime, startDate, endDate, description, type, isActive, instructorId, bootcampImg, all}) {
+export function Upcome({ _id, title, duration, category, subCategory, bootcampId, startTime, endTime, startDate, endDate, description, type, isActive, instructorId, bootcampImg, all }) {
   const { getItem } = useLocalStorage();
   const userdata = getItem("gotocourse-userdata");
   const navigate = useNavigate();
 
+  // console.log({all});
+
   async function handleBootstrapEnrollment(e) {
     e.preventDefault();
     if (userdata?.token) {
-      localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+      // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
       navigate("payment")
     } else {
-     navigate("/login")
+      navigate("/login")
     }
   }
-  return(
+  return (
     <div className={clsx.upcome}>
-      <p>{title}</p>
-      <div>
-        <p>Date</p>
-        <p>{startDate ?  getDate(startDate) : ""} - { endDate ?  getDate(endDate) : "" }</p>
+      <div  className={clsx.upcomeitem}>
+        <p>{title}</p>
+
       </div>
-      <div>
+      <div className={clsx.upcomeitem}>
+        <p>Category</p>
+        <p style={{ textTransform: "capitalize" }}>{category}</p>
+      </div>
+      <div className={clsx.upcomeitem}>
+        <p>Subcategory</p>
+        <p style={{ textTransform: "capitalize" }}>{subCategory && subCategory.split("_").join(" ")}</p>
+      </div>
+      <div className={clsx.upcomeitem}>
+        <p>Start Date</p>
+        <p>{startDate ? getDate(startDate) : ""}</p>
+      </div>
+      <div className={clsx.upcomeitem}>
         <p>Duration</p>
         <p>{duration}</p>
       </div>
-      <div>
-        <button onClick={handleBootstrapEnrollment}>Enroll now</button>
+      <div className={clsx.upcomeitem}>
+        {/* <button onClick={handleBootstrapEnrollment}>Enroll now</button> */}
+        <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>learn More</button>
       </div>
     </div>
   )

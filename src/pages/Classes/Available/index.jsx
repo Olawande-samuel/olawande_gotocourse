@@ -85,33 +85,33 @@ const Available = () => {
     const classType= [
         {
             id: 1,
-            mainHeading:"Classes that get you ready for in demand career ",
+            mainHeading:"In-demand Courses",
             subHeading:"Launch a new career in as little as 1- 6 months",
-            data:"in-demand"
+            data:"IN_DEMAND"
         },
         {
             id: 2,
-            mainHeading:"Classes you can complete in 1-2 weeks",
+            mainHeading:"Upskill Courses",
             subHeading:"",
-            data:"1-2 weeks"
+            data:"UPSKILL_COURSES"
         },
         {
             id: 3,
-            mainHeading:"Certification courses",
+            mainHeading:"Executive Courses",
             subHeading:"",
-            data:"certification"
+            data:"EXECUTIVE_COURSES"
         },
         {
             id: 4,
-            mainHeading:"Classes you can complete in a day",
+            mainHeading:"Short Courses",
             subHeading:"",
-            data:"1 day"
+            data:"SHORT_COURSES"
         },
         {
             id: 5,
-            mainHeading:"Free classes",
+            mainHeading:"Tech Entrepreneurship Courses",
             subHeading:"",
-            data:"free"
+            data:"TECH_ENTREPRENEURSHIP"
         },
     ]
 

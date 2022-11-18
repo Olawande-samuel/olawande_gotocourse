@@ -1,5 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { Outlet, Route, Routes } from "react-router-dom";
+
+import 'react-quill/dist/quill.snow.css';
 import './App.css';
 import '@stripe/stripe-js'
 
@@ -36,7 +38,7 @@ import { Dashboard as AffiliatesDash, Sales, Income, Revenue } from "./pages/Das
 import { Landing as AffiliateLanding, Register as AffiliateRegister, Login as AffiliateLogin, Verification as AffiliateVerification } from "./pages/Affiliate";
 import AdminAffiliate from "./pages/Dashboard/Admin/Affiliate";
 
-import {HIW, HIWAffiliate } from "./pages/HowItWorks"
+import { HIW, HIWAffiliate } from "./pages/HowItWorks"
 import 'react-toastify/dist/ReactToastify.css';
 import AuthContextProvider from "./contexts/Auth";
 import "react-multi-carousel/lib/styles.css";
@@ -82,7 +84,7 @@ import SyllabusContextProvider from "./contexts/Syllabus";
 import { Suspense, lazy } from "react";
 import Loader from "./components/Loader";
 import CheckList from "./pages/Teacher/checkList";
-import Events from "./pages/Events";
+import Events, { Event } from "./pages/Events";
 import Business from "./Business/pages/landing/business";
 import File from "./pages/Dashboard/components/classConsole/File";
 import Note from "./pages/Dashboard/components/classConsole/Note";
@@ -90,7 +92,7 @@ import Note from "./pages/Dashboard/components/classConsole/Note";
 import Content, { ChatComponent } from "./pages/Dashboard/components/classConsole/Content";
 
 import Quiz, { Preview } from "./pages/Dashboard/components/classConsole/Quiz";
-import Suite, {Processed, Pending} from "./pages/Dashboard/components/classConsole/Suite";
+import Suite, { Processed, Pending } from "./pages/Dashboard/components/classConsole/Suite";
 import Classroom from "./pages/Dashboard/components/classConsole/Classroom";
 
 import { Intermission, LiveClassInfo } from "./pages/Dashboard/components/classConsole/Liveclass";
@@ -105,6 +107,12 @@ import Detail from "./pages/Course/Details";
 import AllCourses from "./pages/Courses/allcourses/AllCourses";
 import { MainContainer } from "./pages/Dashboard/components/classConsole";
 import Articles from "./pages/Events/articles";
+import StudentChatModule, { ActiveChat } from "./pages/Dashboard/components/classConsole/Chat/student";
+
+import { GroupContent, MailDetail } from "./pages/Dashboard/components/classConsole/Chat";
+import { ProgramPage } from "./components/NewLanding/ExecutiveClasses";
+import CourseComponent from "./pages/Courses/allcourses/Course";
+import UpComingComponent from "./pages/Bootcamp/Upcoming";
 
 
 
@@ -133,11 +141,11 @@ const Contact = lazy(() => import("./pages/Contact"))
 const Settings = lazy(() => import("./pages/Dashboard/Admin/Settings"))
 const LiveClass = lazy(() => import("./pages/Dashboard/components/Live/LiveClass"))
 
-const TeachersHelp = lazy(()=>import("./pages/Dashboard/Teachers/Help")) ;
+const TeachersHelp = lazy(() => import("./pages/Dashboard/Teachers/Help"));
 
-const HIWStudent = lazy(()=> import("./pages/HowItWorks/HIWStudent")) 
-const  HIWTeacher = lazy(()=>import("./pages/HowItWorks/HIWTeacher")) 
-
+const HIWStudent = lazy(() => import("./pages/HowItWorks/HIWStudent"))
+const HIWTeacher = lazy(() => import("./pages/HowItWorks/HIWTeacher"))
+const TeachersLanding = lazy(()=> import("./pages/Teachers"))
 
 //MENTORS
 // const {MentorsProfile} = lazy(() => import("./pages/Dashboard/Mentors"));
@@ -172,20 +180,32 @@ function App() {
               <Route path="courses" element={<AllCourses />} />
               <Route path="forgot-password" element={<ForgotPassword />} />
               <Route path="change-password" element={<ResetPassword />} />
-              <Route path="become-a-teacher" element={<BecomeATeacher />} />
+              {/* <Route path="become-a-teacher" element={<BecomeATeacher />} /> */}
+              <Route path="become-a-teacher" element={<TeachersLanding />} />
               <Route path="student/classroom" element={<StudentClassroom />} />
- 
+
               <Route path="tester" element={<CreateRoom />} />
               <Route path="video-chat" element={<VideDiv />} />
+
+              <Route path="category" element={<Out />} >
+                <Route index element={<CourseComponent />} />
+                <Route path="upcoming" element={<UpComingComponent />} />
+                <Route path=":id" element={<CourseComponent />} />
+              </Route>
 
               <Route path="categories" element={<Out />}>
                 <Route index element={<CategoryHome />} />
                 <Route path=":id" element={<Out />}  >
                   <Route index element={<CategoryDetail />} />
                   <Route path="courses" element={<CoursesHome />} />
-                  <Route path="courses/:profile" element={<Out />}>
-                    <Route index element={<Detail />} />
-                    <Route path="payment" element={<Payment />} />
+                  <Route path="courses/:profile/:id" element={<Out />}>
+                    <Route index element={<NewBootcampDetailsComponent />} />
+                    <Route path="payment" element={<BootcampPayment />} />
+                    <Route path="payment/success" element={<PaymentStatus success={true} />} />
+                    <Route path="payment/error" element={<PaymentStatus />} />
+                    {/* FORMERLY COURSES */}
+                    {/* <Route index element={<Detail />} /> */}
+                    {/* <Route path="payment" element={<Payment />} /> */}
                   </Route>
                 </Route>
               </Route>
@@ -201,9 +221,10 @@ function App() {
               <Route path="user-authentication" element={<Verification />} />
               <Route path="user-onboarding" element={<UserOnBoarding />} />
               <Route path="qualifications" element={<CheckList />} />
-              
+
               <Route path="events&articles" element={<Out />}>
-                <Route index element={<Events />}  />
+                <Route index element={<Events />} />
+                <Route path=":id" element={<Event />} />
                 <Route path="articles/:id" element={<Articles />} />
               </Route>
 
@@ -256,12 +277,15 @@ function App() {
                 <Route path="console" element={<Content />}>
                   <Route path="myclasses" element={<Out />} >
                     <Route index element={<ConsoleClasses />} />
-                    {/* <Route path=":id" element={<MyClass />} /> */}
+                    <Route path=":id" element={<StudentChatModule />} />
+                    <Route path=":id/chat" element={<ActiveChat />} />
+
                   </Route>
                   <Route path="assessments" element={<ConsoleAssessments />} />
                   <Route path="liveclass" element={<Out />} />
                 </Route>
-                <Route path="class-console/class" element={<StudentClassroom />} />
+                <Route path="class-console/class/:id" element={<StudentClassroom />} />
+
               </Route>
 
               <Route path="test" element={<Content />}>
@@ -270,7 +294,7 @@ function App() {
                 <Route path="classroom" element={<Classroom />} />
                 <Route path='chat' element={<ChatComponent />} />
                 <Route path="suite" element={<Suite />} />
-                
+
                 <Route path="quiz" element={<Out />}>
                   <Route index element={<Quiz />} />
                   <Route path="preview" element={<Preview />} />
@@ -344,9 +368,14 @@ function App() {
                   <Route path="class" element={<Content />}>
                     <Route path=":classId" element={<Out />}>
                       <Route index element={<MainContainer />} />
-                      <Route path="creator-suite" element={<Suite />}/>          
+                      <Route path="creator-suite" element={<Suite />} />
                       <Route path="classroom" element={<Classroom />} />
-                      <Route path="mail" element={<ChatComponent />} />
+                      <Route path="mail" element={<Out />}>
+                        <Route index element={<ChatComponent />} />
+                        <Route path="details" element={<GroupContent />} />
+                        <Route path="group/:groupID" element={<GroupContent />} />
+                        <Route path="chat/:userId" element={<MailDetail />} />
+                      </Route>
                       <Route path="file" element={<File />} />
                       <Route path="note" element={<Note />} />
                       <Route path="quiz" element={<Out />}>
@@ -358,7 +387,7 @@ function App() {
                 </Route>
               </Route>
 
-              
+
               <Route path="affiliates" element={<AffiliateLanding />} />
               <Route path="affiliates/register" element={<AffiliateRegister />} />
               <Route path="affiliates/login" element={<AffiliateLogin />} />
@@ -381,7 +410,7 @@ function App() {
 
 
 
-             
+
 
               <Route path="admin">
                 <Route path="" element={<AdminDashboard />} />
@@ -410,9 +439,9 @@ function App() {
                 <Route path="settings" element={<Settings />} />
                 <Route path="earnings" element={<AdminEarning />} />
                 <Route path="affiliate" element={<AdminAffiliate />} />
-               
 
-                <Route path="class-console" element={<Out />}>
+
+                {/* <Route path="class-console" element={<Out />}>
                   <Route index element={<AdminClassConsole />} />
                   <Route path=":id" element={<Content />}>
                     <Route path="file" element={<File />} />
@@ -420,6 +449,29 @@ function App() {
                     <Route path="quiz" element={<Out />}>
                       <Route index element={<Quiz />} />
                       <Route path="preview" element={<Preview />} />
+                    </Route>
+                  </Route>
+                </Route> */}
+
+                <Route path="class-console" element={<Out />}>
+                  <Route index element={<AdminClassConsole />} />
+                  <Route path="class" element={<Content />}>
+                    <Route path=":classId" element={<Out />}>
+                      <Route index element={<MainContainer />} />
+                      <Route path="creator-suite" element={<Suite />} />
+                      <Route path="classroom" element={<Classroom />} />
+                      <Route path="mail" element={<Out />}>
+                        <Route index element={<ChatComponent />} />
+                        <Route path="details" element={<GroupContent />} />
+                        <Route path="group/:groupID" element={<GroupContent />} />
+                        <Route path="chat/:userId" element={<MailDetail />} />
+                      </Route>
+                      <Route path="file" element={<File />} />
+                      <Route path="note" element={<Note />} />
+                      <Route path="quiz" element={<Out />}>
+                        <Route index element={<Quiz />} />
+                        <Route path="preview" element={<Preview />} />
+                      </Route>
                     </Route>
                   </Route>
                 </Route>
@@ -434,7 +486,7 @@ function App() {
                 <Route path="login" element={<AdminLogin />} />
                 <Route path="signup" element={<AdminSignup />} />
               </Route>
-              
+
 
             </Route>
             <Route path="enterprise" element={<Business />} />

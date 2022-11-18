@@ -22,6 +22,7 @@ import { useAuth } from "../../../contexts/Auth";
 import { AdvancedError } from "../../../classes";
 import { capitalize, COURSE_CATEGORY_KEY, getDate, IMAGEURL } from "../../../constants";
 import DOMPurify from "dompurify";
+import { useQuery } from "@tanstack/react-query";
 
 const DetailContainer = styled.div`
   width: 100%;
@@ -226,7 +227,7 @@ const DetailCourseContainer = styled.div`
         font-weight: 700;
         font-size: 32px;
         text-align: center;
-        margin-bottom; 20px;
+        margin-bottom: 10px;
     }
 
     & > p {
@@ -255,13 +256,18 @@ const DetailCourses = styled.div`
   width: 100%;
   display: flex;
   margin-bottom: 30px;
+  
+  div {
+    width: 100%;
+  }
 `;
 
 const CourseCard = styled.div`
   padding: 5px;
   // margin: 15px;
   cursor: pointer;
-  // width: 300px;
+   /* width: 300px; */
+
 `;
 
 const CourseImageContainer = styled.div`
@@ -306,7 +312,7 @@ const Detail = ({ preview }) => {
   const {
     generalState,
     setGeneralState,
-    otherFunctions: { searchCategories,fetchCategory },
+    otherFunctions: { searchCategories, fetchCategory, fetchBootcamps },
   } = useAuth();
   
   const [categoryCourses, setCategoryCourses] = useState([]);
@@ -325,6 +331,16 @@ const Detail = ({ preview }) => {
     }
   }, [preview]);
 
+  const queryClass = useQuery(["fetchclasses"], fetchBootcamps, {
+    onSuccess: (res)=>{
+      console.log(res)
+      setCategoryCourses(res.data?.filter(item => item.category === courseCategory))
+    },
+    onError: (error)=>{
+      console.error(error)
+    }
+  })
+  
   // fetch courses under each category
   useEffect(() => {
     if (!preview?.name) {
@@ -339,7 +355,7 @@ const Detail = ({ preview }) => {
                 if (!success || statusCode !== 1)
                   throw new AdvancedError(message, statusCode);
                 if (res.data.length > 0) {
-                  setCategoryCourses(res.data);
+                  // setCategoryCourses(res.data);
                 }
 
             }
@@ -559,7 +575,7 @@ const Detail = ({ preview }) => {
                 <Swiper
                   // install Swiper modules
                   modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-                  loop={true}
+                  loop={false}
                   speed={1500}
                   autoplay={{ delay: 2500 }}
                   spaceBetween={0}
@@ -586,39 +602,27 @@ const Detail = ({ preview }) => {
                     },
                   }}
                 >
-                  {categoryCourses.length
-                    ? categoryCourses.map((course, i) => (
+                  {
+                  categoryCourses.length
+                    ? categoryCourses.filter(item => item.isActive).map((course, i) => (
                         <SwiperSlide key={i}>
                           <CourseCard
                             onClick={() => {
-                              localStorage.setItem(
-                                "gotocourse-courseInfo",
-                                JSON.stringify(course)
-                              );
-                              localStorage.setItem(
-                                "gotocourse-courseId",
-                                course.courseId
-                              );
-                              navigate(
-                                `courses/${course.name
-                                  .trim()
-                                  .split(" ")
-                                  .join("-")
-                                  .toLowerCase()}`
-                              );
+                              navigate(`courses/${course.title.trim().split(" ").join("-").toLowerCase()}/${course.bootcampId.trim()}`)
                             }}
                           >
                             <CourseImageContainer>
-                              <img src={course.courseImg} alt={course.name} />
+                              <img src={course.bootcampImg} alt={course.title} />
                             </CourseImageContainer>
                             <CourseBody>
-                              <h4>{course.name}</h4>
+                              <h4>{course.title}</h4>
                               
                             </CourseBody>
                           </CourseCard>
                         </SwiperSlide>
                       ))
-                    : Array(4)
+                    : 
+                    Array(4)
                         .fill(undefined)
                         .map((_, i) => (
                           <SwiperSlide key={i}>

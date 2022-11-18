@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { createRef } from 'react';
+import * as ReactDOM from 'react-dom'
 import styled from 'styled-components';
-import {BiArrowBack} from 'react-icons/bi';
+import { BiArrowBack } from 'react-icons/bi';
 import { Button } from '@mui/material';
-
-
-
-
-import {Module} from './';
+import { Module } from './';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useMemo } from 'react';
+
 
 
 
@@ -19,13 +20,13 @@ const SidebarContainer = styled.div`
     flex-direction: column;
     height:100%;
 
-    position: ${({$mobile}) => $mobile && 'fixed'};
-    top: ${({$mobile}) => $mobile && 0};
-    left: ${({$mobile}) => $mobile && 0};
-    bottom: ${({$mobile}) => $mobile && 0};
+    position: ${({ $mobile }) => $mobile && 'fixed'};
+    top: ${({ $mobile }) => $mobile && 0};
+    left: ${({ $mobile }) => $mobile && 0};
+    bottom: ${({ $mobile }) => $mobile && 0};
 
     @media screen and (max-width: 960px){
-        display: ${({$mobile}) => $mobile ? 'flex' : 'none'};
+        display: ${({ $mobile }) => $mobile ? 'flex' : 'none'};
     }
 `;
 
@@ -86,29 +87,60 @@ export const CustomButton = styled(Button)`
 
 
 
-const Sidebar = ({modules, changeActive, activeMedia, isMobile}) => {
+const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData, completed, AttachmentLength, setaAllattachmentLength,
+    // allAttachment, setAllattachment ,
+    attach, setAttach
+}) => {
     const navigate = useNavigate()
+    let elementRef = createRef(null)
+    // console.log({ AttachmentLength }); // module info
+
+    const ProgressResult = useMemo(() => {
+        let result = (Math.floor((completed / AttachmentLength) * 100))
+        return result
+    }, [completed, AttachmentLength])
+
     return (
         <SidebarContainer $mobile={isMobile}>
             <SidebarTop>
-                <BiArrowBack onClick={()=>navigate(-1)} />
+                <BiArrowBack onClick={() => navigate(-1)} />
                 Dashboard
             </SidebarTop>
             <SidebarBody>
-                <CustomButton sx={{marginInline: 'auto', width: '50%'}}>
+                <CustomButton sx={{ marginInline: 'auto', width: '50%' }}>
                     Refresh topics
                 </CustomButton>
                 <ProgressContainer>
-                    <p>Progress: 75%</p>
-                    <Progress value="75" max="100" />
+                    <p>Progress: {ProgressResult}%</p>
+                    <Progress value={ProgressResult} max="100" />
                 </ProgressContainer>
-                {
-                    modules.map(({title, attachments}, i) => <Module title={title} activeMedia={activeMedia} attachments={attachments} changeActive={changeActive} key={i} />)
-                }
+                <div ref={elementRef}>
+                    {
+                        modules.map((module) =>
+                            <Module
+                                title={module.name}
+                                activeMedia={activeMedia}
+                                attachments={module}
+                                changeActive={changeActive}
+                                key={module._id}
+                                fetchData={fetchData}
+                                AttachmentLength={AttachmentLength}
+                                setaAllattachmentLength={setaAllattachmentLength}
+                                // allAttachment={allAttachment}
+                                // setAllattachment={setAllattachment}
+                                attach={attach}
+                                setAttach={setAttach}
+                            />)
+                    }
+
+                </div>
+
             </SidebarBody>
         </SidebarContainer>
     )
 }
+
+
 
 
 

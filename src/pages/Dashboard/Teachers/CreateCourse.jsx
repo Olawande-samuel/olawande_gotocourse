@@ -723,7 +723,7 @@ export const Syllabus = ({
       </Modal>
     );
   }
-  function AddPackage({ openPackage, handleClosePackage, list, addPackage }) {
+  export function AddPackage({ openPackage, handleClosePackage, list, addPackage }) {
     const [newPackage, setNewPackage] = useState({
       title: "",
       price: "",
@@ -1073,7 +1073,7 @@ export const Syllabus = ({
     );
   }
   export function changeConstants(name){
-    if(name === "SELF_PACED") return "self-paced"
+    if(name === "SELF_PACED") return "Self-paced"
     if(name === "COHORT") return "Cohort"
     if(name === "MENTORSHIP") return "One-on-One"
     if(name === "PHYSICAL") return "In-person Training"

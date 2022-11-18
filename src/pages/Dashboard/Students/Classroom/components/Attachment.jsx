@@ -45,17 +45,36 @@ const Locked = styled(MdOutlineLock)`
 `
 
 
-const Attachement = ({type, isLocked, title, isComplete, active, changeActive}) => {
+
+
+const Attachement = ({type, _id, isLocked, title,  domain, classId,
+    fetchData,
+     marked, active, changeActive  }) => {
+   
+    // console.log({_id});
+
     let icon = React.useMemo(() => {
-        return type ==='video' ? <MdAttachFile /> : type === 'note' ? <MdNote /> : <MdQuiz />
+        return type ==="FILE_VIDEO" ? <MdAttachFile /> : type === "NOTE" ? <MdNote /> : <MdQuiz />
     }, [type])
 
+    // let statusIcon = React.useMemo(() => {
+    //     return marked ? <isLocked /> : <CompleteIcon $isComplete={marked} />
+    // }, [isLocked])
+
     let statusIcon = React.useMemo(() => {
-        return isLocked ? <Locked /> : <CompleteIcon $isComplete={isComplete} />
-    }, [isLocked])
+        return marked ? <CompleteIcon $isComplete={marked}  /> : <CompleteIcon />  
+    }, [marked])
+
+    
+
+
 
     return (
-        <AttachmentContainer variant="outlined" $active={active === title ? true : false} onClick={e => changeActive(title)}>
+        <AttachmentContainer variant="outlined" $active={active === title ? true : false} onClick={e => {
+            // changeActive(title)
+            fetchData(type, _id, title) 
+        }
+    }>
             <AttachmentInfo>
                 {icon}
                 <h5>{title}</h5>

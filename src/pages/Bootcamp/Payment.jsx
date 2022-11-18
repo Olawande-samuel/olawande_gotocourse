@@ -22,20 +22,18 @@ import Loader from "../../components/Loader"
 import Courses from "../Courses";
 import { GuardedRoute } from "../../hoc";
 import clsx from '../Bootcamp/Pay.module.css'
+import { useQuery } from "@tanstack/react-query";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 export const BootcampPayment = () => {
-  const {
-    studentFunctions: { addBootcamp },
-  } = useAuth();
+  const { studentFunctions: { addBootcamp }, otherFunctions: {fetchBootcamps} } = useAuth();
   const { getItem } = useLocalStorage();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [paymentDetails, setPaymentDetails] = useState({});
+  const [price, setPrice] = useState();
   const details = localStorage.getItem("gotocourse-paymentDetails");
-  const bootcamp = getItem("gotocourse-bootcampdata");
-
+  const [bootcamp, setBootcamp]= useState({})
   const [stripeId, setStripeId] = useState(null);
   const [showStripeModal, setShowStripeModal] = useState(false);
   const [paymentData, setPaymentData] = useState({
@@ -43,11 +41,28 @@ export const BootcampPayment = () => {
     initialPayment: "",
   });
 
-  useEffect(() => {
-    if (details) {
-      setPaymentDetails(JSON.parse(details));
-    }
-  }, []);
+  const params = useParams();
+  console.log({params})
+  const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
+    onSuccess: res =>{
+      console.log({res})
+      console.log(res.data.find(item => item.bootcampId === params.id))
+      if(res.data.length > 0){
+        let info = res.data.find(item => item.bootcampId === params.id)
+        setBootcamp(info)
+        let infoPrice = info.packages.length > 0 ? info.packages[0].price : info.price
+        console.log({infoPrice})
+        setPrice(infoPrice)
+
+        return
+      }
+      setBootcamp({})
+
+    },
+    onError: err => console.error(err)
+  
+  });
+ 
 
   function handleChange(e, type) {
     type === "select"
@@ -78,7 +93,7 @@ export const BootcampPayment = () => {
     if (userData !== null) {
       const bootcampPaymentInfo = {
         bootcampId: bootcamp.bootcampId,
-        amountPaid: bootcamp.price,
+        amountPaid: price,
         fullPayment: paymentData.fullPayment,
         installments: paymentData.fullPayment ? "" : paymentData.installments,
         initialPayment: paymentData.fullPayment
@@ -213,14 +228,14 @@ export const BootcampPayment = () => {
                           name="initialPayment"
                           id="2"
                           onChange={handleInstallmentChoice}
-                          value={(bootcamp?.price + (bootcamp?.price * (25 /100))) / 2 + 100}
+                          value={(price + (price * (25 /100))) / 2 + 100}
                         />
                         <label
                           htmlFor="2"
                           className="form-label generic_label ms-2 "
                         >
                           Pay in two installments of{" "}
-                          {(bootcamp?.price + (bootcamp?.price * (25 /100))) / 2 + 100} each
+                          {(price + (price * (25 /100))) / 2 + 100} each
                         </label>
                       </div>
                       <div className="text-center">
@@ -232,14 +247,14 @@ export const BootcampPayment = () => {
                           name="initialPayment"
                           id="4"
                           onChange={handleInstallmentChoice}
-                          value={bootcamp?.price / 4 + 100}
+                          value={price / 4 + 100}
                         />
                         <label
                           htmlFor="4"
                           className="form-label generic_label ms-2 "
                         >
                           Pay in four installments of{" "}
-                          {bootcamp?.price / 4 + 100} each
+                          {price / 4 + 100} each
                         </label>
                       </div>
                     </div>
@@ -251,7 +266,7 @@ export const BootcampPayment = () => {
                 <div className="d-flex flex-column">
                   <span className={clsx.pay__tit}>Total</span>
                   <p className={` px-3 ${clsx.pay__inform}`}>
-                    ${bootcamp?.price && +bootcamp?.price + (bootcamp?.price * (25 /100))}
+                    ${price && +price + (price * (25 /100))}
                   </p>
                 </div>
                 <button
