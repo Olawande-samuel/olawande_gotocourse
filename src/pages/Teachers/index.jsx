@@ -45,7 +45,8 @@ const Teachers = () => {
     }
     return (
         <Layout>
-            <TeacherHero className="container">
+            <TeacherHero>
+                <div className="container">
                 <div className="left">
                     <h3>
                         Gotocourse is everything you need to teach what you love!
@@ -59,6 +60,8 @@ const Teachers = () => {
                 </div>
                 <div className="right">
                     <img src={hang} alt="" />
+                </div>
+
                 </div>
             </TeacherHero>
             {/* <Hero>
