@@ -62,8 +62,6 @@ const Grid = styled.div`
 
 const ShortHero = styled.div`
 width: 100%;
-padding: 3rem 0;
-// border: 2px solid red;
 display: flex;
 align-items: center;
 
@@ -77,7 +75,6 @@ align-items: center;
       font-weight: 500;
       font-size: 14px;
       line-height: 20px;
-      width: 400px;
       padding: .5rem 0;
     }
 
@@ -89,13 +86,23 @@ align-items: center;
       flex: .5;
       height: 70vh;
 
+
       img{
         width: 100%;
         height: 100%;
         object-fit:cover;
       }
 
-    }  
+    } 
+    
+    @media (max-width: 768px){
+      flex-direction: column-reverse;
+
+      .left{
+        text-align: center;
+        margin: 2rem 0;
+      }
+    }
     
     
 `
@@ -145,6 +152,16 @@ justify-content: space-evenly;
 
 }
 
+@media (max-width: 768px){
+  flex-direction: column;
+  gap: 1rem;
+
+  .item{
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
 
 `
 
@@ -173,84 +190,98 @@ const Section = styled.section`
  `
 
 const UpskillHero = styled.div`
- width: 100%;
-//  padding: 3rem 0;
-//  border: 2px solid red;
- display: flex;
- align-items: center;
- 
-     h3{
-       font-weight: 700;
-       font-size: 40px;
-       line-height: 45px;
-     }
- 
-     p{
-       font-weight: 500;
-       font-size: 14px;
-       line-height: 20px;
-       width: 400px;
-       padding: .5rem 0;
-     }
- 
-     .left{
-       flex: .5;
-     }
- 
-     .right{
-       flex: .5;
-       height: 70vh;
- 
+width: 100%;
+// border: 2px solid red;
+display: flex;
+align-items: center;
+justify-content: space-between;
+
+    h3{
+      font-weight: 700;
+      font-size: 40px;
+      line-height: 45px;
+    }
+
+    p{
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 20px;
+      padding: .5rem 0;
+    }
+
+    .left{
+      flex: .5;
+
+    }
+
+    .right{
+      flex: .3;
+
        img{
          width: 100%;
          height: 100%;
-         object-fit:cover;
-        //  object-position: top;
        }
  
      }  
+   
      
+     @media (max-width: 768px){
+      flex-direction: column-reverse;
+
+      .left{
+        text-align: center;
+        margin: 2rem 0;
+      }
+    }
+    
      
  `
 
 const ExecutiveHero = styled.div`
- width: 100%;
-//  padding: 3rem 0;
-//  border: 2px solid red;
- display: flex;
- align-items: center;
- 
-     h3{
-       font-weight: 700;
-       font-size: 40px;
-       line-height: 45px;
-     }
- 
-     p{
-       font-weight: 500;
-       font-size: 14px;
-       line-height: 20px;
-       width: 400px;
-       padding: .5rem 0;
-     }
- 
-     .left{
-       flex: .6;
-     }
- 
-     .right{
-       flex: .4;
-       height: 70vh;
- 
+width: 100%;
+// border: 2px solid red;
+display: flex;
+align-items: center;
+justify-content: space-between;
+
+    h3{
+      font-weight: 700;
+      font-size: 40px;
+      line-height: 45px;
+    }
+
+    p{
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 20px;
+      padding: .5rem 0;
+    }
+
+    .left{
+      flex: .6;
+      // border: 2px solid blue;
+
+    }
+
+    .right{
+      flex: .3;
+
        img{
          width: 100%;
          height: 100%;
-         object-fit:cover;
-        //  object-position: top;
        }
  
      }  
-     
+
+
+     @media (max-width: 768px){
+      flex-direction: column-reverse;
+
+      .left{
+        text-align: center;
+        margin: 2rem 0;
+      }
+    }
      
  `
 
@@ -316,13 +347,14 @@ const Logos = () => {
 
 const ShortCourseComponent = ({ bootcampTrainingInfo }) => {
 
+  const { generalState: { navHeight }}= useAuth()
   return (
-    <>
+    <div style={{ marginTop: navHeight }}>
       <div className='container'>
         <ShortHero>
           <div className="left">
             <h3>
-              Short courses for <br /> knowledge boost
+              Short courses for knowledge boost
             </h3>
             <p>Choose from wide range of short courses  and tech Entrepreneurship  across various categories.</p>
           </div>
@@ -392,21 +424,22 @@ const ShortCourseComponent = ({ bootcampTrainingInfo }) => {
 
 
 
-    </>
+    </div>
 
   )
 }
 
 
 const UpskillComponent = ({ bootcampTrainingInfo }) => {
+  const { generalState: { navHeight }}= useAuth()
   return (
-    <>
+    <div style={{ marginTop: navHeight }}>
       <div className='container'>
         <UpskillHero>
           <div className="left">
             <h3>
-              Increase your earning <br />
-              potential by upgrading <br />
+              Increase your earning
+              potential by upgrading
               your skillsets.
             </h3>
             <p>Choose from wide range of upskill courses  and tech Entrepreneurship  across various categories.</p>
@@ -477,22 +510,23 @@ const UpskillComponent = ({ bootcampTrainingInfo }) => {
 
 
 
-    </>
+    </div>
 
   )
 }
 
 
 const ExecutiveComponent = ({ bootcampTrainingInfo }) => {
+  const { generalState: { navHeight }}= useAuth()
   return (
-    <>
+    <div style={{ marginTop: navHeight }}>
       <div className='container'>
         <ExecutiveHero>
           <div className="left">
             <h3>
               Acquire strategic skills to
-              <br />
-              boost business growth <br />
+            
+              boost business growth
               your skillsets
             </h3>
             <p>Choose from wide range of upskill courses  and tech Entrepreneurship  across various categories.</p>
@@ -563,22 +597,23 @@ const ExecutiveComponent = ({ bootcampTrainingInfo }) => {
 
 
 
-    </>
+    </div>
 
   )
 }
 
 const DemandComponent = ({ bootcampTrainingInfo }) => {
+  const { generalState: { navHeight }}= useAuth()
   return (
-    <>
+    <div style={{ marginTop: navHeight }}>
       <div className='container'>
         <ExecutiveHero>
           <div className="left">
             <h3>
               Technical  skills most
-              <br />
+              
               needed by companies and
-              <br />
+            
               increase your earnings
             </h3>
 
@@ -650,7 +685,7 @@ const DemandComponent = ({ bootcampTrainingInfo }) => {
 
 
 
-    </>
+    </div>
 
   )
 }
@@ -717,7 +752,7 @@ const CourseComponent = () => {
   return (
     <Layout>
 
-      <div>
+    <div>
 
         {(id === "SHORT_COURSES") ? <ShortCourseComponent bootcampTrainingInfo={bootcampTrainingInfo} /> :
           (id === "UPSKILL_COURSES") ? <UpskillComponent bootcampTrainingInfo={bootcampTrainingInfo} /> :

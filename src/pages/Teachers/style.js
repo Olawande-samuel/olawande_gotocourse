@@ -1,5 +1,69 @@
 import styled from "styled-components"
 
+
+export const TeacherHero = styled.div`
+width: 100%;
+display: flex;
+align-items: center;
+background: #E4E9FF;
+color: var(--theme-blue);
+padding-bottom: 2rem;
+
+
+    h3{
+      font-weight: 700;
+      font-size: 40px;
+      line-height: 45px;
+    }
+
+    p{
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 20px;
+      padding: .5rem 0;
+    }
+
+    button {
+        background: var(--theme-orange);
+        padding:10px 24px;
+        color:#fff;
+        border-radius:4px;
+        border: none;
+        outline:none;
+        text-transform:capitalize;
+        margin-inline: auto;
+
+    }
+
+    .left{
+      flex: .4;
+
+    }
+
+    .right{
+      flex: .6;
+      height: 70vh;
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit:cover;
+      }
+
+    } 
+
+
+    
+    @media (max-width: 768px){
+      flex-direction: column-reverse;
+
+      .left{
+        text-align: center;
+        margin: 2rem 0;
+      }
+    }
+    
+    
+`
 export const Hero = styled.section`
     /* display: grid; */
     /* place-items: center; */

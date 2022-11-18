@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BiCalendar } from "react-icons/bi";
 
 import SwiperCore, {
@@ -444,15 +444,16 @@ const curriculum = [
 
 export function NewBootcampDetailsComponent() {
   const [bootcampTrainingInfo, setBootcampTrainingInfo] = useState({});
-  const [loading, setLoading] = useState(false)
   const { getItem } = useLocalStorage();
+  let [wishlistState, setWishlistState] = useState({})
 
   const bootcampTraining = getItem("gotocourse-bootcampdata");
   const userdata = getItem("gotocourse-userdata");
   const { id } = useParams()
 
+  const flag = useRef(false);
 
-  const { studentFunctions: { wishlistCourse , addwishlistCourse}, otherFunctions: { fetchBootcamps } } = useAuth()
+  const {generalState: { isMobile, loading, navHeight }, setGeneralState, generalState, studentFunctions: { wishlistCourse , addwishlistCourse, deleteFromWishlist, fetchWishlist}, otherFunctions: { fetchBootcamps } } = useAuth()
 
   const bootcamps = useQuery(["bootcamps", id], () => fetchBootcamps(), {
     onSuccess: res => {
@@ -472,11 +473,6 @@ export function NewBootcampDetailsComponent() {
   const navigate = useNavigate();
 
 
-
-  const {
-    generalState: { navHeight },
-  } = useAuth();
-
   async function handleBootstrapEnrollment(e) {
     e.preventDefault();
     if (userdata?.token) {
@@ -491,16 +487,19 @@ export function NewBootcampDetailsComponent() {
 
     if (userdata !== null) {
       try {
-        setLoading(true)
-        const response = await addwishlistCourse(bootcampTraining.bootcampId, userdata?.token)
+        setGeneralState({ ...generalState, loading: true })
+        const response = await addwishlistCourse(id, userdata?.token)
         const { success, message, statusCode } = response
         if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
         toast.success(message)
+        const { data } = response
+        setWishlistState(data)
       } catch (error) {
         console.error(error)
         toast.error(error.message);
       } finally {
-        setLoading(false)
+        setGeneralState({ ...generalState, loading: false });
+
       }
 
 
@@ -509,14 +508,57 @@ export function NewBootcampDetailsComponent() {
     }
   }
 
+  async function getWishList() {
+    try {
+      const res = await fetchWishlist(userdata?.token);
+      const { message, success, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else if (statusCode === 1) {
+        const { data } = res;
+        if (data.length > 0) {
+          setWishlistState(data.find(d => d.courseId === id));
+        } else {
+          console.log("err"); 
 
+        }
+
+      } else {
+        throw new AdvancedError(message, statusCode);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+    }
+  }
+
+  async function removeCourse(e) {
+    e.preventDefault();
+    try {
+      setGeneralState({ ...generalState, loading: true })
+      const res = await deleteFromWishlist(userdata?.token, id)
+      const { success, message, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      console.log("setting to {}");
+        setWishlistState({})
+    } catch (err) {
+
+    } finally {
+      setGeneralState({ ...generalState, loading: false });
+    }
+  }
 
   const handleClick = (event) => {
     console.log(event.currentTarget);
   };
 
-  console.log({ bootcampTrainingInfo });
+  // console.log({ bootcampTrainingInfo });
   // console.log("all", bootcamps.data?.data);
+
+  useEffect(() => {
+    if (flag.current) return;
+    getWishList()
+    flag.current = true;
+}, [])
 
   const similar = bootcamps.data?.data.filter(d => (d.subCategory === bootcampTrainingInfo.subCategory) && d.isActive && (d.bootcampId !== bootcampTrainingInfo.bootcampId))
   const upcoming = bootcamps.data?.data?.filter(d => d.isActive)
@@ -539,6 +581,9 @@ export function NewBootcampDetailsComponent() {
           startDate={bootcampTrainingInfo.startDate}
           addToWishList={addToWishList}
           handleBootstrapEnrollment={handleBootstrapEnrollment}
+          wishlistState={wishlistState}
+          removeCourse={removeCourse}
+          userdata={userdata}
         />
         <section className={clsx.to_learn}>
           <div className="container">
@@ -688,8 +733,8 @@ export function NewBootcampDetailsComponent() {
 }
 
 
-export function DetailsHero({ navHeight, title, description, addToWishList, handleBootstrapEnrollment, loading, img, endDate, startDate }) {
-
+export function DetailsHero({ navHeight, title, description, addToWishList, handleBootstrapEnrollment, loading, img, endDate, startDate , wishlistState, removeCourse, userdata}) {
+console.log({wishlistState});
   return (
     <section
       className={clsx.new_hero}
@@ -713,7 +758,7 @@ export function DetailsHero({ navHeight, title, description, addToWishList, hand
               }}
               transition={{ duration: 0.1 }}
               onClick={handleBootstrapEnrollment}>Enroll now</motion.button>
-            <motion.button
+            {/* <motion.button
               whileHover={{
                 boxShadow: "0px 0px 8px rgb(225, 225, 225)"
               }}
@@ -725,7 +770,42 @@ export function DetailsHero({ navHeight, title, description, addToWishList, hand
                   :
                   "Add to wishlist"
               }
-            </motion.button>
+            </motion.button> */}
+
+{
+              (userdata.token && wishlistState) ?
+
+                <button onClick={removeCourse}>
+                  {
+                    loading ?
+                      <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      :
+                      "Remove wishlist"
+
+                  }
+
+                </button>
+
+                :
+
+                <button onClick={addToWishList}>
+                  {
+                    loading ?
+                      <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      :
+                      "Wishlist"
+
+                  }
+
+                </button>
+            }
+
+
+
           </div>
         </div>
       </div>
