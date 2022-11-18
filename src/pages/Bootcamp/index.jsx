@@ -701,7 +701,7 @@ export function DetailsHero({ navHeight, title, description, addToWishList, hand
     >
       <div className={`container ${clsx.hero_content}`}>
         <div>
-          <h4>{title ? title : "Data Science"}</h4>
+          <h4>{title}</h4>
           <p className="restricted_line" dangerouslySetInnerHTML={{ __html: description }}></p>
           {/* <p>{description ? description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p> */}
           <p style={{ marginTop: "2rem", fontSize: "1.5rem" }}>Starting Date: <span>{new Date(startDate).toDateString()}</span></p>
