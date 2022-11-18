@@ -25,6 +25,7 @@ import { Link } from "react-router-dom"
 import { AiOutlineCheck } from "react-icons/ai"
 import { AdvancedError } from "../../../classes"
 import { useMemo } from "react"
+import {QuikonnetIcon, MeetFixIcon, RekodiaIcon, ClasspodiaIcon, QuizimIcon} from '../NewLanding'
 
 // GREAT OPPORTUNITIES
 
@@ -1551,9 +1552,10 @@ export function SuccessCard({ icon, title, description }) {
     return (<>
         <SuccessWrapper>
             <div className="icon_wrapper">
-                <img src={icon} alt="" />
+                <img src={icon} alt=""/>
+                {/* {icon} */}
             </div>
-            <h6 className="fw-bold" style={{fontSize: "18px"}}>{title}</h6>
+            <h6 className="fw-bold" style={{fontSize: "16px", color: "#464646"}}>{title}</h6>
             <p className="restricted_line">{description}</p>
             <span onClick={handleClick} className="readmore">read more</span>
         </SuccessWrapper>

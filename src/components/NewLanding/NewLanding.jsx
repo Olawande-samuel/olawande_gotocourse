@@ -87,7 +87,7 @@ const NewLanding = () => {
       {/* <Mentors /> */}
       <TechPro />
       {/* <VirtualTraining /> */}
-      <LiveWebinars /> 
+      <LiveWebinars />
       <Success />
       <Logos />
       {/* <TeachingBenefits /> */}
@@ -115,17 +115,37 @@ function VideoSection() {
   const [open, setOpen] = useState(false);
   return (
     <section className="video_section">
-      <img src={vidPreview} alt="" />
-      <div className="video_content">
-        <h4 className="text-center fw-bold mb-0 text-white" style={{ marginInline: "auto"}}>
-          Gotocourse brings the new way to learn tech and business skills.
-        </h4>
-        <h4 className="text-center fw-bold mb-1 text-white" style={{ marginInline: "auto"}}>
-          Learn more
-        </h4>
-        <i>
-          <FiPlayCircle size="6rem" onClick={() => setOpen(true)} />
-        </i>
+
+      <div className="video__left">
+        <img src={vidPreview} alt="" />
+        <div className="video_content">
+          <h4 className="text-center fw-bold mb-0 text-white" style={{ marginInline: "auto" }}>
+            Gotocourse brings the new way to learn tech and business skills.
+          </h4>
+          <h4 className="text-center fw-bold mb-1 text-white" style={{ marginInline: "auto" }}>
+            Learn more
+          </h4>
+          <i>
+            <FiPlayCircle size="6rem" onClick={() => setOpen(true)} />
+          </i>
+        </div>
+
+      </div>
+
+      <div className="video__right">
+
+        <h5>Learn and grow with our community</h5>
+
+        <p>Community is everything! Meet and
+          collaborate with Gotocourse mentors and
+          career advisors who can help you advance
+          your digital skills and career.
+          It's a great way to expand your skill set.</p>
+
+          <button>
+          Join our community 
+          </button>
+
       </div>
       <PopupVideo open={open} setOpen={setOpen} />
     </section>
@@ -214,7 +234,7 @@ function Hero() {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
+    for (let i = 0; i < ca.length; i++) {
       let c = ca[i];
       while (c.charAt(0) === ' ') {
         c = c.substring(1);
@@ -230,8 +250,8 @@ function Hero() {
 
     switch (cookieValue) {
       case "number1":
-          setHeroValue(1)
-          setCookie(COOKEY, "number2")
+        setHeroValue(1)
+        setCookie(COOKEY, "number2")
 
         break;
       case "number2":
@@ -250,20 +270,20 @@ function Hero() {
     }
   }
   let getter = getCookie(COOKEY)
-  useEffect(()=>{
+  useEffect(() => {
     // console.log({getter})
     const interval = setInterval(() => {
       console.log('This will run every 20 mins!');
-        if(getter !== ""){
-          changeImage(getter)
-    
-        } else {
-          setCookie(COOKEY, "number1")
-        }
-    }, 20*60*1000);
+      if (getter !== "") {
+        changeImage(getter)
+
+      } else {
+        setCookie(COOKEY, "number1")
+      }
+    }, 20 * 60 * 1000);
 
     return () => clearInterval(interval);
-  },[getter])
+  }, [getter])
 
   // console.log({heroValue})
 
@@ -350,14 +370,14 @@ function Hero() {
       className="newHero d-flex position-relative"
       style={{ marginTop: navHeight }}
     >
-     
-            <HeroContent
-              overlay={overlay}
-              setOverlay={setOverlay}
-              logtype={logtype}
-              {...heroData[heroValue]}
-            />
-         
+
+      <HeroContent
+        overlay={overlay}
+        setOverlay={setOverlay}
+        logtype={logtype}
+        {...heroData[heroValue]}
+      />
+
     </section>
   );
 }
@@ -539,7 +559,7 @@ function Benefits() {
           <div className="stay_right">
             <div className="services_list">
               {serviceList.map((service, i) => (
-                <BenefitBox {...service} key={i}/>
+                <BenefitBox {...service} key={i} />
               ))}
             </div>
             <div className=" mt-4">
