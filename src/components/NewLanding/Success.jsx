@@ -76,7 +76,7 @@ const Success = () => {
                     <div className="best_cards">
                         {
                             data.map((item, i) => (
-                                <SuccessCard {...item} key={i} />
+                                <SuccessCard {...item} key={item.title} />
                             ))
                         }
                     </div>
@@ -237,7 +237,7 @@ const data = [
 
    
     {
-        icon: <MeetFixIcon/>,
+        icon: Meetifix,
         title:"Live class tool",
         description: `Achieve your goals. Learn great skills with the best teachers live online. Unlock the power of real-time learning without any barrier.
         Teachers are empowered to conduct unlimited live classes with students with just a click of a button, and other features like class recording, screen-share and chat lobby.
@@ -246,7 +246,7 @@ Attend virtual instructor-led classes with ease.
 Break class into rooms to do group projects with colleagues across the world.`
     },
     {
-        icon: <ClasspodiaIcon/>,
+        icon: Classpodia,
         title:"Class console",
         description: `Learn on the go, enjoy learning in a classroom without borders ;  students have unlimited  access to study materials on any device, anytime and anywhere. Maximize your learning with study materials after every class and any time you need it. 
         Open files and documents on the class console wherever you need them and with unlimited replay. 
@@ -254,19 +254,19 @@ Break class into rooms to do group projects with colleagues across the world.`
         Keep track of course work with a to do list and calendar.`
     },
     {
-        icon: <QuikonnetIcon/>,
+        icon: Quikonnet,
         title:"Chat & mailing tool",
         description: `You can quickly communicate with your teachers and colleagues securely with ease. Engage with others in class through  instant chat or mail. Ask questions easily through instant chat or mail. Quikonnet is also a simple two-way interaction tool for teachers to Clear doubts, broadcast announcements, or just send some motivational messages. 
         Send and receive messages`
     },
     {
-        icon: <RekodiaIcon/>,
+        icon: Rekordia,
         title:"Student record management tool",
         description: `Enjoy personalized performance reports. This friendly feature helps to send reminders, and take attendance automatically. It also makes daily basis and common tasks like sorting students into groups, recording assessments/attendance, and contacting students quick and easy. Students can also download gradesheets, attendance particulars etc as a PDF file.`
     },
     {
 
-        icon: <QuizimIcon/>,
+        icon: Quizim,
         title:"Quiz App",
         description: `Create a quiz  in a few seconds, or take secure online quizes on any device, anywhere and at any time. 
         Take quizzes in multiple choice tests, checkboxes, upload file attachment, or assessment papers and have access to grades in real time just when made available. It is easy to use with paperless assignment workflow which allows teachers to create, review and mark assignments quickly,

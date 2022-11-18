@@ -1546,14 +1546,16 @@ export function SuccessCard({ icon, title, description }) {
     };
 
 
+    console.log(icon)
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
     return (<>
         <SuccessWrapper>
             <div className="icon_wrapper">
-                {/* <img src={icon} alt=""/> */}
-                {icon}
+                <img src={icon} alt="" style={{width: "80px", height:"80px", objectFit: "contain"}}/>
+                {/* {icon} */}
+                {/* <Icon /> */}
             </div>
             <h6 className="fw-bold" style={{fontSize: "16px", color: "#464646"}}>{title}</h6>
             <p className="restricted_line">{description}</p>
@@ -1574,6 +1576,7 @@ export function SuccessCard({ icon, title, description }) {
                 <SuccessWrapper>
                     <div className="icon_wrapper">
                         <img src={icon} alt="" />
+                        {/* <Icon /> */}
                     </div>
                     <p className="content">{description}</p>
                 </SuccessWrapper>
