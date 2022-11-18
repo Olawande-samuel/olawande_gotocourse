@@ -1030,9 +1030,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                                     }
 
                                 </button>
-
                                 :
-
                                 <button onClick={addToWishlist}>
                                     {
                                         loading ?
