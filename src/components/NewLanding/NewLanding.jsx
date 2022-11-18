@@ -253,14 +253,14 @@ function Hero() {
   useEffect(()=>{
     // console.log({getter})
     const interval = setInterval(() => {
-      console.log('This will run every 20 mins!');
+      console.log('This will run every 30 mins!');
         if(getter !== ""){
           changeImage(getter)
     
         } else {
           setCookie(COOKEY, "number1")
         }
-    }, 20*60*1000);
+    }, 30*60*1000);
 
     return () => clearInterval(interval);
   },[getter])
