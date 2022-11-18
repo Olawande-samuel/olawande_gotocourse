@@ -1015,18 +1015,37 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                         <div className="skillaction">
                             <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
 
-                            <button onClick={ wishlistState ? removeCourse : addToWishlist}>
-                                {
-                                    loading ?
-                                        <div className="spinner-border" role="status">
-                                            <span className="visually-hidden">Loading...</span>
-                                        </div>
-                                        :
-                                        wishlistState ? "Remove wishlist" : "Wishlist"
+                            {
+                                (userdata.token && wishlistState) ? 
 
-                                }
+                                <button onClick={removeCourse}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Remove wishlist"
 
-                            </button>
+                                    }
+
+                                </button>
+
+                                :
+
+                                <button onClick={addToWishlist}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Wishlist"
+
+                                    }
+
+                                </button>
+                            }
 
 
 
