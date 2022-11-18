@@ -621,7 +621,7 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
                 </div>
 
                 <div className="contentbtn">
-                    <button>Start Learning</button>
+                    <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate)}>Start Learning</button>
                 </div>
 
             </div>
@@ -861,7 +861,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
     const flag = useRef(false);
     let [wishlistState, setWishlistState] = useState({})
 
-    console.log({wishlistState});
+    console.log({ wishlistState });
     const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
 
     async function addToWishlist() {
@@ -873,7 +873,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                 const { success, message, statusCode } = response
                 if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
                 const { data } = response
-                console.log({data});
+                console.log({ data });
                 setWishlistState(data)
             } catch (error) {
                 console.error(error)
@@ -898,7 +898,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
             else if (statusCode === 1) {
                 const { data } = res;
                 if (data.length > 0) {
-                    console.log("wih" , {data});
+                    console.log("wih", { data });
                     setWishlistState(data.find(d => d.courseId === bootcampId));
                 } else {
 
@@ -932,7 +932,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                 handleClose()
             }
         } catch (err) {
-           
+
         } finally {
             setGeneralState({ ...generalState, loading: false });
         }
@@ -1015,7 +1015,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                         <div className="skillaction">
                             <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
 
-                            <button onClick={addToWishlist}>
+                            <button onClick={ wishlistState ? removeCourse : addToWishlist}>
                                 {
                                     loading ?
                                         <div className="spinner-border" role="status">
@@ -1027,6 +1027,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                                 }
 
                             </button>
+
 
 
                             {/* {wishlistState ? <button onClick={removeCourse}> Remove wishlist </button> : <button onClick={addToWishlist}> Wishlist </button>} */}
