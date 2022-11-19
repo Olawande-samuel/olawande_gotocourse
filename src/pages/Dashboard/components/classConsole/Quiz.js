@@ -216,7 +216,7 @@ export default function Quiz() {
                         title: "",
                         showAnswer: false,
                         answer: "",
-                        multiple: [
+                        options: [
                             {
                                 isAnswer: false,
                                 title: ""
@@ -526,14 +526,21 @@ export default function Quiz() {
                                                     </Accordion.Body>
                                                 </Accordion.Item>
                                             </Accordion>
-                                            <div className="footerbtn2">
+                                            <div className="d-flex justify-content-between mt-4" style={{gap:" 1rem"}}>
+                                                <div className="footerbtn2">
+                                                    {
+                                                        formData.questions.length - 1 === id && <button onClick={(e) => handleAddClick(e)}>
+                                                            New Question
+                                                        </button>
+                                                    }
 
-                                                {
-                                                    formData.questions.length - 1 === id && <button onClick={(e) => handleAddClick(e)}>
-                                                        New Question
+
+                                                </div>
+                                                <div className='footerbtn'>
+                                                    <button >
+                                                        save
                                                     </button>
-                                                }
-
+                                                </div>
                                             </div>
 
                                         </>
@@ -544,11 +551,6 @@ export default function Quiz() {
                             </div>
 
 
-                            <div className='footerbtn'>
-                                <button >
-                                    save
-                                </button>
-                            </div>
 
 
 

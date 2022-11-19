@@ -196,7 +196,7 @@ const LiveClass = () => {
   )
 }
 
-export function Navbar(){
+export function Navbar({user}){
   return (
     <nav className={style.live_nav}>
       <div className="container">

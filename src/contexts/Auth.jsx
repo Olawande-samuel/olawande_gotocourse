@@ -19,7 +19,6 @@ const AuthContextProvider = ({children}) => {
         loading: false,
         notifications:0,
         chat:0,
-        pledre:"", 
         classConsole: {
             sidebar: false,
             domains: []
@@ -30,13 +29,7 @@ const AuthContextProvider = ({children}) => {
 
     const [outstanding, setOutstanding] = useState(0)
    
-    useEffect(() => {
-        if(!generalState.pledre && window.PledreAPI ){
-            const Pledre = new window.PledreAPI(process.env.REACT_APP_PLEDRE_API, process.env.REACT_APP_PLEDRE_API_SECRET, process.env.REACT_APP_PLEDRE_URL)
-            setGeneralState({...generalState, pledre: Pledre})
-        }
-        return () => console.log("Rerendering");
-    }, [generalState]) 
+   
 
     return (
         <AuthContext.Provider value={{authFunctions, teacherFunctions, studentFunctions, adminFunctions, generalState, setGeneralState,affiliatesFunctions, consoleFunctions, teacherConsoleFunctions, adminStudentFunctions, adminTeacherFunctions, otherFunctions, kycFunctions, commonFunctions, outstanding, setOutstanding}}>

@@ -23,7 +23,43 @@ import liveClassBig from "../../images/liveClass_big.png";
 
 
 
+export const reviews = [
+    {
+        review: "It's not a fluke when I say that I've had the best experience on Gotocourse, after teaching on a few other platforms before. The administration is really accommodating and doesn't stifle my creative process. If you want a space where you can do what you truly love and still earn good money, Gotocourse is where I recommend!",
+        avatar: aisha,
+        name: "Aisha",
+        location: "Mumbai, India"
+    },
+    {
+        review: "As an IT expert who specializes in cybersecurity, I didn't start out wanting to be a teacher. However, when I learned that I could share my knowledge and develop courses at Gotocourse which I could also monetize, I jumped at the opportunity, and the journey has been a lot of fun. My love for the process of knowledge transfer has been greatly facilitated by the platform. The experience has been worth a while, thank you Gotocourse.",
+        avatar: steph,
+        name: "Stephanie",
+        location: "Ontario, Canada"
+    },
+]
 
+export const faqs = [
+    {
+        question: "Do I require any form of certification to teach on Gotocourse?",
+        answer: "Yes! Teachers will only teach in their respective areas of expertise in which they are certified after they have been screened and vetted by Gotocourse."
+    },
+    {
+        question: "How often do I get paid on Gotocourse?",
+        answer: "Payment starts from when the class is 25% done till when class is completed. Teachers can choose to be paid when the class is 100% done"
+    },
+    {
+        question: "Can I receive payments directly from my students?",
+        answer: "No. Students can only pay via the Gotocourse payment system while Gotocourse pays you afterward."
+    },
+    {
+        question: "How do I receive my payment?",
+        answer: "You receive your payments via your bank info as specified by you."
+    },
+    {
+        question: "How do I conduct my training on Gotocourse?",
+        answer: "Teachers have access to training suite/tools on Gotocourse which they can use to create and conduct all their trainings."
+    }
+]
 export const Home = () => {
     const styles = {
         title: {
@@ -433,44 +469,10 @@ export const Home = () => {
         },
     ]
 
-    const faqs = [
-        {
-            question: "Do I require any form of certification to teach on Gotocourse?",
-            answer: "Yes! Teachers will only teach in their respective areas of expertise in which they are certified after they have been screened and vetted by Gotocourse."
-        },
-        {
-            question: "How often do I get paid on Gotocourse?",
-            answer: "Payment starts from when the class is 25% done till when class is completed. Teachers can choose to be paid when the class is 100% done"
-        },
-        {
-            question: "Can I receive payments directly from my students?",
-            answer: "No. Students can only pay via the Gotocourse payment system while Gotocourse pays you afterward."
-        },
-        {
-            question: "How do I receive my payment?",
-            answer: "You receive your payments via your bank info as specified by you."
-        },
-        {
-            question: "How do I conduct my training on Gotocourse?",
-            answer: "Teachers have access to training suite/tools on Gotocourse which they can use to create and conduct all their trainings."
-        }
-    ]
+    
 
 
-    const reviews = [
-        {
-            review: "It's not a fluke when I say that I've had the best experience on Gotocourse, after teaching on a few other platforms before. The administration is really accommodating and doesn't stifle my creative process. If you want a space where you can do what you truly love and still earn good money, Gotocourse is where I recommend!",
-            avatar: aisha,
-            name: "Aisha",
-            location: "Mumbai, India"
-        },
-        {
-            review: "As an IT expert who specializes in cybersecurity, I didn't start out wanting to be a teacher. However, when I learned that I could share my knowledge and develop courses at Gotocourse which I could also monetize, I jumped at the opportunity, and the journey has been a lot of fun. My love for the process of knowledge transfer has been greatly facilitated by the platform. The experience has been worth a while, thank you Gotocourse.",
-            avatar: steph,
-            name: "Stephanie",
-            location: "Ontario, Canada"
-        },
-    ]
+  
 
 
     return (

@@ -209,8 +209,8 @@
     background: #FFFFFF;
     border-radius: 10px;
     padding: 1rem;
-    /* border: 1px solid #FFFFFF; */
-    border: none;
+    border: 1px solid #eee;
+    /* border: none; */
 
 }
 
@@ -337,9 +337,11 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
 }
-
+.footerbtn, .footerbtn2{
+    flex: 48%;
+}
 .footerbtn button{
     padding: 0.5rem 1rem;
     outline: none;
@@ -347,7 +349,7 @@
     font-size: 12px;
     line-height: 24px;
     border: none;
-    width: 50%;
+    width: 100%;
     color: #FFFFFF;
     background: #00A607;
 }

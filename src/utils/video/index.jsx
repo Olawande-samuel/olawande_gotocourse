@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import CONFIG from "./appConst"
-import VideoChatScreen from "./videoChat/VideoChatScreen"
+import VideoChatScreen from "./newVideoCall/VideoChatScreen"
 import { useReactMediaRecorder } from "react-media-recorder";
 
 

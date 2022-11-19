@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import {MdNavigateNext} from "react-icons/md";
+import { MdNavigateNext } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Breadcrumbs, Skeleton } from "@mui/material";
@@ -12,7 +12,7 @@ import Layout from "../../../components/Layout";
 import { useEffectOnMount, useLocalStorage } from "../../../hooks";
 import { useAuth } from "../../../contexts/Auth";
 import { AdvancedError } from "../../../classes";
-import {COURSE_CATEGORY_KEY, capitalize, getDate} from "../../../constants";
+import { COURSE_CATEGORY_KEY, capitalize, getDate } from "../../../constants";
 import DOMPurify from "dompurify";
 
 
@@ -53,7 +53,7 @@ const BreadcrumbLink = styled(Link)`
     color: ${props => props.$isCurrentPage ? '#0C2191' : '#666363'};
     font-weight: 400;
     font-size: 1rem;
-    cursor: ${(props) => props.$isCurrentPage ? 'not-allowed': 'pointer'};
+    cursor: ${(props) => props.$isCurrentPage ? 'not-allowed' : 'pointer'};
 
     &:hover {
         color:#0C2191
@@ -150,36 +150,36 @@ const Date = styled.div`
 
 
 const Course = () => {
-    const {otherFunctions: {searchCategories}} = useAuth();
+    const { otherFunctions: { searchCategories } } = useAuth();
     const [courses, setCourses] = useState([]);
     const navigate = useNavigate();
-    const {getItem} = useLocalStorage();
+    const { getItem } = useLocalStorage();
     let category = getItem(COURSE_CATEGORY_KEY);
 
 
-   
+
 
     useEffectOnMount(() => {
-        
-        
+
+
         (async () => {
-            try{
+            try {
                 const res = await searchCategories(category.name);
-                const {message, statusCode, success} = res;
-                if(!success) throw new AdvancedError(message, statusCode);
+                const { message, statusCode, success } = res;
+                if (!success) throw new AdvancedError(message, statusCode);
                 else {
-                    const {data} = res;
-                    setCourses(_ =>  [...data]);
+                    const { data } = res;
+                    setCourses(_ => [...data]);
                 }
-            }catch(err){
-               console.error(err)
+            } catch (err) {
+                console.error(err)
             }
         })()
         return () => console.log("Course page is unmounted");
     }, [])
 
 
-    function gotoCourseHandler(e, name){
+    function gotoCourseHandler(e, name) {
         navigate(encodeURIComponent(name))
     }
 
@@ -208,14 +208,20 @@ const Course = () => {
 
                 <CourseBody>
                     {
-                        courses.length !== 0 ? 
-                        courses.map(({courseImg, description, name, startDate, endDate}, i) => (
-                            <CourseCard key={i} startDate={startDate} endDate={endDate} image={courseImg} 
-                            description={description} gotoCourseHandler={gotoCourseHandler}
-                            name={name} separator={(courses.length - 1) === i ? false : true} />
-                        )) : Array(4).fill(undefined).map((_, i) => (
-                            <Skeleton sx={{marginBottom: 10}} animation="wave" key={i} variant="rectangular" width={"100%"} height={350} />
-                        ))
+                        courses.length !== 0 ?
+                            courses.map(({ courseImg, description, name, startDate, endDate }, i) => (
+                                <CourseCard
+                                    key={i}
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    image={courseImg}
+                                    description={description}
+                                    gotoCourseHandler={gotoCourseHandler}
+                                    name={name}
+                                    separator={(courses.length - 1) === i ? false : true} />
+                            )) : Array(4).fill(undefined).map((_, i) => (
+                                <Skeleton sx={{ marginBottom: 10 }} animation="wave" key={i} variant="rectangular" width={"100%"} height={350} />
+                            ))
                     }
                 </CourseBody>
             </CourseContainer>
@@ -224,7 +230,7 @@ const Course = () => {
 }
 
 
-function CourseCard({image, name, description, separator, startDate, endDate, gotoCourseHandler}){
+function CourseCard({ image, name, description, separator, startDate, endDate, gotoCourseHandler }) {
     return (
         <>
             <Card onClick={e => gotoCourseHandler(e, name)}>
@@ -233,7 +239,7 @@ function CourseCard({image, name, description, separator, startDate, endDate, go
                 </CardImageContainer>
                 <CardBody>
                     <h2>{name}</h2>
-                    <p  className="newcourseCard restricted_line_lg" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} />
+                    <p className="newcourseCard restricted_line_lg" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description) }} />
                     {/* <Date>
                         <h3>Date</h3>
                         <span>{`${getDate(startDate)} - ${getDate(endDate)}`}</span>

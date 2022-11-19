@@ -17,7 +17,7 @@ const Main = styled.div`
 height: 80vh;
 width: 100%;
 background: #E5E5E5;
-font-family: 'Inter';
+font-family: 'Raleway, sans-serif';
 font-style: normal;
 `
 

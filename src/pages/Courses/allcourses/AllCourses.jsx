@@ -11,6 +11,9 @@ import { CourseWrapper, Main } from './style';
 
 import cybersecurity from "../../../images/cybersecurity.webp"
 import { COURSE_CATEGORY_KEY } from '../../../constants';
+import { toast } from 'react-toastify';
+import { useLocalStorage } from '../../../hooks';
+import { AdvancedError } from '../../../classes';
 const AllCourses = () => {
 
   return (
@@ -59,16 +62,90 @@ function a11yProps(index) {
 
 export function TabsComp(){
   const [value, setValue] = useState(0);
+  const [bootcampTrainingInfo, setBootcampTrainingInfo] = useState({});
+  const [loading, setLoading] = useState(false)
+  const { getItem } = useLocalStorage();
+
+  const bootcampTraining = getItem("gotocourse-bootcampdata");
+  const userdata = getItem("gotocourse-userdata");
+
   const {
-    otherFunctions: { fetchCategories, fetchCourses },
+    generalState: { navHeight },
+    studentFunctions: { wishlistCourse },
+    otherFunctions: { fetchCategories, fetchCourses, fetchBootcamps},
   } = useAuth();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const categories = useQuery(["categories"], () => fetchCategories());
-  const courses = useQuery(["courses"], () => fetchCourses());
+
+  const categories = useQuery(["categories"], () => fetchCategories(), {
+    onSuccess: res => {
+      console.log("categories",res.data)
+    },
+    onError: err => console.error(err)
+
+  });
+  const courses = useQuery(["courses"], () => fetchCourses(), {
+    onSuccess: res => {
+      console.log("courses",res.data)
+    },
+    onError: err => console.error(err)
+
+  });
+
+
+  const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
+    onSuccess: res => {
+      // console.log({res})
+      if (res.data) {
+        setBootcampTrainingInfo(res.data)
+        // console.log(res.data.find(item => item.bootcampId === id))
+        return
+      }
+      setBootcampTrainingInfo({})
+
+    },
+    onError: err => console.error(err)
+
+  });
+
+  const navigate = useNavigate();
+
+
+
+
+  async function handleBootstrapEnrollment(e) {
+    e.preventDefault();
+    if (userdata?.token) {
+      navigate("payment")
+    } else {
+      navigate("/login")
+    }
+  }
+  async function addToWishList() {
+
+    if (userdata !== null) {
+      try {
+        setLoading(true)
+        const response = await wishlistCourse(bootcampTraining.bootcampId, userdata?.token)
+        const { success, message, statusCode } = response
+        if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+        toast.success(message)
+      } catch (error) {
+        console.error(error)
+        toast.error(error.message);
+      } finally {
+        setLoading(false)
+      }
+
+
+    } else {
+      navigate("/login")
+    }
+  }
+
   
   return (
     <>
@@ -89,6 +166,7 @@ export function TabsComp(){
           className="text-capitalize fw-bolder text-dark"
           {...a11yProps(0)}
         ></Tab>
+
         {categories.data?.data?.map((h, i) => (
           <Tab
             key={i + 1}
@@ -97,6 +175,7 @@ export function TabsComp(){
             {...a11yProps(i + 1)}
           />
         ))}
+
       </Tabs>
 
       <TabPanel
@@ -115,6 +194,8 @@ export function TabsComp(){
           </Main> 
           </div>
       </TabPanel>
+
+
       {categories.data?.data?.map((item, index) => (
         <TabPanel
           value={value}

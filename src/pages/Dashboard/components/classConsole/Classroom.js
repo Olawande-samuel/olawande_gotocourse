@@ -6,6 +6,10 @@ import '../classConsole/Content.css'
 import { useNavigate } from 'react-router-dom';
 import { MdAttachFile, MdOutlineNote } from 'react-icons/md';
 import { VscNote } from 'react-icons/vsc';
+import { useQuery } from '@tanstack/react-query';
+import { useLocalStorage } from '../../../../hooks';
+import { KEY } from '../../../../constants';
+import { useAuth } from "../../../../contexts/Auth";
 
 
 const PopModal = ({ show, handleClose }) => {
@@ -88,6 +92,17 @@ export default function Classroom() {
     const [show, setShow] = useState(false)
     const Toggle = () => setShow(!show)
     const handleClose = () => setShow(false)
+
+    const {getItem} = useLocalStorage()
+    const userdata = getItem(KEY)
+    const [studentList, setStudentList] = useState([])
+    const {teacherFunctions: {fetchApplications} } = useAuth()
+    const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchApplications(userdata.token), {
+        onSuccess: (res)=> console.log({res}),
+        onError: (err)=> console.error(err)
+    })
+    
+    
     return (
         <div className=''>
             <PopModal show={show} handleClose={handleClose} />

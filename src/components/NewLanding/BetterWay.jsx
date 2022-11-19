@@ -1,5 +1,5 @@
 import React from 'react'
-import Learning from "../../images/anywhere.png";
+import Learning from "../../images/business.png";
 import Inperson from "../../images/in-Person.webp"
 import Mento from "../../images/inPerson.webp";
 import Tech from "../../images/fast.webp";
@@ -60,17 +60,24 @@ const BetterWay = () => {
                 <p className="subtitle">All courses are designed with you in mind and built around proven learning principles with real-life application, top-of-the-range technology, and fully immersive exchange with industry experts; everything you need to start and advance your career in tech.</p>
             </header> */}
             <div className="stay">
-                <div className="stay_left anywhere">
-                    <img src={Learning} alt="" />
-                </div>
+                
                 <div className="stay_right anyright">
-                    <h6>Learn From Anywhere</h6>
-                    <p>Connect in real time  with classmates, teachers and mentors  from anywhere using Gotocourse integrated Live class feature</p>
+                    <h6 style={{}}>Gotocourse Business</h6>
+                    <p>Upskill your team to improve your teams productivity</p>
+                    <ul>
+                        <li>Take advantage of Gotoocurse White-label interactive LMS</li>
+                        <li>A fully white-label LMS that lets you completely customize your learning academy to match your brand and create a seamless experience for your customers.</li>
+                        <li>Rapidly deploy training for in-demand skills</li>
+                    </ul>
                     <div className="btn_wrapper">
                         <Link to="/signup" className="d-inline-flex">
-                            <button>Get started</button>
+                            <button>Contact sales</button>
                         </Link>
                     </div>
+                </div>
+
+                <div className="stay_left anywhere">
+                    <img src={Learning} alt="" />
                 </div>
             </div> 
         </div>

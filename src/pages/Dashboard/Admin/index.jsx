@@ -27,7 +27,7 @@ import { useSyllabus } from "../../../contexts/Syllabus";
 import { GuardedRoute } from "../../../hoc";
 import { AdvancedError } from "../../../classes";
 import { useLocalStorage } from "../../../hooks";
-import { getDate } from "../../../constants";
+import { changeSubCategory, getDate } from "../../../constants";
 import Input from "../../../components/Input";
 import Loader from "../../../components/Loader";
 import UploadForm from "../../../components/UploadForm";
@@ -94,7 +94,6 @@ export function CategoryDetails({}) {
               categoryId: data.categoryId,
             };
           });
-          
         }
       } catch (err) {
         toast.error(err.message, {
@@ -545,6 +544,62 @@ export function CareerModal({
     </Modal>
   );
 }
+// CAREERMODAL COMPONENT
+export function PopUpModal({
+  newCareer,
+  updateCareer,
+  open,
+  setOpen,
+  handleChange,
+}) {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    minWidth: 600,
+    background: "#fff",
+    border: "1px solid #eee",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 6,
+    padding: "4rem 2rem",
+  };
+
+  return (
+    <Modal
+      open={open}
+      onClose={(e) => {
+        setOpen((_) => false);
+      }}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box style={style}>
+        <h5
+          className="lead text-primary"
+          style={{ color: "var(--theme-blue)" }}
+        >
+          Add Popup
+        </h5>
+        <Input
+          label="Name"
+          name="name"
+          type="text"
+          handleChange={handleChange}
+          value={newCareer}
+        />
+        <button
+          className="btn btn-primary my-3"
+          onClick={updateCareer}
+          style={{ backgroundColor: "var(--theme-blue)" }}
+        >
+          Add
+        </button>
+      </Box>
+    </Modal>
+  );
+}
 
 // CATEGORYPREVIEWMODAL COMPONENT
 export function CategoryPreviewModal({ preview, open, setOpen }) {
@@ -613,7 +668,7 @@ export function CreateCourseCategory() {
   const [open, setOpen] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
   const [previewImage, setPreviewImage] = useState(false);
-
+ 
   const [showCareerModal, setShowCareerModal] = useState(false);
   const [showNicheModal, setShowNicheModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -688,7 +743,7 @@ export function CreateCourseCategory() {
         importance: formstate.name.trim().toUpperCase(),
         nicheItems: [...nichelists],
         careerList: [...careerlists],
-        description: bio ? bio : formstate.description
+        description: bio ? bio : formstate.description,
       };
       const res = edit
         ? await updateCategory(userdata?.token, formstate.categoryId, data)
@@ -697,7 +752,7 @@ export function CreateCourseCategory() {
       if (!success) throw new AdvancedError(message, statusCode);
       else {
         if (res?.data) {
-          const { data } = res; 
+          const { data } = res;
           toast.success(message, {
             position: "top-right",
             autoClose: 4000,
@@ -1088,7 +1143,7 @@ export function ApproveStudent() {
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const {
-    adminStudentFunctions: {  verify,  },
+    adminStudentFunctions: { verify },
     kycFunctions: { getAStudentKYCById },
     generalState,
     setGeneralState,
@@ -1215,7 +1270,7 @@ export function ApproveStudent() {
       }
     } catch (error) {
       toast.error("No KYC found");
-      console.error(error)
+      console.error(error);
     } finally {
       setGeneralState((old) => {
         return {
@@ -1304,7 +1359,9 @@ export function ApproveStudent() {
             </div>
             <button
               className="button button-lg log_btn w-50 mt-3"
-              style={{ backgroundColor: data?.isVerified && "var(--theme-orange" }}
+              style={{
+                backgroundColor: data?.isVerified && "var(--theme-orange",
+              }}
               type="submit"
               onClick={(e) => handleVerification(e, data?.userId)}
             >
@@ -2951,7 +3008,11 @@ export function CourseDetails({}) {
               >
                 Description
               </label>
-              <div className="border rounded p-2" style={{background: "#e9ecef"}}  dangerouslySetInnerHTML={{__html: formstate.description}} />
+              <div
+                className="border rounded p-2"
+                style={{ background: "#e9ecef" }}
+                dangerouslySetInnerHTML={{ __html: formstate.description }}
+              />
             </div>
             <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
@@ -3393,11 +3454,16 @@ export function Bootcamps() {
     "Title",
     "Details",
     "Type",
+    "Category",
+    "Sub-Category",
     "Duration",
     "Date",
     "Time",
+    "price"
   ];
 
+
+  console.log({bootcamps});
   useEffect(() => {
     if (flag.current) return;
     (async () => {
@@ -3463,7 +3529,7 @@ export function Bootcamps() {
               <tbody>
                 {bootcamps.length > 0 ? (
                   bootcamps
-                    .filter((boot) =>
+                    .filter((boot) => 
                       boot.title.toLowerCase().includes(search.toLowerCase())
                     )
                     .map(
@@ -3476,9 +3542,12 @@ export function Bootcamps() {
                           startTime,
                           endTime,
                           endDate,
-                          startDate,
+                          startDate, 
                           bootcampId,
                           _id,
+                          packages,
+                          price,
+                          category, subCategory
                         },
                         i
                       ) => (
@@ -3493,6 +3562,10 @@ export function Bootcamps() {
                           clickHandler={(e) => detailHandler(e, bootcampId)}
                           time={`${startTime} - ${endTime} CST`}
                           date={`${getDate(startDate)} - ${getDate(endDate)}`}
+                          packages={packages}
+                          price={price}
+                          category={category}
+                          subCategory={subCategory}
                         />
                       )
                     )
@@ -3563,7 +3636,6 @@ export function AdminClassConsole() {
 
 // CREATEBOOTCAMP COMPONENT
 export function CreateBootcamp() {
-
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const flag = useRef(false);
@@ -3595,8 +3667,9 @@ export function CreateBootcamp() {
     type: "",
     instructor: "",
     syllabus: [],
-    careerList:[],
-    packages:[]
+    careerList: [],
+    packages: [],
+    popupArr:[]
   });
 
   const [loading, setLoading] = useState(false);
@@ -3622,7 +3695,7 @@ export function CreateBootcamp() {
 
             delete found.instructorName;
             setFormstate({ ...formstate, ...found });
-            setBio(found.description)
+            setBio(found.description);
           } else {
             throw new AdvancedError(message, statusCode);
           }
@@ -3663,7 +3736,8 @@ export function CreateBootcamp() {
           const { data } = res;
           setCategories(data);
         } catch (err) {
-          toast.error(err.message);
+          console.error(err);
+          toast.error("An error occured");
         } finally {
           setLoading(false);
         }
@@ -3697,7 +3771,10 @@ export function CreateBootcamp() {
   async function submitHandler(e) {
     e.preventDefault();
     setLoading(true);
-    const formData = { ...formstate, description: bio ? bio : formstate.description };
+    const formData = {
+      ...formstate,
+      description: bio ? bio : formstate.description,
+    };
     try {
       if (
         formData.description === "" ||
@@ -3731,10 +3808,13 @@ export function CreateBootcamp() {
   const [previewImage, setPreviewImage] = useState(false);
   const { syllabuses, addtoSyllabus, setSyllabusses } = useSyllabus();
   const [showCareerModal, setShowCareerModal] = useState(false);
-    const [careerlist, setCareerlist] = useState({
-      name: "",
-    });
-
+  const [showPopupModal, setShowPopupModal] = useState(false);
+  const [careerlist, setCareerlist] = useState({
+    name: "",
+  });
+  
+  const [popupList, setPopupList] = useState("")
+  
   const openModal = () => {
     setOpenSyllabus(true);
   };
@@ -3742,12 +3822,30 @@ export function CreateBootcamp() {
     setOpen((_) => true);
   }
 
-  console.log({formstate})
+  console.log({ formstate });
   function deleteSyllabus(e) {
     let newSyllabusArr = formstate.syllabus.filter(
       (item, index) => item.title + index !== e
     );
     setFormstate({ ...formstate, syllabus: newSyllabusArr });
+  }
+  function deletePackage(e) {
+    let newPackagesArr = formstate.packages.filter(
+      (item, index) => item.title + index !== e
+    );
+    setFormstate({ ...formstate, packages: newPackagesArr });
+  }
+  function deleteCareer(e) {
+    let newCareerArr = formstate.careerList.filter(
+      (item, index) => item.name + index !== e
+    );
+    setFormstate({ ...formstate, careerList: newCareerArr });
+  }
+  function deletePopup(e) {
+    let newPopupArr = formstate.popupArr.filter(
+      (item, index) => item + index !== e
+    );
+    setFormstate({ ...formstate, popupArr: newPopupArr });
   }
 
   const handleClose = () => {
@@ -3755,8 +3853,11 @@ export function CreateBootcamp() {
   };
   function updateCareerHandler(e) {
     if (careerlist.name.trim() !== "" || careerlist.description.trim() !== "") {
-      setFormstate({...formstate, careerList: [...formstate.careerList, careerlist]});
-      
+      setFormstate({
+        ...formstate,
+        careerList: [...formstate.careerList, careerlist],
+      });
+
       setCareerlist((_) => {
         return {
           name: "",
@@ -3796,16 +3897,47 @@ export function CreateBootcamp() {
     });
   }
 
-  const [openPackage, setOpenPackage] = useState(false);
-  // PACKAGES 
-  function openPackageModal(){
-    setOpenPackage(true)
+  function updatePopupHandler(e) {
+    if (popupList.trim() !== "") {
+      setFormstate({
+        ...formstate,
+        popupArr: [...formstate.popupArr, popupList],
+      });
+
+      setPopupList("");
+
+      setShowPopupModal((_) => false);
+
+      
+    } else {
+      toast.error("All fields are required", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   }
-  function handleClosePackage(){
-    setOpenPackage(false)
+  function popupChangeHandler(e) {
+    console.log(e.target.value)
+    setPopupList(e.target.value);
+  }
+  
+  // console.log({popupList})
+
+  const [openPackage, setOpenPackage] = useState(false);
+  // PACKAGES
+  function openPackageModal() {
+    setOpenPackage(true);
+  }
+  function handleClosePackage() {
+    setOpenPackage(false);
   }
 
-  console.log({formstate})
+  console.log({ formstate });
   return (
     <Admin header={location.search ? "Edit Class" : "Create Class"}>
       {loader && <Loader />}
@@ -3884,11 +4016,13 @@ export function CreateBootcamp() {
                 className="form-select generic_input"
               >
                 <option value="">Choose a Subcategory</option>
-                <option  value="UPSKILL_COURSES">Upskill Courses</option>
-                <option  value="IN_DEMAND">In Demand Career Courses</option>
-                <option  value="EXECUTIVE_COURSES">Executive Courses</option>
-                <option  value="SHORT_COURSES">Short Courses</option>
-                <option  value="TECH_ENTREPRENEURSHIP">Tech entrepreneurship courses</option>
+                <option value="UPSKILL_COURSES">Upskill Courses</option>
+                <option value="IN_DEMAND">In Demand Career Courses</option>
+                <option value="EXECUTIVE_COURSES">Executive Courses</option>
+                <option value="SHORT_COURSES">Short Courses</option>
+                <option value="TECH_ENTREPRENEURSHIP">
+                  Tech entrepreneurship courses
+                </option>
               </select>
             </div>
             <Input
@@ -3908,62 +4042,67 @@ export function CreateBootcamp() {
                 className="form-select generic_input"
               >
                 <option value="">Choose price type</option>
-                <option  value="FLAT">Flat</option>
-                <option  value="PACKAGE">Package</option>
-                
+                <option value="FLAT">Flat</option>
+                <option value="PACKAGE">Package</option>
               </select>
             </div>
-            { formstate.type === "FLAT" ?
-            <Input
-              label="Price"
-              name="price"
-              type="number"
-              handleChange={changeHandler}
-              value={formstate.price}
-            />
-            :
-            (formstate.type === "PACKAGE" ?
-            <div className={clsx.form_group}>
+            {formstate.type === "FLAT" ? (
+              <Input
+                label="Price"
+                name="price"
+                type="number"
+                handleChange={changeHandler}
+                value={formstate.price}
+              />
+            ) : formstate.type === "PACKAGE" ? (
+              <div className={clsx.form_group}>
                 <label htmlFor={"package"} className="form-label generic_label">
                   Packages
                 </label>
                 {formstate.packages?.length > 0 ? (
                   formstate.packages?.map((item, index) => (
-                     <div className={clsx.syllabus_container}>
-                        <h5>{changeConstants(item.title)}</h5>
-                        {<p>{item.price}</p>}
-                        <p>{item.description}</p>
-                        {/* {
-                          location.search && 
-                          <p>
-                            <i className="text-danger" style={{cursor:"pointer"}} onClick={()=>deletePackage(item.title + index)}>
-                              <BiTrash />
-                            </i>
-                          </p>
-                        } */}
-                      </div>
+                    <div className={clsx.syllabus_container}>
+                      <h5>{changeConstants(item.title)}</h5>
+                      {<p>{item.price}</p>}
+                      <p>{item.description}</p>
+                      {location.search && (
+                        <p>
+                          <i
+                            className="text-danger"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => deletePackage(item.title + index)}
+                          >
+                            <BiTrash />
+                          </i>
+                        </p>
+                      )}
+                    </div>
                   ))
                 ) : (
                   <h6>No Package available</h6>
                 )}
                 <button
-                className="btn btn-primary my-3"
-                style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
-                type="button"
-                onClick={openPackageModal}
-              >
-                Add Package
-              </button>
-              <AddPackage
-                openPackage={openPackage}
-                addPackage={setFormstate}
-                list={formstate}
-                setOpen={setOpen}
-                handleClosePackage={handleClosePackage}
-              />
+                  className="btn btn-primary my-3"
+                  style={{
+                    backgroundColor: "var(--theme-blue)",
+                    fontSize: "14px",
+                  }}
+                  type="button"
+                  onClick={openPackageModal}
+                >
+                  Add Package
+                </button>
+                <AddPackage
+                  openPackage={openPackage}
+                  addPackage={setFormstate}
+                  list={formstate}
+                  setOpen={setOpen}
+                  handleClosePackage={handleClosePackage}
+                />
               </div>
-             : "")
-              }
+            ) : (
+              ""
+            )}
             <div className="d-flex flex-wrap">
               <div className="col-sm-6 col-md-3 pe-2 ">
                 <Input
@@ -4001,14 +4140,15 @@ export function CreateBootcamp() {
                   handleChange={changeHandler}
                 />
               </div>
-            </div>  
+            </div>
             {/* <div className={clsx.editor_container}>
               <ReactQuill theme="snow" value={formstate?.description} onChange={setBio} />
             </div> */}
-            <Editor 
-             initialState={formstate.description} 
-             title="Description" 
-             setBio={setBio} />
+            <Editor
+              initialState={formstate.description}
+              title="Description"
+              setBio={setBio}
+            />
 
             <div className={clsx.form_group}>
               <label htmlFor={"instructor"}>Instructor</label>
@@ -4061,11 +4201,39 @@ export function CreateBootcamp() {
             >
               Add Syllabus
             </button>
+         
+            <Input
+              label="Career Title"
+              name="careerTitle"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.careerTitle}
+            />
+            <button
+              type="button"
+              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
+              className={`btn btn-primary mb-3 ${clsx.addcareer_button}`}
+              onClick={(e) => setShowCareerModal((_) => true)}
+            >
+              Add Career Prospect
+            </button>
             <div className={clsx.form_group}>
               <label>Career Prospect</label>
               {formstate.careerList?.length !== 0 ? (
                 formstate.careerList?.map(({ name }, i) => (
-                  <Syllabus key={i} title={name} />
+                  // <Syllabus key={i} title={name} />
+                  <div className={clsx.syllabus_container}>
+                    <h5>{name}</h5>
+                    <p>
+                      <i
+                        className="text-danger"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => deleteCareer(name + i)}
+                      >
+                        <BiTrash />
+                      </i>
+                    </p>
+                  </div>
                 ))
               ) : (
                 <p
@@ -4076,13 +4244,48 @@ export function CreateBootcamp() {
                 </p>
               )}
             </div>
+            <Input
+              label="Popup Title"
+              name="popupTitle"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.popupTitle}
+            />
+            <div className={clsx.form_group}>
+              <label>Popup List</label>
+              {formstate.popupArr?.length !== 0 ? (
+                formstate.popupArr?.map((name , i) => (
+                  // <Syllabus key={i} title={name} />
+                  <div className={clsx.syllabus_container}>
+                    <h5>{name}</h5>
+                    <p>
+                      <i
+                        className="text-danger"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => deletePopup(name + i)}
+                      >
+                        <BiTrash />
+                      </i>
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <p
+                  className="m-0 text-danger"
+                  style={{ fontSize: "0.8rem", textIndent: 20 }}
+                >
+                  No Popup list found
+                </p>
+              )}
+            </div>
+
             <button
               type="button"
-              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px", }}
+              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
               className={`btn btn-primary mb-3 ${clsx.addcareer_button}`}
-              onClick={(e) => setShowCareerModal((_) => true)}
+              onClick={(e) => setShowPopupModal((_) => true)}
             >
-              Add Career Prospect
+              Add Pop Up
             </button>
             <CareerModal
               open={showCareerModal}
@@ -4091,9 +4294,14 @@ export function CreateBootcamp() {
               handleChange={careerChangeHandler}
               updateCareer={updateCareerHandler}
             />
-            
-  
-              
+            <PopUpModal
+              open={showPopupModal}
+              newCareer={popupList}
+              setOpen={setShowPopupModal}
+              handleChange={popupChangeHandler}
+              updateCareer={updatePopupHandler}
+            />
+
             {/* <div className={clsx.form_group}>
               <label htmlFor={"package"}>Type</label>
               <select
@@ -4150,7 +4358,12 @@ export function BootcampRow({
   duration,
   admin,
   clickHandler = null,
+  packages,
+  price,
+  category, subCategory
 }) {
+  console.log({packages})
+  console.log({price})
   return (
     <tr className={clsx.user__info_card} onClick={clickHandler}>
       <td className={clsx.user__info}>{index + 1}.</td>
@@ -4164,9 +4377,12 @@ export function BootcampRow({
         />
       </td>
       <td className={clsx.user__info}>{type}</td>
+      <td className={clsx.user__info}>{category}</td>
+      <td className={clsx.user__info}>{subCategory && changeSubCategory(subCategory)}</td>
       <td className={clsx.user__info}>{duration}</td>
       <td className={clsx.user__info}>{date}</td>
       <td className={clsx.user__info}>{time}</td>
+      <td className={clsx.user__info}>{packages?.length > 0 ? packages[0].price : price}</td>
       {admin && (
         <td className={clsx.user__info}>
           <div className="d-flex align-items-center" style={{ gap: "1rem" }}>
@@ -4182,8 +4398,6 @@ export function BootcampRow({
     </tr>
   );
 }
-
-
 
 // FEES COMPONENT
 export function Fees() {
@@ -4433,7 +4647,7 @@ export function Earnings() {
   let userdata = getItem(KEY);
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([]);
-  const [earnings, setEarnings]= useState([])
+  const [earnings, setEarnings] = useState([]);
   const {
     generalState,
     setGeneralState,
@@ -4448,22 +4662,29 @@ export function Earnings() {
     (async () => {
       try {
         setLoading((_) => true);
-        let res = await Promise.all([fetchEarnings(userdata?.token), fetchWithdrawals(userdata?.token)]);
-          console.log({res})
-          const [earnings, withdrawals] = res
-          const { success, message, statusCode } = earnings;
-          if (!success) throw new AdvancedError(message, statusCode);
-          else {
-            let { data } = earnings;
-            console.log(data);
-            setEarnings(data)
-          }
-          const { success:WSuccess, message:WMessage, statusCode:WStatusCode } = withdrawals;
-          if (!WSuccess) throw new AdvancedError(WMessage, WStatusCode);
-          else {
-            let { data:WData } = withdrawals;
-            setRows(WData)
-          }
+        let res = await Promise.all([
+          fetchEarnings(userdata?.token),
+          fetchWithdrawals(userdata?.token),
+        ]);
+        console.log({ res });
+        const [earnings, withdrawals] = res;
+        const { success, message, statusCode } = earnings;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          let { data } = earnings;
+          console.log(data);
+          setEarnings(data);
+        }
+        const {
+          success: WSuccess,
+          message: WMessage,
+          statusCode: WStatusCode,
+        } = withdrawals;
+        if (!WSuccess) throw new AdvancedError(WMessage, WStatusCode);
+        else {
+          let { data: WData } = withdrawals;
+          setRows(WData);
+        }
       } catch (err) {
         toast.error(err.message);
       } finally {
@@ -4471,10 +4692,8 @@ export function Earnings() {
       }
     })();
 
-    
     flag.current = true;
   }, []);
-
 
   return (
     <Admin header={"Earnings"}>
