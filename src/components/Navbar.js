@@ -77,7 +77,7 @@ const Navbar = ({ background }) => {
       {
         (mainpage) && showBanner &&
         <div className="d-flex align-items-center justify-content-center p-2 w-100 bg-white">
-          <p className="mb-0 fw-bold me-4">ENROLL NOW AT 50% FOR ALL CLASSES</p>
+          <p className="mb-0 fw-bold me-4">New product alert: Gotocourse Meetifix ( Live Class) is now live 🎉. Learn More!</p>
           <i><AiOutlineCloseCircle size="1.5rem" onClick={()=>{
               setShowBanner(false)
               localStorage.setItem("gotocourse-banner", false)

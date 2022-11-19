@@ -13,20 +13,20 @@ const Grid = styled.div`
     gap: 1.5rem;
     justify-content:space-around;
     
-    @media screen and (max-width: 2560px) {
+    @media screen and (min-width: 1400px) {
         grid-template-columns: repeat(4, 230px);
         justify-content: space-evenly;
         gap: 1rem;
-      }
+    }
     
-      @media screen and (max-width:768px){
+    @media screen and (max-width:768px){
         grid-template-columns: repeat(2, 230px);
     }
 
     @media screen and (max-width:500px){
         grid-template-columns: min(100%, 380px);
         justify-content:center;
-    } */
+    } 
     `
 const UpskillCourse = () => {
 

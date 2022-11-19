@@ -265,7 +265,7 @@ const data = [
     },
     {
         id: 5,
-        title: "Quizim",
+        title: "Quiz Tool",
         p1: "Create a quiz in a few seconds or take secure online quizes on any device, anywhere and at any time . Create quizzes in multiple choice tests, checkboxes, upload file attachment or assessment papers and have access to grades in real time just when made available.",
         logo: Quizim,
         img: quiz
