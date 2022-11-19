@@ -433,7 +433,9 @@ const ExecutiveCard = styled.div`
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
         overflow: hidden;
+        text-align: left;
         font-size: 12.5px;
     }
     .exe_content {
@@ -708,6 +710,7 @@ const UpCoursesCard = styled.div`
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
+        
     }
 
     h5 {
@@ -1505,6 +1508,13 @@ const SuccessWrapper = styled.div`
     padding:1rem clamp(0.625rem, 0.5179rem + 0.5357vw, 1rem);
     background: #F2F3FF;
 
+    .content_small {
+        color: #464646;
+
+    }
+    h6 {
+        color:#929292;
+    }
     .icon_wrapper {
         height: 90px;
         /* max-width:50px; */
@@ -1523,11 +1533,11 @@ const SuccessWrapper = styled.div`
 
     .readmore{
         color: var(--theme-blue);
-        
-            &:hover{
-                cursor: pointer;
-                color: black;
-            }
+    
+        &:hover{
+            cursor: pointer;
+            color: black;
+        }
     }
 
 
@@ -1557,8 +1567,8 @@ export function SuccessCard({ icon, title, description }) {
                 {/* {icon} */}
                 {/* <Icon /> */}
             </div>
-            <h6 className="fw-bold" style={{fontSize: "16px", color: "#464646"}}>{title}</h6>
-            <p className="restricted_line">{description}</p>
+            <h6 className="fw-bold" style={{fontSize: "16px"}}>{title}</h6>
+            <p className="restricted_line content_small">{description}</p>
             <span onClick={handleClick} className="readmore">read more</span>
         </SuccessWrapper>
         <Popover

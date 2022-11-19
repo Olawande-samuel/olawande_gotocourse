@@ -62,14 +62,16 @@ const Grid = styled.div`
     `
 
 const ShortHero = styled.div`
-width: 100%;
-display: flex;
-align-items: center;
+  width: 100%;
+  padding-top:2rem;
+  display: grid;
+  gap: 1rem;
+  align-items: center;
 
     h3{
       font-weight: 700;
-      font-size: 40px;
-      line-height: 45px;
+      font-size: clamp(1.875rem, 1.3176rem + 2.7869vw, 4rem);
+      line-height: 65px;
     }
 
     p{
@@ -77,34 +79,41 @@ align-items: center;
       font-size: 14px;
       line-height: 20px;
       padding: .5rem 0;
+      width: min(100%, 412px)
     }
 
     .left{
-      flex: .5;
+      order: 2;
     }
 
     .right{
-      flex: .5;
-      height: 70vh;
-
+      order: 1;
+      padding-left:0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
       img{
-        width: 100%;
-        height: 100%;
-        object-fit:cover;
+        max-width: 100%;
+        max-height: 450px;
       }
 
     } 
     
-    @media (max-width: 768px){
-      flex-direction: column-reverse;
+    @media (min-width: 512px){
+      
+      grid-template-columns: 1fr 1fr;
+
 
       .left{
-        text-align: center;
-        margin: 2rem 0;
-      }
+      order: 1;
     }
-    
+
+    .right{
+      order: 2;
+      
+    }
+  }
     
 `
 
@@ -132,7 +141,7 @@ justify-content: space-evenly;
 
 .item{
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
   color: #464646;
 
@@ -141,6 +150,7 @@ justify-content: space-evenly;
         font-weight: 700;
         font-size: 20px;
         line-height: 12px;
+        margin-bottom: 0;
       }
 
       span{
@@ -393,9 +403,12 @@ const ShortCourseComponent = ({ bootcampTrainingInfo }) => {
           </div>
 
           <div className='item'>
-            <svg width="30" height="30" viewBox="0 0 57 57" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M51.1989 2.06251H35.5926C35.1074 2.06215 34.6419 2.25385 34.2977 2.59571L3.09766 33.7881C2.41467 34.4744 2.03125 35.4033 2.03125 36.3716C2.03125 37.3399 2.41467 38.2687 3.09766 38.9551L17.9512 53.8086C18.6377 54.4917 19.5668 54.8751 20.5353 54.8751C21.5038 54.8751 22.4329 54.4917 23.1194 53.8086L54.3106 22.6289C54.6524 22.2847 54.8441 21.8191 54.8438 21.334V5.71876C54.8461 5.23892 54.7535 4.76335 54.5713 4.31944C54.3891 3.87553 54.1209 3.47205 53.7821 3.13221C53.4434 2.79238 53.0407 2.52292 52.5974 2.33933C52.1541 2.15574 51.6788 2.06166 51.1989 2.06251V2.06251Z" stroke="#464646" stroke-width="4.0625" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+          <svg width="30" height="30" viewBox="0 0 65 65" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M51.1989 4.06251H35.5926C35.1074 4.06215 34.6419 4.25385 34.2977 4.59571L3.09766 35.7881C2.41467 36.4744 2.03125 37.4033 2.03125 38.3716C2.03125 39.3399 2.41467 40.2687 3.09766 40.9551L17.9512 55.8086C18.6377 56.4917 19.5668 56.8751 20.5353 56.8751C21.5038 56.8751 22.4329 56.4917 23.1194 55.8086L54.3106 24.6289C54.6524 24.2847 54.8441 23.8191 54.8438 23.334V7.71876C54.8461 7.23892 54.7535 6.76335 54.5713 6.31944C54.3891 5.87553 54.1209 5.47205 53.7821 5.13221C53.4434 4.79238 53.0407 4.52292 52.5974 4.33933C52.1541 4.15574 51.6788 4.06166 51.1989 4.06251V4.06251Z" stroke="#464646" stroke-width="4.0625" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M44.6875 18.2813C43.884 18.2813 43.0986 18.043 42.4305 17.5966C41.7624 17.1502 41.2417 16.5157 40.9342 15.7734C40.6268 15.0311 40.5463 14.2142 40.7031 13.4262C40.8598 12.6381 41.2467 11.9143 41.8149 11.3461C42.383 10.778 43.1069 10.3911 43.8949 10.2343C44.683 10.0776 45.4998 10.158 46.2422 10.4655C46.9845 10.773 47.619 11.2937 48.0653 11.9617C48.5117 12.6298 48.75 13.4153 48.75 14.2188C48.75 15.2962 48.322 16.3295 47.5601 17.0914C46.7983 17.8532 45.7649 18.2813 44.6875 18.2813Z" fill="#464646"/>
+            <path d="M29.1992 60.9375L62.4609 27.6758C62.6263 27.509 62.7565 27.3106 62.8437 27.0926C62.9309 26.8745 62.9735 26.6411 62.9688 26.4062V10.1562" stroke="#464646" stroke-width="4.0625" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+
 
             <div className='benefits'>
               <p>Low fees</p>
