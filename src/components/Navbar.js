@@ -109,7 +109,7 @@ const Navbar = ({ background }) => {
                   style={{
                     color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
                   }}
-                  >
+                  > 
                     Categories
                   </Link>
                   {drop ? <NavList dropRef={dropRef} /> : null}
