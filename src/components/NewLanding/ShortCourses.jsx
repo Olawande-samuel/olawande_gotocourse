@@ -7,6 +7,8 @@ import { ClassTypeComponent, Short, TechPreCard } from './landingComponents'
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
+    grid-auto-rows: 402px;
+    overflow: hidden;
     gap: 1.5rem;
     justify-content:space-around;
     

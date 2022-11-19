@@ -10,6 +10,8 @@ import exec3 from "../../images/landing/exe3.png"
 const Grid = styled.div`
      display: grid;
   grid-template-columns: repeat(4, 280px);
+  grid-auto-rows: 402px;
+    overflow: hidden;
   gap: 1.5rem;
   justify-content: space-around;
 
@@ -51,7 +53,7 @@ const ExecutiveClasses = () => {
             <Grid>
                 {
                     shorts?.filter(item => item.isActive).slice(0, 8).map((item, i) => (
-                        <ExeEducation {...item} i={i} img={data.content[i]}  key={item.bootcampId}/>
+                        <ExeEducation {...item} i={i} img={data.content[i]} key={item.bootcampId} />
                     ))
                 }
             </Grid>

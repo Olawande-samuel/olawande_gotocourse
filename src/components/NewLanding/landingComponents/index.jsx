@@ -25,7 +25,7 @@ import { Link } from "react-router-dom"
 import { AiOutlineCheck } from "react-icons/ai"
 import { AdvancedError } from "../../../classes"
 import { useMemo } from "react"
-import {QuikonnetIcon, MeetFixIcon, RekodiaIcon, ClasspodiaIcon, QuizimIcon} from '../NewLanding'
+import { QuikonnetIcon, MeetFixIcon, RekodiaIcon, ClasspodiaIcon, QuizimIcon } from '../NewLanding'
 
 // GREAT OPPORTUNITIES
 
@@ -353,35 +353,35 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
                         <div className="pop_action">
                             <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
                             {
-                                (userdata.token && wishlistState) ? 
+                                (userdata.token && wishlistState) ?
 
-                                <button onClick={removeCourse}>
-                                    {
-                                        loading ?
-                                            <div className="spinner-border" role="status">
-                                                <span className="visually-hidden">Loading...</span>
-                                            </div>
-                                            :
-                                            "Remove wishlist"
+                                    <button onClick={removeCourse}>
+                                        {
+                                            loading ?
+                                                <div className="spinner-border" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div>
+                                                :
+                                                "Remove wishlist"
 
-                                    }
+                                        }
 
-                                </button>
+                                    </button>
 
-                                :
+                                    :
 
-                                <button onClick={addToWishlist}>
-                                    {
-                                        loading ?
-                                            <div className="spinner-border" role="status">
-                                                <span className="visually-hidden">Loading...</span>
-                                            </div>
-                                            :
-                                            "Wishlist"
+                                    <button onClick={addToWishlist}>
+                                        {
+                                            loading ?
+                                                <div className="spinner-border" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div>
+                                                :
+                                                "Wishlist"
 
-                                    }
+                                        }
 
-                                </button>
+                                    </button>
                             }
                         </div>
                     </div>
@@ -1066,33 +1066,33 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                             <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
 
                             {
-                                (userdata.token && wishlistState) ? 
+                                (userdata.token && wishlistState) ?
 
-                                <button onClick={removeCourse}>
-                                    {
-                                        loading ?
-                                            <div className="spinner-border" role="status">
-                                                <span className="visually-hidden">Loading...</span>
-                                            </div>
-                                            :
-                                            "Remove wishlist"
+                                    <button onClick={removeCourse}>
+                                        {
+                                            loading ?
+                                                <div className="spinner-border" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div>
+                                                :
+                                                "Remove wishlist"
 
-                                    }
+                                        }
 
-                                </button>
-                                :
-                                <button onClick={addToWishlist}>
-                                    {
-                                        loading ?
-                                            <div className="spinner-border" role="status">
-                                                <span className="visually-hidden">Loading...</span>
-                                            </div>
-                                            :
-                                            "Wishlist"
+                                    </button>
+                                    :
+                                    <button onClick={addToWishlist}>
+                                        {
+                                            loading ?
+                                                <div className="spinner-border" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div>
+                                                :
+                                                "Wishlist"
 
-                                    }
+                                        }
 
-                                </button>
+                                    </button>
                             }
 
 
@@ -1282,35 +1282,35 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
                         <div className="pop_action">
                             <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
                             {
-                                (userdata.token && wishlistState) ? 
+                                (userdata.token && wishlistState) ?
 
-                                <button onClick={removeCourse}>
-                                    {
-                                        loading ?
-                                            <div className="spinner-border" role="status">
-                                                <span className="visually-hidden">Loading...</span>
-                                            </div>
-                                            :
-                                            "Remove wishlist"
+                                    <button onClick={removeCourse}>
+                                        {
+                                            loading ?
+                                                <div className="spinner-border" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div>
+                                                :
+                                                "Remove wishlist"
 
-                                    }
+                                        }
 
-                                </button>
+                                    </button>
 
-                                :
+                                    :
 
-                                <button onClick={addToWishlist}>
-                                    {
-                                        loading ?
-                                            <div className="spinner-border" role="status">
-                                                <span className="visually-hidden">Loading...</span>
-                                            </div>
-                                            :
-                                            "Wishlist"
+                                    <button onClick={addToWishlist}>
+                                        {
+                                            loading ?
+                                                <div className="spinner-border" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div>
+                                                :
+                                                "Wishlist"
 
-                                    }
+                                        }
 
-                                </button>
+                                    </button>
                             }
                         </div>
                     </div>
@@ -1553,13 +1553,16 @@ export function SuccessCard({ icon, title, description }) {
     return (<>
         <SuccessWrapper>
             <div className="icon_wrapper">
-                <img src={icon} alt="" style={{width: "80px", height:"80px", objectFit: "contain"}}/>
+                <img src={icon} alt="" style={{ width: "80px", height: "80px", objectFit: "contain" }} />
                 {/* {icon} */}
                 {/* <Icon /> */}
             </div>
-            <h6 className="fw-bold" style={{fontSize: "16px", color: "#464646"}}>{title}</h6>
-            <p className="restricted_line">{description}</p>
+            <h6 className="fw-bold" style={{ fontSize: "16px", color: "#464646" }}>{title}</h6>
+                <p className="restricted_line" style={{ marginBottom: "unset"}}>{description}</p>
+            <div style={{ display: "flex", justifyContent:"flex-end" }}>
             <span onClick={handleClick} className="readmore">read more</span>
+
+            </div>
         </SuccessWrapper>
         <Popover
             id={id}
