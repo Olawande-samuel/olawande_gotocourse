@@ -35,7 +35,7 @@ const Grid = styled.div`
 
 const ExecutiveClasses = () => {
     const { otherFunctions: { fetchBootcamps }, } = useAuth();
-    const [shorts, setShorts] = useState([])
+    const [shorts, setShorts] = useState([]) 
 
     const classes = useQuery(["fetch classes"], () => fetchBootcamps(), {
         notifyOnChangeProps: ["category", "isFetching"],
