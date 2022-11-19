@@ -79,7 +79,7 @@ const Teachers = () => {
                 </div>
             </Hero> */}
             <ItWorks>
-                <div className="container">
+                <div className="">
                     <MainHeader>
                         <h2>How It Works</h2>
                         <p>Check incredible tools created on Gotocourse to make teaching cost effective</p>
@@ -133,19 +133,19 @@ const Teachers = () => {
                     </header>
 
                     <div className="bar">
-                        <div className="icon">
+                        <div className="logo_icon">
                             <img src={Meetifix} alt="" />
                         </div>
-                        <div className="icon">
+                        <div className="logo_icon">
                             <img src={Quikonnet} alt="" />
                         </div>
-                        <div className="icon">
+                        <div className="logo_icon">
                             <img src={Rekordia} alt="" />
                         </div>
-                        <div className="icon">
+                        <div className="logo_icon">
                             <img src={Classpodia} alt="" />
                         </div>
-                        <div className="icon">
+                        <div className="logo_icon">
                             <img src={creatzion} alt="" />
                         </div>
                         <div className="quizim">

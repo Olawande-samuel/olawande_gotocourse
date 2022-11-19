@@ -61,8 +61,26 @@ export const TeacherHero = styled.div`
 
         @media (min-width: 512px){
             
-            
+            padding-top:2rem;
             grid-template-columns: repeat(2, 1fr);
+              
+            .left{
+                order: 1;
+                /* text-align: center;
+                margin: 2rem 0; */
+            }
+
+            .right {
+                order: 2;
+            }
+
+    
+          
+        }
+        @media (min-width: 900px){
+            
+            padding-top:2rem;
+            grid-template-columns: 35% 65%;
               
             .left{
                 order: 1;
@@ -148,6 +166,9 @@ export const Hero = styled.section`
 `
 export const ItWorks = styled.section`
     padding-block: 2rem;
+    width: min(100% - .3rem, 1040px);
+    margin-inline: auto;
+
     header {
         margin-bottom: 3rem;
         text-align: center;
@@ -173,13 +194,13 @@ export const ItWorks = styled.section`
         justify-content: center;
 
         @media screen and (min-width:600px){
-            grid-template-columns: 30% 65%;
+            grid-template-columns: 45% 55%;
         }
 
         .list_content {
             display: flex;
             flex-direction: column;
-            gap:1rem;
+            gap: .5rem;
             justify-content: space-between;
         }
         .img_wrapper{
@@ -191,7 +212,7 @@ export const ItWorks = styled.section`
             /* width: 100%; */
             object-fit: cover;
             max-width: 100%;
-            max-height: 500px;
+            max-height: 380px;
         }
 
     }
@@ -418,15 +439,17 @@ export const AllInOne =styled.section`
 
 
         .quizim {
-            position:absolute;
+            /* position:absolute;
             right: -25px;
             top: 50%;
             transform:translateY(-50%);
             width: 50px;
-            height: 50px;
+            height: 50px; */
+            width: 100px;
+            height: 100px;
             
             img {
-                max-width: 100%;
+                width: 100%;
             }
         }
         .arrow_container {
@@ -447,22 +470,23 @@ export const AllInOne =styled.section`
             }
 
             p{
-                font-size: 40px;
+                font-size: 35px;
                 font-weight: 800;
-                color: var(--theme-blue);
+                color: #214AB4;
                 text-transform: uppercase;
+                font-family: "Inter", sans-serif;
             }
             span {
-                font-size: 40px;
+                font-size: 35px;
                 color: var(--theme-orange);
             }
         }
     }
 
-    .icon{
+    .logo_icon{
 
-        width: 100px;
-        height: 100px;
+        width: 85px;
+        height: 85px;
         border-radius: 50%;
         display: grid;
         place-items: center;
@@ -490,7 +514,8 @@ export const AllInOne =styled.section`
         img {
             max-width: 100%;
             margin-bottom: 0;
-            object-fit:contain;
+            object-fit: contain;
+            height: 70%;
         }
 
     }

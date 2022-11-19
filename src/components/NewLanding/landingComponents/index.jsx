@@ -430,11 +430,11 @@ const ExecutiveCard = styled.div`
         }
     }
     .description{
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
+        /* display: -webkit-box;
         -webkit-box-orient: vertical;
         text-overflow: ellipsis;
-        overflow: hidden;
+        overflow: hidden; */
+        -webkit-line-clamp: 2;
         text-align: left;
         font-size: 12.5px;
     }
@@ -485,7 +485,7 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
             <div className="exe_content">
                 <div className="">
                     <h6 aria-describedby={id} onClick={() => gotoclass(title, category, bootcampId, navigate)}>{title}</h6>
-                    <div className="description">
+                    <div className="description restricted_line">
                         <p dangerouslySetInnerHTML={{ __html: description }} />
 
                     </div>
@@ -1515,6 +1515,13 @@ const SuccessWrapper = styled.div`
     h6 {
         color:#929292;
     }
+    .restricted_line {
+        -webkit-line-clamp: 4;
+    }
+
+    span:first-of-type {
+        color: #464646;
+    }
     .icon_wrapper {
         height: 90px;
         /* max-width:50px; */
@@ -1532,7 +1539,7 @@ const SuccessWrapper = styled.div`
     }
 
     .readmore{
-        color: var(--theme-blue);
+        color: #2F80ED;
     
         &:hover{
             cursor: pointer;
@@ -1567,13 +1574,11 @@ export function SuccessCard({ icon, title, description }) {
                 {/* {icon} */}
                 {/* <Icon /> */}
             </div>
-            <h6 className="fw-bold" style={{ fontSize: "16px", color: "#464646" }}>{title}</h6>
-                <p className="restricted_line" style={{ marginBottom: "unset"}}>{description}</p>
-            <div style={{ display: "flex", justifyContent:"flex-end" }}>
-
+            <h6 className="fw-bold" style={{ fontSize: "16px" }}>{title}</h6>
+                <span className="restricted_line" style={{ marginBottom: "unset"}}>{description}</span>
             <span onClick={handleClick} className="readmore">read more</span>
 
-            </div>
+            
         </SuccessWrapper>
         <Popover
             id={id}

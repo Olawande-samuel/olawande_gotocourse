@@ -119,12 +119,7 @@ function VideoSection() {
       <div className="video__left">
         <img src={vidPreview} alt="" />
         <div className="video_content">
-          <h4 className="text-center fw-bold mb-0 text-white" style={{ marginInline: "auto" }}>
-            Gotocourse brings the new way to learn tech and business skills.
-          </h4>
-          <h4 className="text-center fw-bold mb-1 text-white" style={{ marginInline: "auto" }}>
-            Learn more
-          </h4>
+          <h4 className="text-center fw-bold mb-0 text-white" style={{ marginInline: "auto", width:"min(100% - .3rem, 350px)" }}> Gotocourse brings the new way to learn tech and business skills. Learn more</h4>
           <i>
             <FiPlayCircle size="6rem" onClick={() => setOpen(true)} />
           </i>
@@ -500,7 +495,7 @@ export function Stats() {
     //   content: "Teachers & Mentors",
     // },
     {
-      sup: "More than",
+      // sup: "More than",
       title: "89%",
       content: "Tranined students already have jobs",
     },

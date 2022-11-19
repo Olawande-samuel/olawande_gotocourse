@@ -114,7 +114,7 @@ const Navbar = ({ background }) => {
                   </Link>
                   {drop ? <NavList dropRef={dropRef} /> : null}
                 </li>
-                <li className="nav-item holder">
+                {/* <li className="nav-item holder">
                   <Link className="link nav-link courses me-4" to="/lounge"
                   style={{
                     color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
@@ -122,7 +122,7 @@ const Navbar = ({ background }) => {
                   >
                     Mentor
                   </Link>
-                </li>
+                </li> */}
               </>
             )}
 

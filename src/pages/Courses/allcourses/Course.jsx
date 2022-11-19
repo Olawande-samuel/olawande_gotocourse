@@ -224,14 +224,13 @@ width: 100%;
 display: flex;
 align-items: center;
 justify-content: space-between;
-min-height: 70vh;
+/* min-height: 70vh; */
 
     h3{
       font-weight: 700;
-      font-size: clamp(2.8125rem, 2.7679rem + 0.2232vw, 3.125rem);
+      font-size: clamp(2.9125rem, 2.7679rem + 0.2232vw, 3.125rem);
       line-height: 45px;
     }
-
     p{
       font-weight: 500;
       font-size: 16px;
@@ -247,8 +246,8 @@ min-height: 70vh;
       flex: .4;
 
        img{
-         width: 100%;
-         height: 100%;
+         max-width: 100%;
+         max-height: 450px;
        }
  
      }  
@@ -386,7 +385,7 @@ function ShortMid() {
 
             <div className='benefits'>
               <p>Unlimited Access</p>
-              <span>24/7 unlimited accessbwith pre-recorded  lectures</span>
+              <span>24/7 unlimited access with pre-recorded  lectures</span>
             </div>
           </div>
 
@@ -515,10 +514,8 @@ const TechComponent = ({ bootcampTrainingInfo }) => {
       <div className='container'>
         <UpskillHero>
           <div className="left">
-            <h3>
-              Learn Strategies &
-              Global Skills
-            </h3>
+            <h3> Learn Strategies & </h3>
+              <h3>Global Skills </h3>
             <p>Launch  and Scale, Wealth Creation and Financial Freedom.</p>
           </div>
           <div className="right">
