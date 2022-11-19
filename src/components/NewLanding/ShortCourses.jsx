@@ -13,6 +13,7 @@ const Grid = styled.div`
 
     gap: 1.5rem;
     justify-content:space-around;
+    padding: .5rem;
     
     @media screen and (min-width: 1400px) {
         grid-template-columns: repeat(4, 230px);
