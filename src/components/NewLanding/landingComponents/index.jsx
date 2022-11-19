@@ -485,14 +485,14 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
             <div className="exe_content">
                 <div className="">
                     <h6 aria-describedby={id} onClick={() => gotoclass(title, category, bootcampId, navigate)}>{title}</h6>
-                    <div className="description restricted_line">
+                    {/* <div className="description restricted_line">
                         <p dangerouslySetInnerHTML={{ __html: description }} />
 
-                    </div>
-                </div>
+                    </div> */}
                 <div className="d-flex justify-content-between align-items-center">
                     <span>$ {packages.length > 0 ? packages[0].price : price}</span>
                     <span>{duration}</span>
+                </div>
                 </div>
                 <div className="route_to_class">
                     <span onClick={() => gotoclass(title, category, bootcampId, navigate)}>Learn more</span>
@@ -671,7 +671,7 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
                 </div>
 
                 <div className="contentbtn">
-                    <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate)}>Start Learning</button>
+                    <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate)}>Enroll Now</button>
                 </div>
 
             </div>
