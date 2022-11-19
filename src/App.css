@@ -109,6 +109,12 @@ font-size: 14px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+
+
+
+
+
 .newcourseCard.restricted_line_lg p:not(:first-child){
   display: none;
 }

@@ -8,6 +8,8 @@ import { ClassTypeComponent, InDemand } from "./landingComponents";
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 280px);
+  grid-auto-rows: 402px;
+    overflow: hidden;
   gap: 2.5rem;
   row-gap: 3rem;
   justify-content: space-around;

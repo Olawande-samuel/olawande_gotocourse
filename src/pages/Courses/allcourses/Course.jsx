@@ -32,20 +32,36 @@ import SwiperCore, {
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
-import cisco from "../../../images/landing/logos/cisco-2.svg"
-import comptia from "../../../images/landing/logos/comptia.png"
-import ec from "../../../images/landing/logos/ec_council.png"
-import isc from "../../../images/landing/logos/ics.jpeg"
-import isaca from "../../../images/landing/logos/isaca.jpeg"
-import microsoft from "../../../images/landing/logos/microsoft.svg"
-import pecb from "../../../images/landing/logos/pecb.jpeg"
-import pmi from "../../../images/landing/logos/pmi.png"
-
-
+import Microsoft from "../../../images/logos/microsoft.svg"
+import PWC from "../../../images/logos/pwc.svg"
+import Samsung from "../../../images/logos/samsung.svg"
+import Verizon from "../../../images/logos/verizon.svg"
+import Walmart from "../../../images/logos/walmart.svg"
+import Shell from "../../../images/logos/shell.svg"
+import Uber from "../../../images/logos/uber.svg"
+import Shopify from "../../../images/logos/shopify.svg"
+import Twitter from "../../../images/logos/twitter.svg"
+import Tmobile from "../../../images/logos/t-mobile.svg"
+import Slack from "../../../images/logos/slack.svg"
+import Facebook from "../../../images/logos/facebook.svg"
+import Ey from "../../../images/logos/ey.svg"
+import Boa from "../../../images/logos/boa.svg"
+import Deloitte from "../../../images/logos/deloitte.svg"
+import KPMG from "../../../images/logos/kpmg.svg"
+import Google from "../../../images/logos/google.svg"
+import Chase from "../../../images/logos/chase.svg"
+import Tesla from "../../../images/logos/tesla.svg"
+import Geico from "../../../images/logos/geico.svg"
+import Lucid from "../../../images/logos/lucid.svg"
+import Zoom from "../../../images/logos/zoom.svg"
+import AWS from "../../../images/logos/aws.svg"
+import Tesco from "../../../images/logos/tesco.svg"
 
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
+    grid-auto-rows: 402px;
+    overflow: hidden;
     gap: 1.5rem;
     justify-content:space-around;
     margin: 1rem 0 ;
@@ -62,6 +78,7 @@ const Grid = styled.div`
     `
 
 const ShortHero = styled.div`
+
   width: 100%;
   padding-top:2rem;
   display: grid;
@@ -76,7 +93,7 @@ const ShortHero = styled.div`
 
     p{
       font-weight: 500;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 20px;
       padding: .5rem 0;
       width: min(100%, 412px)
@@ -87,6 +104,7 @@ const ShortHero = styled.div`
     }
 
     .right{
+
       order: 1;
       padding-left:0;
       display: flex;
@@ -206,28 +224,27 @@ width: 100%;
 display: flex;
 align-items: center;
 justify-content: space-between;
+min-height: 70vh;
 
     h3{
       font-weight: 700;
-      font-size: 40px;
+      font-size: clamp(2.8125rem, 2.7679rem + 0.2232vw, 3.125rem);
       line-height: 45px;
     }
 
     p{
       font-weight: 500;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 20px;
       padding: .5rem 0;
     }
 
     .left{
-      flex: .5;
-
+      flex: .6;
     }
 
     .right{
-      flex: .3;
-      height: 70vh;
+      flex: .4;
 
        img{
          width: 100%;
@@ -235,10 +252,14 @@ justify-content: space-between;
        }
  
      }  
+
+    
+
    
      
      @media (max-width: 768px){
       flex-direction: column-reverse;
+      height: unset;
 
       .left{
         text-align: center;
@@ -255,16 +276,17 @@ width: 100%;
 display: flex;
 align-items: center;
 justify-content: space-between;
+min-height: 40vh;
 
     h3{
       font-weight: 700;
-      font-size: 40px;
+      font-size: clamp(2.8125rem, 2.7679rem + 0.2232vw, 3.125rem);
       line-height: 45px;
     }
 
     p{
       font-weight: 500;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 20px;
       padding: .5rem 0;
     }
@@ -296,65 +318,48 @@ justify-content: space-between;
     }
      
  `
+ const topicons =  [Deloitte ,Facebook, Shopify, Google,  PWC,  Microsoft]
 
+  const bottomicons = [Chase, Walmart, KPMG, Ey, Samsung, Verizon, Shell, Uber,  Tmobile , Twitter, Slack,  Tesco,   Boa, Tesla, Geico, AWS, Lucid, Zoom]
 
-const myLogos = [cisco, comptia, ec, isc, isaca, microsoft, pecb, pmi]
+  // const compicons =  [Deloitte, Shopify, Facebook,Google, Chase,  PWC,Microsoft, Walmart,Samsung, Verizon, Shell, Uber,  Tmobile,KPMG , Twitter, Slack,  Tesco,  Ey, Boa,
+  //   Tesla, Geico, AWS, Lucid, Zoom,
+    
+  //   ]
+  
 
-const Logos = () => {
+ const Companies = () => {
   return (
-    <Section>
+    <section className="wrapper ">
       <div className="container">
-        <header>
-          <h3>Some of the places our learners  work</h3>
+        <header className='mb-2' >
+          <h4 className="title text-center" style={{color: "#464646"}}>Some of the places our learners  work</h4>
         </header>
-        <Swiper
-          // install Swiper modules
-          modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-          loop={false}
-          speed={1500}
-          autoplay={{ delay: 2500 }}
-          spaceBetween={0}
-          slidesPerView={1}
-          // navigation
-          pagination={{ clickable: true }}
-          scrollbar={{ draggable: true }}
-          breakpoints={{
-            // when window width is >= 320px
-            320: {
-              slidesPerView: 1,
-              spaceBetween: 0,
-            },
-            // when window width is >= 640px
-            575: {
-              slidesPerView: 4,
-              spaceBetween: 5,
-            },
-            700: {
-              slidesPerView: 5,
-              spaceBetween: 5,
-            },
-            1024: {
-              slidesPerView: 8,
-              spaceBetween: 3,
-            },
-            1704: {
-              slidesPerView: 7,
-              spaceBetween: 3,
-            },
-          }}
-        >
-          {myLogos.map((item, i) => (
-            <SwiperSlide key={i}>
-              <img src={item} alt="" />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <div className="service_box_wrapper d-flex flex-wrap justify-content-center px-lg-5 mt-3" style={{gap:"1.5rem"}}>
+            {
+              topicons.map((icon, i)=>(
+                <div className="d-flex justify-content-center align-items-center" style={{width:"100px", height:"60px"}} key={i}>
+                  {/* <i className="icon" style={{width:"100px", height:"50px"}}>{icon}</i> */}
+                  <img src={icon} alt="" style={{width:"100px", height: i === 10 || i === 23 ? "20px" : "30px", maxWidth:"100%"}} />
+                </div>
+              ))
+            }
 
-
+        </div>
+        <div className="service_box_wrapper d-flex flex-wrap justify-content-center px-lg-5 mt-3" style={{gap:"1.5rem"}}>
+          {bottomicons.slice(0,8).map((icon, i)=>(
+                <div className="d-flex justify-content-center align-items-center" style={{width:"100px", height:"60px"}} key={i}>
+                  {/* <i className="icon" style={{width:"100px", height:"50px"}}>{icon}</i> */}
+                  <img src={icon} alt="" style={{width:"100px", height: i === 10 || i === 23 ? "20px" : "30px", maxWidth:"100%"}} />
+                </div>
+              ))
+            }
+        </div>
       </div>
-    </Section>
+    </section>
   )
-}
+} 
+
 
 
 const ShortCourseComponent = ({ bootcampTrainingInfo }) => {
@@ -366,9 +371,13 @@ const ShortCourseComponent = ({ bootcampTrainingInfo }) => {
         <ShortHero>
           <div className="left">
             <h3>
-              Short courses for knowledge boost
+              Short courses for
             </h3>
-            <p>Choose from wide range of short courses  and tech Entrepreneurship  across various categories.</p>
+            <h3>
+              knowledge boost
+            </h3>
+            <p>Choose from wide range of short courses  and tech
+               Entrepreneurship  across various categories.</p>
           </div>
           <div className="right">
             <img src={short} alt="" />
@@ -433,7 +442,7 @@ const ShortCourseComponent = ({ bootcampTrainingInfo }) => {
 
       </div>
 
-      <Logos />
+      <Companies />
 
       <Question />
 
@@ -454,7 +463,11 @@ const UpskillComponent = ({ bootcampTrainingInfo }) => {
           <div className="left">
             <h3>
               Increase your earning
+              </h3>
+              <h3>
               potential by upgrading
+              </h3> 
+              <h3>
               your skillsets.
             </h3>
             <p>Choose from wide range of upskill courses  and tech Entrepreneurship  across various categories.</p>
@@ -519,8 +532,7 @@ const UpskillComponent = ({ bootcampTrainingInfo }) => {
 
       </div>
 
-      <Logos />
-
+      <Companies />
       <Question />
 
 
@@ -603,8 +615,7 @@ const TechComponent = ({ bootcampTrainingInfo }) => {
 
       </div>
 
-      <Logos />
-
+      <Companies />
       <Question />
 
 
@@ -623,9 +634,11 @@ const ExecutiveComponent = ({ bootcampTrainingInfo }) => {
           <div className="left">
             <h3>
               Acquire strategic skills to
-
+            </h3>
+            <h3>
               boost business growth
-              your skillsets
+             
+
             </h3>
             <p>Choose from wide range of upskill courses  and tech Entrepreneurship  across various categories.</p>
           </div>
@@ -689,8 +702,7 @@ const ExecutiveComponent = ({ bootcampTrainingInfo }) => {
 
       </div>
 
-      <Logos />
-
+      <Companies />
       <Question />
 
 
@@ -709,9 +721,11 @@ const DemandComponent = ({ bootcampTrainingInfo }) => {
           <div className="left">
             <h3>
               Technical  skills most
-
+              </h3>
+              <h3>
               needed by companies and
-
+              </h3>
+              <h3>
               increase your earnings
             </h3>
 
@@ -777,8 +791,7 @@ const DemandComponent = ({ bootcampTrainingInfo }) => {
 
       </div>
 
-      <Logos />
-
+      <Companies />
       <Question />
 
 

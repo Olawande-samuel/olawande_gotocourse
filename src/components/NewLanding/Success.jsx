@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { SuccessCard } from './landingComponents'
-import Meetifix from "../../images/landing/icons/Meetifix.png"
+import Meetifix from "../../images/mt.png"
 import Rekordia from "../../images/landing/icons/Rekordia.png"
 import Quikonnet from "../../images/landing/icons/Quikonnet.png"
 import Classpodia from "../../images/landing/icons/Classpodia.png"
