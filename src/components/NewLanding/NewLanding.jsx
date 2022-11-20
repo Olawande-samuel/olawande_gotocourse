@@ -128,19 +128,19 @@ function VideoSection() {
       </div>
 
       <div className="video__right">
+          <div className="content">
+            <h5>Learn and grow with our community</h5>
 
-        <h5>Learn and grow with our community</h5>
+            <p>Community is everything! Meet and
+              collaborate with Gotocourse mentors and
+              career advisors who can help you advance
+              your digital skills and career.
+              It's a great way to expand your skill set.</p>
 
-        <p>Community is everything! Meet and
-          collaborate with Gotocourse mentors and
-          career advisors who can help you advance
-          your digital skills and career.
-          It's a great way to expand your skill set.</p>
-
-          <button>
-          Join our community 
-          </button>
-
+              <button>
+              Join our community 
+              </button>
+          </div>
       </div>
       <PopupVideo open={open} setOpen={setOpen} />
     </section>

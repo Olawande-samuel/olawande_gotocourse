@@ -84,7 +84,7 @@ const Navbar = ({ background }) => {
             }} /> </i>
         </div>
       }
-      <div className="container navbar-container align-items-center">
+      <div className="container navbar-container align-items-center"> 
         <Link
           to="/"
           onClick={() => window.scrollTo(0, 0)}

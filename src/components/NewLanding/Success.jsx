@@ -42,7 +42,19 @@ const SuccessWrapper = styled.section`
             flex: 30.33% 0;
             min-width:15rem;
             max-width:20rem;
-
+            
+            @media (max-width: 520px){
+              min-width:12rem;
+              
+            }
+            @media (max-width: 430px){
+              min-width: 10rem;
+              
+            }
+            @media (max-width: 360px){
+              min-width: 15rem;
+              
+            }
         }
     }
 
