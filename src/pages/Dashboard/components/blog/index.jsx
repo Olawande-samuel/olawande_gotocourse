@@ -52,6 +52,13 @@ form{
 
 `
 
+export const BlogDashboard = () => {
+    return (
+        <>
+        yea
+        </>
+    )
+}
 
 
 export const Blog = () => {
