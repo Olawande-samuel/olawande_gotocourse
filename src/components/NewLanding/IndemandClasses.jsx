@@ -13,6 +13,8 @@ const Grid = styled.div`
   gap: 2.5rem;
   row-gap: 3rem;
   justify-content: space-around;
+  padding: .7rem .5rem;
+
 
   @media screen and (max-width: 1250px) {
     grid-template-columns: repeat(auto-fit, minmax(min(180px, 240px), 240px));

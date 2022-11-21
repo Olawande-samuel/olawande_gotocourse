@@ -2,17 +2,17 @@ import styled from "styled-components"
 
 
 export const TeacherHero = styled.div`
-width: 100%;
-display: flex;
-align-items: center;
-background: #E4E9FF;
-color: var(--theme-blue);
-padding-bottom: 2rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: #E4E9FF;
+    color: var(--theme-blue);
+    padding-bottom: 2rem;
 
 
     h3{
       font-weight: 700;
-      font-size: 40px;
+      font-size: 45px;
       line-height: 45px;
     }
 
@@ -21,11 +21,14 @@ padding-bottom: 2rem;
       font-size: 14px;
       line-height: 20px;
       padding: .5rem 0;
+      margin-bottom: 2rem;
     }
 
     .container{
-        display: flex;
+        display: grid;
         align-items: center;
+        gap: 1rem;
+
         button {
             background: var(--theme-orange);
             padding:10px 24px;
@@ -39,38 +42,64 @@ padding-bottom: 2rem;
         }
     
         .left{
-          flex: .4;
+          order:2;
     
         }
     
         .right{
-          flex: .6;
-          height: 70vh;
+            order:1;
+            display: flex;
+            align-items: center;
           img{
-            width: 100%;
-            height: 100%;
-            object-fit:cover;
+            max-width: 100%;
+            /* height: 100%; */
+            max-height: 450px;
+            /* object-fit:cover; */
           }
     
         } 
 
-    }    
+        @media (min-width: 512px){
+            
+            padding-top:2rem;
+            grid-template-columns: repeat(2, 1fr);
+              
+            .left{
+                order: 1;
+                /* text-align: center;
+                margin: 2rem 0; */
+            }
 
+            .right {
+                order: 2;
+            }
 
     
-    @media (max-width: 920px){
-        
-        .container{
-          flex-direction: column-reverse;
           
-          .left{
-            text-align: center;
-            margin: 2rem 0;
-          }
+        }
+        @media (min-width: 900px){
+            
+            padding-top:2rem;
+            grid-template-columns: 35% 65%;
+              
+            .left{
+                order: 1;
+                /* text-align: center;
+                margin: 2rem 0; */
+            }
 
-      }
-    }
+            .right {
+                order: 2;
+            }
+
     
+          
+        }
+        
+    }    
+    
+
+
     
 `
 export const Hero = styled.section`
@@ -137,6 +166,9 @@ export const Hero = styled.section`
 `
 export const ItWorks = styled.section`
     padding-block: 2rem;
+    width: min(100% - .3rem, 1040px);
+    margin-inline: auto;
+
     header {
         margin-bottom: 3rem;
         text-align: center;
@@ -150,6 +182,7 @@ export const ItWorks = styled.section`
             width:min(100%, 450px);
             text-align: center;
             margin-inline: auto;
+            color: #000;
         }
     }
 
@@ -161,12 +194,13 @@ export const ItWorks = styled.section`
         justify-content: center;
 
         @media screen and (min-width:600px){
-            grid-template-columns: 30% 65%;
+            grid-template-columns: 45% 55%;
         }
 
         .list_content {
             display: flex;
             flex-direction: column;
+            gap: .5rem;
             justify-content: space-between;
         }
         .img_wrapper{
@@ -178,7 +212,7 @@ export const ItWorks = styled.section`
             /* width: 100%; */
             object-fit: cover;
             max-width: 100%;
-            max-height: 400px;
+            max-height: 380px;
         }
 
     }
@@ -189,25 +223,27 @@ export const ItWorks = styled.section`
 
 export const ItWorksList = styled.div`
     .number {
-        padding: 1px 4px;
+        /* padding: 1px; */
         background: var(--theme-orange);
         color:#fff;
-        width: 30px;
+        width: 20px;
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius:10px;
+        border-radius:8px;
         font-size: 18px;
-        margin-bottom: .7rem;
+        margin-bottom: .4rem;
     }
 
     h5 {
         font-weight: 700;
-        margin-bottom: .7rem;
+        margin-bottom: .4rem;
         color: #464646;
     }
     small {
         color:#464646;
+        font-size:13px;
+        font-weight: 300;
     }
 `
 export const MainHeader = styled.header`
@@ -252,16 +288,23 @@ export const BestTools = styled.section`
             p {
                 width: min(100% - .2rem, 550px);
                 margin-right: auto;
+                font-weight: 300;
+                line-height: 28px;
+                font-size: 1rem;
             }
 
-            h4::after {
-                content: "";
-                height: 8px;
-                width: 150px;
-                background: var(--theme-orange);
-                position: absolute;
-                bottom: 0;
-                left: 0;
+            h4 {
+                font-weight: 300;
+
+                ::after {
+                        content: "";
+                    height: 8px;
+                    width: 150px;
+                    background: var(--theme-orange);
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                }
             }
             
         }
@@ -269,7 +312,8 @@ export const BestTools = styled.section`
         
         :nth-child(odd){
             h4 {
-                margin-left: auto;       
+                margin-left: auto;  
+                font-weight: 300;     
                 
                     ::after {
                     content: "";
@@ -285,6 +329,9 @@ export const BestTools = styled.section`
             p {
                 width: min(100% - .2rem, 550px);
                 margin-left: auto;
+                font-weight: 300;
+                line-height: 28px;
+                font-size: 1rem;
             }
             /* color: green; */
              .grid  .img_container{
@@ -345,7 +392,7 @@ export const ImageContent = styled.div`
 
     img {
         width: 100%; 
-        height: 100%;
+        /* height: 100  %; */
         /* max-height: 450px; */
         max-width: 450px;
         /* margin: auto; */
@@ -373,6 +420,7 @@ export const AllInOne =styled.section`
             width: min(100% - .2rem, 550px);
             margin-inline: auto;
             color: #000;
+            font-weight: 500;
         }
     
     }
@@ -386,18 +434,22 @@ export const AllInOne =styled.section`
         justify-content: space-between;
         align-items:center;
         margin-bottom: 180px;
+        width:min(100%, 1040px);
+        margin-inline: auto;
 
 
         .quizim {
-            position:absolute;
+            /* position:absolute;
             right: -25px;
             top: 50%;
             transform:translateY(-50%);
             width: 50px;
-            height: 50px;
+            height: 50px; */
+            width: 100px;
+            height: 100px;
             
             img {
-                max-width: 100%;
+                width: 100%;
             }
         }
         .arrow_container {
@@ -418,22 +470,23 @@ export const AllInOne =styled.section`
             }
 
             p{
-                font-size: 40px;
+                font-size: 35px;
                 font-weight: 800;
-                color: var(--theme-blue);
+                color: #214AB4;
                 text-transform: uppercase;
+                font-family: "Inter", sans-serif;
             }
             span {
-                font-size: 40px;
+                font-size: 35px;
                 color: var(--theme-orange);
             }
         }
     }
 
-    .icon{
+    .logo_icon{
 
-        width: 100px;
-        height: 100px;
+        width: 85px;
+        height: 85px;
         border-radius: 50%;
         display: grid;
         place-items: center;
@@ -461,7 +514,8 @@ export const AllInOne =styled.section`
         img {
             max-width: 100%;
             margin-bottom: 0;
-            object-fit:contain;
+            object-fit: contain;
+            height: 70%;
         }
 
     }
@@ -495,7 +549,7 @@ export const Customised = styled.section`
             
             h3 {
                 font-weight: 500;
-                margin-bottom: 1rem;
+                margin-bottom: 2rem;
             }
 
             button {
@@ -514,11 +568,11 @@ export const Customised = styled.section`
             grid-template-columns: repeat(2, 1fr);
             gap: 3rem;
             align-items: center;
-            
+/*             
             img {
                 min-height:500px;
                 max-height: 550px;
-            }
+            } */
         }
     }
 
@@ -552,6 +606,10 @@ export const FAQ = styled.section`
             ::after {
                 display: none;
 
+            }
+
+            h6, p {
+                color:var(--theme-blue) ;
             }
         }
         @media screen and (min-width: 600px){

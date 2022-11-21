@@ -77,7 +77,7 @@ const Navbar = ({ background }) => {
       {
         (mainpage) && showBanner &&
         <div className="d-flex align-items-center justify-content-center p-2 w-100 bg-white">
-          <p className="mb-0 fw-bold me-4">ENROLL NOW AT 50% FOR ALL CLASSES</p>
+          <p className="mb-0 fw-bold me-4">New product alert: Gotocourse Meetifix ( Live Class) is now live 🎉🎉!</p>
           <i><AiOutlineCloseCircle size="1.5rem" onClick={()=>{
               setShowBanner(false)
               localStorage.setItem("gotocourse-banner", false)
@@ -109,12 +109,12 @@ const Navbar = ({ background }) => {
                   style={{
                     color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
                   }}
-                  >
+                  > 
                     Categories
                   </Link>
                   {drop ? <NavList dropRef={dropRef} /> : null}
                 </li>
-                <li className="nav-item holder">
+                {/* <li className="nav-item holder">
                   <Link className="link nav-link courses me-4" to="/lounge"
                   style={{
                     color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
@@ -122,7 +122,7 @@ const Navbar = ({ background }) => {
                   >
                     Mentor
                   </Link>
-                </li>
+                </li> */}
               </>
             )}
 

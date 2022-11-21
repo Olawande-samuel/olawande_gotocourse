@@ -40,7 +40,7 @@ const SuccessWrapper = styled.section`
 
         > div {
             flex: 30.33% 0;
-            min-width:10rem;
+            min-width:15rem;
             max-width:20rem;
 
         }

@@ -8,25 +8,26 @@ import { ClassTypeComponent, UpskillCourseCard } from './landingComponents'
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-    grid-auto-rows: 402px;
+    grid-auto-rows: 352px;
     overflow: hidden;
     gap: 1.5rem;
     justify-content:space-around;
+    padding: .5rem;
     
-    @media screen and (max-width: 2560px) {
+    @media screen and (min-width: 1400px) {
         grid-template-columns: repeat(4, 230px);
         justify-content: space-evenly;
         gap: 1rem;
-      }
+    }
     
-      @media screen and (max-width:768px){
+    @media screen and (max-width:768px){
         grid-template-columns: repeat(2, 230px);
     }
 
     @media screen and (max-width:500px){
         grid-template-columns: min(100%, 380px);
         justify-content:center;
-    } */
+    } 
     `
 const UpskillCourse = () => {
 

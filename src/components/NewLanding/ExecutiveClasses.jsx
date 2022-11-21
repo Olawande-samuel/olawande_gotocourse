@@ -8,12 +8,13 @@ import exec2 from "../../images/landing/exe2.png"
 import exec3 from "../../images/landing/exe3.png"
 
 const Grid = styled.div`
-     display: grid;
-  grid-template-columns: repeat(4, 280px);
-  grid-auto-rows: 402px;
+    display: grid;
+    grid-template-columns: repeat(4, 280px);
+    grid-auto-rows: 402px;
     overflow: hidden;
-  gap: 1.5rem;
-  justify-content: space-around;
+    gap: 1.5rem;
+    justify-content: space-around;
+    padding: .7rem .5rem;
 
   @media screen and (max-width: 1024px) {
     grid-template-columns: repeat(auto-fit, minmax(min(180px, 240px), 240px));
@@ -34,7 +35,7 @@ const Grid = styled.div`
 
 const ExecutiveClasses = () => {
     const { otherFunctions: { fetchBootcamps }, } = useAuth();
-    const [shorts, setShorts] = useState([])
+    const [shorts, setShorts] = useState([]) 
 
     const classes = useQuery(["fetch classes"], () => fetchBootcamps(), {
         notifyOnChangeProps: ["category", "isFetching"],
