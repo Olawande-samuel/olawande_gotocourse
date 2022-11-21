@@ -572,7 +572,7 @@ export function NewBootcampDetailsComponent() {
     <Layout>
       <div className={clsx.bootcampTraining}>
         <DetailsHero
-          loading={loading}
+          loading={bootcamps.isLoading}
           navHeight={navHeight}
           title={bootcampTrainingInfo?.title}
           description={bootcampTrainingInfo?.description}
@@ -749,7 +749,7 @@ console.log({wishlistState});
           <h4>{title}</h4>
           <p className="restricted_line" dangerouslySetInnerHTML={{ __html: description }}></p>
           {/* <p>{description ? description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p> */}
-          <p style={{ marginTop: "2rem", fontSize: "1.5rem" }}>Starting Date: <span>{new Date(startDate).toDateString()}</span></p>
+          <p style={{ marginTop: "2rem", fontSize: "1.5rem" }}>Starting Date: <span>{ loading ? "" : new Date(startDate).toDateString()}</span></p>
 
           <div className={clsx.hero_buttons}>
             <motion.button

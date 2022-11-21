@@ -19,7 +19,8 @@ import { ExeEducation, InDemand, UpskillCourseCard } from '../../../components/N
 import short from '../../../images/short.png'
 import executive from '../../../images/executive.png'
 import demand from '../../../images/demand.png'
-import skill from '../../../images/skill.png'
+
+import skill from '../../../images/upskill.webp'
 import tech from '../../../images/tech.png'
 import { Question } from '../../Course/Details';
 import SwiperCore, {

@@ -457,6 +457,19 @@ const ExecutiveCard = styled.div`
             color: var(--theme-orange);
         }
     }
+
+    .checks{
+
+p{
+    font-weight: 500;
+    font-size: 13.6101px;
+    line-height: 16px;
+}
+
+.icon{
+    color: var(--theme-blue);
+}
+}
 `
 
 
@@ -493,6 +506,33 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
                     <span>$ {packages.length > 0 ? packages[0].price : price}</span>
                     <span>{duration}</span>
                 </div>
+                </div>
+                <div className="checks">
+                    {/* <p> <AiOutlineCheck className="icon" /> Cohort Learning</p> */}
+
+                    {
+                        changeConstants(packages[0].title) === "Self-paced" ? 
+                        <p> <AiOutlineCheck className="icon" /> Recorded Classes</p>
+                        :
+                        <p> <AiOutlineCheck className="icon" /> Cohort Learning</p>    
+                    }
+                    {/* <p> <AiOutlineCheck className="icon" /> {packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"} Learning</p> */}
+                    <p><AiOutlineCheck className="icon" />
+                    {
+                        changeConstants(packages[0].title) === "Self-paced" ? 
+                        <>
+                            <span style={{color:"var(--theme-orange)"}}>Self-paced </span> 
+                            <span>Learning</span>
+                        </>
+                        
+                        :
+
+                     <>
+                        <span style={{color:"var(--theme-orange)"}}>Live </span> 
+                        <span>with Instructor</span>
+                     </>
+                    }
+                     </p>
                 </div>
                 <div className="route_to_class">
                     <span onClick={() => gotoclass(title, category, bootcampId, navigate)}>Learn more</span>
@@ -656,13 +696,13 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
 
                 <div className="mid_content">
                     <div className="mid_stats">
-                        <span>{packages.length > 0 ? packages[0].title.toLowerCase() : "Cohort"}</span>
+                        {/* <span>{packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"}</span> */}
                         <span>$ {packages.length > 0 ? packages[0].price : price}</span>
                         <span>{duration}</span>
                     </div>
                     <div className="checks">
-                        <p> <AiOutlineCheck className="icon" />Completion certificate</p>
-                        <p><AiOutlineCheck className="icon" /> Earn upto $138k</p>
+                        <p> <AiOutlineCheck className="icon" /> Cohort Learning</p>
+                        <p><AiOutlineCheck className="icon" /> <span style={{color:"var(--theme-orange)"}}>Live </span>with Instructor</p>
                     </div>
                 </div>
 
@@ -1517,6 +1557,7 @@ const SuccessWrapper = styled.div`
     }
     .restricted_line {
         -webkit-line-clamp: 4;
+        font-size: clamp(0.625rem, 0.5179rem + 0.5357vw, 1rem);
     }
 
     span:first-of-type {

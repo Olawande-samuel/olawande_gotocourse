@@ -25,7 +25,7 @@ const Grid = styled.div`
     }
 
     @media screen and (max-width:500px){
-        grid-template-columns: min(100%, 380px);
+        grid-template-columns: min(100%, 280px);
         justify-content:center;
     } 
     `
