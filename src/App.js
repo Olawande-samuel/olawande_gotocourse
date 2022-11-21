@@ -114,6 +114,7 @@ import { ProgramPage } from "./components/NewLanding/ExecutiveClasses";
 import CourseComponent from "./pages/Courses/allcourses/Course";
 import UpComingComponent from "./pages/Bootcamp/Upcoming";
 import { Blog } from "./pages/Dashboard/components/blog";
+import { AdminWebinar, AdminWebinarDashboard } from "./pages/Dashboard/components/webinar";
 
 
 
@@ -146,7 +147,7 @@ const TeachersHelp = lazy(() => import("./pages/Dashboard/Teachers/Help"));
 
 const HIWStudent = lazy(() => import("./pages/HowItWorks/HIWStudent"))
 const HIWTeacher = lazy(() => import("./pages/HowItWorks/HIWTeacher"))
-const TeachersLanding = lazy(()=> import("./pages/Teachers"))
+const TeachersLanding = lazy(() => import("./pages/Teachers"))
 
 //MENTORS
 // const {MentorsProfile} = lazy(() => import("./pages/Dashboard/Mentors"));
@@ -441,6 +442,11 @@ function App() {
                 <Route path="earnings" element={<AdminEarning />} />
                 <Route path="affiliate" element={<AdminAffiliate />} />
                 <Route path="blog" element={<Blog />} />
+                <Route path="webinar" element={<Out />}>
+                  <Route index element={<AdminWebinarDashboard />} />
+                  <Route path="create" element={< AdminWebinar />} />
+
+                </Route>
 
 
                 {/* <Route path="class-console" element={<Out />}>

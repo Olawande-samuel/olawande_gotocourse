@@ -136,6 +136,11 @@ const Sidebar = ({}) => {
             path: "class-console",
             title: "Console"
         },
+        {
+            icon: SiGoogleclassroom,
+            path: "webinar",
+            title: "Webinar"
+        }
         ,
         {
             icon: SiGoogleclassroom,
