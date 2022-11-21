@@ -2306,7 +2306,7 @@ export const adminFunctions = {
     },
     getBlog: async function (token, data) {
         try {
-            const res = await axios.get(`${baseURL}/admin/blog/fetch`, JSON.stringify([data]),
+            const res = await axios.get(`${baseURL}/admin/blogs/fetch`,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,

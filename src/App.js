@@ -113,7 +113,7 @@ import { GroupContent, MailDetail } from "./pages/Dashboard/components/classCons
 import { ProgramPage } from "./components/NewLanding/ExecutiveClasses";
 import CourseComponent from "./pages/Courses/allcourses/Course";
 import UpComingComponent from "./pages/Bootcamp/Upcoming";
-import { Blog, BlogDashboard } from "./pages/Dashboard/components/blog";
+import { Blog, BlogDashboard, MyBlog } from "./pages/Dashboard/components/blog";
 import { AdminWebinar, AdminWebinarDashboard } from "./pages/Dashboard/components/webinar";
 
 
@@ -443,7 +443,7 @@ function App() {
                 <Route path="affiliate" element={<AdminAffiliate />} />
                 <Route path="blog" element={<Out />} >
                   <Route index element={<BlogDashboard />} />
-                  <Route path=":id" element={<BlogDashboard />} />
+                  <Route path=":id" element={<MyBlog />} />
                   <Route path="create" element={< Blog />} />
                 </Route>
                 <Route path="webinar" element={<Out />}>

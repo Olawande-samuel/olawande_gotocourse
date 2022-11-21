@@ -1,4 +1,6 @@
 import { Button } from "@mui/material"
+import { Link } from "react-router-dom"
+import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { BiCloudDownload } from "react-icons/bi"
 import styled from "styled-components"
@@ -7,6 +9,75 @@ import { KEY } from "../../../../constants"
 import { useAuth } from "../../../../contexts/Auth"
 import { useLocalStorage } from "../../../../hooks"
 import { Admin } from "../../Admin"
+import { Header } from "../webinar"
+
+const Container = styled.div`
+overflow-y: scroll;
+
+`
+
+const CardContainer = styled.div`
+display: flex;
+gap: 2rem;
+overflow-y: scroll;
+
+`
+
+const Card = styled.div`
+flex-shrink: 0;
+width: 15rem;
+height: 20rem;
+border: 1px solid black;
+display: flex;
+flex-direction: column;
+cursor: pointer;
+
+.top{
+    flex: .4;
+    border: 2px solid red;
+    height: 100%;
+
+    img{
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+
+.bottom{
+    flex: .6;
+    border: 2px solid green;
+    height: 100%;
+    padding: .5rem;
+
+    .blogbutton{
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+
+        button{
+            border: 1px solid black;
+            outline: none;
+            padding: .5rem 1rem;
+        }
+
+        button:nth-of-type(1){
+        background: #0C2191;
+        color: white;
+
+        }
+
+        button:nth-of-type(2){
+            background: red;
+            color: white;
+        }
+
+    }
+
+}
+
+`
 
 const Form = styled.section`
 padding: 1rem;
@@ -52,11 +123,78 @@ form{
 
 `
 
-export const BlogDashboard = () => {
+export const MyBlog = () => {
     return (
-        <>
-        yea
-        </>
+        <Admin>
+        <Container>
+            <h4>Title</h4>
+            <p>
+            Description
+
+            </p>
+
+
+
+        </Container>
+
+        </Admin>
+    )
+}
+export const BlogDashboard = () => {
+    const { getItem } = useLocalStorage();
+    const [blogs, setBlogs] = useState([])
+    let userdata = getItem(KEY);
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { getBlog } } = useAuth();
+
+    // const blog = useQuery(["fetch classes"], () => getBlog(), {
+    //     onSuccess: (res) => {
+    //         if (res.data.length > 0) {
+    //             console.log("data", res.data);
+
+    //         }
+    //     }
+    // })
+
+    return (
+        <Admin>
+            <Header>
+                <div>
+                    <label htmlFor="filter">Filter By:
+                        <input type="search" placeholder="search" />
+                    </label>
+                </div>
+
+                <button>
+                    <Link to={`create`}>
+                        Create Blog
+                    </Link>
+                </button>
+            </Header>
+            <CardContainer>
+                <Link to={`id`}>
+              
+                <Card>
+                    <div className="top">
+                        <img src="" alt="" />
+
+                    </div>
+                    <div className="bottom">
+                        <h4>Title</h4>
+                        <p className="restricted_line">description</p>
+
+                        <div className="blogbutton">
+                            <button>Update</button>
+                            <button>delete</button>
+                        </div>
+
+                    </div>
+
+
+                </Card>
+                </Link>
+            </CardContainer>
+
+        </Admin>
     )
 }
 
@@ -82,7 +220,7 @@ export const Blog = () => {
             const { success, message, statusCode } = response
             if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
             const { data } = response
-            console.log({data});
+            console.log({ data });
         } catch (error) {
             console.error(error)
         } finally {

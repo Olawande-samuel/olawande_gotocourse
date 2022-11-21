@@ -73,7 +73,7 @@ const Container = styled.section`
 overflow-y: scroll;
 `
 
-const Header = styled.header`
+export const Header = styled.header`
 width: 100%;
 display: flex;
 align-items: center;
