@@ -176,7 +176,7 @@ export default function File() {
 
 
 
-function FileCard({title, fileName, contentId}){
+function FileCard({title, fileName, contentId, type}){
     const [open, setOpen] = useState(false)
     const [content, setContent] = useState("")
 
@@ -202,7 +202,7 @@ function FileCard({title, fileName, contentId}){
                 </i>
                 <button onClick={openContent}>Open</button>
             </div>
-            <ViewModal open={open} setOpen={setOpen} file={content} />
+            <ViewModal open={open} setOpen={setOpen} file={content} type={type} />
         </div>
     )
 }

@@ -523,7 +523,7 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
                         <>
                             <span style={{color:"var(--theme-orange)"}}>Self-paced </span> 
                             <span>Learning</span>
-                        </>
+                        </> 
                         
                         :
 
