@@ -135,6 +135,17 @@ const Sidebar = ({}) => {
             icon: SiGoogleclassroom,
             path: "class-console",
             title: "Console"
+        },
+        {
+            icon: SiGoogleclassroom,
+            path: "webinar",
+            title: "Webinar"
+        }
+        ,
+        {
+            icon: SiGoogleclassroom,
+            path: "blog",
+            title: "Blog"
         }
     ] : route === "student" ?  [
         {
