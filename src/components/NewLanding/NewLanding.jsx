@@ -52,9 +52,9 @@ import life_change from "../../images/landing/life_change.webp";
 import tell from "../../images/landing/mentor_landing.webp";
 import newMen from "../../images/landing/newMen.png";
 
-import afford from "../../images/landing/affordable.png";
-import critical from "../../images/landing/critical.png";
-import interactive from "../../images/landing/interactive.png";
+import afford from "../../images/landing/affordable.webp";
+import critical from "../../images/landing/platform.webp";
+import interactive from "../../images/landing/interactive.webp";
 
 import GreatOpportunities from "./GreatOpportunities";
 import ShortCourses from "./ShortCourses";
@@ -324,8 +324,8 @@ function Hero() {
     },
     {
       id: 2,
-      title: "Get critical",
-      title2: "career skills",
+      title: "No.1 platform for tech ",
+      title2: "and business skills",
       subtitle:
         "We are one of the world’s most comprehensive online learning platform putting learners' needs ahead. Learning on Go2course transforms how you think and what you can do, and translates directly into the real world.",
       social: true,
@@ -343,7 +343,7 @@ function Hero() {
         "We provide relevant knowledge and teach skills needed in ever changing world through a highly interactive and engaging learning system that is flexible enough to accommodate the schedule of individual students.",
       social: true,
       acctype: "teacher",
-      img: interactive,
+      img: afford,
       color: "#66BFE6",
       link: "/sign-up",
       link_btn: "Get Started",
@@ -355,7 +355,7 @@ function Hero() {
       subtitle: "Whether you are starting newly or upgrading your skills this is the best place to learn. No need of without putting your life on hold. You can study anywhere, everywhere and at any time, Gotocourse is your ideal destination of growing your tech and business skills.",
       social: true,
       acctype: "affiliate",
-      img: afford,
+      img: interactive,
       color: "#A1B0FF",
       link: "/sign-up",
       link_btn: "Get started now",
@@ -366,13 +366,51 @@ function Hero() {
       className="newHero d-flex position-relative"
       style={{ marginTop: navHeight }}
     >
-
-      <HeroContent
+      {/* COOKIED HERO */}
+      {/* <HeroContent
         overlay={overlay}
         setOverlay={setOverlay}
         logtype={logtype}
         {...heroData[heroValue]}
-      />
+      /> */}
+
+      <Swiper
+        // install Swiper modules
+        modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+        loop={false}
+        speed={1500}
+        autoplay={{ delay: 5000 }}
+        spaceBetween={0}
+        slidesPerView={1}
+        // navigation
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+        breakpoints={{
+          // when window width is >= 320px
+          320: {
+            slidesPerView: 1,
+            spaceBetween: 0,
+          }        
+        }}
+      >
+        {
+          
+          heroData.map((data) => (
+              <SwiperSlide key={data.id}>
+             
+               <HeroContent
+                  overlay={overlay}
+                  setOverlay={setOverlay}
+                  logtype={logtype}
+                  {...data}
+                />
+              </SwiperSlide>
+            ))
+        }
+        </Swiper>
+
+
+
 
     </section>
   );

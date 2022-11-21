@@ -457,6 +457,19 @@ const ExecutiveCard = styled.div`
             color: var(--theme-orange);
         }
     }
+
+    .checks{
+
+p{
+    font-weight: 500;
+    font-size: 13.6101px;
+    line-height: 16px;
+}
+
+.icon{
+    color: var(--theme-blue);
+}
+}
 `
 
 
@@ -493,6 +506,22 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
                     <span>$ {packages.length > 0 ? packages[0].price : price}</span>
                     <span>{duration}</span>
                 </div>
+                </div>
+                <div className="checks">
+                    {/* <p> <AiOutlineCheck className="icon" /> Cohort Learning</p> */}
+                    <p> <AiOutlineCheck className="icon" /> {packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"} Learning</p>
+                    <p><AiOutlineCheck className="icon" />
+                    {
+                        changeConstants(packages[0].title) === "Self-paced" ? 
+                        <span>Recorded Classes </span> 
+                        :
+
+                     <>
+                        <span style={{color:"var(--theme-orange)"}}>Live </span> 
+                        <span>with Instructor</span>
+                     </>
+                    }
+                     </p>
                 </div>
                 <div className="route_to_class">
                     <span onClick={() => gotoclass(title, category, bootcampId, navigate)}>Learn more</span>
@@ -656,7 +685,7 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
 
                 <div className="mid_content">
                     <div className="mid_stats">
-                        <span>{packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"}</span>
+                        {/* <span>{packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"}</span> */}
                         <span>$ {packages.length > 0 ? packages[0].price : price}</span>
                         <span>{duration}</span>
                     </div>
