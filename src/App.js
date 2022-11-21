@@ -113,6 +113,7 @@ import { GroupContent, MailDetail } from "./pages/Dashboard/components/classCons
 import { ProgramPage } from "./components/NewLanding/ExecutiveClasses";
 import CourseComponent from "./pages/Courses/allcourses/Course";
 import UpComingComponent from "./pages/Bootcamp/Upcoming";
+import { Blog } from "./pages/Dashboard/components/blog";
 
 
 
@@ -439,6 +440,7 @@ function App() {
                 <Route path="settings" element={<Settings />} />
                 <Route path="earnings" element={<AdminEarning />} />
                 <Route path="affiliate" element={<AdminAffiliate />} />
+                <Route path="blog" element={<Blog />} />
 
 
                 {/* <Route path="class-console" element={<Out />}>
