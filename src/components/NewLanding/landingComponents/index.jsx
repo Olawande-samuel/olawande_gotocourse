@@ -509,11 +509,22 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
                 </div>
                 <div className="checks">
                     {/* <p> <AiOutlineCheck className="icon" /> Cohort Learning</p> */}
-                    <p> <AiOutlineCheck className="icon" /> {packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"} Learning</p>
+
+                    {
+                        changeConstants(packages[0].title) === "Self-paced" ? 
+                        <p> <AiOutlineCheck className="icon" /> Recorded Classes</p>
+                        :
+                        <p> <AiOutlineCheck className="icon" /> Cohort Learning</p>    
+                    }
+                    {/* <p> <AiOutlineCheck className="icon" /> {packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"} Learning</p> */}
                     <p><AiOutlineCheck className="icon" />
                     {
                         changeConstants(packages[0].title) === "Self-paced" ? 
-                        <span>Recorded Classes </span> 
+                        <>
+                            <span style={{color:"var(--theme-orange)"}}>Self-paced </span> 
+                            <span>Learning</span>
+                        </>
+                        
                         :
 
                      <>

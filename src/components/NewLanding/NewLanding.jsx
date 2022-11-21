@@ -346,12 +346,12 @@ function Hero() {
       img: afford,
       color: "#66BFE6",
       link: "/sign-up",
-      link_btn: "Get Started",
+      link_btn: "Get Started", 
     },
     {
       id: 4,
-      title: "Over 300 Courses for your career",
-      title2: "growth at an affordable cost!",
+      title: "Over 300 Courses for your career growth at an affordable cost!",
+      title2: "",
       subtitle: "Whether you are starting newly or upgrading your skills this is the best place to learn. No need of without putting your life on hold. You can study anywhere, everywhere and at any time, Gotocourse is your ideal destination of growing your tech and business skills.",
       social: true,
       acctype: "affiliate",
@@ -465,7 +465,7 @@ function HeroContent({
           ) : (
             <h6
               className="newHero_left-title mb-4 mb-lg-3 ms-0"
-              style={{ width: "min(100%, 700px)" }}
+              style={{ width: "min(100%, 500px)" }}
             >
               {subtitle}
             </h6>
