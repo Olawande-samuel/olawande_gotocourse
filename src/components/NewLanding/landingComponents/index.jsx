@@ -235,7 +235,7 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
                 throw new AdvancedError(message, statusCode);
             }
         } catch (err) {
-            console.log(err);
+            console.error(err);
         } finally {
         }
     }
@@ -282,7 +282,7 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
     }
 
     async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
-        console.log(title, category, bootcampId);
+        
         e.preventDefault();
         if (userdata?.token) {
             // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
@@ -297,7 +297,7 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
         if (shortListItem.length > 0) {
             setData(shortListItem[0])
         }
-        console.log({ shortListItem })
+        
     }, [title])
 
     return (
@@ -952,7 +952,6 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
     const flag = useRef(false);
     let [wishlistState, setWishlistState] = useState({})
 
-    console.log({ wishlistState });
     const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
 
     async function addToWishlist() {
@@ -964,7 +963,6 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                 const { success, message, statusCode } = response
                 if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
                 const { data } = response
-                console.log({ data });
                 setWishlistState(data)
             } catch (error) {
                 console.error(error)
@@ -989,7 +987,6 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
             else if (statusCode === 1) {
                 const { data } = res;
                 if (data.length > 0) {
-                    console.log("wih", { data });
                     setWishlistState(data.find(d => d.courseId === bootcampId));
                 } else {
 
@@ -999,7 +996,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                 throw new AdvancedError(message, statusCode);
             }
         } catch (err) {
-            console.log(err);
+            console.error(err);
         } finally {
         }
     }
@@ -1033,7 +1030,6 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
 
 
     async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
-        console.log(title, category, bootcampId, { all });
         e.preventDefault();
         if (userdata?.token) {
             // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
@@ -1222,7 +1218,7 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
                 throw new AdvancedError(message, statusCode);
             }
         } catch (err) {
-            console.log(err);
+            console.error(err);
         } finally {
         }
     }
@@ -1261,7 +1257,6 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
     }
 
     async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
-        console.log(title, category, bootcampId);
         e.preventDefault();
         if (userdata?.token) {
             // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
@@ -1604,7 +1599,6 @@ export function SuccessCard({ icon, title, description }) {
     };
 
 
-    console.log(icon)
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
