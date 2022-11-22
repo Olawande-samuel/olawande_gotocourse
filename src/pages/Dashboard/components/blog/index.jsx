@@ -304,7 +304,7 @@ export const BlogDashboard = () => {
                             <p className="restricted_line" dangerouslySetInnerHTML={{__html: blog.content}}></p>
 
                             <div className="blogbutton">
-                                <button onClick={() => updateBlogFunc(blog._id)}>Update</button>
+                                <button onClick={() => updateBlogFunc(blog._id)}>Edit</button>
                                 <button onClick={() => deleteBlogFunc(blog._id)}>Delete</button>
                             </div>
 
