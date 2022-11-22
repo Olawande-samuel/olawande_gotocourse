@@ -114,7 +114,7 @@ import { ProgramPage } from "./components/NewLanding/ExecutiveClasses";
 import CourseComponent from "./pages/Courses/allcourses/Course";
 import UpComingComponent from "./pages/Bootcamp/Upcoming";
 import { Blog, BlogDashboard, MyBlog } from "./pages/Dashboard/components/blog";
-import { AdminWebinar, AdminWebinarDashboard } from "./pages/Dashboard/components/webinar";
+import { AdminWebinar, AdminWebinarDashboard, MyWebinar } from "./pages/Dashboard/components/webinar";
 
 
 
@@ -448,6 +448,7 @@ function App() {
                 </Route>
                 <Route path="webinar" element={<Out />}>
                   <Route index element={<AdminWebinarDashboard />} />
+                  <Route path=":id" element={<MyWebinar />} />
                   <Route path="create" element={< AdminWebinar />} />
 
                 </Route>

@@ -1550,16 +1550,20 @@ const WebinarWrapper = styled.div`
 
 `
 
-export function LiveWebinarCard({ img, title, place, date, time }) {
+export function LiveWebinarCard({ img,
+    // webinarImg,
+    title, place, date, time }) {
     return (
         <WebinarWrapper>
             <div className="img_top">
                 <img src={img} alt="" />
+                {/* <img src={`${process.env.REACT_APP_IMAGEURL}${webinarImg}`} alt="" /> */}
             </div>
             <div className="content">
                 <h6>{title}</h6>
                 <div>
                     <p>Gotocourse</p>
+                    {/* <p>{new Date(date).toLocaleDateString()} | {time}</p> */}
                     <p>{date} | {time}</p>
                 </div>
             </div>
