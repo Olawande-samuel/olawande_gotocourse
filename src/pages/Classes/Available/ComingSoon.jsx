@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Layout from "../../../components/Layout";
@@ -75,6 +76,11 @@ const Content = styled.div`
             border-radius: 8px;
         }
 
+        a button {
+            background: #fff;
+            color: #F75C4E;
+        }
+
         margin-bottom: 2rem;
     }
 
@@ -145,7 +151,8 @@ const ComingSoon = () =>{
                         <div>
                             <p>You can add this course to your wishlist</p>
 
-
+                            <div className="d-flex" style={{gap:"1.5rem"}}>
+                                <>
                             {
                                 userList?.courseId  ? 
 
@@ -171,6 +178,12 @@ const ComingSoon = () =>{
 
 
                             }
+                                </>
+
+                                <Link to="/">
+                                    <button>Home</button>
+                                </Link>
+                            </div>
                         </div>
 
                     </Content>
