@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Layout from "../../components/Layout"
 import style from "./style.module.css"
 import profile from "../../images/events/profile.png"
@@ -8,10 +8,33 @@ import { IoCalendarSharp, IoTimeSharp } from 'react-icons/io5'
 import { AiFillClockCircle } from 'react-icons/ai'
 import { BiTargetLock } from 'react-icons/bi'
 import { FaShareSquare } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { MdMyLocation } from 'react-icons/md'
+import { useLocalStorage } from '../../hooks'
+import { useAuth } from '../../contexts/Auth'
+import { KEY } from '../../constants'
+import { useQuery } from '@tanstack/react-query'
 
 const Events = () => {
+
+    const { getItem } = useLocalStorage();
+    const [blogs, setBlogs] = useState([])
+    let navigate = useNavigate()
+    let userdata = getItem(KEY);
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { getBlogs } } = useAuth();
+
+    const blogData = useQuery(["fetch classes"], () => getBlogs(), {
+        onSuccess: (res) => {
+            if (res.data.length > 0) {
+                console.log("data", res.data);
+                setBlogs(res.data)
+
+            }
+        }
+    })
+
+
+
     return (
         <Layout>
             <div className={style.events_wrapper}>
@@ -26,10 +49,10 @@ const Events = () => {
                 <div className={style.article}>
                     <div className={style.articles__container}>
                         {
-                            [...Array(6)].map((x, id) => (
-                                <Link to={`articles/${id}`} className={style.articleitem}>
+                            blogs.map((blog, id) => (
+                                <Link to={`articles/${blog._id}`} className={style.articleitem}>
                                     <div className={style.articleimg}>
-                                        <img src={articleimg} alt="" />
+                                    <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
 
                                     </div>
 
@@ -40,11 +63,10 @@ const Events = () => {
 
                                         </div>
                                         <h4>
-                                            How to modernize queues for the digital-⁠first consumer
+                                           {blog.title}
                                         </h4>
-                                        <p>
-                                            Christoffer Klemming, CEO and co-founder of Waitwhile, shares insights on how companies can boost customer satisfaction using learnings from psychological research.
-                                        </p>
+                                        <p className="restricted_line" dangerouslySetInnerHTML={{__html: blog.content}}></p>
+
 
                                     </div>
 
@@ -191,6 +213,7 @@ function Ondemand() {
 }
 
 export function Event() {
+   
     return (
         <Layout>
             <div className={`container p-4 ${style.event}`}>

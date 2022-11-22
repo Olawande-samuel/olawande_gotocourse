@@ -1,6 +1,6 @@
 import { Button } from "@mui/material"
 import { Link, useLocation, useNavigate } from "react-router-dom"
-import { useQuery } from "@tanstack/react-query"
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 import { BiCloudDownload } from "react-icons/bi"
 import styled from "styled-components"
@@ -230,12 +230,13 @@ export const MyBlog = () => {
 }
 export const BlogDashboard = () => {
     const { getItem } = useLocalStorage();
+    const queryClient = useQueryClient()
     const [blogs, setBlogs] = useState([])
     let navigate = useNavigate()
     let userdata = getItem(KEY);
     const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { getBlog, deleteBlog, updateBlog } } = useAuth();
 
-    const blog = useQuery(["fetch classes"], () => getBlog(userdata?.token), {
+    const blogData = useQuery(["fetch classes"], () => getBlog(userdata?.token), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
                 console.log("data", res.data);
@@ -244,6 +245,7 @@ export const BlogDashboard = () => {
             }
         }
     })
+
 
     const updateBlogFunc = async (id) => {
         navigate(`create?id=${id}`, {
@@ -261,7 +263,9 @@ export const BlogDashboard = () => {
             const { success, message, statusCode } = response
             if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
             const { data } = response
-            console.log({ data });
+            queryClient.invalidateQueries(["fetch classes"])
+
+            // console.log({ data });
         } catch (error) {
             console.error(error)
         } finally {
