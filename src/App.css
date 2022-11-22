@@ -101,6 +101,7 @@ font-size: 14px;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 5.5rem;
 }
 .restricted_line_lg {
   display: -webkit-box;
@@ -108,6 +109,7 @@ font-size: 14px;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 7.5rem;
 }
 
 
@@ -169,6 +171,8 @@ td:not(:first-child) {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 6.5rem;
+
 }
 .clamp_text_sm {
   display: -webkit-box;
@@ -176,6 +180,8 @@ td:not(:first-child) {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 5.5rem;
+
 }
 .mt-mid {
   margin-top: 2.0625rem !important;
@@ -835,6 +841,8 @@ border-radius: 13.5px !important;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 6.5rem;
+
 
 }
 
@@ -933,6 +941,8 @@ border-radius: 13.5px !important;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  height: 5.5rem;
+
 }
 
 .mentors .card-text {
@@ -2805,5 +2815,8 @@ gap: 1rem;
   -webkit-line-clamp: 8;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis;  
+  height: 10.5rem;
+
+
 }

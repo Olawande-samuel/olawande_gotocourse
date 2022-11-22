@@ -165,6 +165,8 @@ const CardBody = styled.div`
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
+            height: 6.5rem;
+
         }
     }
 

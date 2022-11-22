@@ -437,6 +437,7 @@ const ExecutiveCard = styled.div`
         -webkit-line-clamp: 2;
         text-align: left;
         font-size: 12.5px;
+        height: 4.5rem;
     }
     .exe_content {
         padding: 2rem;
@@ -750,6 +751,8 @@ const UpCoursesCard = styled.div`
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
+        height: 4.5rem
+        
         
     }
 
@@ -859,6 +862,8 @@ const ShortCard = styled.div`
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
+        height: 5.5rem;
+
     }
 
     h5 {
@@ -1553,6 +1558,7 @@ const SuccessWrapper = styled.div`
     .restricted_line {
         -webkit-line-clamp: 4;
         font-size: clamp(0.625rem, 0.5179rem + 0.5357vw, 1rem);
+        height:6.5rem;
     }
 
     span:first-of-type {
