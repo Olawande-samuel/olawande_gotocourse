@@ -106,6 +106,7 @@ button{
 
 @media (max-width: 768px){
     flex-direction: column;
+    gap: 2rem;
 
     input{
         width: unset;

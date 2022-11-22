@@ -2336,9 +2336,9 @@ export const adminFunctions = {
             }
         }
     },
-    updateBlog: async function (token, data) {
+    updateBlog: async function (token,id, data) {
         try {
-            const res = await axios.put(`${baseURL}/admin/blog/update/${data}`, JSON.stringify([data]),
+            const res = await axios.put(`${baseURL}/admin/blog/update/${id}`, JSON.stringify(data),
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,
@@ -2370,7 +2370,7 @@ export const adminFunctions = {
     },
     deleteBlog: async function (token, data) {
         try {
-            const res = await axios.delete(`${baseURL}/admin/blog/delete/:${data}`, JSON.stringify([data]),
+            const res = await axios.delete(`${baseURL}/admin/blog/delete/${data}`,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,

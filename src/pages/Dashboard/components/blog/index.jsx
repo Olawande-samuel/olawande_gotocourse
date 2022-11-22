@@ -1,5 +1,5 @@
 import { Button } from "@mui/material"
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { BiCloudDownload } from "react-icons/bi"
@@ -10,56 +10,106 @@ import { useAuth } from "../../../../contexts/Auth"
 import { useLocalStorage } from "../../../../hooks"
 import { Admin } from "../../Admin"
 import { Header } from "../webinar"
+import UploadForm from "../../../../components/UploadForm"
+import { useEffect } from "react"
+import { useRef } from "react"
+import { useParams } from "react-router-dom"
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
 
 const Container = styled.div`
 overflow-y: scroll;
+display: flex;
+flex-direction: column;
+gap: 1rem;
+
+.imgcontainer{
+    width: 100%;
+    height: 300px;
+
+    img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+
+    }
+}
+
+
 
 `
 
 const CardContainer = styled.div`
 display: flex;
+flex-wrap: wrap;
 gap: 2rem;
 overflow-y: scroll;
+padding-bottom: 5rem;
+
+@media (max-width: 768px){
+    justify-content: center;
+}
 
 `
 
 const Card = styled.div`
 flex-shrink: 0;
 width: 15rem;
-height: 20rem;
+height: 25rem;
 border: 1px solid black;
-display: flex;
-flex-direction: column;
-cursor: pointer;
+overflow: hidden;
+
+
+a{
+    width: 100%;
+    height: 100%;
+}
 
 .top{
-    flex: .4;
-    border: 2px solid red;
-    height: 100%;
+    // border: 2px solid red;
+    width: 100%;
+    height: 50%;
 
     img{
         width: 100%;
         height: 100%;
-        object-fit: contain;
+        object-fit: cover;
     }
 }
 
 .bottom{
-    flex: .6;
-    border: 2px solid green;
-    height: 100%;
     padding: .5rem;
+    // border: 2px solid green;
+    height: 50%;
+    position: relative;
+
+    h4{
+        font-size:font-size: clamp(1rem, 0.9821rem + 0.0893vw, 1.125rem);
+    }
+
+    p{
+        font-size: font-size: clamp(0.75rem, 0.7321rem + 0.0893vw, 0.875rem);
+
+    }
+
 
     .blogbutton{
+        position: absolute;
         display: flex;
         align-items: center;
-        gap: 1rem;
+        justify-content: space-evenly;
+        bottom: 5px;
+        left: 0;
+        right: 0;
 
 
         button{
             border: 1px solid black;
             outline: none;
             padding: .5rem 1rem;
+            font-size: 12px;
+
         }
 
         button:nth-of-type(1){
@@ -124,18 +174,56 @@ form{
 `
 
 export const MyBlog = () => {
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { getBlog, deleteBlog, updateBlog } } = useAuth();
+    const [blog, setBlog] = useState({})
+    const { getItem } = useLocalStorage();
+    let userdata = getItem(KEY);
+
+
+    let flag = useRef(false)
+    const { id } = useParams()
+
+    useEffect(() => {
+        if (flag.current) return;
+        if (id) {
+            (async () => {
+                try {
+                    const res = await getBlog(userdata?.token);
+                    const { message, success, statusCode } = res;
+                    if (!success) throw new AdvancedError(message, statusCode);
+                    else if (statusCode === 1) {
+                        const { data } = res;
+                        let found = data.find((d) => d._id === id);
+                        setBlog(found)
+                    } else {
+                        throw new AdvancedError(message, statusCode);
+                    }
+                } catch (err) {
+                    console.log(err);
+                } finally {
+
+                }
+            })();
+
+        }
+        flag.current = true;
+        return () => console.log("Removing");
+    }, [id])
     return (
         <Admin>
-        <Container>
-            <h4>Title</h4>
-            <p>
-            Description
+            <Container>
+                <div className="imgcontainer">
+                    <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
+                </div>
+                <h4>{blog.title}</h4>
+                <p>
+                    {blog.content}
 
-            </p>
+                </p>
 
 
 
-        </Container>
+            </Container>
 
         </Admin>
     )
@@ -143,17 +231,44 @@ export const MyBlog = () => {
 export const BlogDashboard = () => {
     const { getItem } = useLocalStorage();
     const [blogs, setBlogs] = useState([])
+    let navigate = useNavigate()
     let userdata = getItem(KEY);
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { getBlog } } = useAuth();
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { getBlog, deleteBlog, updateBlog } } = useAuth();
 
-    // const blog = useQuery(["fetch classes"], () => getBlog(), {
-    //     onSuccess: (res) => {
-    //         if (res.data.length > 0) {
-    //             console.log("data", res.data);
+    const blog = useQuery(["fetch classes"], () => getBlog(userdata?.token), {
+        onSuccess: (res) => {
+            if (res.data.length > 0) {
+                console.log("data", res.data);
+                setBlogs(res.data)
 
-    //         }
-    //     }
-    // })
+            }
+        }
+    })
+
+    const updateBlogFunc = async (id) => {
+        navigate(`create?id=${id}`, {
+            state: {
+                id
+            }
+        })
+
+    }
+
+    const deleteBlogFunc = async (id) => {
+        setGeneralState({ ...generalState, loading: true })
+        try {
+            const response = await deleteBlog(userdata?.token, id)
+            const { success, message, statusCode } = response
+            if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+            const { data } = response
+            console.log({ data });
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setGeneralState({ ...generalState, loading: false })
+
+        }
+    }
 
     return (
         <Admin>
@@ -171,27 +286,29 @@ export const BlogDashboard = () => {
                 </button>
             </Header>
             <CardContainer>
-                <Link to={`id`}>
-              
-                <Card>
-                    <div className="top">
-                        <img src="" alt="" />
+                {blogs.map(blog => (
 
-                    </div>
-                    <div className="bottom">
-                        <h4>Title</h4>
-                        <p className="restricted_line">description</p>
+                    <Card key={blog._id}>
+                        <Link to={`${blog._id}`}>
+                            <div className="top">
+                                <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
 
-                        <div className="blogbutton">
-                            <button>Update</button>
-                            <button>delete</button>
+                            </div>
+                        </Link>
+                        <div className="bottom">
+                            <h4>{blog.title}</h4>
+                            <p className="restricted_line" dangerouslySetInnerHTML={{__html: blog.content}}></p>
+
+                            <div className="blogbutton">
+                                <button onClick={() => updateBlogFunc(blog._id)}>Update</button>
+                                <button onClick={() => deleteBlogFunc(blog._id)}>Delete</button>
+                            </div>
+
                         </div>
 
-                    </div>
 
-
-                </Card>
-                </Link>
+                    </Card>
+                ))}
             </CardContainer>
 
         </Admin>
@@ -200,37 +317,107 @@ export const BlogDashboard = () => {
 
 
 export const Blog = () => {
+    const [open, setOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState(false);
+    const [edit, setEdit] = useState(false)
 
+    let flag = useRef(false)
     const [formState, setFormState] = useState({
         title: "",
         content: "",
-
+        blogImg: ""
     })
+
+
+    let navigate = useNavigate()
+    const location = useLocation()
+    const id = location.state && location.state.id
 
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { addBlog } } = useAuth();
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { addBlog, getBlog, updateBlog } } = useAuth();
 
     const Submit = async (e) => {
         e.preventDefault();
 
-        setGeneralState({ ...generalState, loading: true })
-        try {
-            const response = await addBlog(userdata?.token, formState)
-            const { success, message, statusCode } = response
-            if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-            const { data } = response
-            console.log({ data });
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setGeneralState({ ...generalState, loading: false })
+        if (edit) {
+            setGeneralState({ ...generalState, loading: true })
+            try {
+                const response = await updateBlog(userdata?.token, id, formState)
+                const { success, message, statusCode } = response
+                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+                const { data } = response
+                setEdit(false)
+                navigate('/admin/blog')
+                console.log({ data });
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setGeneralState({ ...generalState, loading: false })
+
+            }
+        } else {
+            setGeneralState({ ...generalState, loading: true })
+            try {
+                const response = await addBlog(userdata?.token, formState)
+                const { success, message, statusCode } = response
+                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+                const { data } = response
+                console.log({ data });
+                navigate('/admin/blog')
+
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setGeneralState({ ...generalState, loading: false })
+
+            }
 
         }
 
+
     }
 
+    function showUploadFormHandler() {
+        setOpen((_) => true);
+    }
 
+    console.log({ id });
+    console.log({ edit });
+
+    useEffect(() => {
+        if (flag.current) return;
+        if (id) {
+            (async () => {
+                try {
+                    const res = await getBlog(userdata?.token);
+                    const { message, success, statusCode } = res;
+                    if (!success) throw new AdvancedError(message, statusCode);
+                    else if (statusCode === 1) {
+                        const { data } = res;
+                        let found = data.find((d) => d._id === id);
+                        if (found) {
+                            setEdit(true)
+                            setFormState({ ...formState, ...found });
+                        }
+                    } else {
+                        throw new AdvancedError(message, statusCode);
+                    }
+                } catch (err) {
+                    console.log(err);
+                } finally {
+
+                }
+            })();
+
+        }
+        flag.current = true;
+        return () => console.log("Removing");
+    }, [id])
+
+    const handleContent = (contentVal) => {
+        setFormState({ ...formState, ["content"]: contentVal })
+    }
 
     return (
         <Admin>
@@ -245,20 +432,44 @@ export const Blog = () => {
                             onChange={(e) => setFormState({ ...formState, [e.target.name]: e.target.value })}
                         />
                     </label>
-
+                    
                     <label htmlFor="content">Content
-                        <textarea name="content"
-                            value={formState.content}
-                            onChange={(e) => setFormState({ ...formState, [e.target.name]: e.target.value })}></textarea>
-                    </label>
 
+                    <CKEditor
+                        editor={ClassicEditor}
+                        data={formState.content}
+                        onReady={(editor) => {
+                            // You can store the "editor" and use when it is needed.
+                            console.log('Editor is ready to use!', editor);
+
+                        }}
+                        onChange={(event, editor) => {
+                            const data = editor.getData();
+                            console.log({ event, editor, data });
+
+                            setFormState({ ...formState, ["content"]: data })
+                            // setFormstate({...formstate, mentorBio: data})
+                        }}
+                    />
+</label> 
                     <label htmlFor="upload">Upload</label>
-                    <Button variant="contained" component="label" style={{ width: "50%", color: "#FFFFFF", background: "#0C2191" }}>
+                    <Button variant="contained" component="label" style={{ width: "50%", color: "#FFFFFF", background: "#0C2191" }} onClick={showUploadFormHandler}>
                         <BiCloudDownload style={{ fontSize: "2rem", color: "#FFFFFF" }} /> Upload
-                        <input hidden accept="image/*" multiple type="file"
-                        />
+                        {/* <input hidden accept="image/*" multiple type="file"/> */}
                     </Button>
 
+                    <UploadForm
+                        isOpen={open}
+                        setIsOpen={setOpen}
+                        setPreviewImage={setPreviewImage}
+                    />
+                    <label htmlFor="title">Upload Link
+                        <input type="text"
+                            name="blogImg"
+                            value={formState.blogImg}
+                            onChange={(e) => setFormState({ ...formState, [e.target.name]: e.target.value })}
+                        />
+                    </label>
 
                     <Button variant="contained" component="label" style={{ color: "#FFFFFF", background: "#0C2191" }} onClick={(e) => Submit(e)}>
                         Publish
