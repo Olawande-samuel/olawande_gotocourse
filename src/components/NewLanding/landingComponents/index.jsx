@@ -1038,9 +1038,11 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
         e.preventDefault();
         if (userdata?.token) {
             // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-            gotoclassPayment(title, category, bootcampId, navigate)
+            // gotoclassPayment(title, category, bootcampId, navigate)
+            navigate("/coming-soon")
         } else {
-            navigate("/login")
+            // navigate("/login")
+            navigate("/coming-soon")
         }
     }
 

@@ -186,6 +186,7 @@ function App() {
               <Route path="become-a-teacher" element={<TeachersLanding />} />
               <Route path="student/classroom" element={<StudentClassroom />} />
 
+              <Route path="coming-soon" element={<ComingSoon />} />
               <Route path="tester" element={<ComingSoon />} />
               <Route path="video-chat" element={<VideDiv />} />
 
