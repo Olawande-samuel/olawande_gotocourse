@@ -216,12 +216,7 @@ export const MyBlog = () => {
                     <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
                 </div>
                 <h4>{blog.title}</h4>
-                <p>
-                    {blog.content}
-
-                </p>
-
-
+                <p dangerouslySetInnerHTML={{__html: blog.content}}></p>
 
             </Container>
 
@@ -290,7 +285,7 @@ export const BlogDashboard = () => {
                 </button>
             </Header>
             <CardContainer>
-                {blogs.map(blog => (
+                { blogs.length > 0 &&  blogs.map(blog => (
 
                     <Card key={blog._id}>
                         <Link to={`${blog._id}`}>
@@ -390,7 +385,6 @@ export const Blog = () => {
     console.log({ edit });
 
     useEffect(() => {
-        if (flag.current) return;
         if (id) {
             (async () => {
                 try {
@@ -399,10 +393,13 @@ export const Blog = () => {
                     if (!success) throw new AdvancedError(message, statusCode);
                     else if (statusCode === 1) {
                         const { data } = res;
+                        console.log({data});
                         let found = data.find((d) => d._id === id);
                         if (found) {
                             setEdit(true)
-                            setFormState({ ...formState, ...found });
+                            console.log({found});
+                            setFormState(found)
+                            // setFormState({ ...formState, ...found });
                         }
                     } else {
                         throw new AdvancedError(message, statusCode);
@@ -415,13 +412,10 @@ export const Blog = () => {
             })();
 
         }
-        flag.current = true;
         return () => console.log("Removing");
     }, [id])
 
-    const handleContent = (contentVal) => {
-        setFormState({ ...formState, ["content"]: contentVal })
-    }
+   console.log({formState});
 
     return (
         <Admin>

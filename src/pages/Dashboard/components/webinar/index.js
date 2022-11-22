@@ -184,7 +184,10 @@ gap: 1rem;
         };
         div:nth-of-type(5){
             flex: .1;
-            color: #087118;
+            a{
+                color: #087118;
+
+            }
         };
         div:nth-of-type(6){
             flex: .1;
@@ -332,6 +335,10 @@ export const AdminWebinar = () => {
 
 
 export const AdminWebinarDashboard = () => {
+
+    const deleteWebinar = () => {
+        
+    }
     return (
         <Admin>
             <Container>
@@ -362,13 +369,13 @@ export const AdminWebinarDashboard = () => {
                 <div className="webinarcontent">
 
                     {[...Array(5)].map((x, id) => (
-                        <div className="webinaritem">
+                        <div className="webinaritem" key={id}>
                             <div>UIUX</div>
                             <div>Feb 24</div>
                             <div>8:00 pm CST</div>
                             <div>Admin 1 </div>
-                            <div>Edit</div>
-                            <div>Delete</div>
+                            <div><Link to={`create?id=${id}`}>Edit</Link></div>
+                            <div onClick={() => deleteWebinar()}>Delete</div>
                         </div>
                     ))}
                 </div>

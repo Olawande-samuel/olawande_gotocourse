@@ -9,6 +9,7 @@ import { BsCalendarWeekFill } from 'react-icons/bs'
 import { FaShareSquare } from 'react-icons/fa'
 import { useAuth } from '../../../contexts/Auth'
 import { useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const Articles = () => {
     const {id} = useParams()
@@ -73,12 +74,14 @@ const Articles = () => {
                 <section>
                 <div className={style.articles__container}>
                         {
-                           blogs.map((x, id) => (
+                          blogs.length > 0 && blogs.map((x, id) => (
                                 <div className={style.articleitem}>
+                                    <Link to={`/events&articles/articles/${x._id}`}>
                                     <div className={style.articleimg}>
                                     <img src={`${process.env.REACT_APP_IMAGEURL}${x.blogImg}`} alt="" />
 
                                     </div>
+                                    </Link>
 
                                     <div className={style.articleInfo}>
                                         <div className={style.articleTop}>

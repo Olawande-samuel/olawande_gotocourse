@@ -445,7 +445,7 @@ const curriculum = [
 export function NewBootcampDetailsComponent() {
   const [bootcampTrainingInfo, setBootcampTrainingInfo] = useState({});
   const { getItem } = useLocalStorage();
-  let [wishlistState, setWishlistState] = useState({})
+  let [wishlistState, setWishlistState] = useState(false)
 
   const bootcampTraining = getItem("gotocourse-bootcampdata");
   const userdata = getItem("gotocourse-userdata");
@@ -493,7 +493,7 @@ export function NewBootcampDetailsComponent() {
         if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
         toast.success(message)
         const { data } = response
-        setWishlistState(data)
+        setWishlistState(true)
       } catch (error) {
         console.error(error)
         toast.error(error.message);
@@ -516,7 +516,7 @@ export function NewBootcampDetailsComponent() {
       else if (statusCode === 1) {
         const { data } = res;
         if (data.length > 0) {
-          setWishlistState(data.find(d => d.courseId === id));
+          setWishlistState(data.map(d => d.courseId).includes(id));
         } else {
           console.log("err"); 
 
@@ -539,7 +539,7 @@ export function NewBootcampDetailsComponent() {
       const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
       console.log("setting to {}");
-        setWishlistState({})
+        setWishlistState(false)
     } catch (err) {
 
     } finally {
@@ -555,10 +555,8 @@ export function NewBootcampDetailsComponent() {
   // console.log("all", bootcamps.data?.data);
 
   useEffect(() => {
-    if (flag.current) return;
     getWishList()
-    flag.current = true;
-}, [])
+}, [setWishlistState])
 
   const similar = bootcamps.data?.data.filter(d => (d.subCategory === bootcampTrainingInfo.subCategory) && d.isActive && (d.bootcampId !== bootcampTrainingInfo.bootcampId))
   const upcoming = bootcamps.data?.data?.filter(d => d.isActive)
@@ -734,7 +732,7 @@ export function NewBootcampDetailsComponent() {
 
 
 export function DetailsHero({ navHeight, title, description, addToWishList, handleBootstrapEnrollment, loading, img, endDate, startDate , wishlistState, removeCourse, userdata}) {
-console.log({wishlistState});
+// console.log({wishlistState});
   return (
     <section
       className={clsx.new_hero}
@@ -773,36 +771,49 @@ console.log({wishlistState});
             </motion.button> */}
 
 {
-              (userdata.token && wishlistState) ?
+                                (!userdata.token) ? <button onClick={addToWishList}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Wishlist"
 
-                <button onClick={removeCourse}>
-                  {
-                    loading ?
-                      <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                      </div>
-                      :
-                      "Remove wishlist"
+                                    }
 
-                  }
+                                </button> :
 
-                </button>
+                                    (userdata.token && wishlistState) ?
 
-                :
+                                        <button onClick={removeCourse}>
+                                            {
+                                                loading ?
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    :
+                                                    "Remove wishlist"
 
-                <button onClick={addToWishList}>
-                  {
-                    loading ?
-                      <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                      </div>
-                      :
-                      "Wishlist"
+                                            }
 
-                  }
+                                        </button>
+                                        :
+                                        <button onClick={addToWishList}>
+                                            {
+                                                loading ?
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    :
+                                                    "Wishlist"
 
-                </button>
-            }
+                                            }
+
+                                        </button>
+
+                            }
+
 
 
 

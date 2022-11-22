@@ -190,7 +190,7 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
     //wishlist
 
     const flag = useRef(false);
-    let [wishlistState, setWishlistState] = useState({})
+    let [wishlistState, setWishlistState] = useState(false)
     const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
 
     async function addToWishlist() {
@@ -202,7 +202,7 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
                 const { success, message, statusCode } = response
                 if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
                 const { data } = response
-                setWishlistState(data)
+                setWishlistState(true)
             } catch (error) {
                 console.error(error)
             } finally {
@@ -226,7 +226,7 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
             else if (statusCode === 1) {
                 const { data } = res;
                 if (data.length > 0) {
-                    setWishlistState(data.find(d => d.courseId === bootcampId));
+                    setWishlistState(data.map(d => d.courseId).includes(bootcampId));
                 } else {
 
                 }
@@ -241,10 +241,8 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
     }
 
     useEffect(() => {
-        if (flag.current) return;
         getWishList()
-        flag.current = true;
-    }, [])
+    }, [setWishlistState])
 
 
     let navigate = useNavigate()
@@ -271,7 +269,7 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
             if (!success) throw new AdvancedError(message, statusCode);
             else {
                 const { data } = res;
-                setWishlistState({})
+                setWishlistState(false)
                 handleClose()
             }
         } catch (err) {
@@ -353,36 +351,49 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
                         <div className="pop_action">
                             <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
                             {
-                                (userdata.token && wishlistState) ?
+                                (!userdata.token) ? <button onClick={addToWishlist}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Wishlist"
 
-                                    <button onClick={removeCourse}>
-                                        {
-                                            loading ?
-                                                <div className="spinner-border" role="status">
-                                                    <span className="visually-hidden">Loading...</span>
-                                                </div>
-                                                :
-                                                "Remove wishlist"
+                                    }
 
-                                        }
+                                </button> :
 
-                                    </button>
+                                    (userdata.token && wishlistState) ?
 
-                                    :
+                                        <button onClick={removeCourse}>
+                                            {
+                                                loading ?
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    :
+                                                    "Remove wishlist"
 
-                                    <button onClick={addToWishlist}>
-                                        {
-                                            loading ?
-                                                <div className="spinner-border" role="status">
-                                                    <span className="visually-hidden">Loading...</span>
-                                                </div>
-                                                :
-                                                "Wishlist"
+                                            }
 
-                                        }
+                                        </button>
+                                        :
+                                        <button onClick={addToWishlist}>
+                                            {
+                                                loading ?
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    :
+                                                    "Wishlist"
 
-                                    </button>
+                                            }
+
+                                        </button>
+
                             }
+
                         </div>
                     </div>
                 </Box>
@@ -502,37 +513,37 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
                         <p dangerouslySetInnerHTML={{ __html: description }} />
 
                     </div> */}
-                <div className="d-flex justify-content-between align-items-center">
-                    <span>$ {packages.length > 0 ? packages[0].price : price}</span>
-                    <span>{duration}</span>
-                </div>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <span>$ {packages.length > 0 ? packages[0].price : price}</span>
+                        <span>{duration}</span>
+                    </div>
                 </div>
                 <div className="checks">
                     {/* <p> <AiOutlineCheck className="icon" /> Cohort Learning</p> */}
 
                     {
-                        changeConstants(packages[0].title) === "Self-paced" ? 
-                        <p> <AiOutlineCheck className="icon" /> Recorded Classes</p>
-                        :
-                        <p> <AiOutlineCheck className="icon" /> Cohort Learning</p>    
+                        changeConstants(packages[0].title) === "Self-paced" ?
+                            <p> <AiOutlineCheck className="icon" /> Recorded Classes</p>
+                            :
+                            <p> <AiOutlineCheck className="icon" /> Cohort Learning</p>
                     }
                     {/* <p> <AiOutlineCheck className="icon" /> {packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"} Learning</p> */}
                     <p><AiOutlineCheck className="icon" />
-                    {
-                        changeConstants(packages[0].title) === "Self-paced" ? 
-                        <>
-                            <span style={{color:"var(--theme-orange)"}}>Self-paced </span> 
-                            <span>Learning</span>
-                        </>
-                        
-                        :
+                        {
+                            changeConstants(packages[0].title) === "Self-paced" ?
+                                <>
+                                    <span style={{ color: "var(--theme-orange)" }}>Self-paced </span>
+                                    <span>Learning</span>
+                                </>
 
-                     <>
-                        <span style={{color:"var(--theme-orange)"}}>Live </span> 
-                        <span>with Instructor</span>
-                     </>
-                    }
-                     </p>
+                                :
+
+                                <>
+                                    <span style={{ color: "var(--theme-orange)" }}>Live </span>
+                                    <span>with Instructor</span>
+                                </>
+                        }
+                    </p>
                 </div>
                 <div className="route_to_class">
                     <span onClick={() => gotoclass(title, category, bootcampId, navigate)}>Learn more</span>
@@ -702,7 +713,7 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
                     </div>
                     <div className="checks">
                         <p> <AiOutlineCheck className="icon" /> Cohort Learning</p>
-                        <p><AiOutlineCheck className="icon" /> <span style={{color:"var(--theme-orange)"}}>Live </span>with Instructor</p>
+                        <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live </span>with Instructor</p>
                     </div>
                 </div>
 
@@ -950,7 +961,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
     //wishlist
 
     const flag = useRef(false);
-    let [wishlistState, setWishlistState] = useState({})
+    let [wishlistState, setWishlistState] = useState(false)
 
     console.log({ wishlistState });
     const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
@@ -965,7 +976,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                 if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
                 const { data } = response
                 console.log({ data });
-                setWishlistState(data)
+                setWishlistState(true)
             } catch (error) {
                 console.error(error)
             } finally {
@@ -990,7 +1001,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                 const { data } = res;
                 if (data.length > 0) {
                     console.log("wih", { data });
-                    setWishlistState(data.find(d => d.courseId === bootcampId));
+                    setWishlistState(data.map(d => d.courseId).includes(bootcampId));
                 } else {
 
                 }
@@ -1005,10 +1016,8 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
     }
 
     useEffect(() => {
-        if (flag.current) return;
         getWishList()
-        flag.current = true;
-    }, [])
+    }, [setWishlistState])
 
 
 
@@ -1020,8 +1029,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
             const { success, message, statusCode } = res;
             if (!success) throw new AdvancedError(message, statusCode);
             else {
-                const { data } = res;
-                setWishlistState({})
+                setWishlistState(false)
                 handleClose()
             }
         } catch (err) {
@@ -1109,36 +1117,48 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                             <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
 
                             {
-                                (userdata.token && wishlistState) ?
+                                (!userdata.token) ? <button onClick={addToWishlist}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Wishlist"
 
-                                    <button onClick={removeCourse}>
-                                        {
-                                            loading ?
-                                                <div className="spinner-border" role="status">
-                                                    <span className="visually-hidden">Loading...</span>
-                                                </div>
-                                                :
-                                                "Remove wishlist"
+                                    }
 
-                                        }
+                                </button> :
 
-                                    </button>
-                                    :
-                                    <button onClick={addToWishlist}>
-                                        {
-                                            loading ?
-                                                <div className="spinner-border" role="status">
-                                                    <span className="visually-hidden">Loading...</span>
-                                                </div>
-                                                :
-                                                "Wishlist"
+                                    (userdata.token && wishlistState) ?
 
-                                        }
+                                        <button onClick={removeCourse}>
+                                            {
+                                                loading ?
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    :
+                                                    "Remove wishlist"
 
-                                    </button>
+                                            }
+
+                                        </button>
+                                        :
+                                        <button onClick={addToWishlist}>
+                                            {
+                                                loading ?
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    :
+                                                    "Wishlist"
+
+                                            }
+
+                                        </button>
+
                             }
-
-
 
 
 
@@ -1177,7 +1197,7 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
     //wishlist
 
     const flag = useRef(false);
-    let [wishlistState, setWishlistState] = useState({})
+    let [wishlistState, setWishlistState] = useState(false)
     const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
 
     async function addToWishlist() {
@@ -1189,7 +1209,7 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
                 const { success, message, statusCode } = response
                 if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
                 const { data } = response
-                setWishlistState(data)
+                setWishlistState(true)
             } catch (error) {
                 console.error(error)
             } finally {
@@ -1213,7 +1233,7 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
             else if (statusCode === 1) {
                 const { data } = res;
                 if (data.length > 0) {
-                    setWishlistState(data.find(d => d.courseId === bootcampId));
+                    setWishlistState(data.map(d => d.courseId).includes(bootcampId));
                 } else {
 
                 }
@@ -1228,10 +1248,8 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
     }
 
     useEffect(() => {
-        if (flag.current) return;
         getWishList()
-        flag.current = true;
-    }, [])
+    }, [setWishlistState])
 
     useEffect(() => {
         const ownListItem = upskillAltData.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
@@ -1250,7 +1268,7 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
             if (!success) throw new AdvancedError(message, statusCode);
             else {
                 const { data } = res;
-                setWishlistState({})
+                setWishlistState(false)
                 handleClose()
             }
         } catch (err) {
@@ -1325,36 +1343,49 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
                         <div className="pop_action">
                             <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
                             {
-                                (userdata.token && wishlistState) ?
+                                (!userdata.token) ? <button onClick={addToWishlist}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Wishlist"
 
-                                    <button onClick={removeCourse}>
-                                        {
-                                            loading ?
-                                                <div className="spinner-border" role="status">
-                                                    <span className="visually-hidden">Loading...</span>
-                                                </div>
-                                                :
-                                                "Remove wishlist"
+                                    }
 
-                                        }
+                                </button> :
 
-                                    </button>
+                                    (userdata.token && wishlistState) ?
 
-                                    :
+                                        <button onClick={removeCourse}>
+                                            {
+                                                loading ?
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    :
+                                                    "Remove wishlist"
 
-                                    <button onClick={addToWishlist}>
-                                        {
-                                            loading ?
-                                                <div className="spinner-border" role="status">
-                                                    <span className="visually-hidden">Loading...</span>
-                                                </div>
-                                                :
-                                                "Wishlist"
+                                            }
 
-                                        }
+                                        </button>
+                                        :
+                                        <button onClick={addToWishlist}>
+                                            {
+                                                loading ?
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    :
+                                                    "Wishlist"
 
-                                    </button>
+                                            }
+
+                                        </button>
+
                             }
+
                         </div>
                     </div>
                 </Box>
@@ -1616,10 +1647,10 @@ export function SuccessCard({ icon, title, description }) {
                 {/* <Icon /> */}
             </div>
             <h6 className="fw-bold" style={{ fontSize: "16px" }}>{title}</h6>
-                <span className="restricted_line" style={{ marginBottom: "unset"}}>{description}</span>
+            <span className="restricted_line" style={{ marginBottom: "unset" }}>{description}</span>
             <span onClick={handleClick} className="readmore">read more</span>
 
-            
+
         </SuccessWrapper>
         <Popover
             id={id}
