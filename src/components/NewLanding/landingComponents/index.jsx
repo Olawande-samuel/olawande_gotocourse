@@ -1557,10 +1557,14 @@ const SuccessWrapper = styled.div`
     h6 {
         color:#929292;
     }
-    .restricted_line {
+    .restricted_p {
+        display: -webkit-box;
         -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
         font-size: clamp(0.625rem, 0.5179rem + 0.5357vw, 1rem);
-        height:6.5rem;
+        /* height:6.5rem; */
     }
 
     span:first-of-type {
@@ -1618,7 +1622,7 @@ export function SuccessCard({ icon, title, description }) {
                 {/* <Icon /> */}
             </div>
             <h6 className="fw-bold" style={{ fontSize: "16px" }}>{title}</h6>
-                <span className="restricted_line" style={{ marginBottom: "unset"}}>{description}</span>
+                <span className="restricted_p" style={{ marginBottom: "unset"}}>{description}</span>
             <span onClick={handleClick} className="readmore">read more</span>
 
             
