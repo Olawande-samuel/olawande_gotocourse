@@ -134,7 +134,7 @@ gap: 1rem;
 .webinartop{
     display: flex;
     align-items: center;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 16px;
     line-height: 19px;
 
@@ -170,7 +170,7 @@ gap: 1rem;
     flex-direction: column;
     gap: 1rem;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 19px;
 
     .webinaritem{
@@ -252,7 +252,7 @@ export const AdminWebinar = () => {
 
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: {getWebinar, addWebinar, updateWebinar } } = useAuth();
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { getWebinar, addWebinar, updateWebinar } } = useAuth();
 
     const Submit = async (e) => {
         e.preventDefault();
@@ -294,7 +294,7 @@ export const AdminWebinar = () => {
 
     }
 
-   
+
     const handleInputChange = (e, index) => {
         const { name, value } = e.target;
         const list = { ...formState }
@@ -481,7 +481,7 @@ export const AdminWebinar = () => {
 
 
 
-            
+
 
                     <Button variant="contained" component="label" style={{ color: "#FFFFFF", background: "#0C2191" }} onClick={(e) => Submit(e)}>
                         Save
@@ -616,7 +616,7 @@ export const AdminWebinarDashboard = () => {
                         <div>Name</div>
                         <div>Date</div>
                         <div>Time</div>
-                        <div>Presenter</div>
+                        <div>Presenter(s)</div>
                         <div />
                         <div />
                     </div>
@@ -627,8 +627,14 @@ export const AdminWebinarDashboard = () => {
                                 <div>{x.title}</div>
                                 <div>{new Date(x.date).toLocaleDateString()}</div>
                                 <div>{x.time}</div>
-                                <div>{x.presenters[0].presenterName} </div>
-                                <div onClick={() =>updateWebinarFunc(x._id)}>Edit</div>
+                                {/* <div>{x.presenters[0].presenterName} </div> */}
+                                <div>
+                                    {x.presenters.length > 0 && x.presenters.map((presenter, id) =>
+                                        <span style={{display: "block", textTransform:"capitalize"}}>{presenter.presenterName}</span>
+                                    )}
+                                </div>
+
+                                <div onClick={() => updateWebinarFunc(x._id)}>Edit</div>
                                 <div onClick={() => deleteWebinarFunc(x._id)}>Delete</div>
                             </div>
                         ))}
