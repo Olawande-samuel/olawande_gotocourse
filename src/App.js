@@ -115,6 +115,7 @@ import CourseComponent from "./pages/Courses/allcourses/Course";
 import UpComingComponent from "./pages/Bootcamp/Upcoming";
 import { Blog, BlogDashboard, MyBlog } from "./pages/Dashboard/components/blog";
 import { AdminWebinar, AdminWebinarDashboard, MyWebinar } from "./pages/Dashboard/components/webinar";
+import LiveChat from "./pages/Dashboard/components/Live/LiveChat";
 
 
 
@@ -187,7 +188,7 @@ function App() {
               <Route path="student/classroom" element={<StudentClassroom />} />
 
               <Route path="coming-soon" element={<ComingSoon />} />
-              <Route path="tester" element={<ComingSoon />} />
+              <Route path="tester" element={<LiveChat />} />
               <Route path="video-chat" element={<VideDiv />} />
 
               <Route path="category" element={<Out />} >
