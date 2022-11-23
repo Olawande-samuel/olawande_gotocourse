@@ -113,8 +113,8 @@ import { GroupContent, MailDetail } from "./pages/Dashboard/components/classCons
 import { ProgramPage } from "./components/NewLanding/ExecutiveClasses";
 import CourseComponent from "./pages/Courses/allcourses/Course";
 import UpComingComponent from "./pages/Bootcamp/Upcoming";
-import { Blog } from "./pages/Dashboard/components/blog";
-import { AdminWebinar, AdminWebinarDashboard } from "./pages/Dashboard/components/webinar";
+import { Blog, BlogDashboard, MyBlog } from "./pages/Dashboard/components/blog";
+import { AdminWebinar, AdminWebinarDashboard, MyWebinar } from "./pages/Dashboard/components/webinar";
 
 
 
@@ -443,9 +443,14 @@ function App() {
                 <Route path="settings" element={<Settings />} />
                 <Route path="earnings" element={<AdminEarning />} />
                 <Route path="affiliate" element={<AdminAffiliate />} />
-                <Route path="blog" element={<Blog />} />
+                <Route path="blog" element={<Out />} >
+                  <Route index element={<BlogDashboard />} />
+                  <Route path=":id" element={<MyBlog />} />
+                  <Route path="create" element={< Blog />} />
+                </Route>
                 <Route path="webinar" element={<Out />}>
                   <Route index element={<AdminWebinarDashboard />} />
+                  <Route path=":id" element={<MyWebinar />} />
                   <Route path="create" element={< AdminWebinar />} />
 
                 </Route>

@@ -816,7 +816,7 @@ function WishCard({ courseId: id, courseName, courseDescription, courseCategory,
                     <img src={trello} alt="icon" className="img-fluid" />
                 </div>
                 <h5 className="fw-bold">{courseName}</h5>
-                <p className="restricted_line">{courseDescription}</p>
+                <p className="restricted_line" dangerouslySetInnerHTML={{__html: courseDescription}}></p>
                 <div className="d-flex justify-content-between">
                     <button className="btn btn-outline-primary" onClick={() => handleNavigate(courseCategory, courseName)} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Register today</button>
                     <button className="btn btn-outline-primary" onClick={() => setOpen(true)} style={{ border: "1px solid var(--theme-orange)", color: "var(--theme-orange)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
