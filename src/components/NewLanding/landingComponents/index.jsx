@@ -235,7 +235,7 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
                 throw new AdvancedError(message, statusCode);
             }
         } catch (err) {
-            console.log(err);
+            console.error(err);
         } finally {
         }
     }
@@ -280,7 +280,7 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
     }
 
     async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
-        // console.log(title, category, bootcampId);
+
         e.preventDefault();
         if (userdata?.token) {
             // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
@@ -295,7 +295,7 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
         if (shortListItem.length > 0) {
             setData(shortListItem[0])
         }
-        // console.log({ shortListItem })
+
     }, [title])
 
     return (
@@ -448,6 +448,7 @@ const ExecutiveCard = styled.div`
         -webkit-line-clamp: 2;
         text-align: left;
         font-size: 12.5px;
+        height: 4.5rem;
     }
     .exe_content {
         padding: 2rem;
@@ -529,21 +530,22 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
                     }
                     {/* <p> <AiOutlineCheck className="icon" /> {packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"} Learning</p> */}
                     <p><AiOutlineCheck className="icon" />
-                        {
-                            changeConstants(packages[0].title) === "Self-paced" ?
-                                <>
-                                    <span style={{ color: "var(--theme-orange)" }}>Self-paced </span>
-                                    <span>Learning</span>
-                                </>
 
-                                :
+                    {
+                        changeConstants(packages[0].title) === "Self-paced" ? 
+                        <>
+                            <span style={{color:"var(--theme-orange)"}}>Self-paced </span> 
+                            <span>Learning</span>
+                        </> 
+                        
+                        :
 
-                                <>
-                                    <span style={{ color: "var(--theme-orange)" }}>Live </span>
-                                    <span>with Instructor</span>
-                                </>
-                        }
-                    </p>
+                     <>
+                        <span style={{color:"var(--theme-orange)"}}>Live </span> 
+                        <span>with Instructor</span>
+                     </>
+                    }
+                     </p>
                 </div>
                 <div className="route_to_class">
                     <span onClick={() => gotoclass(title, category, bootcampId, navigate)}>Learn more</span>
@@ -761,6 +763,8 @@ const UpCoursesCard = styled.div`
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
+        height: 4.5rem
+        
         
     }
 
@@ -870,6 +874,8 @@ const ShortCard = styled.div`
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
+        height: 5.5rem;
+
     }
 
     h5 {
@@ -963,7 +969,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
     const flag = useRef(false);
     let [wishlistState, setWishlistState] = useState(false)
 
-    // console.log({ wishlistState });
+
     const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
 
     async function addToWishlist() {
@@ -975,8 +981,10 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                 const { success, message, statusCode } = response
                 if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
                 const { data } = response
+
                 // console.log({ data });
                 setWishlistState(true)
+
             } catch (error) {
                 console.error(error)
             } finally {
@@ -1000,8 +1008,10 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
             else if (statusCode === 1) {
                 const { data } = res;
                 if (data.length > 0) {
+
                     // console.log("wih", { data });
                     setWishlistState(data.map(d => d.courseId).includes(bootcampId));
+
                 } else {
 
                 }
@@ -1010,7 +1020,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
                 throw new AdvancedError(message, statusCode);
             }
         } catch (err) {
-            console.log(err);
+            console.error(err);
         } finally {
         }
     }
@@ -1041,13 +1051,15 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
 
 
     async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
-        // console.log(title, category, bootcampId, { all });
+
         e.preventDefault();
         if (userdata?.token) {
             // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-            gotoclassPayment(title, category, bootcampId, navigate)
+            // gotoclassPayment(title, category, bootcampId, navigate)
+            navigate("/coming-soon")
         } else {
-            navigate("/login")
+            // navigate("/login")
+            navigate("/coming-soon")
         }
     }
 
@@ -1242,7 +1254,7 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
                 throw new AdvancedError(message, statusCode);
             }
         } catch (err) {
-            console.log(err);
+            console.error(err);
         } finally {
         }
     }
@@ -1279,7 +1291,7 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
     }
 
     async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
-        // console.log(title, category, bootcampId);
+
         e.preventDefault();
         if (userdata?.token) {
             // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
@@ -1600,9 +1612,14 @@ const SuccessWrapper = styled.div`
     h6 {
         color:#929292;
     }
-    .restricted_line {
+    .restricted_p {
+        display: -webkit-box;
         -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
         font-size: clamp(0.625rem, 0.5179rem + 0.5357vw, 1rem);
+        /* height:6.5rem; */
     }
 
     span:first-of-type {
@@ -1649,7 +1666,6 @@ export function SuccessCard({ icon, title, description }) {
     };
 
 
-    // console.log(icon)
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
@@ -1661,7 +1677,8 @@ export function SuccessCard({ icon, title, description }) {
                 {/* <Icon /> */}
             </div>
             <h6 className="fw-bold" style={{ fontSize: "16px" }}>{title}</h6>
-            <span className="restricted_line" style={{ marginBottom: "unset" }}>{description}</span>
+
+                <span className="restricted_p" style={{ marginBottom: "unset"}}>{description}</span>
             <span onClick={handleClick} className="readmore">read more</span>
 
 

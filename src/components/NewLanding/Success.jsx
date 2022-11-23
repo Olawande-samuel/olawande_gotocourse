@@ -60,7 +60,7 @@ const SuccessWrapper = styled.section`
 
     .success_content {
        
-        @media screen and (min-width: 600px) {
+        @media screen and (min-width: 750px) {
             display: grid;
             grid-template-columns: 30% 70%;    
             align-items: center;

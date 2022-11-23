@@ -148,7 +148,7 @@ const TeachersHelp = lazy(() => import("./pages/Dashboard/Teachers/Help"));
 const HIWStudent = lazy(() => import("./pages/HowItWorks/HIWStudent"))
 const HIWTeacher = lazy(() => import("./pages/HowItWorks/HIWTeacher"))
 const TeachersLanding = lazy(() => import("./pages/Teachers"))
-
+const ComingSoon = lazy(()=>import("./pages/Classes/Available/ComingSoon"))
 //MENTORS
 // const {MentorsProfile} = lazy(() => import("./pages/Dashboard/Mentors"));
 
@@ -186,7 +186,8 @@ function App() {
               <Route path="become-a-teacher" element={<TeachersLanding />} />
               <Route path="student/classroom" element={<StudentClassroom />} />
 
-              <Route path="tester" element={<CreateRoom />} />
+              <Route path="coming-soon" element={<ComingSoon />} />
+              <Route path="tester" element={<ComingSoon />} />
               <Route path="video-chat" element={<VideDiv />} />
 
               <Route path="category" element={<Out />} >
@@ -202,7 +203,8 @@ function App() {
                   <Route path="courses" element={<CoursesHome />} />
                   <Route path="courses/:profile/:id" element={<Out />}>
                     <Route index element={<NewBootcampDetailsComponent />} />
-                    <Route path="payment" element={<BootcampPayment />} />
+                    <Route path="payment" element={<ComingSoon />} />
+                    {/* <Route path="payment" element={<BootcampPayment />} /> */}
                     <Route path="payment/success" element={<PaymentStatus success={true} />} />
                     <Route path="payment/error" element={<PaymentStatus />} />
                     {/* FORMERLY COURSES */}

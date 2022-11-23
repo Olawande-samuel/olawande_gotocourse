@@ -475,11 +475,13 @@ export function NewBootcampDetailsComponent() {
 
   async function handleBootstrapEnrollment(e) {
     e.preventDefault();
-    if (userdata?.token) {
-      navigate("payment")
-    } else {
-      navigate("/login")
-    }
+      navigate("/coming-soon")
+
+    // if (userdata?.token) {
+      //   navigate("payment")
+    // } else {
+    //   navigate("/login")
+    // }
   }
 
 
@@ -569,6 +571,7 @@ export function NewBootcampDetailsComponent() {
     <Layout>
       <div className={clsx.bootcampTraining}>
         <DetailsHero
+          subCategory={bootcampTrainingInfo?.subCategory}
           loading={bootcamps.isLoading}
           navHeight={navHeight}
           title={bootcampTrainingInfo?.title}
@@ -592,7 +595,10 @@ export function NewBootcampDetailsComponent() {
               </div>
 
               <div className={clsx.classDescriptionRight}>
+
                 {
+                  bootcampTrainingInfo.subCategory !== "EXECUTIVE_COURSES" &&
+
                   bootcampTrainingInfo?.careerList?.length > 0 &&
                   <div className={clsx.career_list}>
                     <h4>Career Prospect</h4>
@@ -615,21 +621,25 @@ export function NewBootcampDetailsComponent() {
         </section>
 
         <section className={clsx.requirement}>
-          <div className="container">
-            <h4>Syllabus</h4>
-            <div>
-              <ul>
-                {bootcampTrainingInfo?.syllabus?.map((item) => (
-                  <li>
-                    <p className={clsx.niche}>{item.title}</p>
-                    <p className={clsx.niche}>{item.description}</p>
-                  </li>
-                ))}
-              </ul>
+          {
+            bootcampTrainingInfo.subCategory !== "EXECUTIVE_COURSES" &&
+
+            <div className="container">
+              <h4>Syllabus</h4>
+              <div>
+                <ul>
+                  {bootcampTrainingInfo?.syllabus?.map((item) => (
+                    <li>
+                      <p className={clsx.niche}>{item.title}</p>
+                      <p className={clsx.niche}>{item.description}</p>
+                    </li>
+                  ))}
+                </ul>
+
+              </div>
 
             </div>
-
-          </div>
+          }
         </section>
         {/* <section className={clsx.process}>
           <div className="container">
@@ -730,8 +740,9 @@ export function NewBootcampDetailsComponent() {
 }
 
 
-export function DetailsHero({ navHeight, title, description, addToWishList, handleBootstrapEnrollment, loading, img, endDate, startDate , wishlistState, removeCourse, userdata}) {
-// console.log({wishlistState});
+
+export function DetailsHero({ navHeight, title, description, addToWishList, subCategory, handleBootstrapEnrollment, loading, img, endDate, startDate , wishlistState, removeCourse, userdata}) {
+
   return (
     <section
       className={clsx.new_hero}
@@ -744,7 +755,7 @@ export function DetailsHero({ navHeight, title, description, addToWishList, hand
       <div className={`container ${clsx.hero_content}`}>
         <div>
           <h4>{title}</h4>
-          <p className="restricted_line" dangerouslySetInnerHTML={{ __html: description }}></p>
+          {/* <p className="restricted_line" dangerouslySetInnerHTML={{ __html: description }}></p> */}
           {/* <p>{description ? description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p> */}
           <p style={{ marginTop: "2rem", fontSize: "1.5rem" }}>Starting Date: <span>{ loading ? "" : new Date(startDate).toDateString()}</span></p>
 
