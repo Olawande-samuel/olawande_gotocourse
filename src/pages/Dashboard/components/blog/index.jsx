@@ -234,7 +234,7 @@ export const BlogDashboard = () => {
     const blogData = useQuery(["fetch classes"], () => getBlog(userdata?.token), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                console.log("data", res.data);
+                // console.log("data", res.data);
                 setBlogs(res.data)
 
             }
@@ -348,7 +348,7 @@ export const Blog = () => {
                 const { data } = response
                 setEdit(false)
                 navigate('/admin/blog')
-                console.log({ data });
+                // console.log({ data });
             } catch (error) {
                 console.error(error)
             } finally {
@@ -362,7 +362,7 @@ export const Blog = () => {
                 const { success, message, statusCode } = response
                 if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
                 const { data } = response
-                console.log({ data });
+                // console.log({ data });
                 navigate('/admin/blog')
 
             } catch (error) {
@@ -381,8 +381,8 @@ export const Blog = () => {
         setOpen((_) => true);
     }
 
-    console.log({ id });
-    console.log({ edit });
+    // console.log({ id });
+    // console.log({ edit });
 
     useEffect(() => {
         if (id) {
@@ -393,11 +393,11 @@ export const Blog = () => {
                     if (!success) throw new AdvancedError(message, statusCode);
                     else if (statusCode === 1) {
                         const { data } = res;
-                        console.log({data});
+                        // console.log({data});
                         let found = data.find((d) => d._id === id);
                         if (found) {
                             setEdit(true)
-                            console.log({found});
+                            // console.log({found});
                             setFormState(found)
                             // setFormState({ ...formState, ...found });
                         }
@@ -415,7 +415,7 @@ export const Blog = () => {
         return () => console.log("Removing");
     }, [id])
 
-   console.log({formState});
+//    console.log({formState});
 
     return (
         <Admin>
@@ -438,12 +438,12 @@ export const Blog = () => {
                         data={formState.content}
                         onReady={(editor) => {
                             // You can store the "editor" and use when it is needed.
-                            console.log('Editor is ready to use!', editor);
+                            // console.log('Editor is ready to use!', editor);
 
                         }}
                         onChange={(event, editor) => {
                             const data = editor.getData();
-                            console.log({ event, editor, data });
+                            // console.log({ event, editor, data });
 
                             setFormState({ ...formState, ["content"]: data })
                             // setFormstate({...formstate, mentorBio: data})

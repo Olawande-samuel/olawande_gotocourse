@@ -26,7 +26,7 @@ const Events = () => {
     const blogData = useQuery(["fetch classes"], () => getBlogs(), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                console.log("data", res.data);
+                // console.log("data", res.data);
                 setBlogs(res.data)
 
             }

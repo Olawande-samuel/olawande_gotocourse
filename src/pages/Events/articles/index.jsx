@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
 
 const Articles = () => {
     const {id} = useParams()
-    console.log({id});
+    // console.log({id});
     const [blog, setBlog] = useState({})
     const [blogs, setBlogs] = useState({})
     const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: {getABlog, getBlogs } } = useAuth();
@@ -21,7 +21,7 @@ const Articles = () => {
     const blogData = useQuery(["fetch classes", id], () => getABlog(id), {
         onSuccess: (res) => {
             if (res.data) {
-                console.log("data", res.data);
+                // console.log("data", res.data);
                 setBlog(res.data)
 
             }
@@ -31,7 +31,7 @@ const Articles = () => {
     const blogsData = useQuery(["fetch classes"], () => getBlogs(), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                console.log("data", res.data);
+                // console.log("data", res.data);
                 setBlogs(res.data.filter(d => d._id !== id))
 
             }

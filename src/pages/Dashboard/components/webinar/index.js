@@ -248,7 +248,7 @@ export const AdminWebinar = () => {
     const [formState, setFormState] = useState(initialState)
     const location = useLocation()
     const id = location.state && location.state.id
-    console.log({id});
+    // console.log({id});
 
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
@@ -266,7 +266,7 @@ export const AdminWebinar = () => {
                 setEdit(false)
                 setFormState(initialState)
                 navigate('/admin/webinar')
-                console.log({ data });
+                // console.log({ data });
             } catch (error) {
                 console.error(error)
             } finally {
@@ -281,7 +281,7 @@ export const AdminWebinar = () => {
                 const { success, message, statusCode } = response
                 if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
                 const { data } = response
-                console.log({ data });
+                // console.log({ data });
                 setFormState(initialState)
                 navigate('/admin/webinar')
             } catch (error) {
@@ -299,7 +299,7 @@ export const AdminWebinar = () => {
         const { name, value } = e.target;
         const list = { ...formState }
         list.presenters[index][name] = value;
-        console.log(list);
+        // console.log(list);
         setFormState(list)
     }
 
@@ -342,11 +342,11 @@ export const AdminWebinar = () => {
                     if (!success) throw new AdvancedError(message, statusCode);
                     else if (statusCode === 1) {
                         const { data } = res;
-                        console.log({data});
+                        // console.log({data});
                         let found = data.find((d) => d._id === id);
                         if (found) {
                             setEdit(true)
-                            console.log({found});
+                            // console.log({found});
                             // setFormState(found)
                             setFormState({ ...formState, ...found });
                         }
@@ -481,27 +481,7 @@ export const AdminWebinar = () => {
 
 
 
-                    {/* {formState.presenters?.length !== 0 && (
-                        formState.presenters?.map(({ name }, i) => (
-                            <div className={clsx.syllabus_container}>
-                                <h5>{name}</h5>
-                                <p>
-                                    <i
-                                        className="text-danger"
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() => deletePopup(name + i)}
-                                    >
-                                        <BiTrash />
-                                    </i>
-                                </p>
-                            </div>
-                        ))
-                    )
-                    } */}
-
-
-
-
+            
 
                     <Button variant="contained" component="label" style={{ color: "#FFFFFF", background: "#0C2191" }} onClick={(e) => Submit(e)}>
                         Save

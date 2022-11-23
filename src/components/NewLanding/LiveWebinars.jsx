@@ -8,21 +8,29 @@ import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/Auth'
 const Grid = styled.div`
-    display: grid;
-    gap: 1rem;
-    place-items:center;
 
-     @media screen and (min-width:500px){
-        grid-template-columns: repeat(3, 1fr);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(250px, 300px), 300px));
+    grid-auto-rows: 250px;
+    overflow: hidden;
+    gap: 1.5rem;
+    // justify-content:space-around;
+    padding: .5rem;
+    
+    @media screen and (min-width: 1400px) {
+        grid-template-columns: repeat(4, 300px);
+        justify-content: space-evenly;
         gap: 1rem;
-        justify-content: space-around;
     }
     
-    /*
+    @media screen and (max-width:768px){
+        grid-template-columns: repeat(2, 300px);
+    }
+
     @media screen and (max-width:500px){
-        grid-template-columns: min(100%, 380px);
+        grid-template-columns: min(100%, 280px);
         justify-content:center;
-    } */
+    } 
     `
 const LiveWebinars = () => {
     const [webinars, setWebinars] = useState([])
@@ -30,10 +38,10 @@ const LiveWebinars = () => {
     const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { getWebinar, getAWebinar } } = useAuth();
     let navigate = useNavigate()
 
-    const webinarData = useQuery(["fetch classes"], () => getWebinar(), {
+    const webinarData = useQuery(["fetch webinar"], () => getWebinar(), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                // console.log("data", res.data);
+                // console.log("webinar data", res.data);
                 setWebinars(res.data)
 
             }
@@ -43,19 +51,19 @@ const LiveWebinars = () => {
         <ClassTypeComponent {...data}>
             <div className="container">
                 <Grid>
-                    {
+                    {/* {
                         data.content.map(item => (
                             <LiveWebinarCard {...item} />
                         ))
-                    }
+                    } */}
 
 
 
-                    {/* {
+                    {
                         webinars.length > 0 && webinars.map(item => (
                             <LiveWebinarCard {...item} key={item._id} />
                         ))
-                    } */}
+                    }
                 </Grid>
             </div>
         </ClassTypeComponent>

@@ -538,7 +538,6 @@ export function NewBootcampDetailsComponent() {
       const res = await deleteFromWishlist(userdata?.token, id)
       const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
-      console.log("setting to {}");
         setWishlistState(false)
     } catch (err) {
 
@@ -548,7 +547,7 @@ export function NewBootcampDetailsComponent() {
   }
 
   const handleClick = (event) => {
-    console.log(event.currentTarget);
+    // console.log(event.currentTarget);
   };
 
   // console.log({ bootcampTrainingInfo });
