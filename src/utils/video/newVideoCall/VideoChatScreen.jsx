@@ -262,8 +262,6 @@ const VideoChatScreen = ()  => {
         myPeer.current.on('call', call => {
             if (call.peer.split('-')[0] !== "presentation") {
                 
-
-
                 call.answer(localStream.current)
                 const remoteVideoWrapper = document.createElement('div')
                 remoteVideoWrapper.classList.add("remote-users")
@@ -399,6 +397,7 @@ const VideoChatScreen = ()  => {
         if (userProfile.userId !== "") {
             chekForVideoRoom()
         }
+        // ask you to log in
     }
  
     useEffect(() => {
