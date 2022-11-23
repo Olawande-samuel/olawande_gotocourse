@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react'
 import { useState } from 'react';
+import ReactPaginate from 'react-paginate';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { toast } from 'react-toastify';
@@ -23,8 +24,9 @@ color: #fff;
 const UpComingComponent = () => {
     const [loading, setLoading] = useState(false)
     const [bootcampTrainingInfo, setBootcampTrainingInfo] = useState([]);
+    let itemsPerPage = 12;
 
-    const {pathname} = useLocation()
+    const Location= useLocation()
 
     const { getItem } = useLocalStorage();
 
@@ -52,7 +54,10 @@ const UpComingComponent = () => {
 
     });
 
-    const { id } = useParams()
+    // console.log({Location});
+
+    const id = Location.search && Location.search.split("=")[1]
+    //  console.log({id});
 
 
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
@@ -60,10 +65,11 @@ const UpComingComponent = () => {
             // console.log({res})
             // console.log(res.data.filter(item => item.subCategory === id && item.isActive))
             if (res.data) {
-                setBootcampTrainingInfo(res.data.filter(item => item.subCategory === id && item.isActive))
+            // console.log(res.data)
+            setBootcampTrainingInfo(res.data.filter(item => item.subCategory === id && item.isActive))
                 return
             }
-            setBootcampTrainingInfo({})
+            setBootcampTrainingInfo([])
 
         },
         onError: err => console.error(err)
@@ -105,19 +111,53 @@ const UpComingComponent = () => {
         }
     }
 
+    // Here we use item offsets; we could also use page offsets
+    // following the API or data you're working with.
+    const [itemOffset, setItemOffset] = useState(0);
+
+    // Simulate fetching items from another resources.
+    // (This could be items from props; or items loaded in a local state
+    // from an API endpoint with useEffect and useState)
+    const endOffset = itemOffset + itemsPerPage;
+    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+    const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
+    const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
+
+    // Invoke when user click to request another page.
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
+        console.log(
+            `User requested page number ${event.selected}, which is offset ${newOffset}`
+        );
+        setItemOffset(newOffset);
+    };
+
     return (
         <Layout>
             <Header>
-                <h3 style={{textTransform:"uppercase"}}>{`${pathname.split('/')[2]} Courses`}</h3>
+                <h3 style={{ textTransform: "uppercase" }}>{`${Location.pathname.split('/')[2]} Courses`}</h3>
             </Header>
             <div className="container">
                 <div>
                     {
-                        bootcamps.data?.data?.filter(d => d.isActive).map(item => (
+                       currentItems?.map(item => (
+                            // bootcamps.data?.data?.filter(d => d.isActive).map(item => (
                             <Upcome {...item} all={item} />))
                     }
 
                 </div>
+                <ReactPaginate
+                    className="pagination"
+                    breakLabel="..."
+                    nextLabel=">"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={5}
+                    pageCount={pageCount}
+                    // previousLabel="< previous"
+                    previousLabel="<"
+                    // previousLabel="&#8592;"
+                    renderOnZeroPageCount={null}
+                />
 
             </div>
         </Layout>
