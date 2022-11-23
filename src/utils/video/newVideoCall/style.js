@@ -156,7 +156,7 @@ export const VideoWrapper = styled.div`
         video {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
         }
     }
 `;
@@ -176,8 +176,8 @@ export const StreamWrapper = styled.div`
     position: relative;
     overflow-y: auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-auto-rows: 150px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 350px));
+    grid-auto-rows: 200px;
     gap: .3rem;
 
     
@@ -224,7 +224,7 @@ export const StreamWrapper = styled.div`
         video {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
         }
     }
 `;
@@ -268,7 +268,7 @@ export const UserCallBlock = styled.div`
     video {
         width: 100%;
         height: 100%;
-        object-fit: contain;
+        object-fit: cover;
         border-radius: 10px;
 
     }
@@ -337,6 +337,13 @@ export const ControlWrapper = styled.div`
     bottom: 20px;
     width: 100%;
     z-index: 9999;
+
+    .controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
 `;
 export const ControlItem = styled.div`
     width: 40px;

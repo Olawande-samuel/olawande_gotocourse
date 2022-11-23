@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { BsCameraVideo, BsCameraVideoOff, BsMic, BsMicMute } from 'react-icons/bs'
-import { HiOutlinePhone } from 'react-icons/hi'
+import { HiOutlineHand, HiOutlinePhone } from 'react-icons/hi'
 import {  IoAdd } from 'react-icons/io5'
 import { MdPresentToAll } from 'react-icons/md'
 import {  VscRecord } from 'react-icons/vsc'
@@ -109,7 +109,6 @@ const VideoChatScreen = ()  => {
     },[])
 
     function addVideoStream(videoWrapper, stream) {
-        console.log({videoWrapper})
 
         const video = videoWrapper.querySelector('video')
         video.srcObject = stream
@@ -175,7 +174,6 @@ const VideoChatScreen = ()  => {
             }
         })
 
-        console.log(res.data)
     }
 
     const presentationStream = useRef(null);
@@ -240,7 +238,9 @@ const VideoChatScreen = ()  => {
     const [remoteUserPresentingProccessing, setRemoteUserPresentingProccessing] = useState(false)
 
     const peers = useRef({})
+
     const startWebCam = async () => {
+        console.log("calling once")
         const myVideo = document.querySelector('.client-local-stream')
         myVideo?.setAttribute("autoplay", "")
         myVideo?.setAttribute("playsInline", "")
@@ -255,7 +255,6 @@ const VideoChatScreen = ()  => {
             secure: true
         });
 
-        console.log("peer: ", myPeer.current)
         myPeer.current.on('open', userId => {
             console.log("connected to room with userId: ", userId)
             socket.emit('join-video-room', roomId, userId)
@@ -270,12 +269,8 @@ const VideoChatScreen = ()  => {
                 remoteVideoWrapper.classList.add("remote-users")
                 const remoteVideo = document.createElement('video')
                 remoteVideoWrapper.appendChild(remoteVideo)
-                console.log("runnin on call")
-                console.log({videoWrapper})
                 videoWrapper?.append(remoteVideoWrapper)
 
-                console.log("caller user: ", call.peer)
-                console.log("remotevid: ", remoteVideoWrapper)
 
                 peers.current[call.peer] = call
                 
@@ -290,7 +285,6 @@ const VideoChatScreen = ()  => {
                 call.answer(localStream.current)
                 setIsPresenting(true)
                 call?.on('stream', presentationStream => {
-                    console.log("recevied presentation stream: ", presentationStream)
                     const presentationVideo = document.querySelector('.client-presentation-stream')
                     presentationVideo?.setAttribute("autoplay", "")
                     presentationVideo?.setAttribute("playsInline", "")
@@ -317,9 +311,7 @@ const VideoChatScreen = ()  => {
             console.log("new user joined room: ", userId)
             if (userId.split('-')[0] !== "presentation") {
                 connectToNewUser(userId, localStream.current)
-                console.log("presentation state: ", isPresenting)
                 if (presentationStream.current?.getVideoTracks()[0].enabled) {
-                    console.log("I am user is presenting")
                     presentationPeer.current?.call(userId, presentationStream.current);
                 }
             } else if (userProfile.userId !== userId.split('-')[1]) {
@@ -354,7 +346,6 @@ const VideoChatScreen = ()  => {
 
         const connectToUserRemotePresentation = (presentaterUserId) => {
             const presentationId = "presentation-"+ connectionUserId.current
-            console.log(`lofty presentation id:  ${presentationId}`)
             myCall = myPeer.current?.call(presentaterUserId, localStream.current)
 
             setIsPresenting(true)
@@ -378,9 +369,9 @@ const VideoChatScreen = ()  => {
 
         socket.on('user-disconnected', userId => {
             console.log('user disconnected: ', userId)
+            console.log(peers.current)
             if (peers.current[userId]) {
                 peers.current[userId].close()
-                console.log("omo peer: ", peers.current)
 
                 // if (!presentationPeers.current[userId]) {
                 //     setIsPresenting(false)
@@ -392,7 +383,6 @@ const VideoChatScreen = ()  => {
         socket.on('user-ended-presentation', (userId) => {
             if (peers.current[userId]) {
                 peers.current[userId].close()
-                console.log("omo peer: ", peers.current)
 
                 if (userProfile.userId !== userId.split('-')[1]) {
                     setIsPresenting(false)
@@ -452,27 +442,35 @@ const VideoChatScreen = ()  => {
                     </StreamWrapper>
 
                     <ControlWrapper>
-                        <ControlItem onClick={() => {
-                            if (!isRecording) {
-                                startRecording()
-                            } else {
-                                stopRecording()
-                            }
-                        }}  isOn={!isRecording}>
-                            <VscRecord />
-                        </ControlItem>
-                        <ControlItem onClick={togggleAudio} isOn={callSettingsState.audio}>
-                            {callSettingsState.audio ? <BsMic /> : <BsMicMute  />}
-                        </ControlItem>
-                        <ControlItem onClick={() => startCapture()} isOn={true}>
-                            <MdPresentToAll />
-                        </ControlItem>
-                        <ControlItem onClick={togggleVideo} isOn={callSettingsState.video}>
-                            {callSettingsState.video ? <BsCameraVideo /> : <BsCameraVideoOff />}
-                        </ControlItem>
-                        <ControlItem onClick={handleNavigation}>
-                            <HiOutlinePhone />
-                        </ControlItem>
+
+                        <div className="controls">
+                            <ControlItem onClick={() => {
+                                if (!isRecording) {
+                                    startRecording()
+                                } else {
+                                    stopRecording()
+                                }
+                            }}  isOn={!isRecording}>
+                                <VscRecord size="1.5rem" />
+                            </ControlItem>
+
+                            <ControlItem onClick={togggleAudio} isOn={callSettingsState.audio}>
+                                <HiOutlineHand size="1.5rem"  />
+                            </ControlItem>
+                            <ControlItem onClick={togggleAudio} isOn={callSettingsState.audio}>
+                                {callSettingsState.audio ? <BsMic  size="1.5rem" /> : <BsMicMute size="1.5rem"   />}
+                            </ControlItem>
+                            <ControlItem onClick={() => startCapture()} isOn={true}>
+                                <MdPresentToAll  size="1.5rem" />
+                            </ControlItem>
+                            <ControlItem onClick={togggleVideo} isOn={callSettingsState.video}>
+                                {callSettingsState.video ? <BsCameraVideo size="1.5rem" /> : <BsCameraVideoOff size="1.5rem" />}
+                            </ControlItem>
+                            <ControlItem onClick={handleNavigation}>
+                                <HiOutlinePhone size="1.5rem"  />
+                            </ControlItem>
+
+                        </div>
                     </ControlWrapper>
                     {/* <AddPeople>
                         <IoAdd />
