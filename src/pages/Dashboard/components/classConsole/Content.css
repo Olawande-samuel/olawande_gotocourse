@@ -1115,40 +1115,60 @@
 
 /* FILE CARD */
 
-.filecard {
+.filecardcontainer{
     display: flex;
-    flex-direction: column;
     width: 100%;
+    padding-top: 2rem;
+    /* border: 2px solid red; */
+    gap: 2rem;
 }
 
-.filecard > div {
+.filecard {
+    flex:.3;
+    width: 100%;
+    flex-shrink: 0;
+    height: 15rem;
+    border: 1px solid black;
+
+}
+
+.filetop{
+    height:60%;
+    /* border: 2px solid red; */
+
+}
+
+
+.filetop img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.filebottom{
+    height: 40%;
     padding: 14px 9px;
+    /* border: 2px solid blue; */
+    position: relative;
 
 }
 
-.filecard > p {
-    margin-bottom: 0;
+.filebottom h3{
+    font-size: 16px;
+    font-weight: 700;
+
 }
 
-.filecard > div:first-child {
-    border: 1px solid rgb(168, 167, 167);
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+.filebutton{
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right:0;
     display: flex;
-    justify-content: space-between;
-}
-.filecard > div:last-child {
-    border: 1px solid rgb(168, 167, 167);
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-
+    justify-content: space-evenly;
 }
 
-.filecard > div:last-child i {
-    margin-right: 20px;
-
-}
-.filecard > div:last-child button {
+.filebutton button {
     cursor: pointer;
     padding: .4rem;
     border-radius: 4px;
@@ -1156,10 +1176,46 @@
     outline:none;
     
 }
-.filecard > div:last-child button:hover {
+.filebutton button:hover {
     background-color: rgb(236, 236, 236);
 
 }
+
+
+/* .filecard > p {
+    margin-bottom: 0;
+} */
+
+/* .filecard > div:first-child {
+    border: 1px solid rgb(168, 167, 167);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+} */
+/* .filecard > div:last-child {
+    border: 1px solid rgb(168, 167, 167);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+} */
+
+/* .filecard > div:last-child i {
+    margin-right: 20px;
+
+} */
+/* .filecard > div:last-child button {
+    cursor: pointer;
+    padding: .4rem;
+    border-radius: 4px;
+    border: none;
+    outline:none;
+    
+} */
+/* .filecard > div:last-child button:hover {
+    background-color: rgb(236, 236, 236);
+
+} */
 
 
 
