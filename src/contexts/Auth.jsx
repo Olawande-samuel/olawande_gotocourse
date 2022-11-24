@@ -23,6 +23,7 @@ const AuthContextProvider = ({children}) => {
             sidebar: false,
             domains: []
         },
+        chatDetail:{},
         scheduledClasses: []
         
     })
