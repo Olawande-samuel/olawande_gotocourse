@@ -15,6 +15,7 @@ import { KEY } from '../../../../constants';
 import { useQuery } from '@tanstack/react-query';
 import { IconButton, Modal, stepContentClasses, Tooltip } from '@mui/material';
 import { UploadScreenRecording, UploadVideoRecording } from './Suite';
+import VideoImageThumbnail from 'react-video-thumbnail-image'
 
 
 function TabPanel(props) {
@@ -39,23 +40,23 @@ function TabPanel(props) {
 
 export default function File() {
     const { pathname, search } = useLocation();
-    
+
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(0);
-    const [openUpload, setOpenUpload]= useState(false)
-    const [screenOpen, setScreenOpen]= useState(false)
-    const [videoOpen, setVideoOpen]= useState(false)
-    const [fileData, setFileData]= useState([])
-    const {consoleFunctions: {fetchFile}} = useAuth()
-    const {getItem} = useLocalStorage()
-    
+    const [openUpload, setOpenUpload] = useState(false)
+    const [screenOpen, setScreenOpen] = useState(false)
+    const [videoOpen, setVideoOpen] = useState(false)
+    const [fileData, setFileData] = useState([])
+    const { consoleFunctions: { fetchFile } } = useAuth()
+    const { getItem } = useLocalStorage()
+
     const bread = pathname?.split("/");
     let path = pathname.split("/")
-    let classId = path[path.length -1]
+    let classId = path[path.length - 1]
     let searchData = search.split("=").reverse()[0]
-    
+
     const userdata = getItem(KEY)
-    
+
     const OpenToggle = () => setOpen(!open)
     const closeSmall = () => setOpen(false);
     function a11yProps(index) {
@@ -83,19 +84,22 @@ export default function File() {
     }
 
     const getFiles = useQuery(["file content", search, searchData], () => fetchFile(userdata.token, searchData), {
-        onSuccess: (res)=> {
-         
-            if(res.data?.length > 0){
+        onSuccess: (res) => {
+
+            if (res.data?.length > 0) {
                 setFileData(res.data)
             }
-            
+
         }
-    } )
+    })
+
+    // console.log({ fileData });
+
     return (
         <>
             <div className=''>
                 <Box sx={{ width: '100%' }}>
-                    <Box sx={{ marginBottom: "2rem"}}>
+                    <Box sx={{ marginBottom: "2rem" }}>
                         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                             <Tab label="File" {...a11yProps(0)} />
                             <Tab label="Integration" {...a11yProps(1)} />
@@ -103,7 +107,7 @@ export default function File() {
                     </Box>
 
 
-                        <div className="contentbreadcrumb">
+                    {/* <div className="contentbreadcrumb">
                             <nav arial-label="breadcrumb">
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item">
@@ -125,8 +129,8 @@ export default function File() {
                                         ))}
                                 </ol>
                             </nav>
-                        </div>
-                   
+                        </div> */}
+
 
                     <TabPanel value={value} index={0}>
                         <section className="contenttop">
@@ -138,12 +142,15 @@ export default function File() {
                         </section>
 
                         <main className='contentbody'>
-                            {
-                                fileData?.map(item=>(
-                                    <FileCard {...item} key={item._id} />
+                            <div className="filecardcontainer">
+                                {
+                                    fileData?.map(item => (
+                                        <FileCard {...item} key={item._id} />
 
-                                ))
-                            }
+                                    ))
+                                }
+                            </div>
+
                         </main>
 
                         {/* <div className="contentbutton">
@@ -152,9 +159,9 @@ export default function File() {
                             <IoMdCloudDownload />
                             </div>
                         </div> */}
-                        <UploadVideoRecording  isVideoOpen={videoOpen} setIsVideoOpen={setVideoOpen}  uploadType="content" fileCreate={true} />
-                        <UploadScreenRecording isScreenOpen={screenOpen} setIsScreenOpen={setScreenOpen}  uploadType="content" fileCreate={true}  />
-                        <UploadForm isOpen={openUpload} setIsOpen={setOpenUpload} uploadType="content"  />
+                        <UploadVideoRecording isVideoOpen={videoOpen} setIsVideoOpen={setVideoOpen} uploadType="content" fileCreate={true} />
+                        <UploadScreenRecording isScreenOpen={screenOpen} setIsScreenOpen={setScreenOpen} uploadType="content" fileCreate={true} />
+                        <UploadForm isOpen={openUpload} setIsOpen={setOpenUpload} uploadType="content" />
                     </TabPanel>
 
                     <TabPanel value={value} index={1}>
@@ -176,38 +183,51 @@ export default function File() {
 
 
 
-function FileCard({title, fileName, contentId, type}){
+function FileCard({ title, fileName, contentId, type }) {
     const [open, setOpen] = useState(false)
     const [content, setContent] = useState("")
 
-    function openContent(){
+
+    function openContent() {
         setOpen(true)
         setContent(fileName)
     }
     return (
+
         <div className="filecard">
-            <div>
-                <p>{title}</p>
-                {/* <p>options</p> */}
+            <div className="filetop">
+                {type === "video/mp4" ? 
+                <VideoImageThumbnail
+                    videoUrl={fileName}
+                    thumbnailHandler={(thumbnail) => console.log(thumbnail)}
+                    width={120}
+                    height={80}
+                /> : 
+                <img src={fileName} alt="" />}
             </div>
-            <div>
-                <i>
-                    <a href={fileName} download>
-                        <Tooltip title="download">
-                            <IconButton>
-                                <IoMdCloudDownload size="1.5rem"  color="var(--theme-blue)"/>
-                            </IconButton>
-                        </Tooltip>
-                    </a>
-                </i>
-                <button onClick={openContent}>Open</button>
+            <div className="filebottom">
+                <h3>{title}</h3>
+                <div className='filebutton'>
+                    <i>
+                        <a href={fileName} download>
+                            <Tooltip title="download">
+                                <IconButton>
+                                    <IoMdCloudDownload size="1.5rem" color="var(--theme-blue)" />
+                                </IconButton>
+                            </Tooltip>
+                        </a>
+                    </i>
+                    <button onClick={openContent}>Open</button>
+                </div>
+
             </div>
-            <ViewModal open={open} setOpen={setOpen} file={content} type={type} />
+
+            <ViewModal open={open} setOpen={setOpen} file={content} type={type} title={title} />
         </div>
     )
 }
 
-export function ViewModal({open, setOpen, file, creator, type}){
+export function ViewModal({ open, setOpen, file, creator, type, title }) {
     const style = {
         position: "absolute",
         bottom: 0,
@@ -221,26 +241,26 @@ export function ViewModal({open, setOpen, file, creator, type}){
         boxShadow: 24,
         p: 6,
         padding: "4rem 2rem",
-      };
-    
-      return (
+    };
+
+    return (
         <Modal
-          open={open}
-          onClose={(e) => {
-            setOpen((_) => false);
-          }}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
+            open={open}
+            onClose={(e) => {
+                setOpen((_) => false);
+            }}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
         >
-          <Box style={style}>
-            <p>{file}</p>
-            {
-                type === "video/mp4" ? 
-                <video src={`${process.env.REACT_APP_IMAGEURL}${file}`} controls autoPlay style={{width: "100%", height:"100%", border:"1px solid #eee", borderRadius:"8px"}}></video>            
-                :
-                <img src={creator ? `${process.env.REACT_APP_IMAGEURL}${file}` : file} alt="" className="w-100 h-100" style={{objectFit:"contain"}} />
-            }
-          </Box>
-          </Modal>
+            <Box style={style}>
+                <p>{title}</p>
+                {
+                    type === "video/mp4" ?
+                        <video src={`${process.env.REACT_APP_IMAGEURL}${file}`} controls autoPlay style={{ width: "100%", height: "100%", border: "1px solid #eee", borderRadius: "8px" }}></video>
+                        :
+                        <img src={creator ? `${process.env.REACT_APP_IMAGEURL}${file}` : file} alt="" className="w-100 h-100" style={{ objectFit: "contain" }} />
+                }
+            </Box>
+        </Modal>
     )
 }
