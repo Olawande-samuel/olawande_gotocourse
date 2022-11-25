@@ -256,7 +256,7 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
                 <p>{title}</p>
                 {
                     type === "video/mp4" ?
-                        <video src={`${process.env.REACT_APP_IMAGEURL}${file}`} controls autoPlay style={{ width: "100%", height: "100%", border: "1px solid #eee", borderRadius: "8px" }}></video>
+                        <video src={`${file}`} controls autoPlay style={{ width: "100%", height: "100%", border: "1px solid #eee", borderRadius: "8px" }}></video>
                         :
                         <img src={creator ? `${process.env.REACT_APP_IMAGEURL}${file}` : file} alt="" className="w-100 h-100" style={{ objectFit: "contain" }} />
                 }
