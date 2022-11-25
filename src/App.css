@@ -3211,3 +3211,13 @@ td span {
   /* width: 50px;
   height: 50px */
 }
+.boxtop{
+  height:80%;
+  overflow-y:scroll;
+  padding: 2rem 0 ;
+}
+
+.boxbottom{
+  height: 20%;
+  margin: 1rem 0 ;
+}
