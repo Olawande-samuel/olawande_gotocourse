@@ -458,7 +458,11 @@ const VideoChatScreen = () => {
     const handleSubmit = (event) => {
         event.preventDefault()
         console.log({roomId}, {value});
-        socket.emit('client-message', roomId, value)
+        socket.emit('client-message', roomId, {
+            value,
+            name: `${userProfile.firstName} ${userProfile.lastName}`,
+
+        })
         setValue("")
     };
 
@@ -548,7 +552,8 @@ const VideoChatScreen = () => {
                     <div className="boxtop">
                         {messages.length> 0 && messages.map(x => (
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                               {x.value}
+                               {x.name}
                             </Typography>
 
                         ))}
