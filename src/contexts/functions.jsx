@@ -2271,6 +2271,134 @@ export const adminFunctions = {
             }
         }
     },
+    addWebinar: async function (token, data) {
+        try {
+            const res = await axios.post(`${baseURL}/admin/webinar/add`, JSON.stringify(data),
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    getWebinar: async function (token, data) {
+        try {
+            const res = await axios.get(`${baseURL}/admin/webinars/fetch`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    updateWebinar: async function (token,id, data) {
+        try {
+            const res = await axios.put(`${baseURL}/admin/webinar/update/${id}`, JSON.stringify(data),
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    deleteWebinar: async function (token, data) {
+        try {
+            const res = await axios.delete(`${baseURL}/admin/webinar/delete/${data}`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
 
     addBlog: async function (token, data) {
         try {
@@ -2306,7 +2434,7 @@ export const adminFunctions = {
     },
     getBlog: async function (token, data) {
         try {
-            const res = await axios.get(`${baseURL}/admin/blog/fetch`, JSON.stringify([data]),
+            const res = await axios.get(`${baseURL}/admin/blogs/fetch`,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,
@@ -2336,9 +2464,9 @@ export const adminFunctions = {
             }
         }
     },
-    updateBlog: async function (token, data) {
+    updateBlog: async function (token,id, data) {
         try {
-            const res = await axios.put(`${baseURL}/admin/blog/update/${data}`, JSON.stringify([data]),
+            const res = await axios.put(`${baseURL}/admin/blog/update/${id}`, JSON.stringify(data),
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,
@@ -2370,7 +2498,7 @@ export const adminFunctions = {
     },
     deleteBlog: async function (token, data) {
         try {
-            const res = await axios.delete(`${baseURL}/admin/blog/delete/:${data}`, JSON.stringify([data]),
+            const res = await axios.delete(`${baseURL}/admin/blog/delete/${data}`,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,
@@ -3075,6 +3203,141 @@ export const studentFunctions = {
                         return status >= 200 && status <= 505;
                     }
                 })
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    getWebinar: async function (data) {
+        try {
+            const res = await axios.get(`${baseURL}/user/webinars/fetch`
+            // ,
+            // {
+            //         headers: {
+            //             "Authorization": `Bearer ${token}`,
+            //             "Content-Type": "application/json"
+            //         },
+            //         validateStatus: status => {
+            //             return status >= 200 && status <= 505;
+            //         }
+            //     }
+                )
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    getAWebinar: async function (id) {
+        try {
+            const res = await axios.get(`${baseURL}/user/webinar/fetch/${id}`
+            // ,
+            // {
+            //         headers: {
+            //             "Authorization": `Bearer ${token}`,
+            //             "Content-Type": "application/json"
+            //         },
+            //         validateStatus: status => {
+            //             return status >= 200 && status <= 505;
+            //         }
+            //     }
+                )
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    getBlogs: async function (token) {
+        try {
+            const res = await axios.get(`${baseURL}/user/blogs/fetch`
+                // ,{
+                //     headers: {
+                //         "Authorization": `Bearer ${token}`,
+                //         "Content-Type": "application/json"
+                //     },
+                //     validateStatus: status => {
+                //         return status >= 200 && status <= 505;
+                //     }
+                // }
+                )
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    getABlog: async function (id) {
+        try {
+            const res = await axios.get(`${baseURL}/user/blog/fetch/${id}`
+            // ,
+            //     {
+            //         headers: {
+            //             "Authorization": `Bearer ${token}`,
+            //             "Content-Type": "application/json"
+            //         },
+            //         validateStatus: status => {
+            //             return status >= 200 && status <= 505;
+            //         }
+            //     }
+                )
+
             if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,

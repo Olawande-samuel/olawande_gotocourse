@@ -445,7 +445,7 @@ const curriculum = [
 export function NewBootcampDetailsComponent() {
   const [bootcampTrainingInfo, setBootcampTrainingInfo] = useState({});
   const { getItem } = useLocalStorage();
-  let [wishlistState, setWishlistState] = useState({})
+  let [wishlistState, setWishlistState] = useState(false)
 
   const bootcampTraining = getItem("gotocourse-bootcampdata");
   const userdata = getItem("gotocourse-userdata");
@@ -453,7 +453,7 @@ export function NewBootcampDetailsComponent() {
 
   const flag = useRef(false);
 
-  const {generalState: { isMobile, loading, navHeight }, setGeneralState, generalState, studentFunctions: { wishlistCourse , addwishlistCourse, deleteFromWishlist, fetchWishlist}, otherFunctions: { fetchBootcamps } } = useAuth()
+  const { generalState: { isMobile, loading, navHeight }, setGeneralState, generalState, studentFunctions: { wishlistCourse, addwishlistCourse, deleteFromWishlist, fetchWishlist }, otherFunctions: { fetchBootcamps } } = useAuth()
 
   const bootcamps = useQuery(["bootcamps", id], () => fetchBootcamps(), {
     onSuccess: res => {
@@ -475,10 +475,10 @@ export function NewBootcampDetailsComponent() {
 
   async function handleBootstrapEnrollment(e) {
     e.preventDefault();
-      navigate("/coming-soon")
+    navigate("/coming-soon")
 
     // if (userdata?.token) {
-      //   navigate("payment")
+    //   navigate("payment")
     // } else {
     //   navigate("/login")
     // }
@@ -495,7 +495,7 @@ export function NewBootcampDetailsComponent() {
         if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
         toast.success(message)
         const { data } = response
-        setWishlistState(data)
+        setWishlistState(true)
       } catch (error) {
         console.error(error)
         toast.error(error.message);
@@ -518,9 +518,9 @@ export function NewBootcampDetailsComponent() {
       else if (statusCode === 1) {
         const { data } = res;
         if (data.length > 0) {
-          setWishlistState(data.find(d => d.courseId === id));
+          setWishlistState(data.map(d => d.courseId).includes(id));
         } else {
-          console.log("err"); 
+          console.log("err");
 
         }
 
@@ -540,8 +540,7 @@ export function NewBootcampDetailsComponent() {
       const res = await deleteFromWishlist(userdata?.token, id)
       const { success, message, statusCode } = res;
       if (!success) throw new AdvancedError(message, statusCode);
-      console.log("setting to {}");
-        setWishlistState({})
+      setWishlistState(false)
     } catch (err) {
 
     } finally {
@@ -550,17 +549,15 @@ export function NewBootcampDetailsComponent() {
   }
 
   const handleClick = (event) => {
-    console.log(event.currentTarget);
+    // console.log(event.currentTarget);
   };
 
   // console.log({ bootcampTrainingInfo });
   // console.log("all", bootcamps.data?.data);
 
   useEffect(() => {
-    if (flag.current) return;
     getWishList()
-    flag.current = true;
-}, [])
+  }, [setWishlistState])
 
   const similar = bootcamps.data?.data.filter(d => (d.subCategory === bootcampTrainingInfo.subCategory) && d.isActive && (d.bootcampId !== bootcampTrainingInfo.bootcampId))
   const upcoming = bootcamps.data?.data?.filter(d => d.isActive)
@@ -605,7 +602,7 @@ export function NewBootcampDetailsComponent() {
                   bootcampTrainingInfo?.careerList?.length > 0 &&
                   <div className={clsx.career_list}>
                     <h4>Career Prospect</h4>
-                    <p>{ bootcampTrainingInfo?.careerTitle}</p>
+                    <p>{bootcampTrainingInfo?.careerTitle}</p>
                     <ul>
                       {
                         bootcampTrainingInfo?.careerList?.map((item, i) => (
@@ -725,7 +722,7 @@ export function NewBootcampDetailsComponent() {
                 ))
               }
               <div className={clsx.viewmore}>
-                <Link to="/category/upcoming">View More <BsArrowRight /></Link>
+                <Link to={`/category/upcoming?id=${bootcampTrainingInfo.subCategory}`}>View More <BsArrowRight /></Link>
               </div>
             </div>
           </div>
@@ -743,8 +740,9 @@ export function NewBootcampDetailsComponent() {
 }
 
 
-export function DetailsHero({ navHeight, title, description, addToWishList, subCategory, handleBootstrapEnrollment, loading, img, endDate, startDate , wishlistState, removeCourse, userdata}) {
-console.log({wishlistState});
+
+export function DetailsHero({ navHeight, title, description, addToWishList, subCategory, handleBootstrapEnrollment, loading, img, endDate, startDate, wishlistState, removeCourse, userdata }) {
+
   return (
     <section
       className={clsx.new_hero}
@@ -759,7 +757,7 @@ console.log({wishlistState});
           <h4>{title}</h4>
           {/* <p className="restricted_line" dangerouslySetInnerHTML={{ __html: description }}></p> */}
           {/* <p>{description ? description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p> */}
-          <p style={{ marginTop: "2rem", fontSize: "1.5rem" }}>Starting Date: <span>{ loading ? "" : new Date(startDate).toDateString()}</span></p>
+          <p style={{ marginTop: "2rem", fontSize: "1.5rem" }}>Starting Date: <span>{loading ? "" : new Date(startDate).toDateString()}</span></p>
 
           <div className={clsx.hero_buttons}>
             <motion.button
@@ -782,37 +780,50 @@ console.log({wishlistState});
               }
             </motion.button> */}
 
-{
-              (userdata.token && wishlistState) ?
+            {
+              (!userdata.token) ? <button onClick={addToWishList}>
+                {
+                  loading ?
+                    <div className="spinner-border" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    :
+                    "Wishlist"
 
-                <button onClick={removeCourse}>
-                  {
-                    loading ?
-                      <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                      </div>
-                      :
-                      "Remove wishlist"
+                }
 
-                  }
+              </button> :
 
-                </button>
+                (userdata.token && wishlistState) ?
 
-                :
+                  <button onClick={removeCourse}>
+                    {
+                      loading ?
+                        <div className="spinner-border" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                        :
+                        "Remove wishlist"
 
-                <button onClick={addToWishList}>
-                  {
-                    loading ?
-                      <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                      </div>
-                      :
-                      "Wishlist"
+                    }
 
-                  }
+                  </button>
+                  :
+                  <button onClick={addToWishList}>
+                    {
+                      loading ?
+                        <div className="spinner-border" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                        :
+                        "Wishlist"
 
-                </button>
+                    }
+
+                  </button>
+
             }
+
 
 
 
@@ -829,6 +840,7 @@ export function Upcome({ _id, title, duration, category, subCategory, bootcampId
   const navigate = useNavigate();
 
   // console.log({all});
+  // console.log({category});
 
   async function handleBootstrapEnrollment(e) {
     e.preventDefault();
@@ -841,7 +853,7 @@ export function Upcome({ _id, title, duration, category, subCategory, bootcampId
   }
   return (
     <div className={clsx.upcome}>
-      <div  className={clsx.upcomeitem}>
+      <div className={clsx.upcomeitem}>
         <p>{title}</p>
 
       </div>
