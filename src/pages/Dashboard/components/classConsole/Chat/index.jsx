@@ -772,19 +772,12 @@ function ActiveChat(){
         onSuccess: (res)=>{
             console.log({res})
         }
-    })
-    const {classId} = useParams() 
-    const navigate = useNavigate() 
+      })
+    
     console.log({allMessages})
-
-    function openChat(e){
-        e.preventDefault();
-        navigate(`/teacher/class/${classId}/mail/chat`)
-    }
     return(
         <ActiveChatContainer>
-            <button onClick={openChat} style={{border: "none", outline:"none", padding: ".7rem", background:"var(--theme-blue)", color:"#fff"}} >Open Chat</button>
-            {/* <ActiveChatTop>
+            <ActiveChatTop>
                 <InputContainer>
                     <MdSearch />
                     <input type="text" name="search" placeholder='Search for student' />
@@ -818,7 +811,7 @@ function ActiveChat(){
                         ))
                     }
                 </ActiveChatCard>
-            </ActiveChatBody> */}
+            </ActiveChatBody>
         </ActiveChatContainer>
     )
 }

@@ -2,51 +2,24 @@ import axios from 'axios'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { BsCameraVideo, BsCameraVideoOff, BsMic, BsMicMute } from 'react-icons/bs'
 import { HiOutlineHand, HiOutlinePhone } from 'react-icons/hi'
-import { IoAdd } from 'react-icons/io5'
+import {  IoAdd } from 'react-icons/io5'
 import { MdPresentToAll } from 'react-icons/md'
-import { VscRecord } from 'react-icons/vsc'
+import {  VscRecord } from 'react-icons/vsc'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import useQuery from '../useQuery'
 import useSocket from '../useSocket'
-import { Wrapper, Content, HeadBar, VideoWrapper, AddPeople, ControlItem, ControlWrapper, UserCallBlock, UserPresentation, StreamWrapper, } from './style'
+import { Wrapper, Content, HeadBar, VideoWrapper, AddPeople, ControlItem, ControlWrapper, UserCallBlock, UserPresentation, StreamWrapper,  } from './style'
 import { MediaConnection, Peer } from "peerjs";
 import CONFIG from '../appConst'
 import { KEY } from '../../../constants'
 import { useLocalStorage } from '../../../hooks'
 import { Navbar } from '../../../pages/Dashboard/components/Live/LiveClass'
-import { BiMessageDetail } from 'react-icons/bi'
-import { Box, Modal, TextField, Button, Typography } from '@mui/material/';
 
-
-
-
-const style = {
-    position: 'absolute',
-    // top: '50%',
-    top: "50px",
-    // left: '50%',
-    right: 0,
-    bottom: "50px",
-    // transform: 'translate(-50%, -50%)',
-    width: 400,
-    height: 600,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    overflow: "hidden",
-    p: 4,
-};
-
-const VideoChatScreen = () => {
+const VideoChatScreen = ()  => {
     const { socket, sendPing } = useSocket()
     const location = useLocation();
-    const { getItem } = useLocalStorage()
+    const {getItem} = useLocalStorage()
     const userProfile = getItem(KEY);
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    const [value, setValue] = useState('');
-    const [messages, setMessages] = useState([])
     const [isPresenting, setIsPresenting] = useState(false);
     const [callSettingsState, setCallSettingsState] = useState({
         video: true,
@@ -63,7 +36,7 @@ const VideoChatScreen = () => {
         hasJoinedPresentation: false
     })
 
-
+       
 
 
     const chekForVideoRoom = async () => {
@@ -78,7 +51,7 @@ const VideoChatScreen = () => {
             isRoomOwner = true
 
             setUpMediaScreen()
-
+            
         } else {
             isRoomOwner = false
             setUpMediaScreen()
@@ -86,19 +59,19 @@ const VideoChatScreen = () => {
     }
     const localStream = useRef(null);
     let myCall;
-
+    
 
     const togggleVideo = async () => {
         if (callSettingsState.video) {
-            handleVideoToggle({ video: false, audio: callSettingsState.audio })
-            setCallSettingsState({ ...callSettingsState, video: false })
+            handleVideoToggle({video: false, audio: callSettingsState.audio})
+            setCallSettingsState({...callSettingsState, video: false})
         } else {
-            handleVideoToggle({ video: true, audio: true })
-            setCallSettingsState({ ...callSettingsState, video: callSettingsState.audio })
+            handleVideoToggle({video: true, audio: true})
+            setCallSettingsState({...callSettingsState, video: callSettingsState.audio})
         }
     }
 
-    const handleVideoToggle = async ({ video, audio }) => {
+    const handleVideoToggle = async ({video, audio}) => {
         const enabled = localStream.current?.getVideoTracks()[0].enabled;
 
         if (enabled) {
@@ -108,7 +81,7 @@ const VideoChatScreen = () => {
         }
     }
 
-    const handleAudioToggle = async ({ video, audio }) => {
+    const handleAudioToggle = async ({video, audio}) => {
         const enabled = localStream.current?.getAudioTracks()[0].enabled;
 
         if (enabled) {
@@ -117,30 +90,30 @@ const VideoChatScreen = () => {
             localStream.current.getAudioTracks()[0].enabled = true;
         }
     }
-
+    
     const togggleAudio = async () => {
 
         if (callSettingsState.audio) {
-            handleAudioToggle({ video: callSettingsState.video, audio: false })
-            setCallSettingsState({ ...callSettingsState, audio: false })
+            handleAudioToggle({video: callSettingsState.video, audio: false})
+            setCallSettingsState({...callSettingsState, audio: false})
         } else {
-            handleAudioToggle({ video: callSettingsState.video, audio: true })
-            setCallSettingsState({ ...callSettingsState, audio: true })
+            handleAudioToggle({video: callSettingsState.video, audio: true})
+            setCallSettingsState({...callSettingsState, audio: true})
         }
     }
 
     let videoWrapper
 
-    useEffect(() => {
+    useEffect(()=>{
         videoWrapper = document.querySelector('.video-section');
-    }, [])
+    },[])
 
     function addVideoStream(videoWrapper, stream) {
 
         const video = videoWrapper.querySelector('video')
         video.srcObject = stream
         video.addEventListener('loadedmetadata', () => {
-            video.play()
+          video.play()
         })
     }
 
@@ -209,9 +182,9 @@ const VideoChatScreen = () => {
     const presentationPeers = useRef({})
 
     function startCapture() {
-        const presentationId = "presentation-" + connectionUserId.current
+        const presentationId = "presentation-"+ connectionUserId.current
         const presentationVideo = document.querySelector('.client-presentation-stream')
-        navigator.mediaDevices.getDisplayMedia({ audio: false, video: true }).then((stream) => {
+         navigator.mediaDevices.getDisplayMedia({audio: false, video: true}).then((stream) => {
             presentationStream.current = stream
 
             presentationVideo?.setAttribute("autoplay", "")
@@ -256,10 +229,10 @@ const VideoChatScreen = () => {
                 // socket.emit('join-video-room', roomId, presentationId)
             }
             setIsPresenting(true)
-
+            
         });
 
-
+        
     }
 
     const [remoteUserPresentingProccessing, setRemoteUserPresentingProccessing] = useState(false)
@@ -286,9 +259,10 @@ const VideoChatScreen = () => {
             console.log("connected to room with userId: ", userId)
             socket.emit('join-video-room', roomId, userId)
         })
-
         myPeer.current.on('call', call => {
             if (call.peer.split('-')[0] !== "presentation") {
+                
+
 
                 call.answer(localStream.current)
                 const remoteVideoWrapper = document.createElement('div')
@@ -299,7 +273,7 @@ const VideoChatScreen = () => {
 
 
                 peers.current[call.peer] = call
-
+                
                 call.on('stream', userVideoStream => {
                     addVideoStream(remoteVideoWrapper, userVideoStream)
                 })
@@ -356,8 +330,8 @@ const VideoChatScreen = () => {
             const remoteVideo = document.createElement('video')
             remoteVideoWrapper.appendChild(remoteVideo)
             videoWrapper.append(remoteVideoWrapper)
-
-            console.log({ videoWrapper })
+            
+            console.log({videoWrapper})
 
             myCall.on('stream', userVideoStream => {
                 console.log("recevied user video stream: ", userVideoStream)
@@ -371,7 +345,7 @@ const VideoChatScreen = () => {
         }
 
         const connectToUserRemotePresentation = (presentaterUserId) => {
-            const presentationId = "presentation-" + connectionUserId.current
+            const presentationId = "presentation-"+ connectionUserId.current
             myCall = myPeer.current?.call(presentaterUserId, localStream.current)
 
             setIsPresenting(true)
@@ -415,15 +389,6 @@ const VideoChatScreen = () => {
                 }
             }
         })
-
-        socket.on('incoming-message', userData => {
-            console.log("working");
-            console.log({ userData });
-            if(userData){
-                setMessages([...messages, userData])
-                // messages.push(userData)
-            }
-        })
     }
 
     const checkPeerUsers = () => {
@@ -434,41 +399,21 @@ const VideoChatScreen = () => {
         if (userProfile.userId !== "") {
             chekForVideoRoom()
         }
-        // ask you to log in
     }
-
+ 
     useEffect(() => {
         initRoom()
         connectionUserId.current = userProfile.userId
     }, [userProfile.userId])
 
-    function handleNavigation() {
-        userProfile.userType === "student" ?
-            window.location.assign("/student")
-            :
-            userProfile.userType === "teacher" ?
-                window.location.assign("/teacher") : userProfile.userType === "admin" ? window.location.assign("/admin") : window.location.assign("/")
+    function handleNavigation(){
+        userProfile.userType === "student" ? 
+        window.location.assign("/student")
+        :
+        userProfile.userType === "teacher" ? 
+        window.location.assign("/teacher"): userProfile.userType === "admin" ? window.location.assign("/admin") : window.location.assign("/")
 
     }
-
-    const toggleMessage = () => {
-        setOpen(!open)
-    }
-
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        console.log({roomId}, {value});
-        socket.emit('client-message', roomId, {
-            value,
-            name: `${userProfile.firstName} ${userProfile.lastName}`,
-
-        })
-        setValue("")
-    };
-
-  
-
- 
     return (
         <Wrapper>
             {/* <HeadBar>
@@ -482,15 +427,15 @@ const VideoChatScreen = () => {
             </HeadBar> */}
             <Navbar user={userProfile} />
             <Content>
-                <VideoWrapper isPresenting={isPresenting}>
-                    <div onClick={closeRecordedModal} className="recoreded-media">
+                <VideoWrapper isPresenting={isPresenting}> 
+                     <div onClick={closeRecordedModal} className="recoreded-media">
                         <video ref={recordedVideoRef} src=""></video>
                     </div>
                     <UserPresentation isPresenting={isPresenting}>
                         <video className="client-presentation-stream" src="" muted={true}></video>
                     </UserPresentation>
                     <StreamWrapper isPresenting={isPresenting} className="video-section">
-
+                        
                         <UserCallBlock>
                             <video className="client-local-stream" src="" muted={true}></video>
                         </UserCallBlock>
@@ -505,29 +450,25 @@ const VideoChatScreen = () => {
                                 } else {
                                     stopRecording()
                                 }
-                            }} isOn={!isRecording}>
+                            }}  isOn={!isRecording}>
                                 <VscRecord size="1.5rem" />
                             </ControlItem>
 
                             <ControlItem onClick={togggleAudio} isOn={callSettingsState.audio}>
-                                <HiOutlineHand size="1.5rem" />
+                                <HiOutlineHand size="1.5rem"  />
                             </ControlItem>
                             <ControlItem onClick={togggleAudio} isOn={callSettingsState.audio}>
-                                {callSettingsState.audio ? <BsMic size="1.5rem" /> : <BsMicMute size="1.5rem" />}
+                                {callSettingsState.audio ? <BsMic  size="1.5rem" /> : <BsMicMute size="1.5rem"   />}
                             </ControlItem>
                             <ControlItem onClick={() => startCapture()} isOn={true}>
-                                <MdPresentToAll size="1.5rem" />
+                                <MdPresentToAll  size="1.5rem" />
                             </ControlItem>
                             <ControlItem onClick={togggleVideo} isOn={callSettingsState.video}>
                                 {callSettingsState.video ? <BsCameraVideo size="1.5rem" /> : <BsCameraVideoOff size="1.5rem" />}
                             </ControlItem>
-                            <ControlItem onClick={toggleMessage}>
-                                <BiMessageDetail size="1.5rem" />
-                            </ControlItem>
                             <ControlItem onClick={handleNavigation}>
-                                <HiOutlinePhone size="1.5rem" />
+                                <HiOutlinePhone size="1.5rem"  />
                             </ControlItem>
-
 
                         </div>
                     </ControlWrapper>
@@ -537,38 +478,6 @@ const VideoChatScreen = () => {
                     </AddPeople> */}
                 </VideoWrapper>
             </Content>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                className="message"
-            >
-                <Box sx={style}  
-                component="form"
-                noValidate
-                autoComplete="off"
-                >
-                    <div className="boxtop">
-                        {messages.length> 0 && messages.map(x => (
-                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                               {x.value}
-                               {x.name}
-                            </Typography>
-
-                        ))}
-
-                    </div>
-                    <div className="boxbottom">
-                        <TextField id="outlined-basic" placeholder='Message' variant="outlined" size="small" value={value}
-                            onChange={(event) => setValue(event.target.value)} />
-                        <Button variant="outlined" onClick={(e) => handleSubmit(e)}>Send</Button>
-
-                    </div>
-
-
-                </Box>
-            </Modal>
         </Wrapper>
     )
 }

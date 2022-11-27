@@ -816,7 +816,7 @@ function WishCard({ courseId: id, courseName, courseDescription, courseCategory,
                     <img src={trello} alt="icon" className="img-fluid" />
                 </div>
                 <h5 className="fw-bold">{courseName}</h5>
-                <p className="restricted_line" dangerouslySetInnerHTML={{ __html: courseDescription }}></p>
+                <p className="restricted_line">{courseDescription}</p>
                 <div className="d-flex justify-content-between">
                     <button className="btn btn-outline-primary" onClick={() => handleNavigate(courseCategory, courseName)} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Register today</button>
                     <button className="btn btn-outline-primary" onClick={() => setOpen(true)} style={{ border: "1px solid var(--theme-orange)", color: "var(--theme-orange)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
@@ -1529,19 +1529,18 @@ export const Dashboard = () => {
     const [loader, setLoading] = useState(false)
 
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
-    const { data: myenrolledcourses, isSuccess: mycoursesuccess } = useQuery(["fetch my enrolledclasses"], () => fetchMyClasses(userdata?.token))
+    // const { data, isSuccess } = useQuery(["fetch my classes"], () => fetchMyClasses(userdata?.token))
     // const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
     const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps());
 
     // console.log(data)
-    // console.log("data", myenrolledcourses?.data);
-    // console.log("wish",wishlistData );
+
     const topContent = [
         {
             id: 1,
             title: "Courses enrolled for",
             logo: <Stu1 />,
-            value: myenrolledcourses?.data?.length ?? 0
+            value: data?.data?.length ?? 0
         },
         {
             id: 2,
@@ -1562,7 +1561,7 @@ export const Dashboard = () => {
         topContent[1].value = wishlistData?.data?.length
     }
     if (isSuccess) {
-        topContent[0].value = myenrolledcourses?.data.length
+        topContent[0].value = data?.data?.filter(d => d.isActive)?.length
     }
 
     return (
@@ -1580,7 +1579,7 @@ export const Dashboard = () => {
                                         <p className="text-muted">No item in wishlist</p>
                                         :
                                         wishlistData?.data?.map((item, i) => (
-                                            <li key={i}>{item.courseName}</li>
+                                            <li key={i}>{item.name}</li>
                                         ))
                                 }
 
@@ -1594,7 +1593,7 @@ export const Dashboard = () => {
                     </div>
                     {/* <CourseTable courses={data?.data} type="dashboard" /> */}
                     {
-                        myenrolledcourses?.data?.length > 0 ?
+                        data?.data?.length > 0 ?
                             <div className="table-responsive">
                                 <table className="table table-borderless w-auto">
                                     <thead>
@@ -1605,7 +1604,7 @@ export const Dashboard = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {myenrolledcourses?.data.filter(data => data.status === "paid").map((item, i) => (
+                                        {data?.data.filter(data => data.status === "paid").map((item, i) => (
                                             <tr key={i}>
                                                 <td><span>{i + 1}</span></td>
                                                 <td>
@@ -1649,7 +1648,7 @@ function AvailableCourses({ data }) {
         } else {
             navigate("/login")
         }
-
+      
     }
     // console.log({ data });
     return (

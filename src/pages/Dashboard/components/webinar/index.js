@@ -1,16 +1,13 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import styled from "styled-components"
 import { Admin } from "../../Admin"
 import { Button } from "@mui/material"
-import { BiCloudDownload, BiTrash } from "react-icons/bi"
+import { BiCloudDownload } from "react-icons/bi"
 import { useLocalStorage } from "../../../../hooks"
 import { KEY } from "../../../../constants"
 import { useAuth } from "../../../../contexts/Auth"
 import { AdvancedError } from "../../../../classes"
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
-import { RiDeleteBinFill } from "react-icons/ri"
-import UploadForm from "../../../../components/UploadForm"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { Link } from "react-router-dom"
 
 const Form = styled.section`
 padding: 1rem;
@@ -49,12 +46,6 @@ form{
         padding: .5rem ;
     
     }
-
-    .presenters{
-        display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    }
 }
 
 
@@ -82,7 +73,7 @@ const Container = styled.section`
 overflow-y: scroll;
 `
 
-export const Header = styled.header`
+const Header = styled.header`
 width: 100%;
 display: flex;
 align-items: center;
@@ -115,7 +106,6 @@ button{
 
 @media (max-width: 768px){
     flex-direction: column;
-    gap: 2rem;
 
     input{
         width: unset;
@@ -134,7 +124,7 @@ gap: 1rem;
 .webinartop{
     display: flex;
     align-items: center;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 16px;
     line-height: 19px;
 
@@ -170,7 +160,7 @@ gap: 1rem;
     flex-direction: column;
     gap: 1rem;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 19px;
 
     .webinaritem{
@@ -194,14 +184,10 @@ gap: 1rem;
         div:nth-of-type(5){
             flex: .1;
             color: #087118;
-            cursor: pointer;
-          
         };
         div:nth-of-type(6){
             flex: .1;
-            color: #C41000; 
-            cursor: pointer;
-   
+            color: #C41000;    
         };
     }
 
@@ -219,152 +205,38 @@ gap: 1rem;
 
 
 `
-
-const initialState = {
-    title: "",
-    description: "",
-    status: "Physical",
-    date: "",
-    time: "",
-    webinarImg: "",
-    presenters: [
-        {
-            presenterName: "",
-            presenterDesc: "",
-            presenterImg: ""
-        }
-    ]
-
-}
 export const AdminWebinar = () => {
-    const [open, setOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState(false);
-    const [edit, setEdit] = useState(false)
+    const [formState, setFormState] = useState({
+        title: "",
+        description: "",
 
+    })
 
-    let navigate = useNavigate()
-
-
-    const [formState, setFormState] = useState(initialState)
-    const location = useLocation()
-    const id = location.state && location.state.id
-    // console.log({id});
 
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { getWebinar, addWebinar, updateWebinar } } = useAuth();
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { addBlog } } = useAuth();
 
     const Submit = async (e) => {
         e.preventDefault();
-        if (edit) {
-            setGeneralState({ ...generalState, loading: true })
-            try {
-                const response = await updateWebinar(userdata?.token, id, formState)
-                const { success, message, statusCode } = response
-                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-                const { data } = response
-                setEdit(false)
-                setFormState(initialState)
-                navigate('/admin/webinar')
-                // console.log({ data });
-            } catch (error) {
-                console.error(error)
-            } finally {
-                setGeneralState({ ...generalState, loading: false })
 
-            }
-        } else {
-
-            setGeneralState({ ...generalState, loading: true })
-            try {
-                const response = await addWebinar(userdata?.token, formState)
-                const { success, message, statusCode } = response
-                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-                const { data } = response
-                // console.log({ data });
-                setFormState(initialState)
-                navigate('/admin/webinar')
-            } catch (error) {
-                console.error(error)
-            } finally {
-                setGeneralState({ ...generalState, loading: false })
-
-            }
-        }
-
-    }
-
-
-    const handleInputChange = (e, index) => {
-        const { name, value } = e.target;
-        const list = { ...formState }
-        list.presenters[index][name] = value;
-        // console.log(list);
-        setFormState(list)
-    }
-
-    const handleAddClick = (e) => {
-        e.preventDefault()
-        setFormState(
-            {
-                ...formState,
-                presenters: [
-                    ...formState.presenters,
-                    {
-                        presenterName: "",
-                        presenterDesc: "",
-                        presenterImg: ""
-                    }
-
-                ]
-            }
-        )
-
-    }
-
-    const handleRemoveClick = (id) => {
-        const list = { ...formState }
-        list.presenters.splice(id, 1)
-        setFormState(list)
-    }
-
-    function showUploadFormHandler() {
-        setOpen((_) => true);
-    }
-
-
-    useEffect(() => {
-        if (id) {
-            (async () => {
-                try {
-                    const res = await getWebinar(userdata?.token);
-                    const { message, success, statusCode } = res;
-                    if (!success) throw new AdvancedError(message, statusCode);
-                    else if (statusCode === 1) {
-                        const { data } = res;
-                        // console.log({data});
-                        let found = data.find((d) => d._id === id);
-                        if (found) {
-                            setEdit(true)
-                            // console.log({found});
-                            // setFormState(found)
-                            setFormState({ ...formState, ...found });
-                        }
-                    } else {
-                        throw new AdvancedError(message, statusCode);
-                    }
-                } catch (err) {
-                    console.log(err);
-                } finally {
-
-                }
-            })();
+        setGeneralState({ ...generalState, loading: true })
+        try {
+            const response = await addBlog(userdata?.token, formState)
+            const { success, message, statusCode } = response
+            if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+            const { data } = response
+            console.log({ data });
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setGeneralState({ ...generalState, loading: false })
 
         }
-        return () => console.log("Removing");
-    }, [id])
 
-    // console.log({ formState });
+    }
+
+
     return (
         <Admin>
             <Form >
@@ -380,29 +252,17 @@ export const AdminWebinar = () => {
                     </label>
 
                     <label htmlFor="description">Description:
-                        <textarea
-                            name="description"
+                        <textarea name="Description"
                             value={formState.description}
                             onChange={(e) => setFormState({ ...formState, [e.target.name]: e.target.value })}></textarea>
                     </label>
 
-                    <Button variant="contained" component="label" style={{ width: "50%", color: "#FFFFFF", background: "#0C2191" }} onClick={showUploadFormHandler}>
+                    <label htmlFor="upload">Upload</label>
+                    <Button variant="contained" component="label" style={{ width: "50%", color: "#FFFFFF", background: "#0C2191" }}>
                         <BiCloudDownload style={{ fontSize: "2rem", color: "#FFFFFF" }} /> Upload
-                        {/* <input hidden accept="image/*" multiple type="file"/> */}
-                    </Button>
-
-                    <UploadForm
-                        isOpen={open}
-                        setIsOpen={setOpen}
-                        setPreviewImage={setPreviewImage}
-                    />
-                    <label htmlFor="title">Webinar Image Url
-                        <input type="text"
-                            name="webinarImg"
-                            value={formState.webinarImg}
-                            onChange={(e) => setFormState({ ...formState, [e.target.name]: e.target.value })}
+                        <input hidden accept="image/*" multiple type="file"
                         />
-                    </label>
+                    </Button>
 
 
 
@@ -410,15 +270,14 @@ export const AdminWebinar = () => {
                         <label htmlFor="title">Date
                             <input type="date"
                                 name="date"
-                                value={formState.date}
+                                value={formState.title}
                                 onChange={(e) => setFormState({ ...formState, [e.target.name]: e.target.value })}
                             />
                         </label>
                         <label htmlFor="time">Time
-                            <input
-                                type="time"
-                                name="time"
-                                value={formState.time}
+                            <input type="time"
+                                name="title"
+                                value={formState.title}
                                 onChange={(e) => setFormState({ ...formState, [e.target.name]: e.target.value })}
                             />
                         </label>
@@ -427,60 +286,34 @@ export const AdminWebinar = () => {
 
 
                     <h3>Presenters</h3>
+                    <label htmlFor="presenter">Name of presenter
+                        <input type="presenter"
+                            name="text"
+                            value={formState.status}
+                            onChange={(e) => setFormState({ ...formState, [e.target.name]: e.target.value })}
+                        />
+                    </label>
 
-                    {formState.presenters?.map((x, id) => (
-                        <div key={id} className="presenters">
-                            <label htmlFor="presenterName">Name of presenter
-                                <input
-                                    type="text"
-                                    name="presenterName"
-                                    value={x.presenterName}
-                                    onChange={e => handleInputChange(e, id)}
-                                />
-                            </label>
-
-                            <label htmlFor="presenterDesc">Description of presenter
-                                <input
-                                    type="text"
-                                    name="presenterDesc"
-                                    value={x.presenterDesc}
-                                    onChange={e => handleInputChange(e, id)}
-                                />
-                            </label>
-
-                            <Button variant="contained" component="label" style={{ width: "50%", color: "#FFFFFF", background: "#0C2191" }} onClick={showUploadFormHandler}>
-                                <BiCloudDownload style={{ fontSize: "2rem", color: "#FFFFFF" }} /> Upload
-                                {/* <input hidden accept="image/*" multiple type="file"/> */}
-                            </Button>
-
-                            <label htmlFor="presenterImg">presenter Image
-                                <input
-                                    type="url"
-                                    name="presenterImg"
-                                    value={x.presenterImg}
-                                    onChange={e => handleInputChange(e, id)}
-                                />
-                            </label>
+                    <label htmlFor="presenterDescription">Descrption of presenter
+                        <input type="presenterDescription"
+                            name="text"
+                            value={formState.status}
+                            onChange={(e) => setFormState({ ...formState, [e.target.name]: e.target.value })}
+                        />
+                    </label>
 
 
-                            {
-                                formState.presenters.length !== 1 && <RiDeleteBinFill onClick={() => handleRemoveClick(id)} />
-
-                            }
-
-                            {
-                                formState.presenters.length - 1 === id && <Button variant="contained" component="label" style={{ width: "200px", background: "#FFFFFF", color: "#0C2191", border: "1px solid #0C2191" }}
-                                    onClick={(e) => handleAddClick(e)}>
-                                    Add Presenter
-                                </Button>
-
-                            }
-                        </div>
-
-                    ))}
+                    <label htmlFor="upload">Upload</label>
+                    <Button variant="contained" component="label" style={{ width: "50%", color: "#FFFFFF", background: "#0C2191" }}>
+                        <BiCloudDownload style={{ fontSize: "2rem", color: "#FFFFFF" }} /> Upload
+                        <input hidden accept="image/*" multiple type="file"
+                        />
+                    </Button>
 
 
-
+                    <Button variant="contained" component="label" style={{ width: "200px", background: "#FFFFFF", color: "#0C2191", border: "1px solid #0C2191" }}>
+                        Add presenter
+                    </Button>
 
 
                     <Button variant="contained" component="label" style={{ color: "#FFFFFF", background: "#0C2191" }} onClick={(e) => Submit(e)}>
@@ -491,156 +324,55 @@ export const AdminWebinar = () => {
 
                 </form>
             </Form>
-        </Admin >
-    )
-}
-
-export const MyWebinar = () => {
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { getWebinar, deleteBlog, updateBlog } } = useAuth();
-    const [webinar, setWebinar] = useState({})
-    const { getItem } = useLocalStorage();
-    let userdata = getItem(KEY);
-
-
-    // let flag = useRef(false)
-    const { id } = useParams()
-
-    useEffect(() => {
-        // if (flag.current) return;
-        if (id) {
-            (async () => {
-                try {
-                    const res = await getWebinar(userdata?.token);
-                    const { message, success, statusCode } = res;
-                    if (!success) throw new AdvancedError(message, statusCode);
-                    else if (statusCode === 1) {
-                        const { data } = res;
-                        let found = data.find((d) => d._id === id);
-                        setWebinar(found)
-                    } else {
-                        throw new AdvancedError(message, statusCode);
-                    }
-                } catch (err) {
-                    console.log(err);
-                } finally {
-
-                }
-            })();
-
-        }
-        // flag.current = true;
-        return () => console.log("Removing");
-    }, [id])
-    return (
-        <Admin>
-            <Container>
-                <div className="imgcontainer">
-                    <img src={`${process.env.REACT_APP_IMAGEURL}${webinar.webinarImg}`} alt="" />
-                </div>
-                <h4>{webinar.title}</h4>
-                <p>{webinar.description}</p>
-
-            </Container>
-
         </Admin>
     )
 }
 
 
+
 export const AdminWebinarDashboard = () => {
-    const { getItem } = useLocalStorage();
-    const queryClient = useQueryClient()
-    const [webinars, setWebinars] = useState([])
-    let userdata = getItem(KEY);
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { getWebinar, deleteWebinar } } = useAuth();
-    let navigate = useNavigate()
-
-    const webinarData = useQuery(["fetch classes"], () => getWebinar(userdata?.token), {
-        onSuccess: (res) => {
-            if (res.data.length > 0) {
-                // console.log("data", res.data);
-                setWebinars(res.data)
-
-            }
-        }
-    })
-
-    const updateWebinarFunc = async (id) => {
-        navigate(`create?id=${id}`, {
-            state: {
-                id
-            }
-        })
-
-    }
-
-
-
-    const deleteWebinarFunc = async (id) => {
-        setGeneralState({ ...generalState, loading: true })
-        try {
-            const response = await deleteWebinar(userdata?.token, id)
-            const { success, message, statusCode } = response
-            if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
-            const { data } = response
-            queryClient.invalidateQueries(["fetch classes"])
-
-            // console.log({ data });
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setGeneralState({ ...generalState, loading: false })
-
-        }
-    }
     return (
         <Admin>
             <Container>
-                <Header>
-                    <div>
-                        <label htmlFor="filter">Filter By:
-                            <input type="search" placeholder="search" />
-                        </label>
-                    </div>
+            <Header>
+                <div>
+                    <label htmlFor="filter">Filter By:
+                        <input type="search" placeholder="search" />
+                    </label>
+                </div>
 
-                    <button>
-                        <Link to={`create`}>
-                            Create Webinar
-                        </Link>
-                    </button>
-                </Header>
+                <button>
+                    <Link to={`create`}>
+                        Create Webinar
+                    </Link>
+                </button>
+            </Header>
 
-                <WebinarContent>
+            <WebinarContent>
 
-                    <div className="webinartop">
-                        <div>Name</div>
-                        <div>Date</div>
-                        <div>Time</div>
-                        <div>Presenter(s)</div>
-                        <div />
-                        <div />
-                    </div>
-                    <div className="webinarcontent">
+                <div className="webinartop">
+                    <div>Name</div>
+                    <div>Date</div>
+                    <div>Time</div>
+                    <div>Presenter</div>
+                    <div />
+                    <div />
+                </div>
+                <div className="webinarcontent">
 
-                        {webinars.length > 0 && webinars.map((x, id) => (
-                            <div className="webinaritem" key={x._id}>
-                                <div>{x.title}</div>
-                                <div>{new Date(x.date).toLocaleDateString()}</div>
-                                <div>{x.time}</div>
-                                {/* <div>{x.presenters[0].presenterName} </div> */}
-                                <div>
-                                    {x.presenters.length > 0 && x.presenters.map((presenter, id) =>
-                                        <span style={{display: "block", textTransform:"capitalize"}}>{presenter.presenterName}</span>
-                                    )}
-                                </div>
+                    {[...Array(5)].map((x, id) => (
+                        <div className="webinaritem">
+                            <div>UIUX</div>
+                            <div>Feb 24</div>
+                            <div>8:00 pm CST</div>
+                            <div>Admin 1 </div>
+                            <div>Edit</div>
+                            <div>Delete</div>
+                        </div>
+                    ))}
+                </div>
 
-                                <div onClick={() => updateWebinarFunc(x._id)}>Edit</div>
-                                <div onClick={() => deleteWebinarFunc(x._id)}>Delete</div>
-                            </div>
-                        ))}
-                    </div>
-
-                </WebinarContent>
+            </WebinarContent>
 
             </Container>
         </Admin>

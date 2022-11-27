@@ -1,11 +1,6 @@
-// const  CONFIG = {
-//     socketUrl: "https://gotocourse.loftywebtech.com",
-//     peerUrl: "gotocourse.loftywebtech.com"
-// }
-
 const  CONFIG = {
-    socketUrl: "https://api.gotocourse.us",
-    peerUrl: "api.gotocourse.us"
+    socketUrl: "https://gotocourse.loftywebtech.com",
+    peerUrl: "gotocourse.loftywebtech.com"
 }
 
 
