@@ -419,7 +419,7 @@ const VideoChatScreen = () => {
         socket.on('incoming-message', userData => {
             console.log("working");
             console.log({ userData });
-            if(userData){
+            if (userData) {
                 setMessages([...messages, userData])
                 // messages.push(userData)
             }
@@ -455,11 +455,18 @@ const VideoChatScreen = () => {
         setOpen(!open)
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault()
+    const handleSubmit = (e) => {
+        e.preventDefault()
         // console.log({roomId}, {value});
-        setMessages([...messages, {value, name: `${userProfile.firstName} ${userProfile.lastName}`}])
-        messages.push(value)
+        if(!value) return;
+        setMessages([
+            ...messages,
+            {
+                value,
+                name: `${userProfile.firstName} ${userProfile.lastName}`,
+                mine:true,
+            }])
+        // messages.push(value)
         socket.emit('client-message', roomId, {
             value,
             name: `${userProfile.firstName} ${userProfile.lastName}`,
@@ -468,9 +475,9 @@ const VideoChatScreen = () => {
         setValue("")
     };
 
-  
 
- 
+
+
     return (
         <Wrapper>
             {/* <HeadBar>
@@ -546,25 +553,24 @@ const VideoChatScreen = () => {
                 aria-describedby="modal-modal-description"
                 className="message"
             >
-                <Box sx={style}  
-                component="form"
-                noValidate
-                autoComplete="off"
+                <Box sx={style}
                 >
                     <div className="boxtop">
-                        {messages.length> 0 && messages.map(x => (
-                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                               {x.value}
-                               {x.name}
-                            </Typography>
+                        {messages.length > 0 && messages.map(x => (
+                            <div className={`message ${x.mine &&"mine"}`}> 
+                            <p style={{color: "#0C2191", marginBottom:".5rem"}}>{x.name}</p>
+                            <span> {x.value}</span>   
+
+                            </div>
 
                         ))}
 
                     </div>
                     <div className="boxbottom">
-                        <TextField id="outlined-basic" placeholder='Message' variant="outlined" size="small" value={value}
-                            onChange={(event) => setValue(event.target.value)} />
-                        <Button variant="outlined" onClick={(e) => handleSubmit(e)}>Send</Button>
+                        <form onSubmit={handleSubmit}>
+                            <input type="text" value={value} placeholder='Message' onChange={(event) => setValue(event.target.value)} />
+                            <button>Send</button>
+                        </form>
 
                     </div>
 
