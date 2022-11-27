@@ -13,7 +13,7 @@ import UploadForm from "../../../../components/UploadForm"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 const Form = styled.section`
-padding: 1rem;
+padding: 1rem;  
 // border: 2px solid red;
 overflow-y: scroll;
 
@@ -80,47 +80,49 @@ label, input{
 
 const Container = styled.section`
 overflow-y: scroll;
+padding-top:.6rem;
 `
 
 export const Header = styled.header`
-width: 100%;
-display: flex;
-align-items: center;
-justify-content: space-between;
-// border: 2px solid red;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // border: 2px solid red;
 
-label{
-    color: #595959;
-    font-size: 14px;
-line-height: 19px;
-}
-
-input{
-    width: 300px;
-    padding: .5rem;
-    border: .2px solid ;
-    margin-left: 1rem;
-}
-
-button{
-    border: none;
-    outline: none;
-    border-radius: 5px;
-    a{
-        color: #fff;
-        background: #0C2191;
-        padding:.8rem 1rem;
+    label{
+        color: #595959;
+        font-size: 14px;
+    line-height: 19px;
     }
-}
-
-@media (max-width: 768px){
-    flex-direction: column;
-    gap: 2rem;
 
     input{
-        width: unset;
+        width: 300px;
+        padding: .5rem;
+        border: .2px solid ;
         margin-left: 1rem;
     }
+
+    button{
+        border: none;
+        outline: none;
+        border-radius: 5px;
+        a{
+            color: #fff;
+            background: #0C2191;
+            padding:.8rem 1rem;
+            border-radius: 5px;
+        }
+    }
+
+    @media (max-width: 768px){
+        flex-direction: column;
+        gap: 2rem;
+
+        input{
+            width: unset;
+            margin-left: 1rem;
+        }
 }
 `
 

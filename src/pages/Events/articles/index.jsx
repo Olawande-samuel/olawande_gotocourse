@@ -10,12 +10,20 @@ import { FaShareSquare } from 'react-icons/fa'
 import { useAuth } from '../../../contexts/Auth'
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import SwiperCore, {
+    Navigation,
+    Autoplay,
+    Pagination,
+    Scrollbar,
+    A11y,
+  } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 const Articles = () => {
     const {id} = useParams()
     // console.log({id});
     const [blog, setBlog] = useState({})
-    const [blogs, setBlogs] = useState({})
+    const [blogs, setBlogs] = useState([])
     const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: {getABlog, getBlogs } } = useAuth();
 
     const blogData = useQuery(["fetch classes", id], () => getABlog(id), {
@@ -28,10 +36,10 @@ const Articles = () => {
         }
     })
 
-    const blogsData = useQuery(["fetch classes"], () => getBlogs(), {
+    const blogsData = useQuery(["fetch list classes", id], () => getBlogs(), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                // console.log("data", res.data);
+                console.log("data", res.data);
                 setBlogs(res.data.filter(d => d._id !== id))
 
             }
@@ -68,45 +76,95 @@ const Articles = () => {
             </Content>
             <MoreLikeThis>
                 <header>
-                    <h4>You'll Like This</h4>
+                    <h4>You'll Like These</h4>
                 </header>
 
                 <section>
-                <div className={style.articles__container}>
-                        {
-                          blogs.length > 0 && blogs.map((x, id) => (
-                                <div className={style.articleitem}>
-                                    <Link to={`/events&articles/articles/${x._id}`}>
-                                    <div className={style.articleimg}>
-                                    <img src={`${process.env.REACT_APP_IMAGEURL}${x.blogImg}`} alt="" />
-
-                                    </div>
-                                    </Link>
-
-                                    <div className={style.articleInfo}>
-                                        <div className={style.articleTop}>
-                                            <span style={{ fontSize: "12px", color: "#4100FA" }}>{new Date(x.createdAt).toLocaleDateString()}</span>
-                                            <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} />
-
-                                        </div>
-                                        {x.title}
-                                        <p className="restricted_line" dangerouslySetInnerHTML={{__html: x.content}}></p>
-
-
-                                    </div>
-
-
-
-                                </div>
-
-                            ))
-                        }
-                    </div>
+                        <LikeThis data={blogs} />
+                
                 </section>
             </MoreLikeThis>
         </section>
     </Layout>
   )
+}
+
+
+function LikeThis({data}){
+    console.log({data})
+    return (
+        
+        <Swiper
+        // install Swiper modules
+        modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+        loop={false}
+        speed={1500}
+        // autoplay={{ delay: 2500 }}
+        spaceBetween={0}
+        slidesPerView={1}
+        // navigation
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+        breakpoints={{
+          // when window width is >= 320px
+          320: {
+            slidesPerView: 1,
+            spaceBetween: 0,
+          },
+          // when window width is >= 640px
+          575: {
+            slidesPerView: 1,
+            spaceBetween: 5,
+          },
+          700: {
+            slidesPerView: 2,
+            spaceBetween: 5,
+          },
+          1024: {
+            slidesPerView: 4,
+            spaceBetween: 3,
+          },
+          1704: {
+            slidesPerView: 5,
+            spaceBetween: 3,
+          },
+        }}
+      >
+          <div className={style.articles__container}>
+        {data?.map((x, i) => (
+          <SwiperSlide key={i}>
+                <div className={style.articleitem}>
+                    <Link to={`/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
+                    <div className={style.articleimg}>
+                    <img src={`${process.env.REACT_APP_IMAGEURL}${x.blogImg}`} alt="" />
+
+                    </div>
+                    </Link>
+
+                    <div className={style.articleInfo}>
+                        <div className={style.articleTop}>
+                            <span style={{ fontSize: "12px", color: "#4100FA" }}>{new Date(x.createdAt).toLocaleDateString()}</span>
+                            <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} />
+
+                        </div>
+                        <Link to={`/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
+                            <h6>
+                                {x.title}
+                            </h6>
+                        </Link>
+                        <p className="restricted_line" dangerouslySetInnerHTML={{__html: x.content}}></p>
+
+
+                    </div>
+
+
+
+                </div>
+            </SwiperSlide>
+        ))}
+        </div>
+      </Swiper>
+    )
 }
 
 export default Articles

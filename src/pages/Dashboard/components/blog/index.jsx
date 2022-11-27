@@ -32,6 +32,7 @@ gap: 1rem;
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position:top;
 
     }
 }
@@ -57,7 +58,10 @@ const Card = styled.div`
 flex-shrink: 0;
 width: 15rem;
 height: 25rem;
-border: 1px solid black;
+box-shadow: 4px 1px 17px 0px rgba(0,0,0,0.3);
+-webkit-box-shadow: 4px 1px 17px 0px rgba(0,0,0,0.3);
+-moz-box-shadow: 4px 1px 17px 0px rgba(0,0,0,0.3);
+border-radius:8px;
 overflow: hidden;
 
 
@@ -75,24 +79,23 @@ a{
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: top;
     }
 }
 
 .bottom{
-    padding: .5rem;
-    // border: 2px solid green;
+    padding: 0.5rem;
     height: 50%;
+
     position: relative;
 
     h4{
-        font-size:font-size: clamp(1rem, 0.9821rem + 0.0893vw, 1.125rem);
+        font-size: clamp(1rem, 0.9821rem + 0.0893vw, 1.125rem);
     }
 
     p{
-        font-size: font-size: clamp(0.75rem, 0.7321rem + 0.0893vw, 0.875rem);
-
+        font-size: clamp(0.75rem, 0.7321rem + 0.0893vw, 0.875rem);
     }
-
 
     .blogbutton{
         position: absolute;
@@ -105,8 +108,9 @@ a{
 
 
         button{
-            border: 1px solid black;
+            border: none;
             outline: none;
+            border-radius:8px;
             padding: .5rem 1rem;
             font-size: 12px;
 
@@ -119,7 +123,7 @@ a{
         }
 
         button:nth-of-type(2){
-            background: red;
+            background: var(--theme-orange);
             color: white;
         }
 
@@ -131,7 +135,6 @@ a{
 
 const Form = styled.section`
 padding: 1rem;
-// border: 2px solid red;
 overflow-y: scroll;
 
 form{

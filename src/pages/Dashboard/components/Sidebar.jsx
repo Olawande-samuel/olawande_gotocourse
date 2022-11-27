@@ -24,6 +24,8 @@ import { useAuth } from "../../../contexts/Auth";
 import LogoutButton from "../../../components/LogoutButton";
 import { LogoSidebar, Logosm } from "../../../images/components/svgs";
 import { SiGoogleclassroom } from "react-icons/si";
+import { BsNewspaper } from "react-icons/bs";
+import { HiOutlinePresentationChartLine } from "react-icons/hi";
 
 
 
@@ -137,13 +139,13 @@ const Sidebar = ({}) => {
             title: "Console"
         },
         {
-            icon: SiGoogleclassroom,
+            icon: HiOutlinePresentationChartLine,
             path: "webinar",
             title: "Webinar"
         }
         ,
         {
-            icon: SiGoogleclassroom,
+            icon: BsNewspaper,
             path: "blog",
             title: "Blog"
         }
