@@ -11,7 +11,7 @@ const Grid = styled.div`
 
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(250px, 300px), 300px));
-    grid-auto-rows: 250px;
+    grid-auto-rows: 290px;
     overflow: hidden;
     gap: 1.5rem;
     // justify-content:space-around;

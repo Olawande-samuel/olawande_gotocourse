@@ -457,7 +457,9 @@ const VideoChatScreen = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        console.log({roomId}, {value});
+        // console.log({roomId}, {value});
+        setMessages([...messages, {value, name: `${userProfile.firstName} ${userProfile.lastName}`}])
+        messages.push(value)
         socket.emit('client-message', roomId, {
             value,
             name: `${userProfile.firstName} ${userProfile.lastName}`,

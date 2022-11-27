@@ -50,7 +50,7 @@ const Events = () => {
                     <div className={style.articles__container}>
                         {
                            blogs.length > 0 &&   blogs.map((blog, id) => (
-                                <Link to={`articles/${blog._id}`} className={style.articleitem}>
+                                <Link to={`articles/${blog.title.split(" ").join("-").replace('?','')}/${blog._id}`} className={style.articleitem}>
                                     <div className={style.articleimg}>
                                     <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
 

@@ -208,6 +208,7 @@ import {
   MyWebinar,
 } from "./pages/Dashboard/components/webinar";
 import LiveChat from "./pages/Dashboard/components/Live/quikkonnet/LiveChat";
+import Playground from "./components/Playground";
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -271,7 +272,7 @@ function App() {
               <Route path="student/classroom" element={<StudentClassroom />} />
 
               <Route path="coming-soon" element={<ComingSoon />} />
-              <Route path="tester" element={<LiveChat />} />
+              <Route path="tester" element={<Playground />} />
               <Route path="video-chat" element={<VideDiv />} />
 
               <Route path="category" element={<Out />}>
@@ -322,7 +323,7 @@ function App() {
               <Route path="events&articles" element={<Out />}>
                 <Route index element={<Events />} />
                 <Route path=":id" element={<Event />} />
-                <Route path="articles/:id" element={<Articles />} />
+                <Route path="articles/:title/:id" element={<Articles />} />
               </Route>
 
               <Route path="classes" element={<Out />}>
