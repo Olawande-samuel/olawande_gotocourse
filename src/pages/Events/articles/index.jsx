@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Layout from '../../../components/Layout'
 import style from "../style.module.css"
 import articleimg from "../../../images/events/article.png"
@@ -18,6 +18,24 @@ import SwiperCore, {
     A11y,
   } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Box, Modal, TextField, Button, Typography } from '@mui/material/';
+import {
+    EmailShareButton,
+    FacebookShareButton,
+    LinkedinShareButton,
+    TelegramShareButton,
+    TwitterShareButton,
+    RedditShareButton,
+    WhatsappShareButton,
+    TwitterIcon,
+    FacebookIcon,
+    LinkedinIcon,
+    TelegramIcon,
+    EmailIcon,
+    RedditIcon,
+    WhatsappIcon,
+  } from "react-share";
+import { borderRadius } from '@mui/system'
 
 const Articles = () => {
     const {id} = useParams()
@@ -91,7 +109,28 @@ const Articles = () => {
 
 
 function LikeThis({data}){
-    console.log({data})
+
+    const [open,setOpen]= useState(false)
+
+    function handleClose(){
+        setOpen(false)
+    }
+
+    function handleShare(e){
+        e.preventDefault()
+        setOpen(true)
+    }
+
+
+    const inputRef = useRef()
+    function copyText() {
+        
+        let copy = inputRef.current.value
+        navigator.clipboard.writeText(copy);
+        
+        // Alert the copied text
+        alert("Copied the text: " + copy);
+    }
     return (
         
         <Swiper
@@ -144,7 +183,7 @@ function LikeThis({data}){
                     <div className={style.articleInfo}>
                         <div className={style.articleTop}>
                             <span style={{ fontSize: "12px", color: "#4100FA" }}>{new Date(x.createdAt).toLocaleDateString()}</span>
-                            <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} />
+                            <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} onClick={handleShare} />
 
                         </div>
                         <Link to={`/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
@@ -153,7 +192,55 @@ function LikeThis({data}){
                             </h6>
                         </Link>
                         <p className="restricted_line" dangerouslySetInnerHTML={{__html: x.content}}></p>
+                        <Modal
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                            className="message"
+                        >
+                            <Box sx={modalStyle}>
+                                <div className="boxtop">
+                                    <h5>Share Post</h5>
 
+                                    <Box>
+                                        <p>Share to: </p>
+                                        <div>
+                                            <FacebookShareButton	url={`https://gotocourse.us/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                                <FacebookIcon />
+                                            </FacebookShareButton>
+                                            <TwitterShareButton	url={`https://gotocourse.us/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                                <TwitterIcon />
+                                            </TwitterShareButton>
+                                            <LinkedinShareButton	url={`https://gotocourse.us/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                                <LinkedinIcon />
+                                            </LinkedinShareButton>
+                                            <TelegramShareButton	url={`https://gotocourse.us/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                                <TelegramIcon />
+                                            </TelegramShareButton>
+                                            <EmailShareButton	url={`https://gotocourse.us/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                                <EmailIcon />
+                                            </EmailShareButton>
+                                        </div>
+                                        <div className="d-flex align-items-center mt-3" style={{gap: "1rem"}}>
+                                            <input type="text" name="" id="" className="form-control" ref={inputRef} value={`https://gotocourse.us/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}  />
+                                            <button type="button" onClick={copyText}
+                                            style={{
+                                                border: "none",
+                                                outline: "none",
+                                                backgroundColor:"var(--theme-blue)",
+                                                color: "#fff",
+                                                padding: ".5rem",
+                                                borderRadius:"8px"
+
+                                            }}
+                                            
+                                            >Copy</button>
+                                        </div>
+                                    </Box>
+                                </div>
+                            </Box>
+                        </Modal>
 
                     </div>
 
@@ -166,5 +253,20 @@ function LikeThis({data}){
       </Swiper>
     )
 }
+
+
+const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: "min(100% - .3rem, 550px)",
+    height: 400,
+    bgcolor: 'background.paper',
+    border: '.5px solid #333',
+    boxShadow: 24,
+    overflow: "hidden",
+    p: 4,
+};
 
 export default Articles

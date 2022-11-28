@@ -70,6 +70,8 @@ export default function Note() {
             if(res.data?.length > 0){
                 setFormstate({...formstate, body: res.data[0].body})
                 setNote(res.data[0].body)
+            }else{
+                setNote("")
             }
             
         }
@@ -158,37 +160,47 @@ export default function Note() {
                 <TabPanel value={value} index={0}>
                     <small className='smallnote'>Make sure you constantly save your note as you type.</small>
                     <main className='note'>
-                        <form  onSubmit={handleSubmit}>
-                            <div className="texteditor">
-                                {/* <CKEditorContext context={Context}>
-                                        <h2>Using the CKeditor 5 context featzure in React</h2>
-                                        <CKEditor
-                                            editor={ClassicEditor}
-                                            config={{
-                                                plugins: [Paragraph, Bold, Italic, Essentials],
-                                                toolbar: ['bold', 'italic']
-                                            }}
-                                            data="<p>Hello from the first editor working with the context!</p>"
-                                            onReady={editor => {
-                                                // You can store the "editor" and use when it is needed.
-                                                console.log('Editor1 is ready to use!', editor);
-                                            }}
-                                        />
-
-                                    </CKEditorContext> */}
-                                    <ReactQuill theme="snow" value={note} onChange={setNote} />
-                                <div className="notebtn">
-                                    <button>{
-                                            
-                                                mutation.isLoading ? <div className="spinner-border text-white">
-                                                    <div className="visually-hidden">Loading</div>
-                                                </div>
-                                            :
-                                            <span>Save note</span>
-                                        }</button>
-                                </div>
+                        
+                        {
+                            noteQuery.isLoading ? <div className="spinner-border text-primary">
+                                <div className="visually-hidden">Loading...</div>
                             </div>
-                        </form>
+                            
+                            :
+                            <form  onSubmit={handleSubmit}>
+                                <div className="texteditor">
+                                    {/* <CKEditorContext context={Context}>
+                                            <h2>Using the CKeditor 5 context featzure in React</h2>
+                                            <CKEditor
+                                                editor={ClassicEditor}
+                                                config={{
+                                                    plugins: [Paragraph, Bold, Italic, Essentials],
+                                                    toolbar: ['bold', 'italic']
+                                                }}
+                                                data="<p>Hello from the first editor working with the context!</p>"
+                                                onReady={editor => {
+                                                    // You can store the "editor" and use when it is needed.
+                                                    console.log('Editor1 is ready to use!', editor);
+                                                }}
+                                            />
+
+                                        </CKEditorContext> */}
+                                        <ReactQuill theme="snow" value={note} onChange={setNote} />
+                                    <div className="notebtn">
+                                        <button>{
+                                                
+                                                    mutation.isLoading ? <div className="spinner-border text-white">
+                                                        <div className="visually-hidden">Loading</div>
+                                                    </div>
+                                                :
+                                                <span>Save note</span>
+                                            }</button>
+                                    </div>
+                                </div>
+                            </form>
+                        }
+
+
 
 
 
