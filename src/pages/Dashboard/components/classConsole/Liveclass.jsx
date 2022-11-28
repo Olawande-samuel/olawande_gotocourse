@@ -165,8 +165,8 @@ export function ScheduleClass({ open, setOpen }) {
       setLoading(true)
       const res = await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
           roomName: "myroom",
-          userId: "629a6a268034834a935aa518"
-          // userId: user.userId
+          // userId: "629a6a268034834a935aa518"
+          userId: user.userId
       })
       
       console.log(res.data.data)
@@ -294,7 +294,14 @@ export function ScheduleClass({ open, setOpen }) {
                 onChange={handleChange}
               />
             </div>
-            <button type="submit">Create</button>
+            
+            <button type="submit" disabled={loading}>{
+              loading ? <div className="spinner-border text-white">
+                <div className="visually-hidden">Loading...</div>
+              </div>
+              :
+              <span>Create</span>
+            }</button>
           </div>
         </form>
       </Box>
