@@ -29,7 +29,7 @@ const style = {
     bottom: "50px",
     // transform: 'translate(-50%, -50%)',
     width: 400,
-    height: 600,
+    height: "min(100vh - 81px, 500px)",
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -81,7 +81,7 @@ const VideoChatScreen = () => {
 
         } else {
             isRoomOwner = false
-            setUpMediaScreen()
+            setUpMediaScreen("audioOff")
         }
     }
     const localStream = useRef(null);
@@ -153,6 +153,8 @@ const VideoChatScreen = () => {
             video: true,
         }).then((stream) => {
             localStream.current = stream;
+            handleAudioToggle({ video: callSettingsState.video, audio: false })
+            setCallSettingsState({ ...callSettingsState, audio: false })
             startWebCam()
         });
     }
@@ -518,7 +520,7 @@ const VideoChatScreen = () => {
                                 <VscRecord size="1.5rem" />
                             </ControlItem>
 
-                            <ControlItem onClick={togggleAudio} isOn={callSettingsState.audio}>
+                            <ControlItem isOn={false}>
                                 <HiOutlineHand size="1.5rem" />
                             </ControlItem>
                             <ControlItem onClick={togggleAudio} isOn={callSettingsState.audio}>
@@ -530,7 +532,7 @@ const VideoChatScreen = () => {
                             <ControlItem onClick={togggleVideo} isOn={callSettingsState.video}>
                                 {callSettingsState.video ? <BsCameraVideo size="1.5rem" /> : <BsCameraVideoOff size="1.5rem" />}
                             </ControlItem>
-                            <ControlItem onClick={toggleMessage}>
+                            <ControlItem onClick={toggleMessage} isOn={false}>
                                 <BiMessageDetail size="1.5rem" />
                             </ControlItem>
                             <ControlItem onClick={handleNavigation}>

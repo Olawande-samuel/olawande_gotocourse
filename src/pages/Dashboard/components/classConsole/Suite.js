@@ -173,7 +173,7 @@ function SuiteBox({x, id}){
                 <button onClick={(e)=>openPreview(e, x.type)}>Preview</button>
             </div>
             <AddtoClassRoom open={addToClassroom} setOpen={setAddToClassroom} name={x.name} originalName={x.originalName} />
-            <ViewModal open={open} setOpen={setOpen} file={x.name} creator={true} type={x.type} />
+            <ViewModal open={open} setOpen={setOpen} file={`${process.env.REACT_APP_VIDEOURL}${x.name}`} creator={true} type={x.type} />
         </div>
     )
 }

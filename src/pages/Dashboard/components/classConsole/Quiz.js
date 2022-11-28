@@ -12,7 +12,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../../../contexts/Auth';
@@ -97,6 +97,7 @@ export default function Quiz() {
     const { pathname, search } = useLocation();
     const bread = pathname?.split("/");
     const [value, setValue] = useState(0);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
@@ -105,6 +106,7 @@ export default function Quiz() {
     let path = pathname.split("/")
     let classId = path[path.length -1]
     let searchData = search.split("=").reverse()[0]
+    const contentId = searchParams.get("content")
 
     useEffect(()=>{
         setFormData({...formData, classId, contentId: searchData})
@@ -132,17 +134,44 @@ export default function Quiz() {
         }
     })
 
-    const getContentfromQuery = useQuery(["quiz content", search, searchData], () => fetchQuiz(userdata.token, searchData), {
+    const getContentfromQuery = useQuery(["quiz content", contentId, userdata?.token], () => fetchQuiz(userdata.token, searchData), {
         onSuccess: (res)=> {
             console.log("successful query")
             console.log(res)
             if(res.data.length > 0){
                 setFormData({...res.data[0]})
+            }else{
+                setFormData({
+                    classId:"",
+                    contentId:"",
+                    title: "",
+                    endDate: "",
+                    endTime: "",
+                    note: "",
+                    timeLimit: "",
+                    maxAttempts: 1,
+                    questions: [
+                        {
+                            type: "",
+                            title: "",
+                            showAnswer: false,
+                            answer:"",
+                            options: [
+                                {
+                                    isAnswer: false,
+                                    title: ""
+                                }
+                            ]
+            
+                        }
+                    ]
+            
+                })
             }
         }
     } )
 
-    console.log({getContentfromQuery})
+    
 
     function goBack() {
         let pathArray = pathname.split("/")[1];
@@ -270,7 +299,7 @@ export default function Quiz() {
                     </Tabs>
                 </Box>
 
-                <div className="contentbreadcrumb">
+                {/* <div className="contentbreadcrumb">
                     <nav arial-label="breadcrumb">
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item">
@@ -292,11 +321,18 @@ export default function Quiz() {
                                 ))}
                         </ol>
                     </nav>
-                </div>
+                </div> */}
 
                 <TabPanel value={value} index={0}>
 
                     <main className='quiz__contentbody'>
+
+                        {
+                            getContentfromQuery.isLoading ? <div className="spinner-border text-primary">
+                                <div className="visually-hidden">Loading...</div>
+                            </div>
+
+                            :
 
                         <form className='content__quiz' onSubmit={handleSubmit}>
                             <label htmlFor="Name">Name of Quiz</label>
@@ -515,11 +551,6 @@ export default function Quiz() {
 
                                                                 )
                                                             }
-                                                            {/* <div className="footerbtn">
-                                                                <button onClick={submitForm}>Save</button>
-                                                            </div> */}
-
-
                                                         </FormControl>
 
 
@@ -536,11 +567,7 @@ export default function Quiz() {
 
 
                                                 </div>
-                                                <div className='footerbtn'>
-                                                    <button >
-                                                        save
-                                                    </button>
-                                                </div>
+                                               
                                             </div>
 
                                         </>
@@ -551,11 +578,23 @@ export default function Quiz() {
                             </div>
 
 
-
+                            <div className='footerbtn'>
+                                <button disabled={quizAdd.isLoading} >
+                                    {
+                                        quizAdd.isLoading ? 
+                                        <div className="spinner-border text-white">
+                                            <div className="visually-hidden">Loading...</div>
+                                        </div>
+                                        :
+                                        <span>save</span>
+                                    }
+                                </button>
+                            </div>
 
 
 
                         </form>
+                        }
 
                         {/* <div className="prevbtn">
                             <button><Link to="preview">Preview quiz</Link></button>

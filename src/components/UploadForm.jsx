@@ -108,6 +108,8 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage }) => {
         (<div className={clsx.upload_file__background} onClick={e => {
             if(e.target === e.currentTarget) {
                 setIsOpen(_ => false);
+                setFile(null)
+
             }
         }}>
             <div className={clsx.uploda_file__container}>

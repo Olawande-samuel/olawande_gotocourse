@@ -1116,15 +1116,16 @@
 /* FILE CARD */
 
 .filecardcontainer{
-    display: flex;
-    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
+    grid-auto-rows: 352px;    width: 100%;
     padding-top: 2rem;
+    flex-wrap: wrap;
     /* border: 2px solid red; */
     gap: 2rem;
 }
 
 .filecard {
-    flex:.3;
     width: 100%;
     flex-shrink: 0;
     height: 15rem;
@@ -1138,6 +1139,9 @@
 
 }
 
+.filetop > div {
+    height: 100%;
+}
 
 .filetop img{
     width: 100%;

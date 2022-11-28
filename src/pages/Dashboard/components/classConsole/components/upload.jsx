@@ -45,6 +45,7 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
                 const {data} = res;
                 createFileContent(data.name, data.fileId, file.name)
                 setIsOpen(false)
+                setFile(null)
                 setData(_ => data.name);
                 toast.success(message)
             }

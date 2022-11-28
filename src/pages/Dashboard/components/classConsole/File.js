@@ -7,7 +7,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import UploadForm from './components/upload';
 import { useAuth } from '../../../../contexts/Auth';
 import { useLocalStorage } from '../../../../hooks';
@@ -54,6 +54,8 @@ export default function File() {
     let path = pathname.split("/")
     let classId = path[path.length - 1]
     let searchData = search.split("=").reverse()[0]
+    const [searchParams, setSearchParams] = useSearchParams();
+    const contentId = searchParams.get("content")
 
     const userdata = getItem(KEY)
 
@@ -83,7 +85,7 @@ export default function File() {
         }
     }
 
-    const getFiles = useQuery(["file content", search, searchData], () => fetchFile(userdata.token, searchData), {
+    const getFiles = useQuery(["file content", contentId, userdata?.token], () => fetchFile(userdata.token, searchData), {
         onSuccess: (res) => {
 
             if (res.data?.length > 0) {
@@ -95,6 +97,7 @@ export default function File() {
 
     // console.log({ fileData });
 
+    console.log("loading", getFiles?.isLoading)
     return (
         <>
             <div className=''>
@@ -142,14 +145,23 @@ export default function File() {
                         </section>
 
                         <main className='contentbody'>
-                            <div className="filecardcontainer">
-                                {
-                                    fileData?.map(item => (
-                                        <FileCard {...item} key={item._id} />
+                            {
+                                getFiles?.isLoading ? 
+                                <div className="spinner-border text-primary">
+                                    <div className="visually-hidden">Loading...</div>
+                                </div>
+                                
+                                :
 
-                                    ))
-                                }
-                            </div>
+                                <div className="filecardcontainer">
+                                    {
+                                        fileData?.map(item => (
+                                            <FileCard {...item} key={item._id} />
+
+                                        ))
+                                    }
+                                </div>
+                            }
 
                         </main>
 
@@ -199,9 +211,10 @@ function FileCard({ title, fileName, contentId, type }) {
                 {type === "video/mp4" ? 
                 <VideoImageThumbnail
                     videoUrl={fileName}
-                    thumbnailHandler={(thumbnail) => console.log(thumbnail)}
-                    width={120}
-                    height={80}
+                    thumbnailHandler={(thumbnail) => {return}}
+                    width={610}
+                    height={350}
+                    snapshotAtTime={2}
                 /> : 
                 <img src={fileName} alt="" />}
             </div>

@@ -73,7 +73,7 @@ export const VideoWrapper = styled.div`
     justify-content: flex-end; */
     width: 100%;
     gap: 10px;
-    background:#191046;
+    background:#000;
     height: 100%;
     position: relative;
     overflow: hidden;
@@ -172,7 +172,7 @@ export const StreamWrapper = styled.div`
     /* flex: 1; */
     border-radius: 10px;
     gap: 10px;
-    background:#191046;
+    background:#000;
     position: relative;
     overflow-y: auto;
     display: grid;

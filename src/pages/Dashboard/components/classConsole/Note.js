@@ -131,7 +131,7 @@ export default function Note() {
                     </Tabs>
                 </Box>
 
-                    <div className="contentbreadcrumb">
+                    {/* <div className="contentbreadcrumb">
                         <nav arial-label="breadcrumb">
                             <ol className="breadcrumb">
                                 <li className="breadcrumb-item">
@@ -153,7 +153,7 @@ export default function Note() {
                                     ))}
                             </ol>
                         </nav>
-                    </div>
+                    </div> */}
               
 
 
