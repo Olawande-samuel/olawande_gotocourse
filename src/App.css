@@ -3217,7 +3217,38 @@ td span {
   padding: 2rem 0 ;
 }
 
+.message{
+  /* border: 2px solid red; */
+  display: flex;
+  flex-direction: column;
+}
+
+.message.mine{
+  align-items: flex-end;
+
+}
+
 .boxbottom{
   height: 20%;
-  margin: 1rem 0 ;
+  margin: 1rem 0;
 }
+
+.boxbottom form {
+  display: flex;
+  align-items: center;
+ }
+
+.boxbottom form input{
+  padding: .5rem;
+  flex:.7;
+}
+
+.boxbottom form button{
+  padding: .5rem;
+  flex:.3;
+  border: 1px solid var(--btn-color);
+  outline: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
