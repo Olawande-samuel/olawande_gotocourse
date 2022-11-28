@@ -90,11 +90,11 @@ const Sidebar = ({}) => {
             path: "fees",
             title: "Fees"
         },
-        {
-            icon: FiGift,
-            path: "courses",
-            title: "Courses"
-        },
+        // {
+        //     icon: FiGift,
+        //     path: "courses",
+        //     title: "Courses"
+        // },
         {
             icon: IoIosHelpBuoy,
             path: "courses-categories",
@@ -232,11 +232,11 @@ const Sidebar = ({}) => {
             path: "profile",
             title: "My Profile"
         },
-        {
-            icon: FiGift,
-            path: "courses",
-            title: "Courses"
-        },
+        // {
+        //     icon: FiGift,
+        //     path: "courses",
+        //     title: "Courses"
+        // },
         {
             icon: BiCategory,
             path: "classes",

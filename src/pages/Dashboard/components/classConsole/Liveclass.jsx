@@ -20,6 +20,7 @@ import axios from "axios";
 import CONFIG from "../../../../utils/video/appConst";
 import { useLocalStorage } from "../../../../hooks";
 import { KEY } from "../../../../constants";
+import { useQuery } from "@tanstack/react-query";
 
 export function LiveClassInfo({ type }) {
   const [open, setOpen] = useState(false);
@@ -141,7 +142,7 @@ export function ScheduleClass({ open, setOpen }) {
 
   const {getItem}= useLocalStorage()
   const user = getItem(KEY)
-  const { generalState, setGeneralState } = useAuth();
+  const { generalState, setGeneralState, teacherFunctions: {fetchLiveClasses} } = useAuth();
   const [formstate, setFormstate] = useState({
     startDate: "",
     endDate: "",
@@ -195,6 +196,8 @@ export function ScheduleClass({ open, setOpen }) {
       setLoading(false)
     }
   }
+
+  // const fetchClass = useQuery(["fetch all live classes", user.token], ()=>fetchLiveClasses(userdata.token, classId))
 
   return (
     <Modal

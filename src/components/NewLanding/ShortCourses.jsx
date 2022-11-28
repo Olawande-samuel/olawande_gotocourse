@@ -21,7 +21,7 @@ const Grid = styled.div`
         gap: 1rem;
     }
 
- @media screen and (max-width:768px){
+    @media screen and (max-width:768px){
         grid-template-columns: repeat(2, 280px);
     }
 

@@ -1,8 +1,8 @@
-
+import React, { useState } from 'react';
+import { Document, Page } from 'react-pdf';
 import '../classConsole/Content.css'
 import { IoMdCloudDownload } from 'react-icons/io';
 import { PopModalContent } from '.';
-import { useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -16,6 +16,8 @@ import { useQuery } from '@tanstack/react-query';
 import { IconButton, Modal, stepContentClasses, Tooltip } from '@mui/material';
 import { UploadScreenRecording, UploadVideoRecording } from './Suite';
 import VideoImageThumbnail from 'react-video-thumbnail-image'
+import processed from '../../../../images/processed.png'
+import { AiOutlineClose } from 'react-icons/ai';
 
 
 function TabPanel(props) {
@@ -90,6 +92,8 @@ export default function File() {
 
             if (res.data?.length > 0) {
                 setFileData(res.data)
+            } else {
+                setFileData([])
             }
 
         }
@@ -207,17 +211,15 @@ function FileCard({ title, fileName, contentId, type }) {
     return (
 
         <div className="filecard">
-            <div className="filetop">
-                {type === "video/mp4" ? 
-                <VideoImageThumbnail
-                    videoUrl={fileName}
-                    thumbnailHandler={(thumbnail) => {return}}
-                    width={610}
-                    height={350}
-                    snapshotAtTime={2}
-                /> : 
-                <img src={fileName} alt="" />}
-            </div>
+            {(type.includes("video") || type.includes("image")) &&
+                <div className="filetop">
+                    {type === "video/mp4" ? 
+                        <img src="https://pledre-lms-input-videos.s3.us-east-2.amazonaws.com/class-video/627c044239ff200008c09827/cmaf/Key_Concepts_Of_Risk_Management-img.0000001.jpg" alt="" />
+                        : 
+                        <img src={fileName} alt="" />
+                    }
+                </div>
+             }
             <div className="filebottom">
                 <h3>{title}</h3>
                 <div className='filebutton'>
@@ -247,7 +249,7 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
         left: "50%",
         transform: "translateX(-50%)",
         width: "100%",
-        height: "80%",
+        height: "100%",
         background: "#fff",
         border: "1px solid #eee",
         borderRadius: "10px",
@@ -266,6 +268,7 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
             aria-describedby="modal-modal-description"
         >
             <Box style={style}>
+                <div><AiOutlineClose  onClick={(e) => { setOpen((_) => false)}} size="1.5rem" style={{marginLeft: "auto", display:"block", cursor:"pointer"}} /></div>
                 <p>{title}</p>
                 {
                     type === "video/mp4" ?
@@ -276,4 +279,25 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
             </Box>
         </Modal>
     )
+}
+
+function Pdf({document}){
+    const [numPages, setNumPages] = useState(null);
+    const [pageNumber, setPageNumber] = useState(1);
+    
+    function onDocumentLoadSuccess({ numPages }) {
+        setNumPages(numPages);
+    }
+      
+    return (
+        <div>
+        <Document file="somefile.pdf" onLoadSuccess={onDocumentLoadSuccess}>
+            <Page pageNumber={pageNumber} />
+        </Document>
+        <p>
+            Page {pageNumber} of {numPages}
+        </p>
+        </div>
+    );
+    
 }

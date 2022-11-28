@@ -565,7 +565,7 @@ const VideoChatScreen = () => {
 
                             </div>
 
-                        ))}
+                        ))} 
 
                     </div>
                     <div className="boxbottom">

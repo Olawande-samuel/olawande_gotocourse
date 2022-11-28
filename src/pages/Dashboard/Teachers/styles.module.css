@@ -477,15 +477,40 @@
 
 
 .class_con_cards {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
+    overflow: hidden;
+    grid-auto-rows: 250px;
+    gap: 1.5rem;
+    /* justify-content:space-around; */
+    padding: .5rem;
+    
+}
+
+@media screen and (min-width: 1400px) {
+    .class_con_cards {
+        grid-template-columns: repeat(4, 230px);
+        justify-content: space-evenly;
+        gap: 1rem;
+    }
+}
+
+@media screen and (max-width:768px){
+    .class_con_cards {
+        grid-template-columns: repeat(2, 280px);
+    }
 }
 
 
+@media screen and (max-width:500px){
+    .class_con_cards {
+        grid-template-columns: min(100%, 280px);
+        justify-content:center;
+    }
+}  
+
 .class_con_card {
-    width: min(100%, 320px);
+    /* width: min(100%, 320px); */
     border-radius: 8px;
     background-color: #fff;
     padding: 1rem;
@@ -506,7 +531,7 @@
 
 .class_con_button {
     border: none;
-    color: #fff;
-    background: var(--theme-orange);
+    color: #fff !important; 
+    background: var(--theme-orange) !important;
     padding: 8px 12px;
 }

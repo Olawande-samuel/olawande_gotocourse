@@ -36,9 +36,9 @@
     }
 }
 .console .class_sidebar {
-    /* flex: 20%; */
+    flex: 25%;
     flex-shrink: 0;
-    width: 15rem;
+    /* width: 15rem; */
     z-index:2;
     /* border: 2px solid red; */
     /* position: fixed; */
@@ -55,6 +55,8 @@
 @media (max-width: 764px) {
     .console .class_sidebar {
         position: absolute;
+        width: 15rem;
+
         /* display: none; */
     }
     
@@ -62,7 +64,7 @@
 }
 
 .console .children {
-    flex: 80%;
+    flex: 75%;
     height: 100vh;
     overflow-y: auto;
     padding: 1rem clamp(0.5rem, 0.0714rem + 2.1429vw, 2rem);
