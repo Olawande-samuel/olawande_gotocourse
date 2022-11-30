@@ -35,7 +35,7 @@ import {
     RedditIcon,
     WhatsappIcon,
   } from "react-share";
-import { borderRadius } from '@mui/system'
+import Helmet from 'react-helmet'
 
 const Articles = () => {
     const {id} = useParams()
@@ -44,7 +44,7 @@ const Articles = () => {
     const [blogs, setBlogs] = useState([])
     const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: {getABlog, getBlogs } } = useAuth();
 
-    const blogData = useQuery(["fetch classes", id], () => getABlog(id), {
+    const blogData = useQuery(["fetch blog", id], () => getABlog(id), {
         onSuccess: (res) => {
             if (res.data) {
                 // console.log("data", res.data);
@@ -54,7 +54,7 @@ const Articles = () => {
         }
     })
 
-    const blogsData = useQuery(["fetch list classes", id], () => getBlogs(), {
+    const blogsData = useQuery(["fetch blogs", id], () => getBlogs(), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
                 console.log("data", res.data);
@@ -63,7 +63,23 @@ const Articles = () => {
             }
         }
     })
+
+
+    // SHARE BLOG
+    
+    const [open,setOpen]= useState(false)
+    function handleShare(e){
+        e.preventDefault();
+        setOpen(true)
+    }
+
   return (
+    <>
+     <Helmet>
+        <title>{`${blog?.title?.toUpperCase()} | Gotocourse`}</title>
+        <meta property="og:site_name" content="Gotocourse" />
+        <meta name="description" content="Gotocourse Blogs" />
+    </Helmet>
     <Layout>
         <section className="container py-4">
             <Header>
@@ -81,7 +97,7 @@ const Articles = () => {
                     </i>
                     <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
                 </span>
-                <span>
+                <span onClick={handleShare}>
                     <span>Share</span>
                     <i><FaShareSquare /></i>
                 </span>
@@ -102,8 +118,10 @@ const Articles = () => {
                 
                 </section>
             </MoreLikeThis>
+            <ShareModal x={blog} open={open} setOpen={setOpen} />
         </section>
     </Layout>
+    </>
   )
 }
 
@@ -173,74 +191,26 @@ function LikeThis({data}){
         {data?.map((x, i) => (
           <SwiperSlide key={i}>
                 <div className={style.articleitem}>
-                    <Link to={`/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
+                    <Link to={`/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x?._id}`}>
                     <div className={style.articleimg}>
-                    <img src={`${process.env.REACT_APP_IMAGEURL}${x.blogImg}`} alt="" />
+                    <img src={`${process.env.REACT_APP_IMAGEURL}${x?.blogImg}`} alt="" />
 
                     </div>
                     </Link>
 
                     <div className={style.articleInfo}>
                         <div className={style.articleTop}>
-                            <span style={{ fontSize: "12px", color: "#4100FA" }}>{new Date(x.createdAt).toLocaleDateString()}</span>
+                            <span style={{ fontSize: "12px", color: "#4100FA" }}>{new Date(x?.createdAt).toLocaleDateString()}</span>
                             <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} onClick={handleShare} />
 
                         </div>
-                        <Link to={`/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
+                        <Link to={`/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x?._id}`}>
                             <h6>
-                                {x.title}
+                                {x?.title}
                             </h6>
                         </Link>
-                        <p className="restricted_line" dangerouslySetInnerHTML={{__html: x.content}}></p>
-                        <Modal
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                            className="message"
-                        >
-                            <Box sx={modalStyle}>
-                                <div className="boxtop">
-                                    <h5>Share Post</h5>
-
-                                    <Box>
-                                        <p>Share to: </p>
-                                        <div>
-                                            <FacebookShareButton	url={`https://gotocourse.us/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
-                                                <FacebookIcon />
-                                            </FacebookShareButton>
-                                            <TwitterShareButton	url={`https://gotocourse.us/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
-                                                <TwitterIcon />
-                                            </TwitterShareButton>
-                                            <LinkedinShareButton	url={`https://gotocourse.us/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
-                                                <LinkedinIcon />
-                                            </LinkedinShareButton>
-                                            <TelegramShareButton	url={`https://gotocourse.us/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
-                                                <TelegramIcon />
-                                            </TelegramShareButton>
-                                            <EmailShareButton	url={`https://gotocourse.us/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}>
-                                                <EmailIcon />
-                                            </EmailShareButton>
-                                        </div>
-                                        <div className="d-flex align-items-center mt-3" style={{gap: "1rem"}}>
-                                            <input type="text" name="" id="" className="form-control" ref={inputRef} value={`https://gotocourse.us/events&articles/articles/${x.title.split(" ").join("-").replace('?','')}/${x._id}`}  />
-                                            <button type="button" onClick={copyText}
-                                            style={{
-                                                border: "none",
-                                                outline: "none",
-                                                backgroundColor:"var(--theme-blue)",
-                                                color: "#fff",
-                                                padding: ".5rem",
-                                                borderRadius:"8px"
-
-                                            }}
-                                            
-                                            >Copy</button>
-                                        </div>
-                                    </Box>
-                                </div>
-                            </Box>
-                        </Modal>
+                        <p className="restricted_line" dangerouslySetInnerHTML={{__html: x?.content}}></p>
+                        <ShareModal x={x} open={open} setOpen={setOpen} />
 
                     </div>
 
@@ -268,5 +238,71 @@ const modalStyle = {
     overflow: "hidden",
     p: 4,
 };
+export function ShareModal({x, open, setOpen}){
+    const inputRef = useRef()
+    function copyText() {
+        
+        let copy = inputRef.current.value
+        navigator.clipboard.writeText(copy);
+        
+        // Alert the copied text
+        alert("Copied the text: " + copy);
+    }
 
+    function handleClose(){
+        setOpen(false)
+    }
+
+    return(
+        <Modal
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                            className="message"
+                        >
+                            <Box sx={modalStyle}>
+                                <div className="boxtop">
+                                    <h5>Share Post</h5>
+
+                                    <Box>
+                                        <p>Share to: </p>
+                                        <div>
+                                            <FacebookShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                                <FacebookIcon />
+                                            </FacebookShareButton>
+                                            <TwitterShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                                <TwitterIcon />
+                                            </TwitterShareButton>
+                                            <LinkedinShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                                <LinkedinIcon />
+                                            </LinkedinShareButton>
+                                            <TelegramShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                                <TelegramIcon />
+                                            </TelegramShareButton>
+                                            <EmailShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                                <EmailIcon />
+                                            </EmailShareButton>
+                                        </div>
+                                        <div className="d-flex align-items-center mt-3" style={{gap: "1rem"}}>
+                                            <input type="text" name="" id="" className="form-control" ref={inputRef} value={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}  />
+                                            <button type="button" onClick={copyText}
+                                            style={{
+                                                border: "none",
+                                                outline: "none",
+                                                backgroundColor:"var(--theme-blue)",
+                                                color: "#fff",
+                                                padding: ".5rem",
+                                                borderRadius:"8px"
+
+                                            }}
+                                            
+                                            >Copy</button>
+                                        </div>
+                                    </Box>
+                                </div>
+                            </Box>
+                        </Modal>
+    )
+}
 export default Articles
