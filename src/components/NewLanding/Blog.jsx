@@ -5,6 +5,7 @@ import { FaShareSquare } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import styled from "styled-components"
 import { useAuth } from "../../contexts/Auth";
+import { ShareModal } from "../../pages/Events/articles";
 
 const CardContainer = styled.div`
 display: flex;
@@ -24,11 +25,11 @@ const Card = styled.div`
 flex-shrink: 0;
 width: 15rem;
 height: 25rem;
-box-shadow: 4px 1px 17px 0px rgba(0,0,0,0.3);
--webkit-box-shadow: 4px 1px 17px 0px rgba(0,0,0,0.3);
--moz-box-shadow: 4px 1px 17px 0px rgba(0,0,0,0.3);
-border-radius:8px;
-overflow: hidden;
+// box-shadow: 4px 1px 17px 0px rgba(0,0,0,0.3);
+// -webkit-box-shadow: 4px 1px 17px 0px rgba(0,0,0,0.3);
+// -moz-box-shadow: 4px 1px 17px 0px rgba(0,0,0,0.3);
+// border-radius:8px;
+// overflow: hidden;
 
 
 a{
@@ -58,7 +59,7 @@ a{
         font-style: normal;
         font-weight: 700;
         color: #252525;
-        font-size: clamp(1rem, 0.9821rem + 0.0893vw, 1.125rem);
+        font-size: clamp(1.8rem, 0.9821rem + 0.0893vw, 2.4rem);
     }
 
     p{
@@ -109,6 +110,7 @@ export const DateAndAction = styled.div`
 
 export const Blog = () => {
     // const [blog, setBlog] = useState({})
+    const [open, setOpen] = useState(false)
     const [blogs, setBlogs] = useState([])
     const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { getABlog, getBlogs } } = useAuth();
 
@@ -138,7 +140,7 @@ export const Blog = () => {
                 {blogs.length > 0 && blogs.map(blog => (
 
                     <Card key={blog._id}>
-                        <Link to={`${blog._id}`}>
+                    <Link to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?','')}/${blog?._id}`}>
                             <div className="top">
                                 <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
 
@@ -150,7 +152,7 @@ export const Blog = () => {
                                 <span style={{ color: "#4100FA" }}>{new Date(blog.createdAt).toLocaleDateString().split("/").join('.')}</span>
                             </span>
                             <span>
-                                <i><FaShareSquare style={{ color: "#0C2191", fontSize: "2rem" }} /></i>
+                                <i><FaShareSquare style={{ color: "#0C2191", fontSize: "2rem" }} onClick={() =>setOpen(true)}/></i>
                             </span>
                         </DateAndAction>
                         <div className="bottom">
@@ -161,6 +163,7 @@ export const Blog = () => {
                         </div>
 
 
+                        <ShareModal x={blog} open={open} setOpen={setOpen} />
                     </Card>
                 ))}
             </CardContainer>

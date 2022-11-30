@@ -84,6 +84,7 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage }) => {
             draggable: true,
             pauseOnHover: true
         })
+
     }
 
     function triggerUpload(e){
@@ -109,6 +110,9 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage }) => {
             if(e.target === e.currentTarget) {
                 setIsOpen(_ => false);
                 setFile(null)
+                setData(null)
+                setImageUrl(null)
+
 
             }
         }}>

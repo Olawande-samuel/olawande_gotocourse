@@ -389,7 +389,7 @@ export const AdminWebinar = () => {
         return () => console.log("Removing");
     }, [id])
 
-    // console.log({ formState });
+    console.log({ formState });
     return (
         <Admin>
             <Form >

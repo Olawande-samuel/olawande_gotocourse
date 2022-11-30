@@ -41,7 +41,7 @@ const LiveWebinars = () => {
     const webinarData = useQuery(["fetch webinar"], () => getWebinar(), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                // console.log("webinar data", res.data);
+                console.log("webinar data", res.data);
                 setWebinars(res.data)
 
             }

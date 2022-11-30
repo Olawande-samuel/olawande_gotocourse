@@ -1577,6 +1577,7 @@ export function LiveWebinarCard({
     // img,
     webinarImg,
     title, place, date, time }) {
+
     return (
         <WebinarWrapper>
             <div className="img_top">
@@ -1586,7 +1587,7 @@ export function LiveWebinarCard({
                 <h6>{title}</h6>
                 <div>
                     <p>Gotocourse</p>
-                    <p>{new Date(date).toLocaleDateString()} | {time}</p>
+                    <p>{new Date(date).toLocaleDateString()} | {time} {time?.split(":")[0] >= 12 ? "": "am"}</p>
                 </div>
                 <div>
                     <button className="tag">FREE</button>
