@@ -23,7 +23,7 @@ const Events = () => {
     let userdata = getItem(KEY);
     const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { getBlogs } } = useAuth();
 
-    const blogData = useQuery(["fetch classes"], () => getBlogs(), {
+    const blogData = useQuery(["fetch blogs"], () => getBlogs(), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
                 // console.log("data", res.data);
