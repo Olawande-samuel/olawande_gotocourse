@@ -30,7 +30,7 @@ form{
     }
     
     
-    input{
+   select, input{
         width: 100%;
         padding: .5rem ;
         background: #FAFAFA;
@@ -72,6 +72,10 @@ gap: 2rem;
 
 
 label, input{
+    width: 40%;
+}
+
+select{
     width: 40%;
 }
 
@@ -222,10 +226,17 @@ gap: 1rem;
 
 `
 
+const Tags = styled.div`
+
+
+`
+
 const initialState = {
     title: "",
     description: "",
-    status: "Physical",
+    status: "",
+    price: "",
+    tags: [],
     date: "",
     time: "",
     webinarImg: "",
@@ -242,6 +253,7 @@ export const AdminWebinar = () => {
     const [open, setOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState(false);
     const [edit, setEdit] = useState(false)
+    const [tag, setTag] = useState("")
 
 
     let navigate = useNavigate()
@@ -296,6 +308,17 @@ export const AdminWebinar = () => {
 
     }
 
+
+
+
+
+   
+
+    const handleRemoveTagClick = (id) => {
+        const list = { ...formState }
+        list.tags.splice(id, 1)
+        setFormState(list)
+    }
 
     const handleInputChange = (e, index) => {
         const { name, value } = e.target;
@@ -426,6 +449,64 @@ export const AdminWebinar = () => {
                         </label>
 
                     </DateTime>
+
+                    <DateTime>
+                        <label htmlFor="status">Status:
+                            <select
+                                name="status"
+                                value={formState.status}
+                                onChange={(e) => setFormState({ ...formState, [e.target.name]: e.target.value })}
+                            >
+                                <option value="">Pick a Type</option>
+                                <option value="Online">Online</option>
+                                <option value="Physical">Physical</option>
+                            </select>
+
+                        </label>
+
+                        <label htmlFor="price">Price:
+                            <input
+                                name="price"
+                                value={formState.price}
+                                onChange={(e) => setFormState({ ...formState, [e.target.name]: e.target.value })} />
+                        </label>
+
+
+
+                    </DateTime>
+
+                    <label htmlFor="tags">Tags:
+                        <input
+                            name="tags"
+                            value={tag}
+                            onChange={e => setTag(e.target.value)}
+                        />
+                    </label>
+
+                    <Button variant="contained" component="label" style={{ width: "200px", background: "#FFFFFF", color: "#0C2191", border: "1px solid #0C2191" }}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setFormState({
+                                ...formState,
+                                tags: [...formState.tags, tag]
+                            })
+                            setTag("")
+                        }}>
+                        Add Tags
+                    </Button>
+                    <Tags>
+
+                    {
+                        formState.tags.length > 0 && formState.tags.map((x, i) => (
+                            <p>#{x}  <RiDeleteBinFill style={{cursor: "pointer", color:"red", marginLeft: "2rem"}} onClick={() => handleRemoveTagClick(i)} /></p>
+                        ))
+
+                    }
+
+                    </Tags>
+
+
+
 
 
                     <h3>Presenters</h3>
@@ -632,7 +713,7 @@ export const AdminWebinarDashboard = () => {
                                 {/* <div>{x.presenters[0].presenterName} </div> */}
                                 <div>
                                     {x.presenters.length > 0 && x.presenters.map((presenter, id) =>
-                                        <span style={{display: "block", textTransform:"capitalize"}}>{presenter.presenterName}</span>
+                                        <span style={{ display: "block", textTransform: "capitalize" }}>{presenter.presenterName}</span>
                                     )}
                                 </div>
 
