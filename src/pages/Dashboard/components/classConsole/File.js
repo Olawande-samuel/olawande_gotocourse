@@ -214,7 +214,7 @@ function FileCard({ title, fileName, contentId, type }) {
             {(type.includes("video") || type.includes("image")) &&
                 <div className="filetop">
                     {type === "video/mp4" ? 
-                        <img src="https://pledre-lms-input-videos.s3.us-east-2.amazonaws.com/class-video/627c044239ff200008c09827/cmaf/Key_Concepts_Of_Risk_Management-img.0000001.jpg" alt="" />
+                        <video src={fileName} controls muted style={{ width: "100%", height: "100%", border: "1px solid #eee", borderRadius: "8px" }} />
                         : 
                         <img src={fileName} alt="" />
                     }

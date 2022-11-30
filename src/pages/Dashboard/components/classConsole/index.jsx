@@ -467,6 +467,9 @@ function addSuiteContentToClass(id, contentName, originalName){
         }])
 }
 
+
+const contentid = searchParams.get("content")
+
   return (
     <div className={style.content_item}>
       <div className={style.content_item_top}>
@@ -478,14 +481,14 @@ function addSuiteContentToClass(id, contentName, originalName){
           )}
         </i>
         <span>{name}</span>
-        <AccordMenu />
+        <AccordMenu type="domain" id={_id} />
 
       </div>
 
       {
         details &&
         (
-          
+          // creator suite delete
             creator ? 
                 mutation.isLoading  ?
 
@@ -495,10 +498,10 @@ function addSuiteContentToClass(id, contentName, originalName){
                 :
                 <ul className={style.content_list}>
                   {getDomainContent?.data?.data?.filter(item => item.domain === _id).filter(item=> item.type === "FILE_VIDEO").map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
-                    <li key={_id} className="d-flex justify-content-between position-relative" style={{cursor:"pointer"}}>
+                    <li key={_id} className="d-flex position-relative" style={{cursor:"pointer"}}>
                       <i>{IconType(type)}</i>
                       <span>{title}</span>
-                      <AccordMenu />
+                      <AccordMenu type="content" id={_id} />
                     
                         <i style={{position: "absolute", right: "10px", top: "50%", transform:"translateY(-50%)", zIndex:"200"}} onClick={() => addSuiteContentToClass(_id, contentName, originalName, classId)}>
                           <FaPlus size="1.5rem" color="#fff" />
@@ -510,10 +513,10 @@ function addSuiteContentToClass(id, contentName, originalName){
             :
             <ul className={style.content_list}>
               {getDomainContent?.data?.data?.filter(item => item.domain === _id).map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
-                <li key={_id} onClick={() => handleContentNavigation(_id, type, domain, classId)} className="d-flex justify-content-between" style={{cursor:"pointer"}}>
+                <li key={_id} onClick={() => handleContentNavigation(_id, type, domain, classId)} className={`d-flex justify-content-between ${_id === contentid ? "activeClass" : ""}`} style={{cursor:"pointer"}}>
                   <i>{IconType(type)}</i>
                   <span>{title}</span>
-                  <AccordMenu />
+                  <AccordMenu type="content" id={_id} domain={domain} classId={classId} />
                   
                 </li>
               ))}
@@ -524,7 +527,7 @@ function addSuiteContentToClass(id, contentName, originalName){
   );
 }
 
-function AccordMenu({ id, content }) {
+function AccordMenu({ id, type, classId }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -533,8 +536,43 @@ function AccordMenu({ id, content }) {
   const handleClose = () => {
     setAnchorEl(null);
   }
+  const {getItem} = useLocalStorage()
+  const userdata = getItem(KEY)
+  const navigate = useNavigate()
+  const queryClient = useQueryClient();
+
+  const {teacherConsoleFunctions: {deleteDomain, deleteContent}} = useAuth();
+
+  const contentdelete = useMutation(([token, id])=>deleteContent(token, id), {
+    onSuccess: (res)=>{
+      navigate(`/teacher/class-console/class/${classId}`)
+      queryClient.invalidateQueries("fetch domains")
+    },
+    onError: (err)=>{
+      console.error(err)
+    }
+  })
+  const domaindelete = useMutation(([token, id])=>deleteDomain(token, id), {
+    onSuccess: (res)=>{
+
+      queryClient.invalidateQueries("getDomainContent")
+    },
+    onError: (err)=>{
+      console.error(err)
+    }
+  })
+
+  function deleteCnt(e){
+      e.preventDefault()
+      if(type === "domain"){
+        console.log({id})
+        domaindelete.mutate([userdata.token, id])
+      } else if(type === "content"){
+        contentdelete.mutate([userdata.token, id])
+      }
+  }
   return (
-    <div>
+    <div style={{marginLeft:"auto"}}>
       <i
         id="basic-button"
         aria-controls={open ? 'basic-menu' : undefined}
@@ -555,7 +593,7 @@ function AccordMenu({ id, content }) {
       >
         {/* <MenuItem onClick={handleClose}>Edit content</MenuItem> */}
         <MenuItem onClick={handleClose}>Lock content</MenuItem>
-        <MenuItem onClick={handleClose}>Delete content</MenuItem>
+        <MenuItem onClick={deleteCnt}>Delete content</MenuItem>
       </Menu>
     </div>
   )
