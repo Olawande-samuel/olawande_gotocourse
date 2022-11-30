@@ -378,6 +378,16 @@
     margin-bottom: 1rem;
 }
 
+.ondemand_text_container{
+    min-height: 250px;
+    position: relative;
+}
+
+.lastbtn{
+    position: absolute;
+    bottom: 0;
+}
+
 .ondemand_text_container .tags {
     margin-bottom: 1rem;
 }
