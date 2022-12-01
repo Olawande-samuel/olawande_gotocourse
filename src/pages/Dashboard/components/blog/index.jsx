@@ -294,9 +294,9 @@ export const BlogDashboard = () => {
                 </button>
             </Header>
             <CardContainer>
-                { blogs.length > 0 &&  blogs.map(blog => (
+                { blogs.length > 0 &&  blogs.map((blog, i) => (
 
-                    <BlogCard blog={blog} />
+                    <BlogCard blog={blog} key={i} />
                 ))}
             </CardContainer>
 

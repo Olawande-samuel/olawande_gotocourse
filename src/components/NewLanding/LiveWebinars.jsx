@@ -10,14 +10,14 @@ import { useAuth } from '../../contexts/Auth'
 const Grid = styled.div`
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(250px, 300px), 300px));
+    grid-template-columns: repeat(auto-fit, minmax(min(250px,280px), 280px));
     grid-auto-rows: 290px;
     overflow: hidden;
-    gap: 1.5rem;
-    // justify-content:space-around;
+    gap: 1em;
+    justify-content:space-around;
     padding: .5rem;
     
-    @media screen and (min-width: 1400px) {
+    @media screen and (min-width: 1500px) {
         grid-template-columns: repeat(4, 280px);
         justify-content: space-evenly;
         gap: 1rem;
