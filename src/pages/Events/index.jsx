@@ -285,7 +285,8 @@ export function Event() {
                     <div className={style.eventBottom}>
                         <h2>FEATURED PRESENTERS</h2>
                         <div className={style.eventProfiles}>
-                            {webinar.presenters?.length > 0 && webinar.presenters.map((x, id) => (
+
+                            {webinar?.presenters?.length > 0 && webinar.presenters.map((x, id) => (
                                 <div className={style.eventProfile}>
                                     <div className={style.eventprofileimg}>
                                         <img src={`${process.env.REACT_APP_IMAGEURL}${x.presenterImg}`} alt="" />

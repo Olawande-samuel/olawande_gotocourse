@@ -724,7 +724,7 @@ export const AdminWebinarDashboard = () => {
                     </div>
                     <div className="webinarcontent">
 
-                        {webinars.length > 0 && webinars.map((x, id) => (
+                        {webinars?.length > 0 && webinars.map((x, id) => (
                             <div className="webinaritem" key={x._id}>
                                 <div>{x.title}</div>
                                 <div>{new Date(x.date).toLocaleDateString()}</div>

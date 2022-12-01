@@ -16,7 +16,10 @@ import { useRef } from "react"
 import { useParams } from "react-router-dom"
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
 import { toast } from "react-toastify"
+import { ShareModal } from "../../../Events/articles"
+
 
 
 const Container = styled.div`
@@ -281,6 +284,11 @@ export const BlogDashboard = () => {
 
         }
     }
+    const [open,setOpen]= useState(false)
+    function handleShare(e){
+        e.preventDefault();
+        setOpen(true)
+    }
 
     return (
         <Admin>
@@ -298,9 +306,56 @@ export const BlogDashboard = () => {
                 </button>
             </Header>
             <CardContainer>
-                { blogs.length > 0 &&  blogs.map(blog => (
+                { blogs.length > 0 &&  blogs.map((blog, i) => (
 
-                    <Card key={blog._id}>
+                    <BlogCard blog={blog} key={i} />
+                ))}
+            </CardContainer>
+
+        </Admin>
+    )
+}
+
+function BlogCard({blog}){
+    const { getItem } = useLocalStorage();
+    const queryClient = useQueryClient()
+    const [blogs, setBlogs] = useState([])
+    let navigate = useNavigate()
+    let userdata = getItem(KEY);
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { getBlog, deleteBlog, updateBlog } } = useAuth();
+    const updateBlogFunc = async (id) => {
+        navigate(`create?id=${id}`, {
+            state: {
+                id
+            }
+        })
+
+    }
+
+    const deleteBlogFunc = async (id) => {
+        setGeneralState({ ...generalState, loading: true })
+        try {
+            const response = await deleteBlog(userdata?.token, id)
+            const { success, message, statusCode } = response
+            if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+            const { data } = response
+            queryClient.invalidateQueries(["fetch classes"])
+
+            // console.log({ data });
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setGeneralState({ ...generalState, loading: false })
+
+        }
+    }
+    const [open,setOpen]= useState(false)
+    function handleShare(e){
+        e.preventDefault();
+        setOpen(true)
+    }
+    return(
+        <Card key={blog._id}>
                         <Link to={`${blog._id}`}>
                             <div className="top">
                                 <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
@@ -312,21 +367,17 @@ export const BlogDashboard = () => {
                             <p className="restricted_line" dangerouslySetInnerHTML={{__html: blog.content}}></p>
 
                             <div className="blogbutton">
+
                                 <button onClick={() => updateBlogFunc(blog._id)}>Edit</button>
                                 <button onClick={() => deleteBlogFunc(blog._id)}>Delete</button>
+                                <button onClick={handleShare}>Share</button>
                             </div>
 
                         </div>
-
-
+                        <ShareModal x={blog} open={open} setOpen={setOpen} />
                     </Card>
-                ))}
-            </CardContainer>
-
-        </Admin>
     )
 }
-
 
 export const Blog = () => {
     const [open, setOpen] = useState(false);
