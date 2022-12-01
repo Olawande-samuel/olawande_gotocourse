@@ -542,6 +542,15 @@ export function NewBootcampDetailsComponent() {
       if (!success) throw new AdvancedError(message, statusCode);
       setWishlistState(false)
     } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
 
     } finally {
       setGeneralState({ ...generalState, loading: false });

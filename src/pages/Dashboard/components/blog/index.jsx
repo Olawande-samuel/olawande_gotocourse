@@ -16,6 +16,7 @@ import { useRef } from "react"
 import { useParams } from "react-router-dom"
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { toast } from "react-toastify"
 
 
 const Container = styled.div`
@@ -266,6 +267,15 @@ export const BlogDashboard = () => {
             // console.log({ data });
         } catch (error) {
             console.error(error)
+            toast.error(error.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
         } finally {
             setGeneralState({ ...generalState, loading: false })
 
@@ -354,6 +364,15 @@ export const Blog = () => {
                 // console.log({ data });
             } catch (error) {
                 console.error(error)
+                toast.error(error.message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
             } finally {
                 setGeneralState({ ...generalState, loading: false })
 
@@ -370,6 +389,15 @@ export const Blog = () => {
 
             } catch (error) {
                 console.error(error)
+                toast.error(error.message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
             } finally {
                 setGeneralState({ ...generalState, loading: false })
 

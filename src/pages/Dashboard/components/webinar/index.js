@@ -11,6 +11,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import { RiDeleteBinFill } from "react-icons/ri"
 import UploadForm from "../../../../components/UploadForm"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { toast } from "react-toastify"
 
 const Form = styled.section`
 padding: 1rem;  
@@ -283,6 +284,15 @@ export const AdminWebinar = () => {
                 // console.log({ data });
             } catch (error) {
                 console.error(error)
+                toast.error(error.message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
             } finally {
                 setGeneralState({ ...generalState, loading: false })
 
@@ -300,6 +310,15 @@ export const AdminWebinar = () => {
                 navigate('/admin/webinar')
             } catch (error) {
                 console.error(error)
+                toast.error(error.message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
             } finally {
                 setGeneralState({ ...generalState, loading: false })
 
@@ -497,7 +516,7 @@ export const AdminWebinar = () => {
                     <Tags>
 
                     {
-                        formState.tags.length > 0 && formState.tags.map((x, i) => (
+                        formState.tags?.length > 0 && formState.tags?.map((x, i) => (
                             <p>#{x}  <RiDeleteBinFill style={{cursor: "pointer", color:"red", marginLeft: "2rem"}} onClick={() => handleRemoveTagClick(i)} /></p>
                         ))
 
