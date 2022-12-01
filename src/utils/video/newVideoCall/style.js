@@ -330,19 +330,24 @@ export const AddPeople = styled.div`
 
 export const ControlWrapper = styled.div`
     display: flex;
-    justify-content: center;
+    /* justify-content: space-between; */
     align-items: center;
     gap: 20px;
     position: absolute;
     bottom: 20px;
     width: 100%;
     z-index: 9999;
+    color: #fff;
+    padding-inline: .5rem;
 
     .controls {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 20px;
+    }
+    .controls.right_controls{
+        margin-left:auto;
     }
 `;
 export const ControlItem = styled.div`
@@ -361,11 +366,29 @@ export const ControlItem = styled.div`
         color: #F24E1E;
     }
     :last-child {
-        width: 40px;
+        width: 60px;
         height: 40px;
-        border-radius: 50%;
+        border-radius: 40px;
         color: #fff;
         background-color: #FF3459;
-        rotate: 135deg;
+        
+        svg {
+            rotate: 135deg;
+        }
     }
 `;
+
+export const ScreenShare = styled.div`
+    width: 100%;
+    height: 100%;
+    /* border: 3px solid red; */
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 9000;
+    background: #000;
+    display: grid;
+    place-items: center;
+    color:#fff;
+    
+`

@@ -89,7 +89,7 @@ const NewLanding = () => {
       <TechPro />
       {/* <VirtualTraining /> */}
       <LiveWebinars />
-      <Blog/>
+      {/* <Blog/> */}
       <Success />
       <Logos />
       {/* <TeachingBenefits /> */}
