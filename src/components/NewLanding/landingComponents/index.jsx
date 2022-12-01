@@ -1587,7 +1587,7 @@ export function LiveWebinarCard({
                 <h6>{title}</h6>
                 <div>
                     <p>Gotocourse</p>
-                    <p>{new Date(date).toLocaleDateString()} | {time} {time?.split(":")[0] >= 12 ? "": "am"}</p>
+                    <p>{new Intl.DateTimeFormat('en-US').format(new Date(date))} | {time} {time?.split(":")[0] >= 12 ? "": "am"}</p>
                 </div>
                 <div>
                     <button className="tag">FREE</button>
