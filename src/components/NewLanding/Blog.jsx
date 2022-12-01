@@ -59,7 +59,7 @@ a{
         font-style: normal;
         font-weight: 700;
         color: #252525;
-        font-size: clamp(1.8rem, 0.9821rem + 0.0893vw, 2.4rem);
+        font-size: clamp(1.5rem, 0.9821rem + 0.0893vw, 2rem);
     }
 
     p{
@@ -143,26 +143,20 @@ export const Blog = () => {
                     <Link to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?','')}/${blog?._id}`}>
                             <div className="top">
                                 <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
-
                             </div>
                         </Link>
                         <DateAndAction>
                             <span>
-
                                 <span style={{ color: "#4100FA" }}>{new Date(blog.createdAt).toLocaleDateString().split("/").join('.')}</span>
                             </span>
                             <span>
-                                <i><FaShareSquare style={{ color: "#0C2191", fontSize: "2rem" }} onClick={() =>setOpen(true)}/></i>
+                                <i><FaShareSquare style={{ color: "#0C2191", fontSize: "1rem" }} onClick={() =>setOpen(true)}/></i>
                             </span>
                         </DateAndAction>
                         <div className="bottom">
                             <h4>{blog.title}</h4>
                             <p className="restricted_line" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
-
-
                         </div>
-
-
                         <ShareModal x={blog} open={open} setOpen={setOpen} />
                     </Card>
                 ))}

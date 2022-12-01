@@ -79,7 +79,7 @@ const data = [
     },
     {
         img:tech,
-        title:"Teach Entrepreneurship Education",
+        title:"Tech Entrepreneurship Education",
         link:"/category/TECH_ENTREPRENEURSHIP"
     },
 ]

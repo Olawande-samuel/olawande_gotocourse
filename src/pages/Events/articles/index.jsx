@@ -255,54 +255,53 @@ export function ShareModal({x, open, setOpen}){
 
     return(
         <Modal
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                            className="message"
-                        >
-                            <Box sx={modalStyle}>
-                                <div className="boxtop">
-                                    <h5>Share Post</h5>
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            className="message"
+        >
+            <Box sx={modalStyle}>
+                <div className="boxtop">
+                    <h5>Share Post</h5>
 
-                                    <Box>
-                                        <p>Share to: </p>
-                                        <div>
-                                            <FacebookShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
-                                                <FacebookIcon />
-                                            </FacebookShareButton>
-                                            <TwitterShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
-                                                <TwitterIcon />
-                                            </TwitterShareButton>
-                                            <LinkedinShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
-                                                <LinkedinIcon />
-                                            </LinkedinShareButton>
-                                            <TelegramShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
-                                                <TelegramIcon />
-                                            </TelegramShareButton>
-                                            <EmailShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
-                                                <EmailIcon />
-                                            </EmailShareButton>
-                                        </div>
-                                        <div className="d-flex align-items-center mt-3" style={{gap: "1rem"}}>
-                                            <input type="text" name="" id="" className="form-control" ref={inputRef} value={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}  />
-                                            <button type="button" onClick={copyText}
-                                            style={{
-                                                border: "none",
-                                                outline: "none",
-                                                backgroundColor:"var(--theme-blue)",
-                                                color: "#fff",
-                                                padding: ".5rem",
-                                                borderRadius:"8px"
-
-                                            }}
-                                            
-                                            >Copy</button>
-                                        </div>
-                                    </Box>
-                                </div>
-                            </Box>
-                        </Modal>
+                    <Box>
+                        <p>Share to: </p>
+                        <div>
+                            <FacebookShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                <FacebookIcon />
+                            </FacebookShareButton>
+                            <TwitterShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                <TwitterIcon />
+                            </TwitterShareButton>
+                            <LinkedinShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                <LinkedinIcon />
+                            </LinkedinShareButton>
+                            <TelegramShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                <TelegramIcon />
+                            </TelegramShareButton>
+                            <EmailShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                <EmailIcon />
+                            </EmailShareButton>
+                        </div>
+                        <div className="d-flex align-items-center mt-3" style={{gap: "1rem"}}>
+                            <input type="text" name="" id="" className="form-control" ref={inputRef} value={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}  />
+                            <button type="button" onClick={copyText}
+                            style={{
+                                border: "none",
+                                outline: "none",
+                                backgroundColor:"var(--theme-blue)",
+                                color: "#fff",
+                                padding: ".5rem",
+                                borderRadius:"8px"
+                            }}
+                            
+                            >Copy</button>
+                        </div>
+                    </Box>
+                </div>
+            </Box>
+        </Modal>
     )
 }
 export default Articles
