@@ -420,7 +420,7 @@
 .eventimage img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .eventTop {
@@ -499,7 +499,7 @@
 .eventprofileimg img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .eventprofiletext {
