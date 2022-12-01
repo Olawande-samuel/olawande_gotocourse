@@ -273,7 +273,7 @@
     flex-basis: 30%;
 }
 
-.tags {
+.tagsConatiner {
     display: flex;
     gap: .3rem;
 }

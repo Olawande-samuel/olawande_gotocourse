@@ -160,14 +160,19 @@ function Upcoming({ id, event }) {
                 <div className={style.upcoming_event_text_container}>
                     <h5>{event.title}</h5>
                     <p className='restricted_line'>{event.description}</p>
-                    <div className={style.tags}>
-                        {/* <small className={style.tag}>Design</small>
-                        <small className={style.tag}>UI/UX</small> */}
+                    <div className={style.tagsConatiner}>
+                        {event.tags.map((e, id) => (
+                            <div className={style.tags} key={id}>
+                                <small className={style.tag}>#{e}</small>
+                            </div>
+                        ))}
+
                     </div>
+
                 </div>
 
                 <div className={style.e_details}>
-                    <h6>{event.price === "0" ? "FREE" : event.price}</h6>
+                    <h6>{event.price === 0 ? "FREE" : event.price}</h6>
                     <div className={style.event_details}>
                         <span><i><IoCalendarSharp /></i></span>
                         <span>{new Date(event.date).toDateString()}</span>
@@ -196,12 +201,12 @@ function Upcoming({ id, event }) {
 }
 
 
-function Ondemand({event}) {
+function Ondemand({ event }) {
     return (
         <div className={style.ondemand_card}>
             <div className={style.ondemand_top}>
                 <div className={style.ondemand_img_wrapper}>
-                <img src={`${process.env.REACT_APP_IMAGEURL}${event.webinarImg}`} alt="" />
+                    <img src={`${process.env.REACT_APP_IMAGEURL}${event.webinarImg}`} alt="" />
                 </div>
             </div>
             <div className={style.ondemand_bottom}>

@@ -458,7 +458,7 @@ export const AdminWebinar = () => {
                                 onChange={(e) => setFormState({ ...formState, [e.target.name]: e.target.value })}
                             >
                                 <option value="">Pick a Type</option>
-                                <option value="Online">Online</option>
+                                <option value="Live">Online</option>
                                 <option value="Physical">Physical</option>
                             </select>
 
