@@ -3,12 +3,12 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { BsCameraVideo, BsCameraVideoOff, BsMic, BsMicMute } from 'react-icons/bs'
 import { HiOutlineHand, HiOutlinePhone } from 'react-icons/hi'
 import { IoAdd } from 'react-icons/io5'
-import { MdPresentToAll } from 'react-icons/md'
+import { MdOutlineMessage, MdPresentToAll } from 'react-icons/md'
 import { VscRecord } from 'react-icons/vsc'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import useQuery from '../useQuery'
 import useSocket from '../useSocket'
-import { Wrapper, Content, HeadBar, VideoWrapper, AddPeople, ControlItem, ControlWrapper, UserCallBlock, UserPresentation, StreamWrapper, } from './style'
+import { Wrapper, Content, HeadBar, VideoWrapper, AddPeople, ControlItem, ControlWrapper, UserCallBlock, UserPresentation, StreamWrapper, ScreenShare, } from './style'
 import { MediaConnection, Peer } from "peerjs";
 import CONFIG from '../appConst'
 import { KEY } from '../../../constants'
@@ -16,8 +16,11 @@ import { useLocalStorage } from '../../../hooks'
 import { Navbar } from '../../../pages/Dashboard/components/Live/LiveClass'
 import { BiMessageDetail } from 'react-icons/bi'
 import { Box, Modal, TextField, Button, Typography } from '@mui/material/';
+import { AiOutlineInfoCircle } from 'react-icons/ai'
+import { FiUsers } from 'react-icons/fi'
+import { FaShapes } from 'react-icons/fa'
 
-
+import sharing from "../../../images/degree.png"
 
 
 const style = {
@@ -478,7 +481,29 @@ const VideoChatScreen = () => {
     };
 
 
-
+    const others = [
+        {
+          id:1,
+          icon:AiOutlineInfoCircle,
+          name:"info"
+        },
+        {
+          id:2,
+          icon:FiUsers,
+          name:"users"
+        },
+        {
+          id:3,
+          icon:MdOutlineMessage,
+          name:"chat",
+          handleClick: toggleMessage,
+        },
+        {
+          id:4,
+          icon:FaShapes,
+          name:"info"
+        },
+      ]
 
     return (
         <Wrapper>
@@ -506,9 +531,13 @@ const VideoChatScreen = () => {
                             <video className="client-local-stream" src="" muted={true}></video>
                         </UserCallBlock>
                     </StreamWrapper>
+                    {
+                        isPresenting && 
+                    <SreenSharePlaceholder />
+                    }
 
                     <ControlWrapper>
-
+                        <span>Class meeting</span>
                         <div className="controls">
                             <ControlItem onClick={() => {
                                 if (!isRecording) {
@@ -532,14 +561,23 @@ const VideoChatScreen = () => {
                             <ControlItem onClick={togggleVideo} isOn={callSettingsState.video}>
                                 {callSettingsState.video ? <BsCameraVideo size="1.5rem" /> : <BsCameraVideoOff size="1.5rem" />}
                             </ControlItem>
-                            <ControlItem onClick={toggleMessage} isOn={false}>
+                            {/* <ControlItem onClick={toggleMessage} isOn={false}>
                                 <BiMessageDetail size="1.5rem" />
-                            </ControlItem>
+                            </ControlItem> */}
                             <ControlItem onClick={handleNavigation}>
                                 <HiOutlinePhone size="1.5rem" />
                             </ControlItem>
 
 
+                        </div>
+                        <div className="controls right_controls">
+                        {
+                            others.map(({icon:Icon, handleClick}, i)=>(
+                                <i>
+                                <Icon onClick={handleClick} />
+                                </i>
+                            ))
+                        }
                         </div>
                     </ControlWrapper>
                     {/* <AddPeople>
@@ -583,4 +621,15 @@ const VideoChatScreen = () => {
     )
 }
 
+
+function SreenSharePlaceholder(){
+    return(
+        <ScreenShare>
+            <div>
+                <img src={sharing} alt="" />
+                <p className="text-center">You are presenting your screen</p>
+            </div>
+        </ScreenShare>
+    )
+}
 export default VideoChatScreen
