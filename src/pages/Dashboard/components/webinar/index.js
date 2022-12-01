@@ -657,7 +657,7 @@ export const AdminWebinarDashboard = () => {
     const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { getWebinar, deleteWebinar } } = useAuth();
     let navigate = useNavigate()
 
-    const webinarData = useQuery(["fetch classes"], () => getWebinar(userdata?.token), {
+    const webinarData = useQuery(["fetch webinar"], () => getWebinar(userdata?.token), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
                 // console.log("data", res.data);
@@ -685,7 +685,7 @@ export const AdminWebinarDashboard = () => {
             const { success, message, statusCode } = response
             if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
             const { data } = response
-            queryClient.invalidateQueries(["fetch classes"])
+            queryClient.invalidateQueries(["fetch webinar"])
 
             // console.log({ data });
         } catch (error) {
