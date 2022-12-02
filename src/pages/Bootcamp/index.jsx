@@ -568,7 +568,7 @@ export function NewBootcampDetailsComponent() {
     getWishList()
   }, [setWishlistState])
 
-  const similar = bootcamps.data?.data.filter(d => (d.subCategory === bootcampTrainingInfo.subCategory) && d.isActive && (d.bootcampId !== bootcampTrainingInfo.bootcampId))
+  const similar = bootcamps.data?.data?.filter(d => (d.subCategory === bootcampTrainingInfo.subCategory) && d.isActive && (d.bootcampId !== bootcampTrainingInfo.bootcampId))
   const upcoming = bootcamps.data?.data?.filter(d => d.isActive)
 
 

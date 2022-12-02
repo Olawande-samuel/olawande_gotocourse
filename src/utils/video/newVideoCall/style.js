@@ -265,12 +265,25 @@ export const UserCallBlock = styled.div`
     bottom: 20px;
     z-index: 999; */
     height:100%;
+    position: relative;
+    top: 0;
+
     video {
         width: 100%;
         height: 100%;
         object-fit: cover;
         border-radius: 10px;
+        border: 1px solid #484848;
 
+    }
+
+    p{
+        position:absolute;
+        top: ${props => props.showText ? "unset": "50%"};
+        left: ${props => props.showText ? 0: "50%"};
+        bottom: ${props => props.showText ? "0": "0"};
+        transform: ${props => props.showText ? "unset": "translate(-50%, -50%)"};
+        color:white;
     }
 
     @media screen and (min-width: 880px) {

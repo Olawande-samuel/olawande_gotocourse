@@ -42,6 +42,7 @@ const SuccessWrapper = styled.section`
             flex: 30.33% 0;
             min-width:15rem;
             max-width:20rem;
+            border: 1px solid #0C2191;
             
             @media (max-width: 520px){
               min-width:12rem;
