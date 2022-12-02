@@ -51,6 +51,7 @@ const VideoChatScreen = () => {
     const [value, setValue] = useState('');
     const [messages, setMessages] = useState([])
     const [isPresenting, setIsPresenting] = useState(false);
+    const [presentingUser, setPresentingUser] = useState(false);
     const [callSettingsState, setCallSettingsState] = useState({
         video: true,
         audio: true,
@@ -97,13 +98,13 @@ const VideoChatScreen = () => {
             setCallSettingsState({ ...callSettingsState, video: false })
         } else {
             handleVideoToggle({ video: true, audio: true })
-            setCallSettingsState({ ...callSettingsState, video: callSettingsState.audio })
+            setCallSettingsState({ ...callSettingsState, video: !callSettingsState.video })
         }
     }
 
-    const handleVideoToggle = async ({ video, audio }) => {
+    const handleVideoToggle = async ({ video, audio, stream }) => {
         const enabled = localStream.current?.getVideoTracks()[0].enabled;
-
+        console.log(localStream.current)
         if (enabled) {
             localStream.current.getVideoTracks()[0].enabled = false;
         } else {
@@ -155,9 +156,13 @@ const VideoChatScreen = () => {
             },
             video: true,
         }).then((stream) => {
+            console.log({stream})
             localStream.current = stream;
-            handleAudioToggle({ video: callSettingsState.video, audio: false })
-            setCallSettingsState({ ...callSettingsState, audio: false })
+            // handleAudioToggle({ video: callSettingsState.video, audio: false })
+            // setCallSettingsState({ ...callSettingsState, audio: false })
+            handleAudioToggle({ video: false, audio: false })
+            handleVideoToggle({ video: false, audio: false })
+            setCallSettingsState({ ...callSettingsState, audio: false, video: false })
             startWebCam()
         });
     }
@@ -215,6 +220,7 @@ const VideoChatScreen = () => {
 
     function startCapture() {
         const presentationId = "presentation-" + connectionUserId.current
+
         const presentationVideo = document.querySelector('.client-presentation-stream')
         navigator.mediaDevices.getDisplayMedia({ audio: false, video: true }).then((stream) => {
             presentationStream.current = stream
@@ -260,6 +266,7 @@ const VideoChatScreen = () => {
                 socket.emit('client-presentation-ended', roomId, presentationId)
                 // socket.emit('join-video-room', roomId, presentationId)
             }
+            setPresentingUser(connectionUserId.current)
             setIsPresenting(true)
 
         });
@@ -505,6 +512,8 @@ const VideoChatScreen = () => {
         },
       ]
 
+      console.log({isRoomOwner})
+      console.log(location?.state?.owner)
     return (
         <Wrapper>
             {/* <HeadBar>
@@ -527,12 +536,13 @@ const VideoChatScreen = () => {
                     </UserPresentation>
                     <StreamWrapper isPresenting={isPresenting} className="video-section">
 
-                        <UserCallBlock>
+                        <UserCallBlock showText={localStream.current?.getVideoTracks()[0].enabled}>
                             <video className="client-local-stream" src="" muted={true}></video>
+                            <p>USER Q</p>
                         </UserCallBlock>
                     </StreamWrapper>
                     {
-                        isPresenting && 
+                        (isPresenting && presentingUser === userProfile.userId) && 
                     <SreenSharePlaceholder />
                     }
 

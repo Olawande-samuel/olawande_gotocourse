@@ -817,7 +817,7 @@ export const Dashboard = ()=>{
                       //     <p className="text-muted">You haven't registered for a course</p>
                       //   </li> 
                       //   :
-                    data?.data.map((item, i)=>(
+                    data?.data?.map((item, i)=>(
                           <li key={item.bootcampId} className={` ${clsx["dashboard_class--wrapper"]}`}>
                               <div className={clsx["dashboard_class--details"]}>
                                 <p>{item.title}</p>
