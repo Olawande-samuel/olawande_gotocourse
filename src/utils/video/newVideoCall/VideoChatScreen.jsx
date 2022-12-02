@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { BsCameraVideo, BsCameraVideoOff, BsMic, BsMicMute } from 'react-icons/bs'
-import { HiOutlineHand, HiOutlinePhone } from 'react-icons/hi'
+import { HiDotsVertical, HiOutlineHand, HiOutlinePhone } from 'react-icons/hi'
 import { IoAdd } from 'react-icons/io5'
 import { MdOutlineMessage, MdPresentToAll } from 'react-icons/md'
 import { VscRecord } from 'react-icons/vsc'
@@ -21,6 +21,7 @@ import { FiUsers } from 'react-icons/fi'
 import { FaShapes } from 'react-icons/fa'
 
 import sharing from "../../../images/degree.png"
+import { width } from '@mui/system'
 
 
 const style = {
@@ -31,13 +32,13 @@ const style = {
     right: 0,
     bottom: "50px",
     // transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: "min(100% - .2rem, 400px)",
     height: "min(100vh - 81px, 500px)",
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     overflow: "hidden",
-    p: 4,
+    padding: "clamp(0.625rem, 0.2321rem + 1.9643vw, 2rem)",
 };
 
 const VideoChatScreen = () => {
@@ -46,8 +47,11 @@ const VideoChatScreen = () => {
     const { getItem } = useLocalStorage()
     const userProfile = getItem(KEY);
     const [open, setOpen] = useState(false);
+    const [openToolBox, setOpenToolBox] = useState(false);
+    
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
     const [value, setValue] = useState('');
     const [messages, setMessages] = useState([])
     const [isPresenting, setIsPresenting] = useState(false);
@@ -546,7 +550,7 @@ const VideoChatScreen = () => {
                     }
 
                     <ControlWrapper>
-                        <span>Class meeting</span>
+                        <span className="d-none d-sm-block">Class meeting</span>
                         <div className="controls">
                             <ControlItem onClick={() => {
                                 if (!isRecording) {
@@ -554,17 +558,22 @@ const VideoChatScreen = () => {
                                 } else {
                                     stopRecording()
                                 }
-                            }} isOn={!isRecording}>
+                            }} isOn={!isRecording}
+                            className="d-sm-flex d-none"
+                            >
                                 <VscRecord size="1.5rem" />
                             </ControlItem>
 
-                            <ControlItem isOn={false}>
+                            <ControlItem isOn={true} className="d-flex d-sm-none" onClick={()=>setOpenToolBox(true)}>
+                                <HiDotsVertical size="1.5rem" />
+                            </ControlItem>
+                            <ControlItem isOn={true}>
                                 <HiOutlineHand size="1.5rem" />
                             </ControlItem>
                             <ControlItem onClick={togggleAudio} isOn={callSettingsState.audio}>
                                 {callSettingsState.audio ? <BsMic size="1.5rem" /> : <BsMicMute size="1.5rem" />}
                             </ControlItem>
-                            <ControlItem onClick={() => startCapture()} isOn={true}>
+                            <ControlItem onClick={() => startCapture()} isOn={true} className="d-sm-flex d-none" > 
                                 <MdPresentToAll size="1.5rem" />
                             </ControlItem>
                             <ControlItem onClick={togggleVideo} isOn={callSettingsState.video}>
@@ -577,16 +586,24 @@ const VideoChatScreen = () => {
                                 <HiOutlinePhone size="1.5rem" />
                             </ControlItem>
 
-
+                            <Info
+                                open={openToolBox}
+                                setOpen={setOpenToolBox}
+                                others={others}
+                                isRecording={isRecording}
+                                startRecording={startRecording}
+                                stopRecording={stopRecording}
+                                startCapture={startCapture}
+                             />
                         </div>
-                        <div className="controls right_controls">
-                        {
-                            others.map(({icon:Icon, handleClick}, i)=>(
-                                <i>
-                                <Icon onClick={handleClick} />
-                                </i>
-                            ))
-                        }
+                        <div className="controls right_controls d-sm-flex d-none">
+                            {
+                                others.map(({icon:Icon, handleClick}, i)=>(
+                                    <i>
+                                    <Icon onClick={handleClick} />
+                                    </i>
+                                ))
+                            }
                         </div>
                     </ControlWrapper>
                     {/* <AddPeople>
@@ -622,8 +639,6 @@ const VideoChatScreen = () => {
                         </form>
 
                     </div>
-
-
                 </Box>
             </Modal>
         </Wrapper>
@@ -641,4 +656,61 @@ function SreenSharePlaceholder(){
         </ScreenShare>
     )
 }
+
+function Info({open, setOpen, others, isRecording,startRecording, stopRecording, startCapture }) {
+  
+    const modalStyle = {
+      position: 'absolute',
+      bottom: '15%',
+      left: '50%',
+      transform: 'translate(-50%)',
+      width: "min(100% - .2rem, 300px)",
+      backgroundColor: '#000',
+      border: '2px solid #eee',
+      boxShadow: 24,
+      color:"#fff",
+      p: 2,
+    };
+  
+    return (
+      <Modal
+        open={open}
+        onClose={()=>setOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+            <div className="popup_action">
+              {
+                others.map(({name, icon:Icon, handleClick}, i)=>(
+                  <i  onClick={handleClick}>
+                    <Icon size="1.5rem" />
+                    <p>{name}</p>
+                  </i>
+                ))
+              }
+              <>
+              <div className='d-flex flex-column' 
+                onClick={() => {
+                    if (!isRecording) {
+                        startRecording()
+                    } else {
+                        stopRecording()
+                    }
+                }} 
+                isOn={!isRecording}>
+                    <VscRecord size="1.5rem" />
+                    <p>Record</p>
+                </div>
+                <div className='d-flex flex-column' onClick={() => startCapture()} isOn={true}>
+                    <MdPresentToAll size="1.5rem" />
+                    <p>Share Screen</p>
+
+                </div>
+              </>
+            </div>
+        </Box>
+      </Modal>
+    )
+  }
 export default VideoChatScreen

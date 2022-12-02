@@ -3252,3 +3252,7 @@ td span {
   border-radius: 5px;
 }
 
+.popup_action {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}

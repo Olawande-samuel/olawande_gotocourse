@@ -157,6 +157,8 @@ export const VideoWrapper = styled.div`
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border: 1px solid #484848;
+
         }
     }
 `;
@@ -200,6 +202,7 @@ export const StreamWrapper = styled.div`
         max-width: 100%;
         max-height: 100%;
         border-radius: 10px;
+        border: 1px solid #484848;
         position: relative;
         overflow: hidden;
 
@@ -225,6 +228,8 @@ export const StreamWrapper = styled.div`
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border: 1px solid #484848;
+
         }
     }
 `;
@@ -358,6 +363,11 @@ export const ControlWrapper = styled.div`
         justify-content: center;
         align-items: center;
         gap: 20px;
+
+        .popup_action {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
     }
     .controls.right_controls{
         margin-left:auto;
