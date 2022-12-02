@@ -1562,7 +1562,7 @@ export const Dashboard = () => {
         topContent[1].value = wishlistData?.data?.length
     }
     if (isSuccess) {
-        topContent[0].value = myenrolledcourses?.data.length
+        topContent[0].value = myenrolledcourses?.data?.length
     }
 
     return (
@@ -1605,7 +1605,7 @@ export const Dashboard = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {myenrolledcourses?.data.filter(data => data.status === "paid").map((item, i) => (
+                                        {myenrolledcourses?.data?.filter(data => data.status === "paid").map((item, i) => (
                                             <tr key={i}>
                                                 <td><span>{i + 1}</span></td>
                                                 <td>
