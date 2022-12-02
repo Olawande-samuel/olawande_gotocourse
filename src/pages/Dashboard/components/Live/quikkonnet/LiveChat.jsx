@@ -558,7 +558,9 @@ function AllUsers(){
         enabled: isStudent || isTeacher,
         onSuccess: (res)=>{
             if(res.data?.length > 0){
-                setAdmins(res.data)
+              console.log({res})
+              let admin = res.data.filter(admin=> admin.firstName === "Admiralty")
+                setAdmins(admin)
             }
         }
     })

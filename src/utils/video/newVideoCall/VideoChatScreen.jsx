@@ -150,7 +150,25 @@ const VideoChatScreen = () => {
             video.play()
         })
     }
+   
+        /*
+        needs a socket connection that handles remote audio and video toggling.
+            on emit, 
+            1. get userId, 
+            2. check if it matches the roomOwner id
+            3. if it doesn't, get localStream.current.audioandvideoTracks
+            4. set them to false
+            5. disable mic and video toggling buttons
+        */ 
 
+
+        /**
+         * for the hand raise feature
+         * integrate it with the people icon popup
+         * add hand raise notification to stream box
+         * 
+         * add 'lower hand' permission to roomOwner
+         */
     const setUpMediaScreen = () => {
         navigator.mediaDevices.getUserMedia({
             audio: {
