@@ -155,7 +155,7 @@ function Mentors(){
           </div>
 
           <div className="newMentors_content_bottom mt-5">
-              <h4 className="bottom_title d-block text-center fw-bolder mb-4">Connect with</h4>
+              <h4 className="bottom_title d-block text-center fw-bolder mb-4">Schedule one-on-one sessions with:</h4>
               <div className="newMentors_content_bottom_card">
                 <Link to="/lounge" className="d-inline-flex">
                 <div className="newMentors_content_bottom_cards">
