@@ -495,8 +495,32 @@
 }
 
 
+@media (max-width:1024px) {
+    .courseitem:nth-of-type(8) div {
+        display: flex;
+        flex-direction: column;
+
+    }
+
+}
 
 
+@media (max-width:768px) {
+    .courseheader, .coursecontent{
+        flex-direction: column;
+            align-items: center;
+
+    }
+
+    .coursecontent,.coursebody{
+        gap: 1rem;
+    }
+
+    .courseitem{
+        text-align: center;
+    }
+    
+}
 
 
 
