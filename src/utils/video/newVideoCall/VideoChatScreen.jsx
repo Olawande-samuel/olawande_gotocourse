@@ -140,6 +140,11 @@ const VideoChatScreen = () => {
 
     useEffect(() => {
         videoWrapper = document.querySelector('.video-section');
+        socket.on('incoming-raising-hand', userData => {
+            console.log("incoming socket", userData)
+            // window.alert("someone raised their hand")
+        })
+        console.log("running socket on")
     }, [])
 
     function addVideoStream(videoWrapper, stream) {
@@ -153,6 +158,7 @@ const VideoChatScreen = () => {
    
         /*
         needs a socket connection that handles remote audio and video toggling.
+        
             on emit, 
             1. get userId, 
             2. check if it matches the roomOwner id
@@ -161,7 +167,15 @@ const VideoChatScreen = () => {
             5. disable mic and video toggling buttons
         */ 
 
-
+        function raiseHand(){
+           
+            console.log("clicked", socket)
+            socket.emit('client-raise-hand', roomId, {
+                name: `${userProfile.firstName} ${userProfile.lastName}`,
+            })
+        }
+     
+        console.log(socket)
         /**
          * for the hand raise feature
          * integrate it with the people icon popup
@@ -457,6 +471,11 @@ const VideoChatScreen = () => {
                 // messages.push(userData)
             }
         })
+        socket.on('incoming-raising-hand', userData => {
+            console.log("incoming socket", userData)
+            // window.alert("someone raised their hand")
+        })
+       
     }
 
     const checkPeerUsers = () => {
@@ -585,7 +604,7 @@ const VideoChatScreen = () => {
                             <ControlItem isOn={true} className="d-flex d-sm-none" onClick={()=>setOpenToolBox(true)}>
                                 <HiDotsVertical size="1.5rem" />
                             </ControlItem>
-                            <ControlItem isOn={true}>
+                            <ControlItem isOn={true} onClick={raiseHand}>
                                 <HiOutlineHand size="1.5rem" />
                             </ControlItem>
                             <ControlItem onClick={togggleAudio} isOn={callSettingsState.audio}>
