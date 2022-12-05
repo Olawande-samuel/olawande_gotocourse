@@ -146,7 +146,7 @@ const ComingSoon = () =>{
                         <h1>Thank you for choosing to learn with Gotocourse.</h1>
                         <div>
                             <p>Enrollment for this course starts</p>
-                            <h3>1st of December 2022</h3>
+                            <h3>January 5, 2023</h3>
                         </div>
                         <div>
                             <p>You can add this course to your wishlist</p>

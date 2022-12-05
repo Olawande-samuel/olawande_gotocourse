@@ -415,3 +415,60 @@ export const ScreenShare = styled.div`
     color:#fff;
     
 `
+
+
+// USERS
+
+export const UserHeader = styled.h5`
+    color: #000;
+    font-size: 14px;
+    text-transform:capitalize;
+`
+
+export const SearchBox = styled.div`
+    margin-block: 1rem;
+
+    input {
+        border: 1px solid #000;
+        padding: 8px 4px;
+        width: 100%;
+        border-radius:8px;
+    }
+
+`
+
+export const HandList = styled.div`
+    display: flex;
+    flex-direction:column;    
+    gap: 1rem;
+    margin-block: 1rem;
+`
+
+export const HandUser = styled.div`
+    display: flex;
+    color: #000;
+    
+    img {
+        width: 40px;
+        height: 40px;
+        border-radius:50%;
+    }
+
+    svg {
+        margin-left:auto;
+    }
+
+`
+export const UserListWrapper = styled.div`
+
+    p {
+        margin-bottom: 2rem;
+    }
+
+`
+
+export const UserList = styled.ul`
+    list-style-type:none;
+
+
+`

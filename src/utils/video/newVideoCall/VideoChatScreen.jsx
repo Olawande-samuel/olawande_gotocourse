@@ -8,7 +8,7 @@ import { VscRecord } from 'react-icons/vsc'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import useQuery from '../useQuery'
 import useSocket from '../useSocket'
-import { Wrapper, Content, HeadBar, VideoWrapper, AddPeople, ControlItem, ControlWrapper, UserCallBlock, UserPresentation, StreamWrapper, ScreenShare, } from './style'
+import { Wrapper, Content, HeadBar, VideoWrapper, AddPeople, ControlItem, ControlWrapper, UserCallBlock, UserPresentation, StreamWrapper, ScreenShare, UserHeader, SearchBox, HandList, HandUser, UserListWrapper, UserList, } from './style'
 import { MediaConnection, Peer } from "peerjs";
 import CONFIG from '../appConst'
 import { KEY } from '../../../constants'
@@ -48,6 +48,7 @@ const VideoChatScreen = () => {
     const userProfile = getItem(KEY);
     const [open, setOpen] = useState(false);
     const [openToolBox, setOpenToolBox] = useState(false);
+    const [openUserBox, setOpenUserBox] = useState(false);
     
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -168,10 +169,9 @@ const VideoChatScreen = () => {
         */ 
 
         function raiseHand(){
-           
-            console.log("clicked", socket)
             socket.emit('client-raise-hand', roomId, {
                 name: `${userProfile.firstName} ${userProfile.lastName}`,
+                id: userProfile.userId
             })
         }
      
@@ -506,6 +506,9 @@ const VideoChatScreen = () => {
     const toggleMessage = () => {
         setOpen(!open)
     }
+    const toggleUser = () => {
+        setOpenUserBox(!open) 
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -537,7 +540,9 @@ const VideoChatScreen = () => {
         {
           id:2,
           icon:FiUsers,
-          name:"users"
+          name:"users",
+          handleClick: toggleUser,
+
         },
         {
           id:3,
@@ -631,6 +636,11 @@ const VideoChatScreen = () => {
                                 startRecording={startRecording}
                                 stopRecording={stopRecording}
                                 startCapture={startCapture}
+                             />
+                             <Users
+                              open={openUserBox}
+                              setOpen={setOpenUserBox}
+                             
                              />
                         </div>
                         <div className="controls right_controls d-sm-flex d-none">
@@ -746,6 +756,64 @@ function Info({open, setOpen, others, isRecording,startRecording, stopRecording,
                 </div>
               </>
             </div>
+        </Box>
+      </Modal>
+    )
+  }
+function Users({open, setOpen, others, isRecording,startRecording, stopRecording, startCapture }) {
+  
+    const modalStyle = {
+        position: 'absolute',
+    // top: '50%',
+    top: "50px",
+    // left: '50%',
+    right: 0,
+    bottom: "15%",
+    // transform: 'translate(-50%, -50%)',
+     width: "min(100% - .2rem, 400px)",
+      height: "min(100vh - 81px, 500px)",
+      bgcolor: 'background.paper',
+      backgroundColor: '#fff',
+      border: '2px solid #eee',
+      boxShadow: 24,
+      color:"#fff",
+      p: 2,
+    };
+  
+    return (
+      <Modal
+        open={open}
+        onClose={()=>setOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+            <UserHeader>People</UserHeader>
+            <SearchBox>
+                <label htmlFor="search" className="visually-hidden">Search User</label>
+                <input type="search" name="Search user" id="search" placeholder='Search user...' />
+            </SearchBox>
+
+            <HandList>
+                <p className="title">Hand Raised</p>
+                <HandUser>
+                    <img src="" alt="" />
+                    <p>Goodness and Message</p>
+                    <HiOutlineHand size="1.2rem" />
+                </HandUser>
+            </HandList>
+            <UserListWrapper>
+                <p className="title"></p>
+
+                <UserList>
+                    <HandUser>
+                        <img src="" alt="" />
+                        <p>Goodness and Message</p>
+                        <HiOutlineHand size="1.2rem" />
+                    </HandUser>
+                </UserList>
+            </UserListWrapper>
+            
         </Box>
       </Modal>
     )

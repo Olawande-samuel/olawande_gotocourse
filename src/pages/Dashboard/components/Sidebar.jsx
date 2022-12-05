@@ -103,7 +103,7 @@ const Sidebar = ({}) => {
         {
             icon: BiCategory,
             path: "classes",
-            title: "Classes"
+            title: "Courses"
         },
         {
             icon: BiVideo,
@@ -236,11 +236,11 @@ const Sidebar = ({}) => {
         //     icon: FiGift,
         //     path: "courses",
         //     title: "Courses"
-        // },
+        // }, 
         {
             icon: BiCategory,
             path: "classes",
-            title: "Classes"
+            title: "Courses"
         },
         {
             icon: BiVideo,
