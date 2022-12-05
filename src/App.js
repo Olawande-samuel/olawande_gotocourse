@@ -349,6 +349,7 @@ function App() {
               <Route path="teachers-how-it-works" element={<HIWTeacher />} />
               <Route path="student-how-it-works" element={<HIWStudent />} />
 
+                {/* STUDENTS */}
               <Route path="student" element={<Out />}>
                 <Route path="" element={<StudentDashboard />} />
                 <Route path="profile" element={<StudentProfile />} />
@@ -389,7 +390,8 @@ function App() {
                   element={<StudentClassroom />}
                 />
               </Route>
-
+                        
+                        {/* TEST CONSOLE */}
               <Route path="test" element={<Content />}>
                 <Route path="file" element={<File />} />
                 <Route path="note" element={<Note />} />
@@ -412,12 +414,16 @@ function App() {
                 <Route path="liveclass" element={<Out />} />
               </Route>
 
+                        {/* MENTORS */}
+
               <Route path="mentors" element={<Out />}>
                 <Route index element={<All type="mentors" />} />
                 <Route path=":id" element={<Out />}>
                   <Route index element={<TeacherProfile type="mentors" />} />
                 </Route>
               </Route>
+
+              {/*                   MENTORS DASHBOARD                     */}
 
               <Route path="mentor" element={<Out />}>
                 <Route index element={<MentorsDashboard />} />
@@ -431,12 +437,16 @@ function App() {
                 <Route path="help" element={<MentorsHelp />} />
               </Route>
 
+              {/*                   TEACHERS PAGE                     */}
+
               <Route path="teachers" element={<Out />}>
                 <Route index element={<All type="teachers" />} />
                 <Route path=":id" element={<Out />}>
                   <Route index element={<TeacherProfile />} />
                 </Route>
               </Route>
+
+              {/*                   TEACHERS DASHBOARD                     */}
 
               <Route path="teacher" element={<Out />}>
                 <Route index element={<TeacherDashboard />} />
@@ -501,6 +511,8 @@ function App() {
                 <Route path="class/:id/mail/chat" element={<LiveChat />} />
               </Route>
 
+
+{/*                   AFFILIATES PAGE                     */}
               <Route path="affiliates" element={<AffiliateLanding />} />
               <Route
                 path="affiliates/register"

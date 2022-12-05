@@ -371,6 +371,10 @@ export const ControlWrapper = styled.div`
     }
     .controls.right_controls{
         margin-left:auto;
+        
+        i{
+            cursor:pointer;
+        }
     }
 `;
 export const ControlItem = styled.div`
@@ -441,12 +445,18 @@ export const HandList = styled.div`
     display: flex;
     flex-direction:column;    
     gap: 1rem;
-    margin-block: 1rem;
+    margin-block: 2rem;
+
+    .head {
+        font-size: 17px;
+        color:#000;
+    }
 `
 
 export const HandUser = styled.div`
     display: flex;
     color: #000;
+    gap: 1rem;
     
     img {
         width: 40px;
@@ -461,14 +471,17 @@ export const HandUser = styled.div`
 `
 export const UserListWrapper = styled.div`
 
-    p {
-        margin-bottom: 2rem;
-    }
+    .head {
+        font-size: 17px;
+        color:#000;
+        margin-bottom: 1rem;
+    } 
 
 `
 
 export const UserList = styled.ul`
     list-style-type:none;
+    padding-left: 0;
 
 
 `

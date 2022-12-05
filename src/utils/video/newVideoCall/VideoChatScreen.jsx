@@ -22,6 +22,7 @@ import { FaShapes } from 'react-icons/fa'
 
 import sharing from "../../../images/degree.png"
 import { width } from '@mui/system'
+import { toast, ToastContainer } from 'react-toastify'
 
 
 const style = {
@@ -42,6 +43,7 @@ const style = {
 };
 
 const VideoChatScreen = () => {
+    const HandKey = "gotocourse_hand_raised_users"
     const { socket, sendPing } = useSocket()
     const location = useLocation();
     const { getItem } = useLocalStorage()
@@ -49,7 +51,7 @@ const VideoChatScreen = () => {
     const [open, setOpen] = useState(false);
     const [openToolBox, setOpenToolBox] = useState(false);
     const [openUserBox, setOpenUserBox] = useState(false);
-    
+    const [handRaiseList, setHandRaiseList] = useState([]);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -74,7 +76,14 @@ const VideoChatScreen = () => {
 
 
 
+    let data = sessionStorage.getItem(HandKey);
+    useEffect(()=>{
+        console.log({data})
+        setHandRaiseList(JSON.parse(data))
 
+    }, [data])
+
+    console.log({handRaiseList})
     const chekForVideoRoom = async () => {
         if (location?.state?.owner) {
             isRoomOwner = true
@@ -141,10 +150,12 @@ const VideoChatScreen = () => {
 
     useEffect(() => {
         videoWrapper = document.querySelector('.video-section');
-        socket.on('incoming-raising-hand', userData => {
-            console.log("incoming socket", userData)
-            // window.alert("someone raised their hand")
-        })
+        // socket.on('incoming-raising-hand', userData => {
+        //     console.log("incoming socket", userData)
+
+        //     sessionStorage.setItem(HandKey, JSON.stringify([...handRaiseList,  userData]));
+        //     // window.alert("someone raised their hand")
+        // })
         console.log("running socket on")
     }, [])
 
@@ -168,21 +179,7 @@ const VideoChatScreen = () => {
             5. disable mic and video toggling buttons
         */ 
 
-        function raiseHand(){
-            socket.emit('client-raise-hand', roomId, {
-                name: `${userProfile.firstName} ${userProfile.lastName}`,
-                id: userProfile.userId
-            })
-        }
-     
-        console.log(socket)
-        /**
-         * for the hand raise feature
-         * integrate it with the people icon popup
-         * add hand raise notification to stream box
-         * 
-         * add 'lower hand' permission to roomOwner
-         */
+    
     const setUpMediaScreen = () => {
         navigator.mediaDevices.getUserMedia({
             audio: {
@@ -473,6 +470,8 @@ const VideoChatScreen = () => {
         })
         socket.on('incoming-raising-hand', userData => {
             console.log("incoming socket", userData)
+            sessionStorage.setItem(HandKey, JSON.stringify([...handRaiseList,  userData]));
+            toast.info(`${userData.name} raised their hand`)
             // window.alert("someone raised their hand")
         })
        
@@ -495,6 +494,7 @@ const VideoChatScreen = () => {
     }, [userProfile.userId])
 
     function handleNavigation() {
+        sessionStorage.clear()
         userProfile.userType === "student" ?
             window.location.assign("/student")
             :
@@ -557,10 +557,45 @@ const VideoChatScreen = () => {
         },
       ]
 
-      console.log({isRoomOwner})
-      console.log(location?.state?.owner)
+
+
+      function raiseHand(){
+        socket.emit('client-raise-hand', roomId, {
+            name: `${userProfile.firstName} ${userProfile.lastName}`,
+            img: userProfile.profileImg,
+            id: userProfile.userId
+        })
+        sessionStorage.setItem(HandKey, JSON.stringify([...handRaiseList,  {
+                name: `${userProfile.firstName} ${userProfile.lastName}`,
+                img: userProfile.profileImg    
+            }
+        ]));
+
+        toast.info("You raised your hand")
+    }
+ 
+    console.log(socket)
+    /**
+     * for the hand raise feature
+     * integrate it with the people icon popup
+     * add hand raise notification to stream box
+     * 
+     * add 'lower hand' permission to roomOwner
+     */
     return (
         <Wrapper>
+            <ToastContainer
+                position="bottom-center"
+                autoClose={3500}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+                />
             {/* <HeadBar>
                 <div className="banner">
                     <img src="/assets/svg/logo.svg" alt="logo" />
@@ -640,6 +675,7 @@ const VideoChatScreen = () => {
                              <Users
                               open={openUserBox}
                               setOpen={setOpenUserBox}
+                              profileData={userProfile}
                              
                              />
                         </div>
@@ -668,6 +704,9 @@ const VideoChatScreen = () => {
             >
                 <Box sx={style}
                 >
+                    <header style={{marginBottom:"0"}}>
+                        Live-Chat
+                    </header>
                     <div className="boxtop">
                         {messages.length > 0 && messages.map(x => (
                             <div className={`message ${x.mine &&"mine"}`}> 
@@ -760,26 +799,35 @@ function Info({open, setOpen, others, isRecording,startRecording, stopRecording,
       </Modal>
     )
   }
-function Users({open, setOpen, others, isRecording,startRecording, stopRecording, startCapture }) {
+function Users({open, setOpen, profileData }) {
   
     const modalStyle = {
         position: 'absolute',
-    // top: '50%',
-    top: "50px",
-    // left: '50%',
-    right: 0,
-    bottom: "15%",
-    // transform: 'translate(-50%, -50%)',
-     width: "min(100% - .2rem, 400px)",
-      height: "min(100vh - 81px, 500px)",
-      bgcolor: 'background.paper',
-      backgroundColor: '#fff',
-      border: '2px solid #eee',
-      boxShadow: 24,
-      color:"#fff",
-      p: 2,
-    };
-  
+        top: "50px",
+        right: 0,
+        bottom: "15%",
+        width: "min(100% - .2rem, 400px)",
+        height: "min(100vh - 81px, 500px)",
+        bgcolor: 'background.paper',
+        backgroundColor: '#fff',
+        border: '2px solid #eee',
+        boxShadow: 24,
+        color:"#fff",
+        p: 2,
+    }
+    const HandKey = "gotocourse_hand_raised_users"  
+    const session = sessionStorage.getItem(HandKey)
+    
+    
+    const [handRaiseList, setHandRaiseList]= useState([])
+    
+    useEffect(() => {
+        const sessionData = JSON.parse(session)
+        console.log({sessionData})
+
+        setHandRaiseList(sessionData)   
+    }, [session])
+
     return (
       <Modal
         open={open}
@@ -795,22 +843,24 @@ function Users({open, setOpen, others, isRecording,startRecording, stopRecording
             </SearchBox>
 
             <HandList>
-                <p className="title">Hand Raised</p>
-                <HandUser>
-                    <img src="" alt="" />
-                    <p>Goodness and Message</p>
-                    <HiOutlineHand size="1.2rem" />
-                </HandUser>
+                <p className="head">Hand Raised</p>
+                {
+                    handRaiseList?.map((item, i)=>(
+                        <HandUser key={i}>
+                            <img src={item.img} alt="" />
+                            <p>{item.name}</p>
+                            <HiOutlineHand size="1.2rem" />
+                        </HandUser>
+                    ))
+                }
             </HandList>
             <UserListWrapper>
-                <p className="title"></p>
-
+                <p className="head">All Users</p>
                 <UserList>
-                    <HandUser>
-                        <img src="" alt="" />
-                        <p>Goodness and Message</p>
-                        <HiOutlineHand size="1.2rem" />
-                    </HandUser>
+                    {/* <HandUser>
+                        <img src={profileData.profileImg} alt="" />
+                        <p>Goodness and Mercy</p>
+                    </HandUser> */}
                 </UserList>
             </UserListWrapper>
             

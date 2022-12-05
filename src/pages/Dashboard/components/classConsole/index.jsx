@@ -130,7 +130,7 @@ const iconData = [
     id: 3,
     icon: RiVideoAddFill,
     title: "Live Class",
-    link: `/teacher/live-class`,
+    link: `/teacher/class-console/class/${classId}/live-class`,
   },
   {
     id: 4,

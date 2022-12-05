@@ -12,7 +12,7 @@ import "./console.css";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
 import { Box, Modal, Switch } from "@mui/material";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../../../contexts/Auth";
 import { AdvancedError } from "../../../../classes";
 import { toast, ToastContainer } from "react-toastify";
@@ -140,6 +140,7 @@ export function ScheduleClass({ open, setOpen }) {
     p: 4,
   };
 
+  const {classId} = useParams()
   const {getItem}= useLocalStorage()
   const user = getItem(KEY)
   const { generalState, setGeneralState, teacherFunctions: {fetchLiveClasses} } = useAuth();
@@ -165,9 +166,9 @@ export function ScheduleClass({ open, setOpen }) {
     try {
       setLoading(true)
       const res = await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
-          roomName: "myroom",
-          // userId: "629a6a268034834a935aa518"
-          userId: user.userId
+          roomName: formstate.title,
+          userId: user.userId,
+          classId
       })
       
       console.log(res.data.data)
@@ -218,6 +219,7 @@ export function ScheduleClass({ open, setOpen }) {
               id="title"
               className="form-control"
               onChange={handleChange}
+              value={formstate.title}
             />
           </div>
           <div className="form-group my-3">
