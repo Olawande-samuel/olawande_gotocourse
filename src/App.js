@@ -493,11 +493,16 @@ function App() {
                       <Route path="mail" element={<Out />}>
                         <Route index element={<ChatComponent />} />
                         <Route path="details" element={<GroupContent />} />
-                        <Route
-                          path="group/:groupID"
-                          element={<GroupContent />}
-                        />
+                        <Route path="group/:groupID" element={<GroupContent />} />
                         <Route path="chat/:userId" element={<MailDetail />} />
+                      </Route>
+                      <Route path="live-class" element={<Out />}>
+                        <Route index element={<LiveClassInfo />} />
+                        <Route path="live" element={<LiveClass />} />
+                        <Route path="connect" element={<Out />}>
+                        <Route index element={<Intermission />} />
+                        <Route path="stream" element={<VideDiv />} />
+                        </Route>
                       </Route>
                       <Route path="file" element={<File />} />
                       <Route path="note" element={<Note />} />
@@ -513,6 +518,7 @@ function App() {
 
 
 {/*                   AFFILIATES PAGE                     */}
+
               <Route path="affiliates" element={<AffiliateLanding />} />
               <Route
                 path="affiliates/register"

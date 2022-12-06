@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Document, Page } from 'react-pdf';
+import { Document, Page, pdfjs  } from 'react-pdf';
 import '../classConsole/Content.css'
 import { IoMdCloudDownload } from 'react-icons/io';
 import { PopModalContent } from '.';
@@ -19,6 +19,8 @@ import VideoImageThumbnail from 'react-video-thumbnail-image'
 import processed from '../../../../images/processed.png'
 import { AiOutlineClose } from 'react-icons/ai';
 
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -256,6 +258,7 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
         boxShadow: 24,
         p: 6,
         padding: "4rem 2rem",
+        overflowY:"auto"
     };
 
     return (
@@ -274,7 +277,13 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
                     type === "video/mp4" ?
                         <video src={`${file}`} controls autoPlay style={{ width: "100%", height: "100%", border: "1px solid #eee", borderRadius: "8px" }}></video>
                         :
-                        <img src={creator ? `${process.env.REACT_APP_IMAGEURL}${file}` : file} alt="" className="w-100 h-100" style={{ objectFit: "contain" }} />
+                        ( 
+                            type === "application/pdf" ?
+                            <Pdf document={file} />
+                            : 
+                            <img src={creator ? `${process.env.REACT_APP_IMAGEURL}${file}` : file} alt="" className="w-100 h-100" style={{ objectFit: "contain" }} />
+                        
+                        )
                 }
             </Box>
         </Modal>
@@ -285,14 +294,22 @@ function Pdf({document}){
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
     
+    console.log({document})
     function onDocumentLoadSuccess({ numPages }) {
         setNumPages(numPages);
     }
       
     return (
         <div>
-        <Document file="somefile.pdf" onLoadSuccess={onDocumentLoadSuccess}>
-            <Page pageNumber={pageNumber} />
+        <Document file={{
+            url:document
+        }} 
+        onLoadSuccess={onDocumentLoadSuccess}>
+            <Page
+             pageNumber={pageNumber}
+             width={800}
+             
+             />
         </Document>
         <p>
             Page {pageNumber} of {numPages}

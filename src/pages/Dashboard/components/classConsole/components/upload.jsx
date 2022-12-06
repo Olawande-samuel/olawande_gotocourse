@@ -180,16 +180,20 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
             filename={filename}
             setFilename={setFilename}
             progress={progress}
+            setFile={setFile}
+            setImageUrl={setImageUrl}
             />
         )
     )
 }
 
-export function UploadFormContent({setIsOpen, data, progress, triggerUpload, changeHandler, file, imageUrl, loading, copy, uploadFileHandler, filename, setFilename}){
+export function UploadFormContent({setIsOpen, setFile,setImageUrl, data, progress, triggerUpload, changeHandler, file, imageUrl, loading, copy, uploadFileHandler, filename, setFilename}){
     return (
         <div className={clsx.upload_file__background} onClick={e => {
             if(e.target === e.currentTarget) {
                 setIsOpen(_ => false);
+                setFile(null)
+                setImageUrl(false)
             }
         }}>
             <div className={clsx.uploda_file__container}>

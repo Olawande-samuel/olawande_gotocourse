@@ -40,6 +40,13 @@ export function getDate(date){
   m = months[parseInt(m) - 1];
   return `${m} ${day}`;
 }
+export function getFullDate(date){
+  let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  let d = date.split("T")[0];
+  let [y, m, day] = d.split("-");
+  m = months[parseInt(m) - 1];
+  return `${m} ${day} ${y}`;
+}
 
 export function getTime(time){
     if(time){

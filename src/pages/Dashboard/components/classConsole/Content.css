@@ -752,8 +752,10 @@
 }
 
 .suite__orange {
-    background: #FFBBB5;
+    /* background: #FFBBB5; */
+    background: var(--theme-orange);
     border-radius: 20px;
+    color:#fff;
 }
 
 .suite__blue h4,

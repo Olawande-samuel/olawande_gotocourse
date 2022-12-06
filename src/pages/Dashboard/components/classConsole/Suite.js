@@ -21,7 +21,7 @@ import { toast } from 'react-toastify';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AdvancedError } from '../../../../classes';
 import { useLocalStorage } from '../../../../hooks';
-import { CLASSID, getDate, getTime, KEY } from '../../../../constants';
+import { CLASSID, getFullDate, getTime, KEY } from '../../../../constants';
 import { useAuth } from '../../../../contexts/Auth';
 import { ViewModal } from './File';
 
@@ -166,7 +166,8 @@ function SuiteBox({x, id}){
             </div>
             <p className='suite__title'>{x.originalName}</p>
             <span>{x.type}</span>
-            <span>{x.updatedAt ? getDate(x.updatedAt) : ""}</span>
+            <span>Status: Processed</span>
+            <span>{x.updatedAt ? getFullDate(x.updatedAt) : ""}</span>
             {/* <p className='suite__title'>created in: IT AUDIT</p> */}
             <div className="suite__btn">
                 <button onClick={()=>setAddToClassroom(true)}>Add to classroom</button>

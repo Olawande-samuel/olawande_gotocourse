@@ -52,6 +52,8 @@ const VideoChatScreen = () => {
     const [openToolBox, setOpenToolBox] = useState(false);
     const [openUserBox, setOpenUserBox] = useState(false);
     const [handRaiseList, setHandRaiseList] = useState([]);
+    const [userCount, setUserCount] = useState(0);
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -78,12 +80,10 @@ const VideoChatScreen = () => {
 
     let data = sessionStorage.getItem(HandKey);
     useEffect(()=>{
-        console.log({data})
         setHandRaiseList(JSON.parse(data))
 
     }, [data])
 
-    console.log({handRaiseList})
     const chekForVideoRoom = async () => {
         if (location?.state?.owner) {
             isRoomOwner = true
@@ -117,7 +117,6 @@ const VideoChatScreen = () => {
 
     const handleVideoToggle = async ({ video, audio, stream }) => {
         const enabled = localStream.current?.getVideoTracks()[0].enabled;
-        console.log(localStream.current)
         if (enabled) {
             localStream.current.getVideoTracks()[0].enabled = false;
         } else {
@@ -151,12 +150,10 @@ const VideoChatScreen = () => {
     useEffect(() => {
         videoWrapper = document.querySelector('.video-section');
         // socket.on('incoming-raising-hand', userData => {
-        //     console.log("incoming socket", userData)
 
         //     sessionStorage.setItem(HandKey, JSON.stringify([...handRaiseList,  userData]));
         //     // window.alert("someone raised their hand")
         // })
-        console.log("running socket on")
     }, [])
 
     function addVideoStream(videoWrapper, stream) {
@@ -188,7 +185,6 @@ const VideoChatScreen = () => {
             },
             video: true,
         }).then((stream) => {
-            console.log({stream})
             localStream.current = stream;
             // handleAudioToggle({ video: callSettingsState.video, audio: false })
             // setCallSettingsState({ ...callSettingsState, audio: false })
@@ -273,12 +269,11 @@ const VideoChatScreen = () => {
 
 
             presentationPeer.current.on('open', userId => {
-                console.log("connected to presentation room with userId: ", userId)
+                
                 socket.emit('join-video-room', roomId, presentationId)
             })
 
             presentationPeer.current.on('call', call => {
-                console.log("presentation caller user: ", call.peer)
                 presentationPeers.current[call.peer] = call
                 call.answer(presentationStream.current)
 
@@ -311,7 +306,6 @@ const VideoChatScreen = () => {
     const peers = useRef({})
 
     const startWebCam = async () => {
-        console.log("calling once")
         const myVideo = document.querySelector('.client-local-stream')
         myVideo?.setAttribute("autoplay", "")
         myVideo?.setAttribute("playsInline", "")
@@ -329,6 +323,9 @@ const VideoChatScreen = () => {
         myPeer.current.on('open', userId => {
             console.log("connected to room with userId: ", userId)
             socket.emit('join-video-room', roomId, userId)
+            setUserCount(userCount + 1)
+            console.log("peer",myPeer.current._clients)
+
         })
 
         myPeer.current.on('call', call => {
@@ -379,6 +376,7 @@ const VideoChatScreen = () => {
 
         socket.on('new-user-join-video-room', (userId) => {
             console.log("new user joined room: ", userId)
+            setUserCount(userCount + 1)
             if (userId.split('-')[0] !== "presentation") {
                 connectToNewUser(userId, localStream.current)
                 if (presentationStream.current?.getVideoTracks()[0].enabled) {
@@ -474,9 +472,10 @@ const VideoChatScreen = () => {
             toast.info(`${userData.name} raised their hand`)
             // window.alert("someone raised their hand")
         })
-       
+
     }
 
+    console.log(userCount)
     const checkPeerUsers = () => {
         console.log(presentationPeers.current)
     }
@@ -512,7 +511,6 @@ const VideoChatScreen = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        // console.log({roomId}, {value});
         if(!value) return;
         setMessages([
             ...messages,
@@ -565,16 +563,15 @@ const VideoChatScreen = () => {
             img: userProfile.profileImg,
             id: userProfile.userId
         })
+        toast.info("You raised your hand")
         sessionStorage.setItem(HandKey, JSON.stringify([...handRaiseList,  {
                 name: `${userProfile.firstName} ${userProfile.lastName}`,
                 img: userProfile.profileImg    
             }
         ]));
 
-        toast.info("You raised your hand")
     }
  
-    console.log(socket)
     /**
      * for the hand raise feature
      * integrate it with the people icon popup
@@ -823,7 +820,6 @@ function Users({open, setOpen, profileData }) {
     
     useEffect(() => {
         const sessionData = JSON.parse(session)
-        console.log({sessionData})
 
         setHandRaiseList(sessionData)   
     }, [session])
