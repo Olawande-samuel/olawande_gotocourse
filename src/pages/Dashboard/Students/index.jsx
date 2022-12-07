@@ -1704,7 +1704,7 @@ function AvailableCourses({ data }) {
 
                             <div className={clsx["courseitem"]}>
 
-                                {item.category}
+                                {item.category?.toLowerCase()}
                             </div>
 
                             <div className={clsx["courseitem"]}>

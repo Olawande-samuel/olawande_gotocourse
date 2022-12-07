@@ -238,7 +238,7 @@ export const BlogDashboard = () => {
     let userdata = getItem(KEY);
     const { generalState: { isMobile, loading }, setGeneralState, generalState, adminFunctions: { getBlog, deleteBlog, updateBlog } } = useAuth();
 
-    const blogData = useQuery(["fetch classes"], () => getBlog(userdata?.token), {
+    const blogData = useQuery(["fetch list blogs"], () => getBlog(userdata?.token), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
                 // console.log("data", res.data);
@@ -265,7 +265,7 @@ export const BlogDashboard = () => {
             const { success, message, statusCode } = response
             if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
             const { data } = response
-            queryClient.invalidateQueries(["fetch classes"])
+            queryClient.invalidateQueries(["fetch list blogs"])
 
             // console.log({ data });
         } catch (error) {
@@ -339,7 +339,7 @@ function BlogCard({blog}){
             const { success, message, statusCode } = response
             if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
             const { data } = response
-            queryClient.invalidateQueries(["fetch classes"])
+            queryClient.invalidateQueries(["fetch list blogs"])
 
             // console.log({ data });
         } catch (error) {
