@@ -86,7 +86,7 @@ const Content = styled.div`
 
 `
 
-const ComingSoon = () =>{
+const ComingSoon = ({student}) =>{
     const {getItem} = useLocalStorage()
     const {otherFunctions:{},studentFunctions:{addwishlistCourse, deleteFromWishlist, fetchWishlist}} = useAuth()
     const [userList, setUserList] = useState({})
@@ -145,40 +145,52 @@ const ComingSoon = () =>{
                     <Content>
                         <h1>Thank you for choosing to learn with Gotocourse.</h1>
                         <div>
-                            <p>Enrollment for this course starts</p>
+                            {
+                                student ? <p>Enrollment starts</p>:<p>Enrollment for this course starts</p>
+                            }
                             <h3>January 5, 2023</h3>
                         </div>
                         <div>
-                            <p>You can add this course to your wishlist</p>
+                            {
+                                !student &&
+
+                                <p>You can add this course to your wishlist</p>
+                            }
 
                             <div className="d-flex" style={{gap:"1.5rem"}}>
-                                <>
-                            {
-                                userList?.courseId  ? 
+                                {
+                                    !student &&
 
-                                <button onClick={deleteWishList} disabled={ deleteMutation.isLoading }> 
-                                    {
-                                        deleteMutation.isLoading ? <div className=" mb-0 spinner-border text-white">
-                                            <div className="visually-hidden">Loading...</div>
-                                        </div>
-                                        :
-                                        <span>Remove from Wishlist</span>
-                                    }
-                                </button>
-                                :
-                                <button onClick={addToWishList} disabled={ mutation.isLoading }> 
-                                    {
-                                        mutation.isLoading ? <div className=" mb-0 spinner-border text-white">
-                                            <div className="visually-hidden">Loading...</div>
-                                        </div>
-                                        :
-                                        <span>Add to wishlist</span>
-                                    }
-                                </button>
+                                    <>
+
+                                        {   
+                                            userList?.courseId  ? 
+
+                                            <button onClick={deleteWishList} disabled={ deleteMutation.isLoading }> 
+                                                {
+                                                    deleteMutation.isLoading ? <div className=" mb-0 spinner-border text-white">
+                                                        <div className="visually-hidden">Loading...</div>
+                                                    </div>
+                                                    :
+                                                    <span>Remove from Wishlist</span>
+                                                }
+                                            </button>
+                                            :
+                                            <button onClick={addToWishList} disabled={ mutation.isLoading }> 
+                                                {
+                                                    mutation.isLoading ? <div className=" mb-0 spinner-border text-white">
+                                                        <div className="visually-hidden">Loading...</div>
+                                                    </div>
+                                                    :
+                                                    <span>Add to wishlist</span>
+                                                }
+                                            </button>
 
 
-                            }
-                                </>
+                                        }
+                                    </>
+                                }
+
 
                                 <Link to="/">
                                     <button>Home</button>

@@ -102,6 +102,14 @@ const Navbar = ({ background }) => {
           id="navbarNav"
       >
           <ul className="navbar-nav me-5">
+                <li className="nav-item holder">
+                  <Link to="/" className="link nav-link courses me-4"
+                   style={{
+                    color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
+                  }}
+                  
+                  >Home</Link>
+                </li>
             {(location.pathname.split("/")[1] === "" || celebRoute) && (
               <>
                 <li className="nav-item holder">
@@ -156,9 +164,7 @@ const Navbar = ({ background }) => {
               ""
             ) : (
               <>
-                {/* <li className="nav-item d-flex align-items-center nav_link  me-4">
-                  <HowItWorks />
-                </li> */}
+                
                 <li className="nav-item d-flex align-items-center nav_link">
                   <Link to="/become-a-teacher" className="link"
                    style={{

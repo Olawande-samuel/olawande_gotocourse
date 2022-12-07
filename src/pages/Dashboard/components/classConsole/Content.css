@@ -116,7 +116,7 @@
     flex-direction: column;
     gap: 3rem;
     margin-top: 2rem;
-    overflow-y: scroll;
+    overflow-y: auto;
 
 }
 
@@ -1121,7 +1121,7 @@
     display: grid;
     /* grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px)); */
     grid-template-columns: 1fr;
-    grid-auto-rows: 452px;
+    grid-auto-rows: minmax(min(200px, 350px), 350px);
     width: 100%;
     padding-top: 2rem;
     flex-wrap: wrap;
@@ -1137,9 +1137,14 @@
     border-radius: 8px;
 
 }
-
+.small__filecard{
+    height: 150px ;
+}
+.small__filecard .filebottom {
+    height: 100%;
+}
 .filetop{
-    height:80%;
+    height:70%;
     /* border: 2px solid red; */
 
 }
@@ -1155,7 +1160,7 @@
 }
 
 .filebottom{
-    height: 20%;
+    height: 30%;
     padding: 14px 9px;
     /* border: 2px solid blue; */
     position: relative;
@@ -1165,9 +1170,13 @@
 .filebottom h3{
     font-size: 16px;
     font-weight: 700;
+    margin-bottom: 1rem;
 
 }
 
+.small__filecard .filebottom {
+    height: 100%;
+}
 .filebutton{
     position: absolute;
     bottom: 5px;

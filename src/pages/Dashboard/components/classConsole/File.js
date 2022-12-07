@@ -212,21 +212,46 @@ function FileCard({ title, fileName, contentId, type }) {
     }
     return (
 
-        <div className="filecard">
+        <div className={`filecard ${type === "text/csv" && "small__filecard"}`}>
             {(type.includes("video") || type.includes("image")) &&
                 <div className="filetop">
                     {type === "video/mp4" ? 
                         <video src={fileName} controls muted style={{ width: "100%", height: "100%", border: "1px solid #eee", borderRadius: "8px" }} />
                         : 
-                        <img src={fileName} alt="" />
+                        (
+                            <img src={fileName} alt="" />
+                        )
                     }
+
                 </div>
              }
+             
+                    {(type === "application/pdf" || type === "application/vnd.openxmlformats-officedocument.presentationml.presentation") &&
+                        <div className="filetop">
+                            <object type={type}
+                                data={fileName}
+                                width="100%"
+                                height="200">
+                            </object>
+                        </div>
+                    }
+
+                    {(type === "text/csv") &&
+                        <div className="filetop d-none">
+                            <object type={type}
+                                data={fileName}
+                                width="100%"
+                                height="200">
+                            </object>
+                        </div>
+                    }
+            
+
             <div className="filebottom">
                 <h3>{title}</h3>
                 <div className='filebutton'>
                     <i>
-                        <a href={fileName} download>
+                        <a href={fileName} download="gotocourse data" target="_blank" rel="noreferrer">
                             <Tooltip title="download">
                                 <IconButton>
                                     <IoMdCloudDownload size="1.5rem" color="var(--theme-blue)" />

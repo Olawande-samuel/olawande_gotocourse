@@ -350,7 +350,8 @@ function App() {
               <Route path="student-how-it-works" element={<HIWStudent />} />
 
                 {/* STUDENTS */}
-              <Route path="student" element={<Out />}>
+              <Route path="student" element={<ComingSoon student={true} />}>
+              {/* <Route path="student" element={<Out />}> */}
                 <Route path="" element={<StudentDashboard />} />
                 <Route path="profile" element={<StudentProfile />} />
                 <Route path="classes" element={<StudentClasses />} />
