@@ -40,35 +40,9 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
         ajax.addEventListener("load", completeHandler, false);
         ajax.addEventListener("error", errorHandler, false);
         ajax.addEventListener("abort", abortHandler, false);
-        ajax.open("POST", `${process.env.REACT_APP_BASEURL}/file/upload`); // http://www.developphp.com/video/JavaScript/File-Upload-Progress-Bar-Meter-Tutorial-Ajax-PHP
-        //use file_upload_parser.php from above url
+        ajax.open("POST", `${process.env.REACT_APP_BASEURL}/file/upload`);
         ajax.setRequestHeader("Authorization",  "Bearer " + value.token); 
         ajax.send(formdata);
-        // try{
-        //     const res = await uploadFile(formdata, value?.token);
-        //     setLoading(false)
-
-        //     const {success, message, statusCode} = res;
-        //     if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
-        //     else {
-
-        //         const {data} = res;
-        //         createFileContent(data.name, data.fileId, file.name)
-        //         setIsOpen(false)
-        //         setFile(null)
-        //         setData(_ => data.name);
-        //         toast.success(message)
-        //     }
-        // }catch(err){
-        //     console.error(err.statusCode)
-        //     setLoading(false)
-        //     toast.error(err.message)
-        //     if(err.statusCode === 2){
-        //         localStorage.clear()
-        //         // navigate("/")
-        //     }
-        // }
-
     }
 
 
@@ -79,9 +53,9 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
         setProgress(Math.round(percent) + "% uploaded... please wait")
         // _("progressBar").value = Math.round(percent);
         // _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
-      }
+    }
       
-      function completeHandler(event) {
+    function completeHandler(event) {
         setLoading(false)
         
         console.log(JSON.parse(event.target.response))
@@ -91,20 +65,17 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
         createFileContent(data.name, data.fileId, file.name)
         setIsOpen(false)
         setProgress(0); //wil clear progress bar after successful upload
-      }
+    }
       
-      function errorHandler(event) {
+    function errorHandler(event) {
         setLoading(false)
         console.error(event)
         toast.error(event.message)
-
-        // _("status").innerHTML = "Upload Failed";
-      }
-      
-      function abortHandler(event) {
+    }
+    
+    function abortHandler(event) {
         setLoading(false)
-        // _("status").innerHTML = "Upload Aborted";
-      }
+    }
     const mutation = useMutation(([token, data])=>addFile(token, data), {
         onSuccess: (res)=> {
             console.log(res)
