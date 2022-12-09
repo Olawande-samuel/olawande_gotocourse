@@ -64,7 +64,7 @@ export default function Note() {
         onError: (err)=> console.error(err)
     })
 
-    const noteQuery = useQuery([fetchNote, contentId, userdata.token],() => fetchNote(userdata.token, contentId), {
+    const noteQuery = useQuery(["fetch note", fetchNote, contentId, userdata.token],() => fetchNote(userdata.token, contentId), {
         onSuccess: (res)=> {
             console.log(res)
             if(res.data?.length > 0){

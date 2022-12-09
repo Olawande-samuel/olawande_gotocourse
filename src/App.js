@@ -555,6 +555,9 @@ function App() {
                 <Route path="chat" element={<TeacherChat />} />
               </Route>
 
+              {/*                   ADMIN DASHBOARD                     */}
+
+
               <Route path="admin">
                 <Route path="" element={<AdminDashboard />} />
                 <Route path="profile" element={<AdminProfile />} />
