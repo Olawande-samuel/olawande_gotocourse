@@ -497,6 +497,8 @@ function App() {
                         <Route path="group/:groupID" element={<GroupContent />} />
                         <Route path="chat/:userId" element={<MailDetail />} />
                       </Route>
+
+
                       <Route path="live-class" element={<Out />}>
                         <Route index element={<LiveClassInfo />} />
                         <Route path="live" element={<LiveClass />} />
@@ -505,6 +507,7 @@ function App() {
                         <Route path="stream" element={<VideDiv />} />
                         </Route>
                       </Route>
+                      
                       <Route path="file" element={<File />} />
                       <Route path="note" element={<Note />} />
                       <Route path="quiz" element={<Out />}>
