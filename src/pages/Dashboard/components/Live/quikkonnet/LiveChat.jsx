@@ -554,6 +554,9 @@ function AllUsers(){
             }
         }
     })
+
+
+
    const allAdmins = useQuery(userData?.token && ["get all admins"], () => fetchAdmin(), {
         enabled: isStudent || isTeacher,
         onSuccess: (res)=>{
@@ -564,15 +567,17 @@ function AllUsers(){
             }
         }
     })
-   
+
+
+
    console.log({students})
     return (
         <>
         {
-            [...admins, ...students]?.map((item,i)=>(
-                <ContactWindow {...item} all={item} />
+          [...admins, ...students]?.map((item,i)=>(
+              <ContactWindow {...item} all={item} />
 
-            ))
+          ))
         }
         </>
     )

@@ -12,7 +12,7 @@ import "./console.css";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
 import { Box, Modal, Skeleton, Switch } from "@mui/material";
-import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../../../contexts/Auth";
 import { AdvancedError } from "../../../../classes";
 import { toast, ToastContainer } from "react-toastify";
@@ -25,6 +25,7 @@ import { IoInfiniteOutline} from "react-icons/io5"
 import { MenuOptionsPopup } from "./components";
 import {FiEdit} from "react-icons/fi"
 import { BiTrash } from "react-icons/bi";
+import { useEffect } from "react";
 
 export function LiveClassInfo({ type }) {
   
@@ -36,12 +37,12 @@ export function LiveClassInfo({ type }) {
   const userdata = getItem(KEY)
 
   const [schedule, setSchedule] = useState([])
+  const queryClient = useQueryClient()
 
 
   const fetchSchedule = useQuery(["fetch live schedule", userdata?.token],()=>fetchLiveSchedule(userdata.token, classId), {
     
     onSuccess: res => {
-      console.log(res)
       if(res.success){
         setSchedule(res.data)
         return
@@ -55,7 +56,12 @@ export function LiveClassInfo({ type }) {
   })
 
 
-console.log({schedule})
+
+  function refresh(e){
+    e.preventDefault();
+    queryClient.invalidateQueries({ queryKey: ["fetch live schedule"]}) 
+  }
+
 
   return (
     <div className={style.live_class}>
@@ -82,7 +88,7 @@ console.log({schedule})
         {type !== "student" && (
           <button onClick={() => setOpen(true)}>Schedule a live class</button>
         )}
-        <button>Refresh list</button>
+        <button onClick={refresh}>Refresh list</button>
       </div>
 
       <div className={style.currently_live}>
@@ -95,17 +101,18 @@ console.log({schedule})
             <>
             <Skeleton sx={{marginBottom: 10, borderTopLeftRadius: 8, borderTopRightRadius: 8}} animation="wave"  variant="rectangular" width={"min(240px, 300px)"} height={320} />
             <Skeleton sx={{marginBottom: 10, borderTopLeftRadius: 8, borderTopRightRadius: 8}} animation="wave"  variant="rectangular" width={"min(240px, 300px)"} height={320} />
+            <Skeleton sx={{marginBottom: 10, borderTopLeftRadius: 8, borderTopRightRadius: 8}} animation="wave"  variant="rectangular" width={"min(240px, 300px)"} height={320} />
             </>
             :
             schedule?.map((item, id) => (
-              <CurrentLive {...item} key={id} />
+              <CurrentLive {...item} key={id} setOpen={setOpen} />
             ))
           
           }
 
         </div>
       </div>
-      <ScheduleClass open={open} setOpen={setOpen} />
+      <ScheduleClass open={open} setOpen={setOpen} editDataArray={schedule} />
     </div>
   );
 }
@@ -133,7 +140,10 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
 
 
 
-  function handleEdit(){}
+  function handleEdit(){
+    navigate(`?edit=${_id}`)
+    setOpen(true)
+  }
 
 
 
@@ -155,7 +165,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
 
   return (
     <div className={style.live_card}>
-      <MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} />
+      <MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} schedule={true} />
       <h6>{roomName}</h6>
       <div className={style.live_card_schedule}>
         <div>
@@ -192,7 +202,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
   );
 }
 
-export function ScheduleClass({ open, setOpen }) {
+export function ScheduleClass({ open, setOpen , editDataArray}) {
   const [inputType, setInputType] = useState({
     startDate: false,
     endDate: false,
@@ -225,10 +235,18 @@ export function ScheduleClass({ open, setOpen }) {
     endTime: "",
   });
   const [loading, setLoading]= useState(false)
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams();
+  const edit = searchParams.get("edit")
+
+
 
   function handleChange(e) {
     setFormstate({ ...formstate, [e.target.name]: e.target.value });
   }
+
+
+  // TODO: Add schedule edit endpoint
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -277,12 +295,30 @@ export function ScheduleClass({ open, setOpen }) {
     }
   }
 
-  // const fetchClass = useQuery(["fetch all live classes", user.token], ()=>fetchLiveClasses(userdata.token, classId))
+
+
+  function handleClose(){
+    edit && navigate(-1)
+    setOpen(false)
+  }
+
+
+  useEffect(() => {
+    
+    if(edit){
+      let editData = editDataArray?.find(item => item._id === edit)
+      if(editData?._id){
+        setFormstate(editData)
+      }
+    }
+  }, [edit, editDataArray])
+
+  
 
   return (
     <Modal
       open={open}
-      onClose={() => setOpen(false)}
+      onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -400,7 +436,6 @@ export function Intermission() {
     const {generalState, setGeneralState} = useAuth()
     const {getItem}= useLocalStorage()
   
-    console.log(student);
   
     const roomid = getItem("gotocourse-roomid")
     function joinLiveClass(){

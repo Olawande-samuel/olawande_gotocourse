@@ -196,14 +196,14 @@ const LiveClass = () => {
   )
 }
 
-export function Navbar({user}){
+export function Navbar({user, isPresenting}){
 
   function handleNavigation() {
     user.userType === "student" ?
-        window.location.assign("/student")
-        :
-        user.userType === "teacher" ?
-            window.location.assign("/teacher") : user.userType === "admin" ? window.location.assign("/admin") : window.location.assign("/")
+    window.location.assign("/student")
+    :
+    user.userType === "teacher" ?
+    window.location.assign("/teacher") : user.userType === "admin" ? window.location.assign("/admin") : window.location.assign("/")
 
   } 
   return (
@@ -214,9 +214,12 @@ export function Navbar({user}){
         </Link>
         <div className={style.present_user}>
           <span className={style.present_profile}>
-            <img src={mainuser} alt="" />
+            <img src={user.profileImg} alt="" />
           </span>
-          <span>Marcus is presenting</span>
+          {
+            isPresenting &&
+            <span>Marcus is presenting</span>
+          }
         </div>
         <div className={style.live_back_button}>
           <button className={style.lb_button} onClick={handleNavigation} >Class Console</button>

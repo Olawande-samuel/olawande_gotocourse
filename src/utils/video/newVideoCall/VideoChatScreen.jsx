@@ -602,7 +602,7 @@ const VideoChatScreen = () => {
                     <img src={userProfile.profileImg} alt="avatar" />
                 </div>
             </HeadBar> */}
-            <Navbar user={userProfile} />
+            <Navbar user={userProfile} isPresenting={isPresenting} />
             <Content>
                 <VideoWrapper isPresenting={isPresenting}>
                     <div onClick={closeRecordedModal} className="recoreded-media">
@@ -615,7 +615,7 @@ const VideoChatScreen = () => {
 
                         <UserCallBlock showText={localStream.current?.getVideoTracks()[0].enabled}>
                             <video className="client-local-stream" src="" muted={true}></video>
-                            <p>USER Q</p>
+                            <p>{userProfile.firstName} {userProfile.lastName}</p>
                         </UserCallBlock>
                     </StreamWrapper>
                     {
