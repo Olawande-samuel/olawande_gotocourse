@@ -23,12 +23,25 @@ import { KEY } from "../../../../constants";
 import { useQuery } from "@tanstack/react-query";
 
 export function LiveClassInfo({ type }) {
+  
+  const {classId} = useParams()
   const [open, setOpen] = useState(false);
-  const { generalState, setGeneralState } = useAuth();
-
+  const { generalState, consoleFunctions:{fetchLiveSchedule}, setGeneralState } = useAuth();
   const { scheduledClasses } = generalState;
+  const {getItem} = useLocalStorage();
+  const userdata = getItem(KEY)
 
-  console.log(scheduledClasses);
+
+
+  const fetchSchedule = useQuery(["fetch live schedule", userdata?.token],()=>fetchLiveSchedule(userdata.token, classId), {
+    
+    onSuccess: res => console.log(res),
+    onError: err => console.log(err)
+  })
+
+
+
+
   return (
     <div className={style.live_class}>
       <ToastContainer
