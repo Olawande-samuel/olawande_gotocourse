@@ -11,7 +11,7 @@ import style from "./style.module.css";
 import "./console.css";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
-import { Box, Modal, Switch } from "@mui/material";
+import { Box, Modal, Skeleton, Switch } from "@mui/material";
 import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../../../contexts/Auth";
 import { AdvancedError } from "../../../../classes";
@@ -20,7 +20,11 @@ import axios from "axios";
 import CONFIG from "../../../../utils/video/appConst";
 import { useLocalStorage } from "../../../../hooks";
 import { KEY } from "../../../../constants";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { IoInfiniteOutline} from "react-icons/io5"
+import { MenuOptionsPopup } from "./components";
+import {FiEdit} from "react-icons/fi"
+import { BiTrash } from "react-icons/bi";
 
 export function LiveClassInfo({ type }) {
   
@@ -31,16 +35,27 @@ export function LiveClassInfo({ type }) {
   const {getItem} = useLocalStorage();
   const userdata = getItem(KEY)
 
+  const [schedule, setSchedule] = useState([])
 
 
   const fetchSchedule = useQuery(["fetch live schedule", userdata?.token],()=>fetchLiveSchedule(userdata.token, classId), {
     
-    onSuccess: res => console.log(res),
-    onError: err => console.log(err)
+    onSuccess: res => {
+      console.log(res)
+      if(res.success){
+        setSchedule(res.data)
+        return
+      }
+
+    },
+    onError: err => {
+      toast.error("Error fetching schedule")
+      console.log(err)
+    }
   })
 
 
-
+console.log({schedule})
 
   return (
     <div className={style.live_class}>
@@ -71,12 +86,23 @@ export function LiveClassInfo({ type }) {
       </div>
 
       <div className={style.currently_live}>
-        <p>Scheduled Classes ({scheduledClasses.length})</p>
+        <p>Scheduled Classes ({schedule?.length})</p>
 
         <div className={style.live_list}>
-          {scheduledClasses.map((item, id) => (
-            <CurrentLive {...item} key={id} />
-          ))}
+          {
+          
+          fetchSchedule?.isLoading ? 
+            <>
+            <Skeleton sx={{marginBottom: 10, borderTopLeftRadius: 8, borderTopRightRadius: 8}} animation="wave"  variant="rectangular" width={"min(240px, 300px)"} height={320} />
+            <Skeleton sx={{marginBottom: 10, borderTopLeftRadius: 8, borderTopRightRadius: 8}} animation="wave"  variant="rectangular" width={"min(240px, 300px)"} height={320} />
+            </>
+            :
+            schedule?.map((item, id) => (
+              <CurrentLive {...item} key={id} />
+            ))
+          
+          }
+
         </div>
       </div>
       <ScheduleClass open={open} setOpen={setOpen} />
@@ -84,20 +110,53 @@ export function LiveClassInfo({ type }) {
   );
 }
 
-export function CurrentLive({ title, startDate, startTime, endDate, endTime, roomid }) {
+export function CurrentLive({ setOpen, roomName, status, startDate, startTime, endDate, endTime, roomid, _id }) {
+
+  const contextMenu = [
+    {
+      id: 1,
+      title:"Edit",
+      iconImg: FiEdit,
+      event: handleEdit
+    },
+    {
+      id: 2,
+      title:"Delete",
+      iconImg: BiTrash,
+      event: handleDelete
+    },
+  ]
   const {updateItem}= useLocalStorage()
   const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openAnchor = Boolean(anchorEl);
+
+
+
+  function handleEdit(){}
+
+
+
+  function handleDelete(){}
+
+
 
   function gotoLiveClass(e){
     e.preventDefault()
 
-    updateItem("gotocourse-roomid", roomid);  
+    updateItem("gotocourse-roomid", _id);  
     navigate("connect")
   }
 
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
   return (
     <div className={style.live_card}>
-      <h6>{title}</h6>
+      <MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} />
+      <h6>{roomName}</h6>
       <div className={style.live_card_schedule}>
         <div>
           <i>
@@ -110,7 +169,7 @@ export function CurrentLive({ title, startDate, startTime, endDate, endTime, roo
             <AiFillClockCircle />
           </i>
           <span>
-            {startTime} - {endTime} GMT+0100 (West Africa Standard Time)
+            {startTime ? startTime : "Now"} - {endTime ? endTime : <IoInfiniteOutline />} UTC{ new Date().getTimezoneOffset()/10}
           </span>
         </div>
         <div>
@@ -153,6 +212,8 @@ export function ScheduleClass({ open, setOpen }) {
     p: 4,
   };
 
+  const queryClient = useQueryClient()
+
   const {classId} = useParams()
   const {getItem}= useLocalStorage()
   const user = getItem(KEY)
@@ -171,41 +232,46 @@ export function ScheduleClass({ open, setOpen }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if ( !formstate.title || !formstate.startDate || !formstate.startTime || !formstate.endTime ) {
+
+    if ( !formstate.roomName || !formstate.startDate || !formstate.startTime  ) {
       toast.error("All fields are required");
+
       throw new AdvancedError("All fields are required", 0);
     }
     
     try {
       setLoading(true)
       const res = await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
-          roomName: formstate.title,
+        ...formstate,  
           userId: user.userId,
           classId
       })
-      
-      console.log(res.data.data)
-  
+
       res.data.success && toast.success("Schedule created successfully")
-  
+      
       localStorage.setItem("video-room", res.data.data._id)
-  
+      
+      queryClient.invalidateQueries("fetch live schedule")
+      
       setGeneralState({
         ...generalState,
         scheduledClasses: [...generalState.scheduledClasses, {...formstate, roomid: res.data.data._id}],
       });
   
       setFormstate({
-          startDate: "",
-          endDate: "",
-          startTime: "",
-          endTime: "",
+        startDate: "",
+        endDate: "",
+        startTime: "",
+        endTime: "",
       });
+
       setOpen(false);
       
     } catch (error) {
       console.error(error)
+
       toast.error(error.message)
+
     } finally {
       setLoading(false)
     }
@@ -223,16 +289,16 @@ export function ScheduleClass({ open, setOpen }) {
       <Box sx={modalStyle}>
         <form className={style.class_schedule} onSubmit={handleSubmit}>
           <div className="form-group my-3">
-            <label htmlFor="title" className="form-label generic_label">
+            <label htmlFor="roomName" className="form-label generic_label">
               Title
             </label>
             <input
               type="text"
-              name="title"
-              id="title"
+              name="roomName"
+              id="roomName"
               className="form-control"
               onChange={handleChange}
-              value={formstate.title}
+              value={formstate.roomName}
             />
           </div>
           <div className="form-group my-3">
@@ -379,3 +445,5 @@ export function Intermission() {
     </section>
   );
 }
+
+
