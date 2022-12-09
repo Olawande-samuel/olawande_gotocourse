@@ -3,6 +3,10 @@ import { NavLink, Outlet, useNavigate, useParams, useSearchParams } from 'react-
 import { useState } from 'react'
 import processed from '../../../../images/processed.png'
 import {
+    BsDownload,
+    BsMic,
+    BsMicMute,
+    BsPauseCircle,
     BsRecordCircle,
     BsThreeDotsVertical,
   } from "react-icons/bs";
@@ -12,7 +16,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Link, useLocation } from "react-router-dom";
-import { Menu, MenuItem, Modal } from '@mui/material';
+import { IconButton, Menu, MenuItem, Modal, Tooltip } from '@mui/material';
 import { HiOutlineCloudUpload } from 'react-icons/hi';
 import { BiStopCircle, BiTrash, BiVideoRecording } from 'react-icons/bi';
 import { MdPresentToAll } from 'react-icons/md';
@@ -21,7 +25,7 @@ import { toast } from 'react-toastify';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AdvancedError } from '../../../../classes';
 import { useLocalStorage } from '../../../../hooks';
-import { CLASSID, getDate, getTime, KEY } from '../../../../constants';
+import { CLASSID, getFullDate, getTime, KEY } from '../../../../constants';
 import { useAuth } from '../../../../contexts/Auth';
 import { ViewModal } from './File';
 
@@ -30,6 +34,7 @@ import { useRef } from 'react';
 import { useEffect } from 'react';
 import { border } from '@mui/system';
 import { IoCloudUploadOutline } from 'react-icons/io5';
+import { BsPlay } from "react-icons/bs";
 import { Accord } from '.';
 
 function TabPanel(props) {
@@ -166,14 +171,15 @@ function SuiteBox({x, id}){
             </div>
             <p className='suite__title'>{x.originalName}</p>
             <span>{x.type}</span>
-            <span>{x.updatedAt ? getDate(x.updatedAt) : ""}</span>
+            <span>Status: Processed</span>
+            <span>{x.updatedAt ? getFullDate(x.updatedAt) : ""}</span>
             {/* <p className='suite__title'>created in: IT AUDIT</p> */}
             <div className="suite__btn">
                 <button onClick={()=>setAddToClassroom(true)}>Add to classroom</button>
                 <button onClick={(e)=>openPreview(e, x.type)}>Preview</button>
             </div>
             <AddtoClassRoom open={addToClassroom} setOpen={setAddToClassroom} name={x.name} originalName={x.originalName} />
-            <ViewModal open={open} setOpen={setOpen} file={x.name} creator={true} type={x.type} />
+            <ViewModal open={open} setOpen={setOpen} file={`${process.env.REACT_APP_VIDEOURL}${x.name}`} creator={true} type={x.type} />
         </div>
     )
 }
@@ -386,40 +392,86 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
     const [file, setFile] = useState(null);
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false)
+    const [progress, setProgress] = useState(0)
     const contentId = searchParams.get("content")
+
 
     const {classId} = useParams()
 
+    // async function uploadFileHandler(e){
+    //     try{
+    //         setLoading(true)
+    //         const formdata = new FormData();
+    //         formdata.append('file', file, file.name);
+    //         const res = await uploadFile(formdata, value?.token);
+    //         setLoading(false)
+
+    //         const {success, message, statusCode} = res;
+    //         if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+    //         else {
+
+    //             const {data} = res;
+    //             createFileContent(data.fileId)
+    //             setIsOpen(false)
+    //             setData(_ => data.name);
+    //             toast.success(message)
+    //         }
+    //     }catch(err){
+    //         console.error(err.statusCode)
+    //         setLoading(false)
+    //         toast.error(err.message)
+    //         if(err.statusCode === 2){
+    //             localStorage.clear()
+    //             // navigate("/")
+    //         }
+    //     }
+
+    // }
+
     async function uploadFileHandler(e){
-        try{
-            setLoading(true)
-            const formdata = new FormData();
-            formdata.append('file', file, file.name);
-            const res = await uploadFile(formdata, value?.token);
-            setLoading(false)
+        setLoading(true)
+        const formdata = new FormData();
+        formdata.append('file', file, file.name);
+        var ajax = new XMLHttpRequest();
 
-            const {success, message, statusCode} = res;
-            if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
-            else {
-
-                const {data} = res;
-                createFileContent(data.fileId)
-                setIsOpen(false)
-                setData(_ => data.name);
-                toast.success(message)
-            }
-        }catch(err){
-            console.error(err.statusCode)
-            setLoading(false)
-            toast.error(err.message)
-            if(err.statusCode === 2){
-                localStorage.clear()
-                // navigate("/")
-            }
-        }
-
+        ajax.upload.addEventListener("progress", progressHandler, false);
+        ajax.addEventListener("load", completeHandler, false);
+        ajax.addEventListener("error", errorHandler, false);
+        ajax.addEventListener("abort", abortHandler, false);
+        ajax.open("POST", `${process.env.REACT_APP_BASEURL}/file/upload`);
+        ajax.setRequestHeader("Authorization",  "Bearer " + value.token); 
+        ajax.send(formdata);
     }
 
+    function progressHandler(event) {
+        console.log({event})
+        var percent = (event.loaded / event.total) * 100;
+        console.log(percent)
+        setProgress(Math.round(percent) + "% uploaded... please wait")
+        // _("progressBar").value = Math.round(percent);
+        // _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+    }
+      
+    function completeHandler(event) {
+        setLoading(false)
+        let { data,message } = JSON.parse(event.target.response)
+        toast.success(message)
+        createFileContent(data.fileId)
+        setIsOpen(false)
+        setData(_ => data.name);
+        setProgress(0)
+    }
+      
+    function errorHandler(event) {
+        setLoading(false)
+        console.error(event)
+        toast.error(event.message)
+        
+    }
+    
+    function abortHandler(event) {
+        setLoading(false)
+    }
     const mutation = useMutation(([token, data])=>addFile(token, data), {
         onSuccess: (res)=> {
             console.log(res)
@@ -489,12 +541,27 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
             loading={loading}
             copy={copy}
             uploadFileHandler={uploadFileHandler}
+            progress={progress}
             />
         )
     )
 }
 export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewImage, uploadType, fileCreate }) => {
-
+    const style = {
+        position: "absolute",
+        bottom: 0,
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "100%",
+        height: "100%",
+        // overflowY:"scroll",
+        background: "#fff",
+        border: "1px solid #eee",
+        borderRadius: "10px",
+        boxShadow: 24,
+        p: 6,
+        padding: "4rem 2rem .3rem 2rem",
+    };
     const [searchParams, setSearchParams] = useSearchParams();
     const queryClient = useQueryClient()
 
@@ -507,9 +574,10 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
 
     const [videoData, setVideoData] = useState(null)
     const [previewData, setPreviewData] = useState(null)
+    const [progress, setProgress] = useState(0)
     const videoRef = useRef()
     
-    const { status, startRecording, stopRecording, mediaBlobUrl, previewStream } = useReactMediaRecorder({ video: true, onStop: (blobUrl, blob) => {setVideoData(blob)
+    const { status, startRecording, stopRecording, muteAudio, unMuteAudio, pauseRecording, resumeRecording, mediaBlobUrl, previewStream, clearBlobUrl } = useReactMediaRecorder({ video: true, onStop: (blobUrl, blob) => {setVideoData(blob)
             setPreviewData(blobUrl)
         },
         onStart: ()=>{
@@ -537,37 +605,53 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
 
     // }, [mediaBlobUrl])
 
-    console.log({previewStream})
-
+    
     async function uploadFileHandler(e){
-        try{
-            setLoading(true)
-            const formdata = new FormData();
-            formdata.append('file', videoData, fileName);
-            const res = await uploadFile(formdata, value?.token);
-            setLoading(false)
-
-            const {success, message, statusCode} = res;
-            if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
-            else {
-
-                const {data} = res;
-                createFileContent(data.fileId)
-                setIsVideoOpen(false)
-                toast.success(message)
-            }
-        }catch(err){
-            console.error(err.statusCode)
-            setLoading(false)
-            toast.error(err.message)
-            if(err.statusCode === 2){
-                localStorage.clear()
-                // navigate("/")
-            }
-        } finally {
-            setLoading(false)
+        if(!fileName){
+            toast.error('Please provide a file name')
+            return
         }
+        setLoading(true)
+        const formdata = new FormData();
+        formdata.append('file', videoData, fileName);
+        var ajax = new XMLHttpRequest();
 
+        ajax.upload.addEventListener("progress", progressHandler, false);
+        ajax.addEventListener("load", completeHandler, false);
+        ajax.addEventListener("error", errorHandler, false);
+        ajax.addEventListener("abort", abortHandler, false);
+        ajax.open("POST", `${process.env.REACT_APP_BASEURL}/file/upload`);
+        ajax.setRequestHeader("Authorization",  "Bearer " + value.token); 
+        ajax.send(formdata);
+    }
+
+    function progressHandler(event) {
+        console.log({event})
+        var percent = (event.loaded / event.total) * 100;
+        console.log(percent)
+        setProgress(Math.round(percent) + "% uploaded... please wait")
+        // _("progressBar").value = Math.round(percent);
+        // _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+    }
+      
+    function completeHandler(event) {
+        setLoading(false)
+        let { data,message } = JSON.parse(event.target.response)
+        toast.success(message)
+        createFileContent(data.fileId)
+        setIsVideoOpen(false)
+        setProgress(0)
+    }
+      
+    function errorHandler(event) {
+        setLoading(false)
+        console.error(event)
+        toast.error(event.message)
+        
+    }
+    
+    function abortHandler(event) {
+        setLoading(false)
     }
 
     const mutation = useMutation(([token, data])=>addFile(token, data), {
@@ -590,26 +674,68 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
         }
     }
 
-    const style = {
-        position: "absolute",
-        bottom: 0,
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "100%",
-        height: "100%",
-        // overflowY:"scroll",
-        background: "#fff",
-        border: "1px solid #eee",
-        borderRadius: "10px",
-        boxShadow: 24,
-        p: 6,
-        padding: "4rem 2rem .3rem 2rem",
-    };
+    // download recording
+
+    const downloadRecording = () => {
+        if(!fileName){
+            toast.error("Please provide a file name")
+            return
+        }
+        const pathName = `${fileName}.mp4`;   
+        try {
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          // for IE
+          window.navigator.msSaveOrOpenBlob(mediaBlobUrl, pathName);
+        } else {
+          // for Chrome
+          const link = document.createElement("a");
+          link.href = mediaBlobUrl;
+          link.download = pathName;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+        } catch (err) {
+          console.error(err);
+        }
+     };
+
+    
+
+    const [muted, setMuted] = useState(false)
+    const [recordingStatus, setRecordingStatus] = useState(false)
+    
+    function handleMute(e){
+        e.preventDefault()
+        setMuted(true)
+        muteAudio()
+    }
+
+
+    function handleUnmute(e){
+        e.preventDefault()
+        setMuted(false)
+        // console.log(unMuteAudio)
+        unMuteAudio()
+
+    }
+
+    function handlePauseRecording() {
+        pauseRecording()
+        setRecordingStatus(false)
+    }
+    function handleResumeRecording(){
+        resumeRecording();
+        setRecordingStatus(true)
+    }
     return(
         <Modal
           open={isVideoOpen}
           onClose={(e) => {
+            clearBlobUrl()
+            setPreviewData(null)
             setIsVideoOpen((_) => false);
+            
           }}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
@@ -622,6 +748,7 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
                     <div className="visually-hidden">Loading...</div>
                 </div>
                 <small className="d-block">Upload in progress. Do not close this page </small>
+                <small className="d-block">{progress}</small>
                 </di>
                 :
               <div className='position-relative h-100'>
@@ -632,7 +759,7 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
                 <span className="text-muted">Stream Status:</span>
                   <span className="fw-bold text-uppercase" style={{color:"var(--theme-blue)"}}>{status}</span>
                 </div>
-                <div style={{overflowY:"scroll", maxHeight:"100%", paddingBottom: "2rem"}}>
+                <div style={{overflowY:"auto", maxHeight:"100%", paddingBottom: "2rem", paddingLeft:".5rem"}}>
                     {
                         
                         !previewData && <video ref={videoRef} style={{width: "100%", height:"100%"}}  autoPlay controls />
@@ -642,8 +769,17 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
                         previewData &&
                         <>
                             
-                            <div className="my-1" style={{width:"min(100%, 450px)"}}> 
-                                <input type="text" name="title" id="title " className="form-control"  placeholder='Enter file name' value={fileName} onChange={(e)=>setFileName(e.target.value)} />
+                            <div className="my-3 d-flex align-items-center justify-content-between">
+                                <div className="my-3" style={{width:"min(100%, 450px)"}}> 
+                                    <input type="text" name="title" id="title " className="form-control"  style={{outline:"1.5px solid var(--theme-blue)"}} placeholder='Enter file name' value={fileName} onChange={(e)=>setFileName(e.target.value)} onBlur={()=>console.log("blurred")} onFocus={()=>console.log("focused")} />
+                                </div>
+                                <button 
+                                    className="button py-2 px-4"
+                                    onClick={(e)=>{
+                                    e.preventDefault();
+                                    clearBlobUrl()
+                                    setPreviewData(null)
+                                }}>Clear</button>
                             </div>
                             <video src={previewData} controls autoPlay style={{width: "100%", height:"100%", aspectRatio:"3/1"}}  /> 
                             
@@ -656,32 +792,103 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
                   <div className="d-flex justify-content-center position-fixed video_controls" style={{bottom:5, width:"100%", gap:"1rem"}}>
                     {
                         (status === "stopped" ||status === "idle")&&
-                        <button className="rounded-pill border-0" style={{background:"#eee", color: "#fff", padding:".7rem"}} onClick={startRecording}>
-                            <i><BsRecordCircle color='red' size="1.5rem" /></i>
-                        </button>
+                        <TooltipIcon
+                            title="start recording"
+                            handleClick={startRecording}
+                            icon={BsRecordCircle}
+                            mutation={null}
+                        />
+                        // <button className="rounded-pill border-0" style={{background:"#eee", color: "#fff", padding:".7rem"}} onClick={startRecording}>
+                        //     <i><BsRecordCircle color='red' size="1.5rem" /></i>
+                        // </button>
 
                     }
                     {
                         status === "recording" &&
-                        <button className="rounded-pill border-0" style={{background:"var(--theme-orange)", color: "#fff", padding:".7rem"}} onClick={stopRecording}>
-                            <i><BiStopCircle size="1.5rem" /></i>
-                        </button>
+                        <>
+                            <TooltipIcon
+                                title="stop recording"
+                                handleClick={stopRecording}
+                                icon={BiStopCircle}
+                                mutation={null}
+                            />
+                            
+                            <TooltipIcon
+                                title="pause recording"
+                                handleClick={handlePauseRecording}
+                                icon={BsPauseCircle}
+                                mutation={mutation}
+                            />
+
+                            {
+                                muted ? 
+                                <TooltipIcon
+                                    title="unmute"
+                                    handleClick={handleUnmute}
+                                    icon={BsMicMute}
+                                    mutation={null}
+                                />
+                                
+                                :
+                                <TooltipIcon
+                                    title="mute mic"
+                                    handleClick={handleMute}
+                                    icon={BsMic}
+                                    mutation={null}
+                                />
+                            }
+                        </>
                     }
                     {
                         status === "stopped" &&
-                        <button className="rounded-pill border-0" style={{background:"var(--theme-orange)", color: "#fff", padding:".7rem"}} onClick={uploadFileHandler}>
-                            {
-                                mutation.isLoading ? 
-                                <div className="spinner-border text-white">
-                                    <div className="visually-hidden">Loading...</div>
-                                </div>
-                                :
-                                <span><i><IoCloudUploadOutline size="1.5rem"  /></i></span>
+
+                        <TooltipIcon
+                            title="Upload"
+                            handleClick={uploadFileHandler}
+                            icon={IoCloudUploadOutline}
+                            mutation={mutation}
+                        />
+                        // <button className="rounded-pill border-0" style={{background:"var(--theme-orange)", color: "#fff", padding:".7rem"}} onClick={uploadFileHandler}>
+                        //     {
+                        //         mutation.isLoading ? 
+                        //         <div className="spinner-border text-white">
+                        //             <div className="visually-hidden">Loading...</div>
+                        //         </div>
+                        //         :
+                        //         <span><i><IoCloudUploadOutline size="1.5rem"  /></i></span>
                             
-                            }
-                        </button>
+                        //     }
+                        // </button>
                     }
-                        
+                    {status === "paused" &&  
+                        <TooltipIcon
+                            title="resume recording"
+                            handleClick={handleResumeRecording}
+                            icon={BsPlay}
+                            mutation={mutation}        
+                        />
+                    }
+
+                    {
+                        status === "stopped" &&
+                        <TooltipIcon
+                            title="Download"
+                            handleClick={downloadRecording}
+                            icon={BsDownload}
+                            mutation={mutation}
+                        />
+                        // <button className="rounded-pill border-0" style={{color:"var(--theme-orange)", padding:".7rem"}} onClick={downloadRecording}>
+                        //     {
+                        //         mutation.isLoading ? 
+                        //         <div className="spinner-border text-white">
+                        //             <div className="visually-hidden">Loading...</div>
+                        //         </div>
+                        //         :
+                        //         <span><i><BsDownload size="1.5rem"  /></i></span>
+                            
+                        //     }
+                        // </button>
+                    }
                   </div>
               </div>
             }
@@ -691,7 +898,20 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
     )
 }
 export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreviewImage, uploadType, fileCreate }) => {
-
+    const style = {
+        position: "absolute",
+        bottom: 0,
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "100%",
+        height: "100%",
+        background: "#fff",
+        border: "1px solid #eee",
+        borderRadius: "10px",
+        boxShadow: 24,
+        p: 6,
+        padding: "4rem 2rem .3rem 2rem",
+    };
     const queryClient = useQueryClient()
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -705,10 +925,11 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
     const [videoData, setVideoData] = useState(null)
     const [previewData, setPreviewData] = useState(null)
     const contentId = searchParams.get("content")
+    const [muted, setMuted] = useState(false)
+    const [recordingStatus, setRecordingStatus] = useState(false)
+    const [progress, setProgress] = useState(0)
 
-
-
-    const { status, startRecording, stopRecording, mediaBlobUrl, previewStream } = useReactMediaRecorder({ screen: true, audio: true, onStop: (blobUrl, blob) => {setVideoData(blob)
+    const { status, startRecording, stopRecording, mediaBlobUrl, pauseRecording, resumeRecording, clearBlobUrl, muteAudio, unMuteAudio } = useReactMediaRecorder({ screen: true, audio: true, onStop: (blobUrl, blob) => {setVideoData(blob)
         setPreviewData(blobUrl)
     },
     onStart: ()=>{
@@ -718,32 +939,50 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
     const {classId} = useParams()
 
     async function uploadFileHandler(e){
-        try{
-            setLoading(true)
-            const formdata = new FormData();
-            formdata.append('file', videoData, fileName);
-            const res = await uploadFile(formdata, value?.token);
-            setLoading(false)
 
-            const {success, message, statusCode} = res;
-            if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
-            else {
-
-                const {data} = res;
-                createFileContent(data.fileId)
-                setIsScreenOpen(false)
-                toast.success(message)
-            }
-        }catch(err){
-            console.error(err.statusCode)
-            setLoading(false)
-            toast.error(err.message)
-            if(err.statusCode === 2){
-                localStorage.clear()
-                // navigate("/")
-            }
+        if(!fileName){
+            toast.error("please provide a file name")
+            return
         }
+        setLoading(true)
+        const formdata = new FormData();
+        formdata.append('file', videoData, fileName);
+        var ajax = new XMLHttpRequest();
 
+        ajax.upload.addEventListener("progress", progressHandler, false);
+        ajax.addEventListener("load", completeHandler, false);
+        ajax.addEventListener("error", errorHandler, false);
+        ajax.addEventListener("abort", abortHandler, false);
+        ajax.open("POST", `${process.env.REACT_APP_BASEURL}/file/upload`);
+        ajax.setRequestHeader("Authorization",  "Bearer " + value.token); 
+        ajax.send(formdata);
+    }
+
+    function progressHandler(event) {
+        console.log({event})
+        var percent = (event.loaded / event.total) * 100;
+        console.log(percent)
+        setProgress(Math.round(percent) + "% uploaded... please wait")
+    }
+      
+    function completeHandler(event) {
+        setLoading(false)
+        let { data,message } = JSON.parse(event.target.response)
+        toast.success(message)
+        createFileContent(data.fileId)
+        setIsScreenOpen(false)
+        setProgress(0)
+    }
+      
+    function errorHandler(event) {
+        setLoading(false)
+        console.error(event)
+        toast.error(event.message)
+        
+    }
+    
+    function abortHandler(event) {
+        setLoading(false)
     }
 
     const mutation = useMutation(([token, data])=>addFile(token, data), {
@@ -785,26 +1024,64 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
         }
     }
 
-    const style = {
-        position: "absolute",
-        bottom: 0,
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "100%",
-        height: "100%",
-        background: "#fff",
-        border: "1px solid #eee",
-        borderRadius: "10px",
-        boxShadow: 24,
-        p: 6,
-        padding: "4rem 2rem .3rem 2rem",
-    };
+    const downloadRecording = () => {
+        if(!fileName){
+            toast.error("Please provide a file name")
+            return
+        }
+        const pathName = `${fileName}.mp4`;
+        try {
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          // for IE
+          window.navigator.msSaveOrOpenBlob(mediaBlobUrl, pathName);
+        } else {
+          // for Chrome
+          const link = document.createElement("a");
+          link.href = mediaBlobUrl;
+          link.download = pathName;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+        } catch (err) {
+          console.error(err);
+        }
+     };
+
+
+
+    function handleMute(e){
+        e.preventDefault()
+        setMuted(true)
+        muteAudio()
+    }
+
+
+    function handleUnmute(e){
+        e.preventDefault()
+        setMuted(false)
+        // console.log(unMuteAudio)
+        unMuteAudio()
+
+    }
+
+    function handlePauseRecording() {
+        pauseRecording()
+        setRecordingStatus(false)
+    }
+    function handleResumeRecording(){
+        resumeRecording();
+        setRecordingStatus(true)
+    }
+
 
     return(
         <Modal
           open={isScreenOpen}
           onClose={(e) => {
             setIsScreenOpen((_) => false);
+            setPreviewData(null)
+            clearBlobUrl()
           }}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
@@ -816,6 +1093,7 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
                     <div className="visually-hidden">Loading...</div>
                 </div>
                 <small className="d-block">Upload in progress. Do not close this page </small>
+                <small className="d-block">{progress}</small>
                 </di>
                 :
               <div className='position-relative'>
@@ -829,9 +1107,17 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
                     {
                         previewData &&
                         <>
-                            
-                            <div className="my-3" style={{width:"min(100%, 450px)"}}> 
-                                <input type="text" name="title" id="title " className="form-control"  placeholder='Enter file name' value={fileName} onChange={(e)=>setFileName(e.target.value)} onBlur={()=>console.log("blurred")} onFocus={()=>console.log("focused")} />
+                            <div className="my-3 d-flex align-items-center justify-content-between">
+                                <div className="my-3" style={{width:"min(100%, 450px)"}}> 
+                                    <input type="text" name="title" id="title " className="form-control"  style={{outline:"1.5px solid var(--theme-blue)"}} placeholder='Enter file name' value={fileName} onChange={(e)=>setFileName(e.target.value)} onBlur={()=>console.log("blurred")} onFocus={()=>console.log("focused")} />
+                                </div>
+                                <button 
+                                    className="button py-2 px-4"
+                                    onClick={(e)=>{
+                                    e.preventDefault();
+                                    clearBlobUrl()
+                                    setPreviewData(null)
+                                }}>Clear</button>
                             </div>
                             <video src={previewData} controls autoPlay style={{width: "100%", height:"100%", aspectRatio:"3/1"}}  /> 
                             
@@ -840,30 +1126,75 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
                   <div className="d-flex justify-content-center position-fixed video_controls" style={{bottom:5, width:"100%", gap:"1rem"}}>
                     {
                         (status === "stopped" ||status === "idle")&&
-                        <button className="rounded-pill border-0" style={{background:"#eee", color: "#fff", padding:".7rem"}} onClick={startRecording}>
-                            <i><BsRecordCircle color='red' size="1.5rem" /></i>
-                        </button>
+                        <TooltipIcon
+                            title="Record"
+                            handleClick={startRecording}
+                            icon={BsRecordCircle}
+                            mutation={mutation}
+                        />
 
                     }
                     {
                         status === "recording" &&
-                        <button className="rounded-pill border-0" style={{background:"var(--theme-orange)", color: "#fff", padding:".7rem"}} onClick={stopRecording}>
-                            <i><BiStopCircle size="1.5rem" /></i>
-                        </button>
+                        <>
+                            <button className="rounded-pill border-0" style={{background:"var(--theme-orange)", color: "#fff", padding:".7rem"}} onClick={stopRecording}>
+                                <i><BiStopCircle size="1.5rem" /></i>
+                            </button>
+                           
+                            <TooltipIcon
+                                title="pause recording"
+                                handleClick={handlePauseRecording}
+                                icon={BsPauseCircle}
+                                mutation={mutation}
+                            />
+
+                            {
+                                muted ? 
+                                <TooltipIcon
+                                    title="unmute"
+                                    handleClick={handleUnmute}
+                                    icon={BsMicMute}
+                                    mutation={null}
+                                />
+                                
+                                :
+                                <TooltipIcon
+                                    title="mute mic"
+                                    handleClick={handleMute}
+                                    icon={BsMic}
+                                    mutation={null}
+                                />
+                            }
+                        </>
+                    }
+
+                    {status === "paused" &&  
+                    
+                        <TooltipIcon
+                            title="resume recording"
+                            handleClick={handleResumeRecording}
+                            icon={BsPlay}
+                            mutation={mutation}        
+                        />
                     }
                     {
                         status === "stopped" &&
-                        <button className="rounded-pill border-0" style={{background:"var(--theme-orange)", color: "#fff", padding:".7rem"}} onClick={uploadFileHandler}>
-                            {
-                                mutation.isLoading ? 
-                                <div className="spinner-border text-white">
-                                    <div className="visually-hidden">Loading...</div>
-                                </div>
-                                :
-                                <span><i><IoCloudUploadOutline size="1.5rem"  /></i></span>
-                            
-                            }
-                        </button>
+                        <TooltipIcon
+                        title="upload"
+                        handleClick={uploadFileHandler}
+                        icon={IoCloudUploadOutline}
+                        mutation={mutation}
+                        />
+                    }
+                    {
+                        status === "stopped" &&
+                        <TooltipIcon
+                        title="download"
+                        handleClick={downloadRecording}
+                        icon={BsDownload}
+                        mutation={mutation}
+                        
+                        />
                     }
                         
                   </div>
@@ -874,6 +1205,23 @@ export const UploadScreenRecording = ({isScreenOpen, setIsScreenOpen, setPreview
     )
 }
 
+function TooltipIcon({title, handleClick, icon:Icon, mutation}){
+    return(
+        <Tooltip title={title}>
+            <IconButton className="rounded-pill border-0" style={{color:"var(--theme-orange)", padding:".7rem"}} onClick={handleClick}>
+                {
+                    mutation?.isLoading ? 
+                    <div className="spinner-border text-white">
+                        <div className="visually-hidden">Loading...</div>
+                    </div>
+                    :
+                    <span><i><Icon size="1.5rem"  /></i></span>
+                
+                }
+            </IconButton>
+        </Tooltip>
+)
+}
 function AddtoClassRoom({open,setOpen, name, originalName}){
     const style = {
         position: "absolute",

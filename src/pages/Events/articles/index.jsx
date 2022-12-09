@@ -1,22 +1,93 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import Layout from '../../../components/Layout'
 import style from "../style.module.css"
 import articleimg from "../../../images/events/article.png"
+import { useQuery } from '@tanstack/react-query'
 
 import {Content, DateAndAction, Header, ImageContainer, MoreLikeThis} from "./style.js"
 import { BsCalendarWeekFill } from 'react-icons/bs'
 import { FaShareSquare } from 'react-icons/fa'
+import { useAuth } from '../../../contexts/Auth'
+import { useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import SwiperCore, {
+    Navigation,
+    Autoplay,
+    Pagination,
+    Scrollbar,
+    A11y,
+  } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Box, Modal, TextField, Button, Typography } from '@mui/material/';
+import {
+    EmailShareButton,
+    FacebookShareButton,
+    LinkedinShareButton,
+    TelegramShareButton,
+    TwitterShareButton,
+    RedditShareButton,
+    WhatsappShareButton,
+    TwitterIcon,
+    FacebookIcon,
+    LinkedinIcon,
+    TelegramIcon,
+    EmailIcon,
+    RedditIcon,
+    WhatsappIcon,
+  } from "react-share";
+import Helmet from 'react-helmet'
 
 const Articles = () => {
+    const {id} = useParams()
+    // console.log({id});
+    const [blog, setBlog] = useState({})
+    const [blogs, setBlogs] = useState([])
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: {getABlog, getBlogs } } = useAuth();
+
+    const blogData = useQuery(["fetch blog", id], () => getABlog(id), {
+        onSuccess: (res) => {
+            if (res.data) {
+                // console.log("data", res.data);
+                setBlog(res.data)
+
+            }
+        }
+    })
+
+    const blogsData = useQuery(["fetch blogs", id], () => getBlogs(), {
+        onSuccess: (res) => {
+            if (res.data.length > 0) {
+                console.log("data", res.data);
+                setBlogs(res.data.filter(d => d._id !== id))
+
+            }
+        }
+    })
+
+
+    // SHARE BLOG
+    
+    const [open,setOpen]= useState(false)
+    function handleShare(e){
+        e.preventDefault();
+        setOpen(true)
+    }
+
   return (
+    <>
+     <Helmet>
+        <title>{`${blog?.title?.toUpperCase()} | Gotocourse`}</title>
+        <meta property="og:site_name" content="Gotocourse" />
+        <meta name="description" content="Gotocourse Blogs" />
+    </Helmet>
     <Layout>
         <section className="container py-4">
             <Header>
-                <h4>How to modernize queues for the digital-⁠first consumer</h4>
+                <h4>{blog.title}</h4>
             </Header>
             <ImageContainer>
                 <div>
-                    <img src={articleimg} alt="" />
+                <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
                 </div>
             </ImageContainer>
             <DateAndAction>
@@ -24,78 +95,213 @@ const Articles = () => {
                     <i>
                         <BsCalendarWeekFill />
                     </i>
-                    <span>04.08.22</span>
+                    <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
                 </span>
-                <span>
+                <span onClick={handleShare}>
                     <span>Share</span>
                     <i><FaShareSquare /></i>
                 </span>
             </DateAndAction>
             <MoreLikeThis></MoreLikeThis>
             <Content>
-                <p>
-                     At the same time, humans are becoming less patient. Attention spans are declining, and technology is conditioning us to expect instant gratification. During pandemic isolation, we had little else to turn to other than our devices. Technology kept us connected, informed, and entertained. As restrictions lifted and people were let out of their homes, a new consumer base emerged—one still rooted firmly in the digital world.
-                </p>
+            <p  dangerouslySetInnerHTML={{__html: blog.content}}></p>
 
-                <p>
-                    According to a September 2021 Pew Research Center survey, 90 percent of adults said that the internet has been essential to them personally during the pandemic, and 40 percent said they use digital technology or the internet in a new or different way compared with before the outbreak. When it comes to retail, the numbers are staggering, if unsurprising. According to the most recently released U.S. Census Bureau Annual Retail Trade Survey (ARTS), e-commerce sales increased by 43 percent year-over-year in 2020, reaching $815.4 billion. 
-                </p>
-
-                <p>
-                    As the online shopping surge dissipates with the strong rebound of brick-and-mortar retail, it’s critical to understand that the modern consumer is forever changed. The pandemic unexpectedly homogenized the consumer base and heightened its collective expectations. Whereas in pre-pandemic times, businesses thought of Millennials and Gen Z as their core digital natives, today, consumers across all age cohorts are digital-first. And with that digital-first consumer mindset comes the expectation of speed and convenience. 
-                </p>
-
-                <p>
-                    To cater to this transformed population, businesses must rethink archaic modes of queue management because, quite frankly, today’s consumer doesn’t have the time. A recent Waitwhile survey of over 1200 consumers found that most associate waiting in line with boredom, annoyance, frustration, or impatience. The same study found that nearly 70 percent of guests prefer virtual lines.
-                </p>
-
-                <p>
-                    Yet, most businesses still require their visitors to wait in physical lines or crowded waiting areas, which are inefficient to manage and “tortuous” to stand in. A tech-driven approach to queue management is the perfect solution, as it delivers on consumer expectations for personalized, high-touch experiences and brings additional operational and cost efficiencies to businesses.
-                </p>
 
             </Content>
             <MoreLikeThis>
                 <header>
-                    <h4>You'll Like This</h4>
+                    <h4>You'll Like These</h4>
                 </header>
 
                 <section>
-                <div className={style.articles__container}>
-                        {
-                            [...Array(3)].map((x, id) => (
-                                <div className={style.articleitem}>
-                                    <div className={style.articleimg}>
-                                        <img src={articleimg} alt="" />
-
-                                    </div>
-
-                                    <div className={style.articleInfo}>
-                                        <div className={style.articleTop}>
-                                            <span style={{ fontSize: "12px", color: "#4100FA" }}>04.08.22</span>
-                                            <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} />
-
-                                        </div>
-                                        <h4>
-                                            How to modernize queues for the digital-⁠first consumer
-                                        </h4>
-                                        <p>
-                                            Christoffer Klemming, CEO and co-founder of Waitwhile, shares insights on how companies can boost customer satisfaction using learnings from psychological research.
-                                        </p>
-
-                                    </div>
-
-
-
-                                </div>
-
-                            ))
-                        }
-                    </div>
+                        <LikeThis data={blogs} />
+                
                 </section>
             </MoreLikeThis>
+            <ShareModal x={blog} open={open} setOpen={setOpen} />
         </section>
     </Layout>
+    </>
   )
 }
 
+
+function LikeThis({data}){
+
+    const [open,setOpen]= useState(false)
+
+    function handleClose(){
+        setOpen(false)
+    }
+
+    function handleShare(e){
+        e.preventDefault()
+        setOpen(true)
+    }
+
+
+    const inputRef = useRef()
+    function copyText() {
+        
+        let copy = inputRef.current.value
+        navigator.clipboard.writeText(copy);
+        
+        // Alert the copied text
+        alert("Copied the text: " + copy);
+    }
+    return (
+        
+        <Swiper
+        // install Swiper modules
+        modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+        loop={false}
+        speed={1500}
+        // autoplay={{ delay: 2500 }}
+        spaceBetween={0}
+        slidesPerView={1}
+        // navigation
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+        breakpoints={{
+          // when window width is >= 320px
+          320: {
+            slidesPerView: 1,
+            spaceBetween: 0,
+          },
+          // when window width is >= 640px
+          575: {
+            slidesPerView: 1,
+            spaceBetween: 5,
+          },
+          700: {
+            slidesPerView: 2,
+            spaceBetween: 5,
+          },
+          1024: {
+            slidesPerView: 4,
+            spaceBetween: 3,
+          },
+          1704: {
+            slidesPerView: 5,
+            spaceBetween: 3,
+          },
+        }}
+      >
+          <div className={style.articles__container}>
+        {data?.map((x, i) => (
+          <SwiperSlide key={i}>
+                <div className={style.articleitem}>
+                    <Link to={`/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x?._id}`}>
+                    <div className={style.articleimg}>
+                    <img src={`${process.env.REACT_APP_IMAGEURL}${x?.blogImg}`} alt="" />
+
+                    </div>
+                    </Link>
+
+                    <div className={style.articleInfo}>
+                        <div className={style.articleTop}>
+                            <span style={{ fontSize: "12px", color: "#4100FA" }}>{new Date(x?.createdAt).toLocaleDateString()}</span>
+                            <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} onClick={handleShare} />
+
+                        </div>
+                        <Link to={`/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x?._id}`}>
+                            <h6>
+                                {x?.title}
+                            </h6>
+                        </Link>
+                        <p className="restricted_line" dangerouslySetInnerHTML={{__html: x?.content}}></p>
+                        <ShareModal x={x} open={open} setOpen={setOpen} />
+
+                    </div>
+
+
+
+                </div>
+            </SwiperSlide>
+        ))}
+        </div>
+      </Swiper>
+    )
+}
+
+
+const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: "min(100% - .3rem, 550px)",
+    height: 400,
+    bgcolor: 'background.paper',
+    border: '.5px solid #333',
+    boxShadow: 24,
+    overflow: "hidden",
+    p: 4,
+};
+export function ShareModal({x, open, setOpen}){
+    const inputRef = useRef()
+    function copyText() {
+        
+        let copy = inputRef.current.value
+        navigator.clipboard.writeText(copy);
+        
+        // Alert the copied text
+        alert("Copied the text: " + copy);
+    }
+
+    function handleClose(){
+        setOpen(false)
+    }
+
+    return(
+        <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            className="message"
+        >
+            <Box sx={modalStyle}>
+                <div className="boxtop">
+                    <h5>Share Post</h5>
+
+                    <Box>
+                        <p>Share to: </p>
+                        <div>
+                            <FacebookShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                <FacebookIcon />
+                            </FacebookShareButton>
+                            <TwitterShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                <TwitterIcon />
+                            </TwitterShareButton>
+                            <LinkedinShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                <LinkedinIcon />
+                            </LinkedinShareButton>
+                            <TelegramShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                <TelegramIcon />
+                            </TelegramShareButton>
+                            <EmailShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                                <EmailIcon />
+                            </EmailShareButton>
+                        </div>
+                        <div className="d-flex align-items-center mt-3" style={{gap: "1rem"}}>
+                            <input type="text" name="" id="" className="form-control" ref={inputRef} value={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}  />
+                            <button type="button" onClick={copyText}
+                            style={{
+                                border: "none",
+                                outline: "none",
+                                backgroundColor:"var(--theme-blue)",
+                                color: "#fff",
+                                padding: ".5rem",
+                                borderRadius:"8px"
+                            }}
+                            
+                            >Copy</button>
+                        </div>
+                    </Box>
+                </div>
+            </Box>
+        </Modal>
+    )
+}
 export default Articles

@@ -1,4 +1,4 @@
-import {useState} from "react"
+import {useRef, useState} from "react"
 import {toast} from "react-toastify";
 import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 
@@ -17,7 +17,7 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams();
     const queryClient = useQueryClient()
-
+    const [progress, setProgress] = useState(0)
     const {adminFunctions: {uploadFile}, consoleFunctions: {addFile}} = useAuth();
     const {getItem} = useLocalStorage();
     const value = getItem(KEY);
@@ -30,39 +30,56 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
     const {classId} = useParams()
 
     async function uploadFileHandler(e){
-        try{
-            setLoading(true)
-            const formdata = new FormData();
-            formdata.append('file', file, file.name);
-            console.log(file.name)
-            const res = await uploadFile(formdata, value?.token);
-            setLoading(false)
+        setLoading(true)
+        const formdata = new FormData();
+        formdata.append('file', file, file.name);
+        console.log(file.name)
+        var ajax = new XMLHttpRequest();
 
-            const {success, message, statusCode} = res;
-            if(!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
-            else {
-
-                const {data} = res;
-                createFileContent(data.name, data.fileId, file.name)
-                setIsOpen(false)
-                setData(_ => data.name);
-                toast.success(message)
-            }
-        }catch(err){
-            console.error(err.statusCode)
-            setLoading(false)
-            toast.error(err.message)
-            if(err.statusCode === 2){
-                localStorage.clear()
-                // navigate("/")
-            }
-        }
-
+        ajax.upload.addEventListener("progress", progressHandler, false);
+        ajax.addEventListener("load", completeHandler, false);
+        ajax.addEventListener("error", errorHandler, false);
+        ajax.addEventListener("abort", abortHandler, false);
+        ajax.open("POST", `${process.env.REACT_APP_BASEURL}/file/upload`);
+        ajax.setRequestHeader("Authorization",  "Bearer " + value.token); 
+        ajax.send(formdata);
     }
 
+
+    function progressHandler(event) {
+        console.log({event})
+        var percent = (event.loaded / event.total) * 100;
+        console.log(percent)
+        setProgress(Math.round(percent) + "% uploaded... please wait")
+        // _("progressBar").value = Math.round(percent);
+        // _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+    }
+      
+    function completeHandler(event) {
+        setLoading(false)
+        
+        console.log(JSON.parse(event.target.response))
+
+        let { data,message } = JSON.parse(event.target.response)
+        toast.success(message)
+        createFileContent(data.name, data.fileId, file.name)
+        setIsOpen(false)
+        setProgress(0); //wil clear progress bar after successful upload
+    }
+      
+    function errorHandler(event) {
+        setLoading(false)
+        console.error(event)
+        toast.error(event.message)
+    }
+    
+    function abortHandler(event) {
+        setLoading(false)
+    }
     const mutation = useMutation(([token, data])=>addFile(token, data), {
         onSuccess: (res)=> {
             console.log(res)
+            
             setData(null)
             setFile(null)
             setImageUrl(null)
@@ -133,16 +150,21 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage, uploadType }) => {
             uploadFileHandler={uploadFileHandler}
             filename={filename}
             setFilename={setFilename}
+            progress={progress}
+            setFile={setFile}
+            setImageUrl={setImageUrl}
             />
         )
     )
 }
 
-export function UploadFormContent({setIsOpen, data, triggerUpload, changeHandler, file, imageUrl, loading, copy, uploadFileHandler, filename, setFilename}){
+export function UploadFormContent({setIsOpen, setFile,setImageUrl, data, progress, triggerUpload, changeHandler, file, imageUrl, loading, copy, uploadFileHandler, filename, setFilename}){
     return (
         <div className={clsx.upload_file__background} onClick={e => {
             if(e.target === e.currentTarget) {
                 setIsOpen(_ => false);
+                setFile(null)
+                setImageUrl(false)
             }
         }}>
             <div className={clsx.uploda_file__container}>
@@ -170,10 +192,12 @@ export function UploadFormContent({setIsOpen, data, triggerUpload, changeHandler
 
                 {imageUrl && (
                     <div className={clsx.upload_final}>
-                        {loading ? 
+                        {loading ? <>
                         <div className="spinner-border text-primary" role="status" style={{width:"4rem", height:"4rem"}}>
                             <span className="visually-hidden">Loading...</span>
                         </div>
+                        <small>{progress}</small>
+                        </>
                         :
                         <button onClick={uploadFileHandler} style={{background: "var(--theme-blue)", color:"#Fff"}} >Upload</button>
                         }

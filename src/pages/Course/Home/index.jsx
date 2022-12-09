@@ -14,6 +14,7 @@ import { useAuth } from "../../../contexts/Auth";
 import { AdvancedError } from "../../../classes";
 import { COURSE_CATEGORY_KEY, capitalize, getDate } from "../../../constants";
 import DOMPurify from "dompurify";
+import { useQuery } from "@tanstack/react-query";
 
 
 
@@ -88,7 +89,7 @@ const CardImageContainer = styled.div`
 
     & img {
         width: 100%;
-        min-height: 240px;
+        height: 240px;
         object-fit: cover;
     }
 `
@@ -122,6 +123,8 @@ const CardBody = styled.div`
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
+            height: 6.5rem;
+
         }
     }
 `
@@ -150,37 +153,25 @@ const Date = styled.div`
 
 
 const Course = () => {
-    const { otherFunctions: { searchCategories } } = useAuth();
-    const [courses, setCourses] = useState([]);
+    const { otherFunctions: { fetchBootcamps } } = useAuth();
     const navigate = useNavigate();
     const { getItem } = useLocalStorage();
+
     let category = getItem(COURSE_CATEGORY_KEY);
 
 
 
+    const classes = useQuery(["fetch classes", category.name], () => fetchBootcamps(), {
+        notifyOnChangeProps:["category", "isFetching"]
+    })
 
-    useEffectOnMount(() => {
-
-
-        (async () => {
-            try {
-                const res = await searchCategories(category.name);
-                const { message, statusCode, success } = res;
-                if (!success) throw new AdvancedError(message, statusCode);
-                else {
-                    const { data } = res;
-                    setCourses(_ => [...data]);
-                }
-            } catch (err) {
-                console.error(err)
-            }
-        })()
-        return () => console.log("Course page is unmounted");
-    }, [])
+    console.log({classes})
 
 
-    function gotoCourseHandler(e, name) {
-        navigate(encodeURIComponent(name))
+
+    function gotoCourseHandler(e, name, id) {
+        navigate(`${name.trim().split(" ").join("-").toLowerCase()}/${id.trim()}`)
+
     }
 
 
@@ -208,17 +199,13 @@ const Course = () => {
 
                 <CourseBody>
                     {
-                        courses.length !== 0 ?
-                            courses.map(({ courseImg, description, name, startDate, endDate }, i) => (
+                        classes.data?.data?.filter( c => c.category === category.name && c.isActive).length !== 0 ?
+                            classes.data?.data?.filter( c => c.category === category.name && c.isActive).map((course, i) => (
                                 <CourseCard
                                     key={i}
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    image={courseImg}
-                                    description={description}
+                                    {...course}
                                     gotoCourseHandler={gotoCourseHandler}
-                                    name={name}
-                                    separator={(courses.length - 1) === i ? false : true} />
+                                    separator={true} />
                             )) : Array(4).fill(undefined).map((_, i) => (
                                 <Skeleton sx={{ marginBottom: 10 }} animation="wave" key={i} variant="rectangular" width={"100%"} height={350} />
                             ))
@@ -230,15 +217,15 @@ const Course = () => {
 }
 
 
-function CourseCard({ image, name, description, separator, startDate, endDate, gotoCourseHandler }) {
+function CourseCard({ bootcampImg, title, bootcampId, description, separator, startDate, endDate, gotoCourseHandler }) {
     return (
         <>
-            <Card onClick={e => gotoCourseHandler(e, name)}>
+            <Card onClick={e => gotoCourseHandler(e, title, bootcampId)}>
                 <CardImageContainer>
-                    <img src={image} alt="Card Image" />
+                    <img src={bootcampImg} alt="Card Image" />
                 </CardImageContainer>
                 <CardBody>
-                    <h2>{name}</h2>
+                    <h2>{title}</h2>
                     <p className="newcourseCard restricted_line_lg" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description) }} />
                     {/* <Date>
                         <h3>Date</h3>

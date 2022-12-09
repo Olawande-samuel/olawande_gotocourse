@@ -26,6 +26,7 @@ import { Reviews } from "../Teacher/components";
 import { faqs, reviews } from "../Teacher";
 import { FaqComponent } from "../../components/Faq";
 import teacher from "../../images/become_teacher02.png";
+import { Link } from "react-router-dom";
 
 
 
@@ -44,18 +45,23 @@ const Teachers = () => {
     }
     return (
         <Layout>
-            <TeacherHero className="container">
+            <TeacherHero>
+                <div className="container">
                 <div className="left">
                     <h3>
                         Gotocourse is everything you need to teach what you love!
                     </h3>
                     <p>Before you begin your journey, check if you are eligible to teach on Gotocourse by answering  some questions</p>
                     <div className="d-flex">
-                        <button>Check Eligibility</button>
+                        <Link to="/qualifications">
+                            <button>Check Eligibility</button>
+                        </Link>
                     </div>
                 </div>
                 <div className="right">
                     <img src={hang} alt="" />
+                </div>
+
                 </div>
             </TeacherHero>
             {/* <Hero>
@@ -73,7 +79,7 @@ const Teachers = () => {
                 </div>
             </Hero> */}
             <ItWorks>
-                <div className="container">
+                <div className="">
                     <MainHeader>
                         <h2>How It Works</h2>
                         <p>Check incredible tools created on Gotocourse to make teaching cost effective</p>
@@ -87,13 +93,18 @@ const Teachers = () => {
                             </ItWorksList>
                             <ItWorksList>
                                 <div className="number">2</div>
-                                <h5>Enroll to teach</h5>
-                                <small>Enroll to teach on Gotocourse and get approved by Gotocourse course standardization team.</small>
+                                <h5>Create Class</h5>
+                                <small>Create a learning environment according to your niche with your own modifications.</small>
                             </ItWorksList>
                             <ItWorksList>
                                 <div className="number">3</div>
-                                <h5>Enroll to teach</h5>
-                                <small>Enroll to teach on Gotocourse and get approved by Gotocourse course standardization team.</small>
+                                <h5>Deliver a Great Class</h5>
+                                <small>With our built-in creator suite, you can optimize your class to deliver a great lecture to your students.</small>
+                            </ItWorksList>
+                            <ItWorksList>
+                                <div className="number">4</div>
+                                <h5>Get Paid</h5>
+                                <small>Get paid by your students via our payment systems, a reward for your mentorship.</small>
                             </ItWorksList>
 
                         </div>
@@ -122,19 +133,19 @@ const Teachers = () => {
                     </header>
 
                     <div className="bar">
-                        <div className="icon">
+                        <div className="logo_icon">
                             <img src={Meetifix} alt="" />
                         </div>
-                        <div className="icon">
+                        <div className="logo_icon">
                             <img src={Quikonnet} alt="" />
                         </div>
-                        <div className="icon">
+                        <div className="logo_icon">
                             <img src={Rekordia} alt="" />
                         </div>
-                        <div className="icon">
+                        <div className="logo_icon">
                             <img src={Classpodia} alt="" />
                         </div>
-                        <div className="icon">
+                        <div className="logo_icon">
                             <img src={creatzion} alt="" />
                         </div>
                         <div className="quizim">
@@ -185,7 +196,9 @@ const Teachers = () => {
                 </ReviewContainer>
                 <Ready>
                     <h4>Ready to start creating unlimited courses on Gotocourse?</h4>
-                    <button>Get started for free</button>
+                    <Link to="/qualifications">
+                        <button>Get started for free</button>
+                    </Link>
                 </Ready>
         </Layout>
     )
@@ -252,7 +265,7 @@ const data = [
     },
     {
         id: 5,
-        title: "Quizim",
+        title: "Quiz Tool",
         p1: "Create a quiz in a few seconds or take secure online quizes on any device, anywhere and at any time . Create quizzes in multiple choice tests, checkboxes, upload file attachment or assessment papers and have access to grades in real time just when made available.",
         logo: Quizim,
         img: quiz

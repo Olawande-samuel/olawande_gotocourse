@@ -66,8 +66,12 @@ const Login = () => {
         }) 
         if(d.userType === "student"){
           if(d.isVerified){
-            updateItem(KEY, d);
+            
+            // updateItem(KEY, d);
             navigate("/student")
+
+            // navigate("/coming-soon")
+
           } else {
             updateItem(VERIFICATION_KEY, d)
             navigate("/user-authentication")

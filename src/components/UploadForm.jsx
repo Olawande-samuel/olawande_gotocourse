@@ -84,6 +84,7 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage }) => {
             draggable: true,
             pauseOnHover: true
         })
+
     }
 
     function triggerUpload(e){
@@ -108,6 +109,11 @@ const UploadForm = ({isOpen, setIsOpen, setPreviewImage }) => {
         (<div className={clsx.upload_file__background} onClick={e => {
             if(e.target === e.currentTarget) {
                 setIsOpen(_ => false);
+                setFile(null)
+                setData(null)
+                setImageUrl(null)
+
+
             }
         }}>
             <div className={clsx.uploda_file__container}>

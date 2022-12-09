@@ -83,7 +83,8 @@ const OnBoarding = () => {
                console.log({res})
                 // SET USERDATA HERE
                 removeItem(VERIFICATION_KEY)
-                updateItem(KEY, userdata)
+                
+                // updateItem(KEY, userdata)
                 setPage(_ => 10);
                 toast.success(message, {
                     position: "top-right",
@@ -323,7 +324,8 @@ function Success({}){
                     <h2>Registration Successful</h2>
                     <img src={success} alt="Registration Success" />
                     <div className={clsx.form_group__button}>
-                        <Link to="/student">
+                        {/* <Link to="/student"> */}
+                        <Link to="/coming-soon">
                             <button>Go to Dashboard</button>
                         </Link>
                     </div>

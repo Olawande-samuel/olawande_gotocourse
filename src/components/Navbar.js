@@ -77,14 +77,14 @@ const Navbar = ({ background }) => {
       {
         (mainpage) && showBanner &&
         <div className="d-flex align-items-center justify-content-center p-2 w-100 bg-white">
-          <p className="mb-0 fw-bold me-4">ENROLL NOW AT 50% FOR ALL CLASSES</p>
+          <p className="mb-0 fw-bold me-4">New product alert: Gotocourse Meetifix ( Live Class) is now live 🎉🎉!</p>
           <i><AiOutlineCloseCircle size="1.5rem" onClick={()=>{
               setShowBanner(false)
               localStorage.setItem("gotocourse-banner", false)
             }} /> </i>
         </div>
       }
-      <div className="container navbar-container align-items-center">
+      <div className="container navbar-container align-items-center"> 
         <Link
           to="/"
           onClick={() => window.scrollTo(0, 0)}
@@ -102,6 +102,14 @@ const Navbar = ({ background }) => {
           id="navbarNav"
       >
           <ul className="navbar-nav me-5">
+                <li className="nav-item holder">
+                  <Link to="/" className="link nav-link courses me-4"
+                   style={{
+                    color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
+                  }}
+                  
+                  >Home</Link>
+                </li>
             {(location.pathname.split("/")[1] === "" || celebRoute) && (
               <>
                 <li className="nav-item holder">
@@ -109,12 +117,12 @@ const Navbar = ({ background }) => {
                   style={{
                     color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
                   }}
-                  >
+                  > 
                     Categories
                   </Link>
                   {drop ? <NavList dropRef={dropRef} /> : null}
                 </li>
-                <li className="nav-item holder">
+                {/* <li className="nav-item holder">
                   <Link className="link nav-link courses me-4" to="/lounge"
                   style={{
                     color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
@@ -122,7 +130,7 @@ const Navbar = ({ background }) => {
                   >
                     Mentor
                   </Link>
-                </li>
+                </li> */}
               </>
             )}
 
@@ -156,9 +164,7 @@ const Navbar = ({ background }) => {
               ""
             ) : (
               <>
-                {/* <li className="nav-item d-flex align-items-center nav_link  me-4">
-                  <HowItWorks />
-                </li> */}
+                
                 <li className="nav-item d-flex align-items-center nav_link">
                   <Link to="/become-a-teacher" className="link"
                    style={{

@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Logosm } from '../../../../images/components/svgs'
+import { Logosm, MeetifixLogosm } from '../../../../images/components/svgs'
 import style from './style.module.css'
 import "./liveclass.css"
 
@@ -197,11 +197,20 @@ const LiveClass = () => {
 }
 
 export function Navbar({user}){
+
+  function handleNavigation() {
+    user.userType === "student" ?
+        window.location.assign("/student")
+        :
+        user.userType === "teacher" ?
+            window.location.assign("/teacher") : user.userType === "admin" ? window.location.assign("/admin") : window.location.assign("/")
+
+  } 
   return (
     <nav className={style.live_nav}>
       <div className="container">
         <Link to="/" className="d-inline-block">
-          <Logosm />
+          <MeetifixLogosm />
         </Link>
         <div className={style.present_user}>
           <span className={style.present_profile}>
@@ -210,7 +219,7 @@ export function Navbar({user}){
           <span>Marcus is presenting</span>
         </div>
         <div className={style.live_back_button}>
-          <button className={style.lb_button}>Class Console</button>
+          <button className={style.lb_button} onClick={handleNavigation} >Class Console</button>
         </div>
       </div>
   </nav>

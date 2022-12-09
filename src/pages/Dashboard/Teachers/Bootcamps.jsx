@@ -12,6 +12,7 @@ import {CLASSID, KEY} from "../../../constants"
 import Loader from "../../../components/Loader";
 import { BootcampRow } from "../Admin";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 
 export default function Bootcamps() {
@@ -189,6 +190,7 @@ export function ConsoleClass() {
       localStorage.setItem("gotocourse-teacherbootcamp", JSON.stringify(item))
       navigate("details/"+_id);
     }
+    console.log({courseList})
     return (
       <Teachers header={"My Classes"} >
         {loading && <Loader />}
@@ -212,21 +214,145 @@ export function ConsoleClass() {
   }
 
 
-  export function ClassesCard({bootcampImg, title, description, bootcampId, all}){
-    return (  
-        <div className={clsx.class_con_card}>
-          <img src={bootcampImg} alt="" className={clsx.class_con_img} />
-          <h5>{title}</h5>
-          <p className="clamp_text_sm" dangerouslySetInnerHTML={{__html:description}}></p>
-          <div>
-            <Link className="d-inline-flex" to={`class/${bootcampId}`} onClick={()=> localStorage.setItem(CLASSID, bootcampId)}>
-              <button className={clsx.class_con_button}>Open Class</button>
-            </Link>
-          </div>
-        </div>
-    )
-  }
+  // export function ClassesCard({bootcampImg, title, description, bootcampId, all}){
+  //   return (  
+  //       <div className={clsx.class_con_card}>
+  //         <img src={bootcampImg} alt="" className={clsx.class_con_img} />
+  //         <h5>{title}</h5>
+  //         <p className="clamp_text_sm" dangerouslySetInnerHTML={{__html:description}}></p>
+  //         <div>
+  //           <Link className="d-inline-flex" to={`class/${bootcampId}`} onClick={()=> localStorage.setItem(CLASSID, bootcampId)}>
+  //             <button className={clsx.class_con_button}>Open Class</button>
+  //           </Link>
+  //         </div>
+  //       </div>
+  //   )
+  // }
 
 
 
   
+  const ShortCard = styled.div`
+    /* border: 2.2648px solid rgba(0, 114, 239, 0.5);
+    padding: clamp(0.03125rem, -0.2813rem + 1.5625vw, 1.125rem);
+    border-radius: 8px; */
+    display: flex;
+    flex-direction:column;
+    flex-shrink:0;
+    // width: 250px;
+    // height: 250px;
+    // border: 2px solid red;
+    box-shadow: -10px 159px 64px rgba(0, 0, 0, 0.01), -6px 90px 54px rgba(0, 0, 0, 0.05), -3px 40px 40px rgba(0, 0, 0, 0.09), -1px 10px 22px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
+    
+    img {
+        height: 40%;
+        min-height: 40%;
+        max-width: 100%;
+        object-fit:cover;
+        object-position: center;
+        border: 1.5px solid #FFCE31;
+    }
+    small {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 5.5rem;
+
+    }
+
+    h5 {
+        font-weight: 800;
+        // text-transform: capitalize;
+        font-size: 16px;
+        margin-block: .7rem;
+        cursor: pointer;
+
+    }
+    > div .cta {
+        font-size: 14px;
+        border: none;
+        outline: none;
+        background:#fff;
+
+        :hover {
+            color: var(--theme-blue);
+        }
+    }
+    button {
+        color:#0072EF;
+        font-size:14px;
+        border:none;
+        outline:none;
+        background:#fff;
+    }
+    .up_content {
+        padding-inline: 1.5rem;
+        padding-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content:space-between;
+        height: 60%;
+        /* height: -webkit-fill-available; */
+
+
+        .cta {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            font-size: 13px;
+            margin-top: 1rem;
+    
+            span:first-child {
+                cursor: pointer;
+                transition: color .3s ease; 
+    
+                :hover {
+                    color: var(--theme-blue)
+                }
+            }
+            span:last-child {
+                color: var(--theme-orange)
+            }
+            .ct_bar{
+                width:1px;
+                height:100%;
+                background: #333;
+            }
+        }
+    }
+    
+`
+
+export function ClassesCard({ title, bootcampImg, bootcampId, all }) {
+
+    // Call to Action
+    const navigate = useNavigate();
+    const [data, setData] = useState({});
+    const { getItem } = useLocalStorage();
+
+    const userdata = getItem(KEY)
+
+   
+
+
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
+  return (
+      <ShortCard>
+          <img src={bootcampImg} alt="" />
+          <div className="up_content">
+              <div>
+                  <h5 variant="contained">{title.toLowerCase()}</h5>
+              </div>
+
+              {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+              <div className="cta">
+                <Link className="d-inline-flex" to={`class/${bootcampId}`} onClick={()=> localStorage.setItem(CLASSID, bootcampId)}>
+                  <button className={clsx.class_con_button}>Open Class</button>
+                </Link>
+              </div>
+          </div>
+      </ShortCard>
+  )
+}

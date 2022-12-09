@@ -34,7 +34,7 @@ const Twocolumn = ({img, title, firstText, secondText, thirdText, btn,link}) => 
 
 export function TechPro(){
     const data = {
-        title:"Are You a tech professional Looking To Share Knowledge and connect with Students  from everywhere across the world?",
+        title:"Become an Instructor",
         firstText:"Do you have Interest in teaching the next generation of Tech professionals? Collaborate with us.",
         secondText:"We provide you the platform and tools to teach what you love while creating an enriched and engaging experience with students.",
         btn:"Become an Educator",

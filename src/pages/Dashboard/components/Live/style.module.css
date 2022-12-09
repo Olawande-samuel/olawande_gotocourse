@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background:#191046;
+    background:#000;
     color: #fff;
     overflow: hidden;
 }
@@ -15,7 +15,7 @@
 }
 
 .live_nav {
-    background:#191046;
+    background:#000;
     color: #fff;
 }
 .present_user {

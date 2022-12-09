@@ -351,6 +351,8 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    height: 5.5rem;
+
 }
 
 .otherCourseCard h5 {

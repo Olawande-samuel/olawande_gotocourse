@@ -1,17 +1,50 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Layout from "../../components/Layout"
 import style from "./style.module.css"
-import profile from "../../images/events/profile.png"
-import card from "../../images/events/eventcard.png"
-import articleimg from "../../images/events/article.png"
 import { IoCalendarSharp, IoTimeSharp } from 'react-icons/io5'
 import { AiFillClockCircle } from 'react-icons/ai'
 import { BiTargetLock } from 'react-icons/bi'
 import { FaShareSquare } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { MdMyLocation } from 'react-icons/md'
+import { useLocalStorage } from '../../hooks'
+import { useAuth } from '../../contexts/Auth'
+import { KEY } from '../../constants'
+import { useQuery } from '@tanstack/react-query'
 
 const Events = () => {
+
+    const { getItem } = useLocalStorage();
+    const [blogs, setBlogs] = useState([])
+    const [webinars, setWebinars] = useState([])
+
+    let navigate = useNavigate()
+    let userdata = getItem(KEY);
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { getBlogs, getWebinar, getAWebinar } } = useAuth();
+
+    const blogData = useQuery(["fetch blogs"], () => getBlogs(), {
+        onSuccess: (res) => {
+            if (res.data.length > 0) {
+                // console.log("data", res.data);
+                setBlogs(res.data)
+
+            }
+        }
+    })
+
+
+    const webinarData = useQuery(["fetch webinar"], () => getWebinar(), {
+        onSuccess: (res) => {
+            if (res.data.length > 0) {
+                // console.log("webinar data", res.data);
+                setWebinars(res.data)
+
+            }
+        }
+    })
+
+
+
     return (
         <Layout>
             <div className={style.events_wrapper}>
@@ -26,10 +59,10 @@ const Events = () => {
                 <div className={style.article}>
                     <div className={style.articles__container}>
                         {
-                            [...Array(6)].map((x, id) => (
-                                <Link to={`articles/${id}`} className={style.articleitem}>
+                            blogs.length > 0 && blogs.map((blog, id) => (
+                                <Link to={`articles/${blog.title.split(" ").join("-").replace('?', '')}/${blog._id}`} className={style.articleitem} key={id}>
                                     <div className={style.articleimg}>
-                                        <img src={articleimg} alt="" />
+                                        <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
 
                                     </div>
 
@@ -40,11 +73,10 @@ const Events = () => {
 
                                         </div>
                                         <h4>
-                                            How to modernize queues for the digital-⁠first consumer
+                                            {blog.title}
                                         </h4>
-                                        <p>
-                                            Christoffer Klemming, CEO and co-founder of Waitwhile, shares insights on how companies can boost customer satisfaction using learnings from psychological research.
-                                        </p>
+                                        <p className="restricted_line" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
+
 
                                     </div>
 
@@ -91,8 +123,8 @@ const Events = () => {
                         <h3>Upcoming events</h3>
 
                         <div className={style.upcoming_events}>
-                            {[1, 2, 3, 4].map((event, index) => (
-                                <Upcoming key={index} id={index} />
+                            {webinars.length > 0 && webinars.map((event, index) => (
+                                <Upcoming key={index} id={index} event={event} />
                             ))}
                         </div>
                     </div>
@@ -101,12 +133,11 @@ const Events = () => {
                     <div className="container">
                         <h3>On-demand events</h3>
                         <div className={style.ondemand_events}>
-                            <Ondemand />
-                            <Ondemand />
-                            <Ondemand />
-                            <Ondemand />
-                            <Ondemand />
-                            <Ondemand />
+                            {webinars.length > 0 && webinars.map((event, index) => (
+                                <Ondemand key={index} id={index} event={event} />
+                            ))}
+
+
                         </div>
                     </div>
                 </div>
@@ -116,33 +147,39 @@ const Events = () => {
 }
 
 
-function Upcoming({ id }) {
+function Upcoming({ id, event }) {
+    console.log({ event });
     return (
         <div className={style.upcoming_event}>
             <div className={style.upcoming_event_left}>
                 <div className={style.upcoming_event_img_wrapper}>
-                    <img src={card} alt="" />
+                    <img src={`${process.env.REACT_APP_IMAGEURL}${event.webinarImg}`} alt="" />
                 </div>
             </div>
             <div className={style.upcoming_event_right}>
                 <div className={style.upcoming_event_text_container}>
-                    <h5>An Introduction to Design Thinking (with Maureen Herben)</h5>
-                    <p>Grow your knowledge, tap into a new skill, or learn how to forge a tech career from scratch.</p>
-                    <div className={style.tags}>
-                        <small className={style.tag}>Design</small>
-                        <small className={style.tag}>UI/UX</small>
+                    <h5>{event.title}</h5>
+                    <p className='restricted_line'>{event.description}</p>
+                    <div className={style.tagsConatiner}>
+                        {event.tags.map((e, id) => (
+                            <div className={style.tags} key={id}>
+                                <small className={style.tag}>#{e}</small>
+                            </div>
+                        ))}
+
                     </div>
+
                 </div>
 
                 <div className={style.e_details}>
-                    <h6>FREE</h6>
+                    <h6>{event.price === 0 ? "FREE" : event.price}</h6>
                     <div className={style.event_details}>
                         <span><i><IoCalendarSharp /></i></span>
-                        <span>27 September 2022</span>
+                        <span>{new Date(event.date).toDateString()}</span>
                     </div>
                     <div className={style.event_details}>
                         <span><i><AiFillClockCircle /></i></span>
-                        <span>2:00pm</span>
+                        <span>{event.time}</span>
                     </div>
                     <div className={style.event_details}>
                         <span>
@@ -150,10 +187,10 @@ function Upcoming({ id }) {
                                 <BiTargetLock />
                             </i>
                         </span>
-                        <span>Online</span>
+                        <span>{event.status}</span>
                     </div>
                     <button className={style.event_button}>
-                        <Link to={`${id}`}>
+                        <Link to={`${event._id}`}>
                             Learn More
                         </Link>
                     </button>
@@ -164,24 +201,23 @@ function Upcoming({ id }) {
 }
 
 
-function Ondemand() {
+function Ondemand({ event }) {
     return (
         <div className={style.ondemand_card}>
             <div className={style.ondemand_top}>
                 <div className={style.ondemand_img_wrapper}>
-                    <img src={card} alt="" />
+                    <img src={`${process.env.REACT_APP_IMAGEURL}${event.webinarImg}`} alt="" />
                 </div>
             </div>
             <div className={style.ondemand_bottom}>
                 <div className={style.ondemand_text_container}>
                     <div className={style.tags}>
-                        <small className={style.tag}>Design</small>
-                        <small className={style.tag}>UI/UX</small>
+                        {/* <small className={style.tag}>Design</small>
+                        <small className={style.tag}>UI/UX</small> */}
                     </div>
-                    <h5>An Introduction to Design Thinking (with Maureen Herben)</h5>
-                    <p>Grow your knowledge, tap into a new skill, or learn how to forge a tech career from scratch.</p>
-
-                    <div>
+                    <h5>{event.title}</h5>
+                    <p className='restricted_line'>{event.description}</p>
+                    <div className={style.lastbtn}>
                         <button>Watch Now</button>
                     </div>
                 </div>
@@ -191,18 +227,32 @@ function Ondemand() {
 }
 
 export function Event() {
+    const { id } = useParams()
+    const [webinar, setWebinar] = useState({})
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { getAWebinar } } = useAuth();
+
+    const webinarData = useQuery(["fetch webinar", id], () => getAWebinar(id), {
+        onSuccess: (res) => {
+            if (res.data) {
+                console.log("data", res.data);
+                setWebinar(res.data)
+
+            }
+        }
+    })
+
     return (
         <Layout>
             <div className={`container p-4 ${style.event}`}>
                 <div className={style.eventimage}>
-                    <img src={card} alt="" />
+                    <img src={`${process.env.REACT_APP_IMAGEURL}${webinar.webinarImg}`} alt="" />
                 </div>
 
                 <div className={style.eventinfo}>
 
                     <div className={style.eventTop}>
                         <h2>
-                            An Introduction to Design Thinking (with Maureen Herben)
+                            {webinar.title}
                         </h2>
                         <button className={style.event_button}>
                             Register
@@ -210,16 +260,16 @@ export function Event() {
                         <div className={style.eventTime}>
                             <div>
                                 <IoCalendarSharp />
-                                <span>27 September 2022</span>
+                                <span>{new Date(webinar.date).toDateString()}</span>
                             </div>
                             <div >
                                 <IoTimeSharp />
-                                <span>2:00pm</span>
+                                <span>{webinar.time}</span>
                             </div>
 
                             <div>
                                 <MdMyLocation />
-                                <span>Online</span>
+                                <span>{webinar.status}</span>
                             </div>
                         </div>
 
@@ -228,45 +278,22 @@ export function Event() {
                     <div className={style.eventMiddle}>
                         <h2>About This Event</h2>
                         <p>
-                            So what exactly is Design Thinking?
-                            <hr style={{ height: "0px" }} />
-
-                            And how do I go about using this process in my day-to-day work?
-                            <br/>
-                            If you’ve been asking yourself these questions, we’ve got the perfect live event for you!
-                            <br/>
-                            Join Senior Product Designer Maureen Herben as she walks you through the Design
-                            <br />
-                            Thinking process from start to finish.
-                            <br/>
-                            You’ll learn exactly what the process involves and in what contexts it is particularly useful.
-                            <br />
-
-                            Maureen will also analyze the relationship between UX design and Design Thinking, and discuss real-world case studies that beautifully illustrate the process in action.
-                            <br/>
-                            All sound a little overwhelming?
-                            <br />
-                            Don’t worry—this live event is perfect for beginners and pros alike.
-                            <br/>
-                            We’ll also be having a Q&A at the end to answer all your burning questions.
-                            <br/>
-                            Look forward to seeing you there!
+                            {webinar.description}
                         </p>
                     </div>
 
                     <div className={style.eventBottom}>
                         <h2>FEATURED PRESENTERS</h2>
                         <div className={style.eventProfiles}>
-                            {[...Array(2)].map((x, id) => (
+                            {webinar?.presenters?.length > 0 && webinar.presenters.map((x, id) => (
                                 <div className={style.eventProfile}>
                                     <div className={style.eventprofileimg}>
-                                        <img src={profile} alt="" />
+                                        <img src={`${process.env.REACT_APP_IMAGEURL}${x.presenterImg}`} alt="" />
                                     </div>
                                     <div className={style.eventprofiletext}>
-                                        <p>Amandler- Daesigner at Microsoft</p>
+                                        <p>{x.presenterName} </p>
                                         <span>
-                                            Grow your knowledge, tap into a new skill, or learn how to forge a tech career from scratch.
-                                        </span>
+                                            {x.presenterDesc}                                        </span>
                                     </div>
                                 </div>
 
@@ -274,7 +301,7 @@ export function Event() {
                         </div>
                     </div>
 
-                </div>
+                </div> 
 
             </div>
 

@@ -8,12 +8,15 @@ import exec2 from "../../images/landing/exe2.png"
 import exec3 from "../../images/landing/exe3.png"
 
 const Grid = styled.div`
-     display: grid;
-  grid-template-columns: repeat(4, 280px);
-  gap: 1.5rem;
-  justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 250px), 250px));    
+    grid-auto-rows: 432px;
+    overflow: hidden;
+    gap: 1.5rem;
+    justify-content: space-around;
+    padding: .7rem .5rem;
 
-  @media screen and (max-width: 930px) {
+  @media screen and (max-width: 1024px) {
     grid-template-columns: repeat(auto-fit, minmax(min(180px, 240px), 240px));
     justify-content: space-evenly;
     gap: 1rem;
@@ -21,16 +24,16 @@ const Grid = styled.div`
 
 
 
-    /*
-    @media screen and (max-width:500px){
-        grid-template-columns: min(100%, 380px);
+
+  @media screen and (max-width:500px){
+        grid-template-columns: min(100%, 280px);
         justify-content:center;
-    } */
+    } 
 `
 
 const ExecutiveClasses = () => {
     const { otherFunctions: { fetchBootcamps }, } = useAuth();
-    const [shorts, setShorts] = useState([])
+    const [shorts, setShorts] = useState([]) 
 
     const classes = useQuery(["fetch classes"], () => fetchBootcamps(), {
         notifyOnChangeProps: ["category", "isFetching"],
@@ -49,7 +52,7 @@ const ExecutiveClasses = () => {
             <Grid>
                 {
                     shorts?.filter(item => item.isActive).slice(0, 8).map((item, i) => (
-                        <ExeEducation {...item} i={i} img={data.content[i]}  key={item.bootcampId}/>
+                        <ExeEducation {...item} i={i} key={item.bootcampId} />
                     ))
                 }
             </Grid>

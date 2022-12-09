@@ -7,24 +7,29 @@ import { ClassTypeComponent, Short, TechPreCard } from './landingComponents'
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
+
+    overflow: hidden;
+    grid-auto-rows: 350px;
+
     gap: 1.5rem;
     justify-content:space-around;
+    padding: .5rem;
     
-    @media screen and (max-width: 2560px) {
+    @media screen and (min-width: 1400px) {
         grid-template-columns: repeat(4, 230px);
         justify-content: space-evenly;
         gap: 1rem;
-      }
+    }
 
- @media screen and (max-width:768px){
+    @media screen and (max-width:768px){
         grid-template-columns: repeat(2, 280px);
     }
 
 
     @media screen and (max-width:500px){
-        grid-template-columns: min(100%, 380px);
+        grid-template-columns: min(100%, 280px);
         justify-content:center;
-    } 
+    }  
     `
 
 const ShortCourses = () => {

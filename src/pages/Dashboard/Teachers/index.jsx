@@ -817,7 +817,7 @@ export const Dashboard = ()=>{
                       //     <p className="text-muted">You haven't registered for a course</p>
                       //   </li> 
                       //   :
-                    data?.data.map((item, i)=>(
+                    data?.data?.map((item, i)=>(
                           <li key={item.bootcampId} className={` ${clsx["dashboard_class--wrapper"]}`}>
                               <div className={clsx["dashboard_class--details"]}>
                                 <p>{item.title}</p>
@@ -860,14 +860,41 @@ export const Teachers = ({ children, isMobile, userdata, notification, header, l
     generalState: { showSidebar },
     generalState,
     setGeneralState,
-    adminFunctions: {getUnreadMessages}, studentFunctions: {fetchNotifications }
+    adminFunctions: {getUnreadMessages}, studentFunctions: {fetchNotifications }, teacherFunctions:{fetchProfile}
   } = useAuth();
 
-  const {getItem} = useLocalStorage()
+  const {getItem, updateItem} = useLocalStorage()
 
   const userData = getItem(KEY)
   const flag = useRef(false);
 
+  async function getProfile() {
+    setGeneralState({ ...generalState, loading: true });
+    try {
+      let data = await fetchProfile(userdata?.token);
+      setGeneralState({ ...generalState, loading: false });
+
+      const { success, message, statusCode } = data;
+      if (!success || statusCode !== 1)
+        throw new AdvancedError(message, statusCode);
+      else {
+        const { data: d } = data;
+        const newValue = {
+          ...userdata,
+          ...d,
+        };
+        userdata = updateItem(KEY, newValue);
+        setGeneralState((old) => {
+          return {
+            ...old,
+            userdata: { ...old.userdata, ...d },
+          };
+        });
+      }
+    } catch (err) {
+
+    }
+  }
   useEffect(() => {
     if(flag.current) return;
       (async() => {
@@ -896,6 +923,10 @@ export const Teachers = ({ children, isMobile, userdata, notification, header, l
           });
         }
       })()
+
+      if(userdata?.token){
+        getProfile()
+      }
       flag.current = true;
   }, []);
 

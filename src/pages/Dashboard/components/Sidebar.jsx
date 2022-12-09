@@ -24,6 +24,8 @@ import { useAuth } from "../../../contexts/Auth";
 import LogoutButton from "../../../components/LogoutButton";
 import { LogoSidebar, Logosm } from "../../../images/components/svgs";
 import { SiGoogleclassroom } from "react-icons/si";
+import { BsNewspaper } from "react-icons/bs";
+import { HiOutlinePresentationChartLine } from "react-icons/hi";
 
 
 
@@ -88,11 +90,11 @@ const Sidebar = ({}) => {
             path: "fees",
             title: "Fees"
         },
-        {
-            icon: FiGift,
-            path: "courses",
-            title: "Courses"
-        },
+        // {
+        //     icon: FiGift,
+        //     path: "courses",
+        //     title: "Courses"
+        // },
         {
             icon: IoIosHelpBuoy,
             path: "courses-categories",
@@ -101,7 +103,7 @@ const Sidebar = ({}) => {
         {
             icon: BiCategory,
             path: "classes",
-            title: "Classes"
+            title: "Courses"
         },
         {
             icon: BiVideo,
@@ -135,6 +137,17 @@ const Sidebar = ({}) => {
             icon: SiGoogleclassroom,
             path: "class-console",
             title: "Console"
+        },
+        {
+            icon: HiOutlinePresentationChartLine,
+            path: "webinar",
+            title: "Webinar"
+        }
+        ,
+        {
+            icon: BsNewspaper,
+            path: "blog",
+            title: "Blog"
         }
     ] : route === "student" ?  [
         {
@@ -219,15 +232,15 @@ const Sidebar = ({}) => {
             path: "profile",
             title: "My Profile"
         },
-        {
-            icon: FiGift,
-            path: "courses",
-            title: "Courses"
-        },
+        // {
+        //     icon: FiGift,
+        //     path: "courses",
+        //     title: "Courses"
+        // }, 
         {
             icon: BiCategory,
             path: "classes",
-            title: "Classes"
+            title: "Courses"
         },
         {
             icon: BiVideo,

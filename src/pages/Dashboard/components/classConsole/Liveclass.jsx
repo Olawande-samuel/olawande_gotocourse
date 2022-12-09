@@ -12,7 +12,7 @@ import "./console.css";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
 import { Box, Modal, Switch } from "@mui/material";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../../../contexts/Auth";
 import { AdvancedError } from "../../../../classes";
 import { toast, ToastContainer } from "react-toastify";
@@ -20,14 +20,28 @@ import axios from "axios";
 import CONFIG from "../../../../utils/video/appConst";
 import { useLocalStorage } from "../../../../hooks";
 import { KEY } from "../../../../constants";
+import { useQuery } from "@tanstack/react-query";
 
 export function LiveClassInfo({ type }) {
+  
+  const {classId} = useParams()
   const [open, setOpen] = useState(false);
-  const { generalState, setGeneralState } = useAuth();
-
+  const { generalState, consoleFunctions:{fetchLiveSchedule}, setGeneralState } = useAuth();
   const { scheduledClasses } = generalState;
+  const {getItem} = useLocalStorage();
+  const userdata = getItem(KEY)
 
-  console.log(scheduledClasses);
+
+
+  const fetchSchedule = useQuery(["fetch live schedule", userdata?.token],()=>fetchLiveSchedule(userdata.token, classId), {
+    
+    onSuccess: res => console.log(res),
+    onError: err => console.log(err)
+  })
+
+
+
+
   return (
     <div className={style.live_class}>
       <ToastContainer
@@ -139,9 +153,10 @@ export function ScheduleClass({ open, setOpen }) {
     p: 4,
   };
 
+  const {classId} = useParams()
   const {getItem}= useLocalStorage()
   const user = getItem(KEY)
-  const { generalState, setGeneralState } = useAuth();
+  const { generalState, setGeneralState, teacherFunctions: {fetchLiveClasses} } = useAuth();
   const [formstate, setFormstate] = useState({
     startDate: "",
     endDate: "",
@@ -164,9 +179,9 @@ export function ScheduleClass({ open, setOpen }) {
     try {
       setLoading(true)
       const res = await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
-          roomName: "myroom",
-          userId: "629a6a268034834a935aa518"
-          // userId: user.userId
+          roomName: formstate.title,
+          userId: user.userId,
+          classId
       })
       
       console.log(res.data.data)
@@ -196,6 +211,8 @@ export function ScheduleClass({ open, setOpen }) {
     }
   }
 
+  // const fetchClass = useQuery(["fetch all live classes", user.token], ()=>fetchLiveClasses(userdata.token, classId))
+
   return (
     <Modal
       open={open}
@@ -215,6 +232,7 @@ export function ScheduleClass({ open, setOpen }) {
               id="title"
               className="form-control"
               onChange={handleChange}
+              value={formstate.title}
             />
           </div>
           <div className="form-group my-3">
@@ -294,7 +312,14 @@ export function ScheduleClass({ open, setOpen }) {
                 onChange={handleChange}
               />
             </div>
-            <button type="submit">Create</button>
+            
+            <button type="submit" disabled={loading}>{
+              loading ? <div className="spinner-border text-white">
+                <div className="visually-hidden">Loading...</div>
+              </div>
+              :
+              <span>Create</span>
+            }</button>
           </div>
         </form>
       </Box>

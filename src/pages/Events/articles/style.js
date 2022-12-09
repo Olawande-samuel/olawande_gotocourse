@@ -22,13 +22,15 @@ export const ImageContainer = styled.div`
         border-radius:  20px;
         width:min(100%, 800px);
         margin-inline: auto;
-        height: 400px;
+        height: 360px;
+        display: flex;
+        justify-content: center;
     }
     img {
-        width:100%;
-        height:100%;
+        max-width:100%;
+        height:auto;
         border-radius: 20px;
-        object-fit: cover;
+        object-fit: contain;
     }
 
 `

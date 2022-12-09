@@ -102,6 +102,29 @@ export default function Classroom() {
         onError: (err)=> console.error(err)
     })
     
+    const studentData = [
+
+        {
+            name:"Richmond Tyson",
+            email:"richieTy@gmail.com",
+            code:"212-33-34"
+        },
+        {
+            name:"Alysson Bach",
+            email:"bachAlysson92@gmail.com",
+            code:"212-83-34"
+        },
+        {
+            name:"Ahmed Mahmoud",
+            email:"moudya@gmail.com",
+            code:"212-42-45"
+        },
+        {
+            name:"Hope Sterling",
+            email:"s_hope@gmail.com",
+            code:"212-61-74"
+        },
+    ]
     
     return (
         <div className=''>
@@ -120,6 +143,7 @@ export default function Classroom() {
                         <input type="search" name="" id="" placeholder='Search for videos/files' />
 
                     </div>
+                    <button>Download csv</button>
 
                 </div>
 
@@ -134,13 +158,13 @@ export default function Classroom() {
                         <div>Upgraded Assessment</div>
                     </div>
                     {
-                        [...Array(7)].map((x, id) => (
+                        studentData.map((x, id) => (
                             <div className="classroom__info" onClick={Toggle}>
 
                                 <div>{id + 1}</div>
-                                <div>Olufunmilayo Adekaunsi</div>
-                                <div>xyz@gmail.com</div>
-                                <div>214-3-44</div>
+                                <div>{x.name}</div>
+                                <div>{x.email}</div>
+                                <div>{x.code}</div>
                                 <div>0%</div>
                                 <div>0.00%</div>
                                 <div>0/0</div>

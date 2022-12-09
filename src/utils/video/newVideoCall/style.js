@@ -73,7 +73,7 @@ export const VideoWrapper = styled.div`
     justify-content: flex-end; */
     width: 100%;
     gap: 10px;
-    background:#191046;
+    background:#000;
     height: 100%;
     position: relative;
     overflow: hidden;
@@ -156,7 +156,9 @@ export const VideoWrapper = styled.div`
         video {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
+            border: 1px solid #484848;
+
         }
     }
 `;
@@ -172,12 +174,12 @@ export const StreamWrapper = styled.div`
     /* flex: 1; */
     border-radius: 10px;
     gap: 10px;
-    background:#191046;
+    background:#000;
     position: relative;
     overflow-y: auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-auto-rows: 150px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 350px));
+    grid-auto-rows: 200px;
     gap: .3rem;
 
     
@@ -200,6 +202,7 @@ export const StreamWrapper = styled.div`
         max-width: 100%;
         max-height: 100%;
         border-radius: 10px;
+        border: 1px solid #484848;
         position: relative;
         overflow: hidden;
 
@@ -224,7 +227,9 @@ export const StreamWrapper = styled.div`
         video {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
+            border: 1px solid #484848;
+
         }
     }
 `;
@@ -265,12 +270,25 @@ export const UserCallBlock = styled.div`
     bottom: 20px;
     z-index: 999; */
     height:100%;
+    position: relative;
+    top: 0;
+
     video {
         width: 100%;
         height: 100%;
-        object-fit: contain;
+        object-fit: cover;
         border-radius: 10px;
+        border: 1px solid #484848;
 
+    }
+
+    p{
+        position:absolute;
+        top: ${props => props.showText ? "unset": "50%"};
+        left: ${props => props.showText ? 0: "50%"};
+        bottom: ${props => props.showText ? "0": "0"};
+        transform: ${props => props.showText ? "unset": "translate(-50%, -50%)"};
+        color:white;
     }
 
     @media screen and (min-width: 880px) {
@@ -330,13 +348,34 @@ export const AddPeople = styled.div`
 
 export const ControlWrapper = styled.div`
     display: flex;
-    justify-content: center;
+    /* justify-content: space-between; */
     align-items: center;
     gap: 20px;
     position: absolute;
     bottom: 20px;
     width: 100%;
     z-index: 9999;
+    color: #fff;
+    padding-inline: .5rem;
+
+    .controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+
+        .popup_action {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    .controls.right_controls{
+        margin-left:auto;
+        
+        i{
+            cursor:pointer;
+        }
+    }
 `;
 export const ControlItem = styled.div`
     width: 40px;
@@ -354,11 +393,95 @@ export const ControlItem = styled.div`
         color: #F24E1E;
     }
     :last-child {
-        width: 40px;
+        width: 60px;
         height: 40px;
-        border-radius: 50%;
+        border-radius: 40px;
         color: #fff;
         background-color: #FF3459;
-        rotate: 135deg;
+        
+        svg {
+            rotate: 135deg;
+        }
     }
 `;
+
+export const ScreenShare = styled.div`
+    width: 100%;
+    height: 100%;
+    /* border: 3px solid red; */
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 9000;
+    background: #000;
+    display: grid;
+    place-items: center;
+    color:#fff;
+    
+`
+
+
+// USERS
+
+export const UserHeader = styled.h5`
+    color: #000;
+    font-size: 14px;
+    text-transform:capitalize;
+`
+
+export const SearchBox = styled.div`
+    margin-block: 1rem;
+
+    input {
+        border: 1px solid #000;
+        padding: 8px 4px;
+        width: 100%;
+        border-radius:8px;
+    }
+
+`
+
+export const HandList = styled.div`
+    display: flex;
+    flex-direction:column;    
+    gap: 1rem;
+    margin-block: 2rem;
+
+    .head {
+        font-size: 17px;
+        color:#000;
+    }
+`
+
+export const HandUser = styled.div`
+    display: flex;
+    color: #000;
+    gap: 1rem;
+    
+    img {
+        width: 40px;
+        height: 40px;
+        border-radius:50%;
+    }
+
+    svg {
+        margin-left:auto;
+    }
+
+`
+export const UserListWrapper = styled.div`
+
+    .head {
+        font-size: 17px;
+        color:#000;
+        margin-bottom: 1rem;
+    } 
+
+`
+
+export const UserList = styled.ul`
+    list-style-type:none;
+    padding-left: 0;
+
+
+`
