@@ -209,6 +209,7 @@ import {
 } from "./pages/Dashboard/components/webinar";
 import LiveChat from "./pages/Dashboard/components/Live/quikkonnet/LiveChat";
 import Playground from "./components/Playground";
+import AnotherLanding from "./components/AnotherLanding";
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -252,7 +253,8 @@ function App() {
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<Out />}>
-              <Route index element={<Landing />} />
+            {/* <Route index element={<Landing />} /> */}
+            <Route index element={<AnotherLanding />} />
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<SignUp />} />
               <Route path="email" element={<Email />} />
@@ -350,8 +352,8 @@ function App() {
               <Route path="student-how-it-works" element={<HIWStudent />} />
 
                 {/* STUDENTS */}
-              <Route path="student" element={<ComingSoon student={true} />}>
-              {/* <Route path="student" element={<Out />}> */}
+              {/* <Route path="student" element={<ComingSoon student={true} />}> */}
+              <Route path="student" element={<Out />}>
                 <Route path="" element={<StudentDashboard />} />
                 <Route path="profile" element={<StudentProfile />} />
                 <Route path="classes" element={<StudentClasses />} />

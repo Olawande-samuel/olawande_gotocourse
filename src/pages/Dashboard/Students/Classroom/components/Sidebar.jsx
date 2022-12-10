@@ -95,10 +95,10 @@ const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData, comp
     let elementRef = createRef(null)
     // console.log({ AttachmentLength }); // module info
 
-    const ProgressResult = useMemo(() => {
-        let result = (Math.floor((completed / AttachmentLength) * 100))
-        return result
-    }, [completed, AttachmentLength])
+    // const ProgressResult = useMemo(() => {
+    //     let result = (Math.floor((completed / AttachmentLength) * 100))
+    //     return result
+    // }, [completed, AttachmentLength])
 
     return (
         <SidebarContainer $mobile={isMobile}>
@@ -111,18 +111,18 @@ const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData, comp
                     Refresh topics
                 </CustomButton>
                 <ProgressContainer>
-                    <p>Progress: {ProgressResult}%</p>
-                    <Progress value={ProgressResult} max="100" />
+                    {/* <p>Progress: {ProgressResult}%</p> */}
+                    {/* <Progress value={ProgressResult} max="100" /> */}
                 </ProgressContainer>
                 <div ref={elementRef}>
                     {
-                        modules.map((module) =>
+                        modules.map((module, id) =>
                             <Module
                                 title={module.name}
                                 activeMedia={activeMedia}
-                                attachments={module}
+                                contents={module.contents}
                                 changeActive={changeActive}
-                                key={module._id}
+                                key={id}
                                 fetchData={fetchData}
                                 AttachmentLength={AttachmentLength}
                                 setaAllattachmentLength={setaAllattachmentLength}
