@@ -153,7 +153,7 @@ const Footer = () => {
                 <li><AiOutlineMail/></li>
 
                   </div>
-                  {categories.data?.data?.map((link, index) => (
+                  {/* {categories.data?.data?.map((link, index) => (
                     <Link key={index} to={`/categories/${link.name.split(" ").join("-").toLowerCase()}`} onClick={()=>{
                       localStorage.setItem('gotocourse-category', JSON.stringify(link))
                     }} style={{ color:"#fff"}}>
@@ -177,7 +177,7 @@ const Footer = () => {
                         {link.name}
                       </motion.li>
                     </Link>
-                  ))}
+                  ))} */}
 
               </ul>
             </div>
