@@ -493,13 +493,18 @@ const VideoChatScreen = () => {
     }, [userProfile.userId])
 
     function handleNavigation() {
+        // let videoWrapper = document.querySelector(".video-section")
+        // console.log({videoWrapper})
+        // const video = VideoWrapper.querySelector('.client-local-stream')
+        // for (const track of video.srcObject.getTracks()){
+        //     console.log(track)
+        // }
         sessionStorage.clear()
         userProfile.userType === "student" ?
-            window.location.assign("/student")
-            :
-            userProfile.userType === "teacher" ?
-                window.location.assign("/teacher") : userProfile.userType === "admin" ? window.location.assign("/admin") : window.location.assign("/")
-
+        window.location.assign("/student")
+        :
+        userProfile.userType === "teacher" ?
+        window.location.assign("/teacher") : userProfile.userType === "admin" ? window.location.assign("/admin") : window.location.assign("/")
     }
 
     const toggleMessage = () => {

@@ -661,10 +661,7 @@ function App() {
               </Route>
             </Route>
             <Route path="enterprise" element={<Business />} />
-            <Route
-              path="*"
-              element={<h1 className="text-center">Page Not Found</h1>}
-            />
+            <Route path="*" element={<h1 className="text-center">Page Not Found</h1>} />
           </Routes>
         </Suspense>
       </SyllabusContextProvider>
