@@ -1,19 +1,21 @@
 import styled from "styled-components"
-import dashboard from '../../images/landing/dashboard.png'
+import dashboard from '../../../images/landing/dashboard.png'
 
 const Container = styled.div`
 padding: 2rem;
-background: #F0F4FF;
+
+.createheader{
+    padding: 2rem;
+}
 
 h4{
-    padding: 2rem 0;
     text-align: center;
     color: #1B1F29;
     font-family: 'Raleway';
     font-style: normal;
     font-weight: 700;
-    font-size: 32px;
-    line-height: 48px;
+    font-size: 24px;
+    // line-height: 48px;
 }
 
 
@@ -81,7 +83,10 @@ h4{
 const Create = () => {
     return (
         <Container>
-            <h4>Create & sell courses for everyone, anywhere</h4>
+            <div className="createheader">
+                <h4>All-in-one platform</h4>
+                <h4>to manage live classes</h4>
+            </div>
             <div className="createcontent">
 
                 <div className="createleft">
@@ -93,8 +98,7 @@ const Create = () => {
                         <h5>Leverage on our themes to</h5>
                         <h5> customize your space</h5>
                     </div>
-                    <p>Build  and showcase your leaning site with themes designed
-                        <br /> for selling education.</p>
+                    <p>Want to start from absolute scratch? Customize your space with our customization templates and intuitive design tools, we empower educators in creating an engaging course quickly and easily.</p>
                 </div>
             </div>
         </Container>

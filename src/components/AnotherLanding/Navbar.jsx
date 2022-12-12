@@ -1,9 +1,14 @@
 import styled from "styled-components"
 import { Badge } from "@mui/material"
 import { AiOutlineMenu } from "react-icons/ai"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 // import LogoutButton from "./LogoutButton"
 import { Logosm } from "../../images/components/svgs";
+import { motion } from "framer-motion";
+import { useAuth } from "../../contexts/Auth";
+import { useLocalStorage } from "../../hooks";
+import { KEY } from "../../constants";
+import { FaRegUser } from "react-icons/fa";
 
 const Container = styled.div`
 color: #0C1825;
@@ -119,35 +124,94 @@ ul{
 `
 
 const Navbar = ({ toggleSidebar }) => {
+    const { setGeneralState } = useAuth();
+    const { getItem } = useLocalStorage();
+
+    const value = getItem(KEY);
+    const location = useLocation();
+    const navigate = useNavigate();
+
     return (
         <Container>
             <div className="navbarlogo">
-                <Logosm color="var(--theme-blue)"/>
+                <Link to={`/`}>
+                    <Logosm color="var(--theme-blue)" />
+                </Link>
             </div>
 
             <ul>
                 <div className="firstitems">
-                    <li><Link to={`/`}>Create</Link></li>
-                    <li><Link to={`/`}>Manage</Link></li>
-                    <li><Link to={`/`}>Learn with Gotocourse</Link></li>
-                    <li><Link to={`/`}>Pricing</Link></li>
+                    <li><Link to={`/create`}>Create</Link></li>
+                    <li><Link to={`/manage`}>Manage</Link></li>
+                    <li><Link to={`/goto`}>Learn with Gotocourse</Link></li>
+                    <li><Link to={`/pricing`}>Pricing</Link></li>
                 </div>
 
                 <div className="seconditems">
-                      <li>
-                        <button className="first__btn">Sign in</button>
-                    </li>
+                    {value?.token ? (
+                        <>
+                            <li className="me-3 nav_link">
+                                <motion.span
+                                    style={{
+                                        cursor: "pointer", color: "#0C2191"
+                                    }}
+                                    whileHover={{
+                                        textShadow: "0px 0px 8px rgb(255, 255, 255)",
+                                    }}
+                                    transition={{ duration: 0.1 }}
+                                    onClick={() => {
+                                        localStorage.clear();
 
-                    <li>
-                        <button className="second__btn">Register for free</button>
-                    </li>
+                                        navigate("/login")
+                                    }}
+                                >
+                                    Logout
+                                </motion.span>
+                            </li>
+                            <Link
+                                to={`${value.userType === "admin"
+                                    ? "/admin"
+                                    : value.userType === "student"
+                                        ? "/student"
+                                        : "/teacher"
+                                    }`}
+                            >
+                                <motion.div
+                                    whileHover={{
+                                        textShadow: "0px 0px 8px rgb(255, 255, 255)"
+                                    }}
+                                    className="d-flex align-items-center nav_link"
+                                    style={{ color: "#0C2191", fontSize: "16px" }}
+                                >
+                                    <i
+                                        className="d-flex align-items-center justify-content-center me-2"
+                                        style={{ color: "#0C2191" }}
+                                    >
+                                        <FaRegUser />
+                                    </i>
+                                    <span>{value.firstName}</span>
+                                </motion.div>
+                            </Link>
+                        </>
+                    ) :
+                        (<>
+                            <li>
+                                <button className="first__btn">Sign in</button>
+                            </li>
+
+                            <li>
+                                <button className="second__btn">Register for free</button>
+                            </li>
+                        </>
+                        )}
+
 
                 </div>
             </ul>
 
             <div className="hamburger align-items-center">
                 <i>
-                    <AiOutlineMenu style={{ fontSize: "24px", color:"var(--theme-blue)", cursor: "pointer" }} onClick={toggleSidebar} />
+                    <AiOutlineMenu style={{ fontSize: "24px", color: "var(--theme-blue)", cursor: "pointer" }} onClick={toggleSidebar} />
                 </i>
             </div>
         </Container>

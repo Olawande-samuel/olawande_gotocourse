@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import community from '../../images/landing/community.png'
+import community from '../../../images/landing/community.png'
 
 const Container = styled.div`
 padding: 2rem;
