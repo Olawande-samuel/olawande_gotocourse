@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
 import { Breadcrumbs, IconButton, Paper, Backdrop, Tooltip } from "@mui/material";
@@ -380,17 +380,171 @@ ul{
         </QuizImageContainer>
         <QuizButton>Open Quiz</QuizButton> */}
 
-const QuizContent = ({ q, id }) => {
-    console.log({q});
+// const QuizContent = ({ q, id }) => {
+//     console.log({q});
+//     return (
+//         <>
+//             <Quiz key={id}>
+
+//                 <QuizInfo>
+//                     <p>Description: </p>
+//                     <span>{q.note}</span>
+//                     <p>Max Attempts: <span>{q.maxAttempts}</span></p>
+//                     <p>Deadline: <span>{new Date(q?.endDate).toLocaleTimeString('en-US', {
+//                         hour: '2-digit',
+//                         minute: '2-digit'
+//                     })}</span></p>
+//                     <p>Number of submissions:  <span>1/1</span> </p>
+//                     <p> Provisional Result (based on Objective): <span>0.00%</span></p>
+//                 </QuizInfo>
+
+//             </Quiz>
+//             <div>
+//                 {q.questions.length > 0 && q.questions.map((ques, index) => (
+//                     <Accordion >
+//                         <Accordion.Item eventKey={id} className="accord__body">
+//                             <Accordion.Header className="accord__header"> Question {id + 1}</Accordion.Header>
+//                             <Accordion.Body>
+//                                 <QuesHeader className="queshead">
+//                                     <p>Type: <span>{ques.type}</span></p>
+//                                     <p>Grade: <span>{ques.grade}</span></p>
+//                                 </QuesHeader>
+
+//                                 <QuestionOptions>
+//                                     <h4 dangerouslySetInnerHTML={{ __html: `${ques.title}` }}></h4>
+//                                     {ques?.options && ques?.options.length > 0 && ques?.options.map((opt, i) => (
+//                                         <Answer>
+//                                             <label for="vehicle1">
+//                                                 <input
+//                                                     type="checkbox"
+//                                                     value={opt.title}
+//                                                     // name="isAnswer"
+//                                                     onChange={e => {
+//                                                         // const list = { ...formData }
+//                                                         // list.questions[id].options[index]['isAnswer'] = e.target.checked;
+//                                                         // console.log(list);
+//                                                         // setFormData(list)
+//                                                     }} />
+//                                                 {opt.title}
+//                                             </label>
+
+//                                         </Answer>
+
+//                                     ))}
+
+//                                 </QuestionOptions>
+//                                 <QuizAction>
+
+//                                     <QuizButton>
+//                                         Submit
+//                                     </QuizButton>
+//                                 </QuizAction>
+
+//                             </Accordion.Body>
+//                         </Accordion.Item>
+//                     </Accordion>
+//                 ))}
+
+//             </div>
+
+
+//         </>
+//     )
+// }
+
+const NoteComponent = (contentItem) => {
+
     return (
-        <>
-            <Quiz key={id}>
+        <NotecContainer>
+
+            <div>
+                < Note >
+                    {/* <h4>Hey this is a demo note heading</h4> */}
+                    <p dangerouslySetInnerHTML={{ __html: contentItem.contentItem?.body }}></p>
+
+                </Note>
+                {/* { note && <button ref={ref} onClick={() => handleCompleted(note.contentId)}>{note.contentId}</button>} */}
+                {/* {
+                    <QuizAction>
+                        <QuizButton
+                        // onClick={() => handleCompleted(note.contentId)}
+                        >
+                            Mark as Completed
+                        </QuizButton>
+                    </QuizAction>
+                } */}
+            </div>
+
+
+        </NotecContainer>
+    )
+}
+
+const FileComponent = (contentItem) => {
+
+    const getExtention = (val) => {
+
+        if (val.includes("svg", "png", "avif", "webp")) {
+            console.log("image");
+            return "image"
+
+        }
+        else if (val.includes("mp4", "3gp", "mkv")) return "video"
+        else return ""
+    }
+    return (
+        <div>
+            <Paper variant='outlined' className="paper">
+                <PaperTop>
+                    <div>
+                        <h5>{contentItem.contentItem.title}</h5>
+                        <IconButton>
+                            <MdMoreVert />
+                        </IconButton>
+
+                    </div>
+                    <div>
+                        <BodyActions>
+                            <IconButton>
+                                <BiCloudDownload />
+                            </IconButton>
+                            <CustomButton>Open</CustomButton>
+                        </BodyActions>
+                    </div>
+                </PaperTop>
+
+                <FileName>
+                    <p>{contentItem.contentItem.title}</p>
+                    <IconButton>
+                        <MdMoreVert />
+                    </IconButton>
+                </FileName>
+
+                <FileDisplay>
+                    {getExtention(contentItem.contentItem.fileName) === "image" ? <img src={`${process.env.REACT_APP_IMAGEURL}${contentItem.contentItem.fileName}`} alt="" /> :
+                        <video src={`${process.env.REACT_APP_VIDEOSURL}${contentItem.contentItem.fileName}`} controls ></video>
+                    }
+
+                </FileDisplay>
+
+
+            </Paper>
+
+        </div>
+    )
+}
+
+const QuizComponent = ({contentItem}) => {
+    console.log(contentItem);
+    return (
+          <>
+            <Quiz>
 
                 <QuizInfo>
                     <p>Description: </p>
-                    <span>{q.note}</span>
-                    <p>Max Attempts: <span>{q.maxAttempts}</span></p>
-                    <p>Deadline: <span>{new Date(q?.endDate).toLocaleTimeString('en-US', {
+                    <span>{contentItem.note}</span>
+                    <p>Max Attempts: <span>{contentItem.maxAttempts}</span></p>
+                    <p>Deadline: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
                         hour: '2-digit',
                         minute: '2-digit'
                     })}</span></p>
@@ -400,10 +554,10 @@ const QuizContent = ({ q, id }) => {
 
             </Quiz>
             <div>
-                {q.questions.length > 0 && q.questions.map((ques, index) => (
+                {contentItem.questions.length > 0 && contentItem.questions.map((ques, index) => (
                     <Accordion >
-                        <Accordion.Item eventKey={id} className="accord__body">
-                            <Accordion.Header className="accord__header"> Question {id + 1}</Accordion.Header>
+                        <Accordion.Item eventKey={index} className="accord__body">
+                            <Accordion.Header className="accord__header"> Question {index + 1}</Accordion.Header>
                             <Accordion.Body>
                                 <QuesHeader className="queshead">
                                     <p>Type: <span>{ques.type}</span></p>
@@ -452,138 +606,18 @@ const QuizContent = ({ q, id }) => {
     )
 }
 
-const NoteComponent = ({ noteContent, completed, setCompleted, AttachmentLength, attach, setAttach }) => {
-    const { getItem } = useLocalStorage()
-    const userdata = getItem(KEY)
-    const { consoleFunctions: { markAsCompleted } } = useAuth();
-    const ref = useRef()
-    // console.log({ completed });
-    // console.log({ noteContent });
-
-    const handleCompleted = async (id, index) => {
-        const { success } = await markAsCompleted(userdata?.token, id)
-        // console.log({success});
-        if (success) {
-            // console.log(ref.current);
-            // console.log("note id", noteContent[0].contentId);
-            setCompleted((prev) => prev < AttachmentLength ? prev + 1 : prev)
-            setAttach(attach.map(val => {
-                console.log(val._id === noteContent[0].contentId);
-                if (val._id === noteContent[0].contentId) {
-                     val = {
-                        ...val,
-                        marked: true
-                    }
-                } 
-                return val
-            }))
-           
-            ref.current.style.display = "none";
-
-
-        }
-
-
-    }
-
-    let note = noteContent[noteContent?.length - 1]
-    // console.log({note});
-
-    return (
-        <NotecContainer>
-
-            <div>
-                < Note >
-                    {/* <h4>Hey this is a demo note heading</h4> */}
-                    <p dangerouslySetInnerHTML={{ __html: note.body }}></p>
-
-                </Note>
-                {/* { note && <button ref={ref} onClick={() => handleCompleted(note.contentId)}>{note.contentId}</button>} */}
-                {
-                    note &&
-                    <QuizAction>
-                        <QuizButton ref={ref} onClick={() => handleCompleted(note.contentId)}>
-                            Mark as Completed
-                        </QuizButton>
-                    </QuizAction>
-                }
-            </div>
-
-
-        </NotecContainer>
-    )
-}
-
-
-const FileComponent = ({ x, id }) => {
-
-
-    const getExtention = (val) => {
-
-        if (val.includes("svg", "png", "avif", "webp")) {
-            console.log("image");
-            return "image"
-
-        }
-        else if (val.includes("mp4", "3gp", "mkv")) return "video"
-        else return ""
-    }
-    return (
-        <div>
-            <Paper variant='outlined' key={id} className="paper">
-                <PaperTop>
-                    <div>
-                        <h5>{x.title}</h5>
-                        <IconButton>
-                            <MdMoreVert />
-                        </IconButton>
-
-                    </div>
-                    <div>
-                        <BodyActions>
-                            <IconButton>
-                                <BiCloudDownload />
-                            </IconButton>
-                            <CustomButton>Open</CustomButton>
-                        </BodyActions>
-                    </div>
-                </PaperTop>
-
-                <FileName>
-                    <p>{x.fileName}</p>
-                    <IconButton>
-                        <MdMoreVert />
-                    </IconButton>
-                </FileName>
-
-                <FileDisplay>
-                    {getExtention(x.fileName) === "image" ? <img src={x.fileName} alt="" /> :
-                        <video src={x.fileName}></video>
-                    }
-
-                </FileDisplay>
-
-
-            </Paper>
-
-        </div>
-    )
-}
 
 
 const Classroom = () => {
     const [showMobile, setShowMobile] = useState(false);
     const [modules, setModules] = useState([]);
-    // const [allAttachment, setAllattachment] = useState([])
-    const [attach, setAttach] = useState([])
-    const [AttachmentLength, setaAllattachmentLength] = useState(0)
-    const [fileContent, setFileContent] = useState([])
+    const [contents, setContents] = useState([])
     const [title, setTitle] = useState("")
-    const [quizContent, setQuizContent] = useState([])
-    const [noteContent, setNoteContent] = useState([])
+
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
     let location = useLocation()
+
     const [pickedType, setPickedType] = useState("")
     let [completed, setCompleted] = useState(0);
 
@@ -600,56 +634,22 @@ const Classroom = () => {
     })
 
 
-    const fetchData = async (type, info, title) => {
-        if (type === "QUIZ") {
-            const { data } = await fetchStudentQuiz(userdata.token, info)
-            // console.log({ data });
-            setPickedType("QUIZ")
-            setTitle(title)
-            setQuizContent(data)
-            setNoteContent([])
-            setFileContent([])
 
-        }
-        else if (type === "NOTE") {
-            const { data } = await fetchStudentNote(userdata.token, info)
-            console.log({ data });
-            setPickedType("NOTE")
-            setTitle(title)
-            setNoteContent(data)
-            setQuizContent([])
-            setFileContent([])
-
-        } else {
-            const { data } = await fetchStudentFile(userdata.token, info)
-            // console.log({ data });
-            setPickedType("FILE")
-            setTitle(title)
-            setFileContent(data)
-            setQuizContent([])
-            setNoteContent([])
-        }
-    }
 
     const quizRef = useRef()
     const fileRef = useRef()
+
+    const reduceModules = useMemo(() => {
+        return modules?.reduce((total, current) =>{
+           return total + current.contents.length
+        } , 0 );
+    },[modules])
 
 
     const handleFileCompleted = async (id, index) => {
         const { success } = await markAsCompleted(userdata?.token, id)
         if (success) {
-            setCompleted((prev) => prev < AttachmentLength ? prev + 1 : prev)
-            setAttach(attach.map(val => {
-                // console.log(val._id === index);
-                if (val._id === id) {
-                     val = {
-                        ...val,
-                        marked: true
-                    }
-                } 
-                return val
-            }))
-           
+            setCompleted((prev) => prev < reduceModules ? prev + 1 : prev)
             fileRef.current.style.display = "none";
 
         }
@@ -661,18 +661,7 @@ const Classroom = () => {
     const handleQuizCompleted = async (id, index) => {
         const { success } = await markAsCompleted(userdata?.token, id)
         if (success) {
-            setCompleted((prev) => prev < AttachmentLength ? prev + 1 : prev)
-            setAttach(attach.map(val => {
-                // console.log(val._id === index);
-                if (val._id === id) {
-                     val = {
-                        ...val,
-                        marked: true
-                    }
-                } 
-                return val
-            }))
-           
+            setCompleted((prev) => prev < reduceModules ? prev + 1 : prev)
             quizRef.current.style.display = "none";
 
         }
@@ -680,6 +669,12 @@ const Classroom = () => {
 
     }
 
+    console.log({ contents });
+    console.log({modules});
+
+   
+
+    console.log({reduceModules});
 
     return (
         <Container>
@@ -708,28 +703,21 @@ const Classroom = () => {
                     <Sidebar isMobile={true} modules={modules}
                         // activeMedia={active} 
                         // changeActive={setActiveMediaHandler} 
-                        fetchData={fetchData}
                         completed={completed}
-                        AttachmentLength={AttachmentLength}
-                        setaAllattachmentLength={setaAllattachmentLength}
-                        // allAttachment={allAttachment}
-                        // setAllattachment={setAllattachment}
-                        attach={attach}
-                        setAttach={setAttach}
+                                               setContents={setContents}
+                        setPickedType={setPickedType}
+                        reduceModules={reduceModules}
                     />
                 </Backdrop>
                 <Sidebar
                     isMobile={false} modules={modules}
                     // activeMedia={active} 
                     // changeActive={setActiveMediaHandler} 
-                    fetchData={fetchData}
                     completed={completed}
-                    AttachmentLength={AttachmentLength}
-                    setaAllattachmentLength={setaAllattachmentLength}
-                    // allAttachment={allAttachment}
-                    //  setAllattachment={setAllattachment}
-                    attach={attach}
-                    setAttach={setAttach}
+                    setContents={setContents}
+                    setPickedType={setPickedType}
+                    reduceModules={reduceModules}
+
                 />
                 <ClassroomMain>
                     <ClassroomMainTop>
@@ -750,72 +738,82 @@ const Classroom = () => {
                             <h3>{title}</h3>
                             <CustomButton>Ask tutor a question</CustomButton>
                         </BodyInfo>
+
                         <BodyContent>
-                            {pickedType === "FILE" && <>
-                                {fileContent.length > 0 && fileContent.map((x, id) => (
-                                    <FileComponent x={x} id={id} />
+                            {pickedType === "FILE_VIDEO" && <>
+                                {contents?.length > 0 && contents?.map((content, id) => (
+                                    <FileComponent contentItem={content} id={id} key={id}/>
 
 
                                 ))
                                 }
 
-                                {fileContent.length > 0 &&
+                                {contents?.length > 0 &&
                                     <QuizAction >
-                                        <QuizButton ref={fileRef} onClick={() => handleFileCompleted(fileContent[0].contentId)}>
+                                        <QuizButton
+                                        // onClick={() => handleFileCompleted(fileContent[0].contentId)}
+                                        >
                                             Mark as Completed
                                         </QuizButton>
                                     </QuizAction>
                                 }
-                            </>
-                            }
 
 
-                            {pickedType === "QUIZ" && <>
-                                {quizContent.length > 0 && quizContent.map((q, id) => (
-                                    <QuizContent q={q} id={id} key={id}/>
-                                ))}
-                                {quizContent.length > 0 && (
-                                    //  <button ref={quizRef} onClick={() => handleQuizCompleted(quizContent[0].contentId)}>{quizContent[0].contentId}</button>
-
-                                    <QuizAction>
-                                        <QuizButton ref={quizRef} onClick={() => handleQuizCompleted(quizContent[0].contentId)}>
-                                            Mark as Completed
-                                        </QuizButton>
-                                    </QuizAction>
-                                )}
 
                             </>
-
                             }
-
-
 
                             {pickedType === "NOTE" && <>
-                                {noteContent.length > 0 && <NoteComponent
-                                    noteContent={noteContent}
-                                    completed={completed}
-                                    setCompleted={setCompleted}
-                                    AttachmentLength={AttachmentLength}
-                                    attach={attach}
-                                    setAttach={setAttach}
-                                />
+                                {contents?.length > 0 && contents?.map((content, id) => (
+                                    <NoteComponent contentItem={content} id={id} key={id}/>
+
+
+                                ))
+                                }
+
+                                {contents?.length > 0 &&
+                                    <QuizAction >
+                                        <QuizButton
+                                        // onClick={() => handleFileCompleted(fileContent[0].contentId)}
+                                        >
+                                            Mark as Completed
+                                        </QuizButton>
+                                    </QuizAction>
+                                }
+                            </>
+                            }
+
+                            {pickedType === "QUIZ" && <>
+                                {contents?.length > 0 && contents?.map((content, id) => (
+                                    <QuizComponent contentItem={content} id={id} key={id}/>
+
+
+                                ))
+                                }
+
+                                {contents.length > 0 &&
+                                    <QuizAction >
+                                        <QuizButton
+                                        // onClick={() => handleFileCompleted(fileContent[0].contentId)}
+                                        >
+                                            Mark as Completed
+                                        </QuizButton>
+                                    </QuizAction>
                                 }
 
 
                             </>
-
                             }
 
+
                             <QuizAction>
-                                <PreviousButton variant="outlined">
+                                <PreviousButton variant="outlined" >
                                     <FaCaretLeft />  Previous Content
                                 </PreviousButton>
                                 <NextButton variant="outlined">
                                     Next Content <FaCaretRight />
                                 </NextButton>
                             </QuizAction>
-
-
 
                         </BodyContent>
                     </ClassroomMainBody>

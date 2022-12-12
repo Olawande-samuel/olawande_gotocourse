@@ -25,7 +25,7 @@ div{
         color: #fff;
         padding: .5rem 1rem;
         font-weight: 400;
-        font-size: 18px;
+        font-size: 14px;
         line-height: 27px;
         // width: 300px ;
 

@@ -4,56 +4,49 @@ import midpic from '../../images/landing/midpic.png'
 const Container = styled.div`
 padding: 2rem;
 
-.contentp{
-    text-align: center;
-    padding: 2rem;
-
-}
 
 `
 
-const Top = styled.div`
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 2rem;
-
-
-&>:first-child{   
-    flex:.5;
-    // border:2px solid red;
-    font-family: 'Raleway';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 24px;
-    line-height: 28px;
-}
-
-&>:last-child{
-    // border:2px solid yellow;
-    flex:.5;
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 98.02%;
-    color: #0C2191;
-}
-
-@media (max-width: 768px){
-    flex-direction: column;
-    text-align: center;
-
-}
-
-`
 const Middle = styled.div`
 display: flex;
+align-items: center;
 gap: 2rem;
 width: 100%;
 
 .middlecontentleft{
     flex: .4;
+    color: var( --theme-blue);
+
+
+    h4{
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 26px;
+        color: var( --theme-blue);
+        // line-height: 36px;
+    }
+
+    p{
+        font-family: 'DM Sans';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16.5px;
+        line-height: 27px;
+        color: #2A44CC;
+    }
+
+    button{
+        border:2px solid white;
+        border-radius: 7px;
+        background: var( --theme-blue);
+        color: #fff;
+        padding: .5rem 1rem;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 27px;
+
+    }
 }
 
 .middlecontentright{
@@ -102,6 +95,7 @@ width: 100%;
 
 @media (max-width: 768px){
     flex-direction: column;
+    text-align: center;
 
     .middlecontentleft{
             width: 100%;
@@ -121,26 +115,17 @@ width: 100%;
 const User = () => {
     return (
         <Container>
-            <Top>
-                <div>
-                    <p>Great educators use Gotocourse to <br />
-                        teach and engage learners .</p>
-
-                </div>
-                <div>
-                    <p> 22,000+ users globally
-                    </p>
-                </div>
-            </Top>
-            <div className="contentp">
-            <p>Gotocourse provides everything you need to get started  and grow </p>
-
-            </div>
 
 
             <Middle>
                 <div className="middlecontentleft">
-                    <img src={midpic} alt="" width={400}/>
+                    <h4>
+                        Get started and grow
+                    </h4>
+
+                    <p>Gotocourse provides everything you <br/> need to power your start and scale.</p>
+
+                    <button>Start free trial</button>
                 </div>
 
                 <div className="middlecontentright">

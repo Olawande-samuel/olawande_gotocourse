@@ -121,7 +121,7 @@ const Footer = () => {
   return (
     <footer className="footer wrapper" style={{
       // background: celebRoute ? "#000F62" : "var(--blue-ish)", color: celebRoute ? "#fffff" : "var(--theme-blue)"
-      background: "linear-gradient(180deg, #0A8CAB 0%, #071C76 100%)", color: "#fff"
+      background: "linear-gradient(180deg, #CCD7FF 0%, #FFFFFF 100%)", color:"var(--theme-blue)" 
 
     }}>
       <div className="container ">
@@ -132,25 +132,25 @@ const Footer = () => {
               <Link to="/" onClick={() => window.scrollTo(0, 0)}>
                 <i className="d-none d-lg-block">
                   {/* <Logo color={!celebRoute ? "var(--theme-blue)" : "#fff"} /> */}
-                  <Logo color={"#fff" } />
+                  <Logo color={"var(--theme-blue)" } />
                 </i>
 
                 <i className="d-lg-none">
                   {/* <Logosm color={!celebRoute ? "var(--theme-blue)" : "#fff"} /> */}
-                  <Logosm color={"#fff"} />
+                  <Logosm color={"var(--theme-blue)" } />
                 </i>
                 {/* <small className="text-center d-block" style={{ fontSize: '16px', color: !celebRoute ? "var(--theme-blue)" : "#fff" }}>Learn without limits.</small> */}
-                <small className="text-center d-block" style={{ fontSize: '16px', color:  "#fff"}}>Learn without limits.</small>
+                <small className="text-center d-block" style={{ fontSize: '16px', color:  "var(--theme-blue)", padding: "1rem 0" }}>All right reserved | c 2022 Gotocourse Inc </small>
               </Link>
             </div>
 
             <div className="second">
                 <ul>
-                  <div style={{display:"flex", alignItems:"center" , gap: "2rem", fontSize: "1rem"}}>
-                <li><BsFacebook/></li>
-                <li><BsInstagram/></li>
-                <li><BsTwitter/></li>
-                <li><AiOutlineMail/></li>
+                  <div style={{display:"flex", alignItems:"center" , gap: "2rem"}}>
+                <li><BsFacebook style={{color:"var(--theme-blue)" , fontSize: "1.5rem"}}/></li>
+                <li><BsInstagram style={{color:"var(--theme-blue)" , fontSize: "1.5rem"}}/></li>
+                <li><BsTwitter style={{color:"var(--theme-blue)" , fontSize: "1.5rem"}}/></li>
+                <li><AiOutlineMail style={{color:"var(--theme-blue)", fontSize: "1.5rem" }}/></li>
 
                   </div>
                   {/* {categories.data?.data?.map((link, index) => (
@@ -207,7 +207,7 @@ const Footer = () => {
                           stiffness: 300
                         }}
                         // style={{ color: !celebRoute ? "var(--theme-blue)" : "#FFF", fontSize:"10px", lineHeight:"26px" }}
-                        style={{ color:"#fff" , fontSize:"10px", lineHeight:"26px" }}
+                        style={{ color:"var(--theme-blue)"  , fontSize:"10px", lineHeight:"26px" }}
                       >
                         {link.title.toUpperCase()}
                       </motion.li>
@@ -231,7 +231,7 @@ const Footer = () => {
                         transition={{
                           stiffness: 300
                         }}
-                        style={{ color:  "#fff", fontSize:"10px", lineHeight:"26px" }}
+                        style={{ color:  "var(--theme-blue)" , fontSize:"10px", lineHeight:"26px" }}
                       >
                         {link.title.toUpperCase()}
                       </motion.li>

@@ -3,29 +3,30 @@ import styled from "styled-components"
 import live from '../../images/landing/live.png'
 
 const Container = styled.div`
-padding: 2rem;
+padding: 4rem 2rem;
     display: flex;
     align-items: center;
     gap: 2rem;
 
-    .liveright{
-        flex: .5;
+    .liveleft{
+        flex: .7;
   
     }
 
-    .liveleft{
-        flex: .5;
+    .liveright{
+        flex: .3;
         display: flex; 
         flex-direction: column;
         gap: .5rem;
 
-        h5{
+        h4{
             font-family: 'Raleway';
             font-style: normal;
             font-weight: 700;
-            font-size: 24px;
+            font-size: 30px;
             padding: 1rem 2rem;
             // line-height: 36px;
+            color: #1B1F29;
         }
         div{
             display: flex;
@@ -45,7 +46,7 @@ padding: 2rem;
     }
 
     @media (max-width: 912px){
-        .liveright{
+        .liveleft{
             width: 100%;
             height: 300px;
             img{
@@ -59,7 +60,7 @@ padding: 2rem;
     @media (max-width:768px){
             flex-direction: column;
 
-            .liveright{
+            .liveleft{
                 width: 100%;
                 img{
                     width: 100%;
@@ -72,8 +73,13 @@ padding: 2rem;
 const Live = () => {
     return (
         <Container>
-            <div className="liveleft">
-                <h5>Hold unlimited live classes</h5>
+             <div className="liveleft">
+                <img src={live} alt="" width={800} />
+
+            </div>
+
+            <div className="liveright">
+                <h4>Hold unlimited live classes</h4>
                 <div>
                     <AiOutlineCheck style={{ color: "#175fff", marginRight:"1rem" }} /><span> Create live classes of any size</span>
                 </div>
@@ -92,10 +98,7 @@ const Live = () => {
 
             </div>
 
-            <div className="liveright">
-                <img src={live} alt="" width={600} />
-
-            </div>
+           
 
         </Container>
     )

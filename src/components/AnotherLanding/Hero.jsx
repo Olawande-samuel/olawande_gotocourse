@@ -1,3 +1,5 @@
+import { BiRightArrowAlt } from "react-icons/bi"
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import heroimg from '../../images/landing/herright.png'
 
@@ -5,8 +7,7 @@ const Container = styled.div`
 display: flex;
 justify-content: space-between;
 align-items: center;
-background: linear-gradient(180deg, #0B8FAC 0%, #071974 100%);
-color: #fff;
+color: #0C1825;
 padding: .5rem 2rem;
 
 
@@ -25,11 +26,11 @@ padding: .5rem 2rem;
         font-size: clamp(2.25rem, 2.1429rem + .5357vw, 3rem);
     }
     ul{
-        color: #fff;
-
-    }
-    p{
-        color: #B5C0D0;
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 27px;
     }
 
     .email{
@@ -37,25 +38,19 @@ padding: .5rem 2rem;
         align-items: center;
         gap: 2rem;
 
-        input{
-            width: 58% !important;
-            padding: 1rem;
-            border: none;
-            outline: none;
-            border-radius: 7px;
+        a{
+            color: var(--theme-blue);
         }
-        input::placeholder{
-            color: #9F9F9F;
-        }
+      
 
         button{
-                background: #fff;
                 border:2px solid white;
                 border-radius: 7px;
-                color: #0C2191;
+                background: var( --theme-blue);
+                color: #fff;
                 padding: .5rem 1rem;
                 font-weight: 700;
-                font-size: 18px;
+                font-size: 14px;
                 line-height: 27px;
     
         }
@@ -121,8 +116,8 @@ const Hero = () => {
 
             <div className="heroleft">
                 <div>
-                <h1>All-in-one platform</h1>
-                <h1>to power  live classes.</h1>
+                <h1>  The best way to</h1>
+                <h1>power online classes</h1>
 
                 </div>
                 <ul>
@@ -131,8 +126,8 @@ const Hero = () => {
                 </ul>
 
                 <div className="email">
-                    <input type="email" placeholder="Enter your email address" />
-                    <button>Start for free</button>
+                    <button>Create free account</button>
+                    <Link to={`/`}>Request demo <BiRightArrowAlt/></Link>
                 </div>
 
                 <p> no credit card required.</p>

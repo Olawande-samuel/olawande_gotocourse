@@ -6,52 +6,70 @@ import { Link, useLocation } from "react-router-dom"
 import { Logosm } from "../../images/components/svgs";
 
 const Container = styled.div`
-background: #0b8aaa;
-color: #fff;
+color: #0C1825;
 display: flex;
 align-items: center;
 justify-content: space-between;
-font-family: 'Inter';
 width: 100%;
 padding: .5rem 2rem;
+gap: 1rem;
 
 .navbarlogo{
-    flex: .3;
+    flex: .2;
+    // border: 2px solid yellow;
+
 }
 
 
 ul{
-    flex:.7;
+    // border: 2px solid red;
+    flex:.8;
     list-style-type: none;
     display: none;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    padding-left: unset;
+    margin-bottom: unset;
 
-    .items{
+    .firstitems{
+        flex: .7;
         display: flex;
         align-items: center;
-        justify-content: space-between; 
-        gap: 2rem;
+        justify-content: space-evenly;        
+        // border: 2px solid green;
+
+       
+    }
+
+    .seconditems{
+        flex: .3;
+        display: flex;
+        justify-content:flex-end;
+        gap: 1rem;
+        // border: 2px solid purple;
 
         .first__btn{
-            background: transparent;
-            border:2px solid white;
+            color:var(--theme-blue);
+            border: 1px solid #BBBBBB;
             border-radius: 7px;
-            color: #fff;
             padding: .5rem 1rem;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 16px;
             line-height: 27px;
 
         }
 
         .second__btn{
-            background: #fff;
+            background: var(--theme-blue);;
             border:2px solid white;
-            color: #0C2191;
+            color: #fff;
             padding: .5rem 1rem;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 14px;
             line-height: 27px;
 
         }
@@ -59,7 +77,7 @@ ul{
 
 }
 
-@media (min-width: 612px){
+@media (min-width: 780px){
     ul{
         display: flex;
     }
@@ -69,11 +87,30 @@ ul{
     }
 }
 
+@media (max-width: 1024px){
+
+    ul{
+        .firstitems{
+            flex: .6;
+        }
+
+        .seconditems{
+            flex: .4;
+        }
+    }
+
+}
+
 @media (max-width: 912px){
 
     ul{
-        .items{
-            gap: 1rem;
+        .firstitems{
+            flex: .6;
+        }
+
+        .seconditems{
+            gap: unset;
+            flex: .4;
         }
     }
 
@@ -85,28 +122,24 @@ const Navbar = ({ toggleSidebar }) => {
     return (
         <Container>
             <div className="navbarlogo">
-                <Logosm />
+                <Logosm color="var(--theme-blue)"/>
             </div>
 
             <ul>
-                <div className="items">
-                    <li>Create</li>
-                    <li>Learn</li>
-                    <li>Hire</li>
-
+                <div className="firstitems">
+                    <li><Link to={`/`}>Create</Link></li>
+                    <li><Link to={`/`}>Manage</Link></li>
+                    <li><Link to={`/`}>Learn with Gotocourse</Link></li>
+                    <li><Link to={`/`}>Pricing</Link></li>
                 </div>
 
-                <div className="items">
-                    <li>
-                        Price
-                    </li>
-
-                    <li>
+                <div className="seconditems">
+                      <li>
                         <button className="first__btn">Sign in</button>
                     </li>
 
                     <li>
-                        <button className="second__btn">Start for free</button>
+                        <button className="second__btn">Register for free</button>
                     </li>
 
                 </div>
@@ -114,7 +147,7 @@ const Navbar = ({ toggleSidebar }) => {
 
             <div className="hamburger align-items-center">
                 <i>
-                    <AiOutlineMenu style={{ fontSize: "24px", color: "#fff", cursor: "pointer" }} onClick={toggleSidebar} />
+                    <AiOutlineMenu style={{ fontSize: "24px", color:"var(--theme-blue)", cursor: "pointer" }} onClick={toggleSidebar} />
                 </i>
             </div>
         </Container>

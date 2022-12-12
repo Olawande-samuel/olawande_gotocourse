@@ -17,7 +17,8 @@ gap: 2rem;
     font-family: 'Raleway';
     font-style: normal;
     font-weight: 700;
-    font-size: clamp(2.1rem, 2.1429rem + .5357vw, 2.5rem);
+    font-size: 26px;
+    // font-size: clamp(2.1rem, 2.1429rem + .5357vw, 2.5rem);
     // line-height: 54px;
     color: #1B1F29;
 }
@@ -110,7 +111,7 @@ gap: 2rem;
         flex-direction: column;
 
         .reviewdiv{
-            min-height: 30rem;
+            min-height: 20rem;
             padding: 2rem .5rem;
 
         }
@@ -138,7 +139,7 @@ const Review = () => {
 
                         </div>
                         <div>
-                            <p>The AvantStay team has been growing rapidly and, Wrangle is the tool behind the scenes keeping our workflows on track in Slack. Wrangle saves us hundreds of hours a month while also ensuring nothing gets lost in the chaos of Slack.</p>
+                            <p>Gotocourse is the top platform for experts to share their knowledge. The advanced search and the intuitive UI make it easy for learners to find what they need. We are proud to partner with Gotocourse.</p>
                         </div>
                     </div>
 
@@ -148,8 +149,8 @@ const Review = () => {
 
                         </div>
                         <div className="reviewpersoninfo">
-                            <p>Reuben Doetsch</p>
-                            <p>Cofounder and CTO, AvantStay</p>
+                            <p>John Adewale</p>
+                            <p>Zachsam</p>
 
                         </div>
 
@@ -164,7 +165,7 @@ const Review = () => {
 
                         </div>
                         <div>
-                            <p>In companies, people have been abusing Slack for tickets for years. Wrangle fixes everything. As an Ops professional this is everything I have ever wanted. To have all this housed in Slack? Phenomenal.</p>
+                            <p>A real pleasure to work with. Gotocourse platform is super easy to use and we are happy with the steady increase in enrollments. The customer service is excellent</p>
                         </div>
                     </div>
 
@@ -174,8 +175,8 @@ const Review = () => {
 
                         </div>
                         <div className="reviewpersoninfo">
-                            <p>KC Procter</p>
-                            <p>Director of Operations, The Speaker Lab</p>
+                            <p>Catherine</p>
+                            <p>Head of studies, Realztech Institute.</p>
 
                         </div>
 
@@ -190,7 +191,7 @@ const Review = () => {
 
                         </div>
                         <div>
-                            <p>As a startup, we run on slim margins but, we needed a way to automate and streamline our security compliance needs. Wrangle has allowed us to build out approval workflows that otherwise would have to be tracked and done manually, likely resulting in human error.</p>
+                            <p>Gotocourse has helped me gained confidence alongside teaching. No matter what you are looking to teach, or gain confidence in teaching. Gotocourse’s tools make up the best environment for you.</p>
                         </div>
                     </div>
 
@@ -200,8 +201,8 @@ const Review = () => {
 
                         </div>
                         <div className="reviewpersoninfo">
-                            <p>Isaac Painter</p>
-                            <p>Senior Manager of Information Security, Aumni</p>
+                            <p>Sarah Jones</p>
+                            <p>BetaGRc</p>
 
                         </div>
 

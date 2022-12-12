@@ -87,18 +87,16 @@ export const CustomButton = styled(Button)`
 
 
 
-const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData, completed, AttachmentLength, setaAllattachmentLength,
-    // allAttachment, setAllattachment ,
-    attach, setAttach
+const Sidebar = ({ modules,setContents,setPickedType,reduceModules, changeActive, activeMedia, isMobile, completed
 }) => {
     const navigate = useNavigate()
     let elementRef = createRef(null)
-    // console.log({ AttachmentLength }); // module info
 
-    // const ProgressResult = useMemo(() => {
-    //     let result = (Math.floor((completed / AttachmentLength) * 100))
-    //     return result
-    // }, [completed, AttachmentLength])
+    const ProgressResult = useMemo(() => {
+        if (reduceModules === undefined) return 0;
+        let result = (Math.floor((completed / reduceModules) * 100))
+        return result
+    }, [completed, reduceModules])
 
     return (
         <SidebarContainer $mobile={isMobile}>
@@ -111,25 +109,22 @@ const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData, comp
                     Refresh topics
                 </CustomButton>
                 <ProgressContainer>
-                    {/* <p>Progress: {ProgressResult}%</p> */}
-                    {/* <Progress value={ProgressResult} max="100" /> */}
+                    <p>Progress: {ProgressResult}%</p>
+                    <Progress value={ProgressResult} max="100" />
                 </ProgressContainer>
                 <div ref={elementRef}>
                     {
-                        modules.map((module, id) =>
+                        modules?.map((module, id) =>
                             <Module
                                 title={module.name}
                                 activeMedia={activeMedia}
-                                contents={module.contents}
+                                contentsData={module.contents}
                                 changeActive={changeActive}
                                 key={id}
-                                fetchData={fetchData}
-                                AttachmentLength={AttachmentLength}
-                                setaAllattachmentLength={setaAllattachmentLength}
-                                // allAttachment={allAttachment}
-                                // setAllattachment={setAllattachment}
-                                attach={attach}
-                                setAttach={setAttach}
+                                setContents={setContents}
+                                setPickedType={setPickedType}
+                                module={id}
+
                             />)
                     }
 

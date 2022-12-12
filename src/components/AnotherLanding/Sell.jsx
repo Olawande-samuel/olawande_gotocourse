@@ -1,16 +1,15 @@
 import styled from "styled-components"
-import join from '../../images/landing/join.png'
+import sell from '../../images/landing/sell.png'
 
 const Container = styled.div`
-    background: #162574;
-    padding: 2rem 5rem;
-    color: #fff;
-
+    padding: 2rem;
+    color: #1B1F29;
+    
     .joincontent{
-        // border: 2px solid red;
         display: flex;
         gap: 2rem;
         justify-content: space-between;
+        align-items: center;
 
         .joinleft{
             flex: .5;
@@ -19,13 +18,12 @@ const Container = styled.div`
             gap: 2rem;
     
             h4{
-              
-                font-family: 'Inter';
+                font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 700;
-                font-size: 30px;
-                line-height: 32px;
-                color: #fff;
+                font-size: 28px;
+                color: #1B1F29;
+                line-height: 22px;
 
             }
             
@@ -34,24 +32,12 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 400;
-                font-size: 12px;
-                line-height: 36px;
-                color: #fff;
+                font-size: 14px;
+                line-height: 22px;
+                color: #1B1F29;            
             }
 
-            button{
-                justify-items: flex-end;
-                background: #fff;
-                border:2px solid white;
-                border-radius: 7px;
-                color: #0C2191;
-                padding: .5rem 1rem;
-                font-weight: 700;
-                font-size: 14px;
-                line-height: 27px;
-                width: 200px ;
-    
-        }
+           
     
         
     
@@ -59,13 +45,16 @@ const Container = styled.div`
     
         .joinright{
             flex: .5;
+            img{
+                width: 100%;
+                object-fit: cover;
+            }
       
         }
 
     } 
     
     @media (max-width:768px){
-        padding: 2rem;
         text-align: center;
 
         .joincontent{
@@ -78,37 +67,40 @@ const Container = styled.div`
                     object-fit: cover;
                 }
             }
+
+            .joinleft{
+                p{
+                    padding: 2rem 0;
+                }
+            }
     
         }
     }
    
 
 `
-const Join = () => {
+const Sell = () => {
     return (
         <Container>
             <div className="joincontent">
                 <div className="joinleft">
                     <div>
-                        <h4>Join our learning </h4>
-                        <h4>marketplace</h4>
+                        <h4>Create & sell courses for</h4>
+                        <h4>everyone, anywhere</h4>
                         <p>
-                            Thinking of how to market your courses? <br />
-                            Market and sell your courses on Learn with Gotocourse Marketplace
+                            Create your learning space and get paid for
+                            your expertise, manage payments via a 
+                            secured payment system.
                         </p>
 
                     </div>
-
-                    <button>
-                        Join for free
-                    </button>
 
 
                 </div>
 
                 <div className="joinright">
-                    <img src={join} alt=""
-                        width={400}
+                    <img src={sell} alt=""
+                        // width={600}
                     />
 
                 </div>
@@ -119,4 +111,4 @@ const Join = () => {
     )
 }
 
-export default Join
+export default Sell

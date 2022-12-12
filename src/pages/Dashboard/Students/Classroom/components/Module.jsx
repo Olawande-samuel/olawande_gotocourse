@@ -73,36 +73,13 @@ const Locked = styled(MdOutlineLock)`
 
 
 
-const Module = ({ title, contents, changeActive, activeMedia, fetchData, setaAllattachmentLength,
-    // allAttachment, setAllattachment ,
-    attach, setAttach
+const Module = ({ title,setContents,moduleIndex, setPickedType, contentsData, changeActive, activeMedia,
 }) => {
 
 
-    // const [attach, setAttach] = useState([])
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
     const { consoleFunctions: { fetchStudentDomains, fetchStudentQuiz, fetchStudentFile, fetchStudentNote, markAsCompleted }, } = useAuth();
-    const [pickedType, setPickedType] = useState("")
-
-    // const fetchContents = useQuery(["fetch content", attachments.classId], () => fetchStudentContents(userdata.token, attachments.classId), {
-    //     onSuccess: (res) => {
-    //         // console.log("result ", { res })
-    //         setAttach(res.data.map((x, id) => (
-    //             {
-
-    //                 ...x,
-    //                 marked: false,
-
-    //             }
-    //         )))
-    //     }
-    // })
-
-    // useEffect(() => {
-    //     console.log({ attach });
-    //     setaAllattachmentLength(attach.length)
-    // }, [attach])
 
 
     let icon = (type) => {
@@ -110,14 +87,11 @@ const Module = ({ title, contents, changeActive, activeMedia, fetchData, setaAll
     }
 
 
-    let statusIcon = React.useMemo(() => {
-        // return marked ? <CompleteIcon $isComplete={marked}  /> : <CompleteIcon />  
-    }, [
-        // marked
-    ])
+    let statusIcon = (marked) => marked ? <CompleteIcon $isComplete={marked}  /> : <CompleteIcon />  
 
 
-    console.log({contents});
+
+    console.log({contentsData});
 
    
     return (
@@ -132,7 +106,7 @@ const Module = ({ title, contents, changeActive, activeMedia, fetchData, setaAll
                         key={i} {...a} />))
                 } */}
 
-                {contents.map((content, index) => (
+                {contentsData?.map((content, index) => (
 
                     <AttachmentContainer key={index}
                         variant="outlined"
@@ -142,11 +116,14 @@ const Module = ({ title, contents, changeActive, activeMedia, fetchData, setaAll
                             // fetchData(type, _id, title)
                         }
                         }>
-                        <AttachmentInfo onClick={() => fetchData(content?.type,"id", content?.title)}>
+                        <AttachmentInfo onClick={() => {
+                            setContents(content?.items)
+                            setPickedType(content?.type)
+                        }}>
                             {icon(content?.type)}
-                            <h5>{content.title}</h5>
+                            <h5>{content?.title}</h5>
                         </AttachmentInfo>
-                        {statusIcon}
+                        {statusIcon(false)}
                     </AttachmentContainer>
 
                 ))}
