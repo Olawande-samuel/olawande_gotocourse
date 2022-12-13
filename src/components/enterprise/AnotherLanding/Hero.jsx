@@ -130,7 +130,7 @@ const Hero = () => {
                     <Link to={`/`}>Request demo <BiRightArrowAlt/></Link>
                 </div>
 
-                <p> no credit card required.</p>
+                <p> No credit card required.</p>
             </div>
 
             <div className="heroright">

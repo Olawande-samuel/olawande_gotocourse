@@ -10,7 +10,7 @@ import lib from '../../../images/landing/lib.svg'
 
 const Container = styled.div`
 width: 100%;
-padding: 2rem 0;
+padding: 5rem 0;
 text-align: center;
 
 h5{

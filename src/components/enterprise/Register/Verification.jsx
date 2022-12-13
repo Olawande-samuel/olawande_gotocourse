@@ -261,7 +261,7 @@ export function Form({type}){
                       </div>
                   </div>
                   <div className={clsx.form_footer}>
-                      <span>Didn't get code?</span> <a onClick={resendOTPHandler}>Resend</a>
+                      <span>Didn't get code?</span> <a href="#!" onClick={resendOTPHandler}>Resend</a>
                   </div>
           </form>
 

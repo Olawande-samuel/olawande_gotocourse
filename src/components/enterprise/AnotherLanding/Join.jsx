@@ -34,9 +34,10 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 400;
-                font-size: 12px;
-                line-height: 36px;
+                font-size: 14px;
+                line-height: 30px;
                 color: #fff;
+                opacity: .8;
             }
 
             button{
@@ -69,7 +70,7 @@ const Container = styled.div`
         text-align: center;
 
         .joincontent{
-            flex-direction: column;
+            flex-direction: column-reverse;
 
             .joinright{
                 width: 100%;
@@ -77,6 +78,10 @@ const Container = styled.div`
                     width: 100%;
                     object-fit: cover;
                 }
+            }
+
+            .joinleft{
+                align-items: center;
             }
     
         }

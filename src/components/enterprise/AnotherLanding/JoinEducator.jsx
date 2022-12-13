@@ -3,18 +3,21 @@ import confetti from '../../../images/landing/confetti.png'
 
 const Container = styled.div`
 background: url(${confetti});
-padding: 2rem;
+padding: 5rem 2rem;
 text-align: center;
 
 div{
-    text-align: center;
-    color: #0C2191;
-    font-family: 'Raleway';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 40px;
-    line-height: 48px;
+    h5{
+        text-align: center;
+        color: #0C2191;
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 40px;
+        // line-height: 48px;
+
     }
+}
 
     button{
         margin: 2rem 0;

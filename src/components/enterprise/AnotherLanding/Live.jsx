@@ -9,12 +9,12 @@ padding: 4rem 2rem;
     gap: 2rem;
 
     .liveleft{
-        flex: .7;
+        flex: .6;
   
     }
 
     .liveright{
-        flex: .3;
+        flex: .4;
         display: flex; 
         flex-direction: column;
         gap: .5rem;
@@ -23,7 +23,7 @@ padding: 4rem 2rem;
             font-family: 'Raleway';
             font-style: normal;
             font-weight: 700;
-            font-size: 30px;
+            font-size: 34px;
             padding: 1rem 2rem;
             // line-height: 36px;
             color: #1B1F29;
@@ -36,7 +36,7 @@ padding: 4rem 2rem;
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 400;
-                font-size: 14px;
+                font-size: 16px;
                 line-height: 24px;
                 color: #000000;
             }

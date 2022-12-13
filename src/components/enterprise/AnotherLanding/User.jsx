@@ -1,5 +1,10 @@
 import styled from "styled-components"
-import midpic from '../../../images/landing/midpic.png'
+import global from '../../../images/landing/global.svg'
+import custom from '../../../images/landing/custom.svg'
+import monetize from '../../../images/landing/monetize.svg'
+import partners from '../../../images/landing/partners.svg'
+import progress from '../../../images/landing/progress.svg'
+import ease from '../../../images/landing/ease.svg'
 
 const Container = styled.div`
 padding: 2rem;
@@ -21,7 +26,7 @@ width: 100%;
     h4{
         font-family: 'Raleway';
         font-style: normal;
-        font-weight: 700;
+        font-weight: 900;
         font-size: 26px;
         color: var( --theme-blue);
         // line-height: 36px;
@@ -63,6 +68,12 @@ width: 100%;
         border-radius: 12px;
         padding: 2rem;
         text-align: center;
+
+        img{
+            width: 50px;
+            height: 50px;
+        }
+
 
         p{
             font-family: 'ABeeZee';
@@ -123,7 +134,7 @@ const User = () => {
                         Get started and grow
                     </h4>
 
-                    <p>Gotocourse provides everything you <br/> need to power your start and scale.</p>
+                    <p>Gotocourse provides everything you <br /> need to power your start and scale.</p>
 
                     <button>Start free trial</button>
                 </div>
@@ -131,46 +142,73 @@ const User = () => {
                 <div className="middlecontentright">
 
                     <div className="miditem">
-                        <p>Onboard With Ease</p>
-                        <span>
-                            Sell your courses through Hopin events, with all sorts of features to make it a complete experience.
-                        </span>
+                        <img src={ease} alt="" />
+
+                        <div>
+                            <p>Onboard With Ease</p>
+                            <span>
+                                Sell your courses through Hopin events, with all sorts of features to make it a complete experience.
+                            </span>
+
+                        </div>
                     </div>
 
                     <div className="miditem">
-                        <p>Interractive dasboard</p>
-                        <span>Webinars tend to be one-sided. Listeners are passively attending Hopin ups the engagement.</span>
+                        <img src={progress} alt="" />
+
+                        <div>
+                            <p>Track Progress</p>
+                            <span>Track your process in real time to make informed business decisions.</span>
+                        </div>
                     </div>
 
                     <div className="miditem">
-                        <p>Monetize classes</p>
-                        <span>
-                            Host a physical event, and stream it into Hopin with all our interactive segments for your online audience.
-                        </span>
+                        <img src={partners} alt="" />
+
+                        <div>
+                            <p>Engage with learners</p>
+                            <span>
+                                Engage students to help with meaningful discussions to make improvements based on their needs.
+                            </span>
+
+                        </div>
                     </div>
 
                     <div className="miditem">
-                        <p>Engage with learners</p>
-                        <span>
-                            Connect people online with ease through one to one meetings in succession via video.
+                        <img src={monetize} alt="" />
 
-                        </span>
+                        <div>
+                            <p>Monetize classes</p>
+                            <span>
+                                Get paid for your classes via our flexible payment system.                            </span>
+
+                        </div>
+                    </div>
+
+
+
+                    <div className="miditem">
+                        <img src={custom} alt="" />
+
+                        <div>
+                            <p>Custom Landing Page</p>
+                            <span>
+                                Fast, easy-to-navigate and responsive landing pages for smooth experience
+                            </span>
+
+                        </div>
                     </div>
 
                     <div className="miditem">
-                        <p>Flexible learning</p>
-                        <span>
-                            Connect people online with ease through one to one meetings in succession via video.
+                    <img src={global} alt="" />
 
-                        </span>
-                    </div>
+                        <div>
 
-                    <div className="miditem">
-                        <p>Global reach</p>
-                        <span>
-                            Connect people online with ease through one to one meetings in succession via video.
-
-                        </span>
+                            <p>Global reach</p>
+                            <span>
+                            Reach an increasing number of learners worldwide, interested in your expertise.
+                            </span>
+                        </div>
                     </div>
 
                 </div>
