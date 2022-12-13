@@ -209,6 +209,9 @@ import {
 } from "./pages/Dashboard/components/webinar";
 import LiveChat from "./pages/Dashboard/components/Live/quikkonnet/LiveChat";
 import Playground from "./components/Playground";
+import AnotherLanding from "./components/AnotherLanding";
+import CreatePage from "./components/AnotherLanding/Create/Index";
+import ManagePage from "./components/AnotherLanding/Manage/Index";
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -252,7 +255,10 @@ function App() {
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<Out />}>
-              <Route index element={<Landing />} />
+              <Route index element={<AnotherLanding />} />
+              <Route path="goto" element={<Landing />} />
+              <Route path="create" element={<CreatePage />} />
+              <Route path="manage" element={<ManagePage />} />
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<SignUp />} />
               <Route path="email" element={<Email />} />
@@ -349,9 +355,9 @@ function App() {
               <Route path="teachers-how-it-works" element={<HIWTeacher />} />
               <Route path="student-how-it-works" element={<HIWStudent />} />
 
-                {/* STUDENTS */}
-              <Route path="student" element={<ComingSoon student={true} />}>
-              {/* <Route path="student" element={<Out />}> */}
+              {/* STUDENTS */}
+              {/* <Route path="student" element={<ComingSoon student={true} />}> */}
+              <Route path="student" element={<Out />}>
                 <Route path="" element={<StudentDashboard />} />
                 <Route path="profile" element={<StudentProfile />} />
                 <Route path="classes" element={<StudentClasses />} />
@@ -391,8 +397,8 @@ function App() {
                   element={<StudentClassroom />}
                 />
               </Route>
-                        
-                        {/* TEST CONSOLE */}
+
+              {/* TEST CONSOLE */}
               <Route path="test" element={<Content />}>
                 <Route path="file" element={<File />} />
                 <Route path="note" element={<Note />} />
@@ -415,7 +421,7 @@ function App() {
                 <Route path="liveclass" element={<Out />} />
               </Route>
 
-                        {/* MENTORS */}
+              {/* MENTORS */}
 
               <Route path="mentors" element={<Out />}>
                 <Route index element={<All type="mentors" />} />
@@ -497,14 +503,17 @@ function App() {
                         <Route path="group/:groupID" element={<GroupContent />} />
                         <Route path="chat/:userId" element={<MailDetail />} />
                       </Route>
+
+
                       <Route path="live-class" element={<Out />}>
                         <Route index element={<LiveClassInfo />} />
                         <Route path="live" element={<LiveClass />} />
                         <Route path="connect" element={<Out />}>
-                        <Route index element={<Intermission />} />
-                        <Route path="stream" element={<VideDiv />} />
+                          <Route index element={<Intermission />} />
+                          <Route path="stream" element={<VideDiv />} />
                         </Route>
                       </Route>
+
                       <Route path="file" element={<File />} />
                       <Route path="note" element={<Note />} />
                       <Route path="quiz" element={<Out />}>
@@ -518,7 +527,7 @@ function App() {
               </Route>
 
 
-{/*                   AFFILIATES PAGE                     */}
+              {/*                   AFFILIATES PAGE                     */}
 
               <Route path="affiliates" element={<AffiliateLanding />} />
               <Route

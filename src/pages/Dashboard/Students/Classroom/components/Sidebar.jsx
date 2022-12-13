@@ -87,18 +87,16 @@ export const CustomButton = styled(Button)`
 
 
 
-const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData, completed, AttachmentLength, setaAllattachmentLength,
-    // allAttachment, setAllattachment ,
-    attach, setAttach
+const Sidebar = ({ modules,setContents,setPickedType,reduceModules, changeActive, activeMedia, isMobile, completed
 }) => {
     const navigate = useNavigate()
     let elementRef = createRef(null)
-    // console.log({ AttachmentLength }); // module info
 
     const ProgressResult = useMemo(() => {
-        let result = (Math.floor((completed / AttachmentLength) * 100))
+        if (reduceModules === undefined) return 0;
+        let result = (Math.floor((completed / reduceModules) * 100))
         return result
-    }, [completed, AttachmentLength])
+    }, [completed, reduceModules])
 
     return (
         <SidebarContainer $mobile={isMobile}>
@@ -116,20 +114,17 @@ const Sidebar = ({ modules, changeActive, activeMedia, isMobile, fetchData, comp
                 </ProgressContainer>
                 <div ref={elementRef}>
                     {
-                        modules.map((module) =>
+                        modules?.map((module, id) =>
                             <Module
                                 title={module.name}
                                 activeMedia={activeMedia}
-                                attachments={module}
+                                contentsData={module.contents}
                                 changeActive={changeActive}
-                                key={module._id}
-                                fetchData={fetchData}
-                                AttachmentLength={AttachmentLength}
-                                setaAllattachmentLength={setaAllattachmentLength}
-                                // allAttachment={allAttachment}
-                                // setAllattachment={setAllattachment}
-                                attach={attach}
-                                setAttach={setAttach}
+                                key={id}
+                                setContents={setContents}
+                                setPickedType={setPickedType}
+                                module={id}
+
                             />)
                     }
 
