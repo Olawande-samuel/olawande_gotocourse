@@ -268,7 +268,7 @@ function App() {
               <Route path="enterprise-forgot" element={<EnterPriseForgotPassword />} />
               <Route path="enterprise-verify" element={<EnterpriseVerification />} />
              
-              <Route path="goto" element={<Landing />} />
+              <Route path="learn-with-gotocourse" element={<Landing />} />
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<SignUp />} />
               <Route path="email" element={<Email />} />

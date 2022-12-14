@@ -691,7 +691,7 @@ export function NewBootcampDetailsComponent() {
                   <img src={item.bootcampImg} alt="" />
                   <div className={clsx.up_content}>
                     <div>
-                      <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{item.title.toLowerCase()}</h5>
+                      <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{item.title}</h5>
                       <div className="d-flex justify-content-between">
                         <small>{item.duration}</small>
                         <small>$ {item.packages.length > 0 ? item.packages[0].price : item.price}</small>

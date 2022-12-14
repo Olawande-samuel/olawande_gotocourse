@@ -343,7 +343,7 @@ export function ClassesCard({ title, bootcampImg, bootcampId, all }) {
           <img src={bootcampImg} alt="" />
           <div className="up_content">
               <div>
-                  <h5 variant="contained">{title.toLowerCase()}</h5>
+                  <h5 variant="contained">{title}</h5>
               </div>
 
               {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}

@@ -3172,7 +3172,8 @@ export const studentFunctions = {
                     }
                 })
             // Error from backend
-            if (res.data.message !== "Notifications fetched successfully") throw new AdvancedError(res.data.message, res.data.statusCode);
+            console.log(res)
+            if (res.data.message !== "Notifications fetched successfully") throw new AdvancedError("Error fetching notifications", res.data.statusCode);
             return {
                 ...res.data,
                 success: true
@@ -5251,6 +5252,72 @@ export const teacherConsoleFunctions = {
                         return status >= 200 && status <= 505;
                     }
                 })
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    deleteLiveSchedule: async function (token, id) {
+        try {
+            const res = await axios.delete(`${baseURL}/rooms/video/${id}`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    editLiveSchedule: async function (token, id, data) {
+        try {
+            const res = await axios.patch(`${baseURL}/rooms/video/${id}`, JSON.stringify(data),
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
 
             if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {

@@ -20,7 +20,7 @@ import axios from "axios";
 import CONFIG from "../../../../utils/video/appConst";
 import { useLocalStorage } from "../../../../hooks";
 import { KEY } from "../../../../constants";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IoInfiniteOutline} from "react-icons/io5"
 import { MenuOptionsPopup } from "./components";
 import {FiEdit} from "react-icons/fi"
@@ -105,7 +105,7 @@ export function LiveClassInfo({ type }) {
             </>
             :
             schedule?.map((item, id) => (
-              <CurrentLive {...item} key={id} setOpen={setOpen} />
+              <CurrentLive {...item} key={item._id} setOpen={setOpen} />
             ))
           
           }
@@ -133,10 +133,13 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
       event: handleDelete
     },
   ]
-  const {updateItem}= useLocalStorage()
+  const {updateItem, getItem}= useLocalStorage()
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const openAnchor = Boolean(anchorEl);
+  const {teacherConsoleFunctions: {deleteLiveSchedule}} = useAuth()
+  const userdata = getItem(KEY)
+  const queryClient = useQueryClient();
 
 
 
@@ -146,8 +149,20 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
   }
 
 
+  const deleteLive = useMutation(([token, id, data])=>deleteLiveSchedule(token, id, data), {
+    onSuccess: res=> {
+      queryClient.invalidateQueries({ queryKey: ["fetch live schedule"]}) 
 
-  function handleDelete(){}
+    },
+    onError: err => console.error(err)
+  })
+
+  function handleDelete(){
+    console.log(userdata.token)
+    if(window.confirm("Delete this item ?")){
+      deleteLive.mutate([userdata.token, _id, {}])
+    }
+  }
 
 
 
@@ -155,7 +170,14 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
     e.preventDefault()
 
     updateItem("gotocourse-roomid", _id);  
-    navigate("connect")
+    let today  = new Date().getTime();
+    let startingDate = new Date(startDate).getTime();
+
+    if(today >= startingDate){
+      // navigate("connect")
+    }else {
+      
+    }
   }
 
 
@@ -227,7 +249,7 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
   const {classId} = useParams()
   const {getItem}= useLocalStorage()
   const user = getItem(KEY)
-  const { generalState, setGeneralState, teacherFunctions: {fetchLiveClasses} } = useAuth();
+  const { generalState, setGeneralState, teacherFunctions: {fetchLiveClasses}, teacherConsoleFunctions: {editLiveSchedule} } = useAuth();
   const [formstate, setFormstate] = useState({
     startDate: "",
     endDate: "",
@@ -248,6 +270,17 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
 
   // TODO: Add schedule edit endpoint
 
+  const editMutation = useMutation(([token, id, data])=>editLiveSchedule(token, id, data), {
+    onSuccess: res => {
+      queryClient.invalidateQueries("fetch live schedule")
+      setFormstate({})
+      handleClose();
+    },
+    onError: err=>{
+      console.error(err.message)
+    }
+  })
+
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -259,7 +292,14 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
     
     try {
       setLoading(true)
-      const res = await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
+
+
+      if(edit){
+        editMutation.mutate([user.token, formstate._id, formstate ]) 
+        return
+      }
+
+      const res =  await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
         ...formstate,  
           userId: user.userId,
           classId
@@ -283,7 +323,7 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
         endTime: "",
       });
 
-      setOpen(false);
+      handleClose();
       
     } catch (error) {
       console.error(error)
@@ -416,11 +456,16 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
             </div>
             
             <button type="submit" disabled={loading}>{
-              loading ? <div className="spinner-border text-white">
+              (editMutation.isLoading || loading) ? <div className="spinner-border text-white">
                 <div className="visually-hidden">Loading...</div>
               </div>
               :
-              <span>Create</span>
+              <>
+              {
+                edit ? <span>Edit</span>:
+                <span>Create</span>
+              }
+              </>
             }</button>
           </div>
         </form>
