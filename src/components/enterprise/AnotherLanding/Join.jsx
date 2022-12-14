@@ -20,7 +20,7 @@ const Container = styled.div`
     
             h4{
               
-                font-family: 'Inter';
+                font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 700;
                 font-size: 30px;

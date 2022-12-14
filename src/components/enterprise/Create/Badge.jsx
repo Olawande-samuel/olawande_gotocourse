@@ -2,12 +2,12 @@ import styled from "styled-components"
 import course from '../../../images/create/badge.png'
 
 const Container = styled.div`
-padding: 5rem 2rem;
+padding: 5rem 1rem;
 background: #F0F4FF;
 
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 3rem;
 
     .courseleft{
         flex: .5;

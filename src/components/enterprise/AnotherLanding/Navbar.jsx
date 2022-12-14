@@ -16,7 +16,7 @@ display: flex;
 align-items: center;
 justify-content: space-between;
 width: 100%;
-padding: .5rem 2rem;
+padding: .5rem 1rem;
 gap: 1rem;
 
 .navbarlogo{
@@ -33,7 +33,7 @@ ul{
     display: none;
     align-items: center;
     justify-content: space-evenly;
-    font-family: 'DM Sans';
+    font-family: 'Raleway';
     font-style: normal;
     font-weight: 500;
     font-size: 16px;

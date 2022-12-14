@@ -2,13 +2,13 @@ import styled from "styled-components"
 import what from '../../../images/manage/pay.png'
 
 const Container = styled.div`
-    padding: 2rem;
+padding: 2rem 1rem;
     color: #1B1F29;
     // background: #F0F4FF;
 
     .joincontent{
         display: flex;
-        gap: 2rem;
+        gap: 3rem;
         justify-content: space-between;
         align-items: center;
 

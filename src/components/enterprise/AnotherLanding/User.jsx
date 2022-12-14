@@ -7,7 +7,7 @@ import progress from '../../../images/landing/progress.svg'
 import ease from '../../../images/landing/ease.svg'
 
 const Container = styled.div`
-padding: 2rem;
+padding: 2rem 1rem;
 
 
 `
@@ -84,7 +84,7 @@ width: 100%;
         }
 
         span{
-            font-family: 'Inter';
+            font-family: 'Raleway';
             font-style: normal;
             font-weight: 400;
             font-size: 14px;

@@ -2,7 +2,7 @@ import styled from "styled-components"
 import what from '../../../images/manage/what.png'
 
 const Container = styled.div`
-    padding: 2rem;
+padding: 2rem 1rem;
     color: #1B1F29;
     // background: #F0F4FF;
 

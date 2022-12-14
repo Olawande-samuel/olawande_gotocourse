@@ -9,7 +9,7 @@ import lib from '../../../images/create/lib.svg'
 
 const Container = styled.div`
 width: 100%;
-padding: 5rem 2rem;
+padding: 5rem 1rem;
 
 h5{
     text-align: center;

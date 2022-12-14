@@ -5,7 +5,7 @@ const Container = styled.div`
 background: url(${confetti});
 background-repeat: no-repeat;
 background-size: cover;
-padding: 5rem 2rem;
+padding: 5rem 1rem;
 text-align: center;
 
 div{

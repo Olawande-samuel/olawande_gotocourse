@@ -22,6 +22,7 @@ gap: 2rem;
 
 .payimages{
     display: flex;
+    justify-content: center;
     gap: 1rem;
     // border: 2px solid red;
 
@@ -55,7 +56,7 @@ font-weight: 500;
             }
     
             span{
-                font-family: 'Inter';
+                font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 400;
                 font-size: 14px;

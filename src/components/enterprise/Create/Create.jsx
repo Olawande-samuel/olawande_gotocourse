@@ -2,7 +2,7 @@ import styled from "styled-components"
 import dashboard from '../../../images/landing/dashboard.png'
 
 const Container = styled.div`
-padding: 2rem;
+padding: 2rem 1rem;
 
 .createheader{
     padding: 2rem;
@@ -22,7 +22,7 @@ h4{
 .createcontent{
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 3rem;
 
     .createleft{
         flex:.5;
