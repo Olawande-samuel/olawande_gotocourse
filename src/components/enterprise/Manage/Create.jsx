@@ -2,7 +2,7 @@ import styled from "styled-components"
 import manage from '../../../images/manage/midmanage.png'
 
 const Container = styled.div`
-padding: 2rem;
+padding: 2rem 1rem;
 
 .createheader{
     padding: 2rem;

@@ -8,7 +8,7 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 color: #0C1825;
-padding: .5rem 2rem;
+padding: .5rem 1rem;
 
 
 

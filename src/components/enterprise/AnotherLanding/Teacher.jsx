@@ -2,7 +2,7 @@ import styled from "styled-components"
 import teach from '../../../images/landing/teach.png'
 
 const Container = styled.div`
-padding: 2rem;
+padding: 2rem 1rem;
 background: #F0F4FF;
 
 .teachercontent{

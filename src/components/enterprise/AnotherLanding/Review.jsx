@@ -9,7 +9,7 @@ const Container = styled.div`
 background: url(${others});
 background-repeat: no-repeat;
 background-size: cover;
-padding: 2rem;
+padding: 2rem 1rem;
 display: flex;
 flex-direction: column;
 align-items: center;

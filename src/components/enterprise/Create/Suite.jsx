@@ -2,7 +2,7 @@ import styled from "styled-components"
 import business from '../../../images/create/suite.png'
 
 const Container = styled.div`
-    padding: 5rem 2rem;
+padding: 5rem 1rem;
     color: #1B1F29;
     // background: #F0F4FF;
 

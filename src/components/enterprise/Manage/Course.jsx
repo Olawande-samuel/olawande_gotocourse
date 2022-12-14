@@ -2,7 +2,7 @@ import styled from "styled-components"
 import course from '../../../images/landing/course.png'
 
 const Container = styled.div`
-padding: 2rem;
+padding: 2rem 1rem;
     display: flex;
     align-items: center;
     gap: 2rem;

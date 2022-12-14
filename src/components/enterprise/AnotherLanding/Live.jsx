@@ -3,7 +3,7 @@ import styled from "styled-components"
 import live from '../../../images/landing/live.png'
 
 const Container = styled.div`
-padding: 4rem 2rem;
+padding: 4rem 1rem;
     display: flex;
     align-items: center;
     gap: 2rem;
