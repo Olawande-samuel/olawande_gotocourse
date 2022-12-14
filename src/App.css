@@ -1575,7 +1575,7 @@ td:not(:first-child) {
 
 /* ********************SIGNUP/LOGIN************************** */
 
-.signWrapper {
+.signWrapper, .enterpriseWrapper {
   position: relative;
   display: grid;
   /* place-items: center; */
@@ -1592,6 +1592,16 @@ td:not(:first-child) {
 .signWrapper_background {
   height: 100%;
   background: url(./images/logup.webp);
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: none;
+  place-items: center;
+  color: #ffffff;
+}
+
+.enterpriseWrapper_background {
+  height: 100%;
+  background: url('./images/enterprise/signup.png');
   background-repeat: no-repeat;
   background-size: cover;
   display: none;
@@ -1649,7 +1659,7 @@ td:not(:first-child) {
   justify-content: center;
 }
 
-.signWrapper .back {
+.signWrapper .back, .enterpriseWrapper .back {
   position: absolute;
   top: 5%;
   left: 3%;
@@ -1659,7 +1669,7 @@ td:not(:first-child) {
   height: 100vh;
 }
 
-.signWrapper main {
+.signWrapper main, .enterpriseWrapper main {
   width: min(100% - 2rem, 600px);
   /* margin: auto; */
   border-radius: 20px;
@@ -1695,16 +1705,28 @@ td:not(:first-child) {
     background-size: cover;
     width: min(100%, 600px);
   }
+
+  .enterpriseWrapper>div:nth-child(3) {
+    background: url(./images/enterprise/signup.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: min(100%, 600px);
+  }
 }
 
 @media (min-width:591px) {
-  .signWrapper {
+  .signWrapper, .enterpriseWrapper {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     place-items: unset;
   }
 
   .signWrapper_background {
+    display: grid;
+
+  }
+
+  .enterpriseWrapper_background {
     display: grid;
 
   }

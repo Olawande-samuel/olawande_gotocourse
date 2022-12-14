@@ -209,9 +209,13 @@ import {
 } from "./pages/Dashboard/components/webinar";
 import LiveChat from "./pages/Dashboard/components/Live/quikkonnet/LiveChat";
 import Playground from "./components/Playground";
-import AnotherLanding from "./components/AnotherLanding";
-import CreatePage from "./components/AnotherLanding/Create/Index";
-import ManagePage from "./components/AnotherLanding/Manage/Index";
+import AnotherLanding from "./components/enterprise/AnotherLanding";
+import CreatePage from "./components/enterprise/Create/Index";
+import ManagePage from "./components/enterprise/Manage/Index";
+import EnterPriseLogin from "./components/enterprise/Register/EnterPriseLogin";
+import EnterpriseSignUp from "./components/enterprise/Register/EnterpriseSignUp";
+import EnterPriseForgotPassword from "./components/enterprise/Register/ForgotPassword";
+import EnterpriseVerification from "./components/enterprise/Register/Verification";
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -255,10 +259,16 @@ function App() {
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<Out />}>
+
               <Route index element={<AnotherLanding />} />
-              <Route path="goto" element={<Landing />} />
               <Route path="create" element={<CreatePage />} />
               <Route path="manage" element={<ManagePage />} />
+              <Route path="enterprise-login" element={<EnterPriseLogin />} />
+              <Route path="enterprise-signup" element={<EnterpriseSignUp />} />
+              <Route path="enterprise-forgot" element={<EnterPriseForgotPassword />} />
+              <Route path="enterprise-verify" element={<EnterpriseVerification />} />
+             
+              <Route path="goto" element={<Landing />} />
               <Route path="login" element={<Login />} />
               <Route path="signup" element={<SignUp />} />
               <Route path="email" element={<Email />} />
