@@ -22,7 +22,7 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 700;
-                font-size: 28px;
+                font-size: 30px;
                 color: #1B1F29;
                 line-height: 22px;
 
@@ -33,9 +33,10 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 400;
-                font-size: 14px;
+                font-size: 16px;
                 line-height: 22px;
-                color: #1B1F29;            
+                color: #1B1F29;  
+                margin-top: 2rem;          
             }
 
            
@@ -96,7 +97,9 @@ const Mail = () => {
                         <h4>Enjoy secure  chat </h4>
                         <h4>and mail system</h4>
                         <p>
-                        Explore our simple  two-way interaction tool for teachers and school admins  to  send coupons, clear doubts, broadcast announcements, or just send some motivational messages.                        </p>
+                        Explore our simple  two-way interaction tool for teachers and school
+                        <br/> admins  to  send coupons, clear doubts, broadcast announcements,<br/>
+                         or just send some motivational messages.                        </p>
                     </div>
 
 

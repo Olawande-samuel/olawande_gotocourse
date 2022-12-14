@@ -2,9 +2,9 @@ import styled from "styled-components"
 import business from '../../../images/create/suite.png'
 
 const Container = styled.div`
-    padding: 2rem;
+    padding: 5rem 2rem;
     color: #1B1F29;
-    background: #F0F4FF;
+    // background: #F0F4FF;
 
     .joincontent{
         display: flex;
@@ -22,8 +22,8 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 700;
-                font-size: 28px;
-                color: #1B1F29;
+                font-size: 30px;
+                color: #000;
                 line-height: 22px;
 
             }
@@ -33,9 +33,9 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 400;
-                font-size: 14px;
+                font-size: 16px;
                 line-height: 22px;
-                color: #1B1F29;            
+                color: #111217;           
             }
 
             
@@ -49,7 +49,7 @@ const Container = styled.div`
                 font-weight: 700;
                 font-size: 14px;
                 line-height: 27px;
-                width: 30%;
+                width: 150px;
     
         }
         
@@ -68,6 +68,8 @@ const Container = styled.div`
     } 
     
     @media (max-width:768px){
+        padding: 2rem;
+
         text-align: center;
 
         .joincontent{
@@ -82,6 +84,8 @@ const Container = styled.div`
             }
 
             .joinleft{
+                align-items: center;
+                
                 p{
                     padding: 2rem 0;
                 }
@@ -98,11 +102,18 @@ const Suite = () => {
             <div className="joincontent">
                 <div className="joinleft">
                     <div>
-                        <h4>Online course creation that’s  </h4> 
-                        <h4>quick and easy</h4>   
-                        <p>
-                        With Gotocourse course creation studio , you will have everything to turn your knowledge to course in minutes. No tech skill required 
-                        </p>                    
+                    <div>
+                        <h4>Online course creation that’s  </h4>
+                        <h4>quick and easy</h4>
+
+                    </div>
+                    <p style={{marginTop: "1rem"}}>
+                        With Gotocourse course creation <br />
+                        studio , you will have everything to <br />
+                        turn your knowledge to course in minutes. <br />
+                        No tech skill required
+                    </p>
+
                     </div>
 
                     <button>Get started</button>
@@ -112,7 +123,7 @@ const Suite = () => {
 
                 <div className="joinright">
                     <img src={business} alt=""
-                        // width={600}
+                    // width={600}
                     />
 
                 </div>
@@ -123,4 +134,4 @@ const Suite = () => {
     )
 }
 
-export default  Suite
+export default Suite

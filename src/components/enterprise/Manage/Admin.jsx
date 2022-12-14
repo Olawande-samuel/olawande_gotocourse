@@ -22,7 +22,7 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 700;
-                font-size: 28px;
+                font-size: 30px;
                 color: #1B1F29;
                 line-height: 22px;
 
@@ -33,9 +33,10 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 400;
-                font-size: 14px;
+                font-size: 16px;
                 line-height: 22px;
-                color: #1B1F29;            
+                color: #1B1F29;    
+                margin-top: 2rem;        
             }
 
            

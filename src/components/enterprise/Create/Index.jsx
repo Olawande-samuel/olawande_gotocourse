@@ -11,12 +11,20 @@ import Create from "./Create"
 import Hero from "./Hero"
 import Suite from "./Suite"
 import Educator from "./Educator"
+import SideBar from "../AnotherLanding/Sidebar"
+import { useAuth } from "../../../contexts/Auth"
 
 
 const CreatePage = () => {
+    const { generalState: { loading, showSidebar }, generalState, setGeneralState } = useAuth();
+
+    const toggleSidebar = () => {
+        setGeneralState({ ...generalState, showSidebar: !showSidebar });
+    };
     return (
         <>
-            <Navbar />
+            <Navbar toggleSidebar={toggleSidebar} />
+            <SideBar showSidebar={showSidebar}  toggleSidebar={toggleSidebar}/>
             <Hero/>
             <Create/>
             <Business/>

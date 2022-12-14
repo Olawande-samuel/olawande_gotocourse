@@ -22,7 +22,7 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 700;
-                font-size: 28px;
+                font-size: 30px;
                 color: #1B1F29;
                 line-height: 22px;
 
@@ -33,9 +33,10 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 400;
-                font-size: 14px;
+                font-size: 16px;
                 line-height: 22px;
-                color: #1B1F29;            
+                color: #1B1F29;    
+                margin-top: 1rem;        
             }
 
            
@@ -89,7 +90,10 @@ const Solution = () => {
                     <h4>A single solution for all your </h4>
                     <h4>business needs</h4>
                         <p>
-                        Get access to coaching packages, marketing support for your business and talent, email marketing system, an online payment processing—everything you need to grow a flourishing coaching practice is here at your fingertips..
+                        Get access to coaching packages, marketing support for your <br/>
+                        business and talent, email marketing system, an online <br/>
+                        payment processing—everything you need to grow a <br/>
+                        flourishing coaching practice is here at your fingertips..
                         </p>
                     </div>
 

@@ -9,17 +9,29 @@ import lib from '../../../images/create/lib.svg'
 
 const Container = styled.div`
 width: 100%;
-padding: 2rem;
+padding: 5rem 2rem;
 
 h5{
     text-align: center;
     font-family: 'Raleway';
     font-style: normal;
-    font-weight: 700;
-    font-size: 26px;
+    font-weight: 900;
+    font-size: 28px;
     text-align: center;
+    color: #111111;
     // line-height: 54px;
 }
+
+    p{
+        font-family: 'Raleway';
+        font-style: italic;
+        font-weight: 500;
+        text-align: center;
+        font-size: 20px;
+        color: #000;
+
+
+    }
 
 .list__content{
     width: 100%;
@@ -44,6 +56,8 @@ h5{
             font-weight: 100;
             font-size: 20px;
             color: #1B1F29;
+            text-align: start;
+
         }
 
         span{
@@ -77,7 +91,8 @@ const Educator = () => {
     return (
         <Container>
             <h5>Educators and institutions of all sizes use Gotocourse</h5>
-            <p>Explore Gotocourse to upskill for better performance, provide access to your content, experts and training to empower your learners and drive career development. </p>
+            <p>Explore Gotocourse to upskill for better performance, provide access to your content, experts <br/>
+                and training to empower your learners and drive career development. </p>
 
 
             <div className="list__content">

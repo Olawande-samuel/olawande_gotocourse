@@ -64,6 +64,7 @@ padding: .5rem 2rem;
     flex:.5;
     width: 100%;
     height: 500px;
+    padding: 2rem 0;
 
     img{
         width: 100%;
@@ -76,6 +77,7 @@ padding: .5rem 2rem;
 @media (max-width: 768px){
     flex-direction: column-reverse;
     text-align: center;
+    align-items: center;
 
     .heroleft{
     
@@ -130,6 +132,7 @@ const Hero = () => {
                 </div>
                 <p>
                     Transform your knowledge into
+                    <br/>
                     profitable online course and go global.
                 </p>
 

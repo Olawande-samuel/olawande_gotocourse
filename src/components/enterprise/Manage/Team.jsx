@@ -22,7 +22,7 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 700;
-                font-size: 28px;
+                font-size: 30px;
                 color: #1B1F29;
                 line-height: 22px;
 
@@ -33,9 +33,11 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 400;
-                font-size: 14px;
+                font-size: 16px;
                 line-height: 22px;
-                color: #1B1F29;            
+                color: #1B1F29;    
+                margin-top: 1rem;        
+        
             }
 
            
@@ -88,9 +90,12 @@ const Team = () => {
                     <div>
                     <h4>Work progressively with your team</h4>
                         <p>
-                            Easily scale without fear. Move from soloprenuer into a bigger team  without the fear of loosing control or not having the proper tool to manage work activities and the team.
-
-                            Do more with your team and be in control with our in built CRM tool designed with you in mind.
+                            Easily scale without fear. Move from soloprenuer into a bigger <br/>
+                             team  without the fear of loosing control or not having the <br/>
+                             proper tool to manage work activities and the team.
+                             <br/><br/>
+                            Do more with your team and be in control with our in built<br/>
+                             CRM tool designed with you in mind.
                         </p>
                     </div>
 

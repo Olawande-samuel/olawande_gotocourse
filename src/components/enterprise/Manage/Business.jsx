@@ -22,7 +22,7 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 700;
-                font-size: 28px;
+                font-size: 30px;
                 color: #1B1F29;
                 line-height: 22px;
 
@@ -33,9 +33,10 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 400;
-                font-size: 14px;
+                font-size: 16px;
                 line-height: 22px;
-                color: #1B1F29;            
+                color: #1B1F29;    
+                margin-top: 1rem;        
             }
 
            
@@ -86,13 +87,16 @@ const Business = () => {
             <div className="joincontent">
                 <div className="joinleft">
                     <div>
-                        <h4>Manage records with</h4> 
+                        <h4>Manage records with</h4>
                         <h4>ease and do more .  </h4>
-                       <p>
-                       Grow your business with every tool you
- need inside one easy-to-use platform.
-Run your online business without limitations. Download learners record , record attendance and have access to student information via an interactive dashboard.
-                       </p>
+                        <p>
+                            Grow your business with every tool you <br />
+                            need inside one easy-to-use platform. <br />
+                            Run your online business without <br />
+                            limitations. Download learners record ,<br />
+                            record attendance and have access to <br /> 
+                            student information via an interactive dashboard.
+                        </p>
                     </div>
 
 
@@ -100,7 +104,7 @@ Run your online business without limitations. Download learners record , record 
 
                 <div className="joinright">
                     <img src={what} alt=""
-                        // width={600}
+                    // width={600}
                     />
 
                 </div>
@@ -111,4 +115,4 @@ Run your online business without limitations. Download learners record , record 
     )
 }
 
-export default  Business
+export default Business

@@ -21,7 +21,7 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 700;
-                font-size: 28px;
+                font-size: 30px;
                 color: #1B1F29;
                 line-height: 22px;
 
@@ -32,9 +32,10 @@ const Container = styled.div`
                 font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 400;
-                font-size: 14px;
+                font-size: 16px;
                 line-height: 22px;
-                color: #1B1F29;            
+                color: #1B1F29;  
+                margin-top: 1rem;         
             }
 
             button{
@@ -46,7 +47,7 @@ const Container = styled.div`
                 font-weight: 700;
                 font-size: 14px;
                 line-height: 27px;
-                width: 30%;
+                width: 150px;
     
         }
         
@@ -81,6 +82,7 @@ const Container = styled.div`
             }
 
             .joinleft{
+                align-items: center;
                 p{
                     padding: 2rem 0;
                 }
@@ -100,8 +102,12 @@ const Sell = () => {
                         <h4>Create & sell courses for</h4>
                         <h4>everyone, anywhere</h4>
                         <p>
-                            Payment processing is one thing that Gotocourse has done so well. We integrate with Stripe ,PayPal  and flutterway to make payments quick and seamless.
-                            Create Incentives for  your students to refer their friends with student referrals. Take advantage of the  affiliate marketing tools to recruit partners to promote your business on Gotocourse.
+                            Payment processing is one thing that Gotocourse has done so well. <br/>
+                            We integrate with Stripe ,PayPal  and flutterway to make payments quick and seamless.<br/>
+    
+                            Create Incentives for  your students to refer their friends <br/>
+                            with student referrals. Take advantage of the  affiliate marketing <br/>
+                            tools to recruit partners to promote your business on Gotocourse.
                         </p>
 
                     </div>

@@ -3,10 +3,10 @@ import community from '../../../images/landing/community.png'
 
 const Container = styled.div`
 padding: 2rem;
-background: #F0F4FF;
+// background: #F0F4FF;
 
 .communitycontent{
-    padding: 2rem;
+    padding: 3rem 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -25,7 +25,7 @@ background: #F0F4FF;
             font-family: 'Raleway';
             font-style: normal;
             font-weight: 700;
-            font-size: 24px;
+            font-size: 28px;
             // line-height: 36px;
         }
 
@@ -33,7 +33,7 @@ background: #F0F4FF;
             font-family: 'Raleway';
             font-style: normal;
             font-weight: 400;
-            font-size: 14px;
+            font-size: 16px;
             line-height: 24px;
             color: #000000;
         }
@@ -46,11 +46,11 @@ background: #F0F4FF;
             color: #fff;
             padding: .5rem 1rem;
             font-weight: 700;
-            font-size: 22px;
+            font-size: 14px;
             line-height: 27px;
-            width: 300px ;
+            width: 150px ;
 
-    }
+        }
     }
 
 }
@@ -61,6 +61,7 @@ background: #F0F4FF;
 @media (max-width:768px){
     .communitycontent{
         flex-direction: column;
+        padding : 5rem 0;
 
         .communityleft{
             width: 100%;
@@ -68,6 +69,11 @@ background: #F0F4FF;
                 width: 100%;
                 object-fit: cover;
             }
+        }
+
+        .communityright{
+            text-align: center;
+            align-items: center;
         }
 
     }
@@ -83,8 +89,10 @@ const Community = () => {
 
                 </div>
                 <div className="communityright">
-                       <h5>Be the biggest community of Educators </h5>
-                    <p>We do more when we learn  and support each other. Be part of our community to achieve your goals and share knowledge with like minds.</p>
+                    <h5>Join  the biggest community of Educators </h5>
+                    <p>We do more when we learn  and support each other. <br />
+                        Be part of our community to achieve your goals and <br />
+                        share knowledge with like minds.</p>
                     <button>Join community</button>
                 </div>
             </div>

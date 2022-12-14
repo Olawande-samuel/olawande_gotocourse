@@ -34,6 +34,11 @@ div{
 
 }
 
+@media (max-width: 768px){
+    padding:  2rem;
+
+}
+
 `
 
 const JoinEducator = () => {

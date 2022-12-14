@@ -37,17 +37,30 @@ h4{
             font-family: 'Raleway';
             font-style: normal;
             font-weight: 700;
-            font-size: 24px;
+            font-size: 28px;
             // line-height: 36px;
         }
 
         p{
             font-family: 'Raleway';
             font-style: normal;
-            font-weight: 400;
-            font-size: 14px;
+            font-weight: 500;
+            font-size: 16px;
             line-height: 24px;
             color: #000000;
+        }
+
+        button{
+            border:2px solid white;
+            border-radius: 7px;
+            background: var( --theme-blue);
+            color: #fff;
+            padding: .5rem 1rem;
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 27px;
+            width: 150px;
+
         }
     }
 
@@ -66,6 +79,7 @@ h4{
 }
 
 @media (max-width:768px){
+  
     .createcontent{
         flex-direction: column;
 
@@ -75,7 +89,12 @@ h4{
                 width: 100%;
                 object-fit: cover;
             }
-    }
+        }
+        .createright{
+            align-items: center;
+
+        }
+
 
     }
 }
@@ -99,6 +118,8 @@ const Create = () => {
                         <h5> customize your space</h5>
                     </div>
                     <p>Want to start from absolute scratch? Customize your space with our customization templates and intuitive design tools, we empower educators in creating an engaging course quickly and easily.</p>
+                    <button>Start a trial</button>
+
                 </div>
             </div>
         </Container>

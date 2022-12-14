@@ -2,7 +2,9 @@ import styled from "styled-components"
 import course from '../../../images/create/badge.png'
 
 const Container = styled.div`
-padding: 2rem;
+padding: 5rem 2rem;
+background: #F0F4FF;
+
     display: flex;
     align-items: center;
     gap: 2rem;
@@ -18,11 +20,14 @@ padding: 2rem;
         flex-direction: column;
         gap: .5rem;
 
-        h5{
+        h4{
             font-family: 'Raleway';
             font-style: normal;
             font-weight: 700;
-            font-size: 24px;
+            font-size: 30px;
+            color: #000;
+            line-height: 22px;
+
         }
         
     
@@ -30,7 +35,7 @@ padding: 2rem;
             font-family: 'Raleway';
             font-style: normal;
             font-weight: 400;
-            font-size: 14px;
+            font-size: 16px;
             line-height: 24px;
             color: #000000;
         }
@@ -75,14 +80,17 @@ const Badge = () => {
 
             <div className="courseright">
                 <div>
-                    <h5>Create  Certificate of</h5>
-                    <h5>completion and Badges</h5>
+                    <div>
+                        <h4>Create  Certificate of</h4>
+                        <h4>completion and Badges</h4>
 
-                    <p>
-                        We make it easy for you to create,
-                        distribute digital certificates and badges.                    </p>
+                    </div>
+
                 </div>
-
+                <p>
+                    We make it easy for you to create, <br />
+                    distribute digital certificates and badges.
+                </p>
 
             </div>
 

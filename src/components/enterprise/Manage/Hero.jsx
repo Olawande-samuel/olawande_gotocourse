@@ -64,6 +64,7 @@ padding: .5rem 2rem;
     flex:.5;
     width: 100%;
     height: 500px;
+    padding: 2rem 0;
 
     img{
         width: 100%;
@@ -87,6 +88,7 @@ padding: .5rem 2rem;
     }
 
     .heroright{
+        
         width: 100%;
         img{
             width: 100%;

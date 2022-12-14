@@ -40,10 +40,16 @@ gap: 2rem;
 
 
         .paytext{
+            .payheadtext{
+                font-family: 'Raleway';
+font-style: normal;
+font-weight: 700;
+font-size: 20px;
+            }
             p{
-                font-family: 'ABeeZee';
-                font-style: italic;
-                font-weight: 400;
+                font-family: 'Raleway';
+font-style: normal;
+font-weight: 500;
                 font-size: 20px;
                 line-height: 19px;
             }
@@ -100,7 +106,7 @@ const Success = () => {
                     <img src={one} alt="" />
 
                     <div className="paytext">
-                        <p>24/7 Support</p>
+                        <p className="payheadtext">24/7 Support</p>
                         <span>
                             Our customer support team is
                             available 24/7/365 to assist you
@@ -115,7 +121,7 @@ const Success = () => {
                 <div className="payimg">
                     <img src={second} alt="" />
                     <div className="paytext">
-                        <p>Supportive community</p>
+                        <p className="payheadtext">Supportive community</p>
                         <span>
                             Our community of educators and learners is supportive, encouraging, and helpful. We encourage you to connect with other members for advice, tips, and support.
                         </span>
@@ -127,7 +133,7 @@ const Success = () => {
                     <img src={third} alt="" />
 
                     <div className="paytext">
-                        <p>Business Advising</p>
+                        <p className="payheadtext">Business Advising</p>
                         <span>
                             Our team of business advisors has experience in the education industry and can help you create a plan for your business.
                         </span>

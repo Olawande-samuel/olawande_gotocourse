@@ -2,7 +2,7 @@ import styled from "styled-components"
 import course from '../../../images/create/course.png'
 
 const Container = styled.div`
-padding: 2rem;
+padding: 5rem  2rem;
     display: flex;
     align-items: center;
     gap: 2rem;
@@ -22,15 +22,15 @@ padding: 2rem;
             font-family: 'Raleway';
             font-style: normal;
             font-weight: 700;
-            font-size: 24px;
+            font-size: 28px;
         }
         
     
         p{
             font-family: 'Raleway';
             font-style: normal;
-            font-weight: 400;
-            font-size: 14px;
+            font-weight: 500;
+            font-size: 16px;
             line-height: 24px;
             color: #000000;
         }

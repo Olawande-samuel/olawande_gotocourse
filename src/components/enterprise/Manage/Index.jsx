@@ -9,12 +9,20 @@ import Record from "./Record"
 import Admin from "./Admin"
 import Success from "./Success"
 import Solution from "./Solution"
+import SideBar from "../AnotherLanding/Sidebar"
+import { useAuth } from "../../../contexts/Auth"
 
 
 const ManagePage = () => {
+    const { generalState: { loading, showSidebar }, generalState, setGeneralState } = useAuth();
+
+    const toggleSidebar = () => {
+        setGeneralState({ ...generalState, showSidebar: !showSidebar });
+    };
     return (
         <>
-            <Navbar />
+            <Navbar toggleSidebar={toggleSidebar} />
+            <SideBar showSidebar={showSidebar}  toggleSidebar={toggleSidebar}/>
             <Hero />
             <Create />
             <Business />
