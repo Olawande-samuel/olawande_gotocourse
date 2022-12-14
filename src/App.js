@@ -255,9 +255,8 @@ function App() {
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<Out />}>
-              {/* <Route index element={<AnotherLanding />} /> */}
-              {/* <Route path="goto" element={<Landing />} /> */}
-              <Route index element={<Landing />} />
+              <Route index element={<AnotherLanding />} />
+              <Route path="goto" element={<Landing />} />
               <Route path="create" element={<CreatePage />} />
               <Route path="manage" element={<ManagePage />} />
               <Route path="login" element={<Login />} />
