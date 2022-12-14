@@ -11,6 +11,7 @@ import Success from "./Success"
 import Solution from "./Solution"
 import SideBar from "../AnotherLanding/Sidebar"
 import { useAuth } from "../../../contexts/Auth"
+import Testimonial from "./Testimonial"
 
 
 const ManagePage = () => {
@@ -32,6 +33,7 @@ const ManagePage = () => {
             <Mail/>
             <Success/>
             <Solution/>
+            <Testimonial/>
             <Footer />
 
         </>

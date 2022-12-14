@@ -3,9 +3,12 @@ import review1 from '../../../images/landing/review1.png'
 import review2 from '../../../images/landing/review2.png'
 import review3 from '../../../images/landing/review3.png'
 import quote from '../../../images/landing/quote.svg'
+import others from '../../../images/landing/others.png'
 
 const Container = styled.div`
-background: rgba(241, 248, 255, 0.69);
+background: url(${others});
+background-repeat: no-repeat;
+background-size: cover;
 padding: 2rem;
 display: flex;
 flex-direction: column;
