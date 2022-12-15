@@ -1,6 +1,6 @@
 import Footer from "../AnotherLanding/Footer"
 import Join from "../AnotherLanding/Join"
-import JoinEducator from "../AnotherLanding/JoinEducator"
+import JoinEducator from "./JoinEducator"
 import Navbar from "../AnotherLanding/Navbar"
 import Sell from "./Sell"
 import Badge from "./Badge"
