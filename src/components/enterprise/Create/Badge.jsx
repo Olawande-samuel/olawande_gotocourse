@@ -5,13 +5,19 @@ const Container = styled.div`
 padding: 5rem 1rem;
 background: #F0F4FF;
 
+
+.contentcontainer{
     display: flex;
     align-items: center;
     gap: 3rem;
-
+    
     .courseleft{
         flex: .5;
-  
+        img{
+            width: 100%;
+            height: 100%;
+            // object-fit: cover;
+        }
     }
 
     .courseright{
@@ -41,23 +47,30 @@ background: #F0F4FF;
         }
 
     
+    }
+
 
     }
 
     @media (max-width: 912px){
-        .courseleft{
-            width: 100%;
-            height: 300px;
-            img{
+
+        .contentcontainer {
+            .courseleft{
                 width: 100%;
-                height: 100%;
-                // object-fit: cover;
+                height: 300px;
+                img{
+                    width: 100%;
+                    height: 100%;
+                    // object-fit: cover;
+                }
             }
+
         }
     
     }
 
     @media (max-width:768px){
+        .contentcontainer{
             flex-direction: column;
 
             .courseleft{
@@ -67,12 +80,16 @@ background: #F0F4FF;
                     object-fit: cover;
                 }
             }
+
         }
+    }
 
 `
 const Badge = () => {
     return (
         <Container>
+            <div className="contentcontainer container">
+
             <div className="courseleft">
                 <img src={course} alt="" width={600} />
 
@@ -92,6 +109,7 @@ const Badge = () => {
                     distribute digital certificates and badges.
                 </p>
 
+            </div>
             </div>
 
 

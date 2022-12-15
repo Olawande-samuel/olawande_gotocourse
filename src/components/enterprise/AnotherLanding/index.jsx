@@ -96,7 +96,7 @@ const AnotherLanding = () => {
         setGeneralState({ ...generalState, showSidebar: !showSidebar });
     };
     return (
-        <Container>
+        <Container >
             <Navbar toggleSidebar={toggleSidebar} />
             <SideBar showSidebar={showSidebar}  toggleSidebar={toggleSidebar}/>
             <Hero />

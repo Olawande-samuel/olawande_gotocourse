@@ -26,6 +26,11 @@ h4{
 
     .createleft{
         flex:.5;
+        img{
+            width: 100%;
+            height: 100%;
+            // object-fit: cover;
+        }
 
     }
     .createright{
@@ -101,7 +106,7 @@ h4{
 `
 const Create = () => {
     return (
-        <Container>
+        <Container className="container">
             <div className="createheader">
                 <h4>Gotocourse makes it simple to create and sell a great-looking </h4>
                 <h4>course that would start  generating income immediately.</h4>

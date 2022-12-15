@@ -35,6 +35,11 @@ color: #000000;
 
     .createleft{
         flex:.5;
+        img{
+            width: 100%;
+            height: 100%;
+            // object-fit: cover;
+        }
 
     }
     .createright{
@@ -104,7 +109,7 @@ color: #000000;
 `
 const Create = () => {
     return (
-        <Container>
+        <Container className="container">
             <div className="createheader">
                 <h4>Gotocourse is everything you need,</h4>
                 <h4>no plugins or integrations required.</h4>

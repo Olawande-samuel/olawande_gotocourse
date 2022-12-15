@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import styled from "styled-components"
-import confetti from '../../../images/landing/confetti.png'
+import confetti from '../../../images/create/flower.png'
 
 const Container = styled.div`
 background: url(${confetti});

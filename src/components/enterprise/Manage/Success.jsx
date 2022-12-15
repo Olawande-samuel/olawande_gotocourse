@@ -96,7 +96,7 @@ font-weight: 500;
 
 const Success = () => {
     return (
-        <Container>
+        <Container className="container">
             <div className="payhead">
                 <h4>Your Success is our #1 priority</h4>
                 <h4>Do more with Gotocourse.</h4>

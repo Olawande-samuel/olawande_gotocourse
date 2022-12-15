@@ -74,7 +74,7 @@ padding: 2rem 0;
 
 const Tools = () => {
     return (
-        <Container>
+        <Container className="container">
             <div className="tleft">
                 <img src={tool} alt="" />
             </div>

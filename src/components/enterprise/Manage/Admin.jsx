@@ -49,7 +49,8 @@ padding: 2rem 1rem;
             flex: .5;
             img{
                 width: 100%;
-                object-fit: cover;
+                height: 100%;
+                // object-fit: cover;
             }
       
         }
@@ -84,7 +85,7 @@ padding: 2rem 1rem;
 const Admin = () => {
     return (
         <Container>
-            <div className="joincontent">
+            <div className="joincontent container">
 
                 <div className="joinleft">
                     <img src={what} alt=""

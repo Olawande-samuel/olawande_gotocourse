@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import community from '../../../images/landing/community.png'
 
@@ -81,7 +82,7 @@ padding: 2rem 1rem;
 `
 const Community = () => {
     return (
-        <Container>
+        <Container  className="container">
             <div className="communitycontent">
 
                 <div className="communityleft">
@@ -93,7 +94,9 @@ const Community = () => {
                     <p>We do more when we learn  and support each other. <br />
                         Be part of our community to achieve your goals and <br />
                         share knowledge with like minds.</p>
-                    <button>Join community</button>
+                        
+                    <Link to={`/enterprise-signup`}> <button>Join community</button></Link>
+
                 </div>
             </div>
         </Container>

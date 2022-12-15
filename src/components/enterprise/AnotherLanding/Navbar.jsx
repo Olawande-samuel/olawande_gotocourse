@@ -140,7 +140,7 @@ const Navbar = ({ toggleSidebar }) => {
     const navigate = useNavigate();
 
     return (
-        <Container>
+        <Container className="container">
             <div className="navbarlogo">
                 <Link to={`/`}>
                     <Logosm color="var(--theme-blue)" />

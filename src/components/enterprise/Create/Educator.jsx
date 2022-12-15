@@ -89,7 +89,7 @@ h5{
 
 const Educator = () => {
     return (
-        <Container>
+        <Container className="container">
             <h5>Educators and institutions of all sizes use Gotocourse</h5>
             <p>Explore Gotocourse to upskill for better performance, provide access to your content, experts <br/>
                 and training to empower your learners and drive career development. </p>

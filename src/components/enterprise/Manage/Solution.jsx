@@ -49,9 +49,9 @@ padding: 2rem 1rem;
             flex: .5;
             img{
                 width: 100%;
-                object-fit: cover;
+                height: 100%;
+                // object-fit: cover;
             }
-      
         }
 
     } 
@@ -83,7 +83,7 @@ padding: 2rem 1rem;
 `
 const Solution = () => {
     return (
-        <Container>
+        <Container className="container">
             <div className="joincontent">
                 <div className="joinleft">
                     <div>
