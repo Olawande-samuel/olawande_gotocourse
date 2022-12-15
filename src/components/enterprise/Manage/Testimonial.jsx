@@ -96,7 +96,7 @@ padding: 2rem 1rem;
 `
 const Testimonial = () => {
     return (
-        <Container>
+        <Container className="container">
             <div className="joincontent">
 
                 <div className="joinleft">

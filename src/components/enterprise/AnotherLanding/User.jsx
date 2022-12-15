@@ -5,6 +5,7 @@ import monetize from '../../../images/landing/monetize.svg'
 import partners from '../../../images/landing/partners.svg'
 import progress from '../../../images/landing/progress.svg'
 import ease from '../../../images/landing/ease.svg'
+import { Link } from "react-router-dom"
 
 const Container = styled.div`
 padding: 2rem 1rem;
@@ -125,7 +126,7 @@ width: 100%;
 `
 const User = () => {
     return (
-        <Container>
+        <Container className="container">
 
 
             <Middle>
@@ -136,7 +137,7 @@ const User = () => {
 
                     <p>Gotocourse provides everything you <br /> need to power your start and scale.</p>
 
-                    <button>Start free trial</button>
+                    <Link to={`/enterprise-signup`}><button>Start free trial</button></Link>
                 </div>
 
                 <div className="middlecontentright">

@@ -129,6 +129,8 @@ gap: 2rem;
 const Review = () => {
     return (
         <Container>
+            <div className="container">
+
             <div className="reviewhead">
                 <h4>See what other educators are  </h4>
                 <h4>saying about us</h4>
@@ -214,6 +216,7 @@ const Review = () => {
                 </div>
 
 
+            </div>
             </div>
 
 

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import confetti from '../../../images/landing/confetti.png'
 
@@ -45,14 +46,15 @@ div{
 
 const JoinEducator = () => {
     return (
-        <Container>
+        <Container className="container">
             <div>
                 <h5>Join 10,000+ educators</h5>
                 <h5>creating better experiences</h5>
             </div>
 
-            <button>Sign up for free</button>
-
+            <Link to={`/enterprise-signup`}>
+                <button>Sign up for free</button>
+            </Link>
         </Container>
     )
 }

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import join from '../../../images/landing/join.png'
 
@@ -92,6 +93,7 @@ const Container = styled.div`
 const Join = () => {
     return (
         <Container>
+            <div className="container">
             <div className="joincontent">
                 <div className="joinleft">
                     <div>
@@ -104,9 +106,10 @@ const Join = () => {
 
                     </div>
 
-                    <button>
+                    <Link to={`/enterprise-signup`}>  <button>
                         Join for free
                     </button>
+                    </Link>
 
 
                 </div>
@@ -117,6 +120,8 @@ const Join = () => {
                     />
 
                 </div>
+
+            </div>
 
             </div>
 

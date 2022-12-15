@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import business from '../../../images/create/suite.png'
 
@@ -60,9 +61,9 @@ padding: 5rem 1rem;
             flex: .5;
             img{
                 width: 100%;
-                object-fit: cover;
+                height: 100%;
+                // object-fit: cover;
             }
-      
         }
 
     } 
@@ -98,7 +99,7 @@ padding: 5rem 1rem;
 `
 const Suite = () => {
     return (
-        <Container>
+        <Container className="container">
             <div className="joincontent">
                 <div className="joinleft">
                     <div>
@@ -115,8 +116,7 @@ const Suite = () => {
                     </p>
 
                     </div>
-
-                    <button>Get started</button>
+                    <Link to={`/enterprise-signup`}> <button>Get started</button></Link>
 
 
                 </div>

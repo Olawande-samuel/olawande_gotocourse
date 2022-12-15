@@ -81,7 +81,7 @@ padding: 2rem 1rem;
 `
 const Sell = () => {
     return (
-        <Container>
+        <Container className="container">
             <div className="joincontent">
                 <div className="joinleft">
                     <div>

@@ -1,4 +1,3 @@
-import { BiRightArrowAlt } from "react-icons/bi"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 import heroimg from '../../../images/manage/hero.png'
@@ -23,7 +22,7 @@ padding: .5rem 1rem;
         font-family: 'Raleway';
         font-style: normal;
         font-weight: 900;
-        font-size: clamp(2.25rem, 2.1429rem + .5357vw, 3rem);
+        font-size: clamp(2.8125rem, 2.25rem + 1.8vw, 3.0375rem);
     }
     ul{
         font-family: 'Raleway';
@@ -122,28 +121,30 @@ padding: .5rem 1rem;
 `
 const Hero = () => {
     return (
-        <Container>
+        <Container  className="container">
 
             <div className="heroleft">
                 <div>
-                    <h1>All-in-one platform</h1>
-                    <h1>to manage live classes</h1>
+                    <h1>
+                        <span> All-in-one platform</span>
+                        <span className="d-block">to manage live classes</span>
+                    </h1>
 
                 </div>
                 <ul>
                     <li>Create everything tech and business skills training.</li>
-                    <li>Build your training space the way you want<br/>for  who you want  everywhere</li>
+                    <li>Build your training space the way you want<br />for  who you want  everywhere</li>
                 </ul>
 
                 <div className="email">
-                    <button>Start for free</button>
+                    <Link to={`/enterprise-signup`}> <button>Start for free</button></Link>
                 </div>
 
             </div>
 
             <div className="heroright">
-                <img src={heroimg} alt="" 
-                width={400} 
+                <img src={heroimg} alt=""
+                    width={400}
                 // height={200}
                 />
 

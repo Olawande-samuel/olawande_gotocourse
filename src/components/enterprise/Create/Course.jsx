@@ -9,6 +9,11 @@ padding: 5rem 1rem;
 
     .courseleft{
         flex: .5;
+        img{
+            width: 100%;
+            height: 100%;
+            // object-fit: cover;
+        }
   
     }
 
@@ -67,7 +72,7 @@ padding: 5rem 1rem;
 `
 const Course = () => {
     return (
-        <Container>
+        <Container className="container">
               <div className="courseleft">
                 <img src={course} alt="" width={600} />
 

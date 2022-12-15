@@ -83,7 +83,7 @@ padding: 2rem 1rem;
 const Business = () => {
     return (
         <Container>
-            <div className="joincontent">
+            <div className="joincontent container">
                 <div className="joinleft">
                     <div>
                         <h4>Create online courses </h4> 

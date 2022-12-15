@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import sell from '../../../images/landing/sell.png'
 
@@ -95,7 +96,7 @@ padding: 2rem 1rem;
 `
 const Sell = () => {
     return (
-        <Container>
+        <Container className="container">
             <div className="joincontent">
                 <div className="joinleft">
                     <div>
@@ -112,7 +113,7 @@ const Sell = () => {
 
                     </div>
 
-                    <button>Start Now</button>
+                    <Link to={`/enterprise-signup`}> <button>Start Now</button></Link>
 
 
                 </div>

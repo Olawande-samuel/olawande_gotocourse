@@ -23,7 +23,7 @@ padding: .5rem 1rem;
         font-family: 'Raleway';
         font-style: normal;
         font-weight: 900;
-        font-size: clamp(2.25rem, 2.1429rem + .5357vw, 3rem);
+        font-size: clamp(2.8125rem, 2.25rem + 1.8vw, 3.0375rem);
     }
     p{
         font-family: 'Raleway';
@@ -122,30 +122,36 @@ padding: .5rem 1rem;
 `
 const Hero = () => {
     return (
-        <Container>
+        <Container className="container">
 
             <div className="heroleft">
                 <div>
-                    <h1>Educators and Institutions </h1>
-                    <h1>of all sizes use Gotocourse</h1>
+                    <h1>
+                       <span>
+                       Educators and Institutions 
+                        </span>
+                        <span className="d-block">
+                        of all sizes use Gotocourse
+                        </span>
+                    </h1>
 
                 </div>
                 <p>
                     Transform your knowledge into
-                    <br/>
+                    <br />
                     profitable online course and go global.
                 </p>
 
                 <div className="email">
-                    <button>Start for free</button>
+                    <Link to={`/enterprise-signup`}> <button>Start for free</button></Link>
                     <Link to={`/`}>Watch demo <BiRightArrowAlt /></Link>
                 </div>
 
             </div>
 
             <div className="heroright">
-                <img src={heroimg} alt="" 
-                width={400} 
+                <img src={heroimg} alt=""
+                    width={400}
                 // height={200}
                 />
 

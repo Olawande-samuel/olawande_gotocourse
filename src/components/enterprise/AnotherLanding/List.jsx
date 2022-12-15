@@ -30,6 +30,8 @@ h5{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
 
+   
+
     .list__item{
         // border: 2px solid red;
         padding: 1rem;

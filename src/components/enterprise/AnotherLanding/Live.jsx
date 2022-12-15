@@ -10,6 +10,11 @@ padding: 4rem 1rem;
 
     .liveleft{
         flex: .6;
+        img{
+            width: 100%;
+            height: 100%;
+            // object-fit: cover;
+        }
   
     }
 
@@ -72,7 +77,7 @@ padding: 4rem 1rem;
 `
 const Live = () => {
     return (
-        <Container>
+        <Container className="container">
              <div className="liveleft">
                 <img src={live} alt="" width={800} />
 

@@ -23,7 +23,8 @@ padding: .5rem 1rem;
         font-family: 'Raleway';
         font-style: normal;
         font-weight: 900;
-        font-size: clamp(2.25rem, 2.1429rem + .5357vw, 3rem);
+        font-size: clamp(2.8125rem, 2.25rem + 1.8vw, 3.0375rem);
+        // font-size: clamp(2.25rem, 2.1429rem + .5357vw, 3rem);
     }
     ul{
         font-family: 'Raleway';
@@ -52,6 +53,9 @@ padding: .5rem 1rem;
                 font-weight: 700;
                 font-size: 14px;
                 line-height: 27px;
+                a{
+                    color: #fff; 
+                }
     
         }
     }
@@ -112,22 +116,24 @@ padding: .5rem 1rem;
 `
 const Hero = () => {
     return (
-        <Container>
+        <Container className="container">
 
             <div className="heroleft">
                 <div>
-                <h1>  The best way to</h1>
-                <h1>power online classes</h1>
+                    <h1>
+                        <span>The best way to</span>
+                        <span className="d-block">power online classes</span>
+                    </h1>
 
                 </div>
                 <ul>
                     <li>Create everything tech and business skills training.</li>
-                    <li>Build your training space the way you want<br/>for  who you want  everywhere</li>
+                    <li>Build your training space the way you want<br />for  who you want  everywhere</li>
                 </ul>
 
                 <div className="email">
-                    <button>Create free account</button>
-                    <Link to={`/`}>Request demo <BiRightArrowAlt/></Link>
+                <Link to={`/enterprise-signup`}><button> Create free account</button></Link>
+                    <Link to={`/`}>Request demo <BiRightArrowAlt /></Link>
                 </div>
 
                 <p> No credit card required.</p>
