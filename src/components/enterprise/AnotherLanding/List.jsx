@@ -11,7 +11,6 @@ import lib from '../../../images/landing/lib.svg'
 const Container = styled.div`
 width: 100%;
 padding: 5rem 0;
-text-align: center;
 
 h5{
     padding: 2rem; 
@@ -23,36 +22,55 @@ h5{
     // line-height: 54px;
 }
 
-.list__content{
-    width: 100%;
+.listcontainer{
     background: #E7F1FF;
-    padding:2rem 4rem ;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
 
-   
-
-    .list__item{
-        // border: 2px solid red;
-        padding: 1rem;
-        color: var( --theme-blue);
-
-        img{
-            width: 18px;
-            height: 18px;
-            margin-right: 1rem;
+    .list__content{
+        width: 100%;
+        padding:10rem 2rem ;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+       
+    
+        .list__item{
+            // border: 2px solid red;
+            padding: 1rem 0;
+            color: var( --theme-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+    
+            span{
+                font-size: 1.3rem;
+            }
+    
+            img{
+                width: 20px;
+                height: 20px;
+                margin-right: 1rem;
+            }
+    
         }
-
+    
     }
-
 }
 
-@media (max-width:768px){
-    .list__content{
-        grid-template-columns:  1fr;
-        padding:2rem;
-        text-align: start;
 
+@media (max-width:768px){
+    .listcontainer{
+        .list__content{
+            grid-template-columns:  1fr;
+            padding:2rem;
+            text-align: start;
+
+            .list__item{
+                span{
+                    font-size: 1rem;
+                }
+
+            }
+        }    
 
     }
 }
@@ -62,47 +80,52 @@ h5{
 
 const List = () => {
     return (
-        <Container>
-            <h5>Educators and institutions of all sizes use Gotocourse</h5>
+        <Container >
+            <div className="container">
+                <h5>Educators and institutions of all sizes use Gotocourse</h5>
 
+            </div>
 
-            <div className="list__content">
+            <div className="listcontainer">
 
-                <div className="list__item">
-                    <img src={hat} alt="" />
-                    <span>Independent educators</span> 
+                <div className="list__content container">
+
+                    <div className="list__item">
+                        <img src={hat} alt="" />
+                        <span>Independent educators</span>
+                    </div>
+
+                    <div className="list__item">
+                        <img src={lib} alt="" />
+                        <span> Training insitutions</span>
+
+                    </div>
+
+                    <div className="list__item">
+                        <img src={bag} alt="" />
+                        <span>Businesses</span>
+
+                    </div>
+
+                    <div className="list__item">
+                        <img src={npt} alt="" />
+                        <span>Non profit orgainzations</span>
+
+                    </div>
+
+                    <div className="list__item">
+                        <img src={camp} alt="" />
+                        <span>Bootcamps</span>
+
+                    </div>
+
+                    <div className="list__item">
+                        <img src={government} alt="" />
+                        <span>Government</span>
+
+                    </div>
+
                 </div>
-
-                <div className="list__item">
-                    <img src={lib} alt="" />
-                    <span> Training insitutions</span>
-                   
-                </div>
-
-                <div className="list__item">
-                    <img src={bag} alt="" />
-                    <span>Businesses</span>
-                   
-                </div>
-
-                <div className="list__item">
-                    <img src={npt} alt="" />
-                    <span>Non profit orgainzations</span>
-                    
-                </div>
-
-                <div className="list__item">
-                    <img src={camp} alt="" />
-                    <span>Bootcamps</span>
-                   
-                </div>
-
-                <div className="list__item">
-                    <img src={government} alt="" />
-                    <span>Government</span>
-                    
-                </div>
-
             </div>
 
         </Container>
