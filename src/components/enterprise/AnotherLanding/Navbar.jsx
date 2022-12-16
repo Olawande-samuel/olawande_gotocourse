@@ -22,6 +22,7 @@ position: fixed;
 width: 100%;
 left:0;
 top:0;
+right:0;
 height: 4rem;
 background: #fff;
 // border: 2px solid red;
