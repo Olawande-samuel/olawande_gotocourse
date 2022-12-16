@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import sell from '../../../images/landing/sell.png'
 
@@ -35,6 +36,18 @@ padding: 2rem 1rem;
                 font-size: 14px;
                 line-height: 22px;
                 color: #1B1F29;            
+            }
+
+            button{
+                border:2px solid white;
+                border-radius: 7px;
+                background: var( --theme-blue);
+                color: #fff;
+                padding: .5rem 1rem;
+                font-weight: 700;
+                font-size: 14px;
+                line-height: 27px;
+        
             }
 
            
@@ -104,6 +117,8 @@ const Sell = () => {
                         </p>
 
                     </div>
+                    <Link to={`/enterprise-signup`}><button>Start free trial</button></Link>
+
 
 
                 </div>
