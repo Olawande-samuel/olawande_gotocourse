@@ -85,12 +85,22 @@ const Sell = () => {
             <div className="joincontent">
                 <div className="joinleft">
                     <div>
-                        <h4>Create & sell courses for</h4>
-                        <h4>everyone, anywhere</h4>
-                        <p>
-                            Create your learning space and get paid for
-                            your expertise, manage payments via a 
+                        <h4>
+                            <span> Create & sell courses for</span>
+                            <span className="d-block">everyone, anywhere</span>
+                        </h4>
+                        <p style={{marginTop : "1rem"}}>
+                            Create your learning space and get paid for <br/>
+                            your expertise, manage payments via a <br/>
                             secured payment system.
+                        </p>
+                        <p>
+                            Gotocourse integrates with Stripe, flutterwave <br/>
+                            and Paypal to mske payments quick and <br/>
+                            seamless. With absolute peace of mind <br/>
+                            set up payment gateway provider of your <br/>
+                            choice and get paid via most trusted online <br/> 
+                            payment gateways.
                         </p>
 
                     </div>

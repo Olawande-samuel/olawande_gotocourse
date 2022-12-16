@@ -18,6 +18,14 @@ justify-content: space-between;
 width: 100%;
 padding: .5rem 1rem;
 gap: 1rem;
+position: fixed;
+width: 100%;
+left:0;
+top:0;
+height: 4rem;
+background: #fff;
+// border: 2px solid red;
+
 
 .navbarlogo{
     flex: .2;

@@ -9,6 +9,7 @@ justify-content: space-between;
 align-items: center;
 color: #0C1825;
 padding: .5rem 1rem;
+margin-top: 4rem;
 
 
 
