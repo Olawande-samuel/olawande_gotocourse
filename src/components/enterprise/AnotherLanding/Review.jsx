@@ -33,7 +33,7 @@ gap: 2rem;
 
     .reviewdiv{
         flex: .33;       
-        border: 1.19742px solid #3D4051;
+        border: 1.01562px solid rgba(61, 64, 81, 0.4);
         border-radius: 30px;
         padding: 2rem;
         position: relative;
@@ -67,27 +67,28 @@ gap: 2rem;
 
             .reviewpersoninfo{
             p{
+                margin-top: .5rem;
                 margin-bottom: 0;
-                font-family: 'Segoe UI';
+                font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 400;
                 font-size: 15px;
                 // line-height: 29px;
                 display: flex;
                 align-items: center;
-                color: #464646;
+                color: #000;
             }
 
             p:nth-of-type(2){
-                margin-bottom: 0;
-                font-family: 'Segoe UI';
+                margin: 0;
+                font-family: 'Raleway';
                 font-style: normal;
                 font-weight: 400;
                 font-size: 16px;
                 // line-height: 29px;
                 display: flex;
                 align-items: center;
-                color: #000;
+                color: #464646;
             }
 
         }

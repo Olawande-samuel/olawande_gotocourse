@@ -9,6 +9,7 @@ justify-content: space-between;
 align-items: center;
 color: #0C1825;
 padding: .5rem 1rem;
+margin-top: 4rem;
 
 
 
@@ -17,13 +18,14 @@ padding: .5rem 1rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    flex:.5;
+    flex:.6;
 
     h1{
         font-family: 'Raleway';
         font-style: normal;
         font-weight: 900;
         font-size: clamp(2.8125rem, 2.25rem + 1.8vw, 3.0375rem);
+        // font-size: clamp(2.8rem, 2.25rem + 1.8vw, 3.0rem);
     }
     p{
         font-family: 'Raleway';
@@ -61,7 +63,7 @@ padding: .5rem 1rem;
 }
 
 .heroright{
-    flex:.5;
+    flex:.4;
     width: 100%;
     height: 500px;
     padding: 2rem 0;
@@ -127,12 +129,8 @@ const Hero = () => {
             <div className="heroleft">
                 <div>
                     <h1>
-                       <span>
-                       Educators and Institutions 
-                        </span>
-                        <span className="d-block">
-                        of all sizes use Gotocourse
-                        </span>
+                       <span> Educators and Institutions </span>
+                        <span className="d-block">of all sizes use Gotocourse</span>
                     </h1>
 
                 </div>
