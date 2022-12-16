@@ -96,7 +96,7 @@ const Sell = () => {
                         </p>
                         <p>
                             Gotocourse integrates with Stripe, flutterwave <br/>
-                            and Paypal to mske payments quick and <br/>
+                            and Paypal to make payments quick and <br/>
                             seamless. With absolute peace of mind <br/>
                             set up payment gateway provider of your <br/>
                             choice and get paid via most trusted online <br/> 
