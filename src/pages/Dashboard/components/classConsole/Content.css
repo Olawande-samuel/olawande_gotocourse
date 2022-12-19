@@ -109,14 +109,14 @@
 }
 
 .contentbody {
-    height: 80vh;
+    min-height: 80vh;
     width: 80%;
     /* border: 3px solid red; */
     display: flex;
     flex-direction: column;
     gap: 3rem;
     margin-top: 2rem;
-    overflow-y: auto;
+    /* overflow-y: auto; */
 
 }
 
@@ -1132,12 +1132,12 @@
 .filecard {
     width: 100%;
     flex-shrink: 0;
-    /* height: 15rem; */
-    border: 1px solid #eee;
+    height: 18rem;
+    border: 1.9px solid #eee;
     border-radius: 8px;
 
 }
-.small__filecard{
+.small__filecard {
     height: 150px ;
 }
 .small__filecard .filebottom {
@@ -1160,6 +1160,7 @@
 }
 
 .filebottom{
+    border: 1px solid #eee;
     height: 30%;
     padding: 14px 9px;
     /* border: 2px solid blue; */

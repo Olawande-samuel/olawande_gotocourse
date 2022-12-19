@@ -7,7 +7,7 @@ import {
   AiOutlinePlus,
   AiOutlineMenu,
 } from "react-icons/ai";
-import { BiCaretDown, BiCaretRight, BiCaretUp } from "react-icons/bi";
+import { BiCaretDown, BiCaretRight, BiCaretUp, BiLockAlt } from "react-icons/bi";
 import {
   BsPaperclip,
   BsCameraReels,
@@ -512,11 +512,14 @@ const contentid = searchParams.get("content")
               
             :
             <ul className={style.content_list}>
-              {getDomainContent?.data?.data?.filter(item => item.domain === _id).map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
+              {getDomainContent?.data?.data?.filter(item => item.domain === _id).map(({ icon: Icon, title, link, _id, type, domain, classId, isLocked }) => (
                 <li key={_id} onClick={() => handleContentNavigation(_id, type, domain, classId)} className={`d-flex justify-content-between ${_id === contentid ? "activeClass" : ""}`} style={{cursor:"pointer"}}>
                   <i>{IconType(type)}</i>
                   <span>{title}</span>
-                  <AccordMenu type="content" id={_id} domain={domain} classId={classId} />
+                  <div className="d-flex gap-3 align-items-center">
+                    {isLocked && <BiLockAlt />}
+                    <AccordMenu type="content" id={_id} domain={domain} classId={classId} locked={isLocked} />
+                  </div>
                   
                 </li>
               ))}
@@ -527,7 +530,7 @@ const contentid = searchParams.get("content")
   );
 }
 
-function AccordMenu({ id, type, classId }) {
+function AccordMenu({ id, type, classId , locked}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -592,7 +595,12 @@ function AccordMenu({ id, type, classId }) {
         }}
       >
         {/* <MenuItem onClick={handleClose}>Edit content</MenuItem> */}
+       {
+        locked ? 
+        <MenuItem onClick={handleClose}>Unlock content</MenuItem>
+        :
         <MenuItem onClick={handleClose}>Lock content</MenuItem>
+      } 
         <MenuItem onClick={deleteCnt}>Delete content</MenuItem>
       </Menu>
     </div>
@@ -777,7 +785,7 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                       onClick={handleIsLocked}
                     />
                     <p className={style.formtext}>
-                      Content is currently locked
+                      Content is currently {formstate.isLocked ? "locked" : "unlocked"}
                     </p>
                   </div>
 
