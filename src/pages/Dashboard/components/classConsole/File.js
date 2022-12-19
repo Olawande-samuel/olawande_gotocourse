@@ -12,7 +12,7 @@ import UploadForm from "./components/upload";
 import { useAuth } from "../../../../contexts/Auth";
 import { useLocalStorage } from "../../../../hooks";
 import { KEY } from "../../../../constants";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IconButton, Modal, stepContentClasses, Tooltip } from "@mui/material";
 import { UploadScreenRecording, UploadVideoRecording } from "./Suite";
 import VideoImageThumbnail from "react-video-thumbnail-image";
@@ -220,6 +220,14 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 	const [content, setContent] = useState("");
     const [anchorEl, setAnchorEl] = useState(null);
     const openAnchor = Boolean(anchorEl);
+    const {teacherConsoleFunctions: {deleteDomain, deleteContent}} = useAuth();
+
+
+    console.log({_id})
+    const {getItem} = useLocalStorage();
+    const userdata = getItem(KEY)
+
+    const queryClient = useQueryClient()
 
     const contextMenu = [
         {
@@ -244,15 +252,52 @@ function FileCard({ title, fileName, contentId, type, _id }) {
             id: 4,
             title:"Delete",
             iconImg: BiTrash,
-            // event: handleDelete
+            event: handleDelete
         },
         
     ]
+
+
+    const contentdelete = useMutation(([token, id])=>deleteContent(token, id), {
+      onSuccess: (res)=>{
+        console.log({res})
+        // navigate(`/teacher/class-console/class/${classId}`)
+        queryClient.invalidateQueries("file content")
+      },
+      onError: (err)=>{
+        console.error(err)
+      }
+    })
+  
+    
+    function handleDelete(){
+        if(window.confirm("Are you sure you want to delete")){
+            // delete
+                contentdelete.mutate([userdata.token, _id])
+            
+        }
+    }
+
+
+
+    function MoveUp(){
+
+    }
+
+
+
+    function MoveDown(){
+
+    }
+
+
 
 	function openContent() {
 		setOpen(true);
 		setContent(fileName);
 	}
+
+
 
 	function downloadContent(file, fileName) {
 		fetch(file, { method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer' })
@@ -279,6 +324,7 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 
     const TYPES = {
         noPreview: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || "text/csv",
+        
     }
     console.log(type === TYPES?.noPreview)
 
@@ -333,7 +379,7 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 
 			<div className="filebottom">
                 <div className="position-absolute end-0" style={{cursor:"pointer"}}>
-                    <MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} content={true}  />
+                    <MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} content={true} type={type}  />
                 </div>
 				<h3>{title}</h3>
 				<div className="filebutton">

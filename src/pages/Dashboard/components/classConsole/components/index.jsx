@@ -6,7 +6,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 
 
 
-export function MenuOptionsPopup({handleDelete, x, id, schedule, handleClick, data=[], openAnchor, anchorEl, setAnchorEl, toggleDownload, content, handleIsDownloadable }){
+export function MenuOptionsPopup({handleDelete, x, id, schedule, handleClick, data=[], openAnchor, anchorEl, setAnchorEl, toggleDownload, content, handleIsDownloadable, type }){
     
 
     const handleClose = () => {
@@ -45,7 +45,7 @@ export function MenuOptionsPopup({handleDelete, x, id, schedule, handleClick, da
                         
                     }
 
-                    {content && 
+                    {(content && type !== "video/mp4") &&
                         <MenuItem onClick={(e)=>toggleDownload(e, id)} key={id}>
                             {/* <i><Icon /></i> */}
                             <FormControlLabel
