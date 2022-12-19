@@ -14,6 +14,7 @@ import Navbar from "./Navbar"
 // import Picture from "./Picture"
 import Review from "./Review"
 import Sell from "./Sell"
+import Shop from "./Shop"
 import SideBar from "./Sidebar"
 // import Teacher from "./Teacher"
 import Tools from "./Tools"
@@ -102,13 +103,14 @@ const AnotherLanding = () => {
             <Hero />
             <Tools />
             <User />
+            <Shop/>
             {/* <Picture/> */}
             {/* <Payment/> */}
-            <Live />
             {/* <Teacher/> */}
             {/* <Course/> */}
             <Join />
-            <Sell />
+            <Live />
+            {/* <Sell /> */}
             <List />
             {/* <Create/> */}
             {/* <Community/> */}

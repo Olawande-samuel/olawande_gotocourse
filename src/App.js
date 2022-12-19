@@ -217,6 +217,7 @@ import EnterpriseSignUp from "./components/enterprise/Register/EnterpriseSignUp"
 import EnterPriseForgotPassword from "./components/enterprise/Register/ForgotPassword";
 import EnterpriseVerification from "./components/enterprise/Register/Verification";
 import EnterpriseOnboarding from "./components/enterprise/EnterpriseOnboarding";
+import Pricing from "./components/enterprise/Pricing";
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -271,6 +272,7 @@ function App() {
                 <Route index element={<AnotherLanding />} />
                 <Route path="create" element={<CreatePage />} />
                 <Route path="manage" element={<ManagePage />} />
+                <Route path="pricing" element={<Pricing />} />
                 <Route path="enterprise-login" element={<EnterPriseLogin />} />
                 <Route path="enterprise-signup" element={<EnterpriseSignUp />} />
                 <Route path="enterprise-forgot" element={<EnterPriseForgotPassword />} />
