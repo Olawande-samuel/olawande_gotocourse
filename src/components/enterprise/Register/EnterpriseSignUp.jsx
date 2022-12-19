@@ -348,7 +348,7 @@ const EnterpriseSignUp = () => {
         </form>
         <p className="mt-4">
           <span>Already have an account? </span>
-          <Link to="/login"> Sign in</Link>
+          <Link to="/enterprise-login"> Sign in</Link>
         </p>
       </div>
     </SignInWrapper>

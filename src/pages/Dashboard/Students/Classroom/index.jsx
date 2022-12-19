@@ -646,13 +646,15 @@ const Classroom = () => {
     },[modules])
 
 
-    const handleFileCompleted = async (id, index) => {
-        const { success } = await markAsCompleted(userdata?.token, id)
-        if (success) {
-            setCompleted((prev) => prev < reduceModules ? prev + 1 : prev)
-            fileRef.current.style.display = "none";
+    const handleFileCompleted = async (contentId) => {
+        console.log({contentId});
+        const { data } = await markAsCompleted(userdata?.token, contentId)
+        console.log({data});
+        // if (success) {
+        //     // setCompleted((prev) => prev < reduceModules ? prev + 1 : prev)
+        //     // fileRef.current.style.display = "none";
 
-        }
+        // }
 
 
     }
@@ -748,10 +750,10 @@ const Classroom = () => {
                                 ))
                                 }
 
-                                {contents?.length > 0 &&
+                                {contents?.length > 0 && contents.map(content => content.completedBy).indexOf(userdata.id) &&
                                     <QuizAction >
                                         <QuizButton
-                                        // onClick={() => handleFileCompleted(fileContent[0].contentId)}
+                                        onClick={() => handleFileCompleted(contents[0].contentId)}
                                         >
                                             Mark as Completed
                                         </QuizButton>
@@ -774,7 +776,7 @@ const Classroom = () => {
                                 {contents?.length > 0 &&
                                     <QuizAction >
                                         <QuizButton
-                                        // onClick={() => handleFileCompleted(fileContent[0].contentId)}
+                                        onClick={() => handleFileCompleted(contents[0].contentId)}
                                         >
                                             Mark as Completed
                                         </QuizButton>
@@ -794,7 +796,7 @@ const Classroom = () => {
                                 {contents.length > 0 &&
                                     <QuizAction >
                                         <QuizButton
-                                        // onClick={() => handleFileCompleted(fileContent[0].contentId)}
+                                        onClick={() => handleFileCompleted(contents[0].contentId)}
                                         >
                                             Mark as Completed
                                         </QuizButton>
