@@ -646,19 +646,19 @@ const Classroom = () => {
         }, 0);
     }, [modules])
 
-   
 
-    useMemo(() => {
-        let all= [];
-        modules?.map((mod, i) => {
-            console.log("mod", mod.contents);
-            all.push(mod.contents)
-            // setAllContents([...allContents, mod.contents])
-        });
-        console.log({all});
-
+    const reduceContent = useMemo(() => {
+        return modules?.reduce((total, current) => [
+                 ...total,  ...current.contents
+            ], []);
     }, [modules])
 
+   
+    console.log({reduceContent})
+
+   
+
+    
     console.log({ allContents });
 
     const handleFileCompleted = async (contentId) => {
