@@ -47,7 +47,7 @@ gap: 2rem;
         border-radius: 20px;
         padding: 1rem;
         position: relative;
-        min-height: 40rem;
+        min-height: 45rem;
         display: flex;
         flex-direction: column;
         gap: 1rem;
@@ -56,12 +56,26 @@ gap: 2rem;
             list-style-type: none;
             margin:0;
             padding: 0;
-            // display: flex;
-            // flex-direction: column;
-            // gap: .5rem;
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
 
             li{
                 color: var(--theme-blue);
+                display: flex;
+                gap: .5rem;
+                font-weight: 500;
+                font-size: 16px;
+                font-family: 'Raleway';
+
+                div:nth-of-type(1){
+                    flex: .1;
+                }
+
+                div:nth-of-type(2){
+                    flex: .9;
+                }
+
             }
         }
 
@@ -174,17 +188,50 @@ const Price = () => {
 
 
                         <ul>
-                            <li><AiFillCheckCircle /> Unlimited Students</li>
-                            <li><AiFillCheckCircle /> 1 Course</li>
-                            <li><AiFillCheckCircle /> 1 Admin</li>
-                            <li><AiFillCheckCircle /> Email & Chat to build Class</li>
-                            <li><AiFillCheckCircle /> Integrated Payment Processing</li>
-                            <li><AiFillCheckCircle /> Content Creation Studio</li>
-                            <li><AiFillCheckCircle /> Affiliate Marketing</li>
-                            <li><AiFillCheckCircle /> Assessment (Quizzes)</li>
-                            <li><AiFillCheckCircle /> Landing Page</li>
-                            <li><AiFillCheckCircle /> 3% Transaction Fee on Bookings</li>
-                            <li><AiFillCheckCircle /> Email Support</li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Unlimited Students</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>1 Course</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>1 Admin</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Email & Chat to build Class</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Integrated Payment Processing</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div> Content Creation Studio</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Affiliate Marketing</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Assessment (Quizzes)</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Landing Page</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>3% Transaction Fee on Bookings</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Email Support</div>
+                            </li>
                         </ul>
 
 
@@ -201,19 +248,58 @@ const Price = () => {
 
 
                         <ul>
-                            <li><AiFillCheckCircle /> Unlimited Students</li>                 
-                            <li><AiFillCheckCircle /> Integrated Payment Processing</li>
-                            <li><AiFillCheckCircle /> Content Creation Studio</li>
-                            <li><AiFillCheckCircle /> Affiliate Marketing</li>
-                            <li><AiFillCheckCircle /> Assessment (Quizzes)</li>
-                            <li><AiFillCheckCircle /> Custom Landing Page</li>
-                            <li><AiFillCheckCircle /> 3% Transaction Fee on Bookings</li>
-                            <li><AiFillCheckCircle /> Class Recording</li>
-                            <li><AiFillCheckCircle />In-Built Live Class</li>
-                            <li><AiFillCheckCircle />YouTube Integration</li>
-                            <li><AiFillCheckCircle />Student Records Management</li>
-                            <li><AiFillCheckCircle /> 2 Admin</li>
-                            <li><AiFillCheckCircle /> Email Customer Support</li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Unlimited Students</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Integrated Payment Processing</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Content Creation Studio</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Affiliate Marketing</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Assessment (Quizzes)</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Custom Landing Page</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>3% Transaction Fee on Bookings</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Class Recording</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>In-Built Live Class</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>YouTube Integration</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Student Records Management</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>2 Admin</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Email Customer Support</div>
+                            </li>
                         </ul>
 
 
@@ -230,16 +316,44 @@ const Price = () => {
 
 
                         <ul>
-                            <li><AiFillCheckCircle /> Everything in Basic Plan</li>
-                            <li><AiFillCheckCircle />Custom Domain</li>
-                            <li><AiFillCheckCircle />24/7 Customer Support (phone call & email)</li>
-                            <li><AiFillCheckCircle /> Unlimited Number of Admin</li>
-                            <li><AiFillCheckCircle /> Welcome call with Specialist</li>
-                            <li><AiFillCheckCircle /> 3% Transaction Fee on Bookings</li>
-                            <li><AiFillCheckCircle /> Dedicated Account Officer</li>
-                            <li><AiFillCheckCircle /> Remove GotoCourse Branding</li>
-                            <li><AiFillCheckCircle /> Webinars & Events</li>
-                           
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Everything in Basic Plan</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Custom Domain</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>24/7 Customer Support (phone call & email)</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Unlimited Number of Admin</div>
+                            </li>
+
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Welcome call with Specialist</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>3% Transaction Fee on Bookings</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Dedicated Account Officer</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Remove GotoCourse Branding</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Webinars & Events</div>
+                            </li>
+
                         </ul>
 
 
@@ -256,17 +370,47 @@ const Price = () => {
 
 
                         <ul>
-                            <li><AiFillCheckCircle />Everything in Premium Plan Incusive</li>
-                            <li><AiFillCheckCircle />Admin Center/(Assign Roles & Permission)</li>
-                            <li><AiFillCheckCircle /> Dedicated Account Success Officer </li>
-                            <li><AiFillCheckCircle /> Youtube Integration</li>
-                            <li><AiFillCheckCircle /> 3% Transaction Fee on Bookings</li>
-                            <li><AiFillCheckCircle /> Advanced Analytics</li>
-                            <li><AiFillCheckCircle /> Priority Support</li>
-                            <li><AiFillCheckCircle />Advanced Landing Page Customization</li>
-                            <li><AiFillCheckCircle /> Completion Certificates & Digital Badges</li>
-                            <li><AiFillCheckCircle /> Business Advicing</li>
-                        </ul> 
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div> Everything in Premium Plan Incusive</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Admin Center/(Assign Roles & Permission)</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Dedicated Account Success Officer</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Youtube Integration</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div> 3% Transaction Fee on Bookings</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Advanced Analytics</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Priority Support</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Advanced Landing Page Customization</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Completion Certificates & Digital Badges</div>
+                            </li>
+                            <li>
+                                <div><AiFillCheckCircle /></div>
+                                <div>Business Advicing</div>
+                            </li>
+                        </ul>
 
 
                         <div className="btncontainer">

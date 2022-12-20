@@ -485,7 +485,7 @@ const FileComponent = (contentItem) => {
     const getExtention = (val) => {
 
         if (val.includes("svg", "png", "avif", "webp")) {
-            console.log("image");
+            // console.log("image");
             return "image"
 
         }
@@ -534,10 +534,10 @@ const FileComponent = (contentItem) => {
     )
 }
 
-const QuizComponent = ({contentItem}) => {
-    console.log(contentItem);
+const QuizComponent = ({ contentItem }) => {
+    // console.log(contentItem);
     return (
-          <>
+        <>
             <Quiz>
 
                 <QuizInfo>
@@ -612,6 +612,7 @@ const Classroom = () => {
     const [showMobile, setShowMobile] = useState(false);
     const [modules, setModules] = useState([]);
     const [contents, setContents] = useState([])
+    const [allContents, setAllContents] = useState([])
     const [title, setTitle] = useState("")
 
     const { getItem } = useLocalStorage()
@@ -628,7 +629,7 @@ const Classroom = () => {
 
     const fetchstudentDomains = useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id), {
         onSuccess: (res) => {
-            console.log(res)
+            // console.log(res)
             setModules(res.data)
         }
     })
@@ -640,16 +641,30 @@ const Classroom = () => {
     const fileRef = useRef()
 
     const reduceModules = useMemo(() => {
-        return modules?.reduce((total, current) =>{
-           return total + current.contents.length
-        } , 0 );
-    },[modules])
+        return modules?.reduce((total, current) => {
+            return total + current.contents.length
+        }, 0);
+    }, [modules])
 
+   
+
+    useMemo(() => {
+        let all= [];
+        modules?.map((mod, i) => {
+            console.log("mod", mod.contents);
+            all.push(mod.contents)
+            // setAllContents([...allContents, mod.contents])
+        });
+        console.log({all});
+
+    }, [modules])
+
+    console.log({ allContents });
 
     const handleFileCompleted = async (contentId) => {
-        console.log({contentId});
+        console.log({ contentId });
         const { data } = await markAsCompleted(userdata?.token, contentId)
-        console.log({data});
+        console.log({ data });
         // if (success) {
         //     // setCompleted((prev) => prev < reduceModules ? prev + 1 : prev)
         //     // fileRef.current.style.display = "none";
@@ -671,12 +686,12 @@ const Classroom = () => {
 
     }
 
-    console.log({ contents });
-    console.log({modules});
+    // console.log({ contents });
+    // console.log({modules});
 
-   
 
-    console.log({reduceModules});
+
+    console.log({ reduceModules });
 
     return (
         <Container>
@@ -706,7 +721,7 @@ const Classroom = () => {
                         // activeMedia={active} 
                         // changeActive={setActiveMediaHandler} 
                         completed={completed}
-                                               setContents={setContents}
+                        setContents={setContents}
                         setPickedType={setPickedType}
                         reduceModules={reduceModules}
                     />
@@ -744,7 +759,7 @@ const Classroom = () => {
                         <BodyContent>
                             {pickedType === "FILE_VIDEO" && <>
                                 {contents?.length > 0 && contents?.map((content, id) => (
-                                    <FileComponent contentItem={content} id={id} key={id}/>
+                                    <FileComponent contentItem={content} id={id} key={id} />
 
 
                                 ))
@@ -753,7 +768,7 @@ const Classroom = () => {
                                 {contents?.length > 0 && contents.map(content => content.completedBy).indexOf(userdata.id) &&
                                     <QuizAction >
                                         <QuizButton
-                                        onClick={() => handleFileCompleted(contents[0].contentId)}
+                                            onClick={() => handleFileCompleted(contents[0].contentId)}
                                         >
                                             Mark as Completed
                                         </QuizButton>
@@ -767,7 +782,7 @@ const Classroom = () => {
 
                             {pickedType === "NOTE" && <>
                                 {contents?.length > 0 && contents?.map((content, id) => (
-                                    <NoteComponent contentItem={content} id={id} key={id}/>
+                                    <NoteComponent contentItem={content} id={id} key={id} />
 
 
                                 ))
@@ -776,7 +791,7 @@ const Classroom = () => {
                                 {contents?.length > 0 &&
                                     <QuizAction >
                                         <QuizButton
-                                        onClick={() => handleFileCompleted(contents[0].contentId)}
+                                            onClick={() => handleFileCompleted(contents[0].contentId)}
                                         >
                                             Mark as Completed
                                         </QuizButton>
@@ -787,7 +802,7 @@ const Classroom = () => {
 
                             {pickedType === "QUIZ" && <>
                                 {contents?.length > 0 && contents?.map((content, id) => (
-                                    <QuizComponent contentItem={content} id={id} key={id}/>
+                                    <QuizComponent contentItem={content} id={id} key={id} />
 
 
                                 ))
@@ -796,7 +811,7 @@ const Classroom = () => {
                                 {contents.length > 0 &&
                                     <QuizAction >
                                         <QuizButton
-                                        onClick={() => handleFileCompleted(contents[0].contentId)}
+                                            onClick={() => handleFileCompleted(contents[0].contentId)}
                                         >
                                             Mark as Completed
                                         </QuizButton>
