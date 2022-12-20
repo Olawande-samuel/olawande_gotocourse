@@ -649,8 +649,9 @@ const Classroom = () => {
 
     const reduceContent = useMemo(() => {
         return modules?.reduce((total, current) => [
-                 ...total,  ...current.contents
-            ], []);
+            ...total,  ...current.contents
+        ], []);
+        
     }, [modules])
 
    
