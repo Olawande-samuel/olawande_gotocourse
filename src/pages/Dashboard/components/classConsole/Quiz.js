@@ -11,7 +11,6 @@ import { RiDeleteBinFill } from 'react-icons/ri';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -33,7 +32,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                    <Box>{children}</Box>
                 </Box>
             )}
         </div>
@@ -61,7 +60,7 @@ export function Preview() {
                     <div >
 
                         {[...Array(3)].map((x, id) => (
-                            < Accordion className="preview__accord">
+                            < Accordion className="preview__accord" key={id}>
                                 <Accordion.Item eventKey={id}>
                                     <Accordion.Header className="previewaccord__header"> Question {id + 1} </Accordion.Header>
                                     <Accordion.Body>
@@ -128,7 +127,6 @@ export default function Quiz() {
 
     const quizAdd = useMutation(([token, data])=>addQuiz(token, data), {
         onSuccess: (res) => {
-            console.log(res.data)
             if(res.statusCode === 1){
                 toast.success(res.message)
                 return
@@ -144,10 +142,10 @@ export default function Quiz() {
 
     const getContentfromQuery = useQuery(["quiz content", contentId, userdata?.token], () => fetchQuiz(userdata.token, searchData), {
         onSuccess: (res)=> {
-            console.log("successful query")
-            console.log(res)
+
             if(res.data.length > 0){
-                setFormData({...res.data[0]})
+                let deadline = res.data[0].endDate?.split("T")[0]
+                setFormData({...res.data[0], endDate: deadline})
             }else{
                 setFormData({
                     classId:"",
@@ -227,7 +225,6 @@ export default function Quiz() {
         const { name, value } = e.target;
         const list = { ...formData }
         list.questions[index][name] = value;
-        console.log(list);
         setFormData(list)
     }
 
@@ -286,7 +283,6 @@ export default function Quiz() {
     }
 
 
-    console.log({ formData });
 
     function handleSubmit(e){
         e.preventDefault();
@@ -397,7 +393,7 @@ export default function Quiz() {
                                 {
                                     formData?.questions?.map((x, id) => (
                                         <>
-                                            <Accordion >
+                                            <Accordion key={id} >
                                                 <Accordion.Item eventKey={id} className="accord__body">
                                                     <Accordion.Header className="accord__header"> Question {id + 1}</Accordion.Header>
                                                     <Accordion.Body>
@@ -433,26 +429,21 @@ export default function Quiz() {
                                                             <div className="texteditor quiz__editor">                  
                                                                 <CKEditor
                                                                 editor={ClassicEditor}
-                                                                data=""
+                                                                data={x?.title}
                                                                 onReady={editor => {
                                                                     // You can store the "editor" and use when it is needed.
-                                                                    console.log('Editor is ready to use!', editor);
                                                                 }}
                                                                 onChange={(event, editor) => {
                                                                     const data = editor.getData();
-                                                                    console.log({ event, editor, data });
                                                                     const list = { ...formData }
                                                                     list.questions[id]['title'] = data;
-                                                                    console.log(list);
                                                                     setFormData(list)
                                                                     // handleInputChange(event, id)
 
                                                                 }}
                                                                 onBlur={(event, editor) => {
-                                                                    console.log('Blur.', editor);
                                                                 }}
                                                                 onFocus={(event, editor) => {
-                                                                    console.log('Focus.', editor);
                                                                 }}
                                                             />
 
@@ -477,10 +468,10 @@ export default function Quiz() {
                                                                                 onChange={e => {
                                                                                     const list = { ...formData }
                                                                                     list.questions[id]['showAnswer'] = e.target.checked;
-                                                                                    console.log(list);
                                                                                     setFormData(list)
                                                                                 }
                                                                                 }
+                                                                                value="off"
                                                                             />}
                                                                         label="Add an explanantion"
                                                                     />
@@ -507,7 +498,7 @@ export default function Quiz() {
 
                                                                         {
                                                                             formData.questions[id].options.map((x, index) => (
-                                                                                <div className='multiplechoice'>
+                                                                                <div className='multiplechoice' key={index}>
                                                                                     <div className='multiplechoice__input'>
 
                                                                                         <input
@@ -517,7 +508,6 @@ export default function Quiz() {
                                                                                             onChange={e => {
                                                                                                 const list = { ...formData }
                                                                                                 list.questions[id].options[index]['isAnswer'] = e.target.checked;
-                                                                                                console.log(list);
                                                                                                 setFormData(list)
                                                                                             }} />
                                                                                         <input
@@ -527,7 +517,6 @@ export default function Quiz() {
                                                                                             onChange={e => {
                                                                                                 const list = { ...formData }
                                                                                                 list.questions[id].options[index]['title'] = e.target.value
-                                                                                                console.log(list);
                                                                                                 setFormData(list)
                                                                                             }} />
 

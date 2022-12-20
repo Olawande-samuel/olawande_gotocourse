@@ -22,6 +22,7 @@ import { MenuOptionsPopup } from "./components";
 import { FiEdit } from "react-icons/fi";
 import { BiTrash } from "react-icons/bi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
+import axios from "axios";
 
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -299,23 +300,25 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 
 
 
-	function downloadContent(file, fileName) {
-		fetch(file, { method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer' })
-		.then(res => {
-            res.blob()
-            console.log(res)
-        })
-		.then(res => {
-            console.log({res})
-		  const aElement = document.createElement('a');
-		//   aElement.setAttribute('download', fileName);
-		//   const href = URL.createObjectURL(res);
-		//   aElement.href = href;
-		//   // aElement.setAttribute('href', href);
-		//   aElement.setAttribute('target', '_blank');
-		//   aElement.click();
-		//   URL.revokeObjectURL(href);
-		});
+	function downloadContent(file, fileName, type) {
+       
+		axios({
+            url: file,
+            method: 'GET',
+            responseType: 'blob',
+        }).then((response) => {
+            console.log({response})
+            const href = URL.createObjectURL(response.data);
+            const link = document.createElement('a');
+            link.href = href;
+            link.setAttribute('download', fileName);
+            document.body.appendChild(link);
+            link.click();
+    
+            document.body.removeChild(link);
+            URL.revokeObjectURL(href);
+        });
+        
 	}
 
     const handleClick = (event) => {
@@ -387,7 +390,7 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 						{/* <a href={fileName} download="gotocourse data" target="_blank" rel="noreferrer"> */}
 						<Tooltip
 							title="download"
-							onClick={() => downloadContent(fileName, title)}
+							onClick={() => downloadContent(fileName, title, type)}
 						>
 							<IconButton>
 								<IoMdCloudDownload size="1.5rem" color="var(--theme-blue)" />
