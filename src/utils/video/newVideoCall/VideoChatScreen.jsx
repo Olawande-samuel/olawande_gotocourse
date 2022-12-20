@@ -493,13 +493,18 @@ const VideoChatScreen = () => {
     }, [userProfile.userId])
 
     function handleNavigation() {
+        // let videoWrapper = document.querySelector(".video-section")
+        // console.log({videoWrapper})
+        // const video = VideoWrapper.querySelector('.client-local-stream')
+        // for (const track of video.srcObject.getTracks()){
+        //     console.log(track)
+        // }
         sessionStorage.clear()
         userProfile.userType === "student" ?
-            window.location.assign("/student")
-            :
-            userProfile.userType === "teacher" ?
-                window.location.assign("/teacher") : userProfile.userType === "admin" ? window.location.assign("/admin") : window.location.assign("/")
-
+        window.location.assign("/student")
+        :
+        userProfile.userType === "teacher" ?
+        window.location.assign("/teacher") : userProfile.userType === "admin" ? window.location.assign("/admin") : window.location.assign("/")
     }
 
     const toggleMessage = () => {
@@ -602,7 +607,7 @@ const VideoChatScreen = () => {
                     <img src={userProfile.profileImg} alt="avatar" />
                 </div>
             </HeadBar> */}
-            <Navbar user={userProfile} />
+            <Navbar user={userProfile} isPresenting={isPresenting} />
             <Content>
                 <VideoWrapper isPresenting={isPresenting}>
                     <div onClick={closeRecordedModal} className="recoreded-media">
@@ -615,7 +620,7 @@ const VideoChatScreen = () => {
 
                         <UserCallBlock showText={localStream.current?.getVideoTracks()[0].enabled}>
                             <video className="client-local-stream" src="" muted={true}></video>
-                            <p>USER Q</p>
+                            <p>{userProfile.firstName} {userProfile.lastName}</p>
                         </UserCallBlock>
                     </StreamWrapper>
                     {

@@ -12,7 +12,7 @@ import "./console.css";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
 import { Box, Modal, Skeleton, Switch } from "@mui/material";
-import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../../../contexts/Auth";
 import { AdvancedError } from "../../../../classes";
 import { toast, ToastContainer } from "react-toastify";
@@ -20,11 +20,12 @@ import axios from "axios";
 import CONFIG from "../../../../utils/video/appConst";
 import { useLocalStorage } from "../../../../hooks";
 import { KEY } from "../../../../constants";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IoInfiniteOutline} from "react-icons/io5"
 import { MenuOptionsPopup } from "./components";
 import {FiEdit} from "react-icons/fi"
 import { BiTrash } from "react-icons/bi";
+import { useEffect } from "react";
 
 export function LiveClassInfo({ type }) {
   
@@ -36,12 +37,12 @@ export function LiveClassInfo({ type }) {
   const userdata = getItem(KEY)
 
   const [schedule, setSchedule] = useState([])
+  const queryClient = useQueryClient()
 
 
   const fetchSchedule = useQuery(["fetch live schedule", userdata?.token],()=>fetchLiveSchedule(userdata.token, classId), {
     
     onSuccess: res => {
-      console.log(res)
       if(res.success){
         setSchedule(res.data)
         return
@@ -55,7 +56,12 @@ export function LiveClassInfo({ type }) {
   })
 
 
-console.log({schedule})
+
+  function refresh(e){
+    e.preventDefault();
+    queryClient.invalidateQueries({ queryKey: ["fetch live schedule"]}) 
+  }
+
 
   return (
     <div className={style.live_class}>
@@ -82,7 +88,7 @@ console.log({schedule})
         {type !== "student" && (
           <button onClick={() => setOpen(true)}>Schedule a live class</button>
         )}
-        <button>Refresh list</button>
+        <button onClick={refresh}>Refresh list</button>
       </div>
 
       <div className={style.currently_live}>
@@ -95,17 +101,18 @@ console.log({schedule})
             <>
             <Skeleton sx={{marginBottom: 10, borderTopLeftRadius: 8, borderTopRightRadius: 8}} animation="wave"  variant="rectangular" width={"min(240px, 300px)"} height={320} />
             <Skeleton sx={{marginBottom: 10, borderTopLeftRadius: 8, borderTopRightRadius: 8}} animation="wave"  variant="rectangular" width={"min(240px, 300px)"} height={320} />
+            <Skeleton sx={{marginBottom: 10, borderTopLeftRadius: 8, borderTopRightRadius: 8}} animation="wave"  variant="rectangular" width={"min(240px, 300px)"} height={320} />
             </>
             :
             schedule?.map((item, id) => (
-              <CurrentLive {...item} key={id} />
+              <CurrentLive {...item} key={item._id} setOpen={setOpen} />
             ))
           
           }
 
         </div>
       </div>
-      <ScheduleClass open={open} setOpen={setOpen} />
+      <ScheduleClass open={open} setOpen={setOpen} editDataArray={schedule} />
     </div>
   );
 }
@@ -126,18 +133,36 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
       event: handleDelete
     },
   ]
-  const {updateItem}= useLocalStorage()
+  const {updateItem, getItem}= useLocalStorage()
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const openAnchor = Boolean(anchorEl);
+  const {teacherConsoleFunctions: {deleteLiveSchedule}} = useAuth()
+  const userdata = getItem(KEY)
+  const queryClient = useQueryClient();
 
 
 
-  function handleEdit(){}
+  function handleEdit(){
+    navigate(`?edit=${_id}`)
+    setOpen(true)
+  }
 
 
+  const deleteLive = useMutation(([token, id, data])=>deleteLiveSchedule(token, id, data), {
+    onSuccess: res=> {
+      queryClient.invalidateQueries({ queryKey: ["fetch live schedule"]}) 
 
-  function handleDelete(){}
+    },
+    onError: err => console.error(err)
+  })
+
+  function handleDelete(){
+    console.log(userdata.token)
+    if(window.confirm("Delete this item ?")){
+      deleteLive.mutate([userdata.token, _id, {}])
+    }
+  }
 
 
 
@@ -145,7 +170,14 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
     e.preventDefault()
 
     updateItem("gotocourse-roomid", _id);  
-    navigate("connect")
+    let today  = new Date().getTime();
+    let startingDate = new Date(startDate).getTime();
+
+    if(today >= startingDate){
+      // navigate("connect")
+    }else {
+      
+    }
   }
 
 
@@ -155,7 +187,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
 
   return (
     <div className={style.live_card}>
-      <MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} />
+      <MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} schedule={true} />
       <h6>{roomName}</h6>
       <div className={style.live_card_schedule}>
         <div>
@@ -192,7 +224,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
   );
 }
 
-export function ScheduleClass({ open, setOpen }) {
+export function ScheduleClass({ open, setOpen , editDataArray}) {
   const [inputType, setInputType] = useState({
     startDate: false,
     endDate: false,
@@ -217,7 +249,7 @@ export function ScheduleClass({ open, setOpen }) {
   const {classId} = useParams()
   const {getItem}= useLocalStorage()
   const user = getItem(KEY)
-  const { generalState, setGeneralState, teacherFunctions: {fetchLiveClasses} } = useAuth();
+  const { generalState, setGeneralState, teacherFunctions: {fetchLiveClasses}, teacherConsoleFunctions: {editLiveSchedule} } = useAuth();
   const [formstate, setFormstate] = useState({
     startDate: "",
     endDate: "",
@@ -225,10 +257,29 @@ export function ScheduleClass({ open, setOpen }) {
     endTime: "",
   });
   const [loading, setLoading]= useState(false)
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams();
+  const edit = searchParams.get("edit")
+
+
 
   function handleChange(e) {
     setFormstate({ ...formstate, [e.target.name]: e.target.value });
   }
+
+
+  // TODO: Add schedule edit endpoint
+
+  const editMutation = useMutation(([token, id, data])=>editLiveSchedule(token, id, data), {
+    onSuccess: res => {
+      queryClient.invalidateQueries("fetch live schedule")
+      setFormstate({})
+      handleClose();
+    },
+    onError: err=>{
+      console.error(err.message)
+    }
+  })
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -241,7 +292,14 @@ export function ScheduleClass({ open, setOpen }) {
     
     try {
       setLoading(true)
-      const res = await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
+
+
+      if(edit){
+        editMutation.mutate([user.token, formstate._id, formstate ]) 
+        return
+      }
+
+      const res =  await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
         ...formstate,  
           userId: user.userId,
           classId
@@ -265,7 +323,7 @@ export function ScheduleClass({ open, setOpen }) {
         endTime: "",
       });
 
-      setOpen(false);
+      handleClose();
       
     } catch (error) {
       console.error(error)
@@ -277,12 +335,30 @@ export function ScheduleClass({ open, setOpen }) {
     }
   }
 
-  // const fetchClass = useQuery(["fetch all live classes", user.token], ()=>fetchLiveClasses(userdata.token, classId))
+
+
+  function handleClose(){
+    edit && navigate(-1)
+    setOpen(false)
+  }
+
+
+  useEffect(() => {
+    
+    if(edit){
+      let editData = editDataArray?.find(item => item._id === edit)
+      if(editData?._id){
+        setFormstate(editData)
+      }
+    }
+  }, [edit, editDataArray])
+
+  
 
   return (
     <Modal
       open={open}
-      onClose={() => setOpen(false)}
+      onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -380,11 +456,16 @@ export function ScheduleClass({ open, setOpen }) {
             </div>
             
             <button type="submit" disabled={loading}>{
-              loading ? <div className="spinner-border text-white">
+              (editMutation.isLoading || loading) ? <div className="spinner-border text-white">
                 <div className="visually-hidden">Loading...</div>
               </div>
               :
-              <span>Create</span>
+              <>
+              {
+                edit ? <span>Edit</span>:
+                <span>Create</span>
+              }
+              </>
             }</button>
           </div>
         </form>
@@ -400,7 +481,6 @@ export function Intermission() {
     const {generalState, setGeneralState} = useAuth()
     const {getItem}= useLocalStorage()
   
-    console.log(student);
   
     const roomid = getItem("gotocourse-roomid")
     function joinLiveClass(){

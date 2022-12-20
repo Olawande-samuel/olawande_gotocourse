@@ -12,12 +12,13 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../../../contexts/Auth';
 import { KEY } from '../../../../constants';
 import { useLocalStorage } from '../../../../hooks';
+import { toast } from 'react-toastify';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -104,7 +105,7 @@ export default function Quiz() {
 
     const { consoleFunctions: { fetchQuiz, addQuiz }, } = useAuth();
     let path = pathname.split("/")
-    let classId = path[path.length -1]
+    const {classId} = useParams()
     let searchData = search.split("=").reverse()[0]
     const contentId = searchParams.get("content")
 
@@ -128,8 +129,15 @@ export default function Quiz() {
     const quizAdd = useMutation(([token, data])=>addQuiz(token, data), {
         onSuccess: (res) => {
             console.log(res.data)
+            if(res.statusCode === 1){
+                toast.success(res.message)
+                return
+            }
+            toast.error(res.message)
         },
         onError: (err) => {
+            toast.error("something went wrong")
+
             console.error(err)
         }
     })
@@ -282,7 +290,7 @@ export default function Quiz() {
 
     function handleSubmit(e){
         e.preventDefault();
-        quizAdd.mutate([userdata.token, formData])
+        quizAdd.mutate([userdata.token, {...formData, classId, contentId}])
 
     }
 

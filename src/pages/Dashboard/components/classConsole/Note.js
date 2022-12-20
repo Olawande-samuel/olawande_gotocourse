@@ -18,6 +18,7 @@ import { useEffect } from 'react';
 
 
 import ReactQuill from 'react-quill';
+import { toast } from 'react-toastify';
 
 
 function TabPanel(props) {
@@ -60,16 +61,22 @@ export default function Note() {
 
 
     const mutation = useMutation(([token, data])=> addNote(token, data), {
-        onSuccess: (res)=> console.log({res}),
+        onSuccess: (res)=> {
+            if(res.data?._id){
+                toast.success(res.message)
+            }
+
+        },
         onError: (err)=> console.error(err)
     })
 
     const noteQuery = useQuery(["fetch note", fetchNote, contentId, userdata.token],() => fetchNote(userdata.token, contentId), {
         onSuccess: (res)=> {
-            console.log(res)
             if(res.data?.length > 0){
-                setFormstate({...formstate, body: res.data[0].body})
-                setNote(res.data[0].body)
+                let note = res.data[res.data.length -1]
+
+                setFormstate({...formstate, body: note.body})
+                setNote(note.body)
             }else{
                 setNote("")
             }
@@ -118,7 +125,6 @@ export default function Note() {
         mutation.mutate([userdata.token, {...formstate, body: note}])
     }
     
-    console.log({formstate})
     const [content, setContent] = useState("")
 
     return (
@@ -199,14 +205,6 @@ export default function Note() {
                                 </div>
                             </form>
                         }
-
-
-
-
-
-
-
-
                     </main>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
