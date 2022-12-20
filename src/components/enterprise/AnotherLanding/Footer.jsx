@@ -123,7 +123,7 @@ const Footer = () => {
     <footer className="footer wrapper" style={{
       // background: celebRoute ? "#000F62" : "var(--blue-ish)", color: celebRoute ? "#fffff" : "var(--theme-blue)"
       background: "linear-gradient(180deg, #CCD7FF 0%, #FFFFFF 100%)", color: "var(--theme-blue)",
-minHeight:"90vh",display: "flex", alignItems: "center" 
+minHeight:"70vh",display: "flex", alignItems: "center" 
     }}>
       <div className="container ">
 

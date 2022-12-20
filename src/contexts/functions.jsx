@@ -4613,9 +4613,9 @@ export const consoleFunctions = {
         }
     },
     joinGroup: async function (token, id, data) {
-        console.log(id);
-        console.log(token);
-        console.log({ data });
+        // console.log(id);
+        // console.log(token);
+        // console.log({ data });
         try {
             const res = await axios.post(`${baseURL}/classes/group/join/${id}`, JSON.stringify({
                 classId: data.classId,
@@ -4692,8 +4692,44 @@ export const consoleFunctions = {
     fetchUserGroupstatus: async function (token, id) {
 
         try {
-            // const res = await axios.get(`${baseURL}/classes/group/students/${id}`,
-            const res = await axios.get(`${baseURL}/classes/group/students/636421f509beb648a9d7ea25`,
+            const res = await axios.get(`${baseURL}/classes/group/students/${id}`,
+            // const res = await axios.get(`${baseURL}/classes/group/students/636421f509beb648a9d7ea25`,
+
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    fetchUserGroups: async function (token, id) {
+
+        try {
+            const res = await axios.get(`${baseURL}/classes/student/groups/${id}`,
+            // const res = await axios.get(`${baseURL}/classes/group/students/636421f509beb648a9d7ea25`,
 
                 {
                     headers: {

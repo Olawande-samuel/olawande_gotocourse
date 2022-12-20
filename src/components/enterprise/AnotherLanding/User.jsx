@@ -34,7 +34,7 @@ width: 100%;
     }
 
     p{
-        font-family: 'DM Sans';
+        font-family: 'Raleway';
         font-style: normal;
         font-weight: 400;
         font-size: 16.5px;

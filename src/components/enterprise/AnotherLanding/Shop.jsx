@@ -13,8 +13,8 @@ padding: 4rem 1rem;
         flex: .5;
         img{
             width: 100%;
-            height: 100%;
-            // object-fit: cover;
+            height: 400px;
+            object-fit: contain;
         }
   
     }
@@ -30,7 +30,7 @@ padding: 4rem 1rem;
             font-style: normal;
             font-weight: 700;
             font-size: 34px;
-            padding: 1rem 2rem;
+            padding: 1rem 0;
             // line-height: 36px;
             color: #1B1F29;
         }
@@ -88,6 +88,7 @@ padding: 4rem 1rem;
                 width: 100%;
                 img{
                     width: 100%;
+                    height: 100%;
                     object-fit: cover;
                 }
             }
@@ -98,7 +99,9 @@ const Shop = () => {
     return (
         <Container className="container">
             <div className="liveleft">
-                <img src={live} alt="" width={800} />
+                <img src={live} alt="" 
+                // width={800} 
+                />
 
             </div>
 

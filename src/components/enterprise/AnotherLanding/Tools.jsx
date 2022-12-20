@@ -38,7 +38,7 @@ padding: 2rem 0;
     }
 
     p{
-        font-family: 'DM Sans';
+        font-family: 'Raleway';
         font-style: normal;
         font-weight: 400;
         font-size: 18px;
@@ -49,7 +49,7 @@ padding: 2rem 0;
 
     a{
         color: #0D60D8;
-        font-family: 'DM Sans';
+        font-family: 'Raleway';
         font-style: normal;
         font-weight: 500;
         font-size: 18px;
