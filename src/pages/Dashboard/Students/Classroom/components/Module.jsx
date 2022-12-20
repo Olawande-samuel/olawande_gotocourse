@@ -91,7 +91,7 @@ const Module = ({ title,setContents,moduleIndex, setPickedType, contentsData, ch
 
 
 
-    console.log({contentsData});
+    // console.log({contentsData});
 
    
     return (

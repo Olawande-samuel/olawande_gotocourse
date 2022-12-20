@@ -612,7 +612,6 @@ const Classroom = () => {
     const [showMobile, setShowMobile] = useState(false);
     const [modules, setModules] = useState([]);
     const [contents, setContents] = useState([])
-    const [allContents, setAllContents] = useState([])
     const [title, setTitle] = useState("")
 
     const { getItem } = useLocalStorage()
@@ -629,7 +628,7 @@ const Classroom = () => {
 
     const fetchstudentDomains = useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id), {
         onSuccess: (res) => {
-            // console.log(res)
+            console.log(res.data)
             setModules(res.data)
         }
     })
@@ -640,11 +639,11 @@ const Classroom = () => {
     const quizRef = useRef()
     const fileRef = useRef()
 
-    const reduceModules = useMemo(() => {
-        return modules?.reduce((total, current) => {
-            return total + current.contents.length
-        }, 0);
-    }, [modules])
+    // const reduceModules = useMemo(() => {
+    //     return modules?.reduce((total, current) => {
+    //         return total + current.contents.length
+    //     }, 0);
+    // }, [modules])
 
 
     const reduceContent = useMemo(() => {
@@ -655,12 +654,11 @@ const Classroom = () => {
     }, [modules])
 
    
-    console.log({reduceContent})
+    // console.log({reduceContent})
 
    
 
     
-    console.log({ allContents });
 
     const handleFileCompleted = async (contentId) => {
         console.log({ contentId });
@@ -679,7 +677,7 @@ const Classroom = () => {
     const handleQuizCompleted = async (id, index) => {
         const { success } = await markAsCompleted(userdata?.token, id)
         if (success) {
-            setCompleted((prev) => prev < reduceModules ? prev + 1 : prev)
+            setCompleted((prev) => prev < reduceContent.length ? prev + 1 : prev)
             quizRef.current.style.display = "none";
 
         }
@@ -692,7 +690,6 @@ const Classroom = () => {
 
 
 
-    console.log({ reduceModules });
 
     return (
         <Container>
@@ -724,7 +721,7 @@ const Classroom = () => {
                         completed={completed}
                         setContents={setContents}
                         setPickedType={setPickedType}
-                        reduceModules={reduceModules}
+                        reduceContent={reduceContent}
                     />
                 </Backdrop>
                 <Sidebar
@@ -734,7 +731,7 @@ const Classroom = () => {
                     completed={completed}
                     setContents={setContents}
                     setPickedType={setPickedType}
-                    reduceModules={reduceModules}
+                    reduceContent={reduceContent}
 
                 />
                 <ClassroomMain>
