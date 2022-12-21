@@ -8,8 +8,8 @@ const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
 
-    overflow: hidden;
-    grid-auto-rows: 350px;
+    /* overflow: hidden; */
+    grid-auto-rows: 390px;
 
     gap: 1.5rem;
     justify-content:space-around;
