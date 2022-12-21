@@ -9,7 +9,7 @@ justify-content: space-between;
 align-items: center;
 color: #0C1825;
 padding: .5rem 1rem;
-margin-top: 4rem;
+margin-top: 5rem;
 
 
 
@@ -68,8 +68,8 @@ margin-top: 4rem;
     // border: 2px solid yellow;
 
     img{
-        width: 100%;
-        height: 100%;
+        max-width: 100%;
+        max-height: 400px;
     }
 
 }
@@ -91,10 +91,6 @@ margin-top: 4rem;
 
     .heroright{
         width: 100%;
-        img{
-            width: 100%;
-            object-fit: cover;
-        }
     }
 }
 
@@ -108,15 +104,7 @@ margin-top: 4rem;
 
         }
     }
-    .heroright{
-        width: 100%;
-        height: 400px;
-        img{
-            width: 100%;
-            height: 100%;
-            // object-fit: cover;
-        }
-    }
+    
 }
 
 

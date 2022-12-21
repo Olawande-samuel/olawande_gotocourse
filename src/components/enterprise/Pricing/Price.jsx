@@ -11,164 +11,172 @@ flex-direction: column;
 align-items: center;
 gap: 2rem;
 
-.reviewhead h4{
-    text-align: center;
-    font-family: 'Raleway';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 26px;
-    // font-size: clamp(2.1rem, 2.1429rem + .5357vw, 2.5rem);
-    // line-height: 54px;
-    color: var(--theme-blue);
-}
+    .reviewhead h4{
+        text-align: center;
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 26px;
+        // font-size: clamp(2.1rem, 2.1429rem + .5357vw, 2.5rem);
+        // line-height: 54px;
+        color: var(--theme-blue);
+    }
 
-.reviewhead p{
-    text-align: center;
-    font-family: 'Raleway';
-    font-style: normal;
-    // font-weight: 700;
-    // font-size: 26px;
-    // font-size: clamp(2.1rem, 2.1429rem + .5357vw, 2.5rem);
-    // line-height: 54px;
-    color: var(--theme-blue);
+    .reviewhead p{
+        text-align: center;
+        font-family: 'Raleway';
+        font-style: normal;
+        // font-weight: 700;
+        // font-size: 26px;
+        // font-size: clamp(2.1rem, 2.1429rem + .5357vw, 2.5rem);
+        // line-height: 54px;
+        color: var(--theme-blue);
 
-   
-}
+    
+    }
 
-.reviewcontent{
-    display: flex;
-    gap: 1rem;
+    .pricecontent{
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        // justify-content: center;
+        align-content: center;
+        gap: .5rem;
 
 
-    .reviewdiv{
-        flex: .25;       
-        background: #F2F8FF;
-        border: 1px solid #A0B0FF;
-        border-radius: 20px;
-        padding: 1rem;
-        position: relative;
-        min-height: 45rem;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-
-        ul{
-            list-style-type: none;
-            margin:0;
-            padding: 0;
+        .reviewdiv{
+            flex: .2;       
+            background: #F2F8FF;
+            border: 1px solid #A0B0FF;
+            border-radius: 20px;
+            padding: 1rem;
+            position: relative;
+            min-height: 50rem;
             display: flex;
             flex-direction: column;
-            gap: .5rem;
+            gap: 1rem;
 
-            li{
-                color: var(--theme-blue);
+            ul{
+                list-style-type: none;
+                margin:0;
+                padding: 0;
                 display: flex;
+                flex-direction: column;
                 gap: .5rem;
-                font-weight: 500;
-                font-size: 16px;
-                font-family: 'Raleway';
 
-                div:nth-of-type(1){
-                    flex: .1;
+                li{
+                    color: var(--theme-blue);
+                    display: flex;
+                    gap: .5rem;
+                    font-weight: 500;
+                    font-size: 16px;
+                    font-family: 'Raleway';
+
+                    div:nth-of-type(1){
+                        flex: .1;
+                    }
+
+                    div:nth-of-type(2){
+                        flex: .9;
+                    }
+
                 }
-
-                div:nth-of-type(2){
-                    flex: .9;
-                }
-
             }
-        }
 
 
-        p:nth-of-type(1){
-            font-weight: 800;
- 
-        }
-
-        p{
-            color: var(--theme-blue);
-
-            span{
-                font-family: 'Raleway';
-                font-style: normal;
+            p:nth-of-type(1){
                 font-weight: 800;
-                font-size: 64px;
-                line-height: 136.9%;
-            }
-        }
-
-        .btncontainer{
-            position: absolute;
-            left: 0;
-            bottom: 10px;
-            right: 0;
-            text-align: center;
-
-            button{   
-                width: 150px;
-                border:2px solid white;
-                border-radius: 20px;
-                background: var( --theme-blue);
-                color: #fff;
-                padding: .5rem 1rem;
-                font-weight: 700;
-                font-size: 14px;
-                line-height: 27px;
-                a{
-                    color: #fff; 
-                }
     
             }
 
-            .whitebtn{
-                width: 150px;
-                border:1px solid var( --theme-blue);
-                border-radius: 20px;
-                background: #fff;
-                color: var( --theme-blue);;
-                padding: .5rem 1rem;
-                font-weight: 700;
-                font-size: 14px;
-                line-height: 27px;
-                a{
-                    color: var( --theme-blue);                
+            p{
+                color: var(--theme-blue);
+
+                span{
+                    font-family: 'Raleway';
+                    font-style: normal;
+                    font-weight: 800;
+                    font-size: 45px;
+                    // line-height: 136.9%;
                 }
             }
-        }
 
-    }
+            .pricetext{
+                font-size: 20px;
     
-}
+            }
 
-@media (max-width: 912px){
-    .reviewcontent{
-        // flex-direction: column;
+            .btncontainer{
+                position: absolute;
+                left: 0;
+                bottom: 10px;
+                right: 0;
+                text-align: center;
 
-        .reviewdiv{
-            min-height: 30rem;
-            // padding: 2rem .5rem;
-            padding: 2rem .5rem;
+                button{   
+                    width: 150px;
+                    border:2px solid white;
+                    border-radius: 20px;
+                    background: var( --theme-blue);
+                    color: #fff;
+                    padding: .5rem 1rem;
+                    font-weight: 700;
+                    font-size: 14px;
+                    line-height: 27px;
+                    a{
+                        color: #fff; 
+                    }
+        
+                }
+
+                .whitebtn{
+                    width: 150px;
+                    border:1px solid var( --theme-blue);
+                    border-radius: 20px;
+                    background: #fff;
+                    color: var( --theme-blue);;
+                    padding: .5rem 1rem;
+                    font-weight: 700;
+                    font-size: 14px;
+                    line-height: 27px;
+                    a{
+                        color: var( --theme-blue);                
+                    }
+                }
+            }
 
         }
+        
     }
-}
 
-@media (max-width:768px){
-    .reviewcontent{
-        flex-direction: column;
 
-        .reviewdiv{
-            min-height: 45rem;
-            padding: 2rem .5rem;
 
+@media screen and (max-width: 768px) and (min-width: 280px){
+    .container{
+        .pricecontent{
+            grid-template-columns: 1fr;
+    
+    
         }
+
     }
 
    
 }
 
 
-.
+@media screen and (max-width: 1024px) and (min-width: 900px){
+    .container{
+        .pricecontent{
+            grid-template-columns: repeat(3, 1fr);
+    
+        }
+
+    }
+
+   
+}
+
+
 `
 const Price = () => {
     return (
@@ -180,7 +188,7 @@ const Price = () => {
                     <p>We offer a price that is right for you, no matter who you are</p>
                 </div>
 
-                <div className="reviewcontent">
+                <div className="pricecontent">
 
                     <div className="reviewdiv">
                         <p>Free</p>
@@ -236,7 +244,7 @@ const Price = () => {
 
 
                         <div className="btncontainer">
-                            <Link to={`/enterprise-signup`}><button className="whitebtn">Get started</button></Link>
+                           <button className="whitebtn">Get started</button>
                         </div>
 
 
@@ -304,14 +312,14 @@ const Price = () => {
 
 
                         <div className="btncontainer">
-                            <Link to={`/enterprise-signup`}><button>Get started</button></Link>
+                           <button className="whitebtn">Get started</button>
                         </div>
 
 
                     </div>
 
                     <div className="reviewdiv">
-                        <p>Premium Plan</p>
+                        <p>Pro Plan</p>
                         <p><span>$99 </span>per month</p>
 
 
@@ -358,15 +366,15 @@ const Price = () => {
 
 
                         <div className="btncontainer">
-                            <Link to={`/enterprise-signup`}><button className="whitebtn">Get started</button></Link>
+                           <button className="whitebtn">Get started</button>
                         </div>
 
 
                     </div>
 
                     <div className="reviewdiv">
-                        <p>Enterprise Plan</p>
-                        <p><span>$399 </span>per month</p>
+                        <p>Premium Plan</p>
+                        <p><span>$299 </span>per month</p>
 
 
                         <ul>
@@ -414,7 +422,25 @@ const Price = () => {
 
 
                         <div className="btncontainer">
-                            <Link to={`/enterprise-signup`}><button>Get started</button></Link>
+                           <button className="whitebtn">Get started</button>
+                        </div>
+
+
+                    </div>
+
+                    <div className="reviewdiv">
+                        <p>Enterprise Plan</p>
+                        <br/>
+                        <br/>
+                        <br/>
+
+                        <p className="pricetext">Custom solution<br />
+                            for large teams <br />
+                            with advanced needs</p>
+
+
+                        <div className="btncontainer">
+                            <Link to={`/enterprise-signup`}><button>Contact sales</button></Link>
                         </div>
 
 

@@ -18,9 +18,9 @@ const GuardedRoute = ({children}) => {
     
 
     // for create
-    let isCreator = true
+    let isCreator = value?.userType === "schools"
 
-    console.log({route})
+    console.log({isCreator})
     if(isCreator){
         let schoolRoute = location.pathname 
 
@@ -43,31 +43,37 @@ const GuardedRoute = ({children}) => {
             }
             else return <Navigate to="/school/login" />;
         }
-        return
-    }
+        
+    } else {
+        console.log("here first")
 
-    if(value.token){
-        if(route === "teacher" || route === "student" || route === "affiliate"|| route === "change-password" || route === "mentor"){
-            if(value.isVerified){
-                if(route === "teacher" && !value.canTeach){
-                    localStorage.clear()
-                    return <Navigate to="/login" />
-                } 
+        if(value.token){
+            console.log("here second")
+
+            if(route === "teacher" || route === "student" || route === "affiliate"|| route === "change-password" || route === "mentor"){
+                if(value.isVerified){
+                    if(route === "teacher" && !value.canTeach){
+                        localStorage.clear()
+                        return <Navigate to="/login" />
+                    } 
+                    return children
+                }
+            }else if(route === "admin") {
                 return children
+            } 
+
+            return <Navigate to="/" />;
+        }else {
+
+            console.log("here")
+            if(route === 'admin'){
+                return <Navigate to="/admin/login" />
             }
-        }else if(route === "admin") {
-            return children
+            else return <Navigate to="/login" />;
         }
-    }else {
 
-        if(route === 'admin'){
-            return <Navigate to="/admin/login" />
-        }
-        else return <Navigate to="/login" />;
     }
-
 }
-
 
 
 export default GuardedRoute;

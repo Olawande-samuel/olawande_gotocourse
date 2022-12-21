@@ -453,6 +453,7 @@ ul{
 // }
 
 const NoteComponent = (contentItem) => {
+    console.log({contentItem});
 
     return (
         <NotecContainer>
@@ -654,7 +655,7 @@ const Classroom = () => {
     }, [modules])
 
    
-    // console.log({reduceContent})
+    console.log({reduceContent})
 
    
 

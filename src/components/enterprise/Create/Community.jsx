@@ -25,7 +25,7 @@ padding: 2rem 1rem;
         h5{
             font-family: 'Raleway';
             font-style: normal;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 28px;
             // line-height: 36px;
         }

@@ -13,7 +13,7 @@ h4{
     color: #1B1F29;
     font-family: 'Raleway';
     font-style: normal;
-    font-weight: 700;
+    font-weight: 800;
     font-size: 24px;
     // line-height: 48px;
 }

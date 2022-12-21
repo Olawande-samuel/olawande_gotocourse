@@ -1943,7 +1943,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
     
     // for create
 
-    const isCreator = true
+    const isCreator = userdata?.userType === "schools"
     return (
         <GuardedRoute>
             <div className={clsx.students}>

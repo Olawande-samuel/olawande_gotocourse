@@ -191,7 +191,7 @@ import AllCourses from "./pages/Courses/allcourses/AllCourses";
 import { MainContainer } from "./pages/Dashboard/components/classConsole";
 import Articles from "./pages/Events/articles";
 import StudentChatModule, {
-  ActiveChat,
+  ActiveChat, StudentGroupContent,
 } from "./pages/Dashboard/components/classConsole/Chat/student";
 
 import {
@@ -410,7 +410,13 @@ function App() {
                     <Route path="myclasses" element={<Out />}>
                       <Route index element={<ConsoleClasses />} />
                       <Route path=":id" element={<StudentChatModule />} />
-                      <Route path=":id/chat" element={<ActiveChat />} />
+                      {/* <Route path=":id/chat" element={<ActiveChat />} /> */}
+                      <Route path="mail" element={<Out />}> 
+                        <Route index element={<ChatComponent />} />
+                        <Route path="details" element={<StudentGroupContent />} />
+                        <Route path="group/:groupID" element={<StudentGroupContent />} />
+                        <Route path="chat/:userId" element={<MailDetail />} />
+                     </Route>
                     </Route>
                     <Route path="assessments" element={<ConsoleAssessments />} />
                     <Route path="liveclass" element={<Out />} />
@@ -439,14 +445,9 @@ function App() {
                   <Route path="myclasses" element={<Out />}>
                     <Route index element={<ConsoleClasses />} />
                     <Route path=":id" element={<StudentChatModule />} />
-                    {/* <Route path=":id/chat" element={<ActiveChat />} /> */}
+                    <Route path=":id/chat" element={<ActiveChat />} />
                     
-                    <Route path="mail" element={<Out />}> 
-                        <Route index element={<ChatComponent />} />
-                        <Route path="details" element={<GroupContent />} />
-                        <Route path="group/:groupID" element={<GroupContent />} />
-                        <Route path="chat/:userId" element={<MailDetail />} />
-                     </Route>
+                    
 
                   </Route>
                   <Route path="assessments" element={<ConsoleAssessments />} />
@@ -708,11 +709,11 @@ function App() {
                 <Route path="create" element={<CreatePage />} />
                 <Route path="manage" element={<ManagePage />} />
                 <Route path="pricing" element={<Pricing />} />
-                <Route path="enterprise-login" element={<EnterPriseLogin />} />
-                <Route path="enterprise-signup" element={<EnterpriseSignUp />} />
-                <Route path="enterprise-forgot" element={<EnterPriseForgotPassword />} />
-                <Route path="enterprise-verify" element={<EnterpriseVerification />} />
-                <Route path="enterprise-onboarding" element={<EnterpriseOnboarding />} />
+                <Route path="login" element={<EnterPriseLogin />} />
+                <Route path="signup" element={<EnterpriseSignUp />} />
+                <Route path="forgot" element={<EnterPriseForgotPassword />} />
+                <Route path="verify" element={<EnterpriseVerification />} />
+                <Route path="onboarding" element={<EnterpriseOnboarding />} />
                 
                 <Route path="admin">
                   <Route path="" element={<AdminDashboard />} />

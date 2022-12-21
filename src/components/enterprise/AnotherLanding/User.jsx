@@ -77,9 +77,9 @@ width: 100%;
 
 
         p{
-            font-family: 'ABeeZee';
-            font-style: italic;
-            font-weight: 400;
+            font-family: 'Raleway';
+            font-style: norma;
+            font-weight: 600;
             font-size: 20px;
             line-height: 36px;
         }
@@ -148,8 +148,7 @@ const User = () => {
                         <div>
                             <p>Onboard With Ease</p>
                             <span>
-                                Sell your courses through Hopin events, with all sorts of features to make it a complete experience.
-                            </span>
+                            Effective onboarding process that creates the foundation that gives students the confidence that they can succeed at your training program.                            </span>
 
                         </div>
                     </div>
