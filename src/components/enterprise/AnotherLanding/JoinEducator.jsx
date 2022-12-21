@@ -15,7 +15,7 @@ div{
         color: #0C2191;
         font-family: 'Raleway';
         font-style: normal;
-        font-weight: 700;
+        font-weight: 800;
         font-size: 36px;
         // line-height: 48px;
 
