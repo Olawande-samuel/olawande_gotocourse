@@ -966,7 +966,7 @@ function Modal({ setShow }) {
 }
 
 
-export function GroupContent(){
+export function StudentGroupContent(){
     const {getItem} = useLocalStorage();
     const {groupID} = useParams()
     const userdata = getItem(KEY)
