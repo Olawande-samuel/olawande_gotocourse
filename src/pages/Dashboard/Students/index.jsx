@@ -1940,6 +1940,10 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
         }
     })
 
+    
+    // for create
+
+    const isCreator = true
     return (
         <GuardedRoute>
             <div className={clsx.students}>
@@ -1957,7 +1961,10 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
 
                 <Sidebar isMobile={isMobile} />
                 <div className={clsx.students_main}>
-                    <Navbar toggleSidebar={toggleSidebar} header={header} content={student} />
+                {
+                    !isCreator &&
+                        <Navbar toggleSidebar={toggleSidebar} header={header} content={student} />
+                }
 
                     {children}
 

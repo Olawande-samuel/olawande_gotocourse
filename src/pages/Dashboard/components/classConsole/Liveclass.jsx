@@ -11,8 +11,8 @@ import style from "./style.module.css";
 import "./console.css";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
-import { Box, Modal, Switch } from "@mui/material";
-import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Box, Modal, Skeleton, Switch } from "@mui/material";
+import { Navigate, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../../../contexts/Auth";
 import { AdvancedError } from "../../../../classes";
 import { toast, ToastContainer } from "react-toastify";
@@ -20,7 +20,12 @@ import axios from "axios";
 import CONFIG from "../../../../utils/video/appConst";
 import { useLocalStorage } from "../../../../hooks";
 import { KEY } from "../../../../constants";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { IoInfiniteOutline} from "react-icons/io5"
+import { MenuOptionsPopup } from "./components";
+import {FiEdit} from "react-icons/fi"
+import { BiTrash } from "react-icons/bi";
+import { useEffect } from "react";
 
 export function LiveClassInfo({ type }) {
   
@@ -31,15 +36,31 @@ export function LiveClassInfo({ type }) {
   const {getItem} = useLocalStorage();
   const userdata = getItem(KEY)
 
+  const [schedule, setSchedule] = useState([])
+  const queryClient = useQueryClient()
 
 
   const fetchSchedule = useQuery(["fetch live schedule", userdata?.token],()=>fetchLiveSchedule(userdata.token, classId), {
     
-    onSuccess: res => console.log(res),
-    onError: err => console.log(err)
+    onSuccess: res => {
+      if(res.success){
+        setSchedule(res.data)
+        return
+      }
+
+    },
+    onError: err => {
+      toast.error("Error fetching schedule")
+      console.log(err)
+    }
   })
 
 
+
+  function refresh(e){
+    e.preventDefault();
+    queryClient.invalidateQueries({ queryKey: ["fetch live schedule"]}) 
+  }
 
 
   return (
@@ -67,37 +88,107 @@ export function LiveClassInfo({ type }) {
         {type !== "student" && (
           <button onClick={() => setOpen(true)}>Schedule a live class</button>
         )}
-        <button>Refresh list</button>
+        <button onClick={refresh}>Refresh list</button>
       </div>
 
       <div className={style.currently_live}>
-        <p>Scheduled Classes ({scheduledClasses.length})</p>
+        <p>Scheduled Classes ({schedule?.length})</p>
 
         <div className={style.live_list}>
-          {scheduledClasses.map((item, id) => (
-            <CurrentLive {...item} key={id} />
-          ))}
+          {
+          
+          fetchSchedule?.isLoading ? 
+            <>
+            <Skeleton sx={{marginBottom: 10, borderTopLeftRadius: 8, borderTopRightRadius: 8}} animation="wave"  variant="rectangular" width={"min(240px, 300px)"} height={320} />
+            <Skeleton sx={{marginBottom: 10, borderTopLeftRadius: 8, borderTopRightRadius: 8}} animation="wave"  variant="rectangular" width={"min(240px, 300px)"} height={320} />
+            <Skeleton sx={{marginBottom: 10, borderTopLeftRadius: 8, borderTopRightRadius: 8}} animation="wave"  variant="rectangular" width={"min(240px, 300px)"} height={320} />
+            </>
+            :
+            schedule?.map((item, id) => (
+              <CurrentLive {...item} key={item._id} setOpen={setOpen} />
+            ))
+          
+          }
+
         </div>
       </div>
-      <ScheduleClass open={open} setOpen={setOpen} />
+      <ScheduleClass open={open} setOpen={setOpen} editDataArray={schedule} />
     </div>
   );
 }
 
-export function CurrentLive({ title, startDate, startTime, endDate, endTime, roomid }) {
-  const {updateItem}= useLocalStorage()
+export function CurrentLive({ setOpen, roomName, status, startDate, startTime, endDate, endTime, roomid, _id }) {
+
+  const contextMenu = [
+    {
+      id: 1,
+      title:"Edit",
+      iconImg: FiEdit,
+      event: handleEdit
+    },
+    {
+      id: 2,
+      title:"Delete",
+      iconImg: BiTrash,
+      event: handleDelete
+    },
+  ]
+  const {updateItem, getItem}= useLocalStorage()
   const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openAnchor = Boolean(anchorEl);
+  const {teacherConsoleFunctions: {deleteLiveSchedule}} = useAuth()
+  const userdata = getItem(KEY)
+  const queryClient = useQueryClient();
+
+
+
+  function handleEdit(){
+    navigate(`?edit=${_id}`)
+    setOpen(true)
+  }
+
+
+  const deleteLive = useMutation(([token, id, data])=>deleteLiveSchedule(token, id, data), {
+    onSuccess: res=> {
+      queryClient.invalidateQueries({ queryKey: ["fetch live schedule"]}) 
+
+    },
+    onError: err => console.error(err)
+  })
+
+  function handleDelete(){
+    console.log(userdata.token)
+    if(window.confirm("Delete this item ?")){
+      deleteLive.mutate([userdata.token, _id, {}])
+    }
+  }
+
+
 
   function gotoLiveClass(e){
     e.preventDefault()
 
-    updateItem("gotocourse-roomid", roomid);  
-    navigate("connect")
+    updateItem("gotocourse-roomid", _id);  
+    let today  = new Date().getTime();
+    let startingDate = new Date(startDate).getTime();
+
+    if(today >= startingDate){
+      // navigate("connect")
+    }else {
+      
+    }
   }
+
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   return (
     <div className={style.live_card}>
-      <h6>{title}</h6>
+      <MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} schedule={true} />
+      <h6>{roomName}</h6>
       <div className={style.live_card_schedule}>
         <div>
           <i>
@@ -110,7 +201,7 @@ export function CurrentLive({ title, startDate, startTime, endDate, endTime, roo
             <AiFillClockCircle />
           </i>
           <span>
-            {startTime} - {endTime} GMT+0100 (West Africa Standard Time)
+            {startTime ? startTime : "Now"} - {endTime ? endTime : <IoInfiniteOutline />} UTC{ new Date().getTimezoneOffset()/10}
           </span>
         </div>
         <div>
@@ -133,7 +224,7 @@ export function CurrentLive({ title, startDate, startTime, endDate, endTime, roo
   );
 }
 
-export function ScheduleClass({ open, setOpen }) {
+export function ScheduleClass({ open, setOpen , editDataArray}) {
   const [inputType, setInputType] = useState({
     startDate: false,
     endDate: false,
@@ -153,10 +244,12 @@ export function ScheduleClass({ open, setOpen }) {
     p: 4,
   };
 
+  const queryClient = useQueryClient()
+
   const {classId} = useParams()
   const {getItem}= useLocalStorage()
   const user = getItem(KEY)
-  const { generalState, setGeneralState, teacherFunctions: {fetchLiveClasses} } = useAuth();
+  const { generalState, setGeneralState, teacherFunctions: {fetchLiveClasses}, teacherConsoleFunctions: {editLiveSchedule} } = useAuth();
   const [formstate, setFormstate] = useState({
     startDate: "",
     endDate: "",
@@ -164,75 +257,124 @@ export function ScheduleClass({ open, setOpen }) {
     endTime: "",
   });
   const [loading, setLoading]= useState(false)
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams();
+  const edit = searchParams.get("edit")
+
+
 
   function handleChange(e) {
     setFormstate({ ...formstate, [e.target.name]: e.target.value });
   }
 
+
+  // TODO: Add schedule edit endpoint
+
+  const editMutation = useMutation(([token, id, data])=>editLiveSchedule(token, id, data), {
+    onSuccess: res => {
+      queryClient.invalidateQueries("fetch live schedule")
+      setFormstate({})
+      handleClose();
+    },
+    onError: err=>{
+      console.error(err.message)
+    }
+  })
+
   async function handleSubmit(e) {
     e.preventDefault();
-    if ( !formstate.title || !formstate.startDate || !formstate.startTime || !formstate.endTime ) {
+
+    if ( !formstate.roomName || !formstate.startDate || !formstate.startTime  ) {
       toast.error("All fields are required");
+
       throw new AdvancedError("All fields are required", 0);
     }
     
     try {
       setLoading(true)
-      const res = await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
-          roomName: formstate.title,
+
+
+      if(edit){
+        editMutation.mutate([user.token, formstate._id, formstate ]) 
+        return
+      }
+
+      const res =  await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
+        ...formstate,  
           userId: user.userId,
           classId
       })
-      
-      console.log(res.data.data)
-  
+
       res.data.success && toast.success("Schedule created successfully")
-  
+      
       localStorage.setItem("video-room", res.data.data._id)
-  
+      
+      queryClient.invalidateQueries("fetch live schedule")
+      
       setGeneralState({
         ...generalState,
         scheduledClasses: [...generalState.scheduledClasses, {...formstate, roomid: res.data.data._id}],
       });
   
       setFormstate({
-          startDate: "",
-          endDate: "",
-          startTime: "",
-          endTime: "",
+        startDate: "",
+        endDate: "",
+        startTime: "",
+        endTime: "",
       });
-      setOpen(false);
+
+      handleClose();
       
     } catch (error) {
       console.error(error)
+
       toast.error(error.message)
+
     } finally {
       setLoading(false)
     }
   }
 
-  // const fetchClass = useQuery(["fetch all live classes", user.token], ()=>fetchLiveClasses(userdata.token, classId))
+
+
+  function handleClose(){
+    edit && navigate(-1)
+    setOpen(false)
+  }
+
+
+  useEffect(() => {
+    
+    if(edit){
+      let editData = editDataArray?.find(item => item._id === edit)
+      if(editData?._id){
+        setFormstate(editData)
+      }
+    }
+  }, [edit, editDataArray])
+
+  
 
   return (
     <Modal
       open={open}
-      onClose={() => setOpen(false)}
+      onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
       <Box sx={modalStyle}>
         <form className={style.class_schedule} onSubmit={handleSubmit}>
           <div className="form-group my-3">
-            <label htmlFor="title" className="form-label generic_label">
+            <label htmlFor="roomName" className="form-label generic_label">
               Title
             </label>
             <input
               type="text"
-              name="title"
-              id="title"
+              name="roomName"
+              id="roomName"
               className="form-control"
               onChange={handleChange}
-              value={formstate.title}
+              value={formstate.roomName}
             />
           </div>
           <div className="form-group my-3">
@@ -314,11 +456,16 @@ export function ScheduleClass({ open, setOpen }) {
             </div>
             
             <button type="submit" disabled={loading}>{
-              loading ? <div className="spinner-border text-white">
+              (editMutation.isLoading || loading) ? <div className="spinner-border text-white">
                 <div className="visually-hidden">Loading...</div>
               </div>
               :
-              <span>Create</span>
+              <>
+              {
+                edit ? <span>Edit</span>:
+                <span>Create</span>
+              }
+              </>
             }</button>
           </div>
         </form>
@@ -334,7 +481,6 @@ export function Intermission() {
     const {generalState, setGeneralState} = useAuth()
     const {getItem}= useLocalStorage()
   
-    console.log(student);
   
     const roomid = getItem("gotocourse-roomid")
     function joinLiveClass(){
@@ -379,3 +525,5 @@ export function Intermission() {
     </section>
   );
 }
+
+

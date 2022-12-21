@@ -4,7 +4,7 @@ import { AiOutlineMore, AiOutlineArrowLeft } from "react-icons/ai";
 import { MdSearch, MdSend } from 'react-icons/md';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffectOnMount, useLocalStorage } from "../../../../../hooks";
 import { Box, Tab, Tabs } from "@mui/material";
 import PropTypes from "prop-types";
@@ -571,16 +571,16 @@ const StudentChatModule = () => {
     const userdata = getItem(KEY)
     let path = pathname.split("/")
     let classId = path[path.length - 1]
-    console.log(classId);
+    // console.log(classId);
 
-    console.log({ userdata });
+    // console.log({ userdata });
 
     const { consoleFunctions: { fetchGroups, joinGroup }, } = useAuth();
 
     const [activeTab, setActiveTab] = useState(0);
     const [show, setShow] = useState(false);
     useEffectOnMount(() => {
-        console.log('ChatModule is mounted');
+        // console.log('ChatModule is mounted');
         return () => console.log('ChatModule is unmounted');
     }, [])
     // const [newGroups, setNewGroups] = useState(_ => {
@@ -617,8 +617,8 @@ const StudentChatModule = () => {
 
     const getAllGroupsQuery = useQuery(["all groups"], () => fetchGroups(userdata?.token, classId), {
         onSuccess: (res) => {
-            console.log("successful query")
-            console.log(res.data)
+            // console.log("successful query")
+            // console.log(res.data)
             setNewGroups(res.data)
 
         }
@@ -674,14 +674,14 @@ const StudentChatModule = () => {
 
 
 
-function ChatContent({title, user, body, fromUser, isTutor, type}){
+function ChatContent({ title, user, body, fromUser, isTutor, type }) {
     return (
         <ChatInfo>
             <UserImage>
                 <FaUser size="1.5rem" color="#fff" />
             </UserImage>
             <ChatDetails>
-                <h6>{isTutor ? "Teacher": fromUser}</h6>
+                <h6>{isTutor ? "Teacher" : fromUser}</h6>
                 <p>{body}</p>
             </ChatDetails>
         </ChatInfo>
@@ -809,70 +809,15 @@ function UserCard({ status, fullname, number, lastsent, isChat }) {
 
 
 function ChatTab({ groups, toggle, setShow }) {
-    const { getItem } = useLocalStorage();
-    let userdata = getItem(KEY);
-    const { generalState: { isMobile }, consoleFunctions: { joinGroup, fetchUserGroupstatus } } = useAuth();
-
-    console.log({ groups });
-
-    const userGroupStatus = useQuery(["fetch file", userdata.id], () => fetchUserGroupstatus(userdata.token, userdata.id), {
-        onSuccess: (res) => {
-            console.log(res)
-        }
-    })
 
 
-    const joinGroupBtn = async (e, id, classId) => {
-        e.preventDefault()
-        try {
-            console.log("token", userdata?.token);
-            console.log("id", id);
-            const { data } = await joinGroup(userdata?.token, id, classId)
-            console.log({ data });
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const userjoinedgroup = true
     return (
         <ChatGroup>
             <h2>My Group</h2>
             <Groups>
                 {
                     groups.map((group, i) => (
-                        <Group key={group._id}>
-                            <GroupTop>
-                                <h2>{group.title}</h2>
-                                <span onClick={e => toggle(e, i)}>
-                                    <AiOutlineMore />
-                                    {/* <GroupDropdown $show={showActions ? true : false}>
-                                        <li>Edit</li>
-                                        <li>Archive</li>
-                                    </GroupDropdown> */}
-                                </span>
-                            </GroupTop>
-                            <GroupBody>
-                                <h3>{group.title}</h3>
-                                <p className="restricted_line">{group.description}</p>
-                                <footer>
-                                    <span>{group.students} participants</span>
-                                    {/* <button onClick={e => joinGroupBtn(e, group._id, group)}>Open team</button> */}
-
-                                    {userjoinedgroup ?
-                                        <button >
-                                            <Link to={`chat`}>
-                                            Open team
-                                            </Link>
-                                            
-                                            </button> :
-                                        <button onClick={e => joinGroupBtn(e, group._id, group)}>Join team</button>
-
-                                    }
-                                </footer>
-                            </GroupBody>
-                        </Group>
+                        <GroupInfo key={group._id} group={group} toggle={toggle} setShow={setShow} />
                     ))
                 }
             </Groups>
@@ -880,31 +825,98 @@ function ChatTab({ groups, toggle, setShow }) {
             <h2>All Group</h2>
             <Groups>
                 {
-                    groups.map(({ title, description, students, classId, _id }, i) => (
-                        <Group key={_id}>
-                            <GroupTop>
-                                <h2>{title}</h2>
-                                <span onClick={e => toggle(e, i)}>
-                                    <AiOutlineMore />
-                                    {/* <GroupDropdown $show={showActions ? true : false}>
-                                        <li>Edit</li>
-                                        <li>Archive</li>
-                                    </GroupDropdown> */}
-                                </span>
-                            </GroupTop>
-                            <GroupBody>
-                                <h3>{title}</h3>
-                                <p className="restricted_line">{description}</p>
-                                <footer>
-                                    <span>{students} participants</span>
-                                    <button onClick={e => joinGroupBtn(e, _id)}>Open team</button>
-                                </footer>
-                            </GroupBody>
-                        </Group>
+                    groups.map((group, i) => (
+                        <GroupInfo key={group._id} group={group} toggle={toggle} setShow={setShow} index={i} />
+
                     ))
                 }
             </Groups>
         </ChatGroup>
+    )
+}
+
+const GroupInfo = ({ group, toggle, setShow, index }) => {
+    const { getItem } = useLocalStorage();
+    const [loading, setLoading] = useState(false);
+
+    let userdata = getItem(KEY);
+    const { generalState: { isMobile }, consoleFunctions: { joinGroup, fetchUserGroupstatus, fetchUserGroups } } = useAuth();
+
+    let [userJoined, setUserJoined] = useState(false);
+
+    //   const userGroupStatus = useQuery(["fetch user groups file", group._id], () => fetchUserGroupstatus(userdata.token, group._id), {
+    //     onSuccess: (res) => {
+    //         console.log(res)
+    //     }
+    // })
+
+    const userGroups = useQuery(["fetch user groups", group._id], () => fetchUserGroups(userdata.token, group._id), {
+        onSuccess: ({ data }) => {
+            console.log(data.joindGroups)
+            console.log({ userdata });
+            console.log("user joined", data.joindGroups.map(d => d.studenId).indexOf(userdata.id));
+            setUserJoined(data.joindGroups.map(d => d.studenId).indexOf(userdata.id) >= 0 && data.joindGroups.map(d => d.groupId).indexOf(group._id) >= 0 ? true : false)
+        }
+    })
+    console.log({ group });
+
+    const joinGroupBtn = async (id, classId) => {
+        setLoading(true)
+        try {
+            // console.log("token", userdata?.token);
+            // console.log("id", id);
+            const { data } = await joinGroup(userdata?.token, id, classId)
+            console.log({ data });
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    return (
+        <Group >
+            <GroupTop>
+                <h2>{group.title}</h2>
+                <span onClick={e => toggle(e, index)}>
+                    <AiOutlineMore />
+                    {/* <GroupDropdown $show={showActions ? true : false}>
+                    <li>Edit</li>
+                    <li>Archive</li>
+                </GroupDropdown> */}
+                </span>
+            </GroupTop>
+            <GroupBody>
+                <h3>{group.title}</h3>
+                <p className="restricted_line">{group.description}</p>
+                <footer>
+                    <span>{group.students} participants</span>
+                    {/* <button onClick={e => joinGroupBtn(e, group._id, group)}>Open team</button> */}
+
+                    {userJoined ?
+                        <button >
+                            <Link to={`/student/console/myclasses/mail/group/${group._id}`}>
+                            {/* <Link to={`chat`}> */}
+                                Open team
+                            </Link>
+
+                        </button>
+                        :
+                        loading ? (
+                            <button className="button button-md log_btn w-100 mt-3"
+                                disabled={loading}
+                            >
+                                <div className="spinner-border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </div>
+                            </button>
+                        ) :
+                            <button onClick={() => joinGroupBtn(group._id, group)}>Join team</button>
+
+
+                    }
+                </footer>
+            </GroupBody>
+        </Group>
     )
 }
 
@@ -952,6 +964,76 @@ function Modal({ setShow }) {
         </ModalContainer>
     )
 }
+
+
+export function GroupContent(){
+    const {getItem} = useLocalStorage();
+    const {groupID} = useParams()
+    const userdata = getItem(KEY)
+    const {teacherConsoleFunctions: { sendMessage, fetchMessages}} = useAuth()                      
+    const [messageList, setMessageList] = useState([])
+
+    const [body, setBody] = useState("")
+
+    const queryClient = useQueryClient()
+    const fetchGroupMessages = useQuery(["group message", groupID, userdata?.token], ()=>fetchMessages(userdata.token, groupID), {
+        onSuccess: (res)=> {
+            setMessageList(res.data)
+
+        }
+    })
+
+    const mutation = useMutation(([usertoken, groupId, data]) => sendMessage(usertoken, groupId, data), {
+        onSuccess: (res)=> {
+            console.log(res)
+            setMessageList([...messageList, res.data])
+            queryClient.invalidateQueries("group message")
+        },
+        onError: (err)=> console.error(err)
+    })
+    
+    
+    function handleChange(e){
+        setBody(e.target.value)
+    }
+
+    function send(e){
+        e.preventDefault();
+        mutation.mutate([userdata.token, groupID, {body}])
+        setBody("")
+
+    }
+    return (
+        <ContentContainer>
+            <GroupChat>
+                <SenderContainer>
+                    <Title>
+                        <h4>Group name</h4>
+                    </Title>
+                    <ChatBox>
+                        {
+                            messageList?.map(item=>(
+                                <ChatContent {...item} key={item._id} />
+                            ))
+                        }
+                    </ChatBox>
+                    <Sender>
+                        <input type="text" name="msg" id="msg" className="form-control" onChange={handleChange} value={body} />
+                        <Send>
+                            <i>
+                                <MdSend size="1.5rem" onClick={send} color="var(--theme-blue)" />
+                            </i>
+                        </Send>
+                    </Sender>
+                </SenderContainer>
+            </GroupChat>
+            <StudentList>
+                <ChatAside />
+            </StudentList>
+        </ContentContainer>    
+    )
+}
+
 
 
 export default StudentChatModule;

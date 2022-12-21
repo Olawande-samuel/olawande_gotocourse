@@ -158,6 +158,8 @@ export const VideoWrapper = styled.div`
             height: 100%;
             object-fit: cover;
             border: 1px solid #484848;
+            -webkit-transform: scaleX(-1);
+            transform: scaleX(-1);
 
         }
     }
@@ -229,6 +231,8 @@ export const StreamWrapper = styled.div`
             height: 100%;
             object-fit: cover;
             border: 1px solid #484848;
+            -webkit-transform: scaleX(-1);
+            transform: scaleX(-1);
 
         }
     }
@@ -279,6 +283,8 @@ export const UserCallBlock = styled.div`
         object-fit: cover;
         border-radius: 10px;
         border: 1px solid #484848;
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
 
     }
 

@@ -110,6 +110,14 @@ const Navbar = ({ background }) => {
                   
                   >Home</Link>
                 </li>
+                <li className="nav-item holder">
+                  <a href="http://skillazio.com/" className="link nav-link courses me-4"
+                   style={{
+                    color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
+                  }}
+                  
+                  >Skillazio</a>
+                </li>
             {(location.pathname.split("/")[1] === "" || celebRoute) && (
               <>
                 <li className="nav-item holder">

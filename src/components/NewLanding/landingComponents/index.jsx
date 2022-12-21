@@ -1077,7 +1077,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
             <img src={bootcampImg} alt="" />
             <div className="up_content">
                 <div>
-                    <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title.toLowerCase()}</h5>
+                    <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title}</h5>
                     <div className="d-flex justify-content-between">
                         <small>{duration}</small>
                         <small>$ {packages.length > 0 ? packages[0].price : price}</small>
@@ -1306,7 +1306,7 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
             <img src={bootcampImg} alt="" />
             <div className="up_content">
                 <div>
-                    <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title.toLowerCase()}</h5>
+                    <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title}</h5>
                     <div className="d-flex justify-content-between">
                         <small>{duration}</small>
                         <small>$ {packages.length > 0 ? packages[0].price : price}</small>

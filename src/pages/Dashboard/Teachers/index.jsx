@@ -900,16 +900,17 @@ export const Teachers = ({ children, isMobile, userdata, notification, header, l
       (async() => {
         try{
           const res = await fetchNotifications(userData?.token);
-          const {message, success, statusCode} = res;
-          if(!success) throw new AdvancedError(message, statusCode);
-          const {data} = res
-          console.log({data})
           console.log({res})
-          if(data.length > 0) {
-            const unread = data.filter((notification)=>notification.isRead !== true)
-            setGeneralState({...generalState, notifications: unread.length})
-          }else {
-            setGeneralState({...generalState, notifications: 0})
+          if(res){
+            const {message, success, statusCode} = res;
+            if(!success) throw new AdvancedError(message, statusCode);
+            const {data} = res
+            if(data.length > 0) {
+              const unread = data.filter((notification)=>notification.isRead !== true)
+              setGeneralState({...generalState, notifications: unread.length})
+            }else {
+              setGeneralState({...generalState, notifications: 0})
+            }
           }
         }catch(err){
           toast.error(err.message, {
@@ -950,6 +951,7 @@ const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUn
     
     if(res.data?.statusCode === 2 ){
       localStorage.clear()
+      return
     }
     if(res.data?.statusCode !== 1){
       toast.error(res.data?.message);
@@ -963,6 +965,8 @@ const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUn
 })
 
 
+  // for create 
+  const isCreator = true
   return (
     <GuardedRoute>
       <div className={clsx.teachers}>
@@ -979,7 +983,10 @@ const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUn
         />
         <Sidebar isMobile={isMobile} />
         <div className={clsx.teachers_main}>
-          <Navbar content={teacher}  toggleSidebar={toggleSidebar} header={header} />
+          {
+            !isCreator &&
+            <Navbar content={teacher}  toggleSidebar={toggleSidebar} header={header} />
+          }
           {children}
         </div>
         {loading && <Loader />}

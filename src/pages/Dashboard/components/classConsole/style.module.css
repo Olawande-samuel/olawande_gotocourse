@@ -292,6 +292,12 @@
     gap: 2rem;
     border-radius: 10px;
     width: min(240px, 300px);
+    position: relative;
+}
+.live_card > div:first-child {
+    position: absolute;
+    right: 10px;
+    /* top: 10px; */
 }
 
 .live_card h6 {
