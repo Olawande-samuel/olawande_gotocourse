@@ -68,7 +68,7 @@ export function Form({type}){
                       });
                       updateItem(VERIFICATION_KEY, {...userdata, isVerified: true});
                       setTimeout(() => {
-                            data.isSchool ? 
+                            data?.userType === "schools" ? 
                             // for create
                             navigate(`school/admin`)
                             :

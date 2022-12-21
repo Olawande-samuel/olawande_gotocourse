@@ -966,7 +966,7 @@ const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUn
 
 
   // for create 
-  const isCreator = true
+  const isCreator = userdata?.userType === "schools"
   return (
     <GuardedRoute>
       <div className={clsx.teachers}>

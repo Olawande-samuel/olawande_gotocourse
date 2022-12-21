@@ -709,11 +709,11 @@ function App() {
                 <Route path="create" element={<CreatePage />} />
                 <Route path="manage" element={<ManagePage />} />
                 <Route path="pricing" element={<Pricing />} />
-                <Route path="enterprise-login" element={<EnterPriseLogin />} />
-                <Route path="enterprise-signup" element={<EnterpriseSignUp />} />
-                <Route path="enterprise-forgot" element={<EnterPriseForgotPassword />} />
-                <Route path="enterprise-verify" element={<EnterpriseVerification />} />
-                <Route path="enterprise-onboarding" element={<EnterpriseOnboarding />} />
+                <Route path="login" element={<EnterPriseLogin />} />
+                <Route path="signup" element={<EnterpriseSignUp />} />
+                <Route path="forgot" element={<EnterPriseForgotPassword />} />
+                <Route path="verify" element={<EnterpriseVerification />} />
+                <Route path="onboarding" element={<EnterpriseOnboarding />} />
                 
                 <Route path="admin">
                   <Route path="" element={<AdminDashboard />} />

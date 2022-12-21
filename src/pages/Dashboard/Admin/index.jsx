@@ -5236,7 +5236,7 @@ export const Admin = ({ children, header }) => {
   };
 
   // for Create
-  const isCreator = true
+  const isCreator = userdata?.userType === "schools"
 
   return (
     

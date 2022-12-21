@@ -59,7 +59,7 @@ const Sidebar = ({}) => {
     const [loading, setLoading] = useState(false)
     
     // for create. value should be gotten from localStorage
-    const isCreator = true
+    const isCreator = userdata?.userType === "schools"
 
     let data = []
 

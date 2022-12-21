@@ -4,7 +4,7 @@
 // }
 
 const  CONFIG = {
-    socketUrl: "https://api.gotocourse.us",
+    socketUrl: "https://api.gotocourse.com",
     peerUrl: "api.gotocourse.us"
 }
 
