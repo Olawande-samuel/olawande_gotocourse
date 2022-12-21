@@ -18,6 +18,7 @@ import { useAuth } from '../../../../contexts/Auth';
 import { KEY } from '../../../../constants';
 import { useLocalStorage } from '../../../../hooks';
 import { toast } from 'react-toastify';
+import { formatDiagnosticsWithColorAndContext } from 'typescript';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -108,9 +109,9 @@ export default function Quiz() {
     let searchData = search.split("=").reverse()[0]
     const contentId = searchParams.get("content")
 
-    useEffect(()=>{
-        setFormData({...formData, classId, contentId: searchData})
-    },[classId, searchData])
+    // useEffect(()=>{
+    //     setFormData({...formData, classId, contentId: searchData})
+    // },[classId, searchData])
  
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -142,14 +143,14 @@ export default function Quiz() {
 
     const getContentfromQuery = useQuery(["quiz content", contentId, userdata?.token], () => fetchQuiz(userdata.token, searchData), {
         onSuccess: (res)=> {
-
-            if(res.data.length > 0){
-                let deadline = res.data[0].endDate?.split("T")[0]
-                setFormData({...res.data[0], endDate: deadline})
+            console.log("fetched")
+            if(res.data?.length > 0){
+                let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
+                setFormData({...res.data[res.data.length -1], endDate: deadline})
             }else{
                 setFormData({
-                    classId:"",
-                    contentId:"",
+                    classId,
+                    contentId:searchData,
                     title: "",
                     endDate: "",
                     endTime: "",
@@ -328,9 +329,7 @@ export default function Quiz() {
                 </div> */}
 
                 <TabPanel value={value} index={0}>
-
                     <main className='quiz__contentbody'>
-
                         {
                             getContentfromQuery.isLoading ? <div className="spinner-border text-primary">
                                 <div className="visually-hidden">Loading...</div>
@@ -392,7 +391,7 @@ export default function Quiz() {
                             <div className="display">
                                 {
                                     formData?.questions?.map((x, id) => (
-                                        <>
+                                        <div key={id}>
                                             <Accordion key={id} >
                                                 <Accordion.Item eventKey={id} className="accord__body">
                                                     <Accordion.Header className="accord__header"> Question {id + 1}</Accordion.Header>
@@ -480,7 +479,7 @@ export default function Quiz() {
                                                                         x.showAnswer && (
                                                                             <div className='content__quiz'>
                                                                                 <input type="text" id='' name="answer" placeholder='Explain the correct Answer '
-                                                                                    onChange={e => handleInputChange(e, id)}
+                                                                                    onChange={e => handleInputChange(e, id)} 
                                                                                 />
                                                                             </div>
                                                                         )
@@ -567,7 +566,7 @@ export default function Quiz() {
                                                
                                             </div>
 
-                                        </>
+                                        </div>
                                     ))}
 
 
@@ -603,7 +602,7 @@ export default function Quiz() {
                 </TabPanel>
 
                 <TabPanel value={value} index={1}>
-                    Result
+                    <ResultPanel />
                 </TabPanel>
 
             </Box>
@@ -612,5 +611,14 @@ export default function Quiz() {
 
         </div>
 
+    )
+}
+
+
+function ResultPanel(){
+    return (
+        <section>
+            <p className="text-center lead">No one has attempted the quiz yet</p>
+        </section>
     )
 }
