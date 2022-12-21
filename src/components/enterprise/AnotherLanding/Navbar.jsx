@@ -9,6 +9,10 @@ import { useAuth } from "../../../contexts/Auth";
 import { useLocalStorage } from "../../../hooks";
 import { KEY } from "../../../constants";
 import { FaRegUser } from "react-icons/fa";
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { useState } from "react";
 
 const Container = styled.div`
 color: #0C1825;
@@ -169,6 +173,15 @@ z-index: 1000;
 const Navbar = ({ toggleSidebar }) => {
     const { setGeneralState } = useAuth();
     const { getItem } = useLocalStorage();
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const value = getItem(KEY);
     const location = useLocation();
@@ -185,10 +198,19 @@ const Navbar = ({ toggleSidebar }) => {
 
                 <ul>
                     <div className="firstitems">
-                        <li><Link to={`/create`}>Create</Link></li>
-                        <li><Link to={`/manage`}>Manage</Link></li>
+
+                        <div className="dropdown">
+                            <button className="dropbtn">Create on Gotocourse</button>
+                            <div className="dropdown-content">
+                                <Link to={`/create`}>Create</Link>
+                                <Link to={`/manage`}>Manage</Link>
+                                <Link to={`/pricing`}>Pricing</Link>                            
+                            </div>
+                        </div>
+
+
                         <li><Link to={`/goto`}>Learn with Gotocourse</Link></li>
-                        <li><Link to={`/pricing`}>Pricing</Link></li>
+                        <li></li>
                     </div>
 
                     <div className="seconditems">

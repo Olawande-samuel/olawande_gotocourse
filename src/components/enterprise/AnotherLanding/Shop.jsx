@@ -28,7 +28,7 @@ padding: 4rem 1rem;
         h4{
             font-family: 'Raleway';
             font-style: normal;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 34px;
             padding: 1rem 0;
             // line-height: 36px;

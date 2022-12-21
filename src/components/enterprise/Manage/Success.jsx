@@ -14,7 +14,7 @@ gap: 2rem;
     text-align: center;
     font-family: 'Raleway';
     font-style: normal;
-    font-weight: 700;
+    font-weight: 800;
     font-size: clamp(2.1rem, 2.1429rem + .5357vw, 2.5rem);
     // line-height: 54px;
     color: #1B1F29;
