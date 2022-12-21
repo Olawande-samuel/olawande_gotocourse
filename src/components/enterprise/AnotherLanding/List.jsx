@@ -10,7 +10,7 @@ import lib from '../../../images/landing/lib.svg'
 
 const Container = styled.div`
 width: 100%;
-padding: 5rem 0;
+padding: 3rem 0;
 
 h5{
     padding: 2rem; 
@@ -27,7 +27,7 @@ h5{
 
     .list__content{
         width: 100%;
-        padding:10rem 2rem ;
+        padding:3rem 2rem ;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 1rem;

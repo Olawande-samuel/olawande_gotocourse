@@ -38,6 +38,7 @@ gap: 2rem;
 .reviewcontent{
     display: flex;
     gap: 1rem;
+    // width: 100%;
 
 
     .reviewdiv{
@@ -47,7 +48,7 @@ gap: 2rem;
         border-radius: 20px;
         padding: 1rem;
         position: relative;
-        min-height: 45rem;
+        min-height: 50rem;
         display: flex;
         flex-direction: column;
         gap: 1rem;
@@ -140,18 +141,7 @@ gap: 2rem;
     
 }
 
-@media (max-width: 912px){
-    .reviewcontent{
-        // flex-direction: column;
 
-        .reviewdiv{
-            min-height: 30rem;
-            // padding: 2rem .5rem;
-            padding: 2rem .5rem;
-
-        }
-    }
-}
 
 @media (max-width:768px){
     .reviewcontent{
@@ -168,7 +158,25 @@ gap: 2rem;
 }
 
 
-.
+@media (max-width:1024px){
+    .reviewcontent{
+
+        .reviewdiv{
+            min-height: 55rem;
+            padding: 2rem .5rem;
+
+        }
+    }
+
+   
+}
+
+// @media (max-width: 912px){
+//     .reviewcontent{
+//         display: grid;
+//         grid-template-columns: repeat( 2, 1fr);
+//     }
+// }
 `
 const Price = () => {
     return (
