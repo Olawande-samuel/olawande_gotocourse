@@ -3293,11 +3293,13 @@ td span {
 
 .dropdown .dropbtn {
   font-size: 16px;
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 500;
   border: none;
   outline: none;
   padding: 14px 0;
   background-color: inherit;
-  font-family: inherit;
   margin: 0;
   position: relative;
 }
@@ -3322,6 +3324,10 @@ td span {
   text-decoration: none;
   display: block;
   text-align: center;
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
 }
 
 .dropdown-content a:hover {
