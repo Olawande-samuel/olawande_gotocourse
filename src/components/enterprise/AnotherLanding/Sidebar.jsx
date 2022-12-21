@@ -73,7 +73,7 @@ const SideBar = ({showSidebar, toggleSidebar}) => {
 
             <li><Link to={`/create`}>Create</Link></li>
             <li><Link to={`/manage`}>Manage</Link></li>
-            <li><Link to={`/goto`}>Learn with Gotocourse</Link></li>
+            <li><Link to={`/learn-with-gotocourse`}>Learn with Gotocourse</Link></li>
             <li><Link to={`/pricing`}>Pricing</Link></li>
             <li>
                 <button className="first__btn"><Link to={`/enterprise-login`}>Sign in</Link> </button>
