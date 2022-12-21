@@ -29,7 +29,7 @@ const EnterpriseSignUp = () => {
     email: "",
     password: "",
     retype_password: "",
-    userType: "schools",
+    userType: "school",
     fullname: "",
   });
   const [focus, setFocus] =useState(false)
