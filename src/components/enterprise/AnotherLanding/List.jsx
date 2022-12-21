@@ -30,16 +30,16 @@ h5{
         padding:3rem 2rem ;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
+        gap: 2rem 1rem;
        
     
         .list__item{
             // border: 2px solid red;
-            padding: 1rem 0;
+            padding-left: 5rem;
             color: var( --theme-blue);
             display: flex;
             align-items: center;
-            justify-content: center;
+            // justify-content: center;
     
             span{
                 font-size: 1.3rem;

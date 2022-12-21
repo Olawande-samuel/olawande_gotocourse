@@ -27,9 +27,9 @@ padding: 4rem 1rem;
         h4{
             font-family: 'Raleway';
             font-style: normal;
-            font-weight: 700;
-            font-size: 34px;
-            padding: 1rem 2rem;
+            font-weight: 800;
+            font-size: 36px;
+            padding: 1rem 0;
             // line-height: 36px;
             color: #1B1F29;
         }
@@ -78,32 +78,35 @@ padding: 4rem 1rem;
 const Live = () => {
     return (
         <Container className="container">
-             <div className="liveleft">
+            <div className="liveleft">
                 <img src={live} alt="" width={800} />
 
             </div>
 
             <div className="liveright">
-                <h4>Hold unlimited live classes</h4>
+                <h4>
+                    <span>Hold unlimited live</span>
+                    <span className="d-block">classes</span>
+                </h4>
                 <div>
-                    <AiOutlineCheck style={{ color: "#175fff", marginRight:"1rem" }} /><span> Create live classes of any size</span>
+                    <AiOutlineCheck style={{ color: "#175fff", marginRight: "1rem" }} /><span> Create live classes of any size</span>
                 </div>
                 <div>
-                    <AiOutlineCheck style={{ color: "#175fff", marginRight:"1rem" }} /> <span> Record live classes</span>
+                    <AiOutlineCheck style={{ color: "#175fff", marginRight: "1rem" }} /> <span> Record live classes</span>
                 </div>
                 <div>
-                    <AiOutlineCheck style={{ color: "#175fff", marginRight:"1rem" }} /> <span> Share screen</span>
+                    <AiOutlineCheck style={{ color: "#175fff", marginRight: "1rem" }} /> <span> Share screen</span>
 
                 </div>
 
                 <div>
-                    <AiOutlineCheck style={{ color: "#175fff", marginRight:"1rem" }} /> <span> create collaborative online <br /> learning experience</span>
+                    <AiOutlineCheck style={{ color: "#175fff", marginRight: "1rem" }} /> <span> create collaborative online <br /> learning experience</span>
 
                 </div>
 
             </div>
 
-           
+
 
         </Container>
     )
