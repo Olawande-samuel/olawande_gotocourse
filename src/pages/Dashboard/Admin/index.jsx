@@ -5234,7 +5234,12 @@ export const Admin = ({ children, header }) => {
     title: "ADMIN",
     logo: <FaUserLock size="2.5rem" color="#0C2191" />,
   };
+
+  // for Create
+  const isCreator = true
+
   return (
+    
     <GuardedRoute>
       <div className={clsx["admin"]}>
         <ToastContainer
@@ -5250,11 +5255,14 @@ export const Admin = ({ children, header }) => {
         />
         <Sidebar isMobile={isMobile} />
         <div className={clsx["admin_main"]}>
-          <Navbar
-            content={admin}
-            toggleSidebar={toggleSidebar}
-            header={header}
-          />
+          {
+            !isCreator  &
+            <Navbar
+              content={admin}
+              toggleSidebar={toggleSidebar}
+              header={header}
+            />
+          }
           {children}
         </div>
         {loading && <Loader />}

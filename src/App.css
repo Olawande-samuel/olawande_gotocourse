@@ -3338,3 +3338,8 @@ td span {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+/* CREATOR */
+
+.creator {
+  background-color: #000F62 !important;
+}
