@@ -209,7 +209,7 @@ const Navbar = ({ toggleSidebar }) => {
                         </div>
 
 
-                        <li><Link to={`/goto`}>Learn with Gotocourse</Link></li>
+                        <li><Link to={`/learn-with-gotocourse`}>Learn with Gotocourse</Link></li>
                         <li></li>
                     </div>
 

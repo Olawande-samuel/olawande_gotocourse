@@ -281,7 +281,7 @@ function App() {
                 <Route path="enterprise-onboarding" element={<EnterpriseOnboarding />} />
                 <Route path="creator-landing" element={<Creator />} />
                
-                <Route path="goto" element={<Landing />} />
+                <Route path="Learn-with-gotocourse" element={<Landing />} />
                 <Route path="login" element={<Login />} />
                 <Route path="signup" element={<SignUp />} />
                 <Route path="email" element={<Email />} />
