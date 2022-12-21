@@ -35,6 +35,9 @@ z-index: 1000;
     width: 100%;
  
 
+    .hamburger{
+        display:block;
+    }
 
 
     .navbarlogo{
@@ -112,7 +115,7 @@ z-index: 1000;
 
 
 
-@media (min-width: 780px){
+@media (min-width: 900px){
     .navcontainer{
         ul{
             display: flex;

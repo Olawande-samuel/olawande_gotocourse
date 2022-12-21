@@ -255,10 +255,10 @@ const ComingSoon = lazy(() => import("./pages/Classes/Available/ComingSoon"));
 //MENTORS
 // const {MentorsProfile} = lazy(() => import("./pages/Dashboard/Mentors"));
 
-console.log("window", window.location.href.includes("3000"))
+console.log("window", window.location.href.includes("gotocourse"))
 console.log(process.env.NODE_ENV)
 
-const webLocation = window.location.href.includes(".gotocourse.")
+const webLocation = window.location.href.includes("gotocourse")
 function App() {
 
   if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development' || webLocation ){
@@ -715,7 +715,8 @@ function App() {
           <Suspense fallback={<Loader />}>
             <Routes>
               <Route path="/" element={<Out />}>
-                <Route index  element={ <p>Hello this is gotocourse create</p> } />
+              <Route index element={<Creator />} />
+                {/* <Route   element={ <p>Hello this is gotocourse create</p> } /> */}
               </Route>
             </Routes>
           </Suspense>
