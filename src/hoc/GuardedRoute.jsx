@@ -13,8 +13,38 @@ const GuardedRoute = ({children}) => {
     const route = location.pathname.split("/")[1];
     useEffect(() => {
     }, [])
+
+    
     
 
+    // for create
+    let isCreator = true
+
+    console.log({route})
+    if(isCreator){
+        let schoolRoute = location.pathname 
+
+        if(value.token){
+            if(schoolRoute.includes("school/teacher") || schoolRoute.includes("school/student") || schoolRoute.includes("affiliate") || schoolRoute.includes("school/change-password") || schoolRoute.includes( "mentor")){
+                if(value.isVerified){
+                    if(schoolRoute.includes("teacher") && !value.canTeach){
+                        localStorage.clear()
+                        return <Navigate to="/school/login" />
+                    } 
+                    return children
+                }
+            }else if(schoolRoute.includes("school/admin")) {
+                return children
+            }
+        }else {
+    
+            if(schoolRoute.includes('school/admin')){
+                return <Navigate to="/school/admin/login" />
+            }
+            else return <Navigate to="/school/login" />;
+        }
+        return
+    }
 
     if(value.token){
         if(route === "teacher" || route === "student" || route === "affiliate"|| route === "change-password" || route === "mentor"){

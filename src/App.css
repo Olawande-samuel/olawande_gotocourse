@@ -3278,3 +3278,10 @@ td span {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
+
+
+/* CREATOR */
+
+.creator {
+  background-color: #000F62 !important;
+}
