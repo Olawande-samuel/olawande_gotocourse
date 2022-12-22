@@ -8,7 +8,7 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 width: 100%;
-padding: 6rem 0;
+padding: 6rem 1rem;
 
 .tleft{
     flex: .4;

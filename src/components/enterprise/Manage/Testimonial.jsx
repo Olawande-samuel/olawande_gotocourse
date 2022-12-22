@@ -4,9 +4,12 @@ import what from '../../../images/manage/testimonial.png'
 const Container = styled.div`
 padding: 2rem 1rem;
     color: #1B1F29;
+    // border: 2px solid red;
+
 
     .joincontent{
         display: flex;
+        // border: 2px solid yellow;
         gap: 3rem;
         justify-content: space-between;
         align-items: center;
@@ -15,7 +18,7 @@ padding: 2rem 1rem;
             flex: .5;
             display: flex; 
             flex-direction: column;
-            1gap: 2rem;
+            gap: 2rem;
     
             h4{
                 font-family: 'Raleway';
@@ -58,8 +61,8 @@ padding: 2rem 1rem;
     
         .joinleft{
             flex: .5;
-            // border: 2px solid red;
-            text-align: right;
+            // border: 2px solid blue;
+            text-align: left;
             img{
                 width: 500px;
             }
