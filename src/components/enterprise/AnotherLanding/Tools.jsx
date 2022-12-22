@@ -9,6 +9,7 @@ justify-content: space-between;
 align-items: center;
 width: 100%;
 padding: 6rem 1rem;
+gap: 2rem;
 
 .tleft{
     flex: .4;
