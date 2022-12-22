@@ -1,0 +1,537 @@
+:root {
+    --primary: #f5f5f5;
+    --black: rgba(0, 0, 0, 1);
+    --white: #fff;
+    --obsidian: #070f18;
+    --textColorDark: #081131;
+    --textColorLight: #5e5b5b;
+    --textColorLighter: #9F9F9F;
+    --btnColor: rgb(12, 33, 145);
+    --accentColor: #023047;
+    --textBlue: #0C2191;
+    --greenish: #023047;
+    --secondary: #2F80ED;
+    --gray: #9DA6BA;
+    --info: #5A63F7;
+    --green: #037615;
+    --mobile: 425px;
+    --tablet: 768px;
+    --laptop: 1024px;
+}
+
+
+.teachers {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.teachers_main {
+    height: 100vh;
+    flex: 1;
+    background-color: var(--primary);
+    padding: .5rem;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+@media (min-width: 500px ){
+    .teachers_main {
+        padding: 30px;
+        padding-bottom: 8px;
+    }
+}
+.teachers_topbar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.teachers_header {
+    /* display: flex;
+    align-items: center;
+    margin-bottom: 20px; */
+}
+
+.dashboard_courses{
+    gap: clamp(1rem, 0.7017rem + 1.4915vw, 2.1rem);
+    flex-wrap: wrap;
+    margin-top: 3rem;
+}
+.dashboard_courses--left {
+    flex: 2;
+    background: rgba(51, 255, 47, 0.06);
+    padding: 1.5rem  clamp(0.8rem, 0.1714rem + 3.1429vw, 3rem);
+    border-radius:10px;
+    min-height: 300px;
+    /* overflow: scroll; */
+}
+
+.dashboard_courses--right {
+    flex: 1;
+    background: var(--dashboard-blue);
+    padding: 1.5rem 3rem;
+    border-radius:10px;
+    min-height: 300px;
+}
+.dashboard_courses--left ul,
+.dashboard_courses--right ul{
+    list-style:none;
+    padding-left: 0;
+    font-family: 'Inter', sans-serif;
+}
+.dashboard_courses--left ul li,
+.dashboard_courses--right ul li{
+   padding-block: .5rem;
+
+   color: #262424;
+}
+
+.dashboard_courses--right h6 , .dashboard_courses--left h6{
+    color: var(--theme-blue);
+    margin-bottom: 2rem;
+    font-size: 23px;
+}
+.dashboard_class--wrapper{
+    display: flex;
+    align-items:center;
+}
+.dashboard_class--wrapper > div{
+    flex-basis:100%;
+    /* border: 1px solid; */
+}
+/* .dashboard_class--details {
+    width:18ch ;
+} */
+.dashboard_class--details p:first-child {
+    font-weight: bold;
+    font-size: 17px;
+}
+.dashboard_class--action {
+    gap: 1rem;
+}
+.dashboard_class--action button {
+    padding: 4px clamp(1.25rem, 0.7143rem + 2.6786vw, 3.125rem) !important;
+    font-size: 14px;
+}
+.dashboard_class--action .completed {
+    border-color:rgba(201, 209, 255, 1) ;
+    color: rgba(0, 130, 35, 1);
+}
+.dashboard_class--action .live {
+    color:#fff;
+    background-color: rgba(0, 130, 35, 1);
+}
+.teachers_profile {
+    background-color:var(--white);
+    height: 80vh;
+    padding: min(.5rem, 40px);
+    border-radius: 10px;
+    width: 100%;
+    overflow-y: scroll;
+}
+.teachers_profile_top {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20;
+}
+.teachers_profile_top_img {
+    width: 120px;
+    height: 120px;
+    margin-right: 40px;
+}
+.teachers_profile_top_button {
+    background-color:var(--info);
+    color: var(--white);
+    border: none;
+    padding: 10px 30px;
+    border-radius: 10px;
+}
+
+.teachers_profile_top_button svg {
+    /* margin-right: 5px; */
+}
+.teachers__header {
+    font-size: 1rem;
+    color: var(--textColorDark);
+}
+.teachers__paragraph {
+    line-height: 2;
+    font-size: 1rem;
+    letter-spacing: 0.6px;
+    margin-top: 20px;
+}
+.classes_card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0px;
+    width: 100%;
+}
+.classes_card_first {
+    display: flex;
+    align-items: center;
+}
+.first_avatar {
+    padding: 10px 5px;
+    margin-right: 20px;
+    border-radius: 10px;
+    color: var(--white);
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.first_meta {
+    display: flex;
+    padding-top: "1rem";
+    flex-direction: column;
+    justify-content: 'center'
+}
+
+.first_meta h5 {
+    font-weight: normal;
+}
+.classes_card_second {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.2rem;
+}
+
+.classes_card_second span {
+    margin: 0px 10px
+}
+
+.classes_card_third {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.third_btn {
+    border:1px solid var(--info);
+    color: var(--secondary);
+    border-radius: 10px;
+    margin: 0px 15px;
+    padding: 5px 20px;
+    font-size: 0.7rem;
+    background-color: var(--white);
+}
+.third_btn_live {
+    background-color: var(--green);
+    color: var(--white);
+    border: none;
+}
+
+
+.upload__file_box {
+    width: 80%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--textColorLighter);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.upload__file_box:hover {
+    background-color:rgba(208, 204, 204, 0.2)
+}
+
+.upload__file_box p {
+    margin: 0px;
+    margin-top: 15px;
+    color: var(--secondary);
+}
+
+.user__info_card{
+    height: 90px;
+    cursor: pointer;
+ }
+ .user__info_card td{
+    height: 90px;
+    letter-spacing: var(--letterSpacing);
+    text-align: center
+ }
+@media(max-width: 400px) {
+    .teachers_topbar h1 {
+        display: none;
+    }
+}
+
+.edit__profile {
+    width:min( 100% - .8rem, 700px)
+}
+
+.edit__profile h2 {
+    font-weight: normal;
+    font-size: 1.5rem;
+    margin-bottom: 50px;
+}
+
+.edit__picture {
+    margin: 20px 0px;
+    display: flex;
+    align-items: center;
+}
+
+.edit__picture span {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(217, 217, 217, 0.39);
+    border-radius: 50%;
+    margin-right: 1rem
+}
+
+.edit__picture span svg {
+    font-size: 3rem;
+    color: var(--white);
+}
+
+.edit__picture p {
+    color: var(--textBlue);
+}
+
+.edit__picture img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 1rem;
+}
+
+.form_group {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 20px 0px;
+}
+
+.form_group label {
+    margin-bottom: 10px;
+    color: var(--textBlue)
+}
+
+.form_group select {
+    outline: none;
+    padding: 12px;
+    border: 1px solid rgba(208, 204, 204, 0.5);
+    border-radius: 5px;
+    text-indent: 40px;
+    background-color: var(--primary);
+}
+
+.form_group textarea{
+    outline: none;
+    border: 1px solid rgba(208, 204, 204, 0.5);
+    padding: 4px;
+    border-radius: 5px;
+    text-indent: 40px;
+    background-color: var(--primary);
+}
+
+.edit__profile form > div {
+    margin: 20px 0px;
+}
+
+.edit__profile form div label {
+    color: var(--textBlue);
+    margin: 5px;
+}
+
+.edit__profile form div input {
+    border: 1px solid rgba(208, 204, 204, 0.5);;
+    background-color: var(--primary);
+}
+
+
+.teachers_table {
+    width: 100%
+}
+
+/* .admin__teachers h1{
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 30px;
+} */
+
+.teachers_table {
+    border: none;
+}
+
+.teachers_table thead {
+    height: 70px;
+    text-align: center;
+}
+
+.teachers_table tbody{
+    width: 100%;
+    border: none;
+}
+
+.teachers__profile_info {
+    margin: 30px 0px;
+    width: 100%;
+}
+
+.teachers__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 25px 0px;
+    letter-spacing: 0.4px;
+}
+
+.teachers__info_title {
+    color: var(--textColorLighter);
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.teachers__info_content {
+    font-size: 1.15rem;
+}
+
+
+.syllabus_container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(100, 149, 237, .2);
+}
+
+.syllabus_container h5 {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+.syllabus_container p {
+    font-size: 0.7rem;
+    letter-spacing: 0.4px;
+    color: var(--textColorLight);
+    margin-bottom: 0;
+}
+
+
+
+/* REQUESTS */
+.requests {
+    padding: 20px;
+}
+
+
+.requests h2 {
+    font-weight: 500;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+
+.requests form {
+    width: min(100% - 0.5rem, 480px );
+}
+
+
+.requests form label {
+    margin-top: 20px;
+}
+
+.requests_button {
+    margin: 15px 0px;
+    width: 100%;
+}
+
+
+.requests_button button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    color: var(--primary);
+    background-color: var(--secondary);
+}
+
+/* EARNINGS */
+.earnings_card_wrapper{
+    display: flex;
+    flex-wrap:wrap;
+    gap: 1.5rem;
+
+}
+.earnings_card_wrapper > div {
+    flex: 1 1 30%;
+}
+
+
+/* CLASS CONSOLE */
+
+
+.class_con_cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
+    overflow: hidden;
+    grid-auto-rows: 250px;
+    gap: 1.5rem;
+    /* justify-content:space-around; */
+    padding: .5rem;
+    
+}
+
+@media screen and (min-width: 1400px) {
+    .class_con_cards {
+        grid-template-columns: repeat(4, 230px);
+        justify-content: space-evenly;
+        gap: 1rem;
+    }
+}
+
+@media screen and (max-width:768px){
+    .class_con_cards {
+        grid-template-columns: repeat(2, 280px);
+    }
+}
+
+
+@media screen and (max-width:500px){
+    .class_con_cards {
+        grid-template-columns: min(100%, 280px);
+        justify-content:center;
+    }
+}  
+
+.class_con_card {
+    /* width: min(100%, 320px); */
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 1rem;
+    border: 1px solid #eee;
+    box-shadow: 10px 10px 5px 0px rgba(240,240,240,0.75);
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(240,240,240,0.75);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(240,240,240,0.75);
+}
+.class_con_card h5{
+    font-weight: 700;
+}   
+.class_con_img {
+    max-height: 150px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.class_con_button {
+    border: none;
+    color: #fff !important; 
+    background: var(--theme-orange) !important;
+    padding: 8px 12px;
+}
