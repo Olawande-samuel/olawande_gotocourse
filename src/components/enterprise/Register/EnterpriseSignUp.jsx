@@ -40,6 +40,7 @@ const EnterpriseSignUp = () => {
 		retype_password: "",
 		userType: "school",
 		fullname: "",
+		organization:""
 	});
 	const [focus, setFocus] = useState(false);
 	const {
@@ -287,13 +288,13 @@ const EnterpriseSignUp = () => {
 						errorMessage="Enter a valid email address"
 					/>
 					<Input
-						label="Organisation"
-						name="organisation"
+						label="Organization"
+						name="organization"
 						type="text"
 						myclassname="email_input"
-						value={data.organisation}
+						value={data.organization}
 						handleChange={handleChange}
-						placeholder="Organisation"
+						placeholder="Organization"
 						required={true}
 					/>
 					<Password
