@@ -59,7 +59,7 @@ const ShortCourses = () => {
     <ClassTypeComponent {...data}>
         <Grid>
             {
-                shorts?.filter(item => item.isActive).map(item => (
+                shorts?.filter(item => item.isActive).slice(0, 4).map(item => (
                     // <TechPreCard {...item} />
                     <Short {...item} all={item} key={item.bootcampId}/>
                 ))

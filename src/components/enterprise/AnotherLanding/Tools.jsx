@@ -84,7 +84,7 @@ const Tools = () => {
                 <h4>Get all the tools you need all-in-one place</h4>
                 <div>
                 <p>Transform your knowledge into a thriving business with the best online course platform for professionals everywhere. Great educators love the use of Gotocourse to teach and engage learners .</p>
-                <Link to={'/'}>Learn more <AiOutlineRight /></Link>
+                {/* <Link to={'/'}>Learn more <AiOutlineRight /></Link> */}
                 </div>
 
             </div>

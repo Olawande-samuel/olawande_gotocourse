@@ -1,10 +1,10 @@
-import React, {useEffect, useRef, useState} from "react";
-import {GoChevronRight} from "react-icons/go"
+import React, { useEffect, useRef, useState } from "react";
+import { GoChevronRight } from "react-icons/go"
 import mentorsBg from "../../../images/landmentors.png"
 import mentorsVid from "../../../images/mentorsVid.png"
-import {GiStarMedal} from "react-icons/gi"
+import { GiStarMedal } from "react-icons/gi"
 import { Link, useNavigate } from "react-router-dom";
-import {useAuth} from "../../../contexts/Auth"
+import { useAuth } from "../../../contexts/Auth"
 import { AdvancedError } from "../../../classes";
 
 // import SwiperCore, { Navigation, Autoplay, Pagination, Scrollbar, A11y } from "swiper";
@@ -99,50 +99,58 @@ import { AdvancedError } from "../../../classes";
 //   );
 // };
 
-export const Card = ({ item,type }) => {
+export const Card = ({ item, type }) => {
   const navigate = useNavigate();
-  const {setGeneralState} = useAuth()
-  
-  function gotoMentorPage(){
+  const { setGeneralState } = useAuth()
+
+  function gotoMentorPage() {
     setGeneralState(old => {
       return {
         ...old,
         teacherProfile: item
       }
-    }) 
-      localStorage.setItem("gotocourse-viewMentor", JSON.stringify(item))
-      navigate(`/lounge/mentors/all/${item.mentorFirstName}-${item.mentorLastName}`)
+    })
+    localStorage.setItem("gotocourse-viewMentor", JSON.stringify(item))
+    navigate(`/lounge/mentors/all/${item.mentorFirstName}-${item.mentorLastName}`)
 
- 
+
   }
   return (
-    <div className="px-1" style={{cursor: "pointer", height:"380px"}} onClick={gotoMentorPage}>
-      <div className="card mentor_image h-100 w-100 position-relative" style={{background:`url(${item?.mentorImg && `${process.env.REACT_APP_IMAGEURL}/${item?.mentorImg} `}), rgba(0, 0, 0, 0.5)`, backgroundRepeat:"no-repeat", backgroundPosition:"top", backgroundSize:"cover"}}>
+    <div className="px-1" style={{ cursor: "pointer", height: "380px" }} onClick={gotoMentorPage}>
+      <div className="card mentor_image h-100 w-100 position-relative" style={{ background: `url(${item?.mentorImg && `${process.env.REACT_APP_IMAGEURL}/${item?.mentorImg} `}), rgba(0, 0, 0, 0.5)`, backgroundRepeat: "no-repeat", backgroundPosition: "top", backgroundSize: "cover" }}>
         {/* <img src={item?.mentorImg && `${process.env.REACT_APP_IMAGEURL}/${item?.mentorImg}`} alt="" className="card-img-top mentor_image" /> */}
         <div className="card-body newMentors_card-body position-absolute w-100">
-            <div className="d-flex flex-column justify-content-around h-100">
-                <h5 className="text-center">{`${item?.mentorFirstName}  ${item.mentorLastName} `}</h5>
-                <p className="mentors_footnote text-center" style={{fontSize:"14px"}}>{item?.footnote}</p>
-                <p className="mb-1 text-center">{item?.expertise}</p>
-                <small className="d-block text-center">{item?.experience && item?.experience}</small>
-            </div>
+          <div className="d-flex flex-column justify-content-around h-100">
+            <h5 className="text-center">{`${item?.mentorFirstName}  ${item.mentorLastName} `}</h5>
+            <p className="mentors_footnote text-center" style={{ fontSize: "14px" }}>{item?.footnote}</p>
+            <p className="mb-1 text-center">{item?.expertise}</p>
+            <small className="d-block text-center">{item?.experience && item?.experience}</small>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-function Mentors(){
-  return(
+function Mentors() {
+  return (
     <section className="newMentors">
 
-        <div className="newMentors_content">
+      <div className="newMentors_content">
         <div className="container">
 
           <header className="text-center">
-            <h3 className="title" >Find Your Mentor, Accelerate Your Success</h3>
-            <p className="sub_title mx-auto" style={{width:"min(100% - 1rem, 700px)"}}>
-            Gotocourse mentors are experts, and industry rock stars with years of experience that are excited to share their tricks, tools, insights, and experience with you.           </p>
+            <h3 className="title" >
+              <span> Find Your Mentor,</span>
+              <span className="d-block">Accelerate Your Success</span>
+            </h3>
+            {/* <p className="sub_title mx-auto" style={{ width: "min(100% - 1rem, 700px)" }}>
+              Gotocourse mentors are experts, and industry rock stars  with years of experience that are excited to share their tricks, tools, insights, and experience with you.
+            </p> */}
+             <p>
+              Gotocourse mentors are experts, and industry rock stars<br/>
+              with years of experience that are excited to share their tricks, tools, insights, and experience with you.
+            </p>
           </header>
           {/* <div className="newMentors_content_mid">
             <div className="newMentors_text">
@@ -152,42 +160,42 @@ function Mentors(){
               <img src={mentorsVid} alt="" />
             </div>
           </div> */}
-          </div>
+        </div>
 
-          <div className="newMentors_content_bottom mt-5">
-              <h4 className="bottom_title d-block text-center fw-bolder mb-4">Schedule one-on-one sessions with:</h4>
-              <div className="newMentors_content_bottom_card">
-                <Link to="/lounge" className="d-inline-flex">
-                <div className="newMentors_content_bottom_cards">
-                  <div className="bottom_card d-flex">
-                    <GiStarMedal color="#2F88FF" />
-                    <small>CELEBRITY MENTORS</small>
-                  </div>
+        <div className="newMentors_content_bottom mt-5">
+          <h4 className="bottom_title d-block text-center fw-bolder mb-4">Schedule one-on-one sessions with:</h4>
+          <div className="newMentors_content_bottom_card">
+            <Link to="/lounge" className="d-inline-flex">
+              <div className="newMentors_content_bottom_cards">
+                <div className="bottom_card d-flex">
+                  <GiStarMedal color="#2F88FF" />
+                  <small>CELEBRITY MENTORS</small>
                 </div>
-                </Link>
-                <Link to="/lounge" className="d-inline-flex">
-                <div className="newMentors_content_bottom_cards">
-                  <div className="bottom_card d-flex">
-                    <GiStarMedal color="#2F88FF" />
-                    <small>CAREER ADVISORS</small>
-                  </div>
-                </div>
-                </Link>
-                <Link to="/lounge" className="d-inline-flex">
-                <div className="newMentors_content_bottom_cards">
-                  <div className="bottom_card d-flex">
-                    <GiStarMedal color="#2F88FF" />
-                    <small>TECHNICAL EXPERTS</small>
-                  </div>
-                </div>
-                </Link>
-              </div> 
-              <div className="mt-5 d-flex justify-content-center">
-                <Link to="lounge" className="d-inline-flex">
-                  <button className="button p-2 px-5" style={{background:"var(--theme-orange)", borderRadius:"4px"}}>Explore Mentors Lounge</button>
-                </Link>
               </div>
+            </Link>
+            <Link to="/lounge" className="d-inline-flex">
+              <div className="newMentors_content_bottom_cards">
+                <div className="bottom_card d-flex">
+                  <GiStarMedal color="#2F88FF" />
+                  <small>CAREER ADVISORS</small>
+                </div>
+              </div>
+            </Link>
+            <Link to="/lounge" className="d-inline-flex">
+              <div className="newMentors_content_bottom_cards">
+                <div className="bottom_card d-flex">
+                  <GiStarMedal color="#2F88FF" />
+                  <small>TECHNICAL EXPERTS</small>
+                </div>
+              </div>
+            </Link>
           </div>
+          <div className="mt-5 d-flex justify-content-center">
+            <Link to="lounge" className="d-inline-flex">
+              <button className="button p-2 px-5" style={{ background: "var(--theme-orange)", borderRadius: "4px" }}>Explore Mentors Lounge</button>
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   )

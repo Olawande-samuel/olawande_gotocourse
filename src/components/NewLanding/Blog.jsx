@@ -15,6 +15,11 @@ gap:1rem 4rem;
 padding-bottom: 5rem;
 width: 100%;
 
+h5 {
+    color: #292D32;   
+    font-weight: 700;
+}
+
 @media (max-width: 768px){
     justify-content: center;
 }
@@ -138,9 +143,11 @@ export const Blog = () => {
         <div className="container">
             <CardContainer>
                 {blogs.length > 0 && blogs.map(blog => (
+                    <>
+                <h5>Gotocourse Events, News And Insights</h5>
 
                     <Card key={blog._id}>
-                    <Link to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?','')}/${blog?._id}`}>
+                        <Link to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
                             <div className="top">
                                 <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
                             </div>
@@ -150,7 +157,7 @@ export const Blog = () => {
                                 <span style={{ color: "#4100FA" }}>{new Date(blog.createdAt).toLocaleDateString().split("/").join('.')}</span>
                             </span>
                             <span>
-                                <i><FaShareSquare style={{ color: "#0C2191", fontSize: "1rem" }} onClick={() =>setOpen(true)}/></i>
+                                <i><FaShareSquare style={{ color: "#0C2191", fontSize: "1rem" }} onClick={() => setOpen(true)} /></i>
                             </span>
                         </DateAndAction>
                         <div className="bottom">
@@ -159,6 +166,7 @@ export const Blog = () => {
                         </div>
                         <ShareModal x={blog} open={open} setOpen={setOpen} />
                     </Card>
+                    </>
                 ))}
             </CardContainer>
 

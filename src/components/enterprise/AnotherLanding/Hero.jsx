@@ -9,7 +9,7 @@ justify-content: space-between;
 align-items: center;
 color: #0C1825;
 padding: .5rem 1rem;
-margin-top: 5rem;
+margin-top: 7rem;
 
 
 
@@ -116,7 +116,7 @@ const Hero = () => {
             <div className="heroleft">
                 <div>
                     <h1>
-                        <span>The best way to</span>
+                        <span>The best platform to</span>
                         <span className="d-block">power online classes</span>
                     </h1>
 
