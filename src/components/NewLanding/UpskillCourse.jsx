@@ -51,7 +51,7 @@ const UpskillCourse = () => {
     <ClassTypeComponent {...data}>
         <Grid>
             {
-                shorts?.filter(item=>item.isActive).slice(0, 8).map(item=>(
+                shorts?.filter(item=>item.isActive).slice(0, 4).map(item=>(
                     <UpskillCourseCard {...item} all={item} key={item.bootcampId}/>
                 ))
             }

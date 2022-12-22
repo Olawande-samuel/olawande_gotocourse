@@ -48,6 +48,7 @@ const LiveWebinars = () => {
         }
     })
     return (
+        webinars.length > 0 && (
         <ClassTypeComponent {...data}>
             <div className="container">
                 <Grid>
@@ -67,6 +68,7 @@ const LiveWebinars = () => {
                 </Grid>
             </div>
         </ClassTypeComponent>
+            )
     )
 }
 

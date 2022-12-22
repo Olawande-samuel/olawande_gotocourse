@@ -79,22 +79,22 @@ const NewLanding = () => {
       <Category />
       <GreatOpportunities />
       <Benefits />
-      <ShortCourses />
-      <ExecutiveClasses />
       <IndemandClasses />
       <UpskillCourse />
+      <ExecutiveClasses />
+      <ShortCourses />
       <VideoSection />
       <BetterWay />
-      <TechPro />
+      {/* <TechPro /> */}
       <Mentors />
       {/* <VirtualTraining /> */}
       <LiveWebinars />
-      {/* <Blog/> */}
-      <Success />
-      <Logos />
+      <Blog/>
+      {/* <Success /> */}
+      {/* <Logos /> */}
       {/* <TeachingBenefits /> */}
       {/* <TrackPro /> */}
-      <Faq />
+      {/* <Faq /> */}
       {/* <AffiliatePro /> */}
       {/* <Gif /> */}
       {/* <Experienced /> */}

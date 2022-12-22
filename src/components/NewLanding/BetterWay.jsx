@@ -10,22 +10,22 @@ const BetterWay = () => {
     const data = [
         {
             title: "Learn with a cohort",
-            content:"Join a classroom to take instructor led training, do projects with learning partners, take quizzes, and build work related portfolio",
+            content: "Join a classroom to take instructor led training, do projects with learning partners, take quizzes, and build work related portfolio",
             img: Learning
         },
         {
             title: "Self-paced Learning",
-            content:"Self-paced courses that allow you to complete assignments at your own pace, making it easier to balance coursework with your other personal and professional responsibilities.",
-            img:Tech
+            content: "Self-paced courses that allow you to complete assignments at your own pace, making it easier to balance coursework with your other personal and professional responsibilities.",
+            img: Tech
         },
         {
             title: "One-On-One Mentorship",
-            content:"Challenge yourself with a one-on-one mentorship session with industry experts and professionals and grow your career.",
-            img:Mento
+            content: "Challenge yourself with a one-on-one mentorship session with industry experts and professionals and grow your career.",
+            img: Mento
         },
         {
             title: "In-person Training",
-            content:"Learn from experts by joining us in any of our physical locations",
+            content: "Learn from experts by joining us in any of our physical locations",
             img: Inperson
         },
     ]
@@ -36,53 +36,56 @@ const BetterWay = () => {
         //     content:"Our courses are designed with you in mind and built around proven learning principles with real-life application, top-of-the-range technology, and fully immersive exchange with industry experts; everything you need to start and advance your career in tech."
         // },
         {
-            title:"Learn and study on a flexible schedule",
-            content:"Be in charge of your time, learn and study at your own preferred time without the limitation of fixed lessons and physical classrooms. Set your career goals and milestone and get started on building a great career you will be proud of."
+            title: "Learn and study on a flexible schedule",
+            content: "Be in charge of your time, learn and study at your own preferred time without the limitation of fixed lessons and physical classrooms. Set your career goals and milestone and get started on building a great career you will be proud of."
         },
         {
-            title:"Learn with a cohort",
-            content:"Join a classroom to take instructor led training, do projects with learning partners, take quizzes, and build work related portfolio"
+            title: "Learn with a cohort",
+            content: "Join a classroom to take instructor led training, do projects with learning partners, take quizzes, and build work related portfolio"
         },
         {
-            title:"Self-paced Learning",
-            content:"Self-paced courses that allow you to complete assignments at your own pace, making it easier to balance coursework with your other personal and professional responsibilities."
+            title: "Self-paced Learning",
+            content: "Self-paced courses that allow you to complete assignments at your own pace, making it easier to balance coursework with your other personal and professional responsibilities."
         },
         {
-            title:"One-On-One Mentorship",
-            content:"Challenge yourself with a one-on-one mentorship session with industry experts and professionals and grow your career."
+            title: "One-On-One Mentorship",
+            content: "Challenge yourself with a one-on-one mentorship session with industry experts and professionals and grow your career."
         },
     ]
-  return (
-    <div className='betterway'>
-        <div className="container">
-            {/* <header>
+    return (
+        <div className='betterway'>
+            <div className="container">
+                {/* <header>
                 <h4>Gotocourse promotes a better way to learn</h4>
                 <p className="subtitle">All courses are designed with you in mind and built around proven learning principles with real-life application, top-of-the-range technology, and fully immersive exchange with industry experts; everything you need to start and advance your career in tech.</p>
             </header> */}
-            <div className="stay">
-                
-                <div className="stay_right anyright">
-                    <h6 style={{}}>Gotocourse Business</h6>
-                    <p>Upskill your team to improve your teams productivity</p>
-                    <ul>
-                        <li>Take advantage of Gotoocurse White-label interactive LMS</li>
-                        <li>A fully white-label LMS that lets you completely customize your learning academy to match your brand and create a seamless experience for your customers.</li>
-                        <li>Rapidly deploy training for in-demand skills</li>
-                    </ul>
-                    <div className="btn_wrapper">
-                        <Link to="/signup" className="d-inline-flex">
-                            <button>Contact sales</button>
-                        </Link>
+                <div className="stay">
+
+                    <div className="stay_right anyright">
+                        <h6 style={{}}>ENDLESS POSSIBILITIES</h6>
+                        <p>
+                            Join 20,000+ users who access learning anytime, <br/>
+                            anywhere, on any device <br/>
+                            Let our  real world experts give you a  good start,<br/>
+                             learn live and get mentored by instructors with <br/>
+                              wide range of experience.
+
+                        </p>
+
+                        <div className="btn_wrapper">
+                            <Link to="/signup" className="d-inline-flex">
+                                <button>Get started now</button>
+                            </Link>
+                        </div>
+                    </div>
+
+                    <div className="stay_left anywhere">
+                        <img src={Learning} alt="" />
                     </div>
                 </div>
-
-                <div className="stay_left anywhere">
-                    <img src={Learning} alt="" />
-                </div>
-            </div> 
+            </div>
         </div>
-    </div>
-  )
+    )
 }
 {/* <ul>
 {
@@ -99,7 +102,7 @@ data.map((data, i)=>(
 }
 </div> */}
 
-function Cards({title, content}){
+function Cards({ title, content }) {
     return (
         <li className="betterway_card mb-3">
             <header>
@@ -110,7 +113,7 @@ function Cards({title, content}){
     )
 }
 
-function Models({img, title, content}){
+function Models({ img, title, content }) {
     return (
         <div className="models">
             <div className="model_left">
