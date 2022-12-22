@@ -4,7 +4,7 @@ import join from "../../../images/landing/join.png";
 
 const Container = styled.div`
 	background: #162574;
-	padding: 2rem 5rem;
+	padding: 3rem 5rem;
 	color: #fff;
 
 	.joincontent {
@@ -12,6 +12,7 @@ const Container = styled.div`
 		display: flex;
 		gap: 2rem;
 		justify-content: space-between;
+		align-items: center;
 
 		.joinleft {
 			flex: 0.5;
@@ -54,6 +55,7 @@ const Container = styled.div`
 
 		.joinright {
 			flex: 0.5;
+			text-align: right;
 		}
 	}
 

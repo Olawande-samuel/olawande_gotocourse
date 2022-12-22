@@ -220,7 +220,7 @@ display: "flex", alignItems: "center"
                   ))}
                 </ul>
               </div>
-              <div className="second">
+              {/* <div className="second">
                 <ul>
                   <li>Company</li>
                   {rightLink.map((link, index) => (
@@ -242,7 +242,7 @@ display: "flex", alignItems: "center"
                   ))}
 
                 </ul>
-              </div>
+              </div> */}
 
             </div>
           </div>

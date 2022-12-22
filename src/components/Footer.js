@@ -139,11 +139,11 @@ const Footer = () => {
 
             :
             <div className="box mb-5">
-              <p className="text-center mb-5">
+              {/* <p className="text-center mb-5">
                 Join Gotocourse to unleash untapped opportunities in borderless
                 knowledge sharing across the world! We are ready to serve you
                 anywhere you are
-              </p>
+              </p> */}
 
               <div className="join_button_wrapper justify-content-center align-items-center d-flex mb-3">
                {students && <Link to="/students" onClick={() => window.scrollTo(0, 0)}>
