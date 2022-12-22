@@ -8,21 +8,25 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 width: 100%;
-padding: 2rem 0;
+padding: 6rem 0;
 
 .tleft{
-    flex: .5;
+    flex: .4;
     // border: 2px solid red;
 
    img{
-    width: 100%;
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    // border: 2px solid yellow; 
+
    }
 
 
 }
 
 .toolsright{
-    flex: .5;
+    flex: .6;
     // border: 2px solid yellow;
     display: flex;
     flex-direction: column;

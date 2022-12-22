@@ -4,25 +4,33 @@ import styled from "styled-components";
 import live from "../../../images/landing/shop.png";
 
 const Container = styled.div`
-	padding: 4rem 1rem;
-	display: flex;
-	align-items: center;
-	gap: 2rem;
+    padding: 4rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    // border: 2px solid red;
 
-	.liveleft {
-		flex: 0.5;
-		img {
-			width: 100%;
-			height: 400px;
-			object-fit: contain;
-		}
-	}
 
-	.liveright {
-		flex: 0.5;
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
+    .liveleft{
+        flex: .5;
+        // border: 2px solid green;
+
+        img{
+            width: 100%;
+            max-height: 400px;
+            // object-fit: cover;
+            // border: 2px solid yellow;
+
+        }
+  
+    }
+
+    .liveright{
+        // border: 2px solid blue;
+        flex: .5;
+        display: flex; 
+        flex-direction: column;
+        gap: .5rem;
 
 		h4 {
 			font-family: "Raleway";
@@ -80,60 +88,63 @@ const Container = styled.div`
 	@media (max-width: 768px) {
 		flex-direction: column;
 
-		.liveleft {
-			width: 100%;
-			img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-			}
-		}
-	}
-`;
+    @media (max-width:768px){
+            flex-direction: column;
+
+            .liveleft{
+                width: 100%;
+                img{
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+            .liveright{
+                text-align: center;
+
+                .landingtags{
+                    justify-content: center;
+
+                }
+            }
+    }
+
+`
 const Shop = () => {
-	return (
-		<Container className="container">
-			<div className="liveright">
-				<h4>
-					<span>One-Stop Shop for All Your </span>
-					<span className="d-block">Training Business Operations</span>
-				</h4>
-				<div>
-					<p>
-						Everything your business needs to create, manage, <br />
-						market your courses efficiently and attain global reach. <br />
-						<br />
-						Gotocourse have created systems that work for your business. <br />
-						Having everything in one platform so you don't have to do all <br />
-						of this stuff all over the place. The result? You’re able to save{" "}
-						<br />
-						time , serve your customers better and grow your business with{" "}
-						<br />
-						every tool you need
-					</p>
-				</div>
+    return (
+        <Container className="container">
+            <div className="liveleft">
+                <img src={live} alt=""
+                // height={400} 
+                />
 
-				<div className="landingtags">
-					<span>Course creation studio</span>
-					<span>Secure Business communication</span>
-					<span>Payment processing Management</span>
-					<span>School record management system</span>
-					<span>Classroom management</span>
-				</div>
+            </div>
 
-				<Link to={`/school/signup`}>
-					<button>Join for free</button>
-				</Link>
-			</div>
-			<div className="liveleft">
-				<img
-					src={live}
-					alt=""
-					// width={800}
-				/>
-			</div>
-		</Container>
-	);
+            <div className="liveright">
+                <h4>
+                    <span>One-Stop Shop for All Your </span>
+                    <span className="d-block">Training Business Operations</span>
+                </h4>
+                <div>
+                    <p>
+                        Everything your business needs to create, manage, <br />
+                        market your courses efficiently and attain global reach. <br />
+                    </p>
+                    <div className="landingtags">
+                        <span>Course creation studio</span>
+                        <span>Secure Business communication</span>
+                        <span>Payment processing Management</span>
+                        <span>School record management system</span>
+                        <span>Classroom management</span>
+                    </div>
+
+                    <Link to={`/school/signup`}>
+                        <button>Join for free</button>
+                    </Link>
+                </div>
+               </div>
+        </Container>
+    )
 };
 
 export default Shop;
