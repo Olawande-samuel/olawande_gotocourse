@@ -51,7 +51,7 @@ const ExecutiveClasses = () => {
         <ClassTypeComponent {...data}>
             <Grid>
                 {
-                    shorts?.filter(item => item.isActive).slice(0, 3).map((item, i) => (
+                    shorts?.filter(item => item.isActive).map((item, i) => (
                         <ExeEducation {...item} i={i} key={item.bootcampId} />
                     ))
                 }

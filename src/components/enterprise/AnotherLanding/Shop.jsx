@@ -4,22 +4,29 @@ import styled from "styled-components"
 import live from '../../../images/landing/shop.png'
 
 const Container = styled.div`
-padding: 4rem 1rem;
+    padding: 4rem 1rem;
     display: flex;
     align-items: center;
     gap: 2rem;
+    // border: 2px solid red;
+
 
     .liveleft{
         flex: .5;
+        // border: 2px solid green;
+
         img{
             width: 100%;
-            height: 400px;
-            object-fit: contain;
+            max-height: 400px;
+            // object-fit: cover;
+            // border: 2px solid yellow;
+
         }
   
     }
 
     .liveright{
+        // border: 2px solid blue;
         flex: .5;
         display: flex; 
         flex-direction: column;
@@ -92,12 +99,27 @@ padding: 4rem 1rem;
                     object-fit: cover;
                 }
             }
+            .liveright{
+                text-align: center;
+
+                .landingtags{
+                    justify-content: center;
+
+                }
+            }
     }
 
 `
 const Shop = () => {
     return (
         <Container className="container">
+             <div className="liveleft">
+                <img src={live} alt="" 
+                // height={400} 
+                />
+
+            </div>
+
             <div className="liveright">
                 <h4>
                     <span>One-Stop Shop for All Your </span>
@@ -130,12 +152,7 @@ const Shop = () => {
                 <Link to={`/enterprise-signup`}><button>Join for free</button></Link>
 
             </div>
-            <div className="liveleft">
-                <img src={live} alt="" 
-                // width={800} 
-                />
-
-            </div>
+           
 
 
 
