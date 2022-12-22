@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { GoChevronRight } from "react-icons/go"
-import mentorsBg from "../../../images/landmentors.png"
+import mentorsBg from "../../../images/laMentors2.png"
 import mentorsVid from "../../../images/mentorsVid.png"
 import { GiStarMedal } from "react-icons/gi"
 import { Link, useNavigate } from "react-router-dom";

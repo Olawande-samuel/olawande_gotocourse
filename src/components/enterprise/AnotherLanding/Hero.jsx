@@ -99,7 +99,7 @@ const Hero = () => {
 			<div className="heroleft">
 				<div>
 					<h1>
-						<span>The best way to</span>
+						<span>The best platform to</span>
 						<span className="d-block">power online classes</span>
 					</h1>
 				</div>

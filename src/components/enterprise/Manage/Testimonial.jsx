@@ -110,8 +110,10 @@ const Testimonial = () => {
                 </div>
                 <div className="joinright">
                     <div>
-                        <h4>See what other educators are  </h4>
-                        <h4>saying about us</h4>
+                        <h4>
+                            <span> See what other educators are</span>
+                            <span className="d-block">saying about us</span>
+                             </h4>
                         <p>
                         Join 10,000+ educators creating better experiences
                        </p>

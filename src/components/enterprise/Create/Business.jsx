@@ -5,19 +5,24 @@ const Container = styled.div`
 padding: 2rem 1rem;
     color: #1B1F29;
     background: #F0F4FF;
+    // border: 2px solid red;
+
 
     .joincontent{
         display: flex;
         gap: 2rem;
         justify-content: space-between;
         align-items: center;
+        // border: 2px solid green;
+
 
         .joinleft{
             flex: .5;
             display: flex; 
             flex-direction: column;
             gap: 2rem;
-    
+            // border: 2px solid yellow;
+
             h4{
                 font-family: 'Raleway';
                 font-style: normal;
@@ -46,6 +51,8 @@ padding: 2rem 1rem;
     
         .joinright{
             flex: .5;
+            // border: 2px solid blue;
+
             img{
                 width: 100%;
                 object-fit: cover;
@@ -87,7 +94,7 @@ const Business = () => {
                 <div className="joinleft">
                     <div>
                         <h4>Create online courses </h4> 
-                        <h4>with ease, build a brand,</h4>
+                        <h4>within minutes, build a brand,</h4>
                         <h4> scale your business.</h4>
                        
                     </div>

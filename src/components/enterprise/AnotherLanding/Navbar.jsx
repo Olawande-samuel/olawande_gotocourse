@@ -46,23 +46,24 @@ const NavContainer = styled.div`
 		gap: 1rem;
 		height: 100%;
 		width: 100%;
+		// border: 2px solid red;
 
 		.hamburger {
 			display: block;
 		}
 
 		.navbarlogo {
-			flex: 0.2;
+			flex: 0.5;
 			// border: 2px solid yellow;
 		}
 
 		ul {
-			// border: 2px solid red;
-			flex: 0.8;
+			// border: 2px solid green;
+			flex: 0.5;
 			list-style-type: none;
 			display: none;
 			align-items: center;
-			justify-content: space-evenly;
+			justify-content: flex-end;
 			font-family: "Raleway";
 			font-style: normal;
 			font-weight: 500;
@@ -183,7 +184,7 @@ const Navbar = ({ toggleSidebar }) => {
 
 			{
 				(mainpage) && showBanner &&
-				<div className="d-flex align-items-center justify-content-center p-2 w-100">
+				<div className="d-flex align-items-center justify-content-center p-2 w-100" style={{background: "var(--blue-ish)"}}>
 				<p className="mb-0 fw-bold me-4"> <Link to="/signup" style={{color: "var(--theme-blue)", textDecoration:"underline"}}>Register now</Link> to learn on gotocourse</p>
 				<i><AiOutlineCloseCircle size="1.5rem" onClick={()=>{
 					setShowBanner(false)

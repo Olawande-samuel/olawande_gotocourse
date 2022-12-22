@@ -53,7 +53,7 @@ const Container = styled.div`
 				font-weight: 400;
 				font-size: 16px;
 				line-height: 24px;
-				color: #2e9afe;
+				color: #064988;
 				flex-shrink: 0;
 				background: #eaf5ff;
 				border-radius: 30px;
@@ -113,13 +113,6 @@ const Container = styled.div`
 const Shop = () => {
     return (
         <Container className="container">
-            <div className="liveleft">
-                <img src={live} alt=""
-                // height={400} 
-                />
-
-            </div>
-
             <div className="liveright">
                 <h4>
                     <span>One-Stop Shop for All Your </span>
@@ -143,6 +136,15 @@ const Shop = () => {
                     </Link>
                 </div>
                </div>
+
+            <div className="liveleft">
+                <img src={live} alt=""
+                // height={400} 
+                />
+
+            </div>
+
+            
         </Container>
     )
 };
