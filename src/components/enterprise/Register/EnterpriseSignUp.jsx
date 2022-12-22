@@ -74,7 +74,7 @@ const EnterpriseSignUp = () => {
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
       // main 
-        const response = await register({...others}, "user");
+        const response = await register({...others});
         let { success, message, statusCode } = response;
         if (!success) throw new AdvancedError(message, statusCode);
         else {
