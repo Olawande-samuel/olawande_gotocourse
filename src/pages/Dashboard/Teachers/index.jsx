@@ -965,6 +965,8 @@ const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUn
 })
 
 
+  // for create 
+  const isCreator = userdata?.userType === "schools"
   return (
     <GuardedRoute>
       <div className={clsx.teachers}>
@@ -981,7 +983,10 @@ const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUn
         />
         <Sidebar isMobile={isMobile} />
         <div className={clsx.teachers_main}>
-          <Navbar content={teacher}  toggleSidebar={toggleSidebar} header={header} />
+          {
+            !isCreator &&
+            <Navbar content={teacher}  toggleSidebar={toggleSidebar} header={header} />
+          }
           {children}
         </div>
         {loading && <Loader />}

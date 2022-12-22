@@ -19,9 +19,9 @@ import face from "../../../images/face.png"
 
 
 const EnterpriseSignUp = () => {
-  // const emailReg = new RegExp(/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/)
   const emailReg = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/)
   const passReg = new RegExp(/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/)
+
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -29,7 +29,7 @@ const EnterpriseSignUp = () => {
     email: "",
     password: "",
     retype_password: "",
-    userType: "student",
+    userType: "school",
     fullname: "",
   });
   const [focus, setFocus] =useState(false)
@@ -81,7 +81,6 @@ const EnterpriseSignUp = () => {
           const { data } = response;
           // set item
           updateItem(VERIFICATION_KEY, data);
-          // localStorage.setItem("gotocourse-pledre-user", JSON.stringify(response)) 
           setGeneralState((old) => {
             return {
               ...old,
@@ -90,24 +89,6 @@ const EnterpriseSignUp = () => {
           });
           navigate(`/email`);
         }
-
-        // second dashboard
-        // if(generalState.pledre){
-        //   const res = await generalState.pledre.signUpStudent({
-        //     name:`${data.firstName} ${data.lastName}`,
-        //     email: data.email,
-        //     password:`${data.password}`
-        //   })
-        //   console.log({res})
-        //   if(res.approved){
-            // main dashboard
-            // const response = await register({...others, pledreStudentId: res._id}, "user");
-            // main goes here ****
-          // }
-
-        // } else {
-        //   throw new AdvancedError("Something went wrong. Please try again", 0)
-        // }
     } catch (err) {
       console.error({err})
       toast.error(err.message);
@@ -298,9 +279,8 @@ const EnterpriseSignUp = () => {
             myclassname="email_input"
             value={data.organisation}
             handleChange={handleChange}
-            placeholder="Bootcamp"
+            placeholder="Organisation"
             required={true}
-            errorMessage="Enter an Organisation Name"
           />
           <Password
             label="Password"

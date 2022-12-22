@@ -55,293 +55,532 @@ const Sidebar = ({}) => {
     const navigate = useNavigate();
     const {getItem} = useLocalStorage()
     let userdata = getItem(KEY);
-    const route = location.pathname.split("/")[1];
+    let route = location.pathname.split("/")[1];
     const [loading, setLoading] = useState(false)
-
-
-    const data =  route === "admin" ? [
-        {
-            icon: IoIosHome,
-            path: "",
-            title: "Dashboard"
-        },
-        {
-            icon: IoIosPerson,
-            path: "profile",
-            title: "My Profile"
-        },
-        {
-            icon: IoIosPerson,
-            path: "students",
-            title: "Students"
-        },
-        {
-            icon: FiSend,
-            path: "teachers",
-            title: "Mentors/Teachers"
-        },
-        {
-            icon: FaTwitch,
-            path: "mentors",
-            title: "Mentors"
-        },
-        {
-            icon: IoIosCash,
-            path: "fees",
-            title: "Fees"
-        },
-        // {
-        //     icon: FiGift,
-        //     path: "courses",
-        //     title: "Courses"
-        // },
-        {
-            icon: IoIosHelpBuoy,
-            path: "courses-categories",
-            title: "Course Categories"
-        },
-        {
-            icon: BiCategory,
-            path: "classes",
-            title: "Courses"
-        },
-        {
-            icon: BiVideo,
-            path: "live-class",
-            title: "Live Class"
-        },
-        {
-            icon: BiBell,
-            path: "notifications",
-            title: "Notifications",
-            showBadge:true,
-        },
-        {
-            icon:IoIosChatbubbles,
-            path: "chat",
-            title: "Chat",
-            showBadge:true,
-
-        },
-        {
-            icon: IoIosCash,
-            path: "earnings",
-            title: "Earnings"
-        },
-        {
-            icon:AiOutlineSetting,
-            path: "settings",
-            title: "Settings"
-        },
-        {
-            icon: SiGoogleclassroom,
-            path: "class-console",
-            title: "Console"
-        },
-        {
-            icon: HiOutlinePresentationChartLine,
-            path: "webinar",
-            title: "Webinar"
-        }
-        ,
-        {
-            icon: BsNewspaper,
-            path: "blog",
-            title: "Blog"
-        }
-    ] : route === "student" ?  [
-        {
-            icon: AiOutlineDashboard,
-            path: "",
-            title: "Dashboard"
-        },
-        {
-            icon: IoIosPerson,
-            path: "profile",
-            title: "My Profile"
-        },
-        {
-            icon: BiCategory,
-            path: "classes",
-            title: "Available Courses"
-        },
-        {
-            icon: BiCategory,
-            path: "myclasses",
-            title: "My Courses"
-        },
-        {
-            icon: BiVideo,
-            path: "live-class",
-            title: "Live Class"
-        },
-       
-        {
-            icon: FiGift,
-            path: "wishlist",
-            title: "Wishlist"
-        },
-        {
-            icon: MdOutlineAddReaction,
-            path: "referral",
-            title: "Referral"
-        },
-        {
-            icon: MdHistory,
-            path: "history",
-            title: "History"
-        },
-        {
-            icon: FaRegMoneyBillAlt,
-            path: "payment",
-            title: "Payment"
-        },
-        {
-            icon: BiBell,
-            path: "notifications",
-            title: "Notifications",
-            showBadge:true,
-        },
-        {
-            icon:IoIosChatbubbles,
-            path: "chat",
-            title: "Chat",
-            showBadge:true,
-
-        },
-        {
-            icon:SiGoogleclassroom,
-            path: "console/myclasses",
-            title: "Class Console",
-            showBadge:true,
-
-        },
-        {
-            icon: BiHelpCircle,
-            path: "help",
-            title: "Help"            
-        }
-    ] : route === "teacher" ? [
-        {
-            icon: AiOutlineDashboard,
-            path: "",
-            title: "Dashboard"
-        },
-        {
-            icon: IoIosPerson,
-            path: "profile",
-            title: "My Profile"
-        },
-        // {
-        //     icon: FiGift,
-        //     path: "courses",
-        //     title: "Courses"
-        // }, 
-        {
-            icon: BiCategory,
-            path: "classes",
-            title: "Courses"
-        },
-        {
-            icon: BiVideo,
-            path: "live-class",
-            title: "Live Class"
-        },
-        {
-            icon: IoIosCash,
-            path: "earnings",
-            title: "Earnings"
-        },
-        {
-            icon: MdOutlineAddReaction,
-            path: "referral",
-            title: "Referral"
-        },
-        {
-            icon: BiBell,
-            path: "notifications",
-            title: "Notifications",
-            showBadge:true,
-        },
-        {
-            icon:IoIosChatbubbles,
-            path: "chat",
-            title: "Chat",
-            showBadge:true,
-
-        },
-        {
-            icon: BiHelpCircle,
-            path: "help",
-            title: "Help"            
-        },
-        {
-            icon: SiGoogleclassroom,
-            path: "class-console",
-            title: "Console"
-        }
-    ] : route === 'mentor' ? [
-            {
-                icon: AiOutlineDashboard,
-                path: "",
-                title: "Dashboard"
-            },
-            {
-                icon: IoIosPerson,
-                path: "profile",
-                title: "My Profile"
-            },
-            {
-                icon: IoIosCash,
-                path: "earnings",
-                title: "Earnings"
-            },
-            {
-                icon: MdOutlineAddReaction,
-                path: "referral",
-                title: "Referral"
-            },
-            {
-                icon: BiBell,
-                path: "notifications",
-                title: "Notifications",
-                showBadge:true,
-            },
-            {
-                icon: FaCalendarAlt,
-                path: "scheduler",
-                title: "Scheduler"
-            },
-            {
-                icon:IoIosChatbubbles,
-                path: "chat",
-                title: "Chat",
-                showBadge:true,
     
-            },
-            {
-                icon: BiHelpCircle,
-                path: "help",
-                title: "Help"            
-            }
-    ] : [
+    // for create. value should be gotten from localStorage
+    const isCreator = userdata?.userType === "schools"
+
+    let data = []
+
+
+    if( isCreator ){
+         route = location.pathname
+        if(route.includes("admin")){
+            data = [
+                {
+                    icon: IoIosHome,
+                    path: "",
+                    title: "Dashboard"
+                },
+                {
+                    icon: IoIosPerson,
+                    path: "profile",
+                    title: "My Profile"
+                },
+                {
+                    icon: IoIosPerson,
+                    path: "students",
+                    title: "Students"
+                },
+                {
+                    icon: FiSend,
+                    path: "teachers",
+                    title: "Mentors/Teachers"
+                },
+                {
+                    icon: FaTwitch,
+                    path: "mentors",
+                    title: "Mentors"
+                },
+                {
+                    icon: IoIosCash,
+                    path: "fees",
+                    title: "Fees"
+                },
+                // {
+                //     icon: FiGift,
+                //     path: "courses",
+                //     title: "Courses"
+                // },
+                {
+                    icon: IoIosHelpBuoy,
+                    path: "courses-categories",
+                    title: "Course Categories"
+                },
+                {
+                    icon: BiCategory,
+                    path: "classes",
+                    title: "Courses"
+                },
+                {
+                    icon: BiVideo,
+                    path: "live-class",
+                    title: "Live Class"
+                },
+                {
+                    icon: BiBell,
+                    path: "notifications",
+                    title: "Notifications",
+                    showBadge:true,
+                },
+                {
+                    icon:IoIosChatbubbles,
+                    path: "chat",
+                    title: "Chat",
+                    showBadge:true,
         
-        {
-            icon: AiOutlineDashboard,
-            path: "",
-            title: "Dashboard"
-        },
-        {
-            icon: FiGift,
-            path: "sales",
-            title: "Sales"
-        },
-        {
-            icon: FaMoneyBillWave,
-            path: "income",
-            title: "Income"
-        },
-    ];
+                },
+                {
+                    icon: IoIosCash,
+                    path: "earnings",
+                    title: "Earnings"
+                },
+                {
+                    icon:AiOutlineSetting,
+                    path: "settings",
+                    title: "Settings"
+                },
+                {
+                    icon: SiGoogleclassroom,
+                    path: "class-console",
+                    title: "Console"
+                },
+                {
+                    icon: HiOutlinePresentationChartLine,
+                    path: "webinar",
+                    title: "Webinar"
+                }
+                ,
+                {
+                    icon: BsNewspaper,
+                    path: "blog",
+                    title: "Blog"
+                }
+            ]
+        } else if(route.includes("student")){
+            data = [
+                {
+                    icon: AiOutlineDashboard,
+                    path: "",
+                    title: "Dashboard"
+                },
+                {
+                    icon: IoIosPerson,
+                    path: "profile",
+                    title: "My Profile"
+                },
+                {
+                    icon: BiCategory,
+                    path: "classes",
+                    title: "Available Courses"
+                },
+                {
+                    icon: BiCategory,
+                    path: "myclasses",
+                    title: "My Courses"
+                },
+                {
+                    icon: BiVideo,
+                    path: "live-class",
+                    title: "Live Class"
+                },
+               
+                {
+                    icon: FiGift,
+                    path: "wishlist",
+                    title: "Wishlist"
+                },
+                {
+                    icon: MdOutlineAddReaction,
+                    path: "referral",
+                    title: "Referral"
+                },
+                {
+                    icon: MdHistory,
+                    path: "history",
+                    title: "History"
+                },
+                {
+                    icon: FaRegMoneyBillAlt,
+                    path: "payment",
+                    title: "Payment"
+                },
+                {
+                    icon: BiBell,
+                    path: "notifications",
+                    title: "Notifications",
+                    showBadge:true,
+                },
+                {
+                    icon:IoIosChatbubbles,
+                    path: "chat",
+                    title: "Chat",
+                    showBadge:true,
+        
+                },
+                {
+                    icon:SiGoogleclassroom,
+                    path: "console/myclasses",
+                    title: "Class Console",
+                    showBadge:true,
+        
+                },
+                {
+                    icon: BiHelpCircle,
+                    path: "help",
+                    title: "Help"            
+                }
+            ]
+        }   if(route.includes("teacher")){
+            data = [
+                {
+                    icon: AiOutlineDashboard,
+                    path: "",
+                    title: "Dashboard"
+                },
+                {
+                    icon: IoIosPerson,
+                    path: "profile",
+                    title: "My Profile"
+                },
+                // {
+                //     icon: FiGift,
+                //     path: "courses",
+                //     title: "Courses"
+                // }, 
+                {
+                    icon: BiCategory,
+                    path: "classes",
+                    title: "Courses"
+                },
+                {
+                    icon: BiVideo,
+                    path: "live-class",
+                    title: "Live Class"
+                },
+                {
+                    icon: IoIosCash,
+                    path: "earnings",
+                    title: "Earnings"
+                },
+                {
+                    icon: MdOutlineAddReaction,
+                    path: "referral",
+                    title: "Referral"
+                },
+                {
+                    icon: BiBell,
+                    path: "notifications",
+                    title: "Notifications",
+                    showBadge:true,
+                },
+                {
+                    icon:IoIosChatbubbles,
+                    path: "chat",
+                    title: "Chat",
+                    showBadge:true,
+        
+                },
+                {
+                    icon: BiHelpCircle,
+                    path: "help",
+                    title: "Help"            
+                },
+                {
+                    icon: SiGoogleclassroom,
+                    path: "class-console",
+                    title: "Console"
+                }
+            ]
+        }
+    } else {
+        data =  route === "admin" ?
+        [
+           {
+               icon: IoIosHome,
+               path: "",
+               title: "Dashboard"
+           },
+           {
+               icon: IoIosPerson,
+               path: "profile",
+               title: "My Profile"
+           },
+           {
+               icon: IoIosPerson,
+               path: "students",
+               title: "Students"
+           },
+           {
+               icon: FiSend,
+               path: "teachers",
+               title: "Mentors/Teachers"
+           },
+           {
+               icon: FaTwitch,
+               path: "mentors",
+               title: "Mentors"
+           },
+           {
+               icon: IoIosCash,
+               path: "fees",
+               title: "Fees"
+           },
+           // {
+           //     icon: FiGift,
+           //     path: "courses",
+           //     title: "Courses"
+           // },
+           {
+               icon: IoIosHelpBuoy,
+               path: "courses-categories",
+               title: "Course Categories"
+           },
+           {
+               icon: BiCategory,
+               path: "classes",
+               title: "Courses"
+           },
+           {
+               icon: BiVideo,
+               path: "live-class",
+               title: "Live Class"
+           },
+           {
+               icon: BiBell,
+               path: "notifications",
+               title: "Notifications",
+               showBadge:true,
+           },
+           {
+               icon:IoIosChatbubbles,
+               path: "chat",
+               title: "Chat",
+               showBadge:true,
+    
+           },
+           {
+               icon: IoIosCash,
+               path: "earnings",
+               title: "Earnings"
+           },
+           {
+               icon:AiOutlineSetting,
+               path: "settings",
+               title: "Settings"
+           },
+           {
+               icon: SiGoogleclassroom,
+               path: "class-console",
+               title: "Console"
+           },
+           {
+               icon: HiOutlinePresentationChartLine,
+               path: "webinar",
+               title: "Webinar"
+           }
+           ,
+           {
+               icon: BsNewspaper,
+               path: "blog",
+               title: "Blog"
+           }
+       ] : route === "student" ?  [
+           {
+               icon: AiOutlineDashboard,
+               path: "",
+               title: "Dashboard"
+           },
+           {
+               icon: IoIosPerson,
+               path: "profile",
+               title: "My Profile"
+           },
+           {
+               icon: BiCategory,
+               path: "classes",
+               title: "Available Courses"
+           },
+           {
+               icon: BiCategory,
+               path: "myclasses",
+               title: "My Courses"
+           },
+           {
+               icon: BiVideo,
+               path: "live-class",
+               title: "Live Class"
+           },
+          
+           {
+               icon: FiGift,
+               path: "wishlist",
+               title: "Wishlist"
+           },
+           {
+               icon: MdOutlineAddReaction,
+               path: "referral",
+               title: "Referral"
+           },
+           {
+               icon: MdHistory,
+               path: "history",
+               title: "History"
+           },
+           {
+               icon: FaRegMoneyBillAlt,
+               path: "payment",
+               title: "Payment"
+           },
+           {
+               icon: BiBell,
+               path: "notifications",
+               title: "Notifications",
+               showBadge:true,
+           },
+           {
+               icon:IoIosChatbubbles,
+               path: "chat",
+               title: "Chat",
+               showBadge:true,
+    
+           },
+           {
+               icon:SiGoogleclassroom,
+               path: "console/myclasses",
+               title: "Class Console",
+               showBadge:true,
+    
+           },
+           {
+               icon: BiHelpCircle,
+               path: "help",
+               title: "Help"            
+           }
+       ] : route === "teacher" ? [
+           {
+               icon: AiOutlineDashboard,
+               path: "",
+               title: "Dashboard"
+           },
+           {
+               icon: IoIosPerson,
+               path: "profile",
+               title: "My Profile"
+           },
+           // {
+           //     icon: FiGift,
+           //     path: "courses",
+           //     title: "Courses"
+           // }, 
+           {
+               icon: BiCategory,
+               path: "classes",
+               title: "Courses"
+           },
+           {
+               icon: BiVideo,
+               path: "live-class",
+               title: "Live Class"
+           },
+           {
+               icon: IoIosCash,
+               path: "earnings",
+               title: "Earnings"
+           },
+           {
+               icon: MdOutlineAddReaction,
+               path: "referral",
+               title: "Referral"
+           },
+           {
+               icon: BiBell,
+               path: "notifications",
+               title: "Notifications",
+               showBadge:true,
+           },
+           {
+               icon:IoIosChatbubbles,
+               path: "chat",
+               title: "Chat",
+               showBadge:true,
+    
+           },
+           {
+               icon: BiHelpCircle,
+               path: "help",
+               title: "Help"            
+           },
+           {
+               icon: SiGoogleclassroom,
+               path: "class-console",
+               title: "Console"
+           }
+       ] : route === 'mentor' ? [
+               {
+                   icon: AiOutlineDashboard,
+                   path: "",
+                   title: "Dashboard"
+               },
+               {
+                   icon: IoIosPerson,
+                   path: "profile",
+                   title: "My Profile"
+               },
+               {
+                   icon: IoIosCash,
+                   path: "earnings",
+                   title: "Earnings"
+               },
+               {
+                   icon: MdOutlineAddReaction,
+                   path: "referral",
+                   title: "Referral"
+               },
+               {
+                   icon: BiBell,
+                   path: "notifications",
+                   title: "Notifications",
+                   showBadge:true,
+               },
+               {
+                   icon: FaCalendarAlt,
+                   path: "scheduler",
+                   title: "Scheduler"
+               },
+               {
+                   icon:IoIosChatbubbles,
+                   path: "chat",
+                   title: "Chat",
+                   showBadge:true,
+       
+               },
+               {
+                   icon: BiHelpCircle,
+                   path: "help",
+                   title: "Help"            
+               }
+       ] : [
+           
+           {
+               icon: AiOutlineDashboard,
+               path: "",
+               title: "Dashboard"
+           },
+           {
+               icon: FiGift,
+               path: "sales",
+               title: "Sales"
+           },
+           {
+               icon: FaMoneyBillWave,
+               path: "income",
+               title: "Income"
+           },
+       ];
+    }
+
 
     const toggleSidebar = ()=>{
         setGeneralState({...generalState, showSidebar:!generalState.showSidebar})
@@ -388,17 +627,36 @@ const Sidebar = ({}) => {
     const page = location.pathname.split("/")[1];
     return (
         <>
-        <div className={`${generalState.showSidebar ? clsx.open :clsx.close}  ${clsx.sidebar} sidebar `}>
+        <div className={`${generalState.showSidebar ? clsx.open :clsx.close}  ${clsx.sidebar} sidebar ${isCreator && "creator"}`}>
                 <i className="d-md-none" style={{fontSize:"24px", position:"absolute", right:"-30px", color:"#0C2191", cursor:"pointer", zIndex:"3000"}} onClick={toggleSidebar}>
                     <AiOutlineClose />
                 </i>
                 <div className="text-center">
-                    <Link to="/">
-                        <LogoSidebar  />
-                    </Link>
+                    {
+                        !isCreator ? 
+                        <Link to="/">
+                            <LogoSidebar  />
+                        </Link>
+                        :
+                        <Link to="/school" className="h3 fw-bold text-white">
+                            DASHBOARD
+                        </Link>
+
+                    }
                 </div>
             <div className={clsx.sidebar_items} id="sidebar__items">
+
                 {
+                    isCreator ? 
+
+                    data.map(({icon, path, title,showBadge, admin}, i) => (
+                        <NavLink onClick={toggleSidebar} to={`${route.includes("admin") ? '/school/admin' : route.includes("student") ? '/school/student' : route.includes("teacher")? '/school/teacher' : route.includes("mentor") ? '/school/mentor' : '/school/affiliate'}${'/'+path}`}  key={i}>
+                            <SidebarItem location={location}
+                             icon={icon} 
+                            title={title} path={path} showBadge={showBadge} admin={admin} />
+                        </NavLink>
+                    ))
+                    :
                     data.map(({icon, path, title,showBadge, admin}, i) => (
                         <NavLink onClick={toggleSidebar} to={`${route === "admin" ? '/admin' : route === 'student' ? '/student' : route === "teacher" ? '/teacher' : route === "mentor" ? '/mentor' : '/affiliate'}${'/'+path}`}  key={i}>
                             <SidebarItem location={location}
@@ -406,6 +664,7 @@ const Sidebar = ({}) => {
                             title={title} path={path} showBadge={showBadge} admin={admin} />
                         </NavLink>
                     ))
+
                 }
                     <div className="button_wrapper d-none text-center" style={{marginTop:"3rem"}}>
                         <motion.button 

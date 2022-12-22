@@ -67,7 +67,13 @@ export function Form({type}){
                           progress: undefined,
                       });
                       updateItem(VERIFICATION_KEY, {...userdata, isVerified: true});
-                      setTimeout(() => navigate(data.userType === 'teacher' ? `/teacher/on-boarding` : data.userType === 'student' ? `/user-onboarding`: `/${data.userType}`), 1000);
+                      setTimeout(() => {
+                            data?.userType === "schools" ? 
+                            // for create
+                            navigate(`school/admin`)
+                            :
+                            navigate(data.userType === 'teacher' ? `/teacher/on-boarding` : data.userType === 'student' ? `/user-onboarding`: `/${data.userType}`)
+                        }, 1000);
                   }
               }catch(err){
                   toast.error(err.message, {

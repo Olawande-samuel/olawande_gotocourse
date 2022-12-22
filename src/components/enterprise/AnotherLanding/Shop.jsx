@@ -98,13 +98,6 @@ padding: 4rem 1rem;
 const Shop = () => {
     return (
         <Container className="container">
-            <div className="liveleft">
-                <img src={live} alt="" 
-                // width={800} 
-                />
-
-            </div>
-
             <div className="liveright">
                 <h4>
                     <span>One-Stop Shop for All Your </span>
@@ -137,6 +130,13 @@ const Shop = () => {
                 <Link to={`/enterprise-signup`}><button>Join for free</button></Link>
 
             </div>
+            <div className="liveleft">
+                <img src={live} alt="" 
+                // width={800} 
+                />
+
+            </div>
+
 
 
 

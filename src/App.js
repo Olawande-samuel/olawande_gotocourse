@@ -281,7 +281,7 @@ function App() {
                 <Route path="enterprise-onboarding" element={<EnterpriseOnboarding />} />
                 <Route path="creator-landing" element={<Creator />} />
                
-                <Route path="goto" element={<Landing />} />
+                <Route path="Learn-with-gotocourse" element={<Landing />} />
                 <Route path="login" element={<Login />} />
                 <Route path="signup" element={<SignUp />} />
                 <Route path="email" element={<Email />} />
@@ -702,6 +702,219 @@ function App() {
                   <Route path="signup" element={<AdminSignup />} />
                 </Route>
               </Route>
+
+              {/* FOR CREATE */}
+              <Route path="/school" element={<Out />}>
+                <Route index element={<Creator />} />
+                <Route path="create" element={<CreatePage />} />
+                <Route path="manage" element={<ManagePage />} />
+                <Route path="pricing" element={<Pricing />} />
+                <Route path="login" element={<EnterPriseLogin />} />
+                <Route path="signup" element={<EnterpriseSignUp />} />
+                <Route path="forgot" element={<EnterPriseForgotPassword />} />
+                <Route path="verify" element={<EnterpriseVerification />} />
+                <Route path="onboarding" element={<EnterpriseOnboarding />} />
+                
+                <Route path="admin">
+                  <Route path="" element={<AdminDashboard />} />
+                  <Route path="profile" element={<AdminProfile />} />
+                  <Route path="students" element={<Student />} />
+                  <Route path="students/approve" element={<ApproveStudent />} />
+                  <Route path="notifications" element={<Notification />} />
+                  <Route path="fees" element={<Fees />} />
+                  <Route path="teachers" element={<Teachers />} />
+                  <Route path="mentors" element={<Mentors />} />
+                  <Route path="mentors/detail" element={<MentorsDetail />} />
+                  <Route
+                    path="mentors/detail/edit"
+                    element={<AddMentor edit="mentor" />}
+                  />
+                  <Route path="classes" element={<Bootcamps />} />
+                  <Route
+                    path="classes/details/:id"
+                    element={<BootcampDetails />}
+                  />
+                  <Route path="classes/create" element={<CreateBootcamp />} />
+                  <Route path="courses" element={<Courses />} />
+                  <Route
+                    path="courses/details/:id"
+                    element={<AdminCourseDetails />}
+                  />
+                  <Route path="courses/create" element={<AdminCreateCourse />} />
+                  <Route
+                    path="courses-categories"
+                    element={<AdminCategories />}
+                  />
+                  <Route
+                    path="courses-categories/details/:id"
+                    element={<AdminCategoryDetails />}
+                  />
+                  <Route
+                    path="courses-categories/new"
+                    element={<CreateCourseCategory />}
+                  />
+                  <Route path="teachers/approve" element={<Approve />} />
+                  <Route path="teachers/create/mentor" element={<AddMentor />} />
+                  <Route path="profile/edit" element={<AdminEdit />} />
+                  <Route path="chat" element={<AdminChat />} />
+                  <Route path="settings" element={<Settings />} />
+                  <Route path="earnings" element={<AdminEarning />} />
+                  <Route path="affiliate" element={<AdminAffiliate />} />
+                  <Route path="blog" element={<Out />}>
+                    <Route index element={<BlogDashboard />} />
+                    <Route path=":id" element={<MyBlog />} />
+                    <Route path="create" element={<Blog />} />
+                  </Route>
+                  <Route path="webinar" element={<Out />}>
+                    <Route index element={<AdminWebinarDashboard />} />
+                    <Route path=":id" element={<MyWebinar />} />
+                    <Route path="create" element={<AdminWebinar />} />
+                  </Route>
+                  <Route path="class-console" element={<Out />}>
+                    <Route index element={<AdminClassConsole />} />
+                    <Route path="class" element={<Content />}>
+                      <Route path=":classId" element={<Out />}>
+                        <Route index element={<MainContainer />} />
+                        <Route path="creator-suite" element={<Suite />} />
+                        <Route path="classroom" element={<Classroom />} />
+                        <Route path="mail" element={<Out />}>
+                          <Route index element={<ChatComponent />} />
+                          <Route path="details" element={<GroupContent />} />
+                          <Route
+                            path="group/:groupID"
+                            element={<GroupContent />}
+                          />
+                          <Route path="chat/:userId" element={<MailDetail />} />
+                        </Route>
+                        <Route path="file" element={<File />} />
+                        <Route path="note" element={<Note />} />
+                        <Route path="quiz" element={<Out />}>
+                          <Route index element={<Quiz />} />
+                          <Route path="preview" element={<Preview />} />
+                        </Route>
+                      </Route>
+                    </Route>
+                  </Route>
+  
+                  <Route path="live-class" element={<Out />}>
+                    <Route index element={<Live />} />
+                    <Route path="live" element={<LiveClass />} />
+                    <Route path="connect" element={<Intermission />} />
+                  </Route>
+                </Route>
+                <Route path="teacher" element={<Out />}>
+                  <Route index element={<TeacherDashboard />} />
+                  <Route path="profile" element={<TeachersProfile />} />
+                  <Route path="login" element={<Login />} />
+                  <Route path="on-boarding" element={<TeacherOnBoarding />} />
+                  <Route path="signup" element={<TeacherSignup />} />
+                  <Route path="enrollments" element={<TeacherClasses />} />
+  
+                  <Route path="classes" element={<TeacherBootcamps />} />
+                  <Route
+                    path="classes/details/:id"
+                    element={<TeacherBootcampDetails />}
+                  />
+                  <Route path="earnings" element={<Earnings />} />
+                  <Route path="profile/edit" element={<TeacherEdit />} />
+                  <Route path="courses" element={<TeacherCourses />} />
+                  <Route path="courses/create" element={<CreateCourse />} />
+                  <Route
+                    path="courses/details/:id"
+                    element={<TeacherCourseInfo />}
+                  />
+                  <Route path="chat" element={<TeacherChat />} />
+                  <Route
+                    path="notifications"
+                    element={<TeacherNotifications />}
+                  />
+                  {/* <Route path="help" element={<TeachersHelp />} /> */}
+                  <Route path="help" element={<HIWTeacher />} />
+                  <Route path="referral" element={<TeacherReferral />} />
+                  <Route path="live-class" element={<Out />}>
+                    <Route index element={<Live />} />
+                    <Route path="live" element={<LiveClass />} />
+                    <Route path="connect" element={<Intermission />} />
+                  </Route>
+  
+                  <Route path="class-console" element={<Out />}>
+                    <Route index element={<ConsoleClass />} />
+                    <Route path="class" element={<Content />}>
+                      <Route path=":classId" element={<Out />}>
+                        <Route index element={<MainContainer />} />
+                        <Route path="creator-suite" element={<Suite />} />
+                        <Route path="classroom" element={<Classroom />} />
+                        <Route path="mail" element={<Out />}>
+                          <Route index element={<ChatComponent />} />
+                          <Route path="details" element={<GroupContent />} />
+                          <Route path="group/:groupID" element={<GroupContent />} />
+                          <Route path="chat/:userId" element={<MailDetail />} />
+                        </Route>
+  
+  
+                        <Route path="live-class" element={<Out />}>
+                          <Route index element={<LiveClassInfo />} />
+                          <Route path="live" element={<LiveClass />} />
+                          <Route path="connect" element={<Out />}>
+                            <Route index element={<Intermission />} />
+                            <Route path="stream" element={<VideDiv />} />
+                          </Route>
+                        </Route>
+  
+                        <Route path="file" element={<File />} />
+                        <Route path="note" element={<Note />} />
+                        <Route path="quiz" element={<Out />}>
+                          <Route index element={<Quiz />} />
+                          <Route path="preview" element={<Preview />} />
+                        </Route>
+                      </Route>
+                    </Route>
+                  </Route>
+                  <Route path="class/:id/mail/chat" element={<LiveChat />} />
+                </Route>
+                <Route path="student" element={<Out />}>
+                  <Route path="" element={<StudentDashboard />} />
+                  <Route path="profile" element={<StudentProfile />} />
+                  <Route path="classes" element={<StudentClasses />} />
+                  <Route path="bootcamps" element={<StudentBootcamps />} />
+                  <Route path="myclasses" element={<MyClasses />} />
+                  <Route path="profile/edit" element={<StudentEdit />} />
+                  <Route path="courses" element={<StudentCourses />} />
+                  <Route path="wishlist" element={<Wishlist />} />
+                  <Route path="history" element={<StudentHistory />} />
+                  <Route path="payment" element={<StudentFees />} />
+                  <Route path="chat" element={<StudentChat />} />
+                  {/* <Route path="help" element={<StudentHelp />} /> */}
+                  <Route path="help" element={<HIWStudent />} />
+                  <Route path="referral" element={<StudentReferral />} />
+                  <Route
+                    path="notifications"
+                    element={<StudentNotifications />}
+                  />
+  
+                  <Route path="live-class" element={<Out />}>
+                    <Route index element={<StudentLive />} />
+                    <Route path="live" element={<LiveClass />} />
+                    <Route path="connect" element={<Intermission />} />
+                  </Route>
+  
+                  <Route path="console" element={<Content />}>
+                    <Route path="myclasses" element={<Out />}>
+                      <Route index element={<ConsoleClasses />} />
+                      <Route path=":id" element={<StudentChatModule />} />
+                      <Route path=":id/chat" element={<ActiveChat />} />
+                    </Route>
+                    <Route path="assessments" element={<ConsoleAssessments />} />
+                    <Route path="liveclass" element={<Out />} />
+                  </Route>
+                  <Route
+                    path="class-console/class/:id"
+                    element={<StudentClassroom />}
+                  />
+                </Route>
+                <Route path="*" element={<h1 className="text-center">Page Not Found</h1>} />
+
+              </Route>
               <Route path="enterprise" element={<Business />} />
               <Route path="*" element={<h1 className="text-center">Page Not Found</h1>} />
             </Routes>
@@ -717,6 +930,205 @@ function App() {
             <Routes>
               <Route path="/" element={<Out />}>
               <Route index element={<Creator />} />
+              <Route path="school">
+              <Route path="admin">
+                  <Route path="" element={<AdminDashboard />} />
+                  <Route path="profile" element={<AdminProfile />} />
+                  <Route path="students" element={<Student />} />
+                  <Route path="students/approve" element={<ApproveStudent />} />
+                  <Route path="notifications" element={<Notification />} />
+                  <Route path="fees" element={<Fees />} />
+                  <Route path="teachers" element={<Teachers />} />
+                  <Route path="mentors" element={<Mentors />} />
+                  <Route path="mentors/detail" element={<MentorsDetail />} />
+                  <Route
+                    path="mentors/detail/edit"
+                    element={<AddMentor edit="mentor" />}
+                  />
+                  <Route path="classes" element={<Bootcamps />} />
+                  <Route
+                    path="classes/details/:id"
+                    element={<BootcampDetails />}
+                  />
+                  <Route path="classes/create" element={<CreateBootcamp />} />
+                  <Route path="courses" element={<Courses />} />
+                  <Route
+                    path="courses/details/:id"
+                    element={<AdminCourseDetails />}
+                  />
+                  <Route path="courses/create" element={<AdminCreateCourse />} />
+                  <Route
+                    path="courses-categories"
+                    element={<AdminCategories />}
+                  />
+                  <Route
+                    path="courses-categories/details/:id"
+                    element={<AdminCategoryDetails />}
+                  />
+                  <Route
+                    path="courses-categories/new"
+                    element={<CreateCourseCategory />}
+                  />
+                  <Route path="teachers/approve" element={<Approve />} />
+                  <Route path="teachers/create/mentor" element={<AddMentor />} />
+                  <Route path="profile/edit" element={<AdminEdit />} />
+                  <Route path="chat" element={<AdminChat />} />
+                  <Route path="settings" element={<Settings />} />
+                  <Route path="earnings" element={<AdminEarning />} />
+                  <Route path="affiliate" element={<AdminAffiliate />} />
+                  <Route path="blog" element={<Out />}>
+                    <Route index element={<BlogDashboard />} />
+                    <Route path=":id" element={<MyBlog />} />
+                    <Route path="create" element={<Blog />} />
+                  </Route>
+                  <Route path="webinar" element={<Out />}>
+                    <Route index element={<AdminWebinarDashboard />} />
+                    <Route path=":id" element={<MyWebinar />} />
+                    <Route path="create" element={<AdminWebinar />} />
+                  </Route>
+                  <Route path="class-console" element={<Out />}>
+                    <Route index element={<AdminClassConsole />} />
+                    <Route path="class" element={<Content />}>
+                      <Route path=":classId" element={<Out />}>
+                        <Route index element={<MainContainer />} />
+                        <Route path="creator-suite" element={<Suite />} />
+                        <Route path="classroom" element={<Classroom />} />
+                        <Route path="mail" element={<Out />}>
+                          <Route index element={<ChatComponent />} />
+                          <Route path="details" element={<GroupContent />} />
+                          <Route
+                            path="group/:groupID"
+                            element={<GroupContent />}
+                          />
+                          <Route path="chat/:userId" element={<MailDetail />} />
+                        </Route>
+                        <Route path="file" element={<File />} />
+                        <Route path="note" element={<Note />} />
+                        <Route path="quiz" element={<Out />}>
+                          <Route index element={<Quiz />} />
+                          <Route path="preview" element={<Preview />} />
+                        </Route>
+                      </Route>
+                    </Route>
+                  </Route>
+  
+                  <Route path="live-class" element={<Out />}>
+                    <Route index element={<Live />} />
+                    <Route path="live" element={<LiveClass />} />
+                    <Route path="connect" element={<Intermission />} />
+                  </Route>
+              </Route>
+              <Route path="teacher" element={<Out />}>
+                <Route index element={<TeacherDashboard />} />
+                <Route path="profile" element={<TeachersProfile />} />
+                <Route path="login" element={<Login />} />
+                <Route path="on-boarding" element={<TeacherOnBoarding />} />
+                <Route path="signup" element={<TeacherSignup />} />
+                <Route path="enrollments" element={<TeacherClasses />} />
+
+                <Route path="classes" element={<TeacherBootcamps />} />
+                <Route
+                  path="classes/details/:id"
+                  element={<TeacherBootcampDetails />}
+                />
+                <Route path="earnings" element={<Earnings />} />
+                <Route path="profile/edit" element={<TeacherEdit />} />
+                <Route path="courses" element={<TeacherCourses />} />
+                <Route path="courses/create" element={<CreateCourse />} />
+                <Route
+                  path="courses/details/:id"
+                  element={<TeacherCourseInfo />}
+                />
+                <Route path="chat" element={<TeacherChat />} />
+                <Route
+                  path="notifications"
+                  element={<TeacherNotifications />}
+                />
+                {/* <Route path="help" element={<TeachersHelp />} /> */}
+                <Route path="help" element={<HIWTeacher />} />
+                <Route path="referral" element={<TeacherReferral />} />
+                <Route path="live-class" element={<Out />}>
+                  <Route index element={<Live />} />
+                  <Route path="live" element={<LiveClass />} />
+                  <Route path="connect" element={<Intermission />} />
+                </Route>
+
+                <Route path="class-console" element={<Out />}>
+                  <Route index element={<ConsoleClass />} />
+                  <Route path="class" element={<Content />}>
+                    <Route path=":classId" element={<Out />}>
+                      <Route index element={<MainContainer />} />
+                      <Route path="creator-suite" element={<Suite />} />
+                      <Route path="classroom" element={<Classroom />} />
+                      <Route path="mail" element={<Out />}>
+                        <Route index element={<ChatComponent />} />
+                        <Route path="details" element={<GroupContent />} />
+                        <Route path="group/:groupID" element={<GroupContent />} />
+                        <Route path="chat/:userId" element={<MailDetail />} />
+                      </Route>
+
+
+                      <Route path="live-class" element={<Out />}>
+                        <Route index element={<LiveClassInfo />} />
+                        <Route path="live" element={<LiveClass />} />
+                        <Route path="connect" element={<Out />}>
+                          <Route index element={<Intermission />} />
+                          <Route path="stream" element={<VideDiv />} />
+                        </Route>
+                      </Route>
+
+                      <Route path="file" element={<File />} />
+                      <Route path="note" element={<Note />} />
+                      <Route path="quiz" element={<Out />}>
+                        <Route index element={<Quiz />} />
+                        <Route path="preview" element={<Preview />} />
+                      </Route>
+                    </Route>
+                  </Route>
+                </Route>
+                <Route path="class/:id/mail/chat" element={<LiveChat />} />
+              </Route>
+              <Route path="student" element={<Out />}>
+                <Route path="" element={<StudentDashboard />} />
+                <Route path="profile" element={<StudentProfile />} />
+                <Route path="classes" element={<StudentClasses />} />
+                <Route path="bootcamps" element={<StudentBootcamps />} />
+                <Route path="myclasses" element={<MyClasses />} />
+                <Route path="profile/edit" element={<StudentEdit />} />
+                <Route path="courses" element={<StudentCourses />} />
+                <Route path="wishlist" element={<Wishlist />} />
+                <Route path="history" element={<StudentHistory />} />
+                <Route path="payment" element={<StudentFees />} />
+                <Route path="chat" element={<StudentChat />} />
+                {/* <Route path="help" element={<StudentHelp />} /> */}
+                <Route path="help" element={<HIWStudent />} />
+                <Route path="referral" element={<StudentReferral />} />
+                <Route
+                  path="notifications"
+                  element={<StudentNotifications />}
+                />
+
+                <Route path="live-class" element={<Out />}>
+                  <Route index element={<StudentLive />} />
+                  <Route path="live" element={<LiveClass />} />
+                  <Route path="connect" element={<Intermission />} />
+                </Route>
+
+                <Route path="console" element={<Content />}>
+                  <Route path="myclasses" element={<Out />}>
+                    <Route index element={<ConsoleClasses />} />
+                    <Route path=":id" element={<StudentChatModule />} />
+                    <Route path=":id/chat" element={<ActiveChat />} />
+                  </Route>
+                  <Route path="assessments" element={<ConsoleAssessments />} />
+                  <Route path="liveclass" element={<Out />} />
+                </Route>
+                <Route
+                  path="class-console/class/:id"
+                  element={<StudentClassroom />}
+                />
+              </Route>
+            </Route>
                 {/* <Route   element={ <p>Hello this is gotocourse create</p> } /> */}
               </Route>
             </Routes>

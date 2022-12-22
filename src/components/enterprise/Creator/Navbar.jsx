@@ -181,7 +181,7 @@ const Navbar = ({ toggleSidebar }) => {
                         <Logosm  />
                     </Link>
                 </div>
-
+                {/* <Link to="admin">Admin</Link> */}
                 {/* <ul>
                     <div className="firstitems">
                         <li><Link to={`/create`}>Create</Link></li>
