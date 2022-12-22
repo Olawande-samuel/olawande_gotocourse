@@ -61,10 +61,12 @@ padding: 2rem 1rem;
     
         .joinleft{
             flex: .5;
-            // border: 2px solid blue;
             text-align: left;
+            // border: 2px solid red;
             img{
-                width: 500px;
+                max-width: 500px;
+                // border: 2px solid green;
+
             }
       
         }
@@ -92,6 +94,19 @@ padding: 2rem 1rem;
                 }
             }
     
+        }
+    }
+
+    @media (max-width: 1024px){
+        .joincontent{
+            .joinleft{   
+                img{
+                    max-width: 400px;
+    
+                }
+          
+            }
+
         }
     }
    

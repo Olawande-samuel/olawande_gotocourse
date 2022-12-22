@@ -43,7 +43,7 @@ const NavContainer = styled.div`
 		justify-content: space-between;
 		width: 100%;
 		padding: 0.5rem 1rem;
-		gap: 1rem;
+		// gap: 1rem;
 		height: 100%;
 		width: 100%;
 		// border: 2px solid red;
@@ -53,13 +53,13 @@ const NavContainer = styled.div`
 		}
 
 		.navbarlogo {
-			flex: 0.5;
+			flex: 0.6;
 			// border: 2px solid yellow;
 		}
 
 		ul {
 			// border: 2px solid green;
-			flex: 0.5;
+			flex: 0.4;
 			list-style-type: none;
 			display: none;
 			align-items: center;
@@ -72,11 +72,11 @@ const NavContainer = styled.div`
 			margin-bottom: unset;
 
 			.firstitems {
-				flex: 0.7;
+				width: 100%;
 				display: flex;
 				align-items: center;
 				justify-content: space-evenly;
-				// border: 2px solid green;
+				// border: 2px solid blue;
 			}
 
 			.seconditems {
@@ -130,34 +130,7 @@ const NavContainer = styled.div`
 		}
 	}
 
-	@media (max-width: 1024px) {
-		.navcontainer {
-			ul {
-				.firstitems {
-					flex: 0.6;
-				}
-
-				.seconditems {
-					flex: 0.4;
-				}
-			}
-		}
-	}
-
-	@media (max-width: 912px) {
-		.navcontainer {
-			ul {
-				.firstitems {
-					flex: 0.6;
-				}
-
-				.seconditems {
-					gap: unset;
-					flex: 0.4;
-				}
-			}
-		}
-	}
+	
 `;
 
 const Navbar = ({ toggleSidebar }) => {
@@ -215,7 +188,6 @@ const Navbar = ({ toggleSidebar }) => {
 						<li>
 							<Link to={`/learn-with-gotocourse`}>Learn with Gotocourse</Link>
 						</li>
-						<li></li>
 					</div>
 
 					{/* <div className="seconditems">
