@@ -17,9 +17,9 @@ export const colors = {
 }
 
 export const breakpoints = {
-    mobileLg: '425px',
-    tablet: '768px',
-    laptop: '1024px',
+  mobileLg: '425px',
+  tablet: '768px',
+  laptop: '1024px',
 }
 
 export const baseURL = process.env.REACT_APP_BASEURL;

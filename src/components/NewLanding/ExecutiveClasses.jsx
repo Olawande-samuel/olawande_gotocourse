@@ -68,7 +68,7 @@ const data = {
         exec1, exec2, exec3
     ],
     bottomTitle: "View  more executive education > ",
-    bottomLink: `category/EXECUTIVE_COURSES`
+    bottomLink: `/category/EXECUTIVE_COURSES`
 }
 export default ExecutiveClasses
 

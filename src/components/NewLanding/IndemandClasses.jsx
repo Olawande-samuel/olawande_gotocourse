@@ -62,7 +62,7 @@ const data = {
   subtext:"Develop Tech skills most needed by companies and increase your earnings",
   content: [],
   bottomTitle:"View more In demand career courses >",
-  bottomLink:`category/IN_DEMAND`
+  bottomLink:`/category/IN_DEMAND`
 
 }
 export default IndemandClasses;
