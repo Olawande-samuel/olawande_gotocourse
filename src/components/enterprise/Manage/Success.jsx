@@ -4,11 +4,13 @@ import second from '../../../images/manage/two.png'
 import one from '../../../images/manage/one.png'
 
 const Container = styled.div`
-padding: 2rem;
+padding: 2rem 1rem;
 display: flex;
 flex-direction: column;
 align-items: center;
 gap: 2rem;
+// border: 2px solid brown;
+
 
 .payhead h4{
     text-align: center;
@@ -22,7 +24,7 @@ gap: 2rem;
 
 .payimages{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     gap: 1rem;
     // border: 2px solid red;
 
