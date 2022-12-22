@@ -59,7 +59,7 @@ const ShortCourses = () => {
     <ClassTypeComponent {...data}>
         <Grid>
             {
-                shorts?.filter(item => item.isActive).map(item => (
+                shorts?.filter(item => item.isActive).slice(0, 8).map(item => (
                     // <TechPreCard {...item} />
                     <Short {...item} all={item} key={item.bootcampId}/>
                 ))
@@ -74,7 +74,7 @@ const data = {
     subtext:"Knowledge boost within 1-14 days",
     content: [],
     bottomTitle:"View  more short courses > ",
-    bottomLink:`category/SHORT_COURSES`
+    bottomLink:`/category/SHORT_COURSES`
 
   }
 export default ShortCourses

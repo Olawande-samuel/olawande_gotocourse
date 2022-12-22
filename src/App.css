@@ -146,7 +146,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 4.5rem;
+  /* height: 4.5rem; */
 }
 
 .restricted_line_lg {

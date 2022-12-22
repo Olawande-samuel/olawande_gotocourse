@@ -51,7 +51,7 @@ const ExecutiveClasses = () => {
         <ClassTypeComponent {...data}>
             <Grid>
                 {
-                    shorts?.filter(item => item.isActive).slice(0, 8).map((item, i) => (
+                    shorts?.filter(item => item.isActive).map((item, i) => (
                         <ExeEducation {...item} i={i} key={item.bootcampId} />
                     ))
                 }
@@ -68,7 +68,7 @@ const data = {
         exec1, exec2, exec3
     ],
     bottomTitle: "View  more executive education > ",
-    bottomLink: `category/EXECUTIVE_COURSES`
+    bottomLink: `/category/EXECUTIVE_COURSES`
 }
 export default ExecutiveClasses
 

@@ -274,8 +274,8 @@ function App() {
                 <Route path="create" element={<CreatePage />} />
                 <Route path="manage" element={<ManagePage />} />
                 <Route path="pricing" element={<Pricing />} />
-                <Route path="enterprise-login" element={<EnterPriseLogin />} />
-                <Route path="enterprise-signup" element={<EnterpriseSignUp />} />
+                <Route path="school/login" element={<EnterPriseLogin />} />
+                <Route path="school/signup" element={<EnterpriseSignUp />} />
                 <Route path="enterprise-forgot" element={<EnterPriseForgotPassword />} />
                 <Route path="enterprise-verify" element={<EnterpriseVerification />} />
                 <Route path="enterprise-onboarding" element={<EnterpriseOnboarding />} />

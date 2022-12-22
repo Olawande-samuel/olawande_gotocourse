@@ -6,7 +6,6 @@ import { baseURL } from "../constants";
 
 
 
-
 export const commonFunctions = {
     deleteUser: async function (token, _data) {
         try {

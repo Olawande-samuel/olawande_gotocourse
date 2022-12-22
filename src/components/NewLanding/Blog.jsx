@@ -6,67 +6,80 @@ import { Link } from "react-router-dom";
 import styled from "styled-components"
 import { useAuth } from "../../contexts/Auth";
 import { ShareModal } from "../../pages/Events/articles";
+import { ClassTypeComponent } from "./landingComponents";
 
-const CardContainer = styled.div`
-display: flex;
-flex-wrap: wrap;
-// justify-content: space-evenly;
-gap:1rem 4rem;
-padding-bottom: 5rem;
-width: 100%;
 
-@media (max-width: 768px){
-    justify-content: center;
-}
+const Grid = styled.div`
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 250px), 250px));    
+    grid-auto-rows: 432px;
+    overflow: hidden;
+    gap: 1.5rem;
+    justify-content: space-around;
+    padding: .7rem .5rem;
 
+  @media screen and (max-width: 1024px) {
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 240px), 240px));
+    justify-content: space-evenly;
+    gap: 1rem;
+  }
+
+
+
+
+  @media screen and (max-width:500px){
+        grid-template-columns: min(100%, 280px);
+        justify-content:center;
+    } 
 `
 
+
+
+
+
+
 const Card = styled.div`
-flex-shrink: 0;
-width: 15rem;
-height: 25rem;
-// box-shadow: 4px 1px 17px 0px rgba(0,0,0,0.3);
-// -webkit-box-shadow: 4px 1px 17px 0px rgba(0,0,0,0.3);
-// -moz-box-shadow: 4px 1px 17px 0px rgba(0,0,0,0.3);
-// border-radius:8px;
-// overflow: hidden;
+display: flex;
+flex-direction:column;
+flex-shrink:0;
+
 
 
 a{
-    width: 100%;
-    height: 100%;
-}
-
-.top{
-    // border: 2px solid red;
-    width: 100%;
-    height: 50%;
+    height: 60%;
 
     img{
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit:cover;
         object-position: top;
     }
 }
 
+
+
 .bottom{
     padding: 0.5rem 0;
-    height: 50%;
+    height: 40%;
+    display: flex;
+    flex-direction:column;
+    // border: 2px solid green;
+    overflow: hidden;
 
-    h4{
-        font-family: 'Raleway';
-        font-style: normal;
-        font-weight: 700;
-        color: #252525;
-        font-size: clamp(1.5rem, 0.9821rem + 0.0893vw, 2rem);
+    h5 {
+        font-weight: 800;
+        // text-transform: capitalize;
+        font-size: 16px;
+        margin-block: .7rem;
+        cursor: pointer;
+
     }
 
     p{
         font-family: 'Poppins';
         font-style: normal;
         font-weight: 400;
-        line-height: 25px;
+        // line-height: 25px;
         color: #86868B;
         font-size: clamp(0.75rem, 0.7321rem + 0.0893vw, 0.875rem);
     }
@@ -135,35 +148,43 @@ export const Blog = () => {
     })
 
     return (
-        <div className="container">
-            <CardContainer>
+        <ClassTypeComponent {...data}>
+            <Grid>
                 {blogs.length > 0 && blogs.map(blog => (
 
                     <Card key={blog._id}>
-                    <Link to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?','')}/${blog?._id}`}>
-                            <div className="top">
+                        <Link to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
                                 <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
-                            </div>
                         </Link>
-                        <DateAndAction>
-                            <span>
-                                <span style={{ color: "#4100FA" }}>{new Date(blog.createdAt).toLocaleDateString().split("/").join('.')}</span>
-                            </span>
-                            <span>
-                                <i><FaShareSquare style={{ color: "#0C2191", fontSize: "1rem" }} onClick={() =>setOpen(true)}/></i>
-                            </span>
-                        </DateAndAction>
                         <div className="bottom">
-                            <h4>{blog.title}</h4>
-                            <p className="restricted_line" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
+                            <DateAndAction>
+                                <span>
+                                    <span style={{ color: "#4100FA" }}>{new Date(blog.createdAt).toLocaleDateString().split("/").join('.')}</span>
+                                </span>
+                                <span>
+                                    <i><FaShareSquare style={{ color: "#0C2191", fontSize: "1rem", cursor:"pointer" }} onClick={() => setOpen(true)} /></i>
+                                </span>
+                            </DateAndAction>
+                            <div >
+                                <h5>{blog.title}</h5>
+                                <p className="restricted_line" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
+                            </div>
+
                         </div>
                         <ShareModal x={blog} open={open} setOpen={setOpen} />
                     </Card>
                 ))}
-            </CardContainer>
+            </Grid>
 
-        </div>
+        </ClassTypeComponent>
 
     )
+
+}
+
+
+const data = {
+    header: "Gotocourse Events, News And Insights",
+    content: [],
 
 }

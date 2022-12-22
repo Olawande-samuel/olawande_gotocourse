@@ -3,9 +3,14 @@ import manage from '../../../images/manage/midmanage.png'
 
 const Container = styled.div`
 padding: 2rem 1rem;
+display: flex; 
+flex-direction: column;
+gap: 3rem;
 
 .createheader{
-    padding: 2rem;
+    display: flex; 
+flex-direction: column;
+gap: 1rem;
 }
 
 h4{
@@ -111,12 +116,14 @@ const Create = () => {
     return (
         <Container className="container">
             <div className="createheader">
-                <h4>Gotocourse is everything you need,</h4>
-                <h4>no plugins or integrations required.</h4>
+                <h4>
+                    <span>Gotocourse is everything you need,</span>
+                    <span className="d-block">no plugins or integrations required.</span>
+                </h4>
                 <p>
                     We provide you the tools you need to manage  your training online with ease. <br />
-                    Take your business to greater heights by managing your <br />
-                    training business with an easy to use live learning platform.
+                    Take your business to greater heights by managing your training business with an <br />
+                    easy to use live learning platform.
                 </p>
             </div>
             <div className="createcontent">
@@ -129,8 +136,8 @@ const Create = () => {
                     <div>
                         <h5>Track Everything</h5>
                     </div>
-                    <p>With incredible and interactive dashboard to track <br />
-                    and stay organized you are empowered to track everything. Track earnings, <br />
+                    <p>With incredible and interactive dashboard to track and stay<br />
+                        organized you are empowered to track everything. Track earnings, <br />
                         performance , attendance, admissions. </p>
                 </div>
             </div>

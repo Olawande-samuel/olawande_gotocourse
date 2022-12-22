@@ -1729,7 +1729,7 @@ const ClassWrapper = styled.section`
     .bottom{
         display: flex;
         margin-top: 1rem;
-        justify-content: flex-end;
+        justify-content: center;
 
     }
 `

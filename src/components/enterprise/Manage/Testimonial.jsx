@@ -4,9 +4,12 @@ import what from '../../../images/manage/testimonial.png'
 const Container = styled.div`
 padding: 2rem 1rem;
     color: #1B1F29;
+    // border: 2px solid red;
+
 
     .joincontent{
         display: flex;
+        // border: 2px solid yellow;
         gap: 3rem;
         justify-content: space-between;
         align-items: center;
@@ -15,7 +18,7 @@ padding: 2rem 1rem;
             flex: .5;
             display: flex; 
             flex-direction: column;
-            1gap: 2rem;
+            gap: 2rem;
     
             h4{
                 font-family: 'Raleway';
@@ -58,10 +61,12 @@ padding: 2rem 1rem;
     
         .joinleft{
             flex: .5;
+            text-align: left;
             // border: 2px solid red;
-            text-align: right;
             img{
-                width: 500px;
+                max-width: 500px;
+                // border: 2px solid green;
+
             }
       
         }
@@ -91,6 +96,19 @@ padding: 2rem 1rem;
     
         }
     }
+
+    @media (max-width: 1024px){
+        .joincontent{
+            .joinleft{   
+                img{
+                    max-width: 400px;
+    
+                }
+          
+            }
+
+        }
+    }
    
 
 `
@@ -107,8 +125,10 @@ const Testimonial = () => {
                 </div>
                 <div className="joinright">
                     <div>
-                        <h4>See what other educators are  </h4>
-                        <h4>saying about us</h4>
+                        <h4>
+                            <span> See what other educators are</span>
+                            <span className="d-block">saying about us</span>
+                             </h4>
                         <p>
                         Join 10,000+ educators creating better experiences
                        </p>

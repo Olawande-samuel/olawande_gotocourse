@@ -49,12 +49,16 @@ import "swiper/css";
 
 import critical_skills from "../../images/landing/critical_skills.webp";
 import life_change from "../../images/landing/life_change.webp";
-import tell from "../../images/landing/mentor_landing.webp";
+// import tell from "../../images/landing/mentor_landing.webp";
+import tell from "../../images/landing/mentor_landing.png";
 import newMen from "../../images/landing/newMen.png";
 
-import afford from "../../images/landing/affordable.webp";
-import critical from "../../images/landing/platform.webp";
-import interactive from "../../images/landing/interactive.webp";
+// import afford from "../../images/landing/affordable.webp";
+import afford from "../../images/landing/affordable.png";
+// import critical from "../../images/landing/platform.webp";
+import critical from "../../images/landing/platform.png";
+// import interactive from "../../images/landing/interactive.webp";
+import interactive from "../../images/landing/interactive.png";
 
 import GreatOpportunities from "./GreatOpportunities";
 import ShortCourses from "./ShortCourses";
@@ -79,22 +83,22 @@ const NewLanding = () => {
       <Category />
       <GreatOpportunities />
       <Benefits />
-      <ShortCourses />
-      <ExecutiveClasses />
       <IndemandClasses />
       <UpskillCourse />
+      <ExecutiveClasses />
+      <ShortCourses />
       <VideoSection />
       <BetterWay />
-      <TechPro />
+      {/* <TechPro /> */}
       <Mentors />
       {/* <VirtualTraining /> */}
       <LiveWebinars />
-      {/* <Blog/> */}
-      <Success />
-      <Logos />
+      <Blog/>
+      {/* <Success /> */}
+      {/* <Logos /> */}
       {/* <TeachingBenefits /> */}
       {/* <TrackPro /> */}
-      <Faq />
+      {/* <Faq /> */}
       {/* <AffiliatePro /> */}
       {/* <Gif /> */}
       {/* <Experienced /> */}

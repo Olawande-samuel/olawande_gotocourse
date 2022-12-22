@@ -79,7 +79,11 @@ const Course = () => {
             </div>
 
             <div className="courseright">
-                <h5>Course materials on the go!</h5>
+                <h5>
+                    <span>Course materials on the go!</span> 
+                    <span className="d-block">Any device, any time</span>
+                    
+                </h5>
                 <div>
                     <p>
                         Get access to the same course materials that you would with a normal classroom setting,. Learners have have access to the assignment page and all study materials (e.g., notes, documents, photos, and videos) uploaded and saved on Class console. Attendees have unlimited access to study material on any device, anytime and anywhere hence, they are able to maximize their learning with the provided study material after every class and any time they need it.

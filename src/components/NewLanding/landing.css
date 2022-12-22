@@ -1335,13 +1335,13 @@
 }
 
 .stay_right.anyright h6{
-  color: var(--theme-blue);
+  color: #000;
   font-weight: 700;
   font-size: clamp(1.8rem, 2.2643rem + -2.3214vw, 2.175rem);
 }
 
 .stay_right.anyright p{
-  color: var(--theme-blue);
+  color: #000;
   /* width: min(100%, 400px); */
 }
 .stay_right.anyright li {

@@ -27,15 +27,15 @@ h5{
 
     .list__content{
         width: 100%;
-        padding:3rem 2rem ;
+        padding:3rem 1rem;
+        // border: 2px solid red;
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns :2fr 2fr 1fr;
         gap: 2rem 1rem;
        
     
         .list__item{
             // border: 2px solid red;
-            padding-left: 5rem;
             color: var( --theme-blue);
             display: flex;
             align-items: center;
@@ -62,9 +62,9 @@ h5{
         .list__content{
             grid-template-columns:  1fr;
             padding:2rem;
-            text-align: start;
 
             .list__item{
+
                 span{
                     font-size: 1rem;
                 }
