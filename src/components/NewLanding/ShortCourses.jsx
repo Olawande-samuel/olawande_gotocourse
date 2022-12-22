@@ -74,7 +74,7 @@ const data = {
     subtext:"Knowledge boost within 1-14 days",
     content: [],
     bottomTitle:"View  more short courses > ",
-    bottomLink:`category/SHORT_COURSES`
+    bottomLink:`/category/SHORT_COURSES`
 
   }
 export default ShortCourses

@@ -217,7 +217,7 @@ const data = {
         },
     ],
     bottomTitle: "View more Upskill courses >",
-    bottomLink:`category/UPSKILL_COURSES`
+    bottomLink:`/category/UPSKILL_COURSES`
 
 }
 
