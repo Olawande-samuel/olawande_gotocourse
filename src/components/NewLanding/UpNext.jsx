@@ -183,10 +183,9 @@ export function TabsComp() {
 
     onSuccess: (res) => {
       if (res.data.length > 0) {
-        // console.log("data", res.data);
-        // item.subCategory === "UPSKILL_COURSES" &&
+  
         const uppers = res.data.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
-        console.log({ uppers });
+        // console.log({ uppers });
         setShorts(uppers)
       }
     }
