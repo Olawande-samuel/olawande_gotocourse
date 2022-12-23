@@ -87,10 +87,10 @@ const NewLanding = () => {
       <UpskillCourse />
       <ExecutiveClasses />
       <ShortCourses />
-      <VideoSection />
-      <BetterWay />
-      {/* <TechPro /> */}
       <Mentors />
+      <BetterWay /> 
+      <VideoSection />
+      {/* <TechPro /> */}
       {/* <VirtualTraining /> */}
       <LiveWebinars />
       <Blog/>
