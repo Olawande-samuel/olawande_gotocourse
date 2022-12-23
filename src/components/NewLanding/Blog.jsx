@@ -12,7 +12,7 @@ import { ClassTypeComponent } from "./landingComponents";
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-  grid-auto-rows: 420px;
+  grid-auto-rows: 380px;
   overflow: hidden;
   gap: 2.5rem;
   row-gap: 3rem;
@@ -44,11 +44,12 @@ flex-shrink:0;
 
 
 a{
-    height: 60%;
+    height: 35%;
+    // border: 2px solid red;
 
     img{
         width: 100%;
-        height: 100%;
+        max-height: 100%;
         // object-fit:cover;
         // object-position: top;
     }
@@ -57,12 +58,13 @@ a{
 
 
 .bottom{
-    padding: 0.5rem 0;
-    height: 40%;
+    // padding: 0.5rem 0;
+    height: 60%;
     display: flex;
     flex-direction:column;
     // border: 2px solid green;
     overflow: hidden;
+    margin-top: unset;
 
     h5 {
         font-weight: 800;
@@ -93,9 +95,11 @@ export const DateAndAction = styled.div`
     justify-content: space-between;
     align-items: center;
     width:min(100%, 800px);
-    margin-inline: auto;
-    margin-top: 1.5rem;
+    // margin-inline: auto;
+    // margin-top: 1.5rem;
     // padding-inline: 1rem;
+    // border: 2px solid yellow;
+
     
     > span:first-child {
         font-size: 12px;
