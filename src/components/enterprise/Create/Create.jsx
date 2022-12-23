@@ -2,10 +2,10 @@ import styled from "styled-components"
 import dashboard from '../../../images/landing/dashboard.png'
 
 const Container = styled.div`
-padding: 2rem 1rem;
+padding: 1rem;
 
 .createheader{
-    padding: 4rem;
+    padding-bottom: 2rem;
 }
 
 h4{
