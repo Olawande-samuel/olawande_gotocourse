@@ -184,8 +184,9 @@ export function TabsComp() {
     onSuccess: (res) => {
       if (res.data.length > 0) {
         // console.log("data", res.data);
-        const uppers = res.data.filter(item => item.subCategory === "UPSKILL_COURSES" && item.isActive);
-        //   console.log({uppers});
+        // item.subCategory === "UPSKILL_COURSES" &&
+        const uppers = res.data.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
+        console.log({ uppers });
         setShorts(uppers)
       }
     }
@@ -248,7 +249,7 @@ export function TabsComp() {
 }
 
 
-export function Card({ title, bootcampImg, bootcampId, category, description, duration, price, packages, popupTitle, popupArr, all }) {
+export function Card({ title, bootcampImg, bootcampId, category, description, startDate, duration, price, packages, popupTitle, popupArr, all }) {
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -375,14 +376,19 @@ export function Card({ title, bootcampImg, bootcampId, category, description, du
             <small>{duration}</small>
             <small>$ {packages.length > 0 ? packages[0].price : price}</small>
           </div>
+          <div className="d-flex justify-content-between" style={{color: "var(--theme-blue"}}>
+            <p>Start Date:</p>
+            <p>{new Date(startDate).toLocaleDateString()}</p>
+
+          </div>
         </div>
 
         {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-        <div className="foot">
+        <div className="foot d-flex justify-content-center">
           <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button>
-          <div className="ct_bar"></div>
+          {/* <div className="ct_bar"></div>
 
-          <span>{changeConstants(packages[0]?.title)}</span>
+          <span>{changeConstants(packages[0]?.title)}</span> */}
         </div>
         {/* <div>
                   <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>
