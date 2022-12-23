@@ -10,28 +10,26 @@ import { ClassTypeComponent } from "./landingComponents";
 
 
 const Grid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(200px, 250px), 250px));    
-    grid-auto-rows: 432px;
-    overflow: hidden;
-    gap: 1.5rem;
-    justify-content: space-around;
-    padding: .7rem .5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
+  grid-auto-rows: 420px;
+  overflow: hidden;
+  gap: 2.5rem;
+  row-gap: 3rem;
+  justify-content: space-around;
+  padding: .7rem .5rem;
 
-  @media screen and (max-width: 1024px) {
+
+  @media screen and (max-width: 1250px) {
     grid-template-columns: repeat(auto-fit, minmax(min(180px, 240px), 240px));
     justify-content: space-evenly;
     gap: 1rem;
   }
-
-
-
-
   @media screen and (max-width:500px){
         grid-template-columns: min(100%, 280px);
         justify-content:center;
     } 
-`
+`;
 
 
 

@@ -76,8 +76,8 @@ const NewLanding = () => {
   return (
     <Layout background="blue">
       <Hero />
-      <WhatweDo />
       <Stats />
+      <WhatweDo />
       <Companies />
       <Mission />
       <Category />
@@ -87,10 +87,10 @@ const NewLanding = () => {
       <UpskillCourse />
       <ExecutiveClasses />
       <ShortCourses />
-      <VideoSection />
-      <BetterWay />
-      {/* <TechPro /> */}
       <Mentors />
+      <BetterWay /> 
+      <VideoSection />
+      {/* <TechPro /> */}
       {/* <VirtualTraining /> */}
       <LiveWebinars />
       <Blog/>
