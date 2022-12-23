@@ -716,6 +716,7 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
                     <div className="checks">
                         <p> <AiOutlineCheck className="icon" /> Cohort Learning</p>
                         <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live </span>with Instructor</p>
+                        <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}></span>{new Date(startDate).toLocaleDateString()}</p>
                     </div>
                 </div>
 

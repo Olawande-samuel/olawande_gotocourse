@@ -49,8 +49,8 @@ a{
     img{
         width: 100%;
         height: 100%;
-        object-fit:cover;
-        object-position: top;
+        // object-fit:cover;
+        // object-position: top;
     }
 }
 
@@ -152,7 +152,7 @@ export const Blog = () => {
 
                     <Card key={blog._id}>
                         <Link to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
-                                <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
+                            <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
                         </Link>
                         <div className="bottom">
                             <DateAndAction>
@@ -160,11 +160,13 @@ export const Blog = () => {
                                     <span style={{ color: "#4100FA" }}>{new Date(blog.createdAt).toLocaleDateString().split("/").join('.')}</span>
                                 </span>
                                 <span>
-                                    <i><FaShareSquare style={{ color: "#0C2191", fontSize: "1rem", cursor:"pointer" }} onClick={() => setOpen(true)} /></i>
+                                    <i><FaShareSquare style={{ color: "#0C2191", fontSize: "1rem", cursor: "pointer" }} onClick={() => setOpen(true)} /></i>
                                 </span>
                             </DateAndAction>
                             <div >
-                                <h5>{blog.title}</h5>
+                                <Link to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
+                                    <h5>{blog.title}</h5>
+                                </Link>
                                 <p className="restricted_line" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
                             </div>
 

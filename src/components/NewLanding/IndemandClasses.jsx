@@ -38,7 +38,7 @@ const IndemandClasses = () => {
               const exe = res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.isActive);
 
               setShorts(exe)
-              // console.log({exe})
+              console.log({exe})
             }
         }
   })
