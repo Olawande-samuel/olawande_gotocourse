@@ -76,8 +76,8 @@ const NewLanding = () => {
   return (
     <Layout background="blue">
       <Hero />
-      <WhatweDo />
       <Stats />
+      <WhatweDo />
       <Companies />
       <Mission />
       <Category />
