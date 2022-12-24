@@ -81,8 +81,8 @@ const NewLanding = () => {
       <WhatweDo />
       <Companies />
       {/* <Mission /> */}
-      <Category />
       <Up/>
+      <Category />
       <GreatOpportunities />
       <Benefits />
       <IndemandClasses />

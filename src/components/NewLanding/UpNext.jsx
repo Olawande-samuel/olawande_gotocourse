@@ -17,7 +17,7 @@ import styled from 'styled-components'
 
 // Import Swiper styles
 import "swiper/css";
-import { changeConstants, gotoclassPayment, KEY } from '../../constants';
+import { changeConstants, getFullDate, gotoclassPayment, KEY } from '../../constants';
 import { AdvancedError } from '../../classes';
 import { upskillAltData } from './UpskillCourse';
 import { useLocalStorage } from '../../hooks';
@@ -232,7 +232,7 @@ export function TabsComp() {
         >
           <Grid>
             {
-              shorts?.filter(item => item.isActive).slice(0, 5).map(item => (
+              shorts?.filter(item => item.isActive).sort(() => 0.5 - Math.random()).map(item => (
                 <SwiperSlide key={item.categoryId}>
                   <Card {...item} all={item} key={item.bootcampId} />
                 </SwiperSlide>
@@ -377,7 +377,8 @@ export function Card({ title, bootcampImg, bootcampId, category, description, st
           </div>
           <div className="d-flex justify-content-between" style={{color: "var(--theme-blue"}}>
             <p>Start Date:</p>
-            <p>{new Date(startDate).toLocaleDateString()}</p>
+            {/* <p>{new Date(startDate).toLocaleDateString()}</p> */}
+            <p>{getFullDate(startDate)}</p>
 
           </div>
         </div>
