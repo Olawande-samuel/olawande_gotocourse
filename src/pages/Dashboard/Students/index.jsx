@@ -1569,6 +1569,13 @@ export const Dashboard = () => {
         <Students isMobile={isMobile} userdata={userdata} header={"Dashboard"} >
             <div className={clsx.students_profile}>
                 <DashboardTop content={topContent} />
+
+                <div className={clsx.students_profile_main}>
+                    <UpcomingCourses data={data?.data ? data?.data : []} />
+                </div>
+
+
+                
                 <div className={clsx.students_profile_main}>
                     <AvailableCourses data={data?.data ? data?.data : []} />
                     <div className={`d-flex flex-wrap ${clsx.dashboard_courses}`}>
@@ -1632,6 +1639,130 @@ export const Dashboard = () => {
         </Students>
     )
 
+}
+
+function UpcomingCourses({ data }) {
+    const navigate = useNavigate()
+    // const tableHeader = ["Courses", "Start Date", "Program Fee", ""]
+    const { getItem } = useLocalStorage()
+    let userdata = getItem(KEY);
+
+
+    function handleCourseSelect(e, item) {
+        e.preventDefault()
+        if (userdata?.token) {
+            localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+            gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
+        } else {
+            navigate("/login")
+        }
+
+    }
+    // console.log({ data });
+    return (
+        <div className={` ${clsx.dashboard_courses}`}>
+            <div className={clsx["dashboard_courses--left"]}>
+                <h6 style={{ marginBottom: ".5rem" }}>Upcoming Courses</h6>
+                <small className="mb-4 d-block">Select and enroll for a course to get started</small>
+
+                <div className={clsx["courseheader"]}>
+                    <div className={clsx["courseitem"]}> No</div>
+                    <div className={clsx["courseitem"]}>Courses</div>
+                    <div className={clsx["courseitem"]}>Category</div>
+                    <div className={clsx["courseitem"]}>Subcategory</div>
+                    <div className={clsx["courseitem"]}>Start Date</div>
+                    <div className={clsx["courseitem"]}>Durations</div>
+                    <div className={clsx["courseitem"]}>
+                        {/* <FormControl fullWidth size="small">
+                            <InputLabel id="demo-simple-select-label">Fee</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                // value={age}
+                                label="fee"
+                            // onChange={handleChange}
+                            >
+                                <MenuItem value={30}>POUNDS</MenuItem>
+                                <MenuItem value={10}>USD</MenuItem>
+                                <MenuItem value={20}>EURO</MenuItem>
+                                <MenuItem value={20}>NAIRA</MenuItem>
+                            </Select>
+                        </FormControl> */}
+
+                        Fees
+                    </div>
+                    <div className={clsx["courseitem"]} />
+                </div>
+
+                <div className={clsx["coursebody"]}>
+                    {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
+                    {data?.length > 0 && data.filter(d => d.startDate === "2023-01-05T00:00:00.000Z" && d.isActive).sort(() => 0.5 - Math.random()).map((item, i) => (
+
+                        <div className={clsx["coursecontent"]} key={i}>
+                            <div className={clsx["courseitem"]}>
+                                {i + 1}
+
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                {item.title}
+
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+
+                                {item.category?.toLowerCase()}
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                {item.subCategory === "SHORT_COURSES" ? "Short Courses" :
+                                    item.subCategory === "IN_DEMAND" ? "In-Demand Course" :
+                                        item.subCategory === "UPSKILL_COURSES" ? "Upskill Course" :
+                                            item.subCategory === "EXECUTIVE_COURSES" ? "Executive Course" : "Tech Enterpreneurship"}
+
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                {item.startDate && getDate(item.startDate)}
+                            </div>
+
+
+                            <div className={clsx["courseitem"]}>
+                                {item.duration}
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                ${item.packages.length > 0 && item.packages[0].price}
+
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                <div className={clsx.classes_button}>
+                                    <button className="d-flex align-items-center" onClick={() => gotoclass(item.title, item.category, item.bootcampId, navigate)}>
+                                        <i><BsQuestionCircle /></i>
+                                        <span>Learn more</span>
+                                    </button>
+                                    <button className="d-flex align-items-center" onClick={(e) => handleCourseSelect(e, item)}>
+                                        <i><BsDownload /></i>
+                                        <span>Enroll</span>
+                                    </button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    ))
+                    }
+
+                </div>
+
+            </div>
+
+
+
+
+        </div>
+    )
 }
 
 function AvailableCourses({ data }) {
