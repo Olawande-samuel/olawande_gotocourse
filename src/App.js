@@ -280,6 +280,13 @@ function App() {
                 <Route path="enterprise-verify" element={<EnterpriseVerification />} />
                 <Route path="enterprise-onboarding" element={<EnterpriseOnboarding />} />
                 <Route path="creator-landing" element={<Creator />} />
+
+
+                {/* <Route path="Learn-with-gotocourse" element={<Out />}>
+                              <Route index element={<Landing />} />
+
+                             </Route> */}
+ 
                
                 <Route path="Learn-with-gotocourse" element={<Landing />} />
                 <Route path="login" element={<Login />} />

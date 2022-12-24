@@ -22,15 +22,17 @@ const Container = styled.div`
 			font-family: "Raleway";
 			font-style: normal;
 			font-weight: 900;
-			font-size: clamp(2.8125rem, 2.25rem + 1.8vw, 3.0375rem);
+			// font-size: clamp(2.8125rem, 2.25rem + 1.8vw, 3.0375rem);
 			// font-size: clamp(2.8rem, 2.25rem + 1.8vw, 3.0rem);
+			font-size: 2.4rem;
+
 		}
 		p {
 			font-family: "Raleway";
 			font-style: normal;
 			font-weight: 500;
-			font-size: 18px;
-			line-height: 27px;
+			font-size: 16px;
+			line-height: 22px;
 			color: var(--theme-blue);
 		}
 
@@ -59,13 +61,14 @@ const Container = styled.div`
 	.heroright {
 		flex: 0.4;
 		width: 100%;
-		height: 500px;
-		padding: 2rem 0;
+		// height: 500px;
+		// padding: 2rem 0;
+		text-align: center;
 
 		img {
-			width: 100%;
-			height: 100%;
-			object-fit: contain;
+			// width: 100%;
+			// height: 100%;
+			// object-fit: contain;
 		}
 	}
 
@@ -82,11 +85,11 @@ const Container = styled.div`
 		}
 
 		.heroright {
-			width: 100%;
-			img {
-				width: 100%;
-				object-fit: cover;
-			}
+			// width: 100%;
+			// img {
+			// 	width: 100%;
+			// 	object-fit: cover;
+			// }
 		}
 	}
 
@@ -98,13 +101,13 @@ const Container = styled.div`
 			}
 		}
 		.heroright {
-			width: 100%;
-			height: 400px;
-			img {
-				width: 100%;
-				height: 100%;
-				// object-fit: cover;
-			}
+			// width: 100%;
+			// height: 400px;
+			// img {
+			// 	width: 100%;
+			// 	height: 100%;
+			// 	// object-fit: cover;
+			// }
 		}
 	}
 `;
@@ -139,7 +142,7 @@ const Hero = () => {
 				<img
 					src={heroimg}
 					alt=""
-					width={400}
+					// width={400}
 					// height={200}
 				/>
 			</div>

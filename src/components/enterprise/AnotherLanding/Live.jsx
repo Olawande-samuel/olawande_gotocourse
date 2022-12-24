@@ -72,6 +72,16 @@ padding: 4rem 1rem;
                     object-fit: cover;
                 }
             }
+
+            .liveright{
+                text-align: center;
+
+                h4{
+                    span{
+                        display: inline !important;
+                    }
+                }
+            }
     }
 
 `
@@ -85,7 +95,7 @@ const Live = () => {
 
             <div className="liveright">
                 <h4>
-                    <span>Hold unlimited live</span>
+                    <span>Hold unlimited live </span>
                     <span className="d-block">classes</span>
                 </h4>
                 <div>

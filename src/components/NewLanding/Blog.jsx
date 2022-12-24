@@ -10,28 +10,26 @@ import { ClassTypeComponent } from "./landingComponents";
 
 
 const Grid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(200px, 250px), 250px));    
-    grid-auto-rows: 432px;
-    overflow: hidden;
-    gap: 1.5rem;
-    justify-content: space-around;
-    padding: .7rem .5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
+  grid-auto-rows: 380px;
+  overflow: hidden;
+  gap: 2.5rem;
+  row-gap: 3rem;
+  justify-content: space-around;
+  padding: .7rem .5rem;
 
-  @media screen and (max-width: 1024px) {
+
+  @media screen and (max-width: 1250px) {
     grid-template-columns: repeat(auto-fit, minmax(min(180px, 240px), 240px));
     justify-content: space-evenly;
     gap: 1rem;
   }
-
-
-
-
   @media screen and (max-width:500px){
         grid-template-columns: min(100%, 280px);
         justify-content:center;
     } 
-`
+`;
 
 
 
@@ -46,25 +44,27 @@ flex-shrink:0;
 
 
 a{
-    height: 60%;
+    height: 35%;
+    // border: 2px solid red;
 
     img{
         width: 100%;
-        height: 100%;
-        object-fit:cover;
-        object-position: top;
+        max-height: 100%;
+        // object-fit:cover;
+        // object-position: top;
     }
 }
 
 
 
 .bottom{
-    padding: 0.5rem 0;
-    height: 40%;
+    // padding: 0.5rem 0;
+    height: 60%;
     display: flex;
     flex-direction:column;
     // border: 2px solid green;
     overflow: hidden;
+    margin-top: unset;
 
     h5 {
         font-weight: 800;
@@ -95,9 +95,11 @@ export const DateAndAction = styled.div`
     justify-content: space-between;
     align-items: center;
     width:min(100%, 800px);
-    margin-inline: auto;
-    margin-top: 1.5rem;
+    // margin-inline: auto;
+    // margin-top: 1.5rem;
     // padding-inline: 1rem;
+    // border: 2px solid yellow;
+
     
     > span:first-child {
         font-size: 12px;
@@ -154,7 +156,7 @@ export const Blog = () => {
 
                     <Card key={blog._id}>
                         <Link to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
-                                <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
+                            <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
                         </Link>
                         <div className="bottom">
                             <DateAndAction>
@@ -162,11 +164,13 @@ export const Blog = () => {
                                     <span style={{ color: "#4100FA" }}>{new Date(blog.createdAt).toLocaleDateString().split("/").join('.')}</span>
                                 </span>
                                 <span>
-                                    <i><FaShareSquare style={{ color: "#0C2191", fontSize: "1rem", cursor:"pointer" }} onClick={() => setOpen(true)} /></i>
+                                    <i><FaShareSquare style={{ color: "#0C2191", fontSize: "1rem", cursor: "pointer" }} onClick={() => setOpen(true)} /></i>
                                 </span>
                             </DateAndAction>
                             <div >
-                                <h5>{blog.title}</h5>
+                                <Link to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
+                                    <h5>{blog.title}</h5>
+                                </Link>
                                 <p className="restricted_line" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
                             </div>
 

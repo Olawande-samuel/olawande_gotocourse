@@ -14,10 +14,11 @@ const Container = styled.div`
     .liveleft{
         flex: .5;
         // border: 2px solid green;
+        text-align: right;
 
         img{
-            width: 100%;
-            max-height: 400px;
+            max-width: 100%;
+            // max-height: 400px;
             // object-fit: cover;
             // border: 2px solid yellow;
 

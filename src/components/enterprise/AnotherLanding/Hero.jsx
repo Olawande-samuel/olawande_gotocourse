@@ -10,6 +10,7 @@ const Container = styled.div`
 	color: #0c1825;
 	padding: 0.5rem 1rem;
 	margin-top: 7rem;
+	// border: 2px solid green;
 
 	.heroleft {
 		display: flex;
@@ -21,15 +22,18 @@ const Container = styled.div`
 			font-family: "Raleway";
 			font-style: normal;
 			font-weight: 900;
-			font-size: clamp(2.8125rem, 2.25rem + 1.8vw, 3.0375rem);
+			// font-size: clamp(2.8125rem, 2.25rem + 1.8vw, 3.0375rem);
 			// font-size: clamp(2.25rem, 2.1429rem + .5357vw, 3rem);
+			font-size: 2.4rem;
 		}
 		ul {
 			font-family: "Raleway";
 			font-style: normal;
 			font-weight: 500;
-			font-size: 18px;
-			line-height: 27px;
+			// font-size: 18px;
+			// line-height: 27px;
+			font-size: 16px;
+			line-height: 22px;
 		}
 
 		.email {
@@ -61,6 +65,7 @@ const Container = styled.div`
 		flex: 0.5;
 		width: 100%;
 		// border: 2px solid yellow;
+		text-align: center;
 
 		img {
 			max-width: 100%;

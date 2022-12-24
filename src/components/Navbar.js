@@ -166,14 +166,14 @@ const Navbar = ({ background }) => {
             ) : (
               <>
                 
-                <li className="nav-item d-flex align-items-center nav_link">
+                {/* <li className="nav-item d-flex align-items-center nav_link">
                   <Link to="/become-a-teacher" className="link"
                    style={{
                     color:confirmEmail || landing || categoryRoute || mainpage ? "#0C2191" : "rgba(255, 255, 255)"
                   }}>
                     Become a Teacher
                   </Link>
-                </li>
+                </li> */}
                 <li className="nav-item d-flex align-items-center nav_link d-lg-none">
                   <Link to="/login" className="link"
                   style={{color:landing || mainpage ? "var(--theme-blue)": "#fff"}}

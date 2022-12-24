@@ -10,6 +10,7 @@ import { useAuth } from "../../contexts/Auth";
 import "./landing.css";
 import { useLocalStorage } from "../../hooks";
 import { Category } from "./Tabs";
+import { Up } from "./UpNext";
 // import Learn from "../Learn"
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -76,10 +77,11 @@ const NewLanding = () => {
   return (
     <Layout background="blue">
       <Hero />
-      <WhatweDo />
       <Stats />
+      <WhatweDo />
       <Companies />
-      <Mission />
+      {/* <Mission /> */}
+      <Up/>
       <Category />
       <GreatOpportunities />
       <Benefits />
@@ -87,12 +89,12 @@ const NewLanding = () => {
       <UpskillCourse />
       <ExecutiveClasses />
       <ShortCourses />
-      <VideoSection />
-      <BetterWay />
-      {/* <TechPro /> */}
       <Mentors />
+      <BetterWay /> 
+      <VideoSection />
+      {/* <TechPro /> */}
       {/* <VirtualTraining /> */}
-      <LiveWebinars />
+      {/* <LiveWebinars /> */}
       <Blog/>
       {/* <Success /> */}
       {/* <Logos /> */}
