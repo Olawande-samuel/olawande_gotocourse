@@ -1735,7 +1735,7 @@ const ClassWrapper = styled.section`
     }
 `
 
-export function ClassTypeComponent({ children, header: head, header2, subtext, bottomTitle, bottomLink }) {
+export function ClassTypeComponent({ children, header: head, header2, subtext,subtext1, subtext2, bottomTitle, bottomLink }) {
     return (
         <ClassWrapper>
             <div className="container">
@@ -1743,6 +1743,8 @@ export function ClassTypeComponent({ children, header: head, header2, subtext, b
                     <h5>{head}</h5>
                     <h5>{header2}</h5>
                     <small>{subtext}</small>
+                    <small className="d-block">{subtext1}</small>
+                    <small className="d-block">{subtext2}</small>
                 </header>
                 <article>
                     {children}

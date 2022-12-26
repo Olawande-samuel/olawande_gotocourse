@@ -496,6 +496,169 @@ const ShortCourseComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   )
 }
 
+const HeadstartComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
+  const { generalState: { navHeight } } = useAuth()
+  // Here we use item offsets; we could also use page offsets
+  // following the API or data you're working with.
+  const [itemOffset, setItemOffset] = useState(0);
+
+  // Simulate fetching items from another resources.
+  // (This could be items from props; or items loaded in a local state
+  // from an API endpoint with useEffect and useState)
+  const endOffset = itemOffset + itemsPerPage;
+  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+  const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
+
+  // Invoke when user click to request another page.
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
+    console.log(
+      `User requested page number ${event.selected}, which is offset ${newOffset}`
+    );
+    setItemOffset(newOffset);
+  };
+
+  return (
+    <div style={{ marginTop: navHeight }}>
+      <div className='container'>
+        <ExecutiveHero>
+          <div className="left">
+            <h3>
+              Headstart programs
+            </h3>
+            {/* <h3>
+              needed by companies and
+            </h3>
+            <h3>
+              increase your earnings
+            </h3> */}
+
+            <p>Choose from wide range of programs for your kids between ages 9 - 15 years above to get them started in the tech world</p>
+          </div>
+          <div className="right">
+            <img src={demand} alt="" />
+          </div>
+        </ExecutiveHero>
+      </div>
+
+      <ShortMid />
+
+      <div className="container">
+        <Grid>
+          {
+            currentItems?.map(item => (
+              <InDemand {...item} key={item.bootcampId} />
+            ))
+          }
+
+        </Grid>
+        <ReactPaginate
+          className="pagination"
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          // previousLabel="< previous"
+          previousLabel="<"
+          // previousLabel="&#8592;"
+          renderOnZeroPageCount={null}
+        /> 
+
+      </div>
+
+      <Companies />
+      <Question />
+
+
+
+    </div>
+
+  )
+}
+
+const PathComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
+  const { generalState: { navHeight } } = useAuth()
+
+  // Here we use item offsets; we could also use page offsets
+  // following the API or data you're working with.
+  const [itemOffset, setItemOffset] = useState(0);
+
+  // Simulate fetching items from another resources.
+  // (This could be items from props; or items loaded in a local state
+  // from an API endpoint with useEffect and useState)
+  const endOffset = itemOffset + itemsPerPage;
+  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+  const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
+
+  // Invoke when user click to request another page.
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
+    console.log(
+      `User requested page number ${event.selected}, which is offset ${newOffset}`
+    );
+    setItemOffset(newOffset);
+  };
+
+
+  return (
+    <div style={{ marginTop: navHeight }}>
+      <div className='container'>
+        <ShortHero>
+          <div className="left">
+            <h3>
+             Pathfinders Programs
+            </h3>
+            {/* <h3>
+              knowledge boost
+            </h3> */}
+            <p>Choose from wide range of programs for individuals 15 years above to get them started in the tech world</p>
+          </div>
+          <div className="right">
+            <img src={short} alt="" />
+          </div>
+        </ShortHero>
+      </div>
+
+      <ShortMid />
+
+      <div className="container">
+        <Grid>
+          {
+            currentItems?.map(item => (
+              <UpskillCourseCard {...item} key={item.bootcampId} />
+            ))
+          }
+
+        </Grid>
+
+        <ReactPaginate
+          className="pagination"
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          // previousLabel="< previous"
+          previousLabel="<"
+          // previousLabel="&#8592;"
+          renderOnZeroPageCount={null}
+        /> 
+
+      </div>
+
+      <Companies />
+
+      <Question />
+
+
+
+    </div>
+
+  )
+}
 
 const UpskillComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   const { generalState: { navHeight } } = useAuth()
@@ -882,7 +1045,9 @@ const CourseComponent = () => {
           (id === "UPSKILL_COURSES") ? <UpskillComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
             (id === "EXECUTIVE_COURSES") ? <ExecutiveComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
               (id === "IN_DEMAND") ? <DemandComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
-                (id === "TECH_ENTREPRENEURSHIP") ? <TechComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> : ""
+              (id === "TECH_ENTREPRENEURSHIP") ? <TechComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
+              (id === "PATH_FINDERS") ? <PathComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
+              (id === "HEAD_START") ? <HeadstartComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> : ""
         }
 
 

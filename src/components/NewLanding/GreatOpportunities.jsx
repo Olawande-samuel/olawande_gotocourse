@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from "styled-components"
 import { GreatImage } from './landingComponents'
-import exec from "../../images/landing/executive.png"
+// import exec from "../../images/landing/executive.png"
+import headstart from "../../images/landing/headstart.png"
+import dem from "../../images/landing/dem.png"
 import short from "../../images/landing/short.png"
 import inD from "../../images/landing/indemand.png"
 import up from "../../images/landing/upskill.png"
@@ -57,21 +59,32 @@ const GreatOpportunities = () => {
 }
 
 const data = [
+    // {
+    //     img:exec,
+    //     title:"Executive Education",
+    //     link:"/category/EXECUTIVE_COURSES"
+    // },
+    // {
+    //     img:short,
+    //     title:"Short Courses",
+    //     link:"/category/SHORT_COURSES"
+    // },
     {
-        img:exec,
-        title:"Executive Education",
-        link:"/category/EXECUTIVE_COURSES"
-    },
-    {
-        img:short,
-        title:"Short Courses",
-        link:"/category/SHORT_COURSES"
+        img:headstart,
+        title:"Tech Headstart \n program \n 9 years above",
+        link:"/category/HEAD_START"
     },
     {
         img:inD,
+        title:"IT Pathfinders \n program \n 15 years above",
+        link:"/category/PATH_FINDERS"
+    },
+    {
+        img:dem,
         title:"In demand career courses",
         link:"/category/IN_DEMAND"
     },
+ 
     {
         img:up,
         title:"Upskill Courses",

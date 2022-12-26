@@ -57,7 +57,7 @@ const Navbar = ({ background }) => {
   const confirmEmail = location.pathname.split("/")[1] === "email" ||  location.pathname.split("/")[1] === "confirm";  
   const categoryRoute = background === "category";
   const landing = location.pathname.split("/")[1] !== "lounge";
-  const mainpage = location.pathname.split("/")[1] === ""
+  const mainpage = location.pathname.split("/")[1] === "learn-with-gotocourse"
   function showDrop() { }
   
   const [showBanner, setShowBanner] = useState(true)
@@ -77,7 +77,7 @@ const Navbar = ({ background }) => {
       {
         (mainpage) && showBanner &&
         <div className="d-flex align-items-center justify-content-center p-2 w-100 bg-white">
-          <p className="mb-0 fw-bold me-4">New product alert: Gotocourse Meetifix ( Live Class) is now live 🎉🎉!</p>
+          <a href="#upcoming" className="mb-0 fw-bold me-4">NEW CLASSES STARTS JANUARY 5, ENROLL NOW</a>
           <i><AiOutlineCloseCircle size="1.5rem" onClick={()=>{
               setShowBanner(false)
               localStorage.setItem("gotocourse-banner", false)

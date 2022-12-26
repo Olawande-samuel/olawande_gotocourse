@@ -29,7 +29,7 @@ const Grid = styled.div`
         justify-content:center;
     } 
     `
-const UpskillCourse = () => {
+const Pathfinder = () => {
 
     const { otherFunctions: {fetchBootcamps }, } = useAuth();
     const [shorts, setShorts] = useState([])
@@ -40,7 +40,7 @@ const UpskillCourse = () => {
           onSuccess: (res)=>{
               if(res.data.length > 0){
                 // console.log("data", res.data);
-                  const uppers = res.data.filter(item=>item.subCategory === "UPSKILL_COURSES" && item.isActive);
+                  const uppers = res.data.filter(item=>item.subCategory === "PATH_FINDERS" && item.isActive);
                 //   console.log({uppers});
                   setShorts(uppers)
               }
@@ -188,9 +188,9 @@ export const upskillAltData = [
 
 const data = {
     header: "",
-    header2:"Explore In Upskill courses",
-    subtext:"Develop Tech skills most needed by companies and increase your earnings",
-    subtext1:"Knowledge boost within 1-14 days",
+    header2:"Explore IT pathfinders program for 15 years above",
+    subtext:"Sparkup  IT skill development through coaching and mentoring from real world expert",
+    subtext1:"Achieve your goal in a program that runs through 3 weeks to 6 weeks",
     content: [
         {
             title:"Products",
@@ -217,9 +217,9 @@ const data = {
             description:"Optimize and scale your business with Kajabi’s fully-automated marketing campaigns and funnels.",
         },
     ],
-    bottomTitle: "View more Upskill courses >",
-    bottomLink:`/category/UPSKILL_COURSES`
+    bottomTitle: "View  more IT pathfinders program > ",
+    bottomLink:`/category/PATH_FINDERS`
 
 }
 
-export default UpskillCourse
+export default Pathfinder
