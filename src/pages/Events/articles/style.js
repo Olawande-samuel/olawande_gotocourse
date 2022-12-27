@@ -4,6 +4,7 @@ import styled from "styled-components";
 export const Header = styled.header`
     display: flex;
     justify-content: center;
+    margin-block: 1.5rem;
 
     h4 {
         font-weight: 700;
@@ -47,7 +48,7 @@ export const DateAndAction = styled.div`
     > span:first-child {
         font-size: 12px;
         font-weight: 600;
-        color: #464646;
+        color: #000;
         display:flex;
         justify-content: space-between;
         align-items: center;
@@ -68,12 +69,16 @@ export const DateAndAction = styled.div`
 `
 
 export const Content = styled.section`
-    p {
+    div {
         margin-bottom: 1rem;
         margin-top:3rem;
-        color: #86868B;
+        color: #000;
         width:min(100%, 800px);
         margin-inline: auto;
+
+        h1, h3, h2, h4 {
+            color:#000;
+        }
 
     }
 `

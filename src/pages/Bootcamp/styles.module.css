@@ -253,9 +253,14 @@
     border-radius: 10px;
 }
 
-.hero_buttons button:last-child {
+.hero_buttons button:nth-child(2) {
     border: 1px solid #e5e5e5;
     background: none
+}
+.hero_buttons button:last-child {
+    border: 1px solid #e5e5e5;
+    color: var(--theme-blue);
+    background: #fff;
 }
 
 .hero_buttons button:first-child {
