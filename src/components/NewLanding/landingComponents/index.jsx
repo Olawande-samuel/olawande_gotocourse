@@ -988,6 +988,7 @@ const ShortCard = styled.div`
         .cta {
             display: flex;
             justify-content: space-between;
+            // text-align: center;
             gap: 1rem;
             font-size: 13px;
             margin-top: 1rem;
@@ -1479,6 +1480,228 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
 }
 
 
+export function PathCourseCard({ title, bootcampImg, bootcampId, category, description, duration, price, packages, popupTitle, popupArr, all }) {
+
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+    //   console.log({all});
+
+
+    // Call to Action
+    const navigate = useNavigate();
+    const [data, setData] = useState({});
+    const { getItem } = useLocalStorage();
+
+    const userdata = getItem(KEY)
+    //wishlist
+
+    const flag = useRef(false);
+    let [wishlistState, setWishlistState] = useState(false)
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
+
+    async function addToWishlist() {
+        setGeneralState({ ...generalState, loading: true })
+
+        if (userdata !== null) {
+            try {
+                const response = await addwishlistCourse(bootcampId, userdata?.token)
+                const { success, message, statusCode } = response
+                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+                const { data } = response
+                setWishlistState(true)
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setGeneralState({ ...generalState, loading: false })
+
+            }
+
+
+        } else {
+            navigate("/login")
+        }
+    }
+
+
+
+    async function getWishList() {
+        try {
+            const res = await fetchWishlist(userdata?.token);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+                const { data } = res;
+                if (data.length > 0) {
+                    setWishlistState(data.map(d => d.courseId).includes(bootcampId));
+                } else {
+
+                }
+
+            } else {
+                throw new AdvancedError(message, statusCode);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+        }
+    }
+
+    useEffect(() => {
+        getWishList()
+    }, [setWishlistState])
+
+    useEffect(() => {
+        const ownListItem = upskillAltData.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
+        if (ownListItem.length > 0) {
+            setData(ownListItem[0])
+        }
+
+    }, [title])
+
+    async function removeCourse(e) {
+        e.preventDefault();
+        try {
+            setGeneralState({ ...generalState, loading: true })
+            const res = await deleteFromWishlist(userdata?.token, bootcampId)
+            const { success, message, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+                const { data } = res;
+                setWishlistState(false)
+                handleClose()
+            }
+        } catch (err) {
+
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+        }
+    }
+
+    async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
+
+        e.preventDefault();
+        if (userdata?.token) {
+            // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+            gotoclassPayment(title, category, bootcampId, navigate)
+        } else {
+            navigate("/login")
+        }
+    }
+
+    return (
+        <UpCoursesCard>
+            <img src={bootcampImg} alt="" />
+            <div className="up_content">
+                <div>
+                    <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title}</h5>
+                    <div className="d-flex justify-content-between">
+                        <small>{duration}</small>
+                        <small>$ {packages.length > 0 ? packages[0].price : price}</small>
+                    </div>
+                </div>
+
+                {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+                <div className="foot" style={{justifyContent:"center"}} >
+                    <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button>
+                    {/* <div className="ct_bar"></div> */}
+
+                    {/* <span>{changeConstants(packages[0]?.title)}</span> */}
+                </div>
+                {/* <div>
+                    <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>
+                </div> */}
+            </div>
+            <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'center',
+                    horizontal: 'left',
+                }}
+            >
+                <Box sx={{ p: 2 }} className="pop_container">
+                    <header>
+                        <h5 className="fw-bold text-capitalize">{popupTitle}</h5>
+                    </header>
+                    <div>
+                        {/* <div className="d-flex justify-content-between mb-3">
+                            <span className="fw-bold">{duration}</span>
+                            <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
+                        </div> */}
+                        {/* <p>{data.title}</p> */}
+                        <ul>
+                            {
+                                popupArr?.map((item, i) => (
+                                    <li key={i}>{item}</li>
+                                ))
+                            }
+                        </ul>
+                        {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+                        <div className="pop_action">
+                            <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
+                            {
+                                (!userdata.token) ? <button onClick={addToWishlist}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Wishlist"
+
+                                    }
+
+                                </button> :
+
+                                    (userdata.token && wishlistState) ?
+
+                                        <button onClick={removeCourse}>
+                                            {
+                                                loading ?
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    :
+                                                    "Remove wishlist"
+
+                                            }
+
+                                        </button>
+                                        :
+                                        <button onClick={addToWishlist}>
+                                            {
+                                                loading ?
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    :
+                                                    "Wishlist"
+
+                                            }
+
+                                        </button>
+
+                            }
+
+                        </div>
+                    </div>
+                </Box>
+            </Popover>
+        </UpCoursesCard>
+    )
+}
 // VIRTUAL LIVE
 
 const LiveTrainingWrapper = styled.div`

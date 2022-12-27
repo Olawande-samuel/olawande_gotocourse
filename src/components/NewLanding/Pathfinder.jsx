@@ -3,7 +3,7 @@ import React from 'react'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { useAuth } from '../../contexts/Auth'
-import { ClassTypeComponent, UpskillCourseCard } from './landingComponents'
+import { ClassTypeComponent, PathCourseCard, UpskillCourseCard } from './landingComponents'
 
 const Grid = styled.div`
     display: grid;
@@ -52,7 +52,7 @@ const Pathfinder = () => {
         <Grid>
             {
                 shorts?.filter(item=>item.isActive).slice(0, 8).map(item=>(
-                    <UpskillCourseCard {...item} all={item} key={item.bootcampId}/>
+                    <PathCourseCard {...item} all={item} key={item.bootcampId}/>
                 ))
             }
         </Grid>
