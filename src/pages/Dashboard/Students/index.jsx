@@ -1648,6 +1648,7 @@ function UpcomingCourses({ data }) {
     let userdata = getItem(KEY);
 
 
+
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
@@ -1658,7 +1659,7 @@ function UpcomingCourses({ data }) {
         }
 
     }
-    // console.log({ data });
+    console.log({ data });
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
