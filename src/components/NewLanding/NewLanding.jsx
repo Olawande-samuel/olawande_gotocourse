@@ -72,6 +72,8 @@ import Success from "./Success";
 import { useEffect } from "react";
 import Logos from "./landingComponents/Logos";
 import { Blog } from "./Blog";
+import Headstart from "./Headstart";
+import Pathfinder from "./Pathfinder";
 
 const NewLanding = () => {
   return (
@@ -85,6 +87,8 @@ const NewLanding = () => {
       <Category />
       <GreatOpportunities />
       <Benefits />
+      <Headstart/> 
+      <Pathfinder/>
       <IndemandClasses />
       <UpskillCourse />
       <ExecutiveClasses />
@@ -318,55 +322,75 @@ function Hero() {
   const heroData = [
     {
       id: 1,
-      title: "Upskill & Reskill",
-      subtitle: "All-in-one platform for learning tech skills",
-      social: false,
+      title: "Start and launch",
+      title2:"your IT career now",
+      // subtitle: "All-in-one platform for learning tech skills",
+      social: true,
       acctype: "student",
       list: [
         "Learn from Industry Experts",
-        "Access tools for teaching",
+        "Launch new career within 2 to 6 months",
         "Connect from anywhere",
       ],
       img: tell,
+      color: "var(--theme-blue)",
+      borderRadius:"7px",
+      link: "/signup",
+      link_btn: "Register to get started ",
       // img:HeroImg
     },
     {
       id: 2,
-      title: "No.1 platform for tech ",
-      title2: "and business skills",
-      subtitle:
-        "We are one of the world’s most comprehensive online learning platform putting learners' needs ahead. Learning on Go2course transforms how you think and what you can do, and translates directly into the real world.",
+      title: "Learn in-demand tech ",
+      title2: "skills from experts",
+      // subtitle:"We are one of the world’s most comprehensive online learning platform putting learners' needs ahead. Learning on Go2course transforms how you think and what you can do, and translates directly into the real world.",
       social: true,
       acctype: "student",
+      list: [
+        "Launch out as an IT pro in months not years",
+        "Accelerate your growth with relevant skills taught by industry leaders",
+        "Take the next step towards your career growth",
+      ],
       img: critical,
       color: "#F75C4E",
       link: "/signup",
       link_btn: "Get Started",
+      borderRadius:"10px",
+
     },
     {
       id: 3,
-      title: "Engaging & Fully Interactive",
-      title2: "online Lectures",
+      title: "Upskill and reskill",
+      // title2: "online Lectures",
       subtitle:
-        "We provide relevant knowledge and teach skills needed in ever changing world through a highly interactive and engaging learning system that is flexible enough to accommodate the schedule of individual students.",
+        "Switch or advance your career for less cost while learning from real world expert. Boost your career by empowering yourself through continuous education from leading expert",
       social: true,
       acctype: "teacher",
       img: afford,
       color: "#66BFE6",
       link: "/sign-up",
       link_btn: "Get Started", 
+      borderRadius:"10px",
+
     },
     {
       id: 4,
-      title: "Over 300 Courses for your career growth at an affordable cost!",
+      title: "Anyone can start from here. ",
       title2: "",
-      subtitle: "Whether you are starting newly or upgrading your skills this is the best place to learn. No need of without putting your life on hold. You can study anywhere, everywhere and at any time, Gotocourse is your ideal destination of growing your tech and business skills.",
+      // subtitle: "Whether you are starting newly or upgrading your skills this is the best place to learn. No need of without putting your life on hold. You can study anywhere, everywhere and at any time, Gotocourse is your ideal destination of growing your tech and business skills.",
       social: true,
       acctype: "affiliate",
+      list: [
+        "Join tech headstart program from anywhere",
+        "Find your path to I.T by learning from real world experts",
+        "Build solid foundation that leads to life-time opportunity",
+      ],
       img: interactive,
-      color: "#A1B0FF",
+      color: "#F75C4E",
       link: "/sign-up",
-      link_btn: "Get started now",
+      link_btn: "Register today",
+      borderRadius:"10px",
+
     },
   ];
   return (
@@ -439,6 +463,7 @@ function HeroContent({
   color,
   link,
   link_btn,
+  borderRadius
 }) {
   return (
     <div className="container">
@@ -485,7 +510,7 @@ function HeroContent({
               className="d-inline-flex mx-auto ms-sm-0 d-flex justify-content-center w-100 justify-content-md-start"
               to={link}
             >
-              <button style={{ background: color }}>{link_btn}</button>
+              <button style={{ background: color, borderRadius }}>{link_btn}</button>
             </Link>
           </div>
         ) : (

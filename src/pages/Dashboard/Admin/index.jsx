@@ -4016,6 +4016,8 @@ export function CreateBootcamp() {
                 className="form-select generic_input"
               >
                 <option value="">Choose a Subcategory</option>
+                <option value="PATH_FINDERS">Pathfinder Courses</option>
+                <option value="HEAD_START">HeadStart Courses</option>
                 <option value="UPSKILL_COURSES">Upskill Courses</option>
                 <option value="IN_DEMAND">In Demand Career Courses</option>
                 <option value="EXECUTIVE_COURSES">Executive Courses</option>

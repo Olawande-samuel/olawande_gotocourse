@@ -159,7 +159,7 @@ const UpCoursesCard = styled.div`
 
 export function Up() {
   return (
-    <section className="newCategories mt-4">
+    <section className="newCategories mt-4" id="upcoming">
       <div className="container-xxl">
         <header className="newCategories_header_wrapper">
           <h1 className="newCategories_header">Upcoming courses</h1>

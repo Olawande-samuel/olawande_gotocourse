@@ -1809,8 +1809,8 @@
 }
 
 .video__right{
-  background: #0C2191;
-  color: #fff;
+  /* background: #0C2191; */
+  color: var(--theme-blue);
   display: grid;
   place-items: center;
   padding: 3rem;
@@ -1843,9 +1843,10 @@
 
 .video__right button{
   font-weight: 500;
+  color: #fff;
 font-size: 16px;
 line-height: 38px;
-color: #0C2191;
+background: #0C2191;
 padding: .5rem 2rem;
 outline: none;
 border: none;

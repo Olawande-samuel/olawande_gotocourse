@@ -66,7 +66,8 @@ const UpComingComponent = () => {
             // console.log(res.data.filter(item => item.subCategory === id && item.isActive))
             if (res.data) {
             // console.log(res.data)
-            setBootcampTrainingInfo(res.data.filter(item => item.subCategory === id && item.isActive))
+            setBootcampTrainingInfo(res.data.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive))
+            // setBootcampTrainingInfo(res.data.filter(item => item.subCategory === id && item.isActive))
                 return
             }
             setBootcampTrainingInfo([])

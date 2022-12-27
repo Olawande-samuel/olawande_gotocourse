@@ -26,7 +26,7 @@ const Grid = styled.div`
         justify-content:center;
     } 
 `;
-const IndemandClasses = () => {
+const Headstart = () => {
   const { otherFunctions: {fetchBootcamps }, } = useAuth();
   const [shorts, setShorts] = useState([])
     
@@ -35,7 +35,7 @@ const IndemandClasses = () => {
 
         onSuccess: (res)=>{
             if(res.data.length > 0){
-              const exe = res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.isActive);
+              const exe = res.data.filter(item=>item.subCategory === "HEAD_START" && item.isActive);
 
               setShorts(exe)
               // console.log({exe})
@@ -58,14 +58,16 @@ const IndemandClasses = () => {
 
 const data = {
   header: "",
-  header2:"Explore In demand career courses",
-  subtext:"Learn In demand skills to launch your career. Build job relevant skills by learning from experts from  world-class companies and universities. Finish program within 2 months to 6 months",
+  header2:"Explore Tech Headstart program for 9 years above",
+  subtext:"Fun and creative way to introduce tech and problem solving skills to young people.",
+  subtext1:"We help young people set themselves up for lifetime opportunities for success through coaching and mentoring",
+  subtext2:"Courses runs between  2 weeks to 6 weeks",
   content: [],
-  bottomTitle:"View more In demand career courses >",
-  bottomLink:`/category/IN_DEMAND`
+  bottomTitle:"View  more In Tech headstart program  >",
+  bottomLink:`/category/HEAD_START`
 
 }
-export default IndemandClasses;
+export default Headstart;
 
 export const inDemandPopUpContent = [ 
 
