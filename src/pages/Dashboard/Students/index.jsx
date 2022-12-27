@@ -1733,7 +1733,7 @@ function UpcomingCourses({ data }) {
                             </div>
 
                             <div className={clsx["courseitem"]}>
-                                ${item.packages.length > 0 && item.packages[0].price}
+                                ${(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
 
                             </div>
 
@@ -1857,7 +1857,7 @@ function AvailableCourses({ data }) {
                             </div>
 
                             <div className={clsx["courseitem"]}>
-                                ${item.packages.length > 0 && item.packages[0].price}
+                            ${(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
 
                             </div>
 

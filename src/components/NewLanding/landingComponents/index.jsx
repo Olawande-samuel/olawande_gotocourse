@@ -13,7 +13,7 @@ import { useEffect } from "react"
 import { shortPopUpContent } from "../ShortCourses"
 import { inDemandPopUpContent } from "../IndemandClasses"
 import { useNavigate } from "react-router-dom"
-import { getDate, gotoclass, gotoclassPayment, KEY } from "../../../constants"
+import { getDate, getFullDate, gotoclass, gotoclassPayment, KEY } from "../../../constants"
 import { useAuth } from "../../../contexts/Auth"
 import { useLocalStorage } from "../../../hooks"
 import { useMutation } from "@tanstack/react-query"
@@ -722,7 +722,8 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
                     <div className="checks">
                         <p> <AiOutlineCheck className="icon" /> Cohort Learning</p>
                         <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live </span>with Instructor</p>
-                        <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}></span>{new Date(startDate).toLocaleDateString()}</p>
+                        <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}></span> {getFullDate(startDate)}
+</p>
                     </div>
                 </div>
 
@@ -742,7 +743,71 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
 }
 
 
+//HeadSTART 
+export function Head({ title, bootcampImg, category, duration, price, packages, bootcampId, description, startDate }) {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const navigate = useNavigate();
+    const [data, setData] = useState({});
+    const { getItem } = useLocalStorage();
 
+    const userdata = getItem(KEY)
+
+
+
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
+
+    useEffect(() => {
+        const ownListItem = inDemandPopUpContent.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
+
+        if (ownListItem.length > 0) {
+            setData(ownListItem[0])
+        }
+
+    }, [title])
+
+
+
+
+
+    return (
+        <InDemandCard>
+            <div className="img">
+                <img src={bootcampImg} alt="" />
+            </div>
+            <div className="content">
+                <h6>{title}</h6>
+
+                <div className="mid_content">
+                    <div className="mid_stats">
+                        {/* <span>{packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"}</span> */}
+                        <span>Self-paced</span>
+                        <span>$ {packages.length > 0 ? packages[0].price : price}</span>
+                        <span>{duration}</span>
+                    </div>
+                    <div className="checks">
+                        <p> <AiOutlineCheck className="icon" /> Completion certificate</p>
+                        <p><AiOutlineCheck className="icon" /> Earn upto $138k </p>
+                        <p><AiOutlineCheck className="icon" /> Cohort learning</p>
+                    </div>
+                </div>
+
+                <div className="view">
+                    <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
+                </div>
+
+                <div className="contentbtn">
+                    <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate)}>Enroll Now</button>
+                </div>
+
+            </div>
+
+
+        </InDemandCard>
+    )
+}
 
 
 
