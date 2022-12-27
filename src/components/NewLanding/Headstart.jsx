@@ -3,7 +3,7 @@ import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import { useAuth } from "../../contexts/Auth";
-import { ClassTypeComponent, InDemand } from "./landingComponents";
+import { ClassTypeComponent, Head, InDemand } from "./landingComponents";
 
 const Grid = styled.div`
   display: grid;
@@ -38,7 +38,7 @@ const Headstart = () => {
               const exe = res.data.filter(item=>item.subCategory === "HEAD_START" && item.isActive);
 
               setShorts(exe)
-              // console.log({exe})
+              console.log({exe})
             }
         }
   })
@@ -47,7 +47,7 @@ const Headstart = () => {
       <Grid>
         {
           shorts?.filter(item=>item.isActive).slice(0,8).map((item) => (
-            <InDemand {...item} all={item} key={item.bootcampId}/>
+            <Head {...item} all={item} key={item.bootcampId}/>
           ))
         }
       </Grid>

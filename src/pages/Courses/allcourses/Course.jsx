@@ -534,7 +534,7 @@ const HeadstartComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
               increase your earnings
             </h3> */}
 
-            <p>Choose from wide range of programs for your kids between ages 9 - 15 years above to get them started in the tech world</p>
+            <p>Choose from wide range of programs for your kids 9 years and above to get them started in the tech world</p>
           </div>
           <div className="right">
             <img src={demand} alt="" />
