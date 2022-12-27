@@ -13,7 +13,7 @@ import { useEffect } from "react"
 import { shortPopUpContent } from "../ShortCourses"
 import { inDemandPopUpContent } from "../IndemandClasses"
 import { useNavigate } from "react-router-dom"
-import { getDate, gotoclass, gotoclassPayment, KEY } from "../../../constants"
+import { getDate, getFullDate, gotoclass, gotoclassPayment, KEY } from "../../../constants"
 import { useAuth } from "../../../contexts/Auth"
 import { useLocalStorage } from "../../../hooks"
 import { useMutation } from "@tanstack/react-query"
@@ -722,7 +722,8 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
                     <div className="checks">
                         <p> <AiOutlineCheck className="icon" /> Cohort Learning</p>
                         <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live </span>with Instructor</p>
-                        <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}></span>{new Date(startDate).toLocaleDateString()}</p>
+                        <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}></span> {getFullDate(startDate)}
+</p>
                     </div>
                 </div>
 
