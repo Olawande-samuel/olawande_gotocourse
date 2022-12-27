@@ -41,18 +41,20 @@ const ImageCard = styled.div`
 
     p {
         position: absolute;
+        // border: 2px solid red;
         bottom: 5px;
         /* right: 0; */
-        left: 50%;
-        width: 60%;
-        transform: translateX(-50%);
+        // left: 50%;
+        // width: 60%;
+        width: 100%;
+        // transform: translateX(-50%);
         font-size: 17px;
         font-weight: 700;
         color: #fff;
         text-align: center;
     }
 `
-export function GreatImage({ img, title, link }) {
+export function GreatImage({ img, title1, title2, title3, link }) {
 
 
 
@@ -60,7 +62,11 @@ export function GreatImage({ img, title, link }) {
         <ImageCard>
             <Link to={link}>
                 <img src={img} alt="" />
-                <p>{title}</p>
+                <p>
+                <span>{title1}</span>
+                <span className="d-block">{title2}</span>
+                <span className="d-block">{title3}</span>
+                </p>
             </Link>
         </ImageCard>
     )
@@ -1725,6 +1731,10 @@ const ClassWrapper = styled.section`
             font-weight: 700;
         }
         
+        small{
+            weight: 700;
+        }
+        
     }
 
     .bottom{
@@ -1744,7 +1754,7 @@ export function ClassTypeComponent({ children, header: head, header2, subtext,su
                     <h5>{header2}</h5>
                     <small>{subtext}</small>
                     <small className="d-block">{subtext1}</small>
-                    <small className="d-block">{subtext2}</small>
+                    <small className="d-block" style={{fontSize: "14px", fontWeight: "500",lineHeight: "22px" ,paddingTop:"1rem"}}>{subtext2}</small>
                 </header>
                 <article>
                     {children}

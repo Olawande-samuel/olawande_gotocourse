@@ -71,28 +71,36 @@ const data = [
     // },
     {
         img:headstart,
-        title:"Tech Headstart \n program \n 9 years above",
+        title1:"Tech Headstart",
+        title2:"program",
+        title3:"9 years above",
         link:"/category/HEAD_START"
     },
     {
         img:inD,
-        title:"IT Pathfinders \n program \n 15 years above",
+        title1:"IT Pathfinders",
+        title2:"program",
+        title3:"15 years above",
         link:"/category/PATH_FINDERS"
     },
     {
         img:dem,
-        title:"In demand career courses",
+        title1:"In demand",
+        title2:"career courses",
         link:"/category/IN_DEMAND"
     },
  
     {
         img:up,
-        title:"Upskill Courses",
+        title1:"Upskill",
+        title2:"Courses",
         link:"/category/UPSKILL_COURSES"
     },
     {
         img:tech,
-        title:"Tech Entrepreneurship Education",
+        title1:"Tech",
+        title2:"Entrepreneurship",
+        title3:"Education",
         link:"/category/TECH_ENTREPRENEURSHIP"
     },
 ]
