@@ -206,6 +206,8 @@ export function Navbar({user, isPresenting}){
     window.location.assign("/teacher") : user.userType === "admin" ? window.location.assign("/admin") : window.location.assign("/")
 
   } 
+
+  console.log("navbar", isPresenting)
   return (
     <nav className={style.live_nav}>
       <div className="container">
@@ -218,7 +220,7 @@ export function Navbar({user, isPresenting}){
           </span>
           {
             isPresenting &&
-            <span>Marcus is presenting</span>
+            <span>User is presenting</span>
           }
         </div>
         <div className={style.live_back_button}>

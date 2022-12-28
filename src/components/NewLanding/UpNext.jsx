@@ -17,11 +17,12 @@ import styled from 'styled-components'
 
 // Import Swiper styles
 import "swiper/css";
-import { changeConstants, getFullDate, gotoclassPayment, KEY } from '../../constants';
+import { changeConstants, getFullDate, gotoclass, gotoclassPayment, KEY } from '../../constants';
 import { AdvancedError } from '../../classes';
 import { upskillAltData } from './UpskillCourse';
 import { useLocalStorage } from '../../hooks';
 import { Box, Popover } from '@mui/material';
+import { AiOutlineCheck } from 'react-icons/ai';
 
 const Grid = styled.div`
     display: grid;
@@ -71,7 +72,7 @@ const UpCoursesCard = styled.div`
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
-        height: 4.5rem
+        // height: 4.5rem
         
         
     }
@@ -91,6 +92,7 @@ const UpCoursesCard = styled.div`
         border:none;
         outline:none;
         background:#fff;
+       
     }
     .up_content {
         padding-inline: 1.5rem;
@@ -101,7 +103,18 @@ const UpCoursesCard = styled.div`
         height: 60%;
         /* height: -webkit-fill-available; */
 
+        .checks{
 
+          p{
+              font-weight: 500;
+              font-size: 13.6101px;
+              line-height: 16px;
+          }
+
+          .icon{
+              color: var(--theme-blue);
+          }
+      }
         .cta {
             display: flex;
             justify-content: space-between;
@@ -167,6 +180,11 @@ export function Up() {
         </header>
         <TabsComp />
 
+        <div style={{ padding: "2rem 0", textAlign: "center" }}>
+          <Link to={"/category/upcoming"} className="text-center mt-4">{`View  more Upcoming programs  >`}</Link>
+
+        </div>
+
       </div>
     </section>
   );
@@ -183,9 +201,9 @@ export function TabsComp() {
 
     onSuccess: (res) => {
       if (res.data.length > 0) {
-  
+
         const uppers = res.data.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
-        // console.log({ uppers });
+        console.log({ uppers });
         setShorts(uppers)
       }
     }
@@ -196,14 +214,13 @@ export function TabsComp() {
       <div className="popular_views dark_border">
         <Swiper
           // install Swiper modules
-          modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+          modules={[Navigation, Autoplay]}
           loop={true}
           speed={2500}
           autoplay={{ delay: 2400 }}
           spaceBetween={0}
           slidesPerView={1}
           // navigation
-          pagination={{ clickable: true }}
           scrollbar={{ draggable: true }}
           breakpoints={{
             // when window width is >= 320px
@@ -248,7 +265,7 @@ export function TabsComp() {
 }
 
 
-export function Card({ title, bootcampImg, bootcampId, category, description, startDate, duration, price, packages, popupTitle, popupArr, all }) {
+export function Card({ title, bootcampImg, bootcampId, category, subCategory, description, startDate, duration, price, packages, popupTitle, popupArr, all }) {
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -367,27 +384,52 @@ export function Card({ title, bootcampImg, bootcampId, category, description, st
     }
   }
 
+  const getCategory = (cat) => {
+
+    if (cat === "SHORT_COURSES") return "Short Course";
+    else if (cat === "UPSKILL_COURSES") return "Upskill Course";
+    else if (cat === "EXECUTIVE_COURSES") return "Executive Course";
+    else if (cat === "IN_DEMAND") return "In-Demand Course";
+    else if (cat === "TECH_ENTREPRENEURSHIP") return "Tech Enterpreneurship Course";
+    else if (cat === "PATH_FINDERS") return "Pathfinder Course";
+    else if (cat === "HEAD_START") return "Headstart Course";
+    else if (cat === "upcoming") return "Upcoming Course";
+    else return ""
+
+  }
+
   return (
     <UpCoursesCard>
       <img src={bootcampImg} alt="" />
       <div className="up_content">
         <div>
           <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title}</h5>
+
           <div className="d-flex justify-content-between">
             <small>{duration}</small>
             <small>$ {packages.length > 0 ? packages[0].price : price}</small>
           </div>
-          <div className="d-flex justify-content-between" style={{color: "var(--theme-blue"}}>
+
+          <div className="checks" style={{ paddingTop: "1rem" }}>
+            <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p>
+            <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
+          </div>
+
+          <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue" }}>
             <p>Start Date:</p>
             {/* <p>{new Date(startDate).toLocaleDateString()}</p> */}
             <p>{getFullDate(startDate)}</p>
-
           </div>
+
+
         </div>
 
         {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
         <div className="foot d-flex justify-content-center">
-          <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button>
+          {/* <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button> */}
+          <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
+
+
           {/* <div className="ct_bar"></div>
 
           <span>{changeConstants(packages[0]?.title)}</span> */}

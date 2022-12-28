@@ -170,11 +170,12 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
     e.preventDefault()
 
     updateItem("gotocourse-roomid", _id);  
+
     let today  = new Date().getTime();
     let startingDate = new Date(startDate).getTime();
 
     if(today >= startingDate){
-      navigate("connect")
+      navigate(`connect/${_id}`)
     }else {
       window.alert(`Class starts on ${startDate}`)
     }
@@ -480,22 +481,24 @@ export function Intermission() {
     const student = location.pathname.split("/")[1] === "student";
     const {generalState, setGeneralState} = useAuth()
     const {getItem}= useLocalStorage()
-  
+    const {classId} = useParams()
   
     const roomid = getItem("gotocourse-roomid")
+
+
     function joinLiveClass(){
-        navigate(`/video-chat?room=${roomid}`, {
+        navigate(`/class/${classId}/live/stream?room=${roomid}`, {
             state: {
           
                 roomId: roomid,
-                owner: true
+                owner: !student ? true: false
             }
         })  
         // navigate("/teacher/live-class/live")  
     }
   return (
     <section className={style.intermission}>
-      <nav className={style.intermission_nav}>
+      {/* <nav className={style.intermission_nav}>
         {!student && (
           <button>
             <span>Record</span>
@@ -506,7 +509,7 @@ export function Intermission() {
         )}
 
         <button onClick={() => navigate(-1)}>Class Console</button>
-      </nav>
+      </nav> */}
       <main className={style.intermission_main}>
         <img src={startImg} alt="" />
         <div className="d-flex flex-column">

@@ -309,11 +309,13 @@ function App() {
   
                 <Route path="coming-soon" element={<ComingSoon />} />
                 <Route path="tester" element={<Playground />} />
-                <Route path="video-chat" element={<VideDiv />} />
+
+                {/* TODO: WRAP IN PROTECTED CONTAINER */}
+                <Route path="class/:classId/live/stream" element={<VideDiv />} />
   
                 <Route path="category" element={<Out />}>
                   <Route index element={<CourseComponent />} />
-                  <Route path="upcoming" element={<UpComingComponent />} />
+                  {/* <Route path="upcoming" element={<UpComingComponent />} /> */}
                   <Route path=":id" element={<CourseComponent />} />
                 </Route>
   
@@ -543,12 +545,10 @@ function App() {
                           <Route path="group/:groupID" element={<GroupContent />} />
                           <Route path="chat/:userId" element={<MailDetail />} />
                         </Route>
-  
-  
                         <Route path="live-class" element={<Out />}>
                           <Route index element={<LiveClassInfo />} />
                           <Route path="live" element={<LiveClass />} />
-                          <Route path="connect" element={<Out />}>
+                          <Route path="connect/:liveId" element={<Out />}>
                             <Route index element={<Intermission />} />
                             <Route path="stream" element={<VideDiv />} />
                           </Route>

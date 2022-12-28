@@ -19,6 +19,8 @@ import { ExeEducation, InDemand, UpskillCourseCard } from '../../../components/N
 import short from '../../../images/short.png'
 import executive from '../../../images/executive.png'
 import demand from '../../../images/demand.png'
+import headstart from '../../../images/Heads.png'
+import pathfinder from '../../../images/Pathfinder.png'
 
 import skill from '../../../images/upskill.webp'
 import tech from '../../../images/tech.png'
@@ -301,6 +303,8 @@ min-height: 40vh;
 
     .right{
       flex: .3;
+      // border: 2px solid blue;
+
 
        img{
          max-width: 100%;
@@ -413,6 +417,84 @@ function ShortMid() {
   )
 
 }
+
+const UpComeComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
+  const { generalState: { navHeight } } = useAuth()
+
+  // Here we use item offsets; we could also use page offsets
+  // following the API or data you're working with.
+  const [itemOffset, setItemOffset] = useState(0);
+
+  // Simulate fetching items from another resources.
+  // (This could be items from props; or items loaded in a local state
+  // from an API endpoint with useEffect and useState)
+  const endOffset = itemOffset + itemsPerPage;
+  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+  const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
+
+  // Invoke when user click to request another page.
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
+    console.log(
+      `User requested page number ${event.selected}, which is offset ${newOffset}`
+    );
+    setItemOffset(newOffset);
+  };
+  return (
+    <div style={{ marginTop: navHeight }}>
+      <div className='container'>
+        <UpskillHero>
+          <div className="left">
+            <h3>
+              <span>Discover Our Exciting Upcoming Courses</span>
+              {/* <span className="d-block">potential by upgrading</span> */}
+              {/* <span className="d-block">your skillsets.</span> */}
+
+            </h3>
+            <p>Choose from a Wide Range of Programs and Workshops for all ages and interests Our courses are for everyone, from complete beginners to professional artists and designers. We have something for everyone!</p>
+          </div>
+          <div className="right">
+            <img src={skill} alt="" />
+          </div>
+        </UpskillHero>
+      </div>
+
+      <ShortMid />
+
+      <div className="container">
+        <Grid>
+          {
+            currentItems?.map(item => (
+              <UpskillCourseCard {...item} key={item.bootcampId} />
+            ))
+          }
+
+        </Grid>
+        <ReactPaginate
+          className="pagination"
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          // previousLabel="< previous"
+          previousLabel="<"
+          // previousLabel="&#8592;"
+          renderOnZeroPageCount={null}
+        />
+
+      </div>
+
+      <Companies />
+      <Question />
+
+
+
+    </div>
+
+  )
+}
 const ShortCourseComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   const { generalState: { navHeight } } = useAuth()
 
@@ -444,10 +526,8 @@ const ShortCourseComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
         <ShortHero>
           <div className="left">
             <h3>
-              Short courses for
-            </h3>
-            <h3>
-              knowledge boost
+              <span>Short courses for</span>
+              <span className="d-block">knowledge boost</span>
             </h3>
             <p>Choose from wide range of short courses  and tech
               Entrepreneurship  across various categories.</p>
@@ -481,7 +561,7 @@ const ShortCourseComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
           previousLabel="<"
           // previousLabel="&#8592;"
           renderOnZeroPageCount={null}
-        /> 
+        />
 
       </div>
 
@@ -525,19 +605,14 @@ const HeadstartComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
         <ExecutiveHero>
           <div className="left">
             <h3>
-              Headstart programs
+              <span>Headstart Courses </span>
+              <span className="d-block">for Kids and  Teens</span>
             </h3>
-            {/* <h3>
-              needed by companies and
-            </h3>
-            <h3>
-              increase your earnings
-            </h3> */}
 
-            <p>Choose from wide range of programs for your kids 9 years and above to get them started in the tech world</p>
+            <p>Accelerate Your Learning and Jumpstart Your Future with Our <br/> Age-Appropriate Programs. These courses are designed <br/> to help kids and teens get a head start on their tech education.</p>
           </div>
           <div className="right">
-            <img src={demand} alt="" />
+            <img src={headstart} alt="" />
           </div>
         </ExecutiveHero>
       </div>
@@ -564,7 +639,7 @@ const HeadstartComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
           previousLabel="<"
           // previousLabel="&#8592;"
           renderOnZeroPageCount={null}
-        /> 
+        />
 
       </div>
 
@@ -609,15 +684,16 @@ const PathComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
         <ShortHero>
           <div className="left">
             <h3>
-             Pathfinders Programs
+              <span>Pathfinder Courses </span>
+              <span className="d-block">for Teens and Adults</span>  
             </h3>
             {/* <h3>
               knowledge boost
             </h3> */}
-            <p>Choose from wide range of programs for individuals 15 years above to get them started in the tech world</p>
+            <p>Explore Your Passions and Develop New Skills with Our Dynamic, Engaging Programs. We will take you through some courses to a master-level and develop your path to getting hired.</p>
           </div>
           <div className="right">
-            <img src={short} alt="" />
+            <img src={pathfinder} alt="" />
           </div>
         </ShortHero>
       </div>
@@ -645,7 +721,7 @@ const PathComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
           previousLabel="<"
           // previousLabel="&#8592;"
           renderOnZeroPageCount={null}
-        /> 
+        />
 
       </div>
 
@@ -689,13 +765,10 @@ const UpskillComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
         <UpskillHero>
           <div className="left">
             <h3>
-              Increase your earning
-            </h3>
-            <h3>
-              potential by upgrading
-            </h3>
-            <h3>
-              your skillsets.
+              <span>Increase your earning</span>
+              <span className="d-block">potential by upgrading</span>
+              <span className="d-block">your skillsets.</span>
+              
             </h3>
             <p>Choose from wide range of upskill courses  and tech Entrepreneurship  across various categories.</p>
           </div>
@@ -727,7 +800,7 @@ const UpskillComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
           previousLabel="<"
           // previousLabel="&#8592;"
           renderOnZeroPageCount={null}
-        /> 
+        />
 
       </div>
 
@@ -801,7 +874,7 @@ const TechComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
           previousLabel="<"
           // previousLabel="&#8592;"
           renderOnZeroPageCount={null}
-        /> 
+        />
 
       </div>
 
@@ -881,7 +954,7 @@ const ExecutiveComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
           previousLabel="<"
           // previousLabel="&#8592;"
           renderOnZeroPageCount={null}
-        /> 
+        />
 
       </div>
 
@@ -933,7 +1006,7 @@ const DemandComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
               increase your earnings
             </h3>
 
-            <p>Choose from wide range of upskill courses  and tech Entrepreneurship  across various categories.</p>
+            <p>Choose from wide range of In-demand courses  and tech Entrepreneurship  across various categories.</p>
           </div>
           <div className="right">
             <img src={demand} alt="" />
@@ -963,7 +1036,7 @@ const DemandComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
           previousLabel="<"
           // previousLabel="&#8592;"
           renderOnZeroPageCount={null}
-        /> 
+        />
 
       </div>
 
@@ -1018,11 +1091,20 @@ const CourseComponent = () => {
     onSuccess: res => {
       // console.log({res})
       // console.log(res.data.filter(item => item.subCategory === id && item.isActive))
-      if (res.data) {
+
+      if (res.data && id === "upcoming") {
+        const first = res.data.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
+        const second = res.data.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive);
+        const all = [...first, ...second]
+        setBootcampTrainingInfo(all)
+      } else if (res.data) {
         setBootcampTrainingInfo(res.data.filter(item => item.subCategory === id && item.isActive))
         return
+
+      } else {
+        setBootcampTrainingInfo([])
+
       }
-      setBootcampTrainingInfo([])
 
     },
     onError: err => console.error(err)
@@ -1045,9 +1127,11 @@ const CourseComponent = () => {
           (id === "UPSKILL_COURSES") ? <UpskillComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
             (id === "EXECUTIVE_COURSES") ? <ExecutiveComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
               (id === "IN_DEMAND") ? <DemandComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
-              (id === "TECH_ENTREPRENEURSHIP") ? <TechComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
-              (id === "PATH_FINDERS") ? <PathComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
-              (id === "HEAD_START") ? <HeadstartComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> : ""
+                (id === "TECH_ENTREPRENEURSHIP") ? <TechComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
+                  (id === "PATH_FINDERS") ? <PathComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
+                    (id === "HEAD_START") ? <HeadstartComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
+                      (id === "upcoming") ? <UpComeComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
+                        ""
         }
 
 
