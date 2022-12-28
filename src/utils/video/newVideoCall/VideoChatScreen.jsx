@@ -232,7 +232,7 @@ const VideoChatScreen = () => {
         const videoData = new FormData();
         videoData.append('file', videoblob);
 
-        const res = await axios.post("https://loftywebtech.com/gotocourse/api/v1/file/upload", videoData, {
+        const res = await axios.post(`${process.env.REACT_APP_BASEURL}`, videoData, {
             headers: {
                 "Content-Type": "multipart/form-data",
                 "Authorization": userProfile.token
@@ -317,8 +317,10 @@ const VideoChatScreen = () => {
             host: CONFIG.peerUrl,
             port: 9001,
             path: '/peer',
-            secure: true
+            secure: true,
+            debug: 1
         });
+        console.log(myPeer.current)
 
         myPeer.current.on('open', userId => {
             console.log("connected to room with userId: ", userId)
@@ -525,6 +527,7 @@ const VideoChatScreen = () => {
                 mine:true,
             }])
         // messages.push(value)
+        toast.info(`Incoming message: ${userProfile.firstName} ${userProfile.lastName} - ${value}`)
         socket.emit('client-message', roomId, {
             value,
             name: `${userProfile.firstName} ${userProfile.lastName}`,

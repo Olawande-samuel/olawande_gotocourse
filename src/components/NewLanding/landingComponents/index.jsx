@@ -246,15 +246,17 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
         }
     }
 
-    useEffect(() => {
-        getWishList()
-    }, [setWishlistState])
+    // useEffect(() => {
+    //     getWishList()
+    // }, [setWishlistState])
 
 
     let navigate = useNavigate()
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
+        getWishList()
+
     };
 
     const handleClose = () => {
@@ -1020,6 +1022,8 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
+        getWishList()
+
     };
 
     const handleClose = () => {
@@ -1039,7 +1043,6 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
 
     //wishlist
 
-    const flag = useRef(false);
     let [wishlistState, setWishlistState] = useState(false)
 
 
@@ -1098,9 +1101,9 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
         }
     }
 
-    useEffect(() => {
-        getWishList()
-    }, [setWishlistState])
+    // useEffect(() => {
+    //     getWishList()
+    // }, [setWishlistState])
 
 
 
@@ -1262,6 +1265,8 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
+        getWishList()
+
     };
 
     const handleClose = () => {
@@ -1332,9 +1337,9 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
         }
     }
 
-    useEffect(() => {
-        getWishList()
-    }, [setWishlistState])
+    // useEffect(() => {
+    //     getWishList()
+    // }, [setWishlistState])
 
     useEffect(() => {
         const ownListItem = upskillAltData.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
@@ -1486,6 +1491,8 @@ export function PathCourseCard({ title, bootcampImg, bootcampId, category, descr
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
+        getWishList()
+
     };
 
     const handleClose = () => {
@@ -1556,9 +1563,9 @@ export function PathCourseCard({ title, bootcampImg, bootcampId, category, descr
         }
     }
 
-    useEffect(() => {
-        getWishList()
-    }, [setWishlistState])
+    // useEffect(() => {
+    //     getWishList()
+    // }, [setWishlistState])
 
     useEffect(() => {
         const ownListItem = upskillAltData.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())

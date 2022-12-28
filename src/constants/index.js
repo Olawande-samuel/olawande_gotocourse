@@ -24,6 +24,7 @@ export const breakpoints = {
 
 export const baseURL = process.env.REACT_APP_BASEURL;
 export const IMAGEURL = process.env.REACT_APP_IMAGEURL;
+export const BLOGURL = "https://gotocourse.com/events&articles/articles";
 
 export const KEY = "gotocourse-userdata"
 export const AFFILIATE_KEY = "gotocourse-affiliate-data";

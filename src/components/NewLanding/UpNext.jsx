@@ -254,6 +254,8 @@ export function Card({ title, bootcampImg, bootcampId, category, description, st
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    getWishList()
+
   };
 
   const handleClose = () => {
@@ -323,9 +325,9 @@ export function Card({ title, bootcampImg, bootcampId, category, description, st
     }
   }
 
-  useEffect(() => {
-    getWishList()
-  }, [setWishlistState])
+  // useEffect(() => {
+  //   getWishList()
+  // }, [setWishlistState])
 
   useEffect(() => {
     const ownListItem = upskillAltData.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
