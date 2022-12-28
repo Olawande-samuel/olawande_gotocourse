@@ -92,6 +92,7 @@ const UpCoursesCard = styled.div`
         border:none;
         outline:none;
         background:#fff;
+       
     }
     .up_content {
         padding-inline: 1.5rem;
@@ -213,14 +214,13 @@ export function TabsComp() {
       <div className="popular_views dark_border">
         <Swiper
           // install Swiper modules
-          modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+          modules={[Navigation, Autoplay]}
           loop={true}
           speed={2500}
           autoplay={{ delay: 2400 }}
           spaceBetween={0}
           slidesPerView={1}
           // navigation
-          pagination={{ clickable: true }}
           scrollbar={{ draggable: true }}
           breakpoints={{
             // when window width is >= 320px
