@@ -1418,7 +1418,7 @@ export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, 
 
 
 
-                <div className="checks" 
+                <div className="checks"
                 // style={{ paddingTop: "1rem" }}
                 >
                     {/* <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p> */}
@@ -1670,9 +1670,22 @@ export function PathCourseCard({ title, bootcampImg, bootcampId, category, descr
                     </div>
                 </div>
 
+
+                <div className="checks">
+                    {/* <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p> */}
+                    <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live </span>with Instructor</p>
+                </div>
+
+                {/* <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue" }}>
+                    <p>Start Date:</p>
+                    <p>{getFullDate(startDate)}</p>
+                </div> */}
+
                 {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
                 <div className="foot" style={{ justifyContent: "center" }} >
-                    <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button>
+                    <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
+
+                    {/* <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button> */}
                     {/* <div className="ct_bar"></div> */}
 
                     {/* <span>{changeConstants(packages[0]?.title)}</span> */}

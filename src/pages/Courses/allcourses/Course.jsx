@@ -19,7 +19,7 @@ import { ExeEducation, InDemand, UpskillCourseCard } from '../../../components/N
 import short from '../../../images/short.png'
 import executive from '../../../images/executive.png'
 import demand from '../../../images/demand.png'
-import headstart from '../../../images/Headstart.png'
+import headstart from '../../../images/Heads.png'
 import pathfinder from '../../../images/Pathfinder.png'
 
 import skill from '../../../images/upskill.webp'
@@ -303,6 +303,8 @@ min-height: 40vh;
 
     .right{
       flex: .3;
+      border: 2px solid blue;
+
 
        img{
          max-width: 100%;

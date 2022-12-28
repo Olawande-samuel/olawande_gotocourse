@@ -2,14 +2,24 @@ import styled from "styled-components";
 
 
 export const Header = styled.header`
-    display: flex;
-    justify-content: center;
-    margin-block: 1.5rem;
+    // display: flex;
+    // justify-content: center;
+    width: 65%;
+    padding-top: 1rem;
+    margin: 0 auto;
+    // margin-block: 1.5rem;
+    // border: 2px solid red;
 
     h4 {
         font-weight: 700;
-        text-align: center;
-        width:min(100%, 500px)
+        text-align: left;
+        font-size: 32px;
+        // width:min(100%, 500px)
+    }
+
+    @media( max-width: 768px){
+        width: 100%;
+
     }
 
 `
@@ -71,7 +81,7 @@ export const DateAndAction = styled.div`
 export const Content = styled.section`
     div {
         margin-bottom: 1rem;
-        margin-top:3rem;
+        // margin-top:rem;
         color: #000;
         width:min(100%, 800px);
         margin-inline: auto;
