@@ -329,13 +329,13 @@ function FileCard({ title, fileName, contentId, type, _id }) {
         noPreview: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || "text/csv",
         
     }
-    console.log(type === TYPES?.noPreview)
+    console.log(type)
 
 	return (
 		<div className={`filecard ${type === TYPES?.noPreview && "small__filecard"}`}>
 			{(type.includes("video") || type.includes("image")) && (
 				<div className="filetop">
-					{type === "video/mp4" ? (
+					{type === "video/mp4" || type.includes("video") ? (
 						<video
 							src={fileName}
 							controls
@@ -450,11 +450,12 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
 					/>
 				</div>
 				<p>{title}</p>
-				{type === "video/mp4" ? (
+				{type === "video/mp4" || type.includes("video") ? (
 					<video
 						src={`${file}`}
 						controls
 						autoPlay
+						type={type.includes("matroska") && type}
 						style={{
 							width: "100%",
 							height: "100%",
