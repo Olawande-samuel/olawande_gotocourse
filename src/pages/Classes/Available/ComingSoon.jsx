@@ -7,7 +7,7 @@ import Layout from "../../../components/Layout";
 import { KEY } from "../../../constants";
 import { useAuth } from "../../../contexts/Auth";
 import { useLocalStorage } from "../../../hooks";
-import coming from "../../../images/coming_soon.webp"
+import coming from "../../../images/coming_soon.png"
 
 
 
