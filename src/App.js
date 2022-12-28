@@ -315,7 +315,7 @@ function App() {
   
                 <Route path="category" element={<Out />}>
                   <Route index element={<CourseComponent />} />
-                  <Route path="upcoming" element={<UpComingComponent />} />
+                  {/* <Route path="upcoming" element={<UpComingComponent />} /> */}
                   <Route path=":id" element={<CourseComponent />} />
                 </Route>
   

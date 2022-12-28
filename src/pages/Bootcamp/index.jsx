@@ -579,9 +579,9 @@ export function NewBootcampDetailsComponent() {
   const courseType = bootcampTrainingInfo?.subCategory === "IN_DEMAND" ? "In-Demand Courses" :
     bootcampTrainingInfo?.subCategory === "SHORT_COURSES" ? "Short Courses" :
       bootcampTrainingInfo?.subCategory === "UPSKILL_COURSES" ? "Upskill Courses" :
-      bootcampTrainingInfo?.subCategory === "HEAD_START" ? "Head Start Courses" : 
-      bootcampTrainingInfo?.subCategory === "PATH_FINDERS" ? "Pathfinders Courses" : "Executive Courses"
-      
+        bootcampTrainingInfo?.subCategory === "HEAD_START" ? "Head Start Courses" :
+          bootcampTrainingInfo?.subCategory === "PATH_FINDERS" ? "Pathfinders Courses" : "Executive Courses"
+
 
       console.log({bootcampTrainingInfo})
   return (

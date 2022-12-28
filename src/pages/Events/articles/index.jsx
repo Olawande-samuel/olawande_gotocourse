@@ -4,7 +4,7 @@ import style from "../style.module.css"
 import articleimg from "../../../images/events/article.png"
 import { useQuery } from '@tanstack/react-query'
 
-import {Content, DateAndAction, Header, ImageContainer, MoreLikeThis} from "./style.js"
+import { Content, DateAndAction, Header, ImageContainer, MoreLikeThis } from "./style.js"
 import { BsCalendarWeekFill } from 'react-icons/bs'
 import { FaShareSquare } from 'react-icons/fa'
 import { useAuth } from '../../../contexts/Auth'
@@ -16,7 +16,7 @@ import SwiperCore, {
     Pagination,
     Scrollbar,
     A11y,
-  } from "swiper";
+} from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Box, Modal, TextField, Button, Typography } from '@mui/material/';
 import {
@@ -34,16 +34,16 @@ import {
     EmailIcon,
     RedditIcon,
     WhatsappIcon,
-  } from "react-share";
+} from "react-share";
 import Helmet from 'react-helmet'
 import { BLOGURL } from '../../../constants'
 
 const Articles = () => {
-    const {id} = useParams()
+    const { id } = useParams()
     // console.log({id});
     const [blog, setBlog] = useState({})
     const [blogs, setBlogs] = useState([])
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: {getABlog, getBlogs } } = useAuth();
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { getABlog, getBlogs } } = useAuth();
 
     const blogData = useQuery(["fetch blog", id], () => getABlog(id), {
         onSuccess: (res) => {
@@ -67,68 +67,68 @@ const Articles = () => {
 
 
     // SHARE BLOG
-    
-    const [open,setOpen]= useState(false)
-    function handleShare(e){
+
+    const [open, setOpen] = useState(false)
+    function handleShare(e) {
         e.preventDefault();
         setOpen(true)
     }
 
-  return (
-    <>
-     <Helmet>
-        <title>{`${blog?.title?.toUpperCase()} | Gotocourse`}</title>
-        <meta property="og:site_name" content="Gotocourse" />
-        <meta name="description" content="Gotocourse Blogs" />
-    </Helmet>
-    <Layout>
-        <section className="container py-4">
-            
-            <ImageContainer>
-                <div>
-                <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
-                </div>
-            </ImageContainer>
-            <Header>
-                <h4>{blog.title}</h4>
-            </Header>
-            <DateAndAction>
-                <span>
-                    <i>
-                        <BsCalendarWeekFill />
-                    </i>
-                    <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
-                </span>
-                <ShareButton data={blog} url={BLOGURL} />
-                
-            </DateAndAction>
-            
-            <MoreLikeThis></MoreLikeThis>
-            <Content>
-            <div  dangerouslySetInnerHTML={{__html: blog.content}} />
+    return (
+        <>
+            <Helmet>
+                <title>{`${blog?.title?.toUpperCase()} | Gotocourse`}</title>
+                <meta property="og:site_name" content="Gotocourse" />
+                <meta name="description" content="Gotocourse Blogs" />
+            </Helmet>
+            <Layout>
+                <section className="container py-4">
+
+                    <ImageContainer>
+                        <div>
+                            <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
+                        </div>
+                    </ImageContainer>
+                    <Header>
+                        <h4>{blog.title}</h4>
+                    </Header>
+                    <DateAndAction>
+                        <span>
+                            <i>
+                                <BsCalendarWeekFill />
+                            </i>
+                            <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
+                        </span>
+                        <ShareButton data={blog} url={BLOGURL} />
+
+                    </DateAndAction>
+
+                    <MoreLikeThis></MoreLikeThis>
+                    <Content>
+                        <div dangerouslySetInnerHTML={{ __html: blog.content }} />
 
 
-            </Content>
-            <MoreLikeThis>
-                <header>
-                    <h4>You'll Like These</h4>
-                </header>
+                    </Content>
+                    <MoreLikeThis>
+                        <header>
+                            <h4>You'll Like These</h4>
+                        </header>
 
-                <section>
-                        <LikeThis data={blogs} />
-                
+                        <section>
+                            <LikeThis data={blogs} />
+
+                        </section>
+                    </MoreLikeThis>
                 </section>
-            </MoreLikeThis>
-        </section>
-    </Layout>
-    </>
-  )
+            </Layout>
+        </>
+    )
 }
 
-export function ShareButton({data, url}){
-    const [open, setOpen]= useState(false)
+export function ShareButton({ data, url }) {
+    const [open, setOpen] = useState(false)
 
-    function handleShare(e){
+    function handleShare(e) {
         e.preventDefault();
         setOpen(true)
     }
@@ -140,20 +140,20 @@ export function ShareButton({data, url}){
                 <span>Share</span>
                 <i><FaShareSquare /></i>
             </span>
-            <ShareModal x={data} open={open} setOpen={setOpen} url={url}  />
+            <ShareModal x={data} open={open} setOpen={setOpen} url={url} />
         </>
     )
 }
 
-function LikeThis({data}){
+function LikeThis({ data }) {
 
-    const [open,setOpen]= useState(false)
+    const [open, setOpen] = useState(false)
 
-    function handleClose(){
+    function handleClose() {
         setOpen(false)
     }
 
-    function handleShare(e){
+    function handleShare(e) {
         e.preventDefault()
         setOpen(true)
     }
@@ -161,85 +161,85 @@ function LikeThis({data}){
 
     const inputRef = useRef()
     function copyText() {
-        
+
         let copy = inputRef.current.value
         navigator.clipboard.writeText(copy);
-        
+
         // Alert the copied text
         alert("Copied the text: " + copy);
     }
     return (
-        
+
         <Swiper
-        // install Swiper modules
-        modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-        loop={false}
-        speed={1500}
-        // autoplay={{ delay: 2500 }}
-        spaceBetween={0}
-        slidesPerView={1}
-        // navigation
-        pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
-        breakpoints={{
-          // when window width is >= 320px
-          320: {
-            slidesPerView: 1,
-            spaceBetween: 0,
-          },
-          // when window width is >= 640px
-          575: {
-            slidesPerView: 1,
-            spaceBetween: 5,
-          },
-          700: {
-            slidesPerView: 2,
-            spaceBetween: 5,
-          },
-          1024: {
-            slidesPerView: 4,
-            spaceBetween: 3,
-          },
-          1704: {
-            slidesPerView: 5,
-            spaceBetween: 3,
-          },
-        }}
-      >
-          <div className={style.articles__container}>
-        {data?.map((x, i) => (
-          <SwiperSlide key={i}>
-                <div className={style.articleitem}>
-                    <Link to={`/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x?._id}`}>
-                    <div className={style.articleimg}>
-                    <img src={`${process.env.REACT_APP_IMAGEURL}${x?.blogImg}`} alt="" />
+            // install Swiper modules
+            modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+            loop={false}
+            speed={1500}
+            // autoplay={{ delay: 2500 }}
+            spaceBetween={0}
+            slidesPerView={1}
+            // navigation
+            pagination={{ clickable: true }}
+            scrollbar={{ draggable: true }}
+            breakpoints={{
+                // when window width is >= 320px
+                320: {
+                    slidesPerView: 1,
+                    spaceBetween: 0,
+                },
+                // when window width is >= 640px
+                575: {
+                    slidesPerView: 1,
+                    spaceBetween: 5,
+                },
+                700: {
+                    slidesPerView: 2,
+                    spaceBetween: 5,
+                },
+                1024: {
+                    slidesPerView: 4,
+                    spaceBetween: 3,
+                },
+                1704: {
+                    slidesPerView: 5,
+                    spaceBetween: 3,
+                },
+            }}
+        >
+            <div className={style.articles__container}>
+                {data?.map((x, i) => (
+                    <SwiperSlide key={i}>
+                        <div className={style.articleitem}>
+                            <Link to={`/events&articles/articles/${x?.title?.split(" ").join("-").replace('?', '')}/${x?._id}`}>
+                                <div className={style.articleimg}>
+                                    <img src={`${process.env.REACT_APP_IMAGEURL}${x?.blogImg}`} alt="" />
 
-                    </div>
-                    </Link>
+                                </div>
+                            </Link>
 
-                    <div className={style.articleInfo}>
-                        <div className={style.articleTop}>
-                            <span style={{ fontSize: "12px", color: "#4100FA" }}>{new Date(x?.createdAt).toLocaleDateString()}</span>
-                            <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} onClick={handleShare} />
+                            <div className={style.articleInfo}>
+                                <div className={style.articleTop}>
+                                    <span style={{ fontSize: "12px", color: "#4100FA" }}>{new Date(x?.createdAt).toLocaleDateString()}</span>
+                                    <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} onClick={handleShare} />
+
+                                </div>
+                                <Link to={`/events&articles/articles/${x?.title?.split(" ").join("-").replace('?', '')}/${x?._id}`}>
+                                    <h6>
+                                        {x?.title}
+                                    </h6>
+                                </Link>
+                                <p className="restricted_line" dangerouslySetInnerHTML={{ __html: x?.content }}></p>
+                                <ShareModal x={x} open={open} setOpen={setOpen} url={BLOGURL} />
+
+                            </div>
+
+
 
                         </div>
-                        <Link to={`/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x?._id}`}>
-                            <h6>
-                                {x?.title}
-                            </h6>
-                        </Link>
-                        <p className="restricted_line" dangerouslySetInnerHTML={{__html: x?.content}}></p>
-                        <ShareModal x={x} open={open} setOpen={setOpen} url={BLOGURL} />
-
-                    </div>
-
-
-
-                </div>
-            </SwiperSlide>
-        ))}
-        </div>
-      </Swiper>
+                    </SwiperSlide>
+                ))}
+            </div>
+        </Swiper>
     )
 }
 
@@ -258,22 +258,22 @@ const modalStyle = {
     p: 4,
 };
 
-export function ShareModal({x, open, setOpen, url}){
+export function ShareModal({ x, open, setOpen, url }) {
     const inputRef = useRef()
     function copyText() {
-        
+
         let copy = inputRef.current.value
         navigator.clipboard.writeText(copy);
-        
+
         // Alert the copied text
         alert("Copied the text: " + copy);
     }
 
-    function handleClose(){
+    function handleClose() {
         setOpen(false)
     }
 
-    return(
+    return (
         <Modal
             open={open}
             onClose={handleClose}
@@ -288,34 +288,34 @@ export function ShareModal({x, open, setOpen, url}){
                     <Box>
                         <p>Share to: </p>
                         <div>
-                            <FacebookShareButton	url={`${url}/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                            <FacebookShareButton url={`${url}/${x?.title?.split(" ").join("-").replace('?', '')}/${x._id}`}>
                                 <FacebookIcon />
                             </FacebookShareButton>
-                            <TwitterShareButton	url={`${url}/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                            <TwitterShareButton url={`${url}/${x?.title?.split(" ").join("-").replace('?', '')}/${x._id}`}>
                                 <TwitterIcon />
                             </TwitterShareButton>
-                            <LinkedinShareButton	url={`${url}/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                            <LinkedinShareButton url={`${url}/${x?.title?.split(" ").join("-").replace('?', '')}/${x._id}`}>
                                 <LinkedinIcon />
                             </LinkedinShareButton>
-                            <TelegramShareButton	url={`${url}/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                            <TelegramShareButton url={`${url}/${x?.title?.split(" ").join("-").replace('?', '')}/${x._id}`}>
                                 <TelegramIcon />
                             </TelegramShareButton>
-                            <EmailShareButton	url={`${url}/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                            <EmailShareButton url={`${url}/${x?.title?.split(" ").join("-").replace('?', '')}/${x._id}`}>
                                 <EmailIcon />
                             </EmailShareButton>
                         </div>
-                        <div className="d-flex align-items-center mt-3" style={{gap: "1rem"}}>
-                            <input type="text" name="" id="" className="form-control" ref={inputRef} value={`${url}/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}  />
+                        <div className="d-flex align-items-center mt-3" style={{ gap: "1rem" }}>
+                            <input type="text" name="" id="" className="form-control" ref={inputRef} value={`${url}/${x?.title?.split(" ").join("-").replace('?', '')}/${x._id}`} />
                             <button type="button" onClick={copyText}
-                            style={{
-                                border: "none",
-                                outline: "none",
-                                backgroundColor:"var(--theme-blue)",
-                                color: "#fff",
-                                padding: ".5rem",
-                                borderRadius:"8px"
-                            }}
-                            
+                                style={{
+                                    border: "none",
+                                    outline: "none",
+                                    backgroundColor: "var(--theme-blue)",
+                                    color: "#fff",
+                                    padding: ".5rem",
+                                    borderRadius: "8px"
+                                }}
+
                             >Copy</button>
                         </div>
                     </Box>
