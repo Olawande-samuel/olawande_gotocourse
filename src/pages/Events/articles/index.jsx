@@ -36,6 +36,7 @@ import {
     WhatsappIcon,
   } from "react-share";
 import Helmet from 'react-helmet'
+import { BLOGURL } from '../../../constants'
 
 const Articles = () => {
     const {id} = useParams()
@@ -82,14 +83,15 @@ const Articles = () => {
     </Helmet>
     <Layout>
         <section className="container py-4">
-            <Header>
-                <h4>{blog.title}</h4>
-            </Header>
+            
             <ImageContainer>
                 <div>
                 <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
                 </div>
             </ImageContainer>
+            <Header>
+                <h4>{blog.title}</h4>
+            </Header>
             <DateAndAction>
                 <span>
                     <i>
@@ -97,14 +99,13 @@ const Articles = () => {
                     </i>
                     <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
                 </span>
-                <span onClick={handleShare}>
-                    <span>Share</span>
-                    <i><FaShareSquare /></i>
-                </span>
+                <ShareButton data={blog} url={BLOGURL} />
+                
             </DateAndAction>
+            
             <MoreLikeThis></MoreLikeThis>
             <Content>
-            <p  dangerouslySetInnerHTML={{__html: blog.content}}></p>
+            <div  dangerouslySetInnerHTML={{__html: blog.content}} />
 
 
             </Content>
@@ -118,13 +119,31 @@ const Articles = () => {
                 
                 </section>
             </MoreLikeThis>
-            <ShareModal x={blog} open={open} setOpen={setOpen} />
         </section>
     </Layout>
     </>
   )
 }
 
+export function ShareButton({data, url}){
+    const [open, setOpen]= useState(false)
+
+    function handleShare(e){
+        e.preventDefault();
+        setOpen(true)
+    }
+
+
+    return (
+        <>
+            <span onClick={handleShare}>
+                <span>Share</span>
+                <i><FaShareSquare /></i>
+            </span>
+            <ShareModal x={data} open={open} setOpen={setOpen} url={url}  />
+        </>
+    )
+}
 
 function LikeThis({data}){
 
@@ -210,7 +229,7 @@ function LikeThis({data}){
                             </h6>
                         </Link>
                         <p className="restricted_line" dangerouslySetInnerHTML={{__html: x?.content}}></p>
-                        <ShareModal x={x} open={open} setOpen={setOpen} />
+                        <ShareModal x={x} open={open} setOpen={setOpen} url={BLOGURL} />
 
                     </div>
 
@@ -239,85 +258,7 @@ const modalStyle = {
     p: 4,
 };
 
-export function Sharer({title, category, bootcampId, open, setOpen}){
-    const inputRef = useRef()
-    function copyText() {
-        
-        let copy = inputRef.current.value
-        navigator.clipboard.writeText(copy);
-        
-        // Alert the copied text
-        // alert("Copied the text: " + copy);
-    }
-
-    function handleClose(){
-        setOpen(false)
-    }
-
-    function getTitle () {
-        if(title?.trim().toLowerCase().includes("/")){
-            let newTitle = title?.trim().split("/").join("-").toLowerCase()
-            return (`categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle?.trim().split(" ").join("-").toLowerCase()}/${bootcampId?.trim()}`)
-       } else {
-           return (`categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${title?.trim().split(" ").join("-").toLowerCase()}/${bootcampId?.trim()}`)
-       }
-    }
-
-    return(
-        <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-            className="message"
-        >
-            <Box sx={modalStyle}>
-                <div className="boxtop">
-                    <h5>Share Post</h5>
-
-                    <Box>
-                        <p>Share to: </p>
-                        <div>
-                            <FacebookShareButton	url={`https://gotocourse.us/learn-with-gotocourse/${getTitle()}`}>
-                                <FacebookIcon />
-                            </FacebookShareButton>
-                            <TwitterShareButton	url={`https://gotocourse.us/learn-with-gotocourse/${getTitle()}`}>
-                                <TwitterIcon />
-                            </TwitterShareButton>
-                            <LinkedinShareButton	url={`https://gotocourse.us/learn-with-gotocourse/${getTitle()}`}>
-                                <LinkedinIcon />
-                            </LinkedinShareButton>
-                            <TelegramShareButton	url={`https://gotocourse.us/learn-with-gotocourse/${getTitle()}`}>
-                                <TelegramIcon />
-                            </TelegramShareButton>
-                            <EmailShareButton	url={`https://gotocourse.us/learn-with-gotocourse/${getTitle()}`}>
-                                <EmailIcon />
-                            </EmailShareButton>
-                        </div>
-                        <div className="d-flex align-items-center mt-3" style={{gap: "1rem"}}>
-                            <input type="text" name="" id="" className="form-control" ref={inputRef} value={`https://gotocourse.us/learn-with-gotocourse/${getTitle()}`}  />
-                            <button type="button" onClick={copyText}
-                            style={{
-                                border: "none",
-                                outline: "none",
-                                backgroundColor:"var(--theme-blue)",
-                                color: "#fff",
-                                padding: ".5rem",
-                                borderRadius:"8px"
-                            }}
-                            
-                            >Copy</button>
-                        </div>
-                    </Box>
-                </div>
-            </Box>
-        </Modal>
-    )
-}
-
-
-
-export function ShareModal({x, open, setOpen}){
+export function ShareModal({x, open, setOpen, url}){
     const inputRef = useRef()
     function copyText() {
         
@@ -347,24 +288,24 @@ export function ShareModal({x, open, setOpen}){
                     <Box>
                         <p>Share to: </p>
                         <div>
-                            <FacebookShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                            <FacebookShareButton	url={`${url}/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
                                 <FacebookIcon />
                             </FacebookShareButton>
-                            <TwitterShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                            <TwitterShareButton	url={`${url}/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
                                 <TwitterIcon />
                             </TwitterShareButton>
-                            <LinkedinShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                            <LinkedinShareButton	url={`${url}/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
                                 <LinkedinIcon />
                             </LinkedinShareButton>
-                            <TelegramShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                            <TelegramShareButton	url={`${url}/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
                                 <TelegramIcon />
                             </TelegramShareButton>
-                            <EmailShareButton	url={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
+                            <EmailShareButton	url={`${url}/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}>
                                 <EmailIcon />
                             </EmailShareButton>
                         </div>
                         <div className="d-flex align-items-center mt-3" style={{gap: "1rem"}}>
-                            <input type="text" name="" id="" className="form-control" ref={inputRef} value={`https://gotocourse.us/events&articles/articles/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}  />
+                            <input type="text" name="" id="" className="form-control" ref={inputRef} value={`${url}/${x?.title?.split(" ").join("-").replace('?','')}/${x._id}`}  />
                             <button type="button" onClick={copyText}
                             style={{
                                 border: "none",

@@ -174,9 +174,9 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
     let startingDate = new Date(startDate).getTime();
 
     if(today >= startingDate){
-      // navigate("connect")
+      navigate("connect")
     }else {
-      
+      window.alert(`Class starts on ${startDate}`)
     }
   }
 

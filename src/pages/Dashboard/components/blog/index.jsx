@@ -5,7 +5,7 @@ import { useState } from "react"
 import { BiCloudDownload } from "react-icons/bi"
 import styled from "styled-components"
 import { AdvancedError } from "../../../../classes"
-import { KEY } from "../../../../constants"
+import { BLOGURL, KEY } from "../../../../constants"
 import { useAuth } from "../../../../contexts/Auth"
 import { useLocalStorage } from "../../../../hooks"
 import { Admin } from "../../Admin"
@@ -374,7 +374,7 @@ function BlogCard({blog}){
                             </div>
 
                         </div>
-                        <ShareModal x={blog} open={open} setOpen={setOpen} />
+                        <ShareModal x={blog} open={open} setOpen={setOpen} url={BLOGURL} />
                     </Card>
     )
 }

@@ -4,6 +4,7 @@ import { BsCalendarWeekFill } from "react-icons/bs";
 import { FaShareSquare } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import styled from "styled-components"
+import { BLOGURL } from "../../constants";
 import { useAuth } from "../../contexts/Auth";
 import { ShareModal } from "../../pages/Events/articles";
 import { ClassTypeComponent } from "./landingComponents";
@@ -80,7 +81,7 @@ a{
         font-style: normal;
         font-weight: 400;
         // line-height: 25px;
-        color: #86868B;
+        color: #000;
         font-size: clamp(0.75rem, 0.7321rem + 0.0893vw, 0.875rem);
     }
 
@@ -104,7 +105,7 @@ export const DateAndAction = styled.div`
     > span:first-child {
         font-size: 12px;
         font-weight: 600;
-        color: #464646;
+        color: #000;
         display:flex;
         justify-content: space-between;
         align-items: center;
@@ -175,7 +176,7 @@ export const Blog = () => {
                             </div>
 
                         </div>
-                        <ShareModal x={blog} open={open} setOpen={setOpen} />
+                        <ShareModal x={blog} open={open} setOpen={setOpen} url={BLOGURL} />
                     </Card>
                 ))}
             </Grid>

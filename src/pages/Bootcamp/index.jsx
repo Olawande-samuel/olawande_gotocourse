@@ -42,9 +42,16 @@ import DOMPurify from "dompurify";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { BsArrowRight } from "react-icons/bs";
+<<<<<<< HEAD
 import { ShareModal, Sharer } from "../Events/articles";
 import { FaShareSquare } from "react-icons/fa";
+=======
+import { ShareButton } from "../Events/articles";
+import { Box, Modal } from "@mui/material";
+import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton } from "react-share";
+>>>>>>> fdfcc7f85a22385a6bd0c657537fb13bc5db5654
 
+import { baseURL} from "../../constants";
 const similarBootcamp = [
   {
     title: "UIUX",
@@ -581,6 +588,7 @@ export function NewBootcampDetailsComponent() {
           bootcampTrainingInfo?.subCategory === "PATH_FINDERS" ? "Pathfinders Courses" : "Executive Courses"
 
 
+      console.log({bootcampTrainingInfo})
   return (
     <Layout>
       <div className={clsx.bootcampTraining}>
@@ -598,7 +606,11 @@ export function NewBootcampDetailsComponent() {
           wishlistState={wishlistState}
           removeCourse={removeCourse}
           userdata={userdata}
+<<<<<<< HEAD
           item={bootcampTrainingInfo}
+=======
+          all={bootcampTrainingInfo}
+>>>>>>> fdfcc7f85a22385a6bd0c657537fb13bc5db5654
         />
         <section className={clsx.to_learn}>
           <div className="container">
@@ -756,13 +768,17 @@ export function NewBootcampDetailsComponent() {
 
 
 
-export function DetailsHero({ navHeight, item, title, description, addToWishList, subCategory, handleBootstrapEnrollment, loading, img, endDate, startDate, wishlistState, removeCourse, userdata }) {
-  const [open, setOpen] = useState(false)
+export function DetailsHero({ navHeight, title, description, addToWishList, subCategory, handleBootstrapEnrollment, loading, img, endDate, startDate, wishlistState, removeCourse, userdata, all }) {
 
-  function handleShare(e) {
-    e.preventDefault()
-    setOpen(true)
+  console.log({all})
+
+  const [open, setOpen] = useState(false)
+  
+
+  function shareCourse(){
+    setOpen(true);
   }
+
 
   return (
     <section
@@ -786,11 +802,10 @@ export function DetailsHero({ navHeight, item, title, description, addToWishList
                 boxShadow: "0px 0px 8px rgb(225, 225, 225)"
               }}
               transition={{ duration: 0.1 }}
-              onClick={handleBootstrapEnrollment}>Enroll now</motion.button>
-
-            <FaShareSquare style={{ fontSize: "2rem", color: "#fff", cursor: "pointer" }} onClick={handleShare} />
-
-
+              onClick={handleBootstrapEnrollment}
+            >
+              Enroll now
+            </motion.button>
 
             {
               (!userdata.token) ? <button onClick={addToWishList}>
@@ -835,15 +850,22 @@ export function DetailsHero({ navHeight, item, title, description, addToWishList
                   </button>
 
             }
-
+            <motion.button
+              whileHover={{
+                boxShadow: "0px 0px 8px rgb(225, 225, 225)"
+              }}
+              transition={{ duration: 0.1 }}
+              onClick={shareCourse}
+            >
+              Share
+            </motion.button>
 
 
 
           </div>
         </div>
       </div>
-      <Sharer title={item.title} category={item.category} bootcampId={item.bootcampId} open={open} setOpen={setOpen} />
-
+      <ShareModal  x={all} open={open} setOpen={setOpen}  />
     </section>
   )
 }
@@ -892,5 +914,98 @@ export function Upcome({ _id, title, duration, category, subCategory, bootcampId
         <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>learn More</button>
       </div>
     </div>
+  )
+}
+
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: "min(100% - .3rem, 550px)",
+  height: 400,
+  bgcolor: 'background.paper',
+  border: '.5px solid #333',
+  boxShadow: 24,
+  overflow: "hidden",
+  p: 4,
+};
+
+export function ShareModal({x, open, setOpen, url}){
+  console.log({x})
+  const inputRef = useRef()
+  function copyText() {
+      
+      let copy = inputRef.current.value
+      navigator.clipboard.writeText(copy);
+      
+      // Alert the copied text
+      alert("Copied the text: " + copy);
+  }
+
+  function handleClose(){
+      setOpen(false)
+  }
+
+  function generateUrl(){
+
+    if(x?.title?.trim().toLowerCase().includes("/")){
+      let newTitle = x?.title?.trim().split("/").join("-").toLowerCase()
+      return `https://gotocourse.com/categories/${x?.category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle.trim().split(" ").join("-").toLowerCase()}/${x?.bootcampId?.trim()}`
+  } else {
+     return `https://gotocourse.com/categories/${x?.category?.trim().split(" ").join("-").toLowerCase()}/courses/${x?.title?.trim().split(" ").join("-").toLowerCase()}/${x?.bootcampId?.trim()}`
+  }
+  }
+
+  return(
+      <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          className="message"
+      >
+          <Box sx={modalStyle}>
+              <div className="boxtop">
+                  <h5>Share Course</h5>
+
+                  <Box>
+                      <p>Share to: </p>
+                      <div>
+                          <FacebookShareButton	url={generateUrl()}>
+                              <FacebookIcon />
+                          </FacebookShareButton>
+                          <TwitterShareButton	url={generateUrl()}>
+                              <TwitterIcon />
+                          </TwitterShareButton>
+                          <LinkedinShareButton	url={generateUrl()}>
+                              <LinkedinIcon />
+                          </LinkedinShareButton>
+                          <TelegramShareButton	url={generateUrl()}>
+                              <TelegramIcon />
+                          </TelegramShareButton>
+                          <EmailShareButton	url={generateUrl()}>
+                              <EmailIcon />
+                          </EmailShareButton>
+                      </div>
+                      <div className="d-flex align-items-center mt-3" style={{gap: "1rem"}}>
+                          <input type="text" name="" id="" className="form-control" ref={inputRef} value={generateUrl()}  />
+                          <button type="button" onClick={copyText}
+                          style={{
+                              border: "none",
+                              outline: "none",
+                              backgroundColor:"var(--theme-blue)",
+                              color: "#fff",
+                              padding: ".5rem",
+                              borderRadius:"8px"
+                          }}
+                          
+                          >Copy</button>
+                      </div>
+                  </Box>
+              </div>
+          </Box>
+      </Modal>
   )
 }

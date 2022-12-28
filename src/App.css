@@ -1592,7 +1592,7 @@ td:not(:first-child) {
 
 .signWrapper_background {
   height: 100%;
-  background: url(./images/logup.webp);
+  background: url(./images/logup.png);
   background-repeat: no-repeat;
   background-size: cover;
   display: none;
@@ -1612,7 +1612,7 @@ td:not(:first-child) {
 
 .pay_background {
   min-height: 100vh;
-  background: url(./images/logup.webp);
+  background: url(./images/logup.png);
   background-repeat: no-repeat;
   background-size: cover;
   /* display: flex;
@@ -1703,7 +1703,7 @@ td:not(:first-child) {
   }
 
   .signWrapper>div:nth-child(3) {
-    background: url(./images/logup.webp);
+    background: url(./images/logup.png);
     background-repeat: no-repeat;
     background-size: cover;
     width: min(100%, 600px);
