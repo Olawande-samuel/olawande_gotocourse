@@ -723,7 +723,7 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
                     </div>
                     <div className="checks">
                         <p> <AiOutlineCheck className="icon" /> Cohort Learning</p>
-                        <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live </span>with Instructor</p>
+                        <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
                         <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}></span> {getFullDate(startDate)}
                         </p>
                     </div>
@@ -1422,7 +1422,7 @@ export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, 
                 // style={{ paddingTop: "1rem" }}
                 >
                     {/* <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p> */}
-                    <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live </span>with Instructor</p>
+                    <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
                 </div>
 
                 {/* <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue" }}>
@@ -1673,7 +1673,7 @@ export function PathCourseCard({ title, bootcampImg, bootcampId, category, descr
 
                 <div className="checks">
                     {/* <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p> */}
-                    <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live </span>with Instructor</p>
+                    <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
                 </div>
 
                 {/* <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue" }}>
@@ -2107,12 +2107,12 @@ const ClassWrapper = styled.section`
     }
 `
 
-export function ClassTypeComponent({ children, header: head, header2, subtext, subtext1, subtext2, bottomTitle, bottomLink }) {
+export function ClassTypeComponent({ children, center, header: head, header2, subtext, subtext1, subtext2, bottomTitle, bottomLink }) {
     return (
         <ClassWrapper>
             <div className="container">
                 <header>
-                    <h5>{head}</h5>
+                    <h5 className={center && "text-center"}>{head}</h5>
                     <h5>{header2}</h5>
                     <small>{subtext}</small>
                     <small className="d-block">{subtext1}</small>

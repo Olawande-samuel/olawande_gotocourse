@@ -412,7 +412,7 @@ export function Card({ title, bootcampImg, bootcampId, category, subCategory, de
 
           <div className="checks" style={{ paddingTop: "1rem" }}>
             <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p>
-            <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live </span>with Instructor</p>
+            <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
           </div>
 
           <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue" }}>

@@ -375,13 +375,13 @@ function Hero() {
     },
     {
       id: 4,
-      title: "Anyone can start from here. ",
+      title: "Your kids can start from here. ",
       title2: "",
       // subtitle: "Whether you are starting newly or upgrading your skills this is the best place to learn. No need of without putting your life on hold. You can study anywhere, everywhere and at any time, Gotocourse is your ideal destination of growing your tech and business skills.",
       social: true,
       acctype: "affiliate",
       list: [
-        "Join tech headstart program from anywhere",
+        "Join tech headstart program as early as 9 years",
         "Find your path to I.T by learning from real world experts",
         "Build solid foundation that leads to life-time opportunity",
       ],

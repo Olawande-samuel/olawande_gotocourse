@@ -153,7 +153,7 @@ export const Blog = () => {
     return (
         <ClassTypeComponent {...data}>
             <Grid>
-                {blogs.length > 0 && blogs.slice(0,8).map(blog => (
+                {blogs.length > 0 && blogs.slice(0, 8).map(blog => (
 
                     <Card key={blog._id}>
                         <Link to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
@@ -191,7 +191,7 @@ export const Blog = () => {
 const data = {
     header: "Gotocourse Events, News And Insights",
     content: [],
-    bottomTitle:"View  more Blogs and Articles  >",
-    bottomLink:`/events&articles`
-
+    bottomTitle: "View  more blogs  >",
+    bottomLink: `/events&articles`,
+    center: true
 }
