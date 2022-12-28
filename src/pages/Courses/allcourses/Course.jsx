@@ -303,7 +303,7 @@ min-height: 40vh;
 
     .right{
       flex: .3;
-      border: 2px solid blue;
+      // border: 2px solid blue;
 
 
        img{
