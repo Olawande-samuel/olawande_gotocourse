@@ -42,14 +42,9 @@ import DOMPurify from "dompurify";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { BsArrowRight } from "react-icons/bs";
-<<<<<<< HEAD
-import { ShareModal, Sharer } from "../Events/articles";
-import { FaShareSquare } from "react-icons/fa";
-=======
 import { ShareButton } from "../Events/articles";
 import { Box, Modal } from "@mui/material";
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton } from "react-share";
->>>>>>> fdfcc7f85a22385a6bd0c657537fb13bc5db5654
 
 import { baseURL} from "../../constants";
 const similarBootcamp = [
@@ -606,11 +601,7 @@ export function NewBootcampDetailsComponent() {
           wishlistState={wishlistState}
           removeCourse={removeCourse}
           userdata={userdata}
-<<<<<<< HEAD
-          item={bootcampTrainingInfo}
-=======
           all={bootcampTrainingInfo}
->>>>>>> fdfcc7f85a22385a6bd0c657537fb13bc5db5654
         />
         <section className={clsx.to_learn}>
           <div className="container">
