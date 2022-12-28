@@ -19,6 +19,8 @@ import { ExeEducation, InDemand, UpskillCourseCard } from '../../../components/N
 import short from '../../../images/short.png'
 import executive from '../../../images/executive.png'
 import demand from '../../../images/demand.png'
+import headstart from '../../../images/Headstart.png'
+import pathfinder from '../../../images/Pathfinder.png'
 
 import skill from '../../../images/upskill.webp'
 import tech from '../../../images/tech.png'
@@ -413,6 +415,87 @@ function ShortMid() {
   )
 
 }
+
+const UpComeComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
+  const { generalState: { navHeight } } = useAuth()
+
+  // Here we use item offsets; we could also use page offsets
+  // following the API or data you're working with.
+  const [itemOffset, setItemOffset] = useState(0);
+
+  // Simulate fetching items from another resources.
+  // (This could be items from props; or items loaded in a local state
+  // from an API endpoint with useEffect and useState)
+  const endOffset = itemOffset + itemsPerPage;
+  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+  const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
+
+  // Invoke when user click to request another page.
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
+    console.log(
+      `User requested page number ${event.selected}, which is offset ${newOffset}`
+    );
+    setItemOffset(newOffset);
+  };
+  return (
+    <div style={{ marginTop: navHeight }}>
+      <div className='container'>
+        <UpskillHero>
+          <div className="left">
+            <h3>
+              Increase your earning
+            </h3>
+            <h3>
+              potential by upgrading
+            </h3>
+            <h3>
+              your skillsets.
+            </h3>
+            <p>Choose from wide range of upskill courses  and tech Entrepreneurship  across various categories.</p>
+          </div>
+          <div className="right">
+            <img src={skill} alt="" />
+          </div>
+        </UpskillHero>
+      </div>
+
+      <ShortMid />
+
+      <div className="container">
+        <Grid>
+          {
+            currentItems?.map(item => (
+              <UpskillCourseCard {...item} key={item.bootcampId} />
+            ))
+          }
+
+        </Grid>
+        <ReactPaginate
+          className="pagination"
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          // previousLabel="< previous"
+          previousLabel="<"
+          // previousLabel="&#8592;"
+          renderOnZeroPageCount={null}
+        /> 
+
+      </div>
+
+      <Companies />
+      <Question />
+
+
+
+    </div>
+
+  )
+}
 const ShortCourseComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   const { generalState: { navHeight } } = useAuth()
 
@@ -537,7 +620,7 @@ const HeadstartComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
             <p>Choose from wide range of programs for your kids 9 years and above to get them started in the tech world</p>
           </div>
           <div className="right">
-            <img src={demand} alt="" />
+            <img src={headstart} alt="" />
           </div>
         </ExecutiveHero>
       </div>
@@ -617,7 +700,7 @@ const PathComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
             <p>Choose from wide range of programs for individuals 15 years above to get them started in the tech world</p>
           </div>
           <div className="right">
-            <img src={short} alt="" />
+            <img src={pathfinder} alt="" />
           </div>
         </ShortHero>
       </div>
@@ -933,7 +1016,7 @@ const DemandComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
               increase your earnings
             </h3>
 
-            <p>Choose from wide range of upskill courses  and tech Entrepreneurship  across various categories.</p>
+            <p>Choose from wide range of In-demand courses  and tech Entrepreneurship  across various categories.</p>
           </div>
           <div className="right">
             <img src={demand} alt="" />
@@ -1018,11 +1101,20 @@ const CourseComponent = () => {
     onSuccess: res => {
       // console.log({res})
       // console.log(res.data.filter(item => item.subCategory === id && item.isActive))
-      if (res.data) {
+      
+      if (res.data && id === "upcoming") {
+        const first  = res.data.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
+        const second =  res.data.filter(item =>  item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive); 
+        const all  = [...first, ...second]
+        setBootcampTrainingInfo(all)
+      }else if (res.data) {
         setBootcampTrainingInfo(res.data.filter(item => item.subCategory === id && item.isActive))
         return
+
+      }else{
+        setBootcampTrainingInfo([])
+
       }
-      setBootcampTrainingInfo([])
 
     },
     onError: err => console.error(err)
@@ -1047,7 +1139,9 @@ const CourseComponent = () => {
               (id === "IN_DEMAND") ? <DemandComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
               (id === "TECH_ENTREPRENEURSHIP") ? <TechComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
               (id === "PATH_FINDERS") ? <PathComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
-              (id === "HEAD_START") ? <HeadstartComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> : ""
+              (id === "HEAD_START") ? <HeadstartComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
+              (id === "upcoming") ? <UpComeComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
+               ""
         }
 
 

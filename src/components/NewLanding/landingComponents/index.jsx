@@ -63,9 +63,9 @@ export function GreatImage({ img, title1, title2, title3, link }) {
             <Link to={link}>
                 <img src={img} alt="" />
                 <p>
-                <span>{title1}</span>
-                <span className="d-block">{title2}</span>
-                <span className="d-block">{title3}</span>
+                    <span>{title1}</span>
+                    <span className="d-block">{title2}</span>
+                    <span className="d-block">{title3}</span>
                 </p>
             </Link>
         </ImageCard>
@@ -537,21 +537,21 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
                     {/* <p> <AiOutlineCheck className="icon" /> {packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"} Learning</p> */}
                     <p><AiOutlineCheck className="icon" />
 
-                    {
-                        changeConstants(packages[0].title) === "Self-paced" ? 
-                        <>
-                            <span style={{color:"var(--theme-orange)"}}>Self-paced </span> 
-                            <span>Learning</span>
-                        </> 
-                        
-                        :
+                        {
+                            changeConstants(packages[0].title) === "Self-paced" ?
+                                <>
+                                    <span style={{ color: "var(--theme-orange)" }}>Self-paced </span>
+                                    <span>Learning</span>
+                                </>
 
-                     <>
-                        <span style={{color:"var(--theme-orange)"}}>Live </span> 
-                        <span>with Instructor</span>
-                     </>
-                    }
-                     </p>
+                                :
+
+                                <>
+                                    <span style={{ color: "var(--theme-orange)" }}>Live </span>
+                                    <span>with Instructor</span>
+                                </>
+                        }
+                    </p>
                 </div>
                 <div className="route_to_class">
                     <span onClick={() => gotoclass(title, category, bootcampId, navigate)}>Learn more</span>
@@ -723,7 +723,7 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
                         <p> <AiOutlineCheck className="icon" /> Cohort Learning</p>
                         <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live </span>with Instructor</p>
                         <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}></span> {getFullDate(startDate)}
-</p>
+                        </p>
                     </div>
                 </div>
 
@@ -865,6 +865,18 @@ const UpCoursesCard = styled.div`
         height: 60%;
         /* height: -webkit-fill-available; */
 
+        .checks{
+
+            p{
+                font-weight: 500;
+                font-size: 13.6101px;
+                line-height: 16px;
+            }
+  
+            .icon{
+                color: var(--theme-blue);
+            }
+        }
 
         .cta {
             display: flex;
@@ -983,6 +995,7 @@ const ShortCard = styled.div`
         justify-content:space-between;
         height: 60%;
         /* height: -webkit-fill-available; */
+        
 
 
         .cta {
@@ -1256,7 +1269,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
     )
 }
 
-export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, description, duration, price, packages, popupTitle, popupArr, all }) {
+export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, bootcampId, category, description, duration, price, packages, popupTitle, popupArr, all }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -1387,15 +1400,55 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
                 </div>
 
                 {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-                <div className="foot">
+                {/* <div className="foot">
                     <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button>
                     <div className="ct_bar"></div>
 
                     <span>{changeConstants(packages[0]?.title)}</span>
-                </div>
+                </div> */}
                 {/* <div>
                     <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>
                 </div> */}
+
+
+
+
+                <div className="checks" 
+                // style={{ paddingTop: "1rem" }}
+                >
+                    {/* <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p> */}
+                    <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live </span>with Instructor</p>
+                </div>
+
+                {/* <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue" }}>
+                    <p>Start Date:</p>
+\                    <p>{getFullDate(startDate)}</p>
+                </div> */}
+
+                <div className="foot d-flex justify-content-center">
+                    {/* <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button> */}
+                    <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
+
+
+                    {/* <div className="ct_bar"></div>
+
+          <span>{changeConstants(packages[0]?.title)}</span> */}
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
             <Popover
                 id={id}
@@ -1475,7 +1528,7 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
                     </div>
                 </Box>
             </Popover>
-        </UpCoursesCard>
+        </UpCoursesCard >
     )
 }
 
@@ -1611,7 +1664,7 @@ export function PathCourseCard({ title, bootcampImg, bootcampId, category, descr
                 </div>
 
                 {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-                <div className="foot" style={{justifyContent:"center"}} >
+                <div className="foot" style={{ justifyContent: "center" }} >
                     <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button>
                     {/* <div className="ct_bar"></div> */}
 
@@ -1882,7 +1935,7 @@ export function LiveWebinarCard({
                 <h6>{title}</h6>
                 <div>
                     <p>Gotocourse</p>
-                    <p>{new Intl.DateTimeFormat('en-US').format(new Date(date))} | {time} {time?.split(":")[0] >= 12 ? "": "am"}</p>
+                    <p>{new Intl.DateTimeFormat('en-US').format(new Date(date))} | {time} {time?.split(":")[0] >= 12 ? "" : "am"}</p>
                 </div>
                 <div>
                     <button className="tag">FREE</button>
@@ -1974,7 +2027,7 @@ export function SuccessCard({ icon, title, description }) {
             </div>
             <h6 className="fw-bold" style={{ fontSize: "16px" }}>{title}</h6>
 
-                <span className="restricted_p" style={{ marginBottom: "unset"}}>{description}</span>
+            <span className="restricted_p" style={{ marginBottom: "unset" }}>{description}</span>
             <span onClick={handleClick} className="readmore">read more</span>
 
 
@@ -2017,6 +2070,7 @@ const ClassWrapper = styled.section`
         h5 {
             color: #292D32;   
             font-weight: 700;
+            font-size: 28px;
         }
         
         small{
@@ -2033,7 +2087,7 @@ const ClassWrapper = styled.section`
     }
 `
 
-export function ClassTypeComponent({ children, header: head, header2, subtext,subtext1, subtext2, bottomTitle, bottomLink }) {
+export function ClassTypeComponent({ children, header: head, header2, subtext, subtext1, subtext2, bottomTitle, bottomLink }) {
     return (
         <ClassWrapper>
             <div className="container">
@@ -2042,7 +2096,7 @@ export function ClassTypeComponent({ children, header: head, header2, subtext,su
                     <h5>{header2}</h5>
                     <small>{subtext}</small>
                     <small className="d-block">{subtext1}</small>
-                    <small className="d-block" style={{fontSize: "14px", fontWeight: "500",lineHeight: "22px" ,paddingTop:"1rem"}}>{subtext2}</small>
+                    <small className="d-block" style={{ fontSize: "14px", fontWeight: "500", lineHeight: "22px", paddingTop: "1rem" }}>{subtext2}</small>
                 </header>
                 <article>
                     {children}

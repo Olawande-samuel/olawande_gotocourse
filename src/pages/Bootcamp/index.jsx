@@ -42,6 +42,8 @@ import DOMPurify from "dompurify";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { BsArrowRight } from "react-icons/bs";
+import { ShareModal, Sharer } from "../Events/articles";
+import { FaShareSquare } from "react-icons/fa";
 
 const similarBootcamp = [
   {
@@ -575,9 +577,9 @@ export function NewBootcampDetailsComponent() {
   const courseType = bootcampTrainingInfo?.subCategory === "IN_DEMAND" ? "In-Demand Courses" :
     bootcampTrainingInfo?.subCategory === "SHORT_COURSES" ? "Short Courses" :
       bootcampTrainingInfo?.subCategory === "UPSKILL_COURSES" ? "Upskill Courses" :
-      bootcampTrainingInfo?.subCategory === "HEAD_START" ? "Head Start Courses" : 
-      bootcampTrainingInfo?.subCategory === "PATH_FINDERS" ? "Pathfinders Courses" : "Executive Courses"
-      
+        bootcampTrainingInfo?.subCategory === "HEAD_START" ? "Head Start Courses" :
+          bootcampTrainingInfo?.subCategory === "PATH_FINDERS" ? "Pathfinders Courses" : "Executive Courses"
+
 
   return (
     <Layout>
@@ -596,6 +598,7 @@ export function NewBootcampDetailsComponent() {
           wishlistState={wishlistState}
           removeCourse={removeCourse}
           userdata={userdata}
+          item={bootcampTrainingInfo}
         />
         <section className={clsx.to_learn}>
           <div className="container">
@@ -753,7 +756,13 @@ export function NewBootcampDetailsComponent() {
 
 
 
-export function DetailsHero({ navHeight, title, description, addToWishList, subCategory, handleBootstrapEnrollment, loading, img, endDate, startDate, wishlistState, removeCourse, userdata }) {
+export function DetailsHero({ navHeight, item, title, description, addToWishList, subCategory, handleBootstrapEnrollment, loading, img, endDate, startDate, wishlistState, removeCourse, userdata }) {
+  const [open, setOpen] = useState(false)
+
+  function handleShare(e) {
+    e.preventDefault()
+    setOpen(true)
+  }
 
   return (
     <section
@@ -778,19 +787,10 @@ export function DetailsHero({ navHeight, title, description, addToWishList, subC
               }}
               transition={{ duration: 0.1 }}
               onClick={handleBootstrapEnrollment}>Enroll now</motion.button>
-            {/* <motion.button
-              whileHover={{
-                boxShadow: "0px 0px 8px rgb(225, 225, 225)"
-              }}
-              transition={{ duration: 0.1 }}
-              onClick={addToWishList}
-            >
-              {
-                loading ? <div className="spinner-border"></div>
-                  :
-                  "Add to wishlist"
-              }
-            </motion.button> */}
+
+            <FaShareSquare style={{ fontSize: "2rem", color: "#fff", cursor: "pointer" }} onClick={handleShare} />
+
+
 
             {
               (!userdata.token) ? <button onClick={addToWishList}>
@@ -842,6 +842,8 @@ export function DetailsHero({ navHeight, title, description, addToWishList, subC
           </div>
         </div>
       </div>
+      <Sharer title={item.title} category={item.category} bootcampId={item.bootcampId} open={open} setOpen={setOpen} />
+
     </section>
   )
 }

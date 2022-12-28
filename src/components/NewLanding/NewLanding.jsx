@@ -83,15 +83,15 @@ const NewLanding = () => {
       <WhatweDo />
       <Companies />
       {/* <Mission /> */}
+      <GreatOpportunities />
       <Up/>
       <Category />
-      <GreatOpportunities />
       <Benefits />
       <Headstart/> 
       <Pathfinder/>
       <IndemandClasses />
       <UpskillCourse />
-      <ExecutiveClasses />
+      {/* <ExecutiveClasses /> */}
       <ShortCourses />
       <Mentors />
       <BetterWay /> 

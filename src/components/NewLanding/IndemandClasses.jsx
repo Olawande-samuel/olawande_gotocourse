@@ -35,9 +35,12 @@ const IndemandClasses = () => {
 
         onSuccess: (res)=>{
             if(res.data.length > 0){
-              const exe = res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.isActive);
-
-              setShorts(exe)
+              // const exe = res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.isActive);
+              const first  = res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
+              const second =  res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive);
+              const all  = [...first, ...second]
+              // setShorts(exe)
+              setShorts(all)
               // console.log({exe})
             }
         }
@@ -60,6 +63,7 @@ const data = {
   header: "",
   header2:"Explore In demand career courses",
   subtext:"Learn In demand skills to launch your career. Build job relevant skills by learning from experts from  world-class companies and universities. Finish program within 2 months to 6 months",
+  subtext1:"Build job relevant skills by learning from experts from  world-class companies and universities. Finish program within 2 months to 6 months",
   content: [],
   bottomTitle:"View more In demand career courses >",
   bottomLink:`/category/IN_DEMAND`

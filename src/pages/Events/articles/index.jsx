@@ -238,6 +238,85 @@ const modalStyle = {
     overflow: "hidden",
     p: 4,
 };
+
+export function Sharer({title, category, bootcampId, open, setOpen}){
+    const inputRef = useRef()
+    function copyText() {
+        
+        let copy = inputRef.current.value
+        navigator.clipboard.writeText(copy);
+        
+        // Alert the copied text
+        // alert("Copied the text: " + copy);
+    }
+
+    function handleClose(){
+        setOpen(false)
+    }
+
+    function getTitle () {
+        if(title?.trim().toLowerCase().includes("/")){
+            let newTitle = title?.trim().split("/").join("-").toLowerCase()
+            return (`categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle?.trim().split(" ").join("-").toLowerCase()}/${bootcampId?.trim()}`)
+       } else {
+           return (`categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${title?.trim().split(" ").join("-").toLowerCase()}/${bootcampId?.trim()}`)
+       }
+    }
+
+    return(
+        <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            className="message"
+        >
+            <Box sx={modalStyle}>
+                <div className="boxtop">
+                    <h5>Share Post</h5>
+
+                    <Box>
+                        <p>Share to: </p>
+                        <div>
+                            <FacebookShareButton	url={`https://gotocourse.us/learn-with-gotocourse/${getTitle()}`}>
+                                <FacebookIcon />
+                            </FacebookShareButton>
+                            <TwitterShareButton	url={`https://gotocourse.us/learn-with-gotocourse/${getTitle()}`}>
+                                <TwitterIcon />
+                            </TwitterShareButton>
+                            <LinkedinShareButton	url={`https://gotocourse.us/learn-with-gotocourse/${getTitle()}`}>
+                                <LinkedinIcon />
+                            </LinkedinShareButton>
+                            <TelegramShareButton	url={`https://gotocourse.us/learn-with-gotocourse/${getTitle()}`}>
+                                <TelegramIcon />
+                            </TelegramShareButton>
+                            <EmailShareButton	url={`https://gotocourse.us/learn-with-gotocourse/${getTitle()}`}>
+                                <EmailIcon />
+                            </EmailShareButton>
+                        </div>
+                        <div className="d-flex align-items-center mt-3" style={{gap: "1rem"}}>
+                            <input type="text" name="" id="" className="form-control" ref={inputRef} value={`https://gotocourse.us/learn-with-gotocourse/${getTitle()}`}  />
+                            <button type="button" onClick={copyText}
+                            style={{
+                                border: "none",
+                                outline: "none",
+                                backgroundColor:"var(--theme-blue)",
+                                color: "#fff",
+                                padding: ".5rem",
+                                borderRadius:"8px"
+                            }}
+                            
+                            >Copy</button>
+                        </div>
+                    </Box>
+                </div>
+            </Box>
+        </Modal>
+    )
+}
+
+
+
 export function ShareModal({x, open, setOpen}){
     const inputRef = useRef()
     function copyText() {
