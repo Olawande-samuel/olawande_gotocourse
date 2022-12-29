@@ -87,7 +87,7 @@ export const CustomButton = styled(Button)`
 
 
 
-const Sidebar = ({ modules,setContents,setPickedType,reduceContent, changeActive, activeMedia, isMobile, completed
+const Sidebar = ({ modules,setContents,setPickedType,reduceContent, setActive, active, isMobile, completed
 }) => {
     const navigate = useNavigate()
     let elementRef = createRef(null)
@@ -117,13 +117,14 @@ const Sidebar = ({ modules,setContents,setPickedType,reduceContent, changeActive
                         modules?.map((module, id) =>
                             <Module
                                 title={module.name}
-                                activeMedia={activeMedia}
+                                // active={active}
+                                // setActive={setActive}
                                 contentsData={module.contents}
-                                changeActive={changeActive}
                                 key={id}
                                 setContents={setContents}
                                 setPickedType={setPickedType}
                                 module={id}
+
 
                             />)
                     }
