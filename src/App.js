@@ -326,8 +326,8 @@ function App() {
                     <Route path="courses" element={<CoursesHome />} />
                     <Route path="courses/:profile/:id" element={<Out />}>
                       <Route index element={<NewBootcampDetailsComponent />} />
-                      <Route path="payment" element={<ComingSoon />} />
-                      {/* <Route path="payment" element={<BootcampPayment />} /> */}
+                      {/* <Route path="payment" element={<ComingSoon />} /> */}
+                      <Route path="payment" element={<BootcampPayment />} />
                       <Route
                         path="payment/success"
                         element={<PaymentStatus success={true} />}

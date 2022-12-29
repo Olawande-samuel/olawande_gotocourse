@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Breadcrumbs, IconButton, Paper, Backdrop, Tooltip } from "@mui/material";
 import { MdNavigateNext, MdShare, MdMoreVert, MdMenu, MdMessage } from "react-icons/md";
 import { BiCloudDownload } from "react-icons/bi";
@@ -453,7 +453,7 @@ ul{
 // }
 
 const NoteComponent = (contentItem) => {
-    console.log({contentItem});
+    console.log({ contentItem });
 
     return (
         <NotecContainer>
@@ -614,6 +614,12 @@ const Classroom = () => {
     const [modules, setModules] = useState([]);
     const [contents, setContents] = useState([])
     const [title, setTitle] = useState("")
+    const [searchParams, setSearchParams] = useSearchParams();
+    const contentId = searchParams.get("content");
+    // const [active, setActive] = useState(false)
+    const [next, setNext] = useState(false)
+    const [prev, setPrev] = useState(false)
+
 
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
@@ -649,17 +655,53 @@ const Classroom = () => {
 
     const reduceContent = useMemo(() => {
         return modules?.reduce((total, current) => [
-            ...total,  ...current.contents
+            ...total, ...current.contents
         ], []);
-        
+
     }, [modules])
 
-   
-    console.log({reduceContent})
 
-   
+    console.log({ reduceContent })
 
-    
+    const prevNext = useMemo(() => {
+        if (reduceContent.length > 0) {
+            const findIndex = reduceContent.findIndex(content => content.contentId === contentId);
+            if (findIndex === 0) {
+                setPrev(true)
+            } else if (findIndex === (reduceContent.length - 1)) {
+                setNext(true)
+            } else {
+                setNext(false)
+                setPrev(false)
+            }
+        }
+
+    }, [reduceContent])
+
+    const MoveButton = (type) => {
+        if (reduceContent.length > 0 && type === "next") {
+            const findIndex = reduceContent.findIndex(content => content.contentId === contentId);
+            let val = ""
+            if (findIndex !== (reduceContent.length - 1)) {
+                val = findIndex + 1;
+                setContents(reduceContent[val])
+            } else {
+                val = findIndex;
+                setContents(reduceContent[val])
+            }
+        } else if (reduceContent.length > 0 && type === "prev") {
+            const findIndex = reduceContent.findIndex(content => content.contentId === contentId);
+            let val = ""
+            if (findIndex !== 0) {
+                val = findIndex - 1;
+                setContents(reduceContent[val])
+            } else {
+                val = findIndex;
+                setContents(reduceContent[val])
+            }
+        }
+    }
+
 
     const handleFileCompleted = async (contentId) => {
         console.log({ contentId });
@@ -723,6 +765,8 @@ const Classroom = () => {
                         setContents={setContents}
                         setPickedType={setPickedType}
                         reduceContent={reduceContent}
+                    // active={active} 
+                    // setActive={setActive}
                     />
                 </Backdrop>
                 <Sidebar
@@ -733,6 +777,8 @@ const Classroom = () => {
                     setContents={setContents}
                     setPickedType={setPickedType}
                     reduceContent={reduceContent}
+                // active={active} 
+                // setActive={setActive}
 
                 />
                 <ClassroomMain>
@@ -823,10 +869,10 @@ const Classroom = () => {
 
 
                             <QuizAction>
-                                <PreviousButton variant="outlined" >
+                                <PreviousButton variant="outlined" disabled={prev} onClick={() => MoveButton("prev")}>
                                     <FaCaretLeft />  Previous Content
                                 </PreviousButton>
-                                <NextButton variant="outlined">
+                                <NextButton variant="outlined" disabled={next} onClick={() => MoveButton("next")}>
                                     Next Content <FaCaretRight />
                                 </NextButton>
                             </QuizAction>

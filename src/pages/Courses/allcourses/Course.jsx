@@ -64,7 +64,7 @@ import ReactPaginate from 'react-paginate';
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-    grid-auto-rows: 402px;
+    grid-auto-rows: 460px;
     overflow: hidden;
     gap: 1.5rem;
     justify-content:space-around;
@@ -1092,14 +1092,14 @@ const CourseComponent = () => {
       // console.log({res})
       // console.log(res.data.filter(item => item.subCategory === id && item.isActive))
 
-      if (res.data && id === "upcoming") {
+      if (res.data) {
         const first = res.data.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
         const second = res.data.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive);
         const all = [...first, ...second]
         setBootcampTrainingInfo(all)
-      } else if (res.data) {
-        setBootcampTrainingInfo(res.data.filter(item => item.subCategory === id && item.isActive))
-        return
+      // } else if (res.data) {
+      //   setBootcampTrainingInfo(res.data.filter(item => item.subCategory === id && item.isActive))
+      //   return
 
       } else {
         setBootcampTrainingInfo([])
