@@ -15,7 +15,7 @@ import { useLocalStorage } from '../../../hooks';
 import { COURSE_CATEGORY_KEY } from '../../../constants';
 import { AdvancedError } from '../../../classes';
 import styled from 'styled-components'
-import { ExeEducation, InDemand, UpskillCourseCard } from '../../../components/NewLanding/landingComponents';
+import { ExeEducation, Head, InDemand, UpskillCourseCard } from '../../../components/NewLanding/landingComponents';
 import short from '../../../images/short.png'
 import executive from '../../../images/executive.png'
 import demand from '../../../images/demand.png'
@@ -623,7 +623,7 @@ const HeadstartComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
         <Grid>
           {
             currentItems?.map(item => (
-              <InDemand {...item} key={item.bootcampId} />
+              <Head {...item} key={item.bootcampId} />
             ))
           }
 
