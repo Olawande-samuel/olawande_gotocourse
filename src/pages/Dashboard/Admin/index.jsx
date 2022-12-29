@@ -3622,7 +3622,7 @@ export function AdminClassConsole() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student_main}>
             {bootcamps.length > 0 ? (
-              <Grid>
+              <Grid height="300px">
                 {bootcamps.map((item, i) =>
                   <ClassesCard {...item} />
                 )}
