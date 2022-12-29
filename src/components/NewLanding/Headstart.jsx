@@ -5,10 +5,10 @@ import styled from "styled-components";
 import { useAuth } from "../../contexts/Auth";
 import { ClassTypeComponent, Head, InDemand } from "./landingComponents";
 
-const Grid = styled.div`
+export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-  grid-auto-rows: 420px;
+  grid-auto-rows: ${props => props.height ?  props.height : "420px"};
   overflow: hidden;
   gap: 2.5rem;
   row-gap: 3rem;

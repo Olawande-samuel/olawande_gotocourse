@@ -791,7 +791,7 @@ export function Head({ title, bootcampImg, category, duration, price, packages, 
                     </div>
                     <div className="checks">
                         <p> <AiOutlineCheck className="icon" /> Completion certificate</p>
-                        <p><AiOutlineCheck className="icon" /> Earn upto $138k </p>
+                        {/* <p><AiOutlineCheck className="icon" /> Earn upto $138k </p> */}
                         <p><AiOutlineCheck className="icon" /> Cohort learning</p>
                     </div>
                 </div>

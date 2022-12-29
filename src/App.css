@@ -3343,3 +3343,21 @@ td span {
 .creator {
   background-color: #000F62 !important;
 }
+
+.articles__container {
+  width: 100%;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(289px, 100%), 300px));
+  gap: 3rem;
+  height: 600px;
+  /* border: 5px solid red; */
+  overflow: hidden;
+
+}
+
+.toggleheight{
+  height: unset;
+  overflow: unset;
+
+}

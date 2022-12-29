@@ -51,11 +51,12 @@ import { ClassesCard } from "../Teachers/Bootcamps";
 import Editor from "../components/Editor";
 import Detail from "../../Category/Detail";
 import ReactQuill from "react-quill";
+import { Grid } from "../../../components/NewLanding/Headstart";
 
 const KEY = "gotocourse-userdata";
 
 // CATEGORY DETAILS COMPONENT
-export function CategoryDetails({}) {
+export function CategoryDetails({ }) {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
@@ -668,7 +669,7 @@ export function CreateCourseCategory() {
   const [open, setOpen] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
   const [previewImage, setPreviewImage] = useState(false);
- 
+
   const [showCareerModal, setShowCareerModal] = useState(false);
   const [showNicheModal, setShowNicheModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -2217,7 +2218,7 @@ export function Mentors() {
                         isAbsolute={false}
                         type={null}
 
-                        // accessPledre={teacher.accessPledre}
+                      // accessPledre={teacher.accessPledre}
                       />
                     ))}
               </tbody>
@@ -2749,9 +2750,8 @@ export function Courses() {
                           id={courseId}
                           showDetailsHandler={showDetailsHandler}
                           packages={packages}
-                          date={`${startDate ? getDate(startDate) : ""} - ${
-                            endDate ? getDate(endDate) : ""
-                          }`}
+                          date={`${startDate ? getDate(startDate) : ""} - ${endDate ? getDate(endDate) : ""
+                            }`}
                           isActive={status === "active" ? true : false}
                         />
                       )
@@ -2781,7 +2781,7 @@ export function CreateCourse() {
 }
 
 // COURSE DETAILS COMPONENT
-export function CourseDetails({}) {
+export function CourseDetails({ }) {
   const navigate = useNavigate();
   const { getItem, updateItem } = useLocalStorage();
   let userdata = getItem(KEY);
@@ -3112,7 +3112,7 @@ function DeleteModal({ open, close, deleteTutor }) {
   );
 }
 // BOOTCAMPDETAILS COMPONENT
-export function BootcampDetails({}) {
+export function BootcampDetails({ }) {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
@@ -3463,7 +3463,7 @@ export function Bootcamps() {
   ];
 
 
-  console.log({bootcamps});
+  console.log({ bootcamps });
   useEffect(() => {
     if (flag.current) return;
     (async () => {
@@ -3529,7 +3529,7 @@ export function Bootcamps() {
               <tbody>
                 {bootcamps.length > 0 ? (
                   bootcamps
-                    .filter((boot) => 
+                    .filter((boot) =>
                       boot.title.toLowerCase().includes(search.toLowerCase())
                     )
                     .map(
@@ -3542,7 +3542,7 @@ export function Bootcamps() {
                           startTime,
                           endTime,
                           endDate,
-                          startDate, 
+                          startDate,
                           bootcampId,
                           _id,
                           packages,
@@ -3621,15 +3621,19 @@ export function AdminClassConsole() {
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student_main}>
-          <div className={clsx.class_con_cards}>
             {bootcamps.length > 0 ? (
-              bootcamps.map((item, i) => <ClassesCard {...item} />)
-            ) : (
-              <h6 className="text-center">No Class found</h6>
+              <Grid height="300px">
+                {bootcamps.map((item, i) =>
+                  <ClassesCard {...item} />
+                )}
+              </Grid>
+
+            )
+            : (
+            <h6 className="text-center">No Class found</h6>
             )}
           </div>
         </div>
-      </div>
     </Admin>
   );
 }
@@ -3669,7 +3673,7 @@ export function CreateBootcamp() {
     syllabus: [],
     careerList: [],
     packages: [],
-    popupArr:[]
+    popupArr: []
   });
 
   const [loading, setLoading] = useState(false);
@@ -3784,10 +3788,10 @@ export function CreateBootcamp() {
         throw new AdvancedError("All fields are required", 0);
       const res = location.search
         ? await updateBootcamp(
-            userdata?.token,
-            location.search.split("=").reverse()[0],
-            formData
-          )
+          userdata?.token,
+          location.search.split("=").reverse()[0],
+          formData
+        )
         : await addBootcamp(userdata?.token, formData);
       const { success, message, statusCode } = res;
 
@@ -3812,9 +3816,9 @@ export function CreateBootcamp() {
   const [careerlist, setCareerlist] = useState({
     name: "",
   });
-  
+
   const [popupList, setPopupList] = useState("")
-  
+
   const openModal = () => {
     setOpenSyllabus(true);
   };
@@ -3908,7 +3912,7 @@ export function CreateBootcamp() {
 
       setShowPopupModal((_) => false);
 
-      
+
     } else {
       toast.error("All fields are required", {
         position: "top-right",
@@ -3925,7 +3929,7 @@ export function CreateBootcamp() {
     console.log(e.target.value)
     setPopupList(e.target.value);
   }
-  
+
   // console.log({popupList})
 
   const [openPackage, setOpenPackage] = useState(false);
@@ -4203,7 +4207,7 @@ export function CreateBootcamp() {
             >
               Add Syllabus
             </button>
-         
+
             <Input
               label="Career Title"
               name="careerTitle"
@@ -4256,7 +4260,7 @@ export function CreateBootcamp() {
             <div className={clsx.form_group}>
               <label>Popup List</label>
               {formstate.popupArr?.length !== 0 ? (
-                formstate.popupArr?.map((name , i) => (
+                formstate.popupArr?.map((name, i) => (
                   // <Syllabus key={i} title={name} />
                   <div className={clsx.syllabus_container}>
                     <h5>{name}</h5>
@@ -4364,8 +4368,8 @@ export function BootcampRow({
   price,
   category, subCategory
 }) {
-  console.log({packages})
-  console.log({price})
+  console.log({ packages })
+  console.log({ price })
   return (
     <tr className={clsx.user__info_card} onClick={clickHandler}>
       <td className={clsx.user__info}>{index + 1}.</td>
@@ -5241,7 +5245,7 @@ export const Admin = ({ children, header }) => {
   const isCreator = userdata?.userType === "schools"
 
   return (
-    
+
     <GuardedRoute>
       <div className={clsx["admin"]}>
         <ToastContainer
@@ -5258,7 +5262,7 @@ export const Admin = ({ children, header }) => {
         <Sidebar isMobile={isMobile} />
         <div className={clsx["admin_main"]}>
           {
-            !isCreator  &
+            !isCreator &&
             <Navbar
               content={admin}
               toggleSidebar={toggleSidebar}
