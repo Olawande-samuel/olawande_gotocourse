@@ -457,6 +457,44 @@
 }
 
 
+
+/* quiz results cards */
+.quiz__cards_container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-size: 14px;
+    width: min(100% - 1.2rem, 400px);
+}
+.quiz__card_student_name {
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.quiz__card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 1rem;
+}
+.quiz__card_open_btn {
+    color: #fff;
+    background: var(--theme-blue);
+    padding: 8px 14px;
+    border:none;
+    border-radius: 8px;
+    
+}
+
+.quiz__card_del_btn {
+    border: 1px solid var(--theme-orange);
+    color: var(--theme-orange);
+    padding: 8px 14px;
+    border-radius: 8px;
+}
+
+
+
+
 /* notes */
 
 .note {

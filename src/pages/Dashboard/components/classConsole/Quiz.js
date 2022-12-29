@@ -618,7 +618,58 @@ export default function Quiz() {
 function ResultPanel(){
     return (
         <section>
-            <p className="text-center lead">No one has attempted the quiz yet</p>
+            <section className="quiz__cards_container">
+                {
+                    [...Array(4)].map(item=> (
+                        <ResultCards />
+                    ))
+                }
+            </section>
+            {/* <p className="text-center lead">No one has attempted the quiz yet</p> */}
         </section>
+    )
+}
+
+
+
+
+function ResultCards(){
+    return (
+        <div className="quiz__card">
+            <p className="quiz__card_student_name fw-bold">Olunloyo Adegoke</p>
+            <div>
+                <span>Actual score: </span>
+                <span>Actual score</span>
+            </div>
+            <div>
+                <span>Student ID: </span>
+                <span>Actual score</span>
+            </div>
+            <div>
+                <span>Number of tries: </span>
+                <span>Actual score</span>
+            </div>
+            <p>6/28/2021, 1.55:22AM</p>
+
+            <div className="d-flex gap-2">
+                <button className="quiz__card_del_btn">Delete</button>
+                <button className="quiz__card_open_btn">Open Answer</button>
+            </div>
+        </div>
+    )
+}
+
+
+
+
+function AssessQuiz(){
+    
+    return (
+        <div className="quiz__card">
+            <p className="quiz__card_student_name fw-bold">Olunloyo Adegoke</p>
+            <div>
+                <span>Actual score: </span>
+            </div>
+        </div>
     )
 }
