@@ -467,13 +467,13 @@ export function NewBootcampDetailsComponent() {
     onSuccess: res => {
       // console.log({res})
       if (res.data) {
+        setBootcampTrainingInfo(res.data.find(item => item.bootcampId === id))
+
         const first = res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
         const second = res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive);
-
         const newData = [...first, ...second];
-        setUpcoming(newData.filter(d => d.bootcampId !== bootcampTrainingInfo.bootcampId))
-        setSimilar(newData.filter(d => d.subCategory === bootcampTrainingInfo.subCategory && d.bootcampId !== bootcampTrainingInfo.bootcampId))
-        setBootcampTrainingInfo(res.data.find(item => item.bootcampId === id))
+        setUpcoming(newData.filter(d => d.bootcampId !== bootcampTrainingInfo.bootcampId));
+        setSimilar(newData.filter(d => (d.subCategory === bootcampTrainingInfo.subCategory) && (d.bootcampId !== bootcampTrainingInfo.bootcampId)));
 
         return
       }
@@ -583,20 +583,8 @@ export function NewBootcampDetailsComponent() {
   }, [setWishlistState])
 
   // const similar = bootcamps.data?.data?.filter(d => (d.subCategory === bootcampTrainingInfo.subCategory) && d.isActive && (d.bootcampId !== bootcampTrainingInfo.bootcampId))
+  // const similar = bootcamps.data?.data?.filter(d => (d.subCategory === bootcampTrainingInfo.subCategory) && (d.startDate === "2023-01-05T00:00:00.000Z")  && d.isActive && (d.bootcampId !== bootcampTrainingInfo.bootcampId))
   // const upcoming = bootcamps.data?.data?.filter(d => d.isActive)
-
-
-  // const upcoming  = useMemo(() => {
-  //   const first = bootcamps.data?.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
-  //   const second = bootcamps.data?.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive);
-
-  // console.log({first});
-  // console.log({second});
-
-  //   const newData = [...first, ...second];
-  //    return newData.filter(d =>d.bootcampId !== bootcampTrainingInfo.bootcampId);
-
-  // },[bootcamps?.data?.data])
 
 
 
@@ -608,7 +596,7 @@ export function NewBootcampDetailsComponent() {
           bootcampTrainingInfo?.subCategory === "PATH_FINDERS" ? "Pathfinders Courses" : "Executive Courses"
 
 
-  console.log({ bootcampTrainingInfo })
+  // console.log({ bootcampTrainingInfo })
   return (
     <Layout>
       <div className={clsx.bootcampTraining}>
@@ -720,7 +708,7 @@ export function NewBootcampDetailsComponent() {
             <h4>Other {courseType}</h4>
 
             <Grid>
-              {similar && similar.length > 0 && similar?.splice(0, 4).map((item, i) => (
+              {similar && similar.length > 0 && similar?.slice(0, 4).map((item, i) => (
                 ((bootcampTrainingInfo.subCategory === "HEAD_START") || (bootcampTrainingInfo.subCategory === "IN_DEMAND")) ?
                   <>
                     <Head {...item} all={item} key={item.bootcampId} />
