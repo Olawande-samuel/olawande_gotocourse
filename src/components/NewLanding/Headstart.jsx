@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useAuth } from "../../contexts/Auth";
 import { ClassTypeComponent, Head, InDemand } from "./landingComponents";
 
-const Grid = styled.div`
+export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
   grid-auto-rows: 420px;
