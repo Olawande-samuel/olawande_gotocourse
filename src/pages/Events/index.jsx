@@ -17,7 +17,6 @@ const Events = () => {
     const { getItem } = useLocalStorage();
     const [blogs, setBlogs] = useState([])
     const [webinars, setWebinars] = useState([])
-    let blogRef = useRef()
 
     let navigate = useNavigate()
     let userdata = getItem(KEY);
@@ -47,8 +46,10 @@ const Events = () => {
     // console.log({blogRef});
 
     const ReadMore = () => {
-        console.log(blogRef.current?.clientHeight);
-        // blogRef.current?.clientHeight= clientHeight * 2;
+        let div = document.querySelector('.articles__container')
+        console.log({div});
+        div.classList.toggle('toggleheight')
+       
 
     }
 
@@ -64,7 +65,7 @@ const Events = () => {
                     </div>
                 </div>
                 <div className={style.article}>
-                    <div className={style.articles__container} ref={blogRef}>
+                    <div className="articles__container" >
                         {
                             blogs.length > 0 && blogs.map((blog, id) => (
                                 <Link to={`articles/${blog.title.split(" ").join("-").replace('?', '')}/${blog._id}`} className={style.articleitem} key={id}>
