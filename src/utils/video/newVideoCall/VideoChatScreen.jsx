@@ -5,7 +5,7 @@ import { HiDotsVertical, HiOutlineHand, HiOutlinePhone } from 'react-icons/hi'
 import { IoAdd } from 'react-icons/io5'
 import { MdOutlineMessage, MdPresentToAll } from 'react-icons/md'
 import { VscRecord } from 'react-icons/vsc'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import useQuery from '../useQuery'
 import useSocket from '../useSocket'
 import { Wrapper, Content, HeadBar, VideoWrapper, AddPeople, ControlItem, ControlWrapper, UserCallBlock, UserPresentation, StreamWrapper, ScreenShare, UserHeader, SearchBox, HandList, HandUser, UserListWrapper, UserList, } from './style'
@@ -23,7 +23,10 @@ import { FaShapes } from 'react-icons/fa'
 import sharing from "../../../images/degree.png"
 import { width } from '@mui/system'
 import { toast, ToastContainer } from 'react-toastify'
-
+import { useMutation } from '@tanstack/react-query'
+import { useAuth } from '../../../contexts/Auth'
+import useRecordUpload from "./hook/upload.jsx"
+import zIndex from '@mui/material/styles/zIndex'
 
 const style = {
     position: 'absolute',
@@ -53,6 +56,9 @@ const VideoChatScreen = () => {
     const [openUserBox, setOpenUserBox] = useState(false);
     const [handRaiseList, setHandRaiseList] = useState([]);
     const [userCount, setUserCount] = useState(0);
+    const [openUploadStatus, setOpenUploadStatus] = useState(false);
+
+    const {classId} = useParams()
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -70,6 +76,10 @@ const VideoChatScreen = () => {
     let roomId = query.get('room')
     let isRoomOwner = false;
 
+    const {alert, loading, postVideoToServer, progress } = useRecordUpload(userProfile?.token, classId)
+
+
+    console.log({loading})
     const connectionUserId = useRef(userProfile.userId)
 
     const connectionStateRef = useRef({
@@ -204,42 +214,48 @@ const VideoChatScreen = () => {
             recordedVideoRef.current.parentNode.style.display = "none"
         }
     }
+
+
+
     function startRecording() {
         console.log("is recording media")
-        setIsRecording(true)
-        streamRecorder.current = new MediaRecorder(presentationStream.current);
-
-        const chunks = [];
-        streamRecorder.current.ondataavailable = e => chunks.push(e.data);
-        streamRecorder.current.onstop = e => {
-            setIsRecording(false)
-            const completeBlob = new Blob(chunks, { type: chunks[0].type });
-            recordedVideoRef.current.parentNode.style.display = "flex"
-            recordedVideoRef.current.src = URL.createObjectURL(completeBlob);
-            recordedVideoRef.current.load();
-            recordedVideoRef.current.play()
-
-            postVideoToServer(completeBlob)
-            console.log("stoped recording media")
-        };
-
-        streamRecorder.current.start();
+        if(isPresenting){
+            setIsRecording(true)
+            console.log(presentationStream.current)
+            streamRecorder.current = new MediaRecorder(presentationStream.current, {
+                audioBitsPerSecond: 128000,
+                videoBitsPerSecond: 2500000,
+                mimeType: "video/webm;codecs=VP8",
+              });
+    
+            const chunks = [];
+            streamRecorder.current.ondataavailable = e => chunks.push(e.data);
+            streamRecorder.current.onstop = e => {
+                setIsRecording(false)
+                const completeBlob = new Blob(chunks, { type: chunks[0].type });
+                recordedVideoRef.current.parentNode.style.display = "flex"
+                recordedVideoRef.current.src = URL.createObjectURL(completeBlob);
+                recordedVideoRef.current.load();
+                recordedVideoRef.current.play()
+    
+                postVideoToServer(completeBlob)
+                console.log("stoped recording media")
+            };
+    
+            streamRecorder.current.start();
+        }else {
+            toast.error("Screen share must be turned on before recording")
+        }
     }
+
+
+
     function stopRecording() {
         streamRecorder.current?.stop();
     }
-    const postVideoToServer = async (videoblob) => {
-        const videoData = new FormData();
-        videoData.append('file', videoblob);
+    
+    
 
-        const res = await axios.post(`${process.env.REACT_APP_BASEURL}`, videoData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-                "Authorization": userProfile.token
-            }
-        })
-
-    }
 
     const presentationStream = useRef(null);
     const presentationPeer = useRef(null);
@@ -477,7 +493,6 @@ const VideoChatScreen = () => {
 
     }
 
-    console.log(userCount)
     const checkPeerUsers = () => {
         console.log(presentationPeers.current)
     }
@@ -493,21 +508,26 @@ const VideoChatScreen = () => {
         initRoom()
         connectionUserId.current = userProfile.userId
     }, [userProfile.userId])
-
-    function handleNavigation() {
-        // let videoWrapper = document.querySelector(".video-section")
-        // console.log({videoWrapper})
-        // const video = VideoWrapper.querySelector('.client-local-stream')
-        // for (const track of video.srcObject.getTracks()){
-        //     console.log(track)
-        // }
-        sessionStorage.clear()
-        userProfile.userType === "student" ?
-        window.location.assign("/student")
-        :
-        userProfile.userType === "teacher" ?
-        window.location.assign("/teacher") : userProfile.userType === "admin" ? window.location.assign("/admin") : window.location.assign("/")
+    
+    
+    // end call
+    function endCall() {
+        localStream.current.getTracks().forEach((track) => {
+            track.stop();
+        })
+        navigate(-1)
+        // sessionStorage.clear()
+        // userProfile.userType === "student" ?
+        // window.location.assign("/student")
+        // :
+        // userProfile.userType === "teacher" ?
+        // window.location.assign("/teacher") : userProfile.userType === "admin" ? window.location.assign("/admin") : window.location.assign("/")
     }
+
+
+    //  Messaging
+
+    // TODO: Extract to separate component
 
     const toggleMessage = () => {
         setOpen(!open)
@@ -565,13 +585,14 @@ const VideoChatScreen = () => {
 
 
 
-      function raiseHand(){
+    function raiseHand(){
         socket.emit('client-raise-hand', roomId, {
             name: `${userProfile.firstName} ${userProfile.lastName}`,
             img: userProfile.profileImg,
             id: userProfile.userId
         })
         toast.info("You raised your hand")
+        
         sessionStorage.setItem(HandKey, JSON.stringify([...handRaiseList,  {
                 name: `${userProfile.firstName} ${userProfile.lastName}`,
                 img: userProfile.profileImg    
@@ -664,7 +685,7 @@ const VideoChatScreen = () => {
                             {/* <ControlItem onClick={toggleMessage} isOn={false}>
                                 <BiMessageDetail size="1.5rem" />
                             </ControlItem> */}
-                            <ControlItem onClick={handleNavigation}>
+                            <ControlItem onClick={endCall}>
                                 <HiOutlinePhone size="1.5rem" />
                             </ControlItem>
 
@@ -732,6 +753,7 @@ const VideoChatScreen = () => {
                     </div>
                 </Box>
             </Modal>
+            <UploadStatus open={loading} setOpen={setOpenUploadStatus} progress={progress} />
         </Wrapper>
     )
 }
@@ -868,6 +890,57 @@ function Users({open, setOpen, profileData }) {
                 </UserList>
             </UserListWrapper>
             
+        </Box>
+      </Modal>
+    )
+  }
+function UploadStatus({open, setOpen, progress }) {
+  console.log({open})
+    const modalStyle = {
+        position: 'absolute',
+        top: "50px",
+        left: "50%",
+        bottom: "15%",
+        width: "100%",
+        height: "min(100vh - 81px, 600px)",
+        bgcolor: 'background.paper',
+        backgroundColor: '#fff',
+        border: '2px solid #eee',
+        boxShadow: 24,
+        color:"#fff",
+        p: 2,
+        transform: "translateX(-50%)",
+        display: "grid",
+        placeItems:"center",
+        zIndex:"9000"
+
+    }
+    const HandKey = "gotocourse_hand_raised_users"  
+    const session = sessionStorage.getItem(HandKey)
+    
+    
+    const [handRaiseList, setHandRaiseList]= useState([])
+    
+    useEffect(() => {
+        const sessionData = JSON.parse(session)
+
+        setHandRaiseList(sessionData)   
+    }, [session])
+
+    return (
+      <Modal
+        open={open}
+        onClose={()=>setOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+            <UserHeader>Recorded class upload in progress</UserHeader>
+            <p className="text-dark">Do not close this modal</p>
+            <div className="spinner-border text-primary">
+                <span className="visually-hidden">Search User</span>
+            </div>
+            <span className='text-dark'>{progress}</span>
         </Box>
       </Modal>
     )
