@@ -105,6 +105,24 @@ const useSchoolSettings = (school_id) => {
         });
     };
 
+    const updateCallToActionButton = async (cta) => {
+        updateSchoolSettings({
+            cta: cta,
+        });
+    };
+
+    const updateTestimonials = async (testimonials) => {
+        updateSchoolSettings({
+            testimonials: testimonials,
+        });
+    };
+
+    const updateFAQs = async (faqs) => {
+        updateSchoolSettings({
+            faq: faqs,
+        });
+    };
+
     return {
         schoolSettings,
         loading,
@@ -112,6 +130,9 @@ const useSchoolSettings = (school_id) => {
         updateSchoolHeaders,
         updateSchoolBanner,
         updateWhyOurSchool,
+        updateCallToActionButton,
+        updateTestimonials,
+        updateFAQs,
     };
 };
 
