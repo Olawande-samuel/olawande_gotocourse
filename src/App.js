@@ -219,7 +219,6 @@ import EnterpriseVerification from "./components/enterprise/Register/Verificatio
 import EnterpriseOnboarding from "./components/enterprise/EnterpriseOnboarding";
 import Pricing from "./components/enterprise/Pricing";
 import Creator from "./components/enterprise/Creator";
-import NewDemand from "./components/survey/indemand";
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -271,8 +270,7 @@ function App() {
           <Suspense fallback={<Loader />}>
             <Routes>
               <Route path="/" element={<Out />}>
-              {/* <Route index element={<AnotherLanding />} /> */}
-              <Route index element={<NewDemand />} />
+              <Route index element={<AnotherLanding />} />
                 <Route path="create" element={<CreatePage />} />
                 <Route path="manage" element={<ManagePage />} />
                 <Route path="pricing" element={<Pricing />} />
