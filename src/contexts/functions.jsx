@@ -4651,11 +4651,11 @@ export const consoleFunctions = {
             }
         }
     },
-    markAsCompleted: async function (token, id) {
+    markAsCompleted: async function (token, id, fileId) {
 
         try {
             const res = await axios.patch(`${baseURL}/classes/student/contents/files/mark/completed/${id}`, {
-               id: JSON.stringify(id)
+               fileId
             },
 
                 {

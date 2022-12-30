@@ -93,8 +93,9 @@ const Sidebar = ({ modules,setContents,setPickedType,reduceContent, setActive, a
     let elementRef = createRef(null)
 
     const ProgressResult = useMemo(() => {
-        if (reduceContent === undefined) return 0;
-        let result = (Math.floor((completed / reduceContent.length) * 100))
+        let result = 0;
+        if (reduceContent?.length === 0) return result;
+        result =(Math.floor((completed / reduceContent?.length) * 100))
         return result
     }, [completed, reduceContent])
 

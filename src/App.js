@@ -219,6 +219,7 @@ import EnterpriseVerification from "./components/enterprise/Register/Verificatio
 import EnterpriseOnboarding from "./components/enterprise/EnterpriseOnboarding";
 import Pricing from "./components/enterprise/Pricing";
 import Creator from "./components/enterprise/Creator";
+import Cart from "./pages/Dashboard/components/Cart";
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -271,6 +272,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Out />}>
               <Route index element={<AnotherLanding />} />
+              {/* <Route index element={<Cart />} /> */}
                 <Route path="create" element={<CreatePage />} />
                 <Route path="manage" element={<ManagePage />} />
                 <Route path="pricing" element={<Pricing />} />
