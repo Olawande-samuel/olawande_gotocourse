@@ -534,8 +534,32 @@ const FileComponent = (contentItem) => {
     )
 }
 
-const QuizComponent = ({ contentItem }) => {
-    // console.log(contentItem);
+const QuizComponent = ({ contentItem ,userdata}) => {
+    console.log(contentItem);
+    const { consoleFunctions: { attemptQuiz } } = useAuth();
+    const [myAnswers, setMyAnswers] = useState({
+        questionId:"",
+        answers:[]
+    })
+
+    const [allAnswers, setAllAnswers] = useState([])
+
+
+    useMemo(() => {
+        setAllAnswers([myAnswers])
+    },[myAnswers])
+
+    console.log({myAnswers});
+    console.log({allAnswers});
+
+    const AnswerQuiz = async () => {
+        const { data } = await attemptQuiz(userdata?.token,contentItem._id,  allAnswers)
+        console.log({ data });
+
+
+    }
+
+    
     return (
         <>
             <Quiz>
@@ -574,10 +598,10 @@ const QuizComponent = ({ contentItem }) => {
                                                     value={opt.title}
                                                     // name="isAnswer"
                                                     onChange={e => {
-                                                        // const list = { ...formData }
-                                                        // list.questions[id].options[index]['isAnswer'] = e.target.checked;
-                                                        // console.log(list);
-                                                        // setFormData(list)
+                                                      setMyAnswers({
+                                                        questionId:ques._id,
+                                                        answers:[ ...myAnswers.answers, opt._id]
+                                                      })
                                                     }} />
                                                 {opt.title}
                                             </label>
@@ -589,7 +613,7 @@ const QuizComponent = ({ contentItem }) => {
                                 </QuestionOptions>
                                 <QuizAction>
 
-                                    <QuizButton>
+                                    <QuizButton onClick={AnswerQuiz}>
                                         Submit
                                     </QuizButton>
                                 </QuizAction>
@@ -864,7 +888,7 @@ const Classroom = () => {
                             {pickedType === "QUIZ" && <>
                                 {contents?.length > 0 && contents?.map((content, id) => (
                                     <>
-                                        <QuizComponent contentItem={content} id={id} key={id} />
+                                        <QuizComponent contentItem={content} id={id} key={id} userdata={userdata}/>
                                         <QuizAction >
                                             <QuizButton
                                                 onClick={() => handleFileCompleted(content.contentId, content._id)}
