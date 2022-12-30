@@ -3593,6 +3593,7 @@ export function AdminClassConsole() {
   let userdata = getItem(KEY);
   const [bootcamps, setBootcamps] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     if (flag.current) return;
@@ -3621,10 +3622,34 @@ export function AdminClassConsole() {
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student_main}>
+        <div className="d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
             {bootcamps.length > 0 ? (
               <Grid height="300px">
-                {bootcamps.map((item, i) =>
-                  <ClassesCard {...item} />
+                {bootcamps.filter(
+                      (course) =>
+                        // course.category
+                        //   .toLowerCase()
+                        //   .includes(search.toLowerCase()) ||
+                        course.title
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) 
+                        //   ||
+                        // course.status
+                        //   .toLowerCase()
+                        //   .includes(search.toLowerCase())
+                    )
+                .map((item, i) =>
+                  <ClassesCard {...item} all={item}/>
                 )}
               </Grid>
 
