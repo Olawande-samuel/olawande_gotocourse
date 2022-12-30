@@ -5,8 +5,8 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { IoIosCheckmarkCircle } from 'react-icons/io';
 import { IoDocumentTextOutline, IoTimeSharp } from 'react-icons/io5';
-import { AiOutlineArrowLeft } from 'react-icons/ai';
-import { InputLabel, MenuItem, FormControl, Select, FormControlLabel, Switch, Button } from '@mui/material'
+import { AiOutlineArrowLeft, AiOutlineClose } from 'react-icons/ai';
+import { InputLabel, MenuItem, FormControl, Select, FormControlLabel, Switch, Button, TextField, Modal } from '@mui/material'
 import { RiDeleteBinFill } from 'react-icons/ri';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -18,7 +18,8 @@ import { useAuth } from '../../../../contexts/Auth';
 import { KEY } from '../../../../constants';
 import { useLocalStorage } from '../../../../hooks';
 import { toast } from 'react-toastify';
-import { formatDiagnosticsWithColorAndContext } from 'typescript';
+import ReactQuill from 'react-quill';
+
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -108,6 +109,32 @@ export default function Quiz() {
     const {classId} = useParams()
     let searchData = search.split("=").reverse()[0]
     const contentId = searchParams.get("content")
+    const [formData, setFormData] = useState({
+        classId:"",
+        contentId:"",
+        title: "",
+        endDate: "",
+        endTime: "",
+        note: "",
+        timeLimit: "",
+        maxAttempts: 1,
+        questions: [
+            {
+                type: "",
+                title: "",
+                showAnswer: false,
+                answer:"",
+                options: [
+                    {
+                        isAnswer: false,
+                        title: ""
+                    }
+                ]
+
+            }
+        ]
+
+    })
 
     // useEffect(()=>{
     //     setFormData({...formData, classId, contentId: searchData})
@@ -144,6 +171,7 @@ export default function Quiz() {
     const getContentfromQuery = useQuery(["quiz content", contentId, userdata?.token], () => fetchQuiz(userdata.token, searchData), {
         onSuccess: (res)=> {
             console.log("fetched")
+
             if(res.data?.length > 0){
                 let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
                 setFormData({...res.data[res.data.length -1], endDate: deadline})
@@ -178,6 +206,7 @@ export default function Quiz() {
         }
     } )
 
+    console.log({formData})
     
 
     function goBack() {
@@ -194,32 +223,7 @@ export default function Quiz() {
     }
 
 
-    const [formData, setFormData] = useState({
-        classId:"",
-        contentId:"",
-        title: "",
-        endDate: "",
-        endTime: "",
-        note: "",
-        timeLimit: "",
-        maxAttempts: 1,
-        questions: [
-            {
-                type: "",
-                title: "",
-                showAnswer: false,
-                answer:"",
-                options: [
-                    {
-                        isAnswer: false,
-                        title: ""
-                    }
-                ]
-
-            }
-        ]
-
-    })
+   
 
 
     const handleInputChange = (e, index) => {
@@ -399,10 +403,6 @@ export default function Quiz() {
                                                         <FormControl sx={{ m: 1, width: "100%" }} >
                                                             <InputLabel id="answertype-label">Question Type</InputLabel>
                                                             <Select
-                                                                // labelId="questiontype-label"
-                                                                // id="questiontype"
-                                                                // label="question"
-                                                                // className="myselect"
                                                                 value={x.type}
                                                                 name="type"
                                                                 displayEmpty
@@ -425,8 +425,14 @@ export default function Quiz() {
                                                                 </MenuItem>
                                                             </Select>
 
-                                                            <div className="texteditor quiz__editor">                  
-                                                                <CKEditor
+                                                            <div className="texteditor quiz__editor">  
+                                                            <ReactQuill theme="snow" value={x?.title} onChange={()=>{
+                                                                 const list = { ...formData }
+                                                                 list.questions[id]['title'] = x.title;
+                                                                 setFormData(list)
+                                                            }} />
+                
+                                                                {/* <CKEditor
                                                                 editor={ClassicEditor}
                                                                 data={x?.title}
                                                                 onReady={editor => {
@@ -444,7 +450,7 @@ export default function Quiz() {
                                                                 }}
                                                                 onFocus={(event, editor) => {
                                                                 }}
-                                                            />
+                                                            /> */}
 
                                                                 <div className='textbtn'>
                                                                     <Button
@@ -634,6 +640,7 @@ function ResultPanel(){
 
 
 function ResultCards(){
+    const [open, setOpen] = useState(false)
     return (
         <div className="quiz__card">
             <p className="quiz__card_student_name fw-bold">Olunloyo Adegoke</p>
@@ -653,8 +660,9 @@ function ResultCards(){
 
             <div className="d-flex gap-2">
                 <button className="quiz__card_del_btn">Delete</button>
-                <button className="quiz__card_open_btn">Open Answer</button>
+                <button className="quiz__card_open_btn" type="button" onClick={()=> setOpen(true)} >Open Answer</button>
             </div>
+            <AssessQuiz open={open} setOpen={setOpen} />
         </div>
     )
 }
@@ -662,14 +670,132 @@ function ResultCards(){
 
 
 
-function AssessQuiz(){
+function AssessQuiz({open, setOpen, data}){
+
+    const style = {
+		position: "absolute",
+		bottom: 0,
+		left: "50%",
+		transform: "translateX(-50%)",
+		width: "100%",
+		height: "100%",
+		background: "#fff",
+		border: "1px solid #eee",
+		borderRadius: "10px",
+		boxShadow: 24,
+		p: 6,
+		padding: "4rem 2rem",
+		overflowY: "auto",
+	};
     
     return (
-        <div className="quiz__card">
-            <p className="quiz__card_student_name fw-bold">Olunloyo Adegoke</p>
+        <Modal
+			open={open}
+			onClose={(e) => {
+				setOpen((_) => false);
+			}}
+			aria-labelledby="modal-modal-title"
+			aria-describedby="modal-modal-description"
+		>
+			<Box style={style}>
+				<div>
+					<AiOutlineClose
+						onClick={(e) => {
+							setOpen((_) => false);
+						}}
+						size="1.5rem"
+						style={{ marginLeft: "auto", display: "block", cursor: "pointer" }}
+					/>
+				</div>
+                <ScoreSection />
+                <QuestionBox />
+                <div className="">
+                    <button className="quiz__question_review--btn">Save and Submit Quiz Review</button>                     
+                </div>
+            </Box>
+        </Modal>
+    )
+}
+
+
+function ScoreSection(){
+    return (
+
+        <div className="quiz__score">
             <div>
-                <span>Actual score: </span>
+                <span>Name: </span>
+                <span>Olunloyo Adegoke</span>
             </div>
+            <div className="mb-2">
+                <span>Student ID: </span>
+                <span>Olunloyo Adegoke</span>
+            </div>
+
+            <form className="quiz__score_form" >
+                <div className="mb-2">
+                    <TextField label="Total Score(%)"  fullWidth inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} />
+                    <small></small>
+                </div>
+                <div className="mb-2">
+                    <TextField id="outlined-basic" fullWidth label="Comment" variant="outlined" />                       
+                </div>
+
+                <button className="quiz__score_btn">Submit Grading</button>
+            </form>
+
+
         </div>
     )
 }
+
+
+function QuestionBox(){
+    return (
+
+        <div className="quiz__question_box">
+            <form>
+
+            <div>
+                <span>Question 1: </span>
+                <span>Theory</span>
+            </div>
+
+            <p>Question blah blah blah</p>
+
+            <div>Answer 1</div>
+            <div>Answer 2</div>
+        
+            <div className="quiz__question_review">
+                <button className="open_review">Open Review</button>
+
+                <div className="quiz__question_review--content">
+                    <form action="" className="quiz__score_form">
+                        <Box sx={{width: 240}} marginBottom="1rem" >
+                            <FormControl fullWidth >
+                                <InputLabel id="demo-simple-select-label">Choose if answer is right</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    // value={age}
+                                    label="Age"
+                                    // onChange={handleChange}
+                                >
+                                    <MenuItem value={10}>Correct</MenuItem>
+                                    <MenuItem value={20}>Incorrect</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                        <Box marginBottom="1rem">
+                            <TextField id="outlined-basic" label="Add a Comment" variant="outlined" />       
+                        </Box>
+
+                        
+                    </form>
+                </div>
+
+            </div> 
+            </form>
+        </div>
+    )
+}
+
