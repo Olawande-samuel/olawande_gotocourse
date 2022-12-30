@@ -29,19 +29,21 @@
 .sidebar_selected_icon {
     font-weight: bold;
     min-width: 40px;
+    color: var(--theme-blue);
 }
 
 .sidebar_selected_text {
-    font-weight: bold !important;
+    /* font-weight: bold !important; */
+    font-size: 20px !important;
 }
 
-.sidebar_item {
-    font-size: 21px;
+.sidebar_text {
+    font-size: 20px !important;
 }
+
+.sidebar_item {}
 
 .sidebar_selected_item {
-    font-size: 21px;
-    font-weight: bold;
     color: var(--theme-blue);
 }
 
@@ -61,8 +63,8 @@
 }
 
 .header_text_field_div {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .header_text_label {
@@ -70,7 +72,7 @@
 }
 
 .header_text_field {
-    border: 1px solid #888;
+    border: 1px solid #ababab;
     border-radius: 10px;
     height: 50px;
     padding: 10px 20px;
@@ -88,4 +90,10 @@
     height: 50px !important;
     border-radius: 10px !important;
     font-weight: bold !important;
+}
+
+.contact_icons {
+    color: var(--theme-blue) !important;
+    font-size: 48px;
+    margin-right: 10px;
 }

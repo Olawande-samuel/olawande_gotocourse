@@ -7,11 +7,25 @@ import {
 } from "@mui/material";
 import React from "react";
 import { BiCloudDownload } from "react-icons/bi";
+import {
+    BsBlockquoteLeft,
+    BsCardHeading,
+    BsCardImage,
+    BsFillJournalBookmarkFill,
+} from "react-icons/bs";
+import { FaBasketballBall } from "react-icons/fa";
+import { GiClick } from "react-icons/gi";
+import {
+    MdOutlinePersonPin,
+    MdOutlineQuestionAnswer,
+    MdPermContactCalendar,
+} from "react-icons/md";
 import { Admin } from "..";
 import Loader from "../../../../components/Loader";
 import useSchoolSettings from "../../../../hooks/useSchoolSettings";
 import CustomizeBanner from "./banner";
 import CustomizeCallToAction from "./callToAction";
+import CustomizeContact from "./contact";
 import CustomizeCourses from "./courses";
 import CustomizeFAQs from "./faq";
 import CustomizeHeader from "./header";
@@ -23,40 +37,39 @@ import CustomizeWhyOurSchool from "./whyOurSchool";
 const sidebar = [
     {
         name: "Logo",
-        icon: <BiCloudDownload />,
-        component: <CustomizeLogo />,
+        icon: <FaBasketballBall size={25} />,
     },
     {
         name: "Header",
-        icon: <BiCloudDownload />,
+        icon: <BsCardHeading size={25} />,
     },
     {
         name: "Banner",
-        icon: <BiCloudDownload />,
+        icon: <BsCardImage size={25} />,
     },
     {
         name: "Why Our School",
-        icon: <BiCloudDownload />,
+        icon: <BsBlockquoteLeft size={25} />,
     },
     {
         name: "CTA",
-        icon: <BiCloudDownload />,
+        icon: <GiClick size={25} />,
     },
     {
         name: "Courses",
-        icon: <BiCloudDownload />,
+        icon: <BsFillJournalBookmarkFill size={25} />,
     },
     {
         name: "Testimonials",
-        icon: <BiCloudDownload />,
+        icon: <MdOutlinePersonPin size={25} />,
     },
     {
         name: "FAQ",
-        icon: <BiCloudDownload />,
+        icon: <MdOutlineQuestionAnswer size={25} />,
     },
     {
-        name: "Contact/Socials",
-        icon: <BiCloudDownload />,
+        name: "Contact",
+        icon: <MdPermContactCalendar size={25} />,
     },
 ];
 
@@ -99,7 +112,7 @@ const Customizations = () => {
                                         className={
                                             index === activeTab
                                                 ? clsx["sidebar_selected_text"]
-                                                : ""
+                                                : clsx["sidebar_text"]
                                         }
                                     >
                                         {item.name}
@@ -206,6 +219,33 @@ const Customizations = () => {
                                 oldFAQs={
                                     schoolSettingsHook.schoolSettings?.FAQs ||
                                     []
+                                }
+                            />
+                        </div>
+                    )}
+                    {activeTab === 8 && (
+                        <div className={clsx["customization_content"]}>
+                            <CustomizeContact
+                                onSubmit={schoolSettingsHook.updateContact}
+                                oldFacebook={
+                                    schoolSettingsHook.schoolSettings
+                                        ?.facebook || ""
+                                }
+                                oldTwitter={
+                                    schoolSettingsHook.schoolSettings
+                                        ?.twitter || ""
+                                }
+                                oldInstagram={
+                                    schoolSettingsHook.schoolSettings
+                                        ?.instagram || ""
+                                }
+                                oldLinkedIn={
+                                    schoolSettingsHook.schoolSettings
+                                        ?.linkedIn || ""
+                                }
+                                oldAdditionalContact={
+                                    schoolSettingsHook.schoolSettings
+                                        ?.additional_contact || ""
                                 }
                             />
                         </div>

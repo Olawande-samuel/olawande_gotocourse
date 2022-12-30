@@ -123,6 +123,16 @@ const useSchoolSettings = (school_id) => {
         });
     };
 
+    const updateContact = async (contact) => {
+        updateSchoolSettings({
+            facebook: contact.facebook,
+            twitter: contact.twitter,
+            linkedIn: contact.linkedIn,
+            instagram: contact.instagram,
+            additional_contact: contact.additionalContact,
+        });
+    };
+
     return {
         schoolSettings,
         loading,
@@ -133,6 +143,7 @@ const useSchoolSettings = (school_id) => {
         updateCallToActionButton,
         updateTestimonials,
         updateFAQs,
+        updateContact,
     };
 };
 
