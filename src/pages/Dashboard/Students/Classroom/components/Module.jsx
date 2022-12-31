@@ -8,7 +8,7 @@ import { useLocalStorage } from '../../../../../hooks';
 import { KEY } from '../../../../../constants';
 import { useAuth } from '../../../../../contexts/Auth';
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const ModuleContainer = styled.div`
     display: flex;
@@ -36,7 +36,8 @@ const AttachmentContainer = styled(Paper)`
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    background-color: ${({ active }) => active ? 'rgb(226, 231, 255)' : 'transparent !important'};
+    // background-color: ${({ active }) => active ? 'rgb(226, 231, 255)' : 'transparent !important'};
+    // background-color: ${({ active }) => active ? 'red !important' : 'transparent !important'};
     border-radius: 10px !important;
     margin-bottom: 10px;
     padding: 10px;
@@ -76,6 +77,8 @@ const Module = ({ title, setContents, moduleIndex, setPickedType, contentsData,
 }) => {
     const [active, setActive] = useState(false)
     const navigate = useNavigate()
+    const [searchParams, setSearchParams] = useSearchParams();
+
 
 
     const { getItem } = useLocalStorage()
@@ -92,7 +95,7 @@ const Module = ({ title, setContents, moduleIndex, setPickedType, contentsData,
 
 
 
-    console.log("data", contentsData[0]);
+    // console.log("data", contentsData[0]);
 
 
     return (
@@ -112,8 +115,9 @@ const Module = ({ title, setContents, moduleIndex, setPickedType, contentsData,
                     <AttachmentContainer key={index} variant="outlined"
                         active={active ? true : false}
                         onClick={() => {
-                           navigate(`/student/class-console/class/:id?contentId=${content.contentId}`) 
-                            // navigate(`/student/console/class-console/class/${args[3]}?content=${args[0]}`)
+                            setSearchParams({
+                                contentId: content.contentId
+                            })
                             setActive(true)
                             setContents(content?.items)
                             setPickedType(content?.type)
