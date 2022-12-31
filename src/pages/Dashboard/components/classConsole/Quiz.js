@@ -109,6 +109,7 @@ export default function Quiz() {
     const {classId} = useParams()
     let searchData = search.split("=").reverse()[0]
     const contentId = searchParams.get("content")
+    const [resultMainData, setResultMainData] = useState({})
     const [formData, setFormData] = useState({
         classId:"",
         contentId:"",
@@ -175,6 +176,7 @@ export default function Quiz() {
             if(res.data?.length > 0){
                 let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
                 setFormData({...res.data[res.data.length -1], endDate: deadline})
+                setResultMainData({...res.data[res.data.length -1]})
             }else{
                 setFormData({
                     classId,
@@ -608,7 +610,7 @@ export default function Quiz() {
                 </TabPanel>
 
                 <TabPanel value={value} index={1}>
-                    <ResultPanel />
+                    <ResultPanel data={resultMainData} />
                 </TabPanel>
 
             </Box>
@@ -621,7 +623,21 @@ export default function Quiz() {
 }
 
 
-function ResultPanel(){
+function ResultPanel({data}){
+
+    const {getItem} = useLocalStorage()
+    const userdata = getItem(KEY)
+    const {teacherConsoleFunctions: {fetchAttemptedQuiz}} = useAuth()
+
+    console.log({data})
+
+    const fetchStudentsQuizzes = useQuery(["fetchStudentsQuizzes", userdata.token, data?._id], ()=> fetchAttemptedQuiz(userdata.token, data._id), {
+        onSuccess: (res)=>console.log(res),
+        onError: (err)=>console.error(err)
+    })
+
+
+    console.log({fetchStudentsQuizzes})
     return (
         <section>
             <section className="quiz__cards_container">

@@ -3,7 +3,7 @@ import { AiOutlineArrowLeft, AiOutlineSearch } from 'react-icons/ai';
 import Modal from "react-bootstrap/Modal";
 import { useState } from 'react';
 import '../classConsole/Content.css'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MdAttachFile, MdOutlineNote } from 'react-icons/md';
 import { VscNote } from 'react-icons/vsc';
 import { useQuery } from '@tanstack/react-query';
@@ -96,8 +96,11 @@ export default function Classroom() {
     const {getItem} = useLocalStorage()
     const userdata = getItem(KEY)
     const [studentList, setStudentList] = useState([])
-    const {teacherFunctions: {fetchApplications} } = useAuth()
-    const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchApplications(userdata.token), {
+    const {teacherFunctions: {fetchApplications, fetchCourseStudents} } = useAuth()
+
+    const {classId} = useParams()
+    // const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchApplications(userdata.token), {
+    const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchCourseStudents(classId, userdata.token), {
         onSuccess: (res)=> console.log({res}),
         onError: (err)=> console.error(err)
     })
