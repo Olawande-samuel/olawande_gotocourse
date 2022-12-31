@@ -219,6 +219,7 @@ import EnterpriseVerification from "./components/enterprise/Register/Verificatio
 import EnterpriseOnboarding from "./components/enterprise/EnterpriseOnboarding";
 import Pricing from "./components/enterprise/Pricing";
 import Creator from "./components/enterprise/Creator";
+import ProtectedRoute from "./hoc/LiveClassProtection";
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -306,12 +307,19 @@ function App() {
                 {/* <Route path="become-a-teacher" element={<BecomeATeacher />} /> */}
                 <Route path="become-a-teacher" element={<TeachersLanding />} />
                 <Route path="student/classroom" element={<StudentClassroom />} />
-  
                 <Route path="coming-soon" element={<ComingSoon />} />
+  
+                
                 <Route path="tester" element={<Playground />} />
 
-                {/* TODO: WRAP IN PROTECTED CONTAINER */}
-                <Route path="class/:classId/live/stream" element={<VideDiv />} />
+
+                <Route path="class/:classId/live/stream"
+                 element={
+                    <ProtectedRoute>
+                      <VideDiv />
+                    </ProtectedRoute>
+                  } 
+                />
   
                 <Route path="category" element={<Out />}>
                   <Route index element={<CourseComponent />} />

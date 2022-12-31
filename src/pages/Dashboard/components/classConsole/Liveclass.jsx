@@ -117,7 +117,7 @@ export function LiveClassInfo({ type }) {
   );
 }
 
-export function CurrentLive({ setOpen, roomName, status, startDate, startTime, endDate, endTime, roomid, _id }) {
+export function CurrentLive({ setOpen, roomName, status, startDate, startTime, endDate, endTime, userId, _id }) {
 
   const contextMenu = [
     {
@@ -170,6 +170,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
     e.preventDefault()
 
     updateItem("gotocourse-roomid", _id);  
+    updateItem("gotocourse-room-creator", userId);  
 
     let today  = new Date().getTime();
     let startingDate = new Date(startDate).getTime();
@@ -482,8 +483,10 @@ export function Intermission() {
     const {generalState, setGeneralState} = useAuth()
     const {getItem}= useLocalStorage()
     const {classId} = useParams()
+    const userdata = getItem(KEY)
   
     const roomid = getItem("gotocourse-roomid")
+    const creator = getItem("gotocourse-room-creator")
 
 
     function joinLiveClass(){
@@ -491,7 +494,7 @@ export function Intermission() {
             state: {
           
                 roomId: roomid,
-                owner: !student ? true: false
+                owner: userdata.userId === creator ? true: false
             }
         })  
         // navigate("/teacher/live-class/live")  

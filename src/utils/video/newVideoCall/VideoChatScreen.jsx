@@ -78,15 +78,11 @@ const VideoChatScreen = () => {
 
     const {alert, loading, postVideoToServer, progress } = useRecordUpload(userProfile?.token, classId)
 
-
-    console.log({loading})
     const connectionUserId = useRef(userProfile.userId)
 
     const connectionStateRef = useRef({
         hasJoinedPresentation: false
     })
-
-
 
     let data = sessionStorage.getItem(HandKey);
     useEffect(()=>{
@@ -218,10 +214,9 @@ const VideoChatScreen = () => {
 
 
     function startRecording() {
-        console.log("is recording media")
         if(isPresenting){
             setIsRecording(true)
-            console.log(presentationStream.current)
+            
             streamRecorder.current = new MediaRecorder(presentationStream.current, {
                 audioBitsPerSecond: 128000,
                 videoBitsPerSecond: 2500000,
@@ -239,7 +234,6 @@ const VideoChatScreen = () => {
                 recordedVideoRef.current.play()
     
                 postVideoToServer(completeBlob)
-                console.log("stoped recording media")
             };
     
             streamRecorder.current.start();
@@ -336,13 +330,10 @@ const VideoChatScreen = () => {
             secure: true,
             debug: 1
         });
-        console.log(myPeer.current)
 
         myPeer.current.on('open', userId => {
-            console.log("connected to room with userId: ", userId)
             socket.emit('join-video-room', roomId, userId)
             setUserCount(userCount + 1)
-            console.log("peer",myPeer.current._clients)
 
         })
 
@@ -393,7 +384,7 @@ const VideoChatScreen = () => {
         })
 
         socket.on('new-user-join-video-room', (userId) => {
-            console.log("new user joined room: ", userId)
+            
             setUserCount(userCount + 1)
             if (userId.split('-')[0] !== "presentation") {
                 connectToNewUser(userId, localStream.current)
@@ -406,8 +397,6 @@ const VideoChatScreen = () => {
         })
 
         const connectToNewUser = (userId, stream) => {
-            console.log("new user joining call")
-            console.log(myPeer.current)
             myCall = myPeer.current?.call(userId, stream)
             // const videoWrapper = document.querySelector('.video-section')
 
@@ -417,10 +406,8 @@ const VideoChatScreen = () => {
             remoteVideoWrapper.appendChild(remoteVideo)
             videoWrapper.append(remoteVideoWrapper)
 
-            console.log({ videoWrapper })
 
             myCall.on('stream', userVideoStream => {
-                console.log("recevied user video stream: ", userVideoStream)
                 addVideoStream(remoteVideoWrapper, userVideoStream)
             })
             myCall.on('close', () => {
@@ -436,7 +423,6 @@ const VideoChatScreen = () => {
 
             setIsPresenting(true)
             myCall?.on('stream', presentationStream => {
-                console.log("recevied presentation stream: ", presentationStream)
                 const presentationVideo = document.querySelector('.client-presentation-stream')
                 presentationVideo?.setAttribute("autoplay", "")
                 presentationVideo?.setAttribute("playsInline", "")
@@ -454,8 +440,7 @@ const VideoChatScreen = () => {
         }
 
         socket.on('user-disconnected', userId => {
-            console.log('user disconnected: ', userId)
-            console.log(peers.current)
+            
             if (peers.current[userId]) {
                 peers.current[userId].close()
 
@@ -477,8 +462,6 @@ const VideoChatScreen = () => {
         })
 
         socket.on('incoming-message', userData => {
-            console.log("working");
-            console.log({ userData });
             if (userData) {
                 setMessages([...messages, userData])
                 // messages.push(userData)
@@ -500,6 +483,8 @@ const VideoChatScreen = () => {
     const initRoom = () => {
         if (userProfile.userId !== "") {
             chekForVideoRoom()
+        }else {
+            navigate("/login")
         }
         // ask you to log in
     }
@@ -796,7 +781,7 @@ function Info({open, setOpen, others, isRecording,startRecording, stopRecording,
             <div className="popup_action">
               {
                 others.map(({name, icon:Icon, handleClick}, i)=>(
-                  <i  onClick={handleClick}>
+                  <i  onClick={handleClick} key={i}>
                     <Icon size="1.5rem" />
                     <p>{name}</p>
                   </i>
@@ -895,7 +880,7 @@ function Users({open, setOpen, profileData }) {
     )
   }
 function UploadStatus({open, setOpen, progress }) {
-  console.log({open})
+  
     const modalStyle = {
         position: 'absolute',
         top: "50px",

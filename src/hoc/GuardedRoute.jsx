@@ -21,7 +21,6 @@ const GuardedRoute = ({children}) => {
     // for create
     let isCreator = value?.userType === "schools"
 
-    console.log({isCreator})
     if(isCreator){
         let schoolRoute = location.pathname 
 
@@ -46,10 +45,8 @@ const GuardedRoute = ({children}) => {
         }
         
     } else {
-        console.log("here first")
 
         if(value.token){
-            console.log("here second")
 
             if(route === "teacher" || route === "student" || route === "affiliate"|| route === "change-password" || route === "mentor"){
                 if(value.isVerified){
@@ -66,7 +63,6 @@ const GuardedRoute = ({children}) => {
             return <Navigate to="/" />;
         }else {
 
-            console.log("here")
             if(route === 'admin'){
                 return <Navigate to="/admin/login" />
             }
