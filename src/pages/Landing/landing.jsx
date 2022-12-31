@@ -1,12 +1,24 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../../contexts/Auth'
 import { Center, HomeComponent } from './landing.style'
 import Navbar from './Navbar'
+import SideBar from './Sidebar'
 
 const NewHome = () => {
+  const { generalState: { loading, showSidebar }, generalState, setGeneralState } = useAuth();
+
+  const toggleSidebar = () => {
+      setGeneralState({ ...generalState, showSidebar: !showSidebar });
+  };
+
+  const style = {
+    
+  }
   return (
     <HomeComponent>
-        <Navbar />
+        <Navbar toggleSidebar={toggleSidebar} />
+        <SideBar showSidebar={showSidebar}  toggleSidebar={toggleSidebar}/>
         <Center>
           <div className="d-flex flex-column align-items-center">
             <h1>Successful virtual schools  are</h1>
