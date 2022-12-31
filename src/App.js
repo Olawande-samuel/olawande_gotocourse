@@ -222,6 +222,8 @@ import Creator from "./components/enterprise/Creator";
 
 import Cart from "./pages/Dashboard/components/Cart";
 import ProtectedRoute from "./hoc/LiveClassProtection";
+import Home from "./pages/Landing";
+import NewHome from "./pages/Landing/landing";
 
 
 const Login = lazy(() => import("./pages/User/Login"));
@@ -274,8 +276,8 @@ function App() {
           <Suspense fallback={<Loader />}>
             <Routes>
               <Route path="/" element={<Out />}>
-              <Route index element={<AnotherLanding />} />
-              {/* <Route index element={<Cart />} /> */}
+                <Route index element={<NewHome />} /> 
+                <Route path="create-with-gotocourse" element={<AnotherLanding />} />
                 <Route path="create" element={<CreatePage />} />
                 <Route path="manage" element={<ManagePage />} />
                 <Route path="pricing" element={<Pricing />} />
@@ -286,11 +288,10 @@ function App() {
                 <Route path="enterprise-onboarding" element={<EnterpriseOnboarding />} />
                 <Route path="creator-landing" element={<Creator />} />
 
-
+                {/* <Route index element={<Cart />} /> */}
                 {/* <Route path="Learn-with-gotocourse" element={<Out />}>
-                              <Route index element={<Landing />} />
-
-                             </Route> */}
+                  <Route index element={<Landing />} />
+                  </Route> */}
  
                
                 <Route path="Learn-with-gotocourse" element={<Landing />} />
@@ -313,8 +314,7 @@ function App() {
                 <Route path="student/classroom" element={<StudentClassroom />} />
                 <Route path="coming-soon" element={<ComingSoon />} />
   
-                
-                <Route path="tester" element={<Playground />} />
+                <Route path="tester" element={<NewHome />} />
 
 
                 <Route path="class/:classId/live/stream"

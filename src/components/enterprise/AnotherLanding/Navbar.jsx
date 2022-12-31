@@ -40,30 +40,31 @@ const NavContainer = styled.div`
 	.navcontainer {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+		/* justify-content: space-between; */
 		width: 100%;
 		padding: 0.5rem 1rem;
 		// gap: 1rem;
 		height: 100%;
 		width: 100%;
+		gap: 2rem;
 		// border: 2px solid red;
 
 		.hamburger {
 			display: block;
+			margin-left: auto;
 		}
 
 		.navbarlogo {
-			flex: 0.6;
-			// border: 2px solid yellow;
+			/* flex: 0.6; */
+			/* border: 2px solid yellow; */
 		}
 
 		ul {
-			// border: 2px solid green;
-			flex: 0.4;
+			 /* border: 2px solid green; */
+			flex:2;
 			list-style-type: none;
 			display: none;
 			align-items: center;
-			justify-content: flex-end;
 			font-family: "Raleway";
 			font-style: normal;
 			font-weight: 500;
@@ -72,19 +73,20 @@ const NavContainer = styled.div`
 			margin-bottom: unset;
 
 			.firstitems {
-				width: 100%;
+				flex: 2;
 				display: flex;
 				align-items: center;
 				justify-content: space-evenly;
-				// border: 2px solid blue;
+				 /* border: 2px solid blue; */
 			}
 
 			.seconditems {
-				flex: 0.3;
+				flex: 1;
 				display: flex;
 				justify-content: flex-end;
 				gap: 1rem;
-				// border: 2px solid purple;
+				align-items:center;
+				 /* border: 2px solid purple; */
 
 				.first__btn {
 					color: var(--theme-blue);
@@ -176,21 +178,29 @@ const Navbar = ({ toggleSidebar }) => {
 
 				<ul>
 					<div className="firstitems">
-						<div className="dropdown">
+						<li>
+							<Link to={`/create`}>Create</Link>
+						</li>
+						<li>
+							<Link to={`/manage`}>Manage</Link>
+
+						</li>
+						<li>
+							<Link to={`/pricing`}>Pricing</Link>
+
+						</li>
+						{/* <div className="dropdown">
 							<button className="dropbtn">Create on Gotocourse</button>
 							<div className="dropdown-content">
-								<Link to={`/create`}>Create</Link>
-								<Link to={`/manage`}>Manage</Link>
-								<Link to={`/pricing`}>Pricing</Link>
 							</div>
-						</div>
+						</div> */}
 
-						<li>
+						{/* <li>
 							<Link to={`/learn-with-gotocourse`}>Learn with Gotocourse</Link>
-						</li>
+						</li> */}
 					</div>
 
-					{/* <div className="seconditems">
+					 <div className="seconditems">
 						{value?.token ? (
 							<>
 								<li className="me-3 nav_link">
@@ -253,7 +263,7 @@ const Navbar = ({ toggleSidebar }) => {
 								</li>
 							</>
 						)}
-					</div> */}
+					</div> 
 				</ul>
 
 				<div className="hamburger align-items-center">
