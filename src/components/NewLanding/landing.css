@@ -363,7 +363,7 @@
 .stats_main {
   background: rgba(255, 242, 241, 0.79);
   width: 100%;
-  margin-block: 2rem;
+  /* margin-block: 2rem; */
 }
 
 .stats {

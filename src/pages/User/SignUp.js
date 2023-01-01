@@ -91,23 +91,7 @@ const SignUp = () => {
           navigate(`/email`);
         }
 
-        // second dashboard
-        // if(generalState.pledre){
-        //   const res = await generalState.pledre.signUpStudent({
-        //     name:`${data.firstName} ${data.lastName}`,
-        //     email: data.email,
-        //     password:`${data.password}`
-        //   })
-        //   console.log({res})
-        //   if(res.approved){
-            // main dashboard
-            // const response = await register({...others, pledreStudentId: res._id}, "user");
-            // main goes here ****
-          // }
-
-        // } else {
-        //   throw new AdvancedError("Something went wrong. Please try again", 0)
-        // }
+       
     } catch (err) {
       console.error({err})
       toast.error(err.message);

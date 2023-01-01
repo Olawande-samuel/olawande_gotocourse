@@ -495,6 +495,47 @@
 
 
 
+/* Quiz result details */
+
+.quiz__question_box, .quiz__score {
+    width: min(100% - 1.2rem, 800px);
+    margin-inline: auto;
+    background-color: #e7e7e7;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-block: 2rem;
+} 
+
+.quiz__question_review--btn {
+    display: flex;
+    justify-content: center;
+    width: min(100% - 1rem, 800px);
+    background-color: var(--theme-blue);
+    color: #fff;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-inline: auto;
+}
+
+.quiz__score_form {
+    margin-top: 1rem;
+}
+.quiz__score_form button {
+    padding: 8px;
+    margin-bottom: 1rem;
+    background-color: var(--theme-blue);
+    color: #fff;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+}
+
+
+
+
+
 /* notes */
 
 .note {

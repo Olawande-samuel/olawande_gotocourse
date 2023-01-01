@@ -220,6 +220,12 @@ import EnterpriseOnboarding from "./components/enterprise/EnterpriseOnboarding";
 import Pricing from "./components/enterprise/Pricing";
 import Creator from "./components/enterprise/Creator";
 
+import Cart from "./pages/Dashboard/components/Cart";
+import ProtectedRoute from "./hoc/LiveClassProtection";
+import Home from "./pages/Landing";
+import NewHome from "./pages/Landing/landing";
+
+
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
 const AdminLogin = lazy(() => import("./pages/Admin/Login"));
@@ -270,7 +276,8 @@ function App() {
           <Suspense fallback={<Loader />}>
             <Routes>
               <Route path="/" element={<Out />}>
-                <Route index element={<AnotherLanding />} />
+                <Route index element={<NewHome />} /> 
+                <Route path="create-with-gotocourse" element={<AnotherLanding />} />
                 <Route path="create" element={<CreatePage />} />
                 <Route path="manage" element={<ManagePage />} />
                 <Route path="pricing" element={<Pricing />} />
@@ -281,11 +288,10 @@ function App() {
                 <Route path="enterprise-onboarding" element={<EnterpriseOnboarding />} />
                 <Route path="creator-landing" element={<Creator />} />
 
-
+                {/* <Route index element={<Cart />} /> */}
                 {/* <Route path="Learn-with-gotocourse" element={<Out />}>
-                              <Route index element={<Landing />} />
-
-                             </Route> */}
+                  <Route index element={<Landing />} />
+                  </Route> */}
  
                
                 <Route path="Learn-with-gotocourse" element={<Landing />} />
@@ -306,12 +312,18 @@ function App() {
                 {/* <Route path="become-a-teacher" element={<BecomeATeacher />} /> */}
                 <Route path="become-a-teacher" element={<TeachersLanding />} />
                 <Route path="student/classroom" element={<StudentClassroom />} />
-  
                 <Route path="coming-soon" element={<ComingSoon />} />
-                <Route path="tester" element={<Playground />} />
+  
+                <Route path="tester" element={<NewHome />} />
 
-                {/* TODO: WRAP IN PROTECTED CONTAINER */}
-                <Route path="class/:classId/live/stream" element={<VideDiv />} />
+
+                <Route path="class/:classId/live/stream"
+                 element={
+                    <ProtectedRoute>
+                      <VideDiv />
+                    </ProtectedRoute>
+                  } 
+                />
   
                 <Route path="category" element={<Out />}>
                   <Route index element={<CourseComponent />} />
@@ -326,8 +338,8 @@ function App() {
                     <Route path="courses" element={<CoursesHome />} />
                     <Route path="courses/:profile/:id" element={<Out />}>
                       <Route index element={<NewBootcampDetailsComponent />} />
-                      <Route path="payment" element={<ComingSoon />} />
-                      {/* <Route path="payment" element={<BootcampPayment />} /> */}
+                      {/* <Route path="payment" element={<ComingSoon />} /> */}
+                      <Route path="payment" element={<BootcampPayment />} />
                       <Route
                         path="payment/success"
                         element={<PaymentStatus success={true} />}
