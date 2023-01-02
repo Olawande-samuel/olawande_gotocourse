@@ -3,7 +3,7 @@ import { MdEdit, MdPersonAdd } from "react-icons/md"
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { motion } from "framer-motion"
-import { AiOutlineMenu } from "react-icons/ai"
+import { AiOutlineMenu, AiOutlineSearch } from "react-icons/ai"
 import { FaGraduationCap } from "react-icons/fa"
 import { BsQuestionCircle, BsDownload } from "react-icons/bs"
 import { Rating } from 'react-simple-star-rating'
@@ -714,8 +714,10 @@ export function Classes() {
     )
 }
 export function Wishlist() {
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { fetchWishlist } } = useAuth();
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { fetchWishlist }, otherFunctions: { fetchBootcamps } } = useAuth();
     const [wishlists, setWishlists] = useState([])
+    const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
+    const [search, setSearch] = useState("");
 
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
@@ -776,18 +778,87 @@ export function Wishlist() {
         flag.current = true;
     }, [])
     return (
-        <Students isMobile={isMobile} userdata={userdata} header="Wishlist">
+        <Students isMobile={isMobile} userdata={userdata} header="Cart">
             <div className={clsx.students_profile}>
-                <header className="mb-4">
-                    <h3>My wishlist</h3>
+                <header className="mb-4 d-flex align-center">
+                    <h3 style={{paddingRight: "2rem", fontWeight: "600"}}>Cart</h3>
+
+                    <div className={clsx.wishlist__inputcontaniner}>
+                        <input type="text" className={clsx.wishlist__input}
+                            placeholder="search"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)} />
+                        <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
+                    </div>
                 </header>
+
+
+
+
                 <div className={clsx.classes}>
+                    <div className={clsx.wishlistprice}>
+                        <small>Total:</small>
+                        <p>$11,000</p>
+                        <button>Checkout</button>
+
+                    </div>
+                    <p style={{ padding: "1rem 0" }}>My Cart</p>
+
                     <div className={clsx.students_wishlist}>
-                        {wishlists.length > 0 ? wishlists.map((item, index) => (
-                            <WishCard key={index} {...item} refetch={getWishList} />
-                        )) :
+                        {wishlists?.length > 0 ? wishlists?.filter(
+                            (course) =>
+                                // course.category
+                                //   .toLowerCase()
+                                //   .includes(search.toLowerCase()) ||
+                                course.courseName
+                                    .toLowerCase()
+                                    .includes(search.toLowerCase())
+                            //   ||
+                            // course.status
+                            //   .toLowerCase()
+                            //   .includes(search.toLowerCase())
+                        )
+                            .map((item, index) => (
+                                <WishCard key={index} {...item} refetch={getWishList} />
+                            )) :
                             <p className="text-center mx-auto">Nothing to see here</p>
                         }
+                    </div>
+
+
+                    <div>
+                        <p style={{ padding: "3rem 0" }}>Available Courses</p>
+
+                        <div className={clsx.students_wishlist}>
+                            {bootcamps?.data?.data?.length > 0 ? bootcamps?.data?.data?.filter(
+                                (course) =>
+                                    // course.category
+                                    //   .toLowerCase()
+                                    //   .includes(search.toLowerCase()) ||
+                                    course?.title
+                                        .toLowerCase()
+                                        .includes(search.toLowerCase())
+                                //   ||
+                                // course.status
+                                //   .toLowerCase()
+                                //   .includes(search.toLowerCase())
+                            ).map((item, index) => {
+                                let info = {
+                                    courseId: item.bootcampId,
+                                    courseName: item.title,
+                                    courseDescription: item.description,
+                                    courseCategory: item.category,
+                                }
+                                return (
+                                    <AvailCard key={index} {...info} refetch={getWishList} />
+
+                                )
+                            }) :
+                                <p className="text-center mx-auto">Nothing to see here</p>
+                            }
+                        </div>
+
+
                     </div>
                 </div>
             </div>
@@ -818,13 +889,148 @@ function WishCard({ courseId: id, courseName, courseDescription, courseCategory,
                 <h5 className="fw-bold">{courseName}</h5>
                 <p className="restricted_line" dangerouslySetInnerHTML={{ __html: courseDescription }}></p>
                 <div className="d-flex justify-content-between">
-                    <button className="btn btn-outline-primary" onClick={() => handleNavigate(courseCategory, courseName)} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Register today</button>
+                    {/* <button className="btn btn-outline-primary" onClick={() => handleNavigate(courseCategory, courseName)} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Register today</button> */}
+                    <button className="btn btn-outline-primary" onClick={() => handleNavigate(courseCategory, courseName)} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Pay</button>
                     <button className="btn btn-outline-primary" onClick={() => setOpen(true)} style={{ border: "1px solid var(--theme-orange)", color: "var(--theme-orange)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
-                        <i><FaRegTrashAlt /></i>
+                        {/* <i><FaRegTrashAlt /></i> */}
+                        Remove
                     </button>
                 </div>
             </div>
             <DeleteModal open={open} handleClose={closeModal} id={id} />
+        </div>
+    )
+}
+
+
+function AvailCard({ courseId, courseName, courseDescription, courseCategory, refetch }) {
+    const navigate = useNavigate();
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
+    const { getItem } = useLocalStorage();
+    let [wishlistState, setWishlistState] = useState(false)
+
+    const userdata = getItem(KEY)
+
+    async function addToWishlist() {
+        setGeneralState({ ...generalState, loading: true })
+
+        if (userdata !== null) {
+            try {
+                const response = await addwishlistCourse(courseId, userdata?.token)
+                const { success, message, statusCode } = response
+                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+                const { data } = response
+                setWishlistState(true)
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setGeneralState({ ...generalState, loading: false })
+
+            }
+
+
+        } else {
+            navigate("/login")
+        }
+    }
+
+
+
+    async function getWishList() {
+        try {
+            const res = await fetchWishlist(userdata?.token);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+                const { data } = res;
+                if (data.length > 0) {
+                    setWishlistState(data.map(d => d.courseId).includes(courseId));
+                } else {
+
+                }
+
+            } else {
+                throw new AdvancedError(message, statusCode);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+        }
+    }
+
+    async function removeCourse(e) {
+        e.preventDefault();
+        try {
+            setGeneralState({ ...generalState, loading: true })
+            const res = await deleteFromWishlist(userdata?.token, courseId)
+            const { success, message, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+                const { data } = res;
+                setWishlistState(false)
+            }
+        } catch (err) {
+
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+        }
+    }
+
+    return (
+        <div className="card wish">
+            <div className="card-body wish-card-body">
+                <div style={{ width: "50px", height: "50px", borderRadius: "50%" }}>
+                    <img src={trello} alt="icon" className="img-fluid" />
+                </div>
+                <h5 className="fw-bold">{courseName}</h5>
+                <p className="restricted_line" dangerouslySetInnerHTML={{ __html: courseDescription }}></p>
+                <div className="d-flex justify-content-between">
+
+                    {
+                        (!userdata.token) ? <button onClick={addToWishlist} className="btn btn-outline-primary" style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
+                            {
+                                loading ?
+                                    <div className="spinner-border" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div>
+                                    :
+                                    "Wishlist"
+
+                            }
+
+                        </button> :
+
+                            (userdata.token && wishlistState) ?
+
+                                <button onClick={removeCourse} className="btn btn-outline-primary" style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Remove wishlist"
+
+                                    }
+
+                                </button>
+                                :
+                                <button onClick={addToWishlist} className="btn btn-outline-primary" style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Wishlist"
+
+                                    }
+
+                                </button>
+
+                    }
+                </div>
+            </div>
         </div>
     )
 }
@@ -1575,7 +1781,7 @@ export const Dashboard = () => {
                 </div>
 
 
-                
+
                 <div className={clsx.students_profile_main}>
                     <AvailableCourses data={data?.data ? data?.data : []} />
                     <div className={`d-flex flex-wrap ${clsx.dashboard_courses}`}>
@@ -1857,7 +2063,7 @@ function AvailableCourses({ data }) {
                             </div>
 
                             <div className={clsx["courseitem"]}>
-                            ${(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
+                                ${(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
 
                             </div>
 
@@ -1953,6 +2159,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
     const { getItem } = useLocalStorage()
     const userData = getItem(KEY)
     const user = getItem("gotocourse-userdata")
+    const location = useLocation()
 
     const flag = useRef(false);
     useEffect(() => {
@@ -2072,10 +2279,13 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
         }
     })
 
-    
+
     // for create
 
     const isCreator = userdata?.userType === "schools"
+    const last = location.pathname.split('/').length - 1
+    console.log("last", last);
+    const wishlist = location.pathname.split('/')[last] === "wishlist"
     return (
         <GuardedRoute>
             <div className={clsx.students}>
@@ -2093,10 +2303,10 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
 
                 <Sidebar isMobile={isMobile} />
                 <div className={clsx.students_main}>
-                {
-                    !isCreator &&
+                    {
+                        !isCreator && !wishlist &&
                         <Navbar toggleSidebar={toggleSidebar} header={header} content={student} />
-                }
+                    }
 
                     {children}
 
