@@ -187,7 +187,7 @@ return (
                     <div className="firstitems">
                         {/* <a href="" className="d-inline-flex"> */}
                         <Link to="/create-with-gotocourse">
-                            <button>For Creators</button>
+                            <button>Create School</button>
                         </Link>
                         {/* </a> */}
                         <Link to="/learn-with-gotocourse" className="d-inline-flex">
