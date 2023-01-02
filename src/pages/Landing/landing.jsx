@@ -29,7 +29,7 @@ const NewHome = () => {
           <div className='d-flex gap-3 mt-4'>
             {/* <a href="" className="d-inline-flex"> */}
             <Link to="/create-with-gotocourse">
-              <button>I'm a creator</button>
+              <button>I'm a school administator</button>
             </Link>
             {/* </a> */}
             <Link to="/learn-with-gotocourse">

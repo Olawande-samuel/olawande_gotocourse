@@ -138,6 +138,7 @@ function HomepageHero({ name}){
                     <thead>
                         <tr>
                             <th>S/N</th>
+                            <th>Date</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
@@ -150,6 +151,7 @@ function HomepageHero({ name}){
                             data?.filter(item => item?.category === name).map((item, index) => (
                                 <tr key={index}>
                                     <td>{index + 1}</td>
+                                    <td>{new Intl.DateTimeFormat('en-US').format(new Date(item?.createdAt))}</td>
                                     <td>{item.fullName}</td>
                                     <td>{item.email}</td>
                                     <td>{item.phone}</td>
