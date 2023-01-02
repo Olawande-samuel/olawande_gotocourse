@@ -33,7 +33,7 @@ const NewHome = () => {
             </Link>
             {/* </a> */}
             <Link to="/learn-with-gotocourse">
-              <button>I'm a student</button>
+              <button>I'm a Learner</button>
             </Link>
           </div>
         </Center>

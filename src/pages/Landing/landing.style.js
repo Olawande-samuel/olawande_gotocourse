@@ -16,6 +16,9 @@ export const HomeComponent = styled.section`
     background-size: 13rem, 22rem;
     color: var(--theme-blue);
 
+    @media screen and (max-width: 750px){
+        background-size: 11rem, 17rem;
+    }
 
     @media screen and (max-width: 657px){
         background:#fff;
@@ -54,6 +57,16 @@ export const Center = styled.section`
         background-color: #fff;
         color: var(--theme-blue);
 
+    }
+
+    @media screen and (max-width: 750px){
+        justify-content:start;
+        padding-top: 5.1rem;
+
+    }
+
+    @media screen and (max-width: 657px){
+        justify-content:center;
     }
 
 `

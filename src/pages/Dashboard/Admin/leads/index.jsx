@@ -140,6 +140,7 @@ function HomepageHero({ name}){
                             <th>S/N</th>
                             <th>Name</th>
                             <th>Email</th>
+                            <th>Phone</th>
                             <th>Program</th>
                         </tr>
                     </thead>
@@ -151,6 +152,7 @@ function HomepageHero({ name}){
                                     <td>{index + 1}</td>
                                     <td>{item.fullName}</td>
                                     <td>{item.email}</td>
+                                    <td>{item.phone}</td>
                                     <td>{item.program}</td>
                                 </tr>
                             ))
