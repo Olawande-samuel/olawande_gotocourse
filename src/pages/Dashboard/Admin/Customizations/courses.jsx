@@ -17,6 +17,7 @@ const CustomizeCourses = ({ onSubmit, oldCoursesToShow, school_id }) => {
     const [coursesToShow, setCoursesToShow] = React.useState(oldCoursesToShow);
     const [coursesInSchool, setCoursesInSchool] = React.useState();
     const [loading, setLoading] = React.useState();
+    const onClient = React.useRef(false);
 
     const { getItem } = useLocalStorage();
 
@@ -35,6 +36,11 @@ const CustomizeCourses = ({ onSubmit, oldCoursesToShow, school_id }) => {
     };
 
     React.useEffect(() => {
+        console.log({ onClient: onClient.current });
+        if (!onClient.current) {
+            onClient.current = true;
+            return;
+        }
         setLoading(true);
         adminFunctions
             .getCoursesInSchool(userdata?.token, school_id)
@@ -57,17 +63,16 @@ const CustomizeCourses = ({ onSubmit, oldCoursesToShow, school_id }) => {
 
     const handleChangeCoursesToShow = (course, checked) => {
         const temp = [...coursesToShow];
-        console.log({ temp });
-        const found = temp.find((value) => value.id === course._id);
-        if (found === undefined) {
-            temp.push({
-                id: course._id,
-                hide: !checked,
-            });
-        } else {
-            found.hide = !checked;
+
+        const foundIndex = temp.findIndex((value) => value === course._id);
+        if (!checked && foundIndex >= 0) {
+            temp.splice(foundIndex, 1);
+            setCoursesToShow(temp);
         }
-        setCoursesToShow(temp);
+        if (checked && foundIndex < 0) {
+            temp.push(course._id);
+            setCoursesToShow(temp);
+        }
     };
 
     const handleSubmit = (e) => {
@@ -79,6 +84,9 @@ const CustomizeCourses = ({ onSubmit, oldCoursesToShow, school_id }) => {
         <>
             <div className={clsx["header_text_field_div"]}>
                 <List>
+                    {coursesInSchool && !coursesInSchool.length && (
+                        <Typography>There are no courses in school</Typography>
+                    )}
                     {coursesInSchool &&
                         coursesInSchool.map((course, index) => (
                             <ListItem
@@ -98,11 +106,9 @@ const CustomizeCourses = ({ onSubmit, oldCoursesToShow, school_id }) => {
                                     }}
                                 >
                                     <Switch
-                                        checked={
-                                            !coursesToShow.find(
-                                                (_v) => _v.id === course._id
-                                            )?.hide
-                                        }
+                                        checked={coursesToShow.find(
+                                            (_v) => _v === course._id
+                                        )}
                                         onChange={(e) => {
                                             e.preventDefault();
                                             handleChangeCoursesToShow(

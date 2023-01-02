@@ -15,11 +15,9 @@
 .customization_content {
     margin-left: 10px;
     /* background: #888888; */
-    height: 100%;
     padding: 20px;
     border-radius: 30px;
     overflow-y: scroll;
-    width: calc(100% - 306px);
 }
 
 .sidebar_icon {
@@ -96,4 +94,10 @@
     color: var(--theme-blue) !important;
     font-size: 48px;
     margin-right: 10px;
+}
+
+.preview_button_div {
+    width: 100%;
+    display: flex;
+    justify-content: right;
 }

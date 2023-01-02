@@ -1,4 +1,5 @@
 import {
+    Button,
     List,
     ListItem,
     ListItemIcon,
@@ -6,7 +7,6 @@ import {
     Typography,
 } from "@mui/material";
 import React from "react";
-import { BiCloudDownload } from "react-icons/bi";
 import {
     BsBlockquoteLeft,
     BsCardHeading,
@@ -123,7 +123,30 @@ const Customizations = () => {
                     </List>
                 </div>
                 {loading && <Loader />}
-                <>
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        height: "100%",
+                        width: "calc(100% - 306px)",
+                    }}
+                >
+                    {/* PREVIEW BUTTON */}
+
+                    {/* <div className={clsx.preview_button_div}>
+                        <Button
+                            className={clsx.header_save_button}
+                            href={"/"} // school url
+                            size="large"
+                            style={{
+                                textTransform: "none",
+                                width: "150px",
+                            }}
+                        >
+                            Preview
+                        </Button>
+                    </div> */}
+
                     {activeTab === 0 && (
                         <div className={clsx["customization_content"]}>
                             <CustomizeLogo
@@ -198,6 +221,7 @@ const Customizations = () => {
                                     schoolSettingsHook.schoolSettings
                                         ?.courses || []
                                 }
+                                school_id={school_id}
                             />
                         </div>
                     )}
@@ -250,7 +274,7 @@ const Customizations = () => {
                             />
                         </div>
                     )}
-                </>
+                </div>
             </div>
         </Admin>
     );

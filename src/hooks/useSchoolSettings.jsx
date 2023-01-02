@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 const useSchoolSettings = (school_id) => {
     const [schoolSettings, setSchoolSettings] = React.useState();
     const [loading, setLoading] = React.useState(false);
+    const onClient = React.useRef(false);
 
     const { getItem } = useLocalStorage();
 
@@ -59,6 +60,10 @@ const useSchoolSettings = (school_id) => {
     }, []);
 
     React.useEffect(() => {
+        if (!onClient.current) {
+            onClient.current = true;
+            return;
+        }
         fetchSchoolSettings(school_id);
     }, []);
 
