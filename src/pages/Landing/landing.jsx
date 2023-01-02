@@ -21,11 +21,11 @@ const NewHome = () => {
         <SideBar showSidebar={showSidebar}  toggleSidebar={toggleSidebar}/>
         <Center>
           <div className="d-flex flex-column align-items-center">
-            <h1>Successful virtual schools  are</h1>
-            <h1>built here and learners  start</h1>
+            <h1>Build your virtual school here</h1>
+            <h1>and learners start</h1>
             <h1>from here</h1>
           </div>
-          <p>Gotocourse helps  to Create, manage , market and learn tech and business skills online</p>
+          <p>Gotocourse helps  to create, manage, market and learn tech and business skills online</p>
           <div className='d-flex gap-3 mt-4'>
             {/* <a href="" className="d-inline-flex"> */}
             <Link to="/create-with-gotocourse">
