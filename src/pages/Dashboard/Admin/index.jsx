@@ -1452,33 +1452,6 @@ export function Approve() {
   useEffect(() => {
     const teacherInfo = getItem("gotocourse-teacherDetails");
     setData(teacherInfo);
-    //   (async () => {
-    //     let pledreInfo;
-    //     console.log("getting");
-    //     console.log({ pledre });
-    //     try {
-    //       if (pledre) {
-    //         console.log(pledre);
-    //         setGeneralState({ ...generalState, loading: true });
-    //         const pledRes = await pledre.getTeacherDetails(teacherInfo.email);
-    //         console.log({ pledRes });
-    //         if (pledRes.email) {
-    //           pledreInfo = pledRes;
-    //         } else {
-    //           pledreInfo = {};
-    //         }
-    //       }
-    //     } catch (error) {
-    //       console.error(error.message);
-    //     } finally {
-    //       setGeneralState({ ...generalState, loading: false });
-    //     }
-
-    //     localStorage.setItem(
-    //       "gotocourse-teacherDetails",
-    //       JSON.stringify({ ...teacherInfo, pledre: pledreInfo })
-    //     );
-    //   })();
   }, []);
   console.log({ data });
 

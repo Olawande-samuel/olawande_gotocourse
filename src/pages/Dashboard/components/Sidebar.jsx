@@ -26,6 +26,7 @@ import { LogoSidebar, Logosm } from "../../../images/components/svgs";
 import { SiGoogleclassroom } from "react-icons/si";
 import { BsNewspaper } from "react-icons/bs";
 import { HiOutlinePresentationChartLine } from "react-icons/hi";
+import { RiAdvertisementFill } from "react-icons/ri";
 
 
 
@@ -152,11 +153,13 @@ const Sidebar = ({}) => {
                     title: "Webinar"
                 }
                 ,
+               
                 {
                     icon: BsNewspaper,
                     path: "blog",
                     title: "Blog"
-                }
+                },
+                
             ]
         } else if(route.includes("student")){
             data = [
@@ -342,11 +345,11 @@ const Sidebar = ({}) => {
                path: "classes",
                title: "Courses"
            },
-           {
-               icon: BiVideo,
-               path: "live-class",
-               title: "Live Class"
-           },
+        //    {
+        //        icon: BiVideo,
+        //        path: "live-class",
+        //        title: "Live Class"
+        //    },
            {
                icon: BiBell,
                path: "notifications",
@@ -385,7 +388,14 @@ const Sidebar = ({}) => {
                icon: BsNewspaper,
                path: "blog",
                title: "Blog"
-           }
+           },
+
+        {
+            icon: RiAdvertisementFill,
+            path: "ad-leads",
+            title: "Ad Leads"
+        },
+
        ] : route === "student" ?  [
            {
                icon: AiOutlineDashboard,
@@ -407,11 +417,11 @@ const Sidebar = ({}) => {
                path: "myclasses",
                title: "My Courses"
            },
-           {
-               icon: BiVideo,
-               path: "live-class",
-               title: "Live Class"
-           },
+        //    {
+        //        icon: BiVideo,
+        //        path: "live-class",
+        //        title: "Live Class"
+        //    },
           
            {
                icon: FiGift,
@@ -479,11 +489,11 @@ const Sidebar = ({}) => {
                path: "classes",
                title: "Courses"
            },
-           {
-               icon: BiVideo,
-               path: "live-class",
-               title: "Live Class"
-           },
+        //    {
+        //        icon: BiVideo,
+        //        path: "live-class",
+        //        title: "Live Class"
+        //    },
            {
                icon: IoIosCash,
                path: "earnings",

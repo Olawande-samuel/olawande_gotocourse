@@ -224,6 +224,7 @@ import Cart from "./pages/Dashboard/components/Cart";
 import ProtectedRoute from "./hoc/LiveClassProtection";
 import Home from "./pages/Landing";
 import NewHome from "./pages/Landing/landing";
+import AdLeads from "./pages/Dashboard/Admin/leads";
 
 
 const Login = lazy(() => import("./pages/User/Login"));
@@ -659,6 +660,7 @@ function App() {
                   <Route path="profile/edit" element={<AdminEdit />} />
                   <Route path="chat" element={<AdminChat />} />
                   <Route path="settings" element={<Settings />} />
+                  <Route path="ad-leads" element={<AdLeads />} />
                   <Route path="earnings" element={<AdminEarning />} />
                   <Route path="affiliate" element={<AdminAffiliate />} />
                   <Route path="blog" element={<Out />}>
