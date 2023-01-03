@@ -53,7 +53,7 @@ const UpCoursesCard = styled.div`
     /* border: 2.2648px solid rgba(0, 114, 239, 0.5);
     padding: clamp(0.03125rem, -0.2813rem + 1.5625vw, 1.125rem);
     border-radius: 8px; */
-    height: 390px;
+    height: 410px;
     display: flex;
     flex-direction:column;
     box-shadow: -10px 159px 64px rgba(0, 0, 0, 0.01), -6px 90px 54px rgba(0, 0, 0, 0.05), -3px 40px 40px rgba(0, 0, 0, 0.09), -1px 10px 22px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
@@ -415,7 +415,7 @@ export function Card({ title, bootcampImg, bootcampId, category, subCategory, de
             <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
           </div>
 
-          <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue" }}>
+          <div className="d-flex justify-content-between checks" style={{ color: "var(--theme-blue" }}>
             <p>Start Date:</p>
             {/* <p>{new Date(startDate).toLocaleDateString()}</p> */}
             <p>{getFullDate(startDate)}</p>
