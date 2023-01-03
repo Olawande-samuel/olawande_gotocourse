@@ -15,7 +15,7 @@ import { useLocalStorage } from '../../../../hooks';
 import quiz from '../../../../images/classroom_quiz.svg';
 import { useAuth } from '../../../../contexts/Auth';
 import { KEY } from '../../../../constants';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRef } from 'react';
 
 
@@ -655,6 +655,7 @@ const Classroom = () => {
     // const [active, setActive] = useState(false)
     const [next, setNext] = useState(false)
     const [prev, setPrev] = useState(false)
+    let queryClient =  useQueryClient()
 
 
     const { getItem } = useLocalStorage()
@@ -692,10 +693,22 @@ const Classroom = () => {
     }, [modules])
 
 
+    const completedContent = useMemo(() => {
+        return reduceContent?.reduce((total, current) =>{
+            console.log("text", current.items.filter(item => item.completedBy?.includes(userdata.id)))
+           return total + current.items.length
+
+        }
+         ,0)
+
+    }, [modules])
+
+
+    console.log({completedContent});
     console.log({ reduceContent })
 
 
-    const prevNext = useMemo(() => {
+   useMemo(() => {
 
         if (reduceContent?.length > 0) {
             const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
@@ -758,32 +771,49 @@ const Classroom = () => {
                 })
             }
         }
+
     }
+
+
+    useMemo(() => {
+        if (reduceContent?.length > 0 && contentId){
+            const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
+            if (findIndex > -1) {
+                setPickedType(reduceContent[findIndex]?.type)
+                setContents(reduceContent[findIndex]?.items) 
+            }
+        }
+    },[reduceContent, contentId])
 
 
     const handleFileCompleted = async (contentId, fileId) => {
         console.log({ contentId });
-        const { data } = await markAsCompleted(userdata?.token, contentId, fileId)
-        console.log({ data });
-
-
-    }
-
-
-    const handleQuizCompleted = async (id, index) => {
-        const { success } = await markAsCompleted(userdata?.token, id)
-        if (success) {
-            setCompleted((prev) => prev < reduceContent.length ? prev + 1 : prev)
+        const { data, statusCode } = await markAsCompleted(userdata?.token, contentId, fileId)
+        if(statusCode === 1){
+            queryClient.invalidateQueries(["fetch domains"])
+            console.log({ data });
 
         }
 
 
     }
 
+
+    // const handleQuizCompleted = async (id, index) => {
+    //     const { success } = await markAsCompleted(userdata?.token, id)
+    //     if (success) {
+    //         setCompleted((prev) => prev < reduceContent.length ? prev + 1 : prev)
+
+    //     }
+
+
+    // }
+
     console.log({ modules });
 
     // console.log({ contentId });
 
+    console.log({completed});
 
     return (
         <Container>
