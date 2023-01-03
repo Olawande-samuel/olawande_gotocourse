@@ -253,6 +253,17 @@ const QuizButton = styled.button`
     border-radius: 5px;
 `;
 
+const MarkButton = styled.button`
+display: ${({display}) => display ? 'none' : 'block' };
+    background-color: #3f50b5 ;
+    color: white ;
+    border: none;
+    outline: none;
+    padding: .5rem;
+    font-size: 12px;
+    border-radius: 5px;
+`;
+
 const MenuButton = styled(IconButton)`
     display: none;
 
@@ -672,8 +683,6 @@ const Classroom = () => {
 
 
 
-    const quizRef = useRef()
-    const fileRef = useRef()
 
     const reduceContent = useMemo(() => {
         return modules?.reduce((total, current) => [
@@ -688,14 +697,14 @@ const Classroom = () => {
 
     const prevNext = useMemo(() => {
 
-        if (reduceContent.length > 0) {
-            const findIndex = reduceContent.findIndex(content => content.contentId === contentId);
+        if (reduceContent?.length > 0) {
+            const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
             if (findIndex === 0) {
                 setPrev(true)
                 setNext(false)
 
 
-            } else if (findIndex === (reduceContent.length - 1)) {
+            } else if (findIndex === (reduceContent?.length - 1)) {
                 setNext(true)
                 setPrev(false)
 
@@ -710,42 +719,42 @@ const Classroom = () => {
     }, [reduceContent, contentId])
 
     const MoveButton = (type) => {
-        if (reduceContent.length > 0 && type === "next") {
-            const findIndex = reduceContent.findIndex(content => content.contentId === contentId);
+        if (reduceContent?.length > 0 && type === "next") {
+            const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
             // console.log({ findIndex });
 
             let val = ""
-            if (findIndex !== (reduceContent.length - 1)) {
+            if (findIndex !== (reduceContent?.length - 1)) {
                 val = findIndex + 1;
                 console.log({ val });
-                setPickedType(reduceContent[val].type)
-                setContents(reduceContent[val].items)
+                setPickedType(reduceContent[val]?.type)
+                setContents(reduceContent[val]?.items)
                 setSearchParams({
-                    contentId: reduceContent[val].contentId
+                    contentId: reduceContent[val]?.contentId
                 })
             } else {
                 val = findIndex;
-                setContents(reduceContent[val].items)
+                setContents(reduceContent[val]?.items)
                 setSearchParams({
-                    contentId: reduceContent[val].contentId
+                    contentId: reduceContent[val]?.contentId
                 })
             }
-        } else if (reduceContent.length > 0 && type === "prev") {
-            const findIndex = reduceContent.findIndex(content => content.contentId === contentId);
+        } else if (reduceContent?.length > 0 && type === "prev") {
+            const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
             let val = ""
             if (findIndex !== 0) {
                 val = findIndex - 1;
-                setPickedType(reduceContent[val].type)
-                setContents(reduceContent[val].items)
+                setPickedType(reduceContent[val]?.type)
+                setContents(reduceContent[val]?.items)
                 setSearchParams({
-                    contentId: reduceContent[val].contentId
+                    contentId: reduceContent[val]?.contentId
                 })
             } else {
                 val = findIndex;
-                setPickedType(reduceContent[val].type)
-                setContents(reduceContent[val].items)
+                setPickedType(reduceContent[val]?.type)
+                setContents(reduceContent[val]?.items)
                 setSearchParams({
-                    contentId: reduceContent[val].contentId
+                    contentId: reduceContent[val]?.contentId
                 })
             }
         }
@@ -765,7 +774,6 @@ const Classroom = () => {
         const { success } = await markAsCompleted(userdata?.token, id)
         if (success) {
             setCompleted((prev) => prev < reduceContent.length ? prev + 1 : prev)
-            quizRef.current.style.display = "none";
 
         }
 
@@ -784,7 +792,7 @@ const Classroom = () => {
                     <MenuButton onClick={e => setShowMobile(_ => true)}>
                         <MdMenu />
                     </MenuButton>
-                    <h5 style={{ margin: 0 }}>Classroom</h5>
+                    <h5 style={{ margin: 0 }}><Link to={`/student/console/myclasses`} style={{color: "#fff"}}>Classroom</Link></h5>
                 </div>
                 <NavLeft>
                     <IconButton>
@@ -808,6 +816,7 @@ const Classroom = () => {
                         setContents={setContents}
                         setPickedType={setPickedType}
                         reduceContent={reduceContent}
+                        setCompleted={setCompleted}
                     // active={active} 
                     // setActive={setActive}
                     />
@@ -820,6 +829,7 @@ const Classroom = () => {
                     setContents={setContents}
                     setPickedType={setPickedType}
                     reduceContent={reduceContent}
+                    setCompleted={setCompleted}
                 // active={active} 
                 // setActive={setActive}
 
@@ -851,11 +861,11 @@ const Classroom = () => {
                                         <>
                                             <FileComponent contentItem={content} id={id} key={id} />
                                             <QuizAction >
-                                                <QuizButton
-                                                    onClick={() => handleFileCompleted(content.contentId, content._id)}
+                                                <MarkButton display={content.completedBy.includes(userdata.id) ? true : false}
+                                                    onClick={() => handleFileCompleted(content.contentId, content.fileId)}
                                                 >
                                                     Mark as Completed
-                                                </QuizButton>
+                                                </MarkButton>
                                             </QuizAction>
                                         </>
 
@@ -871,11 +881,11 @@ const Classroom = () => {
                                         <NoteComponent contentItem={content} id={id} key={id} />
 
                                         <QuizAction >
-                                            <QuizButton
+                                            <MarkButton
                                                 onClick={() => handleFileCompleted(content.contentId, content._id)}
                                             >
                                                 Mark as Completed
-                                            </QuizButton>
+                                            </MarkButton>
                                         </QuizAction>
                                     </>
 
@@ -890,11 +900,11 @@ const Classroom = () => {
                                     <>
                                         <QuizComponent contentItem={content} id={id} key={id} userdata={userdata}/>
                                         <QuizAction >
-                                            <QuizButton
+                                            <MarkButton
                                                 onClick={() => handleFileCompleted(content.contentId, content._id)}
                                             >
                                                 Mark as Completed
-                                            </QuizButton>
+                                            </MarkButton>
                                         </QuizAction>
                                     </>
                                 ))

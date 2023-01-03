@@ -33,6 +33,7 @@ import LogoutButton from "../../../components/LogoutButton";
 import { PaymentModal } from "../../Bootcamp/Payment";
 import PayModal from "../../../components/PayModal";
 import { LiveClassInfo } from "../components/classConsole/Liveclass";
+import { Link } from "react-router-dom";
 
 
 
@@ -777,11 +778,20 @@ export function Wishlist() {
         getWishList()
         flag.current = true;
     }, [])
+
+    console.log({wishlists});
+
+    // const value = useMemo(() => {
+    //     return wishlists.reduce((total, current) => {
+    //         // console.log({current});
+    //         total = total + current.price
+    //     }, 0)
+    // }, [wishlists])
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Cart">
             <div className={clsx.students_profile}>
                 <header className="mb-4 d-flex align-center">
-                    <h3 style={{paddingRight: "2rem", fontWeight: "600"}}>Cart</h3>
+                    <h3 style={{ paddingRight: "2rem", fontWeight: "600" }}>Cart</h3>
 
                     <div className={clsx.wishlist__inputcontaniner}>
                         <input type="text" className={clsx.wishlist__input}
@@ -798,8 +808,9 @@ export function Wishlist() {
                 <div className={clsx.classes}>
                     <div className={clsx.wishlistprice}>
                         <small>Total:</small>
+                        {/* <p>{`$${value}`}</p> */}
                         <p>$11,000</p>
-                        <button>Checkout</button>
+                       <Link to={`/student/wishlist-checkout`}>  <button>Checkout</button></Link>
 
                     </div>
                     <p style={{ padding: "1rem 0" }}>My Cart</p>
@@ -905,15 +916,16 @@ function WishCard({ courseId: id, courseName, courseDescription, courseCategory,
 
 function AvailCard({ courseId, courseName, courseDescription, courseCategory, refetch }) {
     const navigate = useNavigate();
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
+    const { generalState: { isMobile }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
     const { getItem } = useLocalStorage();
     let [wishlistState, setWishlistState] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const userdata = getItem(KEY)
 
     async function addToWishlist() {
         setGeneralState({ ...generalState, loading: true })
-
+        setLoading(true)
         if (userdata !== null) {
             try {
                 const response = await addwishlistCourse(courseId, userdata?.token)
@@ -923,8 +935,11 @@ function AvailCard({ courseId, courseName, courseDescription, courseCategory, re
                 setWishlistState(true)
             } catch (error) {
                 console.error(error)
+                setLoading(false)
+
             } finally {
                 setGeneralState({ ...generalState, loading: false })
+                setLoading(false)
 
             }
 
@@ -960,6 +975,8 @@ function AvailCard({ courseId, courseName, courseDescription, courseCategory, re
 
     async function removeCourse(e) {
         e.preventDefault();
+        setLoading(true)
+
         try {
             setGeneralState({ ...generalState, loading: true })
             const res = await deleteFromWishlist(userdata?.token, courseId)
@@ -968,11 +985,15 @@ function AvailCard({ courseId, courseName, courseDescription, courseCategory, re
             else {
                 const { data } = res;
                 setWishlistState(false)
+                setLoading(false)
+
             }
         } catch (err) {
 
         } finally {
             setGeneralState({ ...generalState, loading: false });
+            setLoading(false)
+
         }
     }
 
@@ -994,7 +1015,7 @@ function AvailCard({ courseId, courseName, courseDescription, courseCategory, re
                                         <span className="visually-hidden">Loading...</span>
                                     </div>
                                     :
-                                    "Wishlist"
+                                    "Add to Wishlist"
 
                             }
 
@@ -1022,7 +1043,7 @@ function AvailCard({ courseId, courseName, courseDescription, courseCategory, re
                                                 <span className="visually-hidden">Loading...</span>
                                             </div>
                                             :
-                                            "Wishlist"
+                                            "Add to Wishlist"
 
                                     }
 
@@ -1114,6 +1135,143 @@ function DeleteModal({ id, open, handleClose }) {
 
     )
 }
+
+
+export function WishlistCheckOut() {
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { fetchWishlist }, otherFunctions: { fetchBootcamps } } = useAuth();
+
+    const { getItem } = useLocalStorage();
+    let userdata = getItem(KEY);
+    const [search, setSearch] = useState("")
+    const [wishlists, setWishlists] = useState([])
+
+
+    const flag = useRef(false);
+    async function getWishList() {
+        try {
+            setGeneralState({ ...generalState, loading: true })
+            const res = await fetchWishlist(userdata?.token);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+                const { data } = res;
+                if (data.length > 0) {
+                    setWishlists(data);
+                    toast.success(message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } else {
+                    toast.error("wishlist is empty", {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    setWishlists([])
+                }
+
+            } else {
+                throw new AdvancedError(message, statusCode);
+            }
+        } catch (err) {
+            toast.error(err.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+        }
+    }
+    useEffect(() => {
+        if (flag.current) return;
+        getWishList()
+        flag.current = true;
+    }, [])
+
+
+    const value = useMemo(() => {
+        return wishlists.reduce((total, current) => {
+            total = total + current.price
+        }, 0)
+    }, [wishlists])
+
+    return (
+        <Students isMobile={isMobile} userdata={userdata} header="Checkout">
+            <div className={clsx.students_profile}>
+                <header className="mb-4">
+                    <h3 style={{ paddingRight: "2rem", fontWeight: "600", color:"#081131" }}>Billing address</h3>
+
+                    <div className={clsx.wishlist__select}>
+                        <label htmlFor="country">Country</label> <br />
+                        <select >
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            <option>Nigeria</option>
+                        </select>
+                        <br />
+                        <small>
+                            Gotocourse is required by law to collect applicable transaction taxes <br />
+                            for purchases made in certain tax jurisdictions.
+                        </small>
+                    </div>
+
+                </header>
+
+
+
+
+                <div className={clsx.classes}>
+
+                    <div className={clsx.wishlistcheckoutitems}>
+
+                        <p style={{ padding: "1rem 0", fontWeight: "800" }}>Order details</p>
+                        {
+                            wishlists?.map((item, index) => (
+                                <div key={item.courseId} className="w-100 d-flex justify-content-between align-center">
+                                    <div className="wishlistitemname">
+                                        {item.courseName}
+
+                                    </div>
+                                    <div className="wishlistiteprice">
+                                        {item.coursePrice}
+                                    </div>
+                                </div>
+                            ))
+                        }
+
+                        <div className="w-100 d-flex align-center justify-content-between py-3" style={{ fontSize: "1.5rem", fontWeight: "600" }}>
+                            <span>Total</span>
+                            {/* <span>${value}</span> */}
+
+                        </div>
+
+                        <Link to={`/student/wishlist-checkout`}>  <button>Checkout</button></Link>
+
+
+                    </div>
+
+
+                </div>
+            </div>
+        </Students >
+    )
+}
+
+
 
 export function Courses() {
     const { generalState: { isMobile, loading }, generalState, setGeneralState, studentFunctions: { fetchCourses } } = useAuth();
@@ -2284,8 +2442,9 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
 
     const isCreator = userdata?.userType === "schools"
     const last = location.pathname.split('/').length - 1
-    console.log("last", last);
     const wishlist = location.pathname.split('/')[last] === "wishlist"
+    // const wishlistCheckout = location.pathname.split('/')[last] === "wishlist-checkout"
+
     return (
         <GuardedRoute>
             <div className={clsx.students}>
