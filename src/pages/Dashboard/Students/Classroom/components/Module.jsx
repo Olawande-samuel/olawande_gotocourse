@@ -72,7 +72,7 @@ const Locked = styled(MdOutlineLock)`
 
 
 
-const Module = ({ title, setContents, moduleIndex, setPickedType, contentsData,setCompleted
+const Module = ({ title, setContents,reduceContent, moduleIndex, setPickedType, contentsData,setCompleted
     // setActive, active,
 }) => {
     const [active, setActive] = useState(false)
@@ -83,7 +83,7 @@ const Module = ({ title, setContents, moduleIndex, setPickedType, contentsData,s
 
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
-    const { consoleFunctions: { fetchStudentDomains, fetchStudentQuiz, fetchStudentFile, fetchStudentNote, markAsCompleted }, } = useAuth();
+    // const { consoleFunctions: { fetchStudentDomains, fetchStudentQuiz, fetchStudentFile, fetchStudentNote, markAsCompleted }, } = useAuth();
 
 
     let icon = (type) => {
@@ -92,7 +92,7 @@ const Module = ({ title, setContents, moduleIndex, setPickedType, contentsData,s
 
 
     const getStatus = (contentId, items) => {
-        console.log({contentId}, {items});
+        // console.log({contentId}, {items});
         let findItem = items.find(item => item.contentId === contentId);
         if (findItem) {
            return  findItem?.completedBy?.includes(userdata.id) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />

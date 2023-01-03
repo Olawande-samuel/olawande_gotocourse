@@ -126,6 +126,7 @@ const Sidebar = ({ modules,setContents,setPickedType,reduceContent, setActive, a
                                 setPickedType={setPickedType}
                                 module={id}
                                 setCompleted={setCompleted}
+                                reduceContent={reduceContent}
 
                             />)
                     }
