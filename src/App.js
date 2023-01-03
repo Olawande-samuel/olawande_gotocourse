@@ -50,6 +50,7 @@ import {
   Notification as StudentNotifications,
   MyClasses,
   StudentLive,
+  WishlistCheckOut,
 } from "./pages/Dashboard/Students";
 
 import StudentHelp from "./pages/Dashboard/Students/Help";
@@ -220,7 +221,6 @@ import EnterpriseOnboarding from "./components/enterprise/EnterpriseOnboarding";
 import Pricing from "./components/enterprise/Pricing";
 import Creator from "./components/enterprise/Creator";
 
-import Cart from "./pages/Dashboard/components/Cart";
 import ProtectedRoute from "./hoc/LiveClassProtection";
 import Home from "./pages/Landing";
 import NewHome from "./pages/Landing/landing";
@@ -411,6 +411,7 @@ function App() {
                   <Route path="profile/edit" element={<StudentEdit />} />
                   <Route path="courses" element={<StudentCourses />} />
                   <Route path="wishlist" element={<Wishlist />} />
+                  <Route path="wishlist-checkout" element={<WishlistCheckOut />} />
                   <Route path="history" element={<StudentHistory />} />
                   <Route path="payment" element={<StudentFees />} />
                   <Route path="chat" element={<StudentChat />} />

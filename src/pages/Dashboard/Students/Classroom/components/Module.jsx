@@ -72,7 +72,7 @@ const Locked = styled(MdOutlineLock)`
 
 
 
-const Module = ({ title, setContents, moduleIndex, setPickedType, contentsData,
+const Module = ({ title, setContents, moduleIndex, setPickedType, contentsData,setCompleted
     // setActive, active,
 }) => {
     const [active, setActive] = useState(false)
@@ -91,9 +91,14 @@ const Module = ({ title, setContents, moduleIndex, setPickedType, contentsData,
     }
 
 
-    let statusIcon = (marked) => marked ? <CompleteIcon $isComplete={marked} /> : <CompleteIcon />
-
-
+    const getStatus = (contentId, items) => {
+        console.log({contentId}, {items});
+        let findItem = items.find(item => item.contentId === contentId);
+        if (findItem) {
+           return  findItem?.completedBy?.includes(userdata.id) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />
+        }
+        return <CompleteIcon />
+    }
 
     // console.log("data", contentsData[0]);
 
@@ -105,7 +110,10 @@ const Module = ({ title, setContents, moduleIndex, setPickedType, contentsData,
             </ModuleInfo>
             <ModuleAttachments>
                 {/* {
-                    attach.filter(a => a.domain === attachments._id).map((a, i) => (<Attachment active={activeMedia} changeActive={changeActive}
+                    attach.filter(a => a.domain === attachments._id).map((a, i) => (
+                        <Attachment 
+                        active={activeMedia} 
+                        changeActive={changeActive}
                         fetchData={fetchData}
                         key={i} {...a} />))
                 } */}
@@ -126,7 +134,8 @@ const Module = ({ title, setContents, moduleIndex, setPickedType, contentsData,
                             {icon(content?.type)}
                             <h5>{content?.title}</h5>
                         </AttachmentInfo>
-                        {statusIcon(false)}
+                        {getStatus(content?.contentId, content?.items)}
+
                     </AttachmentContainer>
 
                 ))}
