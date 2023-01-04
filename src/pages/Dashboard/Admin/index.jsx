@@ -3478,7 +3478,7 @@ export function Bootcamps() {
               className="btn btn-primary px-5"
               onClick={gotoCreateCourseHandler}
             >
-              Add Class
+              Add Course
             </button>
           </div>
           <div className="d-flex justify-content-between align-items-center mb-3">
@@ -3776,6 +3776,7 @@ export function CreateBootcamp() {
     const formData = {
       ...formstate,
       description: bio ? bio : formstate.description,
+      type:"flat"
     };
     try {
       if (
@@ -3941,7 +3942,7 @@ export function CreateBootcamp() {
 
   console.log({ formstate });
   return (
-    <Admin header={location.search ? "Edit Class" : "Create Class"}>
+    <Admin header={location.search ? "Edit Course" : "Create Course"}>
       {loader && <Loader />}
       <div className={clsx.admin_profile}>
         <div className={clsx.edit__profile}>
@@ -3957,7 +3958,7 @@ export function CreateBootcamp() {
                 onClick={showUploadFormHandler}
               >
                 <img src={vector} alt={"Placeholder"} />
-                <p>Upload Class Banner</p>
+                <p>Upload Course Banner</p>
               </div>
               {previewImage && (
                 <div className={clsx.upload__file_box}>
@@ -3977,7 +3978,7 @@ export function CreateBootcamp() {
           </div>
           <form className="form" onSubmit={submitHandler}>
             <Input
-              label="Class Banner file name"
+              label="Course image name"
               name="bootcampImg"
               type="text"
               handleChange={changeHandler}
@@ -4036,7 +4037,7 @@ export function CreateBootcamp() {
               handleChange={changeHandler}
               value={formstate.duration}
             />
-            <div className={clsx.form_group}>
+            {/* <div className={clsx.form_group}>
               <label htmlFor={"package"}>Type</label>
               <select
                 rows="5"
@@ -4049,8 +4050,8 @@ export function CreateBootcamp() {
                 <option value="FLAT">Flat</option>
                 <option value="PACKAGE">Package</option>
               </select>
-            </div>
-            {formstate.type === "FLAT" ? (
+            </div> */}
+            {/* {formstate.type === "FLAT" ? ( */}
               <Input
                 label="Price"
                 name="price"
@@ -4058,7 +4059,7 @@ export function CreateBootcamp() {
                 handleChange={changeHandler}
                 value={formstate.price}
               />
-            ) : formstate.type === "PACKAGE" ? (
+            {/* ) : formstate.type === "PACKAGE" ? (
               <div className={clsx.form_group}>
                 <label htmlFor={"package"} className="form-label generic_label">
                   Packages
@@ -4106,7 +4107,7 @@ export function CreateBootcamp() {
               </div>
             ) : (
               ""
-            )}
+            )} */}
             <div className="d-flex flex-wrap">
               <div className="col-sm-6 col-md-3 pe-2 ">
                 <Input
