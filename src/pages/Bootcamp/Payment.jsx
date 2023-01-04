@@ -43,7 +43,7 @@ export const BootcampPayment = () => {
 
   const params = useParams();
   console.log({params})
-  
+
   const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
     onSuccess: res =>{
       console.log({res})
@@ -355,7 +355,7 @@ export const CheckoutForm = () => {
       const result = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `https://gotocourse.us/payment/success/`,
+          return_url: `https://gotocourse.com/payment/success/`,
         },
       });
 
