@@ -66,32 +66,32 @@ gap: 2rem;
             }
 
             .reviewpersoninfo{
-            p{
-                margin-top: .5rem;
-                margin-bottom: 0;
-                font-family: 'Raleway';
-                font-style: normal;
-                font-weight: 400;
-                font-size: 15px;
-                // line-height: 29px;
-                display: flex;
-                align-items: center;
-                color: #000;
-            }
+                p{
+                    margin-top: .5rem;
+                    margin-bottom: 0;
+                    font-family: 'Raleway';
+                    font-style: normal;
+                    font-weight: 400;
+                    font-size: 15px;
+                    // line-height: 29px;
+                    display: flex;
+                    align-items: center;
+                    color: #000;
+                }
 
-            p:nth-of-type(2){
-                margin: 0;
-                font-family: 'Raleway';
-                font-style: normal;
-                font-weight: 400;
-                font-size: 16px;
-                // line-height: 29px;
-                display: flex;
-                align-items: center;
-                color: #464646;
-            }
+                p:nth-of-type(2){
+                    margin: 0;
+                    font-family: 'Raleway';
+                    font-style: normal;
+                    font-weight: 400;
+                    font-size: 16px;
+                    // line-height: 29px;
+                    display: flex;
+                    align-items: center;
+                    color: #464646;
+                }
 
-        }
+            }
         }
     }
     
@@ -125,7 +125,7 @@ gap: 2rem;
 }
 
 
-.
+
 `
 const Review = () => {
     return (

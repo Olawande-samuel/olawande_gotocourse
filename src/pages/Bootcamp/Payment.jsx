@@ -43,6 +43,7 @@ export const BootcampPayment = () => {
 
   const params = useParams();
   console.log({params})
+  
   const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
     onSuccess: res =>{
       console.log({res})

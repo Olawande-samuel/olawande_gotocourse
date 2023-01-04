@@ -42,7 +42,7 @@ const NavContainer = styled.div`
 		align-items: center;
 		/* justify-content: space-between; */
 		width: 100%;
-		padding: 0.5rem 1rem;
+		padding: 0.5rem;
 		// gap: 1rem;
 		height: 100%;
 		width: 100%;
@@ -73,7 +73,7 @@ const NavContainer = styled.div`
 			margin-bottom: unset;
 
 			.firstitems {
-				flex: 2;
+				flex: 1.5;
 				display: flex;
 				align-items: center;
 				justify-content: space-evenly;
