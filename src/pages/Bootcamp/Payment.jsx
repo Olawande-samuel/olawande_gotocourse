@@ -425,6 +425,7 @@ export const CheckoutForm = () => {
             fontSize: "14px",
           }}
           onClick={() => {
+            setLoadingComponent(false)
             navigate("/payment/error");
           }}
         >

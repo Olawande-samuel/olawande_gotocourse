@@ -3696,7 +3696,8 @@ export function CreateBootcamp() {
             found.bootcampImg = found.bootcampImg.split("/").slice(-1)[0];
 
             delete found.instructorName;
-            setFormstate({ ...formstate, ...found });
+            delete found.packages
+            setFormstate({ ...formstate, ...found, type: "FLAT" });
             setBio(found.description);
           } else {
             throw new AdvancedError(message, statusCode);
@@ -3778,6 +3779,7 @@ export function CreateBootcamp() {
       description: bio ? bio : formstate.description,
       type:"FLAT"
     };
+    console.log({formData})
     try {
       if (
         formData.description === "" ||
@@ -3976,7 +3978,7 @@ export function CreateBootcamp() {
               )}
             </div>
           </div>
-          <form className="form" onSubmit={submitHandler}>
+          <form className="form" onSubmit={submitHandler} noValidate>
             <Input
               label="Course image name"
               name="bootcampImg"
