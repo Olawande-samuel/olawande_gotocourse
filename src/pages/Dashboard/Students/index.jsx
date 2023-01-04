@@ -14,7 +14,7 @@ import { Product, Stu1, Stu2, Stu3 } from "../../../images/components/svgs"
 import Loader from "../../../components/Loader"
 import { Sidebar, Searchbar, Navbar } from "../components";
 import clsx from "./styles.module.css";
-import { colors, getDate, gotoclass, gotoclassPayment } from "../../../constants";
+import { colors, getDate, gotoclass, gotoclassPayment, getFullDate, calculateWeeksBetween } from "../../../constants";
 import avatar from "../../../images/teacher.png"
 import { GuardedRoute } from "../../../hoc";
 import Input from "../../../components/Input";
@@ -34,6 +34,7 @@ import { PaymentModal } from "../../Bootcamp/Payment";
 import PayModal from "../../../components/PayModal";
 import { LiveClassInfo } from "../components/classConsole/Liveclass";
 import { Link } from "react-router-dom";
+import { BiMoney } from "react-icons/bi";
 
 
 
@@ -466,28 +467,12 @@ export function MyClasses() {
                                     <div className={clsx["courseheader"]}>
                                         <div className={clsx["courseitem"]}> No</div>
                                         <div className={clsx["courseitem"]}>Courses</div>
-                                        <div className={clsx["courseitem"]}>Category</div>
-                                        <div className={clsx["courseitem"]}>Subcategory</div>
+                                        {/* <div className={clsx["courseitem"]}>Category</div>
+                                        <div className={clsx["courseitem"]}>Subcategory</div> */}
                                         <div className={clsx["courseitem"]}>Start Date</div>
-                                        <div className={clsx["courseitem"]}>Duration</div>
-                                        <div className={clsx["courseitem"]}>
-                                            {/* <FormControl fullWidth size="small">
-                                                <InputLabel id="demo-simple-select-label">Fee</InputLabel>
-                                                <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    // value={age}
-                                                    label="fee"
-                                                // onChange={handleChange}
-                                                >
-                                                    <MenuItem value={30}>POUNDS</MenuItem>
-                                                    <MenuItem value={10}>USD</MenuItem>
-                                                    <MenuItem value={20}>EURO</MenuItem>
-                                                    <MenuItem value={20}>NAIRA</MenuItem>
-                                                </Select>
-                                            </FormControl> */}
-                                            Fees
-                                        </div>
+                                        {/* <div className={clsx["courseitem"]}>Duration</div> */}
+                                        <div className={clsx["courseitem"]}>Fees</div>
+                                        <div className={clsx["courseitem"]}>Status</div>
                                         <div className={clsx["courseitem"]} />
                                     </div>
 
@@ -507,33 +492,50 @@ export function MyClasses() {
                                                 </div>
 
 
-                                                <div className={clsx["courseitem"]}>
-                                                    <span>{item.startDate && getDate(item.startDate)}</span>
+                                                {/* <div className={clsx["courseitem"]}>
+                                                    <span>{item.category}</span>
                                                 </div>
+
+                                                <div className={clsx["courseitem"]}>
+                                                    <span>{item.subCategory}</span>
+                                                </div> */}
 
                                                 <div className={clsx["courseitem"]}>
                                                     <span>{item.startDate && getDate(item.startDate)}</span>
                                                 </div>
+                                                {/* <div className={clsx["courseitem"]}>
+                                                    <span>{(item.endDate && item.startDate) ? (calculateWeeksBetween(item.endDate, item.startDate)) : ""}</span>
+                                                </div> */}
 
                                                 <div className={clsx["courseitem"]}>
                                                     <span>$ {item.bootcampPrice}</span>
 
                                                 </div>
+                                                <div className={clsx["courseitem"]}>
+                                                    <span>{item.paymentStatus}</span>
+
+                                                </div>
 
                                                 <div className={clsx["courseitem"]}>
                                                     <div className={clsx.classes_button}>
-                                                        <button className="d-flex align-items-center"
-                                                        // onClick={(e) => handleCourseSelect(e, item)}
-                                                        >
-                                                            <i><BsQuestionCircle /></i>
-                                                            <span>Learn more</span>
-                                                        </button>
-                                                        <button className="d-flex align-items-center"
-                                                        // onClick={(e) => handleCourseSelect(e, item)}
-                                                        >
-                                                            <i><BsDownload /></i>
-                                                            <span>Enroll</span>
-                                                        </button>
+                                                        {
+                                                            item.paymentStatus === "complete" ? 
+
+                                                            <button className="d-flex align-items-center" style={{background:"var(--theme-blue)"}}
+                                                            onClick={(e) => navigate(`/student/class-console/class/${item.bootcampId}`)}
+                                                            >
+                                                                
+                                                                <span>Go to class</span>
+                                                            </button>
+                                                            :
+                                                            <button className="d-flex align-items-center gap-2"
+                                                            onClick={(e) => navigate("/student/payment")}
+                                                            >
+                                                                <i><BiMoney /> </i>
+                                                                <span>Pay</span>
+                                                            </button>
+
+                                                        }
                                                     </div>
                                                 </div>
 
@@ -1556,23 +1558,13 @@ export function Fees() {
     const all = () => {
         let pending = course.map((c => c.payments.filter(x => x.status === "pending")))
         let individual_total = pending.map(d => d.reduce((total, item) => total + item.amount, 0))
-        console.log("all_total", individual_total.reduce((total, item) => total + item, 0));
         setOutstanding(individual_total.reduce((total, item) => total + item, 0))
 
     }
     all()
 
 
-    // const Outstanding = useMemo(() => {
-    //     let pending = course.map((c => c.payments.filter(x => x.status === "pending")))
-    //     let individual_total = pending.map(d=> d.reduce((total, item) => total + item.amount, 0))
-    //     console.log( "all_total", individual_total.reduce((total, item) => total + item, 0) );
-    //     setOutstanding(individual_total.reduce((total, item) => total + item, 0))
-
-    // }, [course]);
-
-    // console.log({outstanding});
-
+   
     const filterpending = (data) => {
         let result = data.filter(c => c.status === "pending").reduce((sum, current) => sum + current.amount, 0)
         return result

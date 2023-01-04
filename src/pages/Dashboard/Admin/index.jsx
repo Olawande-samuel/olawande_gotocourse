@@ -4058,6 +4058,7 @@ export function CreateBootcamp() {
                 type="number"
                 handleChange={changeHandler}
                 value={formstate.price}
+                noValidate={"true"}
               />
             {/* ) : formstate.type === "PACKAGE" ? (
               <div className={clsx.form_group}>

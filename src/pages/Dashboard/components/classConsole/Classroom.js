@@ -96,11 +96,11 @@ export default function Classroom() {
     const {getItem} = useLocalStorage()
     const userdata = getItem(KEY)
     const [studentList, setStudentList] = useState([])
-    const {teacherFunctions: {fetchApplications, fetchCourseStudents} } = useAuth()
+    const {teacherFunctions: {fetchBootcampApplications, fetchCourseStudents} } = useAuth()
 
     const {classId} = useParams()
     // const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchApplications(userdata.token), {
-    const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchCourseStudents(classId, userdata.token), {
+    const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchBootcampApplications(userdata.token), {
         onSuccess: (res)=> console.log({res}),
         onError: (err)=> console.error(err)
     })
