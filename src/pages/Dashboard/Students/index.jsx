@@ -461,8 +461,8 @@ export function MyClasses() {
 
                             <div className={` ${clsx.dashboard_courses}`}>
                                 <div className={clsx["dashboard_courses--left"]}>
-                                    <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
-                                    <small className="mb-4 d-block">Select and enroll for a class to get started</small>
+                                    {/* <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
+                                    <small className="mb-4 d-block">Select and enroll for a class to get started</small> */}
 
                                     <div className={clsx["courseheader"]}>
                                         <div className={clsx["courseitem"]}> No</div>
@@ -519,7 +519,7 @@ export function MyClasses() {
                                                 <div className={clsx["courseitem"]}>
                                                     <div className={clsx.classes_button}>
                                                         {
-                                                            item.paymentStatus === "complete" ? 
+                                                            (item.paymentStatus === "complete" || item.paymentStatus === "paid") ? 
 
                                                             <button className="d-flex align-items-center" style={{background:"var(--theme-blue)"}}
                                                             onClick={(e) => navigate(`/student/class-console/class/${item.bootcampId}`)}
