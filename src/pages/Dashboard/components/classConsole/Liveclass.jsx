@@ -62,6 +62,7 @@ export function LiveClassInfo({ type }) {
     queryClient.invalidateQueries({ queryKey: ["fetch live schedule"]}) 
   }
 
+  console.log({userdata})
 
   return (
     <div className={style.live_class}>
@@ -234,6 +235,8 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
     startTime: false,
   });
 
+  const [userId, setUserId] = useState("")
+
   const modalStyle = {
     position: "absolute",
     bottom: "30px",
@@ -264,6 +267,17 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
   const edit = searchParams.get("edit")
 
 
+  useEffect(() => {
+      if (user?.token) {
+        if(user.isAdmin){
+          setUserId(user.id)
+        } else {
+          setUserId(user.userId)
+        }
+      }
+    }, [user.token])
+  
+   
 
   function handleChange(e) {
     setFormstate({ ...formstate, [e.target.name]: e.target.value });
@@ -303,7 +317,7 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
 
       const res =  await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
         ...formstate,  
-          userId: user.userId,
+          userId: userId,
           classId
       })
 

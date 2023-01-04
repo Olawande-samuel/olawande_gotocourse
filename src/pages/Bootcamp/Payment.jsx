@@ -374,6 +374,7 @@ export const CheckoutForm = () => {
           draggable: true,
           progress: undefined,
         });
+        navigate("/payment/error");
       }
     } catch (err) {
       toast.error(err.message);
