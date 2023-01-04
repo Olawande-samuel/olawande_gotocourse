@@ -192,7 +192,7 @@ export const BootcampPayment = () => {
 
                 <div className="d-flex flex-column">
                   <span className={`fw-normal ${clsx.pay__tit}`} >Service Fee</span>
-                  <p className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}>25%</p>
+                  <p className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}>5%</p>
                 </div>
 
                 <div className="d-flex flex-column justify-content-between">
@@ -229,14 +229,14 @@ export const BootcampPayment = () => {
                           name="initialPayment"
                           id="2"
                           onChange={handleInstallmentChoice}
-                          value={(price + (price * (25 /100))) / 2 + 100}
+                          value={(price + (price * (5 /100))) / 2 + 100}
                         />
                         <label
                           htmlFor="2"
                           className="form-label generic_label ms-2 "
                         >
                           Pay in two installments of{" "}
-                          {(price + (price * (25 /100))) / 2 + 100} each
+                          {(price + (price * (5 /100))) / 2 + 100} each
                         </label>
                       </div>
                       <div className="text-center">
@@ -267,7 +267,7 @@ export const BootcampPayment = () => {
                 <div className="d-flex flex-column">
                   <span className={clsx.pay__tit}>Total</span>
                   <p className={` px-3 ${clsx.pay__inform}`}>
-                    ${price && +price + (price * (25 /100))}
+                    ${price && +price + (price * (5 /100))}
                   </p>
                 </div>
                 <button

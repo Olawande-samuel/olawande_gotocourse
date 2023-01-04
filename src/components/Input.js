@@ -1,6 +1,6 @@
 import React from "react";
 
-const Input = ({ label, type, name, handleChange, errorMessage, myclassname, readOnly, required=false, pattern, value, placeholder, ...props }) => {
+const Input = ({ label, type, name, handleChange, noValidate, errorMessage, myclassname, readOnly, required=false, pattern, value, placeholder, ...props }) => {
 
   return (
     <div className="form-group my-1" {...props}>
@@ -20,6 +20,7 @@ const Input = ({ label, type, name, handleChange, errorMessage, myclassname, rea
           pattern={pattern}
           required={required}
           autoComplete="new-password"
+          formNoValidate={noValidate}
         />
         <span className="text-danger passError" style={{fontSize:"11px"}}>{errorMessage}</span>
       </div>
