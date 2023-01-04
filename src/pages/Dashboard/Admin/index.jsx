@@ -3776,7 +3776,7 @@ export function CreateBootcamp() {
     const formData = {
       ...formstate,
       description: bio ? bio : formstate.description,
-      type:"flat"
+      type:"FLAT"
     };
     try {
       if (
