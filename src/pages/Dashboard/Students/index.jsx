@@ -553,7 +553,7 @@ export function MyClasses() {
 
                             </div>
 
-                        ) : (<p className="lead">You haven't registered for a course</p>)
+                        ) : (<p className="lead text-center">You haven't registered for a course</p>)
                         }
 
                     </div>
