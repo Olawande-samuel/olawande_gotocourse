@@ -1,7 +1,7 @@
 
 import '../classConsole/Content.css'
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import excel from '../../../../images/excel.png'
+// import empty from '../../../../images/empty.png'
 import { useAuth } from "../../../../contexts/Auth";
 import { useLocalStorage } from "../../../../hooks";
 import { useQuery } from "@tanstack/react-query"
@@ -45,30 +45,37 @@ export function MyClass() {
 export default function ConsoleClasses() {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
-    const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps }  } = useAuth();
+    const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps } } = useAuth();
     const { data, isSuccess } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
-    console.log({data});
+    console.log({ data });
     let navigate = useNavigate()
     return (
         <div className=''>
             <main className='assessments'>
                 {
-                    data?.data?.length > 0 && data?.data?.filter(item => item.status === "paid").map((x, id) => (
-                        <div className="assesstmentbox" key={x.bootcampId} style={{ cursor: "pointer" }} onClick={() => {
-                            navigate(`/student/class-console/class/${x.bootcampId}`, {
-                                state: {
-                                    bootcamp: x
-                                }
-                            })
-                        }}>
-                            <div className="excelbox">
-                                <img src={`${process.env.REACT_APP_IMAGEURL}${x.bootcampImg}`} alt="" />
-                            </div>
-                            <p>{x.bootcampName} </p>
+                    data?.data?.filter(item => item.paymentStatus === "complete")?.length > 0 ?
+                        data?.data?.filter(item => item.paymentStatus === "complete").map((x, id) => (
+                            <div className="assesstmentbox" key={x.bootcampId} style={{ cursor: "pointer" }} onClick={() => {
+                                navigate(`/student/class-console/class/${x.bootcampId}`, {
+                                    state: {
+                                        bootcamp: x
+                                    }
+                                })
+                            }}>
+                                <div className="excelbox">
+                                    <img src={`${process.env.REACT_APP_IMAGEURL}${x.bootcampImg}`} alt="" />
+                                </div>
+                                <p>{x.bootcampName} </p>
 
-                        </div>
+                        ))
+                        :
+                        // <p>no items</p>
+                        
 
-                    ))
+                    <div className="empty">
+                        <p>No Class Available</p>
+                    </div>
+
                 }
 
 

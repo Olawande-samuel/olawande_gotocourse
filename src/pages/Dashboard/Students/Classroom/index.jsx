@@ -553,6 +553,22 @@ const QuizComponent = ({ contentItem ,userdata}) => {
         answers:[]
     })
 
+    // questions:[
+    //     {
+    //         questionId: 1,
+    //         answers:[answer1id, snser2id]
+    //     },
+    //     {
+    //         questionId: 2,
+    //         answers:[answer1id]
+    //     },
+    //     {
+    //         questionId: 3,
+    //         answers:[answer1id]
+    //     },
+
+    // }]
+
     const [allAnswers, setAllAnswers] = useState([])
 
 

@@ -425,6 +425,14 @@ export function MyClasses() {
         // navigate("/bootcamps/details/"+_id);
     }
 
+    function handleNavigate(category, name, id) {
+        console.log("clicking");
+        // localStorage.setItem("gotocourse-courseId", id)
+        let courseCategory = category?.split(" ").join("-")
+        let courseName = name?.split(" ").join("-")
+        navigate(`/categories/${courseCategory}/courses/${courseName}/${id}/payment`)
+    }
+
     return (
         <Students header={"My Courses"}>
             {loading && <Loader />}
@@ -529,7 +537,7 @@ export function MyClasses() {
                                                                 </button>
                                                                 :
                                                                 <button className="d-flex align-items-center gap-2"
-                                                                    onClick={(e) => navigate("/student/payment")}
+                                                                    onClick={(e) => handleNavigate(item.category, item.bootcampName, item.bootcampId)}
                                                                 >
                                                                     <i><BiMoney /> </i>
                                                                     <span>Pay</span>
@@ -721,6 +729,7 @@ export function Wishlist() {
     const [wishlists, setWishlists] = useState([])
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
     const [search, setSearch] = useState("");
+    let navigate = useNavigate();
 
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
@@ -783,12 +792,15 @@ export function Wishlist() {
 
     console.log({ wishlists });
 
-    // const value = useMemo(() => {
-    //     return wishlists.reduce((total, current) => {
-    //         // console.log({current});
-    //         total = total + current.price
-    //     }, 0)
-    // }, [wishlists])
+    const value = useMemo(() => {
+        return wishlists?.reduce((total, current) => {
+            console.log({current});
+            return total  + current.price
+        }, 0)
+    }, [wishlists])
+
+
+
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Cart">
             <div className={clsx.students_profile}>
@@ -810,9 +822,9 @@ export function Wishlist() {
                 <div className={clsx.classes}>
                     <div className={clsx.wishlistprice}>
                         <small>Total:</small>
-                        {/* <p>{`$${value}`}</p> */}
-                        <p>$11,000</p>
-                        <Link to={`/student/wishlist-checkout`}>  <button>Checkout</button></Link>
+                        <p>{`$${value}`}</p>
+                        {/* <p>$11,000</p> */}
+                       <Link to={`/student/wishlist-checkout`}><button>Checkout</button></Link> 
 
                     </div>
                     <p style={{ padding: "1rem 0" }}>My Cart</p>
@@ -1141,13 +1153,21 @@ function DeleteModal({ id, open, handleClose }) {
 
 export function WishlistCheckOut() {
     const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { fetchWishlist }, otherFunctions: { fetchBootcamps } } = useAuth();
+    const [showStripeModal, setShowStripeModal] = useState(false);
+    const [payIntent, setPayintent] = useState("")
 
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
     const [search, setSearch] = useState("")
     const [wishlists, setWishlists] = useState([])
 
+    const checkout = () => {
+        //generate payIntent
+        //setPayintent(data.payIntent)
 
+       //pay
+       //send
+    }
     const flag = useRef(false);
     async function getWishList() {
         try {
@@ -1206,8 +1226,8 @@ export function WishlistCheckOut() {
 
 
     const value = useMemo(() => {
-        return wishlists.reduce((total, current) => {
-            total = total + current.price
+        return wishlists?.reduce((total, current) => {
+            return total + current.price
         }, 0)
     }, [wishlists])
 
@@ -1233,6 +1253,11 @@ export function WishlistCheckOut() {
 
                 </header>
 
+                <div>
+               { showStripeModal && <PaymentModal token={payIntent} setShowStripeModal={setShowStripeModal} /> }
+
+                </div>
+
 
 
 
@@ -1243,13 +1268,13 @@ export function WishlistCheckOut() {
                         <p style={{ padding: "1rem 0", fontWeight: "800" }}>Order details</p>
                         {
                             wishlists?.map((item, index) => (
-                                <div key={item.courseId} className="w-100 d-flex justify-content-between align-center">
+                                <div key={item.courseId} className="w-100 d-flex justify-content-between align-center py-2">
                                     <div className="wishlistitemname">
                                         {item.courseName}
 
                                     </div>
                                     <div className="wishlistiteprice">
-                                        {item.coursePrice}
+                                        ${item.price}
                                     </div>
                                 </div>
                             ))
@@ -1257,11 +1282,11 @@ export function WishlistCheckOut() {
 
                         <div className="w-100 d-flex align-center justify-content-between py-3" style={{ fontSize: "1.5rem", fontWeight: "600" }}>
                             <span>Total</span>
-                            {/* <span>${value}</span> */}
+                            <span>${value}</span>
 
                         </div>
 
-                        <Link to={`/student/wishlist-checkout`}>  <button>Checkout</button></Link>
+                        <button onClick={checkout}>Checkout</button>
 
 
                     </div>
