@@ -104,7 +104,12 @@ const VideoChatScreen = () => {
     // USER VERIFICATION
     const {generalState, setGeneralState, studentFunctions:{fetchBootcamps}, teacherFunctions:{fetchBootcamps: fetchTeacherBootcamps}} = useAuth()
 
-    
+    useEffect(() => {
+        if(userProfile?.isAdmin){
+            setIsPermitted(true)
+        }
+    },[userProfile?.isAdmin])
+
     const fetchStudentApplications = useQuery(["fetchStudentApplications", userProfile.token], ()=>fetchBootcamps(userProfile.token), {
         enabled: userProfile.userType === "student",
         onSuccess: (res)=> {
@@ -572,10 +577,10 @@ const VideoChatScreen = () => {
     }
 
     useEffect(() => {
-        // if(isPermitted){
+        if(isPermitted){
             initRoom()
             connectionUserId.current = userProfile.userId    
-        // }
+        }
 
     }, [userProfile.userId, isPermitted])
     
