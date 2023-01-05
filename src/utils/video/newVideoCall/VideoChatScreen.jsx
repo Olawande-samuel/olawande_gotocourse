@@ -58,6 +58,7 @@ const VideoChatScreen = () => {
     const [handRaiseList, setHandRaiseList] = useState([]);
     const [userCount, setUserCount] = useState(0);
     const [openUploadStatus, setOpenUploadStatus] = useState(false);
+    const [handRaised, setHandRaised] = useState(false);
 
     const {classId} = useParams()
 
@@ -555,7 +556,11 @@ const VideoChatScreen = () => {
         socket.on('incoming-unraising-hand', userData => {
 
             console.log("incoming socket", userData)
-            sessionStorage.setItem(HandKey, JSON.stringify([...handRaiseList,  userData]));
+            let newList = sessionStorage.getItem(HandKey)
+            // console.log(u)
+            // let list = JSON.parse(newList)?.filter(item => item.)
+
+            // sessionStorage.setItem(HandKey, JSON.stringify([...handRaiseList,  userData]));
             // toast.info(`${userData.name} raised their hand`)
         })
 
@@ -664,6 +669,8 @@ const VideoChatScreen = () => {
 
 
     function raiseHand(){
+        setHandRaised(true)
+
         socket.emit('client-raise-hand', roomId, {
             name: `${userProfile.firstName} ${userProfile.lastName}`,
             img: userProfile.profileImg,
@@ -697,11 +704,19 @@ const VideoChatScreen = () => {
      */
 
     function unRaiseHand(){
+        setHandRaised(false)
         socket.emit('client-unraise-hand', roomId,{
             name: `${userProfile.firstName} ${userProfile.lastName}`,
             img: userProfile.profileImg,
             id: userProfile.userId
         })
+        
+        let handStore = sessionStorage.getItem(HandKey)
+        let currentList = JSON.parse(handStore)
+        let newList = currentList.filter(item => item.name !== `${userProfile.firstName} ${userProfile.lastName}`)
+
+        sessionStorage.setItem(HandKey, JSON.stringify(newList));
+        
     }
 
    
@@ -771,7 +786,7 @@ const VideoChatScreen = () => {
                             <ControlItem isOn={true} className="d-flex d-sm-none" onClick={()=>setOpenToolBox(true)}>
                                 <HiDotsVertical size="1.5rem" />
                             </ControlItem>
-                            <ControlItem isOn={true} onClick={raiseHand}>
+                            <ControlItem isOn={true} onClick={ handRaised ? unRaiseHand : raiseHand}>
                                 <HiOutlineHand size="1.5rem" />
                             </ControlItem>
                             <ControlItem onClick={togggleAudio} isOn={callSettingsState.audio}>
@@ -943,6 +958,7 @@ function Users({open, setOpen, profileData }) {
         boxShadow: 24,
         color:"#fff",
         p: 2,
+        overflowY:"auto"
     }
     const HandKey = "gotocourse_hand_raised_users"  
     const session = sessionStorage.getItem(HandKey)
