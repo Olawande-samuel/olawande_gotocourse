@@ -110,11 +110,9 @@ const VideoChatScreen = () => {
     const fetchStudentApplications = useQuery(["fetchStudentApplications", userProfile.token], ()=>fetchBootcamps(userProfile.token), {
         enabled: userProfile.userType === "student",
         onSuccess: (res)=> {
-            console.log(res)
             if(res.statusCode === 1){
                 const findMyClasss = res.data.find(item => item.bootcampId === classId)
-                console.log(findMyClasss)
-                if(findMyClasss.bootcampId && (findMyClasss.status === "paid" || findMyClasss.paymentStatus === "complete")){
+                if(findMyClasss.bootcampId && (findMyClasss.status === "paid" || findMyClasss.paymentStatus === "paid")){
                     // turn off loading state
                     // show status
                     setIsPermitted(true)
@@ -554,12 +552,10 @@ const VideoChatScreen = () => {
         socket.on('incoming-unraising-hand', userData => {
 
             console.log("incoming socket", userData)
-            let newList = sessionStorage.getItem(HandKey)
-            // console.log(u)
-            // let list = JSON.parse(newList)?.filter(item => item.)
+            let currentList = sessionStorage.getItem(HandKey)
+            let newList = currentList.filter(item => item.name !== `${userData.firstName} ${userData.lastName}`)
 
-            // sessionStorage.setItem(HandKey, JSON.stringify([...handRaiseList,  userData]));
-            // toast.info(`${userData.name} raised their hand`)
+            sessionStorage.setItem(HandKey, JSON.stringify(newList));
         })
 
         socket.on('incoming-raising-hand', userData => {
@@ -598,10 +594,14 @@ const VideoChatScreen = () => {
 
     // end call
     function endCall() {
-        localStream.current.getTracks().forEach((track) => {
-            track.stop();
-        })
-        navigate(-1)
+        if(localStream.current.getTracks().length > 0){
+            localStream.current.getTracks().forEach((track) => {
+                track.stop();
+            })
+            navigate(-1)
+        }else {
+            navigate("/learn-with-gotocourse")
+        }
        
     }
 
