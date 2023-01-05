@@ -58,6 +58,7 @@ const VideoChatScreen = () => {
     const [handRaiseList, setHandRaiseList] = useState([]);
     const [userCount, setUserCount] = useState(0);
     const [openUploadStatus, setOpenUploadStatus] = useState(false);
+    const [handRaised, setHandRaised] = useState(false);
 
     const {classId} = useParams()
 
@@ -90,8 +91,12 @@ const VideoChatScreen = () => {
     })
 
     let data = sessionStorage.getItem(HandKey);
+
     useEffect(()=>{
-        setHandRaiseList(JSON.parse(data))
+        if(data){
+            console.log({data})
+            setHandRaiseList(JSON.parse(data))
+        }
 
     }, [data])
 
@@ -115,7 +120,7 @@ const VideoChatScreen = () => {
                     setIsPermitted(true)
                     return
                 }
-                <Navigate  to="/learn-with-gotocourse" replace={true} />
+                navigate("/learn-with-gotocourse")
             }
         },
         onError: (res)=> {
@@ -136,7 +141,7 @@ const VideoChatScreen = () => {
                         setIsPermitted(true)
                         return
                     }
-                    <Navigate  to="/learn-with-gotocourse" replace={true} />
+                    navigate("/learn-with-gotocourse")
                 }
             },
             onError: (res)=> {
@@ -398,6 +403,11 @@ const VideoChatScreen = () => {
         myPeer.current.on('open', userId => {
             socket.emit('join-video-room', roomId, userId)
             setUserCount(userCount + 1)
+            // console.log(user joined room)    
+            console.log("user length", peers.current)            
+            console.log("user length", Object.keys(peers.current).length)
+
+
 
         })
 
@@ -414,6 +424,8 @@ const VideoChatScreen = () => {
 
                 peers.current[call.peer] = call
 
+                console.log("user length", peers.current)            
+                console.log("user length", Object.keys(peers.current).length)
                 call.on('stream', userVideoStream => {
                     addVideoStream(remoteVideoWrapper, userVideoStream)
                 })
@@ -448,8 +460,11 @@ const VideoChatScreen = () => {
         })
 
         socket.on('new-user-join-video-room', (userId) => {
-            
-            setUserCount(userCount + 1)
+            console.log(`new ${userId} joined room`)
+
+            console.log("user length", peers.current)
+            console.log("user length", Object.keys(peers.current).length)
+
             if (userId.split('-')[0] !== "presentation") {
                 connectToNewUser(userId, localStream.current)
                 if (presentationStream.current?.getVideoTracks()[0].enabled) {
@@ -504,8 +519,9 @@ const VideoChatScreen = () => {
         }
 
         socket.on('user-disconnected', userId => {
-            
+            console.log('user disconnected out')
             if (peers.current[userId]) {
+                console.log('user disconnected in')
                 peers.current[userId].close()
 
                 // if (!presentationPeers.current[userId]) {
@@ -537,6 +553,20 @@ const VideoChatScreen = () => {
             toast.info(`${userData.name} raised their hand`)
             // window.alert("someone raised their hand")
         })
+        socket.on('incoming-unraising-hand', userData => {
+
+            console.log("incoming socket", userData)
+            let newList = sessionStorage.getItem(HandKey)
+            // console.log(u)
+            // let list = JSON.parse(newList)?.filter(item => item.)
+
+            // sessionStorage.setItem(HandKey, JSON.stringify([...handRaiseList,  userData]));
+            // toast.info(`${userData.name} raised their hand`)
+        })
+
+        socket.on('incoming-raising-hand', userData => {
+            // window.alert("someone raised their hand")
+        })
 
     }
 
@@ -562,6 +592,12 @@ const VideoChatScreen = () => {
     }, [userProfile.userId, isPermitted])
     
     
+    useEffect(()=>{
+
+        console.log("user length",Object.keys(peers.current).length)
+        console.log("user length obj",peers)
+    },[peers])
+
     // end call
     function endCall() {
         localStream.current.getTracks().forEach((track) => {
@@ -633,18 +669,29 @@ const VideoChatScreen = () => {
 
 
     function raiseHand(){
+        setHandRaised(true)
+
         socket.emit('client-raise-hand', roomId, {
             name: `${userProfile.firstName} ${userProfile.lastName}`,
             img: userProfile.profileImg,
             id: userProfile.userId
         })
         toast.info("You raised your hand")
-        
-        sessionStorage.setItem(HandKey, JSON.stringify([...handRaiseList,  {
-                name: `${userProfile.firstName} ${userProfile.lastName}`,
-                img: userProfile.profileImg    
-            }
-        ]));
+        console.log(handRaiseList)
+        if(handRaiseList !== null){
+            sessionStorage.setItem(HandKey, JSON.stringify([...handRaiseList,  {
+                    name: `${userProfile.firstName} ${userProfile.lastName}`,
+                    img: userProfile.profileImg    
+                }
+            ]));
+        }else {
+            sessionStorage.setItem(HandKey, JSON.stringify([{
+                    name: `${userProfile.firstName} ${userProfile.lastName}`,
+                    img: userProfile.profileImg    
+                }
+            ]));
+
+        }
 
     }
  
@@ -655,6 +702,22 @@ const VideoChatScreen = () => {
      * 
      * add 'lower hand' permission to roomOwner
      */
+
+    function unRaiseHand(){
+        setHandRaised(false)
+        socket.emit('client-unraise-hand', roomId,{
+            name: `${userProfile.firstName} ${userProfile.lastName}`,
+            img: userProfile.profileImg,
+            id: userProfile.userId
+        })
+        
+        let handStore = sessionStorage.getItem(HandKey)
+        let currentList = JSON.parse(handStore)
+        let newList = currentList.filter(item => item.name !== `${userProfile.firstName} ${userProfile.lastName}`)
+
+        sessionStorage.setItem(HandKey, JSON.stringify(newList));
+        
+    }
 
    
     if(!isPermitted){
@@ -723,7 +786,7 @@ const VideoChatScreen = () => {
                             <ControlItem isOn={true} className="d-flex d-sm-none" onClick={()=>setOpenToolBox(true)}>
                                 <HiDotsVertical size="1.5rem" />
                             </ControlItem>
-                            <ControlItem isOn={true} onClick={raiseHand}>
+                            <ControlItem isOn={true} onClick={ handRaised ? unRaiseHand : raiseHand}>
                                 <HiOutlineHand size="1.5rem" />
                             </ControlItem>
                             <ControlItem onClick={togggleAudio} isOn={callSettingsState.audio}>
@@ -895,6 +958,7 @@ function Users({open, setOpen, profileData }) {
         boxShadow: 24,
         color:"#fff",
         p: 2,
+        overflowY:"auto"
     }
     const HandKey = "gotocourse_hand_raised_users"  
     const session = sessionStorage.getItem(HandKey)
@@ -905,7 +969,10 @@ function Users({open, setOpen, profileData }) {
     useEffect(() => {
         const sessionData = JSON.parse(session)
 
-        setHandRaiseList(sessionData)   
+        if(sessionData){
+            setHandRaiseList(sessionData)   
+
+        }
     }, [session])
 
     return (

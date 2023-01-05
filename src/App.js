@@ -433,21 +433,28 @@ function App() {
                     <Route path="myclasses" element={<Out />}>
                       <Route index element={<ConsoleClasses />} />
                       <Route path=":id" element={<StudentChatModule />} />
-                      {/* <Route path=":id/chat" element={<ActiveChat />} /> */}
-                      <Route path="mail" element={<Out />}> 
-                        <Route index element={<ChatComponent />} />
-                        <Route path="details" element={<StudentGroupContent />} />
-                        <Route path="group/:groupID" element={<StudentGroupContent />} />
-                        <Route path="chat/:userId" element={<MailDetail />} />
-                     </Route>
+                        <Route path="mail" element={<Out />}> 
+                          <Route index element={<ChatComponent />} />
+                          <Route path="details" element={<StudentGroupContent />} />
+                          <Route path="group/:groupID" element={<StudentGroupContent />} />
+                          <Route path="chat/:userId" element={<MailDetail />} />
+                      </Route>
+                      <Route path="class" element={<Out />}>
+                        <Route path=":classId" element={<Out />}>
+                          <Route path="live-class" element={<Out />}>
+                            <Route index element={<LiveClassInfo />} />
+                            <Route path="live" element={<LiveClass />} />
+                            <Route path="connect/:liveId" element={<Out />}>
+                              <Route index element={<Intermission />} />
+                              <Route path="stream" element={<VideDiv />} />
+                            </Route>
+                          </Route>
+                        </Route>
+                      </Route>
                     </Route>
                     <Route path="assessments" element={<ConsoleAssessments />} />
-                    <Route path="liveclass" element={<Out />} />
                   </Route>
-                  <Route
-                    path="class-console/class/:id"
-                    element={<StudentClassroom />}
-                  />
+                  <Route path="class-console/class/:id" element={<StudentClassroom />} />
                 </Route>
   
                 {/* TEST CONSOLE */}

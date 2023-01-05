@@ -67,8 +67,6 @@ export default function ConsoleClasses() {
                                 </div>
                                 <p>{x.bootcampName} </p>
 
-                            </div>
-
                         ))
                         :
                         // <p>no items</p>
