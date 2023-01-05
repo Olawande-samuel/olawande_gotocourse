@@ -104,12 +104,13 @@ const VideoChatScreen = () => {
     // USER VERIFICATION
     const {generalState, setGeneralState, studentFunctions:{fetchBootcamps}, teacherFunctions:{fetchBootcamps: fetchTeacherBootcamps}} = useAuth()
 
-    // useEffect(() => {
-    //     if(userProfile?.isAdmin){
-    //         console.log("isAdmin")
-    //         setIsPermitted(true)
-    //     }
-    // },[userProfile?.isAdmin])
+    useEffect(() => {
+        if(userProfile?.isAdmin){
+            console.log("isAdmin")
+            initRoom()
+            connectionUserId.current = userProfile.userId  
+        }
+    },[userProfile?.isAdmin])
 
     const fetchStudentApplications = useQuery(["fetchStudentApplications", userProfile.token], ()=>fetchBootcamps(userProfile.token), {
         enabled: userProfile.userType === "student",
@@ -119,7 +120,9 @@ const VideoChatScreen = () => {
                 if(findMyClasss.bootcampId && (findMyClasss.status === "paid" || findMyClasss.paymentStatus === "paid")){
                     // turn off loading state
                     // show status
-                    setIsPermitted(true)
+                    // setIsPermitted(true)
+                    initRoom()
+                    connectionUserId.current = userProfile.userId  
                     return
                 }
                 navigate("/learn-with-gotocourse")
@@ -138,7 +141,9 @@ const VideoChatScreen = () => {
                     if(findMyClasss.bootcampId){
                         // turn off loading state
                         // show status
-                        setIsPermitted(true)
+                        // setIsPermitted(true)
+                        initRoom()
+                        connectionUserId.current = userProfile.userId  
                         return
                     }
                     navigate("/learn-with-gotocourse")
@@ -577,13 +582,13 @@ const VideoChatScreen = () => {
         // ask you to log in
     }
 
-    useEffect(() => {
-        // if(isPermitted){
-            initRoom()
-            connectionUserId.current = userProfile.userId    
-        // }
+    // useEffect(() => {
+    //     // if(isPermitted){
+    //         initRoom()
+    //         connectionUserId.current = userProfile.userId    
+    //     // }
 
-    }, [userProfile.userId, isPermitted])
+    // }, [userProfile.userId, isPermitted])
     
     
 
