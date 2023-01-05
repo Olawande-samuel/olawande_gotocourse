@@ -346,6 +346,9 @@ const VideoChatScreen = () => {
             socket.emit('join-video-room', roomId, userId)
             console.log("user joined room") ;
         })
+        myPeer.current.on('connect', conn => {
+            console.log({conn}) ;
+        })
 
         myPeer.current.on('call', call => {
             if (call.peer.split('-')[0] !== "presentation") {
@@ -396,10 +399,10 @@ const VideoChatScreen = () => {
         })
 
         socket.on('new-user-join-video-room', (userId) => {
-            console.log(`new ${userId} joined room`)
+            console.log(`new ${userId} joined room`) 
 
-            console.log("user length", peers.current)
-            console.log("user length", Object.keys(peers.current).length)
+            console.log("peer length 1", peers.current)
+            console.log("user length 2", Object.keys(peers.current).length)
 
             if (userId.split('-')[0] !== "presentation") {
                 connectToNewUser(userId, localStream.current)
