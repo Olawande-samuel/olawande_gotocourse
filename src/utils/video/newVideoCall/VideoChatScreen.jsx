@@ -48,6 +48,7 @@ const style = {
 
 const VideoChatScreen = () => {
     const HandKey = "gotocourse_hand_raised_users"
+    const MsgKey = "gotocourse_in_app_chat"
     const { socket, sendPing } = useSocket()
     const location = useLocation();
     const { getItem } = useLocalStorage()
@@ -480,7 +481,15 @@ const VideoChatScreen = () => {
             console.log("incoming-message", userData)
             if (userData) {
                 setMessages([...messages, userData])
+                let previousMessages = sessionStorage.getItem(MsgKey)
+                if(previousMessages){
+                    let prevArray = JSON.parse(previousMessages);
+                    sessionStorage.setItem(MsgKey, JSON.stringify([...prevArray, userData]))
+                }else {
+                    sessionStorage.setItem(MsgKey, JSON.stringify([userData]))
+                }
                 // messages.push(userData)
+
             }
         })
         socket.on('incoming-raising-hand', userData => {
@@ -560,20 +569,35 @@ const VideoChatScreen = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         if(!value) return;
+        let userData = {
+            value,
+            name: `${userProfile.firstName} ${userProfile.lastName}`,
+            mine:true,
+        }
+
         setMessages([
             ...messages,
             {
                 value,
                 name: `${userProfile.firstName} ${userProfile.lastName}`,
                 mine:true,
-            }])
-        // messages.push(value)
-        toast.info(`Incoming message: ${userProfile.firstName} ${userProfile.lastName} - ${value}`)
+            }
+        ])
+        toast.info(`You: ${userProfile.firstName} ${userProfile.lastName} - ${value}`)
         socket.emit('client-message', roomId, {
             value,
             name: `${userProfile.firstName} ${userProfile.lastName}`,
 
         })
+        let previousMessages = sessionStorage.getItem(MsgKey)
+        if(previousMessages){
+            let prevArray = JSON.parse(previousMessages);
+            sessionStorage.setItem(MsgKey, JSON.stringify([...prevArray, userData]))
+        }else {
+            sessionStorage.setItem(MsgKey, JSON.stringify([userData]))
+        }
+        
+
         setValue("")
     };
 
@@ -656,13 +680,24 @@ const VideoChatScreen = () => {
         
     }
 
+    const chatMessages = useMemo(()=>{
+        let allMsgs = sessionStorage.getItem(MsgKey)
+        let data
+        if(allMsgs){
+            data = JSON.parse(allMsgs)
+        }
+        console.log({data})
+         return data
+    },[messages])
    
-    // useEffect(() => {        
-    //     if(peers.current){
-    //         console.log("user length", Object.keys(peers.current).length)
 
-    //     }
-    // }, [peers.current])
+    console.log({chatMessages})
+    useEffect(() => {        
+        if(peers.current){
+            console.log("user length", Object.keys(peers.current).length)
+
+        }
+    }, [peers.current])
 
     // if(!isPermitted){
     //     return <Wrapper> <Loader /> </Wrapper>
@@ -794,7 +829,7 @@ const VideoChatScreen = () => {
                         Live-Chat
                     </header>
                     <div className="boxtop">
-                        {messages.length > 0 && messages.map(x => (
+                        {chatMessages?.length > 0 && chatMessages?.map(x => (
                             <div className={`message ${x.mine &&"mine"}`}> 
                             <p style={{color: "#0C2191", marginBottom:".5rem"}}>{x.name}</p>
                             <span> {x.value}</span>   
@@ -1083,6 +1118,8 @@ function UploadStatus({open, setOpen, progress }) {
             </Wrapper>
         )
     }
+
+
 
     return (
         <VideoChatScreen />
