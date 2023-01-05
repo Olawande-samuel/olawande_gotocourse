@@ -392,13 +392,7 @@ const VideoChatScreen = () => {
         console.log({myPeer})
         myPeer.current.on('open', userId => {
             socket.emit('join-video-room', roomId, userId)
-            setUserCount(userCount + 1)
-            // console.log(user joined room)    
-            console.log("user length", peers.current)            
-            console.log("user length", Object.keys(peers.current).length)
-
-
-
+            console.log("user joined room") ;
         })
 
         myPeer.current.on('call', call => {
@@ -509,7 +503,7 @@ const VideoChatScreen = () => {
         }
 
         socket.on('user-disconnected', userId => {
-            console.log('user disconnected out')
+            console.log(`user ${userId} disconnected out`)
             if (peers.current[userId]) {
                 console.log('user disconnected in')
                 peers.current[userId].close()
@@ -532,6 +526,7 @@ const VideoChatScreen = () => {
         })
 
         socket.on('incoming-message', userData => {
+            console.log("incoming-message", userData)
             if (userData) {
                 setMessages([...messages, userData])
                 // messages.push(userData)
@@ -552,17 +547,16 @@ const VideoChatScreen = () => {
             sessionStorage.setItem(HandKey, JSON.stringify(newList));
         })
 
-        socket.on('incoming-raising-hand', userData => {
-            // window.alert("someone raised their hand")
-        })
+       
 
     }
 
     useEffect(()=>{
-        
         console.log("myPeer", myPeer)
 
     },[myPeer.current])
+
+
 
     const checkPeerUsers = () => {
         console.log(presentationPeers.current)
@@ -578,20 +572,14 @@ const VideoChatScreen = () => {
     }
 
     useEffect(() => {
-        if(isPermitted){
+        // if(isPermitted){
             initRoom()
             connectionUserId.current = userProfile.userId    
-        }
+        // }
 
     }, [userProfile.userId, isPermitted])
     
     
-    useEffect(()=>{
-        
-        console.log("user length",Object.keys(peers.current).length)
-        console.log("user length obj",peers)
-
-    },[peers.current])
 
     // end call
     function endCall() {
@@ -725,9 +713,9 @@ const VideoChatScreen = () => {
         }
     }, [peers.current])
 
-    if(!isPermitted){
-        return <Wrapper> <Loader /> </Wrapper>
-    }
+    // if(!isPermitted){
+    //     return <Wrapper> <Loader /> </Wrapper>
+    // }
 
     return (
         <Wrapper>
