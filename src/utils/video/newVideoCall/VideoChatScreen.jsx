@@ -115,7 +115,7 @@ const VideoChatScreen = () => {
                     setIsPermitted(true)
                     return
                 }
-                <Navigate  to="/learn-with-gotocourse" replace={true} />
+                navigate("/learn-with-gotocourse")
             }
         },
         onError: (res)=> {
@@ -136,7 +136,7 @@ const VideoChatScreen = () => {
                         setIsPermitted(true)
                         return
                     }
-                    <Navigate  to="/learn-with-gotocourse" replace={true} />
+                    navigate("/learn-with-gotocourse")
                 }
             },
             onError: (res)=> {

@@ -53,7 +53,7 @@ export default function ConsoleClasses() {
         <div className=''>
             <main className='assessments'>
                 {
-                    data?.data?.length > 0 && data?.data?.filter(item => item.paymentStatus === "complete").map((x, id) => (
+                    data?.data?.length > 0 && data?.data?.filter(item => item.status === "paid").map((x, id) => (
                         <div className="assesstmentbox" key={x.bootcampId} style={{ cursor: "pointer" }} onClick={() => {
                             navigate(`/student/class-console/class/${x.bootcampId}`, {
                                 state: {
