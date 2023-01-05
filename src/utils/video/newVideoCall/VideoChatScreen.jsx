@@ -5,8 +5,8 @@ import { HiDotsVertical, HiOutlineHand, HiOutlinePhone } from 'react-icons/hi'
 import { IoAdd } from 'react-icons/io5'
 import { MdOutlineMessage, MdPresentToAll } from 'react-icons/md'
 import { VscRecord } from 'react-icons/vsc'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
-import useQuery from '../useQuery'
+import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
+import useSelfQuery from '../useQuery'
 import useSocket from '../useSocket'
 import { Wrapper, Content, HeadBar, VideoWrapper, AddPeople, ControlItem, ControlWrapper, UserCallBlock, UserPresentation, StreamWrapper, ScreenShare, UserHeader, SearchBox, HandList, HandUser, UserListWrapper, UserList, } from './style'
 import { MediaConnection, Peer } from "peerjs";
@@ -23,10 +23,11 @@ import { FaShapes } from 'react-icons/fa'
 import sharing from "../../../images/degree.png"
 import { width } from '@mui/system'
 import { toast, ToastContainer } from 'react-toastify'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAuth } from '../../../contexts/Auth'
 import useRecordUpload from "./hook/upload.jsx"
 import zIndex from '@mui/material/styles/zIndex'
+import Loader from '../../../components/Loader'
 
 const style = {
     position: 'absolute',
@@ -71,8 +72,12 @@ const VideoChatScreen = () => {
         video: true,
         audio: true,
     })
+
+    const [isPermitted, setIsPermitted] = useState(false)
+
+
     const navigate = useNavigate()
-    const query = useQuery();
+    const query = useSelfQuery();
     let roomId = query.get('room')
     let isRoomOwner = false;
 
@@ -89,6 +94,63 @@ const VideoChatScreen = () => {
         setHandRaiseList(JSON.parse(data))
 
     }, [data])
+
+
+
+    // USER VERIFICATION
+    const {generalState, setGeneralState, studentFunctions:{fetchBootcamps}, teacherFunctions:{fetchBootcamps: fetchTeacherBootcamps}} = useAuth()
+
+    console.log("hello everyone!!!!!")
+    
+    const fetchStudentApplications = useQuery(["fetchStudentApplications", userProfile.token], ()=>fetchBootcamps(userProfile.token), {
+        enabled: userProfile.userType === "student",
+        onSuccess: (res)=> {
+            console.log(res)
+            if(res.statusCode === 1){
+                const findMyClasss = res.data.find(item => item.bootcampId === classId)
+                console.log(findMyClasss)
+                if(findMyClasss.bootcampId){
+                    // turn off loading state
+                    // show status
+                    setIsPermitted(true)
+                    return
+                }
+                <Navigate  to="/learn-with-gotocourse" replace={true} />
+            }
+        },
+        onError: (res)=> {
+            console.log(res)
+        },
+    })
+
+    const fetchTeacherApplications = useQuery(["fetchTeacherApplications", userProfile.token], ()=>fetchTeacherBootcamps(userProfile.token), {
+            enabled: userProfile.userType === "teacher", 
+            onSuccess: (res)=> {
+                console.log({res})
+                if(res.statusCode === 1){
+                    const findMyClasss = res.data.find(item => item.bootcampId === classId)
+                    console.log(findMyClasss)
+                    if(findMyClasss.bootcampId){
+                        // turn off loading state
+                        // show status
+                        setIsPermitted(true)
+                        return
+                    }
+                    <Navigate  to="/learn-with-gotocourse" replace={true} />
+                }
+            },
+            onError: (res)=> {
+                console.log(res)
+            },
+        }
+    )
+    console.log({fetchStudentApplications})
+    console.log({fetchTeacherApplications})
+    console.log("hello everyone once again!!!!!")
+
+
+   
+
 
     const chekForVideoRoom = async () => {
         if (location?.state?.owner) {
@@ -200,6 +262,7 @@ const VideoChatScreen = () => {
             startWebCam()
         });
     }
+
     const streamRecorder = useRef();
     const recordedVideoRef = useRef();
     const [showRecordedMedia, setShowRecordedMedia] = useState(false)
@@ -256,6 +319,7 @@ const VideoChatScreen = () => {
     const myPeer = useRef(null);
     const presentationPeers = useRef({})
 
+    // FOR SCREEN SHARE
     function startCapture() {
         const presentationId = "presentation-" + connectionUserId.current
 
@@ -490,9 +554,12 @@ const VideoChatScreen = () => {
     }
 
     useEffect(() => {
-        initRoom()
-        connectionUserId.current = userProfile.userId
-    }, [userProfile.userId])
+        if(isPermitted){
+            initRoom()
+            connectionUserId.current = userProfile.userId    
+        }
+        
+    }, [userProfile.userId, isPermitted])
     
     
     // end call
@@ -501,12 +568,7 @@ const VideoChatScreen = () => {
             track.stop();
         })
         navigate(-1)
-        // sessionStorage.clear()
-        // userProfile.userType === "student" ?
-        // window.location.assign("/student")
-        // :
-        // userProfile.userType === "teacher" ?
-        // window.location.assign("/teacher") : userProfile.userType === "admin" ? window.location.assign("/admin") : window.location.assign("/")
+       
     }
 
 
@@ -593,6 +655,12 @@ const VideoChatScreen = () => {
      * 
      * add 'lower hand' permission to roomOwner
      */
+
+   
+    if(!isPermitted){
+        return <Wrapper> <Loader /> </Wrapper>
+    }
+
     return (
         <Wrapper>
             <ToastContainer
@@ -682,13 +750,13 @@ const VideoChatScreen = () => {
                                 startRecording={startRecording}
                                 stopRecording={stopRecording}
                                 startCapture={startCapture}
-                             />
-                             <Users
-                              open={openUserBox}
-                              setOpen={setOpenUserBox}
-                              profileData={userProfile}
-                             
-                             />
+                                />
+                                <Users
+                                open={openUserBox}
+                                setOpen={setOpenUserBox}
+                                profileData={userProfile}
+                                
+                                />
                         </div>
                         <div className="controls right_controls d-sm-flex d-none">
                             {
@@ -741,6 +809,7 @@ const VideoChatScreen = () => {
             <UploadStatus open={loading} setOpen={setOpenUploadStatus} progress={progress} />
         </Wrapper>
     )
+
 }
 
 
