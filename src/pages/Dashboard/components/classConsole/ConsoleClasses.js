@@ -66,7 +66,7 @@ export default function ConsoleClasses() {
                                     <img src={`${process.env.REACT_APP_IMAGEURL}${x.bootcampImg}`} alt="" />
                                 </div>
                                 <p>{x.bootcampName} </p>
-
+                            </div>
                         ))
                         :
                         // <p>no items</p>
