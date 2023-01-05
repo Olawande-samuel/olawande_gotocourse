@@ -106,6 +106,7 @@ const VideoChatScreen = () => {
 
     useEffect(() => {
         if(userProfile?.isAdmin){
+            console.log("isAdmin")
             setIsPermitted(true)
         }
     },[userProfile?.isAdmin])
@@ -577,10 +578,10 @@ const VideoChatScreen = () => {
     }
 
     useEffect(() => {
-        if(isPermitted){
+        // if(isPermitted){
             initRoom()
             connectionUserId.current = userProfile.userId    
-        }
+        // }
 
     }, [userProfile.userId, isPermitted])
     
