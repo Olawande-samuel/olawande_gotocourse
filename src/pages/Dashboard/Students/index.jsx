@@ -794,8 +794,8 @@ export function Wishlist() {
 
     const value = useMemo(() => {
         return wishlists?.reduce((total, current) => {
-            console.log({current});
-            return total  + current.price
+            console.log({ current });
+            return total + current.price
         }, 0)
     }, [wishlists])
 
@@ -824,7 +824,7 @@ export function Wishlist() {
                         <small>Total:</small>
                         <p>{`$${value}`}</p>
                         {/* <p>$11,000</p> */}
-                       <Link to={`/student/wishlist-checkout`}><button>Checkout</button></Link> 
+                        <Link to={`/student/wishlist-checkout`}><button>Checkout</button></Link>
 
                     </div>
                     <p style={{ padding: "1rem 0" }}>My Cart</p>
@@ -1162,11 +1162,14 @@ export function WishlistCheckOut() {
     const [wishlists, setWishlists] = useState([])
 
     const checkout = () => {
+        //get all ids
+      let ids =  wishlists.map(wishlist => wishlist.courseId)
+
         //generate payIntent
         //setPayintent(data.payIntent)
 
-       //pay
-       //send
+        //pay
+        //send
     }
     const flag = useRef(false);
     async function getWishList() {
@@ -1254,7 +1257,7 @@ export function WishlistCheckOut() {
                 </header>
 
                 <div>
-               { showStripeModal && <PaymentModal token={payIntent} setShowStripeModal={setShowStripeModal} /> }
+                    {showStripeModal && <PaymentModal token={payIntent} setShowStripeModal={setShowStripeModal} />}
 
                 </div>
 
@@ -1912,8 +1915,8 @@ export const Dashboard = () => {
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
     const { data: myenrolledcourses, isSuccess: mycoursesuccess } = useQuery(["fetch my enrolledclasses"], () => fetchMyClasses(userdata?.token))
     // const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
-    const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps(),{
-        
+    const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps(), {
+
     });
     // console.log({data})
     console.log("data", myenrolledcourses?.data);
@@ -2035,9 +2038,9 @@ function UpcomingCourses({ data }) {
     let userdata = getItem(KEY);
 
     const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
-    const second = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive).sort((a,b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-    const all =[...first, ...second];
-    console.log({second});
+    const second = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    const all = [...first, ...second];
+    console.log({ second });
 
     function handleCourseSelect(e, item) {
         e.preventDefault()
@@ -2175,10 +2178,10 @@ function AvailableCourses({ data }) {
     }
     // console.log({ data });
 
-         const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
-         const second = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive).sort((a,b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-         const all =[...first, ...second];
-     
+    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+    const second = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    const all = [...first, ...second];
+
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>

@@ -4711,12 +4711,19 @@ export const consoleFunctions = {
             }
         }
     },
-    markAsCompleted: async function (token, id, fileId) {
+    markAsCompleted: async function (token, id, fileId, type) {
 
         try {
-            const res = await axios.patch(`${baseURL}/classes/student/contents/files/mark/completed/${id}`, {
-                fileId
-            },
+            let payload = {
+                fileId:fileId,     
+            } 
+            if(type === "notes"){
+                   payload.noteId = fileId 
+            }
+            const res = await axios.patch(`${baseURL}/classes/student/contents/${type}/mark/completed/${id}`, {
+               ...payload 
+            }
+               ,
 
                 {
                     headers: {

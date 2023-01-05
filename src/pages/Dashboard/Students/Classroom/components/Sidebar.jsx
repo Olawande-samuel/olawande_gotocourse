@@ -91,6 +91,7 @@ const Sidebar = ({ modules,setContents,setPickedType,reduceContent, setActive, a
 }) => {
     const navigate = useNavigate()
     let elementRef = createRef(null)
+    console.log({progress});
 
     const ProgressResult = useMemo(() => {
         let result = 0;
