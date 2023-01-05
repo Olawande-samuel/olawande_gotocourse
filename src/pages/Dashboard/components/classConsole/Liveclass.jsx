@@ -43,7 +43,11 @@ export function LiveClassInfo({ type }) {
   const fetchSchedule = useQuery(["fetch live schedule", userdata?.token],()=>fetchLiveSchedule(userdata.token, classId), {
     
     onSuccess: res => {
+      console.log({res})
       if(res.success){
+
+        // TODO: check if student / teacher
+        
         setSchedule(res.data)
         return
       }
