@@ -710,18 +710,28 @@ const Classroom = () => {
 
 
     const completedContent = useMemo(() => {
-        return reduceContent?.reduce((total, current) =>{
-            console.log("text", current.items.filter(item => item.completedBy?.includes(userdata.id)))
-           return total + current.items.length
-
-        }
-         ,0)
+        return reduceContent?.reduce((total, current) => [
+            ...total, ...current.items
+        ] ,[])
 
     }, [modules])
 
 
-    console.log({completedContent});
-    console.log({ reduceContent })
+    const totalItem = useMemo(()=>{
+        
+        let length = completedContent?.length 
+        let isCompleted = completedContent.filter(item => item.completedBy)
+        
+        return {
+            total: length,
+            isCompleted: isCompleted.length
+        };
+
+    }, [modules])
+
+
+
+
 
 
    useMemo(() => {
@@ -746,6 +756,7 @@ const Classroom = () => {
         }
 
     }, [reduceContent, contentId])
+
 
     const MoveButton = (type) => {
         if (reduceContent?.length > 0 && type === "next") {
@@ -863,6 +874,8 @@ const Classroom = () => {
                         setPickedType={setPickedType}
                         reduceContent={reduceContent}
                         setCompleted={setCompleted}
+                        progress={totalItem}
+
                     // active={active} 
                     // setActive={setActive}
                     />
@@ -876,6 +889,7 @@ const Classroom = () => {
                     setPickedType={setPickedType}
                     reduceContent={reduceContent}
                     setCompleted={setCompleted}
+                    progress={totalItem}
                 // active={active} 
                 // setActive={setActive}
 

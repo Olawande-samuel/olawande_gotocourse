@@ -53,8 +53,8 @@ export default function ConsoleClasses() {
         <div className=''>
             <main className='assessments'>
                 {
-                    data?.data?.filter(item => item.paymentStatus === "complete")?.length > 0 ?
-                        data?.data?.filter(item => item.paymentStatus === "complete").map((x, id) => (
+                    data?.data?.filter(item => item.paymentStatus === "complete" || item.paymentStatus === "paid")?.length > 0 ?
+                        data?.data?.filter(item => item.paymentStatus === "complete" || item.paymentStatus === "paid").map((x, id) => (
                             <div className="assesstmentbox" key={x.bootcampId} style={{ cursor: "pointer" }} onClick={() => {
                                 navigate(`/student/class-console/class/${x.bootcampId}`, {
                                     state: {
@@ -63,7 +63,8 @@ export default function ConsoleClasses() {
                                 })
                             }}>
                                 <div className="excelbox">
-                                    <img src={`${process.env.REACT_APP_IMAGEURL}${x.bootcampImg}`} alt="" />
+                                    {/* <img src={`${process.env.REACT_APP_IMAGEURL}${x.bootcampImg}`} alt="" /> */}
+                                    <img src={`${x.bootcampImg}`} alt="" />
                                 </div>
                                 <p>{x.bootcampName} </p>
                             </div>
