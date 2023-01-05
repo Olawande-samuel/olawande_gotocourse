@@ -519,21 +519,21 @@ export function MyClasses() {
                                                 <div className={clsx["courseitem"]}>
                                                     <div className={clsx.classes_button}>
                                                         {
-                                                            (item.paymentStatus === "complete" || item.paymentStatus === "paid") ? 
+                                                            (item.paymentStatus === "complete" || item.paymentStatus === "paid") ?
 
-                                                            <button className="d-flex align-items-center" style={{background:"var(--theme-blue)"}}
-                                                            onClick={(e) => navigate(`/student/class-console/class/${item.bootcampId}`)}
-                                                            >
-                                                                
-                                                                <span>Go to class</span>
-                                                            </button>
-                                                            :
-                                                            <button className="d-flex align-items-center gap-2"
-                                                            onClick={(e) => navigate("/student/payment")}
-                                                            >
-                                                                <i><BiMoney /> </i>
-                                                                <span>Pay</span>
-                                                            </button>
+                                                                <button className="d-flex align-items-center" style={{ background: "var(--theme-blue)" }}
+                                                                    onClick={(e) => navigate(`/student/class-console/class/${item.bootcampId}`)}
+                                                                >
+
+                                                                    <span>Go to class</span>
+                                                                </button>
+                                                                :
+                                                                <button className="d-flex align-items-center gap-2"
+                                                                    onClick={(e) => navigate("/student/payment")}
+                                                                >
+                                                                    <i><BiMoney /> </i>
+                                                                    <span>Pay</span>
+                                                                </button>
 
                                                         }
                                                     </div>
@@ -781,7 +781,7 @@ export function Wishlist() {
         flag.current = true;
     }, [])
 
-    console.log({wishlists});
+    console.log({ wishlists });
 
     // const value = useMemo(() => {
     //     return wishlists.reduce((total, current) => {
@@ -812,7 +812,7 @@ export function Wishlist() {
                         <small>Total:</small>
                         {/* <p>{`$${value}`}</p> */}
                         <p>$11,000</p>
-                       <Link to={`/student/wishlist-checkout`}>  <button>Checkout</button></Link>
+                        <Link to={`/student/wishlist-checkout`}>  <button>Checkout</button></Link>
 
                     </div>
                     <p style={{ padding: "1rem 0" }}>My Cart</p>
@@ -1215,7 +1215,7 @@ export function WishlistCheckOut() {
         <Students isMobile={isMobile} userdata={userdata} header="Checkout">
             <div className={clsx.students_profile}>
                 <header className="mb-4">
-                    <h3 style={{ paddingRight: "2rem", fontWeight: "600", color:"#081131" }}>Billing address</h3>
+                    <h3 style={{ paddingRight: "2rem", fontWeight: "600", color: "#081131" }}>Billing address</h3>
 
                     <div className={clsx.wishlist__select}>
                         <label htmlFor="country">Country</label> <br />
@@ -1564,7 +1564,7 @@ export function Fees() {
     all()
 
 
-   
+
     const filterpending = (data) => {
         let result = data.filter(c => c.status === "pending").reduce((sum, current) => sum + current.amount, 0)
         return result
@@ -1887,9 +1887,10 @@ export const Dashboard = () => {
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
     const { data: myenrolledcourses, isSuccess: mycoursesuccess } = useQuery(["fetch my enrolledclasses"], () => fetchMyClasses(userdata?.token))
     // const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
-    const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps());
-
-    // console.log(data)
+    const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps(),{
+        
+    });
+    // console.log({data})
     // console.log("data", myenrolledcourses?.data);
     // console.log("wish",wishlistData );
     const topContent = [
@@ -1921,19 +1922,24 @@ export const Dashboard = () => {
         topContent[0].value = myenrolledcourses?.data?.length
     }
 
+
+
     return (
         <Students isMobile={isMobile} userdata={userdata} header={"Dashboard"} >
             <div className={clsx.students_profile}>
                 <DashboardTop content={topContent} />
 
                 <div className={clsx.students_profile_main}>
+                    {/* <UpcomingCourses data={all ? all : []} /> */}
                     <UpcomingCourses data={data?.data ? data?.data : []} />
                 </div>
 
 
 
                 <div className={clsx.students_profile_main}>
+                    {/* <AvailableCourses data={all ? all : []} /> */}
                     <AvailableCourses data={data?.data ? data?.data : []} />
+
                     <div className={`d-flex flex-wrap ${clsx.dashboard_courses}`}>
                         <div className={clsx["dashboard_courses--right"]}>
                             <h6>Courses on wishlist</h6>
@@ -2003,7 +2009,10 @@ function UpcomingCourses({ data }) {
     const { getItem } = useLocalStorage()
     let userdata = getItem(KEY);
 
-
+    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+    const second = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive).sort((a,b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    const all =[...first, ...second];
+    console.log({second});
 
     function handleCourseSelect(e, item) {
         e.preventDefault()
@@ -2015,7 +2024,6 @@ function UpcomingCourses({ data }) {
         }
 
     }
-    console.log({ data });
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
@@ -2053,7 +2061,8 @@ function UpcomingCourses({ data }) {
 
                 <div className={clsx["coursebody"]}>
                     {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
-                    {data?.length > 0 && data.filter(d => d.startDate === "2023-01-05T00:00:00.000Z" && d.isActive).sort(() => 0.5 - Math.random()).map((item, i) => (
+                    {/* {data?.length > 0 && data.filter(d => d.startDate === "2023-01-05T00:00:00.000Z" && d.isActive).sort(() => 0.5 - Math.random()).map((item, i) => ( */}
+                    {all?.length > 0 && all.slice(0, 10).sort(() => 0.5 - Math.random()).map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
                             <div className={clsx["courseitem"]}>
@@ -2140,6 +2149,11 @@ function AvailableCourses({ data }) {
 
     }
     // console.log({ data });
+
+         const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+         const second = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive).sort((a,b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+         const all =[...first, ...second];
+     
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
@@ -2177,7 +2191,8 @@ function AvailableCourses({ data }) {
 
                 <div className={clsx["coursebody"]}>
                     {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
-                    {data?.length > 0 && data.filter(d => d.isActive).map((item, i) => (
+                    {/* {data?.length > 0 && data.filter(d => d.isActive).map((item, i) => ( */}
+                    {all.length > 0 && all.map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
                             <div className={clsx["courseitem"]}>
