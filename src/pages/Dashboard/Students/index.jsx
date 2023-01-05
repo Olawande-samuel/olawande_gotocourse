@@ -891,7 +891,7 @@ function WishCard({ courseId: id, courseName, courseDescription, courseCategory,
         localStorage.setItem("gotocourse-courseId", id)
         let courseCategory = category.split(" ").join("-")
         let courseName = name.split(" ").join("-")
-        navigate(`/categories/${courseCategory}/courses/${courseName}`)
+        navigate(`/categories/${courseCategory}/courses/${courseName}/${id}/payment`)
     }
     return (
         <div className="card wish">
@@ -1891,7 +1891,7 @@ export const Dashboard = () => {
         
     });
     // console.log({data})
-    // console.log("data", myenrolledcourses?.data);
+    console.log("data", myenrolledcourses?.data);
     // console.log("wish",wishlistData );
     const topContent = [
         {
