@@ -109,7 +109,7 @@ const VideoChatScreen = () => {
             if(res.statusCode === 1){
                 const findMyClasss = res.data.find(item => item.bootcampId === classId)
                 console.log(findMyClasss)
-                if(findMyClasss.bootcampId){
+                if(findMyClasss.bootcampId && findMyClasss.status !== "pending"){
                     // turn off loading state
                     // show status
                     setIsPermitted(true)
@@ -558,7 +558,7 @@ const VideoChatScreen = () => {
             initRoom()
             connectionUserId.current = userProfile.userId    
         }
-        
+
     }, [userProfile.userId, isPermitted])
     
     
