@@ -99,67 +99,7 @@ const VideoChatScreen = () => {
 
     }, [data])
 
-
-
-    // USER VERIFICATION
-    const {generalState, setGeneralState, studentFunctions:{fetchBootcamps}, teacherFunctions:{fetchBootcamps: fetchTeacherBootcamps}} = useAuth()
-
-    useEffect(() => {
-        if(userProfile?.isAdmin){
-            console.log("isAdmin")
-            // initRoom()
-            // connectionUserId.current = userProfile.userId  
-        }
-    },[userProfile?.isAdmin])
-
-    const fetchStudentApplications = useQuery(["fetchStudentApplications", userProfile.token], ()=>fetchBootcamps(userProfile.token), {
-        enabled: userProfile.userType === "student",
-        onSuccess: (res)=> {
-            if(res.statusCode === 1){
-                const findMyClasss = res.data.find(item => item.bootcampId === classId)
-                if(findMyClasss.bootcampId && (findMyClasss.status === "paid" || findMyClasss.paymentStatus === "paid")){
-                    // turn off loading state
-                    // show status
-                    // setIsPermitted(true)
-                    // initRoom()
-                    // connectionUserId.current = userProfile.userId  
-                    return
-                }
-                navigate("/learn-with-gotocourse")
-            }
-        },
-        onError: (res)=> {
-            console.error(res)
-        },
-    })
-
-    const fetchTeacherApplications = useQuery(["fetchTeacherApplications", userProfile.token], ()=>fetchTeacherBootcamps(userProfile.token), {
-            enabled: userProfile.userType === "teacher", 
-            onSuccess: (res)=> {
-                if(res.statusCode === 1){
-                    const findMyClasss = res.data.find(item => item.bootcampId === classId)
-                    if(findMyClasss.bootcampId){
-                        // turn off loading state
-                        // show status
-                        // setIsPermitted(true)
-                        // initRoom()
-                        // connectionUserId.current = userProfile.userId  
-                        return
-                    }
-                    navigate("/learn-with-gotocourse")
-                }
-            },
-            onError: (res)=> {
-                console.error(res)
-            },
-        }
-    )
-    
-
-
    
-
-
     const chekForVideoRoom = async () => {
         if (location?.state?.owner) {
             isRoomOwner = true
@@ -1072,4 +1012,83 @@ function UploadStatus({open, setOpen, progress }) {
       </Modal>
     )
   }
-export default VideoChatScreen
+
+
+  function SuperWrapper(){
+    const { getItem } = useLocalStorage()
+    const userProfile = getItem(KEY);
+    const {classId} = useParams()
+    const navigate = useNavigate()
+
+    const[isPermitted, setIsPermitted]= useState(false)
+    const {generalState, setGeneralState, studentFunctions:{fetchBootcamps}, teacherFunctions:{fetchBootcamps: fetchTeacherBootcamps}} = useAuth()
+
+    useEffect(() => {
+
+        if(userProfile?.isAdmin){
+            console.log("isAdmin")
+            setIsPermitted(true)
+        }
+
+    },[userProfile?.isAdmin])
+
+
+
+    const fetchStudentApplications = useQuery(["fetchStudentApplications", userProfile.token], ()=>fetchBootcamps(userProfile.token), {
+        enabled: userProfile.userType === "student",
+        onSuccess: (res)=> {
+            if(res.statusCode === 1){
+                const findMyClasss = res.data.find(item => item.bootcampId === classId)
+                if(findMyClasss.bootcampId && (findMyClasss.status === "paid" || findMyClasss.paymentStatus === "paid")){
+                    setIsPermitted(true)
+                    return
+                }
+                navigate("/learn-with-gotocourse")
+            }
+        },
+        onError: (res)=> {
+            console.error(res)
+        },
+    })
+
+
+    const fetchTeacherApplications = useQuery(["fetchTeacherApplications", userProfile.token], ()=>fetchTeacherBootcamps(userProfile.token), {
+        enabled: userProfile.userType === "teacher", 
+        onSuccess: (res)=> {
+            if(res.statusCode === 1){
+                const findMyClasss = res.data.find(item => item.bootcampId === classId)
+                if(findMyClasss.bootcampId){
+                    // turn off loading state
+                    // show status
+                    setIsPermitted(true)
+                    // initRoom()
+                    // connectionUserId.current = userProfile.userId  
+                    return
+                }
+                navigate("/learn-with-gotocourse")
+            }
+        },
+        onError: (res)=> {
+            console.error(res)
+        },
+        }
+    )
+
+
+
+    if(!isPermitted){
+        return (
+            <Wrapper>
+                <Loader />
+            </Wrapper>
+        )
+    }
+
+    return (
+        <VideoChatScreen />
+    )
+
+
+}
+
+export default SuperWrapper
