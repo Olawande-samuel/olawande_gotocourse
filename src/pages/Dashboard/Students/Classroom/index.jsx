@@ -740,6 +740,7 @@ const Classroom = () => {
         ], []);
 
     }, [modules])
+    
 
 
     const completedContent = useMemo(() => {
@@ -761,6 +762,8 @@ const Classroom = () => {
         };
 
     }, [modules])
+
+
 
 
 

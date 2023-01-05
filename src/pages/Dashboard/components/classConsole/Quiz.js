@@ -297,6 +297,8 @@ export default function Quiz() {
 
     }
 
+    console.log({formData})
+
 
     return (
 
@@ -428,13 +430,16 @@ export default function Quiz() {
                                                             </Select>
 
                                                             <div className="texteditor quiz__editor">  
-                                                            <ReactQuill theme="snow" value={x?.title} onChange={()=>{
+                                                            
+                                                            {/* <ReactQuill theme="snow" value={x?.title} onChange={()=>{
                                                                  const list = { ...formData }
+
                                                                  list.questions[id]['title'] = x.title;
                                                                  setFormData(list)
-                                                            }} />
+                                                            }} 
+                                                            /> */}
                 
-                                                                {/* <CKEditor
+                                                                <CKEditor
                                                                 editor={ClassicEditor}
                                                                 data={x?.title}
                                                                 onReady={editor => {
@@ -452,7 +457,7 @@ export default function Quiz() {
                                                                 }}
                                                                 onFocus={(event, editor) => {
                                                                 }}
-                                                            /> */}
+                                                            />
 
                                                                 <div className='textbtn'>
                                                                     <Button
@@ -628,11 +633,16 @@ function ResultPanel({data}){
     const {getItem} = useLocalStorage()
     const userdata = getItem(KEY)
     const {teacherConsoleFunctions: {fetchAttemptedQuiz}} = useAuth()
-
+    const [results, setResults] = useState([])
     console.log({data})
 
     const fetchStudentsQuizzes = useQuery(["fetchStudentsQuizzes", userdata.token, data?._id], ()=> fetchAttemptedQuiz(userdata.token, data._id), {
-        onSuccess: (res)=>console.log(res),
+        onSuccess: (res)=>{
+            if(res.statusCode === 1){
+                setResults(res.data)
+            }
+            console.log(res)
+        },
         onError: (err)=>console.error(err)
     })
 
@@ -641,11 +651,11 @@ function ResultPanel({data}){
     return (
         <section>
             <section className="quiz__cards_container">
-                {
-                    [...Array(4)].map(item=> (
-                        <ResultCards />
+                {/* {
+                    results?.map(item=> (
+                        <ResultCards {...item} />
                     ))
-                }
+                } */}
             </section>
             {/* <p className="text-center lead">No one has attempted the quiz yet</p> */}
         </section>
@@ -655,7 +665,7 @@ function ResultPanel({data}){
 
 
 
-function ResultCards(){
+function ResultCards({}){
     const [open, setOpen] = useState(false)
     return (
         <div className="quiz__card">

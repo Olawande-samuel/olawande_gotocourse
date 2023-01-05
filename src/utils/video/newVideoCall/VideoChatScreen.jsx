@@ -114,7 +114,7 @@ const VideoChatScreen = () => {
             if(res.statusCode === 1){
                 const findMyClasss = res.data.find(item => item.bootcampId === classId)
                 console.log(findMyClasss)
-                if(findMyClasss.bootcampId && findMyClasss.status !== "pending"){
+                if(findMyClasss.bootcampId && (findMyClasss.status === "paid" || findMyClasss.paymentStatus === "complete")){
                     // turn off loading state
                     // show status
                     setIsPermitted(true)
@@ -149,9 +149,7 @@ const VideoChatScreen = () => {
             },
         }
     )
-    console.log({fetchStudentApplications})
-    console.log({fetchTeacherApplications})
-    console.log("hello everyone once again!!!!!")
+    
 
 
    
@@ -720,6 +718,13 @@ const VideoChatScreen = () => {
     }
 
    
+    useEffect(() => {        
+        if(peers.current){
+            console.log("user length", Object.keys(peers.current).length)
+
+        }
+    }, [peers.current])
+
     if(!isPermitted){
         return <Wrapper> <Loader /> </Wrapper>
     }
@@ -974,6 +979,8 @@ function Users({open, setOpen, profileData }) {
 
         }
     }, [session])
+
+    
 
     return (
       <Modal

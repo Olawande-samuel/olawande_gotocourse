@@ -3361,3 +3361,9 @@ td span {
   overflow: unset;
 
 }
+
+
+
+.ql-editor.ql-blank{
+  min-height: 340px;
+}
