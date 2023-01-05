@@ -107,8 +107,8 @@ const VideoChatScreen = () => {
     useEffect(() => {
         if(userProfile?.isAdmin){
             console.log("isAdmin")
-            initRoom()
-            connectionUserId.current = userProfile.userId  
+            // initRoom()
+            // connectionUserId.current = userProfile.userId  
         }
     },[userProfile?.isAdmin])
 
@@ -121,8 +121,8 @@ const VideoChatScreen = () => {
                     // turn off loading state
                     // show status
                     // setIsPermitted(true)
-                    initRoom()
-                    connectionUserId.current = userProfile.userId  
+                    // initRoom()
+                    // connectionUserId.current = userProfile.userId  
                     return
                 }
                 navigate("/learn-with-gotocourse")
@@ -142,8 +142,8 @@ const VideoChatScreen = () => {
                         // turn off loading state
                         // show status
                         // setIsPermitted(true)
-                        initRoom()
-                        connectionUserId.current = userProfile.userId  
+                        // initRoom()
+                        // connectionUserId.current = userProfile.userId  
                         return
                     }
                     navigate("/learn-with-gotocourse")
@@ -582,13 +582,13 @@ const VideoChatScreen = () => {
         // ask you to log in
     }
 
-    // useEffect(() => {
-    //     // if(isPermitted){
-    //         initRoom()
-    //         connectionUserId.current = userProfile.userId    
-    //     // }
+    useEffect(() => {
+        // if(isPermitted){
+            initRoom()
+            connectionUserId.current = userProfile.userId    
+        // }
 
-    // }, [userProfile.userId, isPermitted])
+    }, [userProfile.userId])
     
     
 
