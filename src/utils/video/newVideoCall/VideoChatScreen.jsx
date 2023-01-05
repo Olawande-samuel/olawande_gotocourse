@@ -104,12 +104,12 @@ const VideoChatScreen = () => {
     // USER VERIFICATION
     const {generalState, setGeneralState, studentFunctions:{fetchBootcamps}, teacherFunctions:{fetchBootcamps: fetchTeacherBootcamps}} = useAuth()
 
-    useEffect(() => {
-        if(userProfile?.isAdmin){
-            console.log("isAdmin")
-            setIsPermitted(true)
-        }
-    },[userProfile?.isAdmin])
+    // useEffect(() => {
+    //     if(userProfile?.isAdmin){
+    //         console.log("isAdmin")
+    //         setIsPermitted(true)
+    //     }
+    // },[userProfile?.isAdmin])
 
     const fetchStudentApplications = useQuery(["fetchStudentApplications", userProfile.token], ()=>fetchBootcamps(userProfile.token), {
         enabled: userProfile.userType === "student",
@@ -557,10 +557,10 @@ const VideoChatScreen = () => {
 
     }
 
-    useEffect(()=>{
-        console.log("myPeer", myPeer)
+    // useEffect(()=>{
+    //     console.log("myPeer", myPeer)
 
-    },[myPeer.current])
+    // },[myPeer.current])
 
 
 
@@ -712,12 +712,12 @@ const VideoChatScreen = () => {
     }
 
    
-    useEffect(() => {        
-        if(peers.current){
-            console.log("user length", Object.keys(peers.current).length)
+    // useEffect(() => {        
+    //     if(peers.current){
+    //         console.log("user length", Object.keys(peers.current).length)
 
-        }
-    }, [peers.current])
+    //     }
+    // }, [peers.current])
 
     // if(!isPermitted){
     //     return <Wrapper> <Loader /> </Wrapper>
