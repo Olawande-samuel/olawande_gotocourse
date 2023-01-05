@@ -3816,9 +3816,9 @@ export const teacherFunctions = {
             }
         }
     },
-    fetchBootcampApplications: async function (token) {
+    fetchBootcampApplications: async function (token, id) {
         try {
-            const res = await axios.get(`${baseURL}/teacher/bootcamps/applications/fetch`,
+            const res = await axios.get(`${baseURL}/teacher/bootcamps/applications/fetch/${id}`,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,

@@ -317,7 +317,7 @@ function App() {
   
                 <Route path="tester" element={<NewHome />} />
 
-
+                  {/* NEW GENERAL LIVE CLASS COMPONENT */}
                 <Route path="class/:classId/live/stream"
                  element={
                     <ProtectedRoute>

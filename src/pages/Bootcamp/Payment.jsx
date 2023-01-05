@@ -23,6 +23,8 @@ import Courses from "../Courses";
 import { GuardedRoute } from "../../hoc";
 import clsx from '../Bootcamp/Pay.module.css'
 import { useQuery } from "@tanstack/react-query";
+import ErrorBoundary from "../../classes/ErrorBoundary";
+
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
@@ -160,7 +162,9 @@ export const BootcampPayment = () => {
       >
         <div className="col-md-7 col-lg-5 ">
           {showStripeModal ? (
-            <PaymentModal token={stripeId} />
+            <ErrorBoundary>
+              <PaymentModal token={stripeId} setShowStripeModal={setShowStripeModal} />
+            </ErrorBoundary>
           ) : (
             <div className={` card ${style.payment_details_card} `}>
               {/* <div> */}
@@ -183,7 +187,7 @@ export const BootcampPayment = () => {
                     <p
                       className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}
                     >
-                      {bootcamp.title}
+                      {bootcamp?.title}
                     </p>
                     {/* <p>${bootcamp?.price && bootcamp?.price}</p> */}
                   </div>
@@ -321,20 +325,22 @@ export const BootcampPayment = () => {
 
 
 
-export function PaymentModal({ token }) {
+export function PaymentModal({ token, setShowStripeModal }) {
   const options = {
     clientSecret: token,
   };
 
   return (
+    <div>
     <Elements stripe={stripePromise} options={options}>
-      <CheckoutForm />
-    </Elements>
+      <CheckoutForm token={token} setShowStripeModal={setShowStripeModal}/>
+    </Elements> 
+    </div>
   );
 
 }
 
-export const CheckoutForm = () => {
+export const CheckoutForm = ({token, setShowStripeModal}) => {
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
@@ -343,14 +349,18 @@ export const CheckoutForm = () => {
   const { getItem } = useLocalStorage();
 
   const classData = getItem("gotocourse-bootcampdata")
+
+
+ 
+
   async function handlesubmit(e) {
     e.preventDefault();
-    setLoading(true);
     console.log(classData)
     try {
       if (!stripe || !elements) {
         return;
       }
+      setLoading(true);
 
       const result = await stripe.confirmPayment({
         elements,
@@ -389,6 +399,10 @@ export const CheckoutForm = () => {
         onReady={() => {
           setLoadingComponent(false);
         }}
+        onError={(err)=> {
+          console.error(err);
+          setLoadingComponent(false);
+        }}
       />
 
       {loadingComponent ? (
@@ -402,37 +416,39 @@ export const CheckoutForm = () => {
           </div>
         </div>
       ) : (
-        <button className="btn-plain w-100 mt-3" disabled={!stripe}>
-          {loading ? (
-            <div
-              className="spinner-border text-primary"
-              role="status"
-              style={{ width: "2rem", height: "2rem" }}
-            >
-              <span className="visually-hidden">Loading...</span>
-            </div>
-          ) : (
-            <span>Submit</span>
-          )}
-        </button>
+        <>
+          <button className="btn-plain w-100 mt-3" disabled={!stripe}>
+            {loading ? (
+              <div
+                className="spinner-border text-primary"
+                role="status"
+                style={{ width: "2rem", height: "2rem" }}
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              <span>Submit</span>
+            )}
+          </button>
+        </>
       )}
-      <div className="cancel w-100 text-center my-3">
-        <button
-          className=""
-          style={{
-            color: "var(--theme-blue)",
-            border: "none",
-            outline: "none",
-            fontSize: "14px",
-          }}
-          onClick={() => {
-            setLoadingComponent(false)
-            navigate("/payment/error");
-          }}
-        >
-          Cancel
-        </button>
-      </div>
+        <div className="cancel w-100 text-center my-3">
+          <button
+            className=""
+            style={{
+              color: "var(--theme-blue)",
+              border: "none",
+              outline: "none",
+              fontSize: "14px",
+            }}
+            onClick={() => {
+              setShowStripeModal(false)
+              // navigate("/payment/error");
+            }}
+          >
+            Cancel
+          </button>
+        </div>
     </form>
   );
 };

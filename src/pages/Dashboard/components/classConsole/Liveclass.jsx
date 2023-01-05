@@ -504,6 +504,7 @@ export function Intermission() {
 
 
     function joinLiveClass(){
+      
         navigate(`/class/${classId}/live/stream?room=${roomid}`, {
             state: {
           

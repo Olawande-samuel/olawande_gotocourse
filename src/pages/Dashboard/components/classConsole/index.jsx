@@ -124,7 +124,7 @@ export const Console = ({ children }) => {
     id: 2,
     icon: RiVideoAddFill,
     title: "Live Class",
-    link: "/student/live-class"
+    link:  `/student/console/class/${classId}/live-class`
   },
 ];
 

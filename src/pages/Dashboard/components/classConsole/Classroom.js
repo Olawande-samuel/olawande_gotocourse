@@ -99,8 +99,10 @@ export default function Classroom() {
     const {teacherFunctions: {fetchBootcampApplications, fetchCourseStudents} } = useAuth()
 
     const {classId} = useParams()
+
+    console.log({classId})
     // const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchApplications(userdata.token), {
-    const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchBootcampApplications(userdata.token), {
+    const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchBootcampApplications(userdata.token, classId), {
         onSuccess: (res)=> console.log({res}),
         onError: (err)=> console.error(err)
     })
