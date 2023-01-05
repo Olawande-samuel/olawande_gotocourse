@@ -114,7 +114,7 @@ const VideoChatScreen = () => {
             if(res.statusCode === 1){
                 const findMyClasss = res.data.find(item => item.bootcampId === classId)
                 console.log(findMyClasss)
-                if(findMyClasss.bootcampId && (findMyClasss.status === "paid" || findMyClasss.paymentStatus === "complete")){
+                if(findMyClasss.bootcampId && (findMyClasss.status === "paid" || findMyClasss.paymentStatus === "paid")){
                     // turn off loading state
                     // show status
                     setIsPermitted(true)
