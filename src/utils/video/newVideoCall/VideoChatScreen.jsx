@@ -698,6 +698,7 @@ const VideoChatScreen = () => {
     useEffect(() => {        
         if(peers.current){
             console.log("user length", Object.keys(peers.current).length)
+            setUserCount(Object.keys(peers.current).length)
 
         }
     }, [peers.current])
@@ -795,13 +796,13 @@ const VideoChatScreen = () => {
                                 startRecording={startRecording}
                                 stopRecording={stopRecording}
                                 startCapture={startCapture}
-                                />
-                                <Users
+                            />
+                            <Users
                                 open={openUserBox}
                                 setOpen={setOpenUserBox}
                                 profileData={userProfile}
-                                
-                                />
+                            />
+
                         </div>
                         <div className="controls right_controls d-sm-flex d-none">
                             {
@@ -834,9 +835,8 @@ const VideoChatScreen = () => {
                     <div className="boxtop">
                         {chatMessages?.length > 0 && chatMessages?.map(x => (
                             <div className={`message ${x.mine &&"mine"}`}> 
-                            <p style={{color: "#0C2191", marginBottom:".5rem"}}>{x.name}</p>
-                            <span> {x.value}</span>   
-
+                                <p style={{color: "#0C2191", marginBottom:".5rem"}}>{x.name}</p>
+                                <span> {x.value}</span>   
                             </div>
 
                         ))} 
@@ -1077,6 +1077,7 @@ function UploadStatus({open, setOpen, progress }) {
         onSuccess: (res)=> {
             if(res.statusCode === 1){
                 const findMyClasss = res.data.find(item => item.bootcampId === classId)
+                console.log({findMyClasss})
                 if(findMyClasss.bootcampId && (findMyClasss.status === "paid" || findMyClasss.paymentStatus === "paid")){
                     setIsPermitted(true)
                     return
