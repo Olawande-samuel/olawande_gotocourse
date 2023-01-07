@@ -799,6 +799,10 @@ export function Wishlist() {
         }, 0)
     }, [wishlists])
 
+    // const Available=  bootcamps?.data?.data?.length > 0 && bootcamps?.data?.data?.some(r=> wishlists?.map(wishlist => wishlist.courseId).indexOf(r.bootcampId) >= 0)
+    // const Available = bootcamps?.data?.data?.length > 0 && bootcamps?.data?.data?.filter(boot => boot.bootcampId === (wishlists?.map(wishlist => wishlist.courseId)))
+
+    // console.log({Available});
 
 
     return (
@@ -1152,7 +1156,7 @@ function DeleteModal({ id, open, handleClose }) {
 
 
 export function WishlistCheckOut() {
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { fetchWishlist }, otherFunctions: { fetchBootcamps } } = useAuth();
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { fetchWishlist, payCarts } } = useAuth();
     const [showStripeModal, setShowStripeModal] = useState(false);
     const [payIntent, setPayintent] = useState("")
 
@@ -1161,9 +1165,49 @@ export function WishlistCheckOut() {
     const [search, setSearch] = useState("")
     const [wishlists, setWishlists] = useState([])
 
-    const checkout = () => {
+    const checkout = async () => {
         //get all ids
-      let ids =  wishlists.map(wishlist => wishlist.courseId)
+        let ids = wishlists.map(wishlist => wishlist.courseId);
+        console.log({ ids });
+        //   payCarts
+        try {
+            setGeneralState({ ...generalState, loading: true })
+            const res = await payCarts(userdata?.token, ids);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+                const { data } = res;
+                console.log({data});
+                    toast.success(message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+
+            } else {
+                throw new AdvancedError(message, statusCode);
+            }
+
+        } catch (err) {
+            toast.error(err.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+        }
+
+
 
         //generate payIntent
         //setPayintent(data.payIntent)
@@ -2348,7 +2392,7 @@ export function StudentLive() {
 }
 
 export const Students = ({ children, isMobile, notification, userdata, header, loading }) => {
-    const { generalState: { showSidebar }, generalState, setGeneralState, otherFunctions: { fetchCourses }, adminFunctions: { getUnreadMessages }, studentFunctions: { fetchNotifications, readNotifications } } = useAuth();
+    const { generalState: { showSidebar }, generalState, setGeneralState, otherFunctions: { fetchCourses }, adminFunctions: { getUnreadMessages }, studentFunctions: { fetchNotifications, readNotifications, fetchWishlist } } = useAuth();
     const { getItem } = useLocalStorage()
     const userData = getItem(KEY)
     const user = getItem("gotocourse-userdata")
@@ -2381,6 +2425,16 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
         })()
         flag.current = true;
     }, [])
+
+    const getCarts = useQuery(["carts"], () => fetchWishlist(userdata?.token),{
+        onSuccess: (res) => {
+            if (res?.data?.length > 0) {
+                setGeneralState({ ...generalState, carts: res?.data?.length })
+            }
+        }
+    });
+
+ 
 
     const toggleSidebar = () => {
         setGeneralState({ ...generalState, showSidebar: !showSidebar })

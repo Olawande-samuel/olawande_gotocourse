@@ -18,6 +18,7 @@ const AuthContextProvider = ({children}) => {
         navHeight: "",
         loading: false,
         notifications:0,
+        carts:0,
         chat:0,
         classConsole: {
             sidebar: false,

@@ -35,6 +35,7 @@ const AttachmentContainer = styled(Paper)`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    // border: 2px solid red !important;
     width: 100%;
     // background-color: ${({ active }) => active ? 'rgb(226, 231, 255)' : 'transparent !important'};
     // background-color: ${({ active }) => active ? 'red !important' : 'transparent !important'};
@@ -46,8 +47,10 @@ const AttachmentContainer = styled(Paper)`
 
 
 const AttachmentInfo = styled.div`
+    flex:.8;
     display: flex;
     align-items: center;
+    // border: 2px solid green !important;
 
     & > svg {
         color: var(--textBlue);
@@ -61,6 +64,16 @@ const AttachmentInfo = styled.div`
     }
 `;
 
+const AttachmentIcon = styled.div`
+flex:.2;
+display: flex;
+align-items: center;
+justify-content: space-between;
+// border: 2px solid yellow !important;
+
+
+`
+
 
 const CompleteIcon = styled(MdCheckCircle)`
     color: ${props => props.$isComplete ? 'var(--textBlue)' : 'rgba(0,0,0,.2)'}
@@ -72,7 +85,7 @@ const Locked = styled(MdOutlineLock)`
 
 
 
-const Module = ({ title, setContents,reduceContent, moduleIndex, setPickedType, contentsData,setCompleted
+const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData, setCompleted
     // setActive, active,
 }) => {
     const [active, setActive] = useState(false)
@@ -95,7 +108,16 @@ const Module = ({ title, setContents,reduceContent, moduleIndex, setPickedType, 
         // console.log({contentId}, {items});
         let findItem = items.find(item => item.contentId === contentId);
         if (findItem) {
-           return  findItem?.completedBy?.includes(userdata.id) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />
+            return findItem?.completedBy?.includes(userdata.id) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />
+        }
+        return <CompleteIcon />
+    }
+
+    const getLockedStatus = (contentId, items, lock) => {
+        // console.log({contentId}, {items});
+        let findItem = items.find(item => item.contentId === contentId);
+        if (findItem) {
+            return findItem?.locked && lock ? <Locked $isComplete={true} /> : <Locked />
         }
         return <CompleteIcon />
     }
@@ -123,18 +145,27 @@ const Module = ({ title, setContents,reduceContent, moduleIndex, setPickedType, 
                     <AttachmentContainer key={index} variant="outlined"
                         active={active ? true : false}
                         onClick={() => {
-                            setSearchParams({
-                                contentId: content.contentId
-                            })
-                            setActive(true)
-                            setContents(content?.items)
-                            setPickedType(content?.type)
+                            if(!content?.isLocked){
+                                setSearchParams({
+                                    contentId: content.contentId
+                                })
+                                setActive(true)
+                                setContents(content?.items)
+                                setPickedType(content?.type)
+                                setBodyTitle(content?.title)
+
+                            }
+
                         }}>
                         <AttachmentInfo >
                             {icon(content?.type)}
                             <h5>{content?.title}</h5>
                         </AttachmentInfo>
-                        {getStatus(content?.contentId, content?.items)}
+                        <AttachmentIcon>
+                            {getStatus(content?.contentId, content?.items)}
+                            {getLockedStatus(content?.contentId, content?.items, content?.isLocked)}
+
+                        </AttachmentIcon>
 
                     </AttachmentContainer>
 
