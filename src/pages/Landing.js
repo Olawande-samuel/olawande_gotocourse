@@ -21,6 +21,7 @@ import Companies from '../components/Companies'
 import Experienced from '../components/Experienced'
 import Upcoming from '../components/Upcoming'
 import NewLanding from '../components/NewLanding/NewLanding'
+
 const Landing = () => {
   return (
     <div>

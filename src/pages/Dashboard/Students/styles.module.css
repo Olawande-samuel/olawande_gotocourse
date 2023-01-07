@@ -60,6 +60,92 @@
     overflow-y: scroll;
 }
 
+.wishlist__inputcontaniner{
+    display: flex;
+    align-items: center;
+    background: #E8E8E8;
+    border-radius: 10px;
+    width: 50%;
+    padding: 0 1rem;
+
+
+}
+
+.wishlist__input{
+    padding: .5rem;
+    background: #E8E8E8;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+
+}
+
+.wishlist__select label{
+    font-size: 1.5rem;
+    padding:.5rem 0;
+    color: #081131;
+}
+
+.wishlist__select select{
+    padding: 1rem;
+    background: #F0F0F0;
+    border: 1px solid #000000;
+    outline: none;
+    width:50%;
+
+}
+
+.wishlist__select small{
+font-weight: 800;
+font-size: 14px;
+color: #595959;
+padding: .8rem 0;
+
+}
+
+.wishlistprice{
+    border-radius: 15px;
+    background: var(--theme-blue);
+    color: #fff;
+    width: 35%;
+    padding: 1rem 1.5rem;
+}
+
+.wishlistprice p{
+    font-size: 28px;
+
+}
+
+.wishlistprice button{
+    color: var(--theme-blue);
+    background: var(--white);
+    outline: none;
+    border: none;
+    padding: .5rem 1rem;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
+}
+
+.wishlistcheckoutitems{
+    width: 50%;
+    color: #081131;
+
+}
+
+.wishlistcheckoutitems button{
+    background: var(--theme-blue);
+    color: var(--white);
+    outline: none;
+    border: none;
+    padding: .5rem 1rem;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
+}
+
+
+
 .icon {
     width: 60px;
     height: 60px;
@@ -189,9 +275,10 @@
 }
 
 .dashboard_courses--left>div button {
-    padding: 0.3rem 1rem;
+    padding: 0.5rem;
     outline: none;
     border: none;
+    border-radius: 4px;
 
 }
 
@@ -510,6 +597,14 @@
         flex-direction: column;
             align-items: center;
 
+    }
+    .wishlistprice{
+        width: 100%;
+    }
+
+    .wishlist__select select, .wishlistcheckoutitems{
+        width:100%;
+    
     }
 
     .coursecontent,.coursebody{

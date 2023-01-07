@@ -3,7 +3,7 @@ import { MdEdit, MdPersonAdd } from "react-icons/md"
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { motion } from "framer-motion"
-import { AiOutlineMenu } from "react-icons/ai"
+import { AiOutlineMenu, AiOutlineSearch } from "react-icons/ai"
 import { FaGraduationCap } from "react-icons/fa"
 import { BsQuestionCircle, BsDownload } from "react-icons/bs"
 import { Rating } from 'react-simple-star-rating'
@@ -14,7 +14,7 @@ import { Product, Stu1, Stu2, Stu3 } from "../../../images/components/svgs"
 import Loader from "../../../components/Loader"
 import { Sidebar, Searchbar, Navbar } from "../components";
 import clsx from "./styles.module.css";
-import { colors, getDate, gotoclass, gotoclassPayment } from "../../../constants";
+import { colors, getDate, gotoclass, gotoclassPayment, getFullDate, calculateWeeksBetween } from "../../../constants";
 import avatar from "../../../images/teacher.png"
 import { GuardedRoute } from "../../../hoc";
 import Input from "../../../components/Input";
@@ -33,6 +33,8 @@ import LogoutButton from "../../../components/LogoutButton";
 import { PaymentModal } from "../../Bootcamp/Payment";
 import PayModal from "../../../components/PayModal";
 import { LiveClassInfo } from "../components/classConsole/Liveclass";
+import { Link } from "react-router-dom";
+import { BiMoney } from "react-icons/bi";
 
 
 
@@ -423,6 +425,14 @@ export function MyClasses() {
         // navigate("/bootcamps/details/"+_id);
     }
 
+    function handleNavigate(category, name, id) {
+        console.log("clicking");
+        // localStorage.setItem("gotocourse-courseId", id)
+        let courseCategory = category?.split(" ").join("-")
+        let courseName = name?.split(" ").join("-")
+        navigate(`/categories/${courseCategory}/courses/${courseName}/${id}/payment`)
+    }
+
     return (
         <Students header={"My Courses"}>
             {loading && <Loader />}
@@ -459,34 +469,18 @@ export function MyClasses() {
 
                             <div className={` ${clsx.dashboard_courses}`}>
                                 <div className={clsx["dashboard_courses--left"]}>
-                                    <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
-                                    <small className="mb-4 d-block">Select and enroll for a class to get started</small>
+                                    {/* <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
+                                    <small className="mb-4 d-block">Select and enroll for a class to get started</small> */}
 
                                     <div className={clsx["courseheader"]}>
                                         <div className={clsx["courseitem"]}> No</div>
                                         <div className={clsx["courseitem"]}>Courses</div>
-                                        <div className={clsx["courseitem"]}>Category</div>
-                                        <div className={clsx["courseitem"]}>Subcategory</div>
+                                        {/* <div className={clsx["courseitem"]}>Category</div>
+                                        <div className={clsx["courseitem"]}>Subcategory</div> */}
                                         <div className={clsx["courseitem"]}>Start Date</div>
-                                        <div className={clsx["courseitem"]}>Duration</div>
-                                        <div className={clsx["courseitem"]}>
-                                            {/* <FormControl fullWidth size="small">
-                                                <InputLabel id="demo-simple-select-label">Fee</InputLabel>
-                                                <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    // value={age}
-                                                    label="fee"
-                                                // onChange={handleChange}
-                                                >
-                                                    <MenuItem value={30}>POUNDS</MenuItem>
-                                                    <MenuItem value={10}>USD</MenuItem>
-                                                    <MenuItem value={20}>EURO</MenuItem>
-                                                    <MenuItem value={20}>NAIRA</MenuItem>
-                                                </Select>
-                                            </FormControl> */}
-                                            Fees
-                                        </div>
+                                        {/* <div className={clsx["courseitem"]}>Duration</div> */}
+                                        <div className={clsx["courseitem"]}>Fees</div>
+                                        <div className={clsx["courseitem"]}>Status</div>
                                         <div className={clsx["courseitem"]} />
                                     </div>
 
@@ -506,33 +500,50 @@ export function MyClasses() {
                                                 </div>
 
 
-                                                <div className={clsx["courseitem"]}>
-                                                    <span>{item.startDate && getDate(item.startDate)}</span>
+                                                {/* <div className={clsx["courseitem"]}>
+                                                    <span>{item.category}</span>
                                                 </div>
+
+                                                <div className={clsx["courseitem"]}>
+                                                    <span>{item.subCategory}</span>
+                                                </div> */}
 
                                                 <div className={clsx["courseitem"]}>
                                                     <span>{item.startDate && getDate(item.startDate)}</span>
                                                 </div>
+                                                {/* <div className={clsx["courseitem"]}>
+                                                    <span>{(item.endDate && item.startDate) ? (calculateWeeksBetween(item.endDate, item.startDate)) : ""}</span>
+                                                </div> */}
 
                                                 <div className={clsx["courseitem"]}>
                                                     <span>$ {item.bootcampPrice}</span>
 
                                                 </div>
+                                                <div className={clsx["courseitem"]}>
+                                                    <span>{item.paymentStatus}</span>
+
+                                                </div>
 
                                                 <div className={clsx["courseitem"]}>
                                                     <div className={clsx.classes_button}>
-                                                        <button className="d-flex align-items-center"
-                                                        // onClick={(e) => handleCourseSelect(e, item)}
-                                                        >
-                                                            <i><BsQuestionCircle /></i>
-                                                            <span>Learn more</span>
-                                                        </button>
-                                                        <button className="d-flex align-items-center"
-                                                        // onClick={(e) => handleCourseSelect(e, item)}
-                                                        >
-                                                            <i><BsDownload /></i>
-                                                            <span>Enroll</span>
-                                                        </button>
+                                                        {
+                                                            (item.paymentStatus === "complete" || item.paymentStatus === "paid") ?
+
+                                                                <button className="d-flex align-items-center" style={{ background: "var(--theme-blue)" }}
+                                                                    onClick={(e) => navigate(`/student/class-console/class/${item.bootcampId}`)}
+                                                                >
+
+                                                                    <span>Go to class</span>
+                                                                </button>
+                                                                :
+                                                                <button className="d-flex align-items-center gap-2"
+                                                                    onClick={(e) => handleNavigate(item.category, item.bootcampName, item.bootcampId)}
+                                                                >
+                                                                    <i><BiMoney /> </i>
+                                                                    <span>Pay</span>
+                                                                </button>
+
+                                                        }
                                                     </div>
                                                 </div>
 
@@ -550,7 +561,7 @@ export function MyClasses() {
 
                             </div>
 
-                        ) : (<p className="lead">You haven't registered for a course</p>)
+                        ) : (<p className="lead text-center">You haven't registered for a course</p>)
                         }
 
                     </div>
@@ -714,8 +725,11 @@ export function Classes() {
     )
 }
 export function Wishlist() {
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { fetchWishlist } } = useAuth();
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { fetchWishlist }, otherFunctions: { fetchBootcamps } } = useAuth();
     const [wishlists, setWishlists] = useState([])
+    const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
+    const [search, setSearch] = useState("");
+    let navigate = useNavigate();
 
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
@@ -775,19 +789,101 @@ export function Wishlist() {
         getWishList()
         flag.current = true;
     }, [])
+
+    console.log({ wishlists });
+
+    const value = useMemo(() => {
+        return wishlists?.reduce((total, current) => {
+            console.log({ current });
+            return total + current.price
+        }, 0)
+    }, [wishlists])
+
+
+
     return (
-        <Students isMobile={isMobile} userdata={userdata} header="Wishlist">
+        <Students isMobile={isMobile} userdata={userdata} header="Cart">
             <div className={clsx.students_profile}>
-                <header className="mb-4">
-                    <h3>My wishlist</h3>
+                <header className="mb-4 d-flex align-center">
+                    <h3 style={{ paddingRight: "2rem", fontWeight: "600" }}>Cart</h3>
+
+                    <div className={clsx.wishlist__inputcontaniner}>
+                        <input type="text" className={clsx.wishlist__input}
+                            placeholder="search"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)} />
+                        <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
+                    </div>
                 </header>
+
+
+
+
                 <div className={clsx.classes}>
+                    <div className={clsx.wishlistprice}>
+                        <small>Total:</small>
+                        <p>{`$${value}`}</p>
+                        {/* <p>$11,000</p> */}
+                        <Link to={`/student/wishlist-checkout`}><button>Checkout</button></Link>
+
+                    </div>
+                    <p style={{ padding: "1rem 0" }}>My Cart</p>
+
                     <div className={clsx.students_wishlist}>
-                        {wishlists.length > 0 ? wishlists.map((item, index) => (
-                            <WishCard key={index} {...item} refetch={getWishList} />
-                        )) :
+                        {wishlists?.length > 0 ? wishlists?.filter(
+                            (course) =>
+                                // course.category
+                                //   .toLowerCase()
+                                //   .includes(search.toLowerCase()) ||
+                                course.courseName
+                                    .toLowerCase()
+                                    .includes(search.toLowerCase())
+                            //   ||
+                            // course.status
+                            //   .toLowerCase()
+                            //   .includes(search.toLowerCase())
+                        )
+                            .map((item, index) => (
+                                <WishCard key={index} {...item} refetch={getWishList} />
+                            )) :
                             <p className="text-center mx-auto">Nothing to see here</p>
                         }
+                    </div>
+
+
+                    <div>
+                        <p style={{ padding: "3rem 0" }}>Available Courses</p>
+
+                        <div className={clsx.students_wishlist}>
+                            {bootcamps?.data?.data?.length > 0 ? bootcamps?.data?.data?.filter(
+                                (course) =>
+                                    // course.category
+                                    //   .toLowerCase()
+                                    //   .includes(search.toLowerCase()) ||
+                                    course?.title
+                                        .toLowerCase()
+                                        .includes(search.toLowerCase())
+                                //   ||
+                                // course.status
+                                //   .toLowerCase()
+                                //   .includes(search.toLowerCase())
+                            ).map((item, index) => {
+                                let info = {
+                                    courseId: item.bootcampId,
+                                    courseName: item.title,
+                                    courseDescription: item.description,
+                                    courseCategory: item.category,
+                                }
+                                return (
+                                    <AvailCard key={index} {...info} refetch={getWishList} />
+
+                                )
+                            }) :
+                                <p className="text-center mx-auto">Nothing to see here</p>
+                            }
+                        </div>
+
+
                     </div>
                 </div>
             </div>
@@ -807,7 +903,7 @@ function WishCard({ courseId: id, courseName, courseDescription, courseCategory,
         localStorage.setItem("gotocourse-courseId", id)
         let courseCategory = category.split(" ").join("-")
         let courseName = name.split(" ").join("-")
-        navigate(`/categories/${courseCategory}/courses/${courseName}`)
+        navigate(`/categories/${courseCategory}/courses/${courseName}/${id}/payment`)
     }
     return (
         <div className="card wish">
@@ -818,13 +914,158 @@ function WishCard({ courseId: id, courseName, courseDescription, courseCategory,
                 <h5 className="fw-bold">{courseName}</h5>
                 <p className="restricted_line" dangerouslySetInnerHTML={{ __html: courseDescription }}></p>
                 <div className="d-flex justify-content-between">
-                    <button className="btn btn-outline-primary" onClick={() => handleNavigate(courseCategory, courseName)} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Register today</button>
+                    {/* <button className="btn btn-outline-primary" onClick={() => handleNavigate(courseCategory, courseName)} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Register today</button> */}
+                    <button className="btn btn-outline-primary" onClick={() => handleNavigate(courseCategory, courseName)} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Pay</button>
                     <button className="btn btn-outline-primary" onClick={() => setOpen(true)} style={{ border: "1px solid var(--theme-orange)", color: "var(--theme-orange)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
-                        <i><FaRegTrashAlt /></i>
+                        {/* <i><FaRegTrashAlt /></i> */}
+                        Remove
                     </button>
                 </div>
             </div>
             <DeleteModal open={open} handleClose={closeModal} id={id} />
+        </div>
+    )
+}
+
+
+function AvailCard({ courseId, courseName, courseDescription, courseCategory, refetch }) {
+    const navigate = useNavigate();
+    const { generalState: { isMobile }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
+    const { getItem } = useLocalStorage();
+    let [wishlistState, setWishlistState] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+    const userdata = getItem(KEY)
+
+    async function addToWishlist() {
+        setGeneralState({ ...generalState, loading: true })
+        setLoading(true)
+        if (userdata !== null) {
+            try {
+                const response = await addwishlistCourse(courseId, userdata?.token)
+                const { success, message, statusCode } = response
+                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+                const { data } = response
+                setWishlistState(true)
+            } catch (error) {
+                console.error(error)
+                setLoading(false)
+
+            } finally {
+                setGeneralState({ ...generalState, loading: false })
+                setLoading(false)
+
+            }
+
+
+        } else {
+            navigate("/login")
+        }
+    }
+
+
+
+    async function getWishList() {
+        try {
+            const res = await fetchWishlist(userdata?.token);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+                const { data } = res;
+                if (data.length > 0) {
+                    setWishlistState(data.map(d => d.courseId).includes(courseId));
+                } else {
+
+                }
+
+            } else {
+                throw new AdvancedError(message, statusCode);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+        }
+    }
+
+    async function removeCourse(e) {
+        e.preventDefault();
+        setLoading(true)
+
+        try {
+            setGeneralState({ ...generalState, loading: true })
+            const res = await deleteFromWishlist(userdata?.token, courseId)
+            const { success, message, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+                const { data } = res;
+                setWishlistState(false)
+                setLoading(false)
+
+            }
+        } catch (err) {
+
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+            setLoading(false)
+
+        }
+    }
+
+    return (
+        <div className="card wish">
+            <div className="card-body wish-card-body">
+                <div style={{ width: "50px", height: "50px", borderRadius: "50%" }}>
+                    <img src={trello} alt="icon" className="img-fluid" />
+                </div>
+                <h5 className="fw-bold">{courseName}</h5>
+                <p className="restricted_line" dangerouslySetInnerHTML={{ __html: courseDescription }}></p>
+                <div className="d-flex justify-content-between">
+
+                    {
+                        (!userdata.token) ? <button onClick={addToWishlist} className="btn btn-outline-primary" style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
+                            {
+                                loading ?
+                                    <div className="spinner-border" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div>
+                                    :
+                                    "Add to Wishlist"
+
+                            }
+
+                        </button> :
+
+                            (userdata.token && wishlistState) ?
+
+                                <button onClick={removeCourse} className="btn btn-outline-primary" style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Remove wishlist"
+
+                                    }
+
+                                </button>
+                                :
+                                <button onClick={addToWishlist} className="btn btn-outline-primary" style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Add to Wishlist"
+
+                                    }
+
+                                </button>
+
+                    }
+                </div>
+            </div>
         </div>
     )
 }
@@ -908,6 +1149,159 @@ function DeleteModal({ id, open, handleClose }) {
 
     )
 }
+
+
+export function WishlistCheckOut() {
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { fetchWishlist }, otherFunctions: { fetchBootcamps } } = useAuth();
+    const [showStripeModal, setShowStripeModal] = useState(false);
+    const [payIntent, setPayintent] = useState("")
+
+    const { getItem } = useLocalStorage();
+    let userdata = getItem(KEY);
+    const [search, setSearch] = useState("")
+    const [wishlists, setWishlists] = useState([])
+
+    const checkout = () => {
+        //get all ids
+      let ids =  wishlists.map(wishlist => wishlist.courseId)
+
+        //generate payIntent
+        //setPayintent(data.payIntent)
+
+        //pay
+        //send
+    }
+    const flag = useRef(false);
+    async function getWishList() {
+        try {
+            setGeneralState({ ...generalState, loading: true })
+            const res = await fetchWishlist(userdata?.token);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+                const { data } = res;
+                if (data.length > 0) {
+                    setWishlists(data);
+                    toast.success(message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } else {
+                    toast.error("wishlist is empty", {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    setWishlists([])
+                }
+
+            } else {
+                throw new AdvancedError(message, statusCode);
+            }
+        } catch (err) {
+            toast.error(err.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+        }
+    }
+    useEffect(() => {
+        if (flag.current) return;
+        getWishList()
+        flag.current = true;
+    }, [])
+
+
+    const value = useMemo(() => {
+        return wishlists?.reduce((total, current) => {
+            return total + current.price
+        }, 0)
+    }, [wishlists])
+
+    return (
+        <Students isMobile={isMobile} userdata={userdata} header="Checkout">
+            <div className={clsx.students_profile}>
+                <header className="mb-4">
+                    <h3 style={{ paddingRight: "2rem", fontWeight: "600", color: "#081131" }}>Billing address</h3>
+
+                    <div className={clsx.wishlist__select}>
+                        <label htmlFor="country">Country</label> <br />
+                        <select >
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            <option>Nigeria</option>
+                        </select>
+                        <br />
+                        <small>
+                            Gotocourse is required by law to collect applicable transaction taxes <br />
+                            for purchases made in certain tax jurisdictions.
+                        </small>
+                    </div>
+
+                </header>
+
+                <div>
+                    {showStripeModal && <PaymentModal token={payIntent} setShowStripeModal={setShowStripeModal} />}
+
+                </div>
+
+
+
+
+                <div className={clsx.classes}>
+
+                    <div className={clsx.wishlistcheckoutitems}>
+
+                        <p style={{ padding: "1rem 0", fontWeight: "800" }}>Order details</p>
+                        {
+                            wishlists?.map((item, index) => (
+                                <div key={item.courseId} className="w-100 d-flex justify-content-between align-center py-2">
+                                    <div className="wishlistitemname">
+                                        {item.courseName}
+
+                                    </div>
+                                    <div className="wishlistiteprice">
+                                        ${item.price}
+                                    </div>
+                                </div>
+                            ))
+                        }
+
+                        <div className="w-100 d-flex align-center justify-content-between py-3" style={{ fontSize: "1.5rem", fontWeight: "600" }}>
+                            <span>Total</span>
+                            <span>${value}</span>
+
+                        </div>
+
+                        <button onClick={checkout}>Checkout</button>
+
+
+                    </div>
+
+
+                </div>
+            </div>
+        </Students >
+    )
+}
+
+
 
 export function Courses() {
     const { generalState: { isMobile, loading }, generalState, setGeneralState, studentFunctions: { fetchCourses } } = useAuth();
@@ -1192,22 +1586,12 @@ export function Fees() {
     const all = () => {
         let pending = course.map((c => c.payments.filter(x => x.status === "pending")))
         let individual_total = pending.map(d => d.reduce((total, item) => total + item.amount, 0))
-        console.log("all_total", individual_total.reduce((total, item) => total + item, 0));
         setOutstanding(individual_total.reduce((total, item) => total + item, 0))
 
     }
     all()
 
 
-    // const Outstanding = useMemo(() => {
-    //     let pending = course.map((c => c.payments.filter(x => x.status === "pending")))
-    //     let individual_total = pending.map(d=> d.reduce((total, item) => total + item.amount, 0))
-    //     console.log( "all_total", individual_total.reduce((total, item) => total + item, 0) );
-    //     setOutstanding(individual_total.reduce((total, item) => total + item, 0))
-
-    // }, [course]);
-
-    // console.log({outstanding});
 
     const filterpending = (data) => {
         let result = data.filter(c => c.status === "pending").reduce((sum, current) => sum + current.amount, 0)
@@ -1531,10 +1915,11 @@ export const Dashboard = () => {
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
     const { data: myenrolledcourses, isSuccess: mycoursesuccess } = useQuery(["fetch my enrolledclasses"], () => fetchMyClasses(userdata?.token))
     // const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
-    const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps());
+    const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps(), {
 
-    // console.log(data)
-    // console.log("data", myenrolledcourses?.data);
+    });
+    // console.log({data})
+    console.log("data", myenrolledcourses?.data);
     // console.log("wish",wishlistData );
     const topContent = [
         {
@@ -1565,19 +1950,24 @@ export const Dashboard = () => {
         topContent[0].value = myenrolledcourses?.data?.length
     }
 
+
+
     return (
         <Students isMobile={isMobile} userdata={userdata} header={"Dashboard"} >
             <div className={clsx.students_profile}>
                 <DashboardTop content={topContent} />
 
                 <div className={clsx.students_profile_main}>
+                    {/* <UpcomingCourses data={all ? all : []} /> */}
                     <UpcomingCourses data={data?.data ? data?.data : []} />
                 </div>
 
 
-                
+
                 <div className={clsx.students_profile_main}>
+                    {/* <AvailableCourses data={all ? all : []} /> */}
                     <AvailableCourses data={data?.data ? data?.data : []} />
+
                     <div className={`d-flex flex-wrap ${clsx.dashboard_courses}`}>
                         <div className={clsx["dashboard_courses--right"]}>
                             <h6>Courses on wishlist</h6>
@@ -1647,7 +2037,10 @@ function UpcomingCourses({ data }) {
     const { getItem } = useLocalStorage()
     let userdata = getItem(KEY);
 
-
+    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+    const second = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    const all = [...first, ...second];
+    console.log({ second });
 
     function handleCourseSelect(e, item) {
         e.preventDefault()
@@ -1659,7 +2052,6 @@ function UpcomingCourses({ data }) {
         }
 
     }
-    console.log({ data });
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
@@ -1697,7 +2089,8 @@ function UpcomingCourses({ data }) {
 
                 <div className={clsx["coursebody"]}>
                     {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
-                    {data?.length > 0 && data.filter(d => d.startDate === "2023-01-05T00:00:00.000Z" && d.isActive).sort(() => 0.5 - Math.random()).map((item, i) => (
+                    {/* {data?.length > 0 && data.filter(d => d.startDate === "2023-01-05T00:00:00.000Z" && d.isActive).sort(() => 0.5 - Math.random()).map((item, i) => ( */}
+                    {all?.length > 0 && all.slice(0, 10).sort(() => 0.5 - Math.random()).map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
                             <div className={clsx["courseitem"]}>
@@ -1784,6 +2177,11 @@ function AvailableCourses({ data }) {
 
     }
     // console.log({ data });
+
+    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+    const second = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    const all = [...first, ...second];
+
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
@@ -1821,7 +2219,8 @@ function AvailableCourses({ data }) {
 
                 <div className={clsx["coursebody"]}>
                     {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
-                    {data?.length > 0 && data.filter(d => d.isActive).map((item, i) => (
+                    {/* {data?.length > 0 && data.filter(d => d.isActive).map((item, i) => ( */}
+                    {all.length > 0 && all.map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
                             <div className={clsx["courseitem"]}>
@@ -1857,7 +2256,7 @@ function AvailableCourses({ data }) {
                             </div>
 
                             <div className={clsx["courseitem"]}>
-                            ${(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
+                                ${(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
 
                             </div>
 
@@ -1953,6 +2352,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
     const { getItem } = useLocalStorage()
     const userData = getItem(KEY)
     const user = getItem("gotocourse-userdata")
+    const location = useLocation()
 
     const flag = useRef(false);
     useEffect(() => {
@@ -2072,10 +2472,14 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
         }
     })
 
-    
+
     // for create
 
     const isCreator = userdata?.userType === "schools"
+    const last = location.pathname.split('/').length - 1
+    const wishlist = location.pathname.split('/')[last] === "wishlist"
+    // const wishlistCheckout = location.pathname.split('/')[last] === "wishlist-checkout"
+
     return (
         <GuardedRoute>
             <div className={clsx.students}>
@@ -2093,10 +2497,10 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
 
                 <Sidebar isMobile={isMobile} />
                 <div className={clsx.students_main}>
-                {
-                    !isCreator &&
+                    {
+                        !isCreator && !wishlist &&
                         <Navbar toggleSidebar={toggleSidebar} header={header} content={student} />
-                }
+                    }
 
                     {children}
 

@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import vector from "../../../../images/vector.png";
 import {Admin} from "../index"
 import clsx from "../styles.module.css";
-import adminClsx from "../../Teachers/styles.module.css"
+import adminClsx from "../../Teachers/styles.module.css";
 import UploadForm from "../../../../components/UploadForm";
 import Input from "../../../../components/Input";
 

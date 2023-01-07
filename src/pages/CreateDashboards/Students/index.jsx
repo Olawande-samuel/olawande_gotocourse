@@ -1533,7 +1533,7 @@ export const Dashboard = () => {
     // const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
     const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps());
 
-    // console.log(data)
+    // console.log({data})
     // console.log("data", myenrolledcourses?.data);
     // console.log("wish",wishlistData );
     const topContent = [

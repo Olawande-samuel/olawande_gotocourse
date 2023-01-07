@@ -90,7 +90,7 @@ const Articles = () => {
                         </div>
                     </ImageContainer>
                     <Header>
-                        <h4>{blog.title}</h4>
+                        <h4 className="text-center">{blog.title}</h4>
                     </Header>
                     <DateAndAction>
                         <span>

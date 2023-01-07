@@ -42,6 +42,7 @@ import { LogoSidebar, Logosm } from "../../../images/components/svgs";
 import { SiGoogleclassroom } from "react-icons/si";
 import { BsNewspaper } from "react-icons/bs";
 import { HiOutlinePresentationChartLine } from "react-icons/hi";
+import { RiAdvertisementFill } from "react-icons/ri";
 
 //mini-components
 function SidebarItem({ icon: Icon, title, path, showBadge, ...props }) {
@@ -174,6 +175,7 @@ const Sidebar = ({ }) => {
                 },
             ];
         } else if (route.includes("student")) {
+         
             data = [
                 {
                     icon: AiOutlineDashboard,

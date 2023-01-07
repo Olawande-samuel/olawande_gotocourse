@@ -169,7 +169,7 @@ export const Blog = () => {
                                 </span>
                             </DateAndAction>
                             <div >
-                                <Link to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
+                                <Link  to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
                                     <h5>{blog.title}</h5>
                                 </Link>
                                 <p className="restricted_line" dangerouslySetInnerHTML={{ __html: blog.content }}></p>

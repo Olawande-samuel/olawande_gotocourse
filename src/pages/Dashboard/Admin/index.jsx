@@ -1518,74 +1518,47 @@ export function Approve() {
         }
     }, [data]);
 
-    const info = [
-        {
-            title: "Courses",
-            content: "UX Designer",
-        },
-        {
-            title: "Category",
-            content: "Cybersecurity, UX, Data Analysis",
-        },
-        {
-            title: "Mentorship status",
-            content: data?.userType === "mentor" ? "Assigned" : "Unassigned",
-        },
-    ];
+   
+  const info = [
+    {
+      title: "Courses",
+      content: "UX Designer",
+    },
+    {
+      title: "Category",
+      content: "Cybersecurity, UX, Data Analysis",
+    },
+    {
+      title: "Mentorship status",
+      content: data?.userType === "mentor" ? "Assigned" : "Unassigned",
+    },
+  ];
 
-    useEffect(() => {
-        const teacherInfo = getItem("gotocourse-teacherDetails");
-        setData(teacherInfo);
-        //   (async () => {
-        //     let pledreInfo;
-        //     console.log("getting");
-        //     console.log({ pledre });
-        //     try {
-        //       if (pledre) {
-        //         console.log(pledre);
-        //         setGeneralState({ ...generalState, loading: true });
-        //         const pledRes = await pledre.getTeacherDetails(teacherInfo.email);
-        //         console.log({ pledRes });
-        //         if (pledRes.email) {
-        //           pledreInfo = pledRes;
-        //         } else {
-        //           pledreInfo = {};
-        //         }
-        //       }
-        //     } catch (error) {
-        //       console.error(error.message);
-        //     } finally {
-        //       setGeneralState({ ...generalState, loading: false });
-        //     }
+  useEffect(() => {
+    const teacherInfo = getItem("gotocourse-teacherDetails");
+    setData(teacherInfo);
+  }, []);
+  console.log({ data });
 
-        //     localStorage.setItem(
-        //       "gotocourse-teacherDetails",
-        //       JSON.stringify({ ...teacherInfo, pledre: pledreInfo })
-        //     );
-        //   })();
-    }, []);
-    console.log({ data });
-
-    async function deleteUserHandler(e, email) {
-        try {
-            setLoading((_) => true);
-            let value = window.confirm(
-                "Are you sure you want to delete this user?. This process is irreversible"
-            );
-            if (!value) return;
-            const res = await deleteUser(userdata?.token, [email]);
-            console.log(res);
-            const { statusCode, message, success } = res;
-            if (!success) throw new AdvancedError(message, statusCode);
-            else {
-                toast.success(message);
-                navigate(-1);
-            }
-        } catch (err) {
-            toast.error(err.message);
-        } finally {
-            setLoading((_) => false);
-        }
+  async function deleteUserHandler(e, email) {
+    try {
+      setLoading((_) => true);
+      let value = window.confirm(
+        "Are you sure you want to delete this user?. This process is irreversible"
+      );
+      if (!value) return;
+      const res = await deleteUser(userdata?.token, [email]);
+      console.log(res);
+      const { statusCode, message, success } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        toast.success(message);
+        navigate(-1);
+      }
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading((_) => false);
     }
 
     async function handleVerification(e, type, id, pledreId) {
@@ -3844,132 +3817,159 @@ export function Bootcamps() {
 // CLASS/BOOTCAMP CONSOLE
 
 export function AdminClassConsole() {
-    const {
-        adminFunctions: { fetchBootcamps },
-    } = useAuth();
-    const { getItem } = useLocalStorage();
-    const navigate = useNavigate();
-    const flag = useRef(false);
-    let userdata = getItem(KEY);
-    const [bootcamps, setBootcamps] = useState([]);
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        if (flag.current) return;
-        (async () => {
-            try {
-                const res = await fetchBootcamps(userdata?.token);
-                const { message, success, statusCode } = res;
-                if (!success) throw new AdvancedError(message, statusCode);
-                else if (statusCode === 1) {
-                    const { data } = res;
-                    setBootcamps((_) => data);
-                } else {
-                    throw new AdvancedError(message, statusCode);
-                }
-            } catch (err) {
-                toast.error(err.message);
-            } finally {
-                setLoading((_) => false);
-            }
-        })();
-        flag.current = true;
-    }, []);
+  const {
+    adminFunctions: { fetchBootcamps },
+  } = useAuth();
+  const { getItem } = useLocalStorage();
+  const navigate = useNavigate();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [bootcamps, setBootcamps] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
-    return (
-        <Admin header={"Classes"}>
-            {loading && <Loader />}
-            <div className={clsx["admin_profile"]}>
-                <div className={clsx.admin__student_main}>
-                    {bootcamps.length > 0 ? (
-                        <Grid height="300px">
-                            {bootcamps.map((item, i) => (
-                                <ClassesCard {...item} />
-                            ))}
-                        </Grid>
-                    ) : (
-                        <h6 className="text-center">No Class found</h6>
-                    )}
-                </div>
+  useEffect(() => {
+    if (flag.current) return;
+    (async () => {
+      try {
+        const res = await fetchBootcamps(userdata?.token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else if (statusCode === 1) {
+          const { data } = res;
+          setBootcamps((_) => data);
+        } else {
+          throw new AdvancedError(message, statusCode);
+        }
+      } catch (err) {
+        toast.error(err.message);
+      } finally {
+        setLoading((_) => false);
+      }
+    })();
+    flag.current = true;
+  }, []);
+
+  return (
+    <Admin header={"Classes"}>
+      {loading && <Loader />}
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student_main}>
+        <div className="d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
-        </Admin>
-    );
+          </div>
+            {bootcamps.length > 0 ? (
+              <Grid height="300px">
+                {bootcamps.filter(
+                      (course) =>
+                        // course.category
+                        //   .toLowerCase()
+                        //   .includes(search.toLowerCase()) ||
+                        course.title
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) 
+                        //   ||
+                        // course.status
+                        //   .toLowerCase()
+                        //   .includes(search.toLowerCase())
+                    )
+                .map((item, i) =>
+                  <ClassesCard {...item} all={item}/>
+                )}
+              </Grid>
+
+            )
+            : (
+            <h6 className="text-center">No Class found</h6>
+            )}
+          </div>
+        </div>
+    </Admin>
+  );
 }
 
 // CREATEBOOTCAMP COMPONENT
 export function CreateBootcamp() {
-    const { getItem } = useLocalStorage();
-    let userdata = getItem(KEY);
-    const flag = useRef(false);
-    const navigate = useNavigate();
-    const ref = useRef(false);
+   
+  const { getItem } = useLocalStorage();
+  let userdata = getItem(KEY);
+  const flag = useRef(false);
+  const navigate = useNavigate();
+  const ref = useRef(false);
 
-    const {
-        adminFunctions: {
-            addBootcamp,
-            fetchBootcamps,
-            updateBootcamp,
-            fetchCategories,
-        },
-        adminTeacherFunctions: { fetch },
-    } = useAuth();
-    const [categories, setCategories] = useState([]);
-    const location = useLocation();
-    const [loader, setLoader] = useState(location.search ? true : false);
+  const {
+    adminFunctions: {
+      addBootcamp,
+      fetchBootcamps,
+      updateBootcamp,
+      fetchCategories,
+    },
+    adminTeacherFunctions: { fetch },
+  } = useAuth();
+  const [categories, setCategories] = useState([]);
+  const location = useLocation();
+  const [loader, setLoader] = useState(location.search ? true : false);
 
-    const [formstate, setFormstate] = useState({
-        title: "",
-        duration: "",
-        categoryName: "",
-        startDate: "",
-        endDate: "",
-        startTime: "",
-        endTime: "",
-        description: "",
-        type: "",
-        instructor: "",
-        syllabus: [],
-        careerList: [],
-        packages: [],
-        popupArr: [],
-    });
+  const [formstate, setFormstate] = useState({
+    title: "",
+    duration: "",
+    categoryName: "",
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+    description: "",
+    type: "",
+    instructor: "",
+    syllabus: [],
+    careerList: [],
+    packages: [],
+    popupArr: []
+  });
 
-    const [loading, setLoading] = useState(false);
-    const [teachers, setTeachers] = useState([]);
-    const [bio, setBio] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [teachers, setTeachers] = useState([]);
+  const [bio, setBio] = useState("");
 
-    useEffect(() => {
-        if (flag.current) return;
-        if (location.search) {
-            const id = location.search.split("=").reverse()[0];
-            (async () => {
-                try {
-                    const res = await fetchBootcamps(userdata?.token);
-                    const { message, success, statusCode } = res;
-                    if (!success) throw new AdvancedError(message, statusCode);
-                    else if (statusCode === 1) {
-                        const { data } = res;
-                        let found = data.find((d) => d.bootcampId === id);
-                        found.startDate = found.startDate.split("T")[0];
-                        found.endDate = found.endDate.split("T")[0];
-                        found.instructor = found.instructorEmail;
-                        found.bootcampImg = found.bootcampImg
-                            .split("/")
-                            .slice(-1)[0];
+  useEffect(() => {
+    if (flag.current) return;
+    if (location.search) {
+      const id = location.search.split("=").reverse()[0];
+      (async () => {
+        try {
+          const res = await fetchBootcamps(userdata?.token);
+          const { message, success, statusCode } = res;
+          if (!success) throw new AdvancedError(message, statusCode);
+          else if (statusCode === 1) {
+            const { data } = res;
+            let found = data.find((d) => d.bootcampId === id);
+            found.startDate = found.startDate.split("T")[0];
+            found.endDate = found.endDate.split("T")[0];
+            found.instructor = found.instructorEmail;
+            found.bootcampImg = found.bootcampImg.split("/").slice(-1)[0];
 
-                        delete found.instructorName;
-                        setFormstate({ ...formstate, ...found });
-                        setBio(found.description);
-                    } else {
-                        throw new AdvancedError(message, statusCode);
-                    }
-                } catch (err) {
-                    toast.error(err.message);
-                } finally {
-                    setLoader((_) => false);
-                }
-            })();
+            delete found.instructorName;
+            delete found.packages
+            setFormstate({ ...formstate, ...found, type: "FLAT" });
+            setBio(found.description);
+          } else {
+            throw new AdvancedError(message, statusCode);
+          }
+        } catch (err) {
+          toast.error(err.message);
+        } finally {
+          setLoader((_) => false);
         }
+        })();
         //do some coding
         flag.current = true;
         return () => console.log("Removing CreateBootcamp component");
@@ -4084,6 +4084,7 @@ export function CreateBootcamp() {
     };
     function showUploadFormHandler() {
         setOpen((_) => true);
+
     }
 
     console.log({ formstate });
@@ -4111,6 +4112,238 @@ export function CreateBootcamp() {
         );
         setFormstate({ ...formstate, popupArr: newPopupArr });
     }
+  }
+  function popupChangeHandler(e) {
+    console.log(e.target.value)
+    setPopupList(e.target.value);
+  }
+
+  // console.log({popupList})
+
+  const [openPackage, setOpenPackage] = useState(false);
+  // PACKAGES
+  function openPackageModal() {
+    setOpenPackage(true);
+  }
+  function handleClosePackage() {
+    setOpenPackage(false);
+  }
+
+  console.log({ formstate });
+  return (
+    <Admin header={location.search ? "Edit Course" : "Create Course"}>
+      {loader && <Loader />}
+      <div className={clsx.admin_profile}>
+        <div className={clsx.edit__profile}>
+          <UploadForm
+            isOpen={open}
+            setIsOpen={setOpen}
+            setPreviewImage={setPreviewImage}
+          />
+          <div className="row w-100 mt-4">
+            <div className="col-12 d-flex justify-content-between align-items-center">
+              <div
+                className={clsx.upload__file_box}
+                onClick={showUploadFormHandler}
+              >
+                <img src={vector} alt={"Placeholder"} />
+                <p>Upload Course Banner</p>
+              </div>
+              {previewImage && (
+                <div className={clsx.upload__file_box}>
+                  <img
+                    src={previewImage}
+                    alt={"Placeholder"}
+                    style={{
+                      width: "150px",
+                      height: "100px",
+                      objectFit: "cover",
+                      objectPosition: "top",
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+          <form className="form" onSubmit={submitHandler} noValidate>
+            <Input
+              label="Course image name"
+              name="bootcampImg"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.bootcampImg}
+            />
+            <Input
+              label="Title"
+              name="title"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.title}
+            />
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Category</label>
+              <select
+                rows="5"
+                name="categoryName"
+                value={formstate.categoryName}
+                onChange={changeHandler}
+                className="form-select generic_input"
+              >
+                <option value="">Choose a Category</option>
+                {categories.length > 0 &&
+                  categories.map((item, i) => (
+                    <option key={i} value={item.name}>
+                      {item.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Subcategory</label>
+              <select
+                rows="5"
+                name="subCategory"
+                value={formstate.subCategory}
+                onChange={changeHandler}
+                className="form-select generic_input"
+              >
+                <option value="">Choose a Subcategory</option>
+                <option value="PATH_FINDERS">Pathfinder Courses</option>
+                <option value="HEAD_START">HeadStart Courses</option>
+                <option value="UPSKILL_COURSES">Upskill Courses</option>
+                <option value="IN_DEMAND">In Demand Career Courses</option>
+                <option value="EXECUTIVE_COURSES">Executive Courses</option>
+                <option value="SHORT_COURSES">Short Courses</option>
+                <option value="TECH_ENTREPRENEURSHIP">
+                  Tech entrepreneurship courses
+                </option>
+              </select>
+            </div>
+            <Input
+              label="Duration"
+              name="duration"
+              type="text"
+              handleChange={changeHandler}
+              value={formstate.duration}
+            />
+            {/* <div className={clsx.form_group}>
+              <label htmlFor={"package"}>Type</label>
+              <select
+                rows="5"
+                name="type"
+                value={formstate.type}
+                onChange={changeHandler}
+                className="form-select generic_input"
+              >
+                <option value="">Choose price type</option>
+                <option value="FLAT">Flat</option>
+                <option value="PACKAGE">Package</option>
+              </select>
+            </div> */}
+            {/* {formstate.type === "FLAT" ? ( */}
+              <Input
+                label="Price"
+                name="price"
+                type="number"
+                handleChange={changeHandler}
+                value={formstate.price}
+                noValidate={"true"}
+              />
+            {/* ) : formstate.type === "PACKAGE" ? (
+              <div className={clsx.form_group}>
+                <label htmlFor={"package"} className="form-label generic_label">
+                  Packages
+                </label>
+                {formstate.packages?.length > 0 ? (
+                  formstate.packages?.map((item, index) => (
+                    <div className={clsx.syllabus_container}>
+                      <h5>{changeConstants(item.title)}</h5>
+                      {<p>{item.price}</p>}
+                      <p>{item.description}</p>
+                      {location.search && (
+                        <p>
+                          <i
+                            className="text-danger"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => deletePackage(item.title + index)}
+                          >
+                            <BiTrash />
+                          </i>
+                        </p>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <h6>No Package available</h6>
+                )}
+                <button
+                  className="btn btn-primary my-3"
+                  style={{
+                    backgroundColor: "var(--theme-blue)",
+                    fontSize: "14px",
+                  }}
+                  type="button"
+                  onClick={openPackageModal}
+                >
+                  Add Package
+                </button>
+                <AddPackage
+                  openPackage={openPackage}
+                  addPackage={setFormstate}
+                  list={formstate}
+                  setOpen={setOpen}
+                  handleClosePackage={handleClosePackage}
+                />
+              </div>
+            ) : (
+              ""
+            )} */}
+            <div className="d-flex flex-wrap">
+              <div className="col-sm-6 col-md-3 pe-2 ">
+                <Input
+                  label="Starts By (CST)"
+                  name="startTime"
+                  type="time"
+                  handleChange={changeHandler}
+                  value={formstate.startTime}
+                />
+              </div>
+              <div className="col-sm-6 col-md-3 pe-2  ">
+                <Input
+                  label="Ends By (CST)"
+                  name="endTime"
+                  type="time"
+                  handleChange={changeHandler}
+                  value={formstate.endTime}
+                />
+              </div>
+              <div className="col-sm-6 col-md-3 pe-2 ">
+                <Input
+                  label="Start Date"
+                  name="startDate"
+                  type="date"
+                  value={formstate.startDate}
+                  handleChange={changeHandler}
+                />
+              </div>
+              <div className="col-sm-6 col-md-3 ">
+                <Input
+                  label="End Date"
+                  name="endDate"
+                  type="date"
+                  value={formstate.endDate}
+                  handleChange={changeHandler}
+                />
+              </div>
+            </div>
+            {/* <div className={clsx.editor_container}>
+              <ReactQuill theme="snow" value={formstate?.description} onChange={setBio} />
+            </div> */}
+            <Editor
+              initialState={formstate.description}
+              title="Description"
+              setBio={setBio}
+            />
 
     const handleClose = () => {
         setOpenSyllabus(false);

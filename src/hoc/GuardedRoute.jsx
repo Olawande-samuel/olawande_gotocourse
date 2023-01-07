@@ -15,9 +15,9 @@ const GuardedRoute = ({ children }) => {
     // for create
     let isCreator = value?.userType === "schools";
 
-    console.log({ isCreator });
-    if (isCreator) {
-        let schoolRoute = location.pathname;
+
+    if(isCreator){
+        let schoolRoute = location.pathname 
 
         if (value.token) {
             if (
@@ -43,10 +43,9 @@ const GuardedRoute = ({ children }) => {
             } else return <Navigate to="/school/login" />;
         }
     } else {
-        console.log("here first");
 
-        if (value.token) {
-            console.log("here second");
+
+        if(value.token){
 
             if (
                 route === "teacher" ||
@@ -67,11 +66,13 @@ const GuardedRoute = ({ children }) => {
             }
 
             return <Navigate to="/" />;
-        } else {
-            console.log("here");
-            if (route === "admin") {
-                return <Navigate to="/admin/login" />;
-            } else return <Navigate to="/login" />;
+
+        }else {
+
+            if(route === 'admin'){
+                return <Navigate to="/admin/login" />
+            }
+            else return <Navigate to="/login" />;
         }
     }
 };

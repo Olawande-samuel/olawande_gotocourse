@@ -3,7 +3,7 @@ import { AiOutlineArrowLeft, AiOutlineSearch } from 'react-icons/ai';
 import Modal from "react-bootstrap/Modal";
 import { useState } from 'react';
 import '../classConsole/Content.css'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MdAttachFile, MdOutlineNote } from 'react-icons/md';
 import { VscNote } from 'react-icons/vsc';
 import { useQuery } from '@tanstack/react-query';
@@ -12,7 +12,9 @@ import { KEY } from '../../../../constants';
 import { useAuth } from "../../../../contexts/Auth";
 
 
-const PopModal = ({ show, handleClose }) => {
+const PopModal = ({ show, handleClose, data }) => {
+
+    console.log({data})
     const navigate = useNavigate()
     return (
         <>
@@ -28,7 +30,7 @@ const PopModal = ({ show, handleClose }) => {
 
                 <Modal.Body>
                     <div className='classroom__modalheader'>
-                        <h3>Olufunmilayo Adekaunsi Class Activity</h3>
+                        <h3>{data.studentName}</h3>
                         <p>Content student has opened</p>
                     </div>
 
@@ -90,15 +92,32 @@ const PopModal = ({ show, handleClose }) => {
 
 export default function Classroom() {
     const [show, setShow] = useState(false)
-    const Toggle = () => setShow(!show)
     const handleClose = () => setShow(false)
-
+    const [data, setData]= useState({})
     const {getItem} = useLocalStorage()
     const userdata = getItem(KEY)
     const [studentList, setStudentList] = useState([])
-    const {teacherFunctions: {fetchApplications} } = useAuth()
-    const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchApplications(userdata.token), {
-        onSuccess: (res)=> console.log({res}),
+    const {teacherFunctions: {fetchBootcampApplications, fetchCourseStudents} } = useAuth()
+    
+    const {classId} = useParams()
+    
+    
+    
+    const Toggle = (item) => {
+        setData(item)
+        setShow(!show)
+    }
+
+    console.log({classId})
+    // const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchApplications(userdata.token), {
+    const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchBootcampApplications(userdata.token, classId), {
+        onSuccess: (res)=> {
+            console.log({res})
+            if(res.statusCode === 1){
+                setStudentList(res.data)
+            }
+        
+        },
         onError: (err)=> console.error(err)
     })
     
@@ -128,7 +147,7 @@ export default function Classroom() {
     
     return (
         <div className=''>
-            <PopModal show={show} handleClose={handleClose} />
+            <PopModal show={show} handleClose={handleClose} data={data}  />
 
             <main className='suite'>
                 <div className="classroom__top">
@@ -158,13 +177,13 @@ export default function Classroom() {
                         <div>Upgraded Assessment</div>
                     </div>
                     {
-                        studentData.map((x, id) => (
-                            <div className="classroom__info" onClick={Toggle}>
+                        studentList?.map((x, id) => (
+                            <div className="classroom__info" onClick={()=>Toggle(x)}>
 
                                 <div>{id + 1}</div>
-                                <div>{x.name}</div>
+                                <div>{x.studentName}</div>
                                 <div>{x.email}</div>
-                                <div>{x.code}</div>
+                                <div>{x.studentId}</div>
                                 <div>0%</div>
                                 <div>0.00%</div>
                                 <div>0/0</div>

@@ -49,6 +49,21 @@ export function getFullDate(date){
   return `${m} ${day} ${y}`;
 }
 
+
+export function calculateWeeksBetween(date1, date2) {
+  let week, days
+  let difference = Math.abs(new Date(date1) - new Date(date2))/1000/60/60/24;
+  console.log("diffenrence", difference)
+  if(difference > 7){
+    week = Math.abs(difference / 7);
+    days = Math.floor(difference % 7);
+    console.log("week", week)
+    console.log("days", days)
+    return 
+  }
+  return "checking"
+}
+
 export function getTime(time){
     if(time){
       let d = time.split("T")[1];

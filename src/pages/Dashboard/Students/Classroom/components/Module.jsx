@@ -1,16 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MdCollectionsBookmark } from 'react-icons/md';
 import { Paper } from '@mui/material';
 import { MdAttachFile, MdNote, MdQuiz, MdOutlineLock, MdCheckCircle } from 'react-icons/md';
-
-
 import { Attachment } from "./";
 import { useLocalStorage } from '../../../../../hooks';
 import { KEY } from '../../../../../constants';
 import { useAuth } from '../../../../../contexts/Auth';
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const ModuleContainer = styled.div`
     display: flex;
@@ -38,7 +36,8 @@ const AttachmentContainer = styled(Paper)`
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    background-color: ${({ $active }) => $active ? 'rgb(226, 231, 255)' : 'transparent !important'};
+    // background-color: ${({ active }) => active ? 'rgb(226, 231, 255)' : 'transparent !important'};
+    // background-color: ${({ active }) => active ? 'red !important' : 'transparent !important'};
     border-radius: 10px !important;
     margin-bottom: 10px;
     padding: 10px;
@@ -73,13 +72,18 @@ const Locked = styled(MdOutlineLock)`
 
 
 
-const Module = ({ title,setContents,moduleIndex, setPickedType, contentsData, changeActive, activeMedia,
+const Module = ({ title, setContents,reduceContent, moduleIndex, setPickedType, contentsData,setCompleted
+    // setActive, active,
 }) => {
+    const [active, setActive] = useState(false)
+    const navigate = useNavigate()
+    const [searchParams, setSearchParams] = useSearchParams();
+
 
 
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
-    const { consoleFunctions: { fetchStudentDomains, fetchStudentQuiz, fetchStudentFile, fetchStudentNote, markAsCompleted }, } = useAuth();
+    // const { consoleFunctions: { fetchStudentDomains, fetchStudentQuiz, fetchStudentFile, fetchStudentNote, markAsCompleted }, } = useAuth();
 
 
     let icon = (type) => {
@@ -87,13 +91,18 @@ const Module = ({ title,setContents,moduleIndex, setPickedType, contentsData, ch
     }
 
 
-    let statusIcon = (marked) => marked ? <CompleteIcon $isComplete={marked}  /> : <CompleteIcon />  
+    const getStatus = (contentId, items) => {
+        // console.log({contentId}, {items});
+        let findItem = items.find(item => item.contentId === contentId);
+        if (findItem) {
+           return  findItem?.completedBy?.includes(userdata.id) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />
+        }
+        return <CompleteIcon />
+    }
+
+    // console.log("data", contentsData[0]);
 
 
-
-    console.log("data", contentsData[0]);
-
-   
     return (
         <ModuleContainer  >
             <ModuleInfo>
@@ -101,29 +110,32 @@ const Module = ({ title,setContents,moduleIndex, setPickedType, contentsData, ch
             </ModuleInfo>
             <ModuleAttachments>
                 {/* {
-                    attach.filter(a => a.domain === attachments._id).map((a, i) => (<Attachment active={activeMedia} changeActive={changeActive}
+                    attach.filter(a => a.domain === attachments._id).map((a, i) => (
+                        <Attachment 
+                        active={activeMedia} 
+                        changeActive={changeActive}
                         fetchData={fetchData}
                         key={i} {...a} />))
                 } */}
 
                 {contentsData?.map((content, index) => (
 
-                    <AttachmentContainer key={index}
-                        variant="outlined"
-                        // $active={active === title ? true : false} 
-                        onClick={e => {
-                            // changeActive(title)
-                            // fetchData(type, _id, title)
-                        }
-                        }>
-                        <AttachmentInfo onClick={() => {
+                    <AttachmentContainer key={index} variant="outlined"
+                        active={active ? true : false}
+                        onClick={() => {
+                            setSearchParams({
+                                contentId: content.contentId
+                            })
+                            setActive(true)
                             setContents(content?.items)
                             setPickedType(content?.type)
                         }}>
+                        <AttachmentInfo >
                             {icon(content?.type)}
                             <h5>{content?.title}</h5>
                         </AttachmentInfo>
-                        {statusIcon(false)}
+                        {getStatus(content?.contentId, content?.items)}
+
                     </AttachmentContainer>
 
                 ))}

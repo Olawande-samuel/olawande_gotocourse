@@ -37,7 +37,7 @@ const IndemandClasses = () => {
             if(res.data.length > 0){
               // const exe = res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.isActive);
               const first  = res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
-              const second =  res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive);
+              const second =  res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive).sort((a,b) => new Date(a.startDate) - new Date(b.startDate));
               const all  = [...first, ...second]
               // setShorts(exe)
               setShorts(all)

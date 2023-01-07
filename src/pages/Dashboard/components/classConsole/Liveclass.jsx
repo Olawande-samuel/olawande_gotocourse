@@ -43,7 +43,11 @@ export function LiveClassInfo({ type }) {
   const fetchSchedule = useQuery(["fetch live schedule", userdata?.token],()=>fetchLiveSchedule(userdata.token, classId), {
     
     onSuccess: res => {
+      console.log({res})
       if(res.success){
+
+        // TODO: check if student / teacher
+        
         setSchedule(res.data)
         return
       }
@@ -62,6 +66,7 @@ export function LiveClassInfo({ type }) {
     queryClient.invalidateQueries({ queryKey: ["fetch live schedule"]}) 
   }
 
+  console.log({userdata})
 
   return (
     <div className={style.live_class}>
@@ -117,7 +122,7 @@ export function LiveClassInfo({ type }) {
   );
 }
 
-export function CurrentLive({ setOpen, roomName, status, startDate, startTime, endDate, endTime, roomid, _id }) {
+export function CurrentLive({ setOpen, roomName, status, startDate, startTime, endDate, endTime, userId, _id }) {
 
   const contextMenu = [
     {
@@ -170,6 +175,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
     e.preventDefault()
 
     updateItem("gotocourse-roomid", _id);  
+    updateItem("gotocourse-room-creator", userId);  
 
     let today  = new Date().getTime();
     let startingDate = new Date(startDate).getTime();
@@ -233,6 +239,8 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
     startTime: false,
   });
 
+  const [userId, setUserId] = useState("")
+
   const modalStyle = {
     position: "absolute",
     bottom: "30px",
@@ -263,6 +271,17 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
   const edit = searchParams.get("edit")
 
 
+  useEffect(() => {
+      if (user?.token) {
+        if(user.isAdmin){
+          setUserId(user.id)
+        } else {
+          setUserId(user.userId)
+        }
+      }
+    }, [user.token])
+  
+   
 
   function handleChange(e) {
     setFormstate({ ...formstate, [e.target.name]: e.target.value });
@@ -302,7 +321,7 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
 
       const res =  await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
         ...formstate,  
-          userId: user.userId,
+          userId: userId,
           classId
       })
 
@@ -482,16 +501,19 @@ export function Intermission() {
     const {generalState, setGeneralState} = useAuth()
     const {getItem}= useLocalStorage()
     const {classId} = useParams()
+    const userdata = getItem(KEY)
   
     const roomid = getItem("gotocourse-roomid")
+    const creator = getItem("gotocourse-room-creator")
 
 
     function joinLiveClass(){
+      
         navigate(`/class/${classId}/live/stream?room=${roomid}`, {
             state: {
           
                 roomId: roomid,
-                owner: !student ? true: false
+                owner: userdata.userId === creator ? true: false
             }
         })  
         // navigate("/teacher/live-class/live")  

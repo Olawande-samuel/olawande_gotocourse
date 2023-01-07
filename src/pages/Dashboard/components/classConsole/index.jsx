@@ -95,6 +95,21 @@ const popIcon = [
 ];
 
 export const Console = ({ children }) => {
+
+  const { pathname } = useLocation();
+  const [path, setPath]= useState("")
+
+  console.log(pathname.includes("teacher"))
+
+  useEffect(()=>{
+    if(pathname.includes("teacher")){
+      setPath("teacher")
+    } else {
+      setPath("admin")
+      
+    }
+  },[])
+
   const {classId} = useParams()
 
   const studentIcon = [
@@ -109,7 +124,7 @@ export const Console = ({ children }) => {
     id: 2,
     icon: RiVideoAddFill,
     title: "Live Class",
-    link: "/student/live-class"
+    link:  `/student/console/myclasses/class/${classId}/live-class`
   },
 ];
 
@@ -118,30 +133,29 @@ const iconData = [
     id: 1,
     icon: MdMessage,
     title: "Mail",
-    link: `/teacher/class-console/class/${classId}/mail`,
+    link: `/${path}/class-console/class/${classId}/mail`,
   },
   {
     id: 2,
     icon: MdLibraryAdd,
     title: "Creator suite",
-    link: `/teacher/class-console/class/${classId}/creator-suite`,
+    link: `/${path}/class-console/class/${classId}/creator-suite`,
   },
   {
     id: 3,
     icon: RiVideoAddFill,
     title: "Live Class",
-    link: `/teacher/class-console/class/${classId}/live-class`,
+    link: `/${path}/class-console/class/${classId}/live-class`,
   },
   {
     id: 4,
     icon: FaUsers,
     title: "Students",
-    link: `/teacher/class-console/class/${classId}/classroom`,
+    link: `/${path}/class-console/class/${classId}/classroom`,
   },
 ];
   const { generalState: { classConsole }, generalState, setGeneralState, } = useAuth();
 
-  const { pathname } = useLocation();
   const [side, setSide] = useState(false);
   const [show, setShow] = useState(false);
   const [moduleOpen, setModuleOpen] = useState(false);
@@ -158,6 +172,8 @@ const iconData = [
       ...generalState,
       classConsole: { ...classConsole, sidebar: !classConsole.sidebar },
     });
+
+
 
 
     const studentAssessMent =  pathname.includes("/student/console/myclasses");
@@ -263,6 +279,8 @@ function Sidebar({ Toggle, side }) {
     consoleFunctions: { fetchDomains },
   } = useAuth();
 
+  // const {classId} = useParams()
+
   const { pathname } = useLocation();
   const { getItem } = useLocalStorage();
   const navigate = useNavigate();
@@ -357,16 +375,14 @@ function Sidebar({ Toggle, side }) {
                 </button>
               </div>
 
-              <div className={`${style.create_content_button} ${style.blue}`}>
+              {/* <div className={`${style.create_content_button} ${style.blue}`}>
                 <button>
-                  <Link to={"/student/live-class"}>
+                  <Link to={`/student/console/myclasses/class/${classId}/live-class`}>
                     <span>Live Classes</span>
-                    {/* <i>
-                      <BsThreeDotsVertical />
-                    </i> */}
+                   
                   </Link>
                 </button>
-              </div>
+              </div> */}
             </div>
           </>
         )}

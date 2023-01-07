@@ -87,16 +87,19 @@ export const CustomButton = styled(Button)`
 
 
 
-const Sidebar = ({ modules,setContents,setPickedType,reduceContent, changeActive, activeMedia, isMobile, completed
+const Sidebar = ({ modules,setContents,setPickedType,reduceContent, setActive, active, isMobile, completed, setCompleted, progress
 }) => {
     const navigate = useNavigate()
     let elementRef = createRef(null)
+    console.log({progress});
 
     const ProgressResult = useMemo(() => {
-        if (reduceContent === undefined) return 0;
-        let result = (Math.floor((completed / reduceContent.length) * 100))
+        let result = 0;
+        if (reduceContent?.length === 0) return result;
+        result =(Math.floor((progress.isCompleted / progress.total) * 100))
+        console.log({result})
         return result
-    }, [completed, reduceContent])
+    }, [completed, reduceContent, progress.isCompleted, progress.length])
 
     return (
         <SidebarContainer $mobile={isMobile}>
@@ -117,13 +120,15 @@ const Sidebar = ({ modules,setContents,setPickedType,reduceContent, changeActive
                         modules?.map((module, id) =>
                             <Module
                                 title={module.name}
-                                activeMedia={activeMedia}
+                                // active={active}
+                                // setActive={setActive}
                                 contentsData={module.contents}
-                                changeActive={changeActive}
                                 key={id}
                                 setContents={setContents}
                                 setPickedType={setPickedType}
                                 module={id}
+                                setCompleted={setCompleted}
+                                reduceContent={reduceContent}
 
                             />)
                     }

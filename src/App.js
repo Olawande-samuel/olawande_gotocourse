@@ -50,6 +50,7 @@ import {
   Notification as StudentNotifications,
   MyClasses,
   StudentLive,
+  WishlistCheckOut,
 } from "./pages/Dashboard/Students";
 
 import StudentHelp from "./pages/Dashboard/Students/Help";
@@ -222,6 +223,12 @@ import EnterpriseOnboarding from "./components/enterprise/EnterpriseOnboarding";
 import Pricing from "./components/enterprise/Pricing";
 import Creator from "./components/enterprise/Creator";
 
+import ProtectedRoute from "./hoc/LiveClassProtection";
+import Home from "./pages/Landing";
+import NewHome from "./pages/Landing/landing";
+import AdLeads from "./pages/Dashboard/Admin/leads";
+
+
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
 const AdminLogin = lazy(() => import("./pages/Admin/Login"));
@@ -275,44 +282,26 @@ function App() {
           <Suspense fallback={<Loader />}>
             <Routes>
               <Route path="/" element={<Out />}>
-                <Route index element={<AnotherLanding />} />
+                <Route index element={<NewHome />} /> 
+                <Route path="create-with-gotocourse" element={<AnotherLanding />} />
                 <Route path="create" element={<CreatePage />} />
                 <Route path="manage" element={<ManagePage />} />
                 <Route path="pricing" element={<Pricing />} />
-                <Route
-                  path="school/login"
-                  element={<EnterPriseLogin />}
-                />
-                <Route
-                  path="school/signup"
-                  element={<EnterpriseSignUp />}
-                />
-                <Route
-                  path="enterprise-forgot"
-                  element={<EnterPriseForgotPassword />}
-                />
-                <Route
-                  path="enterprise-verify"
-                  element={<EnterpriseVerification />}
-                />
-                <Route
-                  path="enterprise-onboarding"
-                  element={<EnterpriseOnboarding />}
-                />
-                <Route
-                  path="creator-landing"
-                  element={<Creator />}
-                />
 
+                <Route path="school/login" element={<EnterPriseLogin />} />
+                <Route path="school/signup" element={<EnterpriseSignUp />} />
+                <Route path="enterprise-forgot" element={<EnterPriseForgotPassword />} />
+                <Route path="enterprise-verify" element={<EnterpriseVerification />} />
+                <Route path="enterprise-onboarding" element={<EnterpriseOnboarding />} />
+                <Route path="creator-landing" element={<Creator />} />
+
+                {/* <Route index element={<Cart />} /> */}
                 {/* <Route path="Learn-with-gotocourse" element={<Out />}>
-                              <Route index element={<Landing />} />
-
-                             </Route> */}
-
-                <Route
-                  path="Learn-with-gotocourse"
-                  element={<Landing />}
-                />
+                  <Route index element={<Landing />} />
+                  </Route> */}
+ 
+               
+                <Route path="Learn-with-gotocourse" element={<Landing />} />
                 <Route path="login" element={<Login />} />
                 <Route path="signup" element={<SignUp />} />
                 <Route path="email" element={<Email />} />
@@ -352,27 +341,22 @@ function App() {
                   element={<ResetPassword />}
                 />
                 {/* <Route path="become-a-teacher" element={<BecomeATeacher />} /> */}
-                <Route
-                  path="become-a-teacher"
-                  element={<TeachersLanding />}
-                />
-                <Route
-                  path="student/classroom"
-                  element={<StudentClassroom />}
-                />
 
-                <Route
-                  path="coming-soon"
-                  element={<ComingSoon />}
-                />
-                <Route path="tester" element={<Playground />} />
+                <Route path="become-a-teacher" element={<TeachersLanding />} />
+                <Route path="student/classroom" element={<StudentClassroom />} />
+                <Route path="coming-soon" element={<ComingSoon />} />
+  
+                <Route path="tester" element={<NewHome />} />
 
-                {/* TODO: WRAP IN PROTECTED CONTAINER */}
-                <Route
-                  path="class/:classId/live/stream"
-                  element={<VideDiv />}
+                  {/* NEW GENERAL LIVE CLASS COMPONENT */}
+                <Route path="class/:classId/live/stream"
+                 element={
+                    <ProtectedRoute>
+                      <VideDiv />
+                    </ProtectedRoute>
+                  } 
                 />
-
+  
                 <Route path="category" element={<Out />}>
                   <Route
                     index
@@ -391,29 +375,14 @@ function App() {
                 <Route path="categories" element={<Out />}>
                   <Route index element={<CategoryHome />} />
                   <Route path=":id" element={<Out />}>
-                    <Route
-                      index
-                      element={<CategoryDetail />}
-                    />
-                    <Route
-                      path="courses"
-                      element={<CoursesHome />}
-                    />
-                    <Route
-                      path="courses/:profile/:id"
-                      element={<Out />}
-                    >
-                      <Route
-                        index
-                        element={
-                          <NewBootcampDetailsComponent />
-                        }
-                      />
-                      <Route
-                        path="payment"
-                        element={<ComingSoon />}
-                      />
-                      {/* <Route path="payment" element={<BootcampPayment />} /> */}
+
+
+                    <Route index element={<CategoryDetail />} />
+                    <Route path="courses" element={<CoursesHome />} />
+                    <Route path="courses/:profile/:id" element={<Out />}>
+                      <Route index element={<NewBootcampDetailsComponent />} />
+                      {/* <Route path="payment" element={<ComingSoon />} /> */}
+                      <Route path="payment" element={<BootcampPayment />} />
                       <Route
                         path="payment/success"
                         element={
@@ -533,50 +502,18 @@ function App() {
                 {/* STUDENTS */}
                 {/* <Route path="student" element={<ComingSoon student={true} />}> */}
                 <Route path="student" element={<Out />}>
-                  <Route
-                    path=""
-                    element={<StudentDashboard />}
-                  />
-                  <Route
-                    path="profile"
-                    element={<StudentProfile />}
-                  />
-                  <Route
-                    path="classes"
-                    element={<StudentClasses />}
-                  />
-                  <Route
-                    path="bootcamps"
-                    element={<StudentBootcamps />}
-                  />
-                  <Route
-                    path="myclasses"
-                    element={<MyClasses />}
-                  />
-                  <Route
-                    path="profile/edit"
-                    element={<StudentEdit />}
-                  />
-                  <Route
-                    path="courses"
-                    element={<StudentCourses />}
-                  />
-                  <Route
-                    path="wishlist"
-                    element={<Wishlist />}
-                  />
-                  <Route
-                    path="history"
-                    element={<StudentHistory />}
-                  />
-                  <Route
-                    path="payment"
-                    element={<StudentFees />}
-                  />
-                  <Route
-                    path="chat"
-                    element={<StudentChat />}
-                  />
+                  <Route path="" element={<StudentDashboard />} />
+                  <Route path="profile" element={<StudentProfile />} />
+                  <Route path="classes" element={<StudentClasses />} />
+                  <Route path="bootcamps" element={<StudentBootcamps />} />
+                  <Route path="myclasses" element={<MyClasses />} />
+                  <Route path="profile/edit" element={<StudentEdit />} />
+                  <Route path="courses" element={<StudentCourses />} />
+                  <Route path="wishlist" element={<Wishlist />} />
+                  <Route path="wishlist-checkout" element={<WishlistCheckOut />} />
+                  <Route path="history" element={<StudentHistory />} />
+                  <Route path="payment" element={<StudentFees />} />
+                  <Route path="chat" element={<StudentChat />} />
                   {/* <Route path="help" element={<StudentHelp />} /> */}
                   <Route
                     path="help"
@@ -607,58 +544,32 @@ function App() {
                   </Route>
 
                   <Route path="console" element={<Content />}>
-                    <Route
-                      path="myclasses"
-                      element={<Out />}
-                    >
-                      <Route
-                        index
-                        element={<ConsoleClasses />}
-                      />
-                      <Route
-                        path=":id"
-                        element={<StudentChatModule />}
-                      />
-                      {/* <Route path=":id/chat" element={<ActiveChat />} /> */}
-                      <Route
-                        path="mail"
-                        element={<Out />}
-                      >
-                        <Route
-                          index
-                          element={<ChatComponent />}
-                        />
-                        <Route
-                          path="details"
-                          element={
-                            <StudentGroupContent />
-                          }
-                        />
-                        <Route
-                          path="group/:groupID"
-                          element={
-                            <StudentGroupContent />
-                          }
-                        />
-                        <Route
-                          path="chat/:userId"
-                          element={<MailDetail />}
-                        />
+
+                    <Route path="myclasses" element={<Out />}>
+                      <Route index element={<ConsoleClasses />} />
+                      <Route path=":id" element={<StudentChatModule />} />
+                        <Route path="mail" element={<Out />}> 
+                          <Route index element={<ChatComponent />} />
+                          <Route path="details" element={<StudentGroupContent />} />
+                          <Route path="group/:groupID" element={<StudentGroupContent />} />
+                          <Route path="chat/:userId" element={<MailDetail />} />
+                      </Route>
+                      <Route path="class" element={<Out />}>
+                        <Route path=":classId" element={<Out />}>
+                          <Route path="live-class" element={<Out />}>
+                            <Route index element={<LiveClassInfo />} />
+                            <Route path="live" element={<LiveClass />} />
+                            <Route path="connect/:liveId" element={<Out />}>
+                              <Route index element={<Intermission />} />
+                              <Route path="stream" element={<VideDiv />} />
+                            </Route>
+                          </Route>
+                        </Route>
                       </Route>
                     </Route>
-                    <Route
-                      path="assessments"
-                      element={<ConsoleAssessments />}
-                    />
-                    <Route
-                      path="liveclass"
-                      element={<Out />}
-                    />
+                    <Route path="assessments" element={<ConsoleAssessments />} />
                   </Route>
-                  <Route
-                    path="class-console/class/:id"
-                    element={<StudentClassroom />}
-                  />
+                  <Route path="class-console/class/:id" element={<StudentClassroom />} />
                 </Route>
 
                 {/* TEST CONSOLE */}
@@ -1123,34 +1034,15 @@ function App() {
                     path="courses-categories/new"
                     element={<CreateCourseCategory />}
                   />
-                  <Route
-                    path="teachers/approve"
-                    element={<Approve />}
-                  />
-                  <Route
-                    path="teachers/create/mentor"
-                    element={<AddMentor />}
-                  />
-                  <Route
-                    path="profile/edit"
-                    element={<AdminEdit />}
-                  />
-                  <Route
-                    path="chat"
-                    element={<AdminChat />}
-                  />
-                  <Route
-                    path="settings"
-                    element={<Settings />}
-                  />
-                  <Route
-                    path="earnings"
-                    element={<AdminEarning />}
-                  />
-                  <Route
-                    path="affiliate"
-                    element={<AdminAffiliate />}
-                  />
+
+                  <Route path="teachers/approve" element={<Approve />} />
+                  <Route path="teachers/create/mentor" element={<AddMentor />} />
+                  <Route path="profile/edit" element={<AdminEdit />} />
+                  <Route path="chat" element={<AdminChat />} />
+                  <Route path="settings" element={<Settings />} />
+                  <Route path="ad-leads" element={<AdLeads />} />
+                  <Route path="earnings" element={<AdminEarning />} />
+                  <Route path="affiliate" element={<AdminAffiliate />} />
                   <Route path="blog" element={<Out />}>
                     <Route
                       index
@@ -1247,26 +1139,20 @@ function App() {
                             element={<MailDetail />}
                           />
                         </Route>
-                        <Route
-                          path="file"
-                          element={<File />}
-                        />
-                        <Route
-                          path="note"
-                          element={<Note />}
-                        />
-                        <Route
-                          path="quiz"
-                          element={<Out />}
-                        >
-                          <Route
-                            index
-                            element={<Quiz />}
-                          />
-                          <Route
-                            path="preview"
-                            element={<Preview />}
-                          />
+                        <Route path="live-class" element={<Out />}>
+                          <Route index element={<LiveClassInfo />} />
+                          <Route path="live" element={<LiveClass />} />
+                          <Route path="connect/:liveId" element={<Out />}>
+                            <Route index element={<Intermission />} />
+                            <Route path="stream" element={<VideDiv />} />
+                          </Route>
+                        </Route>
+                        
+                        <Route path="file" element={<File />} />
+                        <Route path="note" element={<Note />} />
+                        <Route path="quiz" element={<Out />}>
+                          <Route index element={<Quiz />} />
+                          <Route path="preview" element={<Preview />} />
                         </Route>
                       </Route>
                     </Route>
@@ -1508,43 +1394,35 @@ function App() {
                             element={<MailDetail />}
                           />
                         </Route>
-                        <Route
-                          path="file"
-                          element={<File />}
-                        />
-                        <Route
-                          path="note"
-                          element={<Note />}
-                        />
-                        <Route
-                          path="quiz"
-                          element={<Out />}
-                        >
-                          <Route
-                            index
-                            element={<Quiz />}
-                          />
-                          <Route
-                            path="preview"
-                            element={<Preview />}
-                          />
+
+                        <Route path="live-class" element={<Out />}>
+                          <Route index element={<LiveClassInfo />} />
+                          <Route path="live" element={<LiveClass />} />
+                          <Route path="connect" element={<Out />}>
+                            <Route index element={<Intermission />} />
+                            <Route path="stream" element={<VideDiv />} />
+                          </Route>
+                        </Route>
+  
+
+                        <Route path="file" element={<File />} />
+                        <Route path="note" element={<Note />} />
+                        <Route path="quiz" element={<Out />}>
+                          <Route index element={<Quiz />} />
+                          <Route path="preview" element={<Preview />} />
                         </Route>
                       </Route>
                     </Route>
                   </Route>
 
-                  <Route path="live-class" element={<Out />}>
+  
+                  {/* <Route path="live-class" element={<Out />}>
                     <Route index element={<Live />} />
-                    <Route
-                      path="live"
-                      element={<LiveClass />}
-                    />
-                    <Route
-                      path="connect"
-                      element={<Intermission />}
-                    />
-                  </Route>
+                    <Route path="live" element={<LiveClass />} />
+                    <Route path="connect" element={<Intermission />} />
+                  </Route> */}
                 </Route>
+                
                 <Route path="teacher" element={<Out />}>
                   <Route
                     index

@@ -23,6 +23,8 @@ import Courses from "../Courses";
 import { GuardedRoute } from "../../hoc";
 import clsx from '../Bootcamp/Pay.module.css'
 import { useQuery } from "@tanstack/react-query";
+import ErrorBoundary from "../../classes/ErrorBoundary";
+
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
@@ -43,6 +45,7 @@ export const BootcampPayment = () => {
 
   const params = useParams();
   console.log({params})
+
   const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
     onSuccess: res =>{
       console.log({res})
@@ -159,7 +162,9 @@ export const BootcampPayment = () => {
       >
         <div className="col-md-7 col-lg-5 ">
           {showStripeModal ? (
-            <PaymentModal token={stripeId} />
+            <ErrorBoundary>
+              <PaymentModal token={stripeId} setShowStripeModal={setShowStripeModal} />
+            </ErrorBoundary>
           ) : (
             <div className={` card ${style.payment_details_card} `}>
               {/* <div> */}
@@ -182,7 +187,7 @@ export const BootcampPayment = () => {
                     <p
                       className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}
                     >
-                      {bootcamp.title}
+                      {bootcamp?.title}
                     </p>
                     {/* <p>${bootcamp?.price && bootcamp?.price}</p> */}
                   </div>
@@ -191,7 +196,7 @@ export const BootcampPayment = () => {
 
                 <div className="d-flex flex-column">
                   <span className={`fw-normal ${clsx.pay__tit}`} >Service Fee</span>
-                  <p className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}>25%</p>
+                  <p className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}>5%</p>
                 </div>
 
                 <div className="d-flex flex-column justify-content-between">
@@ -228,14 +233,14 @@ export const BootcampPayment = () => {
                           name="initialPayment"
                           id="2"
                           onChange={handleInstallmentChoice}
-                          value={(price + (price * (25 /100))) / 2 + 100}
+                          value={(price + (price * (5 /100))) / 2 + 100}
                         />
                         <label
                           htmlFor="2"
                           className="form-label generic_label ms-2 "
                         >
                           Pay in two installments of{" "}
-                          {(price + (price * (25 /100))) / 2 + 100} each
+                          {(price + (price * (5 /100))) / 2 + 100} each
                         </label>
                       </div>
                       <div className="text-center">
@@ -266,7 +271,7 @@ export const BootcampPayment = () => {
                 <div className="d-flex flex-column">
                   <span className={clsx.pay__tit}>Total</span>
                   <p className={` px-3 ${clsx.pay__inform}`}>
-                    ${price && +price + (price * (25 /100))}
+                    ${price && +price + (price * (5 /100))}
                   </p>
                 </div>
                 <button
@@ -320,20 +325,22 @@ export const BootcampPayment = () => {
 
 
 
-export function PaymentModal({ token }) {
+export function PaymentModal({ token, setShowStripeModal }) {
   const options = {
     clientSecret: token,
   };
 
   return (
+    <div>
     <Elements stripe={stripePromise} options={options}>
-      <CheckoutForm />
-    </Elements>
+      <CheckoutForm token={token} setShowStripeModal={setShowStripeModal}/>
+    </Elements> 
+    </div>
   );
 
 }
 
-export const CheckoutForm = () => {
+export const CheckoutForm = ({token, setShowStripeModal}) => {
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
@@ -342,19 +349,23 @@ export const CheckoutForm = () => {
   const { getItem } = useLocalStorage();
 
   const classData = getItem("gotocourse-bootcampdata")
+
+
+ 
+
   async function handlesubmit(e) {
     e.preventDefault();
-    setLoading(true);
     console.log(classData)
     try {
       if (!stripe || !elements) {
         return;
       }
+      setLoading(true);
 
       const result = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `https://gotocourse.us/payment/success/`,
+          return_url: `https://gotocourse.com/payment/success/`,
         },
       });
 
@@ -373,6 +384,7 @@ export const CheckoutForm = () => {
           draggable: true,
           progress: undefined,
         });
+        navigate("/payment/error");
       }
     } catch (err) {
       toast.error(err.message);
@@ -385,6 +397,10 @@ export const CheckoutForm = () => {
     <form onSubmit={handlesubmit} className="pay_card rounded" style={{background: "#ffffff"}}>
       <PaymentElement
         onReady={() => {
+          setLoadingComponent(false);
+        }}
+        onError={(err)=> {
+          console.error(err);
           setLoadingComponent(false);
         }}
       />
@@ -400,36 +416,39 @@ export const CheckoutForm = () => {
           </div>
         </div>
       ) : (
-        <button className="btn-plain w-100 mt-3" disabled={!stripe}>
-          {loading ? (
-            <div
-              className="spinner-border text-primary"
-              role="status"
-              style={{ width: "2rem", height: "2rem" }}
-            >
-              <span className="visually-hidden">Loading...</span>
-            </div>
-          ) : (
-            <span>Submit</span>
-          )}
-        </button>
+        <>
+          <button className="btn-plain w-100 mt-3" disabled={!stripe}>
+            {loading ? (
+              <div
+                className="spinner-border text-primary"
+                role="status"
+                style={{ width: "2rem", height: "2rem" }}
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              <span>Submit</span>
+            )}
+          </button>
+        </>
       )}
-      <div className="cancel w-100 text-center my-3">
-        <button
-          className=""
-          style={{
-            color: "var(--theme-blue)",
-            border: "none",
-            outline: "none",
-            fontSize: "14px",
-          }}
-          onClick={() => {
-            navigate("/payment/error");
-          }}
-        >
-          Cancel
-        </button>
-      </div>
+        <div className="cancel w-100 text-center my-3">
+          <button
+            className=""
+            style={{
+              color: "var(--theme-blue)",
+              border: "none",
+              outline: "none",
+              fontSize: "14px",
+            }}
+            onClick={() => {
+              setShowStripeModal(false)
+              // navigate("/payment/error");
+            }}
+          >
+            Cancel
+          </button>
+        </div>
     </form>
   );
 };
