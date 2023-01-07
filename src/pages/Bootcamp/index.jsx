@@ -489,13 +489,13 @@ export function NewBootcampDetailsComponent() {
 
   async function handleBootstrapEnrollment(e) {
     e.preventDefault();
-    navigate("/coming-soon")
+    // navigate("/coming-soon")
 
-    // if (userdata?.token) {
-    //   navigate("payment")
-    // } else {
-    //   navigate("/login")
-    // }
+    if (userdata?.token) {
+      navigate("payment")
+    } else {
+      navigate("/login")
+    }
   }
 
 

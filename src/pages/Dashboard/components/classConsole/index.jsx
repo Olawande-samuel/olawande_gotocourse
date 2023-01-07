@@ -174,6 +174,8 @@ const iconData = [
     });
 
 
+
+
     const studentAssessMent =  pathname.includes("/student/console/myclasses");
     console.log({studentAssessMent});
 
@@ -277,6 +279,8 @@ function Sidebar({ Toggle, side }) {
     consoleFunctions: { fetchDomains },
   } = useAuth();
 
+  // const {classId} = useParams()
+
   const { pathname } = useLocation();
   const { getItem } = useLocalStorage();
   const navigate = useNavigate();
@@ -371,16 +375,14 @@ function Sidebar({ Toggle, side }) {
                 </button>
               </div>
 
-              <div className={`${style.create_content_button} ${style.blue}`}>
+              {/* <div className={`${style.create_content_button} ${style.blue}`}>
                 <button>
-                  <Link to={"/student/live-class"}>
+                  <Link to={`/student/console/myclasses/class/${classId}/live-class`}>
                     <span>Live Classes</span>
-                    {/* <i>
-                      <BsThreeDotsVertical />
-                    </i> */}
+                   
                   </Link>
                 </button>
-              </div>
+              </div> */}
             </div>
           </>
         )}

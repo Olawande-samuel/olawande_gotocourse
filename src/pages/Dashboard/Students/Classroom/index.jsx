@@ -17,6 +17,8 @@ import { useAuth } from '../../../../contexts/Auth';
 import { KEY } from '../../../../constants';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRef } from 'react';
+import axios from 'axios'
+import { ViewModal } from '../../components/classConsole/File';
 
 
 const Container = styled.div`
@@ -494,6 +496,7 @@ const NoteComponent = (contentItem) => {
 
 const FileComponent = (contentItem) => {
     console.log({ contentItem });
+    const [open, setOpen] = useState(false)
 
     const getExtention = (val) => {
         console.log({ val });
@@ -503,23 +506,45 @@ const FileComponent = (contentItem) => {
         }else return "image"
 
     }
+
+
+    function downloadContent(file, fileName, type) {
+       
+		axios({
+            url: file,
+            method: 'GET',
+            responseType: 'blob',
+        }).then((response) => {
+            console.log({response})
+            const href = URL.createObjectURL(response.data);
+            const link = document.createElement('a');
+            link.href = href;
+            link.setAttribute('download', fileName);
+            document.body.appendChild(link);
+            link.click();
+    
+            document.body.removeChild(link);
+            URL.revokeObjectURL(href);
+        });
+        
+	}
     return (
         <div>
             <Paper variant='outlined' className="paper">
                 <PaperTop>
                     <div>
-                        <h5>{contentItem.contentItem.title}</h5>
+                        {/* <h5>{contentItem.contentItem.title}</h5>
                         <IconButton>
                             <MdMoreVert />
-                        </IconButton>
+                        </IconButton> */}
 
                     </div>
                     <div>
                         <BodyActions>
                             <IconButton>
-                                <BiCloudDownload />
+                                <BiCloudDownload  onClick={() =>downloadContent(contentItem.contentItem.fileName,contentItem.contentItem.title,contentItem.contentItem.type)}/>
                             </IconButton>
-                            <CustomButton>Open</CustomButton>
+                            <CustomButton onClick={() => setOpen(true)}>Open</CustomButton>
                         </BodyActions>
                     </div>
                 </PaperTop>
@@ -533,13 +558,21 @@ const FileComponent = (contentItem) => {
 
                 <FileDisplay>
                     {getExtention(contentItem.contentItem.type) === "image" ? <img src={`${process.env.REACT_APP_IMAGEURL}${contentItem.contentItem.fileName}`} alt="" /> :
-                        <video src={`${process.env.REACT_APP_VIDEOSURL}${contentItem.contentItem.fileName}`} controls ></video>
+                        <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem.contentItem.fileName}`} controls ></video>
                     }
 
                 </FileDisplay>
 
 
             </Paper>
+
+            <ViewModal
+				open={open}
+				setOpen={setOpen}
+				file={contentItem.contentItem.fileName}
+				type={contentItem.contentItem.type}
+				title={contentItem.contentItem.title}
+			/>
 
         </div>
     )
@@ -552,6 +585,22 @@ const QuizComponent = ({ contentItem ,userdata}) => {
         questionId:"",
         answers:[]
     })
+
+    // questions:[
+    //     {
+    //         questionId: 1,
+    //         answers:[answer1id, snser2id]
+    //     },
+    //     {
+    //         questionId: 2,
+    //         answers:[answer1id]
+    //     },
+    //     {
+    //         questionId: 3,
+    //         answers:[answer1id]
+    //     },
+
+    // }]
 
     const [allAnswers, setAllAnswers] = useState([])
 
@@ -691,21 +740,34 @@ const Classroom = () => {
         ], []);
 
     }, [modules])
+    
 
 
     const completedContent = useMemo(() => {
-        return reduceContent?.reduce((total, current) =>{
-            console.log("text", current.items.filter(item => item.completedBy?.includes(userdata.id)))
-           return total + current.items.length
-
-        }
-         ,0)
+        return reduceContent?.reduce((total, current) => [
+            ...total, ...current.items
+        ] ,[])
 
     }, [modules])
 
 
-    console.log({completedContent});
-    console.log({ reduceContent })
+    const totalItem = useMemo(()=>{
+        
+        let length = completedContent?.length 
+        let isCompleted = completedContent?.filter(item => item.completedBy < 0)
+        
+        return {
+            total: length,
+            isCompleted: isCompleted.length
+        };
+
+    }, [modules])
+
+
+
+
+
+
 
 
    useMemo(() => {
@@ -730,6 +792,7 @@ const Classroom = () => {
         }
 
     }, [reduceContent, contentId])
+
 
     const MoveButton = (type) => {
         if (reduceContent?.length > 0 && type === "next") {
@@ -786,9 +849,9 @@ const Classroom = () => {
     },[reduceContent, contentId])
 
 
-    const handleFileCompleted = async (contentId, fileId) => {
+    const handleFileCompleted = async (contentId, fileId, type) => {
         console.log({ contentId });
-        const { data, statusCode } = await markAsCompleted(userdata?.token, contentId, fileId)
+        const { data, statusCode } = await markAsCompleted(userdata?.token, contentId, fileId, type)
         if(statusCode === 1){
             queryClient.invalidateQueries(["fetch domains"])
             console.log({ data });
@@ -847,6 +910,8 @@ const Classroom = () => {
                         setPickedType={setPickedType}
                         reduceContent={reduceContent}
                         setCompleted={setCompleted}
+                        progress={totalItem}
+
                     // active={active} 
                     // setActive={setActive}
                     />
@@ -860,6 +925,7 @@ const Classroom = () => {
                     setPickedType={setPickedType}
                     reduceContent={reduceContent}
                     setCompleted={setCompleted}
+                    progress={totalItem}
                 // active={active} 
                 // setActive={setActive}
 
@@ -892,7 +958,7 @@ const Classroom = () => {
                                             <FileComponent contentItem={content} id={id} key={id} />
                                             <QuizAction >
                                                 <MarkButton display={content.completedBy.includes(userdata.id) ? true : false}
-                                                    onClick={() => handleFileCompleted(content.contentId, content.fileId)}
+                                                    onClick={() => handleFileCompleted(content.contentId, content.fileId, "files")}
                                                 >
                                                     Mark as Completed
                                                 </MarkButton>
@@ -912,7 +978,8 @@ const Classroom = () => {
 
                                         <QuizAction >
                                             <MarkButton
-                                                onClick={() => handleFileCompleted(content.contentId, content._id)}
+                                            display={content.completedBy.includes(userdata.id) ? true : false}
+                                                onClick={() => handleFileCompleted(content.contentId, content._id, "notes")}
                                             >
                                                 Mark as Completed
                                             </MarkButton>
@@ -980,7 +1047,7 @@ const IconComponent = ({ classId }) => {
             id: 2,
             icon: RiVideoAddFill,
             title: "Live Class",
-            link: "/student/live-class"
+            link: `/student/console/myclasses/class/${classId}/live-class`
         },
     ];
     return (
