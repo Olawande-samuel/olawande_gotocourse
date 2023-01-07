@@ -11,6 +11,7 @@
   --text-color-dark: #000;
   --text-color-light: #000;
   --text-color-lighter: #000;
+  --text-light: #888;
   --btn-color: rgb(12, 33, 145);
   --accent-color: #023047;
   --text-blue: rgb(12, 33, 145);
@@ -3338,6 +3339,7 @@ td span {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
 /* CREATOR */
 
 .creator {
