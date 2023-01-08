@@ -68,7 +68,7 @@ function SidebarItem({ icon: Icon, title, path, showBadge, ...props }) {
     );
 }
 
-const Sidebar = ({ }) => {
+const Sidebar = () => {
     const location = useLocation();
     const { generalState, setGeneralState } = useAuth();
     const navigate = useNavigate();
@@ -172,6 +172,11 @@ const Sidebar = ({ }) => {
                     icon: BsNewspaper,
                     path: "blog",
                     title: "Blog",
+                },
+                {
+                    icon: BsNewspaper,
+                    path: "customize",
+                    title: "Customize",
                 },
             ];
         } else if (route.includes("student")) {
@@ -399,11 +404,11 @@ const Sidebar = ({ }) => {
                         icon: BsNewspaper,
                         path: "blog",
                         title: "Blog",
-                    },
+                    },            
                     {
-                        icon: BsNewspaper,
-                        path: "customize",
-                        title: "Customize",
+                        icon: RiAdvertisementFill,
+                        path: "ad-leads",
+                        title: "Ad Leads"
                     },
                 ]
                 : route === "student"
