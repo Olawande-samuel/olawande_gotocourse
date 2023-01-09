@@ -86,7 +86,7 @@ const OnBoarding = () => {
                 
                 // updateItem(KEY, userdata)
                 setPage(_ => 10);
-                toast.success(message, {
+                toast.success("Form submitted successfully. You can now proceed to your Dashboard", {
                     position: "top-right",
                     autoClose: 4000,
                     hideProgressBar: true,
@@ -321,11 +321,10 @@ function Success({}){
         <div className={clsx.question}>
             <div className={clsx.question_container}>
                 <form>
-                    <h2>Registration Successful</h2>
+                    <h2 className="text-center" >Registration Successful</h2>
                     <img src={success} alt="Registration Success" />
                     <div className={clsx.form_group__button}>
-                        {/* <Link to="/student"> */}
-                        <Link to="/coming-soon">
+                        <Link to="/student">
                             <button>Go to Dashboard</button>
                         </Link>
                     </div>

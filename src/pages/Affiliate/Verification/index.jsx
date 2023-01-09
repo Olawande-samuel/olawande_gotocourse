@@ -159,7 +159,7 @@ export function Form({type}){
             if(!success) throw new AdvancedError(message, statusCode);
             else {
                 updateItem(VERIFICATION_KEY, {...userdata, isVerified: true})
-                toast.success(message, {
+                toast.success("Email verified successfully. You will be redirected to your onboarding page shortly", {
                     position: "top-right",
                     autoClose: 4000,
                     hideProgressBar: true,
@@ -174,7 +174,10 @@ export function Form({type}){
                       notification: message,
                     };
                 });
-                navigate(userdata.userType === "affiliate" ? "/affiliate" : userdata.userType === "student" ? "/user-onboarding" : userdata.usertype === "admin" ?  "/admin" : "/teacher/on-boarding");
+
+                setTimeout(() => {
+                    navigate(userdata.userType === "affiliate" ? "/affiliate" : userdata.userType === "student" ? "/user-onboarding" : userdata.usertype === "admin" ?  "/admin" : "/teacher/on-boarding");
+                }, 2500);
             }
             
         }catch(err){
