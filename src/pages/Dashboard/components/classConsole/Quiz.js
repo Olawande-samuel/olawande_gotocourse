@@ -172,7 +172,6 @@ export default function Quiz() {
     const getContentfromQuery = useQuery(["quiz content", contentId, userdata?.token], () => fetchQuiz(userdata.token, searchData), {
         onSuccess: (res)=> {
             console.log("fetched")
-
             if(res.data?.length > 0){
                 let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
                 setFormData({...res.data[res.data.length -1], endDate: deadline})
@@ -293,6 +292,7 @@ export default function Quiz() {
 
     function handleSubmit(e){
         e.preventDefault();
+        console.log("Submit", formData)
         quizAdd.mutate([userdata.token, {...formData, classId, contentId}])
 
     }
@@ -431,15 +431,14 @@ export default function Quiz() {
 
                                                             <div className="texteditor quiz__editor">  
                                                             
-                                                            {/* <ReactQuill theme="snow" value={x?.title} onChange={()=>{
+                                                             <ReactQuill theme="snow" value={x?.title} onChange={(e)=>{
                                                                  const list = { ...formData }
-
-                                                                 list.questions[id]['title'] = x.title;
+                                                                 list.questions[id]['title'] = e;
                                                                  setFormData(list)
                                                             }} 
-                                                            /> */}
+                                                            />
                 
-                                                                <CKEditor
+                                                                {/* <CKEditor
                                                                 editor={ClassicEditor}
                                                                 data={x?.title}
                                                                 onReady={editor => {
@@ -457,7 +456,7 @@ export default function Quiz() {
                                                                 }}
                                                                 onFocus={(event, editor) => {
                                                                 }}
-                                                            />
+                                                            /> */}
 
                                                                 <div className='textbtn'>
                                                                     <Button
