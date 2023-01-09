@@ -115,6 +115,8 @@ export default function Email() {
     const {getItem} = useLocalStorage();
     let userdata = getItem(VERIFICATION_KEY);
     const [loading, setLoading] = useState(false);
+
+    
     async function resendOTPHandler(e){
         try{
             setLoading(_ => true);
