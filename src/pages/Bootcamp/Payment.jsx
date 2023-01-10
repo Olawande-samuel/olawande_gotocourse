@@ -176,14 +176,18 @@ export const BootcampPayment = () => {
 
                 <div>
                   <div className="d-flex align-items-center justify-content-center w-100 py-1">
-                    <h3 className={clsx.check}>Checkout Page</h3>
+                    <h3 className={clsx.check}>
+                      <span>Begin Your Exciting Journey To</span>
+                      <span className="d-block">Learning A New Skill</span>
+                      
+                    </h3>
                   </div>
                 </div>
 
 
                 <div className={style.payment_card_mid}>
                   <div className="d-flex flex-column">
-                    <span className={clsx.pay__tit}>Class</span>
+                    <span className={clsx.pay__tit}>Course</span>
                     <p
                       className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}
                     >
@@ -216,7 +220,7 @@ export const BootcampPayment = () => {
                     <option value="0">Installment</option>
                   </select>
                 </div>
-                <hr />
+                <br />
                 {paymentData.fullPayment === false ? (
                   <>
                     <div className="">
@@ -270,10 +274,11 @@ export const BootcampPayment = () => {
                 )}
                 <div className="d-flex flex-column">
                   <span className={clsx.pay__tit}>Total</span>
-                  <p className={` px-3 ${clsx.pay__inform}`}>
+                  <p className={`${clsx.pay__total}`}>
                     ${price && +price + (price * (5 /100))}
                   </p>
                 </div>
+
                 <button
                   onClick={enrollToCourse}
                   className="button w-100 button-md"

@@ -70,9 +70,9 @@ const LogoutButton = () => {
                     <MdLogout size="1.5rem" color="#F75C4E" />
                 </i>
                 <motion.button className="d-none d-lg-flex" style={{minWidth:"130px"}} >
-                    <i>
+                    {/* <i>
                         <MdLogout size="1.5rem" className="me-1" />
-                    </i>
+                    </i> */}
                     <span>Logout</span>
                 </motion.button>
             </>

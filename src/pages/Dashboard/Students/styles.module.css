@@ -248,10 +248,12 @@ padding: .8rem 0;
 
 .dashboard_courses--left {
     flex: 1;
-    background: var(--dashboard-blue);
+    /* background: var(--dashboard-blue);
+     */
+    background: rgba(136, 187, 255, 0.122);
     padding: 1.5rem 1rem;
     border-radius: 10px;
-    overflow: scroll;
+    /* overflow: scroll; */
     min-height: 400px;
     max-height: 800px;
 
@@ -293,7 +295,10 @@ padding: .8rem 0;
 }
 
 .dashboard_courses--left .classes_button button:first-child {
-    background: var(--theme-orange);
+    /* background: var(--theme-orange); */
+    background: #C6D7EE;
+    color: var(--theme-blue);
+
 }
 
 .dashboard_courses--left ul,
@@ -312,13 +317,13 @@ padding: .8rem 0;
 }
 
 .dashboard_courses--left h6 {
-    color: var(--theme-orange);
+    color: var(--theme-blue);
     margin-bottom: 2rem;
     font-size: 23px;
 }
 
 .dashboard_courses--right {
-    background: var(--dashboard-pink);
+    /* background: var(--dashboard-pink); */
     flex: 1;
     padding: 1.5rem 3rem;
     border-radius: 10px;
@@ -344,7 +349,8 @@ padding: .8rem 0;
     margin-top: 3rem;
     padding: 1rem clamp(0.5rem, -0.2143rem + 3.5714vw, 3rem);
     min-height: 400px;
-    background: var(--dashboard-pink);
+    background: rgba(136, 187, 255, 0.122);
+    /* background: var(--dashboard-pink); */ 
     overflow: scroll;
 
 }
@@ -362,7 +368,27 @@ padding: .8rem 0;
 .dashboard_community h6 {
     font-size: 23px;
     margin-bottom: 2rem;
-    color: #C89C00;
+    color: #000;
+}
+.seemore{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem;
+
+}
+
+.seemore a{
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 22px;
+    color: #0C2191;
+}
+
+.courseApplied {
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
 }
 
 .dashboard_community h6 {
@@ -578,7 +604,7 @@ padding: .8rem 0;
 
 
 .coursebody .coursecontent:nth-child(odd) {
-    background-color: lightblue;
+    /* background-color: lightblue; */
 }
 
 
@@ -596,6 +622,11 @@ padding: .8rem 0;
     .courseheader, .coursecontent{
         flex-direction: column;
             align-items: center;
+
+    }
+
+    .courseApplied {
+        flex-direction: column;
 
     }
     .wishlistprice{
