@@ -1972,6 +1972,7 @@ export const Dashboard = ({ mixpanel }) => {
     let userdata = getItem(KEY);
     const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps: fetchMyClasses }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
     // const { studentFunctions: { fetchBootcamps },  otherFunctions:{ fetchBootcamps: studentboot} } = useAuth();
+    const [search, setSearch] = useState("");
 
     const navigate = useNavigate();
 
@@ -2031,16 +2032,24 @@ export const Dashboard = ({ mixpanel }) => {
             <div className={clsx.students_profile}>
                 <DashboardTop content={topContent} />
 
+                <div className={clsx.wishlist__inputcontaniner}>
+                    <input type="text" className={clsx.wishlist__input}
+                        placeholder="search"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)} />
+                    <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
+                </div>
+
                 <div className={clsx.students_profile_main}>
                     {/* <UpcomingCourses data={all ? all : []} /> */}
-                    <UpcomingCourses data={data?.data ? data?.data : []} />
+                    <UpcomingCourses data={data?.data ? data?.data : []} search={search} />
                 </div>
 
 
 
                 <div className={clsx.students_profile_main}>
                     {/* <AvailableCourses data={all ? all : []} /> */}
-                    <AvailableCourses data={data?.data ? data?.data : []} />
+                    <AvailableCourses data={data?.data ? data?.data : []} search={search} />
 
                     <div className={`d-flex flex-wrap ${clsx.dashboard_courses}`}>
                         <div className={clsx["dashboard_courses--right"]}>
@@ -2125,16 +2134,17 @@ export const Dashboard = ({ mixpanel }) => {
 
 }
 
-function UpcomingCourses({ data }) {
+function UpcomingCourses({ data, search }) {
     const navigate = useNavigate()
     // const tableHeader = ["Courses", "Start Date", "Program Fee", ""]
     const { getItem } = useLocalStorage()
     let userdata = getItem(KEY);
 
-    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
-    const second = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-    const all = [...first, ...second];
-    console.log({ second });
+    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
+    const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+    const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    const all = [...first, ...second, ...third];
+    // console.log({ second });
 
     function handleCourseSelect(e, item) {
         e.preventDefault()
@@ -2184,7 +2194,14 @@ function UpcomingCourses({ data }) {
                 <div className={clsx["coursebody"]}>
                     {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
                     {/* {data?.length > 0 && data.filter(d => d.startDate === "2023-01-05T00:00:00.000Z" && d.isActive).sort(() => 0.5 - Math.random()).map((item, i) => ( */}
-                    {all?.length > 0 && all.slice(0, 4).sort(() => 0.5 - Math.random()).map((item, i) => (
+                    {all?.length > 0 && all?.filter((course) =>
+                        course?.category
+                            .toLowerCase()
+                            .includes(search.toLowerCase()) ||
+                        course?.title
+                            .toLowerCase()
+                            .includes(search.toLowerCase())
+                    ).slice(0, 4).sort(() => 0.5 - Math.random()).map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
                             <div className={clsx["courseitem"]}>
@@ -2244,9 +2261,11 @@ function UpcomingCourses({ data }) {
 
                 </div>
 
-                <div className={clsx.seemore}>
-                    <Link to={`/category/upcoming`}> See more <AiOutlineDoubleRight /></Link>
-                </div>
+                {all?.length > 0 &&
+                    <div className={clsx.seemore}>
+                        <Link to={`/category/upcoming`}> See more <AiOutlineDoubleRight /></Link>
+                    </div>
+                }
 
             </div>
 
@@ -2257,7 +2276,7 @@ function UpcomingCourses({ data }) {
     )
 }
 
-function AvailableCourses({ data }) {
+function AvailableCourses({ data, search }) {
     const navigate = useNavigate()
     // const tableHeader = ["Courses", "Start Date", "Program Fee", ""]
     const { getItem } = useLocalStorage()
@@ -2276,9 +2295,10 @@ function AvailableCourses({ data }) {
     }
     // console.log({ data });
 
-    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
-    const second = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-    const all = [...first, ...second];
+    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
+    const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+    const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    const all = [...first, ...second, ...third];
 
     return (
         <div className={` ${clsx.dashboard_courses}`}>
@@ -2318,7 +2338,14 @@ function AvailableCourses({ data }) {
                 <div className={clsx["coursebody"]}>
                     {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
                     {/* {data?.length > 0 && data.filter(d => d.isActive).map((item, i) => ( */}
-                    {all.length > 0 && all.slice(0, 4).map((item, i) => (
+                    {all?.length > 0 && all?.filter((course) =>
+                        course?.category
+                            .toLowerCase()
+                            .includes(search?.toLowerCase()) ||
+                        course?.title
+                            .toLowerCase()
+                            .includes(search?.toLowerCase())
+                    ).slice(0, 4).map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
                             <div className={clsx["courseitem"]}>
@@ -2359,7 +2386,7 @@ function AvailableCourses({ data }) {
                             </div>
 
                             <div className={clsx["courseitem"]}>
-                            <div className={clsx.classes_button}>
+                                <div className={clsx.classes_button}>
                                     <button className="d-flex align-items-center" onClick={() => gotoclass(item.title, item.category, item.bootcampId, navigate)}>
                                         <i><AiFillQuestionCircle style={{ fontSize: "1.1rem", color: "var(--theme-blue" }} /></i>
                                         <span>Learn more</span>
@@ -2378,9 +2405,11 @@ function AvailableCourses({ data }) {
 
                 </div>
 
-                <div className={clsx.seemore}>
-                    <Link to={`/category/upcoming`}> See more <AiOutlineDoubleRight /></Link>
-                </div>
+                {all?.length > 0 &&
+                    <div className={clsx.seemore}>
+                        <Link to={`/category/upcoming`}> See more <AiOutlineDoubleRight /></Link>
+                    </div>
+                }
 
             </div>
 
