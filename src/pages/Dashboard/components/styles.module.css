@@ -45,7 +45,7 @@
 }
 .sidebar_items {
   display: flex;
-  margin-top: 50px;
+  margin-top: 30px;
   flex-direction: column;
   height: 82%;
   overflow-y: scroll;
@@ -67,7 +67,7 @@
 
 .sidebar_item {
   cursor: pointer;
-  padding: 8px;
+  padding: 5px 2rem;
   /* padding: 15px; */
   color: var(--white);
   display: flex;
@@ -75,8 +75,15 @@
   /* border: 2px solid red; */
 }
 
+.sidebar_icon{
+
+  /* border: 2px solid yellow; */
+ 
+}
+
 .sidebar_item_title {
-  font-size: 1rem;
+  font-size: .85rem;
+  /* border: 1px solid green; */
 }
 
 /* NAVBAR */

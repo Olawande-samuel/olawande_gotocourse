@@ -2612,10 +2612,11 @@ input[type="email"] {
 }
 
 #sidebar__items a:not(:last-child) {
-  margin: 5px 0px;
+  /* margin: 5px 0px; */
   padding: 5px;
   border-radius: 0px 10px 10px 0px;
   width: 95%;
+  
 }
 
 #sidebar__items a:hover {
@@ -3368,4 +3369,12 @@ td span {
 
 .ql-editor.ql-blank{
   min-height: 340px;
+}
+
+.coursesdatefilter .MuiOutlinedInput-root{
+background: #fff !important;
+border-radius: 130.455px !important;
+font-weight: 800 !important;
+outline: none !important;
+
 }

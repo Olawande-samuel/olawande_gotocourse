@@ -1982,7 +1982,7 @@ export const Dashboard = ({ mixpanel }) => {
         setValue(newValue);
     };
 
-    console.log({value});
+    console.log({ value });
 
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
     const { data: myenrolledcourses, isSuccess: mycoursesuccess } = useQuery(["fetch my enrolledclasses"], () => fetchMyClasses(userdata?.token))
@@ -2063,27 +2063,26 @@ export const Dashboard = ({ mixpanel }) => {
                     <div className={clsx.courseApplied}>
                         <h6>Names of Courses applied for</h6>
 
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DesktopDatePicker
-                                style={{
-                                    background: "#FFFFFF",
-                                    borderRadius: "130.455px",
-                                    color: "000"
-                                }}
-                                // label="Date desktop"
-                                inputFormat="MM/DD/YYYY"
-                                value={value}
-                                onChange={handleChange}
-                                renderInput={(params) => <TextField {...params} />}
-                            />
-                        </LocalizationProvider>
+                        <div className="coursesdatefilter">
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DesktopDatePicker
+                                    // label="Date desktop"
+                                    inputFormat="MM/DD/YYYY"
+                                    value={value}
+                                    onChange={handleChange}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
+
+                        </div>
+
 
 
                     </div>
                     {/* <CourseTable courses={data?.data} type="dashboard" /> */}
                     {
                         myenrolledcourses?.data?.length > 0 ?
-                        // data?.data?.length > 0 ?
+                            // data?.data?.length > 0 ?
                             <div className="table-responsive">
                                 <table className="table table-borderless w-auto">
                                     <thead>
@@ -2096,22 +2095,22 @@ export const Dashboard = ({ mixpanel }) => {
                                     <tbody>
                                         {myenrolledcourses?.data?.filter(data => data.status === "paid").map((item, i) => (
 
-                                                <tr key={i}>
-                                                    <td><span>{i + 1}</span></td>
-                                                    <td>
-                                                        <span>{item.bootcampName}</span>
-                                                    </td>
-                                                    <td><span>{item.paymentStatus}</span></td>
-                                                    <td><span>{new Date(item?.startDate).toLocaleDateString()}</span></td>
-                                                    <td><span>{item.amountPaid}</span></td>
-                                                    <td>
-                                                        {/* <span className="d-block dashboard_table">
+                                            <tr key={i}>
+                                                <td><span>{i + 1}</span></td>
+                                                <td>
+                                                    <span>{item.bootcampName}</span>
+                                                </td>
+                                                <td><span>{item.paymentStatus}</span></td>
+                                                <td><span>{new Date(item?.startDate).toLocaleDateString()}</span></td>
+                                                <td><span>{item.amountPaid}</span></td>
+                                                <td>
+                                                    {/* <span className="d-block dashboard_table">
                                                         <GotoDashboard loader={loader} setLoading={setLoading} />
                                                     </span> */}
-                                                    </td>
-                                                </tr>
+                                                </td>
+                                            </tr>
 
-                                            ))}
+                                        ))}
                                     </tbody>
                                 </table>
                             </div> : <NoDetail text="You haven't registered for any course" />

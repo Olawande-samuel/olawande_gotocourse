@@ -61,7 +61,7 @@ function SidebarItem({ icon: Icon, title, path, showBadge, ...props }) {
                 color="secondary"
             >
                 <i>
-                    <Icon className={clsx.sidebar_icon} color="white" size="1.5rem" />
+                    <Icon className={clsx.sidebar_icon} color="white" size="1rem" />
                 </i>
                 <span className={clsx.sidebar_item_title}>{title}</span>
             </Badge>

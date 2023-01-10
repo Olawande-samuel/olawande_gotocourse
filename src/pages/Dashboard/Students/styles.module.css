@@ -248,7 +248,9 @@ padding: .8rem 0;
 
 .dashboard_courses--left {
     flex: 1;
-    background: var(--dashboard-blue);
+    /* background: var(--dashboard-blue);
+     */
+    background: rgba(136, 187, 255, 0.122);
     padding: 1.5rem 1rem;
     border-radius: 10px;
     overflow: scroll;
@@ -347,7 +349,7 @@ padding: .8rem 0;
     margin-top: 3rem;
     padding: 1rem clamp(0.5rem, -0.2143rem + 3.5714vw, 3rem);
     min-height: 400px;
-    background: #E1E2FF;
+    background: rgba(136, 187, 255, 0.122);
     /* background: var(--dashboard-pink); */ 
     overflow: scroll;
 
