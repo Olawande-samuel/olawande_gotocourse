@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { AiOutlineMenu } from "react-icons/ai"
+import { AiOutlineMenu, AiOutlineShoppingCart } from "react-icons/ai"
 import { FaGraduationCap } from "react-icons/fa"
 import { IoNotificationsOutline } from "react-icons/io5"
 import { useNavigate, useLocation } from "react-router-dom"
@@ -13,7 +13,7 @@ export default function Navbar({ header, toggleSidebar, notification, content })
     const location = useLocation()
     const main = location.pathname.split("/")[1]
     const [loading, setLoading] = useState(false)
-    const { generalState: { isMobile, showSidebar, notifications }, generalState, setGeneralState, adminFunctions: { fetchNotifications }, outstanding } = useAuth();
+    const { generalState: { isMobile, showSidebar, notifications, carts },   generalState, setGeneralState, adminFunctions: { fetchNotifications }, outstanding } = useAuth();
     const navigate = useNavigate()
 
     const payment = location.pathname.split("/")[2] === "payment"
@@ -39,6 +39,10 @@ export default function Navbar({ header, toggleSidebar, notification, content })
                 {/* move loading state to this component */}
                 <Badge alignItems="center" className="me-4" badgeContent={notifications ? notifications : 0} color="secondary" >
                     <IoNotificationsOutline size="1.5rem" color="#0C2191" onClick={() => navigate(`/${main}/notifications`)} style={{ cursor: "pointer" }} />
+                </Badge>
+
+                <Badge alignItems="center" className="me-4" badgeContent={carts ? carts : 0} color="secondary" >
+                    <AiOutlineShoppingCart size="1.5rem" color="#0C2191" onClick={() => navigate(`/${main}/wishlist`)} style={{ cursor: "pointer" }} />
                 </Badge>
 
                 {payment && (

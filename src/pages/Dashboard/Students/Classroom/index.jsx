@@ -19,7 +19,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRef } from 'react';
 import axios from 'axios'
 import { ViewModal } from '../../components/classConsole/File';
-
+import emptyImg from "../../../../images/empty.png"
 
 const Container = styled.div`
 position: relative;
@@ -185,6 +185,26 @@ const BodyActions = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-start;
+
+    
+// .empty{
+//     background-image: url(${emptyImg});
+//     background-repeat: no-repeat;
+//     background-position: center;
+//     width: 100%;
+//     min-height: 50vh;
+//      border: 2px solid red;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+// }
+
+// .empty p{
+//     font-size: 28px;
+//     font-family: 'Raleway';
+//     color: #0C2191;
+
+// }
 `;
 
 
@@ -256,7 +276,7 @@ const QuizButton = styled.button`
 `;
 
 const MarkButton = styled.button`
-display: ${({display}) => display ? 'none' : 'block' };
+display: ${({ display }) => display ? 'none' : 'block'};
     background-color: #3f50b5 ;
     color: white ;
     border: none;
@@ -495,39 +515,39 @@ const NoteComponent = (contentItem) => {
 }
 
 const FileComponent = (contentItem) => {
-    console.log({ contentItem });
+    // console.log({ contentItem });
     const [open, setOpen] = useState(false)
 
     const getExtention = (val) => {
-        console.log({ val });
+        // console.log({ val });
 
-        if(val.split('/')[0] === "video"){
+        if (val.split('/')[0] === "video") {
             return "video"
-        }else return "image"
+        } else return "image"
 
     }
 
 
     function downloadContent(file, fileName, type) {
-       
-		axios({
+
+        axios({
             url: file,
             method: 'GET',
             responseType: 'blob',
         }).then((response) => {
-            console.log({response})
+            console.log({ response })
             const href = URL.createObjectURL(response.data);
             const link = document.createElement('a');
             link.href = href;
             link.setAttribute('download', fileName);
             document.body.appendChild(link);
             link.click();
-    
+
             document.body.removeChild(link);
             URL.revokeObjectURL(href);
-        });
-        
-	}
+        });
+
+    }
     return (
         <div>
             <Paper variant='outlined' className="paper">
@@ -542,7 +562,7 @@ const FileComponent = (contentItem) => {
                     <div>
                         <BodyActions>
                             <IconButton>
-                                <BiCloudDownload  onClick={() =>downloadContent(contentItem.contentItem.fileName,contentItem.contentItem.title,contentItem.contentItem.type)}/>
+                                <BiCloudDownload onClick={() => downloadContent(contentItem.contentItem.fileName, contentItem.contentItem.title, contentItem.contentItem.type)} />
                             </IconButton>
                             <CustomButton onClick={() => setOpen(true)}>Open</CustomButton>
                         </BodyActions>
@@ -567,23 +587,26 @@ const FileComponent = (contentItem) => {
             </Paper>
 
             <ViewModal
-				open={open}
-				setOpen={setOpen}
-				file={contentItem.contentItem.fileName}
-				type={contentItem.contentItem.type}
-				title={contentItem.contentItem.title}
-			/>
+                open={open}
+                setOpen={setOpen}
+                file={getExtention(contentItem.contentItem.type) === "image" ?
+                    `${process.env.REACT_APP_IMAGEURL}${contentItem.contentItem.fileName}` : 
+                `${process.env.REACT_APP_VIDEOURL}${contentItem.contentItem.fileName}`
+                }
+                type={contentItem.contentItem.type}
+                title={contentItem.contentItem.title}
+            />
 
         </div>
     )
 }
 
-const QuizComponent = ({ contentItem ,userdata}) => {
+const QuizComponent = ({ contentItem, userdata }) => {
     console.log(contentItem);
     const { consoleFunctions: { attemptQuiz } } = useAuth();
     const [myAnswers, setMyAnswers] = useState({
-        questionId:"",
-        answers:[]
+        questionId: "",
+        answers: []
     })
 
     // questions:[
@@ -607,19 +630,19 @@ const QuizComponent = ({ contentItem ,userdata}) => {
 
     useMemo(() => {
         setAllAnswers([myAnswers])
-    },[myAnswers])
+    }, [myAnswers])
 
-    console.log({myAnswers});
-    console.log({allAnswers});
+    console.log({ myAnswers });
+    console.log({ allAnswers });
 
     const AnswerQuiz = async () => {
-        const { data } = await attemptQuiz(userdata?.token,contentItem._id,  allAnswers)
+        const { data } = await attemptQuiz(userdata?.token, contentItem._id, allAnswers)
         console.log({ data });
 
 
     }
 
-    
+
     return (
         <>
             <Quiz>
@@ -658,10 +681,10 @@ const QuizComponent = ({ contentItem ,userdata}) => {
                                                     value={opt.title}
                                                     // name="isAnswer"
                                                     onChange={e => {
-                                                      setMyAnswers({
-                                                        questionId:ques._id,
-                                                        answers:[ ...myAnswers.answers, opt._id]
-                                                      })
+                                                        setMyAnswers({
+                                                            questionId: ques._id,
+                                                            answers: [...myAnswers.answers, opt._id]
+                                                        })
                                                     }} />
                                                 {opt.title}
                                             </label>
@@ -697,6 +720,7 @@ const Classroom = () => {
     const [modules, setModules] = useState([]);
     const [contents, setContents] = useState([])
     const [title, setTitle] = useState("")
+    const [bodyTitle, setBodyTitle] = useState("")
     const [bootcampName, setBootcampName] = useState({})
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -704,7 +728,7 @@ const Classroom = () => {
     // const [active, setActive] = useState(false)
     const [next, setNext] = useState(false)
     const [prev, setPrev] = useState(false)
-    let queryClient =  useQueryClient()
+    let queryClient = useQueryClient()
 
 
     const { getItem } = useLocalStorage()
@@ -740,25 +764,25 @@ const Classroom = () => {
         ], []);
 
     }, [modules])
-    
+
 
 
     const completedContent = useMemo(() => {
         return reduceContent?.reduce((total, current) => [
             ...total, ...current.items
-        ] ,[])
+        ], [])
 
     }, [modules])
 
 
-    const totalItem = useMemo(()=>{
-        
-        let length = completedContent?.length 
+    const totalItem = useMemo(() => {
+
+        let length = completedContent?.length
         let isCompleted = completedContent?.filter(item => item.completedBy < 0)
-        
+
         return {
             total: length,
-            isCompleted: isCompleted.length
+            isCompleted: isCompleted?.length
         };
 
     }, [modules])
@@ -770,7 +794,7 @@ const Classroom = () => {
 
 
 
-   useMemo(() => {
+    useMemo(() => {
 
         if (reduceContent?.length > 0) {
             const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
@@ -805,12 +829,15 @@ const Classroom = () => {
                 console.log({ val });
                 setPickedType(reduceContent[val]?.type)
                 setContents(reduceContent[val]?.items)
+                setBodyTitle(reduceContent[val]?.title)
+
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
             } else {
                 val = findIndex;
                 setContents(reduceContent[val]?.items)
+                setBodyTitle(reduceContent[val]?.title)
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
@@ -822,6 +849,7 @@ const Classroom = () => {
                 val = findIndex - 1;
                 setPickedType(reduceContent[val]?.type)
                 setContents(reduceContent[val]?.items)
+                setBodyTitle(reduceContent[val]?.title)
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
@@ -829,6 +857,7 @@ const Classroom = () => {
                 val = findIndex;
                 setPickedType(reduceContent[val]?.type)
                 setContents(reduceContent[val]?.items)
+                setBodyTitle(reduceContent[val]?.title)
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
@@ -839,20 +868,22 @@ const Classroom = () => {
 
 
     useMemo(() => {
-        if (reduceContent?.length > 0 && contentId){
+        if (reduceContent?.length > 0 && contentId) {
             const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
             if (findIndex > -1) {
                 setPickedType(reduceContent[findIndex]?.type)
-                setContents(reduceContent[findIndex]?.items) 
+                setContents(reduceContent[findIndex]?.items)
+                setBodyTitle(reduceContent[findIndex]?.title)
+
             }
         }
-    },[reduceContent, contentId])
+    }, [reduceContent, contentId])
 
 
     const handleFileCompleted = async (contentId, fileId, type) => {
         console.log({ contentId });
         const { data, statusCode } = await markAsCompleted(userdata?.token, contentId, fileId, type)
-        if(statusCode === 1){
+        if (statusCode === 1) {
             queryClient.invalidateQueries(["fetch domains"])
             console.log({ data });
 
@@ -876,7 +907,7 @@ const Classroom = () => {
 
     // console.log({ contentId });
 
-    console.log({completed});
+    console.log({ completed });
 
     return (
         <Container>
@@ -885,7 +916,7 @@ const Classroom = () => {
                     <MenuButton onClick={e => setShowMobile(_ => true)}>
                         <MdMenu />
                     </MenuButton>
-                    <h5 style={{ margin: 0 }}><Link to={`/student/console/myclasses`} style={{color: "#fff"}}>Classroom</Link></h5>
+                    <h5 style={{ margin: 0 }}><Link to={`/student/console/myclasses`} style={{ color: "#fff" }}>Classroom</Link></h5>
                 </div>
                 <NavLeft>
                     <IconButton>
@@ -911,7 +942,7 @@ const Classroom = () => {
                         reduceContent={reduceContent}
                         setCompleted={setCompleted}
                         progress={totalItem}
-
+                        setBodyTitle={setBodyTitle}
                     // active={active} 
                     // setActive={setActive}
                     />
@@ -926,6 +957,8 @@ const Classroom = () => {
                     reduceContent={reduceContent}
                     setCompleted={setCompleted}
                     progress={totalItem}
+                    setBodyTitle={setBodyTitle}
+
                 // active={active} 
                 // setActive={setActive}
 
@@ -933,24 +966,26 @@ const Classroom = () => {
                 <ClassroomMain>
                     <ClassroomMainTop>
                         <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
-                            <BreadcrumbLink to="/">
+                            <BreadcrumbLink to="/student">
                                 Dashboard
                             </BreadcrumbLink>
-                            <BreadcrumbLink to="#">
+                            <BreadcrumbLink to="/student/console/myclasses">
                                 {bootcampName?.length > 0 && bootcampName[0].bootcampName}
                             </BreadcrumbLink>
                             <BreadcrumbLink to="#" $isCurrentPage={true}>
-                                {title}
+                                {bodyTitle}
                             </BreadcrumbLink>
                         </Breadcrumbs>
                     </ClassroomMainTop>
                     <ClassroomMainBody>
                         <BodyInfo>
-                            <h3>{title}</h3>
+                            <h3>{bodyTitle}</h3>
                             <CustomButton>Ask tutor a question</CustomButton>
                         </BodyInfo>
 
                         <BodyContent>
+
+
                             {pickedType === "FILE_VIDEO" &&
                                 <>
                                     {contents?.length > 0 && contents?.map((content, id) => (
@@ -978,7 +1013,7 @@ const Classroom = () => {
 
                                         <QuizAction >
                                             <MarkButton
-                                            display={content.completedBy.includes(userdata.id) ? true : false}
+                                                display={content.completedBy.includes(userdata.id) ? true : false}
                                                 onClick={() => handleFileCompleted(content.contentId, content._id, "notes")}
                                             >
                                                 Mark as Completed
@@ -995,7 +1030,7 @@ const Classroom = () => {
                             {pickedType === "QUIZ" && <>
                                 {contents?.length > 0 && contents?.map((content, id) => (
                                     <>
-                                        <QuizComponent contentItem={content} id={id} key={id} userdata={userdata}/>
+                                        <QuizComponent contentItem={content} id={id} key={id} userdata={userdata} />
                                         <QuizAction >
                                             <MarkButton
                                                 onClick={() => handleFileCompleted(content.contentId, content._id)}
@@ -1023,6 +1058,10 @@ const Classroom = () => {
                                 </NextButton>
                             </QuizAction>
                             }
+
+
+
+
                         </BodyContent>
                     </ClassroomMainBody>
                 </ClassroomMain>

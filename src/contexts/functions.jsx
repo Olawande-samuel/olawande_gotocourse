@@ -2858,6 +2858,41 @@ export const studentFunctions = {
             }
         }
     },
+    payCarts: async function (token, paymentIds) {
+        // console.log({token});
+        try {
+            const res = await axios.post(`${baseURL}/user/bootcamp/add/cart`, {
+                bootcampIdArr: paymentIds
+            },
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
     addCourse: async function (_data, token) {
         try {
             const res = await axios.post(`${baseURL}/user/course/add`,
