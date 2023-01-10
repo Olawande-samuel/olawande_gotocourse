@@ -25,7 +25,7 @@ import { useLocalStorage } from "../../../hooks";
 import { FaRegTrashAlt, FaUserAlt } from "react-icons/fa";
 import { SiGoogleclassroom } from "react-icons/si";
 import { IoMdChatboxes } from "react-icons/io";
-import { Box, FormControl, InputLabel, MenuItem, Modal, Select ,TextField} from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Modal, Select, TextField } from "@mui/material";
 
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import dayjs from 'dayjs';
@@ -1982,6 +1982,7 @@ export const Dashboard = ({ mixpanel }) => {
         setValue(newValue);
     };
 
+    console.log({value});
 
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
     const { data: myenrolledcourses, isSuccess: mycoursesuccess } = useQuery(["fetch my enrolledclasses"], () => fetchMyClasses(userdata?.token))
@@ -2012,7 +2013,8 @@ export const Dashboard = ({ mixpanel }) => {
             value: "$0"
         }
     ]
-    const tableHeaders = ["No", "Courses", "Course Fee($)", ""]
+    // const tableHeaders = ["No", "Courses", "Course Fee($)", ""]
+    const tableHeaders = ["No", "Courses", "Status", "Date", "Amount Paid"]
 
     if (wishlistIsSuccess) {
         topContent[1].value = wishlistData?.data?.length
@@ -2063,11 +2065,11 @@ export const Dashboard = ({ mixpanel }) => {
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DesktopDatePicker
-                            style={{
-                                background: "#FFFFFF",
-                                borderRadius: "130.455px",
-                                color:"000"
-                            }}
+                                style={{
+                                    background: "#FFFFFF",
+                                    borderRadius: "130.455px",
+                                    color: "000"
+                                }}
                                 // label="Date desktop"
                                 inputFormat="MM/DD/YYYY"
                                 value={value}
@@ -2081,6 +2083,7 @@ export const Dashboard = ({ mixpanel }) => {
                     {/* <CourseTable courses={data?.data} type="dashboard" /> */}
                     {
                         myenrolledcourses?.data?.length > 0 ?
+                        // data?.data?.length > 0 ?
                             <div className="table-responsive">
                                 <table className="table table-borderless w-auto">
                                     <thead>
@@ -2092,20 +2095,23 @@ export const Dashboard = ({ mixpanel }) => {
                                     </thead>
                                     <tbody>
                                         {myenrolledcourses?.data?.filter(data => data.status === "paid").map((item, i) => (
-                                            <tr key={i}>
-                                                <td><span>{i + 1}</span></td>
-                                                <td>
-                                                    <span>{item.bootcampName}</span>
-                                                </td>
-                                                <td><span>{item.amountPaid}</span></td>
-                                                <td>
-                                                    {/* <span className="d-block dashboard_table">
+
+                                                <tr key={i}>
+                                                    <td><span>{i + 1}</span></td>
+                                                    <td>
+                                                        <span>{item.bootcampName}</span>
+                                                    </td>
+                                                    <td><span>{item.paymentStatus}</span></td>
+                                                    <td><span>{new Date(item?.startDate).toLocaleDateString()}</span></td>
+                                                    <td><span>{item.amountPaid}</span></td>
+                                                    <td>
+                                                        {/* <span className="d-block dashboard_table">
                                                         <GotoDashboard loader={loader} setLoading={setLoading} />
                                                     </span> */}
-                                                </td>
-                                            </tr>
+                                                    </td>
+                                                </tr>
 
-                                        ))}
+                                            ))}
                                     </tbody>
                                 </table>
                             </div> : <NoDetail text="You haven't registered for any course" />
@@ -2240,7 +2246,7 @@ function UpcomingCourses({ data }) {
                 </div>
 
                 <div className={clsx.seemore}>
-                    <Link to={`/category/upcoming`}> See more <AiOutlineDoubleRight/></Link>
+                    <Link to={`/category/upcoming`}> See more <AiOutlineDoubleRight /></Link>
                 </div>
 
             </div>
@@ -2313,7 +2319,7 @@ function AvailableCourses({ data }) {
                 <div className={clsx["coursebody"]}>
                     {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
                     {/* {data?.length > 0 && data.filter(d => d.isActive).map((item, i) => ( */}
-                    {all.length > 0 && all.slice(0,4).map((item, i) => (
+                    {all.length > 0 && all.slice(0, 4).map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
                             <div className={clsx["courseitem"]}>
@@ -2374,7 +2380,7 @@ function AvailableCourses({ data }) {
                 </div>
 
                 <div className={clsx.seemore}>
-                    <Link to={`/category/upcoming`}> See more <AiOutlineDoubleRight/></Link>
+                    <Link to={`/category/upcoming`}> See more <AiOutlineDoubleRight /></Link>
                 </div>
 
             </div>
