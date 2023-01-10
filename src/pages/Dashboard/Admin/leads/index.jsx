@@ -119,7 +119,7 @@ export default function AdLeads() {
 
               <Box sx={{ width: '100%' }}>
 
-            <div className="d-flex justify-content-end">
+            {/* <div className="d-flex justify-content-end">
               {
                 fetchAdLeads?.data?.data?.length > 0 &&
                 <button className="btn-plain" onClick={exportCsv} disabled={exportToCsv?.isLoading}>
@@ -137,7 +137,7 @@ export default function AdLeads() {
                 </button>
               }
               
-            </div>
+            </div> */}
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="scrollable">
                       {title.map((item, index)=> (
@@ -249,11 +249,10 @@ function TableRow({item, index}){
 
   const deleteLeads = useMutation(([token, id])=>deleteLead(token, id),
     {
-        enabled:userdata.token !== null,
         onSuccess: res=> {
             console.log(res)
-            toast.success(res.data.message)
             queryClient.invalidateQueries(["fetchAdLeads"])
+            toast.success(res.message)
 
         },
         onError: err=>{

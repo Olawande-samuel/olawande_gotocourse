@@ -2557,7 +2557,7 @@ export const adminFunctions = {
     },
     deleteLead: async function (token, id) {
         try {
-            const res = await axios.get(`${baseURL}/programs/delete/${id}`,
+            const res = await axios.delete(`${baseURL}/program/delete/${id}`,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,

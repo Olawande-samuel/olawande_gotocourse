@@ -27,30 +27,30 @@ const Grid = styled.div`
     } 
 `;
 const IndemandClasses = () => {
-  const { otherFunctions: {fetchBootcamps }, } = useAuth();
+  const { otherFunctions: { fetchBootcamps }, } = useAuth();
   const [shorts, setShorts] = useState([])
-    
-  const classes = useQuery(["fetch classes"], () => fetchBootcamps(), {
-        notifyOnChangeProps:["category", "isFetching"],
 
-        onSuccess: (res)=>{
-            if(res.data.length > 0){
-              // const exe = res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.isActive);
-              const first  = res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
-              const second =  res.data.filter(item=>item.subCategory === "IN_DEMAND" && item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive).sort((a,b) => new Date(a.startDate) - new Date(b.startDate));
-              const all  = [...first, ...second]
-              // setShorts(exe)
-              setShorts(all)
-              // console.log({exe})
-            }
-        }
+  const classes = useQuery(["fetch classes"], () => fetchBootcamps(), {
+    notifyOnChangeProps: ["category", "isFetching"],
+
+    onSuccess: (res) => {
+      if (res.data.length > 0) {
+        const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
+        const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+        const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+        const all = [...first, ...second, ...third];
+        // setShorts(exe)
+        setShorts(all)
+        // console.log({exe})
+      }
+    }
   })
   return (
     <ClassTypeComponent {...data}>
       <Grid>
         {
-          shorts?.filter(item=>item.isActive).slice(0,8).map((item) => (
-            <InDemand {...item} all={item} key={item.bootcampId}/>
+          shorts?.filter(item => item.isActive).slice(0, 8).map((item) => (
+            <InDemand {...item} all={item} key={item.bootcampId} />
           ))
         }
       </Grid>
@@ -61,24 +61,24 @@ const IndemandClasses = () => {
 
 const data = {
   header: "",
-  header2:"Explore In demand career courses",
-  subtext:"Learn In demand skills to launch your career. Build job relevant skills by learning from experts from  world-class companies and universities. Finish program within 2 months to 6 months",
-  subtext1:"Build job relevant skills by learning from experts from  world-class companies and universities. Finish program within 2 months to 6 months",
+  header2: "Explore In demand career courses",
+  subtext: "Learn In demand skills to launch your career. Build job relevant skills by learning from experts from  world-class companies and universities. Finish program within 2 months to 6 months",
+  subtext1: "Build job relevant skills by learning from experts from  world-class companies and universities. Finish program within 2 months to 6 months",
   content: [],
-  bottomTitle:"View more In demand career courses >",
-  bottomLink:`/category/IN_DEMAND`
+  bottomTitle: "View more In demand career courses >",
+  bottomLink: `/category/IN_DEMAND`
 
 }
 export default IndemandClasses;
 
-export const inDemandPopUpContent = [ 
+export const inDemandPopUpContent = [
 
   {
     id: 1,
-    ownedBy:"UI/UX Design Specialization",
+    ownedBy: "UI/UX Design Specialization",
     title: "Learn how to create beautiful and user-friendly digital products.",
     list: [
-      
+
       "You will you will learn how to create wireframes.",
       "You will you will learn how to create prototypes.",
       "You will you will learn how to create user flows.",
@@ -86,7 +86,7 @@ export const inDemandPopUpContent = [
   },
   {
     id: 2,
-    ownedBy:"Product Management",
+    ownedBy: "Product Management",
     title: "Learn the business process of planning, developing, launching and managing a product or service.",
     list: [
       "You will you will learn the entire lifecycle of a product.",
@@ -96,10 +96,10 @@ export const inDemandPopUpContent = [
   },
   {
     id: 3,
-    ownedBy:"AWS Cloud Practitioner Essentials",
+    ownedBy: "AWS Cloud Practitioner Essentials",
     title: "Learn how to supervise the architecting and deployment of applications within AWS platforms.",
     list: [
-      
+
       "You will you will learn how to develop plans for the adoption of cloud solutions.",
       "You will you will learn how to Manage and monitor cloud platforms.",
       "You will you will learn design and build applications on the cloud.",
@@ -107,10 +107,10 @@ export const inDemandPopUpContent = [
   },
   {
     id: 4,
-    ownedBy:"Building Web Applications in PHP",
+    ownedBy: "Building Web Applications in PHP",
     title: "Learn how to create and implement plans that will help organization achieve their objectives.",
     list: [
-      
+
       "You will you will learn about the processes involved in designing products, services, and experiences.",
       "You will you will learn how to grow as a designer and manager.",
       "You will you will learn how to apply design thinking methods to solve problems and create innovative solutions.",
@@ -118,10 +118,10 @@ export const inDemandPopUpContent = [
   },
   {
     id: 5,
-    ownedBy:"Full stack web Development",
+    ownedBy: "Full stack web Development",
     title: "The Fullstack Web Development course will guide you on your journey towards becoming a fullstack web developer.",
     list: [
-      
+
       "You will you will learn how to create dynamic pages using HTML and CSS.",
       "You will you will learn how to develop backend applications using PHP and MySQL..",
       "You will you will learn the skills you need to build and manage your own web applications. ",
@@ -129,7 +129,7 @@ export const inDemandPopUpContent = [
   },
   {
     id: 6,
-    ownedBy:"Front end app Development",
+    ownedBy: "Front end app Development",
     title: "Learn how to create beautiful and responsive user interfaces using modern web development techniques.",
     list: [
       "You will you will learn how to use HTML, CSS, and JavaScript to build website designs that look great on any device.",
@@ -139,10 +139,10 @@ export const inDemandPopUpContent = [
   },
   {
     id: 7,
-    ownedBy:"Android app development",
+    ownedBy: "Android app development",
     title: "Android mobile app development is a process by which a android mobile app is created for a cell phone or a tablet.",
     list: [
-      
+
       "You will you will learn how to create test and deploy an android app.",
       "You will you will learn how to use industry-standard tools and frameworks to build functional, high-quality android mobile apps.",
       "You will you will learn user experience design, app architecture, and the development process for an adroid app.",
@@ -150,10 +150,10 @@ export const inDemandPopUpContent = [
   },
   {
     id: 8,
-    ownedBy:"IOS app development",
+    ownedBy: "IOS app development",
     title: "IOS mobile app development is a process by which a IOS mobile app is created for a cell phone or a tablet.",
     list: [
-      
+
       "You will you will learn how to create test and deploy an IOS app.",
       "You will you will learn how to use industry-standard tools and frameworks to build functional, high-quality IOS mobile apps.",
       "You will you will learn user experience design, app architecture, and the development process for an IOS app. ",
@@ -161,10 +161,10 @@ export const inDemandPopUpContent = [
   },
   {
     id: 9,
-    ownedBy:"ServiceNow & Developer Administration",
+    ownedBy: "ServiceNow & Developer Administration",
     title: "ServiceNow is a cloud computing platform designed for business workflows.",
     list: [
-      
+
       "You will you will learn about the ServiceNow cloud platform and understand how it operates and how to become a certified ServiceNow developer.",
       "You will you will learn how to develop, install and troubleshoot the ServiceNow platform.",
       "You will you will learn how to integrate ServiceNow with other programs.",
@@ -172,10 +172,10 @@ export const inDemandPopUpContent = [
   },
   {
     id: 10,
-    ownedBy:"IT Audit & compliance",
+    ownedBy: "IT Audit & compliance",
     title: "An IT audit or information technology audit is an evaluation of IT systems, infrastructures, policies, and operations.",
     list: [
-      
+
       "You will you will learn how to how to audit IT systems and processes.",
       "You will you will learn how to improve an organization’s processes.",
       "You will you will learn how to ensure your organizations compliance with regulations and standards.",
@@ -183,10 +183,10 @@ export const inDemandPopUpContent = [
   },
   {
     id: 11,
-    ownedBy:"SAFE Agile Methodology",
+    ownedBy: "SAFE Agile Methodology",
     title: "SAFE Agile Methodology is based on the Scaled Agile Framework (SAFE); an agile framework developed for development teams.",
     list: [
-      
+
       "You will you will learn how to use SAFE.",
       "You will you will learn how to build complex solutions that are too big and complicated for a single Scrum team to tackle.",
       "You will you will learn how to create a more predictable release schedule for projects/products.",
@@ -194,10 +194,10 @@ export const inDemandPopUpContent = [
   },
   {
     id: 12,
-    ownedBy:"Business Analysis",
+    ownedBy: "Business Analysis",
     title: "Business Analysts helps with developing a business case and solution for an organization's business problem.",
     list: [
-      
+
       "You will you will learn how to use system flowcharts and wireframes, advanced excel skills, how to track projects and ensure they all follow through as clients require.",
       "You will you will learn how understand all client’s requests and deliver them to the technical team to deploy according all client requirements.",
       "You will you will learn how to use advance data analysis tools.",
@@ -205,10 +205,10 @@ export const inDemandPopUpContent = [
   },
   {
     id: 13,
-    ownedBy:"Project Management Professional",
+    ownedBy: "Project Management Professional",
     title: "You will learn how to be a Project Management Professional.",
     list: [
-      
+
       "You will you will learn how to manage projects through ll the project management lifecyles.",
       "You will you will learn how to plan, innitiate, execute, monitor and complete projects.",
       "You will you will learn how to use various project managements tools and techniques in ensuring the successful delivery of all projects.",
@@ -216,10 +216,10 @@ export const inDemandPopUpContent = [
   },
   {
     id: 14,
-    ownedBy:"Devops Engineering",
+    ownedBy: "Devops Engineering",
     title: "DevOps is a valuable business discipline and organizations are highly requesting for individuals who are knowledgeable and certified DevOps engineers.",
     list: [
-      
+
       "You will you will learn DevOps architecture and features like automation, collaboration, integration and configuration management.",
       "You will you will learn how to use some DevOps tools like: ELK stack, Puppet, Kubernetes, Ansible, Nagios, Splunk.",
       "You will you will learn how to use DevOps software and have an understanding of DevOps management.",
@@ -227,10 +227,10 @@ export const inDemandPopUpContent = [
   },
   {
     id: 15,
-    ownedBy:"Governance, Risk & Compliance Specialty",
+    ownedBy: "Governance, Risk & Compliance Specialty",
     title: "There is a very high demands for Governance, Risk and Compliance (GRC) experts in the tech industry.",
     list: [
-      
+
       "You will you will learn how to develop and implement policies and procedures to protect an organization’s information assets.",
       "You will you will learn how ensure organizational compliance with various regulations and standards.",
       "You will you will learn how to identify, assess, and respond to threats and vulnerabilities in an organization.",
@@ -238,10 +238,10 @@ export const inDemandPopUpContent = [
   },
   {
     id: 17,
-    ownedBy:"",
-    title:"",
+    ownedBy: "",
+    title: "",
     list: [
-    
+
     ]
   },
 ]
