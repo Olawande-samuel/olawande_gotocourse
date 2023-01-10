@@ -7,7 +7,7 @@ import { AiOutlineMenu, AiOutlineSearch } from "react-icons/ai"
 import { FaGraduationCap } from "react-icons/fa"
 import { BsQuestionCircle, BsDownload } from "react-icons/bs"
 import { Rating } from 'react-simple-star-rating'
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import trello from "../../../images/trello.png"
 import { Product, Stu1, Stu2, Stu3 } from "../../../images/components/svgs"
@@ -734,61 +734,69 @@ export function Wishlist() {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
 
-
-
-    async function getWishList() {
-        try {
-            setGeneralState({ ...generalState, loading: true })
-            const res = await fetchWishlist(userdata?.token);
-            const { message, success, statusCode } = res;
-            if (!success) throw new AdvancedError(message, statusCode);
-            else if (statusCode === 1) {
-                const { data } = res;
-                if (data.length > 0) {
-                    setWishlists(data);
-                    toast.success(message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                } else {
-                    toast.error("wishlist is empty", {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                    setWishlists([])
-                }
-
-            } else {
-                throw new AdvancedError(message, statusCode);
+    const getCarts = useQuery(["carts"], () => fetchWishlist(userdata?.token),{
+        enabled: userdata?.token !== null,
+        onSuccess: (res) => {
+            if (res?.data?.length > 0) {
+                setWishlists(res?.data);
             }
-        } catch (err) {
-            toast.error(err.message, {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        } finally {
-            setGeneralState({ ...generalState, loading: false });
         }
-    }
-    useEffect(() => {
-        if (!userdata?.token) return;
-        getWishList()
-    }, [userdata?.token])
+    });
+
+
+    // async function getWishList() {
+    //     try {
+    //         setGeneralState({ ...generalState, loading: true })
+    //         const res = await fetchWishlist(userdata?.token);
+    //         const { message, success, statusCode } = res;
+    //         if (!success) throw new AdvancedError(message, statusCode);
+    //         else if (statusCode === 1) {
+    //             const { data } = res;
+    //             if (data.length > 0) {
+    //                 setWishlists(data);
+    //                 toast.success(message, {
+    //                     position: "top-right",
+    //                     autoClose: 4000,
+    //                     hideProgressBar: true,
+    //                     closeOnClick: true,
+    //                     pauseOnHover: true,
+    //                     draggable: true,
+    //                     progress: undefined,
+    //                 });
+    //             } else {
+    //                 toast.error("wishlist is empty", {
+    //                     position: "top-right",
+    //                     autoClose: 4000,
+    //                     hideProgressBar: true,
+    //                     closeOnClick: true,
+    //                     pauseOnHover: true,
+    //                     draggable: true,
+    //                     progress: undefined,
+    //                 });
+    //                 setWishlists([])
+    //             }
+
+    //         } else {
+    //             throw new AdvancedError(message, statusCode);
+    //         }
+    //     } catch (err) {
+    //         toast.error(err.message, {
+    //             position: "top-right",
+    //             autoClose: 4000,
+    //             hideProgressBar: true,
+    //             closeOnClick: true,
+    //             pauseOnHover: true,
+    //             draggable: true,
+    //             progress: undefined,
+    //         });
+    //     } finally {
+    //         setGeneralState({ ...generalState, loading: false });
+    //     }
+    // }
+    // useEffect(() => {
+    //     if (!userdata?.token) return;
+    //     getWishList()
+    // }, [userdata?.token])
 
     console.log({ wishlists });
 
@@ -848,7 +856,9 @@ export function Wishlist() {
                             //   .includes(search.toLowerCase())
                         )
                             .map((item, index) => (
-                                <WishCard key={index} {...item} refetch={getWishList} />
+                                <WishCard key={index} {...item} 
+                                // refetch={getWishList} 
+                                />
                             )) :
                             <p className="text-center mx-auto">Nothing to see here</p>
                         }
@@ -879,7 +889,9 @@ export function Wishlist() {
                                     courseCategory: item.category,
                                 }
                                 return (
-                                    <AvailCard key={index} {...info} refetch={getWishList} />
+                                    <AvailCard key={index} {...info} 
+                                    // refetch={getWishList} 
+                                    />
 
                                 )
                             }) :
@@ -898,6 +910,7 @@ export function Wishlist() {
 function WishCard({ courseId: id, courseName, courseDescription, courseCategory, refetch }) {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
+
 
     function closeModal() {
         setOpen(false)
@@ -938,6 +951,7 @@ function AvailCard({ courseId, courseName, courseDescription, courseCategory, re
     const { getItem } = useLocalStorage();
     let [wishlistState, setWishlistState] = useState(false)
     const [loading, setLoading] = useState(false)
+    let queryClient = useQueryClient()
 
     const userdata = getItem(KEY)
 
@@ -951,6 +965,7 @@ function AvailCard({ courseId, courseName, courseDescription, courseCategory, re
                 if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
                 const { data } = response
                 setWishlistState(true)
+                queryClient.invalidateQueries(["carts"])
             } catch (error) {
                 console.error(error)
                 setLoading(false)
@@ -1004,6 +1019,7 @@ function AvailCard({ courseId, courseName, courseDescription, courseCategory, re
                 const { data } = res;
                 setWishlistState(false)
                 setLoading(false)
+                queryClient.invalidateQueries(["carts"])
 
             }
         } catch (err) {
