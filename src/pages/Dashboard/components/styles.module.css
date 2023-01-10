@@ -67,14 +67,16 @@
 
 .sidebar_item {
   cursor: pointer;
-  padding: 15px;
+  padding: 8px;
+  /* padding: 15px; */
   color: var(--white);
   display: flex;
   align-items: center;
+  /* border: 2px solid red; */
 }
 
 .sidebar_item_title {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 /* NAVBAR */

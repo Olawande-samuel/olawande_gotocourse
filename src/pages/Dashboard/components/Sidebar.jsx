@@ -39,10 +39,11 @@ import { colors, KEY } from "../../../constants";
 import { useAuth } from "../../../contexts/Auth";
 import LogoutButton from "../../../components/LogoutButton";
 import { LogoSidebar, Logosm } from "../../../images/components/svgs";
-import { SiGoogleclassroom } from "react-icons/si";
+import { SiGooglechat, SiGoogleclassroom } from "react-icons/si";
 import { BsNewspaper } from "react-icons/bs";
 import { HiOutlinePresentationChartLine } from "react-icons/hi";
 import { RiAdvertisementFill } from "react-icons/ri";
+import { GiSandsOfTime } from "react-icons/gi";
 
 //mini-components
 function SidebarItem({ icon: Icon, title, path, showBadge, ...props }) {
@@ -143,7 +144,7 @@ const Sidebar = () => {
                     showBadge: true,
                 },
                 {
-                    icon: IoIosChatbubbles,
+                    icon: SiGooglechat,
                     path: "chat",
                     title: "Chat",
                     showBadge: true,
@@ -211,7 +212,7 @@ const Sidebar = () => {
                 {
                     icon: FiGift,
                     path: "wishlist",
-                    title: "Wishlist",
+                    title: "Cart",
                 },
                 {
                     icon: MdOutlineAddReaction,
@@ -219,7 +220,7 @@ const Sidebar = () => {
                     title: "Referral",
                 },
                 {
-                    icon: MdHistory,
+                    icon: GiSandsOfTime,
                     path: "history",
                     title: "History",
                 },
@@ -235,7 +236,7 @@ const Sidebar = () => {
                     showBadge: true,
                 },
                 {
-                    icon: IoIosChatbubbles,
+                    icon: SiGooglechat,
                     path: "chat",
                     title: "Chat",
                     showBadge: true,
@@ -297,7 +298,7 @@ const Sidebar = () => {
                     showBadge: true,
                 },
                 {
-                    icon: IoIosChatbubbles,
+                    icon: SiGooglechat,
                     path: "chat",
                     title: "Chat",
                     showBadge: true,
@@ -375,7 +376,7 @@ const Sidebar = () => {
                         showBadge: true,
                     },
                     {
-                        icon: IoIosChatbubbles,
+                        icon: SiGooglechat,
                         path: "chat",
                         title: "Chat",
                         showBadge: true,
@@ -442,7 +443,7 @@ const Sidebar = () => {
                         {
                             icon: FiGift,
                             path: "wishlist",
-                            title: "Wishlist",
+                            title: "Cart",
                         },
                         {
                             icon: MdOutlineAddReaction,
@@ -450,7 +451,7 @@ const Sidebar = () => {
                             title: "Referral",
                         },
                         {
-                            icon: MdHistory,
+                            icon: GiSandsOfTime,
                             path: "history",
                             title: "History",
                         },
@@ -466,7 +467,7 @@ const Sidebar = () => {
                             showBadge: true,
                         },
                         {
-                            icon: IoIosChatbubbles,
+                            icon: SiGooglechat,
                             path: "chat",
                             title: "Chat",
                             showBadge: true,
@@ -527,7 +528,7 @@ const Sidebar = () => {
                                 showBadge: true,
                             },
                             {
-                                icon: IoIosChatbubbles,
+                                icon: SiGooglechat,
                                 path: "chat",
                                 title: "Chat",
                                 showBadge: true,
@@ -577,7 +578,7 @@ const Sidebar = () => {
                                     title: "Scheduler",
                                 },
                                 {
-                                    icon: IoIosChatbubbles,
+                                    icon: SiGooglechat,
                                     path: "chat",
                                     title: "Chat",
                                     showBadge: true,

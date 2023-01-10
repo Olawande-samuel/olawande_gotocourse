@@ -1,9 +1,9 @@
 import { useEffect, useState, useMemo, useRef } from "react";
-import { MdEdit, MdPersonAdd } from "react-icons/md"
+import { MdDownloadForOffline, MdEdit, MdPersonAdd } from "react-icons/md"
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { motion } from "framer-motion"
-import { AiOutlineMenu, AiOutlineSearch } from "react-icons/ai"
+import { AiFillQuestionCircle, AiOutlineDoubleRight, AiOutlineMenu, AiOutlineSearch } from "react-icons/ai"
 import { FaGraduationCap } from "react-icons/fa"
 import { BsQuestionCircle, BsDownload } from "react-icons/bs"
 import { Rating } from 'react-simple-star-rating'
@@ -25,7 +25,12 @@ import { useLocalStorage } from "../../../hooks";
 import { FaRegTrashAlt, FaUserAlt } from "react-icons/fa";
 import { SiGoogleclassroom } from "react-icons/si";
 import { IoMdChatboxes } from "react-icons/io";
-import { Box, FormControl, InputLabel, MenuItem, Modal, Select } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Modal, Select ,TextField} from "@mui/material";
+
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import dayjs from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import ChatComponent from "../Admin/Chat";
 
@@ -734,7 +739,7 @@ export function Wishlist() {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
 
-    const getCarts = useQuery(["carts"], () => fetchWishlist(userdata?.token),{
+    const getCarts = useQuery(["carts"], () => fetchWishlist(userdata?.token), {
         enabled: userdata?.token !== null,
         onSuccess: (res) => {
             if (res?.data?.length > 0) {
@@ -856,7 +861,7 @@ export function Wishlist() {
                             //   .includes(search.toLowerCase())
                         )
                             .map((item, index) => (
-                                <WishCard key={index} {...item} 
+                                <WishCard key={index} {...item}
                                 // refetch={getWishList} 
                                 />
                             )) :
@@ -889,7 +894,7 @@ export function Wishlist() {
                                     courseCategory: item.category,
                                 }
                                 return (
-                                    <AvailCard key={index} {...info} 
+                                    <AvailCard key={index} {...info}
                                     // refetch={getWishList} 
                                     />
 
@@ -1193,16 +1198,16 @@ export function WishlistCheckOut() {
             if (!success) throw new AdvancedError(message, statusCode);
             else if (statusCode === 1) {
                 const { data } = res;
-                console.log({data});
-                    toast.success(message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+                console.log({ data });
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
 
             } else {
                 throw new AdvancedError(message, statusCode);
@@ -1962,7 +1967,7 @@ export function Chat() {
     );
 }
 
-export const Dashboard = ({mixpanel}) => {
+export const Dashboard = ({ mixpanel }) => {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
     const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps: fetchMyClasses }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
@@ -1971,6 +1976,12 @@ export const Dashboard = ({mixpanel}) => {
     const navigate = useNavigate();
 
     const [loader, setLoading] = useState(false)
+    const [value, setValue] = useState(dayjs('2014-08-18T21:11:54'));
+
+    const handleChange = (newValue) => {
+        setValue(newValue);
+    };
+
 
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
     const { data: myenrolledcourses, isSuccess: mycoursesuccess } = useQuery(["fetch my enrolledclasses"], () => fetchMyClasses(userdata?.token))
@@ -2047,8 +2058,25 @@ export const Dashboard = ({mixpanel}) => {
                     </div>
                 </div>
                 <div className={`${clsx.dashboard_course_details}`}>
-                    <div className="d-flex justify-content-between align-items-center">
-                        <h6>Courses paid for</h6>
+                    <div className={clsx.courseApplied}>
+                        <h6>Names of Courses applied for</h6>
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DesktopDatePicker
+                            style={{
+                                background: "#FFFFFF",
+                                borderRadius: "130.455px",
+                                color:"000"
+                            }}
+                                // label="Date desktop"
+                                inputFormat="MM/DD/YYYY"
+                                value={value}
+                                onChange={handleChange}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
+                        </LocalizationProvider>
+
+
                     </div>
                     {/* <CourseTable courses={data?.data} type="dashboard" /> */}
                     {
@@ -2151,7 +2179,7 @@ function UpcomingCourses({ data }) {
                 <div className={clsx["coursebody"]}>
                     {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
                     {/* {data?.length > 0 && data.filter(d => d.startDate === "2023-01-05T00:00:00.000Z" && d.isActive).sort(() => 0.5 - Math.random()).map((item, i) => ( */}
-                    {all?.length > 0 && all.slice(0, 10).sort(() => 0.5 - Math.random()).map((item, i) => (
+                    {all?.length > 0 && all.slice(0, 4).sort(() => 0.5 - Math.random()).map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
                             <div className={clsx["courseitem"]}>
@@ -2194,11 +2222,11 @@ function UpcomingCourses({ data }) {
                             <div className={clsx["courseitem"]}>
                                 <div className={clsx.classes_button}>
                                     <button className="d-flex align-items-center" onClick={() => gotoclass(item.title, item.category, item.bootcampId, navigate)}>
-                                        <i><BsQuestionCircle /></i>
+                                        <i><AiFillQuestionCircle style={{ fontSize: "1.2rem", color: "var(--theme-blue" }} /></i>
                                         <span>Learn more</span>
                                     </button>
                                     <button className="d-flex align-items-center" onClick={(e) => handleCourseSelect(e, item)}>
-                                        <i><BsDownload /></i>
+                                        <i><MdDownloadForOffline style={{ fontSize: "1.2rem" }} /></i>
                                         <span>Enroll</span>
                                     </button>
                                 </div>
@@ -2209,6 +2237,10 @@ function UpcomingCourses({ data }) {
                     ))
                     }
 
+                </div>
+
+                <div className={clsx.seemore}>
+                    <Link to={`/category/upcoming`}> See more <AiOutlineDoubleRight/></Link>
                 </div>
 
             </div>
@@ -2281,7 +2313,7 @@ function AvailableCourses({ data }) {
                 <div className={clsx["coursebody"]}>
                     {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
                     {/* {data?.length > 0 && data.filter(d => d.isActive).map((item, i) => ( */}
-                    {all.length > 0 && all.map((item, i) => (
+                    {all.length > 0 && all.slice(0,4).map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
                             <div className={clsx["courseitem"]}>
@@ -2339,6 +2371,10 @@ function AvailableCourses({ data }) {
                     ))
                     }
 
+                </div>
+
+                <div className={clsx.seemore}>
+                    <Link to={`/category/upcoming`}> See more <AiOutlineDoubleRight/></Link>
                 </div>
 
             </div>
@@ -2414,7 +2450,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
     const userData = getItem(KEY)
     const location = useLocation()
 
-    
+
     useEffect(() => {
         if (!userData?.token) return;
         (async () => {
@@ -2441,7 +2477,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
         })()
     }, [])
 
-    const getCarts = useQuery(["carts"], () => fetchWishlist(userData?.token),{
+    const getCarts = useQuery(["carts"], () => fetchWishlist(userData?.token), {
         enabled: userData?.token !== null,
         onSuccess: (res) => {
             if (res?.data?.length > 0) {
@@ -2450,7 +2486,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
         }
     });
 
- 
+
 
     const toggleSidebar = () => {
         setGeneralState({ ...generalState, showSidebar: !showSidebar })
