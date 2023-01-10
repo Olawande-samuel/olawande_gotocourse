@@ -2227,11 +2227,11 @@ function UpcomingCourses({ data }) {
                             <div className={clsx["courseitem"]}>
                                 <div className={clsx.classes_button}>
                                     <button className="d-flex align-items-center" onClick={() => gotoclass(item.title, item.category, item.bootcampId, navigate)}>
-                                        <i><AiFillQuestionCircle style={{ fontSize: "1.2rem", color: "var(--theme-blue" }} /></i>
+                                        <i><AiFillQuestionCircle style={{ fontSize: "1.1rem", color: "var(--theme-blue" }} /></i>
                                         <span>Learn more</span>
                                     </button>
                                     <button className="d-flex align-items-center" onClick={(e) => handleCourseSelect(e, item)}>
-                                        <i><MdDownloadForOffline style={{ fontSize: "1.2rem" }} /></i>
+                                        <i><MdDownloadForOffline style={{ fontSize: "1.1rem" }} /></i>
                                         <span>Enroll</span>
                                     </button>
                                 </div>
@@ -2359,13 +2359,13 @@ function AvailableCourses({ data }) {
                             </div>
 
                             <div className={clsx["courseitem"]}>
-                                <div className={clsx.classes_button}>
+                            <div className={clsx.classes_button}>
                                     <button className="d-flex align-items-center" onClick={() => gotoclass(item.title, item.category, item.bootcampId, navigate)}>
-                                        <i><BsQuestionCircle /></i>
+                                        <i><AiFillQuestionCircle style={{ fontSize: "1.1rem", color: "var(--theme-blue" }} /></i>
                                         <span>Learn more</span>
                                     </button>
                                     <button className="d-flex align-items-center" onClick={(e) => handleCourseSelect(e, item)}>
-                                        <i><BsDownload /></i>
+                                        <i><MdDownloadForOffline style={{ fontSize: "1.1rem" }} /></i>
                                         <span>Enroll</span>
                                     </button>
                                 </div>
