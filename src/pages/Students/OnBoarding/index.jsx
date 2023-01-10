@@ -316,7 +316,8 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
 
 
 
-function Success({}){
+function Success({}){ 
+    
     return (
         <div className={clsx.question}>
             <div className={clsx.question_container}>
