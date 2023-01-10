@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import Becoming from '../components/Becoming'
 import Career from '../components/Career'
 import Degree from '../components/Degree'
@@ -22,7 +22,10 @@ import Experienced from '../components/Experienced'
 import Upcoming from '../components/Upcoming'
 import NewLanding from '../components/NewLanding/NewLanding'
 
-const Landing = () => {
+const Landing = ({mixpanel}) => {
+  
+  useMemo(() => mixpanel.track("Visited learn-with-gotocourse"), [])
+
   return (
     <div>
       <NewLanding />

@@ -1902,7 +1902,7 @@ export function Chat() {
     );
 }
 
-export const Dashboard = () => {
+export const Dashboard = ({mixpanel}) => {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
     const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps: fetchMyClasses }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
@@ -1950,6 +1950,7 @@ export const Dashboard = () => {
         topContent[0].value = myenrolledcourses?.data?.length
     }
 
+    useMemo(() => mixpanel.track("visited student dashboard"), [])
 
 
     return (

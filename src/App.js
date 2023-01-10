@@ -227,6 +227,7 @@ import ProtectedRoute from "./hoc/LiveClassProtection";
 import Home from "./pages/Landing";
 import NewHome from "./pages/Landing/landing";
 import AdLeads from "./pages/Dashboard/Admin/leads";
+import { MixpanelConsumer } from "react-mixpanel";
 
 
 const Login = lazy(() => import("./pages/User/Login"));
@@ -268,7 +269,17 @@ console.log("window", window.location.href.includes("gotocourse"));
 console.log(process.env.NODE_ENV);
 
 const webLocation = window.location.href.includes("gotocourse");
+
+
+
 function App() {
+  return (
+    <MixpanelConsumer>
+			{mixpanel => <MyApp mixpanel={mixpanel}/>}
+		</MixpanelConsumer>
+  )
+}
+function MyApp({mixpanel}) {
   if (
     !process.env.NODE_ENV ||
     process.env.NODE_ENV === "development" ||
@@ -282,7 +293,7 @@ function App() {
           <Suspense fallback={<Loader />}>
             <Routes>
               <Route path="/" element={<Out />}>
-                <Route index element={<NewHome />} /> 
+                <Route index element={<NewHome mixpanel={mixpanel} />} /> 
                 <Route path="create-with-gotocourse" element={<AnotherLanding />} />
                 <Route path="create" element={<CreatePage />} />
                 <Route path="manage" element={<ManagePage />} />
@@ -301,7 +312,7 @@ function App() {
                   </Route> */}
  
                
-                <Route path="Learn-with-gotocourse" element={<Landing />} />
+                <Route path="Learn-with-gotocourse" element={<Landing mixpanel={mixpanel} />} />
                 <Route path="login" element={<Login />} />
                 <Route path="signup" element={<SignUp />} />
                 <Route path="email" element={<Email />} />
@@ -502,7 +513,7 @@ function App() {
                 {/* STUDENTS */}
                 {/* <Route path="student" element={<ComingSoon student={true} />}> */}
                 <Route path="student" element={<Out />}>
-                  <Route path="" element={<StudentDashboard />} />
+                  <Route path="" element={<StudentDashboard mixpanel={mixpanel} />} />
                   <Route path="profile" element={<StudentProfile />} />
                   <Route path="classes" element={<StudentClasses />} />
                   <Route path="bootcamps" element={<StudentBootcamps />} />
