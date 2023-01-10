@@ -224,7 +224,7 @@ export const BootcampPayment = () => {
                         className="text-info"
                         style={{ fontSize: "12px" }}
                       >
-                        *Fees must be paid in not more than four Installments.
+                        *Fees must be paid in not more than two Installments.
                         Each installment carries a $100 extra charge
                       </small>
                       <div className="form-group">
@@ -243,10 +243,10 @@ export const BootcampPayment = () => {
                           {(price + (price * (5 /100))) / 2 + 100} each
                         </label>
                       </div>
-                      <div className="text-center">
+                      {/* <div className="text-center">
                         <small className="text-center text-dark">or</small>
-                      </div>
-                      <div className="form-group">
+                      </div> */}
+                      {/* <div className="form-group">
                         <input
                           type="radio"
                           name="initialPayment"
@@ -261,7 +261,7 @@ export const BootcampPayment = () => {
                           Pay in four installments of{" "}
                           {price / 4 + 100} each
                         </label>
-                      </div>
+                      </div> */}
                     </div>
                     <hr />
                   </>

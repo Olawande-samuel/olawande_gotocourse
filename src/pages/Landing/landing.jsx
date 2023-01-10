@@ -1,20 +1,24 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useMemo } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../../contexts/Auth'
 import { Center, HomeComponent } from './landing.style'
 import Navbar from './Navbar'
 import SideBar from './Sidebar'
 
-const NewHome = () => {
-  const { generalState: { loading, showSidebar }, generalState, setGeneralState } = useAuth();
+const NewHome = ({mixpanel}) => {
+  const { generalState: { showSidebar }, generalState, setGeneralState } = useAuth();
 
   const toggleSidebar = () => {
       setGeneralState({ ...generalState, showSidebar: !showSidebar });
   };
 
-  const style = {
-    
-  }
+  const location = useLocation()
+
+  console.log({location})
+
+  
+  useMemo(() => mixpanel.track("new landing page visit", {"location": location.pathname}), [])
+
   return (
     <HomeComponent>
         <Navbar toggleSidebar={toggleSidebar} />
