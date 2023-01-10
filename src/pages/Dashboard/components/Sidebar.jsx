@@ -60,10 +60,10 @@ function SidebarItem({ icon: Icon, title, path, showBadge, ...props }) {
                 }
                 color="secondary"
             >
-                <i>
+                <p>
                     <Icon className={clsx.sidebar_icon} color="white" size="1rem" />
-                </i>
-                <span className={clsx.sidebar_item_title}>{title}</span>
+                    <span className={clsx.sidebar_item_title}>{title}</span>
+                </p>
             </Badge>
         </div>
     );
@@ -181,7 +181,7 @@ const Sidebar = () => {
                 },
             ];
         } else if (route.includes("student")) {
-         
+
             data = [
                 {
                     icon: AiOutlineDashboard,
@@ -405,7 +405,7 @@ const Sidebar = () => {
                         icon: BsNewspaper,
                         path: "blog",
                         title: "Blog",
-                    },            
+                    },
                     {
                         icon: RiAdvertisementFill,
                         path: "ad-leads",
