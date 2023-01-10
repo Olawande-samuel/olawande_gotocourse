@@ -373,10 +373,10 @@ function MyApp({mixpanel}) {
                     index
                     element={<CourseComponent />}
                   />
-                  <Route
+                  {/* <Route
                     path="upcoming"
                     element={<UpComingComponent />}
-                  />
+                  /> */}
                   <Route
                     path=":id"
                     element={<CourseComponent />}

@@ -1,13 +1,13 @@
 import { useEffect, useState, useMemo, useRef } from "react";
-import { MdEdit, MdPersonAdd } from "react-icons/md"
+import { MdDownloadForOffline, MdEdit, MdPersonAdd } from "react-icons/md"
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { motion } from "framer-motion"
-import { AiOutlineMenu, AiOutlineSearch } from "react-icons/ai"
+import { AiFillQuestionCircle, AiOutlineDoubleRight, AiOutlineMenu, AiOutlineSearch } from "react-icons/ai"
 import { FaGraduationCap } from "react-icons/fa"
 import { BsQuestionCircle, BsDownload } from "react-icons/bs"
 import { Rating } from 'react-simple-star-rating'
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import trello from "../../../images/trello.png"
 import { Product, Stu1, Stu2, Stu3 } from "../../../images/components/svgs"
@@ -25,7 +25,12 @@ import { useLocalStorage } from "../../../hooks";
 import { FaRegTrashAlt, FaUserAlt } from "react-icons/fa";
 import { SiGoogleclassroom } from "react-icons/si";
 import { IoMdChatboxes } from "react-icons/io";
-import { Box, FormControl, InputLabel, MenuItem, Modal, Select } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Modal, Select, TextField } from "@mui/material";
+
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import dayjs from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import ChatComponent from "../Admin/Chat";
 
@@ -734,61 +739,69 @@ export function Wishlist() {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
 
-
-
-    async function getWishList() {
-        try {
-            setGeneralState({ ...generalState, loading: true })
-            const res = await fetchWishlist(userdata?.token);
-            const { message, success, statusCode } = res;
-            if (!success) throw new AdvancedError(message, statusCode);
-            else if (statusCode === 1) {
-                const { data } = res;
-                if (data.length > 0) {
-                    setWishlists(data);
-                    toast.success(message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                } else {
-                    toast.error("wishlist is empty", {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                    setWishlists([])
-                }
-
-            } else {
-                throw new AdvancedError(message, statusCode);
+    const getCarts = useQuery(["carts"], () => fetchWishlist(userdata?.token), {
+        enabled: userdata?.token !== null,
+        onSuccess: (res) => {
+            if (res?.data?.length > 0) {
+                setWishlists(res?.data);
             }
-        } catch (err) {
-            toast.error(err.message, {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        } finally {
-            setGeneralState({ ...generalState, loading: false });
         }
-    }
-    useEffect(() => {
-        if (!userdata?.token) return;
-        getWishList()
-    }, [userdata?.token])
+    });
+
+
+    // async function getWishList() {
+    //     try {
+    //         setGeneralState({ ...generalState, loading: true })
+    //         const res = await fetchWishlist(userdata?.token);
+    //         const { message, success, statusCode } = res;
+    //         if (!success) throw new AdvancedError(message, statusCode);
+    //         else if (statusCode === 1) {
+    //             const { data } = res;
+    //             if (data.length > 0) {
+    //                 setWishlists(data);
+    //                 toast.success(message, {
+    //                     position: "top-right",
+    //                     autoClose: 4000,
+    //                     hideProgressBar: true,
+    //                     closeOnClick: true,
+    //                     pauseOnHover: true,
+    //                     draggable: true,
+    //                     progress: undefined,
+    //                 });
+    //             } else {
+    //                 toast.error("wishlist is empty", {
+    //                     position: "top-right",
+    //                     autoClose: 4000,
+    //                     hideProgressBar: true,
+    //                     closeOnClick: true,
+    //                     pauseOnHover: true,
+    //                     draggable: true,
+    //                     progress: undefined,
+    //                 });
+    //                 setWishlists([])
+    //             }
+
+    //         } else {
+    //             throw new AdvancedError(message, statusCode);
+    //         }
+    //     } catch (err) {
+    //         toast.error(err.message, {
+    //             position: "top-right",
+    //             autoClose: 4000,
+    //             hideProgressBar: true,
+    //             closeOnClick: true,
+    //             pauseOnHover: true,
+    //             draggable: true,
+    //             progress: undefined,
+    //         });
+    //     } finally {
+    //         setGeneralState({ ...generalState, loading: false });
+    //     }
+    // }
+    // useEffect(() => {
+    //     if (!userdata?.token) return;
+    //     getWishList()
+    // }, [userdata?.token])
 
     console.log({ wishlists });
 
@@ -848,7 +861,9 @@ export function Wishlist() {
                             //   .includes(search.toLowerCase())
                         )
                             .map((item, index) => (
-                                <WishCard key={index} {...item} refetch={getWishList} />
+                                <WishCard key={index} {...item}
+                                // refetch={getWishList} 
+                                />
                             )) :
                             <p className="text-center mx-auto">Nothing to see here</p>
                         }
@@ -879,7 +894,9 @@ export function Wishlist() {
                                     courseCategory: item.category,
                                 }
                                 return (
-                                    <AvailCard key={index} {...info} refetch={getWishList} />
+                                    <AvailCard key={index} {...info}
+                                    // refetch={getWishList} 
+                                    />
 
                                 )
                             }) :
@@ -898,6 +915,7 @@ export function Wishlist() {
 function WishCard({ courseId: id, courseName, courseDescription, courseCategory, refetch }) {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
+
 
     function closeModal() {
         setOpen(false)
@@ -938,6 +956,7 @@ function AvailCard({ courseId, courseName, courseDescription, courseCategory, re
     const { getItem } = useLocalStorage();
     let [wishlistState, setWishlistState] = useState(false)
     const [loading, setLoading] = useState(false)
+    let queryClient = useQueryClient()
 
     const userdata = getItem(KEY)
 
@@ -951,6 +970,7 @@ function AvailCard({ courseId, courseName, courseDescription, courseCategory, re
                 if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
                 const { data } = response
                 setWishlistState(true)
+                queryClient.invalidateQueries(["carts"])
             } catch (error) {
                 console.error(error)
                 setLoading(false)
@@ -1004,6 +1024,7 @@ function AvailCard({ courseId, courseName, courseDescription, courseCategory, re
                 const { data } = res;
                 setWishlistState(false)
                 setLoading(false)
+                queryClient.invalidateQueries(["carts"])
 
             }
         } catch (err) {
@@ -1177,16 +1198,16 @@ export function WishlistCheckOut() {
             if (!success) throw new AdvancedError(message, statusCode);
             else if (statusCode === 1) {
                 const { data } = res;
-                console.log({data});
-                    toast.success(message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+                console.log({ data });
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
 
             } else {
                 throw new AdvancedError(message, statusCode);
@@ -1946,7 +1967,7 @@ export function Chat() {
     );
 }
 
-export const Dashboard = ({mixpanel}) => {
+export const Dashboard = ({ mixpanel }) => {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
     const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps: fetchMyClasses }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
@@ -1955,6 +1976,13 @@ export const Dashboard = ({mixpanel}) => {
     const navigate = useNavigate();
 
     const [loader, setLoading] = useState(false)
+    const [value, setValue] = useState(dayjs('2014-08-18T21:11:54'));
+
+    const handleChange = (newValue) => {
+        setValue(newValue);
+    };
+
+    console.log({ value });
 
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
     const { data: myenrolledcourses, isSuccess: mycoursesuccess } = useQuery(["fetch my enrolledclasses"], () => fetchMyClasses(userdata?.token))
@@ -1985,7 +2013,8 @@ export const Dashboard = ({mixpanel}) => {
             value: "$0"
         }
     ]
-    const tableHeaders = ["No", "Courses", "Course Fee($)", ""]
+    // const tableHeaders = ["No", "Courses", "Course Fee($)", ""]
+    const tableHeaders = ["No", "Courses", "Status", "Date", "Amount Paid"]
 
     if (wishlistIsSuccess) {
         topContent[1].value = wishlistData?.data?.length
@@ -2031,12 +2060,29 @@ export const Dashboard = ({mixpanel}) => {
                     </div>
                 </div>
                 <div className={`${clsx.dashboard_course_details}`}>
-                    <div className="d-flex justify-content-between align-items-center">
-                        <h6>Courses paid for</h6>
+                    <div className={clsx.courseApplied}>
+                        <h6>Names of Courses applied for</h6>
+
+                        <div className="coursesdatefilter">
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DesktopDatePicker
+                                    // label="Date desktop"
+                                    inputFormat="MM/DD/YYYY"
+                                    value={value}
+                                    onChange={handleChange}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
+
+                        </div>
+
+
+
                     </div>
                     {/* <CourseTable courses={data?.data} type="dashboard" /> */}
                     {
                         myenrolledcourses?.data?.length > 0 ?
+                            // data?.data?.length > 0 ?
                             <div className="table-responsive">
                                 <table className="table table-borderless w-auto">
                                     <thead>
@@ -2048,11 +2094,14 @@ export const Dashboard = ({mixpanel}) => {
                                     </thead>
                                     <tbody>
                                         {myenrolledcourses?.data?.filter(data => data.status === "paid").map((item, i) => (
+
                                             <tr key={i}>
                                                 <td><span>{i + 1}</span></td>
                                                 <td>
                                                     <span>{item.bootcampName}</span>
                                                 </td>
+                                                <td><span>{item.paymentStatus}</span></td>
+                                                <td><span>{new Date(item?.startDate).toLocaleDateString()}</span></td>
                                                 <td><span>{item.amountPaid}</span></td>
                                                 <td>
                                                     {/* <span className="d-block dashboard_table">
@@ -2135,7 +2184,7 @@ function UpcomingCourses({ data }) {
                 <div className={clsx["coursebody"]}>
                     {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
                     {/* {data?.length > 0 && data.filter(d => d.startDate === "2023-01-05T00:00:00.000Z" && d.isActive).sort(() => 0.5 - Math.random()).map((item, i) => ( */}
-                    {all?.length > 0 && all.slice(0, 10).sort(() => 0.5 - Math.random()).map((item, i) => (
+                    {all?.length > 0 && all.slice(0, 4).sort(() => 0.5 - Math.random()).map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
                             <div className={clsx["courseitem"]}>
@@ -2178,11 +2227,11 @@ function UpcomingCourses({ data }) {
                             <div className={clsx["courseitem"]}>
                                 <div className={clsx.classes_button}>
                                     <button className="d-flex align-items-center" onClick={() => gotoclass(item.title, item.category, item.bootcampId, navigate)}>
-                                        <i><BsQuestionCircle /></i>
+                                        <i><AiFillQuestionCircle style={{ fontSize: "1.1rem", color: "var(--theme-blue" }} /></i>
                                         <span>Learn more</span>
                                     </button>
                                     <button className="d-flex align-items-center" onClick={(e) => handleCourseSelect(e, item)}>
-                                        <i><BsDownload /></i>
+                                        <i><MdDownloadForOffline style={{ fontSize: "1.1rem" }} /></i>
                                         <span>Enroll</span>
                                     </button>
                                 </div>
@@ -2193,6 +2242,10 @@ function UpcomingCourses({ data }) {
                     ))
                     }
 
+                </div>
+
+                <div className={clsx.seemore}>
+                    <Link to={`/category/upcoming`}> See more <AiOutlineDoubleRight /></Link>
                 </div>
 
             </div>
@@ -2265,7 +2318,7 @@ function AvailableCourses({ data }) {
                 <div className={clsx["coursebody"]}>
                     {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
                     {/* {data?.length > 0 && data.filter(d => d.isActive).map((item, i) => ( */}
-                    {all.length > 0 && all.map((item, i) => (
+                    {all.length > 0 && all.slice(0, 4).map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
                             <div className={clsx["courseitem"]}>
@@ -2306,13 +2359,13 @@ function AvailableCourses({ data }) {
                             </div>
 
                             <div className={clsx["courseitem"]}>
-                                <div className={clsx.classes_button}>
+                            <div className={clsx.classes_button}>
                                     <button className="d-flex align-items-center" onClick={() => gotoclass(item.title, item.category, item.bootcampId, navigate)}>
-                                        <i><BsQuestionCircle /></i>
+                                        <i><AiFillQuestionCircle style={{ fontSize: "1.1rem", color: "var(--theme-blue" }} /></i>
                                         <span>Learn more</span>
                                     </button>
                                     <button className="d-flex align-items-center" onClick={(e) => handleCourseSelect(e, item)}>
-                                        <i><BsDownload /></i>
+                                        <i><MdDownloadForOffline style={{ fontSize: "1.1rem" }} /></i>
                                         <span>Enroll</span>
                                     </button>
                                 </div>
@@ -2323,6 +2376,10 @@ function AvailableCourses({ data }) {
                     ))
                     }
 
+                </div>
+
+                <div className={clsx.seemore}>
+                    <Link to={`/category/upcoming`}> See more <AiOutlineDoubleRight /></Link>
                 </div>
 
             </div>
@@ -2398,7 +2455,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
     const userData = getItem(KEY)
     const location = useLocation()
 
-    
+
     useEffect(() => {
         if (!userData?.token) return;
         (async () => {
@@ -2425,7 +2482,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
         })()
     }, [])
 
-    const getCarts = useQuery(["carts"], () => fetchWishlist(userData?.token),{
+    const getCarts = useQuery(["carts"], () => fetchWishlist(userData?.token), {
         enabled: userData?.token !== null,
         onSuccess: (res) => {
             if (res?.data?.length > 0) {
@@ -2434,7 +2491,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
         }
     });
 
- 
+
 
     const toggleSidebar = () => {
         setGeneralState({ ...generalState, showSidebar: !showSidebar })
