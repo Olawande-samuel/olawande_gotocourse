@@ -734,7 +734,8 @@ export function Wishlist() {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
 
-    const flag = useRef(false);
+
+
     async function getWishList() {
         try {
             setGeneralState({ ...generalState, loading: true })
@@ -785,10 +786,9 @@ export function Wishlist() {
         }
     }
     useEffect(() => {
-        if (flag.current) return;
+        if (!userdata?.token) return;
         getWishList()
-        flag.current = true;
-    }, [])
+    }, [userdata?.token])
 
     console.log({ wishlists });
 
@@ -2395,12 +2395,11 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
     const { generalState: { showSidebar }, generalState, setGeneralState, otherFunctions: { fetchCourses }, adminFunctions: { getUnreadMessages }, studentFunctions: { fetchNotifications, readNotifications, fetchWishlist } } = useAuth();
     const { getItem } = useLocalStorage()
     const userData = getItem(KEY)
-    const user = getItem("gotocourse-userdata")
     const location = useLocation()
 
-    const flag = useRef(false);
+    
     useEffect(() => {
-        if (flag.current) return;
+        if (!userData?.token) return;
         (async () => {
             try {
                 const res = await fetchNotifications(userData?.token);
@@ -2423,10 +2422,10 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
                 });
             }
         })()
-        flag.current = true;
     }, [])
 
-    const getCarts = useQuery(["carts"], () => fetchWishlist(userdata?.token),{
+    const getCarts = useQuery(["carts"], () => fetchWishlist(userData?.token),{
+        enabled: userData?.token !== null,
         onSuccess: (res) => {
             if (res?.data?.length > 0) {
                 setGeneralState({ ...generalState, carts: res?.data?.length })
@@ -2483,7 +2482,8 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
     }
 
     // fetch messages
-    const getMessage = useQuery(["fetch student messages", user.token], () => getUnreadMessages(user.token), {
+    const getMessage = useQuery(["fetch student messages", userData?.token], () => getUnreadMessages(userData?.token), {
+        enabled: userData?.token !== null,
         onError: (err) => {
             toast.error(err.message, {
                 position: "top-right",
@@ -2529,7 +2529,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
 
     // for create
 
-    const isCreator = userdata?.userType === "schools"
+    const isCreator = userData?.userType === "schools"
     const last = location.pathname.split('/').length - 1
     const wishlist = location.pathname.split('/')[last] === "wishlist"
     // const wishlistCheckout = location.pathname.split('/')[last] === "wishlist-checkout"

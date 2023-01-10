@@ -679,6 +679,10 @@ export function CreateCourseCategory() {
     nicheDescription: "",
     career: "",
     bannerImg: "",
+    niche: "Niche title",
+    iconImg: "iconImg.png"
+
+
   });
 
   const [nichelist, setNichelist] = useState({
