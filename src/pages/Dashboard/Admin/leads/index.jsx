@@ -13,7 +13,7 @@ import { useLocalStorage } from '../../../../hooks';
 import { useAuth } from '../../../../contexts/Auth';
 import { AdvancedError } from '../../../../classes';
 import { toast } from 'react-toastify';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -73,13 +73,71 @@ export default function AdLeads() {
     setValue(newValue);
   };
 
+
+  const {adminFunctions: {fetchLeads, exportLeads}} = useAuth()
+  const {getItem} = useLocalStorage()
+  const [loading, setLoading]= useState(false)
+  const userdata = getItem("gotocourse-userdata")
+  
+
+  const fetchAdLeads = useQuery(["fetchAdLeads", userdata?.token], () =>fetchLeads(userdata.token),
+    {
+        enabled:userdata.token !== null,
+        onSuccess: res=> {
+          console.log(res)
+        },
+        onError: err=>{
+          console.error(err)
+        }
+  })
+
+
+  const exportToCsv = useMutation(exportLeads, {
+    onSuccess: (res) => {
+      console.log("csv", res)
+    },
+    onError: err=>{
+      console.log(err)
+    }
+  })
+
+  function exportCsv(e){
+    e.preventDefault()
+
+    exportToCsv.mutate(userdata.token)
+  }
+
+
+
+  console.log(fetchAdLeads?.data?.data)
   return (
     <Admin header="AdLeads">
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           {/* <h3>AdLeads</h3> */}
           <div className="row w-100 mt-4">      
+
               <Box sx={{ width: '100%' }}>
+
+            <div className="d-flex justify-content-end">
+              {
+                fetchAdLeads?.data?.data?.length > 0 &&
+                <button className="btn-plain" onClick={exportCsv} disabled={exportToCsv?.isLoading}>
+                  {
+
+                    exportToCsv.isLoading ?
+
+                    <div className="spinner-border text-primary">
+                      <div className="visually-hidden">Loading...</div>
+                    </div>
+                    :
+                    <span>Export to CSV</span>
+                  
+                  }
+                </button>
+              }
+              
+            </div>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="scrollable">
                       {title.map((item, index)=> (
@@ -102,7 +160,7 @@ export default function AdLeads() {
 
 
 function HomepageHero({ name}){
-  const {adminFunctions: {fetchLeads}} = useAuth()
+  const {adminFunctions: {fetchLeads, exportLeads}} = useAuth()
   const {getItem} = useLocalStorage()
   const [loading, setLoading]= useState(false)
   const userdata = getItem("gotocourse-userdata")
@@ -120,12 +178,29 @@ function HomepageHero({ name}){
         onError: err=>{
             console.error(err)
         }
-    })
+  })
 
+
+  const exportToCsv = useMutation(exportLeads, {
+    onSuccess: (res) => {
+      console.log("csv", res)
+    },
+    onError: err=>{
+      console.log(err)
+    }
+  })
+
+  function exportCsv(e){
+    e.preventDefault()
+
+    exportToCsv.mutate(userdata.token)
+  }
   
   return(
     <div className="row">
       <div className="col-12">
+
+       
         <div className="table-responsive">
             {
                 fetchAdLeads?.isLoading ? 
@@ -149,14 +224,7 @@ function HomepageHero({ name}){
                     <tbody>
                         {
                             data?.filter(item => item?.category === name).map((item, index) => (
-                                <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>{new Intl.DateTimeFormat('en-US').format(new Date(item?.createdAt))}</td>
-                                    <td>{item.fullName}</td>
-                                    <td>{item.email}</td>
-                                    <td>{item.phone}</td>
-                                    <td>{item.program}</td>
-                                </tr>
+                                <TableRow  index={index} item={item}  key={index} />
                             ))
                         }
 
@@ -166,5 +234,48 @@ function HomepageHero({ name}){
         </div>
       </div>
     </div>
+  )
+}
+
+
+function TableRow({item, index}){
+
+  const queryClient = useQueryClient()
+  const {adminFunctions: {deleteLead}} = useAuth()
+  const {getItem} = useLocalStorage()
+  const [loading, setLoading]= useState(false)
+  const userdata = getItem("gotocourse-userdata")
+
+
+  const deleteLeads = useMutation(([token, id])=>deleteLead(token, id),
+    {
+        enabled:userdata.token !== null,
+        onSuccess: res=> {
+            console.log(res)
+            toast.success(res.data.message)
+            queryClient.invalidateQueries(["fetchAdLeads"])
+
+        },
+        onError: err=>{
+            console.error(err)
+        }
+    })
+
+  function handleDelete(){
+    if(window.confirm("Are you sure you want to delete ?")){
+      deleteLeads.mutate([userdata.token, item._id])
+    }
+  }
+
+  return (
+    <tr >
+      <td>{index + 1}</td>
+      <td>{new Intl.DateTimeFormat('en-US').format(new Date(item?.createdAt))}</td>
+      <td>{item.fullName}</td>
+      <td>{item.email}</td>
+      <td>{item.phone}</td>
+      <td>{item.program}</td>
+      <td><button className="btn btn-outline-danger" onClick={()=>handleDelete()}>Delete</button></td>
+  </tr>
   )
 }
