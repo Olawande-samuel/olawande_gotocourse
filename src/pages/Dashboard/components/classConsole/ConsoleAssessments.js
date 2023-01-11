@@ -55,7 +55,7 @@ export default function ConsoleAssessments() {
 
           </main>
           :
-          <div className="empty">
+          <div className="dashboard_empty">
             <p>No Class Assessment</p>
           </div>
       }

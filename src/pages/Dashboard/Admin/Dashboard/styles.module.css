@@ -65,14 +65,16 @@
 }
 
 .chart_card {
-    background-color: #fde7e7;
+    /* background-color: #fde7e7; */
+    background: rgba(136, 187, 255, 0.122);
     border-radius: 15px;
     padding: 20px;
     flex: 0.45;
 }
 
 .chart_card h3 {
-    color: #F75C4E;
+    /* color: #F75C4E; */
+    color: var(--theme-blue);
     font-weight: 600;
     font-size: 16px;
 }
@@ -111,7 +113,8 @@
 }
 
 .dashboard_categories {
-    background-color: rgba(253, 203, 203, 0.5);
+    /* background-color: rgba(253, 203, 203, 0.5); */
+    background: rgba(136, 187, 255, 0.122);
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -151,7 +154,8 @@
 }
 
 .dashboard_courses {
-    background-color: rgba(253, 203, 203, 0.5);
+    /* background-color: rgba(253, 203, 203, 0.5); */
+    background: rgba(136, 187, 255, 0.122);
     padding: 20px;
     display: flex;
     flex-direction: column;

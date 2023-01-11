@@ -6,10 +6,10 @@ import Navbar from './Navbar'
 import SideBar from './Sidebar'
 
 const NewHome = ({mixpanel}) => {
-  const { generalState: { showSidebar }, generalState, setGeneralState } = useAuth();
+  const { generalState: { showLandingSidebar }, generalState, setGeneralState } = useAuth();
 
   const toggleSidebar = () => {
-      setGeneralState({ ...generalState, showSidebar: !showSidebar });
+      setGeneralState({ ...generalState, showLandingSidebar: !showLandingSidebar });
   };
 
   const location = useLocation()
@@ -22,7 +22,7 @@ const NewHome = ({mixpanel}) => {
   return (
     <HomeComponent>
         <Navbar toggleSidebar={toggleSidebar} />
-        <SideBar showSidebar={showSidebar}  toggleSidebar={toggleSidebar}/>
+        <SideBar showSidebar={showLandingSidebar}  toggleSidebar={toggleSidebar}/>
         <Center>
           <div className="d-flex flex-column align-items-center">
             <h1>Build your virtual school here</h1>

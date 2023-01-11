@@ -305,7 +305,7 @@ export const BootcampPayment = () => {
                       fontSize: "14px",
                     }}
                     onClick={() => {
-                      navigate(-2);
+                      navigate(-1);
                     }}
                   >
                     Go back

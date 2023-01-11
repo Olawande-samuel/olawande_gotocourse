@@ -598,7 +598,7 @@
     justify-content: space-between;
 }
 
-.empty{
+.dashboard_empty{
     background-image: url(../../../../images/empty.png);
     background-repeat: no-repeat;
     background-position: center;
@@ -610,7 +610,7 @@
     justify-content: center;
 }
 
-.empty p{
+.dashboard_empty p{
     font-size: 28px;
     font-family: 'Raleway';
     color: #0C2191;
