@@ -14,6 +14,7 @@ const AuthContextProvider = ({children}) => {
         isMobile: false,
         theme: "light",
         showSidebar: false,
+        showLandingSidebar: false,
         teacherProfile: null,
         navHeight: "",
         loading: false,

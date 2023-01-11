@@ -73,7 +73,7 @@ export default function ConsoleClasses() {
                         // <p>no items</p>
                         
 
-                    <div className="empty">
+                    <div className="dashboard_empty">
                         <p>No Class Available</p>
                     </div>
 
