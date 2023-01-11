@@ -534,7 +534,7 @@ export function MyClasses() {
                                                         {
                                                             (item.paymentStatus === "complete" || item.paymentStatus === "paid") ?
 
-                                                                <button className="d-flex align-items-center" style={{ background: "var(--theme-blue)" }}
+                                                                <button className="d-flex align-items-center" style={{ background: "var(--theme-blue)", color: "#fff" }}
                                                                     onClick={(e) => navigate(`/student/class-console/class/${item.bootcampId}`)}
                                                                 >
 
@@ -708,8 +708,9 @@ export function Classes() {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
+    const [search, setSearch] = useState("");
 
-
+// console.log(bootcamps?.data?.data);
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Courses">
             {/* <div className={clsx.students_profile}>
@@ -722,9 +723,16 @@ export function Classes() {
                     }
                 </div>
             </div> */}
+             <div className={clsx.wishlist__inputcontaniner}>
+                    <input type="text" className={clsx.wishlist__input}
+                        placeholder="search"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)} />
+                    <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
+                </div>
 
             <div className={`${clsx.students_profile_main} ${clsx.student_bg}`}>
-                <AvailableCourses data={bootcamps?.data?.data ? bootcamps?.data?.data : []} />
+                <AllAvailableCourses data={bootcamps?.data?.data ? bootcamps?.data?.data : []} search={search} />
             </div>
         </Students>
     )
@@ -1626,6 +1634,7 @@ export function Fees() {
                     if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
                     else {
                         const { data } = res;
+                        console.log({data});
                         setFees(_ => data);
                     }
                 } catch (err) {
@@ -1748,7 +1757,7 @@ export function Fees() {
                                                 <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
                                             </div>
                                             <div className={clsx.payment__button}>
-                                                <button className={clsx.bggreen} disabled={d.status === "paid"} onClick={() => handlePay(pay._id, pay.type)}>Full Payment</button>
+                                                <button className={d.status === "paid" ? clsx.bggreen : clsx.bgred} disabled={d.status === "paid"} onClick={() => handlePay(pay._id, pay.type)}>Full Payment</button>
                                             </div>
                                         </div>
 
@@ -1756,9 +1765,28 @@ export function Fees() {
                                         <div className={clsx.payment__empty}></div>
                                     </>
                                 ))
-                                    :
-                                    <>
+                                :
+
+                                <>
+                                        <div className={clsx.payment__card}>
+                                            <p>Full Payment</p>
+                                            <div className={clsx.payment__fee}>
+                                                <span>Fee</span>
+                                                <span className={clsx.clred}>${d.bootcampPrice}</span>
+                                            </div>
+                                            {/* <div className={clsx.payment__fee}>
+                                                <span>Due Date:</span>
+                                                <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
+                                            </div> */}
+                                            <div className={clsx.payment__button}>
+                                                <button className={d.status === "paid" ? clsx.bggreen : clsx.bgred} disabled={d.status === "paid"} onClick={() => handlePay(d.bootcampId, "bootcamp")}>Full Payment</button>
+                                            </div>
+                                        </div>
+
+                                        <div className={clsx.payment__empty}></div>
+                                        <div className={clsx.payment__empty}></div>
                                     </>
+                                   
                                 }
 
                                 {
@@ -2276,6 +2304,152 @@ function UpcomingCourses({ data, search }) {
     )
 }
 
+
+function AllAvailableCourses({ data, search }) {
+    const navigate = useNavigate()
+    // const tableHeader = ["Courses", "Start Date", "Program Fee", ""]
+    const { getItem } = useLocalStorage()
+    let userdata = getItem(KEY);
+
+
+    function handleCourseSelect(e, item) {
+        e.preventDefault()
+        if (userdata?.token) {
+            localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+            gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
+        } else {
+            navigate("/login")
+        }
+
+    }
+    // console.log({ data });
+
+    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
+    const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+    const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    const all = [...first, ...second, ...third];
+
+    return (
+
+        <div className={` ${clsx.dashboard_courses}`}>
+            <div className={clsx["dashboard_courses--left"]}>
+                <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
+                <small className="mb-4 d-block">Select and enroll for a course to get started</small>
+
+               
+
+
+                <div className={clsx["courseheader"]}>
+                    <div className={clsx["courseitem"]}> No</div>
+                    <div className={clsx["courseitem"]}>Courses</div>
+                    <div className={clsx["courseitem"]}>Category</div>
+                    <div className={clsx["courseitem"]}>Subcategory</div>
+                    <div className={clsx["courseitem"]}>Start Date</div>
+                    <div className={clsx["courseitem"]}>Durations</div>
+                    <div className={clsx["courseitem"]}>
+                        {/* <FormControl fullWidth size="small">
+                            <InputLabel id="demo-simple-select-label">Fee</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                // value={age}
+                                label="fee"
+                            // onChange={handleChange}
+                            >
+                                <MenuItem value={30}>POUNDS</MenuItem>
+                                <MenuItem value={10}>USD</MenuItem>
+                                <MenuItem value={20}>EURO</MenuItem>
+                                <MenuItem value={20}>NAIRA</MenuItem>
+                            </Select>
+                        </FormControl> */}
+
+                        Fees
+                    </div>
+                    <div className={clsx["courseitem"]} />
+                </div>
+
+                <div className={clsx["coursebody"]}>
+                    {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
+                    {/* {data?.length > 0 && data.filter(d => d.isActive).map((item, i) => ( */}
+                    {all?.length > 0 && all?.filter((course) =>
+                        course?.category
+                            .toLowerCase()
+                            .includes(search?.toLowerCase()) ||
+                        course?.title
+                            .toLowerCase()
+                            .includes(search?.toLowerCase())
+                    ).map((item, i) => (
+
+                        <div className={clsx["coursecontent"]} key={i}>
+                            <div className={clsx["courseitem"]}>
+                                {i + 1}
+
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                {item.title}
+
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+
+                                {item.category?.toLowerCase()}
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                {item.subCategory === "SHORT_COURSES" ? "Short Courses" :
+                                    item.subCategory === "IN_DEMAND" ? "In-Demand Course" :
+                                        item.subCategory === "UPSKILL_COURSES" ? "Upskill Course" :
+                                            item.subCategory === "EXECUTIVE_COURSES" ? "Executive Course" : "Tech Enterpreneurship"}
+
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                {item.startDate && getDate(item.startDate)}
+                            </div>
+
+
+                            <div className={clsx["courseitem"]}>
+                                {item.duration}
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                ${(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
+
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                <div className={clsx.classes_button}>
+                                    <button className="d-flex align-items-center" onClick={() => gotoclass(item.title, item.category, item.bootcampId, navigate)}>
+                                        <i><AiFillQuestionCircle style={{ fontSize: "1.1rem", color: "var(--theme-blue" }} /></i>
+                                        <span>Learn more</span>
+                                    </button>
+                                    <button className="d-flex align-items-center" onClick={(e) => handleCourseSelect(e, item)}>
+                                        <i><MdDownloadForOffline style={{ fontSize: "1.1rem" }} /></i>
+                                        <span>Enroll</span>
+                                    </button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    ))
+                    }
+
+                </div>
+
+
+            </div>
+
+
+
+
+        </div>
+    )
+}
+
+
+
 function AvailableCourses({ data, search }) {
     const navigate = useNavigate()
     // const tableHeader = ["Courses", "Start Date", "Program Fee", ""]
@@ -2407,7 +2581,7 @@ function AvailableCourses({ data, search }) {
 
                 {all?.length > 0 &&
                     <div className={clsx.seemore}>
-                        <Link to={`/category/upcoming`}> See more <AiOutlineDoubleRight /></Link>
+                        <Link to={`/student/classes`}> See more <AiOutlineDoubleRight /></Link>
                     </div>
                 }
 

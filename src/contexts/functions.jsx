@@ -2821,7 +2821,7 @@ export const studentFunctions = {
                         return status >= 200 && status <= 505;
                     }
                 })
-            console.log("result payment", res);
+            // console.log("result payment", res);
 
             if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -2843,7 +2843,7 @@ export const studentFunctions = {
         }
     },
     fetchBootcampFees: async function (token) {
-        console.log("studentpaymenttoken", token);
+        // console.log("studentpaymenttoken", token);
         try {
             const res = await axios.get(`${baseURL}/student/bootcamps/enrollments/payments/fetch`,
                 {
@@ -2855,7 +2855,7 @@ export const studentFunctions = {
                         return status >= 200 && status <= 505;
                     }
                 })
-            console.log("result payment", res);
+            // console.log("result payment", res);
 
             if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -3288,7 +3288,7 @@ export const studentFunctions = {
                     }
                 })
             // Error from backend
-            console.log(res)
+            // console.log(res)
             if (res.data.message !== "Notifications fetched successfully") throw new AdvancedError("Error fetching notifications", res.data.statusCode);
             return {
                 ...res.data,
