@@ -1078,7 +1078,7 @@ function UploadStatus({open, setOpen, progress }) {
             if(res.statusCode === 1){
                 const findMyClasss = res.data.find(item => item.bootcampId === classId)
                 console.log({findMyClasss})
-                if(findMyClasss.bootcampId && (findMyClasss.status === "paid" || findMyClasss.paymentStatus === "paid")){
+                if(findMyClasss.bootcampId && (findMyClasss.status === "paid" || findMyClasss.paymentStatus === "complete")){
                     setIsPermitted(true)
                     return
                 }
