@@ -1759,7 +1759,7 @@ export function Fees() {
                                                 <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
                                             </div>
                                             <div className={clsx.payment__button}>
-                                                <button className={d.status === "paid" ? clsx.bggreen : clsx.bgred} disabled={d.status === "paid"} onClick={() => handlePay(pay._id, pay.type)}>Full Payment</button>
+                                                <button className={pay.status === "paid" ? clsx.bggreen : clsx.bgred} disabled={d.status === "paid"} onClick={() => handlePay(pay._id, pay.type)}>Full Payment</button>
                                             </div>
                                         </div>
 
