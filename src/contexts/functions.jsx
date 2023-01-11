@@ -2809,7 +2809,7 @@ export const studentFunctions = {
         }
     },
     fetchStudentFees: async function (token) {
-        console.log("studentpaymenttoken", token);
+        // console.log("studentpaymenttoken", token);
         try {
             const res = await axios.get(`${baseURL}/student/courses/enrollments/payment/fetch`,
                 {
