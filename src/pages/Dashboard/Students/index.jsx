@@ -438,6 +438,8 @@ export function MyClasses() {
         navigate(`/categories/${courseCategory}/courses/${courseName}/${id}/payment`)
     }
 
+    console.log({courseList});
+ 
     return (
         <Students header={"My Courses"}>
             {loading && <Loader />}
@@ -1750,14 +1752,14 @@ export function Fees() {
                                             <p>Full Payment</p>
                                             <div className={clsx.payment__fee}>
                                                 <span>Fee</span>
-                                                <span className={clsx.clred}>${d.amount}</span>
+                                                <span className={clsx.clred}>${pay.amount}</span>
                                             </div>
                                             <div className={clsx.payment__fee}>
                                                 <span>Due Date:</span>
                                                 <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
                                             </div>
                                             <div className={clsx.payment__button}>
-                                                <button className={d.status === "paid" ? clsx.bggreen : clsx.bgred} disabled={d.status === "paid"} onClick={() => handlePay(pay._id, pay.type)}>Full Payment</button>
+                                                <button className={pay.status === "paid" ? clsx.bggreen : clsx.bgred} disabled={d.status === "paid"} onClick={() => handlePay(pay._id, pay.type)}>Full Payment</button>
                                             </div>
                                         </div>
 
@@ -2139,7 +2141,7 @@ export const Dashboard = ({ mixpanel }) => {
                                                 </td>
                                                 <td><span>{item.paymentStatus}</span></td>
                                                 <td><span>{new Date(item?.startDate).toLocaleDateString()}</span></td>
-                                                <td><span>{item.amountPaid}</span></td>
+                                                <td><span>${item.amountPaid}</span></td>
                                                 <td>
                                                     {/* <span className="d-block dashboard_table">
                                                         <GotoDashboard loader={loader} setLoading={setLoading} />
