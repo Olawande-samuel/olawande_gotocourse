@@ -77,7 +77,7 @@ const Navbar = ({ background }) => {
       {
         (mainpage) && showBanner &&
         <div className="d-flex align-items-center justify-content-center p-2 w-100 bg-white">
-          <a href="#upcoming" className="mb-0 fw-bold me-4" style={{fontFamily:"Raleway"}}>NEW CLASSES STARTS JANUARY 5, ENROLL NOW</a>
+          <a href="#upcoming" className="mb-0 fw-bold me-4" style={{fontFamily:"Raleway"}}>NEW CLASSES STARTED JANUARY 5, ENROLL NOW</a>
           <i><AiOutlineCloseCircle size="1.5rem" onClick={()=>{
               setShowBanner(false)
               localStorage.setItem("gotocourse-banner", false)

@@ -794,6 +794,11 @@ export function Head({ title, bootcampImg, category, duration, price, packages, 
                         {/* <p><AiOutlineCheck className="icon" /> Earn upto $138k </p> */}
                         <p><AiOutlineCheck className="icon" /> Cohort learning</p>
                     </div>
+
+                    <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
+                    <p>Start Date:</p>
+                    <p>{getFullDate(startDate)}</p>
+                </div>
                 </div>
 
                 <div className="view">
@@ -1538,7 +1543,7 @@ export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, 
 }
 
 
-export function PathCourseCard({ title, bootcampImg, bootcampId, category, description, duration, price, packages, popupTitle, popupArr, all }) {
+export function PathCourseCard({ title, bootcampImg, bootcampId, category,startDate, description, duration, price, packages, popupTitle, popupArr, all }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -1676,10 +1681,10 @@ export function PathCourseCard({ title, bootcampImg, bootcampId, category, descr
                     <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
                 </div>
 
-                {/* <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue" }}>
+                <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
                     <p>Start Date:</p>
                     <p>{getFullDate(startDate)}</p>
-                </div> */}
+                </div>
 
                 {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
                 <div className="foot" style={{ justifyContent: "center" }} >
