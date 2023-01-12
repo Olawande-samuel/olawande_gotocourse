@@ -14,6 +14,10 @@ import { useAuth } from '../../../../contexts/Auth';
 import { AdvancedError } from '../../../../classes';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TextField } from '@mui/material';
+import { useMemo } from 'react';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -82,15 +86,15 @@ export default function AdLeads() {
 
   const fetchAdLeads = useQuery(["fetchAdLeads", userdata?.token], () =>fetchLeads(userdata.token),
     {
-        enabled:userdata.token !== null,
-        onSuccess: res=> {
-          console.log(res)
-        },
-        onError: err=>{
-          console.error(err)
-        }
-  })
-
+      enabled:userdata.token !== null,
+      onSuccess: res=> {
+        console.log(res)
+      },
+      onError: err=>{
+        console.error(err)
+      }
+    }
+  )
 
   const exportToCsv = useMutation(exportLeads, {
     onSuccess: (res) => {
@@ -119,7 +123,7 @@ export default function AdLeads() {
 
               <Box sx={{ width: '100%' }}>
 
-            {/* <div className="d-flex justify-content-end">
+            <div className="d-flex justify-content-end">
               {
                 fetchAdLeads?.data?.data?.length > 0 &&
                 <button className="btn-plain" onClick={exportCsv} disabled={exportToCsv?.isLoading}>
@@ -137,7 +141,7 @@ export default function AdLeads() {
                 </button>
               }
               
-            </div> */}
+            </div>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="scrollable">
                       {title.map((item, index)=> (
@@ -196,11 +200,43 @@ function HomepageHero({ name}){
     exportToCsv.mutate(userdata.token)
   }
   
+  
+  const [value, setValue] = React.useState(null);
+  const [search, setSearch] = React.useState("");
+
+  const dateFilter = useMemo(() => {
+    if(value?.$d){
+      return  new Intl.DateTimeFormat('en-US').format(new Date(value?.$d))
+    } return ""
+  } , [value?.$d])
+
+  // console.log({dateFilter})
+  // console.log(new Intl.DateTimeFormat('en-US').format(new Date("2023-01-12T11:51:17.630Z")))
+    // new Intl.DateTimeFormat('en-US').format(new Date(date))}
   return(
     <div className="row">
       <div className="col-12">
 
-       
+      <div className="mb-4 d-flex">
+          <div className="">
+              <input type="search" name="search" id="search" onChange={(e)=>setSearch(e.target.value)} value={search} className="p-2 rounded form-control " placeholder='search...'/>
+
+          </div>
+          <div className="ms-auto">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                      label="Filter by date"
+                      inputFormat="MM/DD/YYYY"
+                      value={value}
+                      onChange={(newValue) => {
+                        setValue(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                  />
+              </LocalizationProvider>
+
+          </div>
+      </div>
         <div className="table-responsive">
             {
                 fetchAdLeads?.isLoading ? 
@@ -223,7 +259,7 @@ function HomepageHero({ name}){
 
                     <tbody>
                         {
-                            data?.filter(item => item?.category === name).map((item, index) => (
+                            data?.filter(item => item?.category === name).filter(item => (new Intl.DateTimeFormat('en-US').format(new Date(item.updatedAt)).includes(dateFilter)) && item.fullName.includes(search) ).map((item, index) => (
                                 <TableRow  index={index} item={item}  key={index} />
                             ))
                         }

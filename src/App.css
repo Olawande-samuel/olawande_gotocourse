@@ -1613,7 +1613,7 @@ td:not(:first-child) {
 
 .pay_background {
   min-height: 100vh;
-  background: url(./images/logup.png);
+  background: url(./images/paybackground.png);
   background-repeat: no-repeat;
   background-size: cover;
   /* display: flex;
