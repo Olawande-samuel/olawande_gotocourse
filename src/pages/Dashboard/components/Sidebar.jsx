@@ -105,7 +105,7 @@ const Sidebar = () => {
                 {
                     icon: FiSend,
                     path: "teachers",
-                    title: "Mentors/Teachers",
+                    title: "Teachers",
                 },
                 {
                     icon: FaTwitch,
@@ -337,7 +337,7 @@ const Sidebar = () => {
                     {
                         icon: FiSend,
                         path: "teachers",
-                        title: "Mentors/Teachers",
+                        title: "Teachers",
                     },
                     {
                         icon: FaTwitch,
@@ -364,11 +364,11 @@ const Sidebar = () => {
                         path: "classes",
                         title: "Courses",
                     },
-                    {
-                        icon: BiVideo,
-                        path: "live-class",
-                        title: "Live Class",
-                    },
+                    // {
+                    //     icon: BiVideo,
+                    //     path: "live-class",
+                    //     title: "Live Class",
+                    // },
                     {
                         icon: BiBell,
                         path: "notifications",
@@ -434,11 +434,11 @@ const Sidebar = () => {
                             path: "myclasses",
                             title: "My Courses",
                         },
-                        {
-                            icon: BiVideo,
-                            path: "live-class",
-                            title: "Live Class",
-                        },
+                        // {
+                        //     icon: BiVideo,
+                        //     path: "live-class",
+                        //     title: "Live Class",
+                        // },
 
                         {
                             icon: FiGift,
@@ -506,11 +506,11 @@ const Sidebar = () => {
                                 path: "classes",
                                 title: "Courses",
                             },
-                            {
-                                icon: BiVideo,
-                                path: "live-class",
-                                title: "Live Class",
-                            },
+                            // {
+                            //     icon: BiVideo,
+                            //     path: "live-class",
+                            //     title: "Live Class",
+                            // },
                             {
                                 icon: IoIosCash,
                                 path: "earnings",
