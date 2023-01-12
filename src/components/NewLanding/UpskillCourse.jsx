@@ -40,7 +40,7 @@ const UpskillCourse = () => {
           onSuccess: (res)=>{
               if(res.data.length > 0){
                 // console.log("data", res.data);
-                  const uppers = res.data.filter(item=>item.subCategory === "UPSKILL_COURSES" && item.isActive);
+                  const uppers = res.data.filter(item=>item.subCategory === "UPSKILL_COURSES" && item.startDate.includes("2023-01")  && item.isActive);
                 //   console.log({uppers});
                   setShorts(uppers)
               }

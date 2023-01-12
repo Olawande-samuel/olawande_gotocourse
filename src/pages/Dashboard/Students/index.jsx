@@ -1583,6 +1583,16 @@ export function Fees() {
 
     const payNumber = ["1st", "2nd", "3rd", "4th"]
 
+   useQuery(["fetch my enrolledclasses"], () => fetchBootcampFees(userdata?.token),{
+    onSuccess: (res) => {
+        console.log({res});
+        if (res?.data?.length > 0) {
+            setCourse((res?.data));
+        }
+    }
+   })
+
+
     const getmyFees = async (data) => {
         setGeneralState({ ...generalState, loading: true })
         try {
@@ -1600,29 +1610,29 @@ export function Fees() {
 
     }
 
-    async function fetchPayments(token) {
-        setGeneralState({ ...generalState, loading: true })
-        try {
-            const res = await Promise.all([fetchStudentFees(token), fetchBootcampFees(token)])
-            console.log({ res })
-            if (res.length > 0) {
-                const myPayment = res[0].data.concat(res[1].data)
+    // async function fetchPayments(token) {
+    //     setGeneralState({ ...generalState, loading: true })
+    //     try {
+    //         const res = await Promise.all([fetchStudentFees(token), fetchBootcampFees(token)])
+    //         console.log({ res })
+    //         if (res.length > 0) {
+    //             const myPayment = res[0].data.concat(res[1].data)
 
-                console.log(myPayment)
-                setCourse(myPayment)
-            }
-            setGeneralState({ ...generalState, loading: false })
-        } catch (err) {
-            toast.error(err.message);
-        }
-    }
+    //             console.log(myPayment)
+    //             setCourse(myPayment)
+    //         }
+    //         setGeneralState({ ...generalState, loading: false })
+    //     } catch (err) {
+    //         toast.error(err.message);
+    //     }
+    // }
 
 
-    useEffect(() => {
-        if (userdata.token) {
-            fetchPayments(userdata.token)
-        }
-    }, [userdata.token])
+    // useEffect(() => {
+    //     if (userdata.token) {
+    //         fetchPayments(userdata.token)
+    //     }
+    // }, [userdata.token])
 
     useEffect(() => {
         if (ref.current) return
@@ -1763,7 +1773,7 @@ export function Fees() {
                                             </div>
                                         </div>
 
-                                        <div className={clsx.payment__empty}></div>
+                                        {/* <div className={clsx.payment__empty}></div> */}
                                         <div className={clsx.payment__empty}></div>
                                     </>
                                 ))
