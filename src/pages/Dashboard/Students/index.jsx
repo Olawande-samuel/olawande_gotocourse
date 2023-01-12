@@ -27,9 +27,8 @@ import { SiGoogleclassroom } from "react-icons/si";
 import { IoMdChatboxes } from "react-icons/io";
 import { Box, FormControl, InputLabel, MenuItem, Modal, Select, TextField } from "@mui/material";
 
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import ChatComponent from "../Admin/Chat";
@@ -851,7 +850,7 @@ export function Wishlist() {
                         <small>Total:</small>
                         <p>{`$${value}`}</p>
                         {/* <p>$11,000</p> */}
-                        <Link to={`/student/wishlist-checkout`}><button>Checkout</button></Link>
+                        <Link to={`/student/wishlist-checkout`}><button disabled={wishlists?.length <=0 ? true :  false}>Checkout</button></Link>
 
                     </div>
                     <p style={{ padding: "1rem 0" }}>My Cart</p>
@@ -1400,7 +1399,9 @@ export function WishlistCheckOut() {
 
                         </div>
 
-                        <button onClick={checkout}>Checkout</button>
+
+
+                        <button onClick={checkout} disabled={wishlists?.length <=0 ? true :  false}>Checkout</button>
 
 
                     </div>
@@ -2053,13 +2054,13 @@ export const Dashboard = ({ mixpanel }) => {
     const navigate = useNavigate();
 
     const [loader, setLoading] = useState(false)
-    const [value, setValue] = useState(dayjs('2014-08-18T21:11:54'));
+    // const [value, setValue] = useState(dayjs('2014-08-18T21:11:54'));
+    const [value, setValue] = useState((null));
 
     const handleChange = (newValue) => {
         setValue(newValue);
     };
 
-    console.log({ value });
 
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
     const { data: myenrolledcourses, isSuccess: mycoursesuccess } = useQuery(["fetch my enrolledclasses"], () => fetchMyClasses(userdata?.token))
@@ -2102,6 +2103,13 @@ export const Dashboard = ({ mixpanel }) => {
 
     useMemo(() => mixpanel.track("visited student dashboard"), [])
 
+
+
+    const dateFilter = useMemo(() => {
+        if(value?.$d){
+          return  new Intl.DateTimeFormat('en-US').format(new Date(value?.$d))
+        } return ""
+      } , [value?.$d])
 
     return (
         <Students isMobile={isMobile} userdata={userdata} header={"Dashboard"} >
@@ -2150,7 +2158,7 @@ export const Dashboard = ({ mixpanel }) => {
 
                         <div className="coursesdatefilter">
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DesktopDatePicker
+                                <DatePicker
                                     // label="Date desktop"
                                     inputFormat="MM/DD/YYYY"
                                     value={value}
@@ -2178,7 +2186,8 @@ export const Dashboard = ({ mixpanel }) => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {myenrolledcourses?.data?.filter(data => data.status === "paid").map((item, i) => (
+                                        {/* {myenrolledcourses?.data?.filter(data =>  data?.status === "paid").map((item, i) => ( */}
+                                    {myenrolledcourses?.data?.filter(data => (new Intl.DateTimeFormat('en-US').format(new Date(data?.startDate)).includes(dateFilter)) && data?.status === "paid").map((item, i) => (
 
                                             <tr key={i}>
                                                 <td><span>{i + 1}</span></td>
