@@ -1274,7 +1274,7 @@ export function ApproveStudent() {
         // navigate(-1)
       }
     } catch (error) {
-      toast.error("No KYC found");
+      toast.error(error.message);
       console.error(error);
     } finally {
       setGeneralState((old) => {
@@ -1356,14 +1356,79 @@ export function ApproveStudent() {
                 </>
               )}
             </div>
+            <div className={clsx.student_course_info}>
+              <div className="table-responsive my-4">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Courses enrolled</th>
+                      <th>Start date</th>
+                      <th>Amount paid</th>
+                      <th>Outstanding</th>
+                      <th>Due date</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
 
-            <div className={clsx.user__email}>
-              <button onClick={(e) => deleteUserHandler(e, data?.email)}>
-                <AiTwotoneDelete /> &nbsp; &nbsp;Delete User
-              </button>
+                    {
+                      data?.enrollmentData.map((item, i)=> (
+                        <tr>
+                          <td>{i + 1}</td>
+                          <td>{item?.bootcampName}</td>
+                          <td>{item?.startDate}</td>
+                          <td>{item?.amountPaid}</td>
+                          <td>{item?.Outstanding}</td>
+                          <td>{item?.bootcampName}</td>
+                          <td>{item?.bootcampPrice}</td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
+              </div>
+
+              {/* <div className="table-responsive my-4">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Discount on</th>
+                      <th>Type of discount</th>
+                      <th>Approval</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {
+                      data?.enrollmentData.map((item, i)=> (
+                        <tr>
+                          <td>{i + 1}</td>
+                          <td>{item?.bootcampName}</td>
+                          <td>{item?.startDate}</td>
+                          <td>{item?.amountPaid}</td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
+              </div> */}
             </div>
+
             <button
-              className="button button-lg log_btn w-50 mt-3"
+              className="button d-flex button-lg log_btn w-50 mt-3 justify-content-center"
+              style={{
+                backgroundColor: data?.isVerified && "var(--theme-blue)",
+              }}
+              type="submit"
+              // onClick={(e) => handleVerification(e, data?.userId)}
+            >
+              Add student to course
+            </button>
+            <button
+              className="button button-lg log_btn w-50 my-3"
               style={{
                 backgroundColor: data?.isVerified && "var(--theme-orange",
               }}
@@ -1372,6 +1437,12 @@ export function ApproveStudent() {
             >
               {data?.isVerified ? "Revoke Access" : "Approve Access"}
             </button>
+            
+            <div className={clsx.user__email}>
+              <button onClick={(e) => deleteUserHandler(e, data?.email)}>
+                <AiTwotoneDelete /> &nbsp; &nbsp;Delete User
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -4434,7 +4505,6 @@ export function Fees() {
   const tableHeaders = [
     "No",
     "Name",
-    "Type",
     "Title",
     "Date",
     "Course Price",
@@ -4493,6 +4563,7 @@ export function Fees() {
                       dueDate,
                       status,
                       type,
+                      price
                     },
                     i
                   ) => (
@@ -4502,12 +4573,12 @@ export function Fees() {
                       enrolled={studentName}
                       comp="Category"
                       name={type}
-                      coursePrice={createdAt ? getDate(createdAt) : ""}
+                      coursePrice={createdAt ? new Intl.DateTimeFormat('en-US').format(new Date(createdAt)) : ""}
                       date={courseName}
-                      pack={`$ ${coursePrice}`}
+                      pack={price ? `$ ${price}`: "-"}
                       start_date={`$ ${amount}`}
                       email={status}
-                      students={dueDate ? getDate(dueDate) : ""}
+                      students={dueDate ? new Intl.DateTimeFormat('en-US').format(new Date(dueDate)) : ""}
                     />
                   )
                 )}
