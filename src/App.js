@@ -228,6 +228,7 @@ import Home from "./pages/Landing";
 import NewHome from "./pages/Landing/landing";
 import AdLeads from "./pages/Dashboard/Admin/leads";
 import { MixpanelConsumer } from "react-mixpanel";
+import RedirectPage from "./pages/Bootcamp/Redirect";
 
 
 const Login = lazy(() => import("./pages/User/Login"));
@@ -356,6 +357,7 @@ function MyApp({mixpanel}) {
                 <Route path="become-a-teacher" element={<TeachersLanding />} />
                 <Route path="student/classroom" element={<StudentClassroom />} />
                 <Route path="coming-soon" element={<ComingSoon />} />
+                <Route path="redirect" element={<RedirectPage/>} />
   
                 <Route path="tester" element={<NewHome />} />
 
