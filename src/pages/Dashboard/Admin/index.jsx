@@ -1417,7 +1417,7 @@ export function ApproveStudent() {
               </div> */}
             </div>
 
-            <button
+            {/* <button
               className="button d-flex button-lg log_btn w-50 mt-3 justify-content-center"
               style={{
                 backgroundColor: data?.isVerified && "var(--theme-blue)",
@@ -1426,7 +1426,7 @@ export function ApproveStudent() {
               // onClick={(e) => handleVerification(e, data?.userId)}
             >
               Add student to course
-            </button>
+            </button> */}
             <button
               className="button button-lg log_btn w-50 my-3"
               style={{
