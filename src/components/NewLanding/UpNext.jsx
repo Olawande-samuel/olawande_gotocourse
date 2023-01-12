@@ -392,7 +392,7 @@ export function Card({ title, bootcampImg, bootcampId, category, subCategory, de
     }
   }
 
-  const getCategory = (cat) => {
+ const getCategory = (cat) => {
 
     if (cat === "SHORT_COURSES") return "Short Course";
     else if (cat === "UPSKILL_COURSES") return "Upskill Course";

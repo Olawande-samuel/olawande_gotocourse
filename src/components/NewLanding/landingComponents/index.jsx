@@ -1397,6 +1397,20 @@ export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, 
         }
     }
 
+    const getCategory = (cat) => {
+
+        if (cat === "SHORT_COURSES") return "Short Course";
+        else if (cat === "UPSKILL_COURSES") return "Upskill Course";
+        else if (cat === "EXECUTIVE_COURSES") return "Executive Course";
+        else if (cat === "IN_DEMAND") return "In-Demand Course";
+        else if (cat === "TECH_ENTREPRENEURSHIP") return "Tech Enterpreneurship Course";
+        else if (cat === "PATH_FINDERS") return "Pathfinder Course";
+        else if (cat === "HEAD_START") return "Headstart Course";
+        else if (cat === "upcoming") return "Upcoming Course";
+        else return ""
+    
+      }
+
     return (
         <UpCoursesCard>
             <img src={bootcampImg} alt="" />
@@ -1423,17 +1437,17 @@ export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, 
 
 
 
-                <div className="checks"
+                <div className="checks" 
                 // style={{ paddingTop: "1rem" }}
                 >
-                    {/* <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p> */}
+                    <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p>
                     <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
                 </div>
 
-                {/* <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue" }}>
+                <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize:"13px" }}>
                     <p>Start Date:</p>
-\                    <p>{getFullDate(startDate)}</p>
-                </div> */}
+              <p>{getFullDate(startDate)}</p>
+                </div>
 
                 <div className="foot d-flex justify-content-center">
                     {/* <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button> */}
