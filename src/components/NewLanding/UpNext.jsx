@@ -200,7 +200,7 @@ export function TabsComp() {
     notifyOnChangeProps: ["category", "isFetching"],
 
     onSuccess: (res) => {
-      if (res.data.length > 0) {
+      if (res?.data?.length > 0) {
 
 
         const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];

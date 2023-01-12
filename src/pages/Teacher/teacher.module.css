@@ -88,9 +88,20 @@
 .payment_details_card  {
   /* font-weight: 700; */
   /* border: 2px solid green; */
-  border-radius: 10px;
+  /* border-radius: 10px; */
   color: #000000;
-  /* width: 80%; */
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+}
+
+.cardbodyleft{
+  width: 50%;
+  background: url(../../images/payleft.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: var(--theme-blue);
 }
 
 .payment_details_card p {
@@ -174,5 +185,11 @@
   .main {
     grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
     /* padding-block: 4.375rem; */
+}
+
+.payment_details_card{
+  flex-direction: column;
+  width: 100%;
+  margin: unset;
 }
 }
