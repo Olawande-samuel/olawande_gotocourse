@@ -202,10 +202,13 @@ export function TabsComp() {
     onSuccess: (res) => {
       if (res.data.length > 0) {
 
+
         const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
-        const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
-        const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-        const all = [...first, ...second, ...third];
+        const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate.includes("2023-01") && !item.startDate.includes("2023-01-19T00:00:00.000Z") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+
+        // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+        // const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+        const all = [...first, ...second];
 
         // const uppers = res.data.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
         // console.log({ uppers });
