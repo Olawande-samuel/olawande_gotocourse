@@ -4563,7 +4563,8 @@ export function Fees() {
                       dueDate,
                       status,
                       type,
-                      price
+                      bootcampPrice,
+                      bootcampName
                     },
                     i
                   ) => (
@@ -4572,10 +4573,10 @@ export function Fees() {
                       num={i}
                       enrolled={studentName}
                       comp="Category"
-                      name={type}
+                      name={bootcampName}
                       coursePrice={createdAt ? new Intl.DateTimeFormat('en-US').format(new Date(createdAt)) : ""}
                       date={courseName}
-                      pack={price ? `$ ${price}`: "-"}
+                      pack={bootcampPrice ? `$ ${bootcampPrice}`: "-"}
                       start_date={`$ ${amount}`}
                       email={status}
                       students={dueDate ? new Intl.DateTimeFormat('en-US').format(new Date(dueDate)) : ""}
