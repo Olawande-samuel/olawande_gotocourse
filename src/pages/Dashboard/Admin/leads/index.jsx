@@ -14,6 +14,10 @@ import { useAuth } from '../../../../contexts/Auth';
 import { AdvancedError } from '../../../../classes';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TextField } from '@mui/material';
+import { useMemo } from 'react';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -82,15 +86,15 @@ export default function AdLeads() {
 
   const fetchAdLeads = useQuery(["fetchAdLeads", userdata?.token], () =>fetchLeads(userdata.token),
     {
-        enabled:userdata.token !== null,
-        onSuccess: res=> {
-          console.log(res)
-        },
-        onError: err=>{
-          console.error(err)
-        }
-  })
-
+      enabled:userdata.token !== null,
+      onSuccess: res=> {
+        console.log(res)
+      },
+      onError: err=>{
+        console.error(err)
+      }
+    }
+  )
 
   const exportToCsv = useMutation(exportLeads, {
     onSuccess: (res) => {
@@ -101,15 +105,47 @@ export default function AdLeads() {
     }
   })
 
-  function exportCsv(e){
-    e.preventDefault()
+  // function exportCsv(e){
+  //   e.preventDefault()
 
-    exportToCsv.mutate(userdata.token)
+  //   exportToCsv.mutate(userdata.token)
+  // }
+
+  function downloadCsv(data){
+    const blob = new Blob([data], { type: "text/csv" })
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = href;
+    link.setAttribute('download', 'data.csv');
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(href);       
+  } 
+
+
+
+  function exportCsv (e){
+    e.preventDefault()
+  
+    let headers = ['Date, Name, Email, Phone, Program']
+
+    let usersCsv = fetchAdLeads?.data?.data?.reduce((acc, item) => {
+      const {createdAt, fullName, email, phone, program } = item
+      acc.push([createdAt,fullName, email, phone, program].join(','))
+      return acc
+    }, [])
+  
+    let csvData = [...headers, ...usersCsv].join('\n')
+
+    downloadCsv(csvData)
+    
   }
 
 
+  
 
-  console.log(fetchAdLeads?.data?.data)
   return (
     <Admin header="AdLeads">
       <div className={clsx["admin_profile"]}>
@@ -119,7 +155,7 @@ export default function AdLeads() {
 
               <Box sx={{ width: '100%' }}>
 
-            {/* <div className="d-flex justify-content-end">
+            <div className="d-flex justify-content-end">
               {
                 fetchAdLeads?.data?.data?.length > 0 &&
                 <button className="btn-plain" onClick={exportCsv} disabled={exportToCsv?.isLoading}>
@@ -137,7 +173,7 @@ export default function AdLeads() {
                 </button>
               }
               
-            </div> */}
+            </div>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="scrollable">
                       {title.map((item, index)=> (
@@ -166,12 +202,21 @@ function HomepageHero({ name}){
   const userdata = getItem("gotocourse-userdata")
 
   const [data, setData]= useState([]);
-  
+  const [value, setValue] = React.useState(null);
+  const [search, setSearch] = React.useState("");
+
+  const dateFilter = useMemo(() => {
+    if(value?.$d){
+      return  new Intl.DateTimeFormat('en-US').format(new Date(value?.$d))
+    } return ""
+  } , [value?.$d])
+
+
+
   const fetchAdLeads = useQuery(["fetchAdLeads", userdata?.token, name], ()=>fetchLeads(userdata.token),
     {
         enabled:userdata.token !== null,
         onSuccess: res=> {
-            console.log(res)
             setData(res.data)
 
         },
@@ -181,26 +226,82 @@ function HomepageHero({ name}){
   })
 
 
-  const exportToCsv = useMutation(exportLeads, {
-    onSuccess: (res) => {
-      console.log("csv", res)
-    },
-    onError: err=>{
-      console.log(err)
-    }
-  })
+  // const exportToCsv = useMutation(exportLeads, {
+  //   onSuccess: (res) => {
+  //     console.log("csv", res)
+  //   },
+  //   onError: err=>{
+  //     console.log(err)
+  //   }
+  // })
 
-  function exportCsv(e){
-    e.preventDefault()
+  // function exportCsv(e){
+  //   e.preventDefault()
 
-    exportToCsv.mutate(userdata.token)
-  }
+  //   exportToCsv.mutate(userdata.token)
+  // }
   
+  
+  const exportCsv = e => {
+    e.preventDefault()
+  
+    // Headers for each column
+    let headers = ['Date, Name, Email, Phone, Program']
+  
+    // Convert users data to a csv
+    let usersCsv = data.reduce((acc, item) => {
+      const {createdAt, fullName, email, phone, program } = item
+      acc.push([createdAt,fullName, email, phone, program].join(','))
+      return acc
+
+    }, [])
+  
+    let csvData = [...headers, ...usersCsv].join('\n')
+
+
+    const blob = new Blob([csvData], { type: "text/csv" })
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = href;
+    link.setAttribute('download', 'data.csv');
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(href);         
+
+    // downloadFile({
+    //   data: [...headers, ...usersCsv].join('\n'),
+    //   fileName: 'users.csv',
+    //   fileType: 'text/csv',
+    // })
+  }
+
+
   return(
     <div className="row">
       <div className="col-12">
 
-       
+      <div className="mb-4 d-flex">
+          <div className="">
+              <input type="search" name="search" id="search" onChange={(e)=>setSearch(e.target.value)} value={search} className="p-2 rounded form-control " placeholder='search...'/>
+
+          </div>
+          <div className="ms-auto">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                      label="Filter by date"
+                      inputFormat="MM/DD/YYYY"
+                      value={value}
+                      onChange={(newValue) => {
+                        setValue(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                  />
+              </LocalizationProvider>
+
+          </div>
+      </div>
         <div className="table-responsive">
             {
                 fetchAdLeads?.isLoading ? 
@@ -223,7 +324,7 @@ function HomepageHero({ name}){
 
                     <tbody>
                         {
-                            data?.filter(item => item?.category === name).map((item, index) => (
+                            data?.filter(item => item?.category === name).filter(item => (new Intl.DateTimeFormat('en-US').format(new Date(item?.updatedAt)).includes(dateFilter)) && item.fullName.includes(search) ).map((item, index) => (
                                 <TableRow  index={index} item={item}  key={index} />
                             ))
                         }
@@ -250,7 +351,6 @@ function TableRow({item, index}){
   const deleteLeads = useMutation(([token, id])=>deleteLead(token, id),
     {
         onSuccess: res=> {
-            console.log(res)
             queryClient.invalidateQueries(["fetchAdLeads"])
             toast.success(res.message)
 

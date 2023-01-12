@@ -29,13 +29,13 @@ import ErrorBoundary from "../../classes/ErrorBoundary";
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 export const BootcampPayment = () => {
-  const { studentFunctions: { addBootcamp }, otherFunctions: {fetchBootcamps} } = useAuth();
+  const { studentFunctions: { addBootcamp }, otherFunctions: { fetchBootcamps } } = useAuth();
   const { getItem } = useLocalStorage();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [price, setPrice] = useState();
   const details = localStorage.getItem("gotocourse-paymentDetails");
-  const [bootcamp, setBootcamp]= useState({})
+  const [bootcamp, setBootcamp] = useState({})
   const [stripeId, setStripeId] = useState(null);
   const [showStripeModal, setShowStripeModal] = useState(false);
   const [paymentData, setPaymentData] = useState({
@@ -44,17 +44,17 @@ export const BootcampPayment = () => {
   });
 
   const params = useParams();
-  console.log({params})
+  console.log({ params })
 
   const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
-    onSuccess: res =>{
-      console.log({res})
+    onSuccess: res => {
+      console.log({ res })
       console.log(res.data.find(item => item.bootcampId === params.id))
-      if(res.data.length > 0){
+      if (res.data.length > 0) {
         let info = res.data.find(item => item.bootcampId === params.id)
         setBootcamp(info)
         let infoPrice = info.packages.length > 0 ? info.packages[0].price : info.price
-        console.log({infoPrice})
+        console.log({ infoPrice })
         setPrice(infoPrice)
 
         return
@@ -63,9 +63,9 @@ export const BootcampPayment = () => {
 
     },
     onError: err => console.error(err)
-  
+
   });
- 
+
 
   function handleChange(e, type) {
     type === "select"
@@ -93,7 +93,7 @@ export const BootcampPayment = () => {
   async function enrollToCourse(e) {
     e.preventDefault();
     const userData = getItem(KEY);
-    if (userData !== null) {
+    if (userData?.token) {
       const bootcampPaymentInfo = {
         bootcampId: bootcamp.bootcampId,
         amountPaid: price,
@@ -138,119 +138,121 @@ export const BootcampPayment = () => {
       }
     } else {
       localStorage.clear()
-      navigate("/login");
+      navigate("/redirect");
     }
   }
   return (
     // <Courses>
     // {/* <GuardedRoute> */ }
     <div className={`pay_background `}>
-        <ToastContainer
-          position="top-right"
-          autoClose={4500}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-    <div className={`container row justify-content-center align-items-center`} style={{minHeight:"100vh"}}>
-      <section
-        className={`row justify-content-center align-items-center`}
-      >
-        <div className="col-md-7 col-lg-5 ">
-          {showStripeModal ? (
-            <ErrorBoundary>
-              <PaymentModal token={stripeId} setShowStripeModal={setShowStripeModal} />
-            </ErrorBoundary>
-          ) : (
-            <div className={` card ${style.payment_details_card} `}>
-              {/* <div> */}
+      <ToastContainer
+        position="top-right"
+        autoClose={4500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <div className={`d-flex w-100 justify-content-center align-items-center`} style={{ minHeight: "100vh" }}>
+        <section
+          className={`row w-100 justify-content-center align-items-center`}
+        >
+          <div >
+            {showStripeModal ? (
+              <div className="col-md-7 col-lg-5 ">
+                <ErrorBoundary>
+                  <PaymentModal token={stripeId} setShowStripeModal={setShowStripeModal} />
+                </ErrorBoundary>
+              </div>
+            ) : (
+              <div className={`${style.payment_details_card} `}>
 
-              <div className="card-body pay_card">
+                <div className={style.cardbodyleft}>
 
-                {/* <div> */}
-
-
-                <div>
-                  <div className="d-flex align-items-center justify-content-center w-100 py-1">
-                    <h3 className={clsx.check}>
-                      <span>Begin Your Exciting Journey To</span>
-                      <span className="d-block">Learning A New Skill</span>
-                      
-                    </h3>
-                  </div>
                 </div>
 
+                <div className="card">
+                  <div className="card-body pay_card">
+                    <div>
+                      <div className="d-flex align-items-center justify-content-center w-100 py-1">
+                        <h3 className={clsx.check}>
+                          <span>Begin Your Exciting Journey To</span>
+                          <span className="d-block">Learning A New Skill</span>
 
-                <div className={style.payment_card_mid}>
-                  <div className="d-flex flex-column">
-                    <span className={clsx.pay__tit}>Course</span>
-                    <p
-                      className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}
-                    >
-                      {bootcamp?.title}
-                    </p>
-                    {/* <p>${bootcamp?.price && bootcamp?.price}</p> */}
-                  </div>
-                </div>
-
-
-                <div className="d-flex flex-column">
-                  <span className={`fw-normal ${clsx.pay__tit}`} >Service Fee</span>
-                  <p className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}>5%</p>
-                </div>
-
-                <div className="d-flex flex-column justify-content-between">
-                  <label
-                    htmlFor="paymentType"
-                    className="form-label generic_label"
-                  >
-                    Choose a payment structure
-                  </label>
-                  <select
-                    name="fullPayment"
-                    onChange={(e) => handleChange(e, "select")}
-                    id="paymentType"
-                    className="form-select"
-                  >
-                    <option value="1">Full Payment</option>
-                    <option value="0">Installment</option>
-                  </select>
-                </div>
-                <br />
-                {paymentData.fullPayment === false ? (
-                  <>
-                    <div className="">
-                      <small
-                        className="text-info"
-                        style={{ fontSize: "12px" }}
-                      >
-                        *Fees must be paid in not more than two Installments.
-                        Each installment carries a $100 extra charge
-                      </small>
-                      <div className="form-group">
-                        <input
-                          type="radio"
-                          name="initialPayment"
-                          id="2"
-                          onChange={handleInstallmentChoice}
-                          value={(price + (price * (5 /100))) / 2 + 100}
-                        />
-                        <label
-                          htmlFor="2"
-                          className="form-label generic_label ms-2 "
-                        >
-                          Pay in two installments of{" "}
-                          {(price + (price * (5 /100))) / 2 + 100} each
-                        </label>
+                        </h3>
                       </div>
-                      {/* <div className="text-center">
+                    </div>
+
+
+                    <div className={style.payment_card_mid}>
+                      <div className="d-flex flex-column">
+                        <span className={clsx.pay__tit}>Course</span>
+                        <p
+                          className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}
+                        >
+                          {bootcamp?.title}
+                        </p>
+                        {/* <p>${bootcamp?.price && bootcamp?.price}</p> */}
+                      </div>
+                    </div>
+
+
+                    <div className="d-flex flex-column">
+                      <span className={`fw-normal ${clsx.pay__tit}`} >Service Fee</span>
+                      <p className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}>5%</p>
+                    </div>
+
+                    <div className="d-flex flex-column justify-content-between">
+                      <label
+                        htmlFor="paymentType"
+                        className="form-label generic_label"
+                      >
+                        Choose a payment structure
+                      </label>
+                      <select
+                        name="fullPayment"
+                        onChange={(e) => handleChange(e, "select")}
+                        id="paymentType"
+                        className="form-select"
+                      >
+                        <option value="1">Full Payment</option>
+                        <option value="0">Installment</option>
+                      </select>
+                    </div>
+                    <br />
+                    {paymentData.fullPayment === false ? (
+                      <>
+                        <div className="">
+                          <small
+                            className="text-info"
+                            style={{ fontSize: "12px" }}
+                          >
+                            *Fees must be paid in not more than two Installments.
+                            Each installment carries a $100 extra charge
+                          </small>
+                          <div className="form-group">
+                            <input
+                              type="radio"
+                              name="initialPayment"
+                              id="2"
+                              onChange={handleInstallmentChoice}
+                              value={(price + (price * (5 / 100))) / 2 + 100}
+                            />
+                            <label
+                              htmlFor="2"
+                              className="form-label generic_label ms-2 "
+                            >
+                              Pay in two installments of{" "}
+                              {(price + (price * (5 / 100))) / 2 + 100} each
+                            </label>
+                          </div>
+                          {/* <div className="text-center">
                         <small className="text-center text-dark">or</small>
                       </div> */}
-                      {/* <div className="form-group">
+                          {/* <div className="form-group">
                         <input
                           type="radio"
                           name="initialPayment"
@@ -266,64 +268,67 @@ export const BootcampPayment = () => {
                           {price / 4 + 100} each
                         </label>
                       </div> */}
+                        </div>
+                        <hr />
+                      </>
+                    ) : (
+                      ""
+                    )}
+                    <div className="d-flex flex-column">
+                      <span className={clsx.pay__tit}>Total</span>
+                      <p className={`${clsx.pay__total}`}>
+                        ${price && +price + (price * (5 / 100))}
+                      </p>
                     </div>
-                    <hr />
-                  </>
-                ) : (
-                  ""
-                )}
-                <div className="d-flex flex-column">
-                  <span className={clsx.pay__tit}>Total</span>
-                  <p className={`${clsx.pay__total}`}>
-                    ${price && +price + (price * (5 /100))}
-                  </p>
-                </div>
 
-                <button
-                  onClick={enrollToCourse}
-                  className="button w-100 button-md"
-                >
-                  {loading ? (
-                    <div
-                      className="spinner-border text-primary"
-                      role="status"
-                      style={{ width: "2rem", height: "2rem" }}
+                    <button
+                      onClick={enrollToCourse}
+                      className="button w-100 button-md"
                     >
-                      <span className="visually-hidden">Loading...</span>
+                      {loading ? (
+                        <div
+                          className="spinner-border text-primary"
+                          role="status"
+                          style={{ width: "2rem", height: "2rem" }}
+                        >
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                      ) : (
+                        <span>Checkout</span>
+                      )}
+                    </button>
+                    <div className="cancel w-100 text-center my-3">
+                      <button
+                        className=""
+                        style={{
+                          color: "var(--theme-blue)",
+                          border: "none",
+                          outline: "none",
+                          fontSize: "14px",
+                        }}
+                        onClick={() => {
+                          navigate(-1);
+                        }}
+                      >
+                        Go back
+                      </button>
                     </div>
-                  ) : (
-                    <span>Checkout</span>
-                  )}
-                </button>
-                <div className="cancel w-100 text-center my-3">
-                  <button
-                    className=""
-                    style={{
-                      color: "var(--theme-blue)",
-                      border: "none",
-                      outline: "none",
-                      fontSize: "14px",
-                    }}
-                    onClick={() => {
-                      navigate(-1);
-                    }}
-                  >
-                    Go back
-                  </button>
+                  </div>
+
                 </div>
+
               </div>
-            </div>
 
 
 
-            // </div>
+              // </div>
 
-          )}
-        </div>
-      </section>
-    </div>
-      {/* </GuardedRoute> */ }
-  {/* </Courses> */}
+            )}
+          </div>
+        </section>
+      </div>
+      {/* </GuardedRoute> */}
+      {/* </Courses> */}
     </div>
   );
 };
@@ -337,15 +342,15 @@ export function PaymentModal({ token, setShowStripeModal }) {
 
   return (
     <div>
-    <Elements stripe={stripePromise} options={options}>
-      <CheckoutForm token={token} setShowStripeModal={setShowStripeModal}/>
-    </Elements> 
+      <Elements stripe={stripePromise} options={options}>
+        <CheckoutForm token={token} setShowStripeModal={setShowStripeModal} />
+      </Elements>
     </div>
   );
 
 }
 
-export const CheckoutForm = ({token, setShowStripeModal}) => {
+export const CheckoutForm = ({ token, setShowStripeModal }) => {
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
@@ -356,7 +361,7 @@ export const CheckoutForm = ({token, setShowStripeModal}) => {
   const classData = getItem("gotocourse-bootcampdata")
 
 
- 
+
 
   async function handlesubmit(e) {
     e.preventDefault();
@@ -399,12 +404,12 @@ export const CheckoutForm = ({token, setShowStripeModal}) => {
   }
 
   return (
-    <form onSubmit={handlesubmit} className="pay_card rounded" style={{background: "#ffffff"}}>
+    <form onSubmit={handlesubmit} className="pay_card rounded" style={{ background: "#ffffff" }}>
       <PaymentElement
         onReady={() => {
           setLoadingComponent(false);
         }}
-        onError={(err)=> {
+        onError={(err) => {
           console.error(err);
           setLoadingComponent(false);
         }}
@@ -437,23 +442,23 @@ export const CheckoutForm = ({token, setShowStripeModal}) => {
           </button>
         </>
       )}
-        <div className="cancel w-100 text-center my-3">
-          <button
-            className=""
-            style={{
-              color: "var(--theme-blue)",
-              border: "none",
-              outline: "none",
-              fontSize: "14px",
-            }}
-            onClick={() => {
-              setShowStripeModal(false)
-              // navigate("/payment/error");
-            }}
-          >
-            Cancel
-          </button>
-        </div>
+      <div className="cancel w-100 text-center my-3">
+        <button
+          className=""
+          style={{
+            color: "var(--theme-blue)",
+            border: "none",
+            outline: "none",
+            fontSize: "14px",
+          }}
+          onClick={() => {
+            setShowStripeModal(false)
+            // navigate("/payment/error");
+          }}
+        >
+          Cancel
+        </button>
+      </div>
     </form>
   );
 };

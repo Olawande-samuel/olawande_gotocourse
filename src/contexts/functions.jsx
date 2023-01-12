@@ -2593,13 +2593,26 @@ export const adminFunctions = {
                     validateStatus: status => {
                         return status >= 200 && status <= 505;
                     }
-                })
+                }
+            )
+
+            console.log(res)
+            const blob = new Blob([res], { type: "text/csv" })
+            const href = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = href;
+            link.setAttribute('download', 'data.csv');
+            document.body.appendChild(link);
+            link.click();
+    
+            document.body.removeChild(link);
+            URL.revokeObjectURL(href);            
 
             if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
-            }
+            }            
 
         } catch (err) {
             return {

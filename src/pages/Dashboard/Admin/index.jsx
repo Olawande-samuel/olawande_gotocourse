@@ -1274,7 +1274,7 @@ export function ApproveStudent() {
         // navigate(-1)
       }
     } catch (error) {
-      toast.error("No KYC found");
+      toast.error(error.message);
       console.error(error);
     } finally {
       setGeneralState((old) => {
@@ -1356,14 +1356,79 @@ export function ApproveStudent() {
                 </>
               )}
             </div>
+            <div className={clsx.student_course_info}>
+              <div className="table-responsive my-4">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Courses enrolled</th>
+                      <th>Start date</th>
+                      <th>Amount paid</th>
+                      <th>Outstanding</th>
+                      <th>Due date</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
 
-            <div className={clsx.user__email}>
-              <button onClick={(e) => deleteUserHandler(e, data?.email)}>
-                <AiTwotoneDelete /> &nbsp; &nbsp;Delete User
-              </button>
+                    {
+                      data?.enrollmentData.map((item, i)=> (
+                        <tr>
+                          <td>{i + 1}</td>
+                          <td>{item?.bootcampName}</td>
+                          <td>{item?.startDate}</td>
+                          <td>{item?.amountPaid}</td>
+                          <td>{item?.Outstanding}</td>
+                          <td>{item?.bootcampName}</td>
+                          <td>{item?.bootcampPrice}</td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
+              </div>
+
+              {/* <div className="table-responsive my-4">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Discount on</th>
+                      <th>Type of discount</th>
+                      <th>Approval</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {
+                      data?.enrollmentData.map((item, i)=> (
+                        <tr>
+                          <td>{i + 1}</td>
+                          <td>{item?.bootcampName}</td>
+                          <td>{item?.startDate}</td>
+                          <td>{item?.amountPaid}</td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
+              </div> */}
             </div>
+
+            {/* <button
+              className="button d-flex button-lg log_btn w-50 mt-3 justify-content-center"
+              style={{
+                backgroundColor: data?.isVerified && "var(--theme-blue)",
+              }}
+              type="submit"
+              // onClick={(e) => handleVerification(e, data?.userId)}
+            >
+              Add student to course
+            </button> */}
             <button
-              className="button button-lg log_btn w-50 mt-3"
+              className="button button-lg log_btn w-50 my-3"
               style={{
                 backgroundColor: data?.isVerified && "var(--theme-orange",
               }}
@@ -1372,6 +1437,12 @@ export function ApproveStudent() {
             >
               {data?.isVerified ? "Revoke Access" : "Approve Access"}
             </button>
+            
+            <div className={clsx.user__email}>
+              <button onClick={(e) => deleteUserHandler(e, data?.email)}>
+                <AiTwotoneDelete /> &nbsp; &nbsp;Delete User
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1998,6 +2069,40 @@ export function Teachers() {
     localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(details));
     if (email) navigate(`approve?email=${email}`);
   }
+
+
+  function exportCsv (e){
+    e.preventDefault()
+  
+    let headers = ['First name, Last name,  Email']
+
+    let usersCsv = teachers.reduce((acc, item) => {
+      const {firstName, lastName, email } = item
+      acc.push([firstName, lastName, email].join(','))
+      return acc
+    }, [])
+  
+    let csvData = [...headers, ...usersCsv].join('\n')
+
+    downloadCsv(csvData)
+    
+  }
+
+
+  function downloadCsv(data){
+    const blob = new Blob([data], { type: "text/csv" })
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = href;
+    link.setAttribute('download', 'teachers.csv');
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(href);       
+  } 
+
+
   return (
     // <Admin header={"Mentors/Teachers"}>
     <Admin header={"Teachers"}>
@@ -2025,6 +2130,9 @@ export function Teachers() {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
+            <button className="btn-plain" onClick={exportCsv}>
+                  Export to CSV
+                </button>
           </div>
           <div className={`${clsx.admin__student_main}`}>
             <table className={`${clsx.admin__student_table}`}>
@@ -2059,7 +2167,7 @@ export function Teachers() {
                         details={teacher}
                         type={teacher.userType}
                         approveHandler={approveHandler}
-                        accessPledre={teacher.accessPledre}
+                        accessPledre={teacher.isVerified}
                         isAbsolute={true}
                       />
                     ))}
@@ -4426,6 +4534,8 @@ export function BootcampRow({
 export function Fees() {
   const {
     adminFunctions: { fetchPayment },
+    generalState: {loading},
+    setGeneralState
   } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
@@ -4434,7 +4544,6 @@ export function Fees() {
   const tableHeaders = [
     "No",
     "Name",
-    "Type",
     "Title",
     "Date",
     "Course Price",
@@ -4448,6 +4557,12 @@ export function Fees() {
 
     (async () => {
       try {
+        setGeneralState((prev)=> {
+          return {
+            ...prev,
+            loading: true
+          }
+        })
         const res = await fetchPayment(userdata?.token);
         const { message, success, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
@@ -4460,6 +4575,12 @@ export function Fees() {
       } catch (err) {
         toast.error(err.message);
       } finally {
+        setGeneralState((prev)=> {
+          return {
+            ...prev,
+            loading: false
+          }
+        })
       }
     })();
 
@@ -4473,7 +4594,6 @@ export function Fees() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h1>All Fees</h1>
-
           <div className={clsx.admin__student_main}>
             <table className={`${clsx.admin__student_table}`}>
               <thead>
@@ -4493,6 +4613,8 @@ export function Fees() {
                       dueDate,
                       status,
                       type,
+                      bootcampPrice,
+                      bootcampName
                     },
                     i
                   ) => (
@@ -4501,13 +4623,13 @@ export function Fees() {
                       num={i}
                       enrolled={studentName}
                       comp="Category"
-                      name={type}
-                      coursePrice={createdAt ? getDate(createdAt) : ""}
+                      name={bootcampName}
+                      coursePrice={createdAt ? new Intl.DateTimeFormat('en-US').format(new Date(createdAt)) : ""}
                       date={courseName}
-                      pack={`$ ${coursePrice}`}
+                      pack={bootcampPrice ? `$ ${bootcampPrice}`: "-"}
                       start_date={`$ ${amount}`}
                       email={status}
-                      students={dueDate ? getDate(dueDate) : ""}
+                      students={dueDate ? new Intl.DateTimeFormat('en-US').format(new Date(dueDate)) : ""}
                     />
                   )
                 )}
