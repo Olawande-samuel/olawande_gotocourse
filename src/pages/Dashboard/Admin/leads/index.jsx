@@ -82,15 +82,15 @@ export default function AdLeads() {
 
   const fetchAdLeads = useQuery(["fetchAdLeads", userdata?.token], () =>fetchLeads(userdata.token),
     {
-        enabled:userdata.token !== null,
-        onSuccess: res=> {
-          console.log(res)
-        },
-        onError: err=>{
-          console.error(err)
-        }
-  })
-
+      enabled:userdata.token !== null,
+      onSuccess: res=> {
+        console.log(res)
+      },
+      onError: err=>{
+        console.error(err)
+      }
+    }
+  )
 
   const exportToCsv = useMutation(exportLeads, {
     onSuccess: (res) => {
@@ -119,7 +119,7 @@ export default function AdLeads() {
 
               <Box sx={{ width: '100%' }}>
 
-            {/* <div className="d-flex justify-content-end">
+            <div className="d-flex justify-content-end">
               {
                 fetchAdLeads?.data?.data?.length > 0 &&
                 <button className="btn-plain" onClick={exportCsv} disabled={exportToCsv?.isLoading}>
@@ -137,7 +137,7 @@ export default function AdLeads() {
                 </button>
               }
               
-            </div> */}
+            </div>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="scrollable">
                       {title.map((item, index)=> (
