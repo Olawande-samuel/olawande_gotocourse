@@ -105,15 +105,47 @@ export default function AdLeads() {
     }
   })
 
-  function exportCsv(e){
-    e.preventDefault()
+  // function exportCsv(e){
+  //   e.preventDefault()
 
-    exportToCsv.mutate(userdata.token)
+  //   exportToCsv.mutate(userdata.token)
+  // }
+
+  function downloadCsv(data){
+    const blob = new Blob([data], { type: "text/csv" })
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = href;
+    link.setAttribute('download', 'data.csv');
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(href);       
+  } 
+
+
+
+  function exportCsv (e){
+    e.preventDefault()
+  
+    let headers = ['Date, Name, Email, Phone, Program']
+
+    let usersCsv = fetchAdLeads?.data?.data?.reduce((acc, item) => {
+      const {createdAt, fullName, email, phone, program } = item
+      acc.push([createdAt,fullName, email, phone, program].join(','))
+      return acc
+    }, [])
+  
+    let csvData = [...headers, ...usersCsv].join('\n')
+
+    downloadCsv(csvData)
+    
   }
 
 
+  
 
-  console.log(fetchAdLeads?.data?.data)
   return (
     <Admin header="AdLeads">
       <div className={clsx["admin_profile"]}>
@@ -170,37 +202,6 @@ function HomepageHero({ name}){
   const userdata = getItem("gotocourse-userdata")
 
   const [data, setData]= useState([]);
-  
-  const fetchAdLeads = useQuery(["fetchAdLeads", userdata?.token, name], ()=>fetchLeads(userdata.token),
-    {
-        enabled:userdata.token !== null,
-        onSuccess: res=> {
-            console.log(res)
-            setData(res.data)
-
-        },
-        onError: err=>{
-            console.error(err)
-        }
-  })
-
-
-  const exportToCsv = useMutation(exportLeads, {
-    onSuccess: (res) => {
-      console.log("csv", res)
-    },
-    onError: err=>{
-      console.log(err)
-    }
-  })
-
-  function exportCsv(e){
-    e.preventDefault()
-
-    exportToCsv.mutate(userdata.token)
-  }
-  
-  
   const [value, setValue] = React.useState(null);
   const [search, setSearch] = React.useState("");
 
@@ -210,9 +211,73 @@ function HomepageHero({ name}){
     } return ""
   } , [value?.$d])
 
-  // console.log({dateFilter})
-  // console.log(new Intl.DateTimeFormat('en-US').format(new Date("2023-01-12T11:51:17.630Z")))
-    // new Intl.DateTimeFormat('en-US').format(new Date(date))}
+
+
+  const fetchAdLeads = useQuery(["fetchAdLeads", userdata?.token, name], ()=>fetchLeads(userdata.token),
+    {
+        enabled:userdata.token !== null,
+        onSuccess: res=> {
+            setData(res.data)
+
+        },
+        onError: err=>{
+            console.error(err)
+        }
+  })
+
+
+  // const exportToCsv = useMutation(exportLeads, {
+  //   onSuccess: (res) => {
+  //     console.log("csv", res)
+  //   },
+  //   onError: err=>{
+  //     console.log(err)
+  //   }
+  // })
+
+  // function exportCsv(e){
+  //   e.preventDefault()
+
+  //   exportToCsv.mutate(userdata.token)
+  // }
+  
+  
+  const exportCsv = e => {
+    e.preventDefault()
+  
+    // Headers for each column
+    let headers = ['Date, Name, Email, Phone, Program']
+  
+    // Convert users data to a csv
+    let usersCsv = data.reduce((acc, item) => {
+      const {createdAt, fullName, email, phone, program } = item
+      acc.push([createdAt,fullName, email, phone, program].join(','))
+      return acc
+
+    }, [])
+  
+    let csvData = [...headers, ...usersCsv].join('\n')
+
+
+    const blob = new Blob([csvData], { type: "text/csv" })
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = href;
+    link.setAttribute('download', 'data.csv');
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(href);         
+
+    // downloadFile({
+    //   data: [...headers, ...usersCsv].join('\n'),
+    //   fileName: 'users.csv',
+    //   fileType: 'text/csv',
+    // })
+  }
+
+
   return(
     <div className="row">
       <div className="col-12">
@@ -286,7 +351,6 @@ function TableRow({item, index}){
   const deleteLeads = useMutation(([token, id])=>deleteLead(token, id),
     {
         onSuccess: res=> {
-            console.log(res)
             queryClient.invalidateQueries(["fetchAdLeads"])
             toast.success(res.message)
 

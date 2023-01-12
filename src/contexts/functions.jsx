@@ -2584,25 +2584,29 @@ export const adminFunctions = {
     },
     exportLeads: async function (token) {
         try {
-            // const res = await axios.get(`${baseURL}/programs/export`,
-            //     {
-            //         headers: {
-            //             "Authorization": `Bearer ${token}`,
-            //             "Content-Type": "application/json"
-            //         },
-            //         validateStatus: status => {
-            //             return status >= 200 && status <= 505;
-            //         }
-            //     })
+            const res = await axios.get(`${baseURL}/programs/export`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                }
+            )
 
-            const res = await fetch(`${baseURL}/programs/export`, {
-                method: 'GET',
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                },
-            })
-            console.log("leads",res.json())
+            console.log(res)
+            const blob = new Blob([res], { type: "text/csv" })
+            const href = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = href;
+            link.setAttribute('download', 'data.csv');
+            document.body.appendChild(link);
+            link.click();
+    
+            document.body.removeChild(link);
+            URL.revokeObjectURL(href);            
 
             if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
