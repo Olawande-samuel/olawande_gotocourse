@@ -259,7 +259,7 @@ function HomepageHero({ name}){
 
                     <tbody>
                         {
-                            data?.filter(item => item?.category === name).filter(item => (new Intl.DateTimeFormat('en-US').format(new Date(item.updatedAt)).includes(dateFilter)) && item.fullName.includes(search) ).map((item, index) => (
+                            data?.filter(item => item?.category === name).filter(item => (new Intl.DateTimeFormat('en-US').format(new Date(item?.updatedAt)).includes(dateFilter)) && item.fullName.includes(search) ).map((item, index) => (
                                 <TableRow  index={index} item={item}  key={index} />
                             ))
                         }

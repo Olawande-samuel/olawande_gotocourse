@@ -67,7 +67,7 @@ const RedirectPage = () => {
             </h4>
             <Link to={'/login'}><button>Log in</button></Link>
             <p>Do not have an account?
-                <Link to={'/signup'}>Register here</Link></p>
+                <Link to={'/signup'}> Register here</Link></p>
 
         </Container>
     )
