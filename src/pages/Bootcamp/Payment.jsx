@@ -157,9 +157,7 @@ export const BootcampPayment = () => {
         pauseOnHover
       />
       <div className={`container row justify-content-center align-items-center`} style={{ minHeight: "100vh" }}>
-        <section
-          className={`row justify-content-center align-items-center`}
-        >
+        <section className={` `}>
           <div >
             {showStripeModal ? (
               <div className="col-md-7 col-lg-5 ">

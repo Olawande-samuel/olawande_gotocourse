@@ -438,8 +438,8 @@ export function MyClasses() {
         navigate(`/categories/${courseCategory}/courses/${courseName}/${id}/payment`)
     }
 
-    console.log({courseList});
- 
+    console.log({ courseList });
+
     return (
         <Students header={"My Courses"}>
             {loading && <Loader />}
@@ -712,7 +712,7 @@ export function Classes() {
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
     const [search, setSearch] = useState("");
 
-// console.log(bootcamps?.data?.data);
+    // console.log(bootcamps?.data?.data);
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Courses">
             {/* <div className={clsx.students_profile}>
@@ -725,13 +725,13 @@ export function Classes() {
                     }
                 </div>
             </div> */}
-             <div className={clsx.wishlist__inputcontaniner}>
-                    <input type="text" className={clsx.wishlist__input}
-                        placeholder="search"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)} />
-                    <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
-                </div>
+            <div className={clsx.wishlist__inputcontaniner}>
+                <input type="text" className={clsx.wishlist__input}
+                    placeholder="search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)} />
+                <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
+            </div>
 
             <div className={`${clsx.students_profile_main} ${clsx.student_bg}`}>
                 <AllAvailableCourses data={bootcamps?.data?.data ? bootcamps?.data?.data : []} search={search} />
@@ -922,20 +922,51 @@ export function Wishlist() {
     )
 }
 
-function WishCard({ courseId: id, courseName, courseDescription, courseCategory, refetch }) {
+function WishCard({ courseId: id, courseName, courseDescription, courseCategory }) {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
 
+    const { generalState: { isMobile }, setGeneralState, generalState, studentFunctions: { deleteFromWishlist } } = useAuth()
+    const { getItem } = useLocalStorage();
+    const userdata = getItem(KEY)
+    let queryClient = useQueryClient()
+    const [loading, setLoading] = useState(false)
 
     function closeModal() {
         setOpen(false)
-        refetch()
     }
+
+
+
     function handleNavigate(category, name) {
         localStorage.setItem("gotocourse-courseId", id)
         let courseCategory = category.split(" ").join("-")
         let courseName = name.split(" ").join("-")
         navigate(`/categories/${courseCategory}/courses/${courseName}/${id}/payment`)
+    }
+
+    async function removeCourse(e) {
+        e.preventDefault();
+        setLoading(true)
+
+        try {
+            setGeneralState({ ...generalState, loading: true })
+            const res = await deleteFromWishlist(userdata?.token, id)
+            const { success, message, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+                const { data } = res;
+                setLoading(false)
+                queryClient.invalidateQueries(["carts"])
+
+            }
+        } catch (err) {
+
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+            setLoading(false)
+
+        }
     }
     return (
         <div className="card wish">
@@ -948,9 +979,22 @@ function WishCard({ courseId: id, courseName, courseDescription, courseCategory,
                 <div className="d-flex justify-content-between">
                     {/* <button className="btn btn-outline-primary" onClick={() => handleNavigate(courseCategory, courseName)} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Register today</button> */}
                     <button className="btn btn-outline-primary" onClick={() => handleNavigate(courseCategory, courseName)} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Pay</button>
-                    <button className="btn btn-outline-primary" onClick={() => setOpen(true)} style={{ border: "1px solid var(--theme-orange)", color: "var(--theme-orange)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
-                        {/* <i><FaRegTrashAlt /></i> */}
+                    {/* <button className="btn btn-outline-primary" onClick={() => setOpen(true)} style={{ border: "1px solid var(--theme-orange)", color: "var(--theme-orange)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
+                        {/* <i><FaRegTrashAlt /></i> 
                         Remove
+                    </button> */}
+
+                    <button onClick={removeCourse} className="btn btn-outline-primary" style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
+                        {
+                            loading ?
+                                <div className="spinner-border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </div>
+                                :
+                                "Remove"
+
+                        }
+
                     </button>
                 </div>
             </div>
@@ -960,15 +1004,25 @@ function WishCard({ courseId: id, courseName, courseDescription, courseCategory,
 }
 
 
-function AvailCard({ courseId, courseName, courseDescription, courseCategory, refetch }) {
+function AvailCard({ courseId, courseName, courseDescription, courseCategory, }) {
     const navigate = useNavigate();
     const { generalState: { isMobile }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
     const { getItem } = useLocalStorage();
     let [wishlistState, setWishlistState] = useState(false)
     const [loading, setLoading] = useState(false)
     let queryClient = useQueryClient()
-
     const userdata = getItem(KEY)
+
+
+    useQuery(["carts"], () => fetchWishlist(userdata?.token), {
+        enabled: userdata?.token !== null,
+        onSuccess: (res) => {
+            if (res?.data?.length > 0) {
+                setWishlistState(res?.data?.map(d => d.courseId).includes(courseId));
+            }
+        }
+    });
+
 
     async function addToWishlist() {
         setGeneralState({ ...generalState, loading: true })
@@ -999,28 +1053,6 @@ function AvailCard({ courseId, courseName, courseDescription, courseCategory, re
 
 
 
-    async function getWishList() {
-        try {
-            const res = await fetchWishlist(userdata?.token);
-            const { message, success, statusCode } = res;
-            if (!success) throw new AdvancedError(message, statusCode);
-            else if (statusCode === 1) {
-                const { data } = res;
-                if (data.length > 0) {
-                    setWishlistState(data.map(d => d.courseId).includes(courseId));
-                } else {
-
-                }
-
-            } else {
-                throw new AdvancedError(message, statusCode);
-            }
-        } catch (err) {
-            console.error(err);
-        } finally {
-        }
-    }
-
     async function removeCourse(e) {
         e.preventDefault();
         setLoading(true)
@@ -1045,6 +1077,7 @@ function AvailCard({ courseId, courseName, courseDescription, courseCategory, re
 
         }
     }
+
 
     return (
         <div className="card wish">
@@ -1107,6 +1140,7 @@ function AvailCard({ courseId, courseName, courseDescription, courseCategory, re
 
 function DeleteModal({ id, open, handleClose }) {
     const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { deleteFromWishlist } } = useAuth();
+    let queryClient = useQueryClient()
 
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
@@ -1133,27 +1167,29 @@ function DeleteModal({ id, open, handleClose }) {
             if (!success) throw new AdvancedError(message, statusCode);
             else {
                 const { data } = res;
+                console.log("reloading");
+                queryClient.invalidateQueries(["carts", "bootcamps"])
                 handleClose()
-                toast.success(message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+                // toast.success(message, {
+                //     position: "top-right",
+                //     autoClose: 4000,
+                //     hideProgressBar: true,
+                //     closeOnClick: true,
+                //     pauseOnHover: true,
+                //     draggable: true,
+                //     progress: undefined,
+                // });
             }
         } catch (err) {
-            toast.error(err.message, {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            // toast.error(err.message, {
+            //     position: "top-right",
+            //     autoClose: 4000,
+            //     hideProgressBar: true,
+            //     closeOnClick: true,
+            //     pauseOnHover: true,
+            //     draggable: true,
+            //     progress: undefined,
+            // });
         } finally {
             setGeneralState({ ...generalState, loading: false });
         }
@@ -1583,14 +1619,14 @@ export function Fees() {
 
     const payNumber = ["1st", "2nd", "3rd", "4th"]
 
-   useQuery(["fetch my enrolledclasses"], () => fetchBootcampFees(userdata?.token),{
-    onSuccess: (res) => {
-        console.log({res});
-        if (res?.data?.length > 0) {
-            setCourse((res?.data));
+    useQuery(["fetch my enrolledclasses"], () => fetchBootcampFees(userdata?.token), {
+        onSuccess: (res) => {
+            console.log({ res });
+            if (res?.data?.length > 0) {
+                setCourse((res?.data));
+            }
         }
-    }
-   })
+    })
 
 
     const getmyFees = async (data) => {
@@ -1646,7 +1682,7 @@ export function Fees() {
                     if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
                     else {
                         const { data } = res;
-                        console.log({data});
+                        console.log({ data });
                         setFees(_ => data);
                     }
                 } catch (err) {
@@ -1777,9 +1813,9 @@ export function Fees() {
                                         <div className={clsx.payment__empty}></div>
                                     </>
                                 ))
-                                :
+                                    :
 
-                                <>
+                                    <>
                                         <div className={clsx.payment__card}>
                                             <p>Full Payment</p>
                                             <div className={clsx.payment__fee}>
@@ -1798,7 +1834,7 @@ export function Fees() {
                                         <div className={clsx.payment__empty}></div>
                                         <div className={clsx.payment__empty}></div>
                                     </>
-                                   
+
                                 }
 
                                 {
@@ -2348,7 +2384,7 @@ function AllAvailableCourses({ data, search }) {
                 <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
                 <small className="mb-4 d-block">Select and enroll for a course to get started</small>
 
-               
+
 
 
                 <div className={clsx["courseheader"]}>
