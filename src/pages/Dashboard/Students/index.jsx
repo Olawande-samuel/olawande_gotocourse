@@ -753,6 +753,8 @@ export function Wishlist() {
         onSuccess: (res) => {
             if (res?.data?.length > 0) {
                 setWishlists(res?.data);
+            }else {
+                setWishlists([])
             }
         }
     });

@@ -21,7 +21,7 @@ function PayModal({type, token , openPaymentModal, handleClose}) {
         </Modal.Header>
         <Modal.Body>
           <Elements stripe={stripePromise} options={options}>
-           {type ? <CheckoutForm />: <CartCheckoutForm/> }
+           {type ? <CartCheckoutForm />: <CheckoutForm/> }
           </Elements>
         </Modal.Body>
         <Modal.Footer>
