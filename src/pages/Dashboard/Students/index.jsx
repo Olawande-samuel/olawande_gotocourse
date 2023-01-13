@@ -850,7 +850,7 @@ export function Wishlist() {
                         <small>Total:</small>
                         <p>{`$${value}`}</p>
                         {/* <p>$11,000</p> */}
-                        <Link to={`/student/wishlist-checkout`}><button disabled={wishlists?.length <=0 ? true :  false}>Checkout</button></Link>
+                        <Link to={`/student/wishlist-checkout`}><button disabled={wishlists?.length <= 0 ? true : false}>Checkout</button></Link>
 
                     </div>
                     <p style={{ padding: "1rem 0" }}>My Cart</p>
@@ -1231,6 +1231,8 @@ export function WishlistCheckOut() {
     const [search, setSearch] = useState("")
     const [wishlists, setWishlists] = useState([])
 
+    const handleClose = () => setShowStripeModal(false)
+
     const checkout = async () => {
         //get all ids
         let ids = wishlists.map(wishlist => wishlist.courseId);
@@ -1244,6 +1246,8 @@ export function WishlistCheckOut() {
             else if (statusCode === 1) {
                 const { data } = res;
                 console.log({ data });
+                setPayintent(data.clientSecret)
+                setShowStripeModal(true)
                 toast.success(message, {
                     position: "top-right",
                     autoClose: 4000,
@@ -1367,7 +1371,11 @@ export function WishlistCheckOut() {
                 </header>
 
                 <div>
-                    {showStripeModal && <PaymentModal token={payIntent} setShowStripeModal={setShowStripeModal} />}
+                    {showStripeModal && <PayModal
+                        type={'cart'}
+                        token={payIntent} 
+                        openPaymentModal={showStripeModal} 
+                        handleClose={handleClose} />}
 
                 </div>
 
@@ -1401,7 +1409,7 @@ export function WishlistCheckOut() {
 
 
 
-                        <button onClick={checkout} disabled={wishlists?.length <=0 ? true :  false}>Checkout</button>
+                        <button onClick={checkout} disabled={wishlists?.length <= 0 ? true : false}>Checkout</button>
 
 
                     </div>
@@ -2106,10 +2114,10 @@ export const Dashboard = ({ mixpanel }) => {
 
 
     const dateFilter = useMemo(() => {
-        if(value?.$d){
-          return  new Intl.DateTimeFormat('en-US').format(new Date(value?.$d))
+        if (value?.$d) {
+            return new Intl.DateTimeFormat('en-US').format(new Date(value?.$d))
         } return ""
-      } , [value?.$d])
+    }, [value?.$d])
 
     return (
         <Students isMobile={isMobile} userdata={userdata} header={"Dashboard"} >
@@ -2187,7 +2195,7 @@ export const Dashboard = ({ mixpanel }) => {
                                     </thead>
                                     <tbody>
                                         {/* {myenrolledcourses?.data?.filter(data =>  data?.status === "paid").map((item, i) => ( */}
-                                    {myenrolledcourses?.data?.filter(data => (new Intl.DateTimeFormat('en-US').format(new Date(data?.startDate)).includes(dateFilter)) && data?.status === "paid").map((item, i) => (
+                                        {myenrolledcourses?.data?.filter(data => (new Intl.DateTimeFormat('en-US').format(new Date(data?.startDate)).includes(dateFilter)) && data?.status === "paid").map((item, i) => (
 
                                             <tr key={i}>
                                                 <td><span>{i + 1}</span></td>
