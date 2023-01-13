@@ -463,6 +463,118 @@ export const CheckoutForm = ({ token, setShowStripeModal }) => {
   );
 };
 
+
+
+export const CartCheckoutForm = ({ token, setShowStripeModal }) => {
+  const navigate = useNavigate();
+  const stripe = useStripe();
+  const elements = useElements();
+  const [loading, setLoading] = useState(false);
+  const [loadingComponent, setLoadingComponent] = useState(true);
+  const { generalState: { isMobile }, setGeneralState, generalState, studentFunctions: { fetchWishlist, clearCarts } } = useAuth();
+
+  const { getItem } = useLocalStorage();
+
+  const userdata = getItem(KEY)
+
+
+
+
+  async function handlesubmit(e) {
+    e.preventDefault();
+    try {
+      if (!stripe || !elements) {
+        return;
+      }
+      setLoading(true);
+
+      const result = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `https://gotocourse.com/payment/success/`,
+        },
+      });
+
+      console.log({ result })
+
+      if (!result.error) {
+        const res = await clearCarts(userdata?.token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else if (statusCode === 1) {
+          const { data } = res;
+          console.log({ data });
+          setLoading(false);
+
+        }
+      }
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <form onSubmit={handlesubmit} className="pay_card rounded" style={{ background: "#ffffff" }}>
+      <PaymentElement
+        onReady={() => {
+          setLoadingComponent(false);
+        }}
+        onError={(err) => {
+          console.error(err);
+          setLoadingComponent(false);
+        }}
+      />
+
+      {loadingComponent ? (
+        <div className="text-center">
+          <div
+            className="spinner-border text-primary"
+            role="status"
+            style={{ width: "3rem", height: "3rem" }}
+          >
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : (
+        <>
+          <button className="btn-plain w-100 mt-3" disabled={!stripe}>
+            {loading ? (
+              <div
+                className="spinner-border text-primary"
+                role="status"
+                style={{ width: "2rem", height: "2rem" }}
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              <span>Submit</span>
+            )}
+          </button>
+        </>
+      )}
+      <div className="cancel w-100 text-center my-3">
+        <button
+          className=""
+          style={{
+            color: "var(--theme-blue)",
+            border: "none",
+            outline: "none",
+            fontSize: "14px",
+          }}
+          onClick={() => {
+            setShowStripeModal(false)
+            // navigate("/payment/error");
+          }}
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  );
+};
+
 export const PaymentStatus = ({ success }) => {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
