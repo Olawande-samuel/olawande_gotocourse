@@ -2105,7 +2105,7 @@ export function Teachers() {
 
   return (
     // <Admin header={"Mentors/Teachers"}>
-    <Admin header={"Teachers"}>
+    <Admin header={"All Teachers"}>
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
@@ -2260,7 +2260,7 @@ export function Mentors() {
             </button>
           </div>
           <div className="d-flex justify-content-between align-items-center">
-            <h1 className="mb-0">Mentors</h1>
+            <h1 className="mb-0">All Mentors</h1>
             <div>
               <input
                 type="text"
@@ -3714,7 +3714,7 @@ export function AdminClassConsole() {
   }, []);
 
   return (
-    <Admin header={"Classes"}>
+    <Admin header={"Courses"}>
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student_main}>
@@ -4593,7 +4593,7 @@ export function Fees() {
     <Admin header={"Fees"}>
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <h1>All Fees</h1>
+          <h1>All Payments</h1>
           <div className={clsx.admin__student_main}>
             <table className={`${clsx.admin__student_table}`}>
               <thead>
@@ -4716,7 +4716,7 @@ export function Notification() {
   }
 
   return (
-    <Admin header={"Notifications"}>
+    <Admin header={""}>
       <NotificationContent
         notifications={notifications}
         markAsRead={markAsRead}

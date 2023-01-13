@@ -760,59 +760,7 @@ export function Wishlist() {
     });
 
 
-    // async function getWishList() {
-    //     try {
-    //         setGeneralState({ ...generalState, loading: true })
-    //         const res = await fetchWishlist(userdata?.token);
-    //         const { message, success, statusCode } = res;
-    //         if (!success) throw new AdvancedError(message, statusCode);
-    //         else if (statusCode === 1) {
-    //             const { data } = res;
-    //             if (data.length > 0) {
-    //                 setWishlists(data);
-    //                 toast.success(message, {
-    //                     position: "top-right",
-    //                     autoClose: 4000,
-    //                     hideProgressBar: true,
-    //                     closeOnClick: true,
-    //                     pauseOnHover: true,
-    //                     draggable: true,
-    //                     progress: undefined,
-    //                 });
-    //             } else {
-    //                 toast.error("wishlist is empty", {
-    //                     position: "top-right",
-    //                     autoClose: 4000,
-    //                     hideProgressBar: true,
-    //                     closeOnClick: true,
-    //                     pauseOnHover: true,
-    //                     draggable: true,
-    //                     progress: undefined,
-    //                 });
-    //                 setWishlists([])
-    //             }
-
-    //         } else {
-    //             throw new AdvancedError(message, statusCode);
-    //         }
-    //     } catch (err) {
-    //         toast.error(err.message, {
-    //             position: "top-right",
-    //             autoClose: 4000,
-    //             hideProgressBar: true,
-    //             closeOnClick: true,
-    //             pauseOnHover: true,
-    //             draggable: true,
-    //             progress: undefined,
-    //         });
-    //     } finally {
-    //         setGeneralState({ ...generalState, loading: false });
-    //     }
-    // }
-    // useEffect(() => {
-    //     if (!userdata?.token) return;
-    //     getWishList()
-    // }, [userdata?.token])
+ 
 
     console.log({ wishlists });
 
@@ -828,6 +776,8 @@ export function Wishlist() {
 
     // console.log({Available});
 
+  
+
 
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Cart">
@@ -835,13 +785,13 @@ export function Wishlist() {
                 <header className="mb-4 d-flex align-center">
                     <h3 style={{ paddingRight: "2rem", fontWeight: "600" }}>Cart</h3>
 
-                    <div className={clsx.wishlist__inputcontaniner}>
+                    {/* <div className={clsx.wishlist__inputcontaniner}>
                         <input type="text" className={clsx.wishlist__input}
                             placeholder="search"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)} />
                         <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
-                    </div>
+                    </div> */}
                 </header>
 
 
@@ -853,6 +803,7 @@ export function Wishlist() {
                         <p>{`$${value}`}</p>
                         {/* <p>$11,000</p> */}
                         <Link to={`/student/wishlist-checkout`}><button disabled={wishlists?.length <= 0 ? true : false}>Checkout</button></Link>
+
 
                     </div>
                     <p style={{ padding: "1rem 0" }}>My Cart</p>
@@ -1374,7 +1325,6 @@ export function WishlistCheckOut() {
 
                 <div>
                     {showStripeModal && <PayModal
-                        type={'cart'}
                         token={payIntent} 
                         openPaymentModal={showStripeModal} 
                         handleClose={handleClose} />}
