@@ -4538,14 +4538,15 @@ export function BootcampRow({
 // FEES COMPONENT
 export function Fees() {
   const {
-    adminFunctions: { fetchPayment },
-    generalState: {loading},
+    adminFunctions: { fetchPayment }, generalState,
     setGeneralState
   } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const flag = useRef(false);
   const [formstate, setFormstate] = useState([]);
+
+  const [loading, setLoading] = useState(false);
   const tableHeaders = [
     "No",
     "Name",
@@ -4557,36 +4558,27 @@ export function Fees() {
     "Due Date",
   ];
   const tableContents = [];
+
   useEffect(() => {
     if (flag.current) return;
 
     (async () => {
       try {
-        setGeneralState((prev)=> {
-          return {
-            ...prev,
-            loading: true
-          }
-        })
+        setLoading(true)
         const res = await fetchPayment(userdata?.token);
         const { message, success, statusCode } = res;
         if (!success) throw new AdvancedError(message, statusCode);
         else if (statusCode === 1) {
           const { data } = res;
+          setLoading(false)
           setFormstate(data);
         } else {
           throw new AdvancedError(message, statusCode);
         }
       } catch (err) {
         toast.error(err.message);
-      } finally {
-        setGeneralState((prev)=> {
-          return {
-            ...prev,
-            loading: false
-          }
-        })
-      }
+        setLoading(false)
+      } 
     })();
 
     //do some coding
@@ -4596,6 +4588,7 @@ export function Fees() {
 
   return (
     <Admin header={"Fees"}>
+      {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h1>All Payments</h1>

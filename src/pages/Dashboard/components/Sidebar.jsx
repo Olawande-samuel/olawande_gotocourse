@@ -115,7 +115,7 @@ const Sidebar = () => {
                 {
                     icon: IoIosCash,
                     path: "fees",
-                    title: "Fees",
+                    title: "Payments",
                 },
                 // {
                 //     icon: FiGift,
@@ -347,7 +347,7 @@ const Sidebar = () => {
                     {
                         icon: IoIosCash,
                         path: "fees",
-                        title: "Fees",
+                        title: "Payments",
                     },
                     // {
                     //     icon: FiGift,
