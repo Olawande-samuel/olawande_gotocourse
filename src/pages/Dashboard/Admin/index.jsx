@@ -1142,13 +1142,14 @@ function Info({ title, content }) {
 export function ApproveStudent() {
   const navigate = useNavigate();
   const [data, setData] = useState(null);
+  const [enrollmentData, setEnrollmentData] = useState([]);
   const [kyc, setKyc] = useState({});
 
   const [loading, setLoading] = useState(false);
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const {
-    adminStudentFunctions: { verify },
+    adminStudentFunctions: { verify, fetchStudentsClasses },
     kycFunctions: { getAStudentKYCById },
     generalState,
     setGeneralState,
@@ -1168,33 +1169,6 @@ export function ApproveStudent() {
   useEffect(() => {
     const studentInfo = getItem("gotocourse-studentDetails");
     setData(studentInfo);
-
-    // (async () => {
-    //     let pledreInfo;
-    //     console.log("getting");
-    //     try {
-    //       if (pledre) {
-    //         console.log(pledre);
-    //         setGeneralState({ ...generalState, loading: true });
-    //         const pledRes = await pledre.getStudentDetails(studentInfo.email);
-    //         console.log({ pledRes });
-    //         if (pledRes.email) {
-    //           pledreInfo = pledRes;
-    //         } else {
-    //           pledreInfo = {};
-    //         }
-    //       }
-    //     } catch (error) {
-    //       console.error(error.message);
-    //     } finally {
-    //       setGeneralState({ ...generalState, loading: false });
-    //     }
-
-    //     localStorage.setItem(
-    //       "gotocourse-studentDetails",
-    //       JSON.stringify({ ...studentInfo, pledre: pledreInfo })
-    //     );
-    // })();
   }, []);
 
   async function handleVerification(e, id) {
@@ -1291,6 +1265,37 @@ export function ApproveStudent() {
       getStudentKyc(data.userId);
     }
   }, [data]);
+
+  const fetchStudentEnrollments = useQuery(["fetch student enrollments", userdata?.token, data?.userId], ()=>fetchStudentsClasses(userdata?.token, data.userId), {
+    enabled: data?.userId !== null, 
+    onSuccess: (res)=> {
+      if(res?.success){
+        setEnrollmentData(res.data)
+        return
+      }
+      setEnrollmentData([])
+      
+    },
+    onError: err => console.error(err)
+  })
+
+  console.log({fetchStudentEnrollments})
+
+  function getOutstandingAmount(item){
+    let outAmt =  item?.payments?.filter(item=> item.status !== "paid").reduce((acc, curr)=>acc + curr.amount, 0)
+    return outAmt
+  }
+  function getDueDate(item){
+    // let paymentData = item?.payments?.filter(item=> item.status !== "paid")
+    // let leftOver
+    // if(paymentData){
+    //   leftOver = paymentData[0]?.dueDate?.split("T")[0]
+    // }else {
+    //   leftOver = "-"
+    // }
+    let dueDate = item?.payments?.filter(item=> item.status !== "paid").length > 0 ? item?.payments?.filter(item=> item.status !== "paid")[0]?.dueDate.split("T")[0] : "-"
+    return dueDate
+  }
   return (
     <Admin header="Approval">
       {loading && <Loader />}
@@ -1357,13 +1362,19 @@ export function ApproveStudent() {
               )}
             </div>
             <div className={clsx.student_course_info}>
+              {
+                fetchStudentEnrollments?.isLoading ?
+                <div className="spinner-border text-primary">
+                  <div className="visually-hidden">Loading...</div>
+                </div>
+                :
               <div className="table-responsive my-4">
                 <table className="table">
                   <thead>
                     <tr>
                       <th>No</th>
                       <th>Courses enrolled</th>
-                      <th>Start date</th>
+                      {/* <th>Start date</th> */}
                       <th>Amount paid</th>
                       <th>Outstanding</th>
                       <th>Due date</th>
@@ -1373,14 +1384,14 @@ export function ApproveStudent() {
                   <tbody>
 
                     {
-                      data?.enrollmentData.map((item, i)=> (
+                      enrollmentData?.map((item, i)=> (
                         <tr>
                           <td>{i + 1}</td>
                           <td>{item?.bootcampName}</td>
-                          <td>{item?.startDate}</td>
+                          {/* <td>{item?.startDate}</td> */}
                           <td>{item?.amountPaid}</td>
-                          <td>{item?.Outstanding}</td>
-                          <td>{item?.bootcampName}</td>
+                          <td>{item?.payments?.length > 0 ? getOutstandingAmount(item) : "-"}  </td>
+                          <td>{item?.payments?.length > 0 ?  getDueDate(item) : "-"}  </td>
                           <td>{item?.bootcampPrice}</td>
                         </tr>
                       ))
@@ -1388,6 +1399,7 @@ export function ApproveStudent() {
                   </tbody>
                 </table>
               </div>
+              }
 
               {/* <div className="table-responsive my-4">
                 <table className="table">
@@ -1509,20 +1521,8 @@ export function Approve() {
     }
   }, [data]);
 
-  const info = [
-    {
-      title: "Courses",
-      content: "UX Designer",
-    },
-    {
-      title: "Category",
-      content: "Cybersecurity, UX, Data Analysis",
-    },
-    {
-      title: "Mentorship status",
-      content: data?.userType === "mentor" ? "Assigned" : "Unassigned",
-    },
-  ];
+
+  
 
   useEffect(() => {
     const teacherInfo = getItem("gotocourse-teacherDetails");
@@ -1534,7 +1534,7 @@ export function Approve() {
     try {
       setLoading((_) => true);
       let value = window.confirm(
-        "Are you sure you want to delete this user?. This process is irreversible"
+        "Are you sure you want to delete this user? This process is irreversible"
       );
       if (!value) return;
       const res = await deleteUser(userdata?.token, [email]);
@@ -1683,6 +1683,11 @@ export function Approve() {
       });
     }
   }
+
+
+ 
+
+
   return (
     <Admin header="Approval">
       {loading && <Loader />}
