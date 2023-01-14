@@ -72,6 +72,10 @@ export default function AdLeads() {
     {
       title:"Audit and Compliance",
       name:"Audit",
+    },
+    {
+      title:"Marketing Leads",
+      name:"Marketing Leads",
     }
   ]
   const handleChange = (event, newValue) => {
@@ -195,7 +199,7 @@ export default function AdLeads() {
                       {title.map((item, index)=> (
                         <Tab label={item.title} {...a11yProps(index)} />
                         ))}
-                        <Tab label="Marketing Leads" {...a11yProps(4)} />
+                        {/* <Tab label="Marketing Leads" {...a11yProps(4)} /> */}
                   </Tabs>
                 </Box>
                 {title.map((item, index)=>(
