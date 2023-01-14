@@ -356,16 +356,11 @@ export const CheckoutForm = ({ token, setShowStripeModal }) => {
   const elements = useElements();
   const [loading, setLoading] = useState(false);
   const [loadingComponent, setLoadingComponent] = useState(true);
-  const { getItem } = useLocalStorage();
-
-  const classData = getItem("gotocourse-bootcampdata")
-
 
 
 
   async function handlesubmit(e) {
     e.preventDefault();
-    console.log(classData)
     try {
       if (!stripe || !elements) {
         return;
@@ -463,11 +458,15 @@ export const CheckoutForm = ({ token, setShowStripeModal }) => {
   );
 };
 
+
+
 export const PaymentStatus = ({ success }) => {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
-  const { id } = useParams();
+  const { id, cart } = useParams();
   const [loading, setLoading] = useState(false)
+  const { generalState: { isMobile }, setGeneralState, generalState, studentFunctions: { clearCarts } } = useAuth();
+
 
   const [status, setStatus] = useState({
     image: success ? Success : Failure,
@@ -478,8 +477,67 @@ export const PaymentStatus = ({ success }) => {
     action: success ? "Go to Dashboard" : "Try Again",
   });
 
+
+
   console.log(id)
-  const userdata = getItem("gotocourse-userdata");
+  const userdata = getItem(KEY);
+
+
+
+  async function clearCart() {
+    try {
+      setGeneralState({ ...generalState, loading: true })
+      const res = await clearCarts(userdata?.token);
+      const { message, success, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else if (statusCode === 1) {
+        const { data } = res;
+        if (data) {
+          toast.success("wishlist is empty", {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } else {
+          // toast.error("wishlist is empty", {
+          //     position: "top-right",
+          //     autoClose: 4000,
+          //     hideProgressBar: true,
+          //     closeOnClick: true,
+          //     pauseOnHover: true,
+          //     draggable: true,
+          //     progress: undefined,
+          // });
+        }
+
+      } else {
+        throw new AdvancedError(message, statusCode);
+      }
+    } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } finally {
+      setGeneralState({ ...generalState, loading: false });
+    }
+  }
+
+
+
+  useEffect(() => {
+    clearCart()
+  }, [cart])
+
 
   // useEffect(() => {
   //   // enroll student to course

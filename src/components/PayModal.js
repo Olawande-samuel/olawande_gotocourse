@@ -7,7 +7,7 @@ import { loadStripe } from "@stripe/stripe-js";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
-function PayModal({ token , openPaymentModal, handleClose}) {
+function PayModal({token , openPaymentModal, handleClose}) {
 
   const options = {
     clientSecret: token,
@@ -21,7 +21,7 @@ function PayModal({ token , openPaymentModal, handleClose}) {
         </Modal.Header>
         <Modal.Body>
           <Elements stripe={stripePromise} options={options}>
-            <CheckoutForm />
+            <CheckoutForm/> 
           </Elements>
         </Modal.Body>
         <Modal.Footer>

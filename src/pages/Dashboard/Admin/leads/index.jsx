@@ -18,6 +18,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TextField } from '@mui/material';
 import { useMemo } from 'react';
+import { useEffect } from 'react';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -78,10 +79,11 @@ export default function AdLeads() {
   };
 
 
-  const {adminFunctions: {fetchLeads, exportLeads}} = useAuth()
+  const {adminFunctions: {fetchLeads, exportLeads, fetchMarketingLeads}} = useAuth()
   const {getItem} = useLocalStorage()
   const [loading, setLoading]= useState(false)
   const userdata = getItem("gotocourse-userdata")
+  const [data, setData] = useState([])
   
 
   const fetchAdLeads = useQuery(["fetchAdLeads", userdata?.token], () =>fetchLeads(userdata.token),
@@ -89,6 +91,20 @@ export default function AdLeads() {
       enabled:userdata.token !== null,
       onSuccess: res=> {
         console.log(res)
+      },
+      onError: err=>{
+        console.error(err)
+      }
+    }
+  )
+  const fetchMrktLeads = useQuery(["fetchAdLeads", userdata?.token], () => fetchMarketingLeads(userdata.token),
+    {
+      enabled:userdata.token !== null,
+      onSuccess: res=> {
+        
+        if(res?.success){
+          setData(res.data)
+        }
       },
       onError: err=>{
         console.error(err)
@@ -179,6 +195,7 @@ export default function AdLeads() {
                       {title.map((item, index)=> (
                         <Tab label={item.title} {...a11yProps(index)} />
                         ))}
+                        <Tab label="Marketing Leads" {...a11yProps(4)} />
                   </Tabs>
                 </Box>
                 {title.map((item, index)=>(
@@ -186,6 +203,9 @@ export default function AdLeads() {
                     <HomepageHero name={item.name} />
                 </TabPanel>
                 ))}
+                  <TabPanel value={value} index={4}>
+                    <MarketingLeads />
+                </TabPanel>
               </Box>
             </div>
         </div>
@@ -195,7 +215,7 @@ export default function AdLeads() {
 }
 
 
-function HomepageHero({ name}){
+function HomepageHero({ name, mrktData}){
   const {adminFunctions: {fetchLeads, exportLeads}} = useAuth()
   const {getItem} = useLocalStorage()
   const [loading, setLoading]= useState(false)
@@ -212,10 +232,11 @@ function HomepageHero({ name}){
   } , [value?.$d])
 
 
+  console.log({mrktData})
 
   const fetchAdLeads = useQuery(["fetchAdLeads", userdata?.token, name], ()=>fetchLeads(userdata.token),
     {
-        enabled:userdata.token !== null,
+        enabled:userdata.token !== null && !mrktData,
         onSuccess: res=> {
             setData(res.data)
 
@@ -225,6 +246,12 @@ function HomepageHero({ name}){
         }
   })
 
+  useEffect(()=>{
+
+    if(mrktData?.length > 0){
+      setData(mrktData)
+    }
+  },[mrktData])
 
   // const exportToCsv = useMutation(exportLeads, {
   //   onSuccess: (res) => {
@@ -337,6 +364,132 @@ function HomepageHero({ name}){
     </div>
   )
 }
+function MarketingLeads(){
+  const {adminFunctions: {fetchMarketingLeads}} = useAuth()
+  const {getItem} = useLocalStorage()
+  
+  const userdata = getItem("gotocourse-userdata")
+
+  const [data, setData]= useState([]);
+  const [value, setValue] = React.useState(null);
+  const [search, setSearch] = React.useState("");
+
+  const dateFilter = useMemo(() => {
+    if(value?.$d){
+      return  new Intl.DateTimeFormat('en-US').format(new Date(value?.$d))
+    } return ""
+  } , [value?.$d])
+
+
+  const fetchMrktLeads = useQuery(["fetchAdLeads", userdata?.token], () => fetchMarketingLeads(userdata.token),
+    {
+      enabled:userdata.token !== null,
+      onSuccess: res=> {
+        
+        if(res?.success){
+          setData(res.data)
+        }
+      },
+      onError: err=>{
+        console.error(err)
+      }
+    }
+  )
+
+  
+  
+  
+  const exportCsv = e => {
+    e.preventDefault()
+  
+    // Headers for each column
+    let headers = ['Date, First name, Last name, Email, Phone, ']
+  
+    // Convert users data to a csv
+    let usersCsv = data.reduce((acc, item) => {
+      const {createdAt, firstName, lastName, email, phone  } = item
+      acc.push([createdAt,firstName, lastName, email, phone].join(','))
+      return acc
+
+    }, [])
+  
+    let csvData = [...headers, ...usersCsv].join('\n')
+
+
+    const blob = new Blob([csvData], { type: "text/csv" })
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = href;
+    link.setAttribute('download', 'data.csv');
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(href);         
+
+    
+  }
+
+
+  return(
+    <div className="row">
+      <div className="col-12">
+        <button className="btn-plain mb-3" onClick={exportCsv}>Download Leads</button>
+      <div className="mb-4 d-flex">
+          <div className="">
+              <input type="search" name="search" id="search" onChange={(e)=>setSearch(e.target.value)} value={search} className="p-2 rounded form-control " placeholder='search...'/>
+
+          </div>
+          <div className="ms-auto">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                      label="Filter by date"
+                      inputFormat="MM/DD/YYYY"
+                      value={value}
+                      onChange={(newValue) => {
+                        setValue(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                  />
+              </LocalizationProvider>
+
+          </div>
+      </div>
+        <div className="table-responsive">
+            {
+                fetchMrktLeads?.isLoading ? 
+
+                <div className="spinner-border text-primary">
+                    <div className="visually-hidden">Loading...</div>
+                </div>
+                :
+                <table className="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>S/N</th>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            {/* <th>Program</th> */}
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {
+                            data?.filter(item => (new Intl.DateTimeFormat('en-US').format(new Date(item?.createdAt)).includes(dateFilter))).map((item, index) => (
+                                <TableRow  index={index} item={item}  key={index} />
+                            ))
+                        }
+
+                    </tbody>
+                </table>
+            }
+        </div>
+      </div>
+    </div>
+  )
+}
 
 
 function TableRow({item, index}){
@@ -370,7 +523,7 @@ function TableRow({item, index}){
     <tr >
       <td>{index + 1}</td>
       <td>{new Intl.DateTimeFormat('en-US').format(new Date(item?.createdAt))}</td>
-      <td>{item.fullName}</td>
+      <td>{item.fullName ? item.fullName : `${item.firstName} ${item.lastName}` }</td>
       <td>{item.email}</td>
       <td>{item.phone}</td>
       <td>{item.program}</td>
