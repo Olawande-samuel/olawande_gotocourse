@@ -1,13 +1,13 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { CartCheckoutForm, CheckoutForm } from '../pages/Bootcamp/Payment';
+import { CheckoutForm } from '../pages/Bootcamp/Payment';
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
-function PayModal({type, token , openPaymentModal, handleClose}) {
+function PayModal({token , openPaymentModal, handleClose}) {
 
   const options = {
     clientSecret: token,
@@ -21,7 +21,7 @@ function PayModal({type, token , openPaymentModal, handleClose}) {
         </Modal.Header>
         <Modal.Body>
           <Elements stripe={stripePromise} options={options}>
-           {type ? <CartCheckoutForm />: <CheckoutForm/> }
+            <CheckoutForm/> 
           </Elements>
         </Modal.Body>
         <Modal.Footer>

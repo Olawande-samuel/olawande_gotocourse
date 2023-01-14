@@ -356,16 +356,11 @@ export const CheckoutForm = ({ token, setShowStripeModal }) => {
   const elements = useElements();
   const [loading, setLoading] = useState(false);
   const [loadingComponent, setLoadingComponent] = useState(true);
-  const { getItem } = useLocalStorage();
-
-  const classData = getItem("gotocourse-bootcampdata")
-
 
 
 
   async function handlesubmit(e) {
     e.preventDefault();
-    console.log(classData)
     try {
       if (!stripe || !elements) {
         return;
@@ -465,121 +460,13 @@ export const CheckoutForm = ({ token, setShowStripeModal }) => {
 
 
 
-export const CartCheckoutForm = ({ token, setShowStripeModal }) => {
-  const navigate = useNavigate();
-  const stripe = useStripe();
-  const elements = useElements();
-  const [loading, setLoading] = useState(false);
-  const [loadingComponent, setLoadingComponent] = useState(true);
-  const { generalState: { isMobile }, setGeneralState, generalState, studentFunctions: { fetchWishlist, clearCarts } } = useAuth();
-
-  const { getItem } = useLocalStorage();
-
-  const userdata = getItem(KEY)
-
-
-
-
-  async function handlesubmit(e) {
-    e.preventDefault();
-    try {
-      if (!stripe || !elements) {
-        return;
-      }
-      setLoading(true);
-
-      const result = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: `https://gotocourse.com/payment/success/`,
-        },
-      });
-
-      console.log({ result })
-
-      if (!result.error) {
-        const res = await clearCarts(userdata?.token);
-        const { message, success, statusCode } = res;
-        if (!success) throw new AdvancedError(message, statusCode);
-        else if (statusCode === 1) {
-          const { data } = res;
-          console.log({ data });
-          setLoading(false);
-
-        }
-      }
-    } catch (err) {
-      toast.error(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  return (
-    <form onSubmit={handlesubmit} className="pay_card rounded" style={{ background: "#ffffff" }}>
-      <PaymentElement
-        onReady={() => {
-          setLoadingComponent(false);
-        }}
-        onError={(err) => {
-          console.error(err);
-          setLoadingComponent(false);
-        }}
-      />
-
-      {loadingComponent ? (
-        <div className="text-center">
-          <div
-            className="spinner-border text-primary"
-            role="status"
-            style={{ width: "3rem", height: "3rem" }}
-          >
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      ) : (
-        <>
-          <button className="btn-plain w-100 mt-3" disabled={!stripe}>
-            {loading ? (
-              <div
-                className="spinner-border text-primary"
-                role="status"
-                style={{ width: "2rem", height: "2rem" }}
-              >
-                <span className="visually-hidden">Loading...</span>
-              </div>
-            ) : (
-              <span>Submit</span>
-            )}
-          </button>
-        </>
-      )}
-      <div className="cancel w-100 text-center my-3">
-        <button
-          className=""
-          style={{
-            color: "var(--theme-blue)",
-            border: "none",
-            outline: "none",
-            fontSize: "14px",
-          }}
-          onClick={() => {
-            setShowStripeModal(false)
-            // navigate("/payment/error");
-          }}
-        >
-          Cancel
-        </button>
-      </div>
-    </form>
-  );
-};
-
 export const PaymentStatus = ({ success }) => {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
-  const { id } = useParams();
+  const { id, cart } = useParams();
   const [loading, setLoading] = useState(false)
+  const { generalState: { isMobile }, setGeneralState, generalState, studentFunctions: { clearCarts } } = useAuth();
+
 
   const [status, setStatus] = useState({
     image: success ? Success : Failure,
@@ -590,8 +477,67 @@ export const PaymentStatus = ({ success }) => {
     action: success ? "Go to Dashboard" : "Try Again",
   });
 
+
+
   console.log(id)
-  const userdata = getItem("gotocourse-userdata");
+  const userdata = getItem(KEY);
+
+
+
+  async function clearCart() {
+    try {
+      setGeneralState({ ...generalState, loading: true })
+      const res = await clearCarts(userdata?.token);
+      const { message, success, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else if (statusCode === 1) {
+        const { data } = res;
+        if (data) {
+          toast.success("wishlist is empty", {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } else {
+          // toast.error("wishlist is empty", {
+          //     position: "top-right",
+          //     autoClose: 4000,
+          //     hideProgressBar: true,
+          //     closeOnClick: true,
+          //     pauseOnHover: true,
+          //     draggable: true,
+          //     progress: undefined,
+          // });
+        }
+
+      } else {
+        throw new AdvancedError(message, statusCode);
+      }
+    } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } finally {
+      setGeneralState({ ...generalState, loading: false });
+    }
+  }
+
+
+
+  useEffect(() => {
+    clearCart()
+  }, [cart])
+
 
   // useEffect(() => {
   //   // enroll student to course

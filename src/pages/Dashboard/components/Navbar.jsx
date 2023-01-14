@@ -8,15 +8,21 @@ import LogoutButton from "../../../components/LogoutButton";
 import { GotoDashboard } from "../Students";
 import { useAuth } from "../../../contexts/Auth";
 import { Badge } from "@mui/material";
+import { useLocalStorage } from "../../../hooks"
+import { KEY } from "../../../constants"
 
 export default function Navbar({ header, toggleSidebar, notification, content }) {
     const location = useLocation()
     const main = location.pathname.split("/")[1]
     const [loading, setLoading] = useState(false)
-    const { generalState: { isMobile, showSidebar, notifications, carts },   generalState, setGeneralState, adminFunctions: { fetchNotifications }, outstanding } = useAuth();
+    const { generalState: { isMobile, showSidebar, notifications, carts }, generalState, setGeneralState, adminFunctions: { fetchNotifications }, outstanding } = useAuth();
     const navigate = useNavigate()
 
     const payment = location.pathname.split("/")[2] === "payment"
+
+    const { getItem } = useLocalStorage();
+    const userdata = getItem(KEY);
+
 
     return (
         <div className={`align-items-center ${clsx.dashboard_topbar}`}>
@@ -41,29 +47,33 @@ export default function Navbar({ header, toggleSidebar, notification, content })
                     <IoNotificationsOutline size="1.5rem" color="#0C2191" onClick={() => navigate(`/${main}/notifications`)} style={{ cursor: "pointer" }} />
                 </Badge>
 
-                <Badge alignItems="center" className="me-4" badgeContent={carts ? carts : 0} color="secondary" >
-                    <AiOutlineShoppingCart size="1.5rem" color="#0C2191" onClick={() => navigate(`/${main}/wishlist`)} style={{ cursor: "pointer" }} />
-                </Badge>
+                {
+                    userdata.type === "student" &&
+                    <Badge alignItems="center" className="me-4" badgeContent={carts ? carts : 0} color="secondary" >
+                        <AiOutlineShoppingCart size="1.5rem" color="#0C2191" onClick={() => navigate(`/${main}/wishlist`)} style={{ cursor: "pointer" }} />
+                    </Badge>
+                }
+
 
                 {payment && (
-                   
-                        <span style={{
-                            fontSize:"14px",
-                            background: "#DB4E18",
-                            display:"flex",
-                            flexDirection:"column",
-                            padding: "0.2rem .5rem", 
-                            border: "1px solid #DB4E18",
-                             borderRadius: "5px", color: "#fff"
-                        }}>
-                            <span style={{
-                        color: "#fff",
-                        fontSize:"10px"
 
-                        }}>Total Oustanding</span> 
-                            
-                            
-                            ${outstanding}</span>
+                    <span style={{
+                        fontSize: "14px",
+                        background: "#DB4E18",
+                        display: "flex",
+                        flexDirection: "column",
+                        padding: "0.2rem .5rem",
+                        border: "1px solid #DB4E18",
+                        borderRadius: "5px", color: "#fff"
+                    }}>
+                        <span style={{
+                            color: "#fff",
+                            fontSize: "10px"
+
+                        }}>Total Oustanding</span>
+
+
+                        ${outstanding}</span>
                 )}
 
 
