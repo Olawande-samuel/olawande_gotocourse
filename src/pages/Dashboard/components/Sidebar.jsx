@@ -209,11 +209,11 @@ const Sidebar = () => {
                     title: "Live Class",
                 },
 
-                {
-                    icon: FiGift,
-                    path: "wishlist",
-                    title: "Cart",
-                },
+                // {
+                //     icon: FiGift,
+                //     path: "wishlist",
+                //     title: "Cart",
+                // },
                 {
                     icon: MdOutlineAddReaction,
                     path: "referral",
@@ -440,11 +440,11 @@ const Sidebar = () => {
                         //     title: "Live Class",
                         // },
 
-                        {
-                            icon: FiGift,
-                            path: "wishlist",
-                            title: "Cart",
-                        },
+                        // {
+                        //     icon: FiGift,
+                        //     path: "wishlist",
+                        //     title: "Cart",
+                        // },
                         {
                             icon: MdOutlineAddReaction,
                             path: "referral",
