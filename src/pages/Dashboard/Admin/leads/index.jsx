@@ -202,7 +202,7 @@ export default function AdLeads() {
                         {/* <Tab label="Marketing Leads" {...a11yProps(4)} /> */}
                   </Tabs>
                 </Box>
-                {title.map((item, index)=>(
+                {title.slice(0, 4).map((item, index)=>(
                   <TabPanel value={value} index={index}>
                     <HomepageHero name={item.name} />
                 </TabPanel>
