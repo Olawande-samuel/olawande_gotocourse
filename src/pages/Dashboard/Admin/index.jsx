@@ -13,7 +13,7 @@ import {
   AiTwotoneDelete,
 } from "react-icons/ai";
 import { FaUserLock } from "react-icons/fa";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import DOMPurify from "dompurify";
 
@@ -4538,13 +4538,14 @@ export function BootcampRow({
 // FEES COMPONENT
 export function Fees() {
   const {
-    adminFunctions: { fetchPayment }, generalState,
+    adminFunctions: { fetchPayment, deletePaymentHistory }, generalState,
     setGeneralState
   } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const flag = useRef(false);
   const [formstate, setFormstate] = useState([]);
+  const [rest, setRest] = useState({});
 
   const [loading, setLoading] = useState(false);
   const tableHeaders = [
@@ -4556,83 +4557,106 @@ export function Fees() {
     "Amount",
     "Status",
     "Due Date",
+    "",
+    "Action"
   ];
   const tableContents = [];
 
-  useEffect(() => {
-    if (flag.current) return;
+  const queryClient = useQueryClient();
 
-    (async () => {
-      try {
-        setLoading(true)
-        const res = await fetchPayment(userdata?.token);
-        const { message, success, statusCode } = res;
-        if (!success) throw new AdvancedError(message, statusCode);
-        else if (statusCode === 1) {
-          const { data } = res;
-          setLoading(false)
-          setFormstate(data);
-        } else {
-          throw new AdvancedError(message, statusCode);
-        }
-      } catch (err) {
-        toast.error(err.message);
-        setLoading(false)
-      } 
-    })();
+  const [page, setPage] = useState(1)
 
-    //do some coding
-    flag.current = true;
-    return () => console.log("Payments component");
-  }, []);
+  const fetchPaymentHistory = useQuery(["fetch payment history", userdata?.token, page], ()=>fetchPayment(userdata?.token, page), {
+    enabled: userdata.token !== null,
+     onSuccess: (res)=> {
+      if(res?.data?.paymentItems){
+        setFormstate(res?.data?.paymentItems)
+        setRest(res?.data)
+      }else {
+        setFormstate([])
+      }
+     },
+     onError: error => toast.error(error.message)
+  })
+
+
+  const deletePaymentMutation = useMutation(([token, id])=>deletePaymentHistory(token, id), {
+    onSuccess: res=> {
+      console.log(res)
+      queryClient.inValidateQueries(["fetch payment history"])
+    } ,
+    onError: err => console.error(err)
+  })
+
+
+  function deletePayment(e, id){
+    console.log({id})
+    e.preventDefault();
+    if(window.confirm("Are you sure you want to delete this payment")){
+      deletePaymentMutation.mutate([userdata.token, id])
+    }
+  }
+
+
 
   return (
     <Admin header={"Fees"}>
-      {loading && <Loader />}
+      {(fetchPaymentHistory?.isLoading || deletePaymentMutation?.isLoading) && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h1>All Payments</h1>
           <div className={clsx.admin__student_main}>
-            <table className={`${clsx.admin__student_table}`}>
-              <thead>
-                {tableHeaders.map((el, i) => (
-                  <td key={i}>{el}</td>
-                ))}
-              </thead>
-              <tbody>
-                {formstate?.map(
-                  (
-                    {
-                      studentName,
-                      courseName,
-                      coursePrice,
-                      amount,
-                      createdAt,
-                      dueDate,
-                      status,
-                      type,
-                      bootcampPrice,
-                      bootcampName
-                    },
-                    i
-                  ) => (
-                    <UserInfoCard
-                      key={i}
-                      num={i}
-                      enrolled={studentName}
-                      comp="Category"
-                      name={bootcampName}
-                      coursePrice={createdAt ? new Intl.DateTimeFormat('en-US').format(new Date(createdAt)) : ""}
-                      date={courseName}
-                      pack={bootcampPrice ? `$ ${bootcampPrice}`: "-"}
-                      start_date={`$ ${amount}`}
-                      email={status}
-                      students={dueDate ? new Intl.DateTimeFormat('en-US').format(new Date(dueDate)) : ""}
-                    />
-                  )
-                )}
-              </tbody>
-            </table>
+            {!fetchPaymentHistory?.isLoading  &&
+            <>
+              <table className={`${clsx.admin__student_table}`}>
+                <thead>
+                  {tableHeaders.map((el, i) => (
+                    <td key={i}>{el}</td>
+                  ))}
+                </thead>
+                <tbody>
+                  {formstate?.map(
+                    (
+                      {
+                        studentName,
+                        courseName,
+                        coursePrice,
+                        amount,
+                        createdAt,
+                        dueDate,
+                        status,
+                        type,
+                        bootcampPrice,
+                        bootcampName,
+                        paymentId
+                      },
+                      i
+                    ) => (
+                      <UserInfoCard
+                        key={i}
+                        num={i}
+                        enrolled={studentName}
+                        comp="Category"
+                        name={bootcampName}
+                        coursePrice={createdAt ? new Intl.DateTimeFormat('en-US').format(new Date(createdAt)) : ""}
+                        date={courseName}
+                        pack={bootcampPrice ? `$ ${bootcampPrice}`: "-"}
+                        start_date={`$ ${amount}`}
+                        email={status}
+                        students={dueDate ? new Intl.DateTimeFormat('en-US').format(new Date(dueDate)) : ""}
+                        deleteUser={(e)=>deletePayment(e, paymentId)}
+                      />
+                    )
+                  )}
+                </tbody>
+              </table>
+              <div className="mt-3">
+                <button className="btn btn-dark"  onClick={()=> setPage(prev => page - 1)} disabled={page === 1} >Prev</button>
+                <span className="mx-2">page {page} of {rest?.num_of_pages}</span>
+                <button  className="btn btn-dark" onClick={()=> setPage(prev => page + 1)} disabled={page === rest?.num_of_pages}>Next</button>
+              </div>
+            </>
+          }
           </div>
         </div>
       </div>
