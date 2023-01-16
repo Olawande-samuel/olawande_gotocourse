@@ -995,6 +995,10 @@ function MyApp({mixpanel}) {
                     element={<ApproveStudent />}
                   />
                   <Route
+                    path="students/enrolled/approve"
+                    element={<ApproveStudent />}
+                  />
+                  <Route
                     path="notifications"
                     element={<Notification />}
                   />

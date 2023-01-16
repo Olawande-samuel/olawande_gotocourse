@@ -344,19 +344,13 @@ const Sidebar = () => {
                     {
                         icon: IoIosPerson,
                         path: "students",
-                        title: "Students",
-                        sub: [
-                            {
-                                icon: IoIosPerson,
-                                path: "/admin/students",
-                                title: "All",
-                            },
-                            {
-                                icon: IoIosPerson,
-                                path: "/admin/students/enrolled",
-                                title: "Enrolled",
-                            },
-                        ]
+                        title: "All Students",
+                    },
+
+                    {
+                        icon: IoIosPerson,
+                        path: "students/enrolled",
+                        title: "Enrolled Students",
                     },
                     {
                         icon: FiSend,
