@@ -431,12 +431,12 @@ const Sidebar = () => {
                         title: "Blog",
                     },
                     {
-                        icon: MdOutlineSell,
+                        icon: RiAdvertisementFill,
                         path: "ad-leads",
                         title: "Ad Leads"
                     },
                     {
-                        icon: RiAdvertisementFill,
+                        icon: MdOutlineSell,
                         path: "marketing-leads",
                         title: "Marketing Leads"
                     },
