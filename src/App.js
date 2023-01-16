@@ -32,6 +32,8 @@ import {
   Notification,
   Earnings as AdminEarning,
   AdminClassConsole,
+  EnrolledStudents
+  
 } from "./pages/Dashboard/Admin";
 
 import AdminDashboard from "./pages/Dashboard/Admin/Dashboard";
@@ -227,6 +229,7 @@ import ProtectedRoute from "./hoc/LiveClassProtection";
 import Home from "./pages/Landing";
 import NewHome from "./pages/Landing/landing";
 import AdLeads from "./pages/Dashboard/Admin/leads";
+import Market from "./pages/Dashboard/Admin/leads/marketing";
 import { MixpanelConsumer } from "react-mixpanel";
 import RedirectPage from "./pages/Bootcamp/Redirect";
 
@@ -982,10 +985,11 @@ function MyApp({mixpanel}) {
                     path="profile"
                     element={<AdminProfile />}
                   />
-                  <Route
-                    path="students"
-                    element={<Student />}
-                  />
+                  <Route path="students" element={<Out />}>
+                  <Route index element={<Student />} />
+                  <Route path="enrolled" element={<EnrolledStudents />} />
+
+                  </Route>
                   <Route
                     path="students/approve"
                     element={<ApproveStudent />}
@@ -1054,6 +1058,7 @@ function MyApp({mixpanel}) {
                   <Route path="chat" element={<AdminChat />} />
                   <Route path="settings" element={<Settings />} />
                   <Route path="ad-leads" element={<AdLeads />} />
+                  <Route path="marketing-leads" element={<Market />} />
                   <Route path="earnings" element={<AdminEarning />} />
                   <Route path="affiliate" element={<AdminAffiliate />} />
                   <Route path="blog" element={<Out />}>
