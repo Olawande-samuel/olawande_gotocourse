@@ -2093,9 +2093,41 @@ export const adminFunctions = {
             }
         }
     },
-    fetchPayment: async function (token) {
+    fetchPayment: async function (token, page) {
         try {
-            const res = await axios.get(`${baseURL}/admin/payments/fetch`,
+            const res = await axios.get(`${baseURL}/admin/payments/fetch?page=${page}?limit=10`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    deletePaymentHistory: async function (token, id) {
+        try {
+            const res = await axios.delete(`${baseURL}/admin/payments/delete/${id}`,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,
@@ -2880,6 +2912,7 @@ export const studentFunctions = {
             }
         }
     },
+    
     fetchStudentFees: async function (token) {
         // console.log("studentpaymenttoken", token);
         try {
