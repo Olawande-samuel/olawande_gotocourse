@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -4947,6 +4947,143 @@ export function Student() {
               <tbody>
                 {studentList?.length > 0 &&
                   studentList
+                    ?.filter(
+                      (stu) =>
+                        stu.firstName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        stu.lastName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        stu.email.toLowerCase().includes(search.toLowerCase())
+                    )
+                    .map((student, i) => (
+                      <UserInfoCard
+                        key={i}
+                        name={student.name}
+                        firstName={student.firstName}
+                        lastName={student.lastName}
+                        img={student.profileImg}
+                        email={student.email}
+                        num={i}
+                        isActive={student.isVerified}
+                        accessPledre={student.accessPledre}
+                        user={true}
+                        type={null}
+                        // deleteUser={(e) => console.Console.log(e)}
+                        handleVerification={(e) => console.log(e)}
+                        handlePledreAccess={(e) => console.log(e)}
+                        isAbsolute={true}
+                        approveHandler={approveHandler}
+                        details={student}
+                      />
+                    ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {loading && <Loader />}
+    </Admin>
+  );
+}
+// ENROLLED STUDENT COMPONENT
+export function EnrolledStudents() {
+  const [studentList, setStudentList] = useState([]);
+  const { getItem } = useLocalStorage();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [loader, setLoader] = useState(true);
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const {
+    adminStudentFunctions: { fetch, verify, verify_pledre },
+    generalState: { loading },
+    setGeneralState,
+    commonFunctions: { deleteUser },
+  } = useAuth();
+
+  async function fetchStudents() {
+    if (userdata) {
+      try {
+        const res = await fetch(userdata?.token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          const { data } = res;
+          //do somethings
+
+          setStudentList(data);
+        }
+      } catch (err) {
+        toast.error(err.message);
+      } finally {
+        setLoader((_) => false);
+      }
+    }
+  }
+  useEffect(() => {
+    if (flag.current) return;
+    fetchStudents();
+    flag.current = true;
+  }, []);
+
+  function approveHandler(e, email, details) {
+    localStorage.setItem("gotocourse-studentDetails", JSON.stringify(details));
+    if (email) navigate(`approve?email=${email}`);
+  }
+
+  const tableHeaders = [
+    "No",
+    "Name",
+    "Email",
+    "Account Verified",
+    // "Access Dashboard",
+    // "Action",
+  ];
+
+  
+  const enrolledStudents = useMemo(()=>{
+    let hasPaid
+    if(studentList) {
+      let areAccepted = studentList?.filter(item => item.enrollmentData.length > 0)
+      hasPaid = areAccepted.filter(item => item.enrollmentData.find(item => item.status === "paid"))
+      return hasPaid
+    }
+    return []
+  },[studentList])
+  
+
+  return (
+    <Admin header={"Students"}>
+      {loader && <Loader />}
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+          <div className="d-flex justify-content-between">
+            <h1>Enrolled Students</h1>
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="search student"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className={`${clsx.admin__student_main}`}>
+            <table className={clsx.admin__student_table}>
+              <thead>
+                <tr>
+                  {tableHeaders.map((el, i) => (
+                    <th key={i}>{el}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {enrolledStudents?.length > 0 &&
+                  enrolledStudents
                     ?.filter(
                       (stu) =>
                         stu.firstName

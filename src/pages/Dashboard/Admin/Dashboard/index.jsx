@@ -1,5 +1,5 @@
 
-import React, {useEffect, useState, useRef} from "react"
+import React, {useEffect, useState, useRef, useMemo} from "react"
 import Chart from "react-apexcharts";
 import {ToastContainer, toast} from "react-toastify";
 
@@ -120,6 +120,7 @@ const Dashboard = () => {
     })
     const flag = useRef(false);
     const [loading, setLoading] = useState(true);
+    const [students, setStudents] = useState([]);
     let userdata = getItem(KEY);
     const {adminFunctions: {fetchEarnings, fetchCourses, fetchCategories}, adminStudentFunctions: {fetch: fetchStudents}, adminTeacherFunctions: {fetch: fetchTeachers}} = useAuth();
 
@@ -144,6 +145,7 @@ const Dashboard = () => {
                             categories: categories.data
                         }
                     })
+                    setStudents(students?.data)
                    
                 }
             }catch(err){
@@ -166,13 +168,24 @@ const Dashboard = () => {
 
     console.log(chartData);
 
+
+    const enrolledStudents = useMemo(()=>{
+        let calculations = 0
+        if(students.length > 0){
+            return students.filter(item => item.enrollmentData?.length > 0)
+        }
+    },[students])
+
+    console.log(enrolledStudents?.map(item => item.enrollmentData.find(item => item.status === "paid")))
+
+    
     const headerCards = [
         {
             icon: <svg width="28" height="34" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fillRule="evenodd" clipRule="evenodd" d="M11.9716 33.8977H3.8634C2.03373 33.8977 0.550781 32.4147 0.550781 30.5851V21.3859C0.550781 19.7848 1.69584 18.4134 3.27044 18.1274C5.60473 17.7023 9.62956 16.9702 11.9064 16.5572C13.1597 16.3286 14.4428 16.3286 15.6961 16.5572C17.973 16.9702 21.9978 17.7023 24.3321 18.1274C25.9067 18.4134 27.0517 19.7848 27.0517 21.3859C27.0517 23.7942 27.0517 28.0078 27.0517 30.5851C27.0517 32.4147 25.5688 33.8977 23.7391 33.8977H11.9716ZM22.445 20.0288L22.4494 20.0344C22.6426 20.3237 22.6879 20.6869 22.572 21.0149L21.7924 23.2233C21.6908 23.5115 21.4733 23.7456 21.1928 23.8682L19.7264 24.5075L20.3094 25.6746C20.4729 26.0004 20.464 26.3858 20.2874 26.7049L17.518 31.6893H23.7391C24.3486 31.6893 24.8433 31.1946 24.8433 30.5851C24.8433 28.0078 24.8433 23.7942 24.8433 21.3859C24.8433 20.8526 24.4613 20.3954 23.9368 20.2994L22.445 20.0288ZM19.425 19.479L15.3008 18.7292C14.3092 18.5492 13.2933 18.5492 12.3017 18.7292L8.17753 19.479L7.29638 20.8007L7.73254 22.0352L9.82612 22.9473C10.1033 23.0687 10.3186 23.2984 10.4224 23.5833C10.5262 23.8682 10.5074 24.1829 10.3716 24.4534L9.52798 26.1406L12.6109 31.6893H14.9916L18.0745 26.1406L17.2309 24.4534C17.0951 24.1829 17.0763 23.8682 17.1801 23.5833C17.2839 23.2984 17.4992 23.0687 17.7764 22.9473L19.87 22.0352L20.3061 20.8007L19.425 19.479ZM5.15753 20.0288L3.66575 20.2994C3.14125 20.3954 2.75919 20.8526 2.75919 21.3859V30.5851C2.75919 31.1946 3.25388 31.6893 3.8634 31.6893H10.0845L7.31515 26.7049C7.13848 26.3858 7.12965 26.0004 7.29307 25.6746L7.87609 24.5075L6.4097 23.8682C6.12923 23.7456 5.9117 23.5115 5.81012 23.2233L5.03055 21.0149C4.9146 20.6869 4.95988 20.3237 5.15311 20.0344L5.15753 20.0288ZM21.5307 26.1682V28.3766C21.5307 28.9862 22.0254 29.4809 22.6349 29.4809C23.2444 29.4809 23.7391 28.9862 23.7391 28.3766V26.1682C23.7391 25.5587 23.2444 25.064 22.6349 25.064C22.0254 25.064 21.5307 25.5587 21.5307 26.1682ZM13.8013 0.771484C9.84047 0.771484 6.62392 3.98804 6.62392 7.94883C6.62392 11.9096 9.84047 15.1262 13.8013 15.1262C17.762 15.1262 20.9786 11.9096 20.9786 7.94883C20.9786 3.98804 17.762 0.771484 13.8013 0.771484ZM13.8013 2.9799C16.5441 2.9799 18.7702 5.20598 18.7702 7.94883C18.7702 10.6917 16.5441 12.9178 13.8013 12.9178C11.0584 12.9178 8.83233 10.6917 8.83233 7.94883C8.83233 5.20598 11.0584 2.9799 13.8013 2.9799Z" fill="white"/>
             </svg>,
             title: "Students",
-            value: chartData.students,
+            value: enrolledStudents?.map(item => item.enrollmentData.find(item => item.status === "paid")).length,
             color: "#4D44B5"
         },
         {
