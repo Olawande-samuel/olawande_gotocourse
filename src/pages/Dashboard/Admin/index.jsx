@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,7 +13,7 @@ import {
   AiTwotoneDelete,
 } from "react-icons/ai";
 import { FaUserLock } from "react-icons/fa";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import DOMPurify from "dompurify";
 
@@ -1142,13 +1142,14 @@ function Info({ title, content }) {
 export function ApproveStudent() {
   const navigate = useNavigate();
   const [data, setData] = useState(null);
+  const [enrollmentData, setEnrollmentData] = useState([]);
   const [kyc, setKyc] = useState({});
 
   const [loading, setLoading] = useState(false);
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const {
-    adminStudentFunctions: { verify },
+    adminStudentFunctions: { verify, fetchStudentsClasses },
     kycFunctions: { getAStudentKYCById },
     generalState,
     setGeneralState,
@@ -1168,33 +1169,6 @@ export function ApproveStudent() {
   useEffect(() => {
     const studentInfo = getItem("gotocourse-studentDetails");
     setData(studentInfo);
-
-    // (async () => {
-    //     let pledreInfo;
-    //     console.log("getting");
-    //     try {
-    //       if (pledre) {
-    //         console.log(pledre);
-    //         setGeneralState({ ...generalState, loading: true });
-    //         const pledRes = await pledre.getStudentDetails(studentInfo.email);
-    //         console.log({ pledRes });
-    //         if (pledRes.email) {
-    //           pledreInfo = pledRes;
-    //         } else {
-    //           pledreInfo = {};
-    //         }
-    //       }
-    //     } catch (error) {
-    //       console.error(error.message);
-    //     } finally {
-    //       setGeneralState({ ...generalState, loading: false });
-    //     }
-
-    //     localStorage.setItem(
-    //       "gotocourse-studentDetails",
-    //       JSON.stringify({ ...studentInfo, pledre: pledreInfo })
-    //     );
-    // })();
   }, []);
 
   async function handleVerification(e, id) {
@@ -1291,6 +1265,37 @@ export function ApproveStudent() {
       getStudentKyc(data.userId);
     }
   }, [data]);
+
+  const fetchStudentEnrollments = useQuery(["fetch student enrollments", userdata?.token, data?.userId], ()=>fetchStudentsClasses(userdata?.token, data.userId), {
+    enabled: data?.userId !== null, 
+    onSuccess: (res)=> {
+      if(res?.success){
+        setEnrollmentData(res.data)
+        return
+      }
+      setEnrollmentData([])
+      
+    },
+    onError: err => console.error(err)
+  })
+
+  console.log({fetchStudentEnrollments})
+
+  function getOutstandingAmount(item){
+    let outAmt =  item?.payments?.filter(item=> item.status !== "paid").reduce((acc, curr)=>acc + curr.amount, 0)
+    return outAmt
+  }
+  function getDueDate(item){
+    // let paymentData = item?.payments?.filter(item=> item.status !== "paid")
+    // let leftOver
+    // if(paymentData){
+    //   leftOver = paymentData[0]?.dueDate?.split("T")[0]
+    // }else {
+    //   leftOver = "-"
+    // }
+    let dueDate = item?.payments?.filter(item=> item.status !== "paid").length > 0 ? item?.payments?.filter(item=> item.status !== "paid")[0]?.dueDate.split("T")[0] : "-"
+    return dueDate
+  }
   return (
     <Admin header="Approval">
       {loading && <Loader />}
@@ -1357,13 +1362,19 @@ export function ApproveStudent() {
               )}
             </div>
             <div className={clsx.student_course_info}>
+              {
+                fetchStudentEnrollments?.isLoading ?
+                <div className="spinner-border text-primary">
+                  <div className="visually-hidden">Loading...</div>
+                </div>
+                :
               <div className="table-responsive my-4">
                 <table className="table">
                   <thead>
                     <tr>
                       <th>No</th>
                       <th>Courses enrolled</th>
-                      <th>Start date</th>
+                      {/* <th>Start date</th> */}
                       <th>Amount paid</th>
                       <th>Outstanding</th>
                       <th>Due date</th>
@@ -1373,14 +1384,14 @@ export function ApproveStudent() {
                   <tbody>
 
                     {
-                      data?.enrollmentData.map((item, i)=> (
+                      enrollmentData?.map((item, i)=> (
                         <tr>
                           <td>{i + 1}</td>
                           <td>{item?.bootcampName}</td>
-                          <td>{item?.startDate}</td>
+                          {/* <td>{item?.startDate}</td> */}
                           <td>{item?.amountPaid}</td>
-                          <td>{item?.Outstanding}</td>
-                          <td>{item?.bootcampName}</td>
+                          <td>{item?.payments?.length > 0 ? getOutstandingAmount(item) : "-"}  </td>
+                          <td>{item?.payments?.length > 0 ?  getDueDate(item) : "-"}  </td>
                           <td>{item?.bootcampPrice}</td>
                         </tr>
                       ))
@@ -1388,6 +1399,7 @@ export function ApproveStudent() {
                   </tbody>
                 </table>
               </div>
+              }
 
               {/* <div className="table-responsive my-4">
                 <table className="table">
@@ -1509,20 +1521,8 @@ export function Approve() {
     }
   }, [data]);
 
-  const info = [
-    {
-      title: "Courses",
-      content: "UX Designer",
-    },
-    {
-      title: "Category",
-      content: "Cybersecurity, UX, Data Analysis",
-    },
-    {
-      title: "Mentorship status",
-      content: data?.userType === "mentor" ? "Assigned" : "Unassigned",
-    },
-  ];
+
+  
 
   useEffect(() => {
     const teacherInfo = getItem("gotocourse-teacherDetails");
@@ -1534,7 +1534,7 @@ export function Approve() {
     try {
       setLoading((_) => true);
       let value = window.confirm(
-        "Are you sure you want to delete this user?. This process is irreversible"
+        "Are you sure you want to delete this user? This process is irreversible"
       );
       if (!value) return;
       const res = await deleteUser(userdata?.token, [email]);
@@ -1683,6 +1683,11 @@ export function Approve() {
       });
     }
   }
+
+
+ 
+
+
   return (
     <Admin header="Approval">
       {loading && <Loader />}
@@ -4533,14 +4538,16 @@ export function BootcampRow({
 // FEES COMPONENT
 export function Fees() {
   const {
-    adminFunctions: { fetchPayment },
-    generalState: {loading},
+    adminFunctions: { fetchPayment, deletePaymentHistory }, generalState,
     setGeneralState
   } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const flag = useRef(false);
   const [formstate, setFormstate] = useState([]);
+  const [rest, setRest] = useState({});
+
+  const [loading, setLoading] = useState(false);
   const tableHeaders = [
     "No",
     "Name",
@@ -4550,91 +4557,106 @@ export function Fees() {
     "Amount",
     "Status",
     "Due Date",
+    "",
+    "Action"
   ];
   const tableContents = [];
-  useEffect(() => {
-    if (flag.current) return;
 
-    (async () => {
-      try {
-        setGeneralState((prev)=> {
-          return {
-            ...prev,
-            loading: true
-          }
-        })
-        const res = await fetchPayment(userdata?.token);
-        const { message, success, statusCode } = res;
-        if (!success) throw new AdvancedError(message, statusCode);
-        else if (statusCode === 1) {
-          const { data } = res;
-          setFormstate(data);
-        } else {
-          throw new AdvancedError(message, statusCode);
-        }
-      } catch (err) {
-        toast.error(err.message);
-      } finally {
-        setGeneralState((prev)=> {
-          return {
-            ...prev,
-            loading: false
-          }
-        })
+  const queryClient = useQueryClient();
+
+  const [page, setPage] = useState(1)
+
+  const fetchPaymentHistory = useQuery(["fetch payment history", userdata?.token, page], ()=>fetchPayment(userdata?.token, page), {
+    enabled: userdata.token !== null,
+     onSuccess: (res)=> {
+      if(res?.data?.paymentItems){
+        setFormstate(res?.data?.paymentItems)
+        setRest(res?.data)
+      }else {
+        setFormstate([])
       }
-    })();
+     },
+     onError: error => toast.error(error.message)
+  })
 
-    //do some coding
-    flag.current = true;
-    return () => console.log("Payments component");
-  }, []);
+
+  const deletePaymentMutation = useMutation(([token, id])=>deletePaymentHistory(token, id), {
+    onSuccess: res=> {
+      console.log(res)
+      queryClient.inValidateQueries(["fetch payment history"])
+    } ,
+    onError: err => console.error(err)
+  })
+
+
+  function deletePayment(e, id){
+    console.log({id})
+    e.preventDefault();
+    if(window.confirm("Are you sure you want to delete this payment")){
+      deletePaymentMutation.mutate([userdata.token, id])
+    }
+  }
+
+
 
   return (
     <Admin header={"Fees"}>
+      {(fetchPaymentHistory?.isLoading || deletePaymentMutation?.isLoading) && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h1>All Payments</h1>
           <div className={clsx.admin__student_main}>
-            <table className={`${clsx.admin__student_table}`}>
-              <thead>
-                {tableHeaders.map((el, i) => (
-                  <td key={i}>{el}</td>
-                ))}
-              </thead>
-              <tbody>
-                {formstate?.map(
-                  (
-                    {
-                      studentName,
-                      courseName,
-                      coursePrice,
-                      amount,
-                      createdAt,
-                      dueDate,
-                      status,
-                      type,
-                      bootcampPrice,
-                      bootcampName
-                    },
-                    i
-                  ) => (
-                    <UserInfoCard
-                      key={i}
-                      num={i}
-                      enrolled={studentName}
-                      comp="Category"
-                      name={bootcampName}
-                      coursePrice={createdAt ? new Intl.DateTimeFormat('en-US').format(new Date(createdAt)) : ""}
-                      date={courseName}
-                      pack={bootcampPrice ? `$ ${bootcampPrice}`: "-"}
-                      start_date={`$ ${amount}`}
-                      email={status}
-                      students={dueDate ? new Intl.DateTimeFormat('en-US').format(new Date(dueDate)) : ""}
-                    />
-                  )
-                )}
-              </tbody>
-            </table>
+            {!fetchPaymentHistory?.isLoading  &&
+            <>
+              <table className={`${clsx.admin__student_table}`}>
+                <thead>
+                  {tableHeaders.map((el, i) => (
+                    <td key={i}>{el}</td>
+                  ))}
+                </thead>
+                <tbody>
+                  {formstate?.map(
+                    (
+                      {
+                        studentName,
+                        courseName,
+                        coursePrice,
+                        amount,
+                        createdAt,
+                        dueDate,
+                        status,
+                        type,
+                        bootcampPrice,
+                        bootcampName,
+                        paymentId
+                      },
+                      i
+                    ) => (
+                      <UserInfoCard
+                        key={i}
+                        num={i}
+                        enrolled={studentName}
+                        comp="Category"
+                        name={bootcampName}
+                        coursePrice={createdAt ? new Intl.DateTimeFormat('en-US').format(new Date(createdAt)) : ""}
+                        date={courseName}
+                        pack={bootcampPrice ? `$ ${bootcampPrice}`: "-"}
+                        start_date={`$ ${amount}`}
+                        email={status}
+                        students={dueDate ? new Intl.DateTimeFormat('en-US').format(new Date(dueDate)) : ""}
+                        deleteUser={(e)=>deletePayment(e, paymentId)}
+                      />
+                    )
+                  )}
+                </tbody>
+              </table>
+              <div className="mt-3">
+                <button className="btn btn-dark"  onClick={()=> setPage(prev => page - 1)} disabled={page === 1} >Prev</button>
+                <span className="mx-2">page {page} of {rest?.num_of_pages}</span>
+                <button  className="btn btn-dark" onClick={()=> setPage(prev => page + 1)} disabled={page === rest?.num_of_pages}>Next</button>
+              </div>
+            </>
+          }
           </div>
         </div>
       </div>
@@ -4949,6 +4971,143 @@ export function Student() {
               <tbody>
                 {studentList?.length > 0 &&
                   studentList
+                    ?.filter(
+                      (stu) =>
+                        stu.firstName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        stu.lastName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        stu.email.toLowerCase().includes(search.toLowerCase())
+                    )
+                    .map((student, i) => (
+                      <UserInfoCard
+                        key={i}
+                        name={student.name}
+                        firstName={student.firstName}
+                        lastName={student.lastName}
+                        img={student.profileImg}
+                        email={student.email}
+                        num={i}
+                        isActive={student.isVerified}
+                        accessPledre={student.accessPledre}
+                        user={true}
+                        type={null}
+                        // deleteUser={(e) => console.Console.log(e)}
+                        handleVerification={(e) => console.log(e)}
+                        handlePledreAccess={(e) => console.log(e)}
+                        isAbsolute={true}
+                        approveHandler={approveHandler}
+                        details={student}
+                      />
+                    ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {loading && <Loader />}
+    </Admin>
+  );
+}
+// ENROLLED STUDENT COMPONENT
+export function EnrolledStudents() {
+  const [studentList, setStudentList] = useState([]);
+  const { getItem } = useLocalStorage();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [loader, setLoader] = useState(true);
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const {
+    adminStudentFunctions: { fetch, verify, verify_pledre },
+    generalState: { loading },
+    setGeneralState,
+    commonFunctions: { deleteUser },
+  } = useAuth();
+
+  async function fetchStudents() {
+    if (userdata) {
+      try {
+        const res = await fetch(userdata?.token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          const { data } = res;
+          //do somethings
+
+          setStudentList(data);
+        }
+      } catch (err) {
+        toast.error(err.message);
+      } finally {
+        setLoader((_) => false);
+      }
+    }
+  }
+  useEffect(() => {
+    if (flag.current) return;
+    fetchStudents();
+    flag.current = true;
+  }, []);
+
+  function approveHandler(e, email, details) {
+    localStorage.setItem("gotocourse-studentDetails", JSON.stringify(details));
+    if (email) navigate(`approve?email=${email}`);
+  }
+
+  const tableHeaders = [
+    "No",
+    "Name",
+    "Email",
+    "Account Verified",
+    // "Access Dashboard",
+    // "Action",
+  ];
+
+  
+  const enrolledStudents = useMemo(()=>{
+    let hasPaid
+    if(studentList) {
+      let areAccepted = studentList?.filter(item => item.enrollmentData.length > 0)
+      hasPaid = areAccepted.filter(item => item.enrollmentData.find(item => item.status === "paid"))
+      return hasPaid
+    }
+    return []
+  },[studentList])
+  
+
+  return (
+    <Admin header={"Students"}>
+      {loader && <Loader />}
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+          <div className="d-flex justify-content-between">
+            <h1>Enrolled Students</h1>
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="search student"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className={`${clsx.admin__student_main}`}>
+            <table className={clsx.admin__student_table}>
+              <thead>
+                <tr>
+                  {tableHeaders.map((el, i) => (
+                    <th key={i}>{el}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {enrolledStudents?.length > 0 &&
+                  enrolledStudents
                     ?.filter(
                       (stu) =>
                         stu.firstName

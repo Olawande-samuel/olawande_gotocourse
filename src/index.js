@@ -12,7 +12,7 @@ mixpanel.init('de7e6e0ca11a1f334afc964a5377c489', {debug: true, ignore_dnt:true,
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <MixpanelProvider mixpanel={mixpanel}>
       <BrowserRouter>
       <QueryClientProvider client={queryClient}>
@@ -20,7 +20,7 @@ root.render(
       </QueryClientProvider>
       </BrowserRouter>
     </MixpanelProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

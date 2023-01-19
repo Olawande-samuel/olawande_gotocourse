@@ -5,6 +5,7 @@ import {
     AiOutlineClose,
     AiOutlineSetting,
     AiOutlineDashboard,
+    AiOutlineCaretDown
 } from "react-icons/ai";
 import {
     IoIosHome,
@@ -23,7 +24,7 @@ import {
     BiVideo,
     BiCustomize,
 } from "react-icons/bi";
-import { MdOutlineAddReaction } from "react-icons/md";
+import { MdOutlineAddReaction, MdOutlineSell } from "react-icons/md";
 import { FaTwitch } from "react-icons/fa";
 import { useLocation, Link, NavLink, useNavigate } from "react-router-dom";
 import { FiGift, FiSend, FiBookOpen } from "react-icons/fi";
@@ -44,6 +45,8 @@ import { BsNewspaper } from "react-icons/bs";
 import { HiOutlinePresentationChartLine } from "react-icons/hi";
 import { RiAdvertisementFill } from "react-icons/ri";
 import { GiSandsOfTime } from "react-icons/gi";
+
+import {Dropdown} from "react-bootstrap"
 
 //mini-components
 function SidebarItem({ icon: Icon, title, path, showBadge, ...props }) {
@@ -77,6 +80,15 @@ const Sidebar = () => {
     let userdata = getItem(KEY);
     let route = location.pathname.split("/")[1];
     const [loading, setLoading] = useState(false);
+    const [showStudent, setShowStudent] = useState("d-flex");
+
+    function toggleStudent(){
+        if(showStudent === "d-flex"){
+            setShowStudent("d-none")
+        }else {
+            setShowStudent("d-flex")
+        }
+    }
 
     // for create. value should be gotten from localStorage
     const isCreator = userdata?.userType === "schools";
@@ -115,7 +127,7 @@ const Sidebar = () => {
                 {
                     icon: IoIosCash,
                     path: "fees",
-                    title: "Fees",
+                    title: "Payments",
                 },
                 // {
                 //     icon: FiGift,
@@ -209,11 +221,11 @@ const Sidebar = () => {
                     title: "Live Class",
                 },
 
-                {
-                    icon: FiGift,
-                    path: "wishlist",
-                    title: "Cart",
-                },
+                // {
+                //     icon: FiGift,
+                //     path: "wishlist",
+                //     title: "Cart",
+                // },
                 {
                     icon: MdOutlineAddReaction,
                     path: "referral",
@@ -332,7 +344,13 @@ const Sidebar = () => {
                     {
                         icon: IoIosPerson,
                         path: "students",
-                        title: "Students",
+                        title: "All Students",
+                    },
+
+                    {
+                        icon: IoIosPerson,
+                        path: "students/enrolled",
+                        title: "Enrolled Students",
                     },
                     {
                         icon: FiSend,
@@ -347,7 +365,7 @@ const Sidebar = () => {
                     {
                         icon: IoIosCash,
                         path: "fees",
-                        title: "Fees",
+                        title: "Payments",
                     },
                     // {
                     //     icon: FiGift,
@@ -411,6 +429,11 @@ const Sidebar = () => {
                         path: "ad-leads",
                         title: "Ad Leads"
                     },
+                    {
+                        icon: MdOutlineSell,
+                        path: "marketing-leads",
+                        title: "Marketing Leads"
+                    },
                 ]
                 : route === "student"
                     ? [
@@ -440,11 +463,11 @@ const Sidebar = () => {
                         //     title: "Live Class",
                         // },
 
-                        {
-                            icon: FiGift,
-                            path: "wishlist",
-                            title: "Cart",
-                        },
+                        // {
+                        //     icon: FiGift,
+                        //     path: "wishlist",
+                        //     title: "Cart",
+                        // },
                         {
                             icon: MdOutlineAddReaction,
                             path: "referral",
@@ -709,30 +732,50 @@ const Sidebar = () => {
                                 />
                             </NavLink>
                         ))
-                        : data.map(({ icon, path, title, showBadge, admin }, i) => (
-                            <NavLink
-                                onClick={toggleSidebar}
-                                to={`${route === "admin"
-                                    ? "/admin"
-                                    : route === "student"
-                                        ? "/student"
-                                        : route === "teacher"
-                                            ? "/teacher"
-                                            : route === "mentor"
-                                                ? "/mentor"
-                                                : "/affiliate"
-                                    }${"/" + path}`}
-                                key={i}
-                            >
-                                <SidebarItem
-                                    location={location}
-                                    icon={icon}
-                                    title={title}
-                                    path={path}
-                                    showBadge={showBadge}
-                                    admin={admin}
-                                />
-                            </NavLink>
+                        : data.map(({ icon, path, title, showBadge, admin, sub }, i) => (
+                            <>
+                                {
+                                    sub ? 
+                                   <div className={clsx.sidebar_item_button_wrapper}>
+                                        <div className={clsx.sidebar_item_button} onClick={toggleStudent}>
+                                            <span className="d-flex justify-content-between align-items-center gap-3">
+                                                <IoIosPerson /> Students <AiOutlineCaretDown />
+                                            </span>
+                                        </div>
+                                        <div className={`${clsx.sidebar_dropDown} ${showStudent}`}>
+                                            <Link to="/admin/students" className="d-inline-block mb-2 text-start"><IoIosPerson /> All</Link>
+                                            <Link to="/admin/students/enrolled" className="d-inline-block text-start"><IoIosPerson /> Enrolled</Link>
+                                        </div>
+                                   </div>
+                                    :
+                                    <NavLink
+                                        onClick={toggleSidebar}
+                                        to={`${route === "admin"
+                                            ? "/admin"
+                                            : route === "student"
+                                                ? "/student"
+                                                : route === "teacher"
+                                                    ? "/teacher"
+                                                    : route === "mentor"
+                                                        ? "/mentor"
+                                                        : "/affiliate"
+                                            }${"/" + path}`}
+                                        key={i}
+                                    >
+                                        <SidebarItem
+                                            location={location}
+                                            icon={icon}
+                                            title={title}
+                                            path={path}
+                                            showBadge={showBadge}
+                                            admin={admin}
+                                        />
+                                    </NavLink>
+
+
+
+                                }
+                            </>
                         ))}
                     <div
                         className="button_wrapper d-none text-center"
@@ -782,7 +825,8 @@ const Sidebar = () => {
                                     }}
                                     onClick={(e) => navigate(`/${userdata?.userType}`)}
                                     disable={true}
-                                >
+                                > 
+
                                     Go to{" "}
                                     {userdata?.userType === "student"
                                         ? "Student's"
