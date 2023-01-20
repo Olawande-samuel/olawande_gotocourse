@@ -87,7 +87,7 @@ export const CustomButton = styled(Button)`
 
 
 
-const Sidebar = ({ modules,setContents,setPickedType,setBodyTitle,reduceContent, setActive, active, isMobile, completed, setCompleted, progress
+const Sidebar = ({ modules,setContents,setPickedType,setBodyTitle,reduceContent, setActive, active, isMobile, completed, setCompleted, progress, setLocked
 }) => {
     const navigate = useNavigate()
     let elementRef = createRef(null)
@@ -130,6 +130,7 @@ const Sidebar = ({ modules,setContents,setPickedType,setBodyTitle,reduceContent,
                                 setCompleted={setCompleted}
                                 reduceContent={reduceContent}
                                 setBodyTitle={setBodyTitle}
+                                setLocked={setLocked}
 
 
                             />)

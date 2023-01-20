@@ -617,6 +617,27 @@
 
 }
 
+
+
+.console_empty{
+    background-image: url(../../../../images/empty.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    min-height: 30vh;
+    /* border: 2px solid red; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.console_empty p{
+    font-size: 28px;
+    font-family: 'Raleway';
+    color: #0C2191;
+
+}
+
 .assesstmentbox {
     display: flex;
     flex-direction: column;
