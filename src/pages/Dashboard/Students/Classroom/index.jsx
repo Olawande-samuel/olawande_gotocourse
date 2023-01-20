@@ -885,6 +885,8 @@ const Classroom = () => {
             const findItem = reduceContent?.find(content => content.contentId === contentId);
             // console.log({ findIndex });
 
+
+            console.log({findItem});
             let val = ""
             if (findIndex !== (reduceContent?.length - 1)) {
                 val = findIndex + 1;
@@ -897,11 +899,15 @@ const Classroom = () => {
                     setPickedType(reduceContent[val]?.type)
                     setContents(reduceContent[val]?.items)
                     setBodyTitle(reduceContent[val]?.title)
+                    return;
+
+                }else{
+                    setLocked(true)
+                    setPickedType(reduceContent[val]?.type)
+                    setBodyTitle(reduceContent[val]?.title)
+                    return;
 
                 }
-                setLocked(true)
-                setPickedType(reduceContent[val]?.type)
-                setBodyTitle(reduceContent[val]?.title)
 
 
             } else {
@@ -915,11 +921,15 @@ const Classroom = () => {
                     setContents(reduceContent[val]?.items)
                     setBodyTitle(reduceContent[val]?.title)
                     setPickedType(reduceContent[val]?.type)
+                    return;
+
+                }else{
+                    setLocked(true)
+                    setBodyTitle(reduceContent[val]?.title)
+                    setPickedType(reduceContent[val]?.type)
+                    return;
 
                 }
-                setLocked(true)
-                setBodyTitle(reduceContent[val]?.title)
-                setPickedType(reduceContent[val]?.type)
 
 
             }
@@ -938,10 +948,15 @@ const Classroom = () => {
                     setPickedType(reduceContent[val]?.type)
                     setContents(reduceContent[val]?.items)
                     setBodyTitle(reduceContent[val]?.title)
+                    return;
+
+                }else{
+                    setLocked(true)
+                    setPickedType(reduceContent[val]?.type)
+                    setBodyTitle(reduceContent[val]?.title)
+                    return;
+
                 }
-                setLocked(true)
-                setPickedType(reduceContent[val]?.type)
-                setBodyTitle(reduceContent[val]?.title)
 
 
             } else {
@@ -954,10 +969,15 @@ const Classroom = () => {
                     setPickedType(reduceContent[val]?.type)
                     setContents(reduceContent[val]?.items)
                     setBodyTitle(reduceContent[val]?.title)
+                    return;
+
+                }else{
+                    setLocked(true)
+                    setPickedType(reduceContent[val]?.type)
+                    setBodyTitle(reduceContent[val]?.title)
+                    return;
+
                 }
-                setLocked(true)
-                setPickedType(reduceContent[val]?.type)
-                setBodyTitle(reduceContent[val]?.title)
 
             }
         }
@@ -974,14 +994,20 @@ const Classroom = () => {
                 setPickedType(reduceContent[findIndex]?.type)
                 setContents(reduceContent[findIndex]?.items)
                 setBodyTitle(reduceContent[findIndex]?.title)
+                return;
+
 
             } else if (findIndex > -1 && findItem?.isLocked) {
                 setPickedType(reduceContent[findIndex]?.type)
                 setBodyTitle(reduceContent[findIndex]?.title)
                 setLocked(true)
+                return;
+
             } else {
                 setContents([])
                 setLocked(false)
+                return;
+
 
             }
         }

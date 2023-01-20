@@ -155,10 +155,12 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
                             if (!content?.isLocked) {
                                 setContents(content?.items)
                                 setLocked(false)
+                                return;
 
                             }else{
                                 setLocked(true)
                                 setContents([])
+                                return;
 
                             }
 
