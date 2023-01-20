@@ -1906,7 +1906,7 @@ export function UserInfoCard({
         <td className={clsx.user__info}>{course}</td>
       )}
       {enrolled && <td className={clsx.user__info}>{enrolled}</td>}
-      {comp === "History" && <td className={clsx.user__info}>{status}</td>}
+      {comp === "Category" && <td className={clsx.user__info}>{status}</td>}
 
       {(comp === "Courses" || comp === "Category") && (
         <td className={clsx.user__info}>{name}</td>
@@ -4551,6 +4551,7 @@ export function Fees() {
   const tableHeaders = [
     "No",
     "Name",
+    "User ID",
     "Title",
     "Date",
     "Course Price",
@@ -4628,7 +4629,8 @@ export function Fees() {
                         type,
                         bootcampPrice,
                         bootcampName,
-                        paymentId
+                        paymentId,
+                        userId
                       },
                       i
                     ) => (
@@ -4638,6 +4640,7 @@ export function Fees() {
                         enrolled={studentName}
                         comp="Category"
                         name={bootcampName}
+                        status={userId}
                         coursePrice={createdAt ? new Intl.DateTimeFormat('en-US').format(new Date(createdAt)) : ""}
                         date={courseName}
                         pack={bootcampPrice ? `$ ${bootcampPrice}`: "-"}

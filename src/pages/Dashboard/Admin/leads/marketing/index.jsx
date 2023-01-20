@@ -145,7 +145,6 @@ export default function Market() {
         <div className={clsx.admin__student}>
           {/* <h3>AdLeads</h3> */}
           <div className="row w-100 mt-4">      
-
               <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <MarketingLeads />
@@ -270,12 +269,11 @@ function MarketingLeads(){
                     </thead>
 
                     <tbody>
-                        {
-                            data?.filter(item => (new Intl.DateTimeFormat('en-US').format(new Date(item?.createdAt)).includes(dateFilter))).map((item, index) => (
-                                <TableRow  index={index} item={item}  key={index} />
-                            ))
-                        }
-
+                      {
+                          data?.filter(item => (new Intl.DateTimeFormat('en-US').format(new Date(item?.createdAt)).includes(dateFilter))).map((item, index) => (
+                              <TableRow  index={index} item={item}  key={index} />
+                          ))
+                      }
                     </tbody>
                 </table>
             }
@@ -317,10 +315,10 @@ function TableRow({item, index}){
     <tr >
       <td>{index + 1}</td>
       <td>{new Intl.DateTimeFormat('en-US').format(new Date(item?.createdAt))}</td>
-      <td>{item.fullName ? item.fullName : `${item.firstName} ${item.lastName}` }</td>
-      <td>{item.email}</td>
-      <td>{item.phone}</td>
-      <td>{item.program}</td>
+      <td>{item?.fullName ? item.fullName : `${item.firstName} ${item.lastName}` }</td>
+      <td>{item?.email}</td>
+      <td>{item?.phone ? item.phone : item?.kyc[0]?.phone}</td>
+      <td>{item?.program}</td>
       <td><button className="btn btn-outline-danger" onClick={()=>handleDelete()}>Delete</button></td>
   </tr>
   )

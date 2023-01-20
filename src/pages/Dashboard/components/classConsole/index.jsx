@@ -45,20 +45,19 @@ import {
 import { Link, useNavigate, useLocation, useParams, useSearchParams } from "react-router-dom";
 import clsx from "../styles.module.css";
 import { AdvancedError } from "../../../../classes";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CLASSID, KEY } from "../../../../constants";
 import { useLocalStorage } from "../../../../hooks";
 
-
-import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import File from "./File"
 import Quiz from "./Quiz"
 import Note from "./Note"
-import { GiTrumpet } from "react-icons/gi";
 
+import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd"
+import styled from "styled-components";
 
 const popIcon = [
   {
@@ -271,6 +270,7 @@ export function goBack(pathname) {
   }
 }
 
+const SidebarDiv = styled.div``
 function Sidebar({ Toggle, side }) {
   const {
     generalState: { classConsole },
@@ -280,7 +280,7 @@ function Sidebar({ Toggle, side }) {
   } = useAuth();
 
   // const {classId} = useParams()
-
+  const [domainData, setDomainData] = useState([])
   const { pathname } = useLocation();
   const { getItem } = useLocalStorage();
   const navigate = useNavigate();
@@ -308,9 +308,13 @@ function Sidebar({ Toggle, side }) {
     }
   }
 
-  const getDomains = useQuery(["fetch domains", courseId], () =>
-    fetchDomains(userdata.token, courseId)
-  );
+  const getDomains = useQuery(["fetch domains", courseId], () => fetchDomains(userdata.token, courseId), {
+    onSuccess: res => {
+      if(res.success){
+        setDomainData(res.data)
+      }
+    }
+  } );
 
   // useEffect(()=>{
   //   if(getDomains?.data?.data?.length > 0){
@@ -318,85 +322,129 @@ function Sidebar({ Toggle, side }) {
   //   }
   // }, [getDomains?.data?.data])
 
+  function onDragEnd(result){
+    console.log({result})
+
+    const {destination, source, draggableId} = result;
+
+    if(!destination){
+      return
+    }
+    
+    if(destination.index === source.index){
+      return
+    }
+    
+    // get domains state
+    console.log({domainData})
+    let newData = domainData
+    let movedItem = domainData.find(item => item._id === draggableId)
+    newData.splice(source.index, 1)
+    newData.splice(destination.index, 0, movedItem)
+    console.log({newData})
+    setDomainData(newData)
+
+  }
+
+
   return (
     // <article className={style.class_sidebar }>
-    <>
-      <article
-        className={`${classConsole.sidebar ? style.open : style.close} ${style.class_sidebar
-          }`}
-      >
-        <Link to="/">
-          <Logosm />
-        </Link>
+    <DragDropContext
+      onDragEnd={onDragEnd}
 
-        {!studentpath ? (
+    >
           <>
-            <div className={style.course_content}>
-              <p>Course content</p>
-              {getDomains?.data?.data?.map((domain) => (
-                <Accord {...domain} />
-              ))}
-            </div>
-            <div className={`${style.create_content_button} ${style.white}`}>
-              <button onClick={Toggle}>
-                <i>
-                  <AiOutlinePlus />
-                </i>
-                <span>New Content</span>
-                <i>
-                  <BsThreeDotsVertical />
-                </i>
-              </button>
-            </div>
+        <article
+          className={`${classConsole.sidebar ? style.open : style.close} ${style.class_sidebar
+            }`}
+        >
+          <Link to="/">
+            <Logosm />
+          </Link>
 
-            <Link className="d-inline-flex" to={goBack()}>
-              <button className={style.back_button} style={{ width: "100%" }}>Back to Dashboard</button>
-            </Link>
-          </>
-        ) : (
-          <>
-            <div className={style.course_content}>
-              <div className={`${style.create_content_button} ${style.blue}`}>
-                <button>
-                  <Link to={"myclasses"}>
-                    <span>My Classes</span>
-                  </Link>
+          {!studentpath ? (
+            <>
+              <Droppable droppableId={courseId}>
+                {
+                  (provided)=> (
+                    <div
+                      className={style.course_content} 
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      <p>Course content</p>
+                      {getDomains?.data?.data?.map((domain, index) => (
+                        <Accord {...domain} index={index} key={domain._id} all={domain} />
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )
+                }
+              </Droppable>
+              <div className={`${style.create_content_button} ${style.white}`}>
+                <button onClick={Toggle}>
+                  <i>
+                    <AiOutlinePlus />
+                  </i>
+                  <span>New Content</span>
+                  <i>
+                    <BsThreeDotsVertical />
+                  </i>
                 </button>
               </div>
 
-              <div className={`${style.create_content_button} ${style.blue}`}>
-                <button>
-                  <Link to={"assessments"}>
-                    <span>Assessments</span>
-                    <i>
-                      <BsThreeDotsVertical />
-                    </i>
-                  </Link>
-                </button>
-              </div>
+              <Link className="d-inline-flex" to={goBack()}>
+                <button className={style.back_button} style={{ width: "100%" }}>Back to Dashboard</button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className={style.course_content}>
+                <div className={`${style.create_content_button} ${style.blue}`}>
+                  <button>
+                    <Link to={"myclasses"}>
+                      <span>My Classes</span>
+                    </Link>
+                  </button>
+                </div>
 
-              {/* <div className={`${style.create_content_button} ${style.blue}`}>
-                <button>
-                  <Link to={`/student/console/myclasses/class/${classId}/live-class`}>
-                    <span>Live Classes</span>
-                   
-                  </Link>
-                </button>
-              </div> */}
-            </div>
-          </>
-        )}
-      </article>
-      <div
-        onClick={closeSidebar}
-        className={`d-lg-none ${clsx.overlay} ${classConsole.sidebar ? clsx.overlayopen : clsx.overlayclose
-          }`}
-      ></div>
-    </>
+                <div className={`${style.create_content_button} ${style.blue}`}>
+                  <button>
+                    <Link to={"assessments"}>
+                      <span>Assessments</span>
+                      <i>
+                        <BsThreeDotsVertical />
+                      </i>
+                    </Link>
+                  </button>
+                </div>
+
+                {/* <div className={`${style.create_content_button} ${style.blue}`}>
+                  <button>
+                    <Link to={`/student/console/myclasses/class/${classId}/live-class`}>
+                      <span>Live Classes</span>
+                    
+                    </Link>
+                  </button>
+                </div> */}
+              </div>
+            </>
+          )}
+        </article>
+        <div
+          onClick={closeSidebar}
+          className={`d-lg-none ${clsx.overlay} ${classConsole.sidebar ? clsx.overlayopen : clsx.overlayclose
+            }`}
+        ></div>
+      </>
+    </DragDropContext>
   );
 }
 
-export function Accord ({ name, _id, classId, description, creator,contentName, originalName, setOpen }) {
+const AccordDiv = styled.div` `
+
+
+export function Accord ({ name, _id, classId, description, creator,contentName, originalName, setOpen, index, all }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
@@ -487,66 +535,79 @@ function addSuiteContentToClass(id, contentName, originalName){
 const contentid = searchParams.get("content")
 
   return (
-    <div className={style.content_item}>
-      <div className={style.content_item_top}>
-        <i>
-          {details ? (
-            <BiCaretDown onClick={() => showDetails(!details)} />
-          ) : (
-            <BiCaretRight onClick={() => showDetails(!details)} />
-          )}
-        </i>
-        <span>{name}</span>
-        <AccordMenu type="domain" id={_id} />
-
-      </div>
-
+    <Draggable draggableId={_id} index={index}>
       {
-        details &&
-        (
-          // creator suite delete
-            creator ? 
-                mutation.isLoading  ?
+        (provided)=> (
 
-                <div className="spinner-border text-white">
-                  <div className="visually-hidden">Loading...</div>
-                </div>
-                :
-                <ul className={style.content_list}>
-                  {getDomainContent?.data?.data?.filter(item => item.domain === _id).filter(item=> item.type === "FILE_VIDEO").map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
-                    <li key={_id} className="d-flex position-relative" style={{cursor:"pointer"}}>
-                      <i>{IconType(type)}</i>
-                      <span>{title}</span>
-                      <AccordMenu type="content" id={_id} />
+          <div className={style.content_item} 
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
+
+
+          >
+            <div className={style.content_item_top}>
+              <i>
+                {details ? (
+                  <BiCaretDown onClick={() => showDetails(!details)} />
+                ) : (
+                  <BiCaretRight onClick={() => showDetails(!details)} />
+                )}
+              </i>
+              <span>{name}</span>
+              <AccordMenu type="domain" id={_id} domain={all} />
+
+            </div>
+
+            {
+              details &&
+              (
+                // creator suite delete
+                  creator ? 
+                      mutation.isLoading  ?
+
+                      <div className="spinner-border text-white">
+                        <div className="visually-hidden">Loading...</div>
+                      </div>
+                      :
+                      <ul className={style.content_list}>
+                        {getDomainContent?.data?.data?.filter(item => item.domain === _id).filter(item=> item.type === "FILE_VIDEO").map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
+                          <li key={_id} className="d-flex position-relative" style={{cursor:"pointer"}}>
+                            <i>{IconType(type)}</i>
+                            <span>{title}</span>
+                            <AccordMenu type="content" id={_id} />
+                          
+                              <i style={{position: "absolute", right: "10px", top: "50%", transform:"translateY(-50%)", zIndex:"200"}} onClick={() => addSuiteContentToClass(_id, contentName, originalName, classId)}>
+                                <FaPlus size="1.5rem" color="#fff" />
+                              </i>                  
+                          </li>
+                        ))}
+                      </ul>
                     
-                        <i style={{position: "absolute", right: "10px", top: "50%", transform:"translateY(-50%)", zIndex:"200"}} onClick={() => addSuiteContentToClass(_id, contentName, originalName, classId)}>
-                          <FaPlus size="1.5rem" color="#fff" />
-                        </i>                  
-                    </li>
-                  ))}
-                </ul>
-              
-            :
-            <ul className={style.content_list}>
-              {getDomainContent?.data?.data?.filter(item => item.domain === _id).map(({ icon: Icon, title, link, _id, type, domain, classId, isLocked }) => (
-                <li key={_id} onClick={() => handleContentNavigation(_id, type, domain, classId)} className={`d-flex justify-content-between ${_id === contentid ? "activeClass" : ""}`} style={{cursor:"pointer"}}>
-                  <i>{IconType(type)}</i>
-                  <span>{title}</span>
-                  <div className="d-flex gap-3 align-items-center">
-                    {isLocked && <BiLockAlt />}
-                    <AccordMenu type="content" id={_id} domain={domain} classId={classId} locked={isLocked} />
-                  </div>
-                  
-                </li>
-              ))}
-            </ul>
+                  :
+                  <ul className={style.content_list}>
+                    {getDomainContent?.data?.data?.filter(item => item.domain === _id).map((item) => (
+                      <li key={item._id} onClick={() => handleContentNavigation(item._id, item.type, item.domain, item.classId)} className={`d-flex justify-content-between ${item._id === contentid ? "activeClass" : ""}`} style={{cursor:"pointer"}}>
+                        <i>{IconType(item.type)}</i>
+                        <span>{item.title}</span>
+                        <div className="d-flex gap-3 align-items-center">
+                          {item.isLocked && <BiLockAlt />}
+                          <AccordMenu type="content" content={item} id={item._id} domain={item.domain} classId={item.classId} locked={item.isLocked} />
+                        </div>
+                        
+                      </li>
+                    ))}
+                  </ul>
+              )
+            }
+          </div>
         )
       }
-    </div>
+    </Draggable>
   );
 }
 
-function AccordMenu({ id, type, classId , locked}) {
+function AccordMenu({ id, type, classId, locked, domain, content}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -560,7 +621,7 @@ function AccordMenu({ id, type, classId , locked}) {
   const navigate = useNavigate()
   const queryClient = useQueryClient();
 
-  const {teacherConsoleFunctions: {deleteDomain, deleteContent}} = useAuth();
+  const {teacherConsoleFunctions: {deleteDomain, deleteContent}, consoleFunctions:{updateDomain}} = useAuth();
 
   const contentdelete = useMutation(([token, id])=>deleteContent(token, id), {
     onSuccess: (res)=>{
@@ -580,6 +641,15 @@ function AccordMenu({ id, type, classId , locked}) {
       console.error(err)
     }
   })
+  const domaindUpdate = useMutation(([token, data, id])=>updateDomain(token, data, id), {
+    onSuccess: (res)=>{
+
+      queryClient.invalidateQueries("getDomainContent")
+    },
+    onError: (err)=>{
+      console.error(err)
+    }
+  })
 
   function deleteCnt(e){
       e.preventDefault()
@@ -590,6 +660,41 @@ function AccordMenu({ id, type, classId , locked}) {
         contentdelete.mutate([userdata.token, id])
       }
   }
+  
+
+  function handleLockToggle(status){
+    console.log("clicked")
+    let wantsTolock = status === "lock"
+    if(type === "domain"){
+      if(wantsTolock){
+        // lock
+        let domainData = domain
+        domainData.locked = true
+        console.log(domainData)
+        domaindUpdate.mutate([userdata.token, domainData, id])
+        return
+      }
+      // unlock
+      let domainData = domain
+        domainData.locked = true
+        console.log(domainData)
+        domaindUpdate.mutate([userdata.token, domainData, id])
+
+    }else {
+      if(wantsTolock){
+        // lock
+        let contentData = content
+        contentData.locked = true
+        console.log(contentData)
+        return
+      }
+      // unlock
+      let contentData = content
+        contentData.locked = true
+        console.log(contentData)
+    }
+  }
+
   return (
     <div style={{marginLeft:"auto"}}>
       <i
@@ -613,9 +718,9 @@ function AccordMenu({ id, type, classId , locked}) {
         {/* <MenuItem onClick={handleClose}>Edit content</MenuItem> */}
        {
         locked ? 
-        <MenuItem onClick={handleClose}>Unlock content</MenuItem>
+        <MenuItem onClick={()=>handleLockToggle("unlock")}>Unlock content</MenuItem>
         :
-        <MenuItem onClick={handleClose}>Lock content</MenuItem>
+        <MenuItem onClick={()=>handleLockToggle("lock")}>Lock content</MenuItem>
       } 
         <MenuItem onClick={deleteCnt}>Delete content</MenuItem>
       </Menu>
