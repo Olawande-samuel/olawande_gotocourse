@@ -374,7 +374,7 @@ function Sidebar({ Toggle, side }) {
                     >
                       <p>Course content</p>
                       {getDomains?.data?.data?.map((domain, index) => (
-                        <Accord {...domain} index={index} key={domain._id} />
+                        <Accord {...domain} index={index} key={domain._id} all={domain} />
                       ))}
                       {provided.placeholder}
                     </div>
@@ -444,7 +444,7 @@ function Sidebar({ Toggle, side }) {
 const AccordDiv = styled.div` `
 
 
-export function Accord ({ name, _id, classId, description, creator,contentName, originalName, setOpen, index }) {
+export function Accord ({ name, _id, classId, description, creator,contentName, originalName, setOpen, index, all }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
@@ -555,7 +555,7 @@ const contentid = searchParams.get("content")
                 )}
               </i>
               <span>{name}</span>
-              <AccordMenu type="domain" id={_id} />
+              <AccordMenu type="domain" id={_id} domain={all} />
 
             </div>
 
@@ -586,13 +586,13 @@ const contentid = searchParams.get("content")
                     
                   :
                   <ul className={style.content_list}>
-                    {getDomainContent?.data?.data?.filter(item => item.domain === _id).map(({ icon: Icon, title, link, _id, type, domain, classId, isLocked }) => (
-                      <li key={_id} onClick={() => handleContentNavigation(_id, type, domain, classId)} className={`d-flex justify-content-between ${_id === contentid ? "activeClass" : ""}`} style={{cursor:"pointer"}}>
-                        <i>{IconType(type)}</i>
-                        <span>{title}</span>
+                    {getDomainContent?.data?.data?.filter(item => item.domain === _id).map((item) => (
+                      <li key={item._id} onClick={() => handleContentNavigation(item._id, item.type, item.domain, item.classId)} className={`d-flex justify-content-between ${item._id === contentid ? "activeClass" : ""}`} style={{cursor:"pointer"}}>
+                        <i>{IconType(item.type)}</i>
+                        <span>{item.title}</span>
                         <div className="d-flex gap-3 align-items-center">
-                          {isLocked && <BiLockAlt />}
-                          <AccordMenu type="content" id={_id} domain={domain} classId={classId} locked={isLocked} />
+                          {item.isLocked && <BiLockAlt />}
+                          <AccordMenu type="content" content={item} id={item._id} domain={item.domain} classId={item.classId} locked={item.isLocked} />
                         </div>
                         
                       </li>
@@ -607,7 +607,7 @@ const contentid = searchParams.get("content")
   );
 }
 
-function AccordMenu({ id, type, classId , locked}) {
+function AccordMenu({ id, type, classId, locked, domain, content}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -621,7 +621,7 @@ function AccordMenu({ id, type, classId , locked}) {
   const navigate = useNavigate()
   const queryClient = useQueryClient();
 
-  const {teacherConsoleFunctions: {deleteDomain, deleteContent}} = useAuth();
+  const {teacherConsoleFunctions: {deleteDomain, deleteContent}, consoleFunctions:{updateDomain, updateContent}} = useAuth();
 
   const contentdelete = useMutation(([token, id])=>deleteContent(token, id), {
     onSuccess: (res)=>{
@@ -641,6 +641,24 @@ function AccordMenu({ id, type, classId , locked}) {
       console.error(err)
     }
   })
+  const domainUpdate = useMutation(([token, data, id])=>updateDomain(token, data, id), {
+    onSuccess: (res)=>{
+
+      queryClient.invalidateQueries("getDomainContent")
+    },
+    onError: (err)=>{
+      console.error(err)
+    }
+  })
+  const contentUpdate = useMutation(([token, data, id])=>updateDomain(token, data, id), {
+    onSuccess: (res)=>{
+
+      queryClient.invalidateQueries("getDomainContent")
+    },
+    onError: (err)=>{
+      console.error(err)
+    }
+  })
 
   function deleteCnt(e){
       e.preventDefault()
@@ -651,6 +669,43 @@ function AccordMenu({ id, type, classId , locked}) {
         contentdelete.mutate([userdata.token, id])
       }
   }
+  
+
+  function handleLockToggle(status){
+    console.log({status})
+    let wantsTolock = status === "lock"
+    if(type === "domain"){
+      if(wantsTolock){
+        // lock
+        let domainData = domain
+        domainData.isLocked = true
+        console.log(domainData)
+        domainUpdate.mutate([userdata.token, domainData, id])
+        return
+      }
+      // unlock
+      let domainData = domain
+        domainData.isLocked = false
+        console.log(domainData)
+        domainUpdate.mutate([userdata.token, domainData, id])
+
+    }else {
+      if(wantsTolock){
+        // lock
+        let contentData = content
+        contentData.isLocked = true
+        contentData.domainId = contentData.domain
+        domainUpdate.mutate([userdata.token, contentData, id])
+        return
+      }
+      // unlock
+      let contentData = content
+        contentData.isLocked = false
+        contentData.domainId = contentData.domain
+        domainUpdate.mutate([userdata.token, contentData, id])
+    }
+  }
+
   return (
     <div style={{marginLeft:"auto"}}>
       <i
@@ -674,9 +729,9 @@ function AccordMenu({ id, type, classId , locked}) {
         {/* <MenuItem onClick={handleClose}>Edit content</MenuItem> */}
        {
         locked ? 
-        <MenuItem onClick={handleClose}>Unlock content</MenuItem>
+        <MenuItem onClick={()=>handleLockToggle("unlock")}>Unlock content</MenuItem>
         :
-        <MenuItem onClick={handleClose}>Lock content</MenuItem>
+        <MenuItem onClick={()=>handleLockToggle("lock")}>Lock content</MenuItem>
       } 
         <MenuItem onClick={deleteCnt}>Delete content</MenuItem>
       </Menu>

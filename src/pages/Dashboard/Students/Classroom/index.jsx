@@ -530,23 +530,44 @@ const FileComponent = (contentItem) => {
 
 
     function downloadContent(file, fileName, type) {
+        if (getExtention(type) === "image") {
 
-        axios({
-            url: file,
-            method: 'GET',
-            responseType: 'blob',
-        }).then((response) => {
-            console.log({ response })
-            const href = URL.createObjectURL(response.data);
-            const link = document.createElement('a');
-            link.href = href;
-            link.setAttribute('download', fileName);
-            document.body.appendChild(link);
-            link.click();
+            axios({
+                url: `${process.env.REACT_APP_IMAGEURL}${file}`,
+                method: 'GET',
+                responseType: 'blob',
+            }).then((response) => {
+                console.log({ response })
+                const href = URL.createObjectURL(response.data);
+                const link = document.createElement('a');
+                link.href = href;
+                link.setAttribute('download', fileName);
+                document.body.appendChild(link);
+                link.click();
 
-            document.body.removeChild(link);
-            URL.revokeObjectURL(href);
-        });
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        } else {
+            axios({
+                url: `${process.env.REACT_APP_VIDEOURL}${file}`,
+                method: 'GET',
+                responseType: 'blob',
+            }).then((response) => {
+                console.log({ response })
+                const href = URL.createObjectURL(response.data);
+                const link = document.createElement('a');
+                link.href = href;
+                link.setAttribute('download', fileName);
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+
+                URL.revokeObjectURL(href);
+            });
+        }
+
 
     }
     return (
@@ -605,13 +626,8 @@ const FileComponent = (contentItem) => {
 const QuizComponent = ({ contentItem, userdata }) => {
     console.log(contentItem);
     const { consoleFunctions: { attemptQuiz } } = useAuth();
-    const [note, setNote] = useState("")
-    const [myAnswers, setMyAnswers] = useState([
-        {
-            questionId: "",
-            answers: []
-        }
-    ])
+    const [note, setNotes] = useState([])
+    const [myAnswers, setMyAnswers] = useState([])
 
     // questions:[
     //     {
@@ -629,34 +645,48 @@ const QuizComponent = ({ contentItem, userdata }) => {
 
     // }]
 
+    function setNote(text, quizId, questionId, questionIndex, quizIndex) {
+        // for editor content
+        let allNotes = note
+        allNotes[quizIndex] = text
+        setNotes(allNotes)
 
-    const handleInputChange = (e, index, answerId, questionId) => {
-        const { name, value } = e.target;
-        let list = [...myAnswers]
-        console.log({ list });
-        if (list[index]) {
-            let answersLength = list[index][name]?.length
-            let existingAnswer = list[index][name]?.findIndex(item => item === answerId);
-            if (existingAnswer >= 0 && answersLength > 1) {
-                setMyAnswers(list[index][name].splice(existingAnswer, 1))
-            } else {
-                setMyAnswers(list)
-
+        // For Answers
+        let allAnswers = myAnswers
+        let questionForThis = allAnswers.findIndex(item => item.questionId === questionId)
+        if (questionForThis === -1) {
+            let thisAnswer = {
+                questionId: questionId,
+                answers: [text]
             }
+            setMyAnswers([...myAnswers, thisAnswer])
         } else {
+            let thisAnswer = {
+                questionId: questionId,
+                answers: [text]
+            }
+            allAnswers.splice(questionForThis, 1, thisAnswer)
+            setMyAnswers(allAnswers)
 
-            let newAnswer = {
-                questionId,
-                answers: [
-                    ...list[index][name],
-                    answerId
-                ]
-            };
+        }
+    }
 
-            list[index] = newAnswer;
+
+    const handleInputChange = (e, questionId, index) => {
+        const { value } = e.target;
+        let list = [...myAnswers]
+        console.log({ questionId })
+        let thisOption = list.findIndex(item => item.questionId === questionId)
+
+        console.log("questionId2Option: " + thisOption)
+        if (thisOption === -1) {
+            list.push({ questionId: questionId, answers: [value] })
+        } else {
+            list.splice(thisOption, 1, { questionId: questionId, answers: [value] })
         }
         setMyAnswers(list)
     }
+
 
     const AnswerQuiz = async (type) => {
         if (type === "theory") {
@@ -707,7 +737,7 @@ const QuizComponent = ({ contentItem, userdata }) => {
                                             <>
                                                 {opt.title}
                                                 <Answer>
-                                                    <ReactQuill theme="snow" value={note} onChange={setNote} />
+                                                    <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, opt?._id, i, index)} />
                                                 </Answer>
 
                                                 <QuizAction>
@@ -717,7 +747,8 @@ const QuizComponent = ({ contentItem, userdata }) => {
                                                     </QuizButton>
                                                 </QuizAction>
 
-                                            </>))
+                                            </>
+                                        ))
 
 
                                     }
@@ -729,10 +760,10 @@ const QuizComponent = ({ contentItem, userdata }) => {
                                                 <Answer>
                                                     <label for="vehicle1">
                                                         <input
-                                                            type="checkbox"
-                                                            // value={opt.title}
+                                                            type="radio"
+                                                            value={opt._id}
                                                             name="answers"
-                                                            onChange={e => handleInputChange(e, i, opt._id, ques?._id)} />
+                                                            onChange={e => handleInputChange(e, ques?._id, index)} />
                                                         {opt.title}
                                                     </label>
 
@@ -882,11 +913,10 @@ const Classroom = () => {
     const MoveButton = (type) => {
         if (reduceContent?.length > 0 && type === "next") {
             const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
-            const findItem = reduceContent?.find(content => content.contentId === contentId);
-            // console.log({ findIndex });
+            console.log({ findIndex }); 
+           
 
 
-            console.log({findItem});
             let val = ""
             if (findIndex !== (reduceContent?.length - 1)) {
                 val = findIndex + 1;
@@ -894,21 +924,23 @@ const Classroom = () => {
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
-                if (!findItem?.isLocked) {
+                if (!reduceContent[val]?.isLocked) {
+                    console.log("item is logged");
                     setLocked(false)
                     setPickedType(reduceContent[val]?.type)
                     setContents(reduceContent[val]?.items)
                     setBodyTitle(reduceContent[val]?.title)
                     return;
 
-                }else{
+                } else {
+                    setContents([])
+                    console.log("item is  not locked");
                     setLocked(true)
                     setPickedType(reduceContent[val]?.type)
                     setBodyTitle(reduceContent[val]?.title)
                     return;
 
                 }
-
 
             } else {
                 val = findIndex;
@@ -916,14 +948,17 @@ const Classroom = () => {
                     contentId: reduceContent[val]?.contentId
                 })
 
-                if (!findItem?.isLocked) {
+                if (!reduceContent[val]?.isLocked) {
+                    console.log("item is locked");
                     setLocked(false)
                     setContents(reduceContent[val]?.items)
                     setBodyTitle(reduceContent[val]?.title)
                     setPickedType(reduceContent[val]?.type)
                     return;
 
-                }else{
+                } else {
+                    setContents([])
+                    console.log("item is  not locked");
                     setLocked(true)
                     setBodyTitle(reduceContent[val]?.title)
                     setPickedType(reduceContent[val]?.type)
@@ -931,11 +966,9 @@ const Classroom = () => {
 
                 }
 
-
             }
         } else if (reduceContent?.length > 0 && type === "prev") {
             const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
-            const findItem = reduceContent?.find(content => content.contentId === contentId);
 
             let val = ""
             if (findIndex !== 0) {
@@ -943,14 +976,18 @@ const Classroom = () => {
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
-                if (!findItem?.isLocked) {
+                if (!reduceContent[val]?.isLocked) {
+                    console.log("item is locked");
+
                     setLocked(false)
                     setPickedType(reduceContent[val]?.type)
                     setContents(reduceContent[val]?.items)
                     setBodyTitle(reduceContent[val]?.title)
                     return;
 
-                }else{
+                } else {
+                    console.log("item is  not locked");
+                    setContents([])
                     setLocked(true)
                     setPickedType(reduceContent[val]?.type)
                     setBodyTitle(reduceContent[val]?.title)
@@ -958,20 +995,20 @@ const Classroom = () => {
 
                 }
 
-
             } else {
                 val = findIndex;
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
-                if (!findItem?.isLocked) {
+                if (!reduceContent[val]?.isLocked) {
                     setLocked(false)
                     setPickedType(reduceContent[val]?.type)
                     setContents(reduceContent[val]?.items)
                     setBodyTitle(reduceContent[val]?.title)
                     return;
 
-                }else{
+                } else {
+                    setContents([])
                     setLocked(true)
                     setPickedType(reduceContent[val]?.type)
                     setBodyTitle(reduceContent[val]?.title)
@@ -1176,7 +1213,7 @@ const Classroom = () => {
                                         <QuizAction >
                                             <MarkButton
                                                 display={content?.attemptedBy?.includes(userdata.id) ? true : false}
-                                                // onClick={() => handleFileCompleted(content.contentId, content._id)}
+                                            // onClick={() => handleFileCompleted(content.contentId, content._id)}
                                             >
                                                 Mark as Completed
                                             </MarkButton>

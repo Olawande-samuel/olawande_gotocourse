@@ -4567,6 +4567,39 @@ export const consoleFunctions = {
             }
         }
     },
+    updateDomain: async function (token, data,  id) {
+        try {
+            const res = await axios.patch(`${baseURL}/classes/domain/update/${id}`, JSON.stringify(data),
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
     fetchContents: async function (token, domainId) {
         try {
             const res = await axios.get(`${baseURL}/classes/contents/${domainId}`,
@@ -4603,6 +4636,40 @@ export const consoleFunctions = {
     addContent: async function (token, data) {
         try {
             const res = await axios.post(`${baseURL}/classes/content/add`, JSON.stringify(data),
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+                console.log("something went wrong")
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    updateContent: async function (token, data, id) {
+        try {
+            const res = await axios.patch(`${baseURL}/classes/content/update/${id}`, JSON.stringify(data),
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,

@@ -1197,10 +1197,10 @@ function MyApp({mixpanel}) {
                     path="login"
                     element={<AdminLogin />}
                   />
-                  <Route
+                  {/* <Route
                     path="signup"
                     element={<AdminSignup />}
-                  />
+                  /> */}
                 </Route>
               </Route>
 
