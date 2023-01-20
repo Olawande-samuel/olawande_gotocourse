@@ -530,10 +530,10 @@ const FileComponent = (contentItem) => {
 
 
     function downloadContent(file, fileName, type) {
-        if(getExtention(type) === "image" ){
+        if (getExtention(type) === "image") {
 
             axios({
-                url:  `${process.env.REACT_APP_IMAGEURL}${file}`,
+                url: `${process.env.REACT_APP_IMAGEURL}${file}`,
                 method: 'GET',
                 responseType: 'blob',
             }).then((response) => {
@@ -544,7 +544,7 @@ const FileComponent = (contentItem) => {
                 link.setAttribute('download', fileName);
                 document.body.appendChild(link);
                 link.click();
-    
+
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
             });
@@ -561,13 +561,13 @@ const FileComponent = (contentItem) => {
                 link.setAttribute('download', fileName);
                 document.body.appendChild(link);
                 link.click();
-    
+
                 document.body.removeChild(link);
-                
+
                 URL.revokeObjectURL(href);
             });
         }
-        
+
 
     }
     return (
@@ -645,7 +645,7 @@ const QuizComponent = ({ contentItem, userdata }) => {
 
     // }]
 
-    function setNote(text, quizId, questionId, questionIndex, quizIndex ) {
+    function setNote(text, quizId, questionId, questionIndex, quizIndex) {
         // for editor content
         let allNotes = note
         allNotes[quizIndex] = text
@@ -654,13 +654,13 @@ const QuizComponent = ({ contentItem, userdata }) => {
         // For Answers
         let allAnswers = myAnswers
         let questionForThis = allAnswers.findIndex(item => item.questionId === questionId)
-        if(questionForThis === -1){
+        if (questionForThis === -1) {
             let thisAnswer = {
                 questionId: questionId,
                 answers: [text]
             }
             setMyAnswers([...myAnswers, thisAnswer])
-        }else {
+        } else {
             let thisAnswer = {
                 questionId: questionId,
                 answers: [text]
@@ -673,16 +673,16 @@ const QuizComponent = ({ contentItem, userdata }) => {
 
 
     const handleInputChange = (e, questionId, index) => {
-        const {value } = e.target;
+        const { value } = e.target;
         let list = [...myAnswers]
-        console.log({questionId})
+        console.log({ questionId })
         let thisOption = list.findIndex(item => item.questionId === questionId)
 
         console.log("questionId2Option: " + thisOption)
-        if(thisOption === -1) {
-            list.push({questionId: questionId, answers: [value]})
-        }else {
-            list.splice(thisOption, 1, {questionId: questionId, answers: [value]})
+        if (thisOption === -1) {
+            list.push({ questionId: questionId, answers: [value] })
+        } else {
+            list.splice(thisOption, 1, { questionId: questionId, answers: [value] })
         }
         setMyAnswers(list)
     }
@@ -737,7 +737,7 @@ const QuizComponent = ({ contentItem, userdata }) => {
                                             <>
                                                 {opt.title}
                                                 <Answer>
-                                                    <ReactQuill theme="snow" value={note[index]} onChange={(e)=>setNote(e, ques?._id, opt?._id, i, index)} />
+                                                    <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, opt?._id, i, index)} />
                                                 </Answer>
 
                                                 <QuizAction>
@@ -913,8 +913,9 @@ const Classroom = () => {
     const MoveButton = (type) => {
         if (reduceContent?.length > 0 && type === "next") {
             const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
-            const findItem = reduceContent?.find(content => content.contentId === contentId);
-            // console.log({ findIndex });
+            console.log({ findIndex }); 
+           
+
 
             let val = ""
             if (findIndex !== (reduceContent?.length - 1)) {
@@ -923,18 +924,23 @@ const Classroom = () => {
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
-                if (!findItem?.isLocked) {
+                if (!reduceContent[val]?.isLocked) {
+                    console.log("item is logged");
                     setLocked(false)
                     setPickedType(reduceContent[val]?.type)
                     setContents(reduceContent[val]?.items)
                     setBodyTitle(reduceContent[val]?.title)
-                    return
-                }
-                setLocked(true)
-                setPickedType(reduceContent[val]?.type)
-                setBodyTitle(reduceContent[val]?.title)
-                // setContents([])
+                    return;
 
+                } else {
+                    setContents([])
+                    console.log("item is  not locked");
+                    setLocked(true)
+                    setPickedType(reduceContent[val]?.type)
+                    setBodyTitle(reduceContent[val]?.title)
+                    return;
+
+                }
 
             } else {
                 val = findIndex;
@@ -942,22 +948,27 @@ const Classroom = () => {
                     contentId: reduceContent[val]?.contentId
                 })
 
-                if (!findItem?.isLocked) {
+                if (!reduceContent[val]?.isLocked) {
+                    console.log("item is locked");
                     setLocked(false)
                     setContents(reduceContent[val]?.items)
                     setBodyTitle(reduceContent[val]?.title)
                     setPickedType(reduceContent[val]?.type)
-                    return
-                }
-                setLocked(true)
-                setBodyTitle(reduceContent[val]?.title)
-                setPickedType(reduceContent[val]?.type)
+                    return;
 
+                } else {
+                    setContents([])
+                    console.log("item is  not locked");
+                    setLocked(true)
+                    setBodyTitle(reduceContent[val]?.title)
+                    setPickedType(reduceContent[val]?.type)
+                    return;
+
+                }
 
             }
         } else if (reduceContent?.length > 0 && type === "prev") {
             const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
-            const findItem = reduceContent?.find(content => content.contentId === contentId);
 
             let val = ""
             if (findIndex !== 0) {
@@ -965,33 +976,45 @@ const Classroom = () => {
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
-                if (!findItem?.isLocked) {
+                if (!reduceContent[val]?.isLocked) {
+                    console.log("item is locked");
+
                     setLocked(false)
                     setPickedType(reduceContent[val]?.type)
                     setContents(reduceContent[val]?.items)
                     setBodyTitle(reduceContent[val]?.title)
-                    return
-                }
-                setLocked(true)
-                setPickedType(reduceContent[val]?.type)
-                setBodyTitle(reduceContent[val]?.title)
+                    return;
 
+                } else {
+                    console.log("item is  not locked");
+                    setContents([])
+                    setLocked(true)
+                    setPickedType(reduceContent[val]?.type)
+                    setBodyTitle(reduceContent[val]?.title)
+                    return;
+
+                }
 
             } else {
                 val = findIndex;
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
-                if (!findItem?.isLocked) {
+                if (!reduceContent[val]?.isLocked) {
                     setLocked(false)
                     setPickedType(reduceContent[val]?.type)
                     setContents(reduceContent[val]?.items)
                     setBodyTitle(reduceContent[val]?.title)
-                    return
+                    return;
+
+                } else {
+                    setContents([])
+                    setLocked(true)
+                    setPickedType(reduceContent[val]?.type)
+                    setBodyTitle(reduceContent[val]?.title)
+                    return;
+
                 }
-                setLocked(true)
-                setPickedType(reduceContent[val]?.type)
-                setBodyTitle(reduceContent[val]?.title)
 
             }
         }
@@ -1008,14 +1031,20 @@ const Classroom = () => {
                 setPickedType(reduceContent[findIndex]?.type)
                 setContents(reduceContent[findIndex]?.items)
                 setBodyTitle(reduceContent[findIndex]?.title)
+                return;
+
 
             } else if (findIndex > -1 && findItem?.isLocked) {
                 setPickedType(reduceContent[findIndex]?.type)
                 setBodyTitle(reduceContent[findIndex]?.title)
                 setLocked(true)
+                return;
+
             } else {
                 setContents([])
                 setLocked(false)
+                return;
+
 
             }
         }
@@ -1184,7 +1213,7 @@ const Classroom = () => {
                                         <QuizAction >
                                             <MarkButton
                                                 display={content?.attemptedBy?.includes(userdata.id) ? true : false}
-                                                // onClick={() => handleFileCompleted(content.contentId, content._id)}
+                                            // onClick={() => handleFileCompleted(content.contentId, content._id)}
                                             >
                                                 Mark as Completed
                                             </MarkButton>
