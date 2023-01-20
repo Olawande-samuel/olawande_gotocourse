@@ -450,12 +450,12 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
 					/>
 				</div>
 				<p>{title}</p>
-				{type === "video/mp4" || type.includes("video") ? (
+				{type === "video/mp4" || type?.includes("video") ? (
 					<video
 						src={`${file}`}
 						controls
 						autoPlay
-						type={type.includes("matroska") && type}
+						type={type?.includes("matroska") && type}
 						style={{
 							width: "100%",
 							height: "100%",

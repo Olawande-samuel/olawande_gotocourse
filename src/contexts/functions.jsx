@@ -5708,7 +5708,7 @@ export const teacherConsoleFunctions = {
             }
         }
     },
-    deleteLiveSchedule: async function (token, id) {
+   deleteLiveSchedule : async function (token, id) {
         try {
             const res = await axios.delete(`${baseURL}/rooms/video/${id}`,
                 {
