@@ -629,21 +629,6 @@ const QuizComponent = ({ contentItem, userdata }) => {
     const [note, setNotes] = useState([])
     const [myAnswers, setMyAnswers] = useState([])
 
-    // questions:[
-    //     {
-    //         questionId: 1,
-    //         answers:[answer1id, snser2id]
-    //     },
-    //     {
-    //         questionId: 2,
-    //         answers:[answer1id]
-    //     },
-    //     {
-    //         questionId: 3,
-    //         answers:[answer1id]
-    //     },
-
-    // }]
 
     function setNote(text, quizId, questionId, questionIndex, quizIndex) {
         // for editor content
@@ -689,11 +674,6 @@ const QuizComponent = ({ contentItem, userdata }) => {
 
 
     const AnswerQuiz = async (type) => {
-        if (type === "theory") {
-            const { data } = await attemptQuiz(userdata?.token, contentItem._id, myAnswers)
-            console.log({ data });
-
-        }
         const { data } = await attemptQuiz(userdata?.token, contentItem._id, myAnswers)
         console.log({ data });
     }
