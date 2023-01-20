@@ -621,7 +621,7 @@ function AccordMenu({ id, type, classId, locked, domain, content}) {
   const navigate = useNavigate()
   const queryClient = useQueryClient();
 
-  const {teacherConsoleFunctions: {deleteDomain, deleteContent}, consoleFunctions:{updateDomain}} = useAuth();
+  const {teacherConsoleFunctions: {deleteDomain, deleteContent}, consoleFunctions:{updateDomain, updateContent}} = useAuth();
 
   const contentdelete = useMutation(([token, id])=>deleteContent(token, id), {
     onSuccess: (res)=>{
@@ -641,7 +641,16 @@ function AccordMenu({ id, type, classId, locked, domain, content}) {
       console.error(err)
     }
   })
-  const domaindUpdate = useMutation(([token, data, id])=>updateDomain(token, data, id), {
+  const domainUpdate = useMutation(([token, data, id])=>updateDomain(token, data, id), {
+    onSuccess: (res)=>{
+
+      queryClient.invalidateQueries("getDomainContent")
+    },
+    onError: (err)=>{
+      console.error(err)
+    }
+  })
+  const contentUpdate = useMutation(([token, data, id])=>updateDomain(token, data, id), {
     onSuccess: (res)=>{
 
       queryClient.invalidateQueries("getDomainContent")
@@ -663,35 +672,37 @@ function AccordMenu({ id, type, classId, locked, domain, content}) {
   
 
   function handleLockToggle(status){
-    console.log("clicked")
+    console.log({status})
     let wantsTolock = status === "lock"
     if(type === "domain"){
       if(wantsTolock){
         // lock
         let domainData = domain
-        domainData.locked = true
+        domainData.isLocked = true
         console.log(domainData)
-        domaindUpdate.mutate([userdata.token, domainData, id])
+        domainUpdate.mutate([userdata.token, domainData, id])
         return
       }
       // unlock
       let domainData = domain
-        domainData.locked = true
+        domainData.isLocked = false
         console.log(domainData)
-        domaindUpdate.mutate([userdata.token, domainData, id])
+        domainUpdate.mutate([userdata.token, domainData, id])
 
     }else {
       if(wantsTolock){
         // lock
         let contentData = content
-        contentData.locked = true
-        console.log(contentData)
+        contentData.isLocked = true
+        contentData.domainId = contentData.domain
+        domainUpdate.mutate([userdata.token, contentData, id])
         return
       }
       // unlock
       let contentData = content
-        contentData.locked = true
-        console.log(contentData)
+        contentData.isLocked = false
+        contentData.domainId = contentData.domain
+        domainUpdate.mutate([userdata.token, contentData, id])
     }
   }
 

@@ -4569,7 +4569,7 @@ export const consoleFunctions = {
     },
     updateDomain: async function (token, data,  id) {
         try {
-            const res = await axios.post(`${baseURL}/classes/domain/update/${id}`, JSON.stringify(data),
+            const res = await axios.patch(`${baseURL}/classes/domain/update/${id}`, JSON.stringify(data),
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,
