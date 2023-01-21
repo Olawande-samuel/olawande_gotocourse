@@ -76,16 +76,16 @@ justify-content: space-between;
 
 
 const CompleteIcon = styled(MdCheckCircle)`
-    color: ${props => props.$isComplete ? 'var(--textBlue)' : 'rgba(0,0,0,.2)'}
+    color: ${props => props.$isComplete ? 'var(--textBlue)' : 'rgba(0,0,0,.2)'};
 `
 
 const Locked = styled(MdOutlineLock)`
-    color: rgba(0,0,0,.2);
+    color:   ${props => props.$isComplete ? 'var(--textBlue)' : 'rgba(0,0,0,.2)'};
 `
 
 
 
-const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData, setCompleted
+const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData, setCompleted, setLocked
     // setActive, active,
 }) => {
     const [active, setActive] = useState(false)
@@ -114,12 +114,12 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
     }
 
     const getLockedStatus = (contentId, items, lock) => {
-        // console.log({contentId}, {items});
+        // console.log({ contentId }, { items }, { lock });
         let findItem = items.find(item => item.contentId === contentId);
         if (findItem) {
-            return findItem?.locked && lock ? <Locked $isComplete={true} /> : <Locked />
+            return lock ? <Locked $isComplete={true} /> : <Locked />
         }
-        return <CompleteIcon />
+        return <Locked />
     }
 
     // console.log("data", contentsData[0]);
@@ -145,14 +145,22 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
                     <AttachmentContainer key={index} variant="outlined"
                         active={active ? true : false}
                         onClick={() => {
-                            if(!content?.isLocked){
-                                setSearchParams({
-                                    contentId: content.contentId
-                                })
-                                setActive(true)
+                            setSearchParams({
+                                contentId: content.contentId
+                            })
+                            setActive(true)
+                            setBodyTitle(content?.title)
+                            setPickedType(content?.type)
+
+                            if (!content?.isLocked) {
                                 setContents(content?.items)
-                                setPickedType(content?.type)
-                                setBodyTitle(content?.title)
+                                setLocked(false)
+                                return;
+
+                            }else{
+                                setLocked(true)
+                                setContents([])
+                                return;
 
                             }
 

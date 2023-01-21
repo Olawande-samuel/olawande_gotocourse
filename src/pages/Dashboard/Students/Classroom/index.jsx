@@ -20,6 +20,7 @@ import { useRef } from 'react';
 import axios from 'axios'
 import { ViewModal } from '../../components/classConsole/File';
 import emptyImg from "../../../../images/empty.png"
+import ReactQuill from 'react-quill';
 
 const Container = styled.div`
 position: relative;
@@ -518,10 +519,12 @@ const FileComponent = (contentItem) => {
     // console.log({ contentItem });
     const [open, setOpen] = useState(false)
 
+    console.log(contentItem.contentItem);
+
     const getExtention = (val) => {
         // console.log({ val });
 
-        if (val.split('/')[0] === "video") {
+        if (val?.split('/')[0] === "video") {
             return "video"
         } else return "image"
 
@@ -529,23 +532,44 @@ const FileComponent = (contentItem) => {
 
 
     function downloadContent(file, fileName, type) {
+        if (getExtention(type) === "image") {
 
-        axios({
-            url: file,
-            method: 'GET',
-            responseType: 'blob',
-        }).then((response) => {
-            console.log({ response })
-            const href = URL.createObjectURL(response.data);
-            const link = document.createElement('a');
-            link.href = href;
-            link.setAttribute('download', fileName);
-            document.body.appendChild(link);
-            link.click();
+            axios({
+                url: `${process.env.REACT_APP_IMAGEURL}${file}`,
+                method: 'GET',
+                responseType: 'blob',
+            }).then((response) => {
+                console.log({ response })
+                const href = URL.createObjectURL(response.data);
+                const link = document.createElement('a');
+                link.href = href;
+                link.setAttribute('download', fileName);
+                document.body.appendChild(link);
+                link.click();
 
-            document.body.removeChild(link);
-            URL.revokeObjectURL(href);
-        });
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        } else {
+            axios({
+                url: `${process.env.REACT_APP_VIDEOURL}${file}`,
+                method: 'GET',
+                responseType: 'blob',
+            }).then((response) => {
+                console.log({ response })
+                const href = URL.createObjectURL(response.data);
+                const link = document.createElement('a');
+                link.href = href;
+                link.setAttribute('download', fileName);
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+
+                URL.revokeObjectURL(href);
+            });
+        }
+
 
     }
     return (
@@ -562,7 +586,7 @@ const FileComponent = (contentItem) => {
                     <div>
                         <BodyActions>
                             <IconButton>
-                                <BiCloudDownload onClick={() => downloadContent(contentItem.contentItem.fileName, contentItem.contentItem.title, contentItem.contentItem.type)} />
+                             {contentItem?.contentItem?.downloadable &&  <BiCloudDownload onClick={() => downloadContent(contentItem.contentItem.fileName, contentItem.contentItem.title, contentItem.contentItem.type)} /> } 
                             </IconButton>
                             <CustomButton onClick={() => setOpen(true)}>Open</CustomButton>
                         </BodyActions>
@@ -578,7 +602,7 @@ const FileComponent = (contentItem) => {
 
                 <FileDisplay>
                     {getExtention(contentItem.contentItem.type) === "image" ? <img src={`${process.env.REACT_APP_IMAGEURL}${contentItem.contentItem.fileName}`} alt="" /> :
-                        <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem.contentItem.fileName}`} controls ></video>
+                        <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem.contentItem.fileName}`} controls controlsList="nodownload"></video>
                     }
 
                 </FileDisplay>
@@ -590,8 +614,8 @@ const FileComponent = (contentItem) => {
                 open={open}
                 setOpen={setOpen}
                 file={getExtention(contentItem.contentItem.type) === "image" ?
-                    `${process.env.REACT_APP_IMAGEURL}${contentItem.contentItem.fileName}` : 
-                `${process.env.REACT_APP_VIDEOURL}${contentItem.contentItem.fileName}`
+                    `${process.env.REACT_APP_IMAGEURL}${contentItem.contentItem.fileName}` :
+                    `${process.env.REACT_APP_VIDEOURL}${contentItem.contentItem.fileName}`
                 }
                 type={contentItem.contentItem.type}
                 title={contentItem.contentItem.title}
@@ -604,43 +628,59 @@ const FileComponent = (contentItem) => {
 const QuizComponent = ({ contentItem, userdata }) => {
     console.log(contentItem);
     const { consoleFunctions: { attemptQuiz } } = useAuth();
-    const [myAnswers, setMyAnswers] = useState({
-        questionId: "",
-        answers: []
-    })
-
-    // questions:[
-    //     {
-    //         questionId: 1,
-    //         answers:[answer1id, snser2id]
-    //     },
-    //     {
-    //         questionId: 2,
-    //         answers:[answer1id]
-    //     },
-    //     {
-    //         questionId: 3,
-    //         answers:[answer1id]
-    //     },
-
-    // }]
-
-    const [allAnswers, setAllAnswers] = useState([])
+    const [note, setNotes] = useState([])
+    const [myAnswers, setMyAnswers] = useState([])
 
 
-    useMemo(() => {
-        setAllAnswers([myAnswers])
-    }, [myAnswers])
+    function setNote(text, quizId, questionId, questionIndex, quizIndex) {
+        // for editor content
+        let allNotes = note
+        allNotes[quizIndex] = text
+        setNotes(allNotes)
+
+        // For Answers
+        let allAnswers = myAnswers
+        let questionForThis = allAnswers.findIndex(item => item.questionId === questionId)
+        if (questionForThis === -1) {
+            let thisAnswer = {
+                questionId: questionId,
+                answers: [text]
+            }
+            setMyAnswers([...myAnswers, thisAnswer])
+        } else {
+            let thisAnswer = {
+                questionId: questionId,
+                answers: [text]
+            }
+            allAnswers.splice(questionForThis, 1, thisAnswer)
+            setMyAnswers(allAnswers)
+
+        }
+    }
+
+
+    const handleInputChange = (e, questionId, index) => {
+        const { value } = e.target;
+        let list = [...myAnswers]
+        console.log({ questionId })
+        let thisOption = list.findIndex(item => item.questionId === questionId)
+
+        console.log("questionId2Option: " + thisOption)
+        if (thisOption === -1) {
+            list.push({ questionId: questionId, answers: [value] })
+        } else {
+            list.splice(thisOption, 1, { questionId: questionId, answers: [value] })
+        }
+        setMyAnswers(list)
+    }
+
+
+    const AnswerQuiz = async (type) => {
+        const { data } = await attemptQuiz(userdata?.token, contentItem._id, myAnswers)
+        console.log({ data });
+    }
 
     console.log({ myAnswers });
-    console.log({ allAnswers });
-
-    const AnswerQuiz = async () => {
-        const { data } = await attemptQuiz(userdata?.token, contentItem._id, allAnswers)
-        console.log({ data });
-
-
-    }
 
 
     return (
@@ -661,7 +701,7 @@ const QuizComponent = ({ contentItem, userdata }) => {
 
             </Quiz>
             <div>
-                {contentItem.questions.length > 0 && contentItem.questions.map((ques, index) => (
+                {contentItem?.questions?.length > 0 && contentItem?.questions.map((ques, index) => (
                     <Accordion >
                         <Accordion.Item eventKey={index} className="accord__body">
                             <Accordion.Header className="accord__header"> Question {index + 1}</Accordion.Header>
@@ -673,33 +713,62 @@ const QuizComponent = ({ contentItem, userdata }) => {
 
                                 <QuestionOptions>
                                     <h4 dangerouslySetInnerHTML={{ __html: `${ques.title}` }}></h4>
-                                    {ques?.options && ques?.options.length > 0 && ques?.options.map((opt, i) => (
-                                        <Answer>
-                                            <label for="vehicle1">
-                                                <input
-                                                    type="checkbox"
-                                                    value={opt.title}
-                                                    // name="isAnswer"
-                                                    onChange={e => {
-                                                        setMyAnswers({
-                                                            questionId: ques._id,
-                                                            answers: [...myAnswers.answers, opt._id]
-                                                        })
-                                                    }} />
+
+                                    {
+                                        ques?.type === "THEORY" && ques?.options && ques?.options.length > 0 && ques?.options.map((opt, i) => (
+                                            <>
                                                 {opt.title}
-                                            </label>
+                                                <Answer>
+                                                    <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, opt?._id, i, index)} />
+                                                </Answer>
 
-                                        </Answer>
+                                                <QuizAction>
 
-                                    ))}
+                                                    <QuizButton onClick={() => AnswerQuiz("theory")}>
+                                                        Submit
+                                                    </QuizButton>
+                                                </QuizAction>
+
+                                            </>
+                                        ))
+
+
+                                    }
+
+                                    {ques?.type === "MULTIPLE_CHOICE" && ques?.options && ques?.options.length > 0 &&
+                                        <>
+
+                                            {ques?.options.map((opt, i) => (
+                                                <Answer>
+                                                    <label for="vehicle1">
+                                                        <input
+                                                            type="radio"
+                                                            value={opt._id}
+                                                            name="answers"
+                                                            onChange={e => handleInputChange(e, ques?._id, index)} />
+                                                        {opt.title}
+                                                    </label>
+
+                                                </Answer>
+
+                                            ))}
+
+
+                                            < QuizAction >
+                                                <QuizButton onClick={() => AnswerQuiz("mutiple")}>
+                                                    Submit
+                                                </QuizButton>
+                                            </QuizAction>
+
+                                        </>
+                                    }
+
+
 
                                 </QuestionOptions>
-                                <QuizAction>
 
-                                    <QuizButton onClick={AnswerQuiz}>
-                                        Submit
-                                    </QuizButton>
-                                </QuizAction>
+
+
 
                             </Accordion.Body>
                         </Accordion.Item>
@@ -723,6 +792,7 @@ const Classroom = () => {
     const [bodyTitle, setBodyTitle] = useState("")
     const [bootcampName, setBootcampName] = useState({})
     const [searchParams, setSearchParams] = useSearchParams();
+    const [locked, setLocked] = useState(false)
 
     const contentId = searchParams.get("contentId");
     // const [active, setActive] = useState(false)
@@ -765,24 +835,27 @@ const Classroom = () => {
 
     }, [modules])
 
-
-
-    const completedContent = useMemo(() => {
+    const reduceModules = useMemo(() => {
         return reduceContent?.reduce((total, current) => [
             ...total, ...current.items
-        ], [])
+        ], []);
 
     }, [modules])
 
 
+
+    console.log({ reduceModules });
+
+
     const totalItem = useMemo(() => {
 
-        let length = completedContent?.length
-        let isCompleted = completedContent?.filter(item => item.completedBy < 0)
+        let length = reduceContent?.length
+        let isCompleted = reduceModules?.filter(item => item.completedBy?.includes(userdata.id))
+        let isattempted = reduceModules?.filter(item => item.attemptedBy?.includes(userdata.id))
 
         return {
             total: length,
-            isCompleted: isCompleted?.length
+            isCompleted: isCompleted?.length + isattempted?.length
         };
 
     }, [modules])
@@ -793,7 +866,7 @@ const Classroom = () => {
 
 
 
-
+    //check whether next and prev btn be disabled
     useMemo(() => {
 
         if (reduceContent?.length > 0) {
@@ -818,62 +891,142 @@ const Classroom = () => {
     }, [reduceContent, contentId])
 
 
+    //move next and prev btn 
     const MoveButton = (type) => {
         if (reduceContent?.length > 0 && type === "next") {
             const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
-            // console.log({ findIndex });
+            console.log({ findIndex }); 
+           
+
 
             let val = ""
             if (findIndex !== (reduceContent?.length - 1)) {
                 val = findIndex + 1;
                 console.log({ val });
-                setPickedType(reduceContent[val]?.type)
-                setContents(reduceContent[val]?.items)
-                setBodyTitle(reduceContent[val]?.title)
-
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
+                if (!reduceContent[val]?.isLocked) {
+                    console.log("item is logged");
+                    setLocked(false)
+                    setPickedType(reduceContent[val]?.type)
+                    setContents(reduceContent[val]?.items)
+                    setBodyTitle(reduceContent[val]?.title)
+                    return;
+
+                } else {
+                    setContents([])
+                    console.log("item is  not locked");
+                    setLocked(true)
+                    setPickedType(reduceContent[val]?.type)
+                    setBodyTitle(reduceContent[val]?.title)
+                    return;
+
+                }
+
             } else {
                 val = findIndex;
-                setContents(reduceContent[val]?.items)
-                setBodyTitle(reduceContent[val]?.title)
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
+
+                if (!reduceContent[val]?.isLocked) {
+                    console.log("item is locked");
+                    setLocked(false)
+                    setContents(reduceContent[val]?.items)
+                    setBodyTitle(reduceContent[val]?.title)
+                    setPickedType(reduceContent[val]?.type)
+                    return;
+
+                } else {
+                    setContents([])
+                    console.log("item is  not locked");
+                    setLocked(true)
+                    setBodyTitle(reduceContent[val]?.title)
+                    setPickedType(reduceContent[val]?.type)
+                    return;
+
+                }
+
             }
         } else if (reduceContent?.length > 0 && type === "prev") {
             const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
+
             let val = ""
             if (findIndex !== 0) {
                 val = findIndex - 1;
-                setPickedType(reduceContent[val]?.type)
-                setContents(reduceContent[val]?.items)
-                setBodyTitle(reduceContent[val]?.title)
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
+                if (!reduceContent[val]?.isLocked) {
+                    console.log("item is locked");
+
+                    setLocked(false)
+                    setPickedType(reduceContent[val]?.type)
+                    setContents(reduceContent[val]?.items)
+                    setBodyTitle(reduceContent[val]?.title)
+                    return;
+
+                } else {
+                    console.log("item is  not locked");
+                    setContents([])
+                    setLocked(true)
+                    setPickedType(reduceContent[val]?.type)
+                    setBodyTitle(reduceContent[val]?.title)
+                    return;
+
+                }
+
             } else {
                 val = findIndex;
-                setPickedType(reduceContent[val]?.type)
-                setContents(reduceContent[val]?.items)
-                setBodyTitle(reduceContent[val]?.title)
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
+                if (!reduceContent[val]?.isLocked) {
+                    setLocked(false)
+                    setPickedType(reduceContent[val]?.type)
+                    setContents(reduceContent[val]?.items)
+                    setBodyTitle(reduceContent[val]?.title)
+                    return;
+
+                } else {
+                    setContents([])
+                    setLocked(true)
+                    setPickedType(reduceContent[val]?.type)
+                    setBodyTitle(reduceContent[val]?.title)
+                    return;
+
+                }
+
             }
         }
 
     }
 
-
+    //automatically populate content as long as it appears in the url
     useMemo(() => {
         if (reduceContent?.length > 0 && contentId) {
             const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
-            if (findIndex > -1) {
+            const findItem = reduceContent?.find(content => content.contentId === contentId);
+            if (findIndex > -1 && !findItem?.isLocked) {
+                setLocked(false)
                 setPickedType(reduceContent[findIndex]?.type)
                 setContents(reduceContent[findIndex]?.items)
                 setBodyTitle(reduceContent[findIndex]?.title)
+                return;
+
+
+            } else if (findIndex > -1 && findItem?.isLocked) {
+                setPickedType(reduceContent[findIndex]?.type)
+                setBodyTitle(reduceContent[findIndex]?.title)
+                setLocked(true)
+                return;
+
+            } else {
+                setContents([])
+                setLocked(false)
+                return;
+
 
             }
         }
@@ -893,21 +1046,15 @@ const Classroom = () => {
     }
 
 
-    // const handleQuizCompleted = async (id, index) => {
-    //     const { success } = await markAsCompleted(userdata?.token, id)
-    //     if (success) {
-    //         setCompleted((prev) => prev < reduceContent.length ? prev + 1 : prev)
 
-    //     }
-
-
-    // }
 
     console.log({ modules });
 
     // console.log({ contentId });
 
     console.log({ completed });
+
+    console.log({ reduceContent });
 
     return (
         <Container>
@@ -943,6 +1090,7 @@ const Classroom = () => {
                         setCompleted={setCompleted}
                         progress={totalItem}
                         setBodyTitle={setBodyTitle}
+                        setLocked={setLocked}
                     // active={active} 
                     // setActive={setActive}
                     />
@@ -958,6 +1106,7 @@ const Classroom = () => {
                     setCompleted={setCompleted}
                     progress={totalItem}
                     setBodyTitle={setBodyTitle}
+                    setLocked={setLocked}
 
                 // active={active} 
                 // setActive={setActive}
@@ -992,7 +1141,7 @@ const Classroom = () => {
                                         <>
                                             <FileComponent contentItem={content} id={id} key={id} />
                                             <QuizAction >
-                                                <MarkButton display={content.completedBy.includes(userdata.id) ? true : false}
+                                                <MarkButton display={content?.completedBy?.includes(userdata.id) ? true : false}
                                                     onClick={() => handleFileCompleted(content.contentId, content.fileId, "files")}
                                                 >
                                                     Mark as Completed
@@ -1001,6 +1150,11 @@ const Classroom = () => {
                                         </>
 
                                     ))
+                                        // :
+
+                                        // <div className="console_empty">
+                                        //     <p>Content is Currently Empty</p>
+                                        // </div>
                                     }
                                 </>
 
@@ -1013,7 +1167,7 @@ const Classroom = () => {
 
                                         <QuizAction >
                                             <MarkButton
-                                                display={content.completedBy.includes(userdata.id) ? true : false}
+                                                display={content?.completedBy?.includes(userdata.id) ? true : false}
                                                 onClick={() => handleFileCompleted(content.contentId, content._id, "notes")}
                                             >
                                                 Mark as Completed
@@ -1022,6 +1176,13 @@ const Classroom = () => {
                                     </>
 
                                 ))
+
+                                    // :
+
+                                    // <div className="dashboard_empty">
+                                    //     <p>Content is Currently Empty</p>
+                                    // </div>
+
                                 }
 
                             </>
@@ -1033,13 +1194,21 @@ const Classroom = () => {
                                         <QuizComponent contentItem={content} id={id} key={id} userdata={userdata} />
                                         <QuizAction >
                                             <MarkButton
-                                                onClick={() => handleFileCompleted(content.contentId, content._id)}
+                                                display={content?.attemptedBy?.includes(userdata.id) ? true : false}
+                                            // onClick={() => handleFileCompleted(content.contentId, content._id)}
                                             >
                                                 Mark as Completed
                                             </MarkButton>
                                         </QuizAction>
                                     </>
                                 ))
+
+                                    // :
+
+
+                                    // <div className="dashboard_empty">
+                                    //     <p>Content is Currently Empty</p>
+                                    // </div>
                                 }
 
 
@@ -1048,6 +1217,20 @@ const Classroom = () => {
                             </>
                             }
 
+                            {
+                                contents?.length === 0 && !locked && <div className="console_empty">
+                                    <p>Content is Empty</p>
+                                </div>
+
+                            }
+
+                            {
+                                locked &&
+
+                                <div className="console_empty">
+                                    <p>Module is Locked</p>
+                                </div>
+                            }
 
                             {contentId && <QuizAction>
                                 <PreviousButton variant="outlined" disabled={prev} onClick={() => MoveButton("prev")}>
@@ -1058,6 +1241,7 @@ const Classroom = () => {
                                 </NextButton>
                             </QuizAction>
                             }
+
 
 
 
