@@ -111,10 +111,12 @@ const Sidebar = ({ modules,setContents,setPickedType,setBodyTitle,reduceContent,
                 <CustomButton sx={{ marginInline: 'auto', width: '50%' }}>
                     Refresh topics
                 </CustomButton>
+                { reduceContent?.length > 0 &&
                 <ProgressContainer>
-                    <p>Progress: {ProgressResult}%</p>
+                    <p>Progress:  {ProgressResult}%</p>
                     <Progress value={ProgressResult} max="100" />
                 </ProgressContainer>
+                }
                 <div ref={elementRef}>
                     {
                         modules?.map((module, id) =>

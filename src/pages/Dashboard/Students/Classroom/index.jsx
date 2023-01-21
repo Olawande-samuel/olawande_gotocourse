@@ -519,6 +519,8 @@ const FileComponent = (contentItem) => {
     // console.log({ contentItem });
     const [open, setOpen] = useState(false)
 
+    console.log(contentItem.contentItem);
+
     const getExtention = (val) => {
         // console.log({ val });
 
@@ -584,7 +586,7 @@ const FileComponent = (contentItem) => {
                     <div>
                         <BodyActions>
                             <IconButton>
-                                <BiCloudDownload onClick={() => downloadContent(contentItem.contentItem.fileName, contentItem.contentItem.title, contentItem.contentItem.type)} />
+                             {contentItem?.contentItem?.downloadable &&  <BiCloudDownload onClick={() => downloadContent(contentItem.contentItem.fileName, contentItem.contentItem.title, contentItem.contentItem.type)} /> } 
                             </IconButton>
                             <CustomButton onClick={() => setOpen(true)}>Open</CustomButton>
                         </BodyActions>
@@ -600,7 +602,7 @@ const FileComponent = (contentItem) => {
 
                 <FileDisplay>
                     {getExtention(contentItem.contentItem.type) === "image" ? <img src={`${process.env.REACT_APP_IMAGEURL}${contentItem.contentItem.fileName}`} alt="" /> :
-                        <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem.contentItem.fileName}`} controls ></video>
+                        <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem.contentItem.fileName}`} controls controlsList="nodownload"></video>
                     }
 
                 </FileDisplay>
@@ -629,21 +631,6 @@ const QuizComponent = ({ contentItem, userdata }) => {
     const [note, setNotes] = useState([])
     const [myAnswers, setMyAnswers] = useState([])
 
-    // questions:[
-    //     {
-    //         questionId: 1,
-    //         answers:[answer1id, snser2id]
-    //     },
-    //     {
-    //         questionId: 2,
-    //         answers:[answer1id]
-    //     },
-    //     {
-    //         questionId: 3,
-    //         answers:[answer1id]
-    //     },
-
-    // }]
 
     function setNote(text, quizId, questionId, questionIndex, quizIndex) {
         // for editor content
@@ -689,11 +676,6 @@ const QuizComponent = ({ contentItem, userdata }) => {
 
 
     const AnswerQuiz = async (type) => {
-        if (type === "theory") {
-            const { data } = await attemptQuiz(userdata?.token, contentItem._id, myAnswers)
-            console.log({ data });
-
-        }
         const { data } = await attemptQuiz(userdata?.token, contentItem._id, myAnswers)
         console.log({ data });
     }

@@ -156,7 +156,7 @@ export const Blog = () => {
                 {blogs.length > 0 && blogs.slice(0, 8).map(blog => (
 
                     <Card key={blog._id}>
-                        <Link to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
+                        <Link to={`/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
                             <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
                         </Link>
                         <div className="bottom">
@@ -169,7 +169,7 @@ export const Blog = () => {
                                 </span>
                             </DateAndAction>
                             <div >
-                                <Link  to={`/events&articles/articles/${blog?.title?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
+                                <Link  to={`/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
                                     <h5>{blog.title}</h5>
                                 </Link>
                                 <p className="restricted_line" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
