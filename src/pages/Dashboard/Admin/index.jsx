@@ -4419,6 +4419,7 @@ export function CreateBootcamp() {
                         value={timeList[i]?.day}
 
                       >
+                        <option value="">Days</option>
                         <option value="Sunday">Sunday</option>
                         <option value="Monday">Monday</option>
                         <option value="Tuesday">Tuesday</option>
