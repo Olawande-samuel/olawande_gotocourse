@@ -1,5 +1,5 @@
 const  CONFIG = {
-    socketUrl: process.env.REACT_APP_BASEURL,
+    socketUrl: "https://api.gotocourse.com",
     peerUrl: "api.gotocourse.com"
 }
 
