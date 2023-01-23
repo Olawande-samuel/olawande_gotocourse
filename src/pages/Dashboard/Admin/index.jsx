@@ -3226,6 +3226,7 @@ export function BootcampDetails({ }) {
       updateBootcamp,
       addStudentToClass,
       removeStudentToClass,
+      fetchClassStudents
     },
     adminStudentFunctions: { fetch},
     teacherFunctions: {fetchBootcampApplications},
@@ -3426,10 +3427,15 @@ export function BootcampDetails({ }) {
     }
   })
 
-  const fetchAllEnrolledStudents = useQuery(["fetch enrolled students", userdata.token], ()=>fetchBootcampApplications(userdata.token, params?.id), {
+  const fetchAllEnrolledStudents = useQuery(["fetch enrolled students", userdata.token], ()=>fetchClassStudents(userdata.token, params?.id), {
     enabled: userdata.token !== null,
     onSuccess: res => {
       console.log({res})
+      if(res?.data){
+        setAllEnrolledStudents(res.data)
+        return
+      }
+      setAllEnrolledStudents([])
       
 
     },
@@ -3440,17 +3446,27 @@ export function BootcampDetails({ }) {
 
   const addMutation = useMutation(([token, data]) => addStudentToClass(token, data), {
     onSuccess: res => {
-      console.log(res)
+      if(res.statusCode === 1){
+        toast.success(res.message)
+        setStudent("")
+      } else {
+        toast.error(res.message)
+      } 
     },
-    onError: err => console.error(err)
+    onError: err => toast.error(err.message)
   })
 
 
   const removeMutation = useMutation(([token, data]) => removeStudentToClass(token, data), {
     onSuccess: res => {
-      console.log(res)
+      if(res.statusCode === 1){
+        toast.success(res.message)
+        setStudent("")
+      } else {
+        toast.error(res.message)
+      } 
     },
-    onError: err => console.error(err)
+    onError: err => toast.error(err.message)
   })
 
   function addStudent(){
@@ -3459,7 +3475,7 @@ export function BootcampDetails({ }) {
 
 
   function removeStudent(){
-
+    removeMutation.mutate([ userdata.token, {userId: removedStudent, bootcampId: params.id}])
   }
 
   return (
@@ -3558,8 +3574,15 @@ export function BootcampDetails({ }) {
                   type="button"
                   className={clsx.form_group__button}
                   onClick={addStudent}
+                  disabled={addMutation?.isLoading}
                 >
-                  Add
+                  {addMutation?.isLoading ?
+                    <div className="spinner-border text-white">
+                      <div className="visually-hidden">Loading...</div>
+                    </div>   
+                    :
+                      <span>Add</span>
+                  }
                 </button>
               </div>
           </div>
@@ -3568,13 +3591,26 @@ export function BootcampDetails({ }) {
                 <h6>Remove Student</h6>
                 <select name="student" id="student" className="form-select" onChange={(e)=>setRemovedStudent(e.target.value)} value={removedStudent}  >
                   <option value="">Select student</option>
+                  {
+                    allEnrolledStudents?.map(item => ( 
+                      <option value={item.studentId}>{`${item.studentId} - ${item.studentName}`}</option>
+                    ))
+                  }
                 </select>
                 <button
                   type="button"
                   className={clsx.form_group__button}
                   onClick={removeStudent}
+                  disabled={removeMutation?.isLoading}
+
                 >
-                  Remove
+                  {removeMutation?.isLoading ?
+                    <div className="spinner-border text-white">
+                      <div className="visually-hidden">Loading...</div>
+                    </div>   
+                    :
+                      <span>Remove</span>
+                  }
                 </button>
               </div>
           </div>
