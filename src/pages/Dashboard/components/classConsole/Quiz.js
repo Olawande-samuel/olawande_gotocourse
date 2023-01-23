@@ -650,11 +650,11 @@ function ResultPanel({data}){
     return (
         <section>
             <section className="quiz__cards_container">
-                {/* {
+                 {
                     results?.map(item=> (
                         <ResultCards {...item} />
                     ))
-                } */}
+                }
             </section>
             {/* <p className="text-center lead">No one has attempted the quiz yet</p> */}
         </section>
@@ -664,24 +664,28 @@ function ResultPanel({data}){
 
 
 
-function ResultCards({}){
+function ResultCards({studentId, totalScore,quizId, graded, updatedAt}){
     const [open, setOpen] = useState(false)
     return (
         <div className="quiz__card">
             <p className="quiz__card_student_name fw-bold">Olunloyo Adegoke</p>
             <div>
                 <span>Actual score: </span>
-                <span>Actual score</span>
+                <span>{totalScore}</span>
             </div>
             <div>
                 <span>Student ID: </span>
-                <span>Actual score</span>
+                <span>{studentId}</span>
             </div>
             <div>
-                <span>Number of tries: </span>
-                <span>Actual score</span>
+                <span>Graded: </span>
+                <span>{graded}</span>
             </div>
-            <p>6/28/2021, 1.55:22AM</p>
+            {/*<div>*/}
+            {/*    <span>Number of tries: </span>*/}
+            {/*    <span>Actual score</span>*/}
+            {/*</div>*/}
+            <p>{updatedAt.split("T")[0]} {new Date(updatedAt)?.toLocaleTimeString()}</p>
 
             <div className="d-flex gap-2">
                 <button className="quiz__card_del_btn">Delete</button>
