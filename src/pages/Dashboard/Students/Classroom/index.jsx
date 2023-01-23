@@ -409,82 +409,7 @@ ul{
 
 `
 
-{/* <QuizImageContainer>
-            <QuizImage src={quiz} alt="Quiz Image" />
-        </QuizImageContainer>
-        <QuizButton>Open Quiz</QuizButton> */}
 
-// const QuizContent = ({ q, id }) => {
-//     console.log({q});
-//     return (
-//         <>
-//             <Quiz key={id}>
-
-//                 <QuizInfo>
-//                     <p>Description: </p>
-//                     <span>{q.note}</span>
-//                     <p>Max Attempts: <span>{q.maxAttempts}</span></p>
-//                     <p>Deadline: <span>{new Date(q?.endDate).toLocaleTimeString('en-US', {
-//                         hour: '2-digit',
-//                         minute: '2-digit'
-//                     })}</span></p>
-//                     <p>Number of submissions:  <span>1/1</span> </p>
-//                     <p> Provisional Result (based on Objective): <span>0.00%</span></p>
-//                 </QuizInfo>
-
-//             </Quiz>
-//             <div>
-//                 {q.questions.length > 0 && q.questions.map((ques, index) => (
-//                     <Accordion >
-//                         <Accordion.Item eventKey={id} className="accord__body">
-//                             <Accordion.Header className="accord__header"> Question {id + 1}</Accordion.Header>
-//                             <Accordion.Body>
-//                                 <QuesHeader className="queshead">
-//                                     <p>Type: <span>{ques.type}</span></p>
-//                                     <p>Grade: <span>{ques.grade}</span></p>
-//                                 </QuesHeader>
-
-//                                 <QuestionOptions>
-//                                     <h4 dangerouslySetInnerHTML={{ __html: `${ques.title}` }}></h4>
-//                                     {ques?.options && ques?.options.length > 0 && ques?.options.map((opt, i) => (
-//                                         <Answer>
-//                                             <label for="vehicle1">
-//                                                 <input
-//                                                     type="checkbox"
-//                                                     value={opt.title}
-//                                                     // name="isAnswer"
-//                                                     onChange={e => {
-//                                                         // const list = { ...formData }
-//                                                         // list.questions[id].options[index]['isAnswer'] = e.target.checked;
-//                                                         // console.log(list);
-//                                                         // setFormData(list)
-//                                                     }} />
-//                                                 {opt.title}
-//                                             </label>
-
-//                                         </Answer>
-
-//                                     ))}
-
-//                                 </QuestionOptions>
-//                                 <QuizAction>
-
-//                                     <QuizButton>
-//                                         Submit
-//                                     </QuizButton>
-//                                 </QuizAction>
-
-//                             </Accordion.Body>
-//                         </Accordion.Item>
-//                     </Accordion>
-//                 ))}
-
-//             </div>
-
-
-//         </>
-//     )
-// }
 
 const NoteComponent = (contentItem) => {
     console.log({ contentItem });
@@ -498,16 +423,7 @@ const NoteComponent = (contentItem) => {
                     <p dangerouslySetInnerHTML={{ __html: contentItem.contentItem?.body }}></p>
 
                 </Note>
-                {/* { note && <button ref={ref} onClick={() => handleCompleted(note.contentId)}>{note.contentId}</button>} */}
-                {/* {
-                    <QuizAction>
-                        <QuizButton
-                        // onClick={() => handleCompleted(note.contentId)}
-                        >
-                            Mark as Completed
-                        </QuizButton>
-                    </QuizAction>
-                } */}
+                
             </div>
 
 
@@ -577,16 +493,9 @@ const FileComponent = (contentItem) => {
             <Paper variant='outlined' className="paper">
                 <PaperTop>
                     <div>
-                        {/* <h5>{contentItem.contentItem.title}</h5>
-                        <IconButton>
-                            <MdMoreVert />
-                        </IconButton> */}
-
-                    </div>
-                    <div>
                         <BodyActions>
                             <IconButton>
-                             {contentItem?.contentItem?.downloadable &&  <BiCloudDownload onClick={() => downloadContent(contentItem.contentItem.fileName, contentItem.contentItem.title, contentItem.contentItem.type)} /> } 
+                                {contentItem?.contentItem?.downloadable && <BiCloudDownload onClick={() => downloadContent(contentItem.contentItem.fileName, contentItem.contentItem.title, contentItem.contentItem.type)} />}
                             </IconButton>
                             <CustomButton onClick={() => setOpen(true)}>Open</CustomButton>
                         </BodyActions>
@@ -601,8 +510,8 @@ const FileComponent = (contentItem) => {
                 </FileName>
 
                 <FileDisplay>
-                    {getExtention(contentItem.contentItem.type) === "image" ? <img src={`${process.env.REACT_APP_IMAGEURL}${contentItem.contentItem.fileName}`} alt="" /> :
-                        <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem.contentItem.fileName}`} controls controlsList="nodownload"></video>
+                    {getExtention(contentItem?.contentItem?.type) === "image" ? <img src={`${process.env.REACT_APP_IMAGEURL}${contentItem?.contentItem?.fileName}`} alt="" /> :
+                        <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem?.contentItem?.fileName}`} controls controlsList="nodownload"></video>
                     }
 
                 </FileDisplay>
@@ -613,12 +522,12 @@ const FileComponent = (contentItem) => {
             <ViewModal
                 open={open}
                 setOpen={setOpen}
-                file={getExtention(contentItem.contentItem.type) === "image" ?
-                    `${process.env.REACT_APP_IMAGEURL}${contentItem.contentItem.fileName}` :
-                    `${process.env.REACT_APP_VIDEOURL}${contentItem.contentItem.fileName}`
+                file={getExtention(contentItem?.contentItem?.type) === "image" ?
+                    `${process.env.REACT_APP_IMAGEURL}${contentItem?.contentItem?.fileName}` :
+                    `${process.env.REACT_APP_VIDEOURL}${contentItem?.contentItem?.fileName}`
                 }
-                type={contentItem.contentItem.type}
-                title={contentItem.contentItem.title}
+                type={contentItem?.contentItem?.type}
+                title={contentItem?.contentItem?.title}
             />
 
         </div>
@@ -676,7 +585,7 @@ const QuizComponent = ({ contentItem, userdata }) => {
 
 
     const AnswerQuiz = async (type) => {
-        const { data } = await attemptQuiz(userdata?.token, contentItem._id, myAnswers)
+        const { data } = await attemptQuiz(userdata?.token, contentItem?._id, myAnswers)
         console.log({ data });
     }
 
@@ -722,12 +631,12 @@ const QuizComponent = ({ contentItem, userdata }) => {
                                                     <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, opt?._id, i, index)} />
                                                 </Answer>
 
-                                                <QuizAction>
+                                                {/* <QuizAction>
 
                                                     <QuizButton onClick={() => AnswerQuiz("theory")}>
                                                         Submit
                                                     </QuizButton>
-                                                </QuizAction>
+                                                </QuizAction> */}
 
                                             </>
                                         ))
@@ -754,15 +663,14 @@ const QuizComponent = ({ contentItem, userdata }) => {
                                             ))}
 
 
-                                            < QuizAction >
+                                            {/* < QuizAction >
                                                 <QuizButton onClick={() => AnswerQuiz("mutiple")}>
                                                     Submit
                                                 </QuizButton>
-                                            </QuizAction>
+                                            </QuizAction> */}
 
                                         </>
                                     }
-
 
 
                                 </QuestionOptions>
@@ -774,6 +682,12 @@ const QuizComponent = ({ contentItem, userdata }) => {
                         </Accordion.Item>
                     </Accordion>
                 ))}
+
+                < QuizAction >
+                    <QuizButton onClick={() => AnswerQuiz("mutiple")}>
+                        Submit
+                    </QuizButton>
+                </QuizAction>
 
             </div>
 
@@ -788,7 +702,6 @@ const Classroom = () => {
     const [showMobile, setShowMobile] = useState(false);
     const [modules, setModules] = useState([]);
     const [contents, setContents] = useState([])
-    const [title, setTitle] = useState("")
     const [bodyTitle, setBodyTitle] = useState("")
     const [bootcampName, setBootcampName] = useState({})
     const [searchParams, setSearchParams] = useSearchParams();
@@ -805,12 +718,11 @@ const Classroom = () => {
     const userdata = getItem(KEY)
 
     const [pickedType, setPickedType] = useState("")
-    let [completed, setCompleted] = useState(0);
 
     const { id } = useParams()
 
-    const { consoleFunctions: { fetchStudentDomains, fetchStudentQuiz, fetchStudentFile, fetchStudentNote, markAsCompleted }, studentFunctions: { fetchBootcamps } } = useAuth();
-    const fetchBootcampsName = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token), {
+    const { consoleFunctions: { fetchStudentDomains, markAsCompleted }, studentFunctions: { fetchBootcamps } } = useAuth();
+    useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token), {
         onSuccess: (res) => {
             if (res.data && id) {
                 setBootcampName(res.data.filter(d => d.bootcampId === id))
@@ -818,7 +730,7 @@ const Classroom = () => {
         }
     })
 
-    const fetchstudentDomains = useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id), {
+    useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id), {
         onSuccess: (res) => {
             // console.log(res.data)
             setModules(res.data)
@@ -835,7 +747,7 @@ const Classroom = () => {
 
     }, [modules])
 
-    const reduceModules = useMemo(() => {
+    const reduceItem = useMemo(() => {
         return reduceContent?.reduce((total, current) => [
             ...total, ...current.items
         ], []);
@@ -844,14 +756,13 @@ const Classroom = () => {
 
 
 
-    console.log({ reduceModules });
 
 
     const totalItem = useMemo(() => {
 
         let length = reduceContent?.length
-        let isCompleted = reduceModules?.filter(item => item.completedBy?.includes(userdata.id))
-        let isattempted = reduceModules?.filter(item => item.attemptedBy?.includes(userdata.id))
+        let isCompleted = reduceItem?.filter(item => item.completedBy?.includes(userdata.id))
+        let isattempted = reduceItem?.filter(item => item.attemptedBy?.includes(userdata.id))
 
         return {
             total: length,
@@ -859,7 +770,6 @@ const Classroom = () => {
         };
 
     }, [modules])
-
 
 
 
@@ -895,8 +805,8 @@ const Classroom = () => {
     const MoveButton = (type) => {
         if (reduceContent?.length > 0 && type === "next") {
             const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
-            console.log({ findIndex }); 
-           
+            console.log({ findIndex });
+
 
 
             let val = ""
@@ -1048,13 +958,14 @@ const Classroom = () => {
 
 
 
-    console.log({ modules });
-
+    
     // console.log({ contentId });
-
-    console.log({ completed });
-
+    
+    
+    console.log({ modules });
     console.log({ reduceContent });
+    console.log({ reduceItem });
+    console.log({ contents });
 
     return (
         <Container>
@@ -1080,14 +991,10 @@ const Classroom = () => {
                     open={showMobile}
                     onClick={e => setShowMobile(_ => false)}
                 >
-                    <Sidebar isMobile={true} modules={modules}
-                        // activeMedia={active} 
-                        // changeActive={setActiveMediaHandler} 
-                        completed={completed}
+                    <Sidebar isMobile={true} modules={modules} 
                         setContents={setContents}
                         setPickedType={setPickedType}
                         reduceContent={reduceContent}
-                        setCompleted={setCompleted}
                         progress={totalItem}
                         setBodyTitle={setBodyTitle}
                         setLocked={setLocked}
@@ -1097,13 +1004,9 @@ const Classroom = () => {
                 </Backdrop>
                 <Sidebar
                     isMobile={false} modules={modules}
-                    // activeMedia={active} 
-                    // changeActive={setActiveMediaHandler} 
-                    completed={completed}
                     setContents={setContents}
                     setPickedType={setPickedType}
                     reduceContent={reduceContent}
-                    setCompleted={setCompleted}
                     progress={totalItem}
                     setBodyTitle={setBodyTitle}
                     setLocked={setLocked}
@@ -1161,60 +1064,43 @@ const Classroom = () => {
                             }
 
                             {pickedType === "NOTE" && <>
-                                {contents?.length > 0 && contents?.map((content, id) => (
+                                {/* {contents?.length > 0 && contents?.map((content, id) => ( */}
+                                {contents?.length > 0 && 
+
                                     <>
-                                        <NoteComponent contentItem={content} id={id} key={id} />
+                                        <NoteComponent contentItem={contents[contents.length -1]} 
+                                        // id={id} key={id} 
+                                        />
 
                                         <QuizAction >
                                             <MarkButton
-                                                display={content?.completedBy?.includes(userdata.id) ? true : false}
-                                                onClick={() => handleFileCompleted(content.contentId, content._id, "notes")}
+                                                display={contents[contents.length -1]?.completedBy?.includes(userdata.id) ? true : false}
+                                                onClick={() => handleFileCompleted(contents[contents.length -1]?.contentId, contents[contents.length -1]?._id, "notes")}
                                             >
                                                 Mark as Completed
                                             </MarkButton>
                                         </QuizAction>
                                     </>
-
-                                ))
-
-                                    // :
-
-                                    // <div className="dashboard_empty">
-                                    //     <p>Content is Currently Empty</p>
-                                    // </div>
 
                                 }
 
                             </>
                             }
 
-                            {pickedType === "QUIZ" && <>
-                                {contents?.length > 0 && contents?.map((content, id) => (
+                            {pickedType === "QUIZ" &&
+                                contents?.length > 0 && 
                                     <>
-                                        <QuizComponent contentItem={content} id={id} key={id} userdata={userdata} />
+                                        <QuizComponent contentItem={contents[contents.length -1]} id={id} key={id} userdata={userdata} />
                                         <QuizAction >
                                             <MarkButton
-                                                display={content?.attemptedBy?.includes(userdata.id) ? true : false}
+                                                display={contents[contents.length -1]?.attemptedBy?.includes(userdata.id) ? true : false}
                                             // onClick={() => handleFileCompleted(content.contentId, content._id)}
                                             >
                                                 Mark as Completed
                                             </MarkButton>
                                         </QuizAction>
                                     </>
-                                ))
 
-                                    // :
-
-
-                                    // <div className="dashboard_empty">
-                                    //     <p>Content is Currently Empty</p>
-                                    // </div>
-                                }
-
-
-
-
-                            </>
                             }
 
                             {
@@ -1252,7 +1138,7 @@ const Classroom = () => {
             </ClassroomContainer>
 
             <IconComponent classId={id} />
-        </Container>
+        </Container >
     )
 }
 

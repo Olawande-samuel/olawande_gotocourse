@@ -17,7 +17,7 @@ import { motion } from "framer-motion"
 import Layout from "../../components/Layout";
 import clsx from "./styles.module.css";
 import { useLocalStorage } from "../../hooks";
-import { getDate, gotoclass } from "../../constants";
+import { getDate, gotoclass, tConvert } from "../../constants";
 import { useNavigate, useParams } from "react-router-dom";
 import BootcampImage from "../../images/bootcamp.webp";
 import Teacher from "../../images/bootcamps/teacher.png";
@@ -596,7 +596,7 @@ export function NewBootcampDetailsComponent() {
           bootcampTrainingInfo?.subCategory === "PATH_FINDERS" ? "Pathfinders Courses" : "Executive Courses"
 
 
-  // console.log({ bootcampTrainingInfo })
+  console.log({ bootcampTrainingInfo })
   return (
     <Layout>
       <div className={clsx.bootcampTraining}>
@@ -636,9 +636,9 @@ export function NewBootcampDetailsComponent() {
                         bootcampTrainingInfo?.time?.map(item=>(
                           <div>
                             <span className="me-3">{item.day}:</span>
-                            <span className="">{item.startTime}</span>
+                            <span className="">{tConvert(item.startTime)} CST</span>
                             <span> - </span>
-                            <span>{item.endTime}</span>
+                            <span>{tConvert(item.endTime)} CST</span>
                           </div>
                         ))
                       }
@@ -962,13 +962,13 @@ export function ShareModal({ x, open, setOpen, url }) {
   function generateUrl() {
 
     if (x?.title?.trim().toLowerCase().includes("/")) {
-      let newTitle = x?.title?.trim().split("/").join("-").toLowerCase()
+      let newTitle = encodeURIComponent(x?.title)?.trim().split("/").join("-").toLowerCase()
       return `https://gotocourse.com/categories/${x?.category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle.trim().split(" ").join("-").toLowerCase()}/${x?.bootcampId?.trim()}`
     } else {
-      return `https://gotocourse.com/categories/${x?.category?.trim().split(" ").join("-").toLowerCase()}/courses/${x?.title?.trim().split(" ").join("-").toLowerCase()}/${x?.bootcampId?.trim()}`
+      return `https://gotocourse.com/categories/${x?.category?.trim().split(" ").join("-").toLowerCase()}/courses/${encodeURIComponent(x?.title)?.trim().split(" ").join("-").toLowerCase()}/${x?.bootcampId?.trim()}`
     }
   }
-
+ 
   return (
     <Modal
       open={open}

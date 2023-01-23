@@ -3224,7 +3224,11 @@ export function BootcampDetails({ }) {
       fetchBootcamps,
       toggleBootcampStatus,
       updateBootcamp,
+      addStudentToClass,
+      removeStudentToClass,
     },
+    adminStudentFunctions: { fetch},
+    teacherFunctions: {fetchBootcampApplications},
     generalState,
   } = useAuth();
   const [openprompt, setOpenprompt] = useState(false);
@@ -3232,8 +3236,11 @@ export function BootcampDetails({ }) {
   const flag = useRef(false);
   const [formstate, setFormstate] = useState();
   const [loading, setLoading] = useState(true);
-  const [instructors, setInstructors] = useState([]);
-  const students = ["James Segun"];
+  const [allStudents, setAllStudents]= useState([])
+  const [allEnrolledStudents, setAllEnrolledStudents]= useState([])
+  const [student, setStudent]= useState("")
+  const [removedStudent, setRemovedStudent]= useState("")
+
   const params = useParams();
 
   //get user id
@@ -3402,6 +3409,59 @@ export function BootcampDetails({ }) {
     setOpenprompt(true);
   }
 
+
+  // ADD AND REMOVE STUDENTS FROM COURSE
+
+  const fetchAllStudents = useQuery(["fetch all students", userdata.token], ()=>fetch(userdata.token), {
+    enabled: userdata.token !== null,
+    onSuccess: res => {
+      if(res?.data){
+        setAllStudents(res.data)
+        return
+      }
+      setAllStudents([])
+    },
+    onError: err => {
+      console.error(err)
+    }
+  })
+
+  const fetchAllEnrolledStudents = useQuery(["fetch enrolled students", userdata.token], ()=>fetchBootcampApplications(userdata.token, params?.id), {
+    enabled: userdata.token !== null,
+    onSuccess: res => {
+      console.log({res})
+      
+
+    },
+    onError: err => {
+      console.error(err)
+    }
+  })
+
+  const addMutation = useMutation(([token, data]) => addStudentToClass(token, data), {
+    onSuccess: res => {
+      console.log(res)
+    },
+    onError: err => console.error(err)
+  })
+
+
+  const removeMutation = useMutation(([token, data]) => removeStudentToClass(token, data), {
+    onSuccess: res => {
+      console.log(res)
+    },
+    onError: err => console.error(err)
+  })
+
+  function addStudent(){
+    addMutation.mutate([ userdata.token, {userId: student, bootcampId: params.id}])
+  }
+
+
+  function removeStudent(){
+
+  }
+
   return (
     <Admin header="ADMIN">
       {loading && <Loader />}
@@ -3475,21 +3535,49 @@ export function BootcampDetails({ }) {
                 )}
               </div>
 
-              <Input
+              {/* <Input
                 style={{ margin: "0px !important" }}
                 name="instructor"
                 type="text"
                 handleChange={changeHandler}
                 value={formstate?.instructor}
-              />
-              <button
-                type="button"
-                className={clsx.form_group__button}
-                onClick={addTutor}
-              >
-                Change/Add Instructor
-              </button>
+              /> */}
             </div>
+            <div className={clsx.form_group}>
+              <div className={clsx.form_group__teachers}>
+                <h6>Add Student</h6>
+                <select name="userId" id="userId" className="form-select" onChange={(e)=>setStudent(e.target.value)} value={student} >
+                  <option value="">Select student</option>
+                  {
+                    allStudents?.map(item => ( 
+                      <option value={item.userId}>{`${item.email} - ${item.firstName} ${item.lastName}`}</option>
+                    ))
+                  }
+                </select>
+                <button
+                  type="button"
+                  className={clsx.form_group__button}
+                  onClick={addStudent}
+                >
+                  Add
+                </button>
+              </div>
+          </div>
+            <div className={clsx.form_group}>
+              <div className={clsx.form_group__teachers}>
+                <h6>Remove Student</h6>
+                <select name="student" id="student" className="form-select" onChange={(e)=>setRemovedStudent(e.target.value)} value={removedStudent}  >
+                  <option value="">Select student</option>
+                </select>
+                <button
+                  type="button"
+                  className={clsx.form_group__button}
+                  onClick={removeStudent}
+                >
+                  Remove
+                </button>
+              </div>
+          </div>
 
             {/* <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
@@ -4331,6 +4419,7 @@ export function CreateBootcamp() {
                         value={timeList[i]?.day}
 
                       >
+                        <option value="">Days</option>
                         <option value="Sunday">Sunday</option>
                         <option value="Monday">Monday</option>
                         <option value="Tuesday">Tuesday</option>

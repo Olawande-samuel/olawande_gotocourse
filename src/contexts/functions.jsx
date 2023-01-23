@@ -2714,6 +2714,73 @@ export const adminFunctions = {
         }
     },
 
+    addStudentToClass: async function (token, _data) {
+        try {
+            const res = await axios.post(`${baseURL}/admin/student/class/add`,
+                JSON.stringify(_data),
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    removeStudentToClass: async function (token, _data) {
+        try {
+            const res = await axios.delete(`${baseURL}/admin/student/class/remove`,
+                JSON.stringify(_data),
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+
 }
 
 
