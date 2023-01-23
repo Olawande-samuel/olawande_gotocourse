@@ -626,7 +626,25 @@ export function NewBootcampDetailsComponent() {
               </div>
 
               <div className={clsx.classDescriptionRight}>
+                {
+                  bootcampTrainingInfo?.time?.length > 0 
+                  &&
+                  <div className="mb-3">
+                    <h4>Schedule</h4>
 
+                      {
+                        bootcampTrainingInfo?.time?.map(item=>(
+                          <div>
+                            <span className="me-3">{item.day}:</span>
+                            <span className="">{item.startTime}</span>
+                            <span> - </span>
+                            <span>{item.endTime}</span>
+                          </div>
+                        ))
+                      }
+
+                  </div>
+                }
                 {
                   bootcampTrainingInfo.subCategory !== "EXECUTIVE_COURSES" &&
 
