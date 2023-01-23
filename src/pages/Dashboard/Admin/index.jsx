@@ -3799,13 +3799,15 @@ export function CreateBootcamp() {
     syllabus: [],
     careerList: [],
     packages: [],
-    popupArr: []
+    popupArr: [],
+    time: []
   });
 
   const [loading, setLoading] = useState(false);
   const [teachers, setTeachers] = useState([]);
   const [bio, setBio] = useState("");
-
+  const [scheduleCount, setScheduleCount] = useState(0)
+  const [timeList, setTimeList] = useState([])
   useEffect(() => {
     if (flag.current) return;
     if (location.search) {
@@ -3905,7 +3907,8 @@ export function CreateBootcamp() {
     const formData = {
       ...formstate,
       description: bio ? bio : formstate.description,
-      type:"FLAT"
+      type:"FLAT",
+      time:[...formstate.time, ...timeList]
     };
     console.log({formData})
     try {
@@ -4069,6 +4072,24 @@ export function CreateBootcamp() {
   function handleClosePackage() {
     setOpenPackage(false);
   }
+
+
+  function handleTime(e, i){
+    let formCopy = timeList
+    // let timeArray = formCopy.time
+    
+    formCopy[i] = {...formCopy[i], [e.target.name]: e.target.value}
+    // formCopy.time = formCopy
+    console.log({formCopy})
+    setTimeList(formCopy)
+  }
+
+
+  function deleteTime(id){
+    let newTimeList = formstate?.time.filter(item => item._id !== id)
+    setFormstate({...formstate, time: newTimeList})
+  }
+
 
   console.log({ formstate });
   return (
@@ -4276,6 +4297,78 @@ export function CreateBootcamp() {
                   handleChange={changeHandler}
                 />
               </div>
+            </div>
+            <div>
+              {
+                formstate?.time?.map(item => (
+                  <div className={clsx.syllabus_container}>
+                    <h5>{item.day}</h5>
+                    <p>{item.startTime}</p>
+                    <p>{item.endTime}</p>
+
+                    <p>
+                      <i
+                        className="text-danger"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => deleteTime(item._id)}
+                      >
+                        <BiTrash />
+                      </i>
+                    </p>
+                </div>
+                ))
+              }
+            {
+              [...Array(scheduleCount)].map((item, i)=>(
+                <div className="d-flex flex-wrap align-items-end gap-2">
+                    <div className="col-sm-6 col-md-3 pe-2 ">
+                      <label htmlFor="time">Day</label>
+                      <select 
+                        name="day" 
+                        id="day"
+                        className="form-select generic_input"
+                        onChange={(e)=>handleTime(e,i)}
+                        value={timeList[i]?.day}
+
+                      >
+                        <option value="Sunday">Sunday</option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Firday">Friday</option>
+                        <option value="Sunday">Saturday</option>
+                      </select>
+                    </div>
+                    <div className="col-sm-6 col-md-3 pe-2 ">
+                      <Input
+                        label="Starts By (CST)"
+                        name="startTime"
+                        type="time"
+                        handleChange={(e)=>handleTime(e,i)}
+                        value={timeList[i]?.startTime}
+                      />
+                    </div>
+                    <div className="col-sm-6 col-md-3 pe-2  ">
+                      <Input
+                        label="Ends By (CST)"
+                        name="endTime"
+                        type="time"
+                        handleChange={(e)=>handleTime(e,i)}
+                        value={timeList[i]?.endTime}
+                      />
+                    </div>
+                  </div>
+              ))
+            }
+             <button
+              className="btn btn-primary my-3"
+              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
+              type="button"
+              onClick={()=>setScheduleCount(scheduleCount + 1)}
+            >
+              Add Schedule
+            </button>
             </div>
             {/* <div className={clsx.editor_container}>
               <ReactQuill theme="snow" value={formstate?.description} onChange={setBio} />
