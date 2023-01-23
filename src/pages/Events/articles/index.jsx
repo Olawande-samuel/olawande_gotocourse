@@ -288,24 +288,24 @@ export function ShareModal({ x, open, setOpen, url }) {
                     <Box>
                         <p>Share to: </p>
                         <div>
-                            <FacebookShareButton url={`${url}/${x?.title?.split(" ").join("-").replace('?', '')}/${x._id}`}>
+                            <FacebookShareButton url={`${url}/${encodeURIComponent(x.title)?.split(" ").join("-").replace('?', '')}/${x._id}`}>
                                 <FacebookIcon />
                             </FacebookShareButton>
-                            <TwitterShareButton url={`${url}/${x?.title?.split(" ").join("-").replace('?', '')}/${x._id}`}>
+                            <TwitterShareButton url={`${url}/${encodeURIComponent(x.title)?.split(" ").join("-").replace('?', '')}/${x._id}`}>
                                 <TwitterIcon />
                             </TwitterShareButton>
-                            <LinkedinShareButton url={`${url}/${x?.title?.split(" ").join("-").replace('?', '')}/${x._id}`}>
+                            <LinkedinShareButton url={`${url}/${encodeURIComponent(x.title)?.split(" ").join("-").replace('?', '')}/${x._id}`}>
                                 <LinkedinIcon />
                             </LinkedinShareButton>
-                            <TelegramShareButton url={`${url}/${x?.title?.split(" ").join("-").replace('?', '')}/${x._id}`}>
+                            <TelegramShareButton url={`${url}/${encodeURIComponent(x.title)?.split(" ").join("-").replace('?', '')}/${x._id}`}>
                                 <TelegramIcon />
                             </TelegramShareButton>
-                            <EmailShareButton url={`${url}/${x?.title?.split(" ").join("-").replace('?', '')}/${x._id}`}>
+                            <EmailShareButton url={`${url}/${encodeURIComponent(x.title)?.split(" ").join("-").replace('?', '')}/${x._id}`}>
                                 <EmailIcon />
                             </EmailShareButton>
                         </div>
                         <div className="d-flex align-items-center mt-3" style={{ gap: "1rem" }}>
-                            <input type="text" name="" id="" className="form-control" ref={inputRef} value={`${url}/${x?.title?.split(" ").join("-").replace('?', '')}/${x._id}`} />
+                            <input type="text" name="" id="" className="form-control" ref={inputRef} value={`${url}/${encodeURIComponent(x?.title)?.split(" ").join("-").replace('?', '')}/${x._id}`} />
                             <button type="button" onClick={copyText}
                                 style={{
                                     border: "none",

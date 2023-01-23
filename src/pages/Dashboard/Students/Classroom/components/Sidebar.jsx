@@ -87,7 +87,7 @@ export const CustomButton = styled(Button)`
 
 
 
-const Sidebar = ({ modules,setContents,setPickedType,setBodyTitle,reduceContent, setActive, active, isMobile, completed, setCompleted, progress, setLocked
+const Sidebar = ({ modules,setContents,setPickedType,setBodyTitle,reduceContent, setActive, active, isMobile, progress, setLocked
 }) => {
     const navigate = useNavigate()
     let elementRef = createRef(null)
@@ -99,7 +99,7 @@ const Sidebar = ({ modules,setContents,setPickedType,setBodyTitle,reduceContent,
         result =(Math.floor((progress.isCompleted / progress.total) * 100))
         console.log({result})
         return result
-    }, [completed, reduceContent, progress.isCompleted, progress.length])
+    }, [ reduceContent, progress.isCompleted, progress.length])
 
     return (
         <SidebarContainer $mobile={isMobile}>
@@ -129,7 +129,6 @@ const Sidebar = ({ modules,setContents,setPickedType,setBodyTitle,reduceContent,
                                 setContents={setContents}
                                 setPickedType={setPickedType}
                                 module={id}
-                                setCompleted={setCompleted}
                                 reduceContent={reduceContent}
                                 setBodyTitle={setBodyTitle}
                                 setLocked={setLocked}

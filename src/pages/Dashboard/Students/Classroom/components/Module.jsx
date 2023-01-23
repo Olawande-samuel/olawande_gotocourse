@@ -85,7 +85,7 @@ const Locked = styled(MdOutlineLock)`
 
 
 
-const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData, setCompleted, setLocked
+const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData, setLocked
     // setActive, active,
 }) => {
     const [active, setActive] = useState(false)
