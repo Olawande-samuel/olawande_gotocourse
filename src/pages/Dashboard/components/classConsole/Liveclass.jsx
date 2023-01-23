@@ -146,6 +146,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
   const userdata = getItem(KEY)
   const queryClient = useQueryClient();
 
+  const {classId} = useParams()
 
 
   function handleEdit(){
@@ -181,7 +182,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
     let startingDate = new Date(startDate).getTime();
 
     if(today >= startingDate){
-      navigate(`connect/${_id}`)
+      window.open(`https://www.meetifix.com/live/${classId}?token=${userdata?.id}`, '_blank')
     }else {
       window.alert(`Class starts on ${startDate}`)
     }
