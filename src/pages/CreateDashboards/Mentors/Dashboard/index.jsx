@@ -100,7 +100,7 @@ const Dashboard = () =>{
                 </ul>
             </div>
             <div className={clsx["dashboard_courses--right"]}>
-                <h6>My Courses</h6>
+                <h6>My Classes</h6>
                 {/* <ul>
                     {
                         data?.data?.length === 0 || !data?.data ?  

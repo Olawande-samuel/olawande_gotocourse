@@ -440,7 +440,7 @@ export function MyClasses() {
     console.log({ courseList });
 
     return (
-        <Students header={"My Courses"}>
+        <Students header={"My Classes"}>
             {loading && <Loader />}
             <div className={clsx["students_profile"]}>
                 <div className={clsx.admin__student}>
