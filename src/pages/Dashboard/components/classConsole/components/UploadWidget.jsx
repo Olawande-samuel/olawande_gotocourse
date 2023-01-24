@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import clsx from "../../../../../components/globalStyles.module.css";
 
 
-const UploadWidget = ({ fileUrl, setFileUrl }) => {
+const UploadWidget = ({ fileUrl, setFileUrl, setFileData, type}) => {
     const cloudinaryRef = useRef(null);
     const widgetRef = useRef(null);
 
@@ -13,7 +13,7 @@ const UploadWidget = ({ fileUrl, setFileUrl }) => {
         console.log(cloudinaryRef?.current);
         widgetRef.current = cloudinaryRef?.current?.createUploadWidget({
             cloudName: process.env.REACT_APP_CLOUD_NAME,
-            uploadPreset: "ml_default",
+            uploadPreset: "ml_default", folder: "files",
         }, function (error, result) {
             if (result.event === "success") {
                 console.log(result?.info?.secure_url);
@@ -21,6 +21,9 @@ const UploadWidget = ({ fileUrl, setFileUrl }) => {
                 let extension = ext[ext.length -1]
                 console.log({extension});
                 setFileUrl(extension)
+                if(type === "console"){
+                    setFileData(result.info)
+                }
                 return;
             }
             console.log(error);
@@ -51,12 +54,12 @@ const UploadWidget = ({ fileUrl, setFileUrl }) => {
             }} style={{ color: "red", border: " none", outline: "none", padding: ".5rem" }}>Click to Upload file</button>
 
 
-                {fileUrl &&
-                    <>
+            {fileUrl &&
+                <>
 
-                        <input className="w-100" style={{ cursor: "pointer" }} type="text" readOnly value={fileUrl} onClick={e => copy(e.currentTarget.value)} />
-                    </>
-                }
+                    <input className="w-100" style={{ cursor: "pointer" }} type="text" readOnly value={fileUrl} onClick={e => copy(e.currentTarget.value)} />
+                </>
+            }
 
         </>
     )

@@ -92,7 +92,6 @@ const UploadForm = ({ isOpen, setIsOpen, setPreviewImage, uploadType }) => {
     const mutation = useMutation(([token, data]) => addFile(token, data), {
         onSuccess: (res) => {
             console.log(res)
-
             setData(null)
             setFile(null)
             setImageUrl(null)

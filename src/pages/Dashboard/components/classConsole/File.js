@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "../classConsole/Content.css";
 import { IoMdCloudDownload } from "react-icons/io";
@@ -58,9 +58,12 @@ export default function File() {
 	const [videoOpen, setVideoOpen] = useState(false);
 	const [fileData, setFileData] = useState([]);
 	const [fileUrl, setFileUrl] = useState("")
-	
+	const [uploadData, setUploadData] = useState({})
+	const queryClient = useQueryClient()
+
+
 	const {
-		consoleFunctions: { fetchFile },
+		consoleFunctions: { fetchFile, addFile },
 	} = useAuth();
 	const { getItem } = useLocalStorage();
 
@@ -114,6 +117,32 @@ export default function File() {
 	);
 
 	// console.log({ fileData });
+	const mutation = useMutation(([token, data]) => addFile(token, data), {
+        onSuccess: (res) => {
+            console.log(res)
+            queryClient.invalidateQueries("file content")
+        },
+        onError: (err) => console.error(err)
+    })
+
+    // create content after upload
+
+    function createFileContent(file, fileId, fileName) {
+            // call file upload function
+            mutation.mutate([value?.token, {
+                classId,
+                contentId,
+                fileName: uploadData.secure_url,
+                title: uploadData?.public_id
+            }])
+        
+    }
+
+	useEffect(()=>{
+		if(fileUrl){
+			createFileContent()
+		}
+	},[fileUrl])
 
 	return (
 		<>
@@ -197,13 +226,13 @@ export default function File() {
 							fileCreate={true}
 						/>
 
-						<UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
-
-						{/* <UploadForm
+						<UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} type="console" setFileData={setUploadData} />
+ 
+						<UploadForm
 							isOpen={openUpload}
 							setIsOpen={setOpenUpload}
 							uploadType="content"
-						/> */}
+						/>
 					</TabPanel>
 
 					<TabPanel value={value} index={1}>
