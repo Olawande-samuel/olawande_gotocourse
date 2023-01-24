@@ -598,6 +598,7 @@ export const InDemandCard = styled.div`
     .img{
         width: 100%;
         height: 150px;
+        // border: 2px solid red;
 
         img{
             width:100%;
@@ -607,12 +608,13 @@ export const InDemandCard = styled.div`
     }
 
     .content{
-        padding: .5rem;
+        padding: .1rem .5rem;
+        // border: 2px solid yellow;
 
-
+ 
         h6 {
             font-weight: 700;
-            padding: .5rem 0;
+            padding: .2rem 0;
         }
 
         .mid_content{
@@ -796,9 +798,9 @@ export function Head({ title, bootcampImg, category, duration, price, packages, 
                     </div>
 
                     <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
-                    <p>Start Date:</p>
-                    <p>{getFullDate(startDate)}</p>
-                </div>
+                        <p>Start Date:</p>
+                        <p>{getFullDate(startDate)}</p>
+                    </div>
                 </div>
 
                 <div className="view">
@@ -1408,8 +1410,8 @@ export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, 
         else if (cat === "HEAD_START") return "Headstart Course";
         else if (cat === "upcoming") return "Upcoming Course";
         else return ""
-    
-      }
+
+    }
 
     return (
         <UpCoursesCard>
@@ -1437,16 +1439,16 @@ export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, 
 
 
 
-                <div className="checks" 
+                <div className="checks"
                 // style={{ paddingTop: "1rem" }}
                 >
                     <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p>
                     <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
                 </div>
 
-                <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize:"13px" }}>
+                <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
                     <p>Start Date:</p>
-              <p>{getFullDate(startDate)}</p>
+                    <p>{getFullDate(startDate)}</p>
                 </div>
 
                 <div className="foot d-flex justify-content-center">
@@ -1557,7 +1559,7 @@ export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, 
 }
 
 
-export function PathCourseCard({ title, bootcampImg, bootcampId, category,startDate, description, duration, price, packages, popupTitle, popupArr, all }) {
+export function PathCourseCard({ title, bootcampImg, bootcampId, category, startDate, description, duration, price, packages, popupTitle, popupArr, all }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
