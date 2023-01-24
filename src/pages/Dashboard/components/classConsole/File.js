@@ -140,10 +140,10 @@ export default function File() {
     }
 
 	useEffect(()=>{
-		if(fileUrl){
+		if(uploadData.name){
 			createFileContent()
 		}
-	},[fileUrl])
+	},[uploadData.name])
 
 	console.log({uploadData})
 	return (
