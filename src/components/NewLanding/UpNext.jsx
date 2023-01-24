@@ -27,7 +27,7 @@ import { AiOutlineCheck } from 'react-icons/ai';
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-    grid-auto-rows: 392px;
+    grid-auto-rows: 450px;
     /* overflow: hidden; */
     gap: 1.5rem;
     justify-content:space-around;
@@ -53,7 +53,7 @@ const UpCoursesCard = styled.div`
     /* border: 2.2648px solid rgba(0, 114, 239, 0.5);
     padding: clamp(0.03125rem, -0.2813rem + 1.5625vw, 1.125rem);
     border-radius: 8px; */
-    height: 410px;
+    height: 430px;
     display: flex;
     flex-direction:column;
     box-shadow: -10px 159px 64px rgba(0, 0, 0, 0.01), -6px 90px 54px rgba(0, 0, 0, 0.05), -3px 40px 40px rgba(0, 0, 0, 0.09), -1px 10px 22px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
@@ -223,7 +223,7 @@ export function TabsComp() {
         <Swiper
           // install Swiper modules
           modules={[Navigation, Autoplay]}
-          loop={true}
+          // loop={true}
           speed={2500}
           autoplay={{ delay: 2400 }}
           spaceBetween={0}
