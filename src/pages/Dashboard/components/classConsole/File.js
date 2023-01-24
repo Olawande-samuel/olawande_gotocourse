@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "../classConsole/Content.css";
 import { IoMdCloudDownload } from "react-icons/io";
@@ -58,9 +58,12 @@ export default function File() {
 	const [videoOpen, setVideoOpen] = useState(false);
 	const [fileData, setFileData] = useState([]);
 	const [fileUrl, setFileUrl] = useState("")
-	
+	const [uploadData, setUploadData] = useState({})
+	const queryClient = useQueryClient()
+
+
 	const {
-		consoleFunctions: { fetchFile },
+		consoleFunctions: { fetchFile, addFile },
 	} = useAuth();
 	const { getItem } = useLocalStorage();
 
@@ -114,7 +117,35 @@ export default function File() {
 	);
 
 	// console.log({ fileData });
+	const mutation = useMutation(([token, data]) => addFile(token, data), {
+        onSuccess: (res) => {
+            console.log(res)
+            queryClient.invalidateQueries("file content")
+        },
+        onError: (err) => console.error(err)
+    })
 
+    // create content after upload
+
+    function createFileContent(file, fileId, fileName) {
+            // call file upload function
+			console.log({uploadData})
+            mutation.mutate([userdata?.token, {
+                classId,
+                contentId,
+                fileName: uploadData.name,
+                title: uploadData?.originalName
+            }])
+        
+    }
+
+	useEffect(()=>{
+		if(fileUrl){
+			createFileContent()
+		}
+	},[fileUrl])
+
+	console.log({uploadData})
 	return (
 		<>
 			<div className="">
@@ -158,9 +189,10 @@ export default function File() {
 						<section className="contenttop">
 							<div className="contentbutton">
 								<button className="">Refresh</button>
-								<button className="" onClick={OpenToggle}>
+								<UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} type="console" setUploadData={setUploadData} />
+								{/* <button className="" onClick={OpenToggle}>
 									Add New +
-								</button>
+								</button> */}
 							</div>
 						</section>
 
@@ -197,13 +229,13 @@ export default function File() {
 							fileCreate={true}
 						/>
 
-						<UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
-
-						{/* <UploadForm
+						{/* <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} type="console" setUploadData={setUploadData} /> */}
+ 
+						<UploadForm
 							isOpen={openUpload}
 							setIsOpen={setOpenUpload}
 							uploadType="content"
-						/> */}
+						/>
 					</TabPanel>
 
 					<TabPanel value={value} index={1}>

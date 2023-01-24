@@ -2748,8 +2748,10 @@ export const adminFunctions = {
         }
     },
     removeStudentToClass: async function (token, _data) {
+        console.log("token", token)
+        console.log("data",_data)
         try {
-            const res = await axios.delete(`${baseURL}/admin/student/class/remove`,
+            const res = await axios.post(`${baseURL}/admin/student/class/remove`,
                 JSON.stringify(_data),
                 {
                     headers: {
@@ -4182,6 +4184,39 @@ export const teacherFunctions = {
 
 export const otherFunctions = {
     // CHANGE URL
+    addNewFile: async function (token, data) {
+        try {
+            const res = await axios.post(`${baseURL}/file/add`, JSON.stringify(data),
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
 
     fetchMentors: async function () {
         try {

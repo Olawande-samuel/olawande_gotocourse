@@ -101,11 +101,11 @@ export default function Bootcamps() {
       navigate("details/"+_id);
     }
     return (
-      <Teachers header={"Classes"} >
+      <Teachers header={"Courses"} >
         {loading && <Loader />}
         <div className={clsx["teachers_profile"]}>
             <div className="d-flex justify-content-between align-items-center mb-3">
-              <h3 style={{ margin: 0 }}>Classes</h3>
+              <h3 style={{ margin: 0 }}>Courses</h3>
             </div>
   
             <div className={clsx.admin__student_main}>

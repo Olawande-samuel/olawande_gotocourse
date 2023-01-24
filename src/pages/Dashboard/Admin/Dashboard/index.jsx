@@ -127,11 +127,14 @@ const Dashboard = () => {
     useEffect(() => {
         if(flag.current) return;
         (async() => {
+            console.log("calling")
             try{
                 const res = await Promise.all([fetchTeachers(userdata?.token), fetchStudents(userdata?.token), fetchCourses(userdata?.token), fetchCategories(userdata?.token)]);
                 
                 const [teachers, students, courses, categories] = res;
                 const {success, statusCode, message} = teachers;
+                console.log({students})
+                console.log({teachers}) 
                 if(!success) throw new AdvancedError(message, statusCode);
                 else {
                     //no error found

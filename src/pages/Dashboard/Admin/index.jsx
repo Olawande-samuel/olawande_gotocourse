@@ -3460,6 +3460,7 @@ export function BootcampDetails({ }) {
 
   const removeMutation = useMutation(([token, data]) => removeStudentToClass(token, data), {
     onSuccess: res => {
+      console.log({res})
       if(res.statusCode === 1){
         toast.success(res.message)
         setStudent("")
@@ -3476,8 +3477,9 @@ export function BootcampDetails({ }) {
 
 
   function removeStudent(){
-    removeMutation.mutate([ userdata.token, {userId: removedStudent, bootcampId: params.id}])
+    removeMutation.mutate([userdata.token, {userId: removedStudent, bootcampId: params.id}])
   }
+  console.log({removedStudent})
 
   return (
     <Admin header="ADMIN">

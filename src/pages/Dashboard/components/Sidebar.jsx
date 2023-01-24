@@ -213,7 +213,7 @@ const Sidebar = () => {
                 {
                     icon: BiCategory,
                     path: "myclasses",
-                    title: "My Courses",
+                    title: "My Classes",
                 },
                 {
                     icon: BiVideo,
@@ -455,7 +455,13 @@ const Sidebar = () => {
                         {
                             icon: BiCategory,
                             path: "myclasses",
-                            title: "My Courses",
+                            title: "My Classes",
+                        },
+                        {
+                            icon: SiGoogleclassroom,
+                            path: "console/myclasses",
+                            title: "Class Console",
+                            showBadge: true,
                         },
                         // {
                         //     icon: BiVideo,
@@ -495,12 +501,12 @@ const Sidebar = () => {
                             title: "Chat",
                             showBadge: true,
                         },
-                        {
-                            icon: SiGoogleclassroom,
-                            path: "console/myclasses",
-                            title: "Class Console",
-                            showBadge: true,
-                        },
+                        // {
+                        //     icon: SiGoogleclassroom,
+                        //     path: "console/myclasses",
+                        //     title: "Class Console",
+                        //     showBadge: true,
+                        // },
                         {
                             icon: BiHelpCircle,
                             path: "help",
@@ -524,10 +530,15 @@ const Sidebar = () => {
                             //     path: "courses",
                             //     title: "Courses"
                             // },
+                            // {
+                            //     icon: BiCategory,
+                            //     path: "classes",
+                            //     title: "Classes",
+                            // },
                             {
-                                icon: BiCategory,
-                                path: "classes",
-                                title: "Courses",
+                                icon: SiGoogleclassroom,
+                                path: "class-console",
+                                title: "My Classes",
                             },
                             // {
                             //     icon: BiVideo,
@@ -561,11 +572,11 @@ const Sidebar = () => {
                                 path: "help",
                                 title: "Help",
                             },
-                            {
-                                icon: SiGoogleclassroom,
-                                path: "class-console",
-                                title: "Console",
-                            },
+                            // {
+                            //     icon: SiGoogleclassroom,
+                            //     path: "class-console",
+                            //     title: "Console",
+                            // },
                         ]
                         : route === "mentor"
                             ? [
