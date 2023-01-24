@@ -153,7 +153,7 @@ export const Blog = () => {
     return (
         <ClassTypeComponent {...data}>
             <Grid>
-                {blogs.length > 0 && blogs.slice(0, 8).map(blog => (
+                {blogs.length > 0 && blogs.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 8).map(blog => (
 
                     <Card key={blog._id}>
                         <Link to={`/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>

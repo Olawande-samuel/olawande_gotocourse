@@ -503,6 +503,8 @@ export const Blog = () => {
 
     return (
         <Admin>
+            <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+
             <Form >
 
                 <form>
@@ -534,7 +536,7 @@ export const Blog = () => {
                             }}
                         />
                     </label>
-                    <label htmlFor="upload">Upload</label>
+                    {/* <label htmlFor="upload">Upload</label> */}
                     {/* <Button variant="contained" component="label" style={{ width: "50%", color: "#FFFFFF", background: "#0C2191" }} onClick={showUploadFormHandler}>
                         <BiCloudDownload style={{ fontSize: "2rem", color: "#FFFFFF" }} /> Upload
                     </Button> */}
@@ -545,7 +547,6 @@ export const Blog = () => {
                         setPreviewImage={setPreviewImage}
                     /> */}
 
-                    <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
 
                     <label htmlFor="title">Upload Link
                         <input type="text"

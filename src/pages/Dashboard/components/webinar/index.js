@@ -413,6 +413,8 @@ export const AdminWebinar = () => {
     console.log({ formState });
     return (
         <Admin>
+                    <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+
             <Form >
 
                 <form>
@@ -443,7 +445,6 @@ export const AdminWebinar = () => {
                         setPreviewImage={setPreviewImage}
                     /> */}
 
-                    <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
 
                     <label htmlFor="title">Webinar Image Url
                         <input type="text"
@@ -559,7 +560,7 @@ export const AdminWebinar = () => {
                                 <BiCloudDownload style={{ fontSize: "2rem", color: "#FFFFFF" }} /> Upload
                             </Button> */}
 
-                            <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+                            {/* <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} /> */}
 
 
                             <label htmlFor="presenterImg">presenter Image
