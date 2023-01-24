@@ -129,11 +129,12 @@ export default function File() {
 
     function createFileContent(file, fileId, fileName) {
             // call file upload function
-            mutation.mutate([value?.token, {
+			console.log({uploadData})
+            mutation.mutate([userdata?.token, {
                 classId,
                 contentId,
-                fileName: uploadData.secure_url,
-                title: uploadData?.public_id
+                fileName: uploadData.name,
+                title: uploadData?.originalName
             }])
         
     }
@@ -144,6 +145,7 @@ export default function File() {
 		}
 	},[fileUrl])
 
+	console.log({uploadData})
 	return (
 		<>
 			<div className="">
@@ -187,9 +189,10 @@ export default function File() {
 						<section className="contenttop">
 							<div className="contentbutton">
 								<button className="">Refresh</button>
-								<button className="" onClick={OpenToggle}>
+								<UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} type="console" setUploadData={setUploadData} />
+								{/* <button className="" onClick={OpenToggle}>
 									Add New +
-								</button>
+								</button> */}
 							</div>
 						</section>
 
@@ -226,7 +229,7 @@ export default function File() {
 							fileCreate={true}
 						/>
 
-						<UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} type="console" setFileData={setUploadData} />
+						{/* <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} type="console" setUploadData={setUploadData} /> */}
  
 						<UploadForm
 							isOpen={openUpload}
