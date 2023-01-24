@@ -879,6 +879,8 @@ export function CreateCourseCategory() {
             <img src={vector} alt={"Placeholder"} />
             <p>Upload banner or icon Image</p>
           </div>
+
+
           <form className="form" style={{ width: "80%" }}>
             <Input
               label="Name of category"
@@ -887,13 +889,13 @@ export function CreateCourseCategory() {
               handleChange={changeHandler}
               value={formstate.name.toUpperCase()}
             />
-            {/* <Input
+            {/* <Input 
               label="First Description"
               name="description"
               type="text"
               handleChange={changeHandler}
               value={formstate.description}
-            />
+            /> 
             <Input
               label=" Second Description"
               name="niche"
