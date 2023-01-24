@@ -17,7 +17,7 @@ const UploadWidget = ({ fileUrl, setFileUrl, setUploadData, type}) => {
     const addToFile = useMutation(([token, data])=> addNewFile(token, data), {
         onSuccess: (res)=> {
             console.log(res)
-            if(res.success){
+            if(res.statusCode === 1){
                 setUploadData(res.data)
                 console.log("setting done")
             }
