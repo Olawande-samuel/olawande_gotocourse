@@ -4216,7 +4216,7 @@ export function CreateBootcamp() {
   }
 
 
-  console.log({ formstate });
+  // console.log({ formstate });
   return (
     <Admin header={location.search ? "Edit Course" : "Create Course"}>
       {loader && <Loader />}

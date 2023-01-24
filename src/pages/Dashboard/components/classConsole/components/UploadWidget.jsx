@@ -14,9 +14,11 @@ const UploadWidget = ({ fileUrl, setFileUrl }) => {
         widgetRef.current = cloudinaryRef?.current?.createUploadWidget({
             cloudName: process.env.REACT_APP_CLOUD_NAME,
             uploadPreset: "ml_default",
+            folder: "files"
         }, function (error, result) {
             if (result.event === "success") {
-                console.log(result?.info?.secure_url);
+                console.log({result});
+                console.log(result?.info);
                 let ext = result?.info?.secure_url.split("/");
                 let extension = ext[ext.length -1]
                 console.log({extension});
