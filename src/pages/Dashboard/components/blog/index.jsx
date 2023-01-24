@@ -19,6 +19,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import { toast } from "react-toastify"
 import { ShareModal } from "../../../Events/articles"
+import UploadWidget from "../classConsole/components/UploadWidget"
 
 
 
@@ -223,7 +224,7 @@ export const MyBlog = () => {
                     <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
                 </div>
                 <h4>{blog.title}</h4>
-                <p dangerouslySetInnerHTML={{__html: blog.content}}></p>
+                <p dangerouslySetInnerHTML={{ __html: blog.content }}></p>
 
             </Container>
 
@@ -278,14 +279,14 @@ export const BlogDashboard = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-              });
+            });
         } finally {
             setGeneralState({ ...generalState, loading: false })
 
         }
     }
-    const [open,setOpen]= useState(false)
-    function handleShare(e){
+    const [open, setOpen] = useState(false)
+    function handleShare(e) {
         e.preventDefault();
         setOpen(true)
     }
@@ -306,7 +307,7 @@ export const BlogDashboard = () => {
                 </button>
             </Header>
             <CardContainer>
-                { blogs.length > 0 &&  blogs.map((blog, i) => (
+                {blogs.length > 0 && blogs.map((blog, i) => (
 
                     <BlogCard blog={blog} key={i} />
                 ))}
@@ -316,7 +317,7 @@ export const BlogDashboard = () => {
     )
 }
 
-function BlogCard({blog}){
+function BlogCard({ blog }) {
     const { getItem } = useLocalStorage();
     const queryClient = useQueryClient()
     const [blogs, setBlogs] = useState([])
@@ -349,33 +350,33 @@ function BlogCard({blog}){
 
         }
     }
-    const [open,setOpen]= useState(false)
-    function handleShare(e){
+    const [open, setOpen] = useState(false)
+    function handleShare(e) {
         e.preventDefault();
         setOpen(true)
     }
-    return(
+    return (
         <Card key={blog._id}>
-                        <Link to={`${blog._id}`}>
-                            <div className="top">
-                                <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
+            <Link to={`${blog._id}`}>
+                <div className="top">
+                    <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
 
-                            </div>
-                        </Link>
-                        <div className="bottom">
-                            <h4>{blog.title}</h4>
-                            <p className="restricted_line" dangerouslySetInnerHTML={{__html: blog.content}}></p>
+                </div>
+            </Link>
+            <div className="bottom">
+                <h4>{blog.title}</h4>
+                <p className="restricted_line" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
 
-                            <div className="blogbutton">
+                <div className="blogbutton">
 
-                                <button onClick={() => updateBlogFunc(blog._id)}>Edit</button>
-                                <button onClick={() => deleteBlogFunc(blog._id)}>Delete</button>
-                                <button onClick={handleShare}>Share</button>
-                            </div>
+                    <button onClick={() => updateBlogFunc(blog._id)}>Edit</button>
+                    <button onClick={() => deleteBlogFunc(blog._id)}>Delete</button>
+                    <button onClick={handleShare}>Share</button>
+                </div>
 
-                        </div>
-                        <ShareModal x={blog} open={open} setOpen={setOpen} url={BLOGURL} />
-                    </Card>
+            </div>
+            <ShareModal x={blog} open={open} setOpen={setOpen} url={BLOGURL} />
+        </Card>
     )
 }
 
@@ -383,6 +384,7 @@ export const Blog = () => {
     const [open, setOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState(false);
     const [edit, setEdit] = useState(false)
+    const [fileUrl, setFileUrl] = useState("");
 
     let flag = useRef(false)
     const [formState, setFormState] = useState({
@@ -423,7 +425,7 @@ export const Blog = () => {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
-                  });
+                });
             } finally {
                 setGeneralState({ ...generalState, loading: false })
 
@@ -448,7 +450,7 @@ export const Blog = () => {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
-                  });
+                });
             } finally {
                 setGeneralState({ ...generalState, loading: false })
 
@@ -497,10 +499,12 @@ export const Blog = () => {
         return () => console.log("Removing");
     }, [id])
 
-//    console.log({formState});
+    //    console.log({formState});
 
     return (
         <Admin>
+            <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+
             <Form >
 
                 <form>
@@ -512,37 +516,38 @@ export const Blog = () => {
                             onChange={(e) => setFormState({ ...formState, [e.target.name]: e.target.value })}
                         />
                     </label>
-                    
+
                     <label htmlFor="content">Content
 
-                    <CKEditor
-                        editor={ClassicEditor}
-                        data={formState.content}
-                        onReady={(editor) => {
-                            // You can store the "editor" and use when it is needed.
-                            // console.log('Editor is ready to use!', editor);
+                        <CKEditor
+                            editor={ClassicEditor}
+                            data={formState.content}
+                            onReady={(editor) => {
+                                // You can store the "editor" and use when it is needed.
+                                // console.log('Editor is ready to use!', editor);
 
-                        }}
-                        onChange={(event, editor) => {
-                            const data = editor.getData();
-                            // console.log({ event, editor, data });
+                            }}
+                            onChange={(event, editor) => {
+                                const data = editor.getData();
+                                // console.log({ event, editor, data });
 
-                            setFormState({ ...formState, ["content"]: data })
-                            // setFormstate({...formstate, mentorBio: data})
-                        }}
-                    />
-</label> 
-                    <label htmlFor="upload">Upload</label>
-                    <Button variant="contained" component="label" style={{ width: "50%", color: "#FFFFFF", background: "#0C2191" }} onClick={showUploadFormHandler}>
+                                setFormState({ ...formState, ["content"]: data })
+                                // setFormstate({...formstate, mentorBio: data})
+                            }}
+                        />
+                    </label>
+                    {/* <label htmlFor="upload">Upload</label> */}
+                    {/* <Button variant="contained" component="label" style={{ width: "50%", color: "#FFFFFF", background: "#0C2191" }} onClick={showUploadFormHandler}>
                         <BiCloudDownload style={{ fontSize: "2rem", color: "#FFFFFF" }} /> Upload
-                        {/* <input hidden accept="image/*" multiple type="file"/> */}
-                    </Button>
-
+                    </Button> */}
+                    {/* 
                     <UploadForm
                         isOpen={open}
                         setIsOpen={setOpen}
                         setPreviewImage={setPreviewImage}
-                    />
+                    /> */}
+
+
                     <label htmlFor="title">Upload Link
                         <input type="text"
                             name="blogImg"
