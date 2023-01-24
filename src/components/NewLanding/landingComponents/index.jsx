@@ -588,7 +588,7 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
 
 // INDEMAND
 
-const InDemandCard = styled.div`
+export const InDemandCard = styled.div`
     // border: 2px solid red;
     display: flex;
     flex-direction: column;

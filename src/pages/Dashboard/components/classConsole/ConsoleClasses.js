@@ -1,12 +1,127 @@
-
-import '../classConsole/Content.css'
+import styled from 'styled-components'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 // import empty from '../../../../images/empty.png'
 import { useAuth } from "../../../../contexts/Auth";
 import { useLocalStorage } from "../../../../hooks";
 import { useQuery } from "@tanstack/react-query"
+import '../classConsole/Content.css'
 
 const KEY = 'gotocourse-userdata';
+
+
+ const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
+  grid-auto-rows: 380px;
+  overflow: hidden;
+  gap: 2.5rem;
+  row-gap: 3rem;
+  justify-content: space-around;
+  padding: .7rem .5rem;
+
+
+  @media screen and (max-width: 1250px) {
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 240px), 240px));
+    justify-content: space-evenly;
+    gap: 1rem;
+  }
+  @media screen and (max-width:500px){
+        grid-template-columns: min(100%, 280px);
+        justify-content:center;
+    } 
+`;
+
+export const AssessmentCard = styled.div`
+    // border: 2px solid red;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    // padding: 1rem clamp(0.625rem, 0.5179rem + 0.5357vw, 1rem);
+    box-shadow: -9px 150px 60px rgba(0, 0, 0, 0.01), -5px 85px 51px rgba(0, 0, 0, 0.05), -2px 38px 38px rgba(0, 0, 0, 0.09), -1px 9px 21px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
+    .img{
+        width: 100%;
+        height: 250px;
+
+        img{
+            width:100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .content{
+        padding: .5rem;
+
+
+        h6 {
+            font-weight: 700;
+            padding: .5rem 0;
+        }
+
+        .mid_content{
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            
+            .mid_stats {
+                font-size:14px;
+                display:flex;
+                justify-content: space-between;
+                
+                span:first-child {
+                    text-transform: capitalize;
+                }
+            }
+
+            .checks{
+
+                p{
+                    font-weight: 500;
+                    font-size: 13.6101px;
+                    line-height: 16px;
+                }
+
+                .icon{
+                    color: var(--theme-blue);
+                }
+            }
+         
+            
+        }
+
+        .view{
+            display: flex;
+            justify-content: flex-end;
+            padding: .5rem 0;
+            width: 100%;
+
+            button{
+                border: 1px solid;
+                padding: .5rem ;
+                outline: none;
+                font-size: 13.6101px;
+                line-height: 16px;
+            }
+        }
+
+        .contentbtn{
+
+            button{
+                width:100%;
+                color: white;  
+                background-color: var(--btn-color);     
+                border: none;
+                outline: none;
+                font-size: 13.6101px;
+                line-height: 16px;
+                padding: .5rem 0;
+            }
+        }
+
+
+    }
+  
+`
 
 export function MyClass() {
     const { id } = useParams
@@ -52,30 +167,36 @@ export default function ConsoleClasses() {
     return (
         <div className=''>
             <main className='assessments'>
+
+
                 {
                     data?.data?.filter(item => item.status === "paid")?.length > 0 ?
-                        data?.data?.filter(item => item.status === "paid").map((x, id) => (
-                            <div className="assesstmentbox" key={x.bootcampId} style={{ cursor: "pointer" }} onClick={() => {
-                                navigate(`/student/class-console/class/${x.bootcampId}`, {
-                                    state: {
-                                        bootcamp: x
-                                    }
-                                })
-                            }}>
-                                <div className="excelbox">
-                                    {/* <img src={`${process.env.REACT_APP_IMAGEURL}${x.bootcampImg}`} alt="" /> */}
-                                    <img src={`${x.bootcampImg}`} alt="" />
-                                </div>
-                                <p>{x.bootcampName} </p>
-                            </div>
-                        ))
+                        <Grid>
+                            {data?.data?.filter(item => item.status === "paid").map((x, id) => (
+                                <AssessmentCard key={x.bootcampId} style={{ cursor: "pointer" }} onClick={() => {
+                                    navigate(`/student/class-console/class/${x.bootcampId}`, {
+                                        state: {
+                                            bootcamp: x
+                                        }
+                                    })
+                                }}>
+                                    <div className="img">
+                                        <img src={x.bootcampImg} alt="" />
+                                    </div>
+                                    <div className="content">
+                                        <h6>{x.bootcampName}</h6>
+                                    </div>
+                                </AssessmentCard>
+                            ))}
+
+                        </Grid>
                         :
                         // <p>no items</p>
-                        
 
-                    <div className="dashboard_empty">
-                        <p>No Class Available</p>
-                    </div>
+
+                        <div className="dashboard_empty">
+                            <p>No Class Available</p>
+                        </div>
 
                 }
 
