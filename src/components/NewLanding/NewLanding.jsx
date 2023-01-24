@@ -87,10 +87,10 @@ const NewLanding = () => {
       <Up />
       <Category />
       <Benefits />
-      <Headstart />
-      <Pathfinder />
       <IndemandClasses />
       <UpskillCourse />
+      <Headstart />
+      <Pathfinder />
       {/* <ExecutiveClasses /> */}
       <ShortCourses />
       <Mentors />
