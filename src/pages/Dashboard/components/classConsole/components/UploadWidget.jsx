@@ -1,12 +1,31 @@
+import { useMutation } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify";
 import clsx from "../../../../../components/globalStyles.module.css";
+import { KEY } from "../../../../../constants";
+import { useAuth } from "../../../../../contexts/Auth";
+import { useLocalStorage } from "../../../../../hooks";
 
 
-const UploadWidget = ({ fileUrl, setFileUrl, setFileData, type}) => {
+const UploadWidget = ({ fileUrl, setFileUrl, setUploadData, type}) => {
     const cloudinaryRef = useRef(null);
     const widgetRef = useRef(null);
+    const {getItem} = useLocalStorage();
+    const userdata = getItem(KEY)
+    const {otherFunctions: {addNewFile}} = useAuth()
 
+    const addToFile = useMutation(([token, data])=> addNewFile(token, data), {
+        onSuccess: (res)=> {
+            console.log(res)
+            if(res.success){
+                setUploadData(res.data)
+                console.log("setting done")
+            }
+        },
+        onError: err => console.error(err)
+    })
+
+    console.log({setUploadData})
     useEffect(() => {
         cloudinaryRef.current = window?.cloudinary;
 
@@ -21,9 +40,15 @@ const UploadWidget = ({ fileUrl, setFileUrl, setFileData, type}) => {
                 let extension = ext[ext.length -1]
                 console.log({extension});
                 setFileUrl(extension)
-                if(type === "console"){
-                    setFileData(result.info)
-                }
+                addToFile.mutate([userdata.token, {
+                    fileName: extension,
+                    mimeType: result.info.resource_type +"/"+ result.info.format,
+                    fileSize: result.info.bytes,
+                    originalName:result.info.public_id.split("/")[1],
+                    location:"/files",
+                    uploadedBy:userdata.id
+                }])
+              
                 return;
             }
             console.log(error);
@@ -53,8 +78,9 @@ const UploadWidget = ({ fileUrl, setFileUrl, setFileData, type}) => {
 
             }} style={{ color: "red", border: " none", outline: "none", padding: ".5rem" }}>Click to Upload file</button>
 
+            {type !== "console" &&
 
-            {fileUrl &&
+                fileUrl &&
                 <>
 
                     <input className="w-100" style={{ cursor: "pointer" }} type="text" readOnly value={fileUrl} onClick={e => copy(e.currentTarget.value)} />
