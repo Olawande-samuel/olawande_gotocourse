@@ -223,7 +223,7 @@ export function TabsComp() {
         <Swiper
           // install Swiper modules
           modules={[Navigation, Autoplay]}
-          loop={true}
+          // loop={true}
           speed={2500}
           autoplay={{ delay: 2400 }}
           spaceBetween={0}

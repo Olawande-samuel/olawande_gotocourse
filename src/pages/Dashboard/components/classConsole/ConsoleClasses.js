@@ -12,7 +12,7 @@ const KEY = 'gotocourse-userdata';
  const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-  grid-auto-rows: 380px;
+  grid-auto-rows: 350px;
   overflow: hidden;
   gap: 2.5rem;
   row-gap: 3rem;
@@ -35,12 +35,13 @@ export const AssessmentCard = styled.div`
     // border: 2px solid red;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    // justify-content: space-between;
     // padding: 1rem clamp(0.625rem, 0.5179rem + 0.5357vw, 1rem);
     box-shadow: -9px 150px 60px rgba(0, 0, 0, 0.01), -5px 85px 51px rgba(0, 0, 0, 0.05), -2px 38px 38px rgba(0, 0, 0, 0.09), -1px 9px 21px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
     .img{
         width: 100%;
-        height: 250px;
+        height: 200px;
+        // border: 2px solid green;
 
         img{
             width:100%;
@@ -51,72 +52,19 @@ export const AssessmentCard = styled.div`
 
     .content{
         padding: .5rem;
-
+        // border: 2px solid red;
 
         h6 {
             font-weight: 700;
             padding: .5rem 0;
+
         }
 
-        .mid_content{
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            
-            .mid_stats {
-                font-size:14px;
-                display:flex;
-                justify-content: space-between;
-                
-                span:first-child {
-                    text-transform: capitalize;
-                }
-            }
+      
 
-            .checks{
+   
 
-                p{
-                    font-weight: 500;
-                    font-size: 13.6101px;
-                    line-height: 16px;
-                }
-
-                .icon{
-                    color: var(--theme-blue);
-                }
-            }
-         
-            
-        }
-
-        .view{
-            display: flex;
-            justify-content: flex-end;
-            padding: .5rem 0;
-            width: 100%;
-
-            button{
-                border: 1px solid;
-                padding: .5rem ;
-                outline: none;
-                font-size: 13.6101px;
-                line-height: 16px;
-            }
-        }
-
-        .contentbtn{
-
-            button{
-                width:100%;
-                color: white;  
-                background-color: var(--btn-color);     
-                border: none;
-                outline: none;
-                font-size: 13.6101px;
-                line-height: 16px;
-                padding: .5rem 0;
-            }
-        }
+      
 
 
     }
