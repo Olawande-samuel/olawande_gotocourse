@@ -90,6 +90,17 @@ export const Content = styled.section`
             color:#000;
         }
 
+        a{
+            color:#0d6efd;
+            text-decoration: none;
+        }
+
+        img{
+            max-width: 100%;
+            max-height: 100%;
+            padding: .5rem 0;
+        }
+
     }
 `
 export const MoreLikeThis = styled.section`

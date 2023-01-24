@@ -597,8 +597,7 @@ const QuizComponent = ({ contentItem, userdata }) => {
             <Quiz>
 
                 <QuizInfo>
-                    <p>Description: </p>
-                    <span>{contentItem.note}</span>
+                    <p>Description: <span>{contentItem.note}</span></p>             
                     <p>Max Attempts: <span>{contentItem.maxAttempts}</span></p>
                     <p>Deadline: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
                         hour: '2-digit',

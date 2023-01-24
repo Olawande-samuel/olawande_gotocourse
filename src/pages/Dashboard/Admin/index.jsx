@@ -681,7 +681,7 @@ export function CreateCourseCategory() {
     career: "",
     bannerImg: "",
     niche: "Niche title",
-    iconImg: "iconImg.png"
+    iconImg: "iconImg.png"
 
 
   });
@@ -700,6 +700,7 @@ export function CreateCourseCategory() {
   const [loader, setLoader] = useState(location.search ? true : false);
   const edit = location.search;
   const [bio, setBio] = useState("");
+  const [fileUrl, setFileUrl] = useState("")
 
   useEffect(() => {
     if (flag.current) return;
@@ -871,20 +872,24 @@ export function CreateCourseCategory() {
   return (
     <Admin header="Create Category">
       {loader && <Loader />}
-      <UploadForm
+      {/* <UploadForm
         isOpen={open}
         setIsOpen={setOpen}
         setPreviewImage={setPreviewImage}
-      />
+      /> */}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <div
+          {/* <div
             className={clsx.upload__file_box}
             onClick={showUploadFormHandler}
           >
             <img src={vector} alt={"Placeholder"} />
             <p>Upload banner or icon Image</p>
-          </div>
+          </div> */}
+
+
+          <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+
           <form className="form" style={{ width: "80%" }}>
             <Input
               label="Name of category"
@@ -1267,26 +1272,26 @@ export function ApproveStudent() {
     }
   }, [data]);
 
-  const fetchStudentEnrollments = useQuery(["fetch student enrollments", userdata?.token, data?.userId], ()=>fetchStudentsClasses(userdata?.token, data.userId), {
-    enabled: data?.userId !== null, 
-    onSuccess: (res)=> {
-      if(res?.success){
+  const fetchStudentEnrollments = useQuery(["fetch student enrollments", userdata?.token, data?.userId], () => fetchStudentsClasses(userdata?.token, data.userId), {
+    enabled: data?.userId !== null,
+    onSuccess: (res) => {
+      if (res?.success) {
         setEnrollmentData(res.data)
         return
       }
       setEnrollmentData([])
-      
+
     },
     onError: err => console.error(err)
   })
 
-  console.log({fetchStudentEnrollments})
+  console.log({ fetchStudentEnrollments })
 
-  function getOutstandingAmount(item){
-    let outAmt =  item?.payments?.filter(item=> item.status !== "paid").reduce((acc, curr)=>acc + curr.amount, 0)
+  function getOutstandingAmount(item) {
+    let outAmt = item?.payments?.filter(item => item.status !== "paid").reduce((acc, curr) => acc + curr.amount, 0)
     return outAmt
   }
-  function getDueDate(item){
+  function getDueDate(item) {
     // let paymentData = item?.payments?.filter(item=> item.status !== "paid")
     // let leftOver
     // if(paymentData){
@@ -1294,7 +1299,7 @@ export function ApproveStudent() {
     // }else {
     //   leftOver = "-"
     // }
-    let dueDate = item?.payments?.filter(item=> item.status !== "paid").length > 0 ? item?.payments?.filter(item=> item.status !== "paid")[0]?.dueDate.split("T")[0] : "-"
+    let dueDate = item?.payments?.filter(item => item.status !== "paid").length > 0 ? item?.payments?.filter(item => item.status !== "paid")[0]?.dueDate.split("T")[0] : "-"
     return dueDate
   }
   return (
@@ -1365,41 +1370,41 @@ export function ApproveStudent() {
             <div className={clsx.student_course_info}>
               {
                 fetchStudentEnrollments?.isLoading ?
-                <div className="spinner-border text-primary">
-                  <div className="visually-hidden">Loading...</div>
-                </div>
-                :
-              <div className="table-responsive my-4">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>Courses enrolled</th>
-                      {/* <th>Start date</th> */}
-                      <th>Amount paid</th>
-                      <th>Outstanding</th>
-                      <th>Due date</th>
-                      <th>Total</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                    {
-                      enrollmentData?.map((item, i)=> (
+                  <div className="spinner-border text-primary">
+                    <div className="visually-hidden">Loading...</div>
+                  </div>
+                  :
+                  <div className="table-responsive my-4">
+                    <table className="table">
+                      <thead>
                         <tr>
-                          <td>{i + 1}</td>
-                          <td>{item?.bootcampName}</td>
-                          {/* <td>{item?.startDate}</td> */}
-                          <td>{item?.amountPaid}</td>
-                          <td>{item?.payments?.length > 0 ? getOutstandingAmount(item) : "-"}  </td>
-                          <td>{item?.payments?.length > 0 ?  getDueDate(item) : "-"}  </td>
-                          <td>{item?.bootcampPrice}</td>
+                          <th>No</th>
+                          <th>Courses enrolled</th>
+                          {/* <th>Start date</th> */}
+                          <th>Amount paid</th>
+                          <th>Outstanding</th>
+                          <th>Due date</th>
+                          <th>Total</th>
                         </tr>
-                      ))
-                    }
-                  </tbody>
-                </table>
-              </div>
+                      </thead>
+                      <tbody>
+
+                        {
+                          enrollmentData?.map((item, i) => (
+                            <tr>
+                              <td>{i + 1}</td>
+                              <td>{item?.bootcampName}</td>
+                              {/* <td>{item?.startDate}</td> */}
+                              <td>{item?.amountPaid}</td>
+                              <td>{item?.payments?.length > 0 ? getOutstandingAmount(item) : "-"}  </td>
+                              <td>{item?.payments?.length > 0 ? getDueDate(item) : "-"}  </td>
+                              <td>{item?.bootcampPrice}</td>
+                            </tr>
+                          ))
+                        }
+                      </tbody>
+                    </table>
+                  </div>
               }
 
               {/* <div className="table-responsive my-4">
@@ -1450,7 +1455,7 @@ export function ApproveStudent() {
             >
               {data?.isVerified ? "Revoke Access" : "Approve Access"}
             </button>
-            
+
             <div className={clsx.user__email}>
               <button onClick={(e) => deleteUserHandler(e, data?.email)}>
                 <AiTwotoneDelete /> &nbsp; &nbsp;Delete User
@@ -1523,7 +1528,7 @@ export function Approve() {
   }, [data]);
 
 
-  
+
 
   useEffect(() => {
     const teacherInfo = getItem("gotocourse-teacherDetails");
@@ -1686,7 +1691,7 @@ export function Approve() {
   }
 
 
- 
+
 
 
   return (
@@ -2077,25 +2082,25 @@ export function Teachers() {
   }
 
 
-  function exportCsv (e){
+  function exportCsv(e) {
     e.preventDefault()
-  
+
     let headers = ['First name, Last name,  Email']
 
     let usersCsv = teachers.reduce((acc, item) => {
-      const {firstName, lastName, email } = item
+      const { firstName, lastName, email } = item
       acc.push([firstName, lastName, email].join(','))
       return acc
     }, [])
-  
+
     let csvData = [...headers, ...usersCsv].join('\n')
 
     downloadCsv(csvData)
-    
+
   }
 
 
-  function downloadCsv(data){
+  function downloadCsv(data) {
     const blob = new Blob([data], { type: "text/csv" })
     const href = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -2105,8 +2110,8 @@ export function Teachers() {
     link.click();
 
     document.body.removeChild(link);
-    URL.revokeObjectURL(href);       
-  } 
+    URL.revokeObjectURL(href);
+  }
 
 
   return (
@@ -2137,8 +2142,8 @@ export function Teachers() {
               />
             </div>
             <button className="btn-plain" onClick={exportCsv}>
-                  Export to CSV
-                </button>
+              Export to CSV
+            </button>
           </div>
           <div className={`${clsx.admin__student_main}`}>
             <table className={`${clsx.admin__student_table}`}>
@@ -2255,7 +2260,7 @@ export function Mentors() {
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-        <div className="d-flex justify-content-between align-items-center flex-wrap mb-4">
+          <div className="d-flex justify-content-between align-items-center flex-wrap mb-4">
             <button
               className="btn button-md ms-auto"
               style={{ background: "var(--theme-blue)", color: "#fff" }}
@@ -2368,6 +2373,7 @@ export function AddMentor({ edit }) {
   });
 
   const [bio, setBio] = useState("");
+  const [fileUrl, setFileUrl] = useState("")
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -2436,12 +2442,12 @@ export function AddMentor({ edit }) {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h3>Add Mentor</h3>
-          <UploadForm
+          {/* <UploadForm
             isOpen={open}
             setIsOpen={setOpen}
             setPreviewImage={setPreviewImage}
-          />
-          <div className="row w-100 mt-4">
+          /> */}
+          {/* <div className="row w-100 mt-4">
             <div className="col-12 d-flex justify-content-between align-items-center">
               <div
                 className={clsx.upload__file_box}
@@ -2465,7 +2471,10 @@ export function AddMentor({ edit }) {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
+
+          <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+
           <form className="form" style={{ width: "80%" }}>
             <Input
               label="Profile image file name"
@@ -3229,8 +3238,8 @@ export function BootcampDetails({ }) {
       removeStudentToClass,
       fetchClassStudents
     },
-    adminStudentFunctions: { fetch},
-    teacherFunctions: {fetchBootcampApplications},
+    adminStudentFunctions: { fetch },
+    teacherFunctions: { fetchBootcampApplications },
     generalState,
   } = useAuth();
   const [openprompt, setOpenprompt] = useState(false);
@@ -3238,10 +3247,10 @@ export function BootcampDetails({ }) {
   const flag = useRef(false);
   const [formstate, setFormstate] = useState();
   const [loading, setLoading] = useState(true);
-  const [allStudents, setAllStudents]= useState([])
-  const [allEnrolledStudents, setAllEnrolledStudents]= useState([])
-  const [student, setStudent]= useState("")
-  const [removedStudent, setRemovedStudent]= useState("")
+  const [allStudents, setAllStudents] = useState([])
+  const [allEnrolledStudents, setAllEnrolledStudents] = useState([])
+  const [student, setStudent] = useState("")
+  const [removedStudent, setRemovedStudent] = useState("")
 
   const params = useParams();
 
@@ -3414,10 +3423,10 @@ export function BootcampDetails({ }) {
 
   // ADD AND REMOVE STUDENTS FROM COURSE
 
-  const fetchAllStudents = useQuery(["fetch all students", userdata.token], ()=>fetch(userdata.token), {
+  const fetchAllStudents = useQuery(["fetch all students", userdata.token], () => fetch(userdata.token), {
     enabled: userdata.token !== null,
     onSuccess: res => {
-      if(res?.data){
+      if (res?.data) {
         setAllStudents(res.data)
         return
       }
@@ -3428,16 +3437,16 @@ export function BootcampDetails({ }) {
     }
   })
 
-  const fetchAllEnrolledStudents = useQuery(["fetch enrolled students", userdata.token], ()=>fetchClassStudents(userdata.token, params?.id), {
+  const fetchAllEnrolledStudents = useQuery(["fetch enrolled students", userdata.token], () => fetchClassStudents(userdata.token, params?.id), {
     enabled: userdata.token !== null,
     onSuccess: res => {
-      console.log({res})
-      if(res?.data){
+      console.log({ res })
+      if (res?.data) {
         setAllEnrolledStudents(res.data)
         return
       }
       setAllEnrolledStudents([])
-      
+
 
     },
     onError: err => {
@@ -3447,12 +3456,12 @@ export function BootcampDetails({ }) {
 
   const addMutation = useMutation(([token, data]) => addStudentToClass(token, data), {
     onSuccess: res => {
-      if(res.statusCode === 1){
+      if (res.statusCode === 1) {
         toast.success(res.message)
         setStudent("")
       } else {
         toast.error(res.message)
-      } 
+      }
     },
     onError: err => toast.error(err.message)
   })
@@ -3460,26 +3469,26 @@ export function BootcampDetails({ }) {
 
   const removeMutation = useMutation(([token, data]) => removeStudentToClass(token, data), {
     onSuccess: res => {
-      console.log({res})
-      if(res.statusCode === 1){
+      console.log({ res })
+      if (res.statusCode === 1) {
         toast.success(res.message)
         setStudent("")
       } else {
         toast.error(res.message)
-      } 
+      }
     },
     onError: err => toast.error(err.message)
   })
 
-  function addStudent(){
-    addMutation.mutate([ userdata.token, {userId: student, bootcampId: params.id}])
+  function addStudent() {
+    addMutation.mutate([userdata.token, { userId: student, bootcampId: params.id }])
   }
 
 
-  function removeStudent(){
-    removeMutation.mutate([userdata.token, {userId: removedStudent, bootcampId: params.id}])
+  function removeStudent() {
+    removeMutation.mutate([userdata.token, { userId: removedStudent, bootcampId: params.id }])
   }
-  console.log({removedStudent})
+  console.log({ removedStudent })
 
   return (
     <Admin header="ADMIN">
@@ -3565,10 +3574,10 @@ export function BootcampDetails({ }) {
             <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
                 <h6>Add Student</h6>
-                <select name="userId" id="userId" className="form-select" onChange={(e)=>setStudent(e.target.value)} value={student} >
+                <select name="userId" id="userId" className="form-select" onChange={(e) => setStudent(e.target.value)} value={student} >
                   <option value="">Select student</option>
                   {
-                    allStudents?.map(item => ( 
+                    allStudents?.map(item => (
                       <option value={item.userId}>{`${item.email} - ${item.firstName} ${item.lastName}`}</option>
                     ))
                   }
@@ -3582,20 +3591,20 @@ export function BootcampDetails({ }) {
                   {addMutation?.isLoading ?
                     <div className="spinner-border text-white">
                       <div className="visually-hidden">Loading...</div>
-                    </div>   
+                    </div>
                     :
-                      <span>Add</span>
+                    <span>Add</span>
                   }
                 </button>
               </div>
-          </div>
+            </div>
             <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
                 <h6>Remove Student</h6>
-                <select name="student" id="student" className="form-select" onChange={(e)=>setRemovedStudent(e.target.value)} value={removedStudent}  >
+                <select name="student" id="student" className="form-select" onChange={(e) => setRemovedStudent(e.target.value)} value={removedStudent}  >
                   <option value="">Select student</option>
                   {
-                    allEnrolledStudents?.map(item => ( 
+                    allEnrolledStudents?.map(item => (
                       <option value={item.studentId}>{`${item.studentId} - ${item.studentName}`}</option>
                     ))
                   }
@@ -3610,13 +3619,13 @@ export function BootcampDetails({ }) {
                   {removeMutation?.isLoading ?
                     <div className="spinner-border text-white">
                       <div className="visually-hidden">Loading...</div>
-                    </div>   
+                    </div>
                     :
-                      <span>Remove</span>
+                    <span>Remove</span>
                   }
                 </button>
               </div>
-          </div>
+            </div>
 
             {/* <div className={clsx.form_group}>
               <div className={clsx.form_group__teachers}>
@@ -3850,7 +3859,7 @@ export function AdminClassConsole() {
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student_main}>
-        <div className="d-flex justify-content-between align-items-center flex-wrap">
+          <div className="d-flex justify-content-between align-items-center flex-wrap">
             <div>
               <input
                 type="text"
@@ -3861,32 +3870,32 @@ export function AdminClassConsole() {
               />
             </div>
           </div>
-            {bootcamps.length > 0 ? (
-              <Grid height="300px">
-                {bootcamps.filter(
-                      (course) =>
-                        // course.category
-                        //   .toLowerCase()
-                        //   .includes(search.toLowerCase()) ||
-                        course.title
-                          .toLowerCase()
-                          .includes(search.toLowerCase()) 
-                        //   ||
-                        // course.status
-                        //   .toLowerCase()
-                        //   .includes(search.toLowerCase())
-                    )
+          {bootcamps.length > 0 ? (
+            <Grid height="300px">
+              {bootcamps.filter(
+                (course) =>
+                  // course.category
+                  //   .toLowerCase()
+                  //   .includes(search.toLowerCase()) ||
+                  course.title
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
+                //   ||
+                // course.status
+                //   .toLowerCase()
+                //   .includes(search.toLowerCase())
+              )
                 .map((item, i) =>
-                  <ClassesCard {...item} all={item}/>
+                  <ClassesCard {...item} all={item} />
                 )}
-              </Grid>
+            </Grid>
 
-            )
+          )
             : (
-            <h6 className="text-center">No Class found</h6>
+              <h6 className="text-center">No Class found</h6>
             )}
-          </div>
         </div>
+      </div>
     </Admin>
   );
 }
@@ -4034,10 +4043,10 @@ export function CreateBootcamp() {
     const formData = {
       ...formstate,
       description: bio ? bio : formstate.description,
-      type:"FLAT",
-      time:[...formstate.time, ...timeList]
+      type: "FLAT",
+      time: [...formstate.time, ...timeList]
     };
-    console.log({formData})
+    console.log({ formData })
     try {
       if (
         formData.description === "" ||
@@ -4201,24 +4210,24 @@ export function CreateBootcamp() {
   }
 
 
-  function handleTime(e, i){
+  function handleTime(e, i) {
     let formCopy = timeList
     // let timeArray = formCopy.time
-    
-    formCopy[i] = {...formCopy[i], [e.target.name]: e.target.value}
+
+    formCopy[i] = { ...formCopy[i], [e.target.name]: e.target.value }
     // formCopy.time = formCopy
-    console.log({formCopy})
+    console.log({ formCopy })
     setTimeList(formCopy)
   }
 
 
-  function deleteTime(id){
+  function deleteTime(id) {
     let newTimeList = formstate?.time.filter(item => item._id !== id)
-    setFormstate({...formstate, time: newTimeList})
+    setFormstate({ ...formstate, time: newTimeList })
   }
 
 
-  console.log({ formstate });
+  // console.log({ formstate });
   return (
     <Admin header={location.search ? "Edit Course" : "Create Course"}>
       {loader && <Loader />}
@@ -4255,8 +4264,8 @@ export function CreateBootcamp() {
             </div>
           </div> */}
 
-          <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl}/>
-          
+          <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+
           <form className="form" onSubmit={submitHandler} noValidate>
             <Input
               label="Course image name"
@@ -4333,14 +4342,14 @@ export function CreateBootcamp() {
               </select>
             </div> */}
             {/* {formstate.type === "FLAT" ? ( */}
-              <Input
-                label="Price"
-                name="price"
-                type="number"
-                handleChange={changeHandler}
-                value={formstate.price}
-                noValidate={"true"}
-              />
+            <Input
+              label="Price"
+              name="price"
+              type="number"
+              handleChange={changeHandler}
+              value={formstate.price}
+              noValidate={"true"}
+            />
             {/* ) : formstate.type === "PACKAGE" ? (
               <div className={clsx.form_group}>
                 <label htmlFor={"package"} className="form-label generic_label">
@@ -4445,19 +4454,19 @@ export function CreateBootcamp() {
                         <BiTrash />
                       </i>
                     </p>
-                </div>
+                  </div>
                 ))
               }
-            {
-              [...Array(scheduleCount)].map((item, i)=>(
-                <div className="d-flex flex-wrap align-items-end gap-2">
+              {
+                [...Array(scheduleCount)].map((item, i) => (
+                  <div className="d-flex flex-wrap align-items-end gap-2">
                     <div className="col-sm-6 col-md-3 pe-2 ">
                       <label htmlFor="time">Day</label>
-                      <select 
-                        name="day" 
+                      <select
+                        name="day"
                         id="day"
                         className="form-select generic_input"
-                        onChange={(e)=>handleTime(e,i)}
+                        onChange={(e) => handleTime(e, i)}
                         value={timeList[i]?.day}
 
                       >
@@ -4476,7 +4485,7 @@ export function CreateBootcamp() {
                         label="Starts By (CST)"
                         name="startTime"
                         type="time"
-                        handleChange={(e)=>handleTime(e,i)}
+                        handleChange={(e) => handleTime(e, i)}
                         value={timeList[i]?.startTime}
                       />
                     </div>
@@ -4485,21 +4494,21 @@ export function CreateBootcamp() {
                         label="Ends By (CST)"
                         name="endTime"
                         type="time"
-                        handleChange={(e)=>handleTime(e,i)}
+                        handleChange={(e) => handleTime(e, i)}
                         value={timeList[i]?.endTime}
                       />
                     </div>
                   </div>
-              ))
-            }
-             <button
-              className="btn btn-primary my-3"
-              style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
-              type="button"
-              onClick={()=>setScheduleCount(scheduleCount + 1)}
-            >
-              Add Schedule
-            </button>
+                ))
+              }
+              <button
+                className="btn btn-primary my-3"
+                style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
+                type="button"
+                onClick={() => setScheduleCount(scheduleCount + 1)}
+              >
+                Add Schedule
+              </button>
             </div>
             {/* <div className={clsx.editor_container}>
               <ReactQuill theme="snow" value={formstate?.description} onChange={setBio} />
@@ -4791,33 +4800,33 @@ export function Fees() {
 
   const [page, setPage] = useState(1)
 
-  const fetchPaymentHistory = useQuery(["fetch payment history", userdata?.token, page], ()=>fetchPayment(userdata?.token, page), {
+  const fetchPaymentHistory = useQuery(["fetch payment history", userdata?.token, page], () => fetchPayment(userdata?.token, page), {
     enabled: userdata.token !== null,
-     onSuccess: (res)=> {
-      if(res?.data?.paymentItems){
+    onSuccess: (res) => {
+      if (res?.data?.paymentItems) {
         setFormstate(res?.data?.paymentItems)
         setRest(res?.data)
-      }else {
+      } else {
         setFormstate([])
       }
-     },
-     onError: error => toast.error(error.message)
+    },
+    onError: error => toast.error(error.message)
   })
 
 
-  const deletePaymentMutation = useMutation(([token, id])=>deletePaymentHistory(token, id), {
-    onSuccess: res=> {
+  const deletePaymentMutation = useMutation(([token, id]) => deletePaymentHistory(token, id), {
+    onSuccess: res => {
       console.log(res)
       queryClient.inValidateQueries(["fetch payment history"])
-    } ,
+    },
     onError: err => console.error(err)
   })
 
 
-  function deletePayment(e, id){
-    console.log({id})
+  function deletePayment(e, id) {
+    console.log({ id })
     e.preventDefault();
-    if(window.confirm("Are you sure you want to delete this payment")){
+    if (window.confirm("Are you sure you want to delete this payment")) {
       deletePaymentMutation.mutate([userdata.token, id])
     }
   }
@@ -4831,59 +4840,59 @@ export function Fees() {
         <div className={clsx.admin__student}>
           <h1>All Payments</h1>
           <div className={clsx.admin__student_main}>
-            {!fetchPaymentHistory?.isLoading  &&
-            <>
-              <table className={`${clsx.admin__student_table}`}>
-                <thead>
-                  {tableHeaders.map((el, i) => (
-                    <td key={i}>{el}</td>
-                  ))}
-                </thead>
-                <tbody>
-                  {formstate?.map(
-                    (
-                      {
-                        studentName,
-                        courseName,
-                        coursePrice,
-                        amount,
-                        createdAt,
-                        dueDate,
-                        status,
-                        type,
-                        bootcampPrice,
-                        bootcampName,
-                        paymentId,
-                        userId
-                      },
-                      i
-                    ) => (
-                      <UserInfoCard
-                        key={i}
-                        num={i}
-                        enrolled={studentName}
-                        comp="Category"
-                        name={bootcampName}
-                        status={userId}
-                        coursePrice={createdAt ? new Intl.DateTimeFormat('en-US').format(new Date(createdAt)) : ""}
-                        date={courseName}
-                        pack={bootcampPrice ? `$ ${bootcampPrice}`: "-"}
-                        start_date={`$ ${amount}`}
-                        email={status}
-                        students={dueDate ? new Intl.DateTimeFormat('en-US').format(new Date(dueDate)) : ""}
-                        deleteUser={(e)=>deletePayment(e, paymentId)}
-                      />
-                    )
-                  )}
-                </tbody>
-              </table>
-              <div className="mt-3">
-                <button className="btn btn-dark"  onClick={()=> setPage(prev => page - 1)} disabled={page === 1} >Prev</button>
-                <span className="mx-2">page {page} of {rest?.num_of_pages}</span>
-                <button  className="btn btn-dark" onClick={()=> setPage(prev => page + 1)} disabled={page === rest?.num_of_pages}>Next</button>
-              </div>
-            </>
-          }
+            {!fetchPaymentHistory?.isLoading &&
+              <>
+                <table className={`${clsx.admin__student_table}`}>
+                  <thead>
+                    {tableHeaders.map((el, i) => (
+                      <td key={i}>{el}</td>
+                    ))}
+                  </thead>
+                  <tbody>
+                    {formstate?.map(
+                      (
+                        {
+                          studentName,
+                          courseName,
+                          coursePrice,
+                          amount,
+                          createdAt,
+                          dueDate,
+                          status,
+                          type,
+                          bootcampPrice,
+                          bootcampName,
+                          paymentId,
+                          userId
+                        },
+                        i
+                      ) => (
+                        <UserInfoCard
+                          key={i}
+                          num={i}
+                          enrolled={studentName}
+                          comp="Category"
+                          name={bootcampName}
+                          status={userId}
+                          coursePrice={createdAt ? new Intl.DateTimeFormat('en-US').format(new Date(createdAt)) : ""}
+                          date={courseName}
+                          pack={bootcampPrice ? `$ ${bootcampPrice}` : "-"}
+                          start_date={`$ ${amount}`}
+                          email={status}
+                          students={dueDate ? new Intl.DateTimeFormat('en-US').format(new Date(dueDate)) : ""}
+                          deleteUser={(e) => deletePayment(e, paymentId)}
+                        />
+                      )
+                    )}
+                  </tbody>
+                </table>
+                <div className="mt-3">
+                  <button className="btn btn-dark" onClick={() => setPage(prev => page - 1)} disabled={page === 1} >Prev</button>
+                  <span className="mx-2">page {page} of {rest?.num_of_pages}</span>
+                  <button className="btn btn-dark" onClick={() => setPage(prev => page + 1)} disabled={page === rest?.num_of_pages}>Next</button>
+                </div>
+              </>
+            }
           </div>
         </div>
       </div>
@@ -5293,17 +5302,17 @@ export function EnrolledStudents() {
     // "Action",
   ];
 
-  
-  const enrolledStudents = useMemo(()=>{
+
+  const enrolledStudents = useMemo(() => {
     let hasPaid
-    if(studentList) {
+    if (studentList) {
       let areAccepted = studentList?.filter(item => item.enrollmentData.length > 0)
       hasPaid = areAccepted.filter(item => item.enrollmentData.find(item => item.status === "paid"))
       return hasPaid
     }
     return []
-  },[studentList])
-  
+  }, [studentList])
+
 
   return (
     <Admin header={"Students"}>
