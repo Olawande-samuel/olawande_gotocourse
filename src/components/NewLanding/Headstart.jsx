@@ -8,7 +8,7 @@ import { ClassTypeComponent, Head, InDemand } from "./landingComponents";
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-  grid-auto-rows: ${props => props.height ?  props.height : "440px"};
+  grid-auto-rows: ${props => props.height ?  props.height : "460px"};
   overflow: hidden;
   gap: 2.5rem;
   row-gap: 3rem;

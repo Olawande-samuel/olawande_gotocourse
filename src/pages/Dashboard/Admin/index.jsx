@@ -52,6 +52,7 @@ import Editor from "../components/Editor";
 import Detail from "../../Category/Detail";
 import ReactQuill from "react-quill";
 import { Grid } from "../../../components/NewLanding/Headstart";
+import UploadWidget from "../components/classConsole/components/UploadWidget";
 
 const KEY = "gotocourse-userdata";
 
@@ -4221,12 +4222,12 @@ export function CreateBootcamp() {
       {loader && <Loader />}
       <div className={clsx.admin_profile}>
         <div className={clsx.edit__profile}>
-          <UploadForm
+          {/* <UploadForm
             isOpen={open}
             setIsOpen={setOpen}
             setPreviewImage={setPreviewImage}
-          />
-          <div className="row w-100 mt-4">
+          /> */}
+          {/* <div className="row w-100 mt-4">
             <div className="col-12 d-flex justify-content-between align-items-center">
               <div
                 className={clsx.upload__file_box}
@@ -4250,7 +4251,9 @@ export function CreateBootcamp() {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
+
+          <UploadWidget/>
           <form className="form" onSubmit={submitHandler} noValidate>
             <Input
               label="Course image name"
