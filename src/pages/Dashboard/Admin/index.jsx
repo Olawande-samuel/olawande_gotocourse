@@ -4073,6 +4073,7 @@ export function CreateBootcamp() {
   const [careerlist, setCareerlist] = useState({
     name: "",
   });
+  const [fileUrl, setFileUrl] = useState(null);
 
   const [popupList, setPopupList] = useState("")
 
@@ -4083,7 +4084,6 @@ export function CreateBootcamp() {
     setOpen((_) => true);
   }
 
-  console.log({ formstate });
   function deleteSyllabus(e) {
     let newSyllabusArr = formstate.syllabus.filter(
       (item, index) => item.title + index !== e
@@ -4253,7 +4253,8 @@ export function CreateBootcamp() {
             </div>
           </div> */}
 
-          <UploadWidget/>
+          <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl}/>
+          
           <form className="form" onSubmit={submitHandler} noValidate>
             <Input
               label="Course image name"

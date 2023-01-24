@@ -1,31 +1,63 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
+import { toast } from "react-toastify";
+import clsx from "../../../../../components/globalStyles.module.css";
 
 
-const UploadWidget = () => {
+const UploadWidget = ({ fileUrl, setFileUrl }) => {
     const cloudinaryRef = useRef(null);
     const widgetRef = useRef(null);
 
     useEffect(() => {
-        cloudinaryRef.current = window.cloudinary;
+        cloudinaryRef.current = window?.cloudinary;
 
-        console.log(cloudinaryRef.current);
-        widgetRef.current = cloudinaryRef.current.createUploadWidget({
+        console.log(cloudinaryRef?.current);
+        widgetRef.current = cloudinaryRef?.current?.createUploadWidget({
             cloudName: process.env.REACT_APP_CLOUD_NAME,
-            uploadPreset: "",
-            //     api_key: process.env.REACT_APP_CLOUDINARY_API_KEY,
-            //     api_secret: process.env.REACT_APP_CLOUDINARY_API_SECRET,
+            uploadPreset: "ml_default",
         }, function (error, result) {
-            if (result) {
-                console.log({ result });
+            if (result.event === "success") {
+                console.log(result?.info?.secure_url);
+                let ext = result?.info?.secure_url.split("/");
+                let extension = ext[ext.length -1]
+                console.log({extension});
+                setFileUrl(extension)
                 return;
             }
             console.log(error);
         })
     }, [])
 
+    async function copy(_source) {
+        await window.navigator.clipboard.writeText(_source);
+        toast.success("Copied successfully", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            newestOnTop: false,
+            closeOnClick: true,
+            rtl: false,
+            pauseOnFocusLoss: true,
+            draggable: true,
+            pauseOnHover: true
+        })
+    }
+
     return (
         <>
-            <button onClick={() => widgetRef.current.open()} style={{ color: "red" }}>Click to Upload images</button>
+            <button onClick={() => {
+                setFileUrl("")
+                widgetRef?.current.open()
+
+            }} style={{ color: "red", border: " none", outline: "none", padding: ".5rem" }}>Click to Upload file</button>
+
+
+                {fileUrl &&
+                    <>
+
+                        <input className="w-100" style={{ cursor: "pointer" }} type="text" readOnly value={fileUrl} onClick={e => copy(e.currentTarget.value)} />
+                    </>
+                }
+
         </>
     )
 }
