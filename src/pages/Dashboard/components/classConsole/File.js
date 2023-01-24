@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "../classConsole/Content.css";
 import { IoMdCloudDownload } from "react-icons/io";
@@ -23,6 +23,7 @@ import { FiEdit } from "react-icons/fi";
 import { BiTrash } from "react-icons/bi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import axios from "axios";
+import UploadWidget from "./components/UploadWidget";
 
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -56,8 +57,13 @@ export default function File() {
 	const [screenOpen, setScreenOpen] = useState(false);
 	const [videoOpen, setVideoOpen] = useState(false);
 	const [fileData, setFileData] = useState([]);
+	const [fileUrl, setFileUrl] = useState("")
+	const [uploadData, setUploadData] = useState({})
+	const queryClient = useQueryClient()
+
+
 	const {
-		consoleFunctions: { fetchFile },
+		consoleFunctions: { fetchFile, addFile },
 	} = useAuth();
 	const { getItem } = useLocalStorage();
 
@@ -111,6 +117,32 @@ export default function File() {
 	);
 
 	// console.log({ fileData });
+	const mutation = useMutation(([token, data]) => addFile(token, data), {
+        onSuccess: (res) => {
+            console.log(res)
+            queryClient.invalidateQueries("file content")
+        },
+        onError: (err) => console.error(err)
+    })
+
+    // create content after upload
+
+    function createFileContent(file, fileId, fileName) {
+            // call file upload function
+            mutation.mutate([value?.token, {
+                classId,
+                contentId,
+                fileName: uploadData.secure_url,
+                title: uploadData?.public_id
+            }])
+        
+    }
+
+	useEffect(()=>{
+		if(fileUrl){
+			createFileContent()
+		}
+	},[fileUrl])
 
 	return (
 		<>
@@ -193,6 +225,9 @@ export default function File() {
 							uploadType="content"
 							fileCreate={true}
 						/>
+
+						<UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} type="console" setFileData={setUploadData} />
+ 
 						<UploadForm
 							isOpen={openUpload}
 							setIsOpen={setOpenUpload}
@@ -219,77 +254,77 @@ export default function File() {
 function FileCard({ title, fileName, contentId, type, _id }) {
 	const [open, setOpen] = useState(false);
 	const [content, setContent] = useState("");
-    const [anchorEl, setAnchorEl] = useState(null);
-    const openAnchor = Boolean(anchorEl);
-    const {teacherConsoleFunctions: {deleteDomain, deleteContent}} = useAuth();
+	const [anchorEl, setAnchorEl] = useState(null);
+	const openAnchor = Boolean(anchorEl);
+	const { teacherConsoleFunctions: { deleteDomain, deleteContent } } = useAuth();
 
 
-    console.log({_id})
-    const {getItem} = useLocalStorage();
-    const userdata = getItem(KEY)
+	console.log({ _id })
+	const { getItem } = useLocalStorage();
+	const userdata = getItem(KEY)
 
-    const queryClient = useQueryClient()
+	const queryClient = useQueryClient()
 
-    const contextMenu = [
-        {
-            id: 1,
-            title:"Edit File Name",
-            iconImg: FiEdit,
-            // event: handleEdit
-        },
-        {
-            id: 2,
-            title:"Move Content",
-            iconImg: IoIosArrowUp,
-            // event: handleEdit
-        },
-        {
-            id: 3,
-            title:"Move Content",
-            iconImg: IoIosArrowDown,
-            // event: handleEdit
-        },
-        {
-            id: 4,
-            title:"Delete",
-            iconImg: BiTrash,
-            event: handleDelete
-        },
-        
-    ]
+	const contextMenu = [
+		{
+			id: 1,
+			title: "Edit File Name",
+			iconImg: FiEdit,
+			// event: handleEdit
+		},
+		{
+			id: 2,
+			title: "Move Content",
+			iconImg: IoIosArrowUp,
+			// event: handleEdit
+		},
+		{
+			id: 3,
+			title: "Move Content",
+			iconImg: IoIosArrowDown,
+			// event: handleEdit
+		},
+		{
+			id: 4,
+			title: "Delete",
+			iconImg: BiTrash,
+			event: handleDelete
+		},
 
-
-    const contentdelete = useMutation(([token, id])=>deleteContent(token, id), {
-      onSuccess: (res)=>{
-        console.log({res})
-        // navigate(`/teacher/class-console/class/${classId}`)
-        queryClient.invalidateQueries("file content")
-      },
-      onError: (err)=>{
-        console.error(err)
-      }
-    })
-  
-    
-    function handleDelete(){
-        if(window.confirm("Are you sure you want to delete")){
-            // delete
-                contentdelete.mutate([userdata.token, _id])
-            
-        }
-    }
+	]
 
 
+	const contentdelete = useMutation(([token, id]) => deleteContent(token, id), {
+		onSuccess: (res) => {
+			console.log({ res })
+			// navigate(`/teacher/class-console/class/${classId}`)
+			queryClient.invalidateQueries("file content")
+		},
+		onError: (err) => {
+			console.error(err)
+		}
+	})
 
-    function MoveUp(){
 
-    }
+	function handleDelete() {
+		if (window.confirm("Are you sure you want to delete")) {
+			// delete
+			contentdelete.mutate([userdata.token, _id])
+
+		}
+	}
 
 
 
-    function MoveDown(){
+	function MoveUp() {
 
-    }
+	}
+
+
+
+	function MoveDown() {
+
+	}
 
 
 
@@ -301,35 +336,35 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 
 
 	function downloadContent(file, fileName, type) {
-       
+
 		axios({
-            url: file,
-            method: 'GET',
-            responseType: 'blob',
-        }).then((response) => {
-            console.log({response})
-            const href = URL.createObjectURL(response.data);
-            const link = document.createElement('a');
-            link.href = href;
-            link.setAttribute('download', fileName);
-            document.body.appendChild(link);
-            link.click();
-    
-            document.body.removeChild(link);
-            URL.revokeObjectURL(href);
-        });
-        
+			url: file,
+			method: 'GET',
+			responseType: 'blob',
+		}).then((response) => {
+			console.log({ response })
+			const href = URL.createObjectURL(response.data);
+			const link = document.createElement('a');
+			link.href = href;
+			link.setAttribute('download', fileName);
+			document.body.appendChild(link);
+			link.click();
+
+			document.body.removeChild(link);
+			URL.revokeObjectURL(href);
+		});
+
 	}
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+	const handleClick = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
 
-    const TYPES = {
-        noPreview: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || "text/csv",
-        
-    }
-    console.log(type)
+	const TYPES = {
+		noPreview: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || "text/csv",
+
+	}
+	console.log(type)
 
 	return (
 		<div className={`filecard ${type === TYPES?.noPreview && "small__filecard"}`}>
@@ -355,18 +390,18 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 
 			{(type === "application/pdf" ||
 				type ===
-					"application/vnd.openxmlformats-officedocument.presentationml.presentation") && (
-				<div className="filetop">
-					<object
-						type={type}
-						data={fileName}
-						width="100%"
-						height="200"
-                        aria-label={fileName}
+				"application/vnd.openxmlformats-officedocument.presentationml.presentation") && (
+					<div className="filetop">
+						<object
+							type={type}
+							data={fileName}
+							width="100%"
+							height="200"
+							aria-label={fileName}
 
-					></object>
-				</div>
-			)}
+						></object>
+					</div>
+				)}
 
 			{type === TYPES?.noPreview && (
 				<div className="filetop d-none">
@@ -375,15 +410,15 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 						data={fileName}
 						width="100%"
 						height="200"
-                        aria-label={fileName}
+						aria-label={fileName}
 					></object>
 				</div>
 			)}
 
 			<div className="filebottom">
-                <div className="position-absolute end-0" style={{cursor:"pointer"}}>
-                    <MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} content={true} type={type}  />
-                </div>
+				<div className="position-absolute end-0" style={{ cursor: "pointer" }}>
+					<MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} content={true} type={type} />
+				</div>
 				<h3>{title}</h3>
 				<div className="filebutton">
 					<i>

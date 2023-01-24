@@ -36,6 +36,7 @@ import { border } from '@mui/system';
 import { IoCloudUploadOutline } from 'react-icons/io5';
 import { BsPlay } from "react-icons/bs";
 import { Accord } from '.';
+import UploadWidget from './components/UploadWidget';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -309,6 +310,7 @@ function CreatorMenu({ id, content }) {
     const [isOpen, setIsOpen] = useState(false)
     const [isVideoOpen, setIsVideoOpen] = useState(false)
     const [isScreenOpen, setIsScreenOpen] = useState(false)
+    const [fileUrl, setFileUrl] = useState("")
     const open = Boolean(anchorEl);
     
     const handleClick = (event) => {
@@ -359,11 +361,13 @@ function CreatorMenu({ id, content }) {
                 ))
             }
         </Menu>
-        <UploadForm
+        <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl}/>
+
+        {/* <UploadForm
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             uploadType="content"
-        />
+        /> */}
 
         <UploadVideoRecording
             isVideoOpen={isVideoOpen}
