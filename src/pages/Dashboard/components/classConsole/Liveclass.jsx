@@ -195,7 +195,9 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
 
   return (
     <div className={style.live_card}>
-      <MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} schedule={true} />
+       {userdata?.userType !== "student" &&
+        <MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} schedule={true} />
+       }
       <h6>{roomName}</h6>
       <div className={style.live_card_schedule}>
         <div>
