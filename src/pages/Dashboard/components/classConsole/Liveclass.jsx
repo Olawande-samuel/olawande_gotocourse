@@ -320,7 +320,7 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
         return
       }
 
-      const res =  await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
+      const res =  await axios.post(`${CONFIG.socketUrl}v1/room/video/init`, {    
         ...formstate,  
           userId: userId,
           classId
