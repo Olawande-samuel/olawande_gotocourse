@@ -3458,12 +3458,13 @@ export function BootcampDetails({ }) {
     onSuccess: res => {
       if (res.statusCode === 1) {
         toast.success(res.message)
-        setStudent("")
+        // setStudent("")  
       } else {
+        window.alert(res.message)
         toast.error(res.message)
       }
     },
-    onError: err => toast.error(err.message)
+    onError: err => {}
   })
 
 
@@ -3492,6 +3493,17 @@ export function BootcampDetails({ }) {
 
   return (
     <Admin header="ADMIN">
+      {/* <ToastContainer
+          position="top-right"
+          autoClose={4500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        /> */}
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
