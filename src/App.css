@@ -3378,3 +3378,12 @@ font-weight: 800 !important;
 outline: none !important;
 
 }
+
+
+.restrict {
+  height: 4.3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-bottom: .5rem;
+
+}

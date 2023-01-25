@@ -228,7 +228,7 @@ function LikeThis({ data }) {
                                         {x?.title}
                                     </h6>
                                 </Link>
-                                <p className="restricted_line" dangerouslySetInnerHTML={{ __html: x?.content }}></p>
+                                <p className="restrict" dangerouslySetInnerHTML={{ __html: x?.content }}></p>
                                 <ShareModal x={x} open={open} setOpen={setOpen} url={BLOGURL} />
 
                             </div>
