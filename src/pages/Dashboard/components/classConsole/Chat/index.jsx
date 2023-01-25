@@ -944,7 +944,7 @@ function ChatTab(){
             <Createbutton onClick={()=> setShow(true)}>Create Group</Createbutton>
             <Groups>
                 {
-                    groups.map(({title, description, participants, showActions, _id}, i) => (
+                    groups?.map(({title, description, participants, showActions, _id}, i) => (
                         <Group key={i}>
                             <GroupTop>
                                 <h2>{title}</h2>

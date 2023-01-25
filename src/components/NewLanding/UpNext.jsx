@@ -30,8 +30,9 @@ const Grid = styled.div`
     grid-auto-rows: 450px;
     /* overflow: hidden; */
     gap: 1.5rem;
-    justify-content:space-around;
+    justify-content:center;
     padding: .5rem;
+    // border: 5px solid red;
     
     @media screen and (min-width: 1400px) {
         grid-template-columns: repeat(4, 230px);
@@ -258,9 +259,9 @@ export function TabsComp() {
           <Grid>
             {
               shorts?.filter(item => item.isActive).sort(() => 0.5 - Math.random()).map(item => (
-                <SwiperSlide key={item.categoryId}>
+               <SwiperSlide key={item.categoryId}>
                   <Card {...item} all={item} key={item.bootcampId} />
-                </SwiperSlide>
+               </SwiperSlide> 
               ))
             }
           </Grid>
