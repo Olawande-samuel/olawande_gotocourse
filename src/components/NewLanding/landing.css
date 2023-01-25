@@ -2013,3 +2013,7 @@ bottom:0;
     margin-left: auto;
   }
 }
+
+.newCategories .swiper-wrapper{
+  justify-content: center;
+}
