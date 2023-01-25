@@ -10,11 +10,12 @@ import { Box, Tab, Tabs } from "@mui/material";
 import PropTypes from "prop-types";
 import { useAuth } from "../../../../../contexts/Auth";
 import { KEY } from "../../../../../constants";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { ActionButton, ChatBox, ChatDetails, ChatInfo, ChatStudentList, ContentContainer, GroupChat, Send, Sender, SenderContainer, StudentsContainer, StudentSearch, Title, UserImage, StudentList } from ".";
 import { FaSearch, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { identify } from "mixpanel-browser";
 
 
 // const groups = [
@@ -755,14 +756,23 @@ export function ActiveChat() {
         }
     ]);
 
-
+    const {id} = useParams()
 
     const handleChange = () => {
 
     }
+    const navigate = useNavigate()
+
+    function openChat(e){
+        e.preventDefault();
+        navigate(`/student/myclass/${id}/mail/chat`)
+    }
     return (
-        <ContentContainer>
-            <GroupChat>
+        // <ContentContainer>
+        <div>
+            <button onClick={openChat} style={{border: "none", outline:"none", padding: ".7rem", background:"var(--theme-blue)", color:"#fff"}} >Open Chat</button>
+
+            {/* <GroupChat>
                 <SenderContainer>
                     <Title>
                         <h4>Group name</h4>
@@ -783,8 +793,8 @@ export function ActiveChat() {
             </GroupChat>
             <StudentList>
                 <ChatAside />
-            </StudentList>
-        </ContentContainer>
+            </StudentList> */}
+        </div>
     )
 }
 
@@ -816,7 +826,7 @@ function ChatTab({ groups, toggle, setShow }) {
             <h2>My Group</h2>
             <Groups>
                 {
-                    groups.map((group, i) => (
+                    groups?.map((group, i) => (
                         <GroupInfo key={group._id} group={group} toggle={toggle} setShow={setShow} />
                     ))
                 }
@@ -825,7 +835,7 @@ function ChatTab({ groups, toggle, setShow }) {
             <h2>All Group</h2>
             <Groups>
                 {
-                    groups.map((group, i) => (
+                    groups?.map((group, i) => (
                         <GroupInfo key={group._id} group={group} toggle={toggle} setShow={setShow} index={i} />
 
                     ))

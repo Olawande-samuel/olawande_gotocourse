@@ -560,78 +560,48 @@ function MyApp({mixpanel}) {
                   </Route>
 
                   <Route path="console" element={<Content />}>
-
                     <Route path="myclasses" element={<Out />}>
                       <Route index element={<ConsoleClasses />} />
-                      <Route path=":id" element={<StudentChatModule />} />
-                        <Route path="mail" element={<Out />}> 
+                      <Route path=":id" element={<Out />}>
+                      <Route index element={<StudentChatModule />} />
+                      </Route>
+                        {/* <Route path="mail" element={<Out />}> 
                           <Route index element={<ChatComponent />} />
                           <Route path="details" element={<StudentGroupContent />} />
                           <Route path="group/:groupID" element={<StudentGroupContent />} />
                           <Route path="chat/:userId" element={<MailDetail />} />
-                      </Route>
-                      <Route path="class" element={<Out />}>
-                        <Route path=":classId" element={<Out />}>
-                          <Route path="live-class" element={<Out />}>
-                            <Route index element={<LiveClassInfo />} />
-                            <Route path="live" element={<LiveClass />} />
-                            <Route path="connect/:liveId" element={<Out />}>
-                              <Route index element={<Intermission />} />
-                              <Route path="stream" element={<VideDiv />} />
+                        </Route> */}
+                        <Route path="class" element={<Out />}>
+                          <Route path=":classId" element={<Out />}>
+                            <Route path="live-class" element={<Out />}>
+                              <Route index element={<LiveClassInfo />} />
+                              <Route path="live" element={<LiveClass />} />
+                              <Route path="connect/:liveId" element={<Out />}>
+                                <Route index element={<Intermission />} />
+                                <Route path="stream" element={<VideDiv />} />
+                              </Route>
                             </Route>
                           </Route>
                         </Route>
-                      </Route>
                     </Route>
                     <Route path="assessments" element={<ConsoleAssessments />} />
                   </Route>
                   <Route path="class-console/class/:id" element={<StudentClassroom />} />
+                  <Route
+                    path="myclass/:id/mail/chat"
+                    element={<LiveChat />}
+                  />
                 </Route>
 
-                {/* TEST CONSOLE */}
-                <Route path="test" element={<Content />}>
-                  <Route path="file" element={<File />} />
-                  <Route path="note" element={<Note />} />
-                  <Route
-                    path="classroom"
-                    element={<Classroom />}
-                  />
-                  <Route
-                    path="chat"
-                    element={<ChatComponent />}
-                  />
-                  <Route path="suite" element={<Suite />} />
-
-                  <Route path="quiz" element={<Out />}>
-                    <Route index element={<Quiz />} />
-                    <Route
-                      path="preview"
-                      element={<Preview />}
-                    />
-                  </Route>
-                </Route>
-
-                <Route path="console" element={<Content />}>
+                {/* <Route path="console" element={<Content />}>
                   <Route path="myclasses" element={<Out />}>
-                    <Route
-                      index
-                      element={<ConsoleClasses />}
-                    />
-                    <Route
-                      path=":id"
-                      element={<StudentChatModule />}
-                    />
-                    <Route
-                      path=":id/chat"
-                      element={<ActiveChat />}
-                    />
+                    <Route index element={<ConsoleClasses />} />
+                    <Route path=":id" element={<StudentChatModule />} />
+                    <Route path=":id/chat" element={<ActiveChat />} />
                   </Route>
-                  <Route
-                    path="assessments"
-                    element={<ConsoleAssessments />}
-                  />
+                  <Route path="assessments" element={<ConsoleAssessments />} />
                   <Route path="liveclass" element={<Out />} />
-                </Route>
+                </Route> */}
 
                 {/* MENTORS */}
 
