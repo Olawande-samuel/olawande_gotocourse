@@ -18,7 +18,7 @@ const KEY = 'gotocourse-userdata';
   overflow: hidden;
   gap: 2.5rem;
   row-gap: 3rem;
-  justify-content: space-around;
+  justify-content: center;
   padding: .7rem .5rem;
 
 
