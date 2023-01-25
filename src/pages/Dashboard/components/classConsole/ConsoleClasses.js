@@ -5,6 +5,8 @@ import { useAuth } from "../../../../contexts/Auth";
 import { useLocalStorage } from "../../../../hooks";
 import { useQuery } from "@tanstack/react-query"
 import '../classConsole/Content.css'
+import { AiOutlineSearch } from 'react-icons/ai';
+import { useState } from 'react';
 
 const KEY = 'gotocourse-userdata';
 
@@ -61,7 +63,15 @@ export const AssessmentCard = styled.div`
         }
 
       
-
+        button {   
+            background:#0072EF;
+            font-size:14px;
+            border:1px solid #0072EF;
+            outline:none;
+            color:#fff;
+            padding: .5rem;
+            border-radius: 15px;
+        }
    
 
       
@@ -112,15 +122,29 @@ export default function ConsoleClasses() {
     const { data, isSuccess } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
     console.log({ data });
     let navigate = useNavigate()
+
+    const [search, setSearch] = useState("")
     return (
         <div className=''>
             <main className='assessments'>
-
+            <div className="assessments__inputcontainer">
+                    <input type="text" 
+                    className='assessments__input'
+                        placeholder="Search for a Class"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)} />
+                    <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
+                </div>
 
                 {
                     data?.data?.filter(item => item.status === "paid")?.length > 0 ?
                         <Grid>
-                            {data?.data?.filter(item => item.status === "paid").map((x, id) => (
+                            {data?.data?.filter(item => item.status === "paid" && 
+                            item?.bootcampName
+                             .toLowerCase()
+                             .includes(search?.toLowerCase())
+                            
+                            ).map((x, id) => (
                                 <AssessmentCard key={x.bootcampId} style={{ cursor: "pointer" }} onClick={() => {
                                     navigate(`/student/class-console/class/${x.bootcampId}`, {
                                         state: {
@@ -133,6 +157,8 @@ export default function ConsoleClasses() {
                                     </div>
                                     <div className="content">
                                         <h6>{x.bootcampName}</h6>
+
+                                        <button>Open Class</button>
                                     </div>
                                 </AssessmentCard>
                             ))}

@@ -597,6 +597,25 @@
     justify-content: space-between; */
 } 
 
+.assessments__inputcontainer{
+    display: flex;
+    align-items: center;
+    background: #E8E8E8;
+    border-radius: 10px;
+    width: 70%;
+    padding: 0 1rem;
+    margin-bottom: .5rem;
+}
+
+.assessments__input{
+    padding: .7rem;
+    background: #E8E8E8;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+
+}
+
 .dashboard_empty{
     background-image: url(../../../../images/empty.png);
     background-repeat: no-repeat;
