@@ -948,6 +948,33 @@ const Classroom = () => {
 
 
             }
+        }else if (reduceContent?.length > 0 && !contentId){
+            let firstItem = reduceContent[0];
+            if(firstItem?.isLocked){
+                setSearchParams({
+                    contentId: reduceContent[0]?.contentId
+                })
+                setPickedType(reduceContent[0]?.type)
+                setBodyTitle(reduceContent[0]?.title)
+                setLocked(true)
+                return;
+
+            }else{
+                setSearchParams({
+                    contentId: reduceContent[0]?.contentId
+                })
+                setLocked(false)
+                setPickedType(reduceContent[0]?.type)
+                setContents(reduceContent[0]?.items)
+                setBodyTitle(reduceContent[0]?.title)
+                return;
+            }
+
+
+        }else{
+            setContents([])
+            setLocked(false)
+            return;
         }
     }, [reduceContent, contentId])
 
