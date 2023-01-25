@@ -83,10 +83,10 @@ const UploadWidget = ({ fileUrl, setFileUrl, setUploadData, type}) => {
             {type !== "console" &&
 
                 fileUrl &&
-                <>
-
-                    <input className="w-100" style={{ cursor: "pointer" }} type="text" readOnly value={fileUrl} onClick={e => copy(e.currentTarget.value)} />
-                </>
+                <div className="my-2">
+                    <label htmlFor="copy" className="form-label generic_label">Click on the text below to copy file image name</label>
+                    <input id="copy" className="w-100 form-control" style={{ cursor: "pointer" }} type="text" readOnly value={fileUrl} onClick={e => copy(e.currentTarget.value)} />
+                </div>
             }
 
         </>

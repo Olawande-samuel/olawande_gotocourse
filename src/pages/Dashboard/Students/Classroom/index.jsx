@@ -314,19 +314,24 @@ p{
 `
 const FileDisplay = styled.div`
 width: 100%;
-height: 300px;
+// height: 300px;
 // border: 2px solid red;
 
 video{
     width:100%;
-    height: 100%;
+    // height: 100%;
 
 }
 
-img{
-    width: 100%;
-    height: 100%;
+.img{
+    height: 500px;
+    img{
+        max-width: 100%;
+        max-height: 100%;
+    }
+   
 }
+
 
 
 `
@@ -423,7 +428,7 @@ const NoteComponent = (contentItem) => {
                     <p dangerouslySetInnerHTML={{ __html: contentItem.contentItem?.body }}></p>
 
                 </Note>
-                
+
             </div>
 
 
@@ -510,7 +515,12 @@ const FileComponent = (contentItem) => {
                 </FileName>
 
                 <FileDisplay>
-                    {getExtention(contentItem?.contentItem?.type) === "image" ? <img src={`${process.env.REACT_APP_IMAGEURL}${contentItem?.contentItem?.fileName}`} alt="" /> :
+                    {getExtention(contentItem?.contentItem?.type) === "image" ? 
+                    <div className="img">
+                        <img src={`${process.env.REACT_APP_IMAGEURL}${contentItem?.contentItem?.fileName}`} alt="" /> 
+
+                    </div>
+                    :
                         <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem?.contentItem?.fileName}`} controls controlsList="nodownload"></video>
                     }
 
@@ -597,7 +607,7 @@ const QuizComponent = ({ contentItem, userdata }) => {
             <Quiz>
 
                 <QuizInfo>
-                    <p>Description: <span>{contentItem.note}</span></p>             
+                    <p>Description: <span>{contentItem.note}</span></p>
                     <p>Max Attempts: <span>{contentItem.maxAttempts}</span></p>
                     <p>Deadline: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
                         hour: '2-digit',
@@ -938,6 +948,33 @@ const Classroom = () => {
 
 
             }
+        }else if (reduceContent?.length > 0 && !contentId){
+            let firstItem = reduceContent[0];
+            if(firstItem?.isLocked){
+                setSearchParams({
+                    contentId: reduceContent[0]?.contentId
+                })
+                setPickedType(reduceContent[0]?.type)
+                setBodyTitle(reduceContent[0]?.title)
+                setLocked(true)
+                return;
+
+            }else{
+                setSearchParams({
+                    contentId: reduceContent[0]?.contentId
+                })
+                setLocked(false)
+                setPickedType(reduceContent[0]?.type)
+                setContents(reduceContent[0]?.items)
+                setBodyTitle(reduceContent[0]?.title)
+                return;
+            }
+
+
+        }else{
+            setContents([])
+            setLocked(false)
+            return;
         }
     }, [reduceContent, contentId])
 
@@ -957,10 +994,10 @@ const Classroom = () => {
 
 
 
-    
+
     // console.log({ contentId });
-    
-    
+
+
     console.log({ modules });
     console.log({ reduceContent });
     console.log({ reduceItem });
@@ -990,7 +1027,7 @@ const Classroom = () => {
                     open={showMobile}
                     onClick={e => setShowMobile(_ => false)}
                 >
-                    <Sidebar isMobile={true} modules={modules} 
+                    <Sidebar isMobile={true} modules={modules}
                         setContents={setContents}
                         setPickedType={setPickedType}
                         reduceContent={reduceContent}
@@ -1023,9 +1060,12 @@ const Classroom = () => {
                             <BreadcrumbLink to="/student/console/myclasses">
                                 {bootcampName?.length > 0 && bootcampName[0].bootcampName}
                             </BreadcrumbLink>
-                            <BreadcrumbLink to="#" $isCurrentPage={true}>
-                                {bodyTitle}
-                            </BreadcrumbLink>
+                            {bodyTitle &&
+                                <BreadcrumbLink to="#" $isCurrentPage={true}>
+                                    {bodyTitle}
+                                </BreadcrumbLink>
+
+                            }
                         </Breadcrumbs>
                     </ClassroomMainTop>
                     <ClassroomMainBody>
@@ -1064,17 +1104,17 @@ const Classroom = () => {
 
                             {pickedType === "NOTE" && <>
                                 {/* {contents?.length > 0 && contents?.map((content, id) => ( */}
-                                {contents?.length > 0 && 
+                                {contents?.length > 0 &&
 
                                     <>
-                                        <NoteComponent contentItem={contents[contents.length -1]} 
+                                        <NoteComponent contentItem={contents[contents.length - 1]}
                                         // id={id} key={id} 
                                         />
 
                                         <QuizAction >
                                             <MarkButton
-                                                display={contents[contents.length -1]?.completedBy?.includes(userdata.id) ? true : false}
-                                                onClick={() => handleFileCompleted(contents[contents.length -1]?.contentId, contents[contents.length -1]?._id, "notes")}
+                                                display={contents[contents.length - 1]?.completedBy?.includes(userdata.id) ? true : false}
+                                                onClick={() => handleFileCompleted(contents[contents.length - 1]?.contentId, contents[contents.length - 1]?._id, "notes")}
                                             >
                                                 Mark as Completed
                                             </MarkButton>
@@ -1087,18 +1127,18 @@ const Classroom = () => {
                             }
 
                             {pickedType === "QUIZ" &&
-                                contents?.length > 0 && 
-                                    <>
-                                        <QuizComponent contentItem={contents[contents.length -1]} id={id} key={id} userdata={userdata} />
-                                        <QuizAction >
-                                            <MarkButton
-                                                display={contents[contents.length -1]?.attemptedBy?.includes(userdata.id) ? true : false}
-                                            // onClick={() => handleFileCompleted(content.contentId, content._id)}
-                                            >
-                                                Mark as Completed
-                                            </MarkButton>
-                                        </QuizAction>
-                                    </>
+                                contents?.length > 0 &&
+                                <>
+                                    <QuizComponent contentItem={contents[contents.length - 1]} id={id} key={id} userdata={userdata} />
+                                    <QuizAction >
+                                        <MarkButton
+                                            display={contents[contents.length - 1]?.attemptedBy?.includes(userdata.id) ? true : false}
+                                        // onClick={() => handleFileCompleted(content.contentId, content._id)}
+                                        >
+                                            Mark as Completed
+                                        </MarkButton>
+                                    </QuizAction>
+                                </>
 
                             }
 
@@ -1116,6 +1156,13 @@ const Classroom = () => {
                                     <p>Module is Locked</p>
                                 </div>
                             }
+
+                            {/* {
+                                !contentId && reduceContent?.length > 0 &&
+                                <div className="console_empty">
+                                    <p>Pick and Item</p>
+                                </div>
+                            } */}
 
                             {contentId && <QuizAction>
                                 <PreviousButton variant="outlined" disabled={prev} onClick={() => MoveButton("prev")}>

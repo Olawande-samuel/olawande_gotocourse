@@ -172,7 +172,7 @@ export const Blog = () => {
                                 <Link  to={`/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
                                     <h5>{blog.title}</h5>
                                 </Link>
-                                <p className="restricted_line" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
+                                <p className="restrict" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
                             </div>
 
                         </div>

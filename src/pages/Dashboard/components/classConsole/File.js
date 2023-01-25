@@ -464,7 +464,7 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
 		borderRadius: "10px",
 		boxShadow: 24,
 		p: 6,
-		padding: "4rem 2rem",
+		// padding: "4rem 2rem",
 		overflowY: "auto",
 	};
 

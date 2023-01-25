@@ -400,6 +400,7 @@ function Sidebar({ Toggle, side }) {
           ) : (
             <>
               <div className={style.course_content}>
+                <p>Course content</p>
                 <div className={`${style.create_content_button} ${style.blue}`}>
                   <button>
                     <Link to={"myclasses"}>
@@ -412,10 +413,16 @@ function Sidebar({ Toggle, side }) {
                   <button>
                     <Link to={"assessments"}>
                       <span>Assessments</span>
-                      <i>
+                      {/* <i>
                         <BsThreeDotsVertical />
-                      </i>
+                      </i> */}
                     </Link>
+                  </button>
+                </div>
+
+                <div className={`${style.create_content_button} ${style.orange}`}>
+                  <button onClick={() =>navigate("/student")}>
+                      <span>Back to Dashboard</span>
                   </button>
                 </div>
 

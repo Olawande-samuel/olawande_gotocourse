@@ -761,6 +761,7 @@ export const Dashboard = ()=>{
 
   // const {isLoading, isError, isSuccess, data, error} = useQuery(["teacher courses"], () => fetchCourses(userdata.token))
   const {isLoading, isError, isSuccess, data, error} = useQuery(["teacher bootcamp"], () => fetchBootcamps(userdata.token))
+  
 
   if(data?.statusCode === 0){
     toast.error(data?.message, {

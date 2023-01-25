@@ -83,14 +83,14 @@ export function LiveClassInfo({ type }) {
       />
       <header>
         <h4>Live class</h4>
-        {type !== "student" && (
+        {userdata?.userType !== "student" && (
           <p>Click on the button below to schedule a live class</p>
         )}
         <p>You can only join an ongoing schedule</p>
       </header>
 
       <div className={style.live_schedule}>
-        {type !== "student" && (
+        {userdata?.userType !== "student" && (
           <button onClick={() => setOpen(true)}>Schedule a live class</button>
         )}
         <button onClick={refresh}>Refresh list</button>

@@ -84,7 +84,7 @@ const Events = () => {
                                         <h4>
                                             {blog.title}
                                         </h4>
-                                        <p className="restricted_line" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
+                                        <p className="restricted" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
 
 
                                     </div>
@@ -168,7 +168,7 @@ function Upcoming({ id, event }) {
             <div className={style.upcoming_event_right}>
                 <div className={style.upcoming_event_text_container}>
                     <h5>{event.title}</h5>
-                    <p className='restricted_line'>{event.description}</p>
+                    <p className='restrict'>{event.description}</p>
                     <div className={style.tagsConatiner}>
                         {event.tags.map((e, id) => (
                             <div className={style.tags} key={id}>
@@ -225,7 +225,7 @@ function Ondemand({ event }) {
                         <small className={style.tag}>UI/UX</small> */}
                     </div>
                     <h5>{event.title}</h5>
-                    <p className='restricted_line'>{event.description}</p>
+                    <p className='restrict'>{event.description}</p>
                     <div className={style.lastbtn}>
                         <button>Watch Now</button>
                     </div>
