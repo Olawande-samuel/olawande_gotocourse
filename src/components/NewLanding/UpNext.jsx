@@ -32,7 +32,7 @@ const Grid = styled.div`
     gap: 1.5rem;
     justify-content:center;
     padding: .5rem;
-    border: 5px solid red;
+    // border: 5px solid red;
     
     @media screen and (min-width: 1400px) {
         grid-template-columns: repeat(4, 230px);
