@@ -180,8 +180,15 @@
     /* border: 1px solid white; */
 }
 
-.blue button a{
-    color: #ffff;
+.orange button{
+    background: var(--theme-orange);
+    color: #fff;
+    /* border: 1px solid white; */
+}
+
+
+.blue button a, .orange button a{
+    color: #fff;
     width: 100%;
 }
 
