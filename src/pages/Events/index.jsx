@@ -84,7 +84,7 @@ const Events = () => {
                                         <h4>
                                             {blog.title}
                                         </h4>
-                                        <p className="restricted" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
+                                        <p className="restrict" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
 
 
                                     </div>

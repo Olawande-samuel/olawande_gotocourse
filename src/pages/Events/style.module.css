@@ -65,6 +65,9 @@
     color: #86868B;
 }
 
+.articleInfo img {
+    max-width: 100%;
+}
 .articleTop {
     display: flex;
     align-items: center;
