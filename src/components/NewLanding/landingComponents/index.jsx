@@ -867,7 +867,7 @@ const UpCoursesCard = styled.div`
     }
     .up_content {
         padding-inline: 1.5rem;
-        padding-bottom: 1rem;
+        padding-bottom: .5rem;
         display: flex;
         flex-direction: column;
         justify-content:space-between;
@@ -998,7 +998,7 @@ const ShortCard = styled.div`
     }
     .up_content {
         padding-inline: 1.5rem;
-        padding-bottom: 1rem;
+        padding-bottom: .5rem;
         display: flex;
         flex-direction: column;
         justify-content:space-between;

@@ -187,11 +187,11 @@ return (
                     <div className="firstitems">
                         {/* <a href="" className="d-inline-flex"> */}
                         <Link to="/create-with-gotocourse">
-                            <button>Create School</button>
+                            <button>Create with Gotocourse</button>
                         </Link>
                         {/* </a> */}
                         <Link to="/learn-with-gotocourse" className="d-inline-flex">
-                            <button>For Learners</button>
+                            <button>Learner on Gotocourse</button>
                         </Link>
                     </div>
                 </ul>

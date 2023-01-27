@@ -74,8 +74,16 @@ import Logos from "./landingComponents/Logos";
 import { Blog } from "./Blog";
 import Headstart from "./Headstart";
 import Pathfinder from "./Pathfinder";
+import { useIntercom } from "react-use-intercom";
 
 const NewLanding = () => {
+
+  const { boot } = useIntercom(); 
+
+  useEffect(()=>{
+    boot()
+  },[])
+
   return (
     <Layout background="blue">
       <Hero />

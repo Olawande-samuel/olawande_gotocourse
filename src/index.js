@@ -6,19 +6,23 @@ import mixpanel from "mixpanel-browser";
 import { MixpanelProvider, MixpanelConsumer } from 'react-mixpanel'
 // import reportWebVitals from './reportWebVitals';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
-
+import { IntercomProvider } from 'react-use-intercom';
 const queryClient = new QueryClient()
 mixpanel.init('de7e6e0ca11a1f334afc964a5377c489', {debug: true, ignore_dnt:true,})
+const INTERCOM_APP_ID = "f0ts9dta"
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(  
   // <React.StrictMode>
     <MixpanelProvider mixpanel={mixpanel}>
-      <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
-      </BrowserRouter>
+      <IntercomProvider appId={INTERCOM_APP_ID}>
+        <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
+        </BrowserRouter>
+      </IntercomProvider>
     </MixpanelProvider>
   // </React.StrictMode>
 );
