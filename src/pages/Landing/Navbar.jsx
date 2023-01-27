@@ -191,7 +191,7 @@ return (
                         </Link>
                         {/* </a> */}
                         <Link to="/learn-with-gotocourse" className="d-inline-flex">
-                            <button>Learner on Gotocourse</button>
+                            <button>Learn on Gotocourse</button>
                         </Link>
                     </div>
                 </ul>
