@@ -7,11 +7,12 @@ import { useQuery } from "@tanstack/react-query"
 import '../classConsole/Content.css'
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useState } from 'react';
+import Loader from '../../../../components/Loader';
 
 const KEY = 'gotocourse-userdata';
 
 
- const Grid = styled.div`
+const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
   grid-auto-rows: 350px;
@@ -20,6 +21,7 @@ const KEY = 'gotocourse-userdata';
   row-gap: 3rem;
   justify-content: center;
   padding: .7rem .5rem;
+
 
 
   @media screen and (max-width: 1250px) {
@@ -119,17 +121,18 @@ export default function ConsoleClasses() {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
     const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps } } = useAuth();
-    const { data, isSuccess } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
+    const { data, isSuccess, isLoading } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
     console.log({ data });
     let navigate = useNavigate()
 
     const [search, setSearch] = useState("")
     return (
         <div className=''>
+            {isLoading && <Loader/>}
             <main className='assessments'>
-            <div className="assessments__inputcontainer">
-                    <input type="text" 
-                    className='assessments__input'
+                <div className="assessments__inputcontainer">
+                    <input type="text"
+                        className='assessments__input'
                         placeholder="Search for a Class"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)} />
@@ -139,11 +142,11 @@ export default function ConsoleClasses() {
                 {
                     data?.data?.filter(item => item.status === "paid")?.length > 0 ?
                         <Grid>
-                            {data?.data?.filter(item => item.status === "paid" && 
-                            item?.bootcampName
-                             .toLowerCase()
-                             .includes(search?.toLowerCase())
-                            
+                            {data?.data?.filter(item => item.status === "paid" &&
+                                item?.bootcampName
+                                    .toLowerCase()
+                                    .includes(search?.toLowerCase())
+
                             ).map((x, id) => (
                                 <AssessmentCard key={x.bootcampId} style={{ cursor: "pointer" }} onClick={() => {
                                     navigate(`/student/class-console/class/${x.bootcampId}`, {

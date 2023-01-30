@@ -616,6 +616,9 @@
 
 }
 
+.quizaccordion{
+    width: 100%;
+}
 .dashboard_empty{
     background-image: url(../../../../images/empty.png);
     background-repeat: no-repeat;
