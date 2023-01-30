@@ -5186,6 +5186,46 @@ export const consoleFunctions = {
             }
         }
     },
+
+    markFileAsCompleted: async function (token, id, fileIds, type) {
+
+        try {
+          
+            const res = await axios.patch(`${baseURL}/classes/student/contents/${type}/mark/completed/${id}`, {
+               ...fileIds  
+            }
+               ,
+
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
     attemptQuiz: async function (token, quizId, questions) {
 
         try {
@@ -5500,6 +5540,41 @@ export const consoleFunctions = {
     fetchLiveSchedule: async function (token, id) {
         try {
             const res = await axios.get(`${baseURL}/rooms/video/${id}`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+
+    fetchAssessments: async function (token, quizId, questions) {
+
+        try {
+            const res = await axios.get(`${baseURL}/classes/contents/quizes/attempts/${quizId}`, 
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,

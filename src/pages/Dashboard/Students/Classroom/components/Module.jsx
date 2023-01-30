@@ -104,8 +104,14 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
     }
 
 
-    const getStatus = (contentId, items) => {
-        // console.log({contentId}, {items});
+    const getStatus = (contentId, items, type) => {
+        console.log({contentId}, {items}, {type});
+        if(type ==="FILE_VIDEO"){
+            let all = items.filter(item =>item?.contentId === contentId) ;
+            return (all?.filter(content => content?.completedBy?.includes(userdata.id))?.length === all?.length) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />
+
+        }
+
         let findItem = items.find(item => item.contentId === contentId);
         if (findItem) {
             return findItem?.completedBy?.includes(userdata.id) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />
@@ -122,7 +128,7 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
         return <Locked />
     }
 
-    // console.log("data", contentsData[0]);
+    // console.log("data", contentsData);
 
 
     return (
@@ -170,7 +176,7 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
                             <h5>{content?.title}</h5>
                         </AttachmentInfo>
                         <AttachmentIcon>
-                            {getStatus(content?.contentId, content?.items)}
+                            {getStatus(content?.contentId, content?.items, content?.type)}
                             {getLockedStatus(content?.contentId, content?.items, content?.isLocked)}
 
                         </AttachmentIcon>

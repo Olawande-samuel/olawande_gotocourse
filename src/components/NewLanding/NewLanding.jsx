@@ -75,6 +75,7 @@ import { Blog } from "./Blog";
 import Headstart from "./Headstart";
 import Pathfinder from "./Pathfinder";
 import { useIntercom } from "react-use-intercom";
+import Tutorial from "./Tutorial";
 
 const NewLanding = () => {
 
@@ -90,6 +91,7 @@ const NewLanding = () => {
       <Stats />
       <WhatweDo />
       <Companies />
+      <Tutorial/>
       {/* <Mission /> */}
       <GreatOpportunities />
       <Up />

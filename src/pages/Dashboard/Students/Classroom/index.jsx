@@ -21,6 +21,7 @@ import axios from 'axios'
 import { ViewModal } from '../../components/classConsole/File';
 import emptyImg from "../../../../images/empty.png"
 import ReactQuill from 'react-quill';
+import Loader from '../../../../components/Loader';
 
 const Container = styled.div`
 position: relative;
@@ -355,7 +356,7 @@ span{
 
 `
 
-const QuesHeader = styled.div`
+export const QuesHeader = styled.div`
 p{
     font-size: 14px;
     color: black;
@@ -369,7 +370,7 @@ p{
 
 `
 
-const QuestionOptions = styled.div`
+export const QuestionOptions = styled.div`
     h4{
         color: #004DB6;
         font-size: 18px;
@@ -378,7 +379,7 @@ const QuestionOptions = styled.div`
 
 `
 
-const Answer = styled.div`
+export const Answer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 3rem;
@@ -515,12 +516,12 @@ const FileComponent = (contentItem) => {
                 </FileName>
 
                 <FileDisplay>
-                    {getExtention(contentItem?.contentItem?.type) === "image" ? 
-                    <div className="img">
-                        <img src={`${process.env.REACT_APP_IMAGEURL}${contentItem?.contentItem?.fileName}`} alt="" /> 
+                    {getExtention(contentItem?.contentItem?.type) === "image" ?
+                        <div className="img">
+                            <img src={`${process.env.REACT_APP_IMAGEURL}${contentItem?.contentItem?.fileName}`} alt="" />
 
-                    </div>
-                    :
+                        </div>
+                        :
                         <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem?.contentItem?.fileName}`} controls controlsList="nodownload"></video>
                     }
 
@@ -730,7 +731,7 @@ const Classroom = () => {
 
     const { id } = useParams()
 
-    const { consoleFunctions: { fetchStudentDomains, markAsCompleted }, studentFunctions: { fetchBootcamps } } = useAuth();
+    const { consoleFunctions: { fetchStudentDomains, markAsCompleted, markFileAsCompleted }, studentFunctions: { fetchBootcamps } } = useAuth();
     useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token), {
         onSuccess: (res) => {
             if (res.data && id) {
@@ -739,7 +740,7 @@ const Classroom = () => {
         }
     })
 
-    useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id), {
+    const { isLoading } = useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id), {
         onSuccess: (res) => {
             // console.log(res.data)
             setModules(res.data)
@@ -948,9 +949,9 @@ const Classroom = () => {
 
 
             }
-        }else if (reduceContent?.length > 0 && !contentId){
+        } else if (reduceContent?.length > 0 && !contentId) {
             let firstItem = reduceContent[0];
-            if(firstItem?.isLocked){
+            if (firstItem?.isLocked) {
                 setSearchParams({
                     contentId: reduceContent[0]?.contentId
                 })
@@ -959,7 +960,7 @@ const Classroom = () => {
                 setLocked(true)
                 return;
 
-            }else{
+            } else {
                 setSearchParams({
                     contentId: reduceContent[0]?.contentId
                 })
@@ -971,7 +972,7 @@ const Classroom = () => {
             }
 
 
-        }else{
+        } else {
             setContents([])
             setLocked(false)
             return;
@@ -979,9 +980,29 @@ const Classroom = () => {
     }, [reduceContent, contentId])
 
 
-    const handleFileCompleted = async (contentId, fileId, type) => {
+    const handleCompleted = async (contentId, fileId, type) => {
         console.log({ contentId });
         const { data, statusCode } = await markAsCompleted(userdata?.token, contentId, fileId, type)
+        if (statusCode === 1) {
+            queryClient.invalidateQueries(["fetch domains"])
+            console.log({ data });
+
+        }
+
+
+    }
+
+
+    const handleFileCompleted = async (contentId, contentsId, type) => {
+
+        let ids = [];
+        contentsId.map(content =>  {
+            ids.push( content.fileId)
+
+        })
+
+        console.log({ ids });
+        const { data, statusCode } = await markFileAsCompleted(userdata?.token, contentId, ids, type)
         if (statusCode === 1) {
             queryClient.invalidateQueries(["fetch domains"])
             console.log({ data });
@@ -1005,6 +1026,8 @@ const Classroom = () => {
 
     return (
         <Container>
+            {isLoading && <Loader />}
+
             <Navbar>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <MenuButton onClick={e => setShowMobile(_ => true)}>
@@ -1082,22 +1105,28 @@ const Classroom = () => {
                                     {contents?.length > 0 && contents?.map((content, id) => (
                                         <>
                                             <FileComponent contentItem={content} id={id} key={id} />
-                                            <QuizAction >
-                                                <MarkButton display={content?.completedBy?.includes(userdata.id) ? true : false}
+                                            {/* <QuizAction >
+                                                    <MarkButton display={content?.completedBy?.includes(userdata.id) ? true : false}
                                                     onClick={() => handleFileCompleted(content.contentId, content.fileId, "files")}
+    
                                                 >
                                                     Mark as Completed
                                                 </MarkButton>
-                                            </QuizAction>
+                                            </QuizAction> */}
                                         </>
 
                                     ))
-                                        // :
 
-                                        // <div className="console_empty">
-                                        //     <p>Content is Currently Empty</p>
-                                        // </div>
                                     }
+
+                                    <QuizAction >
+                                        <MarkButton display={(contents?.filter(content => content?.completedBy?.includes(userdata.id))?.length === contents?.length) ? true : false}
+
+                                            onClick={() => handleFileCompleted(contents[0]?.contentId, contents, "files")}
+                                        >
+                                            Mark as Completed
+                                        </MarkButton> 
+                                    </QuizAction>
                                 </>
 
                             }
@@ -1114,7 +1143,7 @@ const Classroom = () => {
                                         <QuizAction >
                                             <MarkButton
                                                 display={contents[contents.length - 1]?.completedBy?.includes(userdata.id) ? true : false}
-                                                onClick={() => handleFileCompleted(contents[contents.length - 1]?.contentId, contents[contents.length - 1]?._id, "notes")}
+                                                onClick={() => handleCompleted(contents[contents.length - 1]?.contentId, contents[contents.length - 1]?._id, "notes")}
                                             >
                                                 Mark as Completed
                                             </MarkButton>
