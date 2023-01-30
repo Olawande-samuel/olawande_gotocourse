@@ -649,6 +649,7 @@ function AccordMenu({ id, type, classId, locked, domain, content}) {
       console.error(err)
     }
   })
+
   const domainUpdate = useMutation(([token, data, id])=>updateDomain(token, data, id), {
     onSuccess: (res)=>{
 
@@ -658,9 +659,9 @@ function AccordMenu({ id, type, classId, locked, domain, content}) {
       console.error(err)
     }
   })
-  const contentUpdate = useMutation(([token, data, id])=>updateDomain(token, data, id), {
-    onSuccess: (res)=>{
 
+  const contentUpdate = useMutation(([token, data, id])=>updateContent(token, data, id), {
+    onSuccess: (res)=>{
       queryClient.invalidateQueries("getDomainContent")
     },
     onError: (err)=>{
@@ -680,7 +681,7 @@ function AccordMenu({ id, type, classId, locked, domain, content}) {
   
 
   function handleLockToggle(status){
-    console.log({status})
+    console.log({type})
     let wantsTolock = status === "lock"
     if(type === "domain"){
       if(wantsTolock){
@@ -703,14 +704,14 @@ function AccordMenu({ id, type, classId, locked, domain, content}) {
         let contentData = content
         contentData.isLocked = true
         contentData.domainId = contentData.domain
-        domainUpdate.mutate([userdata.token, contentData, id])
+        contentUpdate.mutate([userdata.token, contentData, id])
         return
       }
       // unlock
       let contentData = content
         contentData.isLocked = false
         contentData.domainId = contentData.domain
-        domainUpdate.mutate([userdata.token, contentData, id])
+        contentUpdate.mutate([userdata.token, contentData, id])
     }
   }
 
