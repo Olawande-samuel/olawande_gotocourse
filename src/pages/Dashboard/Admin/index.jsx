@@ -3944,6 +3944,7 @@ export function CreateBootcamp() {
     description: "",
     type: "",
     instructor: "",
+    instructors: [],
     syllabus: [],
     careerList: [],
     packages: [],
@@ -4099,6 +4100,8 @@ export function CreateBootcamp() {
   const [fileUrl, setFileUrl] = useState(null);
 
   const [popupList, setPopupList] = useState("")
+  
+  const [newInstructor, setNewInstructor] = useState("")
 
   const openModal = () => {
     setOpenSyllabus(true);
@@ -4206,11 +4209,9 @@ export function CreateBootcamp() {
     }
   }
   function popupChangeHandler(e) {
-    console.log(e.target.value)
-    setPopupList(e.target.value);
+    setPopupList(e.target.value)
   }
 
-  // console.log({popupList})
 
   const [openPackage, setOpenPackage] = useState(false);
   // PACKAGES
@@ -4228,7 +4229,6 @@ export function CreateBootcamp() {
 
     formCopy[i] = { ...formCopy[i], [e.target.name]: e.target.value }
     // formCopy.time = formCopy
-    console.log({ formCopy })
     setTimeList(formCopy)
   }
 
@@ -4239,7 +4239,28 @@ export function CreateBootcamp() {
   }
 
 
-  // console.log({ formstate });
+
+  function addInstructor(e){
+    setFormstate({...formstate, instructors: [...formstate?.instructors, newInstructor]})
+    setNewInstructor("")
+  }
+
+  
+  
+  function removeInstructor(instructor){
+    let current = formstate.instructors
+    let newList  = current.filter((item, i) => (item + i) !== instructor)
+    setFormstate({...formstate, instructors: newList})
+  }
+
+
+  function removeInstructorFromEdit(instructorId){
+    let current = formstate.instructors
+    let newList  = current.filter((item, i) => item.tutorId !== instructorId)
+    setFormstate({...formstate, instructors: newList})
+  }
+
+
   return (
     <Admin header={location.search ? "Edit Course" : "Create Course"}>
       {loader && <Loader />}
@@ -4532,7 +4553,7 @@ export function CreateBootcamp() {
             />
 
             <div className={clsx.form_group}>
-              <label htmlFor={"instructor"}>Instructor</label>
+              <label htmlFor={"instructor"}>Main Instructor</label>
               <select
                 name="instructor"
                 value={formstate.instructor}
@@ -4550,6 +4571,45 @@ export function CreateBootcamp() {
                   ))}
               </select>
             </div>
+            <div className={clsx.form_group}>
+            {formstate.instructors?.length > 0 ? 
+                  formstate.instructors?.map((item, index) => (
+                    <div className={clsx.syllabus_container}>
+                      <h5>{item}</h5>
+                        <p>
+                          <i
+                            className="text-danger"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => removeInstructor(item + index)}
+                          >
+                            <BiTrash />
+                          </i>
+                        </p>
+                    </div>
+                  ))
+                  :
+                <p>No instructors found</p>
+              }
+            </div>
+            <div className={clsx.form_group}>
+              <Input
+                label="Instructor Email"
+                name="newInstructor"
+                type="text"
+                handleChange={(e)=>setNewInstructor(e.target.value)}
+                value={newInstructor}
+                placeholder="Enter Instructor email"
+              />
+            </div>
+
+              <button 
+                className="btn btn-primary my-3"
+                style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
+                type="button"
+                onClick={addInstructor}
+              >
+                Add Instructor
+              </button>
 
             <div className={clsx.form_group}>
               <label className="form-label generic_label">Syllabus</label>
@@ -4743,8 +4803,7 @@ export function BootcampRow({
   price,
   category, subCategory
 }) {
-  console.log({ packages })
-  console.log({ price })
+
   return (
     <tr className={clsx.user__info_card} onClick={clickHandler}>
       <td className={clsx.user__info}>{index + 1}.</td>

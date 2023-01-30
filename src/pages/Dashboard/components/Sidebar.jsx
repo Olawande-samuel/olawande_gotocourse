@@ -155,12 +155,12 @@ const Sidebar = () => {
                     title: "Notifications",
                     showBadge: true,
                 },
-                {
-                    icon: SiGooglechat,
-                    path: "chat",
-                    title: "Chat",
-                    showBadge: true,
-                },
+                // {
+                //     icon: SiGooglechat,
+                //     path: "chat",
+                //     title: "Chat",
+                //     showBadge: true,
+                // },
                 {
                     icon: IoIosCash,
                     path: "earnings",
@@ -247,12 +247,12 @@ const Sidebar = () => {
                     title: "Notifications",
                     showBadge: true,
                 },
-                {
-                    icon: SiGooglechat,
-                    path: "chat",
-                    title: "Chat",
-                    showBadge: true,
-                },
+                // {
+                //     icon: SiGooglechat,
+                //     path: "chat",
+                //     title: "Chat",
+                //     showBadge: true,
+                // },
                 {
                     icon: SiGoogleclassroom,
                     path: "console/myclasses",
@@ -309,12 +309,12 @@ const Sidebar = () => {
                     title: "Notifications",
                     showBadge: true,
                 },
-                {
-                    icon: SiGooglechat,
-                    path: "chat",
-                    title: "Chat",
-                    showBadge: true,
-                },
+                // {
+                //     icon: SiGooglechat,
+                //     path: "chat",
+                //     title: "Chat",
+                //     showBadge: true,
+                // },
                 {
                     icon: BiHelpCircle,
                     path: "help",
@@ -393,12 +393,12 @@ const Sidebar = () => {
                         title: "Notifications",
                         showBadge: true,
                     },
-                    {
-                        icon: SiGooglechat,
-                        path: "chat",
-                        title: "Chat",
-                        showBadge: true,
-                    },
+                    // {
+                    //     icon: SiGooglechat,
+                    //     path: "chat",
+                    //     title: "Chat",
+                    //     showBadge: true,
+                    // },
                     {
                         icon: IoIosCash,
                         path: "earnings",
@@ -495,12 +495,12 @@ const Sidebar = () => {
                             title: "Notifications",
                             showBadge: true,
                         },
-                        {
-                            icon: SiGooglechat,
-                            path: "chat",
-                            title: "Chat",
-                            showBadge: true,
-                        },
+                        // {
+                        //     icon: SiGooglechat,
+                        //     path: "chat",
+                        //     title: "Chat",
+                        //     showBadge: true,
+                        // },
                         // {
                         //     icon: SiGoogleclassroom,
                         //     path: "console/myclasses",
@@ -561,12 +561,12 @@ const Sidebar = () => {
                                 title: "Notifications",
                                 showBadge: true,
                             },
-                            {
-                                icon: SiGooglechat,
-                                path: "chat",
-                                title: "Chat",
-                                showBadge: true,
-                            },
+                            // {
+                            //     icon: SiGooglechat,
+                            //     path: "chat",
+                            //     title: "Chat",
+                            //     showBadge: true,
+                            // },
                             {
                                 icon: BiHelpCircle,
                                 path: "help",
@@ -611,12 +611,12 @@ const Sidebar = () => {
                                     path: "scheduler",
                                     title: "Scheduler",
                                 },
-                                {
-                                    icon: SiGooglechat,
-                                    path: "chat",
-                                    title: "Chat",
-                                    showBadge: true,
-                                },
+                                // {
+                                //     icon: SiGooglechat,
+                                //     path: "chat",
+                                //     title: "Chat",
+                                //     showBadge: true,
+                                // },
                                 {
                                     icon: BiHelpCircle,
                                     path: "help",
