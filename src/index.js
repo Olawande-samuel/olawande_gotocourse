@@ -16,7 +16,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(  
   // <React.StrictMode>
     <MixpanelProvider mixpanel={mixpanel}>
-      <IntercomProvider appId={INTERCOM_APP_ID}>
+      <IntercomProvider appId={INTERCOM_APP_ID} autoBoot={true}>
         <BrowserRouter>
         <QueryClientProvider client={queryClient}>
           <App />

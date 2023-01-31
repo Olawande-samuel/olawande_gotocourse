@@ -804,7 +804,10 @@ export const Dashboard = ()=>{
   }
   
   if(studentData?.data?.length > 0){
-    topContent[0].value = studentData.data.length
+    let myStudents = new Set()
+
+    studentData.data.forEach(student => myStudents.add(student.studentId))
+    topContent[0].value = myStudents.size
   }
 
 
