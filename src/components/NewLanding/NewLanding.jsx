@@ -93,7 +93,7 @@ const NewLanding = () => {
       <Stats />
       <WhatweDo />
       <Companies />
-      <Tutorial/>
+      {/* <Tutorial/> */}
       {/* <Mission /> */}
       <GreatOpportunities />
       <Up />
