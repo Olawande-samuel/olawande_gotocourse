@@ -2695,15 +2695,15 @@ export const adminFunctions = {
             link.setAttribute('download', 'data.csv');
             document.body.appendChild(link);
             link.click();
-    
+
             document.body.removeChild(link);
-            URL.revokeObjectURL(href);            
+            URL.revokeObjectURL(href);
 
             if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
                 ...res.data,
                 success: true
-            }            
+            }
 
         } catch (err) {
             return {
@@ -2749,7 +2749,7 @@ export const adminFunctions = {
     },
     removeStudentToClass: async function (token, _data) {
         console.log("token", token)
-        console.log("data",_data)
+        console.log("data", _data)
         try {
             const res = await axios.post(`${baseURL}/admin/student/class/remove`,
                 JSON.stringify(_data),
@@ -3013,7 +3013,7 @@ export const studentFunctions = {
             }
         }
     },
-    
+
     fetchStudentFees: async function (token) {
         // console.log("studentpaymenttoken", token);
         try {
@@ -3158,7 +3158,7 @@ export const studentFunctions = {
         // console.log({token});
         try {
             const res = await axios.post(`${baseURL}/user/wishlist/clear`, {
-              data: JSON.stringify(data)
+                data: JSON.stringify(data)
             },
                 {
                     headers: {
@@ -4733,7 +4733,7 @@ export const consoleFunctions = {
             }
         }
     },
-    updateDomain: async function (token, data,  id) {
+    updateDomain: async function (token, data, id) {
         try {
             const res = await axios.patch(`${baseURL}/classes/domain/update/${id}`, JSON.stringify(data),
                 {
@@ -5178,15 +5178,15 @@ export const consoleFunctions = {
 
         try {
             let payload = {
-                fileId:fileId,     
-            } 
-            if(type === "notes"){
-                   payload.noteId = fileId 
+                fileId: fileId,
+            }
+            if (type === "notes") {
+                payload.noteId = fileId
             }
             const res = await axios.patch(`${baseURL}/classes/student/contents/${type}/mark/completed/${id}`, {
-               ...payload 
+                ...payload
             }
-               ,
+                ,
 
                 {
                     headers: {
@@ -5222,12 +5222,10 @@ export const consoleFunctions = {
     markFileAsCompleted: async function (token, id, fileIds, type) {
 
         try {
-          
-            const res = await axios.patch(`${baseURL}/classes/student/contents/${type}/mark/completed/${id}`, {
-               ...fileIds  
-            }
-               ,
 
+            const res = await axios.patch(`${baseURL}/classes/student/contents/${type}/mark/completed/${id}`,
+                ...fileIds
+                ,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,
@@ -5603,10 +5601,10 @@ export const consoleFunctions = {
         }
     },
 
-    fetchAssessments: async function (token, quizId, questions) {
+    fetchAssessments: async function (token) {
 
         try {
-            const res = await axios.get(`${baseURL}/classes/contents/quizes/attempts/${quizId}`, 
+            const res = await axios.get(`${baseURL}/classes/contents/quizes/attempts/fetch`,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,
@@ -5949,7 +5947,7 @@ export const teacherConsoleFunctions = {
             }
         }
     },
-   deleteLiveSchedule : async function (token, id) {
+    deleteLiveSchedule: async function (token, id) {
         try {
             const res = await axios.delete(`${baseURL}/rooms/video/${id}`,
                 {

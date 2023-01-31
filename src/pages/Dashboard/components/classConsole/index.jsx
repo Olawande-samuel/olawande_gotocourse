@@ -98,7 +98,7 @@ export const Console = ({ children }) => {
   const { pathname } = useLocation();
   const [path, setPath]= useState("")
 
-  console.log(pathname.includes("teacher"))
+  // console.log(pathname.includes("teacher"))
 
   useEffect(()=>{
     if(pathname.includes("teacher")){
@@ -176,7 +176,7 @@ const iconData = [
 
 
     const studentAssessMent =  pathname.includes("/student/console/myclasses") || pathname.includes("/student/console/assessments");
-    console.log({studentAssessMent});
+    // console.log({studentAssessMent});
 
   const studentpath = pathname.split("/")[1] === "student";
   const quizpath =

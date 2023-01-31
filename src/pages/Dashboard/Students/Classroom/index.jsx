@@ -218,7 +218,7 @@ const VideoAction = styled.div`
 `;
 
 
-const QuizAction = styled.div`
+export const QuizAction = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -267,7 +267,7 @@ const QuizImage = styled.img`
     width: 100%;
     height: 100%;
 `;
-const QuizButton = styled.button`
+export const QuizButton = styled.button`
     background-color: #3f50b5 ;
     color: white ;
     border: none;
