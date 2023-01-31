@@ -13,7 +13,7 @@ import { KEY } from "../../../../../constants";
 import { useAuth } from "../../../../../contexts/Auth";
 import { AdvancedError } from "../../../../../classes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { Bar, BarProfile, BarText, Chat, ChatBox, ChatHeader, Closed, Contact, ContactItem, Header, ImgWrapper, InputContainer, Logo, Opened, OpenedContent, PreviewContent, Profile, Search, TabWrapper, TextContent, Top, } from "./style";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
@@ -23,26 +23,20 @@ import PropTypes from "prop-types";
 const LiveChat = () => {
   const { getItem } = useLocalStorage();
   const userData = getItem(KEY);
-  const [showuserlist, setShowUserlist] = useState(true);
-  const {
-    adminFunctions: { getMessages, getUnreadMessages },
-    adminStudentFunctions: { fetch },
-    adminTeacherFunctions: { fetch: TeachersFetch },
-    otherFunctions: { fetchTeachers, fetchAdmin },
-    generalState: { chatDetail },
-  } = useAuth();
+  const { adminFunctions: {  getUnreadMessages }, generalState: { chatDetail }, } = useAuth();
+
   const [users, setUsers] = useState([]);
-  const [userInfo, setUserInfo] = useState({});
-  const [loader, setLoader] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [searchParams] = useSearchParams();
   const contactId = searchParams.get("contact");
+
   useEffect(() => {
     // if(type !== "New Messages"){
     (async () => {
       if (userData.token) {
         try {
           const res = await getUnreadMessages(userData?.token);
-          const { message, success, statusCode } = res.data;
+          const { message, statusCode } = res.data;
           if (statusCode !== 1) throw new AdvancedError(message, statusCode);
           else {
             const { data } = res.data;
@@ -51,8 +45,6 @@ const LiveChat = () => {
         } catch (err) {
           if (err.statusCode === 2)
             err.message = "Session expired. Please login again";
-        } finally {
-          setLoader((_) => false);
         }
       }
     })();
@@ -60,11 +52,23 @@ const LiveChat = () => {
   }, []);
 
   return (
+    <>
+    <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     <Chat>
       <Contact>
         <Logo>
           <img src={logo} alt="logo" />
-          <span>Quikkonnet</span>
+          <span>Quickonnet</span>
         </Logo>
         <Header>
           <Top>
@@ -86,11 +90,230 @@ const LiveChat = () => {
         {/* Tabs go here */}
       </Contact>
       <ChatBox>
-        {chatDetail?.body || contactId ? <OpenedChat /> : <ClosedChat />}
+        {Object.keys(chatDetail).length > 0 ? <OpenedChat /> : <ClosedChat />}
       </ChatBox>
     </Chat>
+    </>
   );
 };
+
+function ChatTabs() {
+  const [value, setValue] = useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const chatSections = [<AllUsers />, <Unread />  ]
+
+  return (
+    <TabWrapper>
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        aria-label="basic tabs example"
+        variant="scrollable"
+
+        TabIndicatorProps={{ sx: { backgroundColor: "#fff" } }}
+        sx={{
+          "& button": { color: "#fff !important" },
+          "& button.Mui-selected": {
+            color: "#fff !important",
+            fontWeight: "bold",
+          },
+        }}
+      >
+        {["All", "Unread"].map((h, i) => (
+          <Tab
+            key={i + 1}
+            label={h}
+            className="text-capitalize fw-bolder text-dark"
+            {...a11yProps(i)}
+            
+          />
+        ))}
+      </Tabs>
+
+      {
+        chatSections?.map((item, i)=>(
+              
+          <TabPanel
+              value={value}
+              index={i}
+              style={{ height: "100%", width: "100%", paddingBottom: "1rem" }}
+              key={i}
+          >
+              {item}
+          </TabPanel>
+        ))
+      }
+
+    </TabWrapper>
+  );
+}
+
+
+
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 0 }} style={{ height: "100%" }}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
+function Unread() {
+  const { getItem } = useLocalStorage();
+  const userData = getItem(KEY);
+  const { adminFunctions: { getUnreadMessages }} = useAuth();
+  const [users, setUsers] = useState([]);
+
+
+  useEffect(() => {
+    // if(type !== "New Messages"){
+    (async () => {
+      if (userData.token) {
+        try {
+          const res = await getUnreadMessages(userData?.token);
+          const { message, statusCode } = res.data;
+          if (statusCode !== 1) throw new AdvancedError(message, statusCode);
+          else {
+            const { data } = res.data;
+            setUsers(data);
+          }
+        } catch (err) {
+          if (err.statusCode === 2)
+            err.message = "Session expired. Please login again";
+        } 
+      }
+    })();
+    // }
+  }, []);
+
+
+
+  return (
+    <>
+      {users?.map((user, i) => (
+          <ContactWindow {...user} all={user} />
+        ))}
+    </>
+  );
+}
+
+function AllUsers(){
+    const { getItem } = useLocalStorage();
+    const userData = getItem(KEY);
+    const {id} = useParams()
+
+
+    const { adminStudentFunctions: { fetch}, adminTeacherFunctions: { fetch: TeachersFetch }, otherFunctions: {fetchTeachers, fetchAdmin}, teacherFunctions: {fetchApplications, fetchMyStudents} } = useAuth();
+  
+    console.log({id})
+    // const isAdmin = userData.userType !== 'admin';
+    const isStudent = userData.userType === 'student';
+    const isTeacher = (userData?.userType === 'teacher' || "mentor" ) ? true : false;
+
+    const [students, setStudents] = useState([]);
+    const [admins, setAdmins] = useState([]);
+    // const [userInfo, setUserInfo] = useState({});
+    // const [loader, setLoader] = useState(false);
+  
+    const {data:studentData} = useQuery(["teacher students", userData.token], () => fetchMyStudents(userData.token), {
+      enabled: userData?.userType !== "student",
+      onSuccess: (res)=>{
+        console.log({res})
+        if(res.data?.length > 0){
+            setStudents(res.data)
+        }
+      }
+    })
+
+    // const allStudents = useQuery(["get all students"], () => fetch(userData?.token), {
+    //     enabled: isTeacher,
+    //     onSuccess: (res)=>{
+    //         console.log(res)
+    //     }
+    // })
+
+    // const allTeachers = useQuery(userData?.token && ["get all teachers"], () => TeachersFetch(userData?.token), {
+    //     enabled: isAdmin,
+    //     onSuccess: (res)=>{}
+    // })
+    // const allAdmins = useQuery(userData?.token && ["get all admins"], () => fetchAdmin(), {
+    //     enabled: isStudent,
+    //     onSuccess: (res)=>{}
+    // })
+    // const allStudentAdmin = useQuery(userData?.token && ["get all student admins"], () => fetchAdmin(), {
+    //     enabled: isStudent,
+    //     onSuccess: (res)=>{}
+    // })
+    // const allStudentTeacher = useQuery(userData?.token && ["get all student admins"], () => fetchAdmin(), {
+    //     enabled: isStudent,
+    //     onSuccess: (res)=>{}
+    // })
+
+    // const courseAllStudent = useQuery(["get course applications", userData?.token], () => fetchApplications(userData?.token), {
+    //     enabled: isTeacher,
+    //     onSuccess: (res)=>{
+    //         if(res.data?.length > 0){
+    //             setStudents(res.data)
+    //         }
+    //     }
+    // })
+
+
+
+   const allAdmins = useQuery(userData?.token && ["get all admins"], () => fetchAdmin(), {
+        enabled: isStudent || isTeacher,
+        onSuccess: (res)=>{
+            if(res.data?.length > 0){
+              console.log({res})
+              let admin = res.data
+              // let admin = res.data.filter(admin=> admin.firstName === "Admiralty")
+              setAdmins(admin)
+            }
+        }
+    })
+
+    return (
+        <>
+        {
+          [...admins, ...students]?.map((item,i)=>(
+              <ContactWindow {...item} all={item} />
+
+          ))
+        }
+        </>
+    )
+}
+
+
+
 
 function ContactWindow({
   profileImg,
@@ -99,13 +322,14 @@ function ContactWindow({
   userType,
   user,
   all,
+  name,
 }) {
   const navigate = useNavigate();
   const { generalState, setGeneralState } = useAuth();
 
   function openMessage(e, message) {
     console.log(message)
-    let userid =  message?.userId ? message?.userId : (message?.fromUser ? message?.fromUser : (message?.teacherId ? message?.teacherId : message?.adminId))
+    let userid =  message?.userId ? message?.userId : (message?.fromUser ? message?.fromUser : (message?.teacherId ? message?.teacherId : message?.adminId ? message?.adminId :  message?.studentId))
     
     e.preventDefault();
     navigate(`?contact=${userid}`);
@@ -125,6 +349,7 @@ function ContactWindow({
                 width: "50px",
                 display: "grid",
                 placeItems: "center",
+                color: "#FFF"
               }}
             >
               <BiUserCircle size="3rem" />
@@ -133,13 +358,17 @@ function ContactWindow({
         </div>
       </Profile>
       <PreviewContent>
-        {user?.fullName ? (
-          <div className="name">{user?.fullName}</div>
-        ) : (
+        {name
+         ? 
+          <div className="name">{name}</div>
+          :  
+          user?.fullName 
+          ? <div className="name">{user.fullName }</div>
+          : 
           <div className="name">{`${firstName ? firstName : ""} ${lastName ? lastName : ""}`}</div>
-        )}
+        }
         <div className="previewText">message</div>
-        <div className="time">10:20PM</div>
+        {/* <div className="time">10:20PM</div> */}
       </PreviewContent>
     </ContactItem>
   );
@@ -147,13 +376,12 @@ function ContactWindow({
 
 function OpenedChat() {
   const queryClient = useQueryClient();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { getItem } = useLocalStorage();
   const userData = getItem(KEY);
   const {
     generalState: { chatDetail },
-    setGeneralState,
-    adminFunctions: { getMessages, sendMessage, readMessage },
+    adminFunctions: { getMessages, sendMessage },
   } = useAuth();
 
 
@@ -167,17 +395,11 @@ function OpenedChat() {
     () =>
       getMessages(
         userData.token,
-        chatDetail?.userId
-          ? chatDetail?.userId
-          : chatDetail?.fromUser
-          ? chatDetail?.fromUser
-          : chatDetail?.teacherId
-          ? chatDetail?.teacherId
-          : chatDetail?.adminId
+        contactId
       ),
     {
       onSuccess: (res) => {
-        if (res.data.length > 0) {
+        if (res.data?.length > 0) {
           setMessageList(res.data);
         } else {
           setMessageList([]);
@@ -194,39 +416,14 @@ function OpenedChat() {
     {
       onSuccess: (res) => {
         if (res.success) {
-          toast.success(res.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
           queryClient.invalidateQueries(["get private messages from user"]);
           setText("");
         } else {
-          toast.error(res.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          toast.error(res.message);
         }
       },
       onError: (err) => {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(err.message);
       },
     }
   );
@@ -245,7 +442,7 @@ function OpenedChat() {
           ? chatDetail.teacherId
           : chatDetail.fromUser
           ? chatDetail.fromUser
-          : chatDetail.adminId,
+          : chatDetail.adminId ? chatDetail.adminId : chatDetail.studentId,
         body: text,
       });
     } else {
@@ -261,7 +458,6 @@ function OpenedChat() {
     }
   }
 
-  console.log("mds", ourMessages.isLoading )
   return (
     <Opened>
       <ChatHeader>
@@ -269,11 +465,11 @@ function OpenedChat() {
           {chatDetail?.profileImg ? (
             <img src={chatDetail?.profileImg} alt="" />
           ) : (
-            <p>{chatDetail?.user?.fullName.substring(0, 2)}</p>
+            <p>{chatDetail?.user?.fullName ? chatDetail?.user?.fullName.substring(0, 2) : chatDetail?.name?.substring(0, 2) }</p>
           )}
         </Profile>
         <PreviewContent>
-          <div className="name text-dark">{chatDetail?.user ? chatDetail?.fullName :  `${chatDetail?.firstName} ${chatDetail?.lastName}`}</div>
+          <div className="name text-dark">{chatDetail?.name ? chatDetail.name : chatDetail?.user ? chatDetail?.fullName :  `${chatDetail?.firstName} ${chatDetail?.lastName}`}</div>
         </PreviewContent>
       </ChatHeader>
 
@@ -367,220 +563,4 @@ function ChatBar({ sender, user, body, profileImg }) {
     </>
   );
 }
-
-function ChatTabs() {
-  const [value, setValue] = useState(0);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const chatSections = [<AllUsers />, <Unread />  ]
-
-  return (
-    <TabWrapper>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        aria-label="basic tabs example"
-        // variant="scrollable"
-
-        TabIndicatorProps={{ sx: { backgroundColor: "#fff" } }}
-        sx={{
-          "& button": { color: "#fff !important" },
-          "& button.Mui-selected": {
-            color: "#fff !important",
-            fontWeight: "bold",
-          },
-        }}
-      >
-        {["All", "Unread", "Sent", "Archived"].map((h, i) => (
-          <Tab
-            key={i + 1}
-            label={h}
-            className="text-capitalize fw-bolder text-dark"
-            {...a11yProps(i)}
-            
-          />
-        ))}
-      </Tabs>
-
-
-            {
-                chatSections?.map((item, i)=>(
-                    
-                    <TabPanel
-                        value={value}
-                        index={i}
-                        style={{ height: "100%", width: "100%", paddingBottom: "1rem" }}
-                        key={i}
-                    >
-                        {item}
-                    </TabPanel>
-                    
-
-
-                ))
-            }
-    </TabWrapper>
-  );
-}
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 0 }} style={{ height: "100%" }}>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
-
-function Unread() {
-    const { getItem } = useLocalStorage();
-    const userData = getItem(KEY);
-    const [loader, setLoader] = useState(false);
-  const {
-    adminFunctions: { getMessages, getUnreadMessages },
-    adminStudentFunctions: { fetch },
-    adminTeacherFunctions: { fetch: TeachersFetch },
-    otherFunctions: { fetchTeachers, fetchAdmin },
-    generalState: { chatDetail },
-  } = useAuth();
-  const [users, setUsers] = useState([]);
-  useEffect(() => {
-    // if(type !== "New Messages"){
-    (async () => {
-      if (userData.token) {
-        try {
-          const res = await getUnreadMessages(userData?.token);
-
-          const { message, success, statusCode } = res.data;
-          if (statusCode !== 1) throw new AdvancedError(message, statusCode);
-          else {
-            const { data } = res.data;
-
-            setUsers(data);
-          }
-        } catch (err) {
-          if (err.statusCode === 2)
-            err.message = "Session expired. Please login again";
-        } finally {
-          setLoader((_) => false);
-        }
-      }
-    })();
-    // }
-  }, []);
-  return (
-    <>
-      {users?.map((user, i) => (
-          <ContactWindow {...user} all={user} />
-        ))}
-    </>
-  );
-}
-
-function AllUsers(){
-    const { getItem } = useLocalStorage();
-    const userData = getItem(KEY);
-    const {id} = useParams()
-
-    const [showuserlist, setShowUserlist]= useState(true)
-
-    const { adminStudentFunctions: { fetch}, adminTeacherFunctions: { fetch: TeachersFetch }, otherFunctions: {fetchTeachers, fetchAdmin}, teacherFunctions: {fetchApplications} } = useAuth();
-  
-    console.log({id})
-    // const isAdmin = userData.userType !== 'admin';
-    const isStudent = userData.userType === 'student';
-    const isTeacher = (userData?.userType === 'teacher' || "mentor" ) ? true : false;
-
-    const [users, setUsers] = useState([]);
-    const [students, setStudents] = useState([]);
-    const [admins, setAdmins] = useState([]);
-    // const [userInfo, setUserInfo] = useState({});
-    // const [loader, setLoader] = useState(false);
-  
-    // const allStudents = useQuery(["get all students"], () => fetch(userData?.token), {
-    //     enabled: isTeacher,
-    //     onSuccess: (res)=>{
-    //         console.log(res)
-    //     }
-    // })
-
-    // const allTeachers = useQuery(userData?.token && ["get all teachers"], () => TeachersFetch(userData?.token), {
-    //     enabled: isAdmin,
-    //     onSuccess: (res)=>{}
-    // })
-    // const allAdmins = useQuery(userData?.token && ["get all admins"], () => fetchAdmin(), {
-    //     enabled: isStudent,
-    //     onSuccess: (res)=>{}
-    // })
-    // const allStudentAdmin = useQuery(userData?.token && ["get all student admins"], () => fetchAdmin(), {
-    //     enabled: isStudent,
-    //     onSuccess: (res)=>{}
-    // })
-    // const allStudentTeacher = useQuery(userData?.token && ["get all student admins"], () => fetchAdmin(), {
-    //     enabled: isStudent,
-    //     onSuccess: (res)=>{}
-    // })
-
-    const courseAllStudent = useQuery(["get course applications", userData?.token], () => fetchApplications(userData?.token), {
-        enabled: isTeacher,
-        onSuccess: (res)=>{
-            if(res.data?.length > 0){
-                setStudents(res.data)
-            }
-        }
-    })
-
-
-
-   const allAdmins = useQuery(userData?.token && ["get all admins"], () => fetchAdmin(), {
-        enabled: isStudent || isTeacher,
-        onSuccess: (res)=>{
-            if(res.data?.length > 0){
-              console.log({res})
-              let admin = res.data.filter(admin=> admin.firstName === "Admiralty")
-                setAdmins(admin)
-            }
-        }
-    })
-
-
-
-   console.log({students})
-    return (
-        <>
-        {
-          [...admins, ...students]?.map((item,i)=>(
-              <ContactWindow {...item} all={item} />
-
-          ))
-        }
-        </>
-    )
-}
-
 export default LiveChat;

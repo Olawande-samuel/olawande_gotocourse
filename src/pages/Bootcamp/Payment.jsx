@@ -535,7 +535,10 @@ export const PaymentStatus = ({ success }) => {
 
 
   useEffect(() => {
-    clearCart()
+    if(cart){
+      clearCart()
+
+    }
   }, [cart])
 
 

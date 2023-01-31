@@ -75,13 +75,16 @@ import { Blog } from "./Blog";
 import Headstart from "./Headstart";
 import Pathfinder from "./Pathfinder";
 import { useIntercom } from "react-use-intercom";
+import Tutorial from "./Tutorial";
 
 const NewLanding = () => {
 
-  const { boot } = useIntercom(); 
+  const { show, boot } = useIntercom(); 
 
   useEffect(()=>{
     boot()
+    show()
+
   },[])
 
   return (
@@ -90,6 +93,7 @@ const NewLanding = () => {
       <Stats />
       <WhatweDo />
       <Companies />
+      <Tutorial/>
       {/* <Mission /> */}
       <GreatOpportunities />
       <Up />
