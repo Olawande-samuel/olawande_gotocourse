@@ -17,13 +17,13 @@ export default function ConsoleAssessments() {
   let userdata = getItem(KEY);
   const { generalState: { isMobile }, studentFunctions: { fetchBootcamps } } = useAuth();
 
-  const { data, isLoading } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
+  const { data, isLoading , isError, } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
   // console.log({ data });
 
 
   return (
     <div className="">
-      {isLoading && <Loader />}
+      {isLoading  && !isError && <Loader />}
       {
         data?.data?.filter(item => item.status === "paid")?.length > 0 ?
           <main className="assess">
@@ -58,7 +58,7 @@ export default function ConsoleAssessments() {
 }
 
 
-const AssessmentItem = ({ x, answer }) => {
+const AssessmentItem = ({ x }) => {
   const [modules, setModules] = useState([])
   const [show, setShow] = useState(false)
 
@@ -110,7 +110,7 @@ const AssessmentItem = ({ x, answer }) => {
 
         <div className="assessright">
           <p className="assesstitle">See Details</p>
-          <button className="assessbold" data-id={x.bootcampId} onClick={() => setShow(!show)}>{answer ? "Open Answer" : "Open Class Quiz"}</button>
+          <button className="assessbold" data-id={x.bootcampId} onClick={() => setShow(!show)}>Open Class Quiz</button>
         </div>
       </div>
 
@@ -184,9 +184,10 @@ const Accord = ({ reduceContent }) => {
     <>
       {
         reduceContent?.length > 0 && reduceContent?.map((item, i) => (
-          <>
-            <h4 style={{ fontSize: "28px" }}>{item.title}</h4>
+          <div className="assessmentaccord">
+            <h4>{item.title}</h4>
             {
+
 
               item?.questions?.length > 0 && item?.questions?.map((ques, index) => (
                 < Accordion key={index}>
@@ -266,7 +267,7 @@ const Accord = ({ reduceContent }) => {
               )
             }
 
-          </>
+          </div>
 
 
 
@@ -360,8 +361,8 @@ const AnswerAccord = ({ reduceContent }) => {
     <>
       {
         reduceContent?.length > 0 && reduceContent?.map((item, i) => (
-          <>
-            <h4 style={{ fontSize: "28px" }}>{item.title}</h4>
+          <div className="assessmentaccord">
+            <h4 style={{ fontSize: "18px", color:"#000" }}>{item.title}</h4>
             {
 
               item?.questions?.length > 0 && item?.questions?.map((ques, index) => (
@@ -442,7 +443,7 @@ const AnswerAccord = ({ reduceContent }) => {
               )
             }
 
-          </>
+          </div>
 
 
 

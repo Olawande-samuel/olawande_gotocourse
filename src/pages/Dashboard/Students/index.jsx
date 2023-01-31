@@ -1327,7 +1327,10 @@ export function WishlistCheckOut() {
                     {showStripeModal && <PayModal
                         token={payIntent} 
                         openPaymentModal={showStripeModal} 
-                        handleClose={handleClose} />}
+                        handleClose={handleClose} 
+                        cart={true}
+                        />
+                        }
 
                 </div>
 
