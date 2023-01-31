@@ -5604,7 +5604,7 @@ export const consoleFunctions = {
     fetchAssessments: async function (token) {
 
         try {
-            const res = await axios.get(`${baseURL}/classes/contents/quizes/attempts`,
+            const res = await axios.get(`${baseURL}/classes/contents/quizes/attempts/fetch`,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,

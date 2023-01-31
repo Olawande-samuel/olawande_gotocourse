@@ -36,14 +36,14 @@ export const CLASSID = "gotocourse-classid";
 
 export function getDate(date){
   let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  let d = date.split("T")[0];
+  let d = date?.split("T")[0];
   let [y, m, day] = d.split("-");
   m = months[parseInt(m) - 1];
   return `${m} ${day}`;
 }
 export function getFullDate(date){
   let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  let d = date.split("T")[0];
+  let d = date?.split("T")[0];
   let [y, m, day] = d.split("-");
   m = months[parseInt(m) - 1];
   return `${m} ${day} ${y}`;
@@ -53,8 +53,8 @@ export function tConvert (time) {
   // Check correct time format and split into components
   time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
 
-  if (time.length > 1) { // If time format correct
-    time = time.slice (1);  // Remove full string match value
+  if (time?.length > 1) { // If time format correct
+    time = time?.slice (1);  // Remove full string match value
     time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
     time[0] = +time[0] % 12 || 12; // Adjust hours
   }

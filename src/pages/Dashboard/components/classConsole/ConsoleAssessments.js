@@ -17,13 +17,13 @@ export default function ConsoleAssessments() {
   let userdata = getItem(KEY);
   const { generalState: { isMobile }, studentFunctions: { fetchBootcamps } } = useAuth();
 
-  const { data, isLoading , isError, } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
+  const { data, isLoading, isError, } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
   // console.log({ data });
 
 
   return (
     <div className="">
-      {isLoading  && !isError && <Loader />}
+      {isLoading && !isError && <Loader />}
       {
         data?.data?.filter(item => item.status === "paid")?.length > 0 ?
           <main className="assess">
@@ -282,16 +282,22 @@ const Accord = ({ reduceContent }) => {
 
 const AnswerAssessmentItem = ({ x }) => {
   const [modules, setModules] = useState([])
+  const [assessment, setAssessment] = useState([])
   const [show, setShow] = useState(false)
 
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
 
-  const { generalState: { isMobile }, consoleFunctions: { fetchStudentDomains , fetchAssessments } } = useAuth();
+  const { generalState: { isMobile }, consoleFunctions: { fetchStudentDomains, fetchAssessments } } = useAuth();
 
 
-  const { data, } = useQuery(["fetch my assessments"], () => fetchAssessments(userdata?.token))
-  console.log({ data });
+  useQuery(["fetch my assessments"], () => fetchAssessments(userdata?.token), {
+    onSuccess: ({ data }) => {
+      console.log({ data });
+      setAssessment(data)
+
+    }
+  })
 
   const { isLoading } = useQuery(["fetch domains", x?.bootcampId], () => fetchStudentDomains(userdata.token, x?.bootcampId), {
     onSuccess: (res) => {
@@ -318,140 +324,64 @@ const AnswerAssessmentItem = ({ x }) => {
 
   // console.log({ reduceModules });
   // console.log({ reduceContent });
+  // console.log({modules});
 
   return (
-    <>
-      <div className="assessbox">
-        <div className="assessleft">
-          <p className="assesstitle">{x.tutorName}</p>
-          <p className="assessbold">{x.bootcampName}</p>
-          <div className="d-flex align-center gap-2">
-            <p className="assesstitle">{getDate(x.startDate)}</p>
-            <p className="assesstitle">{tConvert(x.startTime)}</p>
-          </div>
-        </div>
+    <div className="quizaccordion">
+      {reduceContent?.length > 0 && <AnswerAccord
+        assessment={assessment}
+        reduceContent={reduceContent}
+        reduceModules={reduceModules}
+        // modules={modules}
+      />}
 
-        <div className="assessright">
-          <p className="assesstitle">See Details</p>
-          <button className="assessbold" data-id={x.bootcampId} onClick={() => setShow(!show)}>Open Answer</button>
-        </div>
-      </div>
+    </div>
 
-
-      <div className="quizaccordion">
-        {reduceContent?.length > 0 && show && <AnswerAccord reduceContent={reduceContent} />}
-
-      </div>
-
-
-    </>
   )
 }
 
 
 
-const AnswerAccord = ({ reduceContent }) => {
-
-  const { getItem } = useLocalStorage();
-  let userdata = getItem(KEY);
-
-  
+const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
 
   return (
-    <>
-      {
-        reduceContent?.length > 0 && reduceContent?.map((item, i) => (
-          <div className="assessmentaccord">
-            <h4 style={{ fontSize: "18px", color:"#000" }}>{item.title}</h4>
-            {
+    assessment.length > 0 && assessment?.map((x, i) => {
+      let contentId = x?.contentId;
+      let quizId = x?.quizId;
 
-              item?.questions?.length > 0 && item?.questions?.map((ques, index) => (
-                < Accordion key={index}>
-                  <Accordion.Item eventKey={index} className="accord__body">
-                    <Accordion.Header className="accord__header"> Question {index + 1}</Accordion.Header>
-                    <Accordion.Body>
-                      <QuesHeader className="queshead">
-                        {/* <p>Type: <span>{ques.Title}</span></p>
-                      <p>Grade: <span>{ques.grade}</span></p> */}
-                      </QuesHeader>
+      let quizDetail = reduceContent?.find(item => item?.contentId === contentId);
+      let contentDetail = reduceModules?.find(item => item?.contentId === contentId);
+      // let DomainDetail = modules?.find(item => item?.contentId === contentDetail?.domain);
 
-                      <QuestionOptions>
-                        <h4 dangerouslySetInnerHTML={{ __html: `${ques.title}` }}></h4>
-
-                        {
-                          ques?.type === "THEORY" && ques?.options && ques?.options.length > 0 && ques?.options.map((opt, i) => (
-                            <>
-                              {opt.title}
-                              {/* <Answer>
-                                <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, opt?._id, i, index)} />
-                              </Answer> */}
-
-                              {/* <QuizAction>
-        
-                                                            <QuizButton onClick={() => AnswerQuiz("theory")}>
-                                                                Submit
-                                                            </QuizButton>
-                                                        </QuizAction> */}
-
-                            </>
-                          ))
+      console.log({x});
 
 
-                        }
+      return (quizDetail &&
+        <div key={i} className="assessmentaccord">
+          <div className="assessbox">
+            <div className="assessleft">
+              <p className="assessbold" >{quizDetail?.title}</p>
+              <p className="assesstitle" data-id={contentDetail?.domian}>{contentDetail?.title}</p>
+              <div className="d-flex align-center gap-2">
+                <p className="assesstitle">{quizDetail?.createdAt && getDate(quizDetail?.createdAt)}</p>
+                <p className="assesstitle">{quizDetail?.startDate && getDate(quizDetail?.startDate)}</p>
+              </div>
+            </div>
 
-                        {ques?.type === "MULTIPLE_CHOICE" && ques?.options && ques?.options.length > 0 &&
-                          <>
-
-                            {ques?.options.map((opt, i) => (
-                              <Answer key={i}>
-                                <label for="vehicle1">
-                                  <input
-                                    type="radio"
-                                    value={opt._id}
-                                    name="answers"
-                                  // onChange={e => handleInputChange(e, ques?._id, index)} 
-                                  />
-                                  {opt.title}
-                                </label>
-
-                              </Answer>
-
-                            ))}
-
-
-                            {/* < QuizAction >
-                                                        <QuizButton onClick={() => AnswerQuiz("mutiple")}>
-                                                            Submit
-                                                        </QuizButton>
-                                                    </QuizAction> */}
-
-                          </>
-                        }
-
-
-                      </QuestionOptions>
-
-
-
-
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-
-              )
-
-              )
-            }
-
+            <div className="assessright">
+              <p className="assesstitle">Total score: {x?.totalScore}</p>
+              <button className="assessbold" data-id={quizId} disabled
+              // onClick={() => setShow(!show)}
+              >Graded: {x?.graded ? "true" : "false"}</button>
+            </div>
           </div>
 
+        </div>
+
+      )
 
 
-
-
-
-        ))}
-    </>
+    })
   )
 }
 
