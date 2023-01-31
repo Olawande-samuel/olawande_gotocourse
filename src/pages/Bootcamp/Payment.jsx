@@ -350,7 +350,7 @@ export function PaymentModal({ token, setShowStripeModal }) {
 
 }
 
-export const CheckoutForm = ({ token, setShowStripeModal }) => {
+export const CheckoutForm = ({ token, setShowStripeModal,cart }) => {
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
@@ -370,7 +370,7 @@ export const CheckoutForm = ({ token, setShowStripeModal }) => {
       const result = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `https://gotocourse.com/payment/success/`,
+          return_url: !cart ? `https://gotocourse.com/payment/success/` : `https://gotocourse.com/payment/success?cart=${cart}`,
         },
       });
 

@@ -278,6 +278,29 @@
 
 }
 
+.assessmentaccord {
+    color: #000;
+
+}
+
+
+.assessmentaccord h4 {
+    font-size: 16px;
+     color: #000;
+}
+
+
+
+.assessmentaccord .accord__header button {
+    color: #000;
+    font-size: 16px;
+}
+
+.assessmentaccord .assessbox{
+    color: #000;
+
+}
+
 
 
 .prevbtn  button{

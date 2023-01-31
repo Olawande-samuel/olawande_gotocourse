@@ -1327,7 +1327,10 @@ export function WishlistCheckOut() {
                     {showStripeModal && <PayModal
                         token={payIntent} 
                         openPaymentModal={showStripeModal} 
-                        handleClose={handleClose} />}
+                        handleClose={handleClose} 
+                        cart={true}
+                        />
+                        }
 
                 </div>
 
@@ -1667,9 +1670,9 @@ export function Fees() {
 
 
     const all = () => {
-        let pending = course.map((c => c.payments.filter(x => x.status === "pending")))
-        let individual_total = pending.map(d => d.reduce((total, item) => total + item.amount, 0))
-        setOutstanding(individual_total.reduce((total, item) => total + item, 0))
+        let pending = course.map((c => c?.payments?.filter(x => x.status === "pending")))
+        let individual_total = pending?.map(d => d?.reduce((total, item) => total + item.amount, 0))
+        setOutstanding(individual_total?.reduce((total, item) => total + item, 0))
 
     }
     all()
@@ -2147,7 +2150,7 @@ export const Dashboard = ({ mixpanel }) => {
                                     </thead>
                                     <tbody>
                                         {/* {myenrolledcourses?.data?.filter(data =>  data?.status === "paid").map((item, i) => ( */}
-                                        {myenrolledcourses?.data?.filter(data => (new Intl.DateTimeFormat('en-US').format(new Date(data?.startDate)).includes(dateFilter)) && data?.status === "paid").map((item, i) => (
+                                        {myenrolledcourses?.data?.filter(data => (new Intl.DateTimeFormat('en-US').format(new Date(data?.startDate))?.includes(dateFilter)) && data?.status === "paid").map((item, i) => (
 
                                             <tr key={i}>
                                                 <td><span>{i + 1}</span></td>
