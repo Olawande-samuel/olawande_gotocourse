@@ -79,10 +79,12 @@ import Tutorial from "./Tutorial";
 
 const NewLanding = () => {
 
-  const { boot } = useIntercom(); 
+  const { show, boot } = useIntercom(); 
 
   useEffect(()=>{
     boot()
+    show()
+
   },[])
 
   return (
