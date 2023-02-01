@@ -159,11 +159,30 @@ const iconData = [
   const [show, setShow] = useState(false);
   const [moduleOpen, setModuleOpen] = useState(false);
 
-  const Toggle = () => setShow(!show);
+  // EDIT DATA
+
+  const [editData, setEditData] = useState({});
+  const [editModuleData, setEditModuleData] = useState({});
+  
+  const Toggle = (edit, data) => {
+    setShow(!show)
+    if(edit){
+      setEditData(data)
+    }
+  };
+
+  console.log({editModuleData})
+
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const toggleModule = () => setModuleOpen(!moduleOpen);
+  const toggleModule = (edit, data) => {
+    setModuleOpen(!moduleOpen)
+    if(edit){
+      setEditModuleData(data)
+    }
+  };
   const moduleClose = () => setModuleOpen(false);
 
   const toggleSidebar = () =>
@@ -188,17 +207,20 @@ const iconData = [
 
   return (
     <div className={style.console}>
-      <Sidebar Toggle={Toggle} />
+      <Sidebar 
+        Toggle={Toggle} 
+        toggleModule={toggleModule} 
+      />
       <ModalContent
         show={show}
         setShow={setShow}
         handleClose={handleClose}
         handleShow={handleShow}
-        Toggle={Toggle}
+        editData={editData}
         toggleModule={toggleModule}
       />
 
-      <ModuleModal moduleOpen={moduleOpen} moduleClose={moduleClose} />
+      <ModuleModal moduleOpen={moduleOpen} moduleClose={moduleClose} editModule={editModuleData} />
 
       <main className={style.children}>
         <section className="contentheader">
@@ -272,7 +294,11 @@ export function goBack(pathname) {
 }
 
 const SidebarDiv = styled.div``
-function Sidebar({ Toggle, side }) {
+
+
+
+
+function Sidebar({ Toggle, side, toggleModule }) {
   const {
     generalState: { classConsole },
     generalState,
@@ -348,6 +374,7 @@ function Sidebar({ Toggle, side }) {
   }
 
 
+
   return (
     // <article className={style.class_sidebar }>
     <DragDropContext
@@ -375,7 +402,7 @@ function Sidebar({ Toggle, side }) {
                     >
                       <p>Course content</p>
                       {getDomains?.data?.data?.map((domain, index) => (
-                        <Accord {...domain} index={index} key={domain._id} all={domain} />
+                        <Accord {...domain} index={index} key={domain._id} all={domain} openEditContentModal={Toggle} toggleModule={toggleModule} />
                       ))}
                       {provided.placeholder}
                     </div>
@@ -452,7 +479,7 @@ function Sidebar({ Toggle, side }) {
 const AccordDiv = styled.div` `
 
 
-export function Accord ({ name, _id, classId, description, creator,contentName, originalName, setOpen, index, all }) {
+export function Accord ({ name, _id, classId, description, creator,contentName, originalName, setOpen, index, all, openEditContentModal, toggleModule }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
@@ -563,7 +590,7 @@ const contentid = searchParams.get("content")
                 )}
               </i>
               <span>{name}</span>
-              <AccordMenu type="domain" id={_id} domain={all} />
+              <AccordMenu type="domain" id={_id} domain={all} toggleModule={toggleModule} />
 
             </div>
 
@@ -600,7 +627,7 @@ const contentid = searchParams.get("content")
                         <span>{item.title}</span>
                         <div className="d-flex gap-3 align-items-center">
                           {item.isLocked && <BiLockAlt />}
-                          <AccordMenu type="content" content={item} id={item._id} domain={item.domain} classId={item.classId} locked={item.isLocked} />
+                          <AccordMenu type="content" content={item} id={item._id} domain={item.domain} classId={item.classId} locked={item.isLocked} openEditContentModal={openEditContentModal} />
                         </div>
                         
                       </li>
@@ -615,7 +642,7 @@ const contentid = searchParams.get("content")
   );
 }
 
-function AccordMenu({ id, type, classId, locked, domain, content}) {
+function AccordMenu({ id, type, classId, locked, domain, content, openEditContentModal, toggleModule}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -628,6 +655,7 @@ function AccordMenu({ id, type, classId, locked, domain, content}) {
   const userdata = getItem(KEY)
   const navigate = useNavigate()
   const queryClient = useQueryClient();
+	const [searchParams, setSearchParams] = useSearchParams();
 
   const {teacherConsoleFunctions: {deleteDomain, deleteContent}, consoleFunctions:{updateDomain, updateContent}} = useAuth();
 
@@ -715,6 +743,21 @@ function AccordMenu({ id, type, classId, locked, domain, content}) {
     }
   }
 
+
+
+  function editContent(){
+    // setParams
+    console.log("clicked")
+    if(type === "domain"){
+      toggleModule("edit", domain)
+    }else {
+      openEditContentModal("edit", content)
+    }
+    // open content modal and prefill content
+  }
+
+ 
+
   return (
     <div style={{marginLeft:"auto"}}>
       <i
@@ -735,7 +778,7 @@ function AccordMenu({ id, type, classId, locked, domain, content}) {
           'aria-labelledby': 'basic-button',
         }}
       >
-        {/* <MenuItem onClick={handleClose}>Edit content</MenuItem> */}
+        <MenuItem component="div" onClick={editContent}>Edit content</MenuItem>
        {
         locked ? 
         <MenuItem onClick={()=>handleLockToggle("unlock")}>Unlock content</MenuItem>
@@ -748,14 +791,15 @@ function AccordMenu({ id, type, classId, locked, domain, content}) {
   )
 }
 
-export function ModalContent({ show, handleClose, toggleModule }) {
+export function ModalContent({ show, handleClose, toggleModule, editData  }) {
+
   const [showMore, setShowMore] = useState(false);
   const [type, setType] = useState("file");
   const { getItem } = useLocalStorage();
   const classId = localStorage.getItem(CLASSID)
   const userdata = getItem(KEY)
   let ref = useRef();
-  const { generalState, setGeneralState, generalState: { classConsole, }, consoleFunctions: { addContent } } = useAuth();
+  const { generalState, setGeneralState, generalState: { classConsole, }, consoleFunctions: { addContent, updateContent } } = useAuth();
   const [formstate, setFormstate] = useState({
     isLocked: false,
     notifyStudents: false,
@@ -773,6 +817,15 @@ export function ModalContent({ show, handleClose, toggleModule }) {
       console.error("error adding content", err)
     }
   })
+  const editContentMutation = useMutation(([token, data, id])=>updateContent(token, data, id), {
+    onSuccess: (res)=>{
+      queryClient.invalidateQueries("getDomainContent")
+      handleClose()
+    },
+    onError: (err)=>{
+      console.error(err)
+    }
+  })
 
   function handleChange(e) {
     setFormstate({ ...formstate, [e.target.name]: e.target.value });
@@ -788,6 +841,10 @@ export function ModalContent({ show, handleClose, toggleModule }) {
   }
 
 
+  function editContent(){
+    editContentMutation.mutate([userdata.token, { ...formstate, classId, domainId: formstate.domain}, editData._id])
+  }
+
   function handleNotifyStudent() {
     setFormstate({ ...formstate, notifyStudents: !formstate.notifyStudents })
   }
@@ -795,49 +852,64 @@ export function ModalContent({ show, handleClose, toggleModule }) {
     setFormstate({ ...formstate, isLocked: !formstate.isLocked })
   }
 
+
+
+  useEffect(()=>{
+    if(editData?._id){
+      setFormstate(editData)
+    }
+  },[editData?._id])
+
+
+
   return (
     <div>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton className={style.modal__header}>
-          <Modal.Title className={style.modal__title}>Add Content</Modal.Title>
+          <Modal.Title className={style.modal__title}>{ editData?._id ? "Edit Content" : "Add Content"}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <div className={style.content__form}>
-            <FormControl>
-              <InputLabel id="content-type-label">Content Type</InputLabel>
-              <Select
-                className="quizselect"
-                labelId="content-type-label"
-                id="content-type"
-                label="Content Type"
-                value={formstate.type}
-                onChange={handleChange}
-                name="type"
-              >
-                <MenuItem value="Select Content Type" defaultValue>
-                  Select Content
-                </MenuItem>
-                <MenuItem value="FILE_VIDEO">
-                  <i>
-                    <MdAttachFile />
-                  </i>
-                  File/Videos
-                </MenuItem>
-                <MenuItem value="QUIZ">
-                  <i>
-                    <VscNote />
-                  </i>
-                  Quiz
-                </MenuItem>
-                <MenuItem value="NOTE">
-                  <i>
-                    <MdOutlineNote />
-                  </i>
-                  Note
-                </MenuItem>
-              </Select>
-            </FormControl>
+
+            {
+              !editData?._id && 
+              <FormControl>
+                <InputLabel id="content-type-label">Content Type</InputLabel>
+                <Select
+                  className="quizselect"
+                  labelId="content-type-label"
+                  id="content-type"
+                  label="Content Type"
+                  value={formstate.type}
+                  onChange={handleChange}
+                  name="type"
+                  disabled={editData?._id}
+                >
+                  <MenuItem value="Select Content Type" defaultValue>
+                    Select Content
+                  </MenuItem>
+                  <MenuItem value="FILE_VIDEO">
+                    <i>
+                      <MdAttachFile />
+                    </i>
+                    File/Videos
+                  </MenuItem>
+                  <MenuItem value="QUIZ">
+                    <i>
+                      <VscNote />
+                    </i>
+                    Quiz
+                  </MenuItem>
+                  <MenuItem value="NOTE">
+                    <i>
+                      <MdOutlineNote />
+                    </i>
+                    Note
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            }
 
             <FormControl>
               <TextField
@@ -847,44 +919,47 @@ export function ModalContent({ show, handleClose, toggleModule }) {
                 variant="outlined"
                 placeholder="Content Title"
                 onChange={handleChange}
-                value={formstate.title}
+                value={formstate.title || ""}
                 name="title"
               />
             </FormControl>
+            {
+              !editData?._id &&
+              <FormControl>
+                <InputLabel id="domain-label">Domain</InputLabel>
+                <Select
+                  labelId="domain-label"
+                  id="domain"
+                  label="Domain"
+                  className="myselect"
+                  ref={ref}
+                  onChange={handleChange}
+                  name="domainId"
+                  value={formstate.domainId}
+                  required
+                  disabled={editData?._id}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
 
-            <FormControl>
-              <InputLabel id="domain-label">Domain</InputLabel>
-              <Select
-                labelId="domain-label"
-                id="domain"
-                label="Domain"
-                className="myselect"
-                ref={ref}
-                onChange={handleChange}
-                name="domainId"
-                value={formstate.domainId}
-                required
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
+                  {
+                    fetchDomains?.data?.data?.map((domain) => (
+                      <MenuItem value={domain._id}>{domain.name}</MenuItem>
+                    ))
+                  }
 
-                {
-                  fetchDomains?.data?.data?.map((domain) => (
-                    <MenuItem value={domain._id}>{domain.name}</MenuItem>
-                  ))
-                }
+                  <button className={style.modulebtn} onClick={toggleModule}>
+                    + New Module
+                  </button>
+                </Select>
 
-                <button className={style.modulebtn} onClick={toggleModule}>
-                  + New Module
-                </button>
-              </Select>
-
-              <FormHelperText>
-                A Domain is a container for similar content. e.g "Introduction",
-                "Day 1" or "Domain 1"
-              </FormHelperText>
-            </FormControl>
+                <FormHelperText>
+                  A Domain is a container for similar content. e.g "Introduction",
+                  "Day 1" or "Domain 1"
+                </FormHelperText>
+              </FormControl>
+            }
 
             {/* accordion */}
 
@@ -952,14 +1027,30 @@ export function ModalContent({ show, handleClose, toggleModule }) {
               )}
             </div>
 
+          {  
+              editData?._id ? 
+            <button className={style.contentform__btn} onClick={editContent} disabled={addContentMutation.isLoading}>
+              {
+                editContentMutation.isLoading ? <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div> :
+                  
+                  
+                  <span>Save Edit</span>
+                  
+              }
+            </button>
+            :
             <button className={style.contentform__btn} onClick={createContent} disabled={addContentMutation.isLoading}>
               {
                 addContentMutation.isLoading ? <div className="spinner-border" role="status">
                   <span className="visually-hidden">Loading...</span>
                 </div> :
                   <span>Submit</span>
+                  
               }
             </button>
+          }
           </div>
         </Modal.Body>
         {/* <Modal.Footer>
@@ -975,8 +1066,8 @@ export function ModalContent({ show, handleClose, toggleModule }) {
   );
 }
 
-export function ModuleModal({ moduleOpen, moduleClose }) {
-  const { consoleFunctions: { addDomain } } = useAuth()
+export function ModuleModal({ moduleOpen, moduleClose, editModule }) {
+  const { consoleFunctions: { addDomain,updateDomain } } = useAuth()
   const { getItem } = useLocalStorage()
   const [formstate, setFormstate] = useState({});
   const queryClient = useQueryClient()
@@ -987,6 +1078,20 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
       moduleClose();
     },
     onError: (err) => {
+      toast.error(err.message)
+      console.error(err)
+    }
+  })
+
+
+  const domainUpdate = useMutation(([token, data, id])=>updateDomain(token, data, id), {
+    onSuccess: (res)=>{
+      queryClient.invalidateQueries("getDomainContent")
+      moduleClose();
+
+    },
+    onError: (err)=>{
+      toast.error(err.message)
       console.error(err)
     }
   })
@@ -1002,11 +1107,24 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
     mutation.mutate([userdata.token, { ...formstate, classId }])
   }
 
+
+  function EditModule(){
+    domainUpdate.mutate([userdata.token, formstate, formstate._id])
+  }
+
+  useEffect(()=>{
+
+    if(editModule?._id){
+      setFormstate(editModule)
+    }
+
+  },[editModule?._id])
+
   return (
     <div>
       <Modal show={moduleOpen} onHide={moduleClose} className="modulemodal">
         <Modal.Header className="module__header">
-          <p>Add Domain</p>
+          <p>{editModule?._id ? "Edit Domain" : "Add Domain"}</p>
           <small>
             Domain are a combination of similar content e.g "Introduction", "Day
             1"
@@ -1041,16 +1159,31 @@ export function ModuleModal({ moduleOpen, moduleClose }) {
             </FormControl>
 
             <div className="contentbutton">
-              <button className="" onClick={createModule} disabled={mutation.isLoading}>
-                {
-                  mutation.isLoading ?
-                    <div className="spinner-border" role="status">
-                      <span className="visually-hidden">Loading...</span>
-                    </div>
-                    :
-                    <span>Submit</span>
-                }
-              </button>
+              {
+                editModule?._id ? 
+
+                <button className="" onClick={EditModule} disabled={mutation.isLoading}>
+                  {
+                    domainUpdate.isLoading ?
+                      <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      :
+                      <span>Submit Edit</span>
+                  }
+                </button>
+                :
+                <button className="" onClick={createModule} disabled={mutation.isLoading}>
+                  {
+                    mutation.isLoading ?
+                      <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      :
+                      <span>Submit</span>
+                  }
+                </button>
+              }
             </div>
 
             {/* <label htmlFor="Name">Notes</label>
