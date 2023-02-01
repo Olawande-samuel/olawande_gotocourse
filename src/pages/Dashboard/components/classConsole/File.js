@@ -116,10 +116,9 @@ export default function File() {
 		}
 	);
 
-	// console.log({ fileData });
+	
 	const mutation = useMutation(([token, data]) => addFile(token, data), {
         onSuccess: (res) => {
-            console.log(res)
             queryClient.invalidateQueries("file content")
         },
         onError: (err) => console.error(err)
@@ -129,7 +128,6 @@ export default function File() {
 
     function createFileContent(file, fileId, fileName) {
             // call file upload function
-			console.log({uploadData})
             mutation.mutate([userdata?.token, {
                 classId,
                 contentId,
@@ -143,9 +141,7 @@ export default function File() {
 		if(uploadData.name){
 			createFileContent()
 		}
-	},[uploadData.name])
-
-	console.log({uploadData})
+	},[uploadData?.name])
 	return (
 		<>
 			<div className="">
@@ -261,8 +257,6 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 	const openAnchor = Boolean(anchorEl);
 	const { teacherConsoleFunctions: { deleteDomain, deleteContent } } = useAuth();
 
-
-	console.log({ _id })
 	const { getItem } = useLocalStorage();
 	const userdata = getItem(KEY)
 
@@ -299,8 +293,6 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 
 	const contentdelete = useMutation(([token, id]) => deleteContent(token, id), {
 		onSuccess: (res) => {
-			console.log({ res })
-			// navigate(`/teacher/class-console/class/${classId}`)
 			queryClient.invalidateQueries("file content")
 		},
 		onError: (err) => {
@@ -345,7 +337,6 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 			method: 'GET',
 			responseType: 'blob',
 		}).then((response) => {
-			console.log({ response })
 			const href = URL.createObjectURL(response.data);
 			const link = document.createElement('a');
 			link.href = href;
@@ -367,7 +358,6 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 		noPreview: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || "text/csv",
 
 	}
-	console.log(type)
 
 	return (
 		<div className={`filecard ${type === TYPES?.noPreview && "small__filecard"}`}>

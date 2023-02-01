@@ -105,7 +105,7 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
 
 
     const getStatus = (contentId, items, type) => {
-        console.log({contentId}, {items}, {type});
+        // console.log({contentId}, {items}, {type});
         if(type ==="FILE_VIDEO"){
             let all = items.filter(item =>item?.contentId === contentId) ;
             return (all?.filter(content => content?.completedBy?.includes(userdata.id))?.length === all?.length) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />
