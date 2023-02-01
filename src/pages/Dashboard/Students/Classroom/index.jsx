@@ -441,7 +441,7 @@ const FileComponent = (contentItem) => {
     // console.log({ contentItem });
     const [open, setOpen] = useState(false)
 
-    console.log(contentItem.contentItem);
+    // console.log(contentItem.contentItem);
 
     const getExtention = (val) => {
         // console.log({ val });
@@ -994,6 +994,7 @@ const Classroom = () => {
 
 
     const handleFileCompleted = async (contentId, contentsId, type) => {
+        // console.log("token", userdata?.token);
 
         let ids = [];
         contentsId.map(content =>  {
@@ -1001,7 +1002,7 @@ const Classroom = () => {
 
         })
 
-        console.log({ ids });
+        // console.log({ ids });
         const { data, statusCode } = await markFileAsCompleted(userdata?.token, contentId, ids, type)
         if (statusCode === 1) {
             queryClient.invalidateQueries(["fetch domains"])
