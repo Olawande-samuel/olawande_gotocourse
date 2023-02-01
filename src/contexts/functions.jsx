@@ -5220,13 +5220,16 @@ export const consoleFunctions = {
     },
 
     markFileAsCompleted: async function (token, id, fileIds, type) {
+        // console.log({ token }, { id }, { fileIds });
 
         try {
 
-            const res = await axios.patch(`${baseURL}/classes/student/contents/${type}/mark/completed/${id}`,
+            const res = await axios.patch(`${baseURL}/classes/student/contents/${type}/mark/completed/${id}`, [
                 ...fileIds
+
+            ]
                 ,
-                {
+                { 
                     headers: {
                         "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json"
