@@ -5,7 +5,6 @@ import "react-quill/dist/quill.snow.css";
 import "./App.css";
 import "@stripe/stripe-js";
 
-import Landing from "./pages/Landing";
 import Out from "./pages/Out";
 
 import {
@@ -214,7 +213,6 @@ import {
 } from "./pages/Dashboard/components/webinar";
 import LiveChat from "./pages/Dashboard/components/Live/quikkonnet/LiveChat";
 import Playground from "./components/Playground";
-import AnotherLanding from "./components/enterprise/AnotherLanding";
 import CreatePage from "./components/enterprise/Create/Index";
 import ManagePage from "./components/enterprise/Manage/Index";
 import EnterPriseLogin from "./components/enterprise/Register/EnterPriseLogin";
@@ -227,12 +225,12 @@ import Creator from "./components/enterprise/Creator";
 
 import ProtectedRoute from "./hoc/LiveClassProtection";
 import Home from "./pages/Landing";
-import NewHome from "./pages/Landing/landing";
 import AdLeads from "./pages/Dashboard/Admin/leads";
 import Market from "./pages/Dashboard/Admin/leads/marketing";
 import { MixpanelConsumer } from "react-mixpanel";
 import RedirectPage from "./pages/Bootcamp/Redirect";
 
+import NewHome from "./pages/Landing/landing";
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -246,6 +244,9 @@ const Email = lazy(() => import("./pages/Confirmation/Email"));
 const Confirm = lazy(() => import("./pages/Confirmation/Confirm"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+
+const AnotherLanding = lazy(()=>import("./components/enterprise/AnotherLanding"))
+const Landing = lazy(()=> import("./pages/Landing"));
 
 const TeacherOnBoarding = lazy(() => import("./pages/Teacher/OnBoarding"));
 const TeacherProfile = lazy(() => import("./pages/Teacher/TeacherProfile"));
