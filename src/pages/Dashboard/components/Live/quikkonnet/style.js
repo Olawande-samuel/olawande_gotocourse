@@ -18,11 +18,14 @@ export const Contact = styled.article`
   height: 100vh;
   overflow-y: auto;
   padding: 1.5rem;
+
+  .contact_logo_wrapper {
+    margin-bottom: 31px;
+  }
 `;
 export const Logo = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 31px;
 
   img {
     max-width: 100%;
