@@ -41,12 +41,23 @@ export const Header = styled.div`
 export const Top = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1.2rem;
   color: #fff;
   margin-bottom: 1rem;
 
   h6 {
     margin-bottom: 0;
+  }
+
+  button {
+    border-radius: 20px;
+    padding: 0.5rem 0.7rem;
+    background-color: #fff;
+    margin-left:auto;
+    font-size: 13px;
+    border: none;
+    outline-color: transparent;
   }
 `;
 export const Search = styled.div`
