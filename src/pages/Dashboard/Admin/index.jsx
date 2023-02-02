@@ -3949,7 +3949,8 @@ export function CreateBootcamp() {
     careerList: [],
     packages: [],
     popupArr: [],
-    time: []
+    time: [],
+    isPublic: true
   });
 
   const [loading, setLoading] = useState(false);
@@ -4261,6 +4262,9 @@ export function CreateBootcamp() {
   }
 
 
+  function handleClassStatus(e){
+    setFormstate({...formstate, isPublic: e.target.checked})
+  }
   return (
     <Admin header={location.search ? "Edit Course" : "Create Course"}>
       {loader && <Loader />}
@@ -4728,6 +4732,25 @@ export function CreateBootcamp() {
             >
               Add Pop Up
             </button>
+
+
+            <div className={clsx.form_group} style={{ marginTop: 40 }}>
+              <label>Set class public?</label>
+              {
+                formstate?.isPublic ? 
+                <small class="d-block text-muted">Class is currently set to public. This indicates that students can access the class without paying</small>
+                :
+                <small class="d-block text-muted">Class is currently set to private. This indicates that students have to pay to access the class</small>
+
+              }
+              <Switch
+                onClick={handleClassStatus}
+                size="large"
+                checked={formstate?.isPublic}
+                value={formstate?.isPublic}
+              />
+            </div>
+
             <CareerModal
               open={showCareerModal}
               newCareer={careerlist}
