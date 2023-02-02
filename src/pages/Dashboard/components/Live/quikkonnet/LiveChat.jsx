@@ -21,6 +21,7 @@ import { Box, IconButton, Tab, Tabs, Tooltip } from "@mui/material";
 import PropTypes from "prop-types";
 import { useIntercom } from "react-use-intercom";
 import { Link } from "react-router-dom";
+import {  CreateGroup } from "./group";
 
 const LiveChat = () => {
   const { getItem } = useLocalStorage();
@@ -31,12 +32,17 @@ const LiveChat = () => {
   const contactId = searchParams.get("contact");
   const { shutdown } = useIntercom(); 
   const {pathname} = useLocation()
+  const[open, setOpen] = useState(false)
   
   useEffect(()=>{
     shutdown()
   })
 
 
+
+  function openCreateGroup(){
+    setOpen(true)
+  }
 
 
   useEffect(() => {
@@ -117,6 +123,7 @@ const LiveChat = () => {
               <AiOutlineMenu />
             </i>
             <h6 className="chat_title">Chats</h6>
+            <button onClick={openCreateGroup}>Create group</button>
           </Top>
           
           <Search>
@@ -178,6 +185,7 @@ const LiveChat = () => {
           {Object.keys(chatDetail).length > 0 ? <OpenedChat /> : <ClosedChat />}
         </ChatBox>
       }
+      <CreateGroup open={open} setOpen={setOpen} />
     </Chat>
     </>
   );

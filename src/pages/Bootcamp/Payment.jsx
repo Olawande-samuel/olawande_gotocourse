@@ -103,38 +103,69 @@ export const BootcampPayment = () => {
           ? ""
           : paymentData.initialPayment,
       };
-      try {
-        if (
-          !bootcampPaymentInfo.fullPayment &&
-          !bootcampPaymentInfo.installments
-        )
-          throw new AdvancedError("Choose your preferred payment plan");
-        setLoading(true);
-        const response = await await addBootcamp(
-          bootcampPaymentInfo,
-          userData.token
-        );
-        const { success, message, statusCode } = response;
-        if (!success || statusCode !== 1)
-          throw new AdvancedError(message, statusCode);
-        const { data } = response;
+      if(!bootcamp.isPublic){
+        try {
+          if (
+            !bootcampPaymentInfo.fullPayment &&
+            !bootcampPaymentInfo.installments
+          )
+            throw new AdvancedError("Choose your preferred payment plan");
+          setLoading(true);
+          const response = await await addBootcamp(
+            bootcampPaymentInfo,
+            userData.token
+          );
+          const { success, message, statusCode } = response;
+          if (!success || statusCode !== 1)
+            throw new AdvancedError(message, statusCode);
+          const { data } = response;
+  
+          console.log({ data });
+  
+          setStripeId(data.clientSecret);
+          setShowStripeModal(true);
+        } catch (error) {
+          toast.error(error.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } finally {
+          setLoading(false);
+        }
 
-        console.log({ data });
+      } else {
+        try {
+          setLoading(true);
+          const response = await await addBootcamp(
+            bootcampPaymentInfo,
+            userData.token
+          );
+          const { success, message, statusCode } = response;
+          if (!success || statusCode !== 1)
+            throw new AdvancedError(message, statusCode);
+          const { data } = response;
+          console.log({ data });
+          toast.success("You have successfully enrolled for this course.")
+          navigate("/student")
 
-        setStripeId(data.clientSecret);
-        setShowStripeModal(true);
-      } catch (error) {
-        toast.error(error.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      } finally {
-        setLoading(false);
+        } catch (error) {
+          toast.error(error.message, {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } finally {
+          setLoading(false);
+        }
       }
     } else {
       localStorage.clear()
