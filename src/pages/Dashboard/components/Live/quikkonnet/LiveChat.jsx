@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineMenu, AiOutlinePaperClip } from "react-icons/ai";
 import { BiArrowBack, BiSearch, BiUserCircle } from "react-icons/bi";
-import { BsMic } from "react-icons/bs";
+import { BsArrowLeftCircle, BsMic } from "react-icons/bs";
 import styled from "styled-components";
 import profile from "../../../../../images/chat.png";
 import rocket from "../../../../../images/Launch rocket.png";
@@ -15,11 +15,12 @@ import { AdvancedError } from "../../../../../classes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast, ToastContainer } from "react-toastify";
 import { Bar, BarProfile, BarText, Chat, ChatBox, ChatHeader, Closed, Contact, ContactItem, Header, ImgWrapper, InputContainer, Logo, Opened, OpenedContent, PreviewContent, Profile, Search, TabWrapper, TextContent, Top, } from "./style";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, IconButton, Tab, Tabs, Tooltip } from "@mui/material";
 import PropTypes from "prop-types";
 import { useIntercom } from "react-use-intercom";
+import { Link } from "react-router-dom";
 
 const LiveChat = () => {
   const { getItem } = useLocalStorage();
@@ -29,7 +30,7 @@ const LiveChat = () => {
   const [searchParams] = useSearchParams();
   const contactId = searchParams.get("contact");
   const { shutdown } = useIntercom(); 
-  const navigate = useNavigate()
+  const {pathname} = useLocation()
   
   useEffect(()=>{
     shutdown()
@@ -59,6 +60,22 @@ const LiveChat = () => {
     // }
   }, []);
 
+
+
+  function goBack() {
+    console.log("clicked")
+    let pathArray = pathname.split("/")[1];
+
+    switch (pathArray) {
+      case "teacher":
+        return "/teacher";
+      case "student":
+        return "/student";
+      default:
+        return "/admin";
+    }
+  }
+
   return (
     <>
     <ToastContainer
@@ -74,10 +91,19 @@ const LiveChat = () => {
       />
     <Chat md={false}>
       <Contact>
-        <Logo>
-          <img src={logo} alt="logo" />
-          <span>Quickonnet</span>
-        </Logo>
+        <div className="d-flex justify-content-between contact_logo_wrapper flex-wrap">
+          <Logo>
+            <img src={logo} alt="logo" />
+            <span>Quickonnet</span>
+          </Logo>
+          <Tooltip title="Go to dashboard">
+            <IconButton>
+                <Link to={goBack()} className="d-inline-flex">
+                    <BsArrowLeftCircle size="1.5rem" color="#fff" />
+                </Link>
+            </IconButton>
+          </Tooltip>
+        </div>
         {/* <div className="back">
            <div onClick={()=>{
               navigate("/learn-with-gotocourse")
