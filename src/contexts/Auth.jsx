@@ -26,7 +26,9 @@ const AuthContextProvider = ({children}) => {
             domains: []
         },
         chatDetail:{},
-        scheduledClasses: []
+        searchValue:"",
+        scheduledClasses: [],
+        showMainChat: false,
         
     })
 

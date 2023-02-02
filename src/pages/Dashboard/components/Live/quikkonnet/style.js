@@ -1,10 +1,17 @@
 import styled from "styled-components";
 
 export const Chat = styled.section`
-  display: grid;
+  display: ${(props) => props.md === true ? 'none' : "grid"};
   grid-template-columns: 30% 70%;
   height: 100vh;
   font-family: "Inter", sans-serif;
+
+
+
+  @media screen and (max-width: 680px){
+    grid-template-columns: 1fr;
+    display: ${(props) => props.md === false ? 'none' : "grid"};
+  }
 `;
 export const Contact = styled.article`
   background-color: #2e3747;
@@ -136,6 +143,18 @@ export const PreviewContent = styled.div`
 export const Opened = styled.section`
   height: 100%;
   position: relative;
+
+  .back {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    z-index: 100;
+    cursor: pointer;
+
+    @media screen and (min-width: 681px){
+      display:none;
+    }
+  }
 `;
 export const ChatHeader = styled.div`
   position: absolute;
@@ -144,7 +163,7 @@ export const ChatHeader = styled.div`
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #fff;
+  background-color: transparent;
   z-index: 300;
   padding-top: 1rem;
 `;
@@ -291,7 +310,7 @@ export const BarText = styled.div`
   padding: 0.4rem;
   max-width: 400px;
   background-color: ${(props) =>
-    props.color === "purple" ? "#92AAFF" : "#FFCFCF"};
+    props.color === "purple" ? "#2e3747" : "#FFCFCF"};
   color: ${(props) => (props.color === "purple" ? "#fff" : "#626262")};
   /* order: ${(props) => (props.sender === "user" ? "1" : "2")}; */
 `;

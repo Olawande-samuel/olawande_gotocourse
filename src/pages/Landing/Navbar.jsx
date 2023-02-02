@@ -144,23 +144,6 @@ const NavContainer = styled.div`
 `;
 
 const Navbar = ({ toggleSidebar }) => {
-const { setGeneralState } = useAuth();
-const { getItem } = useLocalStorage();
-const [anchorEl, setAnchorEl] = useState(null);
-const open = Boolean(anchorEl);
-
-const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-};
-const handleClose = () => {
-    setAnchorEl(null);
-};
-
-const value = getItem(KEY);
-const location = useLocation();
-const navigate = useNavigate();
-const [showBanner, setShowBanner] = useState(true)
-const mainpage = location.pathname.split("/")[1] === ""
 
 return (
     <Container>

@@ -2028,11 +2028,8 @@ export const Dashboard = ({ mixpanel }) => {
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
     const { data: myenrolledcourses, isSuccess: mycoursesuccess } = useQuery(["fetch my enrolledclasses"], () => fetchMyClasses(userdata?.token))
     // const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
-    const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps(), {
-
-    });
+    const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps());
     // console.log({data})
-    console.log("data", myenrolledcourses?.data);
     // console.log("wish",wishlistData );
     const topContent = [
         {
@@ -2054,7 +2051,6 @@ export const Dashboard = ({ mixpanel }) => {
             value: "$0"
         }
     ]
-    // const tableHeaders = ["No", "Courses", "Course Fee($)", ""]
     const tableHeaders = ["No", "Courses", "Status", "Date", "Amount Paid"]
 
     if (wishlistIsSuccess) {
@@ -2073,6 +2069,20 @@ export const Dashboard = ({ mixpanel }) => {
             return new Intl.DateTimeFormat('en-US').format(new Date(value?.$d))
         } return ""
     }, [value?.$d])
+
+
+
+    function filterDates(date){
+        let isFound
+        console.log({date})
+        if(date){
+          isFound = (new Intl.DateTimeFormat('en-US').format(new Date(date))?.includes(dateFilter))
+          console.log({isFound})
+          return isFound
+        }else {
+            return false
+        }
+    }
 
     return (
         <Students isMobile={isMobile} userdata={userdata} header={"Dashboard"} >
@@ -2150,7 +2160,7 @@ export const Dashboard = ({ mixpanel }) => {
                                     </thead>
                                     <tbody>
                                         {/* {myenrolledcourses?.data?.filter(data =>  data?.status === "paid").map((item, i) => ( */}
-                                        {myenrolledcourses?.data?.filter(data => (new Intl.DateTimeFormat('en-US').format(new Date(data?.startDate))?.includes(dateFilter)) && data?.status === "paid").map((item, i) => (
+                                        {myenrolledcourses?.data?.filter(data => filterDates(data?.startDate) && data?.status === "paid").map((item, i) => (
 
                                             <tr key={i}>
                                                 <td><span>{i + 1}</span></td>

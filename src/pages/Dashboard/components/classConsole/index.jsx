@@ -303,7 +303,7 @@ function Sidebar({ Toggle, side, toggleModule }) {
     generalState: { classConsole },
     generalState,
     setGeneralState,
-    consoleFunctions: { fetchDomains },
+    consoleFunctions: { fetchDomains, updateDomain },
   } = useAuth();
 
   // const {classId} = useParams()
@@ -314,7 +314,7 @@ function Sidebar({ Toggle, side, toggleModule }) {
   const userdata = getItem(KEY);
   const courseId = localStorage.getItem(CLASSID);
   const studentpath = pathname.split("/")[1] === "student";
-
+  const queryClient = useQueryClient()
   function closeSidebar() {
     setGeneralState({
       ...generalState,
@@ -336,12 +336,24 @@ function Sidebar({ Toggle, side, toggleModule }) {
   }
 
   const getDomains = useQuery(["fetch domains", courseId], () => fetchDomains(userdata.token, courseId), {
+    enabled: userdata?.userType !== "student",
     onSuccess: res => {
       if(res.success){
         setDomainData(res.data)
       }
-    }
+    },
+    onError: err => console.error(err)
   } );
+
+
+  const domainUpdate = useMutation(([token, data, id])=>updateDomain(token, data, id), {
+    onSuccess: (res)=>{
+      console.log(res)
+    },
+    onError: (err)=>{
+      console.error(err)
+    }
+  })
 
   // useEffect(()=>{
   //   if(getDomains?.data?.data?.length > 0){
@@ -370,6 +382,13 @@ function Sidebar({ Toggle, side, toggleModule }) {
     newData.splice(destination.index, 0, movedItem)
     console.log({newData})
     setDomainData(newData)
+
+    // THIS HAS TO CHANGE. IT'S NOT SUSTAINABLE
+    newData.forEach((item, i) => {
+      domainUpdate.mutate([userdata.token, {...item, order: i + 1}, item._id])
+    })
+
+    // queryClient.invalidateQueries("fetch domains")
 
   }
 
@@ -401,7 +420,7 @@ function Sidebar({ Toggle, side, toggleModule }) {
                       {...provided.droppableProps}
                     >
                       <p>Course content</p>
-                      {getDomains?.data?.data?.map((domain, index) => (
+                      {getDomains?.data?.data?.sort((a, b) => a.order - b.order).map((domain, index) => (
                         <Accord {...domain} index={index} key={domain._id} all={domain} openEditContentModal={Toggle} toggleModule={toggleModule} />
                       ))}
                       {provided.placeholder}
@@ -520,26 +539,7 @@ export function Accord ({ name, _id, classId, description, creator,contentName, 
         break;
     }
   }
-  const domain = [
-    // {
-    //   id: 1,
-    //   title: "Edit domain",
-    // },
-    {
-      id: 2,
-      title: "Add Content",
-    },
-    {
-      id: 3,
-      title: "Lock all content",
-    },
-    {
-      id: 4,
-      title: "Delete Domain",
-    },
-
-  ]
-
+  
   function handleContentNavigation(...args) {
     navigate(`/teacher/class-console/class/${args[3]}?content=${args[0]}`)
     // setSearchParams({ "content": args[0] })

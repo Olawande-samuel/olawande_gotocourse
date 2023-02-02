@@ -190,7 +190,7 @@ const Accord = ({ reduceContent }) => {
 
 
               item?.questions?.length > 0 && item?.questions?.map((ques, index) => (
-                < Accordion key={index}>
+                <Accordion key={index}>
                   <Accordion.Item eventKey={index} className="accord__body">
                     <Accordion.Header className="accord__header"> Question {index + 1}</Accordion.Header>
                     <Accordion.Body>
@@ -226,14 +226,14 @@ const Accord = ({ reduceContent }) => {
                         {ques?.type === "MULTIPLE_CHOICE" && ques?.options && ques?.options.length > 0 &&
                           <>
 
-                            {ques?.options.map((opt, i) => (
+                            {ques?.options.map((opt, optionIndex) => (
                               <Answer key={i}>
                                 <label for="vehicle1">
                                   <input
                                     type="radio"
                                     value={opt._id}
                                     name="answers"
-                                    onChange={e => handleInputChange(e, ques?._id, index)}
+                                    onChange={e => handleInputChange(e, ques?._id, index, optionIndex)}
                                   />
                                   {opt.title}
                                 </label>
