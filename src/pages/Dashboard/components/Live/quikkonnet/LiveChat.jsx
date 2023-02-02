@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineMenu, AiOutlinePaperClip } from "react-icons/ai";
-import { BiSearch, BiUserCircle } from "react-icons/bi";
+import { BiArrowBack, BiSearch, BiUserCircle } from "react-icons/bi";
 import { BsMic } from "react-icons/bs";
 import styled from "styled-components";
 import profile from "../../../../../images/chat.png";
@@ -19,16 +19,24 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import { Box, Tab, Tabs } from "@mui/material";
 import PropTypes from "prop-types";
+import { useIntercom } from "react-use-intercom";
 
 const LiveChat = () => {
   const { getItem } = useLocalStorage();
   const userData = getItem(KEY);
-  const { adminFunctions: {  getUnreadMessages }, generalState: { chatDetail }, } = useAuth();
-
+  const { adminFunctions: {  getUnreadMessages }, generalState: { chatDetail, searchValue, showMainChat }, setGeneralState } = useAuth();
   const [users, setUsers] = useState([]);
-
   const [searchParams] = useSearchParams();
   const contactId = searchParams.get("contact");
+  const { shutdown } = useIntercom(); 
+  const navigate = useNavigate()
+  
+  useEffect(()=>{
+    shutdown()
+  })
+
+
+
 
   useEffect(() => {
     // if(type !== "New Messages"){
@@ -64,12 +72,19 @@ const LiveChat = () => {
         draggable
         pauseOnHover
       />
-    <Chat>
+    <Chat md={false}>
       <Contact>
         <Logo>
           <img src={logo} alt="logo" />
           <span>Quickonnet</span>
         </Logo>
+        {/* <div className="back">
+           <div onClick={()=>{
+              navigate("/learn-with-gotocourse")
+            }}>
+              <i><BiArrowBack style={{fontSize:"1rem"}} color="#ffffff" /></i>
+            </div>
+          </div> */}
         <Header>
           <Top>
             <i className="chat_hamburger">
@@ -77,8 +92,16 @@ const LiveChat = () => {
             </i>
             <h6 className="chat_title">Chats</h6>
           </Top>
+          
           <Search>
-            <input type="text" name="search" id="search" placeholder="Search" />
+            <input type="search" name="search" id="search" placeholder="Search" onChange={(e)=> setGeneralState((prev)=>{ 
+                return {
+                  ...prev, searchValue: e.target.value
+                  }
+                })
+              } 
+              value={searchValue} 
+            />
             <i className="search_icon">
               <BiSearch />
             </i>
@@ -86,12 +109,49 @@ const LiveChat = () => {
         </Header>
 
         <ChatTabs />
-
-        {/* Tabs go here */}
       </Contact>
       <ChatBox>
         {Object.keys(chatDetail).length > 0 ? <OpenedChat /> : <ClosedChat />}
       </ChatBox>
+    </Chat>
+    <Chat md={true} >
+      {
+        !showMainChat ? 
+        <Contact>
+          <Logo>
+            <img src={logo} alt="logo" />
+            <span>Quickonnet</span>
+          </Logo>
+          <Header>
+            <Top>
+              <i className="chat_hamburger">
+                <AiOutlineMenu />
+              </i>
+              <h6 className="chat_title">Chats</h6>
+            </Top>
+            
+            <Search>
+              <input type="search" name="search" id="search" placeholder="Search" onChange={(e)=> setGeneralState((prev)=>{ 
+                  return {
+                    ...prev, searchValue: e.target.value
+                    }
+                  })
+                } 
+                value={searchValue} 
+              />
+              <i className="search_icon">
+                <BiSearch />
+              </i>
+            </Search>
+          </Header>
+
+          <ChatTabs  />
+        </Contact>
+        :
+        <ChatBox>
+          {Object.keys(chatDetail).length > 0 ? <OpenedChat /> : <ClosedChat />}
+        </ChatBox>
+      }
     </Chat>
     </>
   );
@@ -189,7 +249,7 @@ function a11yProps(index) {
 function Unread() {
   const { getItem } = useLocalStorage();
   const userData = getItem(KEY);
-  const { adminFunctions: { getUnreadMessages }} = useAuth();
+  const { adminFunctions: { getUnreadMessages }, generalState:{searchValue}} = useAuth();
   const [users, setUsers] = useState([]);
 
 
@@ -218,7 +278,7 @@ function Unread() {
 
   return (
     <>
-      {users?.map((user, i) => (
+      {users?.filter(item => item?.user.fullName?.includes(searchValue)).map((user, i) => (
           <ContactWindow {...user} all={user} />
         ))}
     </>
@@ -231,26 +291,28 @@ function AllUsers(){
     const {id} = useParams()
 
 
-    const { adminStudentFunctions: { fetch}, adminTeacherFunctions: { fetch: TeachersFetch }, otherFunctions: {fetchTeachers, fetchAdmin}, teacherFunctions: {fetchApplications, fetchMyStudents} } = useAuth();
+    const {otherFunctions: {fetchAdmin}, teacherFunctions: {fetchMyStudents}, studentFunctions: { fetchBootcamps }, generalState: {searchValue}} = useAuth();
   
     console.log({id})
     // const isAdmin = userData.userType !== 'admin';
     const isStudent = userData.userType === 'student';
     const isTeacher = (userData?.userType === 'teacher' || "mentor" ) ? true : false;
 
+    const [teachers, setTeachers] = useState([]);
     const [students, setStudents] = useState([]);
     const [admins, setAdmins] = useState([]);
     // const [userInfo, setUserInfo] = useState({});
     // const [loader, setLoader] = useState(false);
   
     const {data:studentData} = useQuery(["teacher students", userData.token], () => fetchMyStudents(userData.token), {
-      enabled: userData?.userType !== "student",
+      enabled: userData?.userType === 'teacher',
       onSuccess: (res)=>{
         console.log({res})
         if(res.data?.length > 0){
             setStudents(res.data)
         }
-      }
+      },
+      onError: (err) => console.error(err)
     })
 
     // const allStudents = useQuery(["get all students"], () => fetch(userData?.token), {
@@ -272,9 +334,22 @@ function AllUsers(){
     //     enabled: isStudent,
     //     onSuccess: (res)=>{}
     // })
-    // const allStudentTeacher = useQuery(userData?.token && ["get all student admins"], () => fetchAdmin(), {
-    //     enabled: isStudent,
-    //     onSuccess: (res)=>{}
+    // const allStudentTeacher = useQuery(["get my teachers", userData?.token], () => fetchBootcamps(userData?.token), {
+    //   enabled: userData?.userType !== "teacher",
+    //   onSuccess: (res)=>{
+    //     if(res.success){
+    //       let teachers = new Set()
+    //       res.data.forEach(student => {
+    //         if(student.tutorId){
+    //           teachers.add(student)
+    //         }
+    //       })
+    //       let teacherArray = Array.from(teachers)
+    //       console.log({teacherArray})
+    //       setTeachers(teacherArray)
+    //     }
+    //   },
+    //   onError: (err) => console.error(err)
     // })
 
     // const courseAllStudent = useQuery(["get course applications", userData?.token], () => fetchApplications(userData?.token), {
@@ -303,7 +378,7 @@ function AllUsers(){
     return (
         <>
         {
-          [...admins, ...students]?.map((item,i)=>(
+          [...admins, ...students]?.filter(item => item.firstName?.includes(searchValue) || item.lastName?.includes(searchValue) || item.name?.includes(searchValue) || item.tutorName?.includes(searchValue)).map((item,i)=>(
               <ContactWindow {...item} all={item} />
 
           ))
@@ -323,17 +398,17 @@ function ContactWindow({
   user,
   all,
   name,
+  tutorName
 }) {
   const navigate = useNavigate();
   const { generalState, setGeneralState } = useAuth();
 
   function openMessage(e, message) {
-    console.log(message)
     let userid =  message?.userId ? message?.userId : (message?.fromUser ? message?.fromUser : (message?.teacherId ? message?.teacherId : message?.adminId ? message?.adminId :  message?.studentId))
     
     e.preventDefault();
     navigate(`?contact=${userid}`);
-    setGeneralState({ ...generalState, chatDetail: message });
+    setGeneralState({ ...generalState, chatDetail: message, showMainChat: true });
     // setUserInfo(message);
   }
   return (
@@ -365,6 +440,9 @@ function ContactWindow({
           user?.fullName 
           ? <div className="name">{user.fullName }</div>
           : 
+          tutorName ?
+          <div className="name">{tutorName}</div>
+          :
           <div className="name">{`${firstName ? firstName : ""} ${lastName ? lastName : ""}`}</div>
         }
         <div className="previewText">message</div>
@@ -380,8 +458,10 @@ function OpenedChat() {
   const { getItem } = useLocalStorage();
   const userData = getItem(KEY);
   const {
-    generalState: { chatDetail },
+    generalState: { chatDetail, showMainChat },
+    generalState,
     adminFunctions: { getMessages, sendMessage },
+    setGeneralState
   } = useAuth();
 
 
@@ -458,8 +538,15 @@ function OpenedChat() {
     }
   }
 
+  console.log({showMainChat})
+
   return (
     <Opened>
+      <div className="back">
+        <div onClick={()=>setGeneralState({...generalState, showMainChat: false})}>
+          <i><BiArrowBack size="1.1rem" color="#2e3747" /></i>
+        </div>
+      </div>
       <ChatHeader>
         <Profile>
           {chatDetail?.profileImg ? (

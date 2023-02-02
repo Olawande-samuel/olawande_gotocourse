@@ -165,7 +165,7 @@
     background: var(--dashboard-blue);
     padding: 1.5rem 1rem;
     border-radius: 10px;
-    overflow: scroll;
+    overflow: auto;
     min-height: 400px;
     max-height: 800px;
 

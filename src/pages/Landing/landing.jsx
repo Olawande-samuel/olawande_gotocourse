@@ -16,13 +16,10 @@ const NewHome = ({mixpanel}) => {
 
   const location = useLocation()
 
-  console.log({location})
-
   
   useMemo(() => mixpanel.track("new landing page visit", {"location": location.pathname}), [])
 
   const { shutdown } = useIntercom(); 
-
 
   useEffect(()=>{
     shutdown()

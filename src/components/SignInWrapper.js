@@ -11,7 +11,7 @@ const SignInWrapper = ({ image, children }) => {
     <section className="signWrapper">
       <div className="back">
         <div onClick={()=>{
-          navigate("/")
+          navigate("/learn-with-gotocourse")
         }}>
           <i><BiArrowBack style={{fontSize:"30px"}} color="#ffffff" /></i>
         </div>

@@ -204,7 +204,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
           <i>
             <FaCalendarAlt />
           </i>
-          <span>{startDate}</span>
+          <span>{new Intl.DateTimeFormat('en-US').format(new Date(startDate))}</span>
         </div>
         <div>
           <i>
