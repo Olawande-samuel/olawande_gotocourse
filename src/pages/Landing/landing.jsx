@@ -6,34 +6,44 @@ import { useAuth } from '../../contexts/Auth'
 import { Center, HomeComponent } from './landing.style'
 import Navbar from './Navbar'
 import SideBar from './Sidebar'
+import Helmet from 'react-helmet'
 
-const NewHome = ({mixpanel}) => {
+
+const NewHome = ({ mixpanel }) => {
   const { generalState: { showLandingSidebar }, generalState, setGeneralState } = useAuth();
 
   const toggleSidebar = () => {
-      setGeneralState({ ...generalState, showLandingSidebar: !showLandingSidebar });
+    setGeneralState({ ...generalState, showLandingSidebar: !showLandingSidebar });
   };
 
   const location = useLocation()
 
-  
-  useMemo(() => mixpanel.track("new landing page visit", {"location": location.pathname}), [])
 
-  const { shutdown } = useIntercom(); 
+  useMemo(() => mixpanel.track("new landing page visit", { "location": location.pathname }), [])
 
-  useEffect(()=>{
+  const { shutdown } = useIntercom();
+
+  useEffect(() => {
     shutdown()
   })
 
   return (
-    <HomeComponent>
+    <>
+      <Helmet>
+        <title>Gotocourse</title>
+        <meta property="og:site_name" content="Gotocourse" />
+        <meta name="description" content="Gotocourse" />
+      </Helmet>
+      <HomeComponent>
         <Navbar toggleSidebar={toggleSidebar} />
-        <SideBar showSidebar={showLandingSidebar}  toggleSidebar={toggleSidebar}/>
+        <SideBar showSidebar={showLandingSidebar} toggleSidebar={toggleSidebar} />
         <Center>
           <div className="d-flex flex-column align-items-center">
-            <h1>Build your virtual school here</h1>
-            <h1>and learners start</h1>
-            <h1>from here</h1>
+            <h1>Build your virtual school here
+              <span className="d-block">and learners start</span>
+              <span className="d-block">from here</span>
+            </h1>
+
           </div>
           <p>Gotocourse helps  to create, manage, market and learn tech and business skills online</p>
           <div className='d-flex gap-3 mt-4'>
@@ -47,8 +57,9 @@ const NewHome = ({mixpanel}) => {
             </Link>
           </div>
         </Center>
-    </HomeComponent>
-    
+      </HomeComponent>
+    </>
+
   )
 }
 

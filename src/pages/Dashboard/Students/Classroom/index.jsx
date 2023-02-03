@@ -770,7 +770,7 @@ const Classroom = () => {
 
     const totalItem = useMemo(() => {
 
-        let length = reduceContent?.length
+        let length = reduceItem?.length
         let isCompleted = reduceItem?.filter(item => item.completedBy?.includes(userdata.id))
         let isattempted = reduceItem?.filter(item => item.attemptedBy?.includes(userdata.id))
 
@@ -1024,6 +1024,7 @@ const Classroom = () => {
     console.log({ reduceContent });
     console.log({ reduceItem });
     console.log({ contents });
+    console.log({totalItem});
 
     return (
         <Container>

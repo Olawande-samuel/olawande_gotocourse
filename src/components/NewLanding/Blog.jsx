@@ -162,7 +162,7 @@ export const Blog = () => {
                         <div className="bottom">
                             <DateAndAction>
                                 <span>
-                                    <span style={{ color: "#4100FA" }}>{new Date(blog.createdAt).toLocaleDateString().split("/").join('.')}</span>
+                                    <span style={{ color: "#4100FA" }}>{new Date(blog.createdAt)?.toLocaleDateString()?.split("/")?.join('.')}</span>
                                 </span>
                                 <span>
                                     <i><FaShareSquare style={{ color: "#0C2191", fontSize: "1rem", cursor: "pointer" }} onClick={() => setOpen(true)} /></i>

@@ -25,7 +25,7 @@ const Events = () => {
     const blogData = useQuery(["fetch blogs"], () => getBlogs(), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                // console.log("data", res.data);
+                console.log("data", res.data);
                 setBlogs(res.data)
 
             }
@@ -77,7 +77,7 @@ const Events = () => {
 
                                     <div className={style.articleInfo}>
                                         <div className={style.articleTop}>
-                                            <span style={{ fontSize: "12px", color: "#4100FA" }}>04.08.22</span>
+                                            <span style={{ fontSize: "12px", color: "#4100FA" }}>{new Date(blog.createdAt).toLocaleDateString().split("/").join('.')}</span>
                                             <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} />
 
                                         </div>
