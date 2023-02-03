@@ -103,7 +103,7 @@ export const BootcampPayment = () => {
           ? ""
           : paymentData.initialPayment,
       };
-      if(!bootcamp.isPublic){
+      if(!bootcamp.isPublic || bootcamp.price !== 0){
         try {
           if (
             !bootcampPaymentInfo.fullPayment &&

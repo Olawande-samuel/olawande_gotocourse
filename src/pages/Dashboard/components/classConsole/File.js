@@ -142,6 +142,7 @@ export default function File() {
 			createFileContent()
 		}
 	},[uploadData?.name])
+	
 	return (
 		<>
 			<div className="">

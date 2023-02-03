@@ -503,7 +503,7 @@ export function Accord ({ name, _id, classId, description, creator,contentName, 
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
   const userdata = getItem(KEY);
-  const { consoleFunctions: { fetchContents, addFile }, } = useAuth();
+  const { consoleFunctions: { fetchContents, addFile, updateContent }, } = useAuth();
   const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId));
   const queryClient = useQueryClient()
   
@@ -540,6 +540,19 @@ export function Accord ({ name, _id, classId, description, creator,contentName, 
     }
   }
   
+  
+  
+  const contentUpdate = useMutation(([token, data, id])=>updateContent(token, data, id), {
+    onSuccess: (res)=>{
+      // queryClient.invalidateQueries("getDomainContent")
+    },
+    onError: (err)=>{
+      console.error(err)
+    }
+  })
+
+
+
   function handleContentNavigation(...args) {
     navigate(`/teacher/class-console/class/${args[3]}?content=${args[0]}`)
     // setSearchParams({ "content": args[0] })
@@ -567,7 +580,34 @@ function addSuiteContentToClass(id, contentName, originalName){
 }
 
 
-const contentid = searchParams.get("content")
+  const contentid = searchParams.get("content")
+
+  function onDragEnd(result){
+    console.log({result})
+
+    const {destination, source, draggableId} = result;
+
+    if(!destination){
+      return
+    }
+    
+    if(destination.index === source.index){
+      return
+    }
+
+    console.log("content data", getDomainContent?.data?.data)
+    let newContentData = getDomainContent?.data?.data
+    let movedItem = getDomainContent?.data?.data.find(item => item._id === draggableId)
+    newContentData.splice(source.index, 1)
+    newContentData.splice(destination.index, 0, movedItem)
+    console.log({newContentData})
+    
+    newContentData.forEach((item, i) => {
+      contentUpdate.mutate([userdata.token, {...item, order: i + 1, domainId: item.domain}, item.domain])
+
+    })
+  }
+
 
   return (
     <Draggable draggableId={_id} index={index}>
@@ -620,19 +660,50 @@ const contentid = searchParams.get("content")
                       </ul>
                     
                   :
-                  <ul className={style.content_list}>
-                    {getDomainContent?.data?.data?.filter(item => item.domain === _id).map((item) => (
-                      <li key={item._id} onClick={() => handleContentNavigation(item._id, item.type, item.domain, item.classId)} className={`d-flex justify-content-between ${item._id === contentid ? "activeClass" : ""}`} style={{cursor:"pointer"}}>
-                        <i>{IconType(item.type)}</i>
-                        <span>{item.title}</span>
-                        <div className="d-flex gap-3 align-items-center">
-                          {item.isLocked && <BiLockAlt />}
-                          <AccordMenu type="content" content={item} id={item._id} domain={item.domain} classId={item.classId} locked={item.isLocked} openEditContentModal={openEditContentModal} />
-                        </div>
-                        
-                      </li>
-                    ))}
-                  </ul>
+                  <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable droppableId={_id}>
+                      {
+                        (provided) => (
+                          <ul 
+                            className={style.content_list}
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                          >
+                            {getDomainContent?.data?.data?.filter(item => item.domain === _id).sort((a, b) => a.order - b.order).map((item, i) => (
+                                  <Draggable draggableId={item._id} index={i}>
+                                    {
+                                      (provided)=> (
+                                        <li 
+                                        key={item._id} 
+                                        onClick={() => handleContentNavigation(item._id, item.type, item.domain, item.classId)} 
+                                        className={`d-flex justify-content-between ${item._id === contentid ? "activeClass" : ""}`} 
+                                        style={{cursor:"pointer"}}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        ref={provided.innerRef}
+                                        >
+                                          <i>{IconType(item.type)}</i>
+                                          <span>{item.title}</span>
+                                          <div className="d-flex gap-3 align-items-center">
+                                            {item.isLocked && <BiLockAlt />}
+                                            <AccordMenu type="content" content={item} id={item._id} domain={item.domain} classId={item.classId} locked={item.isLocked} openEditContentModal={openEditContentModal} />
+                                          </div>
+                                          
+                                        </li>
+
+                                      )
+                                    }
+                                  </Draggable>
+
+                            ))}
+                              {provided.placeholder}
+                          </ul>
+
+                        )
+                      }
+                    </Droppable>
+
+                  </DragDropContext>
               )
             }
           </div>
@@ -766,6 +837,7 @@ function AccordMenu({ id, type, classId, locked, domain, content, openEditConten
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        style={{cursor: "pointer"}}
       >
         <BsThreeDotsVertical />
       </i>

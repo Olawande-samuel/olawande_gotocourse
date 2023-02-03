@@ -7,7 +7,7 @@ import { useAuth } from "../../../../../contexts/Auth";
 import { useLocalStorage } from "../../../../../hooks";
 
 
-const UploadWidget = ({ fileUrl, setFileUrl, setUploadData, type}) => {
+const UploadWidget = ({ fileUrl, setFileUrl, setUploadData, type, theme}) => {
     const cloudinaryRef = useRef(null);
     const widgetRef = useRef(null);
     const {getItem} = useLocalStorage();
@@ -33,7 +33,9 @@ const UploadWidget = ({ fileUrl, setFileUrl, setUploadData, type}) => {
         widgetRef.current = cloudinaryRef?.current?.createUploadWidget({
             cloudName: process.env.REACT_APP_CLOUD_NAME,
             uploadPreset: "ml_default",
-            folder: "files"
+            folder: "files",
+            sources: ["local"]
+
         }, function (error, result) {
             if (result.event === "success") {
                 console.log({result});
@@ -71,6 +73,7 @@ const UploadWidget = ({ fileUrl, setFileUrl, setUploadData, type}) => {
             pauseOnHover: true
         })
     }
+    console.log({theme})
 
     return (
         <>
@@ -78,7 +81,7 @@ const UploadWidget = ({ fileUrl, setFileUrl, setUploadData, type}) => {
                 setFileUrl("")
                 widgetRef?.current.open()
 
-            }} style={{ color: "red", border: " none", outline: "none", padding: ".5rem" }}>Click to Upload file</button>
+            }} style={{ color: theme ? theme : "red", border: " none", outline: "none", padding: ".5rem" }}>Click to Upload file</button>
 
             {type !== "console" &&
 

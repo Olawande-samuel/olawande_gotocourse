@@ -207,18 +207,6 @@ export default function Suite() {
 
     const content = [
         {
-            id: 1,
-            title: "Upload file/image",
-            icon: HiOutlineCloudUpload,
-            type: "file"
-        },
-        {
-            id: 2,
-            title: "Upload video",
-            icon: HiOutlineCloudUpload,
-            type: "file"
-        },
-        {
             id: 3,
             title: "Video Record",
             icon: BiVideoRecording,
@@ -340,6 +328,7 @@ function CreatorMenu({ id, content }) {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
+          className="me-2"
         >
           create new +
         </button>
@@ -361,7 +350,7 @@ function CreatorMenu({ id, content }) {
                 ))
             }
         </Menu>
-        <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl}/>
+        <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} theme="#FFF" />
 
         {/* <UploadForm
             isOpen={isOpen}
@@ -569,7 +558,7 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
     const [searchParams, setSearchParams] = useSearchParams();
     const queryClient = useQueryClient()
 
-    const {adminFunctions: {uploadFile}, teacherConsoleFunctions: {addFile}} = useAuth();
+    const {adminFunctions: {uploadFile}, teacherConsoleFunctions: {addFile}, otherFunctions: {addNewFile}} = useAuth();
     const {getItem} = useLocalStorage();
     const value = getItem(KEY);
     
@@ -609,23 +598,39 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
 
     // }, [mediaBlobUrl])
 
-    
+    const addToFile = useMutation(([token, data])=> addNewFile(token, data), {
+        onSuccess: (res)=> {
+            console.log(res)
+            if(res.statusCode === 1){
+                createFileContent(res.data.fileId)
+                console.log("setting done")
+            }
+        },
+        onError: err => console.error(err)
+    })
+
+
     async function uploadFileHandler(e){
+        console.log("calling")
         if(!fileName){
             toast.error('Please provide a file name')
             return
         }
+        
         setLoading(true)
         const formdata = new FormData();
-        formdata.append('file', videoData, fileName);
         var ajax = new XMLHttpRequest();
+        formdata.append('file', videoData, fileName);
+        formdata.append('upload_preset', "ml_default");
+        formdata.append('timestamp', Date.now());
+        formdata.append('folder', "files");
 
         ajax.upload.addEventListener("progress", progressHandler, false);
         ajax.addEventListener("load", completeHandler, false);
         ajax.addEventListener("error", errorHandler, false);
         ajax.addEventListener("abort", abortHandler, false);
-        ajax.open("POST", `${process.env.REACT_APP_BASEURL}/file/upload`);
-        ajax.setRequestHeader("Authorization",  "Bearer " + value.token); 
+        ajax.open("POST", `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/video/upload`);
+        // ajax.setRequestHeader("Authorization",  "Bearer " + value.token); 
         ajax.send(formdata);
     }
 
@@ -639,10 +644,19 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
     }
       
     function completeHandler(event) {
-        setLoading(false)
-        let { data,message } = JSON.parse(event.target.response)
-        toast.success(message)
-        createFileContent(data.fileId)
+        let response = JSON.parse(event.target.response)
+        console.log(response)
+        
+        let ext = response?.secure_url.split("/");
+        let extension = ext[ext.length -1]
+        addToFile.mutate([value.token, {
+            fileName: extension,
+            mimeType: response?.resource_type +"/"+ response.format,
+            fileSize: response?.bytes,
+            originalName:response?.public_id.split("/")[1],
+            location:"/files",
+            uploadedBy:value.id
+        }])
         setIsVideoOpen(false)
         setProgress(0)
     }
@@ -660,7 +674,7 @@ export const UploadVideoRecording = ({isVideoOpen, setIsVideoOpen, setPreviewIma
 
     const mutation = useMutation(([token, data])=>addFile(token, data), {
         onSuccess: (res)=> {
-            console.log(res)
+            toast.success(res?.message)
             queryClient.invalidateQueries("fetch suite files")
         },
         onError: (err)=> console.error(err)
