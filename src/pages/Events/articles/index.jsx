@@ -80,6 +80,14 @@ const Articles = () => {
                 <title>{`${blog?.title?.toUpperCase()} | Gotocourse`}</title>
                 <meta property="og:site_name" content="Gotocourse" />
                 <meta name="description" content="Gotocourse Blogs" />
+                <meta property="og:type" content="article" />
+                <meta property="og:description" content="Gotocourse Blogs" />
+                <meta property="og:title" content={`${blog?.title}| Gotocourse`} />
+                <meta property="og:image" content={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} />
+                <meta property="og:url" content={`${BLOGURL}/${encodeURIComponent(blog?.title)?.split(" ").join("-").replace('?', '')}/${blog._id}`}/>
+
+
+
             </Helmet>
             <Layout>
                 <section className="container py-4">
