@@ -48,7 +48,7 @@ const UploadWidget = ({ fileUrl, setFileUrl, setUploadData, type, theme}) => {
                     fileName: extension,
                     mimeType: result.info.resource_type +"/"+ result.info.format,
                     fileSize: result.info.bytes,
-                    originalName:result.info.public_id.split("/")[1],
+                    originalName:result.info.original_filename,
                     location:"/files",
                     uploadedBy:userdata.id
                 }])
