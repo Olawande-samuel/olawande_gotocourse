@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { BiArrowBack } from 'react-icons/bi';
 import { Button } from '@mui/material';
 import { Module } from './';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useMemo } from 'react';
@@ -76,6 +76,19 @@ const SidebarBody = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
+    padding: 0 .5rem;
+
+
+    .back_button{
+    margin-top: 1rem;
+    padding: 12px;
+    width: 50%;
+    margin: auto;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--theme-orange);
+    color: #fff ;
+}
 `;
 
 
@@ -105,7 +118,7 @@ const Sidebar = ({ modules,setContents,setPickedType,setBodyTitle,reduceContent,
         <SidebarContainer $mobile={isMobile}>
             <SidebarTop onClick={() => navigate(-1)}> 
                 <BiArrowBack  />
-                Dashboard
+                back
             </SidebarTop>
             <SidebarBody>
                 <CustomButton sx={{ marginInline: 'auto', width: '50%' }}>
@@ -138,6 +151,8 @@ const Sidebar = ({ modules,setContents,setPickedType,setBodyTitle,reduceContent,
                     }
 
                 </div>
+
+                <button className="back_button" style={{ width: "100%" }} onClick={() =>navigate('/student')}>Back to Dashboard</button>
 
             </SidebarBody>
         </SidebarContainer>
