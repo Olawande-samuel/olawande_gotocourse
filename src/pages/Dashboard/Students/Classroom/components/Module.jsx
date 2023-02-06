@@ -16,6 +16,7 @@ const ModuleContainer = styled.div`
     margin-top: 10px;
     /* border: 2px solid red; */
     background: #004DB6;
+    /* background: var(--theme-blue); */
     border-radius: 10px;
 `;
 
