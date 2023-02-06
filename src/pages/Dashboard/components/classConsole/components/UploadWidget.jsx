@@ -44,11 +44,13 @@ const UploadWidget = ({ fileUrl, setFileUrl, setUploadData, type, theme}) => {
                 let extension = ext[ext.length -1]
                 console.log({extension});
                 setFileUrl(extension)
+                let format = result.info.format ? result.info.format : result.info.url.split(".").slice(-1)[0];
+                let ogName = result.info.original_filename ? result.info.original_filename : result.info.url.split("/").slice(-1)[0];
                 addToFile.mutate([userdata.token, {
                     fileName: extension,
-                    mimeType: result.info.resource_type +"/"+ result.info.format,
+                    mimeType: result.info.resource_type +"/"+ format,
                     fileSize: result.info.bytes,
-                    originalName:result.info.original_filename,
+                    originalName:ogName,
                     location:"/files",
                     uploadedBy:userdata.id
                 }])
