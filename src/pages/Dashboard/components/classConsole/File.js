@@ -560,7 +560,7 @@ function Pdf({ document }) {
 	);
 }
 
-function DocumentViewer({file}){
+export function DocumentViewer({file}){
 	const docs = [
 		{ uri: file }, // Remote file
 	];
