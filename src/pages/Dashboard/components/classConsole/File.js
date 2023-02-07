@@ -449,7 +449,7 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
 		left: "50%",
 		transform: "translateX(-50%)",
 		width: "100%",
-		height: "100%",
+		height: "100vh",
 		background: "#fff",
 		border: "1px solid #eee",
 		borderRadius: "10px",
@@ -516,7 +516,7 @@ function Pdf({ document }) {
 	}
 
 	return (
-		<div>
+		<div className="">
 			<Document
 				file={{
 					url: document,
@@ -528,6 +528,7 @@ function Pdf({ document }) {
 			<p>
 				Page {pageNumber} of {numPages}
 			</p>
+			<div className="pdf_controls">Controls</div>
 		</div>
 	);
 }

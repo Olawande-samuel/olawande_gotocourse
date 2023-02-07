@@ -349,9 +349,15 @@ function Sidebar({ Toggle, side, toggleModule }) {
   const domainUpdate = useMutation(([token, data, id])=>updateDomain(token, data, id), {
     onSuccess: (res)=>{
       console.log(res)
+      if(res.statusCode !== 1){
+        toast.error(res.message)
+      }
+      
     },
     onError: (err)=>{
       console.error(err)
+      toast.error(err.message)
+
     }
   })
 
@@ -613,13 +619,10 @@ function addSuiteContentToClass(id, contentName, originalName){
     <Draggable draggableId={_id} index={index}>
       {
         (provided)=> (
-
           <div className={style.content_item} 
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}
-
-
           >
             <div className={style.content_item_top}>
               <i>
@@ -631,9 +634,7 @@ function addSuiteContentToClass(id, contentName, originalName){
               </i>
               <span>{name}</span>
               <AccordMenu type="domain" id={_id} domain={all} toggleModule={toggleModule} />
-
             </div>
-
             {
               details &&
               (
@@ -672,7 +673,7 @@ function addSuiteContentToClass(id, contentName, originalName){
                             {getDomainContent?.data?.data?.filter(item => item.domain === _id).sort((a, b) => a.order - b.order).map((item, i) => (
                                   <Draggable draggableId={item._id} index={i}>
                                     {
-                                      (provided)=> (
+                                      (provided)=> (g
                                         <li 
                                         key={item._id} 
                                         onClick={() => handleContentNavigation(item._id, item.type, item.domain, item.classId)} 
@@ -690,7 +691,6 @@ function addSuiteContentToClass(id, contentName, originalName){
                                           </div>
                                           
                                         </li>
-
                                       )
                                     }
                                   </Draggable>
@@ -751,20 +751,30 @@ function AccordMenu({ id, type, classId, locked, domain, content, openEditConten
 
   const domainUpdate = useMutation(([token, data, id])=>updateDomain(token, data, id), {
     onSuccess: (res)=>{
-
+      console.log({res})
       queryClient.invalidateQueries("getDomainContent")
+      if(res.statusCode !== 1){
+        toast.error(res.message)
+      }
     },
     onError: (err)=>{
       console.error(err)
+      toast.error(err.message)
+
     }
   })
 
   const contentUpdate = useMutation(([token, data, id])=>updateContent(token, data, id), {
     onSuccess: (res)=>{
       queryClient.invalidateQueries("getDomainContent")
+      if(res.statusCode !== 1){
+        toast.error(res.message)
+      }
     },
     onError: (err)=>{
       console.error(err)
+      toast.error(err.message)
+      
     }
   })
 
@@ -883,19 +893,29 @@ export function ModalContent({ show, handleClose, toggleModule, editData  }) {
   const addContentMutation = useMutation(([token, state]) => addContent(token, state), {
     onSuccess: (res) => {
       queryClient.invalidateQueries('fetch domains')
+      if(res.statusCode !== 1){
+        toast.error(res.message)
+      }
       handleClose();
     },
     onError: (err) => {
       console.error("error adding content", err)
+      toast.error(err.message)
+
     }
   })
   const editContentMutation = useMutation(([token, data, id])=>updateContent(token, data, id), {
     onSuccess: (res)=>{
+      if(res.statusCode !== 1){
+        toast.error(res.message)
+      }
       queryClient.invalidateQueries("getDomainContent")
       handleClose()
     },
     onError: (err)=>{
       console.error(err)
+      toast.error(err.message)
+
     }
   })
 
@@ -1148,6 +1168,9 @@ export function ModuleModal({ moduleOpen, moduleClose, editModule }) {
     onSuccess: (res) => {
       queryClient.invalidateQueries('fetch domains')
       moduleClose();
+      if(res.statusCode !== 1){
+        toast.error(res.message)
+      }
     },
     onError: (err) => {
       toast.error(err.message)
@@ -1160,6 +1183,9 @@ export function ModuleModal({ moduleOpen, moduleClose, editModule }) {
     onSuccess: (res)=>{
       queryClient.invalidateQueries("getDomainContent")
       moduleClose();
+      if(res.statusCode !== 1){
+        toast.error(res.message)
+      }
 
     },
     onError: (err)=>{

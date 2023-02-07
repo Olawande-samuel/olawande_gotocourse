@@ -1403,6 +1403,20 @@
 } */
 
 
+/* FILE PDF */
+
+
+.pdf_controls {
+    border: 1px solid red;
+    padding: .5rem;
+    position: fixed;
+    top: 0;
+    right: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.8);
+}
+
+
 
 .video_controls {
     z-index: 2;
