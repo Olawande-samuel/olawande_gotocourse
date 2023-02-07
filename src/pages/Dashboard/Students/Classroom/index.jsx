@@ -18,7 +18,7 @@ import { KEY } from '../../../../constants';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRef } from 'react';
 import axios from 'axios'
-import { ViewModal } from '../../components/classConsole/File';
+import { DocumentViewer, ViewModal } from '../../components/classConsole/File';
 import emptyImg from "../../../../images/empty.png"
 import ReactQuill from 'react-quill';
 import Loader from '../../../../components/Loader';
@@ -131,7 +131,7 @@ const BodyContent = styled.div`
     display: flex;
     flex-direction: column;
     gap: 4rem;
-    // border: 2px solid green;
+     /* border: 2px solid green; */
 
     .paper{
         display: flex;
@@ -442,16 +442,7 @@ const NoteComponent = (contentItem) => {
 }
 
 const FileComponent = (contentItem) => {
-    // console.log({ contentItem });
     const [open, setOpen] = useState(false)
-    const [numPages, setNumPages] = useState(null);
-    const [pageNumber, setPageNumber] = useState(1);
-
-    function onDocumentLoadSuccess({ numPages }) {
-        setNumPages(numPages);
-    }
-
-
     // console.log(contentItem.contentItem);
 
     const getExtention = (val) => {
@@ -459,12 +450,8 @@ const FileComponent = (contentItem) => {
 
         if (val?.split('/')[0] === "video") {
             return "video"
-        } else if (val?.split('/')[1] === "pdf") {
+        } else if ((val?.split('/')[1] === "pdf") || (val?.split('/')[1] === "pptx") || (val?.split('/')[1] === "ppt") || (val?.split('/')[1] === "doc") || (val?.split('/')[1] === "docx") || ((val?.split('/')[1] === "csv") || (val?.split('/')[1] === "clsx"))) {
             return "pdf"
-        } else if ((val?.split('/')[1] === "csv") || (val?.split('/')[1] === "clsx")) {
-            return "csv"
-        } if ((val?.split('/')[1] === "pptx") || (val?.split('/')[1] === "ppt") || (val?.split('/')[1] === "doc") || (val?.split('/')[1] === "docx")) {
-            return "doc"
         }
         else return "image"
 
@@ -544,39 +531,12 @@ const FileComponent = (contentItem) => {
                         getExtention(contentItem?.contentItem?.type) === "pdf" ?
                             <div className="pdf">
 
-
-                                <Document
-                                    file={{
-                                        url: contentItem?.contentItem?.fileUri,
-                                    }}
-                                    onLoadSuccess={onDocumentLoadSuccess}
-                                >
-                                    <Page pageNumber={pageNumber} width={800} />
-                                </Document>
-
-
+                                <DocumentViewer file={contentItem?.contentItem?.fileUri} />
 
                             </div>
                             :
-                            getExtention(contentItem?.contentItem?.type) === "csv" ?
-                                <div className="csv">
 
-                                </div>
-                                :
-
-                                getExtention(contentItem?.contentItem?.type) === "doc" ?
-                                    <div className="doc">
-                                        <object
-                                            type={"docx"}
-                                            data={contentItem?.contentItem?.fileUri}
-                                            width="100%"
-                                            height="200"
-                                            aria-label={contentItem?.contentItem?.fileUri}
-
-                                        ></object>
-                                    </div>
-                                    :
-                                    <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem?.contentItem?.fileName}`} controls controlsList="nodownload"></video>
+                            <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem?.contentItem?.fileName}`} controls controlsList="nodownload"></video>
                     }
 
                 </FileDisplay>
@@ -599,11 +559,12 @@ const FileComponent = (contentItem) => {
     )
 }
 
-const QuizComponent = ({ contentItem, userdata }) => {
+const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
     console.log(contentItem);
     const { consoleFunctions: { attemptQuiz } } = useAuth();
     const [note, setNotes] = useState([])
-    const [myAnswers, setMyAnswers] = useState([])
+    const [myAnswers, setMyAnswers] = useState([]);
+    const [loading, setLoading] = useState(false);
 
 
     function setNote(text, quizId, questionId, questionIndex, quizIndex) {
@@ -636,10 +597,10 @@ const QuizComponent = ({ contentItem, userdata }) => {
     const handleInputChange = (e, questionId, index) => {
         const { value } = e.target;
         let list = [...myAnswers]
-        console.log({ questionId })
+        // console.log({ questionId })
         let thisOption = list.findIndex(item => item.questionId === questionId)
 
-        console.log("questionId2Option: " + thisOption)
+        // console.log("questionId2Option: " + thisOption)
         if (thisOption === -1) {
             list.push({ questionId: questionId, answers: [value] })
         } else {
@@ -649,9 +610,20 @@ const QuizComponent = ({ contentItem, userdata }) => {
     }
 
 
-    const AnswerQuiz = async (type) => {
-        const { data } = await attemptQuiz(userdata?.token, contentItem?._id, myAnswers)
-        console.log({ data });
+    const AnswerQuiz = async () => {
+        try {
+            setLoading(true)
+            const { data, statusCode } = await attemptQuiz(userdata?.token, contentItem?._id, myAnswers)
+            if (statusCode === 1) {
+                setLoading(false)
+                console.log({ data });
+
+            }
+
+        } catch (error) {
+            setLoading(false)
+            console.log({ error });
+        }
     }
 
     console.log({ myAnswers });
@@ -668,8 +640,8 @@ const QuizComponent = ({ contentItem, userdata }) => {
                         hour: '2-digit',
                         minute: '2-digit'
                     })}</span></p>
-                    <p>Number of submissions:  <span>1/1</span> </p>
-                    <p> Provisional Result (based on Objective): <span>0.00%</span></p>
+                    <p>Number of submissions:  <span>{contentItem.attempts || 0}/{contentItem.maxAttempts}</span> </p>
+                    <p> Provisional Result (based on Objective): <span>100.00%</span></p>
                 </QuizInfo>
 
             </Quiz>
@@ -695,12 +667,6 @@ const QuizComponent = ({ contentItem, userdata }) => {
                                                     <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, opt?._id, i, index)} />
                                                 </Answer>
 
-                                                {/* <QuizAction>
-
-                                                    <QuizButton onClick={() => AnswerQuiz("theory")}>
-                                                        Submit
-                                                    </QuizButton>
-                                                </QuizAction> */}
 
                                             </>
                                         ))
@@ -713,27 +679,41 @@ const QuizComponent = ({ contentItem, userdata }) => {
 
                                             {ques?.options.map((opt, i) => (
                                                 <Answer>
-                                                    <label for="vehicle1">
+                                                    <label for={`answers${opt._id}`}>
                                                         <input
                                                             type="radio"
                                                             value={opt._id}
-                                                            name="answers"
+                                                            id={`answers${opt._id}`}
+                                                            name={`answers${ques.title}`}
                                                             onChange={e => handleInputChange(e, ques?._id, index)} />
                                                         {opt.title}
                                                     </label>
 
-                                                </Answer>
+                                                </Answer> 
 
                                             ))}
 
+                                        </>
+                                    }
 
-                                            {/* < QuizAction >
-                                                <QuizButton onClick={() => AnswerQuiz("mutiple")}>
-                                                    Submit
-                                                </QuizButton>
-                                            </QuizAction> */}
+
+                                    {
+                                        ques?.type === "FILE" && ques?.options && ques?.options.length > 0 &&
+                                        <>
+                                            <Answer>
+                                                <label for="file">
+                                                    <input
+                                                        type="file"
+                                                        // value={opt._id}
+                                                        // name="answers"
+                                                        // onChange={e => handleInputChange(e, ques?._id, index)} 
+                                                        />
+                                                </label>
+                                            </Answer>
+
 
                                         </>
+
                                     }
 
 
@@ -747,10 +727,24 @@ const QuizComponent = ({ contentItem, userdata }) => {
                     </Accordion>
                 ))}
 
+                {attemptedStatus && <small style={{ color: "var(--theme-orange)" }}>Quiz has already been submitted {contentItem?.attempts} time(s)</small>}
+
                 < QuizAction >
-                    <QuizButton onClick={() => AnswerQuiz("mutiple")}>
-                        Submit
-                    </QuizButton>
+                    {
+                        loading ?
+                            (
+                                <button className="button button-md log_btn w-100"
+                                    disabled={loading}>
+                                    <div className="spinner-border" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div>
+                                </button>
+                            )
+                            :
+                            <QuizButton onClick={() => AnswerQuiz("mutiple")} disabled={(+contentItem?.attempts) >= (+contentItem?.maxAttempts) }>
+                                Submit
+                            </QuizButton>
+                    }
                 </QuizAction>
 
             </div>
@@ -769,7 +763,9 @@ const Classroom = () => {
     const [bodyTitle, setBodyTitle] = useState("")
     const [bootcampName, setBootcampName] = useState({})
     const [searchParams, setSearchParams] = useSearchParams();
-    const [locked, setLocked] = useState(false)
+    const [locked, setLocked] = useState(false);
+
+    const [loading, setLoading] = useState(false);
 
     const contentId = searchParams.get("contentId");
     // const [active, setActive] = useState(false)
@@ -819,9 +815,6 @@ const Classroom = () => {
     }, [modules])
 
 
-
-
-
     const totalItem = useMemo(() => {
 
         let length = reduceItem?.length
@@ -834,9 +827,6 @@ const Classroom = () => {
         };
 
     }, [modules])
-
-
-
 
 
 
@@ -1036,12 +1026,21 @@ const Classroom = () => {
 
     const handleCompleted = async (contentId, fileId, type) => {
         console.log({ contentId });
-        const { data, statusCode } = await markAsCompleted(userdata?.token, contentId, fileId, type)
-        if (statusCode === 1) {
-            queryClient.invalidateQueries(["fetch domains"])
-            console.log({ data });
+        setLoading(true)
+        try {
 
+            const { data, statusCode } = await markAsCompleted(userdata?.token, contentId, fileId, type)
+            if (statusCode === 1) {
+                setLoading(false)
+                queryClient.invalidateQueries(["fetch domains"])
+                console.log({ data });
+
+            }
+        } catch (error) {
+            setLoading(false)
+            console.log({ error });
         }
+
 
 
     }
@@ -1049,20 +1048,29 @@ const Classroom = () => {
 
     const handleFileCompleted = async (contentId, contentsId, type) => {
         // console.log("token", userdata?.token);
+        setLoading(true)
 
         let ids = [];
         contentsId.map(content => {
             ids.push(content.fileId)
 
         })
+        try {
+            const { data, statusCode } = await markFileAsCompleted(userdata?.token, contentId, ids, type)
+            if (statusCode === 1) {
+                setLoading(false)
+                queryClient.invalidateQueries(["fetch domains"])
+                console.log({ data });
+
+            }
+
+        } catch (error) {
+            setLoading(false)
+            console.log({ error });
+        }
 
         // console.log({ ids });
-        const { data, statusCode } = await markFileAsCompleted(userdata?.token, contentId, ids, type)
-        if (statusCode === 1) {
-            queryClient.invalidateQueries(["fetch domains"])
-            console.log({ data });
 
-        }
 
 
     }
@@ -1117,6 +1125,7 @@ const Classroom = () => {
                     // setActive={setActive}
                     />
                 </Backdrop>
+                
                 <Sidebar
                     isMobile={false} modules={modules}
                     setContents={setContents}
@@ -1176,12 +1185,24 @@ const Classroom = () => {
                                     }
 
                                     <QuizAction >
-                                        <MarkButton display={(contents?.filter(content => content?.completedBy?.includes(userdata.id))?.length === contents?.length) ? true : false}
+                                        {
+                                            loading ?
+                                                (
+                                                    <button className="button button-md log_btn w-100"
+                                                        disabled={loading}>
+                                                        <div className="spinner-border" role="status">
+                                                            <span className="visually-hidden">Loading...</span>
+                                                        </div>
+                                                    </button>
+                                                )
+                                                :
+                                                <MarkButton display={(contents?.filter(content => content?.completedBy?.includes(userdata.id))?.length === contents?.length) ? true : false}
 
-                                            onClick={() => handleFileCompleted(contents[0]?.contentId, contents, "files")}
-                                        >
-                                            Mark as Completed
-                                        </MarkButton>
+                                                    onClick={() => handleFileCompleted(contents[0]?.contentId, contents, "files")}
+                                                >
+                                                    Mark as Completed
+                                                </MarkButton>
+                                        }
                                     </QuizAction>
                                 </>
 
@@ -1197,12 +1218,24 @@ const Classroom = () => {
                                         />
 
                                         <QuizAction >
-                                            <MarkButton
-                                                display={contents[contents.length - 1]?.completedBy?.includes(userdata.id) ? true : false}
-                                                onClick={() => handleCompleted(contents[contents.length - 1]?.contentId, contents[contents.length - 1]?._id, "notes")}
-                                            >
-                                                Mark as Completed
-                                            </MarkButton>
+                                            {
+                                                loading ?
+                                                    (
+                                                        <button className="button button-md log_btn w-100"
+                                                            disabled={loading}>
+                                                            <div className="spinner-border" role="status">
+                                                                <span className="visually-hidden">Loading...</span>
+                                                            </div>
+                                                        </button>
+                                                    )
+                                                    :
+                                                    <MarkButton
+                                                        display={contents[contents.length - 1]?.completedBy?.includes(userdata.id) ? true : false}
+                                                        onClick={() => handleCompleted(contents[contents.length - 1]?.contentId, contents[contents.length - 1]?._id, "notes")}
+                                                    >
+                                                        Mark as Completed
+                                                    </MarkButton>
+                                            }
                                         </QuizAction>
                                     </>
 
@@ -1214,8 +1247,9 @@ const Classroom = () => {
                             {pickedType === "QUIZ" &&
                                 contents?.length > 0 &&
                                 <>
-                                    <QuizComponent contentItem={contents[contents.length - 1]} id={id} key={id} userdata={userdata} />
+                                    <QuizComponent contentItem={contents[contents.length - 1]} id={id} key={id} userdata={userdata} attemptedStatus={contents[contents.length - 1]?.attemptedBy?.includes(userdata.id) ? true : false} />
                                     <QuizAction >
+
                                         <MarkButton
                                             display={contents[contents.length - 1]?.attemptedBy?.includes(userdata.id) ? true : false}
                                         // onClick={() => handleFileCompleted(content.contentId, content._id)}
