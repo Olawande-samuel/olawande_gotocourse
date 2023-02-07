@@ -108,7 +108,7 @@ const Navbar = styled.nav`
 
     .navbarright{
         width: 300px;
-        background-color: var(--theme-blue);
+        background-color:  var(--theme-blue);
         display: flex;
         align-items: center;
         padding: 20px;
@@ -118,6 +118,25 @@ const Navbar = styled.nav`
             font-weight: 300;
             font-size: 1.15rem;
             color: #fff;
+
+            a{
+                color: #fff;   
+            }
+        }
+    }
+
+    @media screen and (max-width: 960px){
+        .navbarright{
+        background-color:  #fff;
+
+        & h5{
+            color: var(--theme-blue);
+
+            a{
+                color: var(--theme-blue);
+    
+            }
+        }
         }
     }
 
@@ -315,7 +334,15 @@ const MenuButton = styled(IconButton)`
 
     @media screen and (max-width: 960px){
         display: inline-block;
+        
+        & svg {
+        color: var(--theme-blue);
     }
+
+    }
+
+ 
+
 `
 
 
@@ -1134,8 +1161,8 @@ const Classroom = () => {
                     <MenuButton onClick={e => setShowMobile(_ => true)}>
                         <MdMenu />
                     </MenuButton>
-    
-                    <h5 style={{ margin: 0 }}><Link to={`/student/console/myclasses`} style={{ color: "#fff" }}>Classroom</Link></h5>
+
+                    <h5 style={{ margin: 0 }}><Link to={`/student/console/myclasses`}>Classroom</Link></h5>
                 </div>
                 <NavLeft>
                     <IconButton>

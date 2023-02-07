@@ -204,7 +204,7 @@ const Sidebar = ({ modules, setContents, setPickedType, setBodyTitle, reduceCont
 
                 </div>
                 <div className="bodybottom">
-                    <button className="back_button" style={{ width: "100%" }} onClick={() => navigate('/student')}>Back to Dashboard</button>
+                    <button className="back_button" style={{ width: "100%" }} onClick={() => navigate('/student/console/myclasses')}>Back to Dashboard</button>
 
                 </div>
 
