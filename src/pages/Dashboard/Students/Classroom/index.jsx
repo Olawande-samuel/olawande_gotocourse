@@ -23,6 +23,8 @@ import emptyImg from "../../../../images/empty.png"
 import ReactQuill from 'react-quill';
 import Loader from '../../../../components/Loader';
 import { Document, Page } from 'react-pdf';
+import { AdvancedError } from '../../../../classes';
+import { toast } from 'react-toastify';
 
 
 const Container = styled.div`
@@ -93,20 +95,32 @@ const Navbar = styled.nav`
     top: 0;
     left: 0;
     right: 0;
-    padding: 20px;
     /* background-color: var(--textBlue); */
-    background: #004DB6;
+    /* background: #004DB6; */
+    /* background-color: var(--theme-blue); */
+
 
     display: flex;
     align-items: center;
     justify-content: space-between;
     color: var(--white);
-    box-shadow: 0px 0px 20px -5px #222;
+    /* box-shadow: 0px 0px 20px -5px #222; */
 
-    & h5 {
-        font-weight: 300;
-        font-size: 1.15rem;
+    .navbarright{
+        width: 300px;
+        background-color: var(--theme-blue);
+        display: flex;
+        align-items: center;
+        padding: 20px;
+
+
+        & h5 {
+            font-weight: 300;
+            font-size: 1.15rem;
+            color: #fff;
+        }
     }
+
 `;
 
 const NavLeft = styled.div`
@@ -114,7 +128,7 @@ const NavLeft = styled.div`
     align-items: center;
 
     & svg {
-        color: var(--white);
+        color: var(--theme-blue);
     }
 `;
 
@@ -613,16 +627,39 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
     const AnswerQuiz = async () => {
         try {
             setLoading(true)
-            const { data, statusCode } = await attemptQuiz(userdata?.token, contentItem?._id, myAnswers)
-            if (statusCode === 1) {
-                setLoading(false)
-                console.log({ data });
+            const res = await attemptQuiz(userdata?.token, contentItem?._id, myAnswers)
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+                const { data } = res;
+                if (data) {
+                    toast.success(message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+
+                    setLoading(false)
+
+                }
 
             }
 
         } catch (error) {
             setLoading(false)
-            console.log({ error });
+            toast.error(error, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
     }
 
@@ -689,7 +726,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
                                                         {opt.title}
                                                     </label>
 
-                                                </Answer> 
+                                                </Answer>
 
                                             ))}
 
@@ -704,10 +741,10 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
                                                 <label for="file">
                                                     <input
                                                         type="file"
-                                                        // value={opt._id}
-                                                        // name="answers"
-                                                        // onChange={e => handleInputChange(e, ques?._id, index)} 
-                                                        />
+                                                    // value={opt._id}
+                                                    // name="answers"
+                                                    // onChange={e => handleInputChange(e, ques?._id, index)} 
+                                                    />
                                                 </label>
                                             </Answer>
 
@@ -741,7 +778,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
                                 </button>
                             )
                             :
-                            <QuizButton onClick={() => AnswerQuiz("mutiple")} disabled={(+contentItem?.attempts) >= (+contentItem?.maxAttempts) }>
+                            <QuizButton onClick={() => AnswerQuiz("mutiple")} disabled={(+contentItem?.attempts) >= (+contentItem?.maxAttempts)}>
                                 Submit
                             </QuizButton>
                     }
@@ -1093,10 +1130,11 @@ const Classroom = () => {
             {isLoading && <Loader />}
 
             <Navbar>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div className='navbarright'>
                     <MenuButton onClick={e => setShowMobile(_ => true)}>
                         <MdMenu />
                     </MenuButton>
+    
                     <h5 style={{ margin: 0 }}><Link to={`/student/console/myclasses`} style={{ color: "#fff" }}>Classroom</Link></h5>
                 </div>
                 <NavLeft>
@@ -1125,7 +1163,7 @@ const Classroom = () => {
                     // setActive={setActive}
                     />
                 </Backdrop>
-                
+
                 <Sidebar
                     isMobile={false} modules={modules}
                     setContents={setContents}
@@ -1159,7 +1197,7 @@ const Classroom = () => {
                     <ClassroomMainBody>
                         <BodyInfo>
                             <h3>{bodyTitle}</h3>
-                            <CustomButton>Ask tutor a question</CustomButton>
+                            {/* <CustomButton>Ask tutor a question</CustomButton> */}
                         </BodyInfo>
 
                         <BodyContent>
