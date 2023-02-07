@@ -149,7 +149,10 @@ const LiveChat = () => {
 								<AiOutlineMenu />
 							</i>
 							<h6 className="chat_title">Chats</h6>
-							<button onClick={openCreateGroup}>Create group</button>
+							{
+								userData.userType !== "student" &&
+								<button onClick={openCreateGroup}>Create group</button>
+							}
 						</Top>
 
 						<Search>
