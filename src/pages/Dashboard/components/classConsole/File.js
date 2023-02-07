@@ -362,7 +362,7 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 
 	return (
 		<div className={`filecard ${type === TYPES?.noPreview && "small__filecard"}`}>
-			{(type.includes("video") || type.includes("image")) && (
+			{(type.includes("video") || (type.includes("image") && !type.includes("pdf"))) && (
 				<div className="filetop">
 					{type === "video/mp4" || type.includes("video") ? (
 						<video
@@ -382,7 +382,7 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 				</div>
 			)}
 
-			{(type === "application/pdf" ||
+			{(type === "application/pdf" || type.includes("pdf") ||
 				type ===
 				"application/vnd.openxmlformats-officedocument.presentationml.presentation") && (
 					<div className="filetop">
@@ -492,7 +492,7 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
 							borderRadius: "8px",
 						}}
 					></video>
-				) : type === "application/pdf" ? (
+				) : type === "application/pdf" || type.includes("pdf") ? (
 					<Pdf document={file} />
 				) : (
 					<img
@@ -509,7 +509,7 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
 
 function Pdf({ document }) {
 	const [numPages, setNumPages] = useState(null);
-	const [pageNumber, setPageNumber] = useState(1);
+	const [pageNumber, setPageNumber] = useState(10);
 
 	function onDocumentLoadSuccess({ numPages }) {
 		setNumPages(numPages);

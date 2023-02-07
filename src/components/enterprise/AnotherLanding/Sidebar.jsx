@@ -73,7 +73,7 @@ const SideBar = ({ showSidebar, toggleSidebar }) => {
 					<Link to={`/manage`}>Manage</Link>
 				</li>
 				<li>
-					<Link to={`/learn-with-gotocourse`}>Learn with Gotocourse</Link>
+					<Link to={`/learn-on-gotocourse`}>Learn with Gotocourse</Link>
 				</li>
 				<li>
 					<Link to={`/pricing`}>Pricing</Link>

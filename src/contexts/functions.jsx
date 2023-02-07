@@ -5811,19 +5811,27 @@ export const teacherConsoleFunctions = {
         }
     },
 
-    approveStudent: async function (token, id, _data) {
+    addToGroup: async function (token, id, _data) {
         try {
-            const res = await axios.delete(`${baseURL}//classes/creator-suite/file/${id}`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                },
-                validateStatus: status => {
-                    return status >= 200 && status <= 505;
-                }
-            })
+
+            const res = await axios.post(`${baseURL}/classes/teacher/group/add/${id}`,
+                JSON.stringify(_data),
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
             if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
-            return { ...res.data, success: true };
+            return {
+                ...res.data,
+                success: true
+            }
+
         } catch (err) {
             if (err.statusCode === 2) {
                 localStorage.clear()

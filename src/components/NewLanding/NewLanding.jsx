@@ -76,6 +76,8 @@ import Headstart from "./Headstart";
 import Pathfinder from "./Pathfinder";
 import { useIntercom } from "react-use-intercom";
 import Tutorial from "./Tutorial";
+import Helmet from 'react-helmet'
+
 
 const NewLanding = () => {
 
@@ -88,6 +90,12 @@ const NewLanding = () => {
   },[])
 
   return (
+    <>
+      <Helmet>
+        <title>Gotocourse</title>
+        <meta property="og:site_name" content="Gotocourse" />
+        <meta name="description" content="Gotocourse" />
+      </Helmet>
     <Layout background="blue">
       <Hero />
       <Stats />
@@ -131,6 +139,7 @@ const NewLanding = () => {
       {/* <Testimonials type="newLanding" /> */}
       {/* <Overview /> */}
     </Layout>
+    </>
   );
 };
 export default NewLanding;

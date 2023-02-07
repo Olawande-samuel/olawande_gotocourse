@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import styled from 'styled-components';
 import { MdCollectionsBookmark } from 'react-icons/md';
 import { Paper } from '@mui/material';
@@ -6,22 +6,33 @@ import { MdAttachFile, MdNote, MdQuiz, MdOutlineLock, MdCheckCircle } from 'reac
 import { Attachment } from "./";
 import { useLocalStorage } from '../../../../../hooks';
 import { KEY } from '../../../../../constants';
-import { useAuth } from '../../../../../contexts/Auth';
-import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { BiCaretDown, BiCaretUp } from 'react-icons/bi';
 
 const ModuleContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
     margin-top: 10px;
+    /* border: 2px solid red; */
+    background: #004DB6;
+    /* background: var(--theme-blue); */
+    border-radius: 10px;
 `;
 
 const ModuleInfo = styled.div`
-    border-bottom: 1px solid rgba(0,0,0,.12);
+    /* border: 2px solid green; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+    /* border-bottom: 1px solid rgba(0,0,0,.12); */
     width: 100%;
     padding: 20px;
-    color: #222;
+    /* color: #222; */
+    color: #fff;
+   
 `;
 
 const ModuleAttachments = styled.div`
@@ -37,8 +48,13 @@ const AttachmentContainer = styled(Paper)`
     justify-content: space-between;
     // border: 2px solid red !important;
     width: 100%;
-    // background-color: ${({ active }) => active ? 'rgb(226, 231, 255)' : 'transparent !important'};
-    // background-color: ${({ active }) => active ? 'red !important' : 'transparent !important'};
+    border: 1px solid #fff !important;
+    background: #004DB6 !important;
+    color: #fff !important;
+
+    /* color:  ${({ active }) => active ? 'var(--theme-blue)' : '#fff'}; */
+    /* background:  ${({ active }) => active ? '#fff' : 'transparent !important'}; */
+
     border-radius: 10px !important;
     margin-bottom: 10px;
     padding: 10px;
@@ -53,7 +69,7 @@ const AttachmentInfo = styled.div`
     // border: 2px solid green !important;
 
     & > svg {
-        color: var(--textBlue);
+        color: #fff;
     }
 
     & h5 {
@@ -76,11 +92,11 @@ justify-content: space-between;
 
 
 const CompleteIcon = styled(MdCheckCircle)`
-    color: ${props => props.$isComplete ? 'var(--textBlue)' : 'rgba(0,0,0,.2)'};
+    color: ${props => props.$isComplete ? '#fff' : 'rgba(0,0,0,.2)'};
 `
 
 const Locked = styled(MdOutlineLock)`
-    color:   ${props => props.$isComplete ? 'var(--textBlue)' : 'rgba(0,0,0,.2)'};
+    color:   ${props => props.$isComplete ? '#fff' : 'rgba(0,0,0,.2)'};
 `
 
 
@@ -91,7 +107,7 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
     const [active, setActive] = useState(false)
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams();
-
+    const [details, showDetails] = useState(false)
 
 
     const { getItem } = useLocalStorage()
@@ -106,8 +122,8 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
 
     const getStatus = (contentId, items, type) => {
         // console.log({contentId}, {items}, {type});
-        if(type ==="FILE_VIDEO"){
-            let all = items.filter(item =>item?.contentId === contentId) ;
+        if (type === "FILE_VIDEO") {
+            let all = items.filter(item => item?.contentId === contentId);
             return (all?.filter(content => content?.completedBy?.includes(userdata.id))?.length === all?.length) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />
 
         }
@@ -133,9 +149,21 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
 
     return (
         <ModuleContainer  >
-            <ModuleInfo>
+            <ModuleInfo onClick={() => showDetails(!details)}>
                 <MdCollectionsBookmark /> {title}
+
+                <i>
+                    {details ? (
+                        <BiCaretUp  />
+                    ) : (
+                        <BiCaretDown />
+                    )}
+                </i>
+
+
             </ModuleInfo>
+
+            {details &&
             <ModuleAttachments>
                 {/* {
                     attach.filter(a => a.domain === attachments._id).map((a, i) => (
@@ -163,7 +191,7 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
                                 setLocked(false)
                                 return;
 
-                            }else{
+                            } else {
                                 setLocked(true)
                                 setContents([])
                                 return;
@@ -171,10 +199,13 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
                             }
 
                         }}>
+
+
                         <AttachmentInfo >
                             {icon(content?.type)}
                             <h5>{content?.title}</h5>
                         </AttachmentInfo>
+                        
                         <AttachmentIcon>
                             {getStatus(content?.contentId, content?.items, content?.type)}
                             {getLockedStatus(content?.contentId, content?.items, content?.isLocked)}
@@ -185,6 +216,7 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
 
                 ))}
             </ModuleAttachments>
+}
         </ModuleContainer>
     )
 }

@@ -22,6 +22,8 @@ import { ViewModal } from '../../components/classConsole/File';
 import emptyImg from "../../../../images/empty.png"
 import ReactQuill from 'react-quill';
 import Loader from '../../../../components/Loader';
+import { Document, Page } from 'react-pdf';
+
 
 const Container = styled.div`
 position: relative;
@@ -92,7 +94,9 @@ const Navbar = styled.nav`
     left: 0;
     right: 0;
     padding: 20px;
-    background-color: var(--textBlue);
+    /* background-color: var(--textBlue); */
+    background: #004DB6;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -440,6 +444,13 @@ const NoteComponent = (contentItem) => {
 const FileComponent = (contentItem) => {
     // console.log({ contentItem });
     const [open, setOpen] = useState(false)
+    const [numPages, setNumPages] = useState(null);
+    const [pageNumber, setPageNumber] = useState(1);
+
+    function onDocumentLoadSuccess({ numPages }) {
+        setNumPages(numPages);
+    }
+
 
     // console.log(contentItem.contentItem);
 
@@ -448,7 +459,14 @@ const FileComponent = (contentItem) => {
 
         if (val?.split('/')[0] === "video") {
             return "video"
-        } else return "image"
+        } else if (val?.split('/')[1] === "pdf") {
+            return "pdf"
+        } else if ((val?.split('/')[1] === "csv") || (val?.split('/')[1] === "clsx")) {
+            return "csv"
+        } if ((val?.split('/')[1] === "pptx") || (val?.split('/')[1] === "ppt") || (val?.split('/')[1] === "doc") || (val?.split('/')[1] === "docx")) {
+            return "doc"
+        }
+        else return "image"
 
     }
 
@@ -522,7 +540,43 @@ const FileComponent = (contentItem) => {
 
                         </div>
                         :
-                        <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem?.contentItem?.fileName}`} controls controlsList="nodownload"></video>
+
+                        getExtention(contentItem?.contentItem?.type) === "pdf" ?
+                            <div className="pdf">
+
+
+                                <Document
+                                    file={{
+                                        url: contentItem?.contentItem?.fileUri,
+                                    }}
+                                    onLoadSuccess={onDocumentLoadSuccess}
+                                >
+                                    <Page pageNumber={pageNumber} width={800} />
+                                </Document>
+
+
+
+                            </div>
+                            :
+                            getExtention(contentItem?.contentItem?.type) === "csv" ?
+                                <div className="csv">
+
+                                </div>
+                                :
+
+                                getExtention(contentItem?.contentItem?.type) === "doc" ?
+                                    <div className="doc">
+                                        <object
+                                            type={"docx"}
+                                            data={contentItem?.contentItem?.fileUri}
+                                            width="100%"
+                                            height="200"
+                                            aria-label={contentItem?.contentItem?.fileUri}
+
+                                        ></object>
+                                    </div>
+                                    :
+                                    <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem?.contentItem?.fileName}`} controls controlsList="nodownload"></video>
                     }
 
                 </FileDisplay>
@@ -770,7 +824,7 @@ const Classroom = () => {
 
     const totalItem = useMemo(() => {
 
-        let length = reduceContent?.length
+        let length = reduceItem?.length
         let isCompleted = reduceItem?.filter(item => item.completedBy?.includes(userdata.id))
         let isattempted = reduceItem?.filter(item => item.attemptedBy?.includes(userdata.id))
 
@@ -997,8 +1051,8 @@ const Classroom = () => {
         // console.log("token", userdata?.token);
 
         let ids = [];
-        contentsId.map(content =>  {
-            ids.push( content.fileId)
+        contentsId.map(content => {
+            ids.push(content.fileId)
 
         })
 
@@ -1024,6 +1078,7 @@ const Classroom = () => {
     console.log({ reduceContent });
     console.log({ reduceItem });
     console.log({ contents });
+    console.log({ totalItem });
 
     return (
         <Container>
@@ -1126,7 +1181,7 @@ const Classroom = () => {
                                             onClick={() => handleFileCompleted(contents[0]?.contentId, contents, "files")}
                                         >
                                             Mark as Completed
-                                        </MarkButton> 
+                                        </MarkButton>
                                     </QuizAction>
                                 </>
 
