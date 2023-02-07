@@ -132,7 +132,7 @@ const Sidebar = ({ modules,setContents,setPickedType,setBodyTitle,reduceContent,
                 }
                 <div ref={elementRef}>
                     {
-                        modules?.map((module, id) =>
+                        modules?.sort((a,b) => a.order - b.order).map((module, id) =>
                             <Module
                                 title={module.name}
                                 // active={active}
