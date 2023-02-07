@@ -128,6 +128,11 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
 
         }
 
+        if(type === "QUIZ"){
+            let all = items.filter(item => item?.contentId === contentId);
+            return (all?.filter(content => content?.attemptedBy?.includes(userdata.id))?.length === all?.length) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon /> 
+        }
+
         let findItem = items.find(item => item.contentId === contentId);
         if (findItem) {
             return findItem?.completedBy?.includes(userdata.id) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />

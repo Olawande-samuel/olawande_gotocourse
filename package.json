@@ -5,6 +5,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^34.2.0",
     "@ckeditor/ckeditor5-react": "^5.0.2",
+    "@cyntler/react-doc-viewer": "^1.10.3",
     "@date-io/dayjs": "^2.16.0",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
