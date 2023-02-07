@@ -211,7 +211,8 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
             <AiFillClockCircle />
           </i>
           <span>
-            {startTime ? startTime : "Now"} - {endTime ? endTime : <IoInfiniteOutline />} UTC{ new Date().getTimezoneOffset()/10}
+            {/* {startTime ? startTime : "Now"} - {endTime ? endTime : <IoInfiniteOutline />} UTC{ new Date().getTimezoneOffset()/10} */}
+            {startTime ? startTime : "Now"} - {endTime ? endTime : <IoInfiniteOutline />} CST
           </span>
         </div>
         <div>
@@ -431,7 +432,7 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
                   className="form-control"
                   onFocus={() => setInputType({ ...inputType, startTime: true })}
                   onBlur={() => setInputType({ ...inputType, startTime: false })}
-                  placeholder="Start Time"
+                  placeholder="Start Time (CST)"
                   onChange={handleChange}
                   value={formstate?.startTime}
                 />
@@ -457,7 +458,7 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
                   className="form-control"
                   onFocus={() => setInputType({ ...inputType, endTime: true })}
                   onBlur={() => setInputType({ ...inputType, endTime: false })}
-                  placeholder="End Time"
+                  placeholder="End Time (CST)"
                   onChange={handleChange}
                   value={formstate?.endTime}
                 />
