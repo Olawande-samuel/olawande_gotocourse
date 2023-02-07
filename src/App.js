@@ -482,12 +482,12 @@ function MyApp({ mixpanel }) {
 										<Route path=":id" element={<Out />}>
 											<Route index element={<StudentChatModule />} />
 										</Route>
-										{/* <Route path="mail" element={<Out />}> 
-                          <Route index element={<ChatComponent />} />
-                          <Route path="details" element={<StudentGroupContent />} />
-                          <Route path="group/:groupID" element={<StudentGroupContent />} />
-                          <Route path="chat/:userId" element={<MailDetail />} />
-                        </Route> */}
+										<Route path="mail" element={<Out />}> 
+											<Route index element={<ChatComponent />} />
+											<Route path="details" element={<StudentGroupContent />} />
+											<Route path="group/:groupID" element={<StudentGroupContent />} />
+											{/* <Route path="chat/:userId" element={<MailDetail />} /> */}
+										</Route>
 										<Route path="class" element={<Out />}>
 											<Route path=":classId" element={<Out />}>
 												<Route path="live-class" element={<Out />}>
