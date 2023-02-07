@@ -24,6 +24,11 @@ import { BiTrash } from "react-icons/bi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import axios from "axios";
 import UploadWidget from "./components/UploadWidget";
+import { MdOutlineNavigateBefore, MdOutlineNavigateNext } from "react-icons/md";
+
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -483,7 +488,7 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
 					<video
 						src={`${file}`}
 						controls
-						autoPlay
+						autoPla
 						type={type?.includes("matroska") && type}
 						style={{
 							width: "100%",
@@ -494,14 +499,17 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
 					></video>
 				) : type === "application/pdf" || type.includes("pdf") ? (
 					<Pdf document={file} />
-				) : (
+				) : type.includes("image") && !type.includes("pdf") ? (
 					<img
 						src={creator ? `${process.env.REACT_APP_IMAGEURL}${file}` : file}
 						alt=""
 						className="w-100 h-100"
 						style={{ objectFit: "contain" }}
 					/>
-				)}
+				)
+				:
+					<DocumentViewer file={file} />
+			}
 			</Box>
 		</Modal>
 	);
@@ -515,8 +523,19 @@ function Pdf({ document }) {
 		setNumPages(numPages);
 	}
 
+	function prev(){
+		if(pageNumber !== 1){
+			setPageNumber(pageNumber - 1)
+		}
+	}
+	function next(){
+		if(pageNumber < numPages){
+			setPageNumber(pageNumber + 1)
+		}
+	}
+
 	return (
-		<div className="">
+		<div className="pdf_container">
 			<Document
 				file={{
 					url: document,
@@ -528,7 +547,24 @@ function Pdf({ document }) {
 			<p>
 				Page {pageNumber} of {numPages}
 			</p>
-			<div className="pdf_controls">Controls</div>
+			<div className="pdf_controls">
+				<button className="prev" disabled={pageNumber === 1} onClick={prev} >
+					<MdOutlineNavigateBefore  />
+				</button>
+				<span>{pageNumber} of {numPages}</span>
+				<button className="next" disabled={pageNumber === numPages} onClick={next}>
+					<MdOutlineNavigateNext />
+				</button>
+			</div>
 		</div>
 	);
+}
+
+function DocumentViewer({file}){
+	const docs = [
+		{ uri: file }, // Remote file
+	];
+	
+	return <DocViewer documents={docs} prefetchMethod="GET" pluginRenderers={DocViewerRenderers} />;
+	
 }
