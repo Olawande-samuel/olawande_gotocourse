@@ -668,7 +668,7 @@ function ResultCards({studentId, totalScore,quizId, graded, updatedAt}){
     const [open, setOpen] = useState(false)
     return (
         <div className="quiz__card">
-            <p className="quiz__card_student_name fw-bold">Olunloyo Adegoke</p>
+            {/* <p className="quiz__card_student_name fw-bold">Olunloyo Adegoke</p> */}
             <div>
                 <span>Actual score: </span>
                 <span>{totalScore}</span>
@@ -753,11 +753,11 @@ function ScoreSection(){
         <div className="quiz__score">
             <div>
                 <span>Name: </span>
-                <span>Olunloyo Adegoke</span>
+                {/* <span>Olunloyo Adegoke</span> */}
             </div>
             <div className="mb-2">
                 <span>Student ID: </span>
-                <span>Olunloyo Adegoke</span>
+                {/* <span>Olunloyo Adegoke</span> */}
             </div>
 
             <form className="quiz__score_form" >
