@@ -673,7 +673,7 @@ function addSuiteContentToClass(id, contentName, originalName){
                             {getDomainContent?.data?.data?.filter(item => item.domain === _id).sort((a, b) => a.order - b.order).map((item, i) => (
                                   <Draggable draggableId={item._id} index={i}>
                                     {
-                                      (provided)=> (g
+                                      (provided)=> (
                                         <li 
                                         key={item._id} 
                                         onClick={() => handleContentNavigation(item._id, item.type, item.domain, item.classId)} 
