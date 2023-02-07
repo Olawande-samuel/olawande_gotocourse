@@ -66,16 +66,16 @@ const SideBar = ({ showSidebar, toggleSidebar }) => {
 	return (
 		<Side showSidebar={showSidebar}>
 			<ul>
-                <div className="firstitems d-flex flex-column align-items-center justify-content-center gap-4">
-                    {/* <a href="" className="d-inline-flex"> */}
-                    <Link to="/create-with-gotocourse">
-                        <button className="first__btn">Create with Gotocourse</button>
-                    </Link>
-                    {/* </a> */}
-                    <Link to="/learn-with-gotocourse" className="d-inline-flex">
-                        <button className="second__btn">Learn on Gotocourse</button>
-                    </Link>
-                </div>
+				<div className="firstitems d-flex flex-column align-items-center justify-content-center gap-4">
+					{/* <a href="" className="d-inline-flex"> */}
+					<Link to="/create-with-gotocourse">
+						<button className="first__btn">Create with Gotocourse</button>
+					</Link>
+					{/* </a> */}
+					<Link to="/learn-on-gotocourse" className="d-inline-flex">
+						<button className="second__btn">Learn on Gotocourse</button>
+					</Link>
+				</div>
 			</ul>
 
 			<div className="empty" onClick={toggleSidebar}></div>
