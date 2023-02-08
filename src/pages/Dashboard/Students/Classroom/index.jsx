@@ -79,9 +79,11 @@ const ClassroomMain = styled.div`
     width: min(100% - 3rem, 950px);
     margin-inline: auto;
     height: 100%;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     display: flex;
     flex-direction: column;
+    height: 85vh;
+    overflow-y: auto;
 `;
 
 
