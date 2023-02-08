@@ -194,7 +194,7 @@ const iconData = [
 
 
 
-    const studentAssessMent =  pathname.includes("/student/console/myclasses") || pathname.includes("/student/console/assessments");
+    const studentAssessMent =  pathname.includes("/student/console/myclasses") || pathname.includes("/student/console/assessments") || pathname.includes("/student/console/messages");
     // console.log({studentAssessMent});
 
   const studentpath = pathname.split("/")[1] === "student";
@@ -466,6 +466,17 @@ function Sidebar({ Toggle, side, toggleModule }) {
                   <button>
                     <Link to={"assessments"}>
                       <span>Assessments</span>
+                      {/* <i>
+                        <BsThreeDotsVertical />
+                      </i> */}
+                    </Link>
+                  </button>
+                </div>
+
+                <div className={`${style.create_content_button} ${style.blue}`}>
+                  <button>
+                    <Link to={"messages"}>
+                      <span>My Messages</span>
                       {/* <i>
                         <BsThreeDotsVertical />
                       </i> */}

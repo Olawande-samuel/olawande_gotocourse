@@ -485,6 +485,8 @@ function FileCard({ title, fileName, contentId, type, _id, fileId , all}) {
 }
 
 export function ViewModal({ open, setOpen, file, creator, type, title }) {
+	console.log({file});
+	console.log({type});
 	const style = {
 		position: "absolute",
 		bottom: 0,
@@ -521,12 +523,12 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
 					/>
 				</div>
 				<p>{title}</p>
-				{type === "video/mp4" || type?.includes("video") ? (
+				{ type && type === "video/mp4" || type?.includes("video") ? (
 					<video
 						src={`${file}`}
 						controls
 						autoPla
-						type={type?.includes("matroska") && type}
+						type={type && type?.includes("matroska") }
 						style={{
 							width: "100%",
 							height: "100%",
@@ -534,9 +536,9 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
 							borderRadius: "8px",
 						}}
 					></video>
-				) : type === "application/pdf" || type.includes("pdf") ? (
+				) : type === "application/pdf" || type?.includes("pdf") ? (
 					<Pdf document={file} />
-				) : type.includes("image") && !type.includes("pdf") ? (
+				) : type?.includes("image") && !type?.includes("pdf") ? (
 					<img
 						src={creator ? `${process.env.REACT_APP_IMAGEURL}${file}` : file}
 						alt=""

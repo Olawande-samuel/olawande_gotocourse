@@ -184,6 +184,7 @@ import {
 } from "./pages/Dashboard/Mentors";
 import { ConsoleClass } from "./pages/Dashboard/Teachers/Bootcamps";
 import ConsoleClasses, {
+	ConsoleMessages,
 	MyClass,
 } from "./pages/Dashboard/components/classConsole/ConsoleClasses";
 import ConsoleAssessments from "./pages/Dashboard/components/classConsole/ConsoleAssessments";
@@ -502,6 +503,7 @@ function MyApp({ mixpanel }) {
 										</Route>
 									</Route>
 									<Route path="assessments" element={<ConsoleAssessments />} />
+									<Route path="messages" element={<ConsoleMessages />} />
 								</Route>
 								<Route
 									path="class-console/class/:id"
