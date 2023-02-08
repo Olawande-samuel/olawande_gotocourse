@@ -18,6 +18,12 @@ const ModuleContainer = styled.div`
     background: #004DB6;
     /* background: var(--theme-blue); */
     border-radius: 10px;
+
+    /* &:hover{
+        color: #004DB6;
+        background: #fff;
+ 
+    } */
 `;
 
 const ModuleInfo = styled.div`
@@ -32,6 +38,10 @@ const ModuleInfo = styled.div`
     padding: 20px;
     /* color: #222; */
     color: #fff;
+
+    /* &:hover{
+        color: #004DB6; 
+    } */
    
 `;
 
