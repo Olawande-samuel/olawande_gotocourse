@@ -13,7 +13,8 @@ import { useMemo } from 'react';
 
 
 const SidebarContainer = styled.div`
-    background-color: rgb(236, 239, 255);
+    /* background-color: rgb(236, 239, 255); */
+    background-color: var(--theme-blue);
     width: 300px;
     overflow: hidden;
     display: flex;
@@ -42,6 +43,8 @@ const SidebarBody = styled.div`
     display: flex;
     flex-direction: column;
     padding: 0 .5rem;
+    color: #fff ;
+
 
     .bodytop{
         height: 20%;
@@ -52,8 +55,9 @@ const SidebarBody = styled.div`
 
     .bodymiddle{
         height: 65%;
-        overflow-y: scroll;
+        overflow-y: auto;
         padding: 1rem 0;
+
         /* border: 2px solid yellow; */
 
         &::-webkit-scrollbar{
@@ -113,7 +117,8 @@ height: 10%;
 
 
 const Progress = styled.progress`
-    accent-color: var(--textBlue);
+    accent-color: var(--theme-orange);
+    /* accent-color: var(--textBlue); */
 `;
 
 
@@ -129,7 +134,7 @@ const ProgressContainer = styled.div`
         margin: 0;
         // color: var(--gray);
         font-size: 0.9rem;
-        color: #000;
+        color: #fff;
     }
 `;
 
@@ -137,6 +142,7 @@ const ProgressContainer = styled.div`
 export const CustomButton = styled(Button)`
     text-transform: capitalize !important;
     font-size: 0.8rem !important;
+
 `;
 
 
@@ -164,7 +170,8 @@ const Sidebar = ({ modules, setContents, setPickedType, setBodyTitle, reduceCont
                 </SidebarTop> */}
 
                 <div className="bodytop">
-                    <CustomButton sx={{ marginInline: 'auto', width: '50%' }}>
+                    <CustomButton sx={{ marginInline: 'auto', width: '50%',  color:"#fff" 
+ }}>
                         Refresh topics
                     </CustomButton>
                     {reduceContent?.length > 0 &&
@@ -197,7 +204,7 @@ const Sidebar = ({ modules, setContents, setPickedType, setBodyTitle, reduceCont
 
                 </div>
                 <div className="bodybottom">
-                    <button className="back_button" style={{ width: "100%" }} onClick={() => navigate('/student')}>Back to Dashboard</button>
+                    <button className="back_button" style={{ width: "100%" }} onClick={() => navigate('/student/console/myclasses')}>Back to Dashboard</button>
 
                 </div>
 
