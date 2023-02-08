@@ -631,11 +631,11 @@ function ResultPanel({data}){
 
     const {getItem} = useLocalStorage()
     const userdata = getItem(KEY)
-    const {teacherConsoleFunctions: {fetchAttemptedQuiz}} = useAuth()
+    const {teacherConsoleFunctions: {newFetchAttemptedQuiz}} = useAuth()
     const [results, setResults] = useState([])
     console.log({data})
 
-    const fetchStudentsQuizzes = useQuery(["fetchStudentsQuizzes", userdata.token, data?._id], ()=> fetchAttemptedQuiz(userdata.token, data._id), {
+    const fetchStudentsQuizzes = useQuery(["fetchStudentsQuizzes", userdata.token, data?._id], ()=> newFetchAttemptedQuiz(userdata.token, data._id), {
         onSuccess: (res)=>{
             if(res.statusCode === 1){
                 setResults(res.data)
