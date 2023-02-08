@@ -5924,6 +5924,39 @@ export const teacherConsoleFunctions = {
             }
         }
     },
+    editContentItem: async function (token, id, data) {
+        try {
+            const res = await axios.patch(`${baseURL}/classes/content/file/update/${id}`, JSON.stringify(data),
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
     approveStudent: async function (token, id, _data) {
         try {
 
@@ -6027,6 +6060,39 @@ export const teacherConsoleFunctions = {
     fetchAttemptedQuiz: async function (token, id) {
         try {
             const res = await axios.get(`${baseURL}/classes/contents/quizes/${id}`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    newFetchAttemptedQuiz: async function (token, id) {
+        try {
+            const res = await axios.get(`${baseURL}/classes/contents/quizes/students/${id}`,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,
