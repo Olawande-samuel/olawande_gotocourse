@@ -64,6 +64,8 @@ const LiveChat = () => {
 	const { shutdown } = useIntercom();
 	const { pathname } = useLocation();
 	const [open, setOpen] = useState(false);
+	const {id} = useParams()
+	console.log({id})
 
 	useEffect(() => {
 		shutdown();
@@ -100,9 +102,9 @@ const LiveChat = () => {
 
 		switch (pathArray) {
 			case "teacher":
-				return "/teacher";
+				return "/teacher/class-console/class/" + id;
 			case "student":
-				return "/student";
+				return "/student/class-console/class/" + id;
 			default:
 				return "/admin";
 		}
