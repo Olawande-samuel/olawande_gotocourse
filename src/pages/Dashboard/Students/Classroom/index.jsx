@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Breadcrumbs, IconButton, Paper, Backdrop, Tooltip } from "@mui/material";
-import { MdNavigateNext, MdShare, MdMoreVert, MdMenu, MdMessage } from "react-icons/md";
+import { MdNavigateNext, MdShare, MdMoreVert, MdMenu, MdMessage, MdDelete } from "react-icons/md";
 import { BiCloudDownload } from "react-icons/bi";
 import { FaCaretRight, FaCaretLeft } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
@@ -25,12 +25,15 @@ import Loader from '../../../../components/Loader';
 import { Document, Page } from 'react-pdf';
 import { AdvancedError } from '../../../../classes';
 import { toast } from 'react-toastify';
+import UploadWidget from '../../components/classConsole/components/UploadWidget';
 
 
 const Container = styled.div`
 position: relative;
 
 `
+
+
 const IconContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -263,6 +266,7 @@ export const QuizAction = styled.div`
     justify-content: space-between;
     align-items: center;
     margin: 40px 0;
+    /* border: 2px solid red; */
 `;
 
 
@@ -288,6 +292,16 @@ const Quiz = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+
+
+    .next_button{
+        margin-top: 1rem;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid var(--theme-blue);
+        background: #fff ;
+        color:  var(--theme-blue);
+    }
 `;
 
 
@@ -391,13 +405,7 @@ font-size: 16px;
 border-radius: 10px;
 background: #EEF5FF;
 box-shadow: 0px 203px 81px rgba(0, 0, 0, 0.01), 0px 114px 68px rgba(0, 0, 0, 0.05), 0px 51px 51px rgba(0, 0, 0, 0.09), 0px 13px 28px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
-p{
 
-}
-
-span{
-
-}
 
 
 
@@ -433,6 +441,40 @@ export const Answer = styled.div`
     input{
         margin: 0 .5rem;
     }
+
+    .answerbutton{
+        margin-top: 1rem;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid var(--theme-blue);
+        background: #fff ;
+        color:  var(--theme-blue);
+    }
+
+`
+
+export const UploadContainer = styled.div`
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    input{
+        margin: 0 .5rem;
+    }
+
+    .addupload{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .answerbutton{
+            padding: .5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--theme-blue);
+            background: #fff ;
+            color:  var(--theme-blue);
+        }
+    }
+
 
 `
 
@@ -557,7 +599,7 @@ const FileComponent = (contentItem) => {
                 </PaperTop>
 
                 <FileName>
-                    <p>{contentItem.contentItem.title}</p>
+                    <p>{(getExtention(contentItem?.contentItem?.type) === "pdf") ? contentItem?.contentItem?.title?.split("_").join(" ") : contentItem?.contentItem?.title}</p>
                     <IconButton>
                         <MdMoreVert />
                     </IconButton>
@@ -590,15 +632,37 @@ const FileComponent = (contentItem) => {
             <ViewModal
                 open={open}
                 setOpen={setOpen}
-                file={getExtention(contentItem?.contentItem?.type) === "image" ?
-                    `${process.env.REACT_APP_IMAGEURL}${contentItem?.contentItem?.fileName}` :
-                    `${process.env.REACT_APP_VIDEOURL}${contentItem?.contentItem?.fileName}`
-                }
+                // file={getExtention(contentItem?.contentItem?.type) === "image" ?
+                //     `${process.env.REACT_APP_IMAGEURL}${contentItem?.contentItem?.fileName}` :
+                //     `${process.env.REACT_APP_VIDEOURL}${contentItem?.contentItem?.fileName}`
+                // }
+                file={contentItem?.contentItem?.fileName}
                 type={contentItem?.contentItem?.type}
                 title={contentItem?.contentItem?.title}
             />
 
         </div>
+    )
+}
+
+
+function WelcomeSection({ pageHandler, contentItem }) {
+    return (
+        <Quiz>
+
+            <QuizInfo>
+                <p>Description: <span>{contentItem.note}</span></p>
+                <p>Max Attempts: <span>{contentItem.maxAttempts}</span></p>
+                <p>Deadline: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })}</span></p>
+                <p>Number of submissions:  <span>{contentItem.attempts || 0}/{contentItem.maxAttempts}</span> </p>
+                <p> Provisional Result (based on Objective): <span>100.00%</span></p>
+            </QuizInfo>
+
+            <button className='next_button' onClick={pageHandler}>Get started</button>
+        </Quiz>
     )
 }
 
@@ -608,6 +672,14 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
     const [note, setNotes] = useState([])
     const [myAnswers, setMyAnswers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [fileUrl, setFileUrl] = useState("");
+    const [uploadlink, setUploadLink] = useState("")
+    const [uploads, setUploads] = useState([])
+    const [page, setPage] = useState(0);
+
+
+    function pageHandler(_) { setPage(old => old += 1); }
+    function backpageHandler(_) { setPage(old => old -= 1); }
 
 
     function setNote(text, quizId, questionId, questionIndex, quizIndex) {
@@ -654,9 +726,18 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
 
 
     const AnswerQuiz = async () => {
+        let allAnswers = [];
+        if(uploads?.length > 0 && myAnswers.length > 0){
+            allAnswers = [...myAnswers, ...uploads]
+
+        }else if (uploads?.length > 0){
+            allAnswers = uploads
+        }else allAnswers = myAnswers
+
+        // console.log({allAnswers});
         try {
             setLoading(true)
-            const res = await attemptQuiz(userdata?.token, contentItem?._id, myAnswers)
+            const res = await attemptQuiz(userdata?.token, contentItem?._id, allAnswers)
             const { message, success, statusCode } = res;
             if (!success) throw new AdvancedError(message, statusCode);
             else if (statusCode === 1) {
@@ -692,129 +773,191 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
         }
     }
 
-    console.log({ myAnswers });
+    // console.log({ myAnswers });
+    console.log({uploadlink});
 
+
+    const AddLink = (e, questionId) => {
+        e.preventDefault();
+        console.log({questionId});
+        console.log({uploadlink});
+
+        const findIndex = uploads.findIndex(up => up.questionId === questionId);
+        if (findIndex >= 0) {
+            console.log({findIndex});
+            // const findItem = uploads.find(up => up.questionId === questionId);
+            // console.log({findItem});
+            // let newItem = findItem.answers.push(uploadlink)
+            let newItem = uploads[findIndex]?.answers?.push(uploadlink)
+            console.log({newItem});
+            setUploadLink("")
+            return setUploads(uploads.splice(findIndex, 1, newItem))
+            
+        } else {
+            console.log("not found");
+            setUploads([...uploads, {
+                questionId,
+                answers: [uploadlink]
+            }
+        ])
+        setUploadLink("")
+        }
+
+    }
+
+    const removeUpload = (e, linkId, questionId) => {
+        e.preventDefault();
+
+        const findIndex = uploads.findIndex(up => up.questionId === questionId);
+        if (findIndex >= 0) {
+            const findItem = uploads.find(up => up.questionId === questionId);
+            const findLinksLength = findItem.answers.length
+            const findLinkPos = findItem.answers.findIndex(lin => lin === linkId);
+            if (findLinkPos >= 0) {
+                if (findLinksLength === 1) {
+                    return setUploads(uploads.splice(findIndex, 1))
+                }
+                const newItem = findItem.answers.splice(findLinkPos, 1)
+                return setUploads(uploads.splice(findIndex, 1, newItem))
+
+            }
+            else return;
+ 
+        }
+        else return;
+    }
+
+    console.log({ uploads });
 
     return (
         <>
-            <Quiz>
+            {
+                page === 0 ? <WelcomeSection pageHandler={pageHandler} contentItem={contentItem} /> :
 
-                <QuizInfo>
-                    <p>Description: <span>{contentItem.note}</span></p>
-                    <p>Max Attempts: <span>{contentItem.maxAttempts}</span></p>
-                    <p>Deadline: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    })}</span></p>
-                    <p>Number of submissions:  <span>{contentItem.attempts || 0}/{contentItem.maxAttempts}</span> </p>
-                    <p> Provisional Result (based on Objective): <span>100.00%</span></p>
-                </QuizInfo>
+                    <div>
+                        {contentItem?.questions?.length > 0 && contentItem?.questions.map((ques, index) => (
+                            <Accordion >
+                                <Accordion.Item eventKey={index} className="accord__body">
+                                    <Accordion.Header className="accord__header"> Question {index + 1}</Accordion.Header>
+                                    <Accordion.Body>
+                                        <QuesHeader className="queshead">
+                                            <p>Type: <span>{ques.type}</span></p>
+                                            <p>Grade: <span>{ques.grade}</span></p>
+                                        </QuesHeader>
 
-            </Quiz>
-            <div>
-                {contentItem?.questions?.length > 0 && contentItem?.questions.map((ques, index) => (
-                    <Accordion >
-                        <Accordion.Item eventKey={index} className="accord__body">
-                            <Accordion.Header className="accord__header"> Question {index + 1}</Accordion.Header>
-                            <Accordion.Body>
-                                <QuesHeader className="queshead">
-                                    <p>Type: <span>{ques.type}</span></p>
-                                    <p>Grade: <span>{ques.grade}</span></p>
-                                </QuesHeader>
+                                        <QuestionOptions>
+                                            <h4 dangerouslySetInnerHTML={{ __html: `${ques.title}` }}></h4>
 
-                                <QuestionOptions>
-                                    <h4 dangerouslySetInnerHTML={{ __html: `${ques.title}` }}></h4>
-
-                                    {
-                                        ques?.type === "THEORY" && ques?.options && ques?.options.length > 0 && ques?.options.map((opt, i) => (
-                                            <>
-                                                {opt.title}
-                                                <Answer>
-                                                    <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, opt?._id, i, index)} />
-                                                </Answer>
-
-
-                                            </>
-                                        ))
-
-
-                                    }
-
-                                    {ques?.type === "MULTIPLE_CHOICE" && ques?.options && ques?.options.length > 0 &&
-                                        <>
-
-                                            {ques?.options.map((opt, i) => (
-                                                <Answer>
-                                                    <label for={`answers${opt._id}`}>
-                                                        <input
-                                                            type="radio"
-                                                            value={opt._id}
-                                                            id={`answers${opt._id}`}
-                                                            name={`answers${ques.title}`}
-                                                            onChange={e => handleInputChange(e, ques?._id, index)} />
+                                            {
+                                                ques?.type === "THEORY" && ques?.options && ques?.options.length > 0 && ques?.options.map((opt, i) => (
+                                                    <>
                                                         {opt.title}
-                                                    </label>
-
-                                                </Answer>
-
-                                            ))}
-
-                                        </>
-                                    }
+                                                        <Answer>
+                                                            <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, opt?._id, i, index)} />
+                                                        </Answer>
 
 
-                                    {
-                                        ques?.type === "FILE" && ques?.options && ques?.options.length > 0 &&
-                                        <>
-                                            <Answer>
-                                                <label for="file">
-                                                    <input
-                                                        type="file"
-                                                    // value={opt._id}
-                                                    // name="answers"
-                                                    // onChange={e => handleInputChange(e, ques?._id, index)} 
-                                                    />
-                                                </label>
-                                            </Answer>
+                                                    </>
+                                                ))
 
 
-                                        </>
+                                            }
 
-                                    }
+                                            {ques?.type === "MULTIPLE_CHOICE" && ques?.options && ques?.options.length > 0 &&
+                                                <>
+
+                                                    {ques?.options.map((opt, i) => (
+                                                        <Answer>
+                                                            <label for={`answers${opt._id}`}>
+                                                                <input
+                                                                    type="radio"
+                                                                    value={opt._id}
+                                                                    id={`answers${opt._id}`}
+                                                                    name={`answers${ques.title}`}
+                                                                    onChange={e => handleInputChange(e, ques?._id, index)} />
+                                                                {opt.title}
+                                                            </label>
+
+                                                        </Answer>
+
+                                                    ))}
+
+                                                </>
+                                            }
 
 
-                                </QuestionOptions>
+                                            {
+                                                ques?.type === "FILE_UPLOAD" &&
+                                                <>
+                                                    <UploadContainer>
+                                                        <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+
+                                                        <div className='addupload'>
+                                                            <label for="upload">
+                                                                <input
+                                                                    placeholder='paste the file link'
+                                                                    className="w-50 form-control"
+                                                                    type="text"
+                                                                    value={uploadlink}
+                                                                    name="link"
+                                                                    onChange={e => setUploadLink(e.target.value)}
+                                                                />
+                                                            </label>
+                                                            <button className='answerbutton' onClick={(e) => AddLink(e, ques?._id,)}>Add</button>
+                                                        </div>
+
+                                                        <div className='uploadresult'>
+                                                            {
+                                                                uploads?.length > 0 && uploads?.filter(links => links.questionId === ques?._id).map(all => (
+                                                                    all?.answers?.length > 0 && all?.answers?.map((l,i) => (
+                                                                        <p onClick={(e) => removeUpload(e, l, ques?._id)} key={i}>{l}<MdDelete /> </p>
+                                                                    ))
+
+                                                                ))
+                                                            }
+
+                                                        </div>
+                                                    </UploadContainer>
+
+
+                                                </>
+
+                                            }
+
+
+                                        </QuestionOptions>
 
 
 
 
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
-                ))}
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                            </Accordion>
+                        ))}
 
-                {attemptedStatus && <small style={{ color: "var(--theme-orange)" }}>Quiz has already been submitted {contentItem?.attempts} time(s)</small>}
+                        {attemptedStatus && <small style={{ color: "var(--theme-orange)" }}>Quiz has already been submitted {contentItem?.attempts} time(s)</small>}
 
-                < QuizAction >
-                    {
-                        loading ?
-                            (
-                                <button className="button button-md log_btn w-100"
-                                    disabled={loading}>
-                                    <div className="spinner-border" role="status">
-                                        <span className="visually-hidden">Loading...</span>
-                                    </div>
-                                </button>
-                            )
-                            :
-                            <QuizButton onClick={() => AnswerQuiz("mutiple")} disabled={(+contentItem?.attempts) >= (+contentItem?.maxAttempts)}>
-                                Submit
-                            </QuizButton>
-                    }
-                </QuizAction>
+                        < QuizAction >
+                            {
+                                loading ?
+                                    (
+                                        <button className="button button-md log_btn w-100"
+                                            disabled={loading}>
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                        </button>
+                                    )
+                                    :
+                                    <QuizButton onClick={() => AnswerQuiz("mutiple")} disabled={(+contentItem?.attempts) >= (+contentItem?.maxAttempts)}>
+                                        Submit
+                                    </QuizButton>
+                            }
+                        </QuizAction>
 
-            </div>
+                    </div>
 
+            }
 
         </>
     )
@@ -1118,7 +1261,7 @@ const Classroom = () => {
 
         let ids = [];
         contentsId.map(content => {
-            ids.push(content.fileId)
+          return  ids.push(content.fileId)
 
         })
         try {
@@ -1359,6 +1502,15 @@ const Classroom = () => {
                                 </NextButton>
                             </QuizAction>
                             }
+
+                            {/* <QuizAction>
+                                <PreviousButton variant="outlined" disabled={prev} onClick={() => MoveButton("prev")}>
+                                    <FaCaretLeft />  Previous Content
+                                </PreviousButton>
+                                <NextButton variant="outlined" disabled={next} onClick={() => MoveButton("next")}>
+                                    Next Content <FaCaretRight />
+                                </NextButton>
+                            </QuizAction> */}
 
 
 

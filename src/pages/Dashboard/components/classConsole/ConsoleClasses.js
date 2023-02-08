@@ -55,7 +55,7 @@ export const AssessmentCard = styled.div`
     }
 
     .content{
-        padding: .5rem;
+        padding: .5rem 1rem;
         // border: 2px solid red;
 
         h6 {
@@ -162,6 +162,74 @@ export default function ConsoleClasses() {
                                         <h6>{x.bootcampName}</h6>
 
                                         <button>Open Class</button>
+                                    </div>
+                                </AssessmentCard>
+                            ))}
+
+                        </Grid>
+                        :
+                        // <p>no items</p>
+
+
+                        <div className="dashboard_empty">
+                            <p>No Class Available</p>
+                        </div>
+
+                }
+
+
+            </main>
+        </div>
+
+    )
+}
+
+
+export  function ConsoleMessages() {
+    const { getItem } = useLocalStorage();
+    let userdata = getItem(KEY);
+    const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps } } = useAuth();
+    const { data, isSuccess, isLoading } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
+    // console.log({ data });
+    let navigate = useNavigate()
+
+    const [search, setSearch] = useState("")
+    return (
+        <div className=''>
+            {isLoading && <Loader/>}
+            <main className='assessments'>
+                <div className="assessments__inputcontainer">
+                    <input type="text"
+                        className='assessments__input'
+                        placeholder="Search for a Class"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)} />
+                    <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
+                </div>
+
+                {
+                    data?.data?.filter(item => item.status === "paid")?.length > 0 ?
+                        <Grid>
+                            {data?.data?.filter(item => item.status === "paid" &&
+                                item?.bootcampName
+                                    .toLowerCase()
+                                    .includes(search?.toLowerCase())
+
+                            ).map((x, id) => (
+                                <AssessmentCard key={x.bootcampId} style={{ cursor: "pointer" }} onClick={() => {
+                                    navigate(`/student/console/myclasses/${x.bootcampId}`, {
+                                        state: {
+                                            bootcamp: x
+                                        }
+                                    })
+                                }}>
+                                    <div className="img">
+                                        <img src={x.bootcampImg} alt="" />
+                                    </div>
+                                    <div className="content">
+                                        <h6>{x.bootcampName}</h6>
+
+                                        <button>Open Messages</button>
                                     </div>
                                 </AssessmentCard>
                             ))}
