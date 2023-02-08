@@ -1,12 +1,9 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { MdCollectionsBookmark } from 'react-icons/md';
 import { Paper } from '@mui/material';
-import { MdAttachFile, MdNote, MdQuiz, MdOutlineLock, MdCheckCircle } from 'react-icons/md';
+import {MdOutlineLock, MdCheckCircle } from 'react-icons/md';
 import { Attachment } from "./";
-import { useLocalStorage } from '../../../../../hooks';
-import { KEY } from '../../../../../constants';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import { BiCaretDown, BiCaretUp } from 'react-icons/bi';
 
 const ModuleContainer = styled.div`
@@ -14,9 +11,7 @@ const ModuleContainer = styled.div`
     flex-direction: column;
     width: 100%;
     margin-top: 10px;
-    /* border: 2px solid red; */
     background: #004DB6;
-    /* background: var(--theme-blue); */
     border-radius: 10px;
 
     /* &:hover{
@@ -114,52 +109,9 @@ const Locked = styled(MdOutlineLock)`
 const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData, setLocked
     // setActive, active,
 }) => {
-    const [active, setActive] = useState(false)
-    const navigate = useNavigate()
-    const [searchParams, setSearchParams] = useSearchParams();
     const [details, showDetails] = useState(false)
 
 
-    const { getItem } = useLocalStorage()
-    const userdata = getItem(KEY)
-    // const { consoleFunctions: { fetchStudentDomains, fetchStudentQuiz, fetchStudentFile, fetchStudentNote, markAsCompleted }, } = useAuth();
-
-
-    let icon = (type) => {
-        return type === "FILE_VIDEO" ? <MdAttachFile /> : type === "NOTE" ? <MdNote /> : <MdQuiz />
-    }
-
-
-    const getStatus = (contentId, items, type) => {
-        // console.log({contentId}, {items}, {type});
-        if (type === "FILE_VIDEO") {
-            let all = items.filter(item => item?.contentId === contentId);
-            return (all?.filter(content => content?.completedBy?.includes(userdata.id))?.length === all?.length) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />
-
-        }
-
-        if(type === "QUIZ"){
-            let all = items.filter(item => item?.contentId === contentId);
-            return (all?.filter(content => content?.attemptedBy?.includes(userdata.id))?.length === all?.length) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon /> 
-        }
-
-        let findItem = items.find(item => item.contentId === contentId);
-        if (findItem) {
-            return findItem?.completedBy?.includes(userdata.id) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />
-        }
-        return <CompleteIcon />
-    }
-
-    const getLockedStatus = (contentId, items, lock) => {
-        // console.log({ contentId }, { items }, { lock });
-        let findItem = items.find(item => item.contentId === contentId);
-        if (findItem) {
-            return lock ? <Locked $isComplete={true} /> : <Locked />
-        }
-        return <Locked />
-    }
-
-    // console.log("data", contentsData);
 
 
     return (
@@ -169,7 +121,7 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
 
                 <i>
                     {details ? (
-                        <BiCaretUp  />
+                        <BiCaretUp />
                     ) : (
                         <BiCaretDown />
                     )}
@@ -179,59 +131,59 @@ const Module = ({ title, setContents, setBodyTitle, setPickedType, contentsData,
             </ModuleInfo>
 
             {details &&
-            <ModuleAttachments>
-                {/* {
-                    attach.filter(a => a.domain === attachments._id).map((a, i) => (
-                        <Attachment 
-                        active={activeMedia} 
-                        changeActive={changeActive}
-                        fetchData={fetchData}
-                        key={i} {...a} />))
-                } */}
+                <ModuleAttachments>
 
-                {contentsData?.map((content, index) => (
+                    {contentsData?.map((content, index) => (
 
-                    <AttachmentContainer key={index} variant="outlined"
-                        active={active ? true : false}
-                        onClick={() => {
-                            setSearchParams({
-                                contentId: content.contentId
-                            })
-                            setActive(true)
-                            setBodyTitle(content?.title)
-                            setPickedType(content?.type)
+                        // <AttachmentContainer key={index} variant="outlined"
+                        //     active={active ? true : false}
+                        //     onClick={() => {
+                        //         setSearchParams({
+                        //             contentId: content.contentId
+                        //         })
+                        //         setActive(true)
+                        //         setBodyTitle(content?.title)
+                        //         setPickedType(content?.type)
 
-                            if (!content?.isLocked) {
-                                setContents(content?.items)
-                                setLocked(false)
-                                return;
+                        //         if (!content?.isLocked) {
+                        //             setContents(content?.items)
+                        //             setLocked(false)
+                        //             return;
 
-                            } else {
-                                setLocked(true)
-                                setContents([])
-                                return;
+                        //         } else {
+                        //             setLocked(true)
+                        //             setContents([])
+                        //             return;
 
-                            }
+                        //         }
 
-                        }}>
+                        //     }}>
 
 
-                        <AttachmentInfo >
-                            {icon(content?.type)}
-                            <h5>{content?.title}</h5>
-                        </AttachmentInfo>
-                        
-                        <AttachmentIcon>
-                            {getStatus(content?.contentId, content?.items, content?.type)}
-                            {getLockedStatus(content?.contentId, content?.items, content?.isLocked)}
+                        //     <AttachmentInfo >
+                        //         {icon(content?.type)}
+                        //         <h5>{content?.title}</h5>
+                        //     </AttachmentInfo>
 
-                        </AttachmentIcon>
+                        //     <AttachmentIcon>
+                        //         {getStatus(content?.contentId, content?.items, content?.type)}
+                        //         {getLockedStatus(content?.contentId, content?.items, content?.isLocked)}
 
-                    </AttachmentContainer>
+                        //     </AttachmentIcon>
 
-                ))}
-            </ModuleAttachments>
-}
+                        // </AttachmentContainer>
+                        <Attachment
+                            key={index}
+                            content={content}
+                            setBodyTitle={setBodyTitle}
+                            setPickedType={setPickedType}
+                            setContents={setContents}
+                            setLocked={setLocked}
+                        />
+
+                    ))}
+                </ModuleAttachments>
+            }
         </ModuleContainer>
     )
 }
