@@ -789,7 +789,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
         const findIndex = uploads.findIndex(up => up.questionId === questionId);
         if (findIndex >= 0) {
             const findItem = uploads.find(up => up.questionId === questionId);
-            let newItem = findItem.answers.push(uploadlink)
+            findItem.answers.push(uploadlink)
             let newUploadItem = [...uploads]
             newUploadItem.splice(findIndex, 1, findItem);
             setUploadLink("")
