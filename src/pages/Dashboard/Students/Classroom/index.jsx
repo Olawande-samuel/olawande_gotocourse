@@ -783,7 +783,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
     // console.log({ myAnswers });
 
 
-    const AddLink = (e, questionId) => {
+    const AddLink = (e, questionId, index) => {
         e.preventDefault();
 
         const findIndex = uploads.findIndex(up => up.questionId === questionId);
@@ -841,7 +841,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
 
                     <div>
                         {contentItem?.questions?.length > 0 && contentItem?.questions.map((ques, index) => (
-                            <Accordion >
+                            <Accordion key={index}>
                                 <Accordion.Item eventKey={index} className="accord__body">
                                     <Accordion.Header className="accord__header"> Question {index + 1}</Accordion.Header>
                                     <Accordion.Body>
@@ -908,7 +908,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
                                                                     onChange={e => setUploadLink(e.target.value)}
                                                                 />
                                                             </label>
-                                                            <button className='answerbutton' onClick={(e) => AddLink(e, ques?._id,)}>Add</button>
+                                                            <button className='answerbutton' onClick={(e) => AddLink(e, ques?._id, index)}>Add</button>
                                                         </div>
 
                                                         <div className='uploadresult'>
