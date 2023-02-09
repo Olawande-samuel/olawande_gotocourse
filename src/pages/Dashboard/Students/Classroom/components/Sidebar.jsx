@@ -1,13 +1,9 @@
-import React, { createRef } from 'react';
-import * as ReactDOM from 'react-dom'
+import React from 'react';
 import styled from 'styled-components';
-import { BiArrowBack } from 'react-icons/bi';
-import { Button } from '@mui/material';
 import { Module } from './';
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useState } from 'react';
 import { useMemo } from 'react';
+import { Button, IconButton } from "@mui/material";
 
 
 
@@ -15,22 +11,20 @@ import { useMemo } from 'react';
 const SidebarContainer = styled.div`
     /* background-color: rgb(236, 239, 255); */
     background-color: var(--theme-blue);
-    width: 300px;
+    width:  ${({ $mobile }) => $mobile ? "250px" : "100%"};
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
     height:100vh;
-    padding: ${({ $mobile }) => !$mobile && '.5rem 0 5rem 0'};
-
     position: ${({ $mobile }) => $mobile && 'fixed'};
     top: ${({ $mobile }) => $mobile && 0};
     left: ${({ $mobile }) => $mobile && 0};
     bottom: ${({ $mobile }) => $mobile && 0};
-    /* border: 2px solid green; */
+    /* border: 2px solid green; */ 
 
     @media screen and (max-width: 960px){
         display: ${({ $mobile }) => $mobile ? 'flex' : 'none'};
+        
     }
 `;
 
@@ -42,22 +36,46 @@ const SidebarBody = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 0 .5rem;
+    gap: .5rem;
+    padding: .5rem;
     color: #fff ;
+    
+.side__nav{
+    height: 10%;
+    /* border: 2px solid red; */
 
+    .navbarright{
+        width: 100%;
+        background-color:  var(--theme-blue);
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+
+
+        & h5 {
+            font-weight: 300;
+            font-size: 1.15rem;
+            color: #fff;
+
+            a{
+                color: #fff;   
+            }
+        }
+    }
+
+}
 
     .bodytop{
         height: 20%;
-        /* border: 2px solid blue; */
+        /* border: 2px solid white; */
 
 
     }
 
     .bodymiddle{
-        height: 65%;
+        height: 60%;
         overflow-y: auto;
         padding: 1rem 0;
-
         /* border: 2px solid yellow; */
 
         &::-webkit-scrollbar{
@@ -75,7 +93,7 @@ const SidebarBody = styled.div`
 
 
     .bodybottom{
-        height: 15%;
+        height: 10%;
         /* border: 2px solid purple; */
         display: flex;
         align-items: center;
@@ -94,26 +112,6 @@ const SidebarBody = styled.div`
     }
 `;
 
-const SidebarTop = styled.div`
-height: 10%;
-/* border: 3px solid red; */
-    padding: 10px 20px;
-    width: 100%;
-    /* border-bottom: 1px solid rgba(0, 0, 0, 0.12); */
-    /* margin-bottom: 30px; */
-    color: #222;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background-color 0.5s ease-out;
-
-    &:hover {
-        background-color: rgb(226, 231, 255)
-    }
-
-    & svg {
-        margin-right: 10px;
-    }
-`;
 
 
 const Progress = styled.progress`
@@ -148,7 +146,12 @@ export const CustomButton = styled(Button)`
 
 
 
-const Sidebar = ({ modules, setContents, setPickedType, setBodyTitle, reduceContent, setActive, active, isMobile, progress, setLocked
+
+
+
+
+
+const Sidebar = ({ setShowMobile, modules, setContents, setPickedType, setBodyTitle, reduceContent, setActive, active, isMobile, progress, setLocked
 }) => {
     const navigate = useNavigate()
     console.log({ progress });
@@ -164,14 +167,18 @@ const Sidebar = ({ modules, setContents, setPickedType, setBodyTitle, reduceCont
     return (
         <SidebarContainer $mobile={isMobile}>
             <SidebarBody>
-                {/* <SidebarTop onClick={() => navigate(-1)}>
-                    <BiArrowBack />
-                    back
-                </SidebarTop> */}
+                <div className='side__nav'>
+                    <div className='navbarright'>
+                        <h5 style={{ margin: 0 }}><Link to={`/student/console/myclasses`}>Classroom</Link></h5>
+
+                    </div>
+                    
+                </div>
 
                 <div className="bodytop">
-                    <CustomButton sx={{ marginInline: 'auto', width: '50%',  color:"#fff" 
- }}>
+                    <CustomButton sx={{
+                        marginInline: 'auto', width: '50%', color: "#fff"
+                    }}>
                         Refresh topics
                     </CustomButton>
                     {reduceContent?.length > 0 &&
@@ -204,7 +211,7 @@ const Sidebar = ({ modules, setContents, setPickedType, setBodyTitle, reduceCont
 
                 </div>
                 <div className="bodybottom">
-                    <button className="back_button" style={{ width: "100%" }} onClick={() => navigate('/student/console/myclasses')}>Back to Dashboard</button>
+                    <button className="back_button" style={{ width: "100%" }} onClick={() => navigate('/student/console/myclasses')}>Back to Console</button>
 
                 </div>
 

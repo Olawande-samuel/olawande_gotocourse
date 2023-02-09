@@ -2,17 +2,15 @@ import { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Breadcrumbs, IconButton, Paper, Backdrop, Tooltip } from "@mui/material";
-import { MdNavigateNext, MdShare, MdMoreVert, MdMenu, MdMessage, MdDelete } from "react-icons/md";
+import { MdNavigateNext, MdDelete, MdShare, MdMoreVert, MdMenu, MdMessage } from "react-icons/md";
 import { BiCloudDownload } from "react-icons/bi";
 import { FaCaretRight, FaCaretLeft } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 import { RiVideoAddFill } from "react-icons/ri";
 import Accordion from 'react-bootstrap/Accordion';
-import ReactPaginate from 'react-paginate';
 import { Sidebar } from "./components";
 import { CustomButton } from './components/Sidebar';
 import { useLocalStorage } from '../../../../hooks';
-import quiz from '../../../../images/classroom_quiz.svg';
 import { useAuth } from '../../../../contexts/Auth';
 import { KEY } from '../../../../constants';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -22,7 +20,6 @@ import { DocumentViewer, ViewModal } from '../../components/classConsole/File';
 import emptyImg from "../../../../images/empty.png"
 import ReactQuill from 'react-quill';
 import Loader from '../../../../components/Loader';
-import { Document, Page } from 'react-pdf';
 import { AdvancedError } from '../../../../classes';
 import { toast } from 'react-toastify';
 import UploadWidget from '../../components/classConsole/components/UploadWidget';
@@ -30,6 +27,9 @@ import UploadWidget from '../../components/classConsole/components/UploadWidget'
 
 const Container = styled.div`
 position: relative;
+/* border: 2px solid yellow; */
+height: 100vh;
+
 
 `
 
@@ -54,12 +54,15 @@ const IconContainer = styled.div`
 
 const ClassroomContainer = styled.div`
     width: 100%;
-    height: calc(100vh - 75px);
+    /* height: calc(100vh - 75px); */
+    height:100%;
     display: grid;
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 320px 1fr;
     margin: 0;
-    margin-top: 75px;
-    overflow-y: hidden;
+    /* margin-top: 75px; */
+    overflow: hidden;
+    /* border: 2px solid green; */
+
 
     @media screen and (max-width: 960px){
         grid-template-columns: 1fr;
@@ -85,82 +88,93 @@ const ClassroomMain = styled.div`
     /* overflow-y: scroll; */
     display: flex;
     flex-direction: column;
-    height: 85vh;
+    height: 100vh;
     overflow-y: auto;
+    position: relative;
+
+    
+    
 `;
 
 
 const ClassroomMainTop = styled.div`
-    width: 100%;
-    margin-block: 40px;
-`;
-
-const Navbar = styled.nav`
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    /* background-color: var(--textBlue); */
-    /* background: #004DB6; */
-    /* background-color: var(--theme-blue); */
-
-
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: var(--white);
-    /* box-shadow: 0px 0px 20px -5px #222; */
+    flex-direction: column;
+    /* align-items: center; */
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    width: 100%;
+    /* border: 2px solid yellow; */
+    padding: 1rem 0;
+    height: 4rem;
 
-    .navbarright{
-        width: 300px;
-        background-color:  var(--theme-blue);
-        display: flex;
+   .navbarright{
+        width: 100%;
+        color:  var(--theme-blue);
+        display: none; 
         align-items: center;
-        padding: 20px;
+        padding: 10px 0 ;
 
 
         & h5 {
             font-weight: 300;
             font-size: 1.15rem;
-            color: #fff;
+            color:  var(--theme-blue);
 
             a{
-                color: #fff;   
+                color:  var(--theme-blue);
             }
         }
     }
 
-    @media screen and (max-width: 960px){
-        .navbarright{
-        background-color:  #fff;
+    .bread{
+        display: flex;
+        align-items: center;
+    }
 
-        & h5{
-            color: var(--theme-blue);
 
-            a{
-                color: var(--theme-blue);
+
+@media screen and (max-width: 768px){
+    height: 8rem;
+
+    .navbarright{
+        display: flex;
+
+    }
     
-            }
-        }
-        }
-    }
-
+}
 `;
 
-const NavLeft = styled.div`
-    display: flex;
-    align-items: center;
+
+const MenuButton = styled(IconButton)`
 
     & svg {
         color: var(--theme-blue);
     }
-`;
+
+
+ 
+
+`
+
 
 
 const ClassroomMainBody = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
+    /* border: 2px solid red; */
+    margin-top: 4rem;
+
+
+    @media screen and (max-width: 768px){
+    
+        margin-top: 8rem;
+
+}
+
 `;
 
 const BodyContent = styled.div`
@@ -265,7 +279,7 @@ export const QuizAction = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 40px 0;
+    margin: 20px 0;
     /* border: 2px solid red; */
 `;
 
@@ -341,25 +355,7 @@ display: ${({ display }) => display ? 'none' : 'block'};
     border-radius: 5px;
 `;
 
-const MenuButton = styled(IconButton)`
-    display: none;
 
-    & svg {
-        color: var(--white);
-    }
-
-    @media screen and (max-width: 960px){
-        display: inline-block;
-        
-        & svg {
-        color: var(--theme-blue);
-    }
-
-    }
-
- 
-
-`
 
 
 const FileName = styled.div`
@@ -367,7 +363,7 @@ display: flex;
 align-items: center;
 justify-content: space-between;
 padding: .5rem 0.4rem;
-border: 1px solid rgba(0, 0, 0, 0.12);
+/* border: 1px solid rgba(0, 0, 0, 0.12); */
 
 p{
     font-size: 14px;
@@ -399,7 +395,7 @@ video{
 `
 const QuizInfo = styled.div`
 padding: 1rem;
-border: 2px solid red;
+/* border: 2px solid red; */
 border: 1px solid #004DB6;
 font-size: 16px;
 border-radius: 10px;
@@ -587,22 +583,25 @@ const FileComponent = (contentItem) => {
     return (
         <div>
             <Paper variant='outlined' className="paper">
-                <PaperTop>
-                    <div>
-                        <BodyActions>
-                            <IconButton>
-                                {contentItem?.contentItem?.downloadable && <BiCloudDownload onClick={() => downloadContent(contentItem.contentItem.fileName, contentItem.contentItem.title, contentItem.contentItem.type)} />}
-                            </IconButton>
-                            <CustomButton onClick={() => setOpen(true)}>Open</CustomButton>
-                        </BodyActions>
-                    </div>
-                </PaperTop>
+                {!(getExtention(contentItem?.contentItem?.type) === "pdf") &&
+                    <PaperTop>
+                        <div>
+                            <BodyActions>
+                                {/* <IconButton>
+                                    {contentItem?.contentItem?.downloadable && <BiCloudDownload onClick={() => downloadContent(contentItem.contentItem.fileName, contentItem.contentItem.title, contentItem.contentItem.type)} />}
+                                </IconButton> */}
+                                <CustomButton onClick={() => setOpen(true)}>Open</CustomButton>
+                            </BodyActions>
+                        </div>
+                    </PaperTop>
+
+                }
 
                 <FileName>
-                    <p>{(getExtention(contentItem?.contentItem?.type) === "pdf") ? contentItem?.contentItem?.title?.split("_").join(" ") : contentItem?.contentItem?.title}</p>
-                    <IconButton>
+                    <p>{(getExtention(contentItem?.contentItem?.type) !== "pdf") && contentItem?.contentItem?.title}</p>
+                    {/* <IconButton>
                         <MdMoreVert />
-                    </IconButton>
+                    </IconButton> */}
                 </FileName>
 
                 <FileDisplay>
@@ -653,20 +652,33 @@ function WelcomeSection({ pageHandler, contentItem }) {
             <QuizInfo>
                 <p>Description: <span>{contentItem.note}</span></p>
                 <p>Max Attempts: <span>{contentItem.maxAttempts}</span></p>
-                <p>Deadline: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
+                <p>Deadline: <span>{new Date(contentItem?.endDate).toLocaleString('en-US',
+                    {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        timeZone: "UTC",
+                        // timeZoneName: "short"
+                    })}</span></p>
+                  <p>Time: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit'
                 })}</span></p>
-                <p>Number of submissions:  <span>{contentItem.attempts || 0}/{contentItem.maxAttempts}</span> </p>
+                <p>Number of submissions:  <span>{contentItem?.attempts || 0}/{contentItem?.maxAttempts}</span> </p>
                 <p> Provisional Result (based on Objective): <span>100.00%</span></p>
             </QuizInfo>
 
-            <button className='next_button' onClick={pageHandler}>Get started</button>
+            {
+                (contentItem?.attempts < contentItem?.maxAttempts) &&
+                <button className='next_button' onClick={pageHandler}>Get started</button>
+            }
+
         </Quiz>
     )
 }
 
-const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
+const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }) => {
     console.log(contentItem);
     const { consoleFunctions: { attemptQuiz } } = useAuth();
     const [note, setNotes] = useState([])
@@ -675,11 +687,11 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
     const [fileUrl, setFileUrl] = useState("");
     const [uploadlink, setUploadLink] = useState("")
     const [uploads, setUploads] = useState([])
-    const [page, setPage] = useState(0);
+
 
 
     function pageHandler(_) { setPage(old => old += 1); }
-    function backpageHandler(_) { setPage(old => old -= 1); }
+    // function backpageHandler(_) { setPage(old => old -= 1); }
 
 
     function setNote(text, quizId, questionId, questionIndex, quizIndex) {
@@ -727,14 +739,14 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
 
     const AnswerQuiz = async () => {
         let allAnswers = [];
-        if(uploads?.length > 0 && myAnswers.length > 0){
+        if (uploads?.length > 0 && myAnswers.length > 0) {
             allAnswers = [...myAnswers, ...uploads]
 
-        }else if (uploads?.length > 0){
+        } else if (uploads?.length > 0) {
             allAnswers = uploads
-        }else allAnswers = myAnswers
+        } else allAnswers = myAnswers
 
-        // console.log({allAnswers});
+        console.log({ allAnswers });
         try {
             setLoading(true)
             const res = await attemptQuiz(userdata?.token, contentItem?._id, allAnswers)
@@ -774,35 +786,27 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
     }
 
     // console.log({ myAnswers });
-    console.log({uploadlink});
 
 
     const AddLink = (e, questionId, index) => {
         e.preventDefault();
-        console.log({questionId});
-        console.log({uploadlink});
-        console.log({index})
-        console.log({uploads})
-        
+
         const findIndex = uploads.findIndex(up => up.questionId === questionId);
         if (findIndex >= 0) {
-            console.log({findIndex});
-            // const findItem = uploads.find(up => up.questionId === questionId);
-            // console.log({findItem});
-            // let newItem = findItem.answers.push(uploadlink)
-            let newItem = uploads[findIndex]?.answers?.push(uploadlink)
-            console.log({newItem});
+            const findItem = uploads.find(up => up.questionId === questionId);
+            let newItem = findItem.answers.push(uploadlink)
+            let newUploadItem = [...uploads]
+            newUploadItem.splice(findIndex, 1, findItem);
             setUploadLink("")
-            return setUploads(uploads.splice(findIndex, 1, newItem))
-            
+            return setUploads(newUploadItem)
+
         } else {
-            console.log("not found");
             setUploads([...uploads, {
                 questionId,
                 answers: [uploadlink]
             }
-        ])
-        setUploadLink("")
+            ])
+            setUploadLink("")
         }
 
     }
@@ -817,14 +821,18 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
             const findLinkPos = findItem.answers.findIndex(lin => lin === linkId);
             if (findLinkPos >= 0) {
                 if (findLinksLength === 1) {
-                    return setUploads(uploads.splice(findIndex, 1))
+                    let newItem = [...uploads]
+                    newItem.splice(findIndex, 1);
+                    return setUploads(newItem)
                 }
-                const newItem = findItem.answers.splice(findLinkPos, 1)
-                return setUploads(uploads.splice(findIndex, 1, newItem))
+                findItem.answers.splice(findLinkPos, 1)
+                let newUploadItem = [...uploads]
+                newUploadItem.splice(findIndex, 1, findItem);
+                return setUploads(newUploadItem)
 
             }
             else return;
- 
+
         }
         else return;
     }
@@ -982,7 +990,13 @@ const Classroom = () => {
     // const [active, setActive] = useState(false)
     const [next, setNext] = useState(false)
     const [prev, setPrev] = useState(false)
-    let queryClient = useQueryClient()
+    let queryClient = useQueryClient();
+    const [page, setPage] = useState(0);
+
+    useMemo(() => {
+        setPage(0)
+
+    }, [contentId])
 
 
     const { getItem } = useLocalStorage()
@@ -1263,7 +1277,7 @@ const Classroom = () => {
 
         let ids = [];
         contentsId.map(content => {
-          return  ids.push(content.fileId)
+            return ids.push(content.fileId)
 
         })
         try {
@@ -1303,71 +1317,70 @@ const Classroom = () => {
         <Container>
             {isLoading && <Loader />}
 
-            <Navbar>
-                <div className='navbarright'>
-                    <MenuButton onClick={e => setShowMobile(_ => true)}>
-                        <MdMenu />
-                    </MenuButton>
 
-                    <h5 style={{ margin: 0 }}><Link to={`/student/console/myclasses`}>Classroom</Link></h5>
-                </div>
-                <NavLeft>
-                    <IconButton>
-                        <MdShare />
-                    </IconButton>
-                    <IconButton>
-                        <MdMoreVert />
-                    </IconButton>
-                </NavLeft>
-            </Navbar>
             <ClassroomContainer>
-                <Backdrop
-                    sx={{ color: '#fff', zIndex: 1000 }}
-                    open={showMobile}
-                    onClick={e => setShowMobile(_ => false)}
-                >
-                    <Sidebar isMobile={true} modules={modules}
+                <div>
+                    <Backdrop
+                        sx={{ color: '#fff', zIndex: 1000 }}
+                        open={showMobile}
+                        onClick={e => setShowMobile(_ => false)}
+                    >
+                        <Sidebar isMobile={true} modules={modules}
+                            setContents={setContents}
+                            setPickedType={setPickedType}
+                            reduceContent={reduceContent}
+                            progress={totalItem}
+                            setBodyTitle={setBodyTitle}
+                            setLocked={setLocked}
+                            setShowMobile={setShowMobile}
+                        // active={active} 
+                        // setActive={setActive}
+                        />
+                    </Backdrop>
+
+                    <Sidebar
+                        isMobile={false} modules={modules}
                         setContents={setContents}
                         setPickedType={setPickedType}
                         reduceContent={reduceContent}
                         progress={totalItem}
                         setBodyTitle={setBodyTitle}
                         setLocked={setLocked}
-                    // active={active} 
-                    // setActive={setActive}
+                        setShowMobile={setShowMobile}
                     />
-                </Backdrop>
 
-                <Sidebar
-                    isMobile={false} modules={modules}
-                    setContents={setContents}
-                    setPickedType={setPickedType}
-                    reduceContent={reduceContent}
-                    progress={totalItem}
-                    setBodyTitle={setBodyTitle}
-                    setLocked={setLocked}
+                </div>
 
-                // active={active} 
-                // setActive={setActive}
-
-                />
                 <ClassroomMain>
-                    <ClassroomMainTop>
-                        <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
-                            <BreadcrumbLink to="/student">
-                                Dashboard
-                            </BreadcrumbLink>
-                            <BreadcrumbLink to="/student/console/myclasses">
-                                {bootcampName?.length > 0 && bootcampName[0].bootcampName}
-                            </BreadcrumbLink>
-                            {bodyTitle &&
-                                <BreadcrumbLink to="#" $isCurrentPage={true}>
-                                    {bodyTitle}
-                                </BreadcrumbLink>
 
-                            }
-                        </Breadcrumbs>
+
+                    <ClassroomMainTop>
+                        <div className='navbarright'>
+                            <MenuButton onClick={e => setShowMobile(_ => true)}>
+                                <MdMenu />
+                            </MenuButton>
+                            <h5 style={{ margin: 0 }}><Link to={`/student/console/myclasses`}>Classroom</Link></h5>
+
+                        </div>
+                        <div className='bread'>
+                            <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
+                                <BreadcrumbLink to="/student">
+                                    Dashboard
+                                </BreadcrumbLink>
+                                <BreadcrumbLink to="/student/console/myclasses">
+                                    {bootcampName?.length > 0 && bootcampName[0].bootcampName}
+                                </BreadcrumbLink>
+                                {bodyTitle &&
+                                    <BreadcrumbLink to="#" $isCurrentPage={true}>
+                                        {bodyTitle}
+                                    </BreadcrumbLink>
+
+                                }
+                            </Breadcrumbs>
+
+                        </div>
                     </ClassroomMainTop>
+
                     <ClassroomMainBody>
                         <BodyInfo>
                             <h3>{bodyTitle}</h3>
@@ -1459,7 +1472,13 @@ const Classroom = () => {
                             {pickedType === "QUIZ" &&
                                 contents?.length > 0 &&
                                 <>
-                                    <QuizComponent contentItem={contents[contents.length - 1]} id={id} key={id} userdata={userdata} attemptedStatus={contents[contents.length - 1]?.attemptedBy?.includes(userdata.id) ? true : false} />
+                                    <QuizComponent
+                                        page={page}
+                                        setPage={setPage}
+                                        contentItem={contents[contents.length - 1]}
+                                        id={id} key={id} userdata={userdata}
+                                        attemptedStatus={contents[contents.length - 1]?.attemptedBy?.includes(userdata.id) ? true : false} />
+
                                     <QuizAction >
 
                                         <MarkButton
@@ -1504,17 +1523,6 @@ const Classroom = () => {
                                 </NextButton>
                             </QuizAction>
                             }
-
-                            {/* <QuizAction>
-                                <PreviousButton variant="outlined" disabled={prev} onClick={() => MoveButton("prev")}>
-                                    <FaCaretLeft />  Previous Content
-                                </PreviousButton>
-                                <NextButton variant="outlined" disabled={next} onClick={() => MoveButton("next")}>
-                                    Next Content <FaCaretRight />
-                                </NextButton>
-                            </QuizAction> */}
-
-
 
 
 
