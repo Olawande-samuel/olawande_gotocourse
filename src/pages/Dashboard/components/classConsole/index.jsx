@@ -524,6 +524,12 @@ export function Accord ({ name, _id, classId, description, creator,contentName, 
   const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId));
   const queryClient = useQueryClient()
   
+  
+
+  // let data = queryClient.getQueryData("getDomainContent")
+
+  // console.log({data})
+
   useEffect(() => {
     if (getDomainContent?.data?.data?.length > 0) {
       console.log(getDomainContent.data.data[0])
@@ -587,18 +593,19 @@ export function Accord ({ name, _id, classId, description, creator,contentName, 
 // create content after upload
 
 function addSuiteContentToClass(id, contentName, originalName){
-        // call file upload function
-        mutation.mutate([userdata?.token, {
-            classId,
-            contentId: id,
-            fileName:contentName,
-            title:originalName
-        }])
+  // call file upload function
+  mutation.mutate([userdata?.token, {
+      classId,
+      contentId: id,
+      fileName:contentName,
+      title:originalName
+  }])
 }
 
 
   const contentid = searchParams.get("content")
 
+  // CONTENT DND
   function onDragEnd(result){
     console.log({result})
 
@@ -619,108 +626,117 @@ function addSuiteContentToClass(id, contentName, originalName){
     newContentData.splice(destination.index, 0, movedItem)
     console.log({newContentData})
     
-    newContentData.forEach((item, i) => {
-      contentUpdate.mutate([userdata.token, {...item, order: i + 1, domainId: item.domain}, item.domain])
+    
+    
 
+    // queryClient.setQueryData("getDomainContent", (old) => ({...old, data:newContentData}))
+    newContentData.forEach((item, i) => {
+      contentUpdate.mutate([userdata.token, {...item, order: i + 1, domainId: item.domain}, item._id])
     })
+
   }
 
 
   return (
-    <Draggable draggableId={_id} index={index}>
-      {
-        (provided)=> (
-          <div className={style.content_item} 
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            ref={provided.innerRef}
-          >
-            <div className={style.content_item_top}>
-              <i>
-                {details ? (
-                  <BiCaretDown onClick={() => showDetails(!details)} />
-                ) : (
-                  <BiCaretRight onClick={() => showDetails(!details)} />
-                )}
-              </i>
-              <span>{name}</span>
-              <AccordMenu type="domain" id={_id} domain={all} toggleModule={toggleModule} />
+    <div style={{background: "#004DB6", borderRadius: "8px"}}>
+
+      <Draggable draggableId={_id} index={index}>
+        {
+          (provided)=> (
+            <div className={style.content_item} 
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              ref={provided.innerRef}
+            >
+              <div className={style.content_item_top}>
+                <i>
+                  {details ? (
+                    <BiCaretDown onClick={() => showDetails(!details)} />
+                  ) : (
+                    <BiCaretRight onClick={() => showDetails(!details)} />
+                  )}
+                </i>
+                <span>{name}</span>
+                <AccordMenu type="domain" id={_id} domain={all} toggleModule={toggleModule} />
+              </div>
             </div>
-            {
-              details &&
-              (
-                // creator suite delete
-                  creator ? 
-                      mutation.isLoading  ?
+          )
+        }
+      </Draggable>
+           
+      {
+        details &&
+        (
+          // creator suite delete
+            creator ? 
+                mutation.isLoading  ?
 
-                      <div className="spinner-border text-white">
-                        <div className="visually-hidden">Loading...</div>
-                      </div>
-                      :
-                      <ul className={style.content_list}>
-                        {getDomainContent?.data?.data?.filter(item => item.domain === _id).filter(item=> item.type === "FILE_VIDEO").map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
-                          <li key={_id} className="d-flex position-relative" style={{cursor:"pointer"}}>
-                            <i>{IconType(type)}</i>
-                            <span>{title}</span>
-                            <AccordMenu type="content" id={_id} />
-                          
-                              <i style={{position: "absolute", right: "10px", top: "50%", transform:"translateY(-50%)", zIndex:"200"}} onClick={() => addSuiteContentToClass(_id, contentName, originalName, classId)}>
-                                <FaPlus size="1.5rem" color="#fff" />
-                              </i>                  
-                          </li>
-                        ))}
-                      </ul>
+                <div className="spinner-border text-white">
+                  <div className="visually-hidden">Loading...</div>
+                </div>
+                :
+                <ul className={style.content_list}>
+                  {getDomainContent?.data?.data?.filter(item => item.domain === _id).filter(item=> item.type === "FILE_VIDEO").map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
+                    <li key={_id} className="d-flex position-relative" style={{cursor:"pointer"}}>
+                      <i>{IconType(type)}</i>
+                      <span>{title}</span>
+                      <AccordMenu type="content" id={_id} />
                     
-                  :
-                  <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable droppableId={_id}>
-                      {
-                        (provided) => (
-                          <ul 
-                            className={style.content_list}
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                          >
-                            {getDomainContent?.data?.data?.filter(item => item.domain === _id).sort((a, b) => a.order - b.order).map((item, i) => (
-                                  <Draggable draggableId={item._id} index={i}>
-                                    {
-                                      (provided)=> (
-                                        <li 
-                                        key={item._id} 
-                                        onClick={() => handleContentNavigation(item._id, item.type, item.domain, item.classId)} 
-                                        className={`d-flex justify-content-between ${item._id === contentid ? "activeClass" : ""}`} 
-                                        style={{cursor:"pointer"}}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                        ref={provided.innerRef}
-                                        >
-                                          <i>{IconType(item.type)}</i>
-                                          <span>{item.title}</span>
-                                          <div className="d-flex gap-3 align-items-center">
-                                            {item.isLocked && <BiLockAlt />}
-                                            <AccordMenu type="content" content={item} id={item._id} domain={item.domain} classId={item.classId} locked={item.isLocked} openEditContentModal={openEditContentModal} />
-                                          </div>
-                                          
-                                        </li>
-                                      )
-                                    }
-                                  </Draggable>
+                        <i style={{position: "absolute", right: "10px", top: "50%", transform:"translateY(-50%)", zIndex:"200"}} onClick={() => addSuiteContentToClass(_id, contentName, originalName, classId)}>
+                          <FaPlus size="1.5rem" color="#fff" />
+                        </i>                  
+                    </li>
+                  ))}
+                </ul>
+              
+            :
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId={_id}>
+                {
+                  (provided) => (
+                    <ul 
+                      className={style.content_list}
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      {getDomainContent?.data?.data?.filter(item => item.domain === _id).sort((a, b) => a.order - b.order).map((item, i) => (
+                            <Draggable draggableId={item._id} index={i}>
+                              {
+                                (provided)=> (
+                                  <li 
+                                  key={item._id} 
+                                  onClick={() => handleContentNavigation(item._id, item.type, item.domain, item.classId)} 
+                                  className={`d-flex justify-content-between ${item._id === contentid ? "activeClass" : ""}`} 
+                                  style={{cursor:"pointer"}}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  ref={provided.innerRef}
+                                  >
+                                    <i>{IconType(item.type)}</i>
+                                    <span>{item.title}</span>
+                                    <div className="d-flex gap-3 align-items-center">
+                                      {item.isLocked && <BiLockAlt />}
+                                      <AccordMenu type="content" content={item} id={item._id} domain={item.domain} classId={item.classId} locked={item.isLocked} openEditContentModal={openEditContentModal} />
+                                    </div>
+                                    
+                                  </li>
+                                )
+                              }
+                            </Draggable>
 
-                            ))}
-                              {provided.placeholder}
-                          </ul>
+                      ))}
+                        {provided.placeholder}
+                    </ul>
 
-                        )
-                      }
-                    </Droppable>
+                  )
+                }
+              </Droppable>
 
-                  </DragDropContext>
-              )
-            }
-          </div>
+            </DragDropContext>
         )
       }
-    </Draggable>
+            {/* // </div>  */}
+    </div>
   );
 }
 
@@ -752,7 +768,7 @@ function AccordMenu({ id, type, classId, locked, domain, content, openEditConten
   })
   const domaindelete = useMutation(([token, id])=>deleteDomain(token, id), {
     onSuccess: (res)=>{
-
+      navigate(`/teacher/class-console/class/${classId}`)
       queryClient.invalidateQueries("getDomainContent")
     },
     onError: (err)=>{
