@@ -231,6 +231,7 @@ import { MixpanelConsumer } from "react-mixpanel";
 import RedirectPage from "./pages/Bootcamp/Redirect";
 
 import NewHome from "./pages/Landing/landing";
+import Abroad from "./components/abroad/pages";
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -327,6 +328,9 @@ function MyApp({ mixpanel }) {
 							{/* <Route path="learn-on-gotocourse" element={<Out />}>
                   <Route index element={<Landing />} />
                   </Route> */}
+
+							<Route path="train" element={<Abroad />} />
+
 
 							<Route
 								path="learn-on-gotocourse"
@@ -483,7 +487,7 @@ function MyApp({ mixpanel }) {
 										<Route path=":id" element={<Out />}>
 											<Route index element={<StudentChatModule />} />
 										</Route>
-										<Route path="mail" element={<Out />}> 
+										<Route path="mail" element={<Out />}>
 											<Route index element={<ChatComponent />} />
 											<Route path="details" element={<StudentGroupContent />} />
 											<Route path="group/:groupID" element={<StudentGroupContent />} />

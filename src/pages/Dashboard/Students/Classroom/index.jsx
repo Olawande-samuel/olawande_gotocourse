@@ -21,7 +21,7 @@ import emptyImg from "../../../../images/empty.png"
 import ReactQuill from 'react-quill';
 import Loader from '../../../../components/Loader';
 import { AdvancedError } from '../../../../classes';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import UploadWidget from '../../components/classConsole/components/UploadWidget';
 
 
@@ -615,9 +615,9 @@ const FileComponent = (contentItem) => {
                         getExtention(contentItem?.contentItem?.type) === "pdf" ?
                             <div className="pdf">
 
-                                <DocumentViewer 
-                                file={contentItem?.contentItem?.fileUri} 
-                                name={contentItem?.contentItem?.fileName?.split(".")[0]?.split("_")?.join(" ")}
+                                <DocumentViewer
+                                    file={contentItem?.contentItem?.fileUri}
+                                    name={contentItem?.contentItem?.fileName?.split(".")[0]?.split("_")?.join(" ")}
                                 />
 
                             </div>
@@ -660,7 +660,7 @@ function WelcomeSection({ pageHandler, contentItem }) {
                         timeZone: "UTC",
                         // timeZoneName: "short"
                     })}</span></p>
-                  <p>Time: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
+                <p>Time: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit'
                 })}</span></p>
@@ -749,21 +749,21 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
         try {
             setLoading(true)
             const res = await attemptQuiz(userdata?.token, contentItem?._id, allAnswers);
-            console.log({res});
+            console.log({ res });
             const { message, success, statusCode } = res;
             if (!success) throw new AdvancedError(message, statusCode);
             else if (statusCode === 1) {
-                    toast.success(message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
 
-                    setLoading(false)
+                setLoading(false)
             }
 
         } catch (error) {
@@ -915,7 +915,12 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
                                                             {
                                                                 uploads?.length > 0 && uploads?.filter(links => links.questionId === ques?._id).map(all => (
                                                                     all?.answers?.length > 0 && all?.answers?.map((l, i) => (
-                                                                        <p onClick={(e) => removeUpload(e, l, ques?._id)} key={i}>{l}<MdDelete /> </p>
+                                                                        <p onClick={(e) => removeUpload(e, l, ques?._id)} key={i}>{l}
+                                                                            <span>
+                                                                                <MdDelete style={{ color: 'red', cursor: "pointer" }} />
+                                                                            </span>
+
+                                                                        </p>
                                                                     ))
 
                                                                 ))
@@ -1311,7 +1316,17 @@ const Classroom = () => {
     return (
         <Container>
             {isLoading && <Loader />}
-
+            <ToastContainer
+				position="top-right"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+			/>
 
             <ClassroomContainer>
                 <div>
