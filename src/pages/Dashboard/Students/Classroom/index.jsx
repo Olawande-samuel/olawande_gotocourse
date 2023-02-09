@@ -2,17 +2,15 @@ import { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Breadcrumbs, IconButton, Paper, Backdrop, Tooltip } from "@mui/material";
-import { MdNavigateNext, MdShare, MdMoreVert, MdMenu, MdMessage } from "react-icons/md";
+import { MdNavigateNext, MdDelete, MdShare, MdMoreVert, MdMenu, MdMessage } from "react-icons/md";
 import { BiCloudDownload } from "react-icons/bi";
 import { FaCaretRight, FaCaretLeft } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 import { RiVideoAddFill } from "react-icons/ri";
 import Accordion from 'react-bootstrap/Accordion';
-import ReactPaginate from 'react-paginate';
 import { Sidebar } from "./components";
 import { CustomButton } from './components/Sidebar';
 import { useLocalStorage } from '../../../../hooks';
-import quiz from '../../../../images/classroom_quiz.svg';
 import { useAuth } from '../../../../contexts/Auth';
 import { KEY } from '../../../../constants';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -22,15 +20,20 @@ import { DocumentViewer, ViewModal } from '../../components/classConsole/File';
 import emptyImg from "../../../../images/empty.png"
 import ReactQuill from 'react-quill';
 import Loader from '../../../../components/Loader';
-import { Document, Page } from 'react-pdf';
 import { AdvancedError } from '../../../../classes';
 import { toast } from 'react-toastify';
+import UploadWidget from '../../components/classConsole/components/UploadWidget';
 
 
 const Container = styled.div`
 position: relative;
+/* border: 2px solid yellow; */
+height: 100vh;
+
 
 `
+
+
 const IconContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -51,12 +54,15 @@ const IconContainer = styled.div`
 
 const ClassroomContainer = styled.div`
     width: 100%;
-    height: calc(100vh - 75px);
+    /* height: calc(100vh - 75px); */
+    height:100%;
     display: grid;
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 320px 1fr;
     margin: 0;
-    margin-top: 75px;
-    overflow-y: hidden;
+    /* margin-top: 75px; */
+    overflow: hidden;
+    /* border: 2px solid green; */
+
 
     @media screen and (max-width: 960px){
         grid-template-columns: 1fr;
@@ -79,83 +85,96 @@ const ClassroomMain = styled.div`
     width: min(100% - 3rem, 950px);
     margin-inline: auto;
     height: 100%;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+    position: relative;
+
+    
+    
 `;
 
 
 const ClassroomMainTop = styled.div`
-    width: 100%;
-    margin-block: 40px;
-`;
-
-const Navbar = styled.nav`
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    /* background-color: var(--textBlue); */
-    /* background: #004DB6; */
-    /* background-color: var(--theme-blue); */
-
-
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: var(--white);
-    /* box-shadow: 0px 0px 20px -5px #222; */
+    flex-direction: column;
+    /* align-items: center; */
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    width: 100%;
+    /* border: 2px solid yellow; */
+    padding: 1rem 0;
+    height: 4rem;
 
-    .navbarright{
-        width: 300px;
-        background-color:  var(--theme-blue);
-        display: flex;
+   .navbarright{
+        width: 100%;
+        color:  var(--theme-blue);
+        display: none; 
         align-items: center;
-        padding: 20px;
+        padding: 10px 0 ;
 
 
         & h5 {
             font-weight: 300;
             font-size: 1.15rem;
-            color: #fff;
+            color:  var(--theme-blue);
 
             a{
-                color: #fff;   
+                color:  var(--theme-blue);
             }
         }
     }
 
-    @media screen and (max-width: 960px){
-        .navbarright{
-        background-color:  #fff;
+    .bread{
+        display: flex;
+        align-items: center;
+    }
 
-        & h5{
-            color: var(--theme-blue);
 
-            a{
-                color: var(--theme-blue);
+
+@media screen and (max-width: 768px){
+    height: 8rem;
+
+    .navbarright{
+        display: flex;
+
+    }
     
-            }
-        }
-        }
-    }
-
+}
 `;
 
-const NavLeft = styled.div`
-    display: flex;
-    align-items: center;
+
+const MenuButton = styled(IconButton)`
 
     & svg {
         color: var(--theme-blue);
     }
-`;
+
+
+ 
+
+`
+
 
 
 const ClassroomMainBody = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
+    /* border: 2px solid red; */
+    margin-top: 4rem;
+
+
+    @media screen and (max-width: 768px){
+    
+        margin-top: 8rem;
+
+}
+
 `;
 
 const BodyContent = styled.div`
@@ -260,7 +279,8 @@ export const QuizAction = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 40px 0;
+    margin: 20px 0;
+    /* border: 2px solid red; */
 `;
 
 
@@ -286,6 +306,16 @@ const Quiz = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+
+
+    .next_button{
+        margin-top: 1rem;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid var(--theme-blue);
+        background: #fff ;
+        color:  var(--theme-blue);
+    }
 `;
 
 
@@ -325,25 +355,7 @@ display: ${({ display }) => display ? 'none' : 'block'};
     border-radius: 5px;
 `;
 
-const MenuButton = styled(IconButton)`
-    display: none;
 
-    & svg {
-        color: var(--white);
-    }
-
-    @media screen and (max-width: 960px){
-        display: inline-block;
-        
-        & svg {
-        color: var(--theme-blue);
-    }
-
-    }
-
- 
-
-`
 
 
 const FileName = styled.div`
@@ -351,7 +363,7 @@ display: flex;
 align-items: center;
 justify-content: space-between;
 padding: .5rem 0.4rem;
-border: 1px solid rgba(0, 0, 0, 0.12);
+/* border: 1px solid rgba(0, 0, 0, 0.12); */
 
 p{
     font-size: 14px;
@@ -383,19 +395,13 @@ video{
 `
 const QuizInfo = styled.div`
 padding: 1rem;
-border: 2px solid red;
+/* border: 2px solid red; */
 border: 1px solid #004DB6;
 font-size: 16px;
 border-radius: 10px;
 background: #EEF5FF;
 box-shadow: 0px 203px 81px rgba(0, 0, 0, 0.01), 0px 114px 68px rgba(0, 0, 0, 0.05), 0px 51px 51px rgba(0, 0, 0, 0.09), 0px 13px 28px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
-p{
 
-}
-
-span{
-
-}
 
 
 
@@ -431,6 +437,40 @@ export const Answer = styled.div`
     input{
         margin: 0 .5rem;
     }
+
+    .answerbutton{
+        margin-top: 1rem;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid var(--theme-blue);
+        background: #fff ;
+        color:  var(--theme-blue);
+    }
+
+`
+
+export const UploadContainer = styled.div`
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    input{
+        margin: 0 .5rem;
+    }
+
+    .addupload{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .answerbutton{
+            padding: .5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--theme-blue);
+            background: #fff ;
+            color:  var(--theme-blue);
+        }
+    }
+
 
 `
 
@@ -543,22 +583,25 @@ const FileComponent = (contentItem) => {
     return (
         <div>
             <Paper variant='outlined' className="paper">
-                <PaperTop>
-                    <div>
-                        <BodyActions>
-                            <IconButton>
-                                {contentItem?.contentItem?.downloadable && <BiCloudDownload onClick={() => downloadContent(contentItem.contentItem.fileName, contentItem.contentItem.title, contentItem.contentItem.type)} />}
-                            </IconButton>
-                            <CustomButton onClick={() => setOpen(true)}>Open</CustomButton>
-                        </BodyActions>
-                    </div>
-                </PaperTop>
+                {!(getExtention(contentItem?.contentItem?.type) === "pdf") &&
+                    <PaperTop>
+                        <div>
+                            <BodyActions>
+                                {/* <IconButton>
+                                    {contentItem?.contentItem?.downloadable && <BiCloudDownload onClick={() => downloadContent(contentItem.contentItem.fileName, contentItem.contentItem.title, contentItem.contentItem.type)} />}
+                                </IconButton> */}
+                                <CustomButton onClick={() => setOpen(true)}>Open</CustomButton>
+                            </BodyActions>
+                        </div>
+                    </PaperTop>
+
+                }
 
                 <FileName>
-                    <p>{contentItem.contentItem.title}</p>
-                    <IconButton>
+                    <p>{(getExtention(contentItem?.contentItem?.type) !== "pdf") && contentItem?.contentItem?.title}</p>
+                    {/* <IconButton>
                         <MdMoreVert />
-                    </IconButton>
+                    </IconButton> */}
                 </FileName>
 
                 <FileDisplay>
@@ -588,10 +631,11 @@ const FileComponent = (contentItem) => {
             <ViewModal
                 open={open}
                 setOpen={setOpen}
-                file={getExtention(contentItem?.contentItem?.type) === "image" ?
-                    `${process.env.REACT_APP_IMAGEURL}${contentItem?.contentItem?.fileName}` :
-                    `${process.env.REACT_APP_VIDEOURL}${contentItem?.contentItem?.fileName}`
-                }
+                // file={getExtention(contentItem?.contentItem?.type) === "image" ?
+                //     `${process.env.REACT_APP_IMAGEURL}${contentItem?.contentItem?.fileName}` :
+                //     `${process.env.REACT_APP_VIDEOURL}${contentItem?.contentItem?.fileName}`
+                // }
+                file={contentItem?.contentItem?.fileName}
                 type={contentItem?.contentItem?.type}
                 title={contentItem?.contentItem?.title}
             />
@@ -600,12 +644,54 @@ const FileComponent = (contentItem) => {
     )
 }
 
-const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
+
+function WelcomeSection({ pageHandler, contentItem }) {
+    return (
+        <Quiz>
+
+            <QuizInfo>
+                <p>Description: <span>{contentItem.note}</span></p>
+                <p>Max Attempts: <span>{contentItem.maxAttempts}</span></p>
+                <p>Deadline: <span>{new Date(contentItem?.endDate).toLocaleString('en-US',
+                    {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        timeZone: "UTC",
+                        // timeZoneName: "short"
+                    })}</span></p>
+                  <p>Time: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })}</span></p>
+                <p>Number of submissions:  <span>{contentItem?.attempts || 0}/{contentItem?.maxAttempts}</span> </p>
+                <p> Provisional Result (based on Objective): <span>100.00%</span></p>
+            </QuizInfo>
+
+            {
+                (contentItem?.attempts < contentItem?.maxAttempts) &&
+                <button className='next_button' onClick={pageHandler}>Get started</button>
+            }
+
+        </Quiz>
+    )
+}
+
+const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }) => {
     console.log(contentItem);
     const { consoleFunctions: { attemptQuiz } } = useAuth();
     const [note, setNotes] = useState([])
     const [myAnswers, setMyAnswers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [fileUrl, setFileUrl] = useState("");
+    const [uploadlink, setUploadLink] = useState("")
+    const [uploads, setUploads] = useState([])
+
+
+
+    function pageHandler(_) { setPage(old => old += 1); }
+    // function backpageHandler(_) { setPage(old => old -= 1); }
 
 
     function setNote(text, quizId, questionId, questionIndex, quizIndex) {
@@ -652,9 +738,18 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
 
 
     const AnswerQuiz = async () => {
+        let allAnswers = [];
+        if (uploads?.length > 0 && myAnswers.length > 0) {
+            allAnswers = [...myAnswers, ...uploads]
+
+        } else if (uploads?.length > 0) {
+            allAnswers = uploads
+        } else allAnswers = myAnswers
+
+        console.log({ allAnswers });
         try {
             setLoading(true)
-            const res = await attemptQuiz(userdata?.token, contentItem?._id, myAnswers)
+            const res = await attemptQuiz(userdata?.token, contentItem?._id, allAnswers)
             const { message, success, statusCode } = res;
             if (!success) throw new AdvancedError(message, statusCode);
             else if (statusCode === 1) {
@@ -690,129 +785,189 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus }) => {
         }
     }
 
-    console.log({ myAnswers });
+    // console.log({ myAnswers });
 
+
+    const AddLink = (e, questionId, index) => {
+        e.preventDefault();
+
+        const findIndex = uploads.findIndex(up => up.questionId === questionId);
+        if (findIndex >= 0) {
+            const findItem = uploads.find(up => up.questionId === questionId);
+            let newItem = findItem.answers.push(uploadlink)
+            let newUploadItem = [...uploads]
+            newUploadItem.splice(findIndex, 1, findItem);
+            setUploadLink("")
+            return setUploads(newUploadItem)
+
+        } else {
+            setUploads([...uploads, {
+                questionId,
+                answers: [uploadlink]
+            }
+            ])
+            setUploadLink("")
+        }
+
+    }
+
+    const removeUpload = (e, linkId, questionId) => {
+        e.preventDefault();
+
+        const findIndex = uploads.findIndex(up => up.questionId === questionId);
+        if (findIndex >= 0) {
+            const findItem = uploads.find(up => up.questionId === questionId);
+            const findLinksLength = findItem.answers.length
+            const findLinkPos = findItem.answers.findIndex(lin => lin === linkId);
+            if (findLinkPos >= 0) {
+                if (findLinksLength === 1) {
+                    let newItem = [...uploads]
+                    newItem.splice(findIndex, 1);
+                    return setUploads(newItem)
+                }
+                findItem.answers.splice(findLinkPos, 1)
+                let newUploadItem = [...uploads]
+                newUploadItem.splice(findIndex, 1, findItem);
+                return setUploads(newUploadItem)
+
+            }
+            else return;
+
+        }
+        else return;
+    }
+
+    console.log({ uploads });
 
     return (
         <>
-            <Quiz>
+            {
+                page === 0 ? <WelcomeSection pageHandler={pageHandler} contentItem={contentItem} /> :
 
-                <QuizInfo>
-                    <p>Description: <span>{contentItem.note}</span></p>
-                    <p>Max Attempts: <span>{contentItem.maxAttempts}</span></p>
-                    <p>Deadline: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    })}</span></p>
-                    <p>Number of submissions:  <span>{contentItem.attempts || 0}/{contentItem.maxAttempts}</span> </p>
-                    <p> Provisional Result (based on Objective): <span>100.00%</span></p>
-                </QuizInfo>
+                    <div>
+                        {contentItem?.questions?.length > 0 && contentItem?.questions.map((ques, index) => (
+                            <Accordion key={index}>
+                                <Accordion.Item eventKey={index} className="accord__body">
+                                    <Accordion.Header className="accord__header"> Question {index + 1}</Accordion.Header>
+                                    <Accordion.Body>
+                                        <QuesHeader className="queshead">
+                                            <p>Type: <span>{ques.type}</span></p>
+                                            <p>Grade: <span>{ques.grade}</span></p>
+                                        </QuesHeader>
 
-            </Quiz>
-            <div>
-                {contentItem?.questions?.length > 0 && contentItem?.questions.map((ques, index) => (
-                    <Accordion >
-                        <Accordion.Item eventKey={index} className="accord__body">
-                            <Accordion.Header className="accord__header"> Question {index + 1}</Accordion.Header>
-                            <Accordion.Body>
-                                <QuesHeader className="queshead">
-                                    <p>Type: <span>{ques.type}</span></p>
-                                    <p>Grade: <span>{ques.grade}</span></p>
-                                </QuesHeader>
+                                        <QuestionOptions>
+                                            <h4 dangerouslySetInnerHTML={{ __html: `${ques.title}` }}></h4>
 
-                                <QuestionOptions>
-                                    <h4 dangerouslySetInnerHTML={{ __html: `${ques.title}` }}></h4>
-
-                                    {
-                                        ques?.type === "THEORY" && ques?.options && ques?.options.length > 0 && ques?.options.map((opt, i) => (
-                                            <>
-                                                {opt.title}
-                                                <Answer>
-                                                    <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, opt?._id, i, index)} />
-                                                </Answer>
-
-
-                                            </>
-                                        ))
-
-
-                                    }
-
-                                    {ques?.type === "MULTIPLE_CHOICE" && ques?.options && ques?.options.length > 0 &&
-                                        <>
-
-                                            {ques?.options.map((opt, i) => (
-                                                <Answer>
-                                                    <label for={`answers${opt._id}`}>
-                                                        <input
-                                                            type="radio"
-                                                            value={opt._id}
-                                                            id={`answers${opt._id}`}
-                                                            name={`answers${ques.title}`}
-                                                            onChange={e => handleInputChange(e, ques?._id, index)} />
+                                            {
+                                                ques?.type === "THEORY" && ques?.options && ques?.options.length > 0 && ques?.options.map((opt, i) => (
+                                                    <>
                                                         {opt.title}
-                                                    </label>
-
-                                                </Answer>
-
-                                            ))}
-
-                                        </>
-                                    }
+                                                        <Answer>
+                                                            <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, opt?._id, i, index)} />
+                                                        </Answer>
 
 
-                                    {
-                                        ques?.type === "FILE" && ques?.options && ques?.options.length > 0 &&
-                                        <>
-                                            <Answer>
-                                                <label for="file">
-                                                    <input
-                                                        type="file"
-                                                    // value={opt._id}
-                                                    // name="answers"
-                                                    // onChange={e => handleInputChange(e, ques?._id, index)} 
-                                                    />
-                                                </label>
-                                            </Answer>
+                                                    </>
+                                                ))
 
 
-                                        </>
+                                            }
 
-                                    }
+                                            {ques?.type === "MULTIPLE_CHOICE" && ques?.options && ques?.options.length > 0 &&
+                                                <>
+
+                                                    {ques?.options.map((opt, i) => (
+                                                        <Answer>
+                                                            <label for={`answers${opt._id}`}>
+                                                                <input
+                                                                    type="radio"
+                                                                    value={opt._id}
+                                                                    id={`answers${opt._id}`}
+                                                                    name={`answers${ques.title}`}
+                                                                    onChange={e => handleInputChange(e, ques?._id, index)} />
+                                                                {opt.title}
+                                                            </label>
+
+                                                        </Answer>
+
+                                                    ))}
+
+                                                </>
+                                            }
 
 
-                                </QuestionOptions>
+                                            {
+                                                ques?.type === "FILE_UPLOAD" &&
+                                                <>
+                                                    <UploadContainer>
+                                                        <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+
+                                                        <div className='addupload'>
+                                                            <label for="upload">
+                                                                <input
+                                                                    placeholder='paste the file link'
+                                                                    className="w-50 form-control"
+                                                                    type="text"
+                                                                    value={uploadlink}
+                                                                    name="link"
+                                                                    onChange={e => setUploadLink(e.target.value)}
+                                                                />
+                                                            </label>
+                                                            <button className='answerbutton' onClick={(e) => AddLink(e, ques?._id, index)}>Add</button>
+                                                        </div>
+
+                                                        <div className='uploadresult'>
+                                                            {
+                                                                uploads?.length > 0 && uploads?.filter(links => links.questionId === ques?._id).map(all => (
+                                                                    all?.answers?.length > 0 && all?.answers?.map((l, i) => (
+                                                                        <p onClick={(e) => removeUpload(e, l, ques?._id)} key={i}>{l}<MdDelete /> </p>
+                                                                    ))
+
+                                                                ))
+                                                            }
+
+                                                        </div>
+                                                    </UploadContainer>
+
+
+                                                </>
+
+                                            }
+
+
+                                        </QuestionOptions>
 
 
 
 
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
-                ))}
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                            </Accordion>
+                        ))}
 
-                {attemptedStatus && <small style={{ color: "var(--theme-orange)" }}>Quiz has already been submitted {contentItem?.attempts} time(s)</small>}
+                        {attemptedStatus && <small style={{ color: "var(--theme-orange)" }}>Quiz has already been submitted {contentItem?.attempts} time(s)</small>}
 
-                < QuizAction >
-                    {
-                        loading ?
-                            (
-                                <button className="button button-md log_btn w-100"
-                                    disabled={loading}>
-                                    <div className="spinner-border" role="status">
-                                        <span className="visually-hidden">Loading...</span>
-                                    </div>
-                                </button>
-                            )
-                            :
-                            <QuizButton onClick={() => AnswerQuiz("mutiple")} disabled={(+contentItem?.attempts) >= (+contentItem?.maxAttempts)}>
-                                Submit
-                            </QuizButton>
-                    }
-                </QuizAction>
+                        < QuizAction >
+                            {
+                                loading ?
+                                    (
+                                        <button className="button button-md log_btn w-100"
+                                            disabled={loading}>
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                        </button>
+                                    )
+                                    :
+                                    <QuizButton onClick={() => AnswerQuiz("mutiple")} disabled={(+contentItem?.attempts) >= (+contentItem?.maxAttempts)}>
+                                        Submit
+                                    </QuizButton>
+                            }
+                        </QuizAction>
 
-            </div>
+                    </div>
 
+            }
 
         </>
     )
@@ -835,7 +990,13 @@ const Classroom = () => {
     // const [active, setActive] = useState(false)
     const [next, setNext] = useState(false)
     const [prev, setPrev] = useState(false)
-    let queryClient = useQueryClient()
+    let queryClient = useQueryClient();
+    const [page, setPage] = useState(0);
+
+    useMemo(() => {
+        setPage(0)
+
+    }, [contentId])
 
 
     const { getItem } = useLocalStorage()
@@ -1116,7 +1277,7 @@ const Classroom = () => {
 
         let ids = [];
         contentsId.map(content => {
-            ids.push(content.fileId)
+            return ids.push(content.fileId)
 
         })
         try {
@@ -1156,71 +1317,70 @@ const Classroom = () => {
         <Container>
             {isLoading && <Loader />}
 
-            <Navbar>
-                <div className='navbarright'>
-                    <MenuButton onClick={e => setShowMobile(_ => true)}>
-                        <MdMenu />
-                    </MenuButton>
 
-                    <h5 style={{ margin: 0 }}><Link to={`/student/console/myclasses`}>Classroom</Link></h5>
-                </div>
-                <NavLeft>
-                    <IconButton>
-                        <MdShare />
-                    </IconButton>
-                    <IconButton>
-                        <MdMoreVert />
-                    </IconButton>
-                </NavLeft>
-            </Navbar>
             <ClassroomContainer>
-                <Backdrop
-                    sx={{ color: '#fff', zIndex: 1000 }}
-                    open={showMobile}
-                    onClick={e => setShowMobile(_ => false)}
-                >
-                    <Sidebar isMobile={true} modules={modules}
+                <div>
+                    <Backdrop
+                        sx={{ color: '#fff', zIndex: 1000 }}
+                        open={showMobile}
+                        onClick={e => setShowMobile(_ => false)}
+                    >
+                        <Sidebar isMobile={true} modules={modules}
+                            setContents={setContents}
+                            setPickedType={setPickedType}
+                            reduceContent={reduceContent}
+                            progress={totalItem}
+                            setBodyTitle={setBodyTitle}
+                            setLocked={setLocked}
+                            setShowMobile={setShowMobile}
+                        // active={active} 
+                        // setActive={setActive}
+                        />
+                    </Backdrop>
+
+                    <Sidebar
+                        isMobile={false} modules={modules}
                         setContents={setContents}
                         setPickedType={setPickedType}
                         reduceContent={reduceContent}
                         progress={totalItem}
                         setBodyTitle={setBodyTitle}
                         setLocked={setLocked}
-                    // active={active} 
-                    // setActive={setActive}
+                        setShowMobile={setShowMobile}
                     />
-                </Backdrop>
 
-                <Sidebar
-                    isMobile={false} modules={modules}
-                    setContents={setContents}
-                    setPickedType={setPickedType}
-                    reduceContent={reduceContent}
-                    progress={totalItem}
-                    setBodyTitle={setBodyTitle}
-                    setLocked={setLocked}
+                </div>
 
-                // active={active} 
-                // setActive={setActive}
-
-                />
                 <ClassroomMain>
-                    <ClassroomMainTop>
-                        <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
-                            <BreadcrumbLink to="/student">
-                                Dashboard
-                            </BreadcrumbLink>
-                            <BreadcrumbLink to="/student/console/myclasses">
-                                {bootcampName?.length > 0 && bootcampName[0].bootcampName}
-                            </BreadcrumbLink>
-                            {bodyTitle &&
-                                <BreadcrumbLink to="#" $isCurrentPage={true}>
-                                    {bodyTitle}
-                                </BreadcrumbLink>
 
-                            }
-                        </Breadcrumbs>
+
+                    <ClassroomMainTop>
+                        <div className='navbarright'>
+                            <MenuButton onClick={e => setShowMobile(_ => true)}>
+                                <MdMenu />
+                            </MenuButton>
+                            <h5 style={{ margin: 0 }}><Link to={`/student/console/myclasses`}>Classroom</Link></h5>
+
+                        </div>
+                        <div className='bread'>
+                            <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
+                                <BreadcrumbLink to="/student">
+                                    Dashboard
+                                </BreadcrumbLink>
+                                <BreadcrumbLink to="/student/console/myclasses">
+                                    {bootcampName?.length > 0 && bootcampName[0].bootcampName}
+                                </BreadcrumbLink>
+                                {bodyTitle &&
+                                    <BreadcrumbLink to="#" $isCurrentPage={true}>
+                                        {bodyTitle}
+                                    </BreadcrumbLink>
+
+                                }
+                            </Breadcrumbs>
+
+                        </div>
                     </ClassroomMainTop>
+
                     <ClassroomMainBody>
                         <BodyInfo>
                             <h3>{bodyTitle}</h3>
@@ -1312,7 +1472,13 @@ const Classroom = () => {
                             {pickedType === "QUIZ" &&
                                 contents?.length > 0 &&
                                 <>
-                                    <QuizComponent contentItem={contents[contents.length - 1]} id={id} key={id} userdata={userdata} attemptedStatus={contents[contents.length - 1]?.attemptedBy?.includes(userdata.id) ? true : false} />
+                                    <QuizComponent
+                                        page={page}
+                                        setPage={setPage}
+                                        contentItem={contents[contents.length - 1]}
+                                        id={id} key={id} userdata={userdata}
+                                        attemptedStatus={contents[contents.length - 1]?.attemptedBy?.includes(userdata.id) ? true : false} />
+
                                     <QuizAction >
 
                                         <MarkButton
@@ -1357,8 +1523,6 @@ const Classroom = () => {
                                 </NextButton>
                             </QuizAction>
                             }
-
-
 
 
 

@@ -64,6 +64,7 @@ const LiveChat = () => {
 	const { shutdown } = useIntercom();
 	const { pathname } = useLocation();
 	const [open, setOpen] = useState(false);
+	const {id} = useParams()
 
 	useEffect(() => {
 		shutdown();
@@ -95,14 +96,13 @@ const LiveChat = () => {
 	}, []);
 
 	function goBack() {
-		console.log("clicked");
 		let pathArray = pathname.split("/")[1];
 
 		switch (pathArray) {
 			case "teacher":
-				return "/teacher";
+				return "/teacher/class-console/class/" + id;
 			case "student":
-				return "/student";
+				return "/student/class-console/class/" + id;
 			default:
 				return "/admin";
 		}
@@ -366,11 +366,10 @@ function AllUsers() {
 	const {
 		otherFunctions: { fetchAdmin },
 		teacherFunctions: { fetchMyStudents },
-		studentFunctions: { fetchBootcamps },
+		studentFunctions: { getMyTeachers },
 		generalState: { searchValue },
 	} = useAuth();
 
-	console.log({ id });
 	// const isAdmin = userData.userType !== 'admin';
 	const isStudent = userData.userType === "student";
 	const isTeacher = userData?.userType === "teacher" || "mentor" ? true : false;
@@ -387,7 +386,6 @@ function AllUsers() {
 		{
 			enabled: userData?.userType === "teacher",
 			onSuccess: (res) => {
-				console.log({ res });
 				if (res.data?.length > 0) {
 					setStudents(res.data);
 				}
@@ -449,7 +447,6 @@ function AllUsers() {
 			enabled: isStudent || isTeacher,
 			onSuccess: (res) => {
 				if (res.data?.length > 0) {
-					console.log({ res });
 					let admin = res.data;
 					// let admin = res.data.filter(admin=> admin.firstName === "Admiralty")
 					setAdmins(admin);
@@ -457,6 +454,26 @@ function AllUsers() {
 			},
 		}
 	);
+
+
+	const allStudentTeacher = useQuery(["get my teachers", userData?.token], () => getMyTeachers(userData?.token, id), {
+	  enabled: userData?.userType === "student",
+	  onSuccess: (res)=>{
+		  console.log(res)
+	    if(res.success){
+	    //   let teachers = new Set()
+	    //   res.data.forEach(student => {
+	    //     if(student.tutorId){
+	    //       teachers.add(student)
+	    //     }
+	    //   })
+	    //   let teacherArray = Array.from(teachers)
+	    //   console.log({teacherArray})
+	    //   setTeachers(teacherArray)
+	    }
+	  },
+	  onError: (err) => console.error(err)
+	})
 
 	return (
 		<>
@@ -631,7 +648,6 @@ function OpenedChat() {
 		}
 	}
 
-	console.log({ showMainChat });
 
 	return (
 		<Opened>
@@ -723,7 +739,7 @@ function ClosedChat() {
 }
 
 function ChatBar({ sender, user, body, profileImg }) {
-	// console.log(sender === "user")
+	
 	const { getItem } = useLocalStorage();
 	const userdata = getItem(KEY);
 

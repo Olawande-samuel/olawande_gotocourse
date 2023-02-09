@@ -13,7 +13,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { useEffect } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../../../contexts/Auth';
 import { KEY } from '../../../../constants';
 import { useLocalStorage } from '../../../../hooks';
@@ -104,12 +104,16 @@ export default function Quiz() {
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
 
-    const { consoleFunctions: { fetchQuiz, addQuiz }, } = useAuth();
+    const { consoleFunctions: { fetchQuiz, addQuiz, quizEdit }, } = useAuth();
     let path = pathname.split("/")
     const {classId} = useParams()
     let searchData = search.split("=").reverse()[0]
     const contentId = searchParams.get("content")
     const [resultMainData, setResultMainData] = useState({})
+    const [edit, setEdit] = useState(false)
+
+    const queryClient = useQueryClient()
+
     const [formData, setFormData] = useState({
         classId:"",
         contentId:"",
@@ -137,9 +141,7 @@ export default function Quiz() {
 
     })
 
-    // useEffect(()=>{
-    //     setFormData({...formData, classId, contentId: searchData})
-    // },[classId, searchData])
+    
  
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -169,6 +171,25 @@ export default function Quiz() {
         }
     })
 
+
+    const editQuiz = useMutation(([token, id, data])=>quizEdit(token, id, data), {
+        onSuccess: (res) => {
+            if(res.statusCode === 1){
+                toast.success(res.message)
+                queryClient.inValidateQueries("quiz content")
+                return
+            }
+            toast.error(res.message)
+        },
+        onError: (err) => {
+            toast.error("something went wrong")
+
+            console.error(err)
+        }
+    })
+
+
+
     const getContentfromQuery = useQuery(["quiz content", contentId, userdata?.token], () => fetchQuiz(userdata.token, searchData), {
         onSuccess: (res)=> {
             console.log("fetched")
@@ -176,7 +197,9 @@ export default function Quiz() {
                 let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
                 setFormData({...res.data[res.data.length -1], endDate: deadline})
                 setResultMainData({...res.data[res.data.length -1]})
+                setEdit(true)
             }else{
+                setEdit(false)
                 setFormData({
                     classId,
                     contentId:searchData,
@@ -292,12 +315,14 @@ export default function Quiz() {
 
     function handleSubmit(e){
         e.preventDefault();
-        console.log("Submit", formData)
+        edit ?
+        editQuiz.mutate([userdata.token, formData._id, formData])
+        :
         quizAdd.mutate([userdata.token, {...formData, classId, contentId}])
 
     }
 
-    console.log({formData})
+    
 
 
     return (
@@ -311,30 +336,6 @@ export default function Quiz() {
                         <Tab label="Result" {...a11yProps(1)} />
                     </Tabs>
                 </Box>
-
-                {/* <div className="contentbreadcrumb">
-                    <nav arial-label="breadcrumb">
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item">
-                                <Link to={goBack(pathname)} style={{ color: "var(--theme-blue", textTransform: "uppercase" }}>
-                                    Dashboard
-                                </Link>
-                            </li>
-                            {bread
-                                .filter((item) => item !== "")
-                                .map((item, idx) => (
-                                    <li className="breadcrumb-item text-uppercase" key={idx}>
-                                        <Link
-                                            style={{ color: "var(--theme-blue" }}
-                                            to={`${bread.slice(0, idx + 2).join("/")}`}
-                                        >
-                                            {item.split("-").join(" ")}
-                                        </Link>
-                                    </li>
-                                ))}
-                        </ol>
-                    </nav>
-                </div> */}
 
                 <TabPanel value={value} index={0}>
                     <main className='quiz__contentbody'>
@@ -421,10 +422,10 @@ export default function Quiz() {
                                                                 <MenuItem value="MULTIPLE_CHOICE" >
                                                                     Multiple Choice
                                                                 </MenuItem>
-                                                                <MenuItem value="checkbox" >
+                                                                <MenuItem value="CHECKBOX" >
                                                                     Checkbox
                                                                 </MenuItem>
-                                                                <MenuItem value="file">
+                                                                <MenuItem value="FILE_UPLOAD">
                                                                     File Upload
                                                                 </MenuItem>
                                                             </Select>
@@ -587,7 +588,7 @@ export default function Quiz() {
 
 
                             <div className='footerbtn'>
-                                <button disabled={quizAdd.isLoading} >
+                                <button disabled={quizAdd.isLoading || editQuiz.isLoading} >
                                     {
                                         quizAdd.isLoading ? 
                                         <div className="spinner-border text-white">
@@ -795,7 +796,8 @@ function QuestionBox(){
             <div>Answer 2</div>
         
             <div className="quiz__question_review">
-                <button className="open_review">Open Review</button>
+                {/* <button className="open_review">Open Review</button>
+ */}
 
                 <div className="quiz__question_review--content">
                     <form action="" className="quiz__score_form">

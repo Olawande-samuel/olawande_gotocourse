@@ -555,6 +555,15 @@
     border-radius: 8px;
 }
 
+.open_review {
+    padding: .4rem;
+    color: #fff;
+    background: var(--theme-blue);
+    border: 0;
+    outline-color: transparent;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
 
 
 
