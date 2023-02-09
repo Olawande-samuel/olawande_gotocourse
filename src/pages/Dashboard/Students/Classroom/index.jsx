@@ -363,7 +363,7 @@ display: flex;
 align-items: center;
 justify-content: space-between;
 padding: .5rem 0.4rem;
-border: 1px solid rgba(0, 0, 0, 0.12);
+/* border: 1px solid rgba(0, 0, 0, 0.12); */
 
 p{
     font-size: 14px;
@@ -587,9 +587,9 @@ const FileComponent = (contentItem) => {
                     <PaperTop>
                         <div>
                             <BodyActions>
-                                <IconButton>
+                                {/* <IconButton>
                                     {contentItem?.contentItem?.downloadable && <BiCloudDownload onClick={() => downloadContent(contentItem.contentItem.fileName, contentItem.contentItem.title, contentItem.contentItem.type)} />}
-                                </IconButton>
+                                </IconButton> */}
                                 <CustomButton onClick={() => setOpen(true)}>Open</CustomButton>
                             </BodyActions>
                         </div>
