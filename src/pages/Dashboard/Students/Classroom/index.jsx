@@ -652,11 +652,20 @@ function WelcomeSection({ pageHandler, contentItem }) {
             <QuizInfo>
                 <p>Description: <span>{contentItem.note}</span></p>
                 <p>Max Attempts: <span>{contentItem.maxAttempts}</span></p>
-                <p>Deadline: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
+                <p>Deadline: <span>{new Date(contentItem?.endDate).toLocaleString('en-US',
+                    {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        timeZone: "UTC",
+                        // timeZoneName: "short"
+                    })}</span></p>
+                  <p>Time: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit'
                 })}</span></p>
-                <p>Number of submissions:  <span>{contentItem.attempts || 0}/{contentItem.maxAttempts}</span> </p>
+                <p>Number of submissions:  <span>{contentItem?.attempts || 0}/{contentItem?.maxAttempts}</span> </p>
                 <p> Provisional Result (based on Objective): <span>100.00%</span></p>
             </QuizInfo>
 
