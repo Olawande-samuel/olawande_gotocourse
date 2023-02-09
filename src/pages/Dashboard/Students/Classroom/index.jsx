@@ -21,7 +21,7 @@ import emptyImg from "../../../../images/empty.png"
 import ReactQuill from 'react-quill';
 import Loader from '../../../../components/Loader';
 import { AdvancedError } from '../../../../classes';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import UploadWidget from '../../components/classConsole/components/UploadWidget';
 
 
@@ -57,7 +57,7 @@ const ClassroomContainer = styled.div`
     /* height: calc(100vh - 75px); */
     height:100%;
     display: grid;
-    grid-template-columns: 320px 1fr;
+    grid-template-columns: 25% 1fr;
     margin: 0;
     /* margin-top: 75px; */
     overflow: hidden;
@@ -524,7 +524,7 @@ const NoteComponent = (contentItem) => {
 
 const FileComponent = (contentItem) => {
     const [open, setOpen] = useState(false)
-    // console.log(contentItem.contentItem);
+    console.log(contentItem.contentItem);
 
     const getExtention = (val) => {
         // console.log({ val });
@@ -615,7 +615,10 @@ const FileComponent = (contentItem) => {
                         getExtention(contentItem?.contentItem?.type) === "pdf" ?
                             <div className="pdf">
 
-                                <DocumentViewer file={contentItem?.contentItem?.fileUri} />
+                                <DocumentViewer
+                                    file={contentItem?.contentItem?.fileUri}
+                                    name={contentItem?.contentItem?.fileName?.split(".")[0]?.split("_")?.join(" ")}
+                                />
 
                             </div>
                             :
@@ -631,10 +634,6 @@ const FileComponent = (contentItem) => {
             <ViewModal
                 open={open}
                 setOpen={setOpen}
-                // file={getExtention(contentItem?.contentItem?.type) === "image" ?
-                //     `${process.env.REACT_APP_IMAGEURL}${contentItem?.contentItem?.fileName}` :
-                //     `${process.env.REACT_APP_VIDEOURL}${contentItem?.contentItem?.fileName}`
-                // }
                 file={contentItem?.contentItem?.fileName}
                 type={contentItem?.contentItem?.type}
                 title={contentItem?.contentItem?.title}
@@ -661,7 +660,7 @@ function WelcomeSection({ pageHandler, contentItem }) {
                         timeZone: "UTC",
                         // timeZoneName: "short"
                     })}</span></p>
-                  <p>Time: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
+                <p>Time: <span>{new Date(contentItem?.endDate).toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit'
                 })}</span></p>
@@ -749,26 +748,22 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
         console.log({ allAnswers });
         try {
             setLoading(true)
-            const res = await attemptQuiz(userdata?.token, contentItem?._id, allAnswers)
+            const res = await attemptQuiz(userdata?.token, contentItem?._id, allAnswers);
+            console.log({ res });
             const { message, success, statusCode } = res;
             if (!success) throw new AdvancedError(message, statusCode);
             else if (statusCode === 1) {
-                const { data } = res;
-                if (data) {
-                    toast.success(message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
 
-                    setLoading(false)
-
-                }
-
+                setLoading(false)
             }
 
         } catch (error) {
@@ -794,7 +789,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
         const findIndex = uploads.findIndex(up => up.questionId === questionId);
         if (findIndex >= 0) {
             const findItem = uploads.find(up => up.questionId === questionId);
-            let newItem = findItem.answers.push(uploadlink)
+            findItem.answers.push(uploadlink)
             let newUploadItem = [...uploads]
             newUploadItem.splice(findIndex, 1, findItem);
             setUploadLink("")
@@ -920,7 +915,12 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
                                                             {
                                                                 uploads?.length > 0 && uploads?.filter(links => links.questionId === ques?._id).map(all => (
                                                                     all?.answers?.length > 0 && all?.answers?.map((l, i) => (
-                                                                        <p onClick={(e) => removeUpload(e, l, ques?._id)} key={i}>{l}<MdDelete /> </p>
+                                                                        <p onClick={(e) => removeUpload(e, l, ques?._id)} key={i}>{l}
+                                                                            <span>
+                                                                                <MdDelete style={{ color: 'red', cursor: "pointer" }} />
+                                                                            </span>
+
+                                                                        </p>
                                                                     ))
 
                                                                 ))
@@ -1316,7 +1316,17 @@ const Classroom = () => {
     return (
         <Container>
             {isLoading && <Loader />}
-
+            <ToastContainer
+				position="top-right"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+			/>
 
             <ClassroomContainer>
                 <div>

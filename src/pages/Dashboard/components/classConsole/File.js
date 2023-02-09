@@ -262,7 +262,7 @@ export default function File() {
 	);
 }
 
-function FileCard({ title, fileName, contentId, type, _id, fileId , all}) {
+function FileCard({ title, fileName, contentId, type, _id, fileId, all }) {
 	const [open, setOpen] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
 	const [content, setContent] = useState("");
@@ -320,14 +320,14 @@ function FileCard({ title, fileName, contentId, type, _id, fileId , all}) {
 		}
 	}
 
-	function handleEdit(e, id, item ) {
+	function handleEdit(e, id, item) {
 		setOpenEdit(true)
 	}
 
-	
-	function MoveUp() {}
 
-	function MoveDown() {}
+	function MoveUp() { }
+
+	function MoveDown() { }
 
 	function openContent() {
 		setOpen(true);
@@ -335,27 +335,27 @@ function FileCard({ title, fileName, contentId, type, _id, fileId , all}) {
 	}
 
 
-	const mutation = useMutation(([token, itemId, state])=>editContentItem(token, itemId, state),{
-        onSuccess: res => {
-			if(res.success){
+	const mutation = useMutation(([token, itemId, state]) => editContentItem(token, itemId, state), {
+		onSuccess: res => {
+			if (res.success) {
 				toast.success(res.message)
 				queryClient.invalidateQueries("getDomainContent")
 				setOpen(false)
-			}else {
+			} else {
 				toast.error(res.message)
 			}
-        },
-        onError: err => {
+		},
+		onError: err => {
 			toast.error(err.message)
-        }
-    })
+		}
+	})
 
 
 
-    function handleIsDownloadable(e){
+	function handleIsDownloadable(e) {
 		e.preventDefault()
-        mutation.mutate([userdata.token, all.fileId, {...all, downloadable: !all.downloadable}])
-    }
+		mutation.mutate([userdata.token, all.fileId, { ...all, downloadable: !all.downloadable }])
+	}
 
 
 	function downloadContent(file, fileName, type) {
@@ -392,26 +392,26 @@ function FileCard({ title, fileName, contentId, type, _id, fileId , all}) {
 		>
 			{(type.includes("video") ||
 				(type.includes("image") && !type.includes("pdf"))) && (
-				<div className="filetop">
-					{type === "video/mp4" || type.includes("video") ? (
-						<video
-							src={fileName}
-							controls
-							muted
-							style={{
-								width: "100%",
-								height: "100%",
-								border: "1px solid #eee",
-								borderRadius: "8px",
-							}}
-						/>
-					) : (
-						<img src={fileName} alt="" />
-					)}
-				</div>
-			)}
+					<div className="filetop">
+						{type === "video/mp4" || type.includes("video") ? (
+							<video
+								src={fileName}
+								controls
+								muted
+								style={{
+									width: "100%",
+									height: "100%",
+									border: "1px solid #eee",
+									borderRadius: "8px",
+								}}
+							/>
+						) : (
+							<img src={fileName} alt="" />
+						)}
+					</div>
+				)}
 
-			{(type === "application/pdf" ||
+			{/* {(type === "application/pdf" ||
 				type.includes("pdf") ||
 				type ===
 					"application/vnd.openxmlformats-officedocument.presentationml.presentation") && (
@@ -424,7 +424,8 @@ function FileCard({ title, fileName, contentId, type, _id, fileId , all}) {
 						aria-label={fileName}
 					></object>
 				</div>
-			)}
+			)} */}
+
 
 			{type === TYPES?.noPreview && (
 				<div className="filetop d-none">
@@ -485,8 +486,8 @@ function FileCard({ title, fileName, contentId, type, _id, fileId , all}) {
 }
 
 export function ViewModal({ open, setOpen, file, creator, type, title }) {
-	console.log({file});
-	console.log({type});
+	console.log({ file });
+	console.log({ type });
 	const style = {
 		position: "absolute",
 		bottom: 0,
@@ -523,12 +524,12 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
 					/>
 				</div>
 				<p>{title}</p>
-				{ type && type === "video/mp4" || type?.includes("video") ? (
+				{type && type === "video/mp4" || type?.includes("video") ? (
 					<video
 						src={`${file}`}
 						controls
 						autoPla
-						type={type && type?.includes("matroska") }
+						type={type && type?.includes("matroska")}
 						style={{
 							width: "100%",
 							height: "100%",
@@ -557,7 +558,7 @@ function Pdf({ document }) {
 	const [numPages, setNumPages] = useState(null);
 	const [pageNumber, setPageNumber] = useState(1);
 
-	
+
 
 	function onDocumentLoadSuccess({ numPages }) {
 		setNumPages(numPages);
@@ -606,9 +607,12 @@ function Pdf({ document }) {
 	);
 }
 
-export function DocumentViewer({ file }) {
+export function DocumentViewer({ file, name }) {
 	const docs = [
-		{ uri: file }, // Remote file
+		{
+			uri: file,
+			fileName: name
+		}, // Remote file
 	];
 
 	return (
@@ -622,9 +626,9 @@ export function DocumentViewer({ file }) {
 
 
 
-function EditItem({open, setOpen, all }){
+function EditItem({ open, setOpen, all }) {
 
-    const style = {
+	const style = {
 		position: "absolute",
 		// bottom: "50%",
 		left: "50%",
@@ -645,52 +649,52 @@ function EditItem({open, setOpen, all }){
 		color: "#0C2191 !important",
 	};
 
-    const [formstate, setFormState] = useState({
-		name:""
+	const [formstate, setFormState] = useState({
+		name: ""
 	})
 
-    const {getItem} = useLocalStorage();
-    const userdata = getItem(KEY)
-    const {teacherConsoleFunctions: {editContentItem}} = useAuth()
-	
+	const { getItem } = useLocalStorage();
+	const userdata = getItem(KEY)
+	const { teacherConsoleFunctions: { editContentItem } } = useAuth()
+
 	const queryClient = useQueryClient()
 
 
-	useEffect(()=>{
-		if(all?.title){
+	useEffect(() => {
+		if (all?.title) {
 			setFormState(all)
-		}	
-	},[all?.title])
+		}
+	}, [all?.title])
 
 
 
-    function handleChange(e){
-		setFormState({...formstate, title: e.target.value})
+	function handleChange(e) {
+		setFormState({ ...formstate, title: e.target.value })
 	}
 
 
 
-    const mutation = useMutation(([token, itemId, state])=>editContentItem(token, itemId, state),{
-        onSuccess: res => {
-			if(res.success){
+	const mutation = useMutation(([token, itemId, state]) => editContentItem(token, itemId, state), {
+		onSuccess: res => {
+			if (res.success) {
 				toast.success(res.message)
 				queryClient.invalidateQueries("getDomainContent")
 				setOpen(false)
-			}else {
+			} else {
 				toast.error(res.message)
 			}
-        },
-        onError: err => {
+		},
+		onError: err => {
 			toast.error(err.message)
-        }
-    })
+		}
+	})
 
 
 
-    function editItem(e){
+	function editItem(e) {
 		e.preventDefault()
-        mutation.mutate([userdata.token, all.fileId, {...formstate}])
-    }
+		mutation.mutate([userdata.token, all.fileId, { ...formstate }])
+	}
 
 
 
@@ -705,31 +709,31 @@ function EditItem({open, setOpen, all }){
 		>
 			<Box style={style} component="form">
 				<Typography>Edit Content</Typography>
-                 {/* <FormControl className="textfield__gap"> */}
-                    <TextField
-                        fullWidth
-                        id="outlined-basic"
-                        label="Domain Name"
-                        variant="outlined"
-                        placeholder="Domain Name"
-                        onChange={handleChange}
-                        name="title"
-                        value={formstate.title || ""}
-                    />
-                {/* </FormControl> */}
-                <div className="contentbutton">
-                    <button className="" onClick={editItem} disabled={mutation.isLoading}>
-                    {
-                        mutation.isLoading ?
-                        <div className="spinner-border" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
-                        :
-                        <span>Submit</span>
-                    }
-                    </button>
-                </div>
-            </Box>
-        </Modal>
-    )
+				{/* <FormControl className="textfield__gap"> */}
+				<TextField
+					fullWidth
+					id="outlined-basic"
+					label="Domain Name"
+					variant="outlined"
+					placeholder="Domain Name"
+					onChange={handleChange}
+					name="title"
+					value={formstate.title || ""}
+				/>
+				{/* </FormControl> */}
+				<div className="contentbutton">
+					<button className="" onClick={editItem} disabled={mutation.isLoading}>
+						{
+							mutation.isLoading ?
+								<div className="spinner-border" role="status">
+									<span className="visually-hidden">Loading...</span>
+								</div>
+								:
+								<span>Submit</span>
+						}
+					</button>
+				</div>
+			</Box>
+		</Modal>
+	)
 }

@@ -1,7 +1,8 @@
 import { Box, Modal } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react'
 import { BiArrowBack, BiUserCircle } from 'react-icons/bi';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { KEY } from '../../../../../../constants';
@@ -110,13 +111,14 @@ const NameBox = styled.div`
     display: flex;
     gap: 1rem;
     padding-block: 1rem;
-    
+    align-items: center;
     img {
         width: 50px;
         height: 50px;
         border-radius: 50%;
     }
 
+    
     p {
         font-size: 18px;
         line-height:25px;
@@ -128,9 +130,13 @@ const NameBox = styled.div`
 
 `
 export const CreateGroup = ({open, setOpen})=> {
-    const [data, setData] = useState({})
+    const [groupData, setGroupData] = useState({
+        students:[],
+        token:"",
+    })
     const [page, setPage] = useState(0);
     const list = [GroupDetails , AddStudentToGroup]
+    console.log({groupData})
     return (
         <Modal
             open={open}
@@ -143,7 +149,7 @@ export const CreateGroup = ({open, setOpen})=> {
             <Box style={style}>
                 {
                     list?.filter((_, i) => i === page).map(Icon => (
-                        <Icon  setPage={setPage} data={data} setData={setData} />
+                        <Icon  setPage={setPage} groupToken={groupData.token} setGroupData={setGroupData} />
                     ))
                 }
             </Box>    
@@ -154,12 +160,35 @@ export const CreateGroup = ({open, setOpen})=> {
 
 
 
-const GroupDetails = ({setPage, setData}) => {
+const GroupDetails = ({setPage, setGroupData}) => {
     const cloudinaryRef = useRef(null);
     const widgetRef = useRef(null);
     const {getItem} = useLocalStorage();
     const userdata = getItem(KEY)
-    const {otherFunctions: {addNewFile}} = useAuth()
+
+    
+    const {otherFunctions: {addNewFile}, teacherFunctions:{createNewGroup}} = useAuth()
+    
+    const [data, setData]= useState({})
+    
+    console.log({data})
+
+    const createGroup = useMutation(([token, data])=>createNewGroup(token, data), {
+        onSuccess: (res)=> {
+            console.log(res)
+            if(res.statusCode === 1){
+                console.log({res})
+
+                setGroupData((prev)=>{
+                    return {
+                        ...prev, token: res.data._id
+                    }
+                })
+                setPage((prev)=> prev + 1)
+            }
+        },
+        onError: err => console.error(err)
+    })
 
     const addToFile = useMutation(([token, data])=> addNewFile(token, data), {
         onSuccess: (res)=> {
@@ -167,6 +196,7 @@ const GroupDetails = ({setPage, setData}) => {
             if(res.statusCode === 1){
                 console.log({res})
                 // setUploadData(res.data)
+                setData({...data, groupImage: res.data.fileId})
                 console.log("setting done")
             }
         },
@@ -190,14 +220,14 @@ const GroupDetails = ({setPage, setData}) => {
                 let extension = ext[ext.length -1]
                 console.log({extension});
                 // setFileUrl(extension)
-                function onChange(e){
-                    setData((prev) => {
-                        return {
-                            ...prev,
-                            groupImg: extension
-                        }
-                    })
-                }
+                // function onChange(e){
+                //     setData((prev) => {
+                //         return {
+                //             ...prev,
+                //             groupImg: extension
+                //         }
+                //     })
+                // }
                 addToFile.mutate([userdata.token, {
                     fileName: extension,
                     mimeType: result.info.resource_type +"/"+ result.info.format,
@@ -219,11 +249,16 @@ const GroupDetails = ({setPage, setData}) => {
         setData((prev) => {
             return {
                 ...prev,
-                groupName: e.target.value
+                title: e.target.value
             }
         })
     }
 
+
+
+    function handleSubmit(){
+        createGroup.mutate([userdata.token, data]) 
+    }
 
   return (
     <>
@@ -234,10 +269,17 @@ const GroupDetails = ({setPage, setData}) => {
             </div>
             <p style={{color:"#888888"}} onClick={()=> widgetRef?.current.open()}>Upload Group image</p>
             <div className="input_container">
-                <input type="text" name="name" id="name" placeholder='Group name' />
+                <input type="text" name="title" id="name" placeholder='Group name' onChange={onChange} value={data.title} />
             </div>
         </Content>
-        <Button onClick={()=>setPage((prev)=> prev + 1)}>Next</Button>
+        <Button onClick={handleSubmit}>
+            {
+                createGroup?.isLoading ?
+                <span className="spinner-border text-white"><span className="visually-hidden">Loading...</span></span>
+                :
+                <span>Next</span>
+            }
+        </Button>
       </Box>
       </>
   )
@@ -245,16 +287,22 @@ const GroupDetails = ({setPage, setData}) => {
 
 
 
-const AddStudentToGroup = ({setPage, data, setData}) => {
+const AddStudentToGroup = ({setPage, data, setGroupData}) => {
 
-    function onChange(e){
-        setData((prev) => {
-            return {
-                ...prev,
-                groupName: e.target.value
-            }
-        })
-    }
+
+    const {teacherFunctions:{fetchBootcampApplications}} = useAuth()
+    const {getItem} = useLocalStorage()
+    const userdata = getItem(KEY)
+    const {id} = useParams()
+
+
+    const getStudents = useQuery(["fetch student list"], ()=>fetchBootcampApplications(userdata.token, id), {
+        onSuccess: res => {
+            console.log({res})
+        },
+        onError: err => {console.error(err)}
+
+    })
     return (
         <>
             <Box>
@@ -267,7 +315,11 @@ const AddStudentToGroup = ({setPage, data, setData}) => {
                         <input type="search" name="name" id="name" placeholder="Type name" />
                     </div>
                     <div className="student_list_conat">
-                        <StudentListBox setData={setData} />
+                        {
+                            getStudents?.data?.data?.map(student => (
+                                <StudentListBox setData={setGroupData} {...student} />
+                            ))
+                        }
                     </div>
                 </AddContent>
                 <Button>Done</Button>
@@ -277,9 +329,10 @@ const AddStudentToGroup = ({setPage, data, setData}) => {
     )
 }
 
-const StudentListBox = ({setData, data})=>{
+const StudentListBox = ({setData, data, studentName, studentId, studentImg})=>{
 
     function onChange(e){
+        console.log(e)
         setData((prev) => {
             return {
                 ...prev,
@@ -289,9 +342,14 @@ const StudentListBox = ({setData, data})=>{
     }
     return (
         <NameBox>
-            <img src="" alt="" />
-            <p>Peter Chan</p>
-            <input type="checkbox" name="" id="" onChange={onChange} />
+            {
+                studentImg ? 
+                <img src={studentImg} alt="" />
+                :
+                <BiUserCircle size="50px" />
+            }
+            <p>{studentName}</p>
+            <input type="checkbox" name="" id="" onClick={onChange} value={studentId} />
         </NameBox>
     )
 }
