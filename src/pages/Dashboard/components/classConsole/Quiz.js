@@ -195,6 +195,7 @@ export default function Quiz() {
             console.log("fetched")
             if(res.data?.length > 0){
                 let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
+                console.log({deadline})
                 setFormData({...res.data[res.data.length -1], endDate: deadline})
                 setResultMainData({...res.data[res.data.length -1]})
                 setEdit(true)
@@ -323,8 +324,7 @@ export default function Quiz() {
     }
 
     
-
-
+    
     return (
 
         <div className=''>

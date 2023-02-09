@@ -411,7 +411,7 @@ function FileCard({ title, fileName, contentId, type, _id, fileId , all}) {
 				</div>
 			)}
 
-			{(type === "application/pdf" ||
+			{/* {(type === "application/pdf" ||
 				type.includes("pdf") ||
 				type ===
 					"application/vnd.openxmlformats-officedocument.presentationml.presentation") && (
@@ -424,7 +424,7 @@ function FileCard({ title, fileName, contentId, type, _id, fileId , all}) {
 						aria-label={fileName}
 					></object>
 				</div>
-			)}
+			)} */}
 
 			{type === TYPES?.noPreview && (
 				<div className="filetop d-none">
