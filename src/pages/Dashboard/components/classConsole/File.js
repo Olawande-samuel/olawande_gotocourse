@@ -411,20 +411,21 @@ function FileCard({ title, fileName, contentId, type, _id, fileId, all }) {
 					</div>
 				)}
 
-			{(type === "application/pdf" ||
+			{/* {(type === "application/pdf" ||
 				type.includes("pdf") ||
 				type ===
-				"application/vnd.openxmlformats-officedocument.presentationml.presentation") && (
-					<div className="filetop">
-						<object
-							type={type}
-							data={fileName}
-							width="100%"
-							height="200"
-							aria-label={fileName}
-						></object>
-					</div>
-				)}
+					"application/vnd.openxmlformats-officedocument.presentationml.presentation") && (
+				<div className="filetop">
+					<object
+						type={type}
+						data={fileName}
+						width="100%"
+						height="200"
+						aria-label={fileName}
+					></object>
+				</div>
+			)} */}
+
 
 			{type === TYPES?.noPreview && (
 				<div className="filetop d-none">
