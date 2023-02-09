@@ -16,11 +16,11 @@ const AttachmentContainer = styled(Paper)`
     // border: 2px solid red !important;
     width: 100%;
     border: 1px solid #fff !important;
-    background: #004DB6 !important;
-    color: #fff !important;
+    /* background: #004DB6 !important; */
+    /* color: #fff !important; */
 
-    /* color:  ${({ active }) => active ? 'var(--theme-blue)' : '#fff'}; */
-    /* background:  ${({ active }) => active ? '#fff' : 'transparent !important'}; */
+    color:  ${({ active }) => active ? ' #0C2191 !important' : '#fff !important'};
+    background:  ${({ active }) => active ? '#fff !important' : 'transparent !important'};
 
     border-radius: 10px !important;
     margin-bottom: 10px;
@@ -43,8 +43,7 @@ const AttachmentInfo = styled.div`
     // border: 2px solid green !important;
 
     & > svg {
-        color: #fff;
-
+        color:  ${({ active }) => active ? ' #0C2191 ' : '#fff'};
       
     }
 
@@ -72,21 +71,23 @@ justify-content: space-between;
 
 
 const CompleteIcon = styled(MdCheckCircle)`
-    color: ${props => props.$isComplete ? '#fff' : 'rgba(0,0,0,.2)'};
+     color:   ${props => props.$isComplete  && props.status ? ' #0C2191 ':
+     props.$isComplete ?  '#fff' : 'rgba(0,0,0,.2)'};
 
-    ${AttachmentContainer}&:hover{
+    /* ${AttachmentContainer}&:hover{
         color:   ${props => props.$isComplete ? 'var(--theme-blue)' : 'rgba(0,0,0,.2)'};
     
-     }
+    } */
 `
 
 const Locked = styled(MdOutlineLock)`
-     color:   ${props => props.$isComplete ? '#fff' : 'rgba(0,0,0,.2)'};
+     color:   ${props => props.$isComplete  && props.status ? ' #0C2191 ':
+     props.$isComplete ?  '#fff' : 'rgba(0,0,0,.2)'};
 
-     ${AttachmentContainer}:hover{
+     /* ${AttachmentContainer}:hover{
         color:   ${props => props.$isComplete ? 'var(--theme-blue) ' : 'rgba(0,0,0,.2)'};
     
-     }
+     } */
 `
 
 
@@ -100,16 +101,19 @@ const Attachement = ({
     setLocked
 }) => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [active, setActive] = useState(false)
 
     const { getItem } = useLocalStorage()
-    const userdata = getItem(KEY)
+    const userdata = getItem(KEY);
+    const contentId = searchParams.get("contentId");
+
+    // console.log({contentId}, content.contentId);
+
 
     let icon = (type) => {
         return type === "FILE_VIDEO" ? <MdAttachFile /> : type === "NOTE" ? <MdNote /> : <MdQuiz />
     }
 
-    const getStatus = (contentId, items, type) => {
+    const getStatus = (contentId, items, type, status) => {
         // console.log({contentId}, {items}, {type});
         if (type === "FILE_VIDEO") {
             let all = items.filter(item => item?.contentId === contentId);
@@ -124,16 +128,16 @@ const Attachement = ({
 
         let findItem = items.find(item => item.contentId === contentId);
         if (findItem) {
-            return findItem?.completedBy?.includes(userdata.id) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />
+            return findItem?.completedBy?.includes(userdata.id) ? <CompleteIcon $isComplete={true} status={status}/> : <CompleteIcon status={status}/>
         }
-        return <CompleteIcon />
+        return <CompleteIcon status={status}/>
     }
 
-    const getLockedStatus = (contentId, items, lock) => {
+    const getLockedStatus = (contentId, items, lock, status) => {
         // console.log({ contentId }, { items }, { lock });
         let findItem = items.find(item => item.contentId === contentId);
         if (findItem) {
-            return lock ? <Locked $isComplete={true} /> : <Locked />
+            return lock ? <Locked $isComplete={true} status={status}/> : <Locked status={status}/>
         }
         return <Locked />
     }
@@ -141,12 +145,11 @@ const Attachement = ({
     return (
         <AttachmentContainer 
             variant="outlined"
-            active={active ? true : false}
+            active={(contentId === content?.contentId) ? true : false}
             onClick={() => {
                 setSearchParams({
                     contentId: content.contentId
                 })
-                setActive(true)
                 setBodyTitle(content?.title)
                 setPickedType(content?.type)
 
@@ -165,14 +168,15 @@ const Attachement = ({
             }}>
 
 
-            <AttachmentInfo >
+            <AttachmentInfo active={(contentId === content?.contentId) ? true : false}
+>
                 {icon(content?.type)}
                 <h5>{content?.title}</h5>
-            </AttachmentInfo>
+            </AttachmentInfo> 
 
             <AttachmentIcon>
-                {getStatus(content?.contentId, content?.items, content?.type)}
-                {getLockedStatus(content?.contentId, content?.items, content?.isLocked)}
+                {getStatus(content?.contentId, content?.items, content?.type, (contentId === content?.contentId))}
+                {getLockedStatus(content?.contentId, content?.items, content?.isLocked, (contentId === content?.contentId))}
 
             </AttachmentIcon>
 

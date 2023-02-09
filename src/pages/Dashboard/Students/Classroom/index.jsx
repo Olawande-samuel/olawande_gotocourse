@@ -660,7 +660,11 @@ function WelcomeSection({ pageHandler, contentItem }) {
                 <p> Provisional Result (based on Objective): <span>100.00%</span></p>
             </QuizInfo>
 
-            <button className='next_button' onClick={pageHandler}>Get started</button>
+            {
+                (contentItem?.attempts < contentItem?.maxAttempts) &&
+                <button className='next_button' onClick={pageHandler}>Get started</button>
+            }
+
         </Quiz>
     )
 }
@@ -678,7 +682,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
 
 
     function pageHandler(_) { setPage(old => old += 1); }
-    function backpageHandler(_) { setPage(old => old -= 1); }
+    // function backpageHandler(_) { setPage(old => old -= 1); }
 
 
     function setNote(text, quizId, questionId, questionIndex, quizIndex) {
@@ -733,7 +737,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
             allAnswers = uploads
         } else allAnswers = myAnswers
 
-        // console.log({allAnswers});
+        console.log({ allAnswers });
         try {
             setLoading(true)
             const res = await attemptQuiz(userdata?.token, contentItem?._id, allAnswers)
@@ -773,27 +777,21 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
     }
 
     // console.log({ myAnswers });
-    console.log({ uploadlink });
 
 
     const AddLink = (e, questionId) => {
         e.preventDefault();
-        console.log({ questionId });
-        console.log({ uploadlink });
 
         const findIndex = uploads.findIndex(up => up.questionId === questionId);
         if (findIndex >= 0) {
-            console.log({ findIndex });
-            // const findItem = uploads.find(up => up.questionId === questionId);
-            // console.log({findItem});
-            // let newItem = findItem.answers.push(uploadlink)
-            let newItem = uploads[findIndex]?.answers?.push(uploadlink)
-            console.log({ newItem });
+            const findItem = uploads.find(up => up.questionId === questionId);
+            let newItem = findItem.answers.push(uploadlink)
+            let newUploadItem = [...uploads]
+            newUploadItem.splice(findIndex, 1, findItem);
             setUploadLink("")
-            return setUploads(uploads.splice(findIndex, 1, newItem))
+            return setUploads(newUploadItem)
 
         } else {
-            console.log("not found");
             setUploads([...uploads, {
                 questionId,
                 answers: [uploadlink]
@@ -814,10 +812,14 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
             const findLinkPos = findItem.answers.findIndex(lin => lin === linkId);
             if (findLinkPos >= 0) {
                 if (findLinksLength === 1) {
-                    return setUploads(uploads.splice(findIndex, 1))
+                    let newItem = [...uploads]
+                    newItem.splice(findIndex, 1);
+                    return setUploads(newItem)
                 }
-                const newItem = findItem.answers.splice(findLinkPos, 1)
-                return setUploads(uploads.splice(findIndex, 1, newItem))
+                findItem.answers.splice(findLinkPos, 1)
+                let newUploadItem = [...uploads]
+                newUploadItem.splice(findIndex, 1, findItem);
+                return setUploads(newUploadItem)
 
             }
             else return;
