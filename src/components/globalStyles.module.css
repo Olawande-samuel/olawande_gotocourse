@@ -18,8 +18,10 @@
 
 .general_logout__button button {
     border: none;
-    color: whitesmoke;
-    background-color: var(--theme-orange);
+    /* color: whitesmoke; */
+    /* background-color: var(--theme-orange); */
+    color: #2F80ED;
+    border: 1px solid #2F80ED;
     padding: 10px 30px;
     font-size: 1rem;
     border-radius: 8px;

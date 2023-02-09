@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Layout from "../../components/Layout"
 import style from "./style.module.css"
 import { IoCalendarSharp, IoTimeSharp } from 'react-icons/io5'
@@ -25,7 +25,7 @@ const Events = () => {
     const blogData = useQuery(["fetch blogs"], () => getBlogs(), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                // console.log("data", res.data);
+                console.log("data", res.data);
                 setBlogs(res.data)
 
             }
@@ -43,7 +43,15 @@ const Events = () => {
         }
     })
 
+    // console.log({blogRef});
 
+    const ReadMore = () => {
+        let div = document.querySelector('.articles__container')
+        console.log({div});
+        div.classList.toggle('toggleheight')
+       
+
+    }
 
     return (
         <Layout>
@@ -57,10 +65,11 @@ const Events = () => {
                     </div>
                 </div>
                 <div className={style.article}>
-                    <div className={style.articles__container}>
+                    <div className="articles__container" >
                         {
                             blogs.length > 0 && blogs.map((blog, id) => (
-                                <Link to={`articles/${blog.title.split(" ").join("-").replace('?', '')}/${blog._id}`} className={style.articleitem} key={id}>
+                                // <Link to={`articles/${blog.title.split(" ").join("-").replace('?', '').replace("/", "%2F")}/${blog._id}`} className={style.articleitem} key={id}>
+                                <Link to={`articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '').replace("/", "%2F")}/${blog._id}`} className={style.articleitem} key={id}>
                                     <div className={style.articleimg}>
                                         <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
 
@@ -68,14 +77,14 @@ const Events = () => {
 
                                     <div className={style.articleInfo}>
                                         <div className={style.articleTop}>
-                                            <span style={{ fontSize: "12px", color: "#4100FA" }}>04.08.22</span>
+                                            <span style={{ fontSize: "12px", color: "#4100FA" }}>{new Date(blog.createdAt).toLocaleDateString().split("/").join('.')}</span>
                                             <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} />
 
                                         </div>
                                         <h4>
                                             {blog.title}
                                         </h4>
-                                        <p className="restricted_line" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
+                                        <p className="restrict" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
 
 
                                     </div>
@@ -92,7 +101,7 @@ const Events = () => {
 
                 </div>
                 <div className={style.articlebtn}>
-                    <button>Read more</button>
+                    <button onClick={ReadMore}>Read more</button>
                 </div>
 
                 <div className={style.hero}>
@@ -159,7 +168,7 @@ function Upcoming({ id, event }) {
             <div className={style.upcoming_event_right}>
                 <div className={style.upcoming_event_text_container}>
                     <h5>{event.title}</h5>
-                    <p className='restricted_line'>{event.description}</p>
+                    <p className='restrict'>{event.description}</p>
                     <div className={style.tagsConatiner}>
                         {event.tags.map((e, id) => (
                             <div className={style.tags} key={id}>
@@ -216,7 +225,7 @@ function Ondemand({ event }) {
                         <small className={style.tag}>UI/UX</small> */}
                     </div>
                     <h5>{event.title}</h5>
-                    <p className='restricted_line'>{event.description}</p>
+                    <p className='restrict'>{event.description}</p>
                     <div className={style.lastbtn}>
                         <button>Watch Now</button>
                     </div>
@@ -301,7 +310,7 @@ export function Event() {
                         </div>
                     </div>
 
-                </div> 
+                </div>
 
             </div>
 

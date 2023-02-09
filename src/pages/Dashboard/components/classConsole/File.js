@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "../classConsole/Content.css";
 import { IoMdCloudDownload } from "react-icons/io";
@@ -13,7 +13,7 @@ import { useAuth } from "../../../../contexts/Auth";
 import { useLocalStorage } from "../../../../hooks";
 import { KEY } from "../../../../constants";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { IconButton, Modal, stepContentClasses, Tooltip } from "@mui/material";
+import { IconButton, Modal, TextField, Tooltip } from "@mui/material";
 import { UploadScreenRecording, UploadVideoRecording } from "./Suite";
 import VideoImageThumbnail from "react-video-thumbnail-image";
 import processed from "../../../../images/processed.png";
@@ -21,9 +21,16 @@ import { AiOutlineClose } from "react-icons/ai";
 import { MenuOptionsPopup } from "./components";
 import { FiEdit } from "react-icons/fi";
 import { BiTrash } from "react-icons/bi";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import axios from "axios";
+import UploadWidget from "./components/UploadWidget";
+import { MdOutlineNavigateBefore, MdOutlineNavigateNext } from "react-icons/md";
 
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
+import { FormControl } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -56,8 +63,12 @@ export default function File() {
 	const [screenOpen, setScreenOpen] = useState(false);
 	const [videoOpen, setVideoOpen] = useState(false);
 	const [fileData, setFileData] = useState([]);
+	const [fileUrl, setFileUrl] = useState("");
+	const [uploadData, setUploadData] = useState({});
+	const queryClient = useQueryClient();
+
 	const {
-		consoleFunctions: { fetchFile },
+		consoleFunctions: { fetchFile, addFile },
 	} = useAuth();
 	const { getItem } = useLocalStorage();
 
@@ -110,7 +121,33 @@ export default function File() {
 		}
 	);
 
-	// console.log({ fileData });
+	const mutation = useMutation(([token, data]) => addFile(token, data), {
+		onSuccess: (res) => {
+			queryClient.invalidateQueries("file content");
+		},
+		onError: (err) => console.error(err),
+	});
+
+	// create content after upload
+
+	function createFileContent(file, fileId, fileName) {
+		// call file upload function
+		mutation.mutate([
+			userdata?.token,
+			{
+				classId,
+				contentId,
+				fileName: uploadData.name,
+				title: uploadData?.originalName,
+			},
+		]);
+	}
+
+	useEffect(() => {
+		if (uploadData.name) {
+			createFileContent();
+		}
+	}, [uploadData?.name]);
 
 	return (
 		<>
@@ -155,9 +192,15 @@ export default function File() {
 						<section className="contenttop">
 							<div className="contentbutton">
 								<button className="">Refresh</button>
-								<button className="" onClick={OpenToggle}>
+								<UploadWidget
+									fileUrl={fileUrl}
+									setFileUrl={setFileUrl}
+									type="console"
+									setUploadData={setUploadData}
+								/>
+								{/* <button className="" onClick={OpenToggle}>
 									Add New +
-								</button>
+								</button> */}
 							</div>
 						</section>
 
@@ -169,7 +212,7 @@ export default function File() {
 							) : (
 								<div className="filecardcontainer">
 									{fileData?.map((item) => (
-										<FileCard {...item} key={item._id} />
+										<FileCard {...item} all={item} key={item._id} />
 									))}
 								</div>
 							)}
@@ -193,6 +236,9 @@ export default function File() {
 							uploadType="content"
 							fileCreate={true}
 						/>
+
+						{/* <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} type="console" setUploadData={setUploadData} /> */}
+
 						<UploadForm
 							isOpen={openUpload}
 							setIsOpen={setOpenUpload}
@@ -216,82 +262,72 @@ export default function File() {
 	);
 }
 
-function FileCard({ title, fileName, contentId, type, _id }) {
+function FileCard({ title, fileName, contentId, type, _id, fileId, all }) {
 	const [open, setOpen] = useState(false);
+	const [openEdit, setOpenEdit] = useState(false);
 	const [content, setContent] = useState("");
-    const [anchorEl, setAnchorEl] = useState(null);
-    const openAnchor = Boolean(anchorEl);
-    const {teacherConsoleFunctions: {deleteDomain, deleteContent}} = useAuth();
+	const [anchorEl, setAnchorEl] = useState(null);
+	const openAnchor = Boolean(anchorEl);
+	const {
+		teacherConsoleFunctions: { deleteDomain, deleteContent, editContentItem },
+	} = useAuth();
+
+	const { getItem } = useLocalStorage();
+	const userdata = getItem(KEY);
+
+	const queryClient = useQueryClient();
+
+	const contextMenu = [
+		{
+			id: 1,
+			title: "Edit File Name",
+			iconImg: FiEdit,
+			event: handleEdit
+		},
+		{
+			id: 2,
+			title: "Move Content",
+			iconImg: IoIosArrowUp,
+			// event: handleEdit
+		},
+		{
+			id: 3,
+			title: "Move Content",
+			iconImg: IoIosArrowDown,
+			// event: handleEdit
+		},
+		{
+			id: 4,
+			title: "Delete",
+			iconImg: BiTrash,
+			event: handleDelete,
+		},
+	];
+
+	const contentdelete = useMutation(([token, id]) => deleteContent(token, id), {
+		onSuccess: (res) => {
+			queryClient.invalidateQueries("file content");
+		},
+		onError: (err) => {
+			console.error(err);
+		},
+	});
+
+	function handleDelete() {
+		if (window.confirm("Are you sure you want to delete")) {
+			// delete
+			contentdelete.mutate([userdata.token, _id]);
+		}
+	}
+
+	function handleEdit(e, id, item) {
+		setOpenEdit(true)
+	}
 
 
-    console.log({_id})
-    const {getItem} = useLocalStorage();
-    const userdata = getItem(KEY)
+	function MoveUp() { }
 
-    const queryClient = useQueryClient()
-
-    const contextMenu = [
-        {
-            id: 1,
-            title:"Edit File Name",
-            iconImg: FiEdit,
-            // event: handleEdit
-        },
-        {
-            id: 2,
-            title:"Move Content",
-            iconImg: IoIosArrowUp,
-            // event: handleEdit
-        },
-        {
-            id: 3,
-            title:"Move Content",
-            iconImg: IoIosArrowDown,
-            // event: handleEdit
-        },
-        {
-            id: 4,
-            title:"Delete",
-            iconImg: BiTrash,
-            event: handleDelete
-        },
-        
-    ]
-
-
-    const contentdelete = useMutation(([token, id])=>deleteContent(token, id), {
-      onSuccess: (res)=>{
-        console.log({res})
-        // navigate(`/teacher/class-console/class/${classId}`)
-        queryClient.invalidateQueries("file content")
-      },
-      onError: (err)=>{
-        console.error(err)
-      }
-    })
-  
-    
-    function handleDelete(){
-        if(window.confirm("Are you sure you want to delete")){
-            // delete
-                contentdelete.mutate([userdata.token, _id])
-            
-        }
-    }
-
-
-
-    function MoveUp(){
-
-    }
-
-
-
-    function MoveDown(){
-
-    }
-
-
+	function MoveDown() { }
 
 	function openContent() {
 		setOpen(true);
@@ -299,61 +335,84 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 	}
 
 
+	const mutation = useMutation(([token, itemId, state]) => editContentItem(token, itemId, state), {
+		onSuccess: res => {
+			if (res.success) {
+				toast.success(res.message)
+				queryClient.invalidateQueries("getDomainContent")
+				setOpen(false)
+			} else {
+				toast.error(res.message)
+			}
+		},
+		onError: err => {
+			toast.error(err.message)
+		}
+	})
 
-	function downloadContent(file, fileName, type) {
-       
-		axios({
-            url: file,
-            method: 'GET',
-            responseType: 'blob',
-        }).then((response) => {
-            console.log({response})
-            const href = URL.createObjectURL(response.data);
-            const link = document.createElement('a');
-            link.href = href;
-            link.setAttribute('download', fileName);
-            document.body.appendChild(link);
-            link.click();
-    
-            document.body.removeChild(link);
-            URL.revokeObjectURL(href);
-        });
-        
+
+
+	function handleIsDownloadable(e) {
+		e.preventDefault()
+		mutation.mutate([userdata.token, all.fileId, { ...all, downloadable: !all.downloadable }])
 	}
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
 
-    const TYPES = {
-        noPreview: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || "text/csv",
-        
-    }
-    console.log(type === TYPES?.noPreview)
+	function downloadContent(file, fileName, type) {
+		axios({
+			url: file,
+			method: "GET",
+			responseType: "blob",
+		}).then((response) => {
+			const href = URL.createObjectURL(response.data);
+			const link = document.createElement("a");
+			link.href = href;
+			link.setAttribute("download", fileName);
+			document.body.appendChild(link);
+			link.click();
+
+			document.body.removeChild(link);
+			URL.revokeObjectURL(href);
+		});
+	}
+
+	const handleClick = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const TYPES = {
+		noPreview:
+			"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+			"text/csv",
+	};
 
 	return (
-		<div className={`filecard ${type === TYPES?.noPreview && "small__filecard"}`}>
-			{(type.includes("video") || type.includes("image")) && (
-				<div className="filetop">
-					{type === "video/mp4" ? (
-						<video
-							src={fileName}
-							controls
-							muted
-							style={{
-								width: "100%",
-								height: "100%",
-								border: "1px solid #eee",
-								borderRadius: "8px",
-							}}
-						/>
-					) : (
-						<img src={fileName} alt="" />
-					)}
-				</div>
-			)}
+		<div
+			className={`filecard ${type === TYPES?.noPreview && "small__filecard"}`}
+		>
+			{(type.includes("video") ||
+				(type.includes("image") && !type.includes("pdf"))) && (
+					<div className="filetop">
+						{type === "video/mp4" || type.includes("video") ? (
+							<video
+								src={fileName}
+								controls
+								muted
+								style={{
+									width: "100%",
+									height: "100%",
+									border: "1px solid #eee",
+									borderRadius: "8px",
+								}}
+							/>
+						) : (
+							<img src={fileName} alt="" />
+						)}
+					</div>
+				)}
 
-			{(type === "application/pdf" ||
+			{/* {(type === "application/pdf" ||
+				type.includes("pdf") ||
 				type ===
 					"application/vnd.openxmlformats-officedocument.presentationml.presentation") && (
 				<div className="filetop">
@@ -362,11 +421,11 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 						data={fileName}
 						width="100%"
 						height="200"
-                        aria-label={fileName}
-
+						aria-label={fileName}
 					></object>
 				</div>
-			)}
+			)} */}
+
 
 			{type === TYPES?.noPreview && (
 				<div className="filetop d-none">
@@ -375,15 +434,27 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 						data={fileName}
 						width="100%"
 						height="200"
-                        aria-label={fileName}
+						aria-label={fileName}
 					></object>
 				</div>
 			)}
 
 			<div className="filebottom">
-                <div className="position-absolute end-0" style={{cursor:"pointer"}}>
-                    <MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} content={true} type={type}  />
-                </div>
+				<div className="position-absolute end-0" style={{ cursor: "pointer" }}>
+					<MenuOptionsPopup
+						handleClick={handleClick}
+						anchorEl={anchorEl}
+						setAnchorEl={setAnchorEl}
+						openAnchor={openAnchor}
+						data={contextMenu}
+						id={_id}
+						content={true}
+						type={type}
+						fileId={fileId}
+						x={all}
+						handleIsDownloadable={handleIsDownloadable}
+					/>
+				</div>
 				<h3>{title}</h3>
 				<div className="filebutton">
 					<i>
@@ -401,6 +472,7 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 					<button onClick={openContent}>Open</button>
 				</div>
 			</div>
+			<EditItem all={all} open={openEdit} setOpen={setOpenEdit} />
 
 			<ViewModal
 				open={open}
@@ -414,19 +486,21 @@ function FileCard({ title, fileName, contentId, type, _id }) {
 }
 
 export function ViewModal({ open, setOpen, file, creator, type, title }) {
+	console.log({ file });
+	console.log({ type });
 	const style = {
 		position: "absolute",
 		bottom: 0,
 		left: "50%",
 		transform: "translateX(-50%)",
 		width: "100%",
-		height: "100%",
+		height: "100vh",
 		background: "#fff",
 		border: "1px solid #eee",
 		borderRadius: "10px",
 		boxShadow: 24,
 		p: 6,
-		padding: "4rem 2rem",
+		// padding: "4rem 2rem",
 		overflowY: "auto",
 	};
 
@@ -450,11 +524,12 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
 					/>
 				</div>
 				<p>{title}</p>
-				{type === "video/mp4" ? (
+				{type && type === "video/mp4" || type?.includes("video") ? (
 					<video
 						src={`${file}`}
 						controls
-						autoPlay
+						autoPla
+						type={type && type?.includes("matroska")}
 						style={{
 							width: "100%",
 							height: "100%",
@@ -462,15 +537,17 @@ export function ViewModal({ open, setOpen, file, creator, type, title }) {
 							borderRadius: "8px",
 						}}
 					></video>
-				) : type === "application/pdf" ? (
+				) : type === "application/pdf" || type?.includes("pdf") ? (
 					<Pdf document={file} />
-				) : (
+				) : type?.includes("image") && !type?.includes("pdf") ? (
 					<img
 						src={creator ? `${process.env.REACT_APP_IMAGEURL}${file}` : file}
 						alt=""
 						className="w-100 h-100"
 						style={{ objectFit: "contain" }}
 					/>
+				) : (
+					<DocumentViewer file={file} />
 				)}
 			</Box>
 		</Modal>
@@ -481,12 +558,25 @@ function Pdf({ document }) {
 	const [numPages, setNumPages] = useState(null);
 	const [pageNumber, setPageNumber] = useState(1);
 
+
+
 	function onDocumentLoadSuccess({ numPages }) {
 		setNumPages(numPages);
 	}
 
+	function prev() {
+		if (pageNumber !== 1) {
+			setPageNumber(pageNumber - 1);
+		}
+	}
+	function next() {
+		if (pageNumber < numPages) {
+			setPageNumber(pageNumber + 1);
+		}
+	}
+
 	return (
-		<div>
+		<div className="pdf_container">
 			<Document
 				file={{
 					url: document,
@@ -498,6 +588,152 @@ function Pdf({ document }) {
 			<p>
 				Page {pageNumber} of {numPages}
 			</p>
+			<div className="pdf_controls">
+				<button className="prev" disabled={pageNumber === 1} onClick={prev}>
+					<MdOutlineNavigateBefore />
+				</button>
+				<span>
+					{pageNumber} of {numPages}
+				</span>
+				<button
+					className="next"
+					disabled={pageNumber === numPages}
+					onClick={next}
+				>
+					<MdOutlineNavigateNext />
+				</button>
+			</div>
 		</div>
 	);
+}
+
+export function DocumentViewer({ file, name }) {
+	const docs = [
+		{
+			uri: file,
+			fileName: name
+		}, // Remote file
+	];
+
+	return (
+		<DocViewer
+			documents={docs}
+			prefetchMethod="GET"
+			pluginRenderers={DocViewerRenderers}
+		/>
+	);
+}
+
+
+
+function EditItem({ open, setOpen, all }) {
+
+	const style = {
+		position: "absolute",
+		// bottom: "50%",
+		left: "50%",
+		transform: "translateX(-50%)",
+		width: 400,
+		height: "50vh",
+		background: "#fff",
+		// border: "1px solid #eee",
+		borderRadius: "10px",
+		boxShadow: 24,
+		p: 6,
+		padding: "4rem 2rem",
+		overflowY: "auto",
+		/* border: 2px solid red; */
+		display: "flex",
+		flexDirection: "column",
+		gap: "1rem",
+		color: "#0C2191 !important",
+	};
+
+	const [formstate, setFormState] = useState({
+		name: ""
+	})
+
+	const { getItem } = useLocalStorage();
+	const userdata = getItem(KEY)
+	const { teacherConsoleFunctions: { editContentItem } } = useAuth()
+
+	const queryClient = useQueryClient()
+
+
+	useEffect(() => {
+		if (all?.title) {
+			setFormState(all)
+		}
+	}, [all?.title])
+
+
+
+	function handleChange(e) {
+		setFormState({ ...formstate, title: e.target.value })
+	}
+
+
+
+	const mutation = useMutation(([token, itemId, state]) => editContentItem(token, itemId, state), {
+		onSuccess: res => {
+			if (res.success) {
+				toast.success(res.message)
+				queryClient.invalidateQueries("getDomainContent")
+				setOpen(false)
+			} else {
+				toast.error(res.message)
+			}
+		},
+		onError: err => {
+			toast.error(err.message)
+		}
+	})
+
+
+
+	function editItem(e) {
+		e.preventDefault()
+		mutation.mutate([userdata.token, all.fileId, { ...formstate }])
+	}
+
+
+
+	return (
+		<Modal
+			open={open}
+			onClose={(e) => {
+				setOpen((_) => false);
+			}}
+			aria-labelledby="modal-modal-title"
+			aria-describedby="modal-modal-description"
+		>
+			<Box style={style} component="form">
+				<Typography>Edit Content</Typography>
+				{/* <FormControl className="textfield__gap"> */}
+				<TextField
+					fullWidth
+					id="outlined-basic"
+					label="Domain Name"
+					variant="outlined"
+					placeholder="Domain Name"
+					onChange={handleChange}
+					name="title"
+					value={formstate.title || ""}
+				/>
+				{/* </FormControl> */}
+				<div className="contentbutton">
+					<button className="" onClick={editItem} disabled={mutation.isLoading}>
+						{
+							mutation.isLoading ?
+								<div className="spinner-border" role="status">
+									<span className="visually-hidden">Loading...</span>
+								</div>
+								:
+								<span>Submit</span>
+						}
+					</button>
+				</div>
+			</Box>
+		</Modal>
+	)
 }

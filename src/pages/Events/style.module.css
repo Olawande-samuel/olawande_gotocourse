@@ -15,14 +15,7 @@
     padding: 2rem 0;
 }
 
-.articles__container {
-    width: 100%;
-    padding: 2rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(289px, 100%), 300px));
-    gap: 3rem;
 
-}
 
 
 
@@ -72,6 +65,9 @@
     color: #86868B;
 }
 
+.articleInfo img {
+    max-width: 100%;
+}
 .articleTop {
     display: flex;
     align-items: center;

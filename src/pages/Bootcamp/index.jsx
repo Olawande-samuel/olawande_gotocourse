@@ -17,7 +17,7 @@ import { motion } from "framer-motion"
 import Layout from "../../components/Layout";
 import clsx from "./styles.module.css";
 import { useLocalStorage } from "../../hooks";
-import { getDate, gotoclass } from "../../constants";
+import { getDate, gotoclass, tConvert } from "../../constants";
 import { useNavigate, useParams } from "react-router-dom";
 import BootcampImage from "../../images/bootcamp.webp";
 import Teacher from "../../images/bootcamps/teacher.png";
@@ -42,7 +42,13 @@ import DOMPurify from "dompurify";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { BsArrowRight } from "react-icons/bs";
+import { ShareButton } from "../Events/articles";
+import { Box, Modal } from "@mui/material";
+import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton } from "react-share";
 
+import { baseURL } from "../../constants";
+import { Grid } from "../../components/NewLanding/Headstart";
+import { Head, PathCourseCard } from "../../components/NewLanding/landingComponents";
 const similarBootcamp = [
   {
     title: "UIUX",
@@ -446,6 +452,8 @@ export function NewBootcampDetailsComponent() {
   const [bootcampTrainingInfo, setBootcampTrainingInfo] = useState({});
   const { getItem } = useLocalStorage();
   let [wishlistState, setWishlistState] = useState(false)
+  const [upcoming, setUpcoming] = useState([])
+  const [similar, setSimilar] = useState([])
 
   const bootcampTraining = getItem("gotocourse-bootcampdata");
   const userdata = getItem("gotocourse-userdata");
@@ -460,7 +468,13 @@ export function NewBootcampDetailsComponent() {
       // console.log({res})
       if (res.data) {
         setBootcampTrainingInfo(res.data.find(item => item.bootcampId === id))
-        // console.log(res.data.find(item => item.bootcampId === id))
+
+        const first = res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
+        const second = res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive);
+        const newData = [...first, ...second];
+        setUpcoming(newData.filter(d => d.bootcampId !== bootcampTrainingInfo.bootcampId));
+        setSimilar(newData.filter(d => (d.subCategory === bootcampTrainingInfo.subCategory) && (d.bootcampId !== bootcampTrainingInfo.bootcampId)));
+
         return
       }
       setBootcampTrainingInfo({})
@@ -475,13 +489,13 @@ export function NewBootcampDetailsComponent() {
 
   async function handleBootstrapEnrollment(e) {
     e.preventDefault();
-    navigate("/coming-soon")
+    // navigate("/coming-soon")
 
-    // if (userdata?.token) {
-    //   navigate("payment")
-    // } else {
-    //   navigate("/login")
-    // }
+    if (userdata?.token) {
+      navigate("payment")
+    } else {
+      navigate("/login")
+    }
   }
 
 
@@ -568,17 +582,21 @@ export function NewBootcampDetailsComponent() {
     getWishList()
   }, [setWishlistState])
 
-  const similar = bootcamps.data?.data?.filter(d => (d.subCategory === bootcampTrainingInfo.subCategory) && d.isActive && (d.bootcampId !== bootcampTrainingInfo.bootcampId))
-  const upcoming = bootcamps.data?.data?.filter(d => d.isActive)
+  // const similar = bootcamps.data?.data?.filter(d => (d.subCategory === bootcampTrainingInfo.subCategory) && d.isActive && (d.bootcampId !== bootcampTrainingInfo.bootcampId))
+  // const similar = bootcamps.data?.data?.filter(d => (d.subCategory === bootcampTrainingInfo.subCategory) && (d.startDate === "2023-01-05T00:00:00.000Z")  && d.isActive && (d.bootcampId !== bootcampTrainingInfo.bootcampId))
+  // const upcoming = bootcamps.data?.data?.filter(d => d.isActive)
+
+
 
 
   const courseType = bootcampTrainingInfo?.subCategory === "IN_DEMAND" ? "In-Demand Courses" :
     bootcampTrainingInfo?.subCategory === "SHORT_COURSES" ? "Short Courses" :
       bootcampTrainingInfo?.subCategory === "UPSKILL_COURSES" ? "Upskill Courses" :
-      bootcampTrainingInfo?.subCategory === "HEAD_START" ? "Head Start Courses" : 
-      bootcampTrainingInfo?.subCategory === "PATH_FINDERS" ? "Pathfinders Courses" : "Executive Courses"
-      
+        bootcampTrainingInfo?.subCategory === "HEAD_START" ? "Head Start Courses" :
+          bootcampTrainingInfo?.subCategory === "PATH_FINDERS" ? "Pathfinders Courses" : "Executive Courses"
 
+
+  console.log({ bootcampTrainingInfo })
   return (
     <Layout>
       <div className={clsx.bootcampTraining}>
@@ -596,6 +614,7 @@ export function NewBootcampDetailsComponent() {
           wishlistState={wishlistState}
           removeCourse={removeCourse}
           userdata={userdata}
+          all={bootcampTrainingInfo}
         />
         <section className={clsx.to_learn}>
           <div className="container">
@@ -607,7 +626,25 @@ export function NewBootcampDetailsComponent() {
               </div>
 
               <div className={clsx.classDescriptionRight}>
+                {
+                  bootcampTrainingInfo?.time?.length > 0 
+                  &&
+                  <div className="mb-3">
+                    <h4>Schedule</h4>
 
+                      {
+                        bootcampTrainingInfo?.time?.map(item=>(
+                          <div>
+                            <span className="me-3">{item.day}:</span>
+                            <span className="">{tConvert(item.startTime)} CST</span>
+                            <span> - </span>
+                            <span>{tConvert(item.endTime)} CST</span>
+                          </div>
+                        ))
+                      }
+
+                  </div>
+                }
                 {
                   bootcampTrainingInfo.subCategory !== "EXECUTIVE_COURSES" &&
 
@@ -687,32 +724,21 @@ export function NewBootcampDetailsComponent() {
         <section >
           <div className="container">
             <h4>Other {courseType}</h4>
-            <div className={clsx.otherCourseGrid}>
-              {similar && similar.length > 0 && similar?.splice(0, 4).map((item, i) => (
-                <div className={clsx.otherCourseCard}>
 
-                  <img src={item.bootcampImg} alt="" />
-                  <div className={clsx.up_content}>
-                    <div>
-                      <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{item.title}</h5>
-                      <div className="d-flex justify-content-between">
-                        <small>{item.duration}</small>
-                        <small>$ {item.packages.length > 0 ? item.packages[0].price : item.price}</small>
-                      </div>
-                    </div>
+            <Grid>
+              {similar && similar.length > 0 && similar?.slice(0, 4).map((item, i) => (
+                ((bootcampTrainingInfo.subCategory === "HEAD_START") || (bootcampTrainingInfo.subCategory === "IN_DEMAND")) ?
+                  <>
+                    <Head {...item} all={item} key={item.bootcampId} />
+                  </>
+                  :
+                  <>
+                    <PathCourseCard {...item} all={item} key={item.bootcampId} />
+                  </>
 
-                    {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-                    <div className={clsx.cta}>
-                      <span onClick={() => gotoclass(item.title, item.category, item.bootcampId, navigate)}>Learn more</span>
-                      <div className={clsx.ct_bar}></div>
-                      {/* <span onClick={()=> gotoclassPayment(title, category, bootcampId, navigate)}>Live Online</span> */}
-                      <span>Self-Paced</span>
-                    </div>
-                  </div>
-
-                </div>
               ))}
-            </div>
+            </Grid>
+
             <div className={clsx.viewmore}>
               <Link to={`/category/${bootcampTrainingInfo.subCategory}`}>View More <BsArrowRight /></Link>
             </div>
@@ -753,7 +779,17 @@ export function NewBootcampDetailsComponent() {
 
 
 
-export function DetailsHero({ navHeight, title, description, addToWishList, subCategory, handleBootstrapEnrollment, loading, img, endDate, startDate, wishlistState, removeCourse, userdata }) {
+export function DetailsHero({ navHeight, title, description, addToWishList, subCategory, handleBootstrapEnrollment, loading, img, endDate, startDate, wishlistState, removeCourse, userdata, all }) {
+
+  console.log({ all })
+
+  const [open, setOpen] = useState(false)
+
+
+  function shareCourse() {
+    setOpen(true);
+  }
+
 
   return (
     <section
@@ -777,20 +813,10 @@ export function DetailsHero({ navHeight, title, description, addToWishList, subC
                 boxShadow: "0px 0px 8px rgb(225, 225, 225)"
               }}
               transition={{ duration: 0.1 }}
-              onClick={handleBootstrapEnrollment}>Enroll now</motion.button>
-            {/* <motion.button
-              whileHover={{
-                boxShadow: "0px 0px 8px rgb(225, 225, 225)"
-              }}
-              transition={{ duration: 0.1 }}
-              onClick={addToWishList}
+              onClick={handleBootstrapEnrollment}
             >
-              {
-                loading ? <div className="spinner-border"></div>
-                  :
-                  "Add to wishlist"
-              }
-            </motion.button> */}
+              Enroll now
+            </motion.button>
 
             {
               (!userdata.token) ? <button onClick={addToWishList}>
@@ -835,13 +861,22 @@ export function DetailsHero({ navHeight, title, description, addToWishList, subC
                   </button>
 
             }
-
+            <motion.button
+              whileHover={{
+                boxShadow: "0px 0px 8px rgb(225, 225, 225)"
+              }}
+              transition={{ duration: 0.1 }}
+              onClick={shareCourse}
+            >
+              Share
+            </motion.button>
 
 
 
           </div>
         </div>
       </div>
+      <ShareModal x={all} open={open} setOpen={setOpen} />
     </section>
   )
 }
@@ -890,5 +925,98 @@ export function Upcome({ _id, title, duration, category, subCategory, bootcampId
         <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>learn More</button>
       </div>
     </div>
+  )
+}
+
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: "min(100% - .3rem, 550px)",
+  height: 400,
+  bgcolor: 'background.paper',
+  border: '.5px solid #333',
+  boxShadow: 24,
+  overflow: "hidden",
+  p: 4,
+};
+
+export function ShareModal({ x, open, setOpen, url }) {
+  console.log({ x })
+  const inputRef = useRef()
+  function copyText() {
+
+    let copy = inputRef.current.value
+    navigator.clipboard.writeText(copy);
+
+    // Alert the copied text
+    alert("Copied the text: " + copy);
+  }
+
+  function handleClose() {
+    setOpen(false)
+  }
+
+  function generateUrl() {
+
+    if (x?.title?.trim().toLowerCase().includes("/")) {
+      let newTitle = encodeURIComponent(x?.title)?.trim().split("/").join("-").toLowerCase()
+      return `https://gotocourse.com/categories/${x?.category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle.trim().split(" ").join("-").toLowerCase()}/${x?.bootcampId?.trim()}`
+    } else {
+      return `https://gotocourse.com/categories/${x?.category?.trim().split(" ").join("-").toLowerCase()}/courses/${encodeURIComponent(x?.title)?.trim().split(" ").join("-").toLowerCase()}/${x?.bootcampId?.trim()}`
+    }
+  }
+ 
+  return (
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+      className="message"
+    >
+      <Box sx={modalStyle}>
+        <div className="boxtop">
+          <h5>Share Course</h5>
+
+          <Box>
+            <p>Share to: </p>
+            <div>
+              <FacebookShareButton url={generateUrl()}>
+                <FacebookIcon />
+              </FacebookShareButton>
+              <TwitterShareButton url={generateUrl()}>
+                <TwitterIcon />
+              </TwitterShareButton>
+              <LinkedinShareButton url={generateUrl()}>
+                <LinkedinIcon />
+              </LinkedinShareButton>
+              <TelegramShareButton url={generateUrl()}>
+                <TelegramIcon />
+              </TelegramShareButton>
+              <EmailShareButton url={generateUrl()}>
+                <EmailIcon />
+              </EmailShareButton>
+            </div>
+            <div className="d-flex align-items-center mt-3" style={{ gap: "1rem" }}>
+              <input type="text" name="" id="" className="form-control" ref={inputRef} value={generateUrl()} />
+              <button type="button" onClick={copyText}
+                style={{
+                  border: "none",
+                  outline: "none",
+                  backgroundColor: "var(--theme-blue)",
+                  color: "#fff",
+                  padding: ".5rem",
+                  borderRadius: "8px"
+                }}
+
+              >Copy</button>
+            </div>
+          </Box>
+        </div>
+      </Box>
+    </Modal>
   )
 }

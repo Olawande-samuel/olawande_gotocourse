@@ -944,7 +944,7 @@ function ChatTab(){
             <Createbutton onClick={()=> setShow(true)}>Create Group</Createbutton>
             <Groups>
                 {
-                    groups.map(({title, description, participants, showActions, _id}, i) => (
+                    groups?.map(({title, description, participants, showActions, _id, students}, i) => (
                         <Group key={i}>
                             <GroupTop>
                                 <h2>{title}</h2>
@@ -961,7 +961,7 @@ function ChatTab(){
                                 <h3>{title}</h3>
                                 <p className="restricted_line">{description}</p>
                                 <footer>
-                                    <span>{participants} participants</span>
+                                    <span><span>{students}</span> participants</span>
                                     <Link to={`group/${_id}`} className="d-inline-flex">
                                         <button>Open team</button>
                                     </Link>
@@ -1127,6 +1127,76 @@ export const ChatBox = styled.div`
     overflow-y: scroll;
     height: 85%;
 `
+export const ChatInfo = styled.div`
+    display: flex;
+    padding: .8rem;
+    margin-block: .5rem;
+    border: 1px solid #ababab;
+    border-radius: 10px;
+
+`
+
+export const UserImage = styled.div`
+    margin-right: 1rem;
+    border-radius:50%;
+    width: ${(props) => props.aside ? "30px" : "50px"};
+    height: ${(props) => props.aside ? "30px" : "50px"};
+    background-color: var(--theme-blue);
+    display: grid;
+    place-items:center;
+
+    
+`
+export const ChatDetails = styled.div`
+    h6 {
+        color: var(--theme-blue);
+        font-weight: 700;
+        margin-bottom: .3rem;
+    }
+
+    p {
+        margin-bottom: 0;
+    }
+`
+
+export const ChatStudentList = styled.div`
+    
+`
+export const StudentSearch = styled.div`
+    border: 1px solid #ababab;
+    border-radius: 4px;
+    padding: .3rem;
+    display: flex;
+    margin-bottom: 2rem;
+
+    input {
+        border:none;
+        outline: none;
+        margin-right: 1rem;
+    }
+    > div {
+        display: flex;
+        align-items: center;
+        gap: .8rem;
+
+        > div  {
+            width: 1px;
+            height: 100%;
+            background-color: #ababab;
+        }
+    }
+`
+export const StudentsContainer = styled.div``
+const RequestContainer = styled.div``
+export const ActionButton = styled.button`
+    border:none;
+    outline:none;
+    background: transparent;
+    color: red;
+    margin-left: auto;
+    font-size:14px;
+`
+
 export function GroupContent(){
     const {getItem} = useLocalStorage();
     const {groupID} = useParams()
@@ -1196,98 +1266,43 @@ export function GroupContent(){
 }
 
 
-export const ChatInfo = styled.div`
-    display: flex;
-    padding: .8rem;
-    margin-block: .5rem;
-    border: 1px solid #ababab;
-    border-radius: 10px;
 
-`
 
-export const UserImage = styled.div`
-    margin-right: 1rem;
-    border-radius:50%;
-    width: ${(props) => props.aside ? "30px" : "50px"};
-    height: ${(props) => props.aside ? "30px" : "50px"};
-    background-color: var(--theme-blue);
-    display: grid;
-    place-items:center;
-
-    
-`
-export const ChatDetails = styled.div`
-    h6 {
-        color: var(--theme-blue);
-        font-weight: 700;
-        margin-bottom: .3rem;
-    }
-
-    p {
-        margin-bottom: 0;
-    }
-`
-
-function ChatContent({title, user, body, fromUser, isTutor, type}){
+function ChatContent({title, user, body, fromUser, isTutor, type, fullName}){
     return (
         <ChatInfo>
             <UserImage>
                 <FaUser size="1.5rem" color="#fff" />
             </UserImage>
             <ChatDetails>
-                <h6>{isTutor ? "Teacher": user?.fullName}</h6>
+                <h6>{isTutor ? "Teacher": fullName}</h6>
                 <p>{body}</p>
             </ChatDetails>
         </ChatInfo>
     )
 }
 
-export const ChatStudentList = styled.div`
-    
-`
-export const StudentSearch = styled.div`
-    border: 1px solid #ababab;
-    border-radius: 4px;
-    padding: .3rem;
-    display: flex;
-    margin-bottom: 2rem;
 
-    input {
-        border:none;
-        outline: none;
-        margin-right: 1rem;
-    }
-    > div {
-        display: flex;
-        align-items: center;
-        gap: .8rem;
-
-        > div  {
-            width: 1px;
-            height: 100%;
-            background-color: #ababab;
-        }
-    }
-`
-export const StudentsContainer = styled.div``
-const RequestContainer = styled.div``
-export const ActionButton = styled.button`
-    border:none;
-    outline:none;
-    background: transparent;
-    color: red;
-    margin-left: auto;
-    font-size:14px;
-`
 function ChatAside(){
     
     const {getItem}= useLocalStorage();
-    const {teacherConsoleFunctions: {fetchGroupStudents, approveStudent}} = useAuth()
+    const {teacherConsoleFunctions: {fetchGroupStudents, approveStudent, addToGroup}, teacherFunctions:{fetchBootcampApplications}} = useAuth()
     const {groupID}= useParams();
 
     const userdata = getItem(KEY);
     const [studentList, setStudentList] = useState([]);
+    const [allStudentList, setAllStudentList] = useState([]);
     const queryClient = useQueryClient()
+    const { classId } = useParams()
+
+    const fetchAllStudents = useQuery(["all students", userdata?.token], ()=>fetchBootcampApplications( userdata?.token, classId), {
+        onSuccess: (res)=> {
+            if(res.statusCode === 1 ) {
+                setAllStudentList(res.data)
+            }
+        }
+    })
+
 
     const fetchStudents = useQuery(["group students", userdata?.token], ()=>fetchGroupStudents( userdata?.token, groupID), {
         onSuccess: (res)=> {
@@ -1305,10 +1320,27 @@ function ChatAside(){
     })
 
 
+    const addStudentToGroupMutation = useMutation(([token, id, data])=>addToGroup(token, id, data), {
+        onSuccess: (res)=> {console.log(res)
+            queryClient.invalidateQueries("group students")
+        },
+        onError: (err)=> console.error(err)
+    })
+
+
     function approveApplication(e, id){
         e.preventDefault()
         approveMutation.mutate([userdata.token, id, {data:""}])
     }
+
+
+
+    function AddStudentToGroup(e, id){
+        e.preventDefault()
+        addStudentToGroupMutation.mutate([userdata.token, groupID, {studentId: id}])
+    }
+
+
     return (
         <ChatStudentList>
             <StudentSearch>
@@ -1360,6 +1392,27 @@ function ChatAside(){
                     }
                 </div>
             </RequestContainer>
+            <StudentsContainer>
+                <h6> All Students</h6>
+                <div>
+                    {
+                        allStudentList?.filter(student=> student.status === "paid" || student.paymentStatus === "complete").map(student=>(
+                            <ChatInfo>
+                                <UserImage aside={true}>
+                                    <FaUser size=".7rem" color="#fff" />
+                                </UserImage>
+                                <ChatDetails>
+                                    <h6>{student?.studentName}</h6>
+                                    <small>{student.studentEmail}</small>
+                                </ChatDetails>
+                                <ActionButton onClick={(e)=>AddStudentToGroup(e, student.studentId)}>
+                                    Add
+                                </ActionButton>
+                            </ChatInfo>
+                        ))
+                    } 
+                </div>
+            </StudentsContainer>
         </ChatStudentList>
     )
 }

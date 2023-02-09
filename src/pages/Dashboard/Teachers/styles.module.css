@@ -479,8 +479,8 @@
 .class_con_cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-    overflow: hidden;
-    grid-auto-rows: 250px;
+    /* overflow-y: auto; */
+    grid-auto-rows: min(100%, 350px);
     gap: 1.5rem;
     /* justify-content:space-around; */
     padding: .5rem;

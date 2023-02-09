@@ -4,6 +4,9 @@ import Footer from "./Footer"
 import End from "./End"
 import { useAuth } from '../contexts/Auth'
 import { useLocation } from 'react-router-dom'
+
+
+
 const Layout = ({ children, background }) => {
   const { generalState: { navHeight }, } = useAuth()
   const height = localStorage.getItem("g2cNavHeight")

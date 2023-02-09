@@ -754,13 +754,16 @@ function ClassesCard({ numberOfLessons, title, date, time, isLive, color }) {
 export const Dashboard = ()=>{
 
   const navigate = useNavigate();
-  const { generalState: { isMobile }, teacherFunctions: { fetchApplications, fetchCourses, earnings , fetchBootcamps}, } = useAuth();
+  const { generalState: { isMobile }, teacherFunctions: { fetchApplications, fetchCourses, earnings , fetchBootcamps, fetchMyStudents}, } = useAuth();
 
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
 
   // const {isLoading, isError, isSuccess, data, error} = useQuery(["teacher courses"], () => fetchCourses(userdata.token))
   const {isLoading, isError, isSuccess, data, error} = useQuery(["teacher bootcamp"], () => fetchBootcamps(userdata.token))
+
+  const {data:studentData} = useQuery(["teacher students"], () => fetchMyStudents(userdata.token))
+  
 
   if(data?.statusCode === 0){
     toast.error(data?.message, {
@@ -773,10 +776,6 @@ export const Dashboard = ()=>{
       progress: true,
     });
   }
-
-
-
-  console.log({data})
 
     const topContent =[
       {
@@ -799,9 +798,19 @@ export const Dashboard = ()=>{
       }
   ]
 
+  
   if(data?.data){
     topContent[1].value = data.data.length
   }
+  
+  if(studentData?.data?.length > 0){
+    let myStudents = new Set()
+
+    studentData.data.forEach(student => myStudents.add(student.studentId))
+    topContent[0].value = myStudents.size
+  }
+
+
   return (
     <Teachers isMobile={isMobile} userdata={userdata} header="Dashboard">
     <div className={clsx.teachers_profile}>
@@ -834,7 +843,7 @@ export const Dashboard = ()=>{
               </ul>
           </div>
           {/* <div className={clsx["dashboard_courses--right"]}>
-              <h6>My Courses</h6>
+              <h6>My Classes</h6>
               <ul>
                   {
                       data?.data?.length === 0 || !data?.data ?  

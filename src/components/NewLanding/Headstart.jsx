@@ -5,10 +5,10 @@ import styled from "styled-components";
 import { useAuth } from "../../contexts/Auth";
 import { ClassTypeComponent, Head, InDemand } from "./landingComponents";
 
-const Grid = styled.div`
+export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-  grid-auto-rows: 420px;
+  grid-auto-rows: ${props => props.height ?  props.height : "460px"};
   overflow: hidden;
   gap: 2.5rem;
   row-gap: 3rem;
@@ -46,7 +46,7 @@ const Headstart = () => {
     <ClassTypeComponent {...data}>
       <Grid>
         {
-          shorts?.filter(item=>item.isActive).slice(0,8).map((item) => (
+          shorts?.filter(item=>item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)).slice(0,8).map((item) => (
             <Head {...item} all={item} key={item.bootcampId}/>
           ))
         }

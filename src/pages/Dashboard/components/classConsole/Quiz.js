@@ -5,20 +5,20 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { IoIosCheckmarkCircle } from 'react-icons/io';
 import { IoDocumentTextOutline, IoTimeSharp } from 'react-icons/io5';
-import { AiOutlineArrowLeft } from 'react-icons/ai';
-import { InputLabel, MenuItem, FormControl, Select, FormControlLabel, Switch, Button } from '@mui/material'
+import { AiOutlineArrowLeft, AiOutlineClose } from 'react-icons/ai';
+import { InputLabel, MenuItem, FormControl, Select, FormControlLabel, Switch, Button, TextField, Modal } from '@mui/material'
 import { RiDeleteBinFill } from 'react-icons/ri';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
-import { useEffect } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../../../contexts/Auth';
 import { KEY } from '../../../../constants';
 import { useLocalStorage } from '../../../../hooks';
 import { toast } from 'react-toastify';
-import { formatDiagnosticsWithColorAndContext } from 'typescript';
+import ReactQuill from 'react-quill';
+
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -103,15 +103,44 @@ export default function Quiz() {
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
 
-    const { consoleFunctions: { fetchQuiz, addQuiz }, } = useAuth();
+    const { consoleFunctions: { fetchQuiz, addQuiz, quizEdit }, } = useAuth();
     let path = pathname.split("/")
     const {classId} = useParams()
     let searchData = search.split("=").reverse()[0]
     const contentId = searchParams.get("content")
+    const [resultMainData, setResultMainData] = useState({})
+    const [edit, setEdit] = useState(false)
 
-    // useEffect(()=>{
-    //     setFormData({...formData, classId, contentId: searchData})
-    // },[classId, searchData])
+    const queryClient = useQueryClient()
+
+    const [formData, setFormData] = useState({
+        classId:"",
+        contentId:"",
+        title: "",
+        endDate: "",
+        endTime: "",
+        note: "",
+        timeLimit: "",
+        maxAttempts: 1,
+        questions: [
+            {
+                type: "",
+                title: "",
+                showAnswer: false,
+                answer:"",
+                options: [
+                    {
+                        isAnswer: false,
+                        title: ""
+                    }
+                ]
+
+            }
+        ]
+
+    })
+
+    
  
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -141,13 +170,39 @@ export default function Quiz() {
         }
     })
 
-    const getContentfromQuery = useQuery(["quiz content", contentId, userdata?.token], () => fetchQuiz(userdata.token, searchData), {
+
+    const editQuiz = useMutation(([token, id, data])=>quizEdit(token, id, data), {
+        onSuccess: (res) => {
+            if(res.statusCode === 1){
+                toast.success(res.message)
+                queryClient.inValidateQueries("quiz content")
+                return
+            }
+            toast.error(res.message)
+        },
+        onError: (err) => {
+            toast.error("something went wrong")
+
+            console.error(err)
+        }
+    })
+
+
+
+    const getContentfromQuery = useQuery([`quiz content ${contentId}`, contentId], () => fetchQuiz(userdata.token, searchData), {
+        enabled: userdata.token !== null,
         onSuccess: (res)=> {
             console.log("fetched")
+            console.log(res.data.length > 0)
+
             if(res.data?.length > 0){
                 let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
-                setFormData({...res.data[res.data.length -1], endDate: deadline})
+                let deadlineTime = res.data[res.data.length -1].endDate?.split("T")[1]
+                setFormData({...res.data[res.data.length -1], endDate: deadline, endTime: deadlineTime.substr(0, 5)})
+                setResultMainData({...res.data[res.data.length -1]})
+                setEdit(true)
             }else{
+                setEdit(false)
                 setFormData({
                     classId,
                     contentId:searchData,
@@ -178,6 +233,8 @@ export default function Quiz() {
         }
     } )
 
+    console.log({formData})
+    console.log({getContentfromQuery})
     
 
     function goBack() {
@@ -194,37 +251,13 @@ export default function Quiz() {
     }
 
 
-    const [formData, setFormData] = useState({
-        classId:"",
-        contentId:"",
-        title: "",
-        endDate: "",
-        endTime: "",
-        note: "",
-        timeLimit: "",
-        maxAttempts: 1,
-        questions: [
-            {
-                type: "",
-                title: "",
-                showAnswer: false,
-                answer:"",
-                options: [
-                    {
-                        isAnswer: false,
-                        title: ""
-                    }
-                ]
-
-            }
-        ]
-
-    })
+   
 
 
     const handleInputChange = (e, index) => {
         const { name, value } = e.target;
         const list = { ...formData }
+        console.log({list})
         list.questions[index][name] = value;
         setFormData(list)
     }
@@ -287,11 +320,15 @@ export default function Quiz() {
 
     function handleSubmit(e){
         e.preventDefault();
+        edit ?
+        editQuiz.mutate([userdata.token, formData._id, formData])
+        :
         quizAdd.mutate([userdata.token, {...formData, classId, contentId}])
 
     }
 
-
+    
+    
     return (
 
         <div className=''>
@@ -303,30 +340,6 @@ export default function Quiz() {
                         <Tab label="Result" {...a11yProps(1)} />
                     </Tabs>
                 </Box>
-
-                {/* <div className="contentbreadcrumb">
-                    <nav arial-label="breadcrumb">
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item">
-                                <Link to={goBack(pathname)} style={{ color: "var(--theme-blue", textTransform: "uppercase" }}>
-                                    Dashboard
-                                </Link>
-                            </li>
-                            {bread
-                                .filter((item) => item !== "")
-                                .map((item, idx) => (
-                                    <li className="breadcrumb-item text-uppercase" key={idx}>
-                                        <Link
-                                            style={{ color: "var(--theme-blue" }}
-                                            to={`${bread.slice(0, idx + 2).join("/")}`}
-                                        >
-                                            {item.split("-").join(" ")}
-                                        </Link>
-                                    </li>
-                                ))}
-                        </ol>
-                    </nav>
-                </div> */}
 
                 <TabPanel value={value} index={0}>
                     <main className='quiz__contentbody'>
@@ -399,10 +412,6 @@ export default function Quiz() {
                                                         <FormControl sx={{ m: 1, width: "100%" }} >
                                                             <InputLabel id="answertype-label">Question Type</InputLabel>
                                                             <Select
-                                                                // labelId="questiontype-label"
-                                                                // id="questiontype"
-                                                                // label="question"
-                                                                // className="myselect"
                                                                 value={x.type}
                                                                 name="type"
                                                                 displayEmpty
@@ -417,16 +426,24 @@ export default function Quiz() {
                                                                 <MenuItem value="MULTIPLE_CHOICE" >
                                                                     Multiple Choice
                                                                 </MenuItem>
-                                                                <MenuItem value="checkbox" >
+                                                                <MenuItem value="CHECKBOX" >
                                                                     Checkbox
                                                                 </MenuItem>
-                                                                <MenuItem value="file">
+                                                                <MenuItem value="FILE_UPLOAD">
                                                                     File Upload
                                                                 </MenuItem>
                                                             </Select>
 
-                                                            <div className="texteditor quiz__editor">                  
-                                                                <CKEditor
+                                                            <div className="texteditor quiz__editor">  
+                                                            
+                                                             <ReactQuill theme="snow" value={x?.title} onChange={(e)=>{
+                                                                 const list = { ...formData }
+                                                                 list.questions[id]['title'] = e;
+                                                                 setFormData(list)
+                                                            }} 
+                                                            />
+                
+                                                                {/* <CKEditor
                                                                 editor={ClassicEditor}
                                                                 data={x?.title}
                                                                 onReady={editor => {
@@ -444,7 +461,7 @@ export default function Quiz() {
                                                                 }}
                                                                 onFocus={(event, editor) => {
                                                                 }}
-                                                            />
+                                                            /> */}
 
                                                                 <div className='textbtn'>
                                                                     <Button
@@ -463,6 +480,7 @@ export default function Quiz() {
                                                                             <Switch
                                                                                 checked={x.showAnswer}
                                                                                 name="showAnswer"
+                                                                                defaultValue=""
                                                                                 // onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })}
                                                                                 onChange={e => {
                                                                                     const list = { ...formData }
@@ -575,7 +593,7 @@ export default function Quiz() {
 
 
                             <div className='footerbtn'>
-                                <button disabled={quizAdd.isLoading} >
+                                <button disabled={quizAdd.isLoading || editQuiz.isLoading} >
                                     {
                                         quizAdd.isLoading ? 
                                         <div className="spinner-border text-white">
@@ -602,7 +620,7 @@ export default function Quiz() {
                 </TabPanel>
 
                 <TabPanel value={value} index={1}>
-                    <ResultPanel />
+                    <ResultPanel data={resultMainData} />
                 </TabPanel>
 
             </Box>
@@ -615,10 +633,204 @@ export default function Quiz() {
 }
 
 
-function ResultPanel(){
+function ResultPanel({data}){
+
+    const {getItem} = useLocalStorage()
+    const userdata = getItem(KEY)
+    const {teacherConsoleFunctions: {newFetchAttemptedQuiz}} = useAuth()
+    const [results, setResults] = useState([])
+    
+
+    const fetchStudentsQuizzes = useQuery(["fetchStudentsQuizzes", userdata.token, data?._id], ()=> newFetchAttemptedQuiz(userdata.token, data._id), {
+        onSuccess: (res)=>{
+            if(res.statusCode === 1){
+                setResults(res.data)
+            }
+        },
+        onError: (err)=>console.error(err)
+    })
+
+
+    
     return (
         <section>
-            <p className="text-center lead">No one has attempted the quiz yet</p>
+            <section className="quiz__cards_container">
+                 {
+                    results?.map(item=> (
+                        <ResultCards {...item} />
+                    ))
+                }
+            </section>
+            {/* <p className="text-center lead">No one has attempted the quiz yet</p> */}
         </section>
     )
 }
+
+
+
+
+function ResultCards({studentId, totalScore,quizId, graded, updatedAt}){
+    const [open, setOpen] = useState(false)
+    return (
+        <div className="quiz__card">
+            {/* <p className="quiz__card_student_name fw-bold">Olunloyo Adegoke</p> */}
+            <div>
+                <span>Actual score: </span>
+                <span>{totalScore}</span>
+            </div>
+            <div>
+                <span>Student ID: </span>
+                <span>{studentId}</span>
+            </div>
+            <div>
+                <span>Graded: </span>
+                <span>{graded}</span>
+            </div>
+            {/*<div>*/}
+            {/*    <span>Number of tries: </span>*/}
+            {/*    <span>Actual score</span>*/}
+            {/*</div>*/}
+            <p>{updatedAt.split("T")[0]} {new Date(updatedAt)?.toLocaleTimeString()}</p>
+
+            <div className="d-flex gap-2">
+                <button className="quiz__card_del_btn">Delete</button>
+                <button className="quiz__card_open_btn" type="button" onClick={()=> setOpen(true)} >Open Answer</button>
+            </div>
+            <AssessQuiz open={open} setOpen={setOpen} />
+        </div>
+    )
+}
+
+
+
+
+function AssessQuiz({open, setOpen, data}){
+
+    const style = {
+		position: "absolute",
+		bottom: 0,
+		left: "50%",
+		transform: "translateX(-50%)",
+		width: "100%",
+		height: "100%",
+		background: "#fff",
+		border: "1px solid #eee",
+		borderRadius: "10px",
+		boxShadow: 24,
+		p: 6,
+		padding: "4rem 2rem",
+		overflowY: "auto",
+	};
+    
+    return (
+        <Modal
+			open={open}
+			onClose={(e) => {
+				setOpen((_) => false);
+			}}
+			aria-labelledby="modal-modal-title"
+			aria-describedby="modal-modal-description"
+		>
+			<Box style={style}>
+				<div>
+					<AiOutlineClose
+						onClick={(e) => {
+							setOpen((_) => false);
+						}}
+						size="1.5rem"
+						style={{ marginLeft: "auto", display: "block", cursor: "pointer" }}
+					/>
+				</div>
+                <ScoreSection />
+                <QuestionBox />
+                <div className="">
+                    <button className="quiz__question_review--btn">Save and Submit Quiz Review</button>                     
+                </div>
+            </Box>
+        </Modal>
+    )
+}
+
+
+function ScoreSection(){
+    return (
+
+        <div className="quiz__score">
+            <div>
+                <span>Name: </span>
+                {/* <span>Olunloyo Adegoke</span> */}
+            </div>
+            <div className="mb-2">
+                <span>Student ID: </span>
+                {/* <span>Olunloyo Adegoke</span> */}
+            </div>
+
+            <form className="quiz__score_form" >
+                <div className="mb-2">
+                    <TextField label="Total Score(%)"  fullWidth inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} />
+                    <small></small>
+                </div>
+                <div className="mb-2">
+                    <TextField id="outlined-basic" fullWidth label="Comment" variant="outlined" />                       
+                </div>
+
+                <button className="quiz__score_btn">Submit Grading</button>
+            </form>
+
+
+        </div>
+    )
+}
+
+
+function QuestionBox(){
+    return (
+
+        <div className="quiz__question_box">
+            <form>
+
+            <div>
+                <span>Question 1: </span>
+                <span>Theory</span>
+            </div>
+
+            <p>Question blah blah blah</p>
+
+            <div>Answer 1</div>
+            <div>Answer 2</div>
+        
+            <div className="quiz__question_review">
+                {/* <button className="open_review">Open Review</button>
+ */}
+
+                <div className="quiz__question_review--content">
+                    <form action="" className="quiz__score_form">
+                        <Box sx={{width: 240}} marginBottom="1rem" >
+                            <FormControl fullWidth >
+                                <InputLabel id="demo-simple-select-label">Choose if answer is right</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    // value={age}
+                                    label="Age"
+                                    // onChange={handleChange}
+                                >
+                                    <MenuItem value={10}>Correct</MenuItem>
+                                    <MenuItem value={20}>Incorrect</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                        <Box marginBottom="1rem">
+                            <TextField id="outlined-basic" label="Add a Comment" variant="outlined" />       
+                        </Box>
+
+                        
+                    </form>
+                </div>
+
+            </div> 
+            </form>
+        </div>
+    )
+}
+

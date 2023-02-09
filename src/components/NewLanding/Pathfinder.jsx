@@ -3,12 +3,12 @@ import React from 'react'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { useAuth } from '../../contexts/Auth'
-import { ClassTypeComponent, UpskillCourseCard } from './landingComponents'
+import { ClassTypeComponent, PathCourseCard, UpskillCourseCard } from './landingComponents'
 
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-    grid-auto-rows: 352px;
+    grid-auto-rows: 380px;
     /* overflow: hidden; */
     gap: 1.5rem;
     justify-content:space-around;
@@ -51,8 +51,8 @@ const Pathfinder = () => {
     <ClassTypeComponent {...data}>
         <Grid>
             {
-                shorts?.filter(item=>item.isActive).slice(0, 8).map(item=>(
-                    <UpskillCourseCard {...item} all={item} key={item.bootcampId}/>
+                shorts?.filter(item=>item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)).slice(0, 8).map(item=>(
+                    <PathCourseCard {...item} all={item} key={item.bootcampId}/>
                 ))
             }
         </Grid>

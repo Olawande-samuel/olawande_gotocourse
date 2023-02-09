@@ -14,17 +14,21 @@ const AuthContextProvider = ({children}) => {
         isMobile: false,
         theme: "light",
         showSidebar: false,
+        showLandingSidebar: false,
         teacherProfile: null,
         navHeight: "",
         loading: false,
         notifications:0,
+        carts:0,
         chat:0,
         classConsole: {
             sidebar: false,
             domains: []
         },
         chatDetail:{},
-        scheduledClasses: []
+        searchValue:"",
+        scheduledClasses: [],
+        showMainChat: false,
         
     })
 

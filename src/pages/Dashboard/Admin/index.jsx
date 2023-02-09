@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,7 +13,7 @@ import {
   AiTwotoneDelete,
 } from "react-icons/ai";
 import { FaUserLock } from "react-icons/fa";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import DOMPurify from "dompurify";
 
@@ -51,11 +51,13 @@ import { ClassesCard } from "../Teachers/Bootcamps";
 import Editor from "../components/Editor";
 import Detail from "../../Category/Detail";
 import ReactQuill from "react-quill";
+import { Grid } from "../../../components/NewLanding/Headstart";
+import UploadWidget from "../components/classConsole/components/UploadWidget";
 
 const KEY = "gotocourse-userdata";
 
 // CATEGORY DETAILS COMPONENT
-export function CategoryDetails({}) {
+export function CategoryDetails({ }) {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
@@ -668,7 +670,7 @@ export function CreateCourseCategory() {
   const [open, setOpen] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
   const [previewImage, setPreviewImage] = useState(false);
- 
+
   const [showCareerModal, setShowCareerModal] = useState(false);
   const [showNicheModal, setShowNicheModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -678,6 +680,10 @@ export function CreateCourseCategory() {
     nicheDescription: "",
     career: "",
     bannerImg: "",
+    niche: "Niche title",
+    iconImg: "iconImg.png"
+
+
   });
 
   const [nichelist, setNichelist] = useState({
@@ -694,6 +700,7 @@ export function CreateCourseCategory() {
   const [loader, setLoader] = useState(location.search ? true : false);
   const edit = location.search;
   const [bio, setBio] = useState("");
+  const [fileUrl, setFileUrl] = useState("")
 
   useEffect(() => {
     if (flag.current) return;
@@ -865,20 +872,24 @@ export function CreateCourseCategory() {
   return (
     <Admin header="Create Category">
       {loader && <Loader />}
-      <UploadForm
+      {/* <UploadForm
         isOpen={open}
         setIsOpen={setOpen}
         setPreviewImage={setPreviewImage}
-      />
+      /> */}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <div
+          {/* <div
             className={clsx.upload__file_box}
             onClick={showUploadFormHandler}
           >
             <img src={vector} alt={"Placeholder"} />
             <p>Upload banner or icon Image</p>
-          </div>
+          </div> */}
+
+
+          <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+
           <form className="form" style={{ width: "80%" }}>
             <Input
               label="Name of category"
@@ -1137,13 +1148,14 @@ function Info({ title, content }) {
 export function ApproveStudent() {
   const navigate = useNavigate();
   const [data, setData] = useState(null);
+  const [enrollmentData, setEnrollmentData] = useState([]);
   const [kyc, setKyc] = useState({});
 
   const [loading, setLoading] = useState(false);
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const {
-    adminStudentFunctions: { verify },
+    adminStudentFunctions: { verify, fetchStudentsClasses },
     kycFunctions: { getAStudentKYCById },
     generalState,
     setGeneralState,
@@ -1163,33 +1175,6 @@ export function ApproveStudent() {
   useEffect(() => {
     const studentInfo = getItem("gotocourse-studentDetails");
     setData(studentInfo);
-
-    // (async () => {
-    //     let pledreInfo;
-    //     console.log("getting");
-    //     try {
-    //       if (pledre) {
-    //         console.log(pledre);
-    //         setGeneralState({ ...generalState, loading: true });
-    //         const pledRes = await pledre.getStudentDetails(studentInfo.email);
-    //         console.log({ pledRes });
-    //         if (pledRes.email) {
-    //           pledreInfo = pledRes;
-    //         } else {
-    //           pledreInfo = {};
-    //         }
-    //       }
-    //     } catch (error) {
-    //       console.error(error.message);
-    //     } finally {
-    //       setGeneralState({ ...generalState, loading: false });
-    //     }
-
-    //     localStorage.setItem(
-    //       "gotocourse-studentDetails",
-    //       JSON.stringify({ ...studentInfo, pledre: pledreInfo })
-    //     );
-    // })();
   }, []);
 
   async function handleVerification(e, id) {
@@ -1269,7 +1254,7 @@ export function ApproveStudent() {
         // navigate(-1)
       }
     } catch (error) {
-      toast.error("No KYC found");
+      toast.error(error.message);
       console.error(error);
     } finally {
       setGeneralState((old) => {
@@ -1286,6 +1271,37 @@ export function ApproveStudent() {
       getStudentKyc(data.userId);
     }
   }, [data]);
+
+  const fetchStudentEnrollments = useQuery(["fetch student enrollments", userdata?.token, data?.userId], () => fetchStudentsClasses(userdata?.token, data.userId), {
+    enabled: data?.userId !== null,
+    onSuccess: (res) => {
+      if (res?.success) {
+        setEnrollmentData(res.data)
+        return
+      }
+      setEnrollmentData([])
+
+    },
+    onError: err => console.error(err)
+  })
+
+  console.log({ fetchStudentEnrollments })
+
+  function getOutstandingAmount(item) {
+    let outAmt = item?.payments?.filter(item => item.status !== "paid").reduce((acc, curr) => acc + curr.amount, 0)
+    return outAmt
+  }
+  function getDueDate(item) {
+    // let paymentData = item?.payments?.filter(item=> item.status !== "paid")
+    // let leftOver
+    // if(paymentData){
+    //   leftOver = paymentData[0]?.dueDate?.split("T")[0]
+    // }else {
+    //   leftOver = "-"
+    // }
+    let dueDate = item?.payments?.filter(item => item.status !== "paid").length > 0 ? item?.payments?.filter(item => item.status !== "paid")[0]?.dueDate.split("T")[0] : "-"
+    return dueDate
+  }
   return (
     <Admin header="Approval">
       {loading && <Loader />}
@@ -1351,14 +1367,86 @@ export function ApproveStudent() {
                 </>
               )}
             </div>
+            <div className={clsx.student_course_info}>
+              {
+                fetchStudentEnrollments?.isLoading ?
+                  <div className="spinner-border text-primary">
+                    <div className="visually-hidden">Loading...</div>
+                  </div>
+                  :
+                  <div className="table-responsive my-4">
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Courses enrolled</th>
+                          {/* <th>Start date</th> */}
+                          <th>Amount paid</th>
+                          <th>Outstanding</th>
+                          <th>Due date</th>
+                          <th>Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
 
-            <div className={clsx.user__email}>
-              <button onClick={(e) => deleteUserHandler(e, data?.email)}>
-                <AiTwotoneDelete /> &nbsp; &nbsp;Delete User
-              </button>
+                        {
+                          enrollmentData?.map((item, i) => (
+                            <tr>
+                              <td>{i + 1}</td>
+                              <td>{item?.bootcampName}</td>
+                              {/* <td>{item?.startDate}</td> */}
+                              <td>{item?.amountPaid}</td>
+                              <td>{item?.payments?.length > 0 ? getOutstandingAmount(item) : "-"}  </td>
+                              <td>{item?.payments?.length > 0 ? getDueDate(item) : "-"}  </td>
+                              <td>{item?.bootcampPrice}</td>
+                            </tr>
+                          ))
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+              }
+
+              {/* <div className="table-responsive my-4">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Discount on</th>
+                      <th>Type of discount</th>
+                      <th>Approval</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {
+                      data?.enrollmentData.map((item, i)=> (
+                        <tr>
+                          <td>{i + 1}</td>
+                          <td>{item?.bootcampName}</td>
+                          <td>{item?.startDate}</td>
+                          <td>{item?.amountPaid}</td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
+              </div> */}
             </div>
+
+            {/* <button
+              className="button d-flex button-lg log_btn w-50 mt-3 justify-content-center"
+              style={{
+                backgroundColor: data?.isVerified && "var(--theme-blue)",
+              }}
+              type="submit"
+              // onClick={(e) => handleVerification(e, data?.userId)}
+            >
+              Add student to course
+            </button> */}
             <button
-              className="button button-lg log_btn w-50 mt-3"
+              className="button button-lg log_btn w-50 my-3"
               style={{
                 backgroundColor: data?.isVerified && "var(--theme-orange",
               }}
@@ -1367,6 +1455,12 @@ export function ApproveStudent() {
             >
               {data?.isVerified ? "Revoke Access" : "Approve Access"}
             </button>
+
+            <div className={clsx.user__email}>
+              <button onClick={(e) => deleteUserHandler(e, data?.email)}>
+                <AiTwotoneDelete /> &nbsp; &nbsp;Delete User
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1433,51 +1527,12 @@ export function Approve() {
     }
   }, [data]);
 
-  const info = [
-    {
-      title: "Courses",
-      content: "UX Designer",
-    },
-    {
-      title: "Category",
-      content: "Cybersecurity, UX, Data Analysis",
-    },
-    {
-      title: "Mentorship status",
-      content: data?.userType === "mentor" ? "Assigned" : "Unassigned",
-    },
-  ];
+
+
 
   useEffect(() => {
     const teacherInfo = getItem("gotocourse-teacherDetails");
     setData(teacherInfo);
-    //   (async () => {
-    //     let pledreInfo;
-    //     console.log("getting");
-    //     console.log({ pledre });
-    //     try {
-    //       if (pledre) {
-    //         console.log(pledre);
-    //         setGeneralState({ ...generalState, loading: true });
-    //         const pledRes = await pledre.getTeacherDetails(teacherInfo.email);
-    //         console.log({ pledRes });
-    //         if (pledRes.email) {
-    //           pledreInfo = pledRes;
-    //         } else {
-    //           pledreInfo = {};
-    //         }
-    //       }
-    //     } catch (error) {
-    //       console.error(error.message);
-    //     } finally {
-    //       setGeneralState({ ...generalState, loading: false });
-    //     }
-
-    //     localStorage.setItem(
-    //       "gotocourse-teacherDetails",
-    //       JSON.stringify({ ...teacherInfo, pledre: pledreInfo })
-    //     );
-    //   })();
   }, []);
   console.log({ data });
 
@@ -1485,7 +1540,7 @@ export function Approve() {
     try {
       setLoading((_) => true);
       let value = window.confirm(
-        "Are you sure you want to delete this user?. This process is irreversible"
+        "Are you sure you want to delete this user? This process is irreversible"
       );
       if (!value) return;
       const res = await deleteUser(userdata?.token, [email]);
@@ -1634,6 +1689,11 @@ export function Approve() {
       });
     }
   }
+
+
+
+
+
   return (
     <Admin header="Approval">
       {loading && <Loader />}
@@ -1852,7 +1912,7 @@ export function UserInfoCard({
         <td className={clsx.user__info}>{course}</td>
       )}
       {enrolled && <td className={clsx.user__info}>{enrolled}</td>}
-      {comp === "History" && <td className={clsx.user__info}>{status}</td>}
+      {comp === "Category" && <td className={clsx.user__info}>{status}</td>}
 
       {(comp === "Courses" || comp === "Category") && (
         <td className={clsx.user__info}>{name}</td>
@@ -2020,12 +2080,47 @@ export function Teachers() {
     localStorage.setItem("gotocourse-teacherDetails", JSON.stringify(details));
     if (email) navigate(`approve?email=${email}`);
   }
+
+
+  function exportCsv(e) {
+    e.preventDefault()
+
+    let headers = ['First name, Last name,  Email']
+
+    let usersCsv = teachers.reduce((acc, item) => {
+      const { firstName, lastName, email } = item
+      acc.push([firstName, lastName, email].join(','))
+      return acc
+    }, [])
+
+    let csvData = [...headers, ...usersCsv].join('\n')
+
+    downloadCsv(csvData)
+
+  }
+
+
+  function downloadCsv(data) {
+    const blob = new Blob([data], { type: "text/csv" })
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = href;
+    link.setAttribute('download', 'teachers.csv');
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(href);
+  }
+
+
   return (
-    <Admin header={"Mentors/Teachers"}>
+    // <Admin header={"Mentors/Teachers"}>
+    <Admin header={"All Teachers"}>
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <div className="d-flex justify-content-between align-items-center flex-wrap">
+          {/* <div className="d-flex justify-content-between align-items-center flex-wrap">
             <h5>Mentors/Teachers</h5>
             <button
               className="btn button-md"
@@ -2035,7 +2130,7 @@ export function Teachers() {
             >
               Add Mentor
             </button>
-          </div>
+          </div> */}
           <div className="d-flex justify-content-between align-items-center flex-wrap">
             <div>
               <input
@@ -2046,6 +2141,9 @@ export function Teachers() {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
+            <button className="btn-plain" onClick={exportCsv}>
+              Export to CSV
+            </button>
           </div>
           <div className={`${clsx.admin__student_main}`}>
             <table className={`${clsx.admin__student_table}`}>
@@ -2080,7 +2178,7 @@ export function Teachers() {
                         details={teacher}
                         type={teacher.userType}
                         approveHandler={approveHandler}
-                        accessPledre={teacher.accessPledre}
+                        accessPledre={teacher.isVerified}
                         isAbsolute={true}
                       />
                     ))}
@@ -2162,8 +2260,18 @@ export function Mentors() {
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
+          <div className="d-flex justify-content-between align-items-center flex-wrap mb-4">
+            <button
+              className="btn button-md ms-auto"
+              style={{ background: "var(--theme-blue)", color: "#fff" }}
+              type="button"
+              onClick={() => navigate("create/mentor")}
+            >
+              Add Mentor
+            </button>
+          </div>
           <div className="d-flex justify-content-between align-items-center">
-            <h1 className="mb-0">Mentors</h1>
+            <h1 className="mb-0">All Mentors</h1>
             <div>
               <input
                 type="text"
@@ -2217,7 +2325,7 @@ export function Mentors() {
                         isAbsolute={false}
                         type={null}
 
-                        // accessPledre={teacher.accessPledre}
+                      // accessPledre={teacher.accessPledre}
                       />
                     ))}
               </tbody>
@@ -2265,6 +2373,7 @@ export function AddMentor({ edit }) {
   });
 
   const [bio, setBio] = useState("");
+  const [fileUrl, setFileUrl] = useState("")
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -2333,12 +2442,12 @@ export function AddMentor({ edit }) {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           <h3>Add Mentor</h3>
-          <UploadForm
+          {/* <UploadForm
             isOpen={open}
             setIsOpen={setOpen}
             setPreviewImage={setPreviewImage}
-          />
-          <div className="row w-100 mt-4">
+          /> */}
+          {/* <div className="row w-100 mt-4">
             <div className="col-12 d-flex justify-content-between align-items-center">
               <div
                 className={clsx.upload__file_box}
@@ -2362,7 +2471,10 @@ export function AddMentor({ edit }) {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
+
+          <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+
           <form className="form" style={{ width: "80%" }}>
             <Input
               label="Profile image file name"
@@ -2749,9 +2861,8 @@ export function Courses() {
                           id={courseId}
                           showDetailsHandler={showDetailsHandler}
                           packages={packages}
-                          date={`${startDate ? getDate(startDate) : ""} - ${
-                            endDate ? getDate(endDate) : ""
-                          }`}
+                          date={`${startDate ? getDate(startDate) : ""} - ${endDate ? getDate(endDate) : ""
+                            }`}
                           isActive={status === "active" ? true : false}
                         />
                       )
@@ -2781,7 +2892,7 @@ export function CreateCourse() {
 }
 
 // COURSE DETAILS COMPONENT
-export function CourseDetails({}) {
+export function CourseDetails({ }) {
   const navigate = useNavigate();
   const { getItem, updateItem } = useLocalStorage();
   let userdata = getItem(KEY);
@@ -3112,7 +3223,7 @@ function DeleteModal({ open, close, deleteTutor }) {
   );
 }
 // BOOTCAMPDETAILS COMPONENT
-export function BootcampDetails({}) {
+export function BootcampDetails({ }) {
   const navigate = useNavigate();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
@@ -3123,7 +3234,12 @@ export function BootcampDetails({}) {
       fetchBootcamps,
       toggleBootcampStatus,
       updateBootcamp,
+      addStudentToClass,
+      removeStudentToClass,
+      fetchClassStudents
     },
+    adminStudentFunctions: { fetch },
+    teacherFunctions: { fetchBootcampApplications },
     generalState,
   } = useAuth();
   const [openprompt, setOpenprompt] = useState(false);
@@ -3131,8 +3247,11 @@ export function BootcampDetails({}) {
   const flag = useRef(false);
   const [formstate, setFormstate] = useState();
   const [loading, setLoading] = useState(true);
-  const [instructors, setInstructors] = useState([]);
-  const students = ["James Segun"];
+  const [allStudents, setAllStudents] = useState([])
+  const [allEnrolledStudents, setAllEnrolledStudents] = useState([])
+  const [student, setStudent] = useState("")
+  const [removedStudent, setRemovedStudent] = useState("")
+
   const params = useParams();
 
   //get user id
@@ -3301,8 +3420,90 @@ export function BootcampDetails({}) {
     setOpenprompt(true);
   }
 
+
+  // ADD AND REMOVE STUDENTS FROM COURSE
+
+  const fetchAllStudents = useQuery(["fetch all students", userdata.token], () => fetch(userdata.token), {
+    enabled: userdata.token !== null,
+    onSuccess: res => {
+      if (res?.data) {
+        setAllStudents(res.data)
+        return
+      }
+      setAllStudents([])
+    },
+    onError: err => {
+      console.error(err)
+    }
+  })
+
+  const fetchAllEnrolledStudents = useQuery(["fetch enrolled students", userdata.token], () => fetchClassStudents(userdata.token, params?.id), {
+    enabled: userdata.token !== null,
+    onSuccess: res => {
+      console.log({ res })
+      if (res?.data) {
+        setAllEnrolledStudents(res.data)
+        return
+      }
+      setAllEnrolledStudents([])
+
+
+    },
+    onError: err => {
+      console.error(err)
+    }
+  })
+
+  const addMutation = useMutation(([token, data]) => addStudentToClass(token, data), {
+    onSuccess: res => {
+      if (res.statusCode === 1) {
+        toast.success(res.message)
+        // setStudent("")  
+      } else {
+        window.alert(res.message)
+        toast.error(res.message)
+      }
+    },
+    onError: err => {}
+  })
+
+
+  const removeMutation = useMutation(([token, data]) => removeStudentToClass(token, data), {
+    onSuccess: res => {
+      console.log({ res })
+      if (res.statusCode === 1) {
+        toast.success(res.message)
+        setStudent("")
+      } else {
+        toast.error(res.message)
+      }
+    },
+    onError: err => toast.error(err.message)
+  })
+
+  function addStudent() {
+    addMutation.mutate([userdata.token, { userId: student, bootcampId: params.id }])
+  }
+
+
+  function removeStudent() {
+    removeMutation.mutate([userdata.token, { userId: removedStudent, bootcampId: params.id }])
+  }
+  console.log({ removedStudent })
+
   return (
     <Admin header="ADMIN">
+      {/* <ToastContainer
+          position="top-right"
+          autoClose={4500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        /> */}
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
@@ -3374,20 +3575,68 @@ export function BootcampDetails({}) {
                 )}
               </div>
 
-              <Input
+              {/* <Input
                 style={{ margin: "0px !important" }}
                 name="instructor"
                 type="text"
                 handleChange={changeHandler}
                 value={formstate?.instructor}
-              />
-              <button
-                type="button"
-                className={clsx.form_group__button}
-                onClick={addTutor}
-              >
-                Change/Add Instructor
-              </button>
+              /> */}
+            </div>
+            <div className={clsx.form_group}>
+              <div className={clsx.form_group__teachers}>
+                <h6>Add Student</h6>
+                <select name="userId" id="userId" className="form-select" onChange={(e) => setStudent(e.target.value)} value={student} >
+                  <option value="">Select student</option>
+                  {
+                    allStudents?.map(item => (
+                      <option value={item.userId}>{`${item.email} - ${item.firstName} ${item.lastName}`}</option>
+                    ))
+                  }
+                </select>
+                <button
+                  type="button"
+                  className={clsx.form_group__button}
+                  onClick={addStudent}
+                  disabled={addMutation?.isLoading}
+                >
+                  {addMutation?.isLoading ?
+                    <div className="spinner-border text-white">
+                      <div className="visually-hidden">Loading...</div>
+                    </div>
+                    :
+                    <span>Add</span>
+                  }
+                </button>
+              </div>
+            </div>
+            <div className={clsx.form_group}>
+              <div className={clsx.form_group__teachers}>
+                <h6>Remove Student</h6>
+                <select name="student" id="student" className="form-select" onChange={(e) => setRemovedStudent(e.target.value)} value={removedStudent}  >
+                  <option value="">Select student</option>
+                  {
+                    allEnrolledStudents?.map(item => (
+                      <option value={item.studentId}>{`${item.studentId} - ${item.studentName}`}</option>
+                    ))
+                  }
+                </select>
+                <button
+                  type="button"
+                  className={clsx.form_group__button}
+                  onClick={removeStudent}
+                  disabled={removeMutation?.isLoading}
+
+                >
+                  {removeMutation?.isLoading ?
+                    <div className="spinner-border text-white">
+                      <div className="visually-hidden">Loading...</div>
+                    </div>
+                    :
+                    <span>Remove</span>
+                  }
+                </button>
+              </div>
             </div>
 
             {/* <div className={clsx.form_group}>
@@ -3463,7 +3712,7 @@ export function Bootcamps() {
   ];
 
 
-  console.log({bootcamps});
+  console.log({ bootcamps });
   useEffect(() => {
     if (flag.current) return;
     (async () => {
@@ -3505,7 +3754,7 @@ export function Bootcamps() {
               className="btn btn-primary px-5"
               onClick={gotoCreateCourseHandler}
             >
-              Add Class
+              Add Course
             </button>
           </div>
           <div className="d-flex justify-content-between align-items-center mb-3">
@@ -3529,7 +3778,7 @@ export function Bootcamps() {
               <tbody>
                 {bootcamps.length > 0 ? (
                   bootcamps
-                    .filter((boot) => 
+                    .filter((boot) =>
                       boot.title.toLowerCase().includes(search.toLowerCase())
                     )
                     .map(
@@ -3542,7 +3791,7 @@ export function Bootcamps() {
                           startTime,
                           endTime,
                           endDate,
-                          startDate, 
+                          startDate,
                           bootcampId,
                           _id,
                           packages,
@@ -3593,6 +3842,7 @@ export function AdminClassConsole() {
   let userdata = getItem(KEY);
   const [bootcamps, setBootcamps] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     if (flag.current) return;
@@ -3617,17 +3867,45 @@ export function AdminClassConsole() {
   }, []);
 
   return (
-    <Admin header={"Classes"}>
+    <Admin header={"Courses"}>
       {loading && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student_main}>
-          <div className={clsx.class_con_cards}>
-            {bootcamps.length > 0 ? (
-              bootcamps.map((item, i) => <ClassesCard {...item} />)
-            ) : (
+          <div className="d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
+          {bootcamps.length > 0 ? (
+            <Grid height="300px">
+              {bootcamps.filter(
+                (course) =>
+                  // course.category
+                  //   .toLowerCase()
+                  //   .includes(search.toLowerCase()) ||
+                  course.title
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
+                //   ||
+                // course.status
+                //   .toLowerCase()
+                //   .includes(search.toLowerCase())
+              )
+                .map((item, i) =>
+                  <ClassesCard {...item} all={item} />
+                )}
+            </Grid>
+
+          )
+            : (
               <h6 className="text-center">No Class found</h6>
             )}
-          </div>
         </div>
       </div>
     </Admin>
@@ -3666,16 +3944,20 @@ export function CreateBootcamp() {
     description: "",
     type: "",
     instructor: "",
+    instructors: [],
     syllabus: [],
     careerList: [],
     packages: [],
-    popupArr:[]
+    popupArr: [],
+    time: [],
+    isPublic: true
   });
 
   const [loading, setLoading] = useState(false);
   const [teachers, setTeachers] = useState([]);
   const [bio, setBio] = useState("");
-
+  const [scheduleCount, setScheduleCount] = useState(0)
+  const [timeList, setTimeList] = useState([])
   useEffect(() => {
     if (flag.current) return;
     if (location.search) {
@@ -3694,7 +3976,8 @@ export function CreateBootcamp() {
             found.bootcampImg = found.bootcampImg.split("/").slice(-1)[0];
 
             delete found.instructorName;
-            setFormstate({ ...formstate, ...found });
+            delete found.packages
+            setFormstate({ ...formstate, ...found, type: "FLAT" });
             setBio(found.description);
           } else {
             throw new AdvancedError(message, statusCode);
@@ -3774,7 +4057,10 @@ export function CreateBootcamp() {
     const formData = {
       ...formstate,
       description: bio ? bio : formstate.description,
+      type: "FLAT",
+      time: [...formstate.time, ...timeList]
     };
+    console.log({ formData })
     try {
       if (
         formData.description === "" ||
@@ -3784,10 +4070,10 @@ export function CreateBootcamp() {
         throw new AdvancedError("All fields are required", 0);
       const res = location.search
         ? await updateBootcamp(
-            userdata?.token,
-            location.search.split("=").reverse()[0],
-            formData
-          )
+          userdata?.token,
+          location.search.split("=").reverse()[0],
+          formData
+        )
         : await addBootcamp(userdata?.token, formData);
       const { success, message, statusCode } = res;
 
@@ -3812,9 +4098,12 @@ export function CreateBootcamp() {
   const [careerlist, setCareerlist] = useState({
     name: "",
   });
-  
+  const [fileUrl, setFileUrl] = useState(null);
+
   const [popupList, setPopupList] = useState("")
   
+  const [newInstructor, setNewInstructor] = useState("")
+
   const openModal = () => {
     setOpenSyllabus(true);
   };
@@ -3822,7 +4111,6 @@ export function CreateBootcamp() {
     setOpen((_) => true);
   }
 
-  console.log({ formstate });
   function deleteSyllabus(e) {
     let newSyllabusArr = formstate.syllabus.filter(
       (item, index) => item.title + index !== e
@@ -3908,7 +4196,7 @@ export function CreateBootcamp() {
 
       setShowPopupModal((_) => false);
 
-      
+
     } else {
       toast.error("All fields are required", {
         position: "top-right",
@@ -3922,11 +4210,9 @@ export function CreateBootcamp() {
     }
   }
   function popupChangeHandler(e) {
-    console.log(e.target.value)
-    setPopupList(e.target.value);
+    setPopupList(e.target.value)
   }
-  
-  // console.log({popupList})
+
 
   const [openPackage, setOpenPackage] = useState(false);
   // PACKAGES
@@ -3937,25 +4223,66 @@ export function CreateBootcamp() {
     setOpenPackage(false);
   }
 
-  console.log({ formstate });
+
+  function handleTime(e, i) {
+    let formCopy = timeList
+    // let timeArray = formCopy.time
+
+    formCopy[i] = { ...formCopy[i], [e.target.name]: e.target.value }
+    // formCopy.time = formCopy
+    setTimeList(formCopy)
+  }
+
+
+  function deleteTime(id) {
+    let newTimeList = formstate?.time.filter(item => item._id !== id)
+    setFormstate({ ...formstate, time: newTimeList })
+  }
+
+
+
+  function addInstructor(e){
+    setFormstate({...formstate, instructors: [...formstate?.instructors, newInstructor]})
+    setNewInstructor("")
+  }
+
+  
+  
+  function removeInstructor(instructor){
+    let current = formstate.instructors
+    let newList  = current.filter((item, i) => (item + i) !== instructor)
+    setFormstate({...formstate, instructors: newList})
+  }
+
+
+  function removeInstructorFromEdit(instructorId){
+    let current = formstate.instructors
+    let newList  = current.filter((item, i) => item.tutorId !== instructorId)
+    setFormstate({...formstate, instructors: newList})
+  }
+
+
+  function handleClassStatus(e){
+    setFormstate({...formstate, isPublic: e.target.checked})
+  }
   return (
-    <Admin header={location.search ? "Edit Class" : "Create Class"}>
+    <Admin header={location.search ? "Edit Course" : "Create Course"}>
       {loader && <Loader />}
       <div className={clsx.admin_profile}>
         <div className={clsx.edit__profile}>
-          <UploadForm
+          {/* <UploadForm
             isOpen={open}
             setIsOpen={setOpen}
             setPreviewImage={setPreviewImage}
-          />
-          <div className="row w-100 mt-4">
+          /> */}
+          {/* <div className="row w-100 mt-4">
             <div className="col-12 d-flex justify-content-between align-items-center">
               <div
                 className={clsx.upload__file_box}
                 onClick={showUploadFormHandler}
               >
                 <img src={vector} alt={"Placeholder"} />
-                <p>Upload Class Banner</p>
+                <p>Upload Course Banner</p>
               </div>
               {previewImage && (
                 <div className={clsx.upload__file_box}>
@@ -3972,10 +4299,13 @@ export function CreateBootcamp() {
                 </div>
               )}
             </div>
-          </div>
-          <form className="form" onSubmit={submitHandler}>
+          </div> */}
+
+          <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+
+          <form className="form" onSubmit={submitHandler} noValidate>
             <Input
-              label="Class Banner file name"
+              label="Course image name"
               name="bootcampImg"
               type="text"
               handleChange={changeHandler}
@@ -4034,7 +4364,7 @@ export function CreateBootcamp() {
               handleChange={changeHandler}
               value={formstate.duration}
             />
-            <div className={clsx.form_group}>
+            {/* <div className={clsx.form_group}>
               <label htmlFor={"package"}>Type</label>
               <select
                 rows="5"
@@ -4047,16 +4377,17 @@ export function CreateBootcamp() {
                 <option value="FLAT">Flat</option>
                 <option value="PACKAGE">Package</option>
               </select>
-            </div>
-            {formstate.type === "FLAT" ? (
-              <Input
-                label="Price"
-                name="price"
-                type="number"
-                handleChange={changeHandler}
-                value={formstate.price}
-              />
-            ) : formstate.type === "PACKAGE" ? (
+            </div> */}
+            {/* {formstate.type === "FLAT" ? ( */}
+            <Input
+              label="Price"
+              name="price"
+              type="number"
+              handleChange={changeHandler}
+              value={formstate.price}
+              noValidate={"true"}
+            />
+            {/* ) : formstate.type === "PACKAGE" ? (
               <div className={clsx.form_group}>
                 <label htmlFor={"package"} className="form-label generic_label">
                   Packages
@@ -4104,7 +4435,7 @@ export function CreateBootcamp() {
               </div>
             ) : (
               ""
-            )}
+            )} */}
             <div className="d-flex flex-wrap">
               <div className="col-sm-6 col-md-3 pe-2 ">
                 <Input
@@ -4143,6 +4474,79 @@ export function CreateBootcamp() {
                 />
               </div>
             </div>
+            <div>
+              {
+                formstate?.time?.map(item => (
+                  <div className={clsx.syllabus_container}>
+                    <h5>{item.day}</h5>
+                    <p>{item.startTime}</p>
+                    <p>{item.endTime}</p>
+
+                    <p>
+                      <i
+                        className="text-danger"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => deleteTime(item._id)}
+                      >
+                        <BiTrash />
+                      </i>
+                    </p>
+                  </div>
+                ))
+              }
+              {
+                [...Array(scheduleCount)].map((item, i) => (
+                  <div className="d-flex flex-wrap align-items-end gap-2">
+                    <div className="col-sm-6 col-md-3 pe-2 ">
+                      <label htmlFor="time">Day</label>
+                      <select
+                        name="day"
+                        id="day"
+                        className="form-select generic_input"
+                        onChange={(e) => handleTime(e, i)}
+                        value={timeList[i]?.day}
+
+                      >
+                        <option value="">Days</option>
+                        <option value="Sunday">Sunday</option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Firday">Friday</option>
+                        <option value="Sunday">Saturday</option>
+                      </select>
+                    </div>
+                    <div className="col-sm-6 col-md-3 pe-2 ">
+                      <Input
+                        label="Starts By (CST)"
+                        name="startTime"
+                        type="time"
+                        handleChange={(e) => handleTime(e, i)}
+                        value={timeList[i]?.startTime}
+                      />
+                    </div>
+                    <div className="col-sm-6 col-md-3 pe-2  ">
+                      <Input
+                        label="Ends By (CST)"
+                        name="endTime"
+                        type="time"
+                        handleChange={(e) => handleTime(e, i)}
+                        value={timeList[i]?.endTime}
+                      />
+                    </div>
+                  </div>
+                ))
+              }
+              <button
+                className="btn btn-primary my-3"
+                style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
+                type="button"
+                onClick={() => setScheduleCount(scheduleCount + 1)}
+              >
+                Add Schedule
+              </button>
+            </div>
             {/* <div className={clsx.editor_container}>
               <ReactQuill theme="snow" value={formstate?.description} onChange={setBio} />
             </div> */}
@@ -4153,7 +4557,7 @@ export function CreateBootcamp() {
             />
 
             <div className={clsx.form_group}>
-              <label htmlFor={"instructor"}>Instructor</label>
+              <label htmlFor={"instructor"}>Main Instructor</label>
               <select
                 name="instructor"
                 value={formstate.instructor}
@@ -4171,6 +4575,45 @@ export function CreateBootcamp() {
                   ))}
               </select>
             </div>
+            <div className={clsx.form_group}>
+            {formstate.instructors?.length > 0 ? 
+                  formstate.instructors?.map((item, index) => (
+                    <div className={clsx.syllabus_container}>
+                      <h5>{item}</h5>
+                        <p>
+                          <i
+                            className="text-danger"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => removeInstructor(item + index)}
+                          >
+                            <BiTrash />
+                          </i>
+                        </p>
+                    </div>
+                  ))
+                  :
+                <p>No instructors found</p>
+              }
+            </div>
+            <div className={clsx.form_group}>
+              <Input
+                label="Instructor Email"
+                name="newInstructor"
+                type="text"
+                handleChange={(e)=>setNewInstructor(e.target.value)}
+                value={newInstructor}
+                placeholder="Enter Instructor email"
+              />
+            </div>
+
+              <button 
+                className="btn btn-primary my-3"
+                style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
+                type="button"
+                onClick={addInstructor}
+              >
+                Add Instructor
+              </button>
 
             <div className={clsx.form_group}>
               <label className="form-label generic_label">Syllabus</label>
@@ -4203,7 +4646,7 @@ export function CreateBootcamp() {
             >
               Add Syllabus
             </button>
-         
+
             <Input
               label="Career Title"
               name="careerTitle"
@@ -4256,7 +4699,7 @@ export function CreateBootcamp() {
             <div className={clsx.form_group}>
               <label>Popup List</label>
               {formstate.popupArr?.length !== 0 ? (
-                formstate.popupArr?.map((name , i) => (
+                formstate.popupArr?.map((name, i) => (
                   // <Syllabus key={i} title={name} />
                   <div className={clsx.syllabus_container}>
                     <h5>{name}</h5>
@@ -4289,6 +4732,25 @@ export function CreateBootcamp() {
             >
               Add Pop Up
             </button>
+
+
+            <div className={clsx.form_group} style={{ marginTop: 40 }}>
+              <label>Set class public?</label>
+              {
+                formstate?.isPublic ? 
+                <small class="d-block text-muted">Class is currently set to public. This indicates that students can access the class without paying</small>
+                :
+                <small class="d-block text-muted">Class is currently set to private. This indicates that students have to pay to access the class</small>
+
+              }
+              <Switch
+                onClick={handleClassStatus}
+                size="large"
+                checked={formstate?.isPublic}
+                value={formstate?.isPublic}
+              />
+            </div>
+
             <CareerModal
               open={showCareerModal}
               newCareer={careerlist}
@@ -4364,8 +4826,7 @@ export function BootcampRow({
   price,
   category, subCategory
 }) {
-  console.log({packages})
-  console.log({price})
+
   return (
     <tr className={clsx.user__info_card} onClick={clickHandler}>
       <td className={clsx.user__info}>{index + 1}.</td>
@@ -4404,94 +4865,128 @@ export function BootcampRow({
 // FEES COMPONENT
 export function Fees() {
   const {
-    adminFunctions: { fetchPayment },
+    adminFunctions: { fetchPayment, deletePaymentHistory }, generalState,
+    setGeneralState
   } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
   const flag = useRef(false);
   const [formstate, setFormstate] = useState([]);
+  const [rest, setRest] = useState({});
+
+  const [loading, setLoading] = useState(false);
   const tableHeaders = [
     "No",
     "Name",
-    "Type",
+    "User ID",
     "Title",
     "Date",
     "Course Price",
     "Amount",
     "Status",
     "Due Date",
+    "",
+    "Action"
   ];
   const tableContents = [];
-  useEffect(() => {
-    if (flag.current) return;
 
-    (async () => {
-      try {
-        const res = await fetchPayment(userdata?.token);
-        const { message, success, statusCode } = res;
-        if (!success) throw new AdvancedError(message, statusCode);
-        else if (statusCode === 1) {
-          const { data } = res;
-          setFormstate(data);
-        } else {
-          throw new AdvancedError(message, statusCode);
-        }
-      } catch (err) {
-        toast.error(err.message);
-      } finally {
+  const queryClient = useQueryClient();
+
+  const [page, setPage] = useState(1)
+
+  const fetchPaymentHistory = useQuery(["fetch payment history", userdata?.token, page], () => fetchPayment(userdata?.token, page), {
+    enabled: userdata.token !== null,
+    onSuccess: (res) => {
+      if (res?.data?.paymentItems) {
+        setFormstate(res?.data?.paymentItems)
+        setRest(res?.data)
+      } else {
+        setFormstate([])
       }
-    })();
+    },
+    onError: error => toast.error(error.message)
+  })
 
-    //do some coding
-    flag.current = true;
-    return () => console.log("Payments component");
-  }, []);
+
+  const deletePaymentMutation = useMutation(([token, id]) => deletePaymentHistory(token, id), {
+    onSuccess: res => {
+      console.log(res)
+      queryClient.inValidateQueries(["fetch payment history"])
+    },
+    onError: err => console.error(err)
+  })
+
+
+  function deletePayment(e, id) {
+    console.log({ id })
+    e.preventDefault();
+    if (window.confirm("Are you sure you want to delete this payment")) {
+      deletePaymentMutation.mutate([userdata.token, id])
+    }
+  }
+
+
 
   return (
     <Admin header={"Fees"}>
+      {(fetchPaymentHistory?.isLoading || deletePaymentMutation?.isLoading) && <Loader />}
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
-          <h1>All Fees</h1>
-
+          <h1>All Payments</h1>
           <div className={clsx.admin__student_main}>
-            <table className={`${clsx.admin__student_table}`}>
-              <thead>
-                {tableHeaders.map((el, i) => (
-                  <td key={i}>{el}</td>
-                ))}
-              </thead>
-              <tbody>
-                {formstate?.map(
-                  (
-                    {
-                      studentName,
-                      courseName,
-                      coursePrice,
-                      amount,
-                      createdAt,
-                      dueDate,
-                      status,
-                      type,
-                    },
-                    i
-                  ) => (
-                    <UserInfoCard
-                      key={i}
-                      num={i}
-                      enrolled={studentName}
-                      comp="Category"
-                      name={type}
-                      coursePrice={createdAt ? getDate(createdAt) : ""}
-                      date={courseName}
-                      pack={`$ ${coursePrice}`}
-                      start_date={`$ ${amount}`}
-                      email={status}
-                      students={dueDate ? getDate(dueDate) : ""}
-                    />
-                  )
-                )}
-              </tbody>
-            </table>
+            {!fetchPaymentHistory?.isLoading &&
+              <>
+                <table className={`${clsx.admin__student_table}`}>
+                  <thead>
+                    {tableHeaders.map((el, i) => (
+                      <td key={i}>{el}</td>
+                    ))}
+                  </thead>
+                  <tbody>
+                    {formstate?.map(
+                      (
+                        {
+                          studentName,
+                          courseName,
+                          coursePrice,
+                          amount,
+                          createdAt,
+                          dueDate,
+                          status,
+                          type,
+                          bootcampPrice,
+                          bootcampName,
+                          paymentId,
+                          userId
+                        },
+                        i
+                      ) => (
+                        <UserInfoCard
+                          key={i}
+                          num={i}
+                          enrolled={studentName}
+                          comp="Category"
+                          name={bootcampName}
+                          status={userId}
+                          coursePrice={createdAt ? new Intl.DateTimeFormat('en-US').format(new Date(createdAt)) : ""}
+                          date={courseName}
+                          pack={bootcampPrice ? `$ ${bootcampPrice}` : "-"}
+                          start_date={`$ ${amount}`}
+                          email={status}
+                          students={dueDate ? new Intl.DateTimeFormat('en-US').format(new Date(dueDate)) : ""}
+                          deleteUser={(e) => deletePayment(e, paymentId)}
+                        />
+                      )
+                    )}
+                  </tbody>
+                </table>
+                <div className="mt-3">
+                  <button className="btn btn-dark" onClick={() => setPage(prev => page - 1)} disabled={page === 1} >Prev</button>
+                  <span className="mx-2">page {page} of {rest?.num_of_pages}</span>
+                  <button className="btn btn-dark" onClick={() => setPage(prev => page + 1)} disabled={page === rest?.num_of_pages}>Next</button>
+                </div>
+              </>
+            }
           </div>
         </div>
       </div>
@@ -4573,7 +5068,7 @@ export function Notification() {
   }
 
   return (
-    <Admin header={"Notifications"}>
+    <Admin header={""}>
       <NotificationContent
         notifications={notifications}
         markAsRead={markAsRead}
@@ -4770,9 +5265,9 @@ export function Student() {
     "No",
     "Name",
     "Email",
-    "Approve",
-    "Access Dashboard",
-    "Actions",
+    "Account Verified",
+    // "Access Dashboard",
+    // "Action",
   ];
 
   console.log({ studentList });
@@ -4829,7 +5324,144 @@ export function Student() {
                         accessPledre={student.accessPledre}
                         user={true}
                         type={null}
-                        deleteUser={(e) => console.Console.log(e)}
+                        // deleteUser={(e) => console.Console.log(e)}
+                        handleVerification={(e) => console.log(e)}
+                        handlePledreAccess={(e) => console.log(e)}
+                        isAbsolute={true}
+                        approveHandler={approveHandler}
+                        details={student}
+                      />
+                    ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {loading && <Loader />}
+    </Admin>
+  );
+}
+// ENROLLED STUDENT COMPONENT
+export function EnrolledStudents() {
+  const [studentList, setStudentList] = useState([]);
+  const { getItem } = useLocalStorage();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [loader, setLoader] = useState(true);
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const {
+    adminStudentFunctions: { fetch, verify, verify_pledre },
+    generalState: { loading },
+    setGeneralState,
+    commonFunctions: { deleteUser },
+  } = useAuth();
+
+  async function fetchStudents() {
+    if (userdata) {
+      try {
+        const res = await fetch(userdata?.token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else {
+          const { data } = res;
+          //do somethings
+
+          setStudentList(data);
+        }
+      } catch (err) {
+        toast.error(err.message);
+      } finally {
+        setLoader((_) => false);
+      }
+    }
+  }
+  useEffect(() => {
+    if (flag.current) return;
+    fetchStudents();
+    flag.current = true;
+  }, []);
+
+  function approveHandler(e, email, details) {
+    localStorage.setItem("gotocourse-studentDetails", JSON.stringify(details));
+    if (email) navigate(`approve?email=${email}`);
+  }
+
+  const tableHeaders = [
+    "No",
+    "Name",
+    "Email",
+    "Account Verified",
+    // "Access Dashboard",
+    // "Action",
+  ];
+
+
+  const enrolledStudents = useMemo(() => {
+    let hasPaid
+    if (studentList) {
+      let areAccepted = studentList?.filter(item => item.enrollmentData.length > 0)
+      hasPaid = areAccepted.filter(item => item.enrollmentData.find(item => item.status === "paid"))
+      return hasPaid
+    }
+    return []
+  }, [studentList])
+
+
+  return (
+    <Admin header={"Students"}>
+      {loader && <Loader />}
+      <div className={clsx["admin_profile"]}>
+        <div className={clsx.admin__student}>
+          <div className="d-flex justify-content-between">
+            <h1>Enrolled Students</h1>
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="search student"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className={`${clsx.admin__student_main}`}>
+            <table className={clsx.admin__student_table}>
+              <thead>
+                <tr>
+                  {tableHeaders.map((el, i) => (
+                    <th key={i}>{el}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {enrolledStudents?.length > 0 &&
+                  enrolledStudents
+                    ?.filter(
+                      (stu) =>
+                        stu.firstName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        stu.lastName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        stu.email.toLowerCase().includes(search.toLowerCase())
+                    )
+                    .map((student, i) => (
+                      <UserInfoCard
+                        key={i}
+                        name={student.name}
+                        firstName={student.firstName}
+                        lastName={student.lastName}
+                        img={student.profileImg}
+                        email={student.email}
+                        num={i}
+                        isActive={student.isVerified}
+                        accessPledre={student.accessPledre}
+                        user={true}
+                        type={null}
+                        // deleteUser={(e) => console.Console.log(e)}
                         handleVerification={(e) => console.log(e)}
                         handlePledreAccess={(e) => console.log(e)}
                         isAbsolute={true}
@@ -5241,7 +5873,7 @@ export const Admin = ({ children, header }) => {
   const isCreator = userdata?.userType === "schools"
 
   return (
-    
+
     <GuardedRoute>
       <div className={clsx["admin"]}>
         <ToastContainer
@@ -5258,7 +5890,7 @@ export const Admin = ({ children, header }) => {
         <Sidebar isMobile={isMobile} />
         <div className={clsx["admin_main"]}>
           {
-            !isCreator  &
+            !isCreator &&
             <Navbar
               content={admin}
               toggleSidebar={toggleSidebar}

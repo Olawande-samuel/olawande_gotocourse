@@ -63,9 +63,9 @@ export function GreatImage({ img, title1, title2, title3, link }) {
             <Link to={link}>
                 <img src={img} alt="" />
                 <p>
-                <span>{title1}</span>
-                <span className="d-block">{title2}</span>
-                <span className="d-block">{title3}</span>
+                    <span>{title1}</span>
+                    <span className="d-block">{title2}</span>
+                    <span className="d-block">{title3}</span>
                 </p>
             </Link>
         </ImageCard>
@@ -246,15 +246,17 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
         }
     }
 
-    useEffect(() => {
-        getWishList()
-    }, [setWishlistState])
+    // useEffect(() => {
+    //     getWishList()
+    // }, [setWishlistState])
 
 
     let navigate = useNavigate()
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
+        getWishList()
+
     };
 
     const handleClose = () => {
@@ -537,21 +539,21 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
                     {/* <p> <AiOutlineCheck className="icon" /> {packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"} Learning</p> */}
                     <p><AiOutlineCheck className="icon" />
 
-                    {
-                        changeConstants(packages[0].title) === "Self-paced" ? 
-                        <>
-                            <span style={{color:"var(--theme-orange)"}}>Self-paced </span> 
-                            <span>Learning</span>
-                        </> 
-                        
-                        :
+                        {
+                            changeConstants(packages[0].title) === "Self-paced" ?
+                                <>
+                                    <span style={{ color: "var(--theme-orange)" }}>Self-paced </span>
+                                    <span>Learning</span>
+                                </>
 
-                     <>
-                        <span style={{color:"var(--theme-orange)"}}>Live </span> 
-                        <span>with Instructor</span>
-                     </>
-                    }
-                     </p>
+                                :
+
+                                <>
+                                    <span style={{ color: "var(--theme-orange)" }}>Live </span>
+                                    <span>with Instructor</span>
+                                </>
+                        }
+                    </p>
                 </div>
                 <div className="route_to_class">
                     <span onClick={() => gotoclass(title, category, bootcampId, navigate)}>Learn more</span>
@@ -586,7 +588,7 @@ export function ExeEducation({ title, date, img, bootcampImg, category, descript
 
 // INDEMAND
 
-const InDemandCard = styled.div`
+export const InDemandCard = styled.div`
     // border: 2px solid red;
     display: flex;
     flex-direction: column;
@@ -596,6 +598,7 @@ const InDemandCard = styled.div`
     .img{
         width: 100%;
         height: 150px;
+        // border: 2px solid red;
 
         img{
             width:100%;
@@ -605,12 +608,13 @@ const InDemandCard = styled.div`
     }
 
     .content{
-        padding: .5rem;
+        padding: .1rem .5rem;
+        // border: 2px solid yellow;
 
-
+ 
         h6 {
             font-weight: 700;
-            padding: .5rem 0;
+            padding: .2rem 0;
         }
 
         .mid_content{
@@ -721,9 +725,9 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
                     </div>
                     <div className="checks">
                         <p> <AiOutlineCheck className="icon" /> Cohort Learning</p>
-                        <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live </span>with Instructor</p>
+                        <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
                         <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}></span> {getFullDate(startDate)}
-</p>
+                        </p>
                     </div>
                 </div>
 
@@ -789,8 +793,13 @@ export function Head({ title, bootcampImg, category, duration, price, packages, 
                     </div>
                     <div className="checks">
                         <p> <AiOutlineCheck className="icon" /> Completion certificate</p>
-                        <p><AiOutlineCheck className="icon" /> Earn upto $138k </p>
+                        {/* <p><AiOutlineCheck className="icon" /> Earn upto $138k </p> */}
                         <p><AiOutlineCheck className="icon" /> Cohort learning</p>
+                    </div>
+
+                    <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
+                        <p>Start Date:</p>
+                        <p>{getFullDate(startDate)}</p>
                     </div>
                 </div>
 
@@ -858,13 +867,25 @@ const UpCoursesCard = styled.div`
     }
     .up_content {
         padding-inline: 1.5rem;
-        padding-bottom: 1rem;
+        padding-bottom: .5rem;
         display: flex;
         flex-direction: column;
         justify-content:space-between;
         height: 60%;
         /* height: -webkit-fill-available; */
 
+        .checks{
+
+            p{
+                font-weight: 500;
+                font-size: 13.6101px;
+                line-height: 16px;
+            }
+  
+            .icon{
+                color: var(--theme-blue);
+            }
+        }
 
         .cta {
             display: flex;
@@ -977,17 +998,19 @@ const ShortCard = styled.div`
     }
     .up_content {
         padding-inline: 1.5rem;
-        padding-bottom: 1rem;
+        padding-bottom: .5rem;
         display: flex;
         flex-direction: column;
         justify-content:space-between;
         height: 60%;
         /* height: -webkit-fill-available; */
+        
 
 
         .cta {
             display: flex;
             justify-content: space-between;
+            // text-align: center;
             gap: 1rem;
             font-size: 13px;
             margin-top: 1rem;
@@ -1019,6 +1042,8 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
+        getWishList()
+
     };
 
     const handleClose = () => {
@@ -1038,7 +1063,6 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
 
     //wishlist
 
-    const flag = useRef(false);
     let [wishlistState, setWishlistState] = useState(false)
 
 
@@ -1097,9 +1121,9 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
         }
     }
 
-    useEffect(() => {
-        getWishList()
-    }, [setWishlistState])
+    // useEffect(() => {
+    //     getWishList()
+    // }, [setWishlistState])
 
 
 
@@ -1255,12 +1279,14 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
     )
 }
 
-export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, description, duration, price, packages, popupTitle, popupArr, all }) {
+export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, bootcampId, category, description, duration, price, packages, popupTitle, popupArr, all }) {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
+        getWishList()
+
     };
 
     const handleClose = () => {
@@ -1331,9 +1357,289 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
         }
     }
 
+    // useEffect(() => {
+    //     getWishList()
+    // }, [setWishlistState])
+
     useEffect(() => {
+        const ownListItem = upskillAltData.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
+        if (ownListItem.length > 0) {
+            setData(ownListItem[0])
+        }
+
+    }, [title])
+
+    async function removeCourse(e) {
+        e.preventDefault();
+        try {
+            setGeneralState({ ...generalState, loading: true })
+            const res = await deleteFromWishlist(userdata?.token, bootcampId)
+            const { success, message, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+                const { data } = res;
+                setWishlistState(false)
+                handleClose()
+            }
+        } catch (err) {
+
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+        }
+    }
+
+    async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
+
+        e.preventDefault();
+        if (userdata?.token) {
+            // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+            gotoclassPayment(title, category, bootcampId, navigate)
+        } else {
+            navigate("/login")
+        }
+    }
+
+    const getCategory = (cat) => {
+
+        if (cat === "SHORT_COURSES") return "Short Course";
+        else if (cat === "UPSKILL_COURSES") return "Upskill Course";
+        else if (cat === "EXECUTIVE_COURSES") return "Executive Course";
+        else if (cat === "IN_DEMAND") return "In-Demand Course";
+        else if (cat === "TECH_ENTREPRENEURSHIP") return "Tech Enterpreneurship Course";
+        else if (cat === "PATH_FINDERS") return "Pathfinder Course";
+        else if (cat === "HEAD_START") return "Headstart Course";
+        else if (cat === "upcoming") return "Upcoming Course";
+        else return ""
+
+    }
+
+    return (
+        <UpCoursesCard>
+            <img src={bootcampImg} alt="" />
+            <div className="up_content">
+                <div>
+                    <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title}</h5>
+                    <div className="d-flex justify-content-between">
+                        <small>{duration}</small>
+                        <small>$ {packages.length > 0 ? packages[0].price : price}</small>
+                    </div>
+                </div>
+
+                {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+                {/* <div className="foot">
+                    <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button>
+                    <div className="ct_bar"></div>
+
+                    <span>{changeConstants(packages[0]?.title)}</span>
+                </div> */}
+                {/* <div>
+                    <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>
+                </div> */}
+
+
+
+
+                <div className="checks"
+                // style={{ paddingTop: "1rem" }}
+                >
+                    <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p>
+                    <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
+                </div>
+
+                <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
+                    <p>Start Date:</p>
+                    <p>{getFullDate(startDate)}</p>
+                </div>
+
+                <div className="foot d-flex justify-content-center">
+                    {/* <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button> */}
+                    <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
+
+
+                    {/* <div className="ct_bar"></div>
+
+          <span>{changeConstants(packages[0]?.title)}</span> */}
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+            <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'center',
+                    horizontal: 'left',
+                }}
+            >
+                <Box sx={{ p: 2 }} className="pop_container">
+                    <header>
+                        <h5 className="fw-bold text-capitalize">{popupTitle}</h5>
+                    </header>
+                    <div>
+                        {/* <div className="d-flex justify-content-between mb-3">
+                            <span className="fw-bold">{duration}</span>
+                            <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
+                        </div> */}
+                        {/* <p>{data.title}</p> */}
+                        <ul>
+                            {
+                                popupArr?.map((item, i) => (
+                                    <li key={i}>{item}</li>
+                                ))
+                            }
+                        </ul>
+                        {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+                        <div className="pop_action">
+                            <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
+                            {
+                                (!userdata.token) ? <button onClick={addToWishlist}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Wishlist"
+
+                                    }
+
+                                </button> :
+
+                                    (userdata.token && wishlistState) ?
+
+                                        <button onClick={removeCourse}>
+                                            {
+                                                loading ?
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    :
+                                                    "Remove wishlist"
+
+                                            }
+
+                                        </button>
+                                        :
+                                        <button onClick={addToWishlist}>
+                                            {
+                                                loading ?
+                                                    <div className="spinner-border" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    :
+                                                    "Wishlist"
+
+                                            }
+
+                                        </button>
+
+                            }
+
+                        </div>
+                    </div>
+                </Box>
+            </Popover>
+        </UpCoursesCard >
+    )
+}
+
+
+export function PathCourseCard({ title, bootcampImg, bootcampId, category, startDate, description, duration, price, packages, popupTitle, popupArr, all }) {
+
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
         getWishList()
-    }, [setWishlistState])
+
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+    //   console.log({all});
+
+
+    // Call to Action
+    const navigate = useNavigate();
+    const [data, setData] = useState({});
+    const { getItem } = useLocalStorage();
+
+    const userdata = getItem(KEY)
+    //wishlist
+
+    const flag = useRef(false);
+    let [wishlistState, setWishlistState] = useState(false)
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
+
+    async function addToWishlist() {
+        setGeneralState({ ...generalState, loading: true })
+
+        if (userdata !== null) {
+            try {
+                const response = await addwishlistCourse(bootcampId, userdata?.token)
+                const { success, message, statusCode } = response
+                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+                const { data } = response
+                setWishlistState(true)
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setGeneralState({ ...generalState, loading: false })
+
+            }
+
+
+        } else {
+            navigate("/login")
+        }
+    }
+
+
+
+    async function getWishList() {
+        try {
+            const res = await fetchWishlist(userdata?.token);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+                const { data } = res;
+                if (data.length > 0) {
+                    setWishlistState(data.map(d => d.courseId).includes(bootcampId));
+                } else {
+
+                }
+
+            } else {
+                throw new AdvancedError(message, statusCode);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+        }
+    }
+
+    // useEffect(() => {
+    //     getWishList()
+    // }, [setWishlistState])
 
     useEffect(() => {
         const ownListItem = upskillAltData.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
@@ -1385,12 +1691,25 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
                     </div>
                 </div>
 
-                {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-                <div className="foot">
-                    <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button>
-                    <div className="ct_bar"></div>
 
-                    <span>{changeConstants(packages[0]?.title)}</span>
+                <div className="checks">
+                    {/* <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p> */}
+                    <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
+                </div>
+
+                <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
+                    <p>Start Date:</p>
+                    <p>{getFullDate(startDate)}</p>
+                </div>
+
+                {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+                <div className="foot" style={{ justifyContent: "center" }} >
+                    <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
+
+                    {/* <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button> */}
+                    {/* <div className="ct_bar"></div> */}
+
+                    {/* <span>{changeConstants(packages[0]?.title)}</span> */}
                 </div>
                 {/* <div>
                     <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>
@@ -1477,8 +1796,6 @@ export function UpskillCourseCard({ title, bootcampImg, bootcampId, category, de
         </UpCoursesCard>
     )
 }
-
-
 // VIRTUAL LIVE
 
 const LiveTrainingWrapper = styled.div`
@@ -1659,7 +1976,7 @@ export function LiveWebinarCard({
                 <h6>{title}</h6>
                 <div>
                     <p>Gotocourse</p>
-                    <p>{new Intl.DateTimeFormat('en-US').format(new Date(date))} | {time} {time?.split(":")[0] >= 12 ? "": "am"}</p>
+                    <p>{new Intl.DateTimeFormat('en-US').format(new Date(date))} | {time} {time?.split(":")[0] >= 12 ? "" : "am"}</p>
                 </div>
                 <div>
                     <button className="tag">FREE</button>
@@ -1751,7 +2068,7 @@ export function SuccessCard({ icon, title, description }) {
             </div>
             <h6 className="fw-bold" style={{ fontSize: "16px" }}>{title}</h6>
 
-                <span className="restricted_p" style={{ marginBottom: "unset"}}>{description}</span>
+            <span className="restricted_p" style={{ marginBottom: "unset" }}>{description}</span>
             <span onClick={handleClick} className="readmore">read more</span>
 
 
@@ -1794,6 +2111,7 @@ const ClassWrapper = styled.section`
         h5 {
             color: #292D32;   
             font-weight: 700;
+            font-size: 28px;
         }
         
         small{
@@ -1810,16 +2128,16 @@ const ClassWrapper = styled.section`
     }
 `
 
-export function ClassTypeComponent({ children, header: head, header2, subtext,subtext1, subtext2, bottomTitle, bottomLink }) {
+export function ClassTypeComponent({ children, center, header: head, header2, subtext, subtext1, subtext2, bottomTitle, bottomLink }) {
     return (
         <ClassWrapper>
             <div className="container">
                 <header>
-                    <h5>{head}</h5>
+                    <h5 className={center && "text-center"}>{head}</h5>
                     <h5>{header2}</h5>
                     <small>{subtext}</small>
                     <small className="d-block">{subtext1}</small>
-                    <small className="d-block" style={{fontSize: "14px", fontWeight: "500",lineHeight: "22px" ,paddingTop:"1rem"}}>{subtext2}</small>
+                    <small className="d-block" style={{ fontSize: "14px", fontWeight: "500", lineHeight: "22px", paddingTop: "1rem" }}>{subtext2}</small>
                 </header>
                 <article>
                     {children}

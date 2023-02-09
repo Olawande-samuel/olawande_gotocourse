@@ -74,32 +74,52 @@ import Logos from "./landingComponents/Logos";
 import { Blog } from "./Blog";
 import Headstart from "./Headstart";
 import Pathfinder from "./Pathfinder";
+import { useIntercom } from "react-use-intercom";
+import Tutorial from "./Tutorial";
+import Helmet from 'react-helmet'
+
 
 const NewLanding = () => {
+
+  const { show, boot } = useIntercom(); 
+
+  useEffect(()=>{
+    boot()
+    show()
+
+  },[])
+
   return (
+    <>
+      <Helmet>
+        <title>Gotocourse</title>
+        <meta property="og:site_name" content="Gotocourse" />
+        <meta name="description" content="Gotocourse" />
+      </Helmet>
     <Layout background="blue">
       <Hero />
       <Stats />
       <WhatweDo />
       <Companies />
+      {/* <Tutorial/> */}
       {/* <Mission /> */}
-      <Up/>
-      <Category />
       <GreatOpportunities />
+      <Up />
+      <Category />
       <Benefits />
-      <Headstart/> 
-      <Pathfinder/>
       <IndemandClasses />
       <UpskillCourse />
-      <ExecutiveClasses />
+      <Headstart />
+      <Pathfinder />
+      {/* <ExecutiveClasses /> */}
       <ShortCourses />
       <Mentors />
-      <BetterWay /> 
+      <BetterWay />
       <VideoSection />
       {/* <TechPro /> */}
       {/* <VirtualTraining /> */}
       {/* <LiveWebinars /> */}
-      <Blog/>
+      <Blog />
       {/* <Success /> */}
       {/* <Logos /> */}
       {/* <TeachingBenefits /> */}
@@ -119,6 +139,7 @@ const NewLanding = () => {
       {/* <Testimonials type="newLanding" /> */}
       {/* <Overview /> */}
     </Layout>
+    </>
   );
 };
 export default NewLanding;
@@ -126,33 +147,36 @@ export default NewLanding;
 function VideoSection() {
   const [open, setOpen] = useState(false);
   return (
-    <section className="video_section">
+    <section className="video_section container">
 
       <div className="video__left">
-        <img src={vidPreview} alt="" />
-        <div className="video_content">
-          <h4 className="text-center fw-bold mb-0 text-white" style={{ marginInline: "auto", width:"min(100% - .3rem, 350px)" }}> Gotocourse brings the new way to learn tech and business skills. Learn more</h4>
-          <i>
-            <FiPlayCircle size="6rem" onClick={() => setOpen(true)} />
-          </i>
+        <div className="video__img">
+          <img src={vidPreview} alt="" />
+          <div className="video_content">
+            <h4 className="text-center fw-bold mb-0 text-white" style={{ marginInline: "auto", width: "min(100% - .3rem, 350px)" }}> Gotocourse brings the new way to learn tech and business skills. Learn more</h4>
+            <i>
+              <FiPlayCircle size="5rem" onClick={() => setOpen(true)} />
+            </i>
+          </div>
+
         </div>
 
       </div>
 
       <div className="video__right">
-          <div className="content">
-            <h5>Learn and grow with our community</h5>
+        <div className="content">
+          <h5>Learn and grow with our community</h5>
 
-            <p>Community is everything! Meet and
-              collaborate with Gotocourse mentors and
-              career advisors who can help you advance
-              your digital skills and career.
-              It's a great way to expand your skill set.</p>
+          <p>Community is everything! Meet and
+            collaborate with Gotocourse mentors and
+            career advisors who can help you advance
+            your digital skills and career.
+            It's a great way to expand your skill set.</p>
 
-              <button>
-              Join our community 
-              </button>
-          </div>
+          <button>
+            Join our community
+          </button>
+        </div>
       </div>
       <PopupVideo open={open} setOpen={setOpen} />
     </section>
@@ -280,15 +304,15 @@ function Hero() {
   useEffect(() => {
     // console.log({getter})
     const interval = setInterval(() => {
-      
+
       console.log('This will run every 30 mins!');
-        if(getter !== ""){
-          changeImage(getter)
-    
-        } else {
-          setCookie(COOKEY, "number1")
-        }
-    }, 30*60*1000);
+      if (getter !== "") {
+        changeImage(getter)
+
+      } else {
+        setCookie(COOKEY, "number1")
+      }
+    }, 30 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [getter])
@@ -323,7 +347,7 @@ function Hero() {
     {
       id: 1,
       title: "Start and launch",
-      title2:"your IT career now",
+      title2: "your IT career now",
       // subtitle: "All-in-one platform for learning tech skills",
       social: true,
       acctype: "student",
@@ -334,7 +358,7 @@ function Hero() {
       ],
       img: tell,
       color: "var(--theme-blue)",
-      borderRadius:"7px",
+      borderRadius: "7px",
       link: "/signup",
       link_btn: "Register to get started ",
       // img:HeroImg
@@ -355,7 +379,7 @@ function Hero() {
       color: "#F75C4E",
       link: "/signup",
       link_btn: "Get Started",
-      borderRadius:"10px",
+      borderRadius: "10px",
 
     },
     {
@@ -369,19 +393,19 @@ function Hero() {
       img: afford,
       color: "#66BFE6",
       link: "/sign-up",
-      link_btn: "Get Started", 
-      borderRadius:"10px",
+      link_btn: "Get Started",
+      borderRadius: "10px",
 
     },
     {
       id: 4,
-      title: "Anyone can start from here. ",
-      title2: "",
+      title: "Your kids can start",
+      title2: "from here.",
       // subtitle: "Whether you are starting newly or upgrading your skills this is the best place to learn. No need of without putting your life on hold. You can study anywhere, everywhere and at any time, Gotocourse is your ideal destination of growing your tech and business skills.",
       social: true,
       acctype: "affiliate",
       list: [
-        "Join tech headstart program from anywhere",
+        "Join tech headstart program as early as 9 years",
         "Find your path to I.T by learning from real world experts",
         "Build solid foundation that leads to life-time opportunity",
       ],
@@ -389,7 +413,7 @@ function Hero() {
       color: "#F75C4E",
       link: "/sign-up",
       link_btn: "Register today",
-      borderRadius:"10px",
+      borderRadius: "10px",
 
     },
   ];
@@ -422,24 +446,24 @@ function Hero() {
           320: {
             slidesPerView: 1,
             spaceBetween: 0,
-          }        
+          }
         }}
       >
         {
-          
+
           heroData.map((data) => (
-              <SwiperSlide key={data.id}>
-             
-               <HeroContent
-                  overlay={overlay}
-                  setOverlay={setOverlay}
-                  logtype={logtype}
-                  {...data}
-                />
-              </SwiperSlide>
-            ))
+            <SwiperSlide key={data.id}>
+
+              <HeroContent
+                overlay={overlay}
+                setOverlay={setOverlay}
+                logtype={logtype}
+                {...data}
+              />
+            </SwiperSlide>
+          ))
         }
-        </Swiper>
+      </Swiper>
 
 
 
