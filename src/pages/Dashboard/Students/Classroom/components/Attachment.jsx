@@ -137,7 +137,7 @@ const Attachement = ({
         if(type=== "NOTE"){
             let findItem = items.find(item => item?.contentId === contentId);
             if (findItem) {
-                return findItem?.completedBy?.includes(userdata.id) ? <CompleteIcon $isComplete={true} status={status} /> : <CompleteIcon status={status} />
+                return findItem?.completedBy?.includes(userdata?.id) ? <CompleteIcon $isComplete={true} status={status} /> : <CompleteIcon status={status} />
             }
             return <CompleteIcon status={status}/>
 
