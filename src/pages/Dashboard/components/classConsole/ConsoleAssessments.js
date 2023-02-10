@@ -29,6 +29,8 @@ export default function ConsoleAssessments() {
 
           <main className="assess">
             <div className="assesstop">
+              <p className="assessinfo">Available Quiz</p>
+
               {
                 data?.data?.filter(item => item.status === "paid").map((x, id) => (
                   <AssessmentItem key={x.bootcampId} x={x} />
@@ -37,9 +39,9 @@ export default function ConsoleAssessments() {
 
             <div className="assessbottom">
               <p className="assessinfo">Submitted assessments</p>
-                {data?.data?.filter(item => item.status === "paid").map((x, id) => (
-                  <AnswerAssessmentItem key={x.bootcampId} x={x} answer={true} />
-                ))}
+              {data?.data?.filter(item => item.status === "paid").map((x, id) => (
+                <AnswerAssessmentItem key={x.bootcampId} x={x} answer={true} />
+              ))}
             </div>
 
 
@@ -85,15 +87,22 @@ const AssessmentItem = ({ x }) => {
 
   }, [modules])
 
-  console.log({ reduceModules });
-  console.log({ reduceContent });
+  const reduceItem = useMemo(() => {
+    return reduceModules?.filter((item => item.type === "QUIZ")).reduce((total, current) => [
+      ...total, ...current.items
+    ], []);
+
+  }, [modules])
+
+  // console.log({ reduceModules });
+  // console.log({ reduceContent });
 
   return (
     <>
-     
+
 
       <div className="quizaccordion">
-        {reduceContent?.length > 0 && <Accord reduceContent={reduceContent} />}
+        {reduceContent?.length > 0 && <Accord reduceContent={reduceContent} reduceItem={reduceItem} />}
 
       </div>
 
@@ -105,18 +114,32 @@ const AssessmentItem = ({ x }) => {
 
 
 
-const Accord = ({ reduceContent }) => {
+const Accord = ({ reduceContent, reduceItem }) => {
 
   return (
-    reduceContent?.length > 0 && reduceContent?.map((item, i) => (
+    reduceContent?.length > 0 && reduceContent?.map((item, i) => {
+      let contentId = item?.contentId;
+
+      // let quizDetail = reduceContent?.find(item => item?.contentId === contentId);
+      let contentDetail = reduceItem?.find(item => item?.contentId === contentId);
+      // console.log({ contentDetail })
+      return (
         <>
           <div className="assessbox">
             <div className="assessleft">
               <p className="assesstitle">{item.type}</p>
               <p className="assessbold">{item.title}</p>
               <div className="d-flex align-center gap-2">
-                {/* <p className="assesstitle">{getDate(item.startDate)}</p> */}
-             {/* <p className="assesstitle">{item.startTime && tConvert(item.startTime)}</p> */}
+                {contentDetail &&
+                  <>
+                    <p className="assesstitle">{getDate(contentDetail?.endDate)}</p>
+                    <p className="assesstitle">{new Date(contentDetail?.endDate).toLocaleTimeString('en-US', {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                    </p>
+                  </>
+                }
               </div>
             </div>
 
@@ -128,10 +151,11 @@ const Accord = ({ reduceContent }) => {
             </div>
           </div>
 
-          <br/>
-          <br/>
+          <br />
+          <br />
         </>
-    )))
+      )
+    }))
 }
 
 
@@ -202,13 +226,11 @@ const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
       let contentId = x?.contentId;
       let quizId = x?.quizId;
 
-      let quizDetail = reduceContent?.find(item => item?.contentId === contentId);
       let contentDetail = reduceModules?.find(item => item?.contentId === contentId);
+      let quizDetail = reduceContent?.find(item => item?.contentId === contentId);
       // let DomainDetail = modules?.find(item => item?.contentId === contentDetail?.domain);
 
       console.log({ x });
-
-
       return (quizDetail &&
         <div key={i} className="assessmentaccord">
           <div className="assessbox">
@@ -216,13 +238,21 @@ const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
               <p className="assessbold" >{quizDetail?.title}</p>
               <p className="assesstitle" data-id={contentDetail?.domian}>{contentDetail?.title}</p>
               <div className="d-flex align-center gap-2">
-                <p className="assesstitle">{quizDetail?.createdAt && getDate(quizDetail?.createdAt)}</p>
                 <p className="assesstitle">{quizDetail?.startDate && getDate(quizDetail?.startDate)}</p>
+                <p className="assesstitle">{quizDetail && new Date(quizDetail?.endDate).toLocaleTimeString('en-US', {
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+                </p>
               </div>
             </div>
 
             <div className="assessright">
+              <div>
               <p className="assesstitle">Total score: {x?.totalScore}</p>
+              <p className="assesstitle">Attempts: {quizDetail?.attempts}</p>
+
+              </div>
               <button className="assessbold" data-id={quizId} disabled
               // onClick={() => setShow(!show)}
               >Graded: {x?.graded ? "true" : "false"}</button>
