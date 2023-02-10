@@ -12,7 +12,6 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
-import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../../../contexts/Auth';
 import { KEY } from '../../../../constants';
@@ -190,12 +189,16 @@ export default function Quiz() {
 
 
 
-    const getContentfromQuery = useQuery(["quiz content", contentId, userdata?.token], () => fetchQuiz(userdata.token, searchData), {
+    const getContentfromQuery = useQuery([`quiz content ${contentId}`, contentId], () => fetchQuiz(userdata.token, searchData), {
+        enabled: userdata.token !== null,
         onSuccess: (res)=> {
             console.log("fetched")
+            console.log(res.data.length > 0)
+
             if(res.data?.length > 0){
                 let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
-                setFormData({...res.data[res.data.length -1], endDate: deadline})
+                let deadlineTime = res.data[res.data.length -1].endDate?.split("T")[1]
+                setFormData({...res.data[res.data.length -1], endDate: deadline, endTime: deadlineTime.substr(0, 5)})
                 setResultMainData({...res.data[res.data.length -1]})
                 setEdit(true)
             }else{
@@ -231,6 +234,7 @@ export default function Quiz() {
     } )
 
     console.log({formData})
+    console.log({getContentfromQuery})
     
 
     function goBack() {
@@ -253,6 +257,7 @@ export default function Quiz() {
     const handleInputChange = (e, index) => {
         const { name, value } = e.target;
         const list = { ...formData }
+        console.log({list})
         list.questions[index][name] = value;
         setFormData(list)
     }
@@ -323,8 +328,7 @@ export default function Quiz() {
     }
 
     
-
-
+    
     return (
 
         <div className=''>
@@ -476,6 +480,7 @@ export default function Quiz() {
                                                                             <Switch
                                                                                 checked={x.showAnswer}
                                                                                 name="showAnswer"
+                                                                                defaultValue=""
                                                                                 // onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })}
                                                                                 onChange={e => {
                                                                                     const list = { ...formData }
@@ -634,20 +639,19 @@ function ResultPanel({data}){
     const userdata = getItem(KEY)
     const {teacherConsoleFunctions: {newFetchAttemptedQuiz}} = useAuth()
     const [results, setResults] = useState([])
-    console.log({data})
+    
 
     const fetchStudentsQuizzes = useQuery(["fetchStudentsQuizzes", userdata.token, data?._id], ()=> newFetchAttemptedQuiz(userdata.token, data._id), {
         onSuccess: (res)=>{
             if(res.statusCode === 1){
                 setResults(res.data)
             }
-            console.log(res)
         },
         onError: (err)=>console.error(err)
     })
 
 
-    console.log({fetchStudentsQuizzes})
+    
     return (
         <section>
             <section className="quiz__cards_container">
@@ -686,7 +690,7 @@ function ResultCards({studentId, totalScore,quizId, graded, updatedAt}){
             {/*    <span>Number of tries: </span>*/}
             {/*    <span>Actual score</span>*/}
             {/*</div>*/}
-            <p>{updatedAt.split("T")[0]} {new Date(updatedAt)?.toLocaleTimeString()}</p>
+            <p>{updatedAt?.split("T")[0]} {new Date(updatedAt)?.toLocaleTimeString()}</p>
 
             <div className="d-flex gap-2">
                 <button className="quiz__card_del_btn">Delete</button>

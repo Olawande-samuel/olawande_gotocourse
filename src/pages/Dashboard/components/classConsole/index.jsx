@@ -380,16 +380,30 @@ function Sidebar({ Toggle, side, toggleModule }) {
       return
     }
     
+    console.log("source ",source.index)
+    console.log("dest ", destination.index)
+
+
     // get domains state
-    console.log({domainData})
     let newData = domainData
     let movedItem = domainData.find(item => item._id === draggableId)
+    console.log({movedItem})
+    
+    // Remove item from the array
     newData.splice(source.index, 1)
-    newData.splice(destination.index, 0, movedItem)
-    console.log({newData})
-    setDomainData(newData)
 
-    // THIS HAS TO CHANGE. IT'S NOT SUSTAINABLE
+    newData.splice(destination.index, 0, movedItem)
+    let organisedData = []
+
+    newData.forEach((item, i) => (
+      organisedData.push({...item, order: i + 1})
+    ))
+    setDomainData(organisedData);
+
+    console.log({organisedData})
+
+
+    // // THIS HAS TO CHANGE. IT'S NOT SUSTAINABLE
     newData.forEach((item, i) => {
       domainUpdate.mutate([userdata.token, {...item, order: i + 1}, item._id])
     })
@@ -426,7 +440,7 @@ function Sidebar({ Toggle, side, toggleModule }) {
                       {...provided.droppableProps}
                     >
                       <p>Course content</p>
-                      {getDomains?.data?.data?.sort((a, b) => a.order - b.order).map((domain, index) => (
+                      {domainData?.sort((a, b) => a.order - b.order).map((domain, index) => (
                         <Accord {...domain} index={index} key={domain._id} all={domain} openEditContentModal={Toggle} toggleModule={toggleModule} />
                       ))}
                       {provided.placeholder}
@@ -521,14 +535,19 @@ export function Accord ({ name, _id, classId, description, creator,contentName, 
   const { getItem } = useLocalStorage();
   const userdata = getItem(KEY);
   const { consoleFunctions: { fetchContents, addFile, updateContent }, } = useAuth();
-  const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId));
+  const [domainContent, setDomainContent] = useState([])
   const queryClient = useQueryClient()
-  
-  
 
-  // let data = queryClient.getQueryData("getDomainContent")
 
-  // console.log({data})
+  const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId), {
+    onSuccess: res => {
+      console.log({res})
+      if(res.success){
+        setDomainContent(res.data)
+      }
+    }
+  });
+
 
   useEffect(() => {
     if (getDomainContent?.data?.data?.length > 0) {
@@ -619,20 +638,35 @@ function addSuiteContentToClass(id, contentName, originalName){
       return
     }
 
-    console.log("content data", getDomainContent?.data?.data)
-    let newContentData = getDomainContent?.data?.data
-    let movedItem = getDomainContent?.data?.data.find(item => item._id === draggableId)
-    newContentData.splice(source.index, 1)
-    newContentData.splice(destination.index, 0, movedItem)
-    console.log({newContentData})
-    
-    
-    
+    // console.log("moved content", draggableId)
+    // console.log(source.index)
+    // console.log(destination.index)
 
-    // queryClient.setQueryData("getDomainContent", (old) => ({...old, data:newContentData}))
-    newContentData.forEach((item, i) => {
-      contentUpdate.mutate([userdata.token, {...item, order: i + 1, domainId: item.domain}, item._id])
-    })
+    // let newContentData = domainContent
+    // let movedItem = domainContent.find(item => item._id === draggableId)
+
+    // console.log({movedItem})
+    // console.log("insert item at index ", destination.index)
+
+
+    // newContentData.splice(source.index, 1)
+    // newContentData.splice(destination.index, 0, movedItem)
+    
+    // console.log({newContentData})    
+
+    // let organisedData = []
+
+    // newContentData.forEach((item, i) => (
+    //   organisedData.push({...item, order: i + 1})
+    // ))
+    // setDomainContent(organisedData);
+
+    // console.log({organisedData})    
+    
+  
+    // newContentData.forEach((item, i) => {
+    //   contentUpdate.mutate([userdata.token, {...item, order: i + 1, domainId: item.domain}, item._id])
+    // })
 
   }
 
@@ -676,7 +710,7 @@ function addSuiteContentToClass(id, contentName, originalName){
                 </div>
                 :
                 <ul className={style.content_list}>
-                  {getDomainContent?.data?.data?.filter(item => item.domain === _id).filter(item=> item.type === "FILE_VIDEO").map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
+                  {getDomainContent?.data?.data?.filter(item => item.domain === _id).filter(item=> item?.type === "FILE_VIDEO").map(({ icon: Icon, title, link, _id, type, domain, classId }) => (
                     <li key={_id} className="d-flex position-relative" style={{cursor:"pointer"}}>
                       <i>{IconType(type)}</i>
                       <span>{title}</span>
@@ -690,6 +724,7 @@ function addSuiteContentToClass(id, contentName, originalName){
                 </ul>
               
             :
+
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId={_id}>
                 {
@@ -699,7 +734,7 @@ function addSuiteContentToClass(id, contentName, originalName){
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                     >
-                      {getDomainContent?.data?.data?.filter(item => item.domain === _id).sort((a, b) => a.order - b.order).map((item, i) => (
+                      {domainContent?.filter(dc => dc.domain === _id).sort((a, b) => a.order - b.order).map((item, i) => (
                             <Draggable draggableId={item._id} index={i}>
                               {
                                 (provided)=> (
@@ -1396,7 +1431,8 @@ export function MainContainer() {
   }, [getDomainContent?.data?.data, contentid])
 
   console.log({ data })
-  switch (data.type) {
+
+  switch (data?.type) {
     case "FILE_VIDEO":
       return <File />;
     case "QUIZ":
@@ -1404,7 +1440,7 @@ export function MainContainer() {
     case "NOTE":
       return <Note />;
     default:
-      return;
+      return null;
   }
 
 }
