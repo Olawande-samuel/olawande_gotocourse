@@ -5362,7 +5362,7 @@ export const consoleFunctions = {
 
         try {
             const res = await axios.post(`${baseURL}/classes/contents/quiz/attempt/${quizId}`, {
-                questions: JSON.stringify(questions)
+                questions
             },
 
                 {
