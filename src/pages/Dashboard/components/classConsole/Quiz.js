@@ -384,7 +384,7 @@ export default function Quiz() {
                             </div>
                             <small>For quizzes without deadline, use a date far in the future</small>
 
-                            <label htmlFor="timeLimit">Time Limit</label>
+                            <label htmlFor="timeLimit">Time Limit (mins)</label>
                             <input 
                             type="number"
                                 name="timeLimit"

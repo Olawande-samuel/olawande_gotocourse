@@ -182,7 +182,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
     let startingDate = new Date(startDate).getTime();
 
     if(today >= startingDate){
-      window.open(`https://www.meetifix.com/live/${classId}?token=${userdata?.id}`, '_blank')
+      window.open(`https://www.meetifix.com/live/${classId}?token=${userdata?.id}&user=${userdata?.token}`, '_blank')
     }else {
       window.alert(`Class starts on ${startDate}`)
     }
