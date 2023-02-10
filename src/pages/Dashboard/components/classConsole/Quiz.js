@@ -669,11 +669,11 @@ function ResultPanel({data}){
 
 
 
-function ResultCards({studentId, totalScore,quizId, graded, updatedAt}){
+function ResultCards({studentId, totalScore,quizId, graded, studentName,  updatedAt}){
     const [open, setOpen] = useState(false)
     return (
         <div className="quiz__card">
-            {/* <p className="quiz__card_student_name fw-bold">Olunloyo Adegoke</p> */}
+            <p className="quiz__card_student_name fw-bold">{studentName}</p>
             <div>
                 <span>Actual score: </span>
                 <span>{totalScore}</span>
@@ -742,7 +742,7 @@ function AssessQuiz({open, setOpen, data}){
 					/>
 				</div>
                 <ScoreSection />
-                <QuestionBox />
+                {/* <QuestionBox /> */}
                 <div className="">
                     <button className="quiz__question_review--btn">Save and Submit Quiz Review</button>                     
                 </div>
@@ -794,7 +794,7 @@ function QuestionBox(){
                 <span>Theory</span>
             </div>
 
-            <p>Question blah blah blah</p>
+            {/* <p>Question blah blah blah</p> */}
 
             <div>Answer 1</div>
             <div>Answer 2</div>
