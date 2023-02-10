@@ -690,7 +690,7 @@ function ResultCards({studentId, totalScore,quizId, graded, updatedAt}){
             {/*    <span>Number of tries: </span>*/}
             {/*    <span>Actual score</span>*/}
             {/*</div>*/}
-            <p>{updatedAt.split("T")[0]} {new Date(updatedAt)?.toLocaleTimeString()}</p>
+            <p>{updatedAt?.split("T")[0]} {new Date(updatedAt)?.toLocaleTimeString()}</p>
 
             <div className="d-flex gap-2">
                 <button className="quiz__card_del_btn">Delete</button>
