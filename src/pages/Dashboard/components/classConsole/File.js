@@ -440,7 +440,7 @@ function FileCard({ title, fileName, contentId, type, _id, fileId, all }) {
 			)}
 
 			<div className="filebottom">
-				<div className="position-absolute end-0" style={{ cursor: "pointer" }}>
+				{/* <div className="position-absolute end-0" style={{ cursor: "pointer" }}>
 					<MenuOptionsPopup
 						handleClick={handleClick}
 						anchorEl={anchorEl}
@@ -454,7 +454,7 @@ function FileCard({ title, fileName, contentId, type, _id, fileId, all }) {
 						x={all}
 						handleIsDownloadable={handleIsDownloadable}
 					/>
-				</div>
+				</div> */}
 				<h3>{title}</h3>
 				<div className="filebutton">
 					<i>
