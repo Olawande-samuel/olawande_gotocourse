@@ -402,7 +402,9 @@ border-radius: 10px;
 background: #EEF5FF;
 box-shadow: 0px 203px 81px rgba(0, 0, 0, 0.01), 0px 114px 68px rgba(0, 0, 0, 0.05), 0px 51px 51px rgba(0, 0, 0, 0.09), 0px 13px 28px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
 
-
+.max{
+    color: var(--theme-orange);
+}
 
 
 `
@@ -664,7 +666,7 @@ function WelcomeSection({ pageHandler, contentItem }) {
                     hour: '2-digit',
                     minute: '2-digit'
                 })}</span></p>
-                <p>Number of submissions:  <span>{contentItem?.attempts || 0}/{contentItem?.maxAttempts}</span> </p>
+                <p>Number of submissions: {(contentItem?.attempts < contentItem?.maxAttempts) ? <span>{contentItem?.attempts} </span> : <span className='max'>You have reached the maximum number of attempts</span>} </p>
                 <p> Provisional Result (based on Objective): <span>100.00%</span></p>
             </QuizInfo>
 
@@ -959,7 +961,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
                                         </button>
                                     )
                                     :
-                                    <QuizButton onClick={() => AnswerQuiz("mutiple")} disabled={(+contentItem?.attempts) >= (+contentItem?.maxAttempts)}>
+                                    <QuizButton onClick={() => AnswerQuiz("mutiple")} disabled={(contentItem?.attempts < contentItem?.maxAttempts)? true: false }>
                                         Submit
                                     </QuizButton>
                             }
