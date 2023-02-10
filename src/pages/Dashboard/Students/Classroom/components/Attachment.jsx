@@ -135,7 +135,7 @@ const Attachement = ({
 
         }
         if(type=== "NOTE"){
-            let findItem = items.find(item => item.contentId === contentId);
+            let findItem = items.find(item => item?.contentId === contentId);
             if (findItem) {
                 return findItem?.completedBy?.includes(userdata.id) ? <CompleteIcon $isComplete={true} status={status} /> : <CompleteIcon status={status} />
             }
@@ -148,7 +148,7 @@ const Attachement = ({
 
     const getLockedStatus = (contentId, items, lock, status) => {
         // console.log({ contentId }, { items }, { lock });
-        let findItem = items.find(item => item.contentId === contentId);
+        let findItem = items.find(item => item?.contentId === contentId);
         if (findItem) {
             return lock ? <Locked $isComplete={true} status={status} /> : <Locked status={status} />
         }
