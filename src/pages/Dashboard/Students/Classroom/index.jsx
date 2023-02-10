@@ -961,7 +961,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
                                     )
                                     :
                                     <QuizButton onClick={() => AnswerQuiz("mutiple")} 
-                                    // disabled={(contentItem?.attempts < contentItem?.maxAttempts)? true: false }
+                                    disabled={(contentItem?.attempts >= contentItem?.maxAttempts)? true: false }
                                     >
                                         Submit
                                     </QuizButton>
