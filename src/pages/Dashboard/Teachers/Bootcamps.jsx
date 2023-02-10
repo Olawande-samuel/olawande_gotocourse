@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ShareModal } from "../../Bootcamp";
 import { FaShareSquare } from "react-icons/fa";
+import { AiOutlineSearch } from "react-icons/ai";
 
 
 export default function Bootcamps() {
@@ -153,6 +154,7 @@ export function ConsoleClass() {
   let userdata = getItem(KEY);
   const [courseList, setCourseList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("")
 
   useEffect(() => {
     if (flag.current) return;
@@ -197,14 +199,29 @@ export function ConsoleClass() {
     <Teachers header={"My Classes"} >
       {loading && <Loader />}
       <div className={clsx["teachers_profile"]}>
+
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h3 style={{ margin: 0 }}>My Classes</h3>
         </div>
         <div className={clsx.admin__student_main}>
+          <div className="assessments__inputcontainer">
+            <input type="text"
+              className='assessments__input'
+              placeholder="Search for a Class"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)} />
+            <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
+          </div>
+
           <div className={clsx.class_con_cards}>
             {
               courseList.length > 0 &&
-              courseList.map((item, i) => (
+              courseList.filter(item =>
+                item?.title
+                  .toLowerCase()
+                  .includes(search?.toLowerCase())
+
+              ).map((item, i) => (
                 <ClassesCard {...item} />
               ))
             }
