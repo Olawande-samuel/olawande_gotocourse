@@ -695,7 +695,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
     // function backpageHandler(_) { setPage(old => old -= 1); }
 
 
-    function setNote(text, quizId, questionId, questionIndex, quizIndex) {
+    function setNote(text, questionId, quizIndex) {
         // for editor content
         let allNotes = note
         allNotes[quizIndex] = text
@@ -782,7 +782,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
         }
     }
 
-    // console.log({ myAnswers });
+    console.log({ myAnswers });
 
 
     const AddLink = (e, questionId, index) => {
@@ -842,7 +842,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
                 page === 0 ? <WelcomeSection pageHandler={pageHandler} contentItem={contentItem} /> :
 
                     <div>
-                        {contentItem?.questions?.length > 0 && contentItem?.questions.map((ques, index) => (
+                        {contentItem?.questions?.length > 0 && contentItem?.questions?.map((ques, index) => (
                             <Accordion key={index}>
                                 <Accordion.Item eventKey={index} className="accord__body">
                                     <Accordion.Header className="accord__header"> Question {index + 1}</Accordion.Header>
@@ -853,19 +853,18 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
                                         </QuesHeader>
 
                                         <QuestionOptions>
-                                            <h4 dangerouslySetInnerHTML={{ __html: `${ques.title}` }}></h4>
+                                            <h4 dangerouslySetInnerHTML={{ __html: `${ques?.title}` }}></h4>
 
                                             {
-                                                ques?.type === "THEORY" && ques?.options && ques?.options.length > 0 && ques?.options.map((opt, i) => (
+                                                ques?.type === "THEORY"  && 
                                                     <>
-                                                        {opt.title}
                                                         <Answer>
-                                                            <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, opt?._id, i, index)} />
+                                                            <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, index)} />
                                                         </Answer>
 
 
                                                     </>
-                                                ))
+                            
 
 
                                             }
@@ -961,7 +960,9 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
                                         </button>
                                     )
                                     :
-                                    <QuizButton onClick={() => AnswerQuiz("mutiple")} disabled={(contentItem?.attempts < contentItem?.maxAttempts)? true: false }>
+                                    <QuizButton onClick={() => AnswerQuiz("mutiple")} 
+                                    // disabled={(contentItem?.attempts < contentItem?.maxAttempts)? true: false }
+                                    >
                                         Submit
                                     </QuizButton>
                             }
