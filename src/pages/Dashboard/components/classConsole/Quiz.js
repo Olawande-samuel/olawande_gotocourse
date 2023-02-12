@@ -18,6 +18,7 @@ import { KEY } from '../../../../constants';
 import { useLocalStorage } from '../../../../hooks';
 import { toast } from 'react-toastify';
 import ReactQuill from 'react-quill';
+import { consoleFunctions } from '../../../../contexts/functions';
 
 
 function TabPanel(props) {
@@ -656,8 +657,8 @@ function ResultPanel({data}){
         <section>
             <section className="quiz__cards_container">
                  {
-                    results?.map(item=> (
-                        <ResultCards {...item} />
+                    results?.map((item, i) => (
+                        <ResultCards key={i} {...item} all={item} />
                     ))
                 }
             </section>
@@ -669,8 +670,11 @@ function ResultPanel({data}){
 
 
 
-function ResultCards({studentId, totalScore,quizId, graded, studentName,  updatedAt}){
+function ResultCards({studentId, totalScore,quizId, graded, studentName,  updatedAt, all}){
     const [open, setOpen] = useState(false)
+    const [data, setData]= useState(()=>all)
+    console.log({data})
+
     return (
         <div className="quiz__card">
             <p className="quiz__card_student_name fw-bold">{studentName}</p>
@@ -696,7 +700,7 @@ function ResultCards({studentId, totalScore,quizId, graded, studentName,  update
                 <button className="quiz__card_del_btn">Delete</button>
                 <button className="quiz__card_open_btn" type="button" onClick={()=> setOpen(true)} >Open Answer</button>
             </div>
-            <AssessQuiz open={open} setOpen={setOpen} />
+            <AssessQuiz open={open} setOpen={setOpen} data={data} />
         </div>
     )
 }
@@ -741,8 +745,12 @@ function AssessQuiz({open, setOpen, data}){
 						style={{ marginLeft: "auto", display: "block", cursor: "pointer" }}
 					/>
 				</div>
-                <ScoreSection />
-                {/* <QuestionBox /> */}
+                <ScoreSection data={data} />
+                {
+                    data?.questions?.map((item, i) => (
+                        <QuestionBox key={i} question={item} i={i} />
+                    ))
+                }
                 <div className="">
                     <button className="quiz__question_review--btn">Save and Submit Quiz Review</button>                     
                 </div>
@@ -752,17 +760,17 @@ function AssessQuiz({open, setOpen, data}){
 }
 
 
-function ScoreSection(){
+function ScoreSection({data}){
     return (
 
         <div className="quiz__score">
             <div>
                 <span>Name: </span>
-                {/* <span>Olunloyo Adegoke</span> */}
+                <span>{data.studentName}</span>
             </div>
             <div className="mb-2">
                 <span>Student ID: </span>
-                {/* <span>Olunloyo Adegoke</span> */}
+                <span>{data.studentId}</span>
             </div>
 
             <form className="quiz__score_form" >
@@ -783,21 +791,93 @@ function ScoreSection(){
 }
 
 
-function QuestionBox(){
+function questionConverter(questionType){
+
+    switch (questionType) {
+        case "THEORY":
+            return "Theory"
+        case "FILE_UPLOAD":
+            return "File Upload"
+        case "MULTIPLE_CHOICE":
+            return "Theory"
+        case "CHECKBOX":
+            return "Checkbox"
+        default:
+            break;
+    }
+}
+
+
+
+function QuestionBox({question, i}){
+
+    const {consoleFunctions: {gradeQuestion}} = useAuth()
+    const [data,setData] = useState({
+        questionId: question._id,
+        isCorrect: "choose"
+    })
+    const {getItem} = useLocalStorage();
+    const userdata = getItem(KEY)
+
+    const grade = useMutation(([token, id, data])=> gradeQuestion(token, id, data), {
+        onSuccess: res => {
+            console.log(res)
+        },
+        onError: err => console.error(err)
+    })
+
+    console.log({data})
+    
+
+    
+
+
+    function submit(e){
+        e.preventDefault();
+        if(data.isCorrect !== "choose"){
+            grade.mutate([userdata.token, question._id, data])
+        }else {
+            window.alert("Please make a selection")
+        }
+    }
+
     return (
 
         <div className="quiz__question_box">
             <form>
 
             <div>
-                <span>Question 1: </span>
-                <span>Theory</span>
+                <span>Question {i + 1}: </span>
+                <span>{question?.type && questionConverter(question.type) }</span>
             </div>
+            <div className="my-4">
+                <ReactQuill theme="snow" value={question?.title} readOnly={true} modules={{toolbar: false}} />
+            </div>
+            <div>Answer</div>
+            {
+                question.type === "THEORY" ?
+                <ReactQuill theme="snow" value={question.answer} readOnly={true} modules={{toolbar: false}} />
+                :
+                question.type === "MULTIPLE_CHOICE" ?
+                question?.options?.map( item => (
+                    <div className='d-flex gap-2 align-items-center'>
+                        <div className="form-group">
+                            <label htmlFor={item.title} className="d-flex align-items-center">
+                                <input type="radio" name={item.tile} id={item.title} value={item.title} disabled={true} checked={item.selected} />
+                                {" "}{item.title}
+                            </label>
 
-            {/* <p>Question blah blah blah</p> */}
-
-            <div>Answer 1</div>
-            <div>Answer 2</div>
+                        </div>
+                        {
+                            item.isAnswer && <small className='text-success'>Correct Option</small>
+                        }
+                    </div>
+                ))
+                :
+                ""
+            }
+            {/* <div>Answer 1</div>
+            <div>Answer 2</div> */}
         
             <div className="quiz__question_review">
                 {/* <button className="open_review">Open Review</button>
@@ -811,19 +891,26 @@ function QuestionBox(){
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    // value={age}
+                                    value={data.isCorrect}
                                     label="Age"
-                                    // onChange={handleChange}
+                                    onChange={(e)=>setData({...data, isCorrect: e.target.value})}
                                 >
-                                    <MenuItem value={10}>Correct</MenuItem>
-                                    <MenuItem value={20}>Incorrect</MenuItem>
+                                    <MenuItem defaultValue="select">Select</MenuItem>
+                                    <MenuItem value={true}>Correct</MenuItem>
+                                    <MenuItem value={false}>Incorrect</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box>
                         <Box marginBottom="1rem">
                             <TextField id="outlined-basic" label="Add a Comment" variant="outlined" />       
                         </Box>
-
+                        <button className="open_review" onClick={submit}>
+                            {
+                                grade?.isLoading ? <span className="spinner-border text-white"><span className="visually-hidden">Loading...</span></span>
+                                :
+                                <span>Submit</span>
+                            }
+                        </button>
                         
                     </form>
                 </div>

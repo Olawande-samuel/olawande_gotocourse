@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Modal, Box, Switch } from "@mui/material";
 import { FiFilter } from "react-icons/fi";
 import { HiOutlineFilter } from "react-icons/hi";
-
+import Accordion from 'react-bootstrap/Accordion';
 import { Chart as ChartLogo } from "../../../images/components/svgs";
 import clsx from "./styles.module.css";
 import { useAuth } from "../../../contexts/Auth";
@@ -15,6 +15,8 @@ import MyChart from "../../../components/Chart";
 import Input from "../../../components/Input";
 import { AdvancedError } from "../../../classes";
 import Loader from "../../../components/Loader";
+import { Link } from "react-router-dom";
+import { Admin } from "../Admin";
 
 export default function Earnings() {
   const { getItem } = useLocalStorage();
@@ -133,7 +135,7 @@ export function AllEarnings({ earnings }) {
   const [total, setTotal] = useState(0);
   const [courseEarnings, setCourseEarnings] = useState(0);
   const [modelEarnings, setModelEarnings] = useState(0);
-  const [modelType, setModelType]= useState("")
+  const [modelType, setModelType] = useState("")
   const data = [
     {
       title: "Teaching Model",
@@ -198,10 +200,10 @@ export function AllEarnings({ earnings }) {
   }, [earnings]);
 
   // returns total based on selected model
-  function getModelTotal( model) {
+  function getModelTotal(model) {
     let modelTotal = earnings.filter((item) => item.teachingModel === model).reduce((a, b) => a + b.amount, 0);
     setModelEarnings(modelTotal);
-  
+
   }
 
   // return total based on selected course/class
@@ -211,11 +213,11 @@ export function AllEarnings({ earnings }) {
       .reduce((a, b) => a + b.amount, 0);
   }
 
-  function handleModelChange(e){
+  function handleModelChange(e) {
     setModelType(e.target.value)
   }
   useEffect(() => {
-    if(earnings){
+    if (earnings) {
       getModelTotal(modelType)
 
     }
@@ -241,8 +243,17 @@ export function AllEarnings({ earnings }) {
         ))}
         <EarningsCard total={true} value={total} />
       </div>
+
+      <div className="pt-3 d-flex justify-content-end">
+      <Link to={`/admin/earnings/courses`}><button className=" button py-1 px-4">Divide earnings</button></Link>
+
+      </div>
+
+
       <div className="overflow-auto">
         <MyChart />
+
+
       </div>
     </>
   );
@@ -264,7 +275,7 @@ export function FilterButton({ title }) {
   );
 }
 
-export function EarningsCard({ title, type, data=[], total, value, handleModelChange }) {
+export function EarningsCard({ title, type, data = [], total, value, handleModelChange }) {
   return (
     <div className="earnings_card">
       <p className="text">{title}</p>
@@ -275,23 +286,23 @@ export function EarningsCard({ title, type, data=[], total, value, handleModelCh
               <h3>TOTAL</h3>
             ) : (
               <>
-              {
-                type === "Model" ? 
-                <select name="model" id="model" className="form-select w-75" onChange={handleModelChange}>
-                  <option defaultValue>{type}</option>
-                  {data.map(item=>(
-                    <option value={item.type}>{item.title}</option>
+                {
+                  type === "Model" ?
+                    <select name="model" id="model" className="form-select w-75" onChange={handleModelChange}>
+                      <option defaultValue>{type}</option>
+                      {data.map(item => (
+                        <option value={item.type}>{item.title}</option>
 
-                  ))}
-                </select>
-                :
-                <select name="model" id="model" className="form-select w-75">
-                  <option defaultValue>{type}</option>
-                  <option defaultValue>COHORT</option>
-                  <option defaultValue>COHORT</option>
-                  <option defaultValue>COHORT</option>
-                </select>
-              }
+                      ))}
+                    </select>
+                    :
+                    <select name="model" id="model" className="form-select w-75">
+                      <option defaultValue>{type}</option>
+                      <option defaultValue>COHORT</option>
+                      <option defaultValue>COHORT</option>
+                      <option defaultValue>COHORT</option>
+                    </select>
+                }
               </>
             )}
           </div>
@@ -309,6 +320,61 @@ export function EarningsCard({ title, type, data=[], total, value, handleModelCh
       </div>
     </div>
   );
+}
+
+export function EarningCourses() {
+  return (
+    <Admin header={"Earnings> Courses"}>
+
+      <div className={clsx.admin_profile}>
+
+        <div className={clsx.earntop}>
+          <div>No</div>
+          <div>Courses</div>
+          <div>Earning</div>
+        </div>
+
+        <div className={clsx.earncontent}>
+          {
+            [...Array(15)].map((_, i) => (
+              <Accordion key={i}>
+                <Accordion.Item eventKey={i} className="accord__body">
+                  <Accordion.Header className="earnaccord__header">
+                    <div className={clsx.earnbtm} key={i}>
+                      <div>{i + 1}</div>
+                      <div>  Question {i}</div>
+                      <div>$2000</div>
+                    </div>
+
+                  </Accordion.Header>
+                  <Accordion.Body>
+                    {[...Array(2)].map((data, index) => (
+                      <EarnInfo key={index} data={data} />
+                    ))}
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+
+            ))
+          }
+
+        </div>
+      </div>
+    </Admin>
+  )
+}
+
+
+const EarnInfo = ({ data }) => {
+  return (
+    <div className={clsx.earninfo}>
+      <div className="d-flex align-items-center">
+        <div className="me-4">{"mayowa"}</div>
+        <div className={clsx.earnbtn}>{"30%"}</div>
+      </div>
+    </div>
+
+  )
 }
 
 const Requests = ({ submitHandler }) => {
