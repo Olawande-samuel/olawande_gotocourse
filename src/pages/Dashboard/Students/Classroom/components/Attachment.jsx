@@ -71,8 +71,8 @@ justify-content: space-between;
 
 
 const CompleteIcon = styled(MdCheckCircle)`
-     color:   ${props => props.$isComplete  && props.status ? ' #0C2191 ':
-     props.$isComplete ?  '#fff' : 'rgba(0,0,0,.2)'};
+     color:   ${props => props.$isComplete && props.status ? ' #0C2191 ' :
+        props.$isComplete ? '#fff' : 'rgba(0,0,0,.2)'};
 
     /* ${AttachmentContainer}&:hover{
         color:   ${props => props.$isComplete ? 'var(--theme-blue)' : 'rgba(0,0,0,.2)'};
@@ -81,8 +81,8 @@ const CompleteIcon = styled(MdCheckCircle)`
 `
 
 const Locked = styled(MdOutlineLock)`
-     color:   ${props => props.$isComplete  && props.status ? ' #0C2191 ':
-     props.$isComplete ?  '#fff' : 'rgba(0,0,0,.2)'};
+     color:   ${props => props.$isComplete && props.status ? ' #0C2191 ' :
+        props.$isComplete ? '#fff' : 'rgba(0,0,0,.2)'};
 
      /* ${AttachmentContainer}:hover{
         color:   ${props => props.$isComplete ? 'var(--theme-blue) ' : 'rgba(0,0,0,.2)'};
@@ -95,7 +95,7 @@ const Locked = styled(MdOutlineLock)`
 
 const Attachement = ({
     content,
-    setBodyTitle, 
+    setBodyTitle,
     setPickedType,
     setContents,
     setLocked
@@ -117,33 +117,46 @@ const Attachement = ({
         // console.log({contentId}, {items}, {type});
         if (type === "FILE_VIDEO") {
             let all = items.filter(item => item?.contentId === contentId);
-            return (all?.filter(content => content?.completedBy?.includes(userdata.id))?.length === all?.length) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />
+            if(all?.length > 0){
+                return (all?.filter(content => content?.completedBy?.includes(userdata.id))?.length === all?.length) ? <CompleteIcon $isComplete={true} status={status}/> : <CompleteIcon status={status}/>
+            }
+            return <CompleteIcon status={status}/>
 
         }
 
         if (type === "QUIZ") {
             let all = items.filter(item => item?.contentId === contentId);
-            return (all?.filter(content => content?.attemptedBy?.includes(userdata.id))?.length === all?.length) ? <CompleteIcon $isComplete={true} /> : <CompleteIcon />
+            if(all?.length > 0){
+                console.log({all}, {contentId}, (all?.filter(content => content?.attemptedBy?.includes(userdata.id))?.length === all?.length));
+                return (all?.filter(content => content?.attemptedBy?.includes(userdata.id))?.length === all?.length) ? <CompleteIcon $isComplete={true} status={status}/> : <CompleteIcon status={status}/>
+
+            }
+            return <CompleteIcon status={status}/>
+
+        }
+        if(type=== "NOTE"){
+            let findItem = items.find(item => item?.contentId === contentId);
+            if (findItem) {
+                return findItem?.completedBy?.includes(userdata?.id) ? <CompleteIcon $isComplete={true} status={status} /> : <CompleteIcon status={status} />
+            }
+            return <CompleteIcon status={status}/>
+
         }
 
-        let findItem = items.find(item => item.contentId === contentId);
-        if (findItem) {
-            return findItem?.completedBy?.includes(userdata.id) ? <CompleteIcon $isComplete={true} status={status}/> : <CompleteIcon status={status}/>
-        }
-        return <CompleteIcon status={status}/>
+        return <CompleteIcon status={status} />
     }
 
     const getLockedStatus = (contentId, items, lock, status) => {
         // console.log({ contentId }, { items }, { lock });
-        let findItem = items.find(item => item.contentId === contentId);
+        let findItem = items.find(item => item?.contentId === contentId);
         if (findItem) {
-            return lock ? <Locked $isComplete={true} status={status}/> : <Locked status={status}/>
+            return lock ? <Locked $isComplete={true} status={status} /> : <Locked status={status} />
         }
-        return <Locked />
+        return <Locked status={status}/>
     }
 
     return (
-        <AttachmentContainer 
+        <AttachmentContainer
             variant="outlined"
             active={(contentId === content?.contentId) ? true : false}
             onClick={() => {
@@ -153,26 +166,37 @@ const Attachement = ({
                 setBodyTitle(content?.title)
                 setPickedType(content?.type)
 
-                if (!content?.isLocked) {
-                    setContents(content?.items)
-                    setLocked(false)
-                    return;
-
-                } else {
+                if (content?.isLocked) {
                     setLocked(true)
                     setContents([])
                     return;
+                } else {
+                    setLocked(false)
+                    setContents(content?.items)
+                    return;
 
                 }
+
+                // if (!content?.isLocked) {
+                //     setContents(content?.items)
+                //     setLocked(false)
+                //     return;
+
+                // } else {
+                //     setLocked(true)
+                //     setContents([])
+                //     return;
+
+                // }
 
             }}>
 
 
             <AttachmentInfo active={(contentId === content?.contentId) ? true : false}
->
+            >
                 {icon(content?.type)}
                 <h5>{content?.title}</h5>
-            </AttachmentInfo> 
+            </AttachmentInfo>
 
             <AttachmentIcon>
                 {getStatus(content?.contentId, content?.items, content?.type, (contentId === content?.contentId))}

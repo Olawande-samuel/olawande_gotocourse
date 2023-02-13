@@ -571,7 +571,7 @@ export function Stats() {
   const statData = [
     {
       title: "20k+",
-      content: "Trained Students",
+      content: "Registered Students",
     },
     // {
     //   title: "20k+",
@@ -599,13 +599,13 @@ export function Stats() {
     //   content: "In-demand Courses",
     // },
     {
-      title: "500",
+      title: "200+",
       content: "Courses",
     },
-    {
-      title: "20",
-      content: "Countries",
-    },
+    // {
+    //   title: "20",
+    //   content: "Countries",
+    // },
   ];
   return (
     <section className="stats_main">
