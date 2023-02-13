@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineMenu, AiOutlinePaperClip } from "react-icons/ai";
-import { BiArrowBack, BiSearch, BiUserCircle } from "react-icons/bi";
+import { BiArrowBack, BiGroup, BiSearch, BiUserCircle } from "react-icons/bi";
 import { BsArrowLeftCircle, BsMic } from "react-icons/bs";
 import styled from "styled-components";
 import profile from "../../../../../images/chat.png";
@@ -368,6 +368,7 @@ function AllUsers() {
 		teacherFunctions: { fetchMyStudents },
 		studentFunctions: { getMyTeachers },
 		generalState: { searchValue },
+		commonFunctions: {fetchMyGroups}
 	} = useAuth();
 
 	// const isAdmin = userData.userType !== 'admin';
@@ -377,6 +378,7 @@ function AllUsers() {
 	const [teachers, setTeachers] = useState([]);
 	const [students, setStudents] = useState([]);
 	const [admins, setAdmins] = useState([]);
+	const [groups, setGroups] = useState([]);
 	// const [userInfo, setUserInfo] = useState({});
 	// const [loader, setLoader] = useState(false);
 
@@ -412,7 +414,7 @@ function AllUsers() {
 	// const allStudentAdmin = useQuery(userData?.token && ["get all student admins"], () => fetchAdmin(), {
 	//     enabled: isStudent,
 	//     onSuccess: (res)=>{}
-	// })
+	// })		
 	// const allStudentTeacher = useQuery(["get my teachers", userData?.token], () => fetchBootcamps(userData?.token), {
 	//   enabled: userData?.userType !== "teacher",
 	//   onSuccess: (res)=>{
@@ -475,15 +477,31 @@ function AllUsers() {
 	  onError: (err) => console.error(err)
 	})
 
+	const allGroups = useQuery(["get all student admins", userData?.token], () => fetchMyGroups(userData?.token), {
+	    onSuccess: (res)=>{
+			console.log({res})
+			if (res.data?.length > 0) {
+				let data = res.data;
+				// let admin = res.data.filter(admin=> admin.firstName === "Admiralty")
+				setGroups(data);
+			}
+		},
+		onError: (err)=>{
+			console.error(err);
+		}
+
+	})
+
 	return (
 		<>
-			{[...admins, ...students]
+			{[...admins, ...students, ...groups]
 				?.filter(
 					(item) =>
 						item.firstName?.includes(searchValue) ||
 						item.lastName?.includes(searchValue) ||
 						item.name?.includes(searchValue) ||
-						item.tutorName?.includes(searchValue)
+						item.tutorName?.includes(searchValue) ||
+						item.title?.includes(searchValue)
 				)
 				.map((item, i) => (
 					<ContactWindow {...item} all={item} />
@@ -501,6 +519,7 @@ function ContactWindow({
 	all,
 	name,
 	tutorName,
+	title
 }) {
 	const navigate = useNavigate();
 	const { generalState, setGeneralState } = useAuth();
@@ -532,6 +551,20 @@ function ContactWindow({
 					{profileImg ? (
 						<img src={profileImg} alt="" />
 					) : (
+						title ?
+						<div
+							style={{
+								height: "50px",
+								width: "50px",
+								display: "grid",
+								placeItems: "center",
+								color: "#FFF",
+							}}
+						>
+							<BiGroup size="3rem" />
+						</div>
+
+						:
 						<div
 							style={{
 								height: "50px",
@@ -553,7 +586,10 @@ function ContactWindow({
 					<div className="name">{user.fullName}</div>
 				) : tutorName ? (
 					<div className="name">{tutorName}</div>
-				) : (
+				) : title ? 
+					<div classNmae="name">{title}</div>
+				:
+				(
 					<div className="name">{`${firstName ? firstName : ""} ${
 						lastName ? lastName : ""
 					}`}</div>
