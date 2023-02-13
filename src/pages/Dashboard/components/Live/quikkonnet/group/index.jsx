@@ -149,7 +149,7 @@ export const CreateGroup = ({open, setOpen})=> {
             <Box style={style}>
                 {
                     list?.filter((_, i) => i === page).map(Icon => (
-                        <Icon  setPage={setPage} groupToken={groupData.token} setGroupData={setGroupData} />
+                        <Icon  setPage={setPage} groupToken={groupData.token} groupData={groupData} setGroupData={setGroupData} />
                     ))
                 }
             </Box>    
@@ -287,10 +287,10 @@ const GroupDetails = ({setPage, setGroupData}) => {
 
 
 
-const AddStudentToGroup = ({setPage, data, setGroupData}) => {
+const AddStudentToGroup = ({setPage, data, groupData, setGroupData}) => {
 
 
-    const {teacherFunctions:{fetchBootcampApplications}} = useAuth()
+    const {teacherFunctions:{fetchBootcampApplications, addStudentGroup}} = useAuth()
     const {getItem} = useLocalStorage()
     const userdata = getItem(KEY)
     const {id} = useParams()
@@ -303,6 +303,21 @@ const AddStudentToGroup = ({setPage, data, setGroupData}) => {
         onError: err => {console.error(err)}
 
     })
+
+
+    const addStudents = useMutation(([token, id, data]) => addStudentGroup(token, id, data), {
+        onSuccess: res => {
+            console.log(res)
+        },
+        onError: err => {console.error(err)}
+    })
+
+
+
+    function submit(e){
+        e.preventDefault()
+        addStudents.mutate([userdata?.token, groupData?.token, groupData?.students])
+    }
     return (
         <>
             <Box>
@@ -322,7 +337,14 @@ const AddStudentToGroup = ({setPage, data, setGroupData}) => {
                         }
                     </div>
                 </AddContent>
-                <Button>Done</Button>
+                <Button onClick={submit}>
+                {
+                addStudents?.isLoading ?
+                <span className="spinner-border text-white"><span className="visually-hidden">Loading...</span></span>
+                :
+                <span>Done</span>
+            }
+                </Button>
             </Box>
         </>
 
