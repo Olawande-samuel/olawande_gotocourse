@@ -179,7 +179,7 @@ const ClassroomMainBody = styled.div`
 
 const BodyContent = styled.div`
     width: 100%;
-    margin-top: 30px;
+    /* margin-top: 30px; */
     display: flex;
     flex-direction: column;
     gap: 4rem;
@@ -961,7 +961,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
                                     )
                                     :
                                     <QuizButton onClick={() => AnswerQuiz("mutiple")} 
-                                    // disabled={(contentItem?.attempts < contentItem?.maxAttempts)? true: false }
+                                    disabled={(contentItem?.attempts >= contentItem?.maxAttempts)? true: false }
                                     >
                                         Submit
                                     </QuizButton>
@@ -1029,7 +1029,7 @@ const Classroom = () => {
 
 
     const reduceContent = useMemo(() => {
-        return modules?.reduce((total, current) => [
+        return modules?.sort((a, b) => a.order - b.order)?.reduce((total, current) => [
             ...total, ...current.contents
         ], []);
 
@@ -1338,7 +1338,9 @@ const Classroom = () => {
                         open={showMobile}
                         onClick={e => setShowMobile(_ => false)}
                     >
-                        <Sidebar isMobile={true} modules={modules}
+                        <Sidebar 
+                        isMobile={true} 
+                        modules={modules}
                             setContents={setContents}
                             setPickedType={setPickedType}
                             reduceContent={reduceContent}
@@ -1352,7 +1354,8 @@ const Classroom = () => {
                     </Backdrop>
 
                     <Sidebar
-                        isMobile={false} modules={modules}
+                        isMobile={false} 
+                        modules={modules}
                         setContents={setContents}
                         setPickedType={setPickedType}
                         reduceContent={reduceContent}
