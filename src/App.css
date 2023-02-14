@@ -266,6 +266,16 @@ td:not(:first-child) {
   line-height: 2rem;
 }
 
+.whtbutton {
+  border: 1px solid var(--theme-blue);
+  outline: none;
+  border-radius: 10px;
+  color: var(--btn-color);
+  background-color: white;
+  font-size: 0.875rem;
+  line-height: 2rem;
+}
+
 .button-lg {
   padding: 0.875rem 3rem !important;
 }
