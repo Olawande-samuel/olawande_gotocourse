@@ -610,6 +610,7 @@ function OpenedChat() {
 		generalState: { chatDetail, showMainChat },
 		generalState,
 		adminFunctions: { getMessages, sendMessage },
+		commonFunctions:{getGroupMessages, sendGroupMessages},
 		setGeneralState,
 	} = useAuth();
 
@@ -635,6 +636,21 @@ function OpenedChat() {
 			},
 		}
 	);
+
+	const GroupMessages = useQuery(["get group messages"], ()=>getGroupMessages(userData.token, ),{
+		onSuccess: (res) => {
+			if (res.data?.length > 0) {
+				setMessageList(res.data);
+			} else {
+				setMessageList([]);
+			}
+		},
+		onError: (err) => {
+			if (err.statusCode === 2)
+				err.message = "Session expired. Please login again";
+		},
+	})
+
 	const msgMutation = useMutation(
 		(data) => sendMessage(userData?.token, data),
 		{
@@ -706,17 +722,23 @@ function OpenedChat() {
 						<p>
 							{chatDetail?.user?.fullName
 								? chatDetail?.user?.fullName.substring(0, 2)
-								: chatDetail?.name?.substring(0, 2)}
+								:chatDetail?.name ?  chatDetail?.name?.substring(0, 2)
+								:
+								chatDetail?.title?.substring(0, 2)
+								
+							}
 						</p>
 					)}
 				</Profile>
 				<PreviewContent>
 					<div className="name text-dark">
-						{chatDetail?.name
+						{
+							chatDetail?.name
 							? chatDetail.name
 							: chatDetail?.user
 							? chatDetail?.fullName
-							: `${chatDetail?.firstName} ${chatDetail?.lastName}`}
+							: chatDetail?.title ? chatDetail.title :`${chatDetail?.firstName} ${chatDetail?.lastName}`
+						}
 					</div>
 				</PreviewContent>
 			</ChatHeader>

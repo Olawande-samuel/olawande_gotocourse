@@ -232,7 +232,7 @@ import RedirectPage from "./pages/Bootcamp/Redirect";
 
 import NewHome from "./pages/Landing/landing";
 import Abroad from "./components/abroad/pages";
-import { EarningCourses } from "./pages/Dashboard/Teachers/Earnings";
+import { EarningApplication, EarningCourses } from "./pages/Dashboard/Teachers/Earnings";
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -725,7 +725,9 @@ function MyApp({ mixpanel }) {
 								<Route path="marketing-leads" element={<Market />} />
 								<Route path="earnings" element={<Out />}>
 									<Route index element={<AdminEarning />} />
-									<Route path="courses" element={<EarningCourses/>} />
+									<Route path="courses" element={<EarningCourses />} />
+									<Route path="applications" element={<EarningApplication />} />
+
 
 								</Route>
 								<Route path="affiliate" element={<AdminAffiliate />} />
