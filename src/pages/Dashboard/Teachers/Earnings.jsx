@@ -244,8 +244,9 @@ export function AllEarnings({ earnings }) {
         <EarningsCard total={true} value={total} />
       </div>
 
-      <div className="pt-3 d-flex justify-content-end">
-      <Link to={`/admin/earnings/courses`}><button className=" button py-1 px-4">Divide earnings</button></Link>
+      <div className="pt-3 d-flex flex-column align-items-end gap-3">
+        <Link to={`/admin/earnings/courses`}><button className=" button py-1 px-4">Divide earnings</button></Link>
+        <Link to={`/admin/earnings/applications`}><button className=" whtbutton py-1 px-4">Earnings applications</button></Link>
 
       </div>
 
@@ -342,15 +343,31 @@ export function EarningCourses() {
                   <Accordion.Header className="earnaccord__header">
                     <div className={clsx.earnbtm} key={i}>
                       <div>{i + 1}</div>
-                      <div>  Question {i}</div>
+                      <div>Cybersecuity - Cohort 1</div>
                       <div>$2000</div>
                     </div>
 
                   </Accordion.Header>
                   <Accordion.Body>
-                    {[...Array(2)].map((data, index) => (
-                      <EarnInfo key={index} data={data} />
-                    ))}
+                    <div className={clsx.earn}>
+
+                      <div className={clsx.earninfo}>
+                        <div />
+                        <div />
+                        <div>1st installment</div>
+                        <div>2nd installment</div>
+                        <div>Total</div>
+
+                      </div>
+                      {[...Array(2)].map((data, index) => (
+                        <EarnInfo key={index} data={data} />
+                      ))}
+
+                    </div>
+
+
+
+
                   </Accordion.Body>
                 </Accordion.Item>
               </Accordion>
@@ -368,12 +385,64 @@ export function EarningCourses() {
 const EarnInfo = ({ data }) => {
   return (
     <div className={clsx.earninfo}>
-      <div className="d-flex align-items-center">
-        <div className="me-4">{"mayowa"}</div>
-        <div className={clsx.earnbtn}>{"30%"}</div>
+
+      <div>{"mayowa"}</div>
+      <div className={clsx.earnbtn}>
+        <input type="text" placeholder={"30%"} />
+      </div>
+
+      <div className={clsx.earnbtn}>
+        <input type="text" placeholder={"$1700"} />
+      </div>
+
+      <div className={clsx.earnbtn}>
+        <input type="text" placeholder={"$1700"} />
+      </div>
+
+
+      <div className={clsx.earnbtn}>
+        {"$3400"}
       </div>
     </div>
 
+  )
+}
+
+
+export function EarningApplication() {
+  return (
+    <Admin header={"Earnings> Applications"}>
+
+      <div className={clsx.admin_profile}>
+
+        <div className={clsx.earntopbar}>
+          <div>No</div>
+          <div>Name</div>
+          <div>Courses</div>
+          <div>Stage</div>
+          <div>Bank Details</div>
+        </div>
+
+        <div className={clsx.earncontent}>
+          {
+            [...Array(5)].map((_, i) => (
+
+              <div className={`${clsx.earntopbar} ${clsx.earnbtmbar}`} key={i}>
+                <div>{i + 1}</div>
+                <div>Yaya Johnson</div>
+                <div>Cybersecuity - Cohort 1</div>
+                <div>2nd stage</div>
+                <div>UBN - 948574449</div>
+              </div>
+
+
+
+            ))
+          }
+
+        </div>
+      </div>
+    </Admin>
   )
 }
 
@@ -402,27 +471,23 @@ const Requests = ({ submitHandler }) => {
       {loading ? <Loader /> : null}
       <h2>Request for Fund</h2>
       <form className="form" onSubmit={(e) => submitHandler(e, formstate)}>
-        <Input
-          label="Name of Course"
-          name="courseName"
-          type="text"
-          handleChange={changeHandler}
-          value={formstate.courseName}
-        />
-        <Input
-          label="Stage of Training"
-          name="stage"
-          type="text"
-          handleChange={changeHandler}
-          value={formstate.stage}
-        />
-        <Input
-          label="Bank Name"
-          name="bankName"
-          type="text"
-          handleChange={changeHandler}
-          value={formstate.bankName}
-        />
+       
+        <div className={clsx.form_group}>
+          <label htmlFor="course" className="form-label generic_label">Select Course</label>
+          <select name="course" id="course" className="form-select" >
+            <option value="">Select Course</option>
+          </select>
+        </div>
+
+        <div className={clsx.form_group}>
+          <label htmlFor="stage" className="form-label generic_label">Stage of Training</label>
+          <select name="stage" id="stage" className="form-select" >
+          <option value="">Select Stage</option>
+          <option value="">1st Stage</option>
+          <option value="">2nd Stage </option>
+          </select>
+        </div>
+
         <Input
           label="Account Number"
           name="accountNumber"
@@ -430,7 +495,16 @@ const Requests = ({ submitHandler }) => {
           handleChange={changeHandler}
           value={formstate.accountNumber}
         />
-        <div className="form-group my-3">
+       
+        <Input
+          label="Bank Name"
+          name="bankName"
+          type="text"
+          handleChange={changeHandler}
+          value={formstate.bankName}
+        />
+        
+        {/* <div className="form-group my-3">
           <label htmlFor="level" className="form-label generic_label">
             Details of Request
           </label>
@@ -447,7 +521,7 @@ const Requests = ({ submitHandler }) => {
             <option value="75%">75%</option>
             <option value="100%">100%</option>
           </select>
-        </div>
+        </div> */}
 
         <div className={`${clsx.requests_button} form-group my-3`}>
           <button>Request for Fund</button>
