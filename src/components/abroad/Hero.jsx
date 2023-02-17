@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import hero from '../../images/abroad/train.png'
-import circle from '../../images/abroad/circle.svg'
-import bag from '../../images/abroad/bag.svg'
 import Navbar from "./Navbar";
+import { Link } from "react-router-dom";
 
 
 const Container = styled.div`
@@ -13,11 +12,13 @@ height: 100vh;
 width: 100%;
 font-family: 'Raleway';
 color: var(--theme-blue);
+margin-top: 5rem;
+padding: 1rem 0;
 
 .container{
     .heroleft{
         width: 50%;
-        margin-top: 5rem;
+        /* margin-top: 5rem; */
          h1{
             font-style: normal;
             font-weight: 900;
@@ -57,7 +58,16 @@ color: var(--theme-blue);
     }
 }
 
+@media (max-width: 768px) {
+        height: unset;
+        text-align: center;
 
+        .container{
+        .heroleft{
+            width: 100%;
+        }
+    }
+}
 
 `
 
@@ -70,13 +80,13 @@ const Hero = () => {
                 <div className="heroleft">
                     <h1>Train to work
                         <span className="d-block">
-                            abroad
+                            abroad programme
                         </span>
                     </h1>
                     <p>Increase your chances of success in the<br />
                         global job market.</p>
 
-                    <div className="icons">
+                    {/* <div className="icons">
 
                         <div className="heroicons">
                             <img src={circle} alt="" />
@@ -94,9 +104,9 @@ const Hero = () => {
 
                         </div>
 
-                    </div>
+                    </div> */}
 
-                    <button>Enroll now</button>
+                    <Link to={`/signup`}><button>Register for free</button> </Link>
 
                 </div>
 

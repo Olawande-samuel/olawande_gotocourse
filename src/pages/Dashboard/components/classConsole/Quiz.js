@@ -182,8 +182,7 @@ export default function Quiz() {
             toast.error(res.message)
         },
         onError: (err) => {
-            toast.error("something went wrong")
-
+            toast.error(err.message)
             console.error(err)
         }
     })

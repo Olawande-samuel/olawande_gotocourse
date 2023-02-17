@@ -1,33 +1,38 @@
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import girl from '../../images/abroad/girl.png'
 
 /* background-image: url(${hero}); */
 const Container = styled.div`
- background: #EFF2FF;
+ /* background: #EFF2FF; */
 /* background-size: cover; */
 /* background-repeat: no-repeat; */
 width: 100%;
 font-family: 'Raleway';
 color: var(--theme-blue);   
-padding: 2rem;
+padding: 2rem 0;
 
 .container{
 
     .expercontent{
         display: flex;
-        align-items: center;
-        height: 300px;
+        /* align-items: center; */
+        /* background: #D8EAFF; */
         /* border: 2px solid red; */
 
 
     .experleft{
         flex: .5;
         width: 100%;
-        /* height: 100%; */
-        background: #D8EAFF;
-        border-radius: 34px;
-        text-align: center;
+        /* border-radius: 34px; */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: left;
         padding: 1rem 0;
+        /* border: 2px solid green; */
+        background: #D8EAFF;
 
 
 
@@ -54,14 +59,23 @@ padding: 2rem;
     .experright{
         flex:.5;
         width: 100%;
-        height: 100%;
+        /* border: 2px solid red; */
+        text-align: center;
+
         img{
             max-width: 100%;
-            max-height: 100%;
+            max-height: 400px;
 
         }
 
     }
+    }
+}
+
+@media (max-width: 768px) {
+    .expercontent{
+        height: unset;
+        flex-direction: column;
     }
 }
 
@@ -73,12 +87,13 @@ const Experience = () => {
                 <div className="expercontent">
                     <div className="experleft">
                         <p>
-                            Gain real experience and< br />
-                            skill to improve your < br />
-                            career prospects.
+                        Your goals and < br />
+                         aspirations are < br />
+                          achievable with < br />
+                           Gotocourse
                         </p>
 
-                        <button>Enroll Now</button>
+                        <Link to={`/signup`}><button>Register for free</button> </Link>
                     </div>
                     <div className="experright">
                         <img src={girl} alt="" />

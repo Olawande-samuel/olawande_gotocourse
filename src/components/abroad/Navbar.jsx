@@ -12,21 +12,20 @@ import { useState } from "react";
 
 const Container = styled.div`
 	width: 100%;
-	position: sticky;
+	position: fixed;
 	left: 0;
 	top: 0;
 	right: 0;
-	/* background: #fff; */
-	background: transparent; 
+	background: #EFF2FF;
 	z-index: 1000;
+	/* border: 2px solid red; */
 `;
 
 const NavContainer = styled.div`
 	color: #0c1825;
 	width: 100%;
-	// border: 2px solid red;
-	height: 4rem;
-    background: transparent; 
+	height: 5rem;
+	background: #EFF2FF;
 	z-index: 1000;
 
 	.navcontainer {
