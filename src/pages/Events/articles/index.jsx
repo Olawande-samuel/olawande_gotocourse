@@ -217,12 +217,12 @@ function LikeThis({ data }) {
                 {data?.map((x, i) => (
                     <SwiperSlide key={i}>
                         <div className={style.articleitem}>
-                            <Link to={`/events&articles/articles/${x?.title?.split(" ").join("-").replace('?', '')}/${x?._id}`}>
+                            <a href={`https://blog.gotocourse.com/events&articles/articles/${encodeURIComponent(x?.title)?.split(" ").join("-").replace('?', '')}/${x?._id}`} target="_blank">
                                 <div className={style.articleimg}>
                                     <img src={`${process.env.REACT_APP_IMAGEURL}${x?.blogImg}`} alt="" />
 
                                 </div>
-                            </Link>
+                            </a>
 
                             <div className={style.articleInfo}>
                                 <div className={style.articleTop}>
@@ -230,12 +230,12 @@ function LikeThis({ data }) {
                                     <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} onClick={handleShare} />
 
                                 </div>
-                                <Link to={`/events&articles/articles/${x?.title?.split(" ").join("-").replace('?', '')}/${x?._id}`}>
+                                <a href={`https://blog.gotocourse.com/events&articles/articles/${encodeURIComponent(x?.title)?.split(" ").join("-").replace('?', '')}/${x?._id}`} target="_blank">
                                     <h6>
                                         {x?.title}
                                     </h6>
-                                </Link>
-                                <p className="restrict" dangerouslySetInnerHTML={{ __html: x?.content }}></p>
+                                </a>
+                                <div className="restrict" dangerouslySetInnerHTML={{ __html: x?.content }}></div>
                                 <ShareModal x={x} open={open} setOpen={setOpen} url={BLOGURL} />
 
                             </div>

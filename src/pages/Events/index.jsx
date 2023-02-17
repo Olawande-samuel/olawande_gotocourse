@@ -9,14 +9,16 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { MdMyLocation } from 'react-icons/md'
 import { useLocalStorage } from '../../hooks'
 import { useAuth } from '../../contexts/Auth'
-import { KEY } from '../../constants'
+import { BLOGURL, KEY } from '../../constants'
 import { useQuery } from '@tanstack/react-query'
+import { ShareModal } from './articles'
 
 const Events = () => {
 
     const { getItem } = useLocalStorage();
     const [blogs, setBlogs] = useState([])
     const [webinars, setWebinars] = useState([])
+    const [open, setOpen] = useState(false)
 
     let navigate = useNavigate()
     let userdata = getItem(KEY);
@@ -47,9 +49,9 @@ const Events = () => {
 
     const ReadMore = () => {
         let div = document.querySelector('.articles__container')
-        console.log({div});
+        console.log({ div });
         div.classList.toggle('toggleheight')
-       
+
 
     }
 
@@ -68,30 +70,31 @@ const Events = () => {
                     <div className="articles__container" >
                         {
                             blogs.length > 0 && blogs.map((blog, id) => (
-                                // <Link to={`articles/${blog.title.split(" ").join("-").replace('?', '').replace("/", "%2F")}/${blog._id}`} className={style.articleitem} key={id}>
-                                <Link to={`articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '').replace("/", "%2F")}/${blog._id}`} className={style.articleitem} key={id}>
-                                    <div className={style.articleimg}>
+                                <div className={style.articleitem}>
+                                    {/* <Link to={`articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '').replace("/", "%2F")}/${blog._id}`} className={style.articleitem} key={id}> */}
+                                    <a href={`https://blog.gotocourse.com/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '').replace("/", "%2F")}/${blog._id}`} key={id} target="_blank" className={style.articleimg}>
+
                                         <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
 
-                                    </div>
-
+                                    </a>
                                     <div className={style.articleInfo}>
                                         <div className={style.articleTop}>
                                             <span style={{ fontSize: "12px", color: "#4100FA" }}>{new Date(blog.createdAt).toLocaleDateString().split("/").join('.')}</span>
-                                            <FaShareSquare style={{ fontSize: "1.3rem", color: "#0C2191" }} />
+                                            <i><FaShareSquare style={{ color: "#0C2191", fontSize: "1rem", cursor: "pointer" }} onClick={() => setOpen(true)} /></i>
 
                                         </div>
-                                        <h4>
-                                            {blog.title}
-                                        </h4>
+                                        <a href={`https://blog.gotocourse.com/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
+                                            <h5>{blog.title}</h5>
+                                        </a>
                                         <p className="restrict" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
 
 
                                     </div>
 
 
+                                    <ShareModal x={blog} open={open} setOpen={setOpen} url={BLOGURL} />
+                                </div>
 
-                                </Link>
 
                             ))
                         }

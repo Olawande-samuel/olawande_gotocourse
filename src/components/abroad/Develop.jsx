@@ -5,6 +5,7 @@ import desktop from '../../images/abroad/desktop.svg'
 
 const Container = styled.div`
 background: #EFF2FF;
+padding: 2rem;
 
   .container{
 
@@ -41,6 +42,12 @@ background: #EFF2FF;
 
             }
     
+        }
+    }
+
+    @media (max-width: 768px) {
+        .content{
+        grid-template-columns: 1fr;
         }
     }
 
