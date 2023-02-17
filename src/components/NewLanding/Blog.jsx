@@ -156,9 +156,12 @@ export const Blog = () => {
                 {blogs.length > 0 && blogs.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 8).map(blog => (
 
                     <Card key={blog._id}>
-                        <Link to={`/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
+                        {/* <Link to={`/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
                             <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
-                        </Link>
+                        </Link> */}
+                        <a href={`https://blog.gotocourse.com/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`} target="_blank">
+                            <img src={`${process.env.REACT_APP_IMAGEURL}${blog.blogImg}`} alt="" />
+                        </a>
                         <div className="bottom">
                             <DateAndAction>
                                 <span>
@@ -169,9 +172,13 @@ export const Blog = () => {
                                 </span>
                             </DateAndAction>
                             <div >
-                                <Link  to={`/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
+                                {/* <Link  to={`/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
                                     <h5>{blog.title}</h5>
-                                </Link>
+                                </Link> */}
+
+                                <a  href={`https://blog.gotocourse.com/events&articles/articles/${encodeURIComponent(blog.title)?.split(" ").join("-").replace('?', '')}/${blog?._id}`}>
+                                    <h5>{blog.title}</h5>
+                                </a>
                                 <p className="restrict" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
                             </div>
 
