@@ -3482,7 +3482,6 @@ export function BootcampDetails({}) {
 				if (res.statusCode === 1) {
 					toast.success(res.message);
           window.alert(res.message);
-
 				} else {
 					window.alert(res.message);
 					toast.error(res.message);
