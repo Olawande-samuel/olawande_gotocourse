@@ -8,14 +8,31 @@ import analysis from '../../images/abroad/data.png'
 import security from '../../images/abroad/security.png'
 import market from '../../images/abroad/market.png'
 import web from '../../images/abroad/web.png'
+import { useState } from "react"
+import { BsChevronDoubleDown } from "react-icons/bs"
 
 const Container = styled.div`
+  .contbtn{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    button{
+        border: none;
+        outline:none;
+        border-radius: 50%;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #ACFFE2;
+    }
+  }
 .container{
     display: flex;
     flex-direction: column;
     gap:2rem;
-    /* border:  1px solid yellow; */
+    height: ${({ more }) => more ? "100%" : "410vh"};
+    overflow: ${({ more }) => more ? "auto" : "hidden"};
 
 }
     
@@ -23,7 +40,7 @@ const Container = styled.div`
 
 const Card = styled.div`
     width: 100%;
-    background: #D8EAFF;
+    background: ${({ background }) => background ? background : "#D8EAFF"};
     border-radius: 10px;
     display: flex;
     height: 100vh;
@@ -61,17 +78,20 @@ const Card = styled.div`
                 text-align: center;
                 padding: 1rem 0;
 
-                button {
-                    border: none;
-                    border-radius: 7px;
-                    background: var(--theme-blue);
-                    color: #fff;
-                    padding: 0.5rem 1rem;
-                    font-weight: 700;
-                    font-size: 14px;
-                    line-height: 27px;
-                    width: 100%;
-                }
+              
+
+                    button {
+                        border: none;
+                        border-radius: 7px;
+                        background: var(--theme-blue);
+                        color: #fff;
+                        padding: 0.5rem 1rem;
+                        font-weight: 700;
+                        font-size: 14px;
+                        line-height: 27px;
+                        width: 100%;
+                    }
+
 
             }
 
@@ -109,16 +129,16 @@ line-height: 30px;
 `
 
 
-const CourseCard = ({ img, title, ptop, pbottom, list, listheader }) => {
+const CourseCard = ({ img, title, ptop, pbottom, list, listheader, background, more }) => {
     return (
-        <Card>
+        <Card background={background} >
             <div className="cardleft">
                 <div className="cardcontent">
                     <div className="cardimg">
                         <img src={img} alt="" />
                     </div>
                     <div className="cardbutton">
-                        <Link to={`/signup`}><button> Enroll</button></Link>
+                    <Link to={`/signup?trainee`}><button>Enroll</button> </Link>
 
                     </div>
                 </div>
@@ -148,12 +168,20 @@ const CourseCard = ({ img, title, ptop, pbottom, list, listheader }) => {
 }
 
 const Course = () => {
+    const [more, seeMore] = useState(false);
+    const toggle = () => seeMore(!more)
     return (
-        <Container>
+        <Container more={more}>
             <div className="container">
                 {data.map((d, i) => (
                     <CourseCard key={i} {...d} />
                 ))}
+
+            </div>
+            <div className="contbtn">
+                <button onClick={toggle}>
+                    <BsChevronDoubleDown style={{ fontSize: "2rem" }} />
+                </button>
 
             </div>
 
@@ -182,8 +210,8 @@ const data = [
             "Product roadmaps, and more."
 
         ],
-        pbottom: "You'll also learn how to effectively manage your product lifecycle, from ideation to launch and beyond. Our expert instructors will guide you every step of the way, helping you to build the skills and confidence you need to excel in your career."
-
+        pbottom: "You'll also learn how to effectively manage your product lifecycle, from ideation to launch and beyond. Our expert instructors will guide you every step of the way, helping you to build the skills and confidence you need to excel in your career.",
+        background: "#D1FFF4"
     },
     {
         id: "2",
@@ -220,7 +248,8 @@ Invest in your future and become a sought-after product designer with the Produc
 
 
         ],
-        pbottom: ``
+        pbottom: ``,
+        background: "#FFDDDA"
 
     },
     {
@@ -263,6 +292,7 @@ Our expert instructors will guide you through the fundamentals of data analytics
         With a certificate of completion from Gotocourse, you'll be ready to take on new and exciting opportunities in the world of data analytics.
         Don't miss out on this opportunity to enhance your skills and propel your career in the exciting field of data analytics. Sign up for Gotocourse's Data Analytics course today!"      
         `
+        ,background: "#FFDDDA"
 
     },
     {
@@ -281,7 +311,9 @@ So what are you waiting for? Take the first step toward your dream career in clo
 
 
         ],
-        pbottom: ``
+        pbottom: ``,
+        background: "#D1FFF4"
+
 
     },
     {
@@ -323,7 +355,9 @@ So, sign up today and start coding your way to success with Gotocourse!
 
 
         ],
-        pbottom: ``
+        pbottom: ``,
+        background: "#FFDDDA"
+
 
     },
 

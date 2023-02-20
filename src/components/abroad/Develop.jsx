@@ -24,12 +24,13 @@ padding: 2rem;
 
 
         .item{
+            padding: 1rem;
 
             p{
                 font-weight: 700;
                 font-size: 18px;
                 line-height: 18px;
-                color: #0E00C9;
+                color: #fff;
                 padding: 1rem 0;
             }
 
@@ -38,7 +39,7 @@ padding: 2rem;
                 font-weight: 400;
                 font-size: 14px;
                 line-height: 22px;
-                color: #000000;
+                color: #fff;
 
             }
     
@@ -64,44 +65,44 @@ const Develop = () => {
                 <h4>We have developed the best way <br/> to learn any tech Skill</h4>
                 <div className="content">
 
-                    <div className="item">
+                <div className="item" style={{background: "#A5683C"}}>
                         <img src={shake} alt="" />
                         <br />
-                        <p>Real life experience</p>
+                        <p>Mentorship</p>
 
                         <span>
-                            With Partnerships with more than<br />
-                            200 companies, you will learn with a<br />
-                            real-life internship. 4 Month Training +<br />
-                            5 Month Internship
+                        Connect with real-world experts with <br />
+                        proven experience and strategies that<br />
+                         will help you step up your game.
+                           
                         </span>
 
                     </div>
 
-                    <div className="item">
+                    <div className="item" style={{background: "#5B3CA5"}}>
                         <img src={computer} alt="" />
                         <br />
                         <p>
-                            Best learning experience
+                        Live learning
+
                         </p>
                         <span>
-                            We're building an outstanding <br />
-                            alternative to university and<br />
-                            corporate training via professional internship
+                        Instructor-led live learning structured to <br /> support every learner's abilities  <br />and convenience. 
+
 
                         </span>
 
                     </div>
 
-                    <div className="item">
+                    <div className="item" style={{background: "#359271"}}>
                         <img src={desktop} alt="" />
                         <br />
-                        <p>Dedicated Company's Direct Supervisor</p>
+                        <p>Flexible payment options</p>
 
                         <span>
-                            We have a dedicated and passionate<br />
-                            supervisor who will guide, direct and<br />
-                            oversee the work of the students.
+                        Explore Gotocourse flexible payment <br />
+                         options that fit every of your needs. 
+                           
 
 
                         </span>
