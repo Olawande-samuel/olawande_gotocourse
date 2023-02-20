@@ -106,7 +106,7 @@ const Hero = () => {
 
                     </div> */}
 
-                    <Link to={`/signup`}><button>Register for free</button> </Link>
+                    <Link to={`/signup?trainee`}><button>Register for free</button> </Link>
 
                 </div>
 
