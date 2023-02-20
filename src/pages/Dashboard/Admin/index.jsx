@@ -4024,6 +4024,7 @@ export function CreateBootcamp() {
 	const [bio, setBio] = useState("");
 	const [scheduleCount, setScheduleCount] = useState(0);
 	const [timeList, setTimeList] = useState([]);
+
 	useEffect(() => {
 		if (flag.current) return;
 		if (location.search) {
@@ -4635,12 +4636,12 @@ export function CreateBootcamp() {
 							{formstate.instructors?.length > 0 ? (
 								formstate.instructors?.map((item, index) => (
 									<div className={clsx.syllabus_container}>
-										<h5>{item}</h5>
+										<h5>{item?.email}</h5>
 										<p>
 											<i
 												className="text-danger"
 												style={{ cursor: "pointer" }}
-												onClick={() => removeInstructor(item + index)}
+												onClick={() => removeInstructor(item.email + index)}
 											>
 												<BiTrash />
 											</i>
