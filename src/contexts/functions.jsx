@@ -104,7 +104,7 @@ export const commonFunctions = {
             }
         }
     },
-    sendGroupMessages: async function (token, id, data) {
+    sendGroupMessage: async function (token, id, data) {
         try {
             const res = await axios.post(`${baseURL}/user/chat/group/message/send/${id}`, JSON.stringify(data),
                 {
@@ -898,6 +898,70 @@ export const adminTeacherFunctions = {
     deleteMentor: async function (id, token) {
         try {
             const res = await axios.delete(`${baseURL}/admin/mentor/page/delete/${id}`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    fetchCourseEarnings: async function (token) {
+        try {
+            const res = await axios.get(`${baseURL}/admin/bootcamp-earnings/fetch`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    updateCourseEarnings: async function (token, id, data) {
+        try {
+            const res = await axios.put(`${baseURL}/admin/bootcamp-earnings/update/${id}`, JSON.stringify(data),
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,
@@ -5230,7 +5294,41 @@ export const consoleFunctions = {
     },
     calculateGrade: async function (token, id, data) {
         try {
-            const res = await axios.post(`${baseURL}//classes/contents/quiz/score/calculate/${id}`, JSON.stringify(data),
+            const res = await axios.post(`${baseURL}/classes/contents/quiz/score/calculate/${id}`, JSON.stringify(data),
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    validateStatus: status => {
+                        return status >= 200 && status <= 505;
+                    }
+                })
+
+
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return {
+                ...res.data,
+                success: true
+            }
+
+        } catch (err) {
+            if (err.statusCode === 2) {
+                localStorage.clear()
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+    deleteQuizAttempt: async function (token, quizId, attemptId) {
+        try {
+            const res = await axios.delete(`${baseURL}/classes/contents/quizes/students/${quizId}/${attemptId}`,
+            
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,

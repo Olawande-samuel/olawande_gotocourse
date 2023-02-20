@@ -19,6 +19,7 @@ import { useLocalStorage } from '../../../../hooks';
 import { toast } from 'react-toastify';
 import ReactQuill from 'react-quill';
 import { consoleFunctions } from '../../../../contexts/functions';
+import { useEffect } from 'react';
 
 
 function TabPanel(props) {
@@ -182,8 +183,7 @@ export default function Quiz() {
             toast.error(res.message)
         },
         onError: (err) => {
-            toast.error("something went wrong")
-
+            toast.error(err.message)
             console.error(err)
         }
     })
@@ -642,7 +642,7 @@ function ResultPanel({data}){
     const [results, setResults] = useState([])
     
 
-    const fetchStudentsQuizzes = useQuery(["fetchStudentsQuizzes", userdata.token, data?._id], ()=> newFetchAttemptedQuiz(userdata.token, data._id), {
+    const fetchStudentsQuizzes = useQuery(["fetchStudentsQuizes", userdata.token, data?._id], ()=> newFetchAttemptedQuiz(userdata.token, data._id), {
         onSuccess: (res)=>{
             if(res.statusCode === 1){
                 setResults(res.data)
@@ -675,6 +675,40 @@ function ResultCards({studentId, totalScore,quizId, graded, studentName,  update
     const [data, setData]= useState(()=>all)
     console.log({data})
 
+    useEffect(()=>{
+        if(all._id){
+            setData(all)
+        }
+    },[])
+
+    const queryClient = useQueryClient()
+    
+    const {getItem}  = useLocalStorage()
+    const userdata = getItem(KEY)
+
+    const {consoleFunctions: {deleteQuizAttempt}} = useAuth()
+
+    const deleteMutation = useMutation(([token, quizId, attemptId])=>deleteQuizAttempt(token, quizId, attemptId), {
+        onSuccess: res => {
+            if(res?.statusCode === 1) {
+                queryClient.inValidateQueries(["fetchStudentsQuizes"])
+                toast.success(res.message)
+                return
+            } 
+            toast.error(res?.message)
+        },
+        onError: err => {
+            toast.error(err.message)
+        }
+    })
+
+
+
+    function deleteAttempt(){
+        if(window.confirm("Are you sure you want to delete this")){
+            deleteMutation.mutate([userdata.token, quizId, all._id ])
+        }
+    }
     return (
         <div className="quiz__card">
             <p className="quiz__card_student_name fw-bold">{studentName}</p>
@@ -697,7 +731,16 @@ function ResultCards({studentId, totalScore,quizId, graded, studentName,  update
             <p>{updatedAt?.split("T")[0]} {new Date(updatedAt)?.toLocaleTimeString()}</p>
 
             <div className="d-flex gap-2">
-                <button className="quiz__card_del_btn">Delete</button>
+                <button className="quiz__card_del_btn" onClick={deleteAttempt} disabled={deleteMutation?.isLoading}>
+                    {
+                        deleteMutation?.isLoading ?
+                        <div className="spinner-border text-danger">
+                            <div className="visually-hidden">Loading...</div>
+                        </div>
+                        :
+                        <span>Delete</span>
+                    }
+                </button>
                 <button className="quiz__card_open_btn" type="button" onClick={()=> setOpen(true)} >Open Answer</button>
             </div>
             <AssessQuiz open={open} setOpen={setOpen} data={data} />
