@@ -2207,6 +2207,11 @@ function UpcomingCourses({ data, search }) {
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
+            if(userdata?.trainee){
+                localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+                gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee) 
+                return;
+            }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
             gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
         } else {
@@ -2345,8 +2350,13 @@ function AllAvailableCourses({ data, search }) {
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
+            if(userdata?.trainee){
+                localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+                gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee) 
+                return;
+            }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
-            gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
+            gotoclassPayment(item.title, item.category, item.bootcampId, navigate, true)
         } else {
             navigate("/login")
         }
@@ -2490,8 +2500,13 @@ function AvailableCourses({ data, search }) {
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
+            if(userdata?.trainee){
+                localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+                gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee) 
+                return;
+            }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
-            gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
+            gotoclassPayment(item.title, item.category, item.bootcampId, navigate, true)
         } else {
             navigate("/login")
         }

@@ -402,6 +402,7 @@ function MyApp({ mixpanel }) {
 								</Route>
 							</Route>
 
+
 							<Route
 								path="bootcamp-training"
 								element={<NewBootcampDetailsComponent />}
@@ -469,6 +470,8 @@ function MyApp({ mixpanel }) {
 								/>
 								<Route path="history" element={<StudentHistory />} />
 								<Route path="payment" element={<StudentFees />} />
+								<Route path="pay" element={<BootcampPaystackPayment/>}/>
+
 								<Route path="chat" element={<StudentChat />} />
 								{/* <Route path="help" element={<StudentHelp />} /> */}
 								<Route path="help" element={<HIWStudent />} />

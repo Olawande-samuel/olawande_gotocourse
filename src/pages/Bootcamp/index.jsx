@@ -492,6 +492,10 @@ export function NewBootcampDetailsComponent() {
     // navigate("/coming-soon")
 
     if (userdata?.token) {
+      if(userdata?.trainee){
+        navigate("pay")
+
+      }
       navigate("payment")
     } else {
       navigate("/login")
