@@ -233,6 +233,7 @@ import RedirectPage from "./pages/Bootcamp/Redirect";
 import NewHome from "./pages/Landing/landing";
 import Abroad from "./components/abroad/pages";
 import { EarningApplication, EarningCourses } from "./pages/Dashboard/Teachers/Earnings";
+import { BootcampPaystackPayment } from "./pages/Bootcamp/PaystackPayment";
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -388,6 +389,7 @@ function MyApp({ mixpanel }) {
 										<Route index element={<NewBootcampDetailsComponent />} />
 										{/* <Route path="payment" element={<ComingSoon />} /> */}
 										<Route path="payment" element={<BootcampPayment />} />
+										{/* <Route path="payment" element={<BootcampPaystackPayment />} /> */}
 										<Route
 											path="payment/success"
 											element={<PaymentStatus success={true} />}

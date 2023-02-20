@@ -17,6 +17,8 @@ import { AdvancedError } from "../../../classes";
 import Loader from "../../../components/Loader";
 import { Link } from "react-router-dom";
 import { Admin } from "../Admin";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import {debounce} from "lodash"
 
 export default function Earnings() {
   const { getItem } = useLocalStorage();
@@ -247,7 +249,6 @@ export function AllEarnings({ earnings }) {
       <div className="pt-3 d-flex flex-column align-items-end gap-3">
         <Link to={`/admin/earnings/courses`}><button className=" button py-1 px-4">Divide earnings</button></Link>
         <Link to={`/admin/earnings/applications`}><button className=" whtbutton py-1 px-4">Earnings applications</button></Link>
-
       </div>
 
 
@@ -324,9 +325,29 @@ export function EarningsCard({ title, type, data = [], total, value, handleModel
 }
 
 export function EarningCourses() {
+  const {adminTeacherFunctions: {fetchCourseEarnings}} = useAuth()
+  const {getItem} = useLocalStorage()
+  const userdata = getItem(KEY)
+  
+  const getCourseEarnings = useQuery(["fetch course earnings"], ()=>fetchCourseEarnings(userdata?.token), {
+    onSuccess: res => {
+      if(res?.statusCode !== 1){
+        toast.error(res.message)
+      }
+    },
+    onError: err => {
+      toast.error(err.message)
+    }
+  })
+
+  console.log({getCourseEarnings})
+
+
   return (
     <Admin header={"Earnings> Courses"}>
-
+      {getCourseEarnings?.isLoading  && 
+        <Loader />
+      }
       <div className={clsx.admin_profile}>
 
         <div className={clsx.earntop}>
@@ -337,40 +358,8 @@ export function EarningCourses() {
 
         <div className={clsx.earncontent}>
           {
-            [...Array(15)].map((_, i) => (
-              <Accordion key={i}>
-                <Accordion.Item eventKey={i} className="accord__body">
-                  <Accordion.Header className="earnaccord__header">
-                    <div className={clsx.earnbtm} key={i}>
-                      <div>{i + 1}</div>
-                      <div>Cybersecuity - Cohort 1</div>
-                      <div>$2000</div>
-                    </div>
-
-                  </Accordion.Header>
-                  <Accordion.Body>
-                    <div className={clsx.earn}>
-
-                      <div className={clsx.earninfo}>
-                        <div />
-                        <div />
-                        <div>1st installment</div>
-                        <div>2nd installment</div>
-                        <div>Total</div>
-
-                      </div>
-                      {[...Array(2)].map((data, index) => (
-                        <EarnInfo key={index} data={data} />
-                      ))}
-
-                    </div>
-
-
-
-
-                  </Accordion.Body>
-                </Accordion.Item>
-              </Accordion>
+            getCourseEarnings?.data?.data.map((course, i) => (
+              <EarningsAccordion key={i} course={course} i={i} />
 
             ))
           }
@@ -378,6 +367,75 @@ export function EarningCourses() {
         </div>
       </div>
     </Admin>
+  )
+}
+
+
+function EarningsAccordion({course, i}){
+  
+  const [total, setTotal] = useState(()=>course.totalEarnings)
+  const [isNotFocused, setIsNotFocused] = useState(true)
+
+  const {adminTeacherFunctions: {updateCourseEarnings}} = useAuth()
+  const {getItem} = useLocalStorage()
+  const userdata = getItem(KEY)
+
+  const updateMutation = useMutation(([token, id, data])=>updateCourseEarnings(token, id, data), {
+    onSuccess: res => {
+      if(res.statusCode === 1){
+        toast.success(res.message)
+        return 
+      }
+      toast.error(res.message)
+    },
+    onError: err => toast.error(err.message)
+  })
+
+  const updateEarnings = debounce(async ()=>{
+      updateMutation.mutate([userdata.token, course.bootcampId, {}])
+  }, 900)
+
+  function handleChange(e){
+    setTotal(e.target.value)
+    updateEarnings()
+  }
+
+
+  return (
+    <Accordion key={i}>
+      {
+        updateMutation?.isLoading && <Loader />
+      }
+      <Accordion.Item eventKey={i} className="accord__body">
+        <Accordion.Header className="earnaccord__header">
+          <div className={clsx.earnbtm} key={i}>
+            <div>{i + 1}</div>
+            <div>{course.title}</div>
+            <div className={clsx.earnbtn}>
+              <input type="text" placeholder={"Total"} value={total} onChange={handleChange} onFocus={()=>console.log("focused")} />
+            </div>
+          </div>
+
+        </Accordion.Header>
+        <Accordion.Body>
+          <div className={clsx.earn}>
+
+            <div className={clsx.earninfo}>
+              <div />
+              <div />
+              <div>1st installment</div>
+              <div>2nd installment</div>
+              <div>Total</div>
+
+            </div>
+            {[...Array(2)].map((data, index) => (
+              <EarnInfo key={index} data={data} />
+            ))}
+
+          </div>
+        </Accordion.Body>
+      </Accordion.Item>
+    </Accordion>
   )
 }
 

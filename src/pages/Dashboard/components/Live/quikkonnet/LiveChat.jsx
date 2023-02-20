@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineMenu, AiOutlinePaperClip } from "react-icons/ai";
 import { BiArrowBack, BiGroup, BiSearch, BiUserCircle } from "react-icons/bi";
-import { BsArrowLeftCircle, BsMic } from "react-icons/bs";
+import { BsThreeDotsVertical, BsArrowLeftCircle, BsMic } from "react-icons/bs";
+import { IconButton, Tab, Tabs, Tooltip, Box, FormControl, FormControlLabel, Menu, MenuItem, Modal, Switch, TextField } from "@mui/material"
 import styled from "styled-components";
 import profile from "../../../../../images/chat.png";
 import rocket from "../../../../../images/Launch rocket.png";
@@ -44,7 +45,6 @@ import {
 	useSearchParams,
 } from "react-router-dom";
 
-import { Box, IconButton, Tab, Tabs, Tooltip } from "@mui/material";
 import PropTypes from "prop-types";
 import { useIntercom } from "react-use-intercom";
 import { Link } from "react-router-dom";
@@ -462,16 +462,8 @@ function AllUsers() {
 	  enabled: userData?.userType === "student",
 	  onSuccess: (res)=>{
 		  console.log(res)
-	    if(res.success){
-	    //   let teachers = new Set()
-	    //   res.data.forEach(student => {
-	    //     if(student.tutorId){
-	    //       teachers.add(student)
-	    //     }
-	    //   })
-	    //   let teacherArray = Array.from(teachers)
-	    //   console.log({teacherArray})
-	    //   setTeachers(teacherArray)
+	    if(res.statusCode === 1){
+	      setTeachers(res.data)
 	    }
 	  },
 	  onError: (err) => console.error(err)
@@ -494,7 +486,7 @@ function AllUsers() {
 
 	return (
 		<>
-			{[...admins, ...students, ...groups]
+			{[...admins, ...students, ...groups, ...teachers]
 				?.filter(
 					(item) =>
 						item.firstName?.includes(searchValue) ||
@@ -528,12 +520,14 @@ function ContactWindow({
 		let userid = message?.userId
 			? message?.userId
 			: message?.fromUser
-			? message?.fromUser
-			: message?.teacherId
-			? message?.teacherId
-			: message?.adminId
-			? message?.adminId
-			: message?.studentId;
+				? message?.fromUser
+				: message?.teacherId
+					? message?.teacherId
+					: message.tutorId 
+						? message.tutorId 
+						: message?.adminId
+							? message?.adminId
+							: message?.studentId;
 
 		e.preventDefault();
 		navigate(`?contact=${userid}`);
@@ -610,7 +604,7 @@ function OpenedChat() {
 		generalState: { chatDetail, showMainChat },
 		generalState,
 		adminFunctions: { getMessages, sendMessage },
-		commonFunctions:{getGroupMessages, sendGroupMessages},
+		commonFunctions:{getGroupMessages, sendGroupMessage},
 		setGeneralState,
 	} = useAuth();
 
@@ -637,8 +631,10 @@ function OpenedChat() {
 		}
 	);
 
-	const GroupMessages = useQuery(["get group messages"], ()=>getGroupMessages(userData.token, ),{
+	const GroupMessages = useQuery([`get group messages ${chatDetail?.groupId}`], ()=>getGroupMessages(userData.token, chatDetail?.groupId),{
+		enabled: chatDetail?.groupId !== "" || chatDetail?.groupId !== null,
 		onSuccess: (res) => {
+			console.log("fetched group messages")
 			if (res.data?.length > 0) {
 				setMessageList(res.data);
 			} else {
@@ -667,6 +663,22 @@ function OpenedChat() {
 			},
 		}
 	);
+	const groupMsgMutation = useMutation(
+		([token, id, data]) => sendGroupMessage(token, id, data),
+		{
+			onSuccess: (res) => {
+				if (res.success) {
+					queryClient.invalidateQueries([`get group messages ${chatDetail?.groupId}`]);
+					setText("");
+				} else {
+					toast.error(res.message);
+				}
+			},
+			onError: (err) => {
+				toast.error(err.message);
+			},
+		}
+	);
 
 	function handleChange(e) {
 		setText(e.target.value);
@@ -675,18 +687,25 @@ function OpenedChat() {
 	function sendMsg(e) {
 		e.preventDefault();
 		if (text) {
-			msgMutation.mutate({
-				toUser: chatDetail.userId
-					? chatDetail.userId
-					: chatDetail.teacherId
-					? chatDetail.teacherId
-					: chatDetail.fromUser
-					? chatDetail.fromUser
-					: chatDetail.adminId
-					? chatDetail.adminId
-					: chatDetail.studentId,
-				body: text,
-			});
+			if(chatDetail?.groupId){
+				groupMsgMutation.mutate([userData?.token, chatDetail?.groupId,  {body: text} ])
+
+			}else {
+				msgMutation.mutate({
+					toUser: chatDetail.userId
+						? chatDetail.userId
+						: chatDetail.teacherId
+						? chatDetail.teacherId
+						: chatDetail.tutorId 
+						? chatDetail.tutorId 
+						: chatDetail.fromUser
+						? chatDetail.fromUser
+						: chatDetail.adminId
+						? chatDetail.adminId
+						: chatDetail.studentId,
+					body: text,
+				});
+			}
 		} else {
 			toast.error("Enter a valid message", {
 				position: "top-right",
@@ -741,11 +760,12 @@ function OpenedChat() {
 						}
 					</div>
 				</PreviewContent>
+				{/* <GroupContextMenu /> */}
 			</ChatHeader>
 
 			<OpenedContent>
 				<TextContent>
-					{ourMessages.isLoading ? (
+					{ourMessages.isLoading || GroupMessages?.isLoading ? (
 						<div className="spinner-border text-primary">
 							<div className="visually-hidden">Loading</div>
 						</div>
@@ -829,4 +849,52 @@ function ChatBar({ sender, user, body, profileImg }) {
 		</>
 	);
 }
+
+
+
+
+export function GroupContextMenu({ x, id, handleClick, data=[], openAnchor, anchorEl, setAnchorEl}){
+    
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    }
+
+
+
+    return (
+        <div className="suite__dots">
+            <BsThreeDotsVertical
+                id="basic-button"
+                aria-controls={openAnchor ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={openAnchor ? 'true' : undefined}
+                onClick={handleClick}
+            />
+            <Menu
+			id="basic-menu"
+			anchorEl={anchorEl}
+			open={openAnchor}
+			onClose={handleClose}
+			MenuListProps={{
+				'aria-labelledby': 'basic-button',
+			}}
+			>
+                    
+				{
+					data?.map(({title}) =>(
+						<MenuItem key={id}>
+							<span className="ms-3">{title}</span>
+						</MenuItem>
+					))
+					
+				}
+
+            </Menu>
+        </div>
+    )
+}
+
+
+
 export default LiveChat;
