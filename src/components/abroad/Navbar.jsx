@@ -38,7 +38,11 @@ const NavContainer = styled.div`
 		height: 100%;
 		width: 100%;
 		gap: 2rem;
-		// border: 2px solid red;
+	 	/* border: 2px solid red; */
+
+		button{
+			margin-top: unset;
+		}
 
 		.hamburger {
 			display: block;
@@ -85,7 +89,7 @@ const NavContainer = styled.div`
 				/* border: 2px solid purple; */
 
 				.first__btn {
-					color: var(--theme-blue);
+					color:#fff;
 					border: 1px solid #bbbbbb;
 					border-radius: 7px;
 					padding: 0.5rem 1rem;
@@ -94,14 +98,14 @@ const NavContainer = styled.div`
 					line-height: 27px;
 
 					a {
-						color: var(--theme-blue);
+						color: #FFf;
 					}
 				}
 
 				.second__btn {
-					background: var(--theme-blue);
-					border: 2px solid white;
-					color: #fff;
+					color: var(--theme-blue);
+					border: 2px solid var(--theme-blue);
+					background: #fff;
 					padding: 0.5rem 1rem;
 					font-weight: 700;
 					font-size: 14px;
@@ -109,7 +113,7 @@ const NavContainer = styled.div`
 					border-radius: 12px;
 
 					a {
-						color: #fff;
+						color: var(--theme-blue);
 					}
 				}
 			}
@@ -192,9 +196,9 @@ const Navbar = ({ toggleSidebar }) => {
 
 					<ul>
 						<div className="firstitems">
-							<li>
+							{/* <li>
 								<Link to={`/signup?trainee`}>Train to Work Abroad</Link>
-							</li>
+							</li> */}
 							{/* <li>
 								<Link to={`/women`}>Women for Tech</Link>
 							</li> */}
@@ -210,7 +214,7 @@ const Navbar = ({ toggleSidebar }) => {
 						</li> */}
 						</div>
 
-						{/* <div className="seconditems">
+						<div className="seconditems">
 							{value?.token ? (
 								<>
 									<li className="me-3 nav_link">
@@ -226,7 +230,7 @@ const Navbar = ({ toggleSidebar }) => {
 											onClick={() => {
 												localStorage.clear();
 
-												navigate("/school/login");
+												navigate("/login");
 											}}
 										>
 											Logout
@@ -262,18 +266,18 @@ const Navbar = ({ toggleSidebar }) => {
 								<>
 									<li>
 										<button className="first__btn">
-											<Link to={`/school/login`}>Sign in</Link>{" "}
+											<Link to={`/login`}>Sign in</Link>{" "}
 										</button>
 									</li>
 
 									<li>
 										<button className="second__btn">
-											<Link to={`/school/signup`}>Register for free</Link>
+											<Link to={`/signup?trainee`}>Register for free</Link>
 										</button>
 									</li>
 								</>
 							)}
-						</div> */}
+						</div>
 					</ul>
 
 					<div className="hamburger align-items-center">

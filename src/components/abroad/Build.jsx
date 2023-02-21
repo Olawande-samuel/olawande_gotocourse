@@ -2,7 +2,6 @@ import styled from "styled-components"
 
 const Container = styled.div`
 text-align: center;
-padding: 3rem 0;
     
 .container{
     h4{
@@ -11,6 +10,8 @@ padding: 3rem 0;
         font-size: 30px;
         line-height: 40px;
         color: #262626;
+        padding: 3rem 0;
+
     }
 
     .boxitem{

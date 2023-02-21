@@ -33,9 +33,9 @@ const Abroad = () => {
             {/* <What/> */}
             <Course/>
             <Build/>
+            <Experience/>
             <Develop/>
             {/* <Benefit/> */}
-            {/* <Experience/> */}
             {/* <Other/> */}
             <Review/>
             {/* <Join/> */}
