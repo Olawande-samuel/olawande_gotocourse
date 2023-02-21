@@ -9,61 +9,71 @@ background: #E1E7FF;
 padding: 2rem 4rem;
 width: 100%;
 
-
 .container{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+  
+  .topbox{
+      display: grid;
+      padding: 1.5rem 0;
+      grid-template-columns: repeat(2, minmax(190px, 350px));
+      gap: 2rem;
+      width: 100%;
+      justify-content: center;
+
+
+      .boxes{
+      border-radius: 32px;
+      padding: 2rem 1rem;
+      position: relative;
+      min-height: 350px;
+      width: 100%;
+
+
+      p{
+          font-style: italic;
+          font-weight: 600;
+          font-size: 23px;
+          line-height: 30px;
+      }
+
+      span{
+          font-style: italic;
+          font-weight: 300;
+          font-size: 16px;
+          line-height: 27px;
+      }
+
+      .boximg img{
+          position: absolute;
+          bottom: 5px;
+          right:5px;
+          width: 200px;
+          height: 150px;
+          object-fit: contain;
+          /* border: 2px solid green; */
+      }
+      }
+
+      
+      .boxes:nth-of-type(1){
+          background: #EDFFFB;
+
+      }
+
+      .boxes:nth-of-type(2){
+          background: #FFF9F9;
+      }
+  }
+
+  .bottombox{
+    display: flex;
+    flex-direction: column;
     gap: 2rem;
-    width: 100%;
 
-    .boxes{
-        /* height: 30px; */
-        /* border: 5px solid red;         */
-        border-radius: 32px;
-        padding: 2rem 1rem;
-        position: relative;
-        min-height: 350px;
-        width: 100%;
-
-
-        p{
-            font-style: italic;
-        font-weight: 600;
-        font-size: 26px;
-        line-height: 30px;
-        }
-
-        span{
-            font-style: italic;
-        font-weight: 300;
-        font-size: 18px;
-        line-height: 27px;
-        }
-
-        .boximg img{
-            position: absolute;
-            bottom: 5px;
-            right:5px;
-            width: 200px;
-            height: 150px;
-            object-fit: contain;
-            /* border: 2px solid green; */
-        }
-    }
-
-    .boxes:nth-of-type(1){
-        background: #EDFFFB;
-
-    }
-
-    .boxes:nth-of-type(2){
-        background: #FFF9F9;
-    }
-
-    .boxes:nth-of-type(3), .boxes:nth-of-type(4){
-        grid-column: 1 / span 3;
+    .boxes:nth-of-type(1), .boxes:nth-of-type(2){
         display: flex;
         background: #EFF2FF;
+        /* border: 2px solid green; */
+        border-radius: 24px;
 
         .firstbox, .secondbox{
             flex: 5;
@@ -81,6 +91,20 @@ width: 100%;
             justify-content: center;
             padding: 0 1rem;
 
+            p{
+                font-style: italic;
+                font-weight: 600;
+                font-size: 23px;
+                line-height: 30px;
+            }
+
+            span{
+                font-style: italic;
+                font-weight: 300;
+                font-size: 16px;
+                line-height: 27px;
+            }
+
         }
 
         .secondbox{
@@ -89,19 +113,34 @@ width: 100%;
         }
     }
 
-    .boxes:nth-of-type(4){
+    .boxes:nth-of-type(2){
         background: #FFF7F7;
-    }
 
-    
+        .firstbox{
+            p{
+                font-size: 26px;
+     
+            }
+        }
+    }
+  }
+
+ 
+
+
+  
 }
+
+
+
 
 
 @media (max-width: 768px) {
     padding: 1rem;
 
     .container{
-        grid-template-columns: 1fr;
+        .topbox{
+            grid-template-columns: 1fr;
 
         .boxes{
             display: flex;
@@ -117,9 +156,14 @@ width: 100%;
             }
         }
 
-        .boxes:nth-of-type(3),.boxes:nth-of-type(4){
-            grid-column: unset;
+       
+
+    }
+
+    .bottombox{
+            .boxes{
             flex-direction: column-reverse;
+            }
         }
    
     }
@@ -131,6 +175,7 @@ export const Boxes = () => {
     return (
         <Container>
             <div className="container">
+                <div className="topbox">
                 <div className="boxes">
                     <p>Enjoy learning with a cohort at low fess</p>
                     <span>Discover an exciting way of learning with a group of other learners.</span>
@@ -152,6 +197,10 @@ export const Boxes = () => {
                     </div>
 
                 </div>
+
+                </div>
+
+                <div className="bottombox">
                 <div className="boxes">
                     <div className="firstbox">
                         <p>Not your usual tech training</p>
@@ -179,6 +228,8 @@ export const Boxes = () => {
                     <div className="secondbox">
                         <img src={chart} alt="" />
                     </div>
+
+                </div>
 
                 </div>
 

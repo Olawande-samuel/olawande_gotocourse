@@ -31,7 +31,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap:2rem;
-    height: ${({ more }) => more ? "100%" : "410vh"};
+    height: ${({ more }) => more ? "100%" : "415vh"};
     overflow: ${({ more }) => more ? "auto" : "hidden"};
 
 }
@@ -104,20 +104,7 @@ const Card = styled.div`
         flex: .7;
         /* border: 2px solid green; */
 
-        h2{
-            color: var(--theme-blue);
-            padding: 1rem 0;
-            font-weight: 700;
-            font-size: 33px;
-            line-height: 24px;
-        }
-
-        p{
-            font-weight: 400;
-font-size: 14.9178px;
-line-height: 30px;
-        }
-
+        
 
     }
 
@@ -128,23 +115,55 @@ line-height: 30px;
 
 `
 
+const ContentItem = styled.div`
+    .restrictcard {
 
-const CourseCard = ({ img, title, ptop, pbottom, list, listheader, background, more }) => {
+    line-height: 1.4rem;
+    --max-lines: 10;
+    position: relative;
+    max-height: calc(1.4rem * var(--max-lines));
+    overflow: hidden;
+    padding-right: 1rem; /* space for ellipsis */
+    }
+
+    .restrictcard::after {
+    content: "";
+    position: absolute;
+    inset-inline-end: 0; /* "right" */
+    width: 1rem;
+    height: 1rem;
+    background: white;
+    }
+
+        h2{
+        color: var(--theme-blue);
+        padding: 1rem 0;
+        font-weight: 700;
+        font-size: 33px;
+        line-height: 24px;
+        }
+
+        p{
+        font-weight: 400;
+        font-size: 14.9178px;
+        line-height: 30px;
+        }
+
+        .seemore{
+        color: var(--theme-blue);
+        cursor: pointer;
+        }
+
+
+`
+
+const Content = ({title, ptop, pbottom, list, listheader}) => {
+    const [show, setShow] = useState(true)
+    const toggle = () => setShow(!show)
     return (
-        <Card background={background} >
-            <div className="cardleft">
-                <div className="cardcontent">
-                    <div className="cardimg">
-                        <img src={img} alt="" />
-                    </div>
-                    <div className="cardbutton">
-                    <Link to={`/signup?trainee`}><button>Enroll</button> </Link>
+        <ContentItem>
+            <div className={show ? "restrictcard" : ""}>
 
-                    </div>
-                </div>
-
-            </div>
-            <div className="cardright">
                 <h2>{title}</h2>
                 <p>{ptop}</p>
                 <p>{listheader}</p>
@@ -160,6 +179,38 @@ const CourseCard = ({ img, title, ptop, pbottom, list, listheader, background, m
                 </ul>
 
                 <p>{pbottom}</p>
+            </div>
+            <span className="seemore" onClick ={toggle}>
+                read more
+            </span>
+        </ContentItem>
+    )
+}
+
+
+const CourseCard = ({ img, title, ptop, pbottom, list, listheader, background, more }) => {
+    return (
+        <Card background={background} >
+            <div className="cardleft">
+                <div className="cardcontent">
+                    <div className="cardimg">
+                        <img src={img} alt="" />
+                    </div>
+                    <div className="cardbutton">
+                        <Link to={`/signup?trainee`}><button>Enroll</button> </Link>
+
+                    </div>
+                </div>
+
+            </div>
+            <div className="cardright">
+                <Content
+                    title={title}
+                    ptop={ptop}
+                    pbottom={pbottom}
+                    list={list}
+                    listheader={listheader}
+                />
 
             </div>
 
@@ -292,7 +343,7 @@ Our expert instructors will guide you through the fundamentals of data analytics
         With a certificate of completion from Gotocourse, you'll be ready to take on new and exciting opportunities in the world of data analytics.
         Don't miss out on this opportunity to enhance your skills and propel your career in the exciting field of data analytics. Sign up for Gotocourse's Data Analytics course today!"      
         `
-        ,background: "#FFDDDA"
+        , background: "#FFDDDA"
 
     },
     {

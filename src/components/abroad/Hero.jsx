@@ -8,7 +8,8 @@ const Container = styled.div`
 background-image: url(${hero});
 background-size: cover;
 background-repeat: no-repeat;
-height: 100vh;
+background-position: center;
+height: 80vh;
 width: 100%;
 font-family: 'Raleway';
 color: var(--theme-blue);
