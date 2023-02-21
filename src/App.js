@@ -389,6 +389,8 @@ function MyApp({ mixpanel }) {
 										<Route index element={<NewBootcampDetailsComponent />} />
 										{/* <Route path="payment" element={<ComingSoon />} /> */}
 										<Route path="payment" element={<BootcampPayment />} />
+										<Route path="pay" element={<BootcampPaystackPayment/>}/>
+
 										{/* <Route path="payment" element={<BootcampPaystackPayment />} /> */}
 										<Route
 											path="payment/success"
@@ -470,7 +472,6 @@ function MyApp({ mixpanel }) {
 								/>
 								<Route path="history" element={<StudentHistory />} />
 								<Route path="payment" element={<StudentFees />} />
-								<Route path="pay" element={<BootcampPaystackPayment/>}/>
 
 								<Route path="chat" element={<StudentChat />} />
 								{/* <Route path="help" element={<StudentHelp />} /> */}

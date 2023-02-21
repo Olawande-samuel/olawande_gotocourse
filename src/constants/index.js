@@ -97,9 +97,9 @@ export function gotoclassPayment(title, category, bootcampId, navigate, trainee)
   if (trainee) {
     if (title.trim().toLowerCase().includes("/")) {
       let newTitle = title.trim().split("/").join("-").toLowerCase()
-      navigate(`pay?categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/payment`)
+      navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/pay`)
     } else {
-      navigate(`pay?categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${title.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/payment`)
+      navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${title.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/pay`)
     }
   } else {
     if (title.trim().toLowerCase().includes("/")) {
