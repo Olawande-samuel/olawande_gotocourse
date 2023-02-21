@@ -11,6 +11,10 @@ import Review from "../Review"
 import What from "../What"
 import Other from "../Other"
 import Course from "../Course"
+import { Boxes } from "../Boxes"
+import { SecondBox } from "../SecondBox"
+import { Become } from "../Become"
+import { Build } from "../Build"
 // import Navbar from "./Navbar"
 
 const Container = styled.section`
@@ -22,15 +26,19 @@ const Abroad = () => {
     return (
         <Container>
             <Hero />
-            <StandOut/>
-            <What/>
+            {/* <StandOut/> */}
+            <Boxes/>
+            <SecondBox/>
+            <Become/>
+            {/* <What/> */}
             <Course/>
-            <Experience/>
+            <Build/>
             <Develop/>
-            <Other/>
-            <Review/>
             {/* <Benefit/> */}
-            <Join/>
+            {/* <Experience/> */}
+            {/* <Other/> */}
+            <Review/>
+            {/* <Join/> */}
             <Faq/>
             <Footer />
 

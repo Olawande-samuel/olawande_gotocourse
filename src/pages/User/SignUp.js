@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {motion} from "framer-motion"
 import Input from "../../components/Input";
 import Password from "../../components/Password";
@@ -22,22 +22,31 @@ const SignUp = () => {
   // const emailReg = new RegExp(/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/)
   const emailReg = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/)
   const passReg = new RegExp(/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/)
-  const [data, setData] = useState({
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    email: "",
-    password: "",
-    retype_password: "",
-    userType: "student",
-    fullname: "",
-  });
+
   const [focus, setFocus] =useState(false)
   const { authFunctions: { register ,googleSignUp, facebookSignUp}, generalState, setGeneralState, } = useAuth();
   const { getItem, removeItem, updateItem } = useLocalStorage();
   
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location =  useLocation()
+
+const trainee = location.search === "?trainee"
+console.log({trainee});
+
+const [data, setData] = useState({
+  firstName: "",
+  lastName: "",
+  phoneNumber: "",
+  email: "",
+  password: "",
+  retype_password: "",
+  userType: "student",
+  fullname: "",
+  trainee: trainee && true 
+});
+
+console.log({data});
 
   useEffect(() => {
     if (data.fullname !== "") {

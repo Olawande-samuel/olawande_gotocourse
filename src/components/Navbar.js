@@ -144,6 +144,22 @@ const Navbar = ({ background }) => {
 							</Link>
 						</li>
 
+						<li className="nav-item holder">
+							<Link
+								to="/train"
+								className="link nav-link courses me-4"
+								style={{
+									color:
+										landing || mainpage
+											? "var(--theme-blue)"
+											: "rgba(255, 255, 255)",
+								}}
+							>
+								Train to work abroad
+							</Link>
+						</li>
+
+
 						{(location.pathname.split("/")[1] === "" || celebRoute) && (
 							<>
 								<li className="nav-item holder">

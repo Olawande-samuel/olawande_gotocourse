@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { AiOutlineCloseCircle, AiOutlineMenu } from "react-icons/ai";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 // import LogoutButton from "./LogoutButton"
-import { Logosm } from "../../images/components/svgs";
+import { Logosm, TrainLogo } from "../../images/components/svgs";
 import { motion } from "framer-motion";
 import { useAuth } from "../../contexts/Auth";
 import { useLocalStorage } from "../../hooks";
@@ -184,18 +184,20 @@ const Navbar = ({ toggleSidebar }) => {
 				<div className="navcontainer container">
 					<div className="navbarlogo">
 						<Link to={`/`}>
-							<Logosm color="var(--theme-blue)" />
+						{/* <Logosm color="var(--theme-blue)" /> */}
+						{/* <img src={logo} alt="" width={150} /> */}
+						<TrainLogo color="var(--theme-blue)"/>
 						</Link>
 					</div>
 
 					<ul>
 						<div className="firstitems">
 							<li>
-								<Link to={`/train`}>Train to Work Abroad</Link>
+								<Link to={`/signup?trainee`}>Train to Work Abroad</Link>
 							</li>
-							<li>
+							{/* <li>
 								<Link to={`/women`}>Women for Tech</Link>
-							</li>
+							</li> */}
 							
 							{/* <div className="dropdown">
 							<button className="dropbtn">Create on Gotocourse</button>

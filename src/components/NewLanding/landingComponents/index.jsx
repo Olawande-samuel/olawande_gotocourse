@@ -292,7 +292,7 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
         e.preventDefault();
         if (userdata?.token) {
             // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-            gotoclassPayment(title, category, bootcampId, navigate)
+            gotoclassPayment(title, category, bootcampId, navigate,  userdata?.trainee)
         } else {
             navigate("/login")
         }
@@ -736,7 +736,7 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
                 </div>
 
                 <div className="contentbtn">
-                    <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate)}>Enroll Now</button>
+                    <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate, userdata?.trainee)}>Enroll Now</button>
                 </div>
 
             </div>
@@ -808,7 +808,7 @@ export function Head({ title, bootcampImg, category, duration, price, packages, 
                 </div>
 
                 <div className="contentbtn">
-                    <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate)}>Enroll Now</button>
+                    <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate,  userdata?.trainee)}>Enroll Now</button>
                 </div>
 
             </div>
@@ -1151,7 +1151,7 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
         e.preventDefault();
         if (userdata?.token) {
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-            gotoclassPayment(title, category, bootcampId, navigate)
+            gotoclassPayment(title, category, bootcampId, navigate, userdata?.trainee)
             // navigate("/coming-soon")
         } else {
             navigate("/login")
@@ -1393,7 +1393,7 @@ export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, 
         e.preventDefault();
         if (userdata?.token) {
             // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-            gotoclassPayment(title, category, bootcampId, navigate)
+            gotoclassPayment(title, category, bootcampId, navigate,  userdata?.trainee)
         } else {
             navigate("/login")
         }
@@ -1673,7 +1673,7 @@ export function PathCourseCard({ title, bootcampImg, bootcampId, category, start
         e.preventDefault();
         if (userdata?.token) {
             // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-            gotoclassPayment(title, category, bootcampId, navigate)
+            gotoclassPayment(title, category, bootcampId, navigate,  userdata?.trainee)
         } else {
             navigate("/login")
         }

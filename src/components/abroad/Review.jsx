@@ -18,33 +18,45 @@ gap: 2rem;
     font-size: 32px;
     // font-size: clamp(2.1rem, 2.1429rem + .5357vw, 2.5rem);
     // line-height: 54px;
-    color: var(--theme-blue);
+    color: #000;
 }
 
 .reviewcontent{
-    display: flex;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
+    align-items: center;
     gap: 1rem;
-    color: var(--theme-blue);
+    color: #000;
+    /* border: 2px solid red; */
 
 
     .reviewdiv{
-        flex: .33;       
-        background: #E1E2FF;
-border-radius: 10px;
+        /* background: #E1E2FF; */
+        border-radius: 10px;
         padding: 2rem;
         position: relative;
         min-height: 25rem;
+        /* border: 2px solid green; */
+
 
         .reviewtop{
             display: flex;
             gap: 1rem;
             font-style: italic;
+            font-weight: 800;
+            font-size: 18px;
             padding: 1rem 0;
             /* position: absolute;
             bottom: 15px; */
         }
 
         .reviewbottom{
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+
              .reviewpersonimg{
                 // border: 2px solid red;
                 width: 50px;
@@ -93,7 +105,7 @@ border-radius: 10px;
 
 @media (max-width: 912px){
     .reviewcontent{
-        // flex-direction: column;
+        grid-template-columns: 1fr;
 
         .reviewdiv{
             min-height: 30rem;
@@ -146,7 +158,9 @@ const Review = () => {
                         </div>
                         <div className="reviewtop">
                             <div>
-                                <p>Gotocourse is the top platform for experts to share their knowledge. The advanced search and the intuitive UI make it easy for learners to find what they need. We are proud to partner with Gotocourse.</p>
+                                <p>“The future belongs to those <br />
+                                    who learn more skills and<br />
+                                    combine them in creative ways.”</p>
                             </div>
                         </div>
 
@@ -155,7 +169,7 @@ const Review = () => {
                     </div>
 
                     <div className="reviewdiv">
-                        
+
 
                         <div className="reviewbottom">
                             <div className="reviewpersonimg">
@@ -171,15 +185,21 @@ const Review = () => {
                         </div>
 
                         <div className="reviewtop">
-                            
+
                             <div>
-                                <p>A real pleasure to work with. Gotocourse platform is super easy to use and we are happy with the steady increase in enrollments. The customer service is excellent</p>
+                                <p>
+                                    “Having only one skill or <br />
+                                    holding only to your academic <br />
+                                    qualifications in an era of <br />
+                                    exponential change makes you <br />
+                                    economically vulnerable.”
+                                </p>
                             </div>
                         </div>
 
                     </div>
 
-                    <div className="reviewdiv">
+                    {/* <div className="reviewdiv">
                        
 
                         <div className="reviewbottom">
@@ -202,7 +222,7 @@ const Review = () => {
                            </div>
                        </div>
 
-                    </div>
+                    </div> */}
 
 
                 </div>
