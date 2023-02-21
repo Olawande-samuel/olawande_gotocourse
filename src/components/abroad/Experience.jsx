@@ -86,11 +86,12 @@ const Experience = () => {
             <div className="container">
                 <div className="expercontent">
                     <div className="experleft">
-                        <p>
-                        Your goals and < br />
-                         aspirations are < br />
-                          achievable with < br />
-                           Gotocourse
+                        <p className="">
+                        We have helped many < br />
+                         develop tech skills in  < br />
+                          very short time, and< br />
+                          helped them find jobs in < br />
+                          the best tech companies
                         </p>
 
                         <Link to={`/signup`}><button>Register for free</button> </Link>

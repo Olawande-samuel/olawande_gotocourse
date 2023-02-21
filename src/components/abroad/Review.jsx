@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import people from '../../images/abroad/Ellipse.png'
+import people from '../../images/abroad/nickyverd.png'
 
 
 const Container = styled.div`
@@ -139,19 +139,21 @@ const Review = () => {
             <div className="container">
 
                 <div className="reviewhead">
-                    <h4>Success Stories from our Alumni  </h4>
+                    <header>
+                        <h4 style={{color: "var(--theme-blue)", fontSize:"40px"}}>Be a Global Talent  </h4>
+                        <p className="subtitle text-center mx-auto" style={{width:"min(100% - 1rem, 700px)"}}>Globalization is a phenomenon that has transformed the way business is conducted. Multinational corporations have various parts of their operations and organizations spread out across different locations around the world.</p>
+                    </header>
                 </div>
 
                 <div className="reviewcontent">
                     <div className="reviewdiv">
                         <div className="reviewbottom">
                             <div className="reviewpersonimg">
-                                <img src={people} alt="" />
-
+                                {/* <img src={people} alt="" /> */}
                             </div>
                             <div className="reviewpersoninfo">
-                                <p>John Adewale</p>
-                                <p>Zachsam</p>
+                                <p>Robert Greene</p>
+                                {/* <p>Zachsam</p> */}
 
                             </div>
 
@@ -177,8 +179,8 @@ const Review = () => {
 
                             </div>
                             <div className="reviewpersoninfo">
-                                <p>Catherine</p>
-                                <p>Head of studies, Realztech Institute.</p>
+                                <p>Nicky Verd</p>
+                                {/* <p>Head of studies, Realztech Institute.</p> */}
 
                             </div>
 
