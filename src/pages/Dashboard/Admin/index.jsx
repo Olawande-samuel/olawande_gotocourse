@@ -4024,6 +4024,7 @@ export function CreateBootcamp() {
 	const [bio, setBio] = useState("");
 	const [scheduleCount, setScheduleCount] = useState(0);
 	const [timeList, setTimeList] = useState([]);
+	const [instructors, setInstructors] = useState([])
 
 	useEffect(() => {
 		if (flag.current) return;
@@ -4044,7 +4045,14 @@ export function CreateBootcamp() {
 
 						delete found.instructorName;
 						delete found.packages;
-						setFormstate({ ...formstate, ...found, type: "FLAT" });
+						if(found.instructors?.length > 0){
+							let instructorsList = found.instructors;
+							let newList = []
+							instructorsList.forEach(instructor => newList.push(instructor.email))
+							setFormstate({...formstate, ...found, instructors: newList, type: "FLAT"})
+						}else {
+							setFormstate({ ...formstate, ...found, type: "FLAT" });
+						}
 						setBio(found.description);
 					} else {
 						throw new AdvancedError(message, statusCode);
@@ -4116,7 +4124,7 @@ export function CreateBootcamp() {
 				setLoading((_) => false);
 			}
 		})();
-	}, []);
+	}, [])
 
 	async function submitHandler(e) {
 		e.preventDefault();
@@ -4127,7 +4135,6 @@ export function CreateBootcamp() {
 			type: "FLAT",
 			time: [...formstate.time, ...timeList],
 		};
-		console.log({ formData });
 		try {
 			if (
 				formData.description === "" ||
@@ -4306,6 +4313,7 @@ export function CreateBootcamp() {
 			...formstate,
 			instructors: [...formstate?.instructors, newInstructor],
 		});
+		setInstructors([...instructors, newInstructor ])
 		setNewInstructor("");
 	}
 
@@ -4636,12 +4644,12 @@ export function CreateBootcamp() {
 							{formstate.instructors?.length > 0 ? (
 								formstate.instructors?.map((item, index) => (
 									<div className={clsx.syllabus_container}>
-										<h5>{item?.email}</h5>
+										<h5>{item}</h5>
 										<p>
 											<i
 												className="text-danger"
 												style={{ cursor: "pointer" }}
-												onClick={() => removeInstructor(item.email + index)}
+												onClick={() => removeInstructor(item + index)}
 											>
 												<BiTrash />
 											</i>
