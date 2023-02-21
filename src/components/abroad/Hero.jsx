@@ -13,17 +13,22 @@ width: 100%;
 font-family: 'Raleway';
 color: var(--theme-blue);
 margin-top: 5rem;
-padding: 1rem 0;
 
 .container{
     .heroleft{
+        /* border: 2px solid red; */
+        padding: 2rem 0;
         width: 50%;
-        /* margin-top: 5rem; */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
          h1{
             font-style: normal;
             font-weight: 900;
             font-size: 60px;
             line-height: 54px;
+            padding: .5rem 0;
          }
 
          .icons{
@@ -65,6 +70,11 @@ padding: 1rem 0;
         .container{
         .heroleft{
             width: 100%;
+
+            h1{
+            font-size: 40px;
+            line-height: 40px;
+         }
         }
     }
 }

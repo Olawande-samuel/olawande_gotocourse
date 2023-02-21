@@ -66,6 +66,8 @@ width: 100%;
             flex: 5;
 
             img{
+                max-width:100%;
+                max-height: 100%;
 
             }
         }
@@ -89,7 +91,13 @@ width: 100%;
         background: #FFF7F7;
     }
 
-    @media (max-width: 768px) {
+}
+
+
+@media (max-width: 768px) {
+    padding: 1rem;
+
+    .container{
         grid-template-columns: 1fr;
 
         .box{
@@ -102,21 +110,16 @@ width: 100%;
             width: 200px;
             height: 150px;
             object-fit: contain;
-        }
+            border: 2px solid yellow;
+            }
         }
 
         .box:nth-of-type(3),.box:nth-of-type(4){
             grid-column: unset;
-
-       flex-direction: column-reverse;
-    }
+            flex-direction: column-reverse;
+        }
    
     }
-}
-
-
-@media (max-width: 768px) {
-    padding: 1rem;
 }
 
 `

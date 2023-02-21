@@ -25,12 +25,14 @@ import clsx from '../Bootcamp/Pay.module.css'
 import { useQuery } from "@tanstack/react-query";
 import ErrorBoundary from "../../classes/ErrorBoundary";
 
-import { PaystackButton } from "react-paystack"
+import { PaystackButton , usePaystackPayment} from "react-paystack"
+import { setRef } from "@mui/material";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 export const BootcampPaystackPayment = () => {
-  const { studentFunctions: { addBootcamp }, otherFunctions: { fetchBootcamps } } = useAuth();
+  const { generalState: { isMobile }, setGeneralState, generalState, otherFunctions: { fetchBootcamps }, studentFunctions: { payCarts, addBootcamp } } = useAuth();
+
   const { getItem } = useLocalStorage();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -40,10 +42,12 @@ export const BootcampPaystackPayment = () => {
   const [bootcamp, setBootcamp] = useState({})
   const [stripeId, setStripeId] = useState(null);
   const [showPaypalButton, setShowPaypalButton] = useState(false);
+  const [resp, setResp] = useState({})
   const [paymentData, setPaymentData] = useState({
     fullPayment: true,
     initialPayment: "",
   });
+  const { id } = useParams()
 
   const userData = getItem(KEY);
 
@@ -74,10 +78,10 @@ export const BootcampPaystackPayment = () => {
   function handleChange(e, type) {
     type === "select"
       ? (
-        
+
         setPaymentData({
-            ...paymentData,
-            fullPayment: e.target.value === "1" ? true : false,
+          ...paymentData,
+          fullPayment: e.target.value === "1" ? true : false,
         })
       )
       : setPaymentData({ ...paymentData, [e.target.name]: e.target.value });
@@ -108,7 +112,7 @@ export const BootcampPaystackPayment = () => {
         initialPayment: paymentData.fullPayment ? "" : paymentData.initialPayment
       }
 
-      if(!bootcamp.isPublic || bootcamp.price !== 0){
+      if (!bootcamp.isPublic || bootcamp.price !== 0) {
         try {
           if (
             !bootcampPaymentInfo.fullPayment &&
@@ -124,9 +128,9 @@ export const BootcampPaystackPayment = () => {
           if (!success || statusCode !== 1)
             throw new AdvancedError(message, statusCode);
           const { data } = response;
-  
+
           console.log({ data });
-  
+
           setStripeId(data.clientSecret);
           setShowPaypalButton(true);
         } catch (error) {
@@ -178,25 +182,94 @@ export const BootcampPaystackPayment = () => {
     }
   }
 
+  // const config = {
+  //   reference: resp?.paystackInfo?.data?.reference,
+  //   email: userData?.email,
+  //   amount: resp?.price, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+  //   publicKey: process.env.REACT_APP_PAYSTACK_KEY,
+  // };
 
-  const componentProps = {
-    email: userData?.email,
-    amount: price + (price * (5 / 100)),
-    metadata: {
-      name: `${userData.firstName} ${userData.lastName}`,
-      phone: userData.phoneNumber,
-    },
-    publicKey: process.env.REACT_APP_PAYSTACK_KEY,
-    text: "Pay Now",
-    onSuccess: (e) =>{
-        console.log({e})
-        alert("Thanks for doing business with us! Come back soon!!")
-    },
-    onClose: () => alert("Wait! Don't leave :("),
+  // const initializePayment = usePaystackPayment(config);
+
+  // const componentProps = {
+  //   email: userData?.email,
+  //   amount: price + (price * (5 / 100)),
+  //   metadata: {
+  //     name: `${userData.firstName} ${userData.lastName}`,
+  //     phone: userData.phoneNumber,
+  //   },
+  //   publicKey: process.env.REACT_APP_PAYSTACK_KEY,
+  //   text: "Pay Now",
+  //   onSuccess: async(e) => {
+  //     console.log({ e })
+  //     alert("Thanks for doing business with us! Come back soon!!")
+
+  //   },
+  //   onClose: () => alert("Wait! Don't leave :("),
+  // }
+
+
+  console.log({resp});
+
+
+  const handlePayment = async () => {
+    try {
+      setGeneralState({ ...generalState, loading: true })
+      const res = await payCarts(userData?.token, [bootcamp.bootcampId]);
+      const { message, success, statusCode } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else if (statusCode === 1) {
+        const { data } = res;
+        console.log({ data });
+        if(data){
+          window.open(data?.paystackInfo?.data?.authorization_url)
+        }
+        // setResp(data)
+
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+      } else {
+        throw new AdvancedError(message, statusCode);
+      }
+
+    } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
+    } finally {
+      setGeneralState({ ...generalState, loading: false });
+    }
+  }
+
+  // you can call this function anything
+  const onSuccess = (reference) => {
+    // Implementation for whatever you want to do with reference and after success call.
+    console.log(reference);
+  };
+
+  // you can call this function anything
+  const onClose = () => {
+    // implementation for  whatever you want to do when the Paystack dialog closed.
+    console.log('closed')
   }
 
   return (
- 
+
     <div className={`pay_background `}>
       <ToastContainer
         position="top-right"
@@ -214,62 +287,62 @@ export const BootcampPaystackPayment = () => {
           className={`row w-100 justify-content-center align-items-center`}
         >
           <div >
-              <div className={`${style.payment_details_card} `}>
+            <div className={`${style.payment_details_card} `}>
 
-                <div className={style.cardbodyleft}>
+              <div className={style.cardbodyleft}>
 
-                </div>
+              </div>
 
-                <div className="card">
-                  <div className="card-body pay_card">
-                    <div>
-                      <div className="d-flex align-items-center justify-content-center w-100 py-1">
-                        <h3 className={clsx.check}>
-                          <span>Begin Your Exciting Journey To</span>
-                          <span className="d-block">Learning A New Skill</span>
+              <div className="card">
+                <div className="card-body pay_card">
+                  <div>
+                    <div className="d-flex align-items-center justify-content-center w-100 py-1">
+                      <h3 className={clsx.check}>
+                        <span>Begin Your Exciting Journey To</span>
+                        <span className="d-block">Learning A New Skill</span>
 
-                        </h3>
-                      </div>
+                      </h3>
                     </div>
+                  </div>
 
 
-                    <div className={style.payment_card_mid}>
-                      <div className="d-flex flex-column">
-                        <span className={clsx.pay__tit}>Course</span>
-                        <p
-                          className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}
-                        >
-                          {bootcamp?.title}
-                        </p>
-                        {/* <p>${bootcamp?.price && bootcamp?.price}</p> */}
-                      </div>
-                    </div>
-
-
+                  <div className={style.payment_card_mid}>
                     <div className="d-flex flex-column">
-                      <span className={`fw-normal ${clsx.pay__tit}`} >Service Fee</span>
-                      <p className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}>5%</p>
+                      <span className={clsx.pay__tit}>Course</span>
+                      <p
+                        className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}
+                      >
+                        {bootcamp?.title}
+                      </p>
+                      {/* <p>${bootcamp?.price && bootcamp?.price}</p> */}
                     </div>
+                  </div>
 
-                    <div className="d-flex flex-column justify-content-between">
-                      <label
-                        htmlFor="paymentType"
-                        className="form-label generic_label"
-                      >
-                        Choose a payment structure
-                      </label>
-                      <select
-                        name="fullPayment"
-                        onChange={(e) => handleChange(e, "select")}
-                        id="paymentType"
-                        className="form-select"
-                      >
-                        <option value="1">Full Payment</option>
-                        {/* <option value="0">Installment</option> */}
-                      </select>
-                    </div>
-                    <br />
-                    {/* {paymentData.fullPayment === false ? (
+
+                  <div className="d-flex flex-column">
+                    <span className={`fw-normal ${clsx.pay__tit}`} >Service Fee</span>
+                    <p className={`text-capitalize fw-normal px-3 ${clsx.pay__inform} `}>5%</p>
+                  </div>
+
+                  <div className="d-flex flex-column justify-content-between">
+                    <label
+                      htmlFor="paymentType"
+                      className="form-label generic_label"
+                    >
+                      Choose a payment structure
+                    </label>
+                    <select
+                      name="fullPayment"
+                      onChange={(e) => handleChange(e, "select")}
+                      id="paymentType"
+                      className="form-select"
+                    >
+                      <option value="1">Full Payment</option>
+                      {/* <option value="0">Installment</option> */}
+                    </select>
+                  </div>
+                  <br />
+                  {/* {paymentData.fullPayment === false ? (
                       <>
                         <div className="">
                           <small
@@ -301,58 +374,45 @@ export const BootcampPaystackPayment = () => {
                     ) : (
                       ""
                     )} */}
-                    <div className="d-flex flex-column">
-                      <span className={clsx.pay__tit}>Total</span>
-                      <p className={`${clsx.pay__total}`}>
-                        ${price && +price + (price * (5 / 100))}
-                      </p>
-                    </div>
-                    {
-                        showPaypalButton ? 
-                        <PaystackButton {...componentProps} />
-                        :
-                        <button
-                        onClick={enrollToCourse}
-                        className="button w-100 button-md"
-                        >
-                        {loading ? (
-                            <div
-                            className="spinner-border text-primary"
-                            role="status"
-                            style={{ width: "2rem", height: "2rem" }}
-                            >
-                            <span className="visually-hidden">Loading...</span>
-                            </div>
-                        ) : (
-                            <span>Confirm to proceed to payment</span>
-                        )}
-                        </button>
-
-                    }
-
-
-                    <div className="cancel w-100 text-center my-3">
-                      <button
-                        className=""
-                        style={{
-                          color: "var(--theme-blue)",
-                          border: "none",
-                          outline: "none",
-                          fontSize: "14px",
-                        }}
-                        onClick={() => {
-                          navigate(-1);
-                        }}
-                      >
-                        Go back
-                      </button>
-                    </div>
+                  <div className="d-flex flex-column">
+                    <span className={clsx.pay__tit}>Total</span>
+                    <p className={`${clsx.pay__total}`}>
+                      ${price && +price + (price * (5 / 100))}
+                    </p>
                   </div>
 
+                  <button className="button w-100 button-md" onClick={handlePayment}>PayNow</button>
+
+                  {/* <button onClick={() => {
+                    initializePayment(onSuccess, onClose)
+                  }} className="button w-100 button-md">Paystack Hooks Implementation</button> */}
+
+                  {/* <PaystackButton className="button w-100 button-md" {...componentProps} /> */}
+
+
+
+                  <div className="cancel w-100 text-center my-3">
+                    <button
+                      className=""
+                      style={{
+                        color: "var(--theme-blue)",
+                        border: "none",
+                        outline: "none",
+                        fontSize: "14px",
+                      }}
+                      onClick={() => {
+                        navigate(-1);
+                      }}
+                    >
+                      Go back
+                    </button>
+                  </div>
                 </div>
 
               </div>
+
             </div>
+          </div>
         </section>
       </div>
     </div>
@@ -376,7 +436,7 @@ export function PaymentModal({ token, setShowPaypalButton }) {
 
 }
 
-export const CheckoutForm = ({ token, setShowStripeModal,cart }) => {
+export const CheckoutForm = ({ token, setShowStripeModal, cart }) => {
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
@@ -561,7 +621,7 @@ export const PaymentStatus = ({ success }) => {
 
 
   useEffect(() => {
-    if(cart){
+    if (cart) {
       clearCart()
 
     }

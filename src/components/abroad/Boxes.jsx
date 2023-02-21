@@ -16,9 +16,9 @@ width: 100%;
     gap: 2rem;
     width: 100%;
 
-    .box{
+    .boxes{
         /* height: 30px; */
-        /* border: 2px solid red;         */
+        /* border: 5px solid red;         */
         border-radius: 32px;
         padding: 2rem 1rem;
         position: relative;
@@ -51,16 +51,16 @@ width: 100%;
         }
     }
 
-    .box:nth-of-type(1){
+    .boxes:nth-of-type(1){
         background: #EDFFFB;
 
     }
 
-    .box:nth-of-type(2){
+    .boxes:nth-of-type(2){
         background: #FFF9F9;
     }
 
-    .box:nth-of-type(3), .box:nth-of-type(4){
+    .boxes:nth-of-type(3), .boxes:nth-of-type(4){
         grid-column: 1 / span 3;
         display: flex;
         background: #EFF2FF;
@@ -69,6 +69,8 @@ width: 100%;
             flex: 5;
 
             img{
+                max-width:100%;
+                max-height: 100%;
 
             }
         }
@@ -87,14 +89,21 @@ width: 100%;
         }
     }
 
-    .box:nth-of-type(4){
+    .boxes:nth-of-type(4){
         background: #FFF7F7;
     }
 
-    @media (max-width: 768px) {
+    
+}
+
+
+@media (max-width: 768px) {
+    padding: 1rem;
+
+    .container{
         grid-template-columns: 1fr;
 
-        .box{
+        .boxes{
             display: flex;
             flex-direction: column;
 
@@ -104,21 +113,16 @@ width: 100%;
             width: 200px;
             height: 150px;
             object-fit: contain;
-        }
+            /* border: 2px solid yellow; */
+            }
         }
 
-        .box:nth-of-type(3),.box:nth-of-type(4){
+        .boxes:nth-of-type(3),.boxes:nth-of-type(4){
             grid-column: unset;
-
-       flex-direction: column-reverse;
-    }
+            flex-direction: column-reverse;
+        }
    
     }
-}
-
-
-@media (max-width: 768px) {
-    padding: 1rem;
 }
 
 `
@@ -127,7 +131,7 @@ export const Boxes = () => {
     return (
         <Container>
             <div className="container">
-                <div className="box">
+                <div className="boxes">
                     <p>Enjoy learning with a cohort at low fess</p>
                     <span>Discover an exciting way of learning with a group of other learners.</span>
 
@@ -138,7 +142,7 @@ export const Boxes = () => {
 
                 </div>
 
-                <div className="box">
+                <div className="boxes">
                     <p>Enjoy access to great teachers and unlimited access to learning resource</p>
                     <span>From industry professionals sharing their experience in tech and resources available at your fingertips, begin your learning journey here.</span>
 
@@ -148,7 +152,7 @@ export const Boxes = () => {
                     </div>
 
                 </div>
-                <div className="box">
+                <div className="boxes">
                     <div className="firstbox">
                         <p>Not your usual tech training</p>
                         <span>
@@ -162,7 +166,7 @@ export const Boxes = () => {
 
                 </div>
 
-                <div className="box">
+                <div className="boxes">
                     <div className="firstbox">
                         <p>Become one of the most sought after in the market</p>
                         <span>
