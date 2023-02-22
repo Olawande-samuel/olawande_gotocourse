@@ -2341,7 +2341,7 @@ function AllAvailableCourses({ data, search }) {
                 return;
             }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
-            gotoclassPayment(item.title, item.category, item.bootcampId, navigate, true)
+            gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
         } else {
             navigate("/login")
         }
