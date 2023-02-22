@@ -130,6 +130,7 @@ export default function Quiz() {
                 title: "",
                 showAnswer: false,
                 answer:"",
+                grade:"",
                 options: [
                     {
                         isAnswer: false,
@@ -177,7 +178,7 @@ export default function Quiz() {
         onSuccess: (res) => {
             if(res.statusCode === 1){
                 toast.success(res.message)
-                queryClient.inValidateQueries("quiz content")
+                queryClient.invalidateQueries(["quiz content"])
                 return
             }
             toast.error(res.message)
@@ -475,6 +476,22 @@ export default function Quiz() {
                                                                     </Button>
                                                                 </div>
 
+                                                                {
+                                                                    x.type === "THEORY" &&
+
+                                                                    <div>
+                                                                        <div className='content__quiz'>
+                                                                            <input type="text" id='' name="answer" placeholder='Grade '
+                                                                                onChange={(e)=>{
+                                                                                    const list = { ...formData }
+                                                                                    list.questions[id]['grade'] = Number(e.target.value);
+                                                                                    setFormData(list)
+                                                                               }} 
+                                                                               value={x.grade}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                }
                                                                 <div >
                                                                     <FormControlLabel
                                                                         control={
@@ -493,6 +510,7 @@ export default function Quiz() {
                                                                             />}
                                                                         label="Add an explanantion"
                                                                     />
+
 
                                                                     {
                                                                         x.showAnswer && (
@@ -691,7 +709,7 @@ function ResultCards({studentId, totalScore,quizId, graded, studentName,  update
     const deleteMutation = useMutation(([token, quizId, attemptId])=>deleteQuizAttempt(token, quizId, attemptId), {
         onSuccess: res => {
             if(res?.statusCode === 1) {
-                queryClient.inValidateQueries(["fetchStudentsQuizes"])
+                queryClient.invalidateQueries(["fetchStudentsQuizes"])
                 toast.success(res.message)
                 return
             } 
@@ -791,7 +809,7 @@ function AssessQuiz({open, setOpen, data}){
                 <ScoreSection data={data} />
                 {
                     data?.questions?.map((item, i) => (
-                        <QuestionBox key={i} question={item} i={i} />
+                        <QuestionBox key={i} question={item} i={i} entryId={data._id} />
                     ))
                 }
                 <div className="">
@@ -852,12 +870,13 @@ function questionConverter(questionType){
 
 
 
-function QuestionBox({question, i}){
+function QuestionBox({question, i, entryId}){
 
     const {consoleFunctions: {gradeQuestion}} = useAuth()
     const [data,setData] = useState({
         questionId: question._id,
-        isCorrect: "choose"
+        isCorrect: "choose",
+        score: 0
     })
     const {getItem} = useLocalStorage();
     const userdata = getItem(KEY)
@@ -878,7 +897,7 @@ function QuestionBox({question, i}){
     function submit(e){
         e.preventDefault();
         if(data.isCorrect !== "choose"){
-            grade.mutate([userdata.token, question._id, data])
+            grade.mutate([userdata.token, entryId, data])
         }else {
             window.alert("Please make a selection")
         }
@@ -892,6 +911,10 @@ function QuestionBox({question, i}){
             <div>
                 <span>Question {i + 1}: </span>
                 <span>{question?.type && questionConverter(question.type) }</span>
+                <div>
+                    <span>Grade: </span>
+                    <span>{question?.grade}</span>
+                </div>
             </div>
             <div className="my-4">
                 <ReactQuill theme="snow" value={question?.title} readOnly={true} modules={{toolbar: false}} />
@@ -943,6 +966,9 @@ function QuestionBox({question, i}){
                                     <MenuItem value={false}>Incorrect</MenuItem>
                                 </Select>
                             </FormControl>
+                        </Box>
+                        <Box marginBottom="1rem">
+                            <TextField id="outlined-basic" label="Grade (%)" variant="outlined" value={data.score} onChange={(e)=>setData({...data, score: Number(e.target.value)})} />       
                         </Box>
                         <Box marginBottom="1rem">
                             <TextField id="outlined-basic" label="Add a Comment" variant="outlined" />       
