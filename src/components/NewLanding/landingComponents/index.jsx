@@ -2128,12 +2128,12 @@ const ClassWrapper = styled.section`
     }
 `
 
-export function ClassTypeComponent({ children, center, header: head, header2, subtext, subtext1, subtext2, bottomTitle, bottomLink }) {
+export function ClassTypeComponent({ children, center, header: head,color, header2, subtext, subtext1, subtext2, bottomTitle, bottomLink }) {
     return (
         <ClassWrapper>
             <div className="container">
                 <header>
-                    <h5 className={center && "text-center"}>{head}</h5>
+                    <h5 className={center && "text-center"} style={{color}}>{head}</h5>
                     <h5>{header2}</h5>
                     <small>{subtext}</small>
                     <small className="d-block">{subtext1}</small>

@@ -1,57 +1,48 @@
 import styled from "styled-components";
-import hero from '../../images/abroad/train.png'
+// import hero from '../../images/abroad/train.png'
+import hero from '../../images/abroad/newhero.png'
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
 
+// background-image: url(${hero});
+// background-size: cover;
+// background-repeat: no-repeat;
+// background-position: center;
 
 const Container = styled.div`
-background-image: url(${hero});
-background-size: cover;
-background-repeat: no-repeat;
-background-position: center;
-height: 80vh;
+height: 60vh;
 width: 100%;
 font-family: 'Raleway';
 color: var(--theme-blue);
 margin-top: 5rem;
 
 .container{
+    display: flex;
+
     .heroleft{
         /* border: 2px solid red; */
-        padding: 2rem 0;
-        width: 50%;
+        flex: .5;
+        padding: 1rem 0;
         display: flex;
         flex-direction: column;
         justify-content: center;
+
+        .welcome{
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 20px;
+        }
 
          h1{
             font-style: normal;
             font-weight: 900;
             font-size: 60px;
             line-height: 54px;
-            padding: .5rem 0;
+            padding: .3rem 0;
          }
 
-         .icons{
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-          
 
-                .heroicons{
-                    color: #0E00C9;
-                    background: #DEEDFF;
-                    border-radius: 12px;
-                    padding: .5rem;
-                }
-
-         }
-
-    }
-
-
-    
-    button {
+         button {
         margin-top: 2rem;
         border: 2px solid white;
         border-radius: 7px;
@@ -62,6 +53,24 @@ margin-top: 5rem;
         font-size: 14px;
         line-height: 27px;
     }
+
+
+
+    }
+
+    .heroright{
+        flex: .5;
+        height: 100%;
+        img{
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+    }
+
+
+    
+  
 }
 
 @media (max-width: 768px) {
@@ -69,13 +78,14 @@ margin-top: 5rem;
         text-align: center;
 
         .container{
-        .heroleft{
-            width: 100%;
+            flex-direction: column-reverse;
 
-            h1{
-            font-size: 40px;
-            line-height: 40px;
-         }
+            .heroleft{
+
+                h1{
+                font-size: 40px;
+                line-height: 40px;
+            }
         }
     }
 }
@@ -89,6 +99,7 @@ const Hero = () => {
             <div className="container">
 
                 <div className="heroleft">
+                    <p className="welcome">Welcome to</p>
                     <h1>Train to work
                         <span className="d-block">
                             abroad programme
@@ -119,6 +130,10 @@ const Hero = () => {
 
                     <Link to={`/signup?trainee`}><button>Register for free</button> </Link>
 
+                </div>
+
+                <div className="heroright">
+                    <img src={hero} alt="" />
                 </div>
 
 

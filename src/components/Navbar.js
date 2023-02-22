@@ -146,7 +146,7 @@ const Navbar = ({ background }) => {
 
 						<li className="nav-item holder">
 							<Link
-								to="/train"
+								to="/train-to-work"
 								className="link nav-link courses me-4"
 								style={{
 									color:

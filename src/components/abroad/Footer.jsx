@@ -8,6 +8,7 @@ import { useAuth } from "../../contexts/Auth";
 import { BsFacebook, BsInstagram, BsTwitter } from "react-icons/bs";
 import { AiOutlineMail } from "react-icons/ai";
 import { height, padding } from "@mui/system";
+import { TrainLogo } from "../../images/components/svgs";
 
 const hover = {
   hover: {
@@ -121,24 +122,24 @@ const Footer = () => {
   const categories = useQuery(["categories"], () => fetchCategories());
   return (
     <footer className="footer wrapper" style={{
-      // background: celebRoute ? "#000F62" : "var(--blue-ish)", color: celebRoute ? "#fffff" : "var(--theme-blue)"
-      background: "linear-gradient(180deg, #CCD7FF 0%, #FFFFFF 100%)", color: "var(--theme-blue)",
-display: "flex", alignItems: "center" 
+      background: "#C9D1FF", color: "var(--theme-blue)",display: "flex", alignItems: "center" 
     }}>
       <div className="container ">
-
         <div className="footer_container d-flex justify-content-between">
           <div className="footer_left">
             <div className="footer_top pt-2">
               <Link to="/" onClick={() => window.scrollTo(0, 0)}>
                 <i className="d-none d-lg-block">
                   {/* <Logo color={!celebRoute ? "var(--theme-blue)" : "#fff"} /> */}
-                  <Logo color={"var(--theme-blue)"} />
+                  {/* <Logo color={"var(--theme-blue)"} /> */}
+                  <TrainLogo/>
                 </i>
 
                 <i className="d-lg-none">
                   {/* <Logosm color={!celebRoute ? "var(--theme-blue)" : "#fff"} /> */}
-                  <Logosm color={"var(--theme-blue)"} />
+                  {/* <Logosm color={"var(--theme-blue)"} /> */}
+                  <TrainLogo/>
+
                 </i>
                 {/* <small className="text-center d-block" style={{ fontSize: '16px', color: !celebRoute ? "var(--theme-blue)" : "#fff" }}>Learn without limits.</small> */}
                 <small className="text-center d-block" style={{ fontSize: '16px', color: "var(--theme-blue)", padding: "1rem 0" }}>All right reserved | c 2022 Gotocourse Inc </small>
@@ -220,9 +221,9 @@ display: "flex", alignItems: "center"
                   ))}
                 </ul>
               </div>
-              {/* <div className="second">
+              <div className="second">
                 <ul>
-                  <li>Company</li>
+                  <li>Security</li>
                   {rightLink.map((link, index) => (
                     <Link key={index} to={link.path}>
                       <motion.li
@@ -242,7 +243,7 @@ display: "flex", alignItems: "center"
                   ))}
 
                 </ul>
-              </div> */}
+              </div>
 
             </div>
           </div>
