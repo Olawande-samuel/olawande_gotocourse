@@ -80,6 +80,7 @@ width: 100%;
         .boxes{
             display: flex;
             flex-direction: column;
+            min-height: 350px;
 
             .boximg img{
             justify-self: end;

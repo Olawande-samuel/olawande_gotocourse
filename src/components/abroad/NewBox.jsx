@@ -3,24 +3,29 @@ import moneyman from '../../images/abroad/moneyman.png'
 
 const Container = styled.div`
 background: #E1E7FF;
-padding: 2rem;
 width: 100%;
+height: 40vh;
+padding: 0 2rem;
 
 
 .container{
+
     .bottombox{
-    display: flex;
-    flex-direction: column;
-    gap: 2rem; 
+        display: flex;
+        flex-direction: column;
+        gap: 2rem; 
+        height: 100%;
 
     .boxes{
         display: flex;
         background: #FFEDED;
-        border-radius: 24px;
+        border-radius: 10px;
+        height: 100%;
+        padding: 1rem 2rem;
 
-        .firstbox, .secondbox{
-            flex: 5;
 
+        .firstbox{
+            flex: .3;
             img{
                 max-width:100%;
                 max-height: 100%;
@@ -29,25 +34,25 @@ width: 100%;
         }
 
         .secondbox{
+            flex: .7;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
             padding: 0 1rem;
 
             p{
                 font-style: italic;
                 font-weight: 600;
-                font-size: 26px;
-                line-height: 30px;
+                font-size: 28px;
+                line-height: 40px;
+                text-align: right;
             }
 
 
         }
 
-        .firstbox{
-            text-align: end;
-
-        }
+       
     }
 
    
@@ -64,11 +69,19 @@ width: 100%;
 
 @media (max-width: 768px) {
     padding: 1rem;
+    height: unset;
 
     .container{
         .bottombox{
             .boxes{
             flex-direction: column-reverse;
+
+            .secondbox{
+                p{
+                    text-align: center;
+
+                }
+            }
             }
         }
 
@@ -86,7 +99,7 @@ export const NewBox = () => {
                 <div className="bottombox">
                     <div className="boxes">
 
-                    <div className="firstbox">
+                        <div className="firstbox">
                             <img src={moneyman} alt="" />
                         </div>
 
@@ -96,7 +109,7 @@ export const NewBox = () => {
 
                         </div>
 
-                      
+
 
 
 

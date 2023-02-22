@@ -72,17 +72,22 @@ padding: 2rem 0;
 }
 
 @media (max-width: 768px) {
-    .expercontent{
-        height: unset;
-        flex-direction: column;
+    .container{
 
-        .experright{
-            p{
-                text-align: center;
-                span{
-                    display: inline;
+        .expercontent{
+            height: unset;
+            flex-direction: column;
+    
+            .experright{
+                p{
+                    text-align: center;
+                    font-size: 24px;
+    
+                    span{
+                        display: inline;
+                    }
+    
                 }
-
             }
         }
     }
