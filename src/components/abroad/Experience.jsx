@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom"
 import styled from "styled-components"
 import girl from '../../images/abroad/girl.png'
 
@@ -17,30 +16,42 @@ padding: 2rem 0;
     .expercontent{
         display: flex;
         /* align-items: center; */
-        /* background: #D8EAFF; */
+        background: #D8EAFF;
         /* border: 2px solid red; */
 
+        .experleft{
+        flex:.4;
+        width: 100%;
+        /* border: 2px solid red; */
+        text-align: left;
+        padding: 0 1rem;
 
-    .experleft{
-        flex: .5;
+        img{
+            max-width: 100%;
+            max-height: 400px;
+
+        }
+
+    }
+    .experright{
+        flex: .6;
         width: 100%;
         /* border-radius: 34px; */
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        text-align: left;
+        text-align: right;
         padding: 1rem 0;
         /* border: 2px solid green; */
-        background: #D8EAFF;
 
 
 
         p{
             color: var(--theme-blue);
             font-weight: 700;
-            font-size: 34px;
-            line-height: 50px;
+            font-size: 30px;
+            line-height: 40px;
         }
 
         button {
@@ -56,19 +67,7 @@ padding: 2rem 0;
     }
     }
 
-    .experright{
-        flex:.5;
-        width: 100%;
-        /* border: 2px solid red; */
-        text-align: center;
-
-        img{
-            max-width: 100%;
-            max-height: 400px;
-
-        }
-
-    }
+   
     }
 }
 
@@ -76,6 +75,16 @@ padding: 2rem 0;
     .expercontent{
         height: unset;
         flex-direction: column;
+
+        .experright{
+            p{
+                text-align: center;
+                span{
+                    display: inline;
+                }
+
+            }
+        }
     }
 }
 
@@ -86,19 +95,19 @@ const Experience = () => {
             <div className="container">
                 <div className="expercontent">
                     <div className="experleft">
-                        <p className="">
-                        We have helped many < br />
-                         develop tech skills in  < br />
-                          very short time, and< br />
-                          helped them find jobs in < br />
-                          the best tech companies
-                        </p>
-
-                        <Link to={`/signup`}><button>Register for free</button> </Link>
-                    </div>
-                    <div className="experright">
                         <img src={girl} alt="" />
                     </div>
+                    <div className="experright">
+                        <p >
+                            We have helped many
+                            <span className="d-block"> develop tech skills in</span>
+                            <span className="d-block">very short time, and</span>
+                            <span className="d-block">helped them find jobs in</span>
+                            the best tech companies
+                        </p>
+
+                    </div>
+
                 </div>
 
             </div>
