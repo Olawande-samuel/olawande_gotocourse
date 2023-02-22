@@ -798,6 +798,7 @@ export function Wishlist() {
 
 
                 <div className={clsx.classes}>
+                    {(!userdata?.trainee) &&
                     <div className={clsx.wishlistprice}>
                         <small>Total:</small>
                         <p>{`$${value}`}</p>
@@ -806,6 +807,8 @@ export function Wishlist() {
 
 
                     </div>
+
+                    }
                     <p style={{ padding: "1rem 0" }}>My Cart</p>
 
                     <div className={clsx.students_wishlist}>
@@ -2356,7 +2359,7 @@ function AllAvailableCourses({ data, search }) {
                 return;
             }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
-            gotoclassPayment(item.title, item.category, item.bootcampId, navigate, true)
+            gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
         } else {
             navigate("/login")
         }

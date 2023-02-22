@@ -331,7 +331,7 @@ function MyApp({ mixpanel }) {
                   <Route index element={<Landing />} />
                   </Route> */}
 
-							<Route path="train" element={<Abroad />} />
+							<Route path="train-to-work" element={<Abroad />} />
 
 
 							<Route

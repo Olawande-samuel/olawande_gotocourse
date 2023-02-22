@@ -856,15 +856,15 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
                                             <h4 dangerouslySetInnerHTML={{ __html: `${ques?.title}` }}></h4>
 
                                             {
-                                                ques?.type === "THEORY"  && 
-                                                    <>
-                                                        <Answer>
-                                                            <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, index)} />
-                                                        </Answer>
+                                                ques?.type === "THEORY" &&
+                                                <>
+                                                    <Answer>
+                                                        <ReactQuill theme="snow" value={note[index]} onChange={(e) => setNote(e, ques?._id, index)} />
+                                                    </Answer>
 
 
-                                                    </>
-                            
+                                                </>
+
 
 
                                             }
@@ -960,8 +960,8 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
                                         </button>
                                     )
                                     :
-                                    <QuizButton onClick={() => AnswerQuiz("mutiple")} 
-                                    disabled={(contentItem?.attempts >= contentItem?.maxAttempts)? true: false }
+                                    <QuizButton onClick={() => AnswerQuiz("mutiple")}
+                                        disabled={(contentItem?.attempts >= contentItem?.maxAttempts) ? true : false}
                                     >
                                         Submit
                                     </QuizButton>
@@ -986,6 +986,8 @@ const Classroom = () => {
     const [bootcampName, setBootcampName] = useState({})
     const [searchParams, setSearchParams] = useSearchParams();
     const [locked, setLocked] = useState(false);
+
+    console.log({ bootcampName });
 
     const [loading, setLoading] = useState(false);
 
@@ -1025,6 +1027,22 @@ const Classroom = () => {
         }
     })
 
+    // notify due date
+    // let paymentDaysLeft = useMemo(() => {
+    //     let dueDate = bootcampName[0]?.nextPayment
+    //     let today = new Date();
+    //     let time = dueDate - today
+    //     let oneDay = 86400000;
+    //     let daysLeft = 0
+    //     if (time > oneDay) {
+    //         daysLeft = Math.floor(time / oneDay) <= 7;
+    //         return daysLeft
+    //     }
+    //     return daysLeft
+
+    // }, [bootcampName])
+
+    // console.log({ paymentDaysLeft });
 
 
 
@@ -1320,16 +1338,16 @@ const Classroom = () => {
         <Container>
             {isLoading && <Loader />}
             <ToastContainer
-				position="top-right"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-			/>
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
 
             <ClassroomContainer>
                 <div>
@@ -1338,9 +1356,9 @@ const Classroom = () => {
                         open={showMobile}
                         onClick={e => setShowMobile(_ => false)}
                     >
-                        <Sidebar 
-                        isMobile={true} 
-                        modules={modules}
+                        <Sidebar
+                            isMobile={true}
+                            modules={modules}
                             setContents={setContents}
                             setPickedType={setPickedType}
                             reduceContent={reduceContent}
@@ -1354,7 +1372,7 @@ const Classroom = () => {
                     </Backdrop>
 
                     <Sidebar
-                        isMobile={false} 
+                        isMobile={false}
                         modules={modules}
                         setContents={setContents}
                         setPickedType={setPickedType}
@@ -1379,6 +1397,14 @@ const Classroom = () => {
 
                         </div>
                         <div className='bread'>
+                            {/* {
+                                paymentDaysLeft &&
+
+                                <div className="banner">
+                                    <p>You have {paymentDaysLeft} left to pay for this course</p>
+                                </div>
+                            } */}
+
                             <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
                                 <BreadcrumbLink to="/student">
                                     Dashboard

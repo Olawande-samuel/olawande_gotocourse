@@ -8,6 +8,7 @@ import '../classConsole/Content.css'
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useState } from 'react';
 import Loader from '../../../../components/Loader';
+import { getFullDate } from '../../../../constants';
 
 const KEY = 'gotocourse-userdata';
 
@@ -160,6 +161,10 @@ export default function ConsoleClasses() {
                                     </div>
                                     <div className="content">
                                         <h6>{x.bootcampName}</h6>
+                                    {x?.nextPayment && x?.paymentStatus === "incomplete" && 
+                                    <p>
+                                        Payment Due Date:{getFullDate(x?.nextPayment)}
+                                    </p>}
 
                                         <button>Open Class</button>
                                     </div>
