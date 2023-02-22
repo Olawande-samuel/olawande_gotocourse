@@ -164,8 +164,8 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
       <div className="content">
         <h6>{title}</h6>
         <p>
-          Join Harvard Kennedy School faculty
-          and former Pentagon Chief of Staff Eric
+          {/* Join Harvard Kennedy School faculty
+          and former Pentagon Chief of Staff Eric */}
         </p>
 
 
