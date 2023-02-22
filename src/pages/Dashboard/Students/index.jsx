@@ -2225,7 +2225,7 @@ function UpcomingCourses({ data, search }) {
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
-                <h6 style={{ marginBottom: ".5rem" }}>Upcoming Courses</h6>
+                <h6 style={{ marginBottom: ".5rem" }}>Train to Work Abroad Courses</h6>
                 <small className="mb-4 d-block">Select and enroll for a course to get started</small>
 
                 <div className={clsx["courseheader"]}>
@@ -2235,25 +2235,7 @@ function UpcomingCourses({ data, search }) {
                     <div className={clsx["courseitem"]}>Subcategory</div>
                     <div className={clsx["courseitem"]}>Start Date</div>
                     <div className={clsx["courseitem"]}>Durations</div>
-                    <div className={clsx["courseitem"]}>
-                        {/* <FormControl fullWidth size="small">
-                            <InputLabel id="demo-simple-select-label">Fee</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                // value={age}
-                                label="fee"
-                            // onChange={handleChange}
-                            >
-                                <MenuItem value={30}>POUNDS</MenuItem>
-                                <MenuItem value={10}>USD</MenuItem>
-                                <MenuItem value={20}>EURO</MenuItem>
-                                <MenuItem value={20}>NAIRA</MenuItem>
-                            </Select>
-                        </FormControl> */}
-
-                        Fees
-                    </div>
+                    <div className={clsx["courseitem"]}>Fees</div>
                     <div className={clsx["courseitem"]} />
                 </div>
 
