@@ -871,21 +871,9 @@ export function CreateCourseCategory() {
 	return (
 		<Admin header="Create Category">
 			{loader && <Loader />}
-			{/* <UploadForm
-        isOpen={open}
-        setIsOpen={setOpen}
-        setPreviewImage={setPreviewImage}
-      /> */}
+			
 			<div className={clsx["admin_profile"]}>
 				<div className={clsx.admin__student}>
-					{/* <div
-            className={clsx.upload__file_box}
-            onClick={showUploadFormHandler}
-          >
-            <img src={vector} alt={"Placeholder"} />
-            <p>Upload banner or icon Image</p>
-          </div> */}
-
 					<UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
 
 					<form className="form" style={{ width: "80%" }}>
@@ -896,20 +884,7 @@ export function CreateCourseCategory() {
 							handleChange={changeHandler}
 							value={formstate.name.toUpperCase()}
 						/>
-						{/* <Input
-              label="First Description"
-              name="description"
-              type="text"
-              handleChange={changeHandler}
-              value={formstate.description}
-            />
-            <Input
-              label=" Second Description"
-              name="niche"
-              type="text"
-              handleChange={changeHandler}
-              value={formstate.niche}
-            /> */}
+						
 						<Editor
 							initialState={formstate.description}
 							title="Description"
@@ -4337,37 +4312,6 @@ export function CreateBootcamp() {
 			{loader && <Loader />}
 			<div className={clsx.admin_profile}>
 				<div className={clsx.edit__profile}>
-					{/* <UploadForm
-            isOpen={open}
-            setIsOpen={setOpen}
-            setPreviewImage={setPreviewImage}
-          /> */}
-					{/* <div className="row w-100 mt-4">
-            <div className="col-12 d-flex justify-content-between align-items-center">
-              <div
-                className={clsx.upload__file_box}
-                onClick={showUploadFormHandler}
-              >
-                <img src={vector} alt={"Placeholder"} />
-                <p>Upload Course Banner</p>
-              </div>
-              {previewImage && (
-                <div className={clsx.upload__file_box}>
-                  <img
-                    src={previewImage}
-                    alt={"Placeholder"}
-                    style={{
-                      width: "150px",
-                      height: "100px",
-                      objectFit: "cover",
-                      objectPosition: "top",
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-          </div> */}
-
 					<UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
 
 					<form className="form" onSubmit={submitHandler} noValidate>
@@ -4431,21 +4375,6 @@ export function CreateBootcamp() {
 							handleChange={changeHandler}
 							value={formstate.duration}
 						/>
-						{/* <div className={clsx.form_group}>
-              <label htmlFor={"package"}>Type</label>
-              <select
-                rows="5"
-                name="type"
-                value={formstate.type}
-                onChange={changeHandler}
-                className="form-select generic_input"
-              >
-                <option value="">Choose price type</option>
-                <option value="FLAT">Flat</option>
-                <option value="PACKAGE">Package</option>
-              </select>
-            </div> */}
-						{/* {formstate.type === "FLAT" ? ( */}
 						<Input
 							label="Price"
 							name="price"
@@ -4454,55 +4383,6 @@ export function CreateBootcamp() {
 							value={formstate.price}
 							noValidate={"true"}
 						/>
-						{/* ) : formstate.type === "PACKAGE" ? (
-              <div className={clsx.form_group}>
-                <label htmlFor={"package"} className="form-label generic_label">
-                  Packages
-                </label>
-                {formstate.packages?.length > 0 ? (
-                  formstate.packages?.map((item, index) => (
-                    <div className={clsx.syllabus_container}>
-                      <h5>{changeConstants(item.title)}</h5>
-                      {<p>{item.price}</p>}
-                      <p>{item.description}</p>
-                      {location.search && (
-                        <p>
-                          <i
-                            className="text-danger"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => deletePackage(item.title + index)}
-                          >
-                            <BiTrash />
-                          </i>
-                        </p>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <h6>No Package available</h6>
-                )}
-                <button
-                  className="btn btn-primary my-3"
-                  style={{
-                    backgroundColor: "var(--theme-blue)",
-                    fontSize: "14px",
-                  }}
-                  type="button"
-                  onClick={openPackageModal}
-                >
-                  Add Package
-                </button>
-                <AddPackage
-                  openPackage={openPackage}
-                  addPackage={setFormstate}
-                  list={formstate}
-                  setOpen={setOpen}
-                  handleClosePackage={handleClosePackage}
-                />
-              </div>
-            ) : (
-              ""
-            )} */}
 						<div className="d-flex flex-wrap">
 							<div className="col-sm-6 col-md-3 pe-2 ">
 								<Input
@@ -4612,9 +4492,7 @@ export function CreateBootcamp() {
 								Add Schedule
 							</button>
 						</div>
-						{/* <div className={clsx.editor_container}>
-              <ReactQuill theme="snow" value={formstate?.description} onChange={setBio} />
-            </div> */}
+						
 						<Editor
 							initialState={formstate.description}
 							title="Description"
@@ -4833,22 +4711,6 @@ export function CreateBootcamp() {
 							handleChange={popupChangeHandler}
 							updateCareer={updatePopupHandler}
 						/>
-
-						{/* <div className={clsx.form_group}>
-              <label htmlFor={"package"}>Type</label>
-              <select
-                rows="5"
-                name="type"
-                value={formstate.type}
-                onChange={changeHandler}
-                className="form-select generic_input"
-              >
-                <option value="">Choose a Type</option>
-                <option value="full time">Full Time</option>
-                <option value="part time">Part-Time</option>
-              </select>
-            </div> */}
-
 						{loading ? (
 							<button className="button button-lg log_btn w-100 mt-3">
 								<div className="spinner-border" role="status">
