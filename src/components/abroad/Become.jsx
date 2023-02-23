@@ -2,6 +2,7 @@ import styled from "styled-components"
 
 const Container = styled.div`
     padding: 2rem;
+    background: linear-gradient(90deg, #FFFFFF 2.32%, rgba(239, 242, 255, 0) 94.98%);
 
 
     h4{

@@ -196,17 +196,17 @@ const Classes = () => {
 
   const classes = useQuery(["fetch classes"], () => fetchBootcamps(), {
     notifyOnChangeProps: ["category", "isFetching"],
+    // "TRAIN2 WORKABROAD"
 
     onSuccess: (res) => {
       if (res.data.length > 0) {
-        const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND") : [];
-        const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND") : [];
-        const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-
-
+        // console.log("filter", res.data);
+        const all = res.data?.length > 0 ? res.data?.filter(item => item.category === "TRAIN2 WORKABROAD") : [];
+        // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND") : [];
+        // const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
         // const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND") : [];
         // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate.includes("2023-01") && !item.startDate.includes("2023-01-19T00:00:00.000Z") && item.isActive && item.subCategory === "IN_DEMAND") : [];
-        const all = [...first, ...second, ...third];
+        // const all = [...first, ...second, ...third];
         // setShorts(exe)
         setShorts(all)
         // console.log({exe})

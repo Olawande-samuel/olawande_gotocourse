@@ -193,7 +193,7 @@ export const BootcampPayment = () => {
         >
           <div >
             {showStripeModal ? (
-              <div className="col-md-7 col-lg-5 ">
+              <div className="col-md-7 col-lg-5 mx-auto ">
                 <ErrorBoundary>
                   <PaymentModal token={stripeId} setShowStripeModal={setShowStripeModal} />
                 </ErrorBoundary>

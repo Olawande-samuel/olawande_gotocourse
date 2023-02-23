@@ -889,20 +889,6 @@ export function CreateCourseCategory() {
               handleChange={changeHandler}
               value={formstate.name.toUpperCase()}
             />
-            {/* <Input 
-              label="First Description"
-              name="description"
-              type="text"
-              handleChange={changeHandler}
-              value={formstate.description}
-            /> 
-            <Input
-              label=" Second Description"
-              name="niche"
-              type="text"
-              handleChange={changeHandler}
-              value={formstate.niche}
-            /> */}
             <Editor
               initialState={formstate.description}
               title="Description"
@@ -997,14 +983,6 @@ export function CreateCourseCategory() {
               handleChange={changeHandler}
               value={formstate.bannerImg}
             />
-
-            {/* <Input
-              label="Icon Image "
-              name="iconImg"
-              type="text"
-              handleChange={changeHandler}
-              value={formstate.iconImg}
-            /> */}
             <i className="text-danger">
               Make sure to upload the files and get the file name
             </i>
