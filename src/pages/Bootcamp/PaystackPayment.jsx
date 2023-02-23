@@ -25,7 +25,7 @@ import clsx from '../Bootcamp/Pay.module.css'
 import { useQuery } from "@tanstack/react-query";
 import ErrorBoundary from "../../classes/ErrorBoundary";
 
-import { PaystackButton , usePaystackPayment} from "react-paystack"
+import { PaystackButton, usePaystackPayment } from "react-paystack"
 import { setRef } from "@mui/material";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
@@ -120,19 +120,16 @@ export const BootcampPaystackPayment = () => {
           )
             throw new AdvancedError("Choose your preferred payment plan");
           setLoading(true);
-          const response = await await addBootcamp(
-            bootcampPaymentInfo,
-            userData.token
-          );
-          const { success, message, statusCode } = response;
-          if (!success || statusCode !== 1)
-            throw new AdvancedError(message, statusCode);
-          const { data } = response;
-
-          console.log({ data });
-
-          setStripeId(data.clientSecret);
-          setShowPaypalButton(true);
+          const res = await payCarts(userData?.token, [bootcamp.bootcampId]);
+          const { message, success, statusCode } = res;
+          if (!success) throw new AdvancedError(message, statusCode);
+          else if (statusCode === 1) {
+            const { data } = res;
+            console.log({ data });
+            if (data) {
+              window.open(data?.paystackInfo?.data?.authorization_url)
+            }
+          }
         } catch (error) {
           toast.error(error.message, {
             position: "top-right",
@@ -209,7 +206,7 @@ export const BootcampPaystackPayment = () => {
   // }
 
 
-  console.log({resp});
+  console.log({ resp });
 
 
   const handlePayment = async () => {
@@ -221,7 +218,7 @@ export const BootcampPaystackPayment = () => {
       else if (statusCode === 1) {
         const { data } = res;
         console.log({ data });
-        if(data){
+        if (data) {
           window.open(data?.paystackInfo?.data?.authorization_url)
         }
         // setResp(data)
@@ -381,7 +378,19 @@ export const BootcampPaystackPayment = () => {
                     </p>
                   </div>
 
-                  <button className="button w-100 button-md" onClick={handlePayment}>PayNow</button>
+                  <button className="button w-100 button-md" onClick={enrollToCourse}>
+                    {loading ? (
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                        style={{ width: "2rem", height: "2rem" }}
+                      >
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    ) : (
+                      <span>PayNow</span>
+                    )}
+                  </button>
 
                   {/* <button onClick={() => {
                     initializePayment(onSuccess, onClose)

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import {motion} from "framer-motion"
+import { motion } from "framer-motion"
 import Input from "../../components/Input";
 import Password from "../../components/Password";
 import SignInWrapper from "../../components/SignInWrapper";
@@ -23,30 +23,30 @@ const SignUp = () => {
   const emailReg = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/)
   const passReg = new RegExp(/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/)
 
-  const [focus, setFocus] =useState(false)
-  const { authFunctions: { register ,googleSignUp, facebookSignUp}, generalState, setGeneralState, } = useAuth();
+  const [focus, setFocus] = useState(false)
+  const { authFunctions: { register, googleSignUp, facebookSignUp }, generalState, setGeneralState, } = useAuth();
   const { getItem, removeItem, updateItem } = useLocalStorage();
-  
+
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const location =  useLocation()
+  // const location = useLocation()
 
-const trainee = location.search === "?trainee"
-console.log({trainee});
+  // const trainee = location.search === "?trainee"
+  // console.log({ trainee });
 
-const [data, setData] = useState({
-  firstName: "",
-  lastName: "",
-  phoneNumber: "",
-  email: "",
-  password: "",
-  retype_password: "",
-  userType: "student",
-  fullname: "",
-  trainee: trainee && true 
-});
+  const [data, setData] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    email: "",
+    password: "",
+    retype_password: "",
+    userType: "student",
+    fullname: "",
+    trainee: false
+  });
 
-console.log({data});
+  console.log({ data });
 
   useEffect(() => {
     if (data.fullname !== "") {
@@ -72,37 +72,37 @@ console.log({data});
   const onSubmit = async (e) => {
     e.preventDefault();
     console.log(data)
-    
+
     setLoading(true);
     try {
       let { retype_password, ...others } = data;
-      if(!emailReg.test(others.email) || !passReg.test(others.password)) 
+      if (!emailReg.test(others.email) || !passReg.test(others.password))
         throw new AdvancedError("Invalid email or password", 0)
       if (others.email.trim() === "" || others.password.trim() === "")
-       throw new AdvancedError("Fields cannot be empty", 0);
+        throw new AdvancedError("Fields cannot be empty", 0);
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
       // main 
-        const response = await register({...others}, "user");
-        let { success, message, statusCode } = response;
-        if (!success) throw new AdvancedError(message, statusCode);
-        else {
-          const { data } = response;
-          // set item
-          updateItem(VERIFICATION_KEY, data);
-          // localStorage.setItem("gotocourse-pledre-user", JSON.stringify(response)) 
-          setGeneralState((old) => {
-            return {
-              ...old,
-              notification: message,
-            };
-          });
-          navigate(`/email`);
-        }
+      const response = await register({ ...others }, "user");
+      let { success, message, statusCode } = response;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        const { data } = response;
+        // set item
+        updateItem(VERIFICATION_KEY, data);
+        // localStorage.setItem("gotocourse-pledre-user", JSON.stringify(response)) 
+        setGeneralState((old) => {
+          return {
+            ...old,
+            notification: message,
+          };
+        });
+        navigate(`/email`);
+      }
 
-       
+
     } catch (err) {
-      console.error({err})
+      console.error({ err })
       toast.error(err.message);
       if (err.statusCode === 0) {
       }
@@ -111,56 +111,56 @@ console.log({data});
     }
   };
 
-// SOCIAL SIGNUP
-  async function socialSignUp(token, type){
-    try{
+  // SOCIAL SIGNUP
+  async function socialSignUp(token, type) {
+    try {
       const res = type === "google" ? await googleSignUp(token) : await facebookSignUp(token)
       console.log(res)
-      if(res.statusCode !== 1) throw new AdvancedError(res.message, res.statusCode)
+      if (res.statusCode !== 1) throw new AdvancedError(res.message, res.statusCode)
       localStorage.setItem(VERIFICATION_KEY, JSON.stringify(res.data))
       navigate("/user-onboarding")
-    }catch(err){
+    } catch (err) {
       toast.error(err.message);
     }
   }
-   
-  function signUpWithGoogle(e){
+
+  function signUpWithGoogle(e) {
     e.preventDefault()
-    signInWithPopup(authentication, provider).then(res=>{
-        console.log(res)
-      if(res.user?.accessToken){
-        let token =  {
+    signInWithPopup(authentication, provider).then(res => {
+      console.log(res)
+      if (res.user?.accessToken) {
+        let token = {
           accessToken: res.user.accessToken,
           userType: "student"
         }
         socialSignUp(token, "google")
       }
     }
-    ).catch(err=>{
+    ).catch(err => {
       allowOnAccountExistError(err, "google", "student")
       toast.error(err.message);
     }
     )
   }
-   function signUpWithFacebook(e){
+  function signUpWithFacebook(e) {
     e.preventDefault()
-    signInWithPopup(authentication, facebookProvider).then(res=>{
+    signInWithPopup(authentication, facebookProvider).then(res => {
       console.log(res)
-      if(res.user?.accessToken){
-        if(res.user?.accessToken){
-          let token =  {
-          accessToken: res.user.accessToken,
-          userType: "student"
-         }
-         socialSignUp(token, "facebook")
+      if (res.user?.accessToken) {
+        if (res.user?.accessToken) {
+          let token = {
+            accessToken: res.user.accessToken,
+            userType: "student"
+          }
+          socialSignUp(token, "facebook")
         }
       }
     }
-  ).catch(err=>{
+    ).catch(err => {
       console.error(err)
       allowOnAccountExistError(err, "facebook", "student")
       toast.error(err.message);
-      }
+    }
     )
   }
 
@@ -206,14 +206,14 @@ console.log({data});
           toast.error(err.message);
         });
     }
-  } 
+  }
 
 
   // password input validation
-  function handlePasswordBlur(){
+  function handlePasswordBlur() {
     setFocus(false)
-    if(!passReg.test(data.password)){
-      
+    if (!passReg.test(data.password)) {
+
     }
   }
   return (
@@ -235,35 +235,35 @@ console.log({data});
         </header>
         <div className="social_signIn_wrapper">
           <motion.button className="facebook d-block mb-3"
-            whileHover={{ 
-              boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
-              textShadow:"0px 0px 8px rgb(255, 255, 255)",
+            whileHover={{
+              boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+              textShadow: "0px 0px 8px rgb(255, 255, 255)",
               backgroundColor: "#eee"
             }}
             onClick={signUpWithGoogle}
           >
-              <i className="me-4">
-                  <img src={goo} alt="" width={25} height={25} />
-              </i>
-              Register with Google
+            <i className="me-4">
+              <img src={goo} alt="" width={25} height={25} />
+            </i>
+            Register with Google
           </motion.button>
-          
-            <motion.button className="google d-block mb-3"
-              whileHover={{ 
-                boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
-                textShadow:"0px 0px 8px rgb(255, 255, 255)",
-                backgroundColor: "#eee"
-              }}
-              onClick={signUpWithFacebook}
-            >
+
+          <motion.button className="google d-block mb-3"
+            whileHover={{
+              boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+              textShadow: "0px 0px 8px rgb(255, 255, 255)",
+              backgroundColor: "#eee"
+            }}
+            onClick={signUpWithFacebook}
+          >
             <i className="me-2">
-                    <img src={face} alt="" width={25} height={25} />
-                </i>
-                Register with Facebook
-            </motion.button>
+              <img src={face} alt="" width={25} height={25} />
+            </i>
+            Register with Facebook
+          </motion.button>
           <small className="or d-block"><span>or</span></small>
         </div>
-        <form className="form" onSubmit={onSubmit}  autoComplete="off">
+        <form className="form" onSubmit={onSubmit} autoComplete="off">
           <Input
             label="Full Name"
             name="fullname"
@@ -293,7 +293,7 @@ console.log({data});
             value={data.password}
             handleChange={handleChange}
             placeholder="Password"
-            focus ={()=>setFocus(true)}
+            focus={() => setFocus(true)}
             blur={handlePasswordBlur}
             pattern="^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$"
             errorMessage="Password must be a minimum of eight characters in length and must contain at least 1 uppercase English letter, 1 lowercase English letter, 1 number and 1 special character"
@@ -310,6 +310,11 @@ console.log({data});
             // pattern={data.password}
             errorMessage="Passwords do not match"
           />
+
+          <label htmlFor="trainee">
+            <input type="checkbox" value={data.trainee} onChange={(e) => setData({ ...data, trainee: e.target.checked })} /> Are you Registering for train to work Abroad Program
+
+          </label>
           {loading ? (
             <button className="button button-md log_btn w-100 mt-3"
               disabled={loading}
