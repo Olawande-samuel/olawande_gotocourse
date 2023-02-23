@@ -673,27 +673,31 @@ export function NewBootcampDetailsComponent() {
           </div>
         </section>
 
-        <section className={clsx.requirement}>
-          {
-            bootcampTrainingInfo.subCategory !== "EXECUTIVE_COURSES" &&
+        {bootcampTrainingInfo.category !== "TRAIN2 WORKABROAD" &&
 
-            <div className="container">
-              <h4>Syllabus</h4>
-              <div>
-                <ul>
-                  {bootcampTrainingInfo?.syllabus?.map((item) => (
-                    <li>
-                      <p className={clsx.niche}>{item.title}</p>
-                      <p className={clsx.niche}>{item.description}</p>
-                    </li>
-                  ))}
-                </ul>
+          <section className={clsx.requirement}>
+            {
+              bootcampTrainingInfo.subCategory !== "EXECUTIVE_COURSES" &&
+
+              <div className="container">
+                <h4>Syllabus</h4>
+                <div>
+                  <ul>
+                    {bootcampTrainingInfo?.syllabus?.map((item) => (
+                      <li>
+                        <p className={clsx.niche}>{item.title}</p>
+                        <p className={clsx.niche}>{item.description}</p>
+                      </li>
+                    ))}
+                  </ul>
+
+                </div>
 
               </div>
+            }
+          </section>
 
-            </div>
-          }
-        </section>
+        }
         {/* <section className={clsx.process}>
           <div className="container">
             <header>
@@ -725,50 +729,57 @@ export function NewBootcampDetailsComponent() {
           </div>
         </section> */}
 
-        <section >
-          <div className="container">
-            <h4>Other {courseType}</h4>
+        {bootcampTrainingInfo.category !== "TRAIN2 WORKABROAD" &&
+          <section >
+            <div className="container">
+              <h4>Other {courseType}</h4>
 
-            <Grid>
-              {similar && similar.length > 0 && similar?.slice(0, 4).map((item, i) => (
-                ((bootcampTrainingInfo.subCategory === "HEAD_START") || (bootcampTrainingInfo.subCategory === "IN_DEMAND")) ?
-                  <>
-                    <Head {...item} all={item} key={item.bootcampId} />
-                  </>
-                  :
-                  <>
-                    <PathCourseCard {...item} all={item} key={item.bootcampId} />
-                  </>
+              <Grid>
+                {similar && similar.length > 0 && similar?.slice(0, 4).map((item, i) => (
+                  ((bootcampTrainingInfo.subCategory === "HEAD_START") || (bootcampTrainingInfo.subCategory === "IN_DEMAND")) ?
+                    <>
+                      <Head {...item} all={item} key={item.bootcampId} />
+                    </>
+                    :
+                    <>
+                      <PathCourseCard {...item} all={item} key={item.bootcampId} />
+                    </>
 
-              ))}
-            </Grid>
+                ))}
+              </Grid>
 
-            <div className={clsx.viewmore}>
-              <Link to={`/category/${bootcampTrainingInfo.subCategory}`}>View More <BsArrowRight /></Link>
+              <div className={clsx.viewmore}>
+                <Link to={`/category/${bootcampTrainingInfo.subCategory}`}>View More <BsArrowRight /></Link>
+              </div>
+
             </div>
 
-          </div>
 
+          </section>
 
-        </section>
-        <section className={clsx.upcoming_classes}>
-          <div className="container">
-            <header>
-              <h3 className={clsx.section_title}>Similar upcoming classes</h3>
-              {/* <hr /> */}
-            </header>
-            <div className={clsx.upcoming_card}>
-              {
-                upcoming && upcoming.length > 0 && upcoming.splice(0, 4).map((item, i) => (
-                  <Upcome {...item} all={item} />
-                ))
-              }
-              <div className={clsx.viewmore}>
-                <Link to={`/category/upcoming?id=${bootcampTrainingInfo.subCategory}`}>View More <BsArrowRight /></Link>
+        }
+
+        {bootcampTrainingInfo.category !== "TRAIN2 WORKABROAD" &&
+
+          <section className={clsx.upcoming_classes}>
+            <div className="container">
+              <header>
+                <h3 className={clsx.section_title}>Similar upcoming classes</h3>
+                {/* <hr /> */}
+              </header>
+              <div className={clsx.upcoming_card}>
+                {
+                  upcoming && upcoming.length > 0 && upcoming.splice(0, 4).map((item, i) => (
+                    <Upcome {...item} all={item} />
+                  ))
+                }
+                <div className={clsx.viewmore}>
+                  <Link to={`/category/upcoming?id=${bootcampTrainingInfo.subCategory}`}>View More <BsArrowRight /></Link>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        }
         {/* <section className={clsx.payment_options}>
           <Payment />
         </section> */}
