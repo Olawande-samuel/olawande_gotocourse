@@ -60,7 +60,7 @@ export const InDemandCard = styled.div`
     }
 
     .content{
-        padding: .1rem .5rem;
+        padding: .1rem 1rem;
         /* border: 2px solid yellow; */
         min-height: 290px;
         position: relative;
@@ -199,7 +199,7 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
         <div className="mid_content">
           <div className="mid_stats">
             {/* <span>{packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"}</span> */}
-            <span>$ {packages.length > 0 ? packages[0].price : price}</span>
+            {/* <span>$ {packages.length > 0 ? packages[0].price : price}</span> */}
             <span>{duration}</span>
           </div>
           <div className="checks">
@@ -277,6 +277,8 @@ const Classes = () => {
 const data = {
   header: "Start Learning",
   header2: "",
+  header3: "Build job relevant skills by learning from experts from world-class",
+  header4: "companies and universities. Finish program within 2 months to 6 months",
   subtext: "",
   subtext1: "",
   content: [],

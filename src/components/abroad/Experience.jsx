@@ -14,6 +14,28 @@ background: linear-gradient(90deg, #FFFFFF 2.32%, rgba(239, 242, 255, 0) 94.98%)
 
 .container{
 
+    .contheader{
+        text-align: center;
+        padding: 1rem 0;
+            
+        h5 {
+            color: #292D32;   
+            font-weight: 700;
+            font-size: 28px;
+            padding-bottom: .7rem;
+        }
+
+        p{
+            font-size: 16px;
+            font-weight: 400;
+            text-align: center;
+            line-height: 20px;
+            font-style: italic;
+            color: #292D32;   
+
+        }
+    }
+
     .expercontent{
         display: flex;
         /* align-items: center; */
@@ -99,6 +121,14 @@ const Experience = () => {
     return (
         <Container>
             <div className="container">
+                <div className="contheader">
+                    <h5>Employment placement assistance</h5>
+                    <p>We provide all the needed support and connection to getting high paying
+                        <br /> remote jobs</p>
+
+                </div>
+
+
                 <div className="expercontent">
                     <div className="experleft">
                         <img src={girl} alt="" />
