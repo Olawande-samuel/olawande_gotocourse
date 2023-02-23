@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import girl from '../../images/abroad/girl.png'
 
@@ -77,17 +78,20 @@ background: linear-gradient(90deg, #FFFFFF 2.32%, rgba(239, 242, 255, 0) 94.98%)
             line-height: 40px;
         }
 
-        button {
-        margin-top: 2rem;
-        border: 2px solid white;
-        border-radius: 7px;
-        background: var(--theme-blue);
-        color: #fff;
-        padding: 0.5rem 1rem;
-        font-weight: 700;
-        font-size: 14px;
-        line-height: 27px;
-    }
+        .experbtn{
+            button {
+            margin-top: 2rem;
+            border: 2px solid white;
+            border-radius: 7px;
+            background: var(--theme-blue);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 27px;
+        }
+        }
+
     }
 
    
@@ -141,6 +145,12 @@ const Experience = () => {
                             <span className="d-block">helped them find jobs in</span>
                             the best tech companies
                         </p>
+                        <div className="experbtn">
+                        <Link to={`/signup?trainee`}><button>Register for free</button> </Link>
+
+                        </div>
+
+
 
                     </div>
 

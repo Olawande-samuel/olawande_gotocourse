@@ -4,9 +4,7 @@ import moneyman from '../../images/abroad/moneyman.png'
 const Container = styled.div`
 /* background: #E1E7FF; */
 background: linear-gradient(90deg, #FFFFFF 2.32%, rgba(239, 242, 255, 0) 94.98%);
-
 width: 100%;
-height: 40vh;
 padding: 0 2rem;
 
 
@@ -121,13 +119,13 @@ export const NewBox = () => {
     return (
         <Container>
             <div className="container">
-
-            <div className="contheader">
+    <div className="contheader">
                     <h5>Get trained to get the job</h5>
                     <p>Learn the tools, skills and resources needed to stand out in global talent market.
-            </p>
+                    </p>
 
                 </div>
+            
 
                 <div className="bottombox">
                     <div className="boxes">
