@@ -1028,21 +1028,21 @@ const Classroom = () => {
     })
 
     // notify due date
-    // let paymentDaysLeft = useMemo(() => {
-    //     let dueDate = bootcampName[0]?.nextPayment
-    //     let today = new Date();
-    //     let time = dueDate - today
-    //     let oneDay = 86400000;
-    //     let daysLeft = 0
-    //     if (time > oneDay) {
-    //         daysLeft = Math.floor(time / oneDay) <= 7;
-    //         return daysLeft
-    //     }
-    //     return daysLeft
+    let paymentDaysLeft = useMemo(() => {
+        let dueDate = bootcampName[0]?.nextPayment
+        let today = new Date();
+        let time = dueDate - today
+        let oneDay = 86400000;
+        let daysLeft = 0
+        if (time >= oneDay) {
+            daysLeft = Math.floor(time / oneDay) <= 7;
+            return daysLeft
+        }
+        return daysLeft
 
-    // }, [bootcampName])
+    }, [bootcampName])
 
-    // console.log({ paymentDaysLeft });
+    console.log({ paymentDaysLeft });
 
 
 
@@ -1397,13 +1397,13 @@ const Classroom = () => {
 
                         </div>
                         <div className='bread'>
-                            {/* {
-                                paymentDaysLeft &&
+                            {
+                                paymentDaysLeft && (paymentDaysLeft >= 0 && paymentDaysLeft <= 7) &&
 
                                 <div className="banner">
                                     <p>You have {paymentDaysLeft} left to pay for this course</p>
                                 </div>
-                            } */}
+                            }
 
                             <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
                                 <BreadcrumbLink to="/student">

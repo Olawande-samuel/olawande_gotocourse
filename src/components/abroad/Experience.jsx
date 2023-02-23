@@ -10,6 +10,7 @@ width: 100%;
 font-family: 'Raleway';
 color: var(--theme-blue);   
 padding: 2rem 0;
+background: linear-gradient(90deg, #FFFFFF 2.32%, rgba(239, 242, 255, 0) 94.98%);
 
 .container{
 
