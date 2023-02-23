@@ -1398,7 +1398,7 @@ const Classroom = () => {
                         </div>
                         <div className='bread'>
                             {
-                                paymentDaysLeft &&
+                                paymentDaysLeft && (paymentDaysLeft >= 0 && paymentDaysLeft <= 7) &&
 
                                 <div className="banner">
                                     <p>You have {paymentDaysLeft} left to pay for this course</p>
