@@ -105,7 +105,7 @@ const NavContainer = styled.div`
 
 				.second__btn {
 					color: var(--theme-blue);
-					/* border: 2px solid var(--theme-blue); */
+					border: 2px solid #fff;
 					border: none;
 					background: #fff;
 					padding: 0.5rem 1rem;
