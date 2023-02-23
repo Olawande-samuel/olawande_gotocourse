@@ -2201,11 +2201,13 @@ function UpcomingCourses({ data, search }) {
     const { getItem } = useLocalStorage()
     let userdata = getItem(KEY);
 
-    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
-    const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
-    const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-    const all = [...first, ...second, ...third];
+    // const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
+    // const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+    // const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    // const all = [...first, ...second, ...third];
     // console.log({ second });
+    const all = data?.length > 0 ? data?.filter(item => item.category === "TRAIN2 WORKABROAD") : [];
+
 
     function handleCourseSelect(e, item) {
         e.preventDefault()

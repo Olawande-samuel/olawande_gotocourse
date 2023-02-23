@@ -4,7 +4,7 @@ import moneyman from '../../images/abroad/moneyman.png'
 import { Link } from "react-router-dom"
 
 const Container = styled.div`
-background: #E1E7FF;
+/* background: #E1E7FF; */
 padding: 1rem 4rem;
 width: 100%;
 

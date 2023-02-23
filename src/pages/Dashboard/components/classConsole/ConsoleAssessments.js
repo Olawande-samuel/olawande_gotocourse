@@ -230,7 +230,6 @@ const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
       let quizDetail = reduceContent?.find(item => item?.contentId === contentId);
       // let DomainDetail = modules?.find(item => item?.contentId === contentDetail?.domain);
 
-      console.log({ x });
       return (quizDetail &&
         <div key={i} className="assessmentaccord">
           <div className="assessbox">

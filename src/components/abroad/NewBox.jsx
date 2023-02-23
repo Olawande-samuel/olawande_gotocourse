@@ -2,7 +2,9 @@ import styled from "styled-components"
 import moneyman from '../../images/abroad/moneyman.png'
 
 const Container = styled.div`
-background: #E1E7FF;
+/* background: #E1E7FF; */
+background: linear-gradient(90deg, #FFFFFF 2.32%, rgba(239, 242, 255, 0) 94.98%);
+
 width: 100%;
 height: 40vh;
 padding: 0 2rem;

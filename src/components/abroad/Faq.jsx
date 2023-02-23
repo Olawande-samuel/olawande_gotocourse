@@ -4,7 +4,11 @@ import { Accordion } from "react-bootstrap";
 const Faq = ({ other = [] }) => {
 
   return (
-    <section className="faq" style={{ background: "#EFF2FF" }}>
+    <section className="faq" style={{ 
+      // background: "#EFF2FF" 
+      background: "linear-gradient(90deg, #FFFFFF 2.32%, rgba(239, 242, 255, 0) 94.98%)"
+
+      }}>
       <div className="container h-100">
         <header className="text-center mb-4">
           <h2 className="title" style={{ color: "var(--theme-blue)" }}>Frequently Asked Questions</h2>
