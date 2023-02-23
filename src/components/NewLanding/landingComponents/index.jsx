@@ -292,7 +292,7 @@ export function TechPreCard({ title, duration, price, packages, category, bootca
         e.preventDefault();
         if (userdata?.token) {
             // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-            gotoclassPayment(title, category, bootcampId, navigate,  userdata?.trainee)
+            gotoclassPayment(title, category, bootcampId, navigate, userdata?.trainee)
         } else {
             navigate("/login")
         }
@@ -808,7 +808,7 @@ export function Head({ title, bootcampImg, category, duration, price, packages, 
                 </div>
 
                 <div className="contentbtn">
-                    <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate,  userdata?.trainee)}>Enroll Now</button>
+                    <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate, userdata?.trainee)}>Enroll Now</button>
                 </div>
 
             </div>
@@ -1393,7 +1393,7 @@ export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, 
         e.preventDefault();
         if (userdata?.token) {
             // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-            gotoclassPayment(title, category, bootcampId, navigate,  userdata?.trainee)
+            gotoclassPayment(title, category, bootcampId, navigate, userdata?.trainee)
         } else {
             navigate("/login")
         }
@@ -1673,7 +1673,7 @@ export function PathCourseCard({ title, bootcampImg, bootcampId, category, start
         e.preventDefault();
         if (userdata?.token) {
             // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
-            gotoclassPayment(title, category, bootcampId, navigate,  userdata?.trainee)
+            gotoclassPayment(title, category, bootcampId, navigate, userdata?.trainee)
         } else {
             navigate("/login")
         }
@@ -2115,7 +2115,16 @@ const ClassWrapper = styled.section`
         }
         
         small{
-            weight: 700;
+            font-weight: 700;
+        }
+
+        h6{
+            font-family: 'Montserrat';
+            font-size: 16px;
+            font-weight: 400;
+            text-align: center;
+            line-height: 20px;
+
         }
         
     }
@@ -2128,13 +2137,15 @@ const ClassWrapper = styled.section`
     }
 `
 
-export function ClassTypeComponent({ children, center, header: head,color, header2, subtext, subtext1, subtext2, bottomTitle, bottomLink }) {
+export function ClassTypeComponent({ children, center, header: head, color, header2, header3, header4, subtext, subtext1, subtext2, bottomTitle, bottomLink }) {
     return (
         <ClassWrapper>
             <div className="container">
                 <header>
-                    <h5 className={center && "text-center"} style={{color}}>{head}</h5>
+                    <h5 className={center && "text-center pb-3"} style={{ color }}>{head}</h5>
                     <h5>{header2}</h5>
+                    <h6>{header3}</h6>
+                    <h6>{header4}</h6>
                     <small>{subtext}</small>
                     <small className="d-block">{subtext1}</small>
                     <small className="d-block" style={{ fontSize: "14px", fontWeight: "500", lineHeight: "22px", paddingTop: "1rem" }}>{subtext2}</small>

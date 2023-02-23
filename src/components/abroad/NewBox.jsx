@@ -11,6 +11,28 @@ padding: 0 2rem;
 
 
 .container{
+    .contheader{
+        text-align: center;
+        padding: 2rem 0;
+            
+        h5 {
+            color: #292D32;   
+            font-weight: 700;
+            font-size: 28px;
+            padding-bottom: .7rem;
+        }
+
+        p{
+            font-size: 16px;
+            font-weight: 400;
+            text-align: center;
+            line-height: 20px;
+            font-style: italic;
+            color: #292D32;   
+
+        }
+    }
+
 
     .bottombox{
         display: flex;
@@ -99,6 +121,13 @@ export const NewBox = () => {
     return (
         <Container>
             <div className="container">
+
+            <div className="contheader">
+                    <h5>Get trained to get the job</h5>
+                    <p>Learn the tools, skills and resources needed to stand out in global talent market.
+            </p>
+
+                </div>
 
                 <div className="bottombox">
                     <div className="boxes">
