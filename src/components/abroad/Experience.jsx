@@ -16,7 +16,7 @@ background: linear-gradient(90deg, #FFFFFF 2.32%, rgba(239, 242, 255, 0) 94.98%)
 
     .contheader{
         text-align: center;
-        padding: 1rem 0;
+        padding: 2rem 0;
             
         h5 {
             color: #292D32;   
