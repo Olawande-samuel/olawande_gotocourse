@@ -33,7 +33,7 @@ const Abroad = () => {
             <Become/>
             <Classes/>
             <Experience/>
-            <SecondBox/>
+            {/* <SecondBox/> */}
             <NewBox/>
 
             {/* <StandOut/> */}
