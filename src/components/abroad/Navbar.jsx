@@ -96,6 +96,7 @@ const NavContainer = styled.div`
 					font-weight: 700;
 					font-size: 16px;
 					line-height: 27px;
+					background: var(--theme-blue);
 
 					a {
 						color: #FFf;
@@ -104,7 +105,8 @@ const NavContainer = styled.div`
 
 				.second__btn {
 					color: var(--theme-blue);
-					border: 2px solid var(--theme-blue);
+					border: 2px solid #fff;
+					border: none;
 					background: #fff;
 					padding: 0.5rem 1rem;
 					font-weight: 700;

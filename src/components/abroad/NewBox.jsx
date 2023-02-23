@@ -20,7 +20,9 @@ padding: 0 2rem;
 
     .boxes{
         display: flex;
-        background: #FFEDED;
+        /* background: #FFEDED; */
+        background: rgba(214, 220, 255, 0.3);
+
         border-radius: 10px;
         height: 100%;
         padding: 1rem 2rem;

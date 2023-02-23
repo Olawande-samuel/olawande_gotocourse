@@ -19,7 +19,7 @@ export const Grid = styled.div`
   /* grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
   grid-auto-rows: 460px; */
   grid-template-columns: repeat(auto-fit, minmax(min(250px, 300px), 300px));
-  grid-auto-rows: 380px;
+  grid-auto-rows: 440px;
   overflow: hidden;
   gap: 2.5rem;
   row-gap: 3rem;
@@ -62,7 +62,7 @@ export const InDemandCard = styled.div`
     .content{
         padding: .1rem .5rem;
         /* border: 2px solid yellow; */
-        min-height: 230px;
+        min-height: 290px;
         position: relative;
         background: #FFFFFF;
 
@@ -75,6 +75,37 @@ export const InDemandCard = styled.div`
           font-weight: 400;
           font-size: 14px;
           line-height: 22px;
+        }
+
+        .mid_content{
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            
+            .mid_stats {
+                font-size:14px;
+                display:flex;
+                justify-content: space-between;
+                
+                span:first-child {
+                    text-transform: capitalize;
+                }
+            }
+
+            .checks{
+
+                p{
+                    font-weight: 500;
+                    font-size: 13.6101px;
+                    line-height: 16px;
+                }
+
+                .icon{
+                    color: var(--theme-blue);
+                }
+            }
+         
+            
         }
 
 
@@ -163,10 +194,21 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
       </div>
       <div className="content">
         <h6>{title}</h6>
-        <p>
-          {/* Join Harvard Kennedy School faculty
-          and former Pentagon Chief of Staff Eric */}
-        </p>
+        {/* <p>{description}</p> */}
+
+        <div className="mid_content">
+          <div className="mid_stats">
+            {/* <span>{packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"}</span> */}
+            <span>$ {packages.length > 0 ? packages[0].price : price}</span>
+            <span>{duration}</span>
+          </div>
+          <div className="checks">
+            <p> <AiOutlineCheck className="icon" /> Cohort Learning</p>
+            <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
+            <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}></span> {getFullDate(startDate)}
+            </p>
+          </div>
+        </div>
 
 
         <div className="contentbtn">
@@ -175,7 +217,8 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
             <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>Learn more</button>
           </div>
           <div className="bottombtn">
-            <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate, userdata?.trainee)}>Enroll Now</button>
+
+            <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate, true)}>Enroll Now</button>
 
           </div>
 
@@ -196,14 +239,15 @@ const Classes = () => {
 
   const classes = useQuery(["fetch classes"], () => fetchBootcamps(), {
     notifyOnChangeProps: ["category", "isFetching"],
-    // "TRAIN2 WORKABROAD"
 
     onSuccess: (res) => {
       if (res.data.length > 0) {
         // console.log("filter", res.data);
         const all = res.data?.length > 0 ? res.data?.filter(item => item.category === "TRAIN2 WORKABROAD") : [];
+        // const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND") : [];
         // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND") : [];
         // const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+
         // const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND") : [];
         // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate.includes("2023-01") && !item.startDate.includes("2023-01-19T00:00:00.000Z") && item.isActive && item.subCategory === "IN_DEMAND") : [];
         // const all = [...first, ...second, ...third];
@@ -218,7 +262,7 @@ const Classes = () => {
       <ClassTypeComponent {...data}>
         <Grid>
           {
-            shorts?.filter(item => item.isActive).slice(0, 6).map((item) => (
+            shorts?.filter(item => item.isActive).map((item) => (
               <InDemand {...item} all={item} key={item.bootcampId} />
             ))
           }
@@ -238,8 +282,8 @@ const data = {
   content: [],
   bottomTitle: "",
   bottomLink: `/category/IN_DEMAND`,
-  center: true, 
-  color:"var(--theme-blue)"
+  center: true,
+  color: "var(--theme-blue)"
 }
 export default Classes;
 
