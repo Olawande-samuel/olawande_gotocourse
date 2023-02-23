@@ -1404,6 +1404,26 @@ td:not(:first-child) {
   /* transform: translate(-50%); */
 }
 
+.trainnee .faq-comp .accordion .accordion-item{
+  border: none !important; 
+}
+
+.trainnee .faq-comp .accordion .accordion-item .accordion-button{
+  color: var(--theme-blue) !important; 
+}
+
+.trainnee .accordion-button::after {
+  flex-shrink: 0;
+  width: 1.25rem rem;
+  height: 1.25rem;
+  margin-left: auto;
+  content: "";
+  background-image: url(./images/abroad/caret.svg) !important;
+  background-repeat: no-repeat;
+  background-size: 1.25rem;
+  transition: transform 0.2s ease-in-out;
+}
+
 @media (max-width: 767px) {
 
   .faq-comp.skip::after {
