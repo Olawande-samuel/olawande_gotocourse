@@ -175,7 +175,8 @@ export function InDemand({ title, bootcampImg, category, duration, price, packag
             <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>Learn more</button>
           </div>
           <div className="bottombtn">
-            <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate, userdata?.trainee)}>Enroll Now</button>
+          
+              <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate, true)}>Enroll Now</button>
 
           </div>
 
