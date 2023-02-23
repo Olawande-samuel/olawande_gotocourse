@@ -1412,7 +1412,7 @@ td:not(:first-child) {
   color: var(--theme-blue) !important; 
 }
 
-.trainnee .faq .accordion-button::after {
+.trainnee .accordion-button::after {
   flex-shrink: 0;
   width: 1.25rem rem;
   height: 1.25rem;
