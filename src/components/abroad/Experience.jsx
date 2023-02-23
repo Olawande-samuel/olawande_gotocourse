@@ -78,10 +78,11 @@ background: linear-gradient(90deg, #FFFFFF 2.32%, rgba(239, 242, 255, 0) 94.98%)
             line-height: 40px;
         }
 
-        .experbtn{
+    
+
             button {
             margin-top: 2rem;
-            border: 2px solid white;
+            border: 2px solid var(--theme-blue);
             border-radius: 7px;
             background: var(--theme-blue);
             color: #fff;
@@ -89,7 +90,6 @@ background: linear-gradient(90deg, #FFFFFF 2.32%, rgba(239, 242, 255, 0) 94.98%)
             font-weight: 700;
             font-size: 14px;
             line-height: 27px;
-        }
         }
 
     }
@@ -145,10 +145,8 @@ const Experience = () => {
                             <span className="d-block">helped them find jobs in</span>
                             the best tech companies
                         </p>
-                        <div className="experbtn">
                         <Link to={`/signup?trainee`}><button>Register for free</button> </Link>
 
-                        </div>
 
 
 
