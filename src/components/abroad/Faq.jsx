@@ -55,7 +55,7 @@ export function FaqComponent({ title, answer, show, styles, index }) {
       {/* <h6 className="fw-bolder" style={{ color: "var(--theme-blue)", fontWeight: "900" }}>{title}</h6>
       <p style={{ color: "var(--theme-blue)", fontSize: "14px", fontWeight: "400" }}>{answer}</p> */}
 
-      <Accordion defaultActiveKey="1">
+      <Accordion defaultActiveKey={index} alwaysOpen>
         <Accordion.Item eventKey={index}>
           <Accordion.Header className="fw-bolder" style={{ color: "var(--theme-blue)", fontWeight: "900" }}>{title}</Accordion.Header>
           <Accordion.Body style={{ color: "var(--theme-blue)", fontSize: "14px", fontWeight: "400" }}>

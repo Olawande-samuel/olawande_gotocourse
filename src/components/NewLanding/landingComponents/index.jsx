@@ -26,6 +26,7 @@ import { AiOutlineCheck } from "react-icons/ai"
 import { AdvancedError } from "../../../classes"
 import { useMemo } from "react"
 import { QuikonnetIcon, MeetFixIcon, RekodiaIcon, ClasspodiaIcon, QuizimIcon } from '../NewLanding'
+import { UpCoursesCard } from "../UpNext"
 
 // GREAT OPPORTUNITIES
 
@@ -773,48 +774,223 @@ export function Head({ title, bootcampImg, category, duration, price, packages, 
     }, [title])
 
 
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+        getWishList()
+
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    //   console.log({all});
+
+
+    // Call to Action
+    //wishlist
+
+    const flag = useRef(false);
+    let [wishlistState, setWishlistState] = useState(false)
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
+
+    async function addToWishlist() {
+        setGeneralState({ ...generalState, loading: true })
+
+        if (userdata !== null) {
+            try {
+                const response = await addwishlistCourse(bootcampId, userdata?.token)
+                const { success, message, statusCode } = response
+                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+                const { data } = response
+                setWishlistState(true)
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setGeneralState({ ...generalState, loading: false })
+
+            }
+
+
+        } else {
+            navigate("/login")
+        }
+    }
+
+
+
+    async function getWishList() {
+        try {
+            const res = await fetchWishlist(userdata?.token);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+                const { data } = res;
+                if (data.length > 0) {
+                    setWishlistState(data.map(d => d.courseId).includes(bootcampId));
+                } else {
+
+                }
+
+            } else {
+                throw new AdvancedError(message, statusCode);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+        }
+    }
+
+    // useEffect(() => {
+    //     getWishList()
+    // }, [setWishlistState])
+
+    useEffect(() => {
+        const ownListItem = upskillAltData.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
+        if (ownListItem.length > 0) {
+            setData(ownListItem[0])
+        }
+
+    }, [title])
+
+    async function removeCourse(e) {
+        e.preventDefault();
+        try {
+            setGeneralState({ ...generalState, loading: true })
+            const res = await deleteFromWishlist(userdata?.token, bootcampId)
+            const { success, message, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+                const { data } = res;
+                setWishlistState(false)
+                handleClose()
+            }
+        } catch (err) {
+
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+        }
+    }
+
+    async function handleBootstrapEnrollment(e, title, category, bootcampId, navigate) {
+
+        e.preventDefault();
+        if (userdata?.token) {
+            // localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(all))
+            gotoclassPayment(title, category, bootcampId, navigate, userdata?.trainee)
+        } else {
+            navigate("/login")
+        }
+    }
+
+
 
 
 
     return (
-        <InDemandCard>
-            <div className="img">
-                <img src={bootcampImg} alt="" />
-            </div>
-            <div className="content">
-                <h6>{title}</h6>
+        // <InDemandCard>
+        //     <div className="img">
+        //         <img src={bootcampImg} alt="" />
+        //     </div>
+        //     <div className="content">
+        //         <h6>{title}</h6>
 
-                <div className="mid_content">
-                    <div className="mid_stats">
-                        {/* <span>{packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"}</span> */}
-                        <span>Self-paced</span>
-                        <span>$ {packages.length > 0 ? packages[0].price : price}</span>
-                        <span>{duration}</span>
-                    </div>
-                    <div className="checks">
-                        <p> <AiOutlineCheck className="icon" /> Completion certificate</p>
-                        {/* <p><AiOutlineCheck className="icon" /> Earn upto $138k </p> */}
-                        <p><AiOutlineCheck className="icon" /> Cohort learning</p>
-                    </div>
+        //         <div className="mid_content">
+        //             <div className="mid_stats">
+        //                 {/* <span>{packages.length > 0 ? changeConstants(packages[0].title) : "Cohort"}</span> */}
+        //                 <span>Self-paced</span>
+        //                 <span>$ {packages.length > 0 ? packages[0].price : price}</span>
+        //                 <span>{duration}</span>
+        //             </div>
+        //             <div className="checks">
+        //                 <p> <AiOutlineCheck className="icon" /> Completion certificate</p>
+        //                 {/* <p><AiOutlineCheck className="icon" /> Earn upto $138k </p> */}
+        //                 <p><AiOutlineCheck className="icon" /> Cohort learning</p>
+        //             </div>
 
-                    <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
-                        <p>Start Date:</p>
-                        <p>{getFullDate(startDate)}</p>
+        //             <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
+        //                 <p>Start Date:</p>
+        //                 <p>{getFullDate(startDate)}</p>
+        //             </div>
+        //         </div>
+
+        //         <div className="view">
+        //             <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
+        //         </div>
+
+        //         <div className="contentbtn">
+        //             <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate, userdata?.trainee)}>Enroll Now</button>
+        //         </div>
+
+        //     </div>
+
+
+        // </InDemandCard>
+
+        <UpCoursesCard>
+            <img src={bootcampImg} alt="" />
+            <div className="up_content">
+                <div>
+                    <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title}</h5>
+                    <div className="d-flex justify-content-between">
+                        <small>{duration}</small>
+                        {/* <small>$ {packages.length > 0 ? packages[0].price : price}</small> */}
                     </div>
                 </div>
 
-                <div className="view">
+                {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+                {/* <div className="foot">
+                <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button>
+                <div className="ct_bar"></div>
+
+                <span>{changeConstants(packages[0]?.title)}</span>
+            </div> */}
+                {/* <div>
+                <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>
+            </div> */}
+
+
+
+
+                {/* <div className="checks"
+            // style={{ paddingTop: "1rem" }}
+            >
+                <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p>
+                <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
+            </div> */}
+
+                {/* <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
+                <p>Start Date:</p>
+                <p>{getFullDate(startDate)}</p>
+            </div> */}
+
+                <div className="foot d-flex justify-content-center">
+                    {/* <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button> */}
                     <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
+
+
+                    {/* <div className="ct_bar"></div>
+
+      <span>{changeConstants(packages[0]?.title)}</span> */}
                 </div>
 
-                <div className="contentbtn">
-                    <button onClick={() => gotoclassPayment(title, category, bootcampId, navigate, userdata?.trainee)}>Enroll Now</button>
-                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             </div>
 
-
-        </InDemandCard>
+        </UpCoursesCard >
     )
 }
 
@@ -822,124 +998,124 @@ export function Head({ title, bootcampImg, category, duration, price, packages, 
 
 // UPSKILL COURSES
 
-const UpCoursesCard = styled.div`
-    /* border: 2.2648px solid rgba(0, 114, 239, 0.5);
-    padding: clamp(0.03125rem, -0.2813rem + 1.5625vw, 1.125rem);
-    border-radius: 8px; */
-    display: flex;
-    flex-direction:column;
-    box-shadow: -10px 159px 64px rgba(0, 0, 0, 0.01), -6px 90px 54px rgba(0, 0, 0, 0.05), -3px 40px 40px rgba(0, 0, 0, 0.09), -1px 10px 22px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
-    
-    img {
-        height: 40%;
-        min-height: 40%;
-        max-width: 100%;
-        object-fit:cover;
-        object-position: center;
-        border: 1.5px solid #FFCE31;
-    }
-    small {
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        height: 4.5rem
-        
-        
-    }
+// const UpCoursesCard = styled.div`
+//     /* border: 2.2648px solid rgba(0, 114, 239, 0.5);
+//     padding: clamp(0.03125rem, -0.2813rem + 1.5625vw, 1.125rem);
+//     border-radius: 8px; */
+//     display: flex;
+//     flex-direction:column;
+//     box-shadow: -10px 159px 64px rgba(0, 0, 0, 0.01), -6px 90px 54px rgba(0, 0, 0, 0.05), -3px 40px 40px rgba(0, 0, 0, 0.09), -1px 10px 22px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
 
-    h5 {
-        font-weight: 800;
-        text-transform: capitalize;
-        font-size: 16px;
-        margin-block: .7rem;
-        cursor: pointer;
+//     img {
+//         height: 40%;
+//         min-height: 40%;
+//         max-width: 100%;
+//         object-fit:cover;
+//         object-position: center;
+//         border: 1.5px solid #FFCE31;
+//     }
+//     small {
+//         display: -webkit-box;
+//         -webkit-line-clamp: 3;
+//         -webkit-box-orient: vertical;
+//         overflow: hidden;
+//         text-overflow: ellipsis;
+//         height: 4.5rem
 
-    }
-     
-    button {
-        color:#0072EF;
-        font-size:14px;
-        border:none;
-        outline:none;
-        background:#fff;
-    }
-    .up_content {
-        padding-inline: 1.5rem;
-        padding-bottom: .5rem;
-        display: flex;
-        flex-direction: column;
-        justify-content:space-between;
-        height: 60%;
-        /* height: -webkit-fill-available; */
 
-        .checks{
+//     }
 
-            p{
-                font-weight: 500;
-                font-size: 13.6101px;
-                line-height: 16px;
-            }
-  
-            .icon{
-                color: var(--theme-blue);
-            }
-        }
+//     h5 {
+//         font-weight: 800;
+//         text-transform: capitalize;
+//         font-size: 16px;
+//         margin-block: .7rem;
+//         cursor: pointer;
 
-        .cta {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            font-size: 13px;
-            // margin-top: 1rem;
-    
-            span:first-child {
-                cursor: pointer;
-                transition: color .3s ease; 
-    
-                :hover {
-                    color: var(--theme-blue)
-                }
-            }
-            span:last-child {
-                color: var(--theme-orange)
-            }
-            .ct_bar{
-                width:1px;
-                height:100%;
-                background: #333;
-            }
-        }
-    }
-    .ct_bar{
-            width:1px;
-            height:100%;
-            background: #333;
-    }
+//     }
 
-    .foot {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        
-        .cta {
-        font-size: 14px;
-        border: none;
-        outline: none;
-        background:#fff;
+//     button {
+//         color:#0072EF;
+//         font-size:14px;
+//         border:none;
+//         outline:none;
+//         background:#fff;
+//     }
+//     .up_content {
+//         padding-inline: 1.5rem;
+//         padding-bottom: .5rem;
+//         display: flex;
+//         flex-direction: column;
+//         justify-content:space-between;
+//         height: 60%;
+//         /* height: -webkit-fill-available; */
 
-            :hover {
-                color: var(--theme-blue);
-            }
-        }
-        span {
-            font-size:14px;
-            color: var(--theme-orange)
-        }
-    } 
-    
-`
+//         .checks{
+
+//             p{
+//                 font-weight: 500;
+//                 font-size: 13.6101px;
+//                 line-height: 16px;
+//             }
+
+//             .icon{
+//                 color: var(--theme-blue);
+//             }
+//         }
+
+//         .cta {
+//             display: flex;
+//             justify-content: space-between;
+//             gap: 1rem;
+//             font-size: 13px;
+//             // margin-top: 1rem;
+
+//             span:first-child {
+//                 cursor: pointer;
+//                 transition: color .3s ease; 
+
+//                 :hover {
+//                     color: var(--theme-blue)
+//                 }
+//             }
+//             span:last-child {
+//                 color: var(--theme-orange)
+//             }
+//             .ct_bar{
+//                 width:1px;
+//                 height:100%;
+//                 background: #333;
+//             }
+//         }
+//     }
+//     .ct_bar{
+//             width:1px;
+//             height:100%;
+//             background: #333;
+//     }
+
+//     .foot {
+//         display: flex;
+//         justify-content: space-between;
+//         align-items: center;
+
+//         .cta {
+//         font-size: 14px;
+//         border: none;
+//         outline: none;
+//         background:#fff;
+
+//             :hover {
+//                 color: var(--theme-blue);
+//             }
+//         }
+//         span {
+//             font-size:14px;
+//             color: var(--theme-orange)
+//         }
+//     } 
+
+// `
 
 const ShortCard = styled.div`
     /* border: 2.2648px solid rgba(0, 114, 239, 0.5);
@@ -1169,113 +1345,180 @@ export function Short({ title, bootcampImg, bootcampId, category, description, p
     }, [title])
 
     return (
-        <ShortCard>
+        // <ShortCard>
+        //     <img src={bootcampImg} alt="" />
+        //     <div className="up_content">
+        //         <div>
+        //             <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title}</h5>
+        //             <div className="d-flex justify-content-between">
+        //                 <small>{duration}</small>
+        //                 <small>$ {packages.length > 0 ? packages[0].price : price}</small>
+        //             </div>
+        //         </div>
+
+        //         {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+        //         <div className="cta">
+        //             <span aria-describedby={id} variant="contained" onClick={handleClick}>View course</span>
+        //             <div className="ct_bar"></div>
+        //             {/* <span onClick={()=> gotoclassPayment(title, category, bootcampId, navigate)}>Live Online</span> */}
+        //             <span>Self-Paced</span>
+        //         </div>
+        //     </div>
+        //     <Popover
+        //         id={id}
+        //         open={open}
+        //         anchorEl={anchorEl}
+        //         onClose={handleClose}
+        //         anchorOrigin={{
+        //             vertical: 'center',
+        //             horizontal: 'left',
+        //         }}
+        //     >
+        //         <Box sx={{ p: 2 }} className="pop_container">
+        //             <header>
+        //                 {/* <h5 className="fw-bold text-capitalize">{popupTitle}</h5> */}
+        //                 <h5 className="fw-bold text-capitalize">{title}</h5>
+        //                 <p style={{ marginTop: "1rem" }}>Starting Date: <span>{new Date(endDate).toDateString()}</span></p>
+
+        //             </header>
+        //             <div>
+        //                 {/* <p>{data.title}</p> */}
+        //                 <ul>
+        //                     {
+        //                         popupArr?.map((item, i) => (
+        //                             <li key={i}>{item}</li>
+        //                         ))
+        //                     }
+        //                 </ul>
+        //                 <div className="d-flex justify-content-between mb-3">
+        //                     <span>Self-Paced</span>
+        //                     <span className="fw-bold">{duration}</span>
+        //                     <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
+        //                 </div>
+        //                 <h6>Ready to register?</h6>
+        //                 {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+        //                 <div className="skillaction">
+        //                     <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
+
+        //                     {
+        //                         (!userdata.token) ? <button onClick={addToWishlist}>
+        //                             {
+        //                                 loading ?
+        //                                     <div className="spinner-border" role="status">
+        //                                         <span className="visually-hidden">Loading...</span>
+        //                                     </div>
+        //                                     :
+        //                                     "Wishlist"
+
+        //                             }
+
+        //                         </button> :
+
+        //                             (userdata.token && wishlistState) ?
+
+        //                                 <button onClick={removeCourse}>
+        //                                     {
+        //                                         loading ?
+        //                                             <div className="spinner-border" role="status">
+        //                                                 <span className="visually-hidden">Loading...</span>
+        //                                             </div>
+        //                                             :
+        //                                             "Remove wishlist"
+
+        //                                     }
+
+        //                                 </button>
+        //                                 :
+        //                                 <button onClick={addToWishlist}>
+        //                                     {
+        //                                         loading ?
+        //                                             <div className="spinner-border" role="status">
+        //                                                 <span className="visually-hidden">Loading...</span>
+        //                                             </div>
+        //                                             :
+        //                                             "Wishlist"
+
+        //                                     }
+
+        //                                 </button>
+
+        //                     }
+
+
+
+        //                 </div>
+        //             </div>
+        //         </Box>
+        //     </Popover>
+
+        // </ShortCard>
+
+
+        <UpCoursesCard>
             <img src={bootcampImg} alt="" />
             <div className="up_content">
                 <div>
                     <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title}</h5>
                     <div className="d-flex justify-content-between">
                         <small>{duration}</small>
-                        <small>$ {packages.length > 0 ? packages[0].price : price}</small>
+                        {/* <small>$ {packages.length > 0 ? packages[0].price : price}</small> */}
                     </div>
                 </div>
 
                 {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-                <div className="cta">
-                    <span aria-describedby={id} variant="contained" onClick={handleClick}>View course</span>
-                    <div className="ct_bar"></div>
-                    {/* <span onClick={()=> gotoclassPayment(title, category, bootcampId, navigate)}>Live Online</span> */}
-                    <span>Self-Paced</span>
+                {/* <div className="foot">
+    <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button>
+    <div className="ct_bar"></div>
+
+    <span>{changeConstants(packages[0]?.title)}</span>
+</div> */}
+                {/* <div>
+    <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>
+</div> */}
+
+
+
+
+                {/* <div className="checks"
+// style={{ paddingTop: "1rem" }}
+>
+    <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p>
+    <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
+</div> */}
+
+                {/* <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
+    <p>Start Date:</p>
+    <p>{getFullDate(startDate)}</p>
+</div> */}
+
+                <div className="foot d-flex justify-content-center">
+                    {/* <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button> */}
+                    <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
+
+
+                    {/* <div className="ct_bar"></div>
+
+<span>{changeConstants(packages[0]?.title)}</span> */}
                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
-            <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'center',
-                    horizontal: 'left',
-                }}
-            >
-                <Box sx={{ p: 2 }} className="pop_container">
-                    <header>
-                        {/* <h5 className="fw-bold text-capitalize">{popupTitle}</h5> */}
-                        <h5 className="fw-bold text-capitalize">{title}</h5>
-                        <p style={{ marginTop: "1rem" }}>Starting Date: <span>{new Date(endDate).toDateString()}</span></p>
 
-                    </header>
-                    <div>
-                        {/* <p>{data.title}</p> */}
-                        <ul>
-                            {
-                                popupArr?.map((item, i) => (
-                                    <li key={i}>{item}</li>
-                                ))
-                            }
-                        </ul>
-                        <div className="d-flex justify-content-between mb-3">
-                            <span>Self-Paced</span>
-                            <span className="fw-bold">{duration}</span>
-                            <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
-                        </div>
-                        <h6>Ready to register?</h6>
-                        {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-                        <div className="skillaction">
-                            <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
+        </UpCoursesCard >
 
-                            {
-                                (!userdata.token) ? <button onClick={addToWishlist}>
-                                    {
-                                        loading ?
-                                            <div className="spinner-border" role="status">
-                                                <span className="visually-hidden">Loading...</span>
-                                            </div>
-                                            :
-                                            "Wishlist"
-
-                                    }
-
-                                </button> :
-
-                                    (userdata.token && wishlistState) ?
-
-                                        <button onClick={removeCourse}>
-                                            {
-                                                loading ?
-                                                    <div className="spinner-border" role="status">
-                                                        <span className="visually-hidden">Loading...</span>
-                                                    </div>
-                                                    :
-                                                    "Remove wishlist"
-
-                                            }
-
-                                        </button>
-                                        :
-                                        <button onClick={addToWishlist}>
-                                            {
-                                                loading ?
-                                                    <div className="spinner-border" role="status">
-                                                        <span className="visually-hidden">Loading...</span>
-                                                    </div>
-                                                    :
-                                                    "Wishlist"
-
-                                            }
-
-                                        </button>
-
-                            }
-
-
-
-                        </div>
-                    </div>
-                </Box>
-            </Popover>
-
-        </ShortCard>
     )
 }
 
@@ -1421,7 +1664,7 @@ export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, 
                     <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title}</h5>
                     <div className="d-flex justify-content-between">
                         <small>{duration}</small>
-                        <small>$ {packages.length > 0 ? packages[0].price : price}</small>
+                        {/* <small>$ {packages.length > 0 ? packages[0].price : price}</small> */}
                     </div>
                 </div>
 
@@ -1439,17 +1682,17 @@ export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, 
 
 
 
-                <div className="checks"
+                {/* <div className="checks"
                 // style={{ paddingTop: "1rem" }}
                 >
                     <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p>
                     <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
-                </div>
+                </div> */}
 
-                <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
+                {/* <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
                     <p>Start Date:</p>
                     <p>{getFullDate(startDate)}</p>
-                </div>
+                </div> */}
 
                 <div className="foot d-flex justify-content-center">
                     {/* <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button> */}
@@ -1555,6 +1798,39 @@ export function UpskillCourseCard({ title, bootcampImg, startDate, subCategory, 
                 </Box>
             </Popover>
         </UpCoursesCard >
+
+        //     <UpCoursesCard>
+        //     <img src={bootcampImg} alt="" />
+        //     <div className="up_content">
+        //       <div className='title'>
+        //         <h5 aria-describedby={id} variant="contained">{title}</h5>
+
+        //       </div>
+        //       <div className="middle">
+        //         <div className="checks">
+        //           {/* <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p> */}
+        //           <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
+        //         </div>
+        //         <div className="d-flex justify-content-end">
+        //           <small>{duration}</small>
+        //           {/* <small>$ {packages.length > 0 ? packages[0].price : price}</small> */}
+        //         </div>
+
+        //         <div className="d-flex justify-content-between checks" style={{ color: "var(--theme-blue" }}>
+        //           <p>Start Date:</p>
+        //           <p>{getFullDate(startDate)}</p>
+        //         </div>
+        //       </div>
+
+
+        //       <div className="foot d-flex justify-content-center">
+        //         {/* <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button> */}
+        //         <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
+        //       </div>
+        //     </div>
+
+
+        //   </UpCoursesCard>
     )
 }
 
@@ -1680,119 +1956,152 @@ export function PathCourseCard({ title, bootcampImg, bootcampId, category, start
     }
 
     return (
+        // <UpCoursesCard>
+        //     <img src={bootcampImg} alt="" />
+        //     <div className="up_content">
+        //         <div>
+        //             <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title}</h5>
+        //             <div className="d-flex justify-content-between">
+        //                 <small>{duration}</small>
+        //                 <small>$ {packages.length > 0 ? packages[0].price : price}</small>
+        //             </div>
+        //         </div>
+
+
+        //         <div className="checks">
+        //             {/* <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p> */}
+        //             <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
+        //         </div>
+
+        //         <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
+        //             <p>Start Date:</p>
+        //             <p>{getFullDate(startDate)}</p>
+        //         </div>
+
+        //         {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+        //         <div className="foot" style={{ justifyContent: "center" }} >
+        //             <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
+
+        //             {/* <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button> */}
+        //             {/* <div className="ct_bar"></div> */}
+
+        //             {/* <span>{changeConstants(packages[0]?.title)}</span> */}
+        //         </div>
+        //         {/* <div>
+        //             <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>
+        //         </div> */}
+        //     </div>
+        //     <Popover
+        //         id={id}
+        //         open={open}
+        //         anchorEl={anchorEl}
+        //         onClose={handleClose}
+        //         anchorOrigin={{
+        //             vertical: 'center',
+        //             horizontal: 'left',
+        //         }}
+        //     >
+        //         <Box sx={{ p: 2 }} className="pop_container">
+        //             <header>
+        //                 <h5 className="fw-bold text-capitalize">{popupTitle}</h5>
+        //             </header>
+        //             <div>
+        //                 {/* <div className="d-flex justify-content-between mb-3">
+        //                     <span className="fw-bold">{duration}</span>
+        //                     <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
+        //                 </div> */}
+        //                 {/* <p>{data.title}</p> */}
+        //                 <ul>
+        //                     {
+        //                         popupArr?.map((item, i) => (
+        //                             <li key={i}>{item}</li>
+        //                         ))
+        //                     }
+        //                 </ul>
+        //                 {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+        //                 <div className="pop_action">
+        //                     <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
+        //                     {
+        //                         (!userdata.token) ? <button onClick={addToWishlist}>
+        //                             {
+        //                                 loading ?
+        //                                     <div className="spinner-border" role="status">
+        //                                         <span className="visually-hidden">Loading...</span>
+        //                                     </div>
+        //                                     :
+        //                                     "Wishlist"
+
+        //                             }
+
+        //                         </button> :
+
+        //                             (userdata.token && wishlistState) ?
+
+        //                                 <button onClick={removeCourse}>
+        //                                     {
+        //                                         loading ?
+        //                                             <div className="spinner-border" role="status">
+        //                                                 <span className="visually-hidden">Loading...</span>
+        //                                             </div>
+        //                                             :
+        //                                             "Remove wishlist"
+
+        //                                     }
+
+        //                                 </button>
+        //                                 :
+        //                                 <button onClick={addToWishlist}>
+        //                                     {
+        //                                         loading ?
+        //                                             <div className="spinner-border" role="status">
+        //                                                 <span className="visually-hidden">Loading...</span>
+        //                                             </div>
+        //                                             :
+        //                                             "Wishlist"
+
+        //                                     }
+
+        //                                 </button>
+
+        //                     }
+
+        //                 </div>
+        //             </div>
+        //         </Box>
+        //     </Popover>
+        // </UpCoursesCard>
+
         <UpCoursesCard>
             <img src={bootcampImg} alt="" />
             <div className="up_content">
-                <div>
-                    <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title}</h5>
-                    <div className="d-flex justify-content-between">
+                <div className='title'>
+                    <h5 aria-describedby={id} variant="contained">{title}</h5>
+
+                </div>
+                <div className="middle">
+                    <div className="checks">
+                        <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
+                        <p> <AiOutlineCheck className="icon" />Self paced</p>
+                    </div>
+                    <div className="d-flex justify-content-end">
                         <small>{duration}</small>
-                        <small>$ {packages.length > 0 ? packages[0].price : price}</small>
+                        {/* <small>$ {packages.length > 0 ? packages[0].price : price}</small> */}
+                    </div>
+
+                    <div className="d-flex justify-content-between checks" style={{ color: "var(--theme-blue" }}>
+                        <p>Start Date:</p>
+                        <p>{getFullDate(startDate)}</p>
                     </div>
                 </div>
 
 
-                <div className="checks">
-                    {/* <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p> */}
-                    <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
-                </div>
-
-                <div className="d-flex justify-content-between" style={{ color: "var(--theme-blue)", fontSize: "13px" }}>
-                    <p>Start Date:</p>
-                    <p>{getFullDate(startDate)}</p>
-                </div>
-
-                {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-                <div className="foot" style={{ justifyContent: "center" }} >
-                    <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
-
+                <div className="foot d-flex justify-content-center">
                     {/* <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button> */}
-                    {/* <div className="ct_bar"></div> */}
-
-                    {/* <span>{changeConstants(packages[0]?.title)}</span> */}
+                    <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
                 </div>
-                {/* <div>
-                    <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>
-                </div> */}
             </div>
-            <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'center',
-                    horizontal: 'left',
-                }}
-            >
-                <Box sx={{ p: 2 }} className="pop_container">
-                    <header>
-                        <h5 className="fw-bold text-capitalize">{popupTitle}</h5>
-                    </header>
-                    <div>
-                        {/* <div className="d-flex justify-content-between mb-3">
-                            <span className="fw-bold">{duration}</span>
-                            <span className="fw-bold">$ {packages.length > 0 ? packages[0].price : price}</span>
-                        </div> */}
-                        {/* <p>{data.title}</p> */}
-                        <ul>
-                            {
-                                popupArr?.map((item, i) => (
-                                    <li key={i}>{item}</li>
-                                ))
-                            }
-                        </ul>
-                        {/* <p className="pop_description" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-                        <div className="pop_action">
-                            <button onClick={(e) => handleBootstrapEnrollment(e, title, category, bootcampId, navigate)} >Enroll Now</button>
-                            {
-                                (!userdata.token) ? <button onClick={addToWishlist}>
-                                    {
-                                        loading ?
-                                            <div className="spinner-border" role="status">
-                                                <span className="visually-hidden">Loading...</span>
-                                            </div>
-                                            :
-                                            "Wishlist"
 
-                                    }
 
-                                </button> :
-
-                                    (userdata.token && wishlistState) ?
-
-                                        <button onClick={removeCourse}>
-                                            {
-                                                loading ?
-                                                    <div className="spinner-border" role="status">
-                                                        <span className="visually-hidden">Loading...</span>
-                                                    </div>
-                                                    :
-                                                    "Remove wishlist"
-
-                                            }
-
-                                        </button>
-                                        :
-                                        <button onClick={addToWishlist}>
-                                            {
-                                                loading ?
-                                                    <div className="spinner-border" role="status">
-                                                        <span className="visually-hidden">Loading...</span>
-                                                    </div>
-                                                    :
-                                                    "Wishlist"
-
-                                            }
-
-                                        </button>
-
-                            }
-
-                        </div>
-                    </div>
-                </Box>
-            </Popover>
         </UpCoursesCard>
     )
 }
@@ -2137,7 +2446,7 @@ const ClassWrapper = styled.section`
     }
 `
 
-export function ClassTypeComponent({ children, center, header: head, color, header2, header3, header4, subtext, subtext1, subtext2, bottomTitle, bottomLink }) {
+export function ClassTypeComponent({ children, center, header: head, color, header2, header3, header4, subtext, subtext1, subtext2, subtext3, subtext4, bottomTitle, bottomLink }) {
     return (
         <ClassWrapper>
             <div className="container">
@@ -2148,7 +2457,9 @@ export function ClassTypeComponent({ children, center, header: head, color, head
                     <h6>{header4}</h6>
                     <small>{subtext}</small>
                     <small className="d-block">{subtext1}</small>
-                    <small className="d-block" style={{ fontSize: "14px", fontWeight: "500", lineHeight: "22px", paddingTop: "1rem" }}>{subtext2}</small>
+                    <small className="d-block" style={{ fontSize: "14px", fontWeight: "500", lineHeight: "22px", paddingTop: ".5rem" }}>{subtext2}</small>
+                    <small className="d-block" style={{ fontSize: "14px", fontWeight: "500", lineHeight: "22px" }}>{subtext3}</small>
+                    <small className="d-block" style={{ fontSize: "14px", fontWeight: "500", lineHeight: "22px" }}>{subtext4}</small>
                 </header>
                 <article>
                     {children}

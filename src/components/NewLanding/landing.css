@@ -1912,6 +1912,11 @@ bottom:0;
     height: 100%;
   
   }
+
+  .video__right{
+    padding: 3rem 0;
+    text-align: center;
+  }
   
 }
 /* @media (min-width: 953px) {
