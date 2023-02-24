@@ -132,9 +132,9 @@ const NewCourse = () => {
 
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                const first = res.data?.length > 0 ? res.data?.filter(item => item.category ==="TRAIN2 WORKABROAD" && item.isActive && item.subCategory === "IN_DEMAND") : [];
+                const first = res.data?.length > 0 ? res.data?.filter(item => item.category ==="TRAIN2 WORKABROAD" && item.isActive && item.startDate ==="2023-03-06T00:00:00.000Z" && item.subCategory === "IN_DEMAND") : [];
                 // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-03-06T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND") : [];
-                const third = res.data?.length > 0 ? res.data?.filter(item => item.category ==="TRAIN2 WORKABROAD"  && item.isActive && item.subCategory === "IN_DEMAND").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+                const third = res.data?.length > 0 ? res.data?.filter(item => item.category ==="TRAIN2 WORKABROAD"  && item.isActive && item.startDate !=="2023-03-06T00:00:00.000Z" && item.subCategory === "IN_DEMAND").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
                 const all = [...first, ...third];
                 setShorts(all)
             }
