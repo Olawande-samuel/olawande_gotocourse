@@ -116,7 +116,7 @@ const NewLanding = () => {
       <UpskillCourse />
       <Headstart />
       <Pathfinder />
-      <ShortCourses />
+      {/* <ShortCourses /> */}
       <Endless/>
       <HowLearn/>
       <Review/>
