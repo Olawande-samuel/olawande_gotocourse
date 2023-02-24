@@ -20,6 +20,7 @@ const GreatWrapper = styled.section`
 
 
         h4 {
+            font-family: 'Raleway';
             font-weight: 700;
         }
         p {

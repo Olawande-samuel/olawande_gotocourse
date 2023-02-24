@@ -19,6 +19,7 @@ const Container = styled.div`
                 color: #000;
                 font-size: 30px;
                 padding-bottom: 1rem;
+                font-family: 'Raleway';
 
             }
     
@@ -51,6 +52,7 @@ padding: 2rem;
     text-align: center;
 
     h6{
+        font-family: 'Raleway';
         font-weight: 700;
         font-size: 24px;
         line-height: 30px;
@@ -59,6 +61,7 @@ padding: 2rem;
     }
 
     p{
+        font-family: 'Raleway';
         font-weight: 400;
         font-size: 16px;
         line-height: 28px;
@@ -95,6 +98,7 @@ display: flex;
 .right{
     flex: .5;
     h6{
+        font-family: 'Raleway';
         font-weight: 700;
         font-size: 24px;
         line-height: 30px;
@@ -103,6 +107,7 @@ display: flex;
     }
 
     p{
+        font-family: 'Raleway';
         font-weight: 400;
         font-size: 16px;
         line-height: 28px;
