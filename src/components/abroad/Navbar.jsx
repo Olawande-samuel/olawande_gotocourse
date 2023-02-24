@@ -2,13 +2,14 @@ import styled from "styled-components";
 import { AiOutlineCloseCircle, AiOutlineMenu } from "react-icons/ai";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 // import LogoutButton from "./LogoutButton"
-import { Logosm, TrainLogo } from "../../images/components/svgs";
+import { Logosm, TrainLogo, TrainLogoSm } from "../../images/components/svgs";
 import { motion } from "framer-motion";
 import { useAuth } from "../../contexts/Auth";
 import { useLocalStorage } from "../../hooks";
 import { KEY } from "../../constants";
 import { FaRegUser } from "react-icons/fa";
 import { useState } from "react";
+import logo from '../../images/abroad/logo.png'
 
 const Container = styled.div`
 	width: 100%;

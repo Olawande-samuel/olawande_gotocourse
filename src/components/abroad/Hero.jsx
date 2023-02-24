@@ -73,6 +73,21 @@ background: linear-gradient(90deg, #FFFFFF 2.32%, rgba(239, 242, 255, 0) 94.98%)
   
 }
 
+@media (min-width: 820px ) and (max-width: 1024px){
+    height: unset;
+
+    .container{
+            .heroleft{
+                h1{
+                font-size: 30px;
+                line-height: 30px;
+            }
+        }
+}
+}
+
+
+
 @media (max-width: 768px) {
         height: unset;
         text-align: center;
