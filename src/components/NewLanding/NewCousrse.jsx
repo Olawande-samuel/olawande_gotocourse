@@ -36,7 +36,7 @@ const Container = styled.div`
     .content{
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(min(300px, 400px), 400px));
-        grid-auto-rows: 300px;
+        grid-auto-rows: minmax(min-content, 300px);
         overflow: hidden;
         gap: 2.5rem;
         justify-content: center;
@@ -77,7 +77,7 @@ padding:1rem 2rem;
 height: 100%;
 
 .middle{
-    height: 50%;
+    /* height: 50%; */
     /* border: 2px solid blue; */
     padding: .5rem 0;
 

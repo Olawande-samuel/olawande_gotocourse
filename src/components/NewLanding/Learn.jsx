@@ -33,7 +33,7 @@ const Container = styled.div`
         width: 100%;
         display: grid;
         grid-template-columns: repeat(3, minmax(min(250px, 300px), 300px));
-        grid-auto-rows: 400px;
+        grid-auto-rows: minmax(min-content, 450px);
         overflow: hidden;
         gap: 2.5rem;
         justify-content: center;

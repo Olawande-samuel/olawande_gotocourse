@@ -5,6 +5,7 @@ const Container = styled.section`
    height: 80vh;
    padding: 1rem 0;
    
+   
    .container{
 
     .inputbox{
@@ -12,6 +13,7 @@ const Container = styled.section`
         margin: 0 auto;
         padding: 2rem 4rem;
         background: #fff;
+        border-radius: 10px;
 
         h2{
             
