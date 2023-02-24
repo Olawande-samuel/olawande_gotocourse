@@ -15,6 +15,7 @@ const Container = styled.div`
             h4{
                 color: #000;
                 font-size: 30px;
+                font-family: 'Raleway';
             }
     
             p{
@@ -44,7 +45,7 @@ const Container = styled.div`
                 padding-bottom: 1rem;
                 font-weight: 700;
                 text-align: center;
-
+                font-family: 'Raleway';
             }
     
             li{

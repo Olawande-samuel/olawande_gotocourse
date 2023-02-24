@@ -62,6 +62,7 @@ const Container = styled.section`
             flex-direction: column;
             gap: 2rem;
             p{
+                font-family: 'Raleway';
                 font-weight: 700;
                 font-size: 32px;
                 line-height: 40px;
