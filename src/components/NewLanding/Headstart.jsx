@@ -47,7 +47,7 @@ const Headstart = () => {
     <ClassTypeComponent {...data}>
       <Grid>
         {
-          shorts?.filter(item=>item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)).slice(0,8).map((item) => (
+          shorts?.filter(item=>item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)).slice(0,4).map((item) => (
             <Head {...item} all={item} key={item.bootcampId}/>
           ))
         }
