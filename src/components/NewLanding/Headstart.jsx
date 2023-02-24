@@ -3,12 +3,13 @@ import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import { useAuth } from "../../contexts/Auth";
-import { ClassTypeComponent, Head, InDemand } from "./landingComponents";
+import { ClassTypeComponent, Head } from "./landingComponents";
+import { NewGrid } from "./UpNext";
 
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-  grid-auto-rows: ${props => props.height ?  props.height : "460px"};
+  grid-auto-rows: ${props => props.height ?  props.height : "390px"};
   overflow: hidden;
   gap: 2.5rem;
   row-gap: 3rem;
@@ -59,9 +60,9 @@ const Headstart = () => {
 const data = {
   header: "",
   header2:"Explore Tech Headstart program for 9 years above",
-  subtext:"Fun and creative way to introduce tech and problem solving skills to young people.",
-  subtext1:"We help young people set themselves up for lifetime opportunities for success through coaching and mentoring",
-  subtext2:"Courses runs between  2 weeks to 6 weeks",
+  subtext2:"Fun and creative way to introduce tech and problem solving skills to young people.",
+  subtext3:"We help young people set themselves up for lifetime opportunities for success through coaching and mentoring",
+  subtext4:"Courses runs between  2 weeks to 6 weeks",
   content: [],
   bottomTitle:"View  more In Tech headstart program  >",
   bottomLink:`/category/HEAD_START`

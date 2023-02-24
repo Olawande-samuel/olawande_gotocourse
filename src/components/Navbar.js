@@ -129,7 +129,7 @@ const Navbar = ({ background }) => {
 					id="navbarNav"
 				>
 					<ul className="navbar-nav me-5">
-						<li className="nav-item holder">
+						{/* <li className="nav-item holder">
 							<Link
 								to="/"
 								className="link nav-link courses me-4"
@@ -142,7 +142,7 @@ const Navbar = ({ background }) => {
 							>
 								Home
 							</Link>
-						</li>
+						</li> */}
 
 						<li className="nav-item holder">
 							<Link

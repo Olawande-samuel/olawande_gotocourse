@@ -4,7 +4,8 @@ import moneyman from '../../images/abroad/moneyman.png'
 
 const Container = styled.div`
 /* background: #E1E7FF; */
-background: linear-gradient(90deg, #FFFFFF 2.32%, rgba(239, 242, 255, 0) 94.98%);
+background: rgba(214, 220, 255, 0.3);
+/* background: linear-gradient(90deg, #FFFFFF 2.32%, rgba(239, 242, 255, 0) 94.98%); */
 width: 100%;
 padding: 0 2rem;
 
@@ -41,8 +42,7 @@ padding: 0 2rem;
 
     .boxes{
         display: flex;
-        /* background: #FFEDED; */
-        background: rgba(214, 220, 255, 0.3);
+        background: #FFEDED;
 
         border-radius: 10px;
         height: 100%;

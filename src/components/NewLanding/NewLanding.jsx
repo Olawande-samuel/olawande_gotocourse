@@ -21,6 +21,7 @@ import Inperson from "../../images/in-Person.webp";
 import Mento from "../../images/inPerson.webp";
 import Tech from "../../images/fast.webp";
 import Image from "../Image";
+import NewCompanies from "../NewCompanies";
 import Companies from "../Companies";
 import Faq from "../Faq";
 import Mentors from "./Mentors/Mentors";
@@ -77,6 +78,13 @@ import Pathfinder from "./Pathfinder";
 import { useIntercom } from "react-use-intercom";
 import Tutorial from "./Tutorial";
 import Helmet from 'react-helmet'
+import Ready from "./Ready";
+import Overflow from "./Overflow";
+import NewCourse from "./NewCousrse";
+import Testimonials from "../Testimonials";
+import Endless from "./Endless";
+import HowLearn from "./Learn";
+import Review from "./Review";
 
 
 const NewLanding = () => {
@@ -98,28 +106,36 @@ const NewLanding = () => {
       </Helmet>
     <Layout background="blue">
       <Hero />
-      <Stats />
-      <WhatweDo />
-      <Companies />
-      {/* <Tutorial/> */}
-      {/* <Mission /> */}
+      <NewCompanies />
+      <Ready/>
+      <Overflow/>
       <GreatOpportunities />
-      <Up />
       <Category />
-      <Benefits />
-      <IndemandClasses />
+      <Up />
+      <NewCourse/>
       <UpskillCourse />
       <Headstart />
       <Pathfinder />
-      {/* <ExecutiveClasses /> */}
       <ShortCourses />
-      <Mentors />
-      <BetterWay />
+      <Endless/>
+      <HowLearn/>
+      <Review/>
+      {/* <Testimonials type="newLanding" /> */}
       <VideoSection />
+            {/* <Companies /> */}
+       {/* <Stats /> */}
+      {/* <WhatweDo /> */}
+      {/* <Tutorial/> */}
+      {/* <Mission /> */}
+      {/* <Benefits /> */}
+      {/* <IndemandClasses /> */}
+      {/* <ExecutiveClasses /> */}
+      {/* <Mentors /> */}
+      {/* <BetterWay /> */} 
       {/* <TechPro /> */}
       {/* <VirtualTraining /> */}
       {/* <LiveWebinars /> */}
-      <Blog />
+      {/* <Blog /> */}
       {/* <Success /> */}
       {/* <Logos /> */}
       {/* <TeachingBenefits /> */}
@@ -132,11 +148,10 @@ const NewLanding = () => {
       {/* <Seamless /> */}
       {/* <Bootcamp/> */}
       {/* <Becoming /> */}
-      {/* <Learn type={"newLanding"} />
-        <Self />
-      <Mentorship /> */}
+       {/* <Learn type={"newLanding"} /> */}
+        {/* <Self /> */}
+      {/* <Mentorship />  */}
       {/* <InPerson /> */}
-      {/* <Testimonials type="newLanding" /> */}
       {/* <Overview /> */}
     </Layout>
     </>
@@ -346,21 +361,22 @@ function Hero() {
   const heroData = [
     {
       id: 1,
-      title: "Start and launch",
-      title2: "your IT career now",
-      // subtitle: "All-in-one platform for learning tech skills",
+      title: "Learn the Skill",
+      title2: "To get the Job",
+      subtitle: `The beginner-friendly online learning programme with `,
+      subtitle2:`the highest completion rate and grad employment`,
       social: true,
       acctype: "student",
       list: [
-        "Learn from Industry Experts",
-        "Launch new career within 2 to 6 months",
-        "Connect from anywhere",
+        // "Learn from Industry Experts",
+        // "Launch new career within 2 to 6 months",
+        // "Connect from anywhere",
       ],
       img: tell,
       color: "var(--theme-blue)",
       borderRadius: "7px",
       link: "/signup",
-      link_btn: "Register to get started ",
+      link_btn: "Register for free ",
       // img:HeroImg
     },
     {
@@ -480,6 +496,7 @@ function HeroContent({
   title2,
   signInWithFacebook,
   subtitle,
+  subtitle2,
   img,
   list,
   acctype,
@@ -503,6 +520,8 @@ function HeroContent({
           </h1>
           <h6 className="newHero_left-title mb-4 mb-lg-5">
             {list && subtitle}
+            <span className="d-block">{subtitle2}</span>
+            
           </h6>
           {list ? (
             <div className=" new_hero_list d-flex justify-content-start">
