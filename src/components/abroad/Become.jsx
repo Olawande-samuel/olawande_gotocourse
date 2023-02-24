@@ -20,6 +20,12 @@ const Container = styled.div`
         /* text-align: center; */
 
     }
+
+
+    @media (max-width: 768px) {
+        padding: 2rem  0;
+
+    }
 `
 
 export const Become = () => {

@@ -1,12 +1,11 @@
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import moneyman from '../../images/abroad/moneyman.png'
 
 const Container = styled.div`
 /* background: #E1E7FF; */
 background: linear-gradient(90deg, #FFFFFF 2.32%, rgba(239, 242, 255, 0) 94.98%);
-
 width: 100%;
-height: 40vh;
 padding: 0 2rem;
 
 
@@ -75,6 +74,18 @@ padding: 0 2rem;
                 text-align: right;
             }
 
+            button {
+            margin: 2rem 0;
+            border: 2px solid var(--theme-blue);
+            border-radius: 7px;
+            background: var(--theme-blue);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 27px;
+        }
+
 
         }
 
@@ -101,8 +112,11 @@ padding: 0 2rem;
         .bottombox{
             .boxes{
             flex-direction: column-reverse;
+            padding: 1rem 0;
 
             .secondbox{
+                padding: 0;
+
                 p{
                     text-align: center;
 
@@ -121,13 +135,13 @@ export const NewBox = () => {
     return (
         <Container>
             <div className="container">
-
-            <div className="contheader">
+                <div className="contheader">
                     <h5>Get trained to get the job</h5>
                     <p>Learn the tools, skills and resources needed to stand out in global talent market.
-            </p>
+                    </p>
 
                 </div>
+
 
                 <div className="bottombox">
                     <div className="boxes">
@@ -139,6 +153,7 @@ export const NewBox = () => {
                         <div className="secondbox">
                             <p>Become one of the most
                                 <span className="d-block">sought after in the market</span> </p>
+                            <Link to={`/signup?trainee`}><button>Join  expert community</button> </Link>
 
                         </div>
 
