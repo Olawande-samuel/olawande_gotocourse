@@ -97,13 +97,13 @@ const data = [
         title2:"Courses",
         link:"/category/UPSKILL_COURSES"
     },
-    {
-        img:tech,
-        title1:"Tech",
-        title2:"Entrepreneurship",
-        title3:"Education",
-        link:"/category/TECH_ENTREPRENEURSHIP"
-    },
+    // {
+    //     img:tech,
+    //     title1:"Tech",
+    //     title2:"Entrepreneurship",
+    //     title3:"Education",
+    //     link:"/category/TECH_ENTREPRENEURSHIP"
+    // },
 ]
 
 export default GreatOpportunities
