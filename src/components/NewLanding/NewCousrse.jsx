@@ -16,6 +16,7 @@ const Container = styled.div`
         padding-bottom: 2.5rem 0;
 
         h4{
+            font-family: 'Raleway';
             color: #000;
             font-size: 30px;
         }

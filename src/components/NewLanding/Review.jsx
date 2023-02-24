@@ -24,6 +24,10 @@ gap: 2rem;
        color: #000;
     }
 
+    p{
+        font-family: 'Raleway';
+    }
+
 }
 
 
