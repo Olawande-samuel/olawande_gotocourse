@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 // background-position: center;
 
 const Container = styled.div`
-height: 60vh;
+/* height: 60vh; */
 width: 100%;
 font-family: 'Raleway';
 color: var(--theme-blue);
