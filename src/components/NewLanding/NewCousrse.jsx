@@ -131,10 +131,10 @@ const NewCourse = () => {
 
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND") : [];
-                const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND") : [];
-                const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-                const all = [...first, ...second, ...third];
+                const first = res.data?.length > 0 ? res.data?.filter(item => item.category ==="TRAIN2 WORKABROAD" && item.isActive && item.subCategory === "IN_DEMAND") : [];
+                // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-03-06T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND") : [];
+                const third = res.data?.length > 0 ? res.data?.filter(item => item.category ==="TRAIN2 WORKABROAD"  && item.isActive && item.subCategory === "IN_DEMAND").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+                const all = [...first, ...third];
                 setShorts(all)
             }
         }
@@ -152,7 +152,7 @@ const NewCourse = () => {
 
 
                 <div className="content">
-                    {shorts.map((item, i) => (
+                    {shorts.slice(0,8).map((item, i) => (
                         // ({ title, bootcampImg, category, duration, price, packages, bootcampId, description, startDate }) => {
                         <Card key={i}>
 
@@ -163,7 +163,7 @@ const NewCourse = () => {
                             <div className="bottom">
 
                                 <p className="salary">
-                                    Salary range: <span>{ }</span>
+                                    Average Salary: <span>{ }</span>
                                 </p>
 
                                 <p>{item.duration}</p>
