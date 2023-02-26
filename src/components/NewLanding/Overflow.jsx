@@ -103,6 +103,7 @@ const Container = styled.section`
         width: 100%;
         height: 100%;
         padding: unset;
+        transform: translateX(0);
 
         .overflowstats {
             min-height: 100%;
