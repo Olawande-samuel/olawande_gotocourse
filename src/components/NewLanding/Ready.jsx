@@ -9,7 +9,7 @@ const Container = styled.section`
    .container{
 
     .inputbox{
-        width: 50%;
+        width: min(100% - .5rem, 500px);
         margin: 0 auto;
         padding: 2rem 4rem;
         background: #fff;

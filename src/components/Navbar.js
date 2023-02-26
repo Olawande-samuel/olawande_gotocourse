@@ -93,7 +93,7 @@ const Navbar = ({ background }) => {
 						className="mb-0 fw-bold me-4"
 						style={{ fontFamily: "Raleway" }}
 					>
-						NEW CLASSES STARTED JANUARY 5, ENROLL NOW
+						Free class Alert!! - Register for some free classes starting from March 3, 2023
 					</a>
 					<i>
 						<AiOutlineCloseCircle
