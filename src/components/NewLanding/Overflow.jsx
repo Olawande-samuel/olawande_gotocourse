@@ -8,13 +8,17 @@ const Container = styled.section`
     .content{
         position: absolute;
         top: -100px;
-        left: 10%;
+        /* left: 10%; */
         background: #FFFFFF;
         border: 1px solid #9FA9FF;
         border-radius: 15px;
-        width: 80%;
-        height: 100%;
+        width: min(100% - .3rem, 800px);
+        /* height: 100%; */
         padding: 2rem;
+        margin-inline: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: 'Josefin Sans', sans-serif;
 
         .overflowstats {
         width: 100%;
@@ -24,7 +28,11 @@ const Container = styled.section`
         display: flex;
         flex-direction: column;
         justify-content: center;
-        font-family: "Inter", serif;
+        font-family: 'Josefin Sans', sans-serif;
+
+
+           
+
         }
 
         .overflowstats_wrapper {
@@ -38,8 +46,11 @@ const Container = styled.section`
         flex-basis: 50%;
         }
         .overflowstat {
-        text-align: center;
-        color: var(--theme-blue);
+            text-align: center;
+            color: var(--theme-blue);
+            &:nth-child(odd){
+                margin-top: 10px;
+            }
         }
         .overflowstat h5 {
         font-weight: 700;
@@ -62,7 +73,7 @@ const Container = styled.section`
             flex-direction: column;
             gap: 2rem;
             p{
-                font-family: 'Raleway';
+                /* font-family: 'Raleway'; */
                 font-weight: 700;
                 font-size: 32px;
                 line-height: 40px;
@@ -71,7 +82,7 @@ const Container = styled.section`
             }
 
             span{
-                font-family: 'Montserrat';
+                /* font-family: 'Montserrat'; */
                 font-style: normal;
                 font-weight: 600;
                 font-size: 18px;
