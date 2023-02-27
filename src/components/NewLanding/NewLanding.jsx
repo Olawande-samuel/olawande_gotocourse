@@ -102,9 +102,9 @@ const NewLanding = () => {
   return (
     <>
       <Helmet>
-        <title>Gotocourse</title>
+        <title>Gotocourse | Learn on gotocourse</title>
         <meta property="og:site_name" content="Gotocourse" />
-        <meta name="description" content="Gotocourse" />
+        <meta name="description" content="Learn on gotocourse. Learn in-demand tech skills from experts" />
       </Helmet>
     <Layout background="blue">
       <Hero />
@@ -452,7 +452,7 @@ function Hero() {
       <Swiper
         // install Swiper modules
         modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-        loop={false}
+        loop={true}
         speed={1500}
         autoplay={{ delay: 5000 }}
         spaceBetween={0}
