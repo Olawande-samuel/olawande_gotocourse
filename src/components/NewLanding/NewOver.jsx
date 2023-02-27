@@ -211,10 +211,10 @@ const OverflowContainer = styled.section`
         padding: unset;
         transform: translateX(0);
 
-        .overflowstats {
+        /* .overflowstats {
             min-height: 100%;
             height: 100%;
-        }
+        } */
 
         .overflowstats_wrapper {
             flex-wrap:wrap;
