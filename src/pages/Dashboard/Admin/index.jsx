@@ -3785,6 +3785,19 @@ export function Bootcamps() {
 	function detailHandler(e, _id) {
 		navigate("details/" + _id);
 	}
+
+	function convertDate(start, end){
+		let startDate = getDate(start)
+		let endDate = getDate(end)
+
+		console.log(startDate + "includes search: " + search + " "  + startDate.includes(search))
+		console.log(endDate + "includes search: " + search + " " + startDate.includes(search))
+		if(startDate?.toString().toLowerCase().includes(search) || endDate?.toString().toLowerCase().includes(search)){
+			return true
+		}
+		return false
+
+	}
 	return (
 		<Admin header={"Classes"}>
 			{loading && <Loader />}
@@ -3822,7 +3835,12 @@ export function Bootcamps() {
 								{bootcamps.length > 0 ? (
 									bootcamps
 										.filter((boot) =>
-											boot.title.toLowerCase().includes(search.toLowerCase())
+											boot.title.toLowerCase().includes(search.toLowerCase()) ||
+											boot.category?.toLowerCase().includes(search.toLowerCase()) ||
+											boot.subCategory?.toLowerCase().includes(search.toLowerCase()) ||
+											boot.title?.toLowerCase().includes(search.toLowerCase()) ||
+											boot.price?.toString().toLowerCase().includes(search.toLowerCase()) ||
+											convertDate(boot.startDate, boot.endDate)
 										)
 										.map(
 											(
@@ -4816,9 +4834,11 @@ export function Fees() {
 	const flag = useRef(false);
 	const [formstate, setFormstate] = useState([]);
 	const [rest, setRest] = useState({});
-  const [open, setOpen] = useState(false)
-  const [editData, setEditData] = useState({})
+	const [open, setOpen] = useState(false)
+	const [editData, setEditData] = useState({})
 	const [loading, setLoading] = useState(false);
+	const [search, setSearch] = useState("");
+
 	const tableHeaders = [
 		"No",
 		"Name",
@@ -4889,6 +4909,15 @@ export function Fees() {
 			<div className={clsx["admin_profile"]}>
 				<div className={clsx.admin__student}>
 					<h1>All Payments</h1>
+					<div>
+							<input
+								type="text"
+								className="form-control"
+								placeholder="search course"
+								value={search}
+								onChange={(e) => setSearch(e.target.value)}
+							/>
+					</div>
 					<div className={clsx.admin__student_main}>
 						{!fetchPaymentHistory?.isLoading && (
 							<>
@@ -4899,7 +4928,7 @@ export function Fees() {
 										))}
 									</thead>
 									<tbody>
-										{formstate?.map(
+										{formstate?.filter(item => item.bootcampName?.includes(search)).map(
 											(
 												{
 													studentName,

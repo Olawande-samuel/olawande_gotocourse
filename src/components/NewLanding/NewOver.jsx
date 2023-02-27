@@ -199,6 +199,7 @@ const OverflowContainer = styled.section`
     } */
 
 @media (max-width: 768px) {
+    height: unset;
 
     .content{
         position: unset;

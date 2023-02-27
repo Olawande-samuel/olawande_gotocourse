@@ -28,6 +28,10 @@ gap: 2rem;
         font-family: 'Raleway';
     }
 
+    img{
+        max-width: 100%;
+    }
+
 }
 
 
