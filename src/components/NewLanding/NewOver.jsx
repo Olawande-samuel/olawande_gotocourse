@@ -192,11 +192,11 @@ const OverflowContainer = styled.section`
         }
     }
 
-    @media (width: 1024px) and (width: 1440px){
+    /* @media (width: 1024px) and (width: 1440px){
         height: 150vh; 
         border: 2px solid blue;
 
-    }
+    } */
 
 @media (max-width: 768px) {
 
