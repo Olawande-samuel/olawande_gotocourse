@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 import ReactQuill from 'react-quill';
 import { consoleFunctions } from '../../../../contexts/functions';
 import { useEffect } from 'react';
+import { DocumentViewer } from './File';
 
 
 function TabPanel(props) {
@@ -194,8 +195,7 @@ export default function Quiz() {
     const getContentfromQuery = useQuery([`quiz content ${contentId}`, contentId], () => fetchQuiz(userdata.token, searchData), {
         enabled: userdata.token !== null,
         onSuccess: (res)=> {
-            console.log("fetched")
-            console.log(res.data.length > 0)
+            
 
             if(res.data?.length > 0){
                 let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
@@ -235,8 +235,7 @@ export default function Quiz() {
         }
     } )
 
-    console.log({formData})
-    console.log({getContentfromQuery})
+    
     
 
     function goBack() {
@@ -259,7 +258,6 @@ export default function Quiz() {
     const handleInputChange = (e, index) => {
         const { name, value } = e.target;
         const list = { ...formData }
-        console.log({list})
         list.questions[index][name] = value;
         setFormData(list)
     }
@@ -658,18 +656,23 @@ function ResultPanel({data}){
     const userdata = getItem(KEY)
     const {teacherConsoleFunctions: {newFetchAttemptedQuiz}} = useAuth()
     const [results, setResults] = useState([])
+
+
     
 
     const fetchStudentsQuizzes = useQuery(["fetchStudentsQuizes", userdata.token, data?._id], ()=> newFetchAttemptedQuiz(userdata.token, data._id), {
         onSuccess: (res)=>{
-            if(res.statusCode === 1){
+            if(res.data?.length > 0){
                 setResults(res.data)
+            }else {
+                setResults([])
             }
         },
         onError: (err)=>console.error(err)
     })
 
 
+    console.log({results})
     
     return (
         <section>
@@ -702,7 +705,6 @@ function ResultPanel({data}){
 function ResultCards({studentId, totalScore,quizId, graded, studentName,  updatedAt, all}){
     const [open, setOpen] = useState(false)
     const [data, setData]= useState(()=>all)
-    console.log({data})
 
     useEffect(()=>{
         if(all._id){
@@ -739,20 +741,19 @@ function ResultCards({studentId, totalScore,quizId, graded, studentName,  update
         }
     }
 
-    console.log({graded})
     return (
         <div className="quiz__card">
-            <p className="quiz__card_student_name fw-bold">{studentName}</p>
+            <p className="quiz__card_student_name fw-bolder">{studentName}</p>
             <div>
-                <span>Actual score: </span>
+                <span className="fw-bold">Actual score: </span>
                 <span>{totalScore}</span>
             </div>
             <div>
-                <span>Student ID: </span>
+                <span className="fw-bold">Student ID: </span>
                 <span>{studentId}</span>
             </div>
             <div>
-                <span>Graded: </span>
+                <span className="fw-bold">Graded: </span>
                 <span dangerouslySetInnerHTML={{__html: graded}} />
             </div>
             {/*<div>*/}
@@ -825,9 +826,9 @@ function AssessQuiz({open, setOpen, data}){
                         <QuestionBox key={i} question={item} i={i} entryId={data._id} />
                     ))
                 }
-                <div className="">
+                {/* <div className="">
                     <button className="quiz__question_review--btn">Save and Submit Quiz Review</button>                     
-                </div>
+                </div> */}
             </Box>
         </Modal>
     )
@@ -839,11 +840,13 @@ function ScoreSection({data}){
     const {consoleFunctions:{calculateFinalGrade}} = useAuth()
     const {getItem} = useLocalStorage()
     const userdata = getItem(KEY)
-    const [total, setTotal] = useState(0)
+    const [total, setTotal] = useState(()=>data.totalScore)
+
+
 
     const mutation = useMutation(([token, id])=>calculateFinalGrade(token, id), {
         onSuccess: res => {
-            console.log({res})
+            
             if(res?.success){
                 setTotal(res.data.totalScore)
                 return
@@ -861,8 +864,6 @@ function ScoreSection({data}){
 
     function submit(e){
         e.preventDefault();
-        // console.log(data._id)
-
         mutation.mutate([userdata.token, data._id])
     }
 
@@ -871,11 +872,11 @@ function ScoreSection({data}){
 
         <div className="quiz__score">
             <div>
-                <span>Name: </span>
+                <span style={{fontWeight: 700}}>Name: </span>
                 <span>{data.studentName}</span>
             </div>
             <div className="mb-2">
-                <span>Student ID: </span>
+                <span style={{fontWeight: 700}}>Student ID: </span>
                 <span>{data.studentId}</span>
             </div>
 
@@ -937,26 +938,34 @@ function QuestionBox({question, i, entryId}){
     const {getItem} = useLocalStorage();
     const userdata = getItem(KEY)
 
+    const queryClient = useQueryClient()
+
     const grade = useMutation(([token, id, data])=> gradeQuestion(token, id, data), {
         onSuccess: res => {
-            console.log(res)
+            console.log({res})
+            if(res.success){
+                toast.success(res.message)
+                queryClient.invalidateQueries(["fetchStudentsQuizes"])
+            }else {
+                toast.error(res.message)
+            }
         },
-        onError: err => console.error(err)
+        onError: err => {
+            console.error(err)
+            toast.error(err.message)
+        }
     })
-
-    console.log({data})
-    
 
     
 
 
     function submit(e){
         e.preventDefault();
-        if(data.isCorrect !== "choose"){
-            grade.mutate([userdata.token, entryId, data])
-        }else {
-            window.alert("Please make a selection")
-        }
+        grade.mutate([userdata.token, entryId, data])
+        // if(data.isCorrect !== "choose"){
+        // }else {
+        //     window.alert("Please make a selection")
+        // }
     }
 
     return (
@@ -965,17 +974,17 @@ function QuestionBox({question, i, entryId}){
             <form>
 
             <div>
-                <span>Question {i + 1}: </span>
+                <span style={{fontWeight: 700}}>Question {i + 1}: </span>
                 <span>{question?.type && questionConverter(question.type) }</span>
                 <div>
-                    <span>Grade: </span>
+                    <span style={{fontWeight: 700}}>Grade: </span>
                     <span>{question?.grade}</span>
                 </div>
             </div>
             <div className="my-4">
                 <ReactQuill theme="snow" value={question?.title} readOnly={true} modules={{toolbar: false}} />
             </div>
-            <div>Answer</div>
+            <div className='fw-bold'>Answer</div>
             {
                 question.type === "THEORY" ?
                 <ReactQuill theme="snow" value={question.answer} readOnly={true} modules={{toolbar: false}} />
@@ -996,6 +1005,19 @@ function QuestionBox({question, i, entryId}){
                     </div>
                 ))
                 :
+                question.type === "FILE_UPLOAD" ?
+                <div className='d-flex gap-2 align-items-center'>
+                    
+                    <div className="card w-100">
+                        <div className="card-body">
+                            <p>{question.answer}</p>
+                            <div>
+                                <button className='btn-plain'>Open</button>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+                :
                 ""
             }
             {/* <div>Answer 1</div>
@@ -1007,28 +1029,32 @@ function QuestionBox({question, i, entryId}){
 
                 <div className="quiz__question_review--content">
                     <form action="" className="quiz__score_form">
-                        <Box sx={{width: 240}} marginBottom="1rem" >
-                            <FormControl fullWidth >
-                                <InputLabel id="demo-simple-select-label">Choose if answer is right</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={data.isCorrect}
-                                    label="Age"
-                                    onChange={(e)=>setData({...data, isCorrect: e.target.value})}
-                                >
-                                    <MenuItem defaultValue="select">Select</MenuItem>
-                                    <MenuItem value={true}>Correct</MenuItem>
-                                    <MenuItem value={false}>Incorrect</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
+                        {
+                            question.type !== "THEORY" &&
+                            <Box sx={{width: 240}} marginBottom="1rem" >
+                                <FormControl fullWidth >
+                                    <InputLabel id="demo-simple-select-label">Choose if answer is right</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={data.isCorrect}
+                                        label="Age"
+                                        onChange={(e)=>setData({...data, isCorrect: e.target.value})}
+                                    >
+                                        <MenuItem defaultValue="select">Select</MenuItem>
+                                        <MenuItem value={true}>Correct</MenuItem>
+                                        <MenuItem value={false}>Incorrect</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
+
+                        }
                         <Box marginBottom="1rem">
                             <TextField id="outlined-basic" label="Grade (%)" variant="outlined" value={data.score} onChange={(e)=>setData({...data, score: Number(e.target.value)})} />       
                         </Box>
-                        <Box marginBottom="1rem">
+                        {/* <Box marginBottom="1rem">
                             <TextField id="outlined-basic" label="Add a Comment" variant="outlined" />       
-                        </Box>
+                        </Box> */}
                         <button className="open_review" onClick={submit}>
                             {
                                 grade?.isLoading ? <span className="spinner-border text-white"><span className="visually-hidden">Loading...</span></span>
@@ -1046,3 +1072,48 @@ function QuestionBox({question, i, entryId}){
     )
 }
 
+
+
+function DocModal({open, setOpen, file}){
+    const style = {
+		position: "absolute",
+		bottom: 0,
+		left: "50%",
+		transform: "translateX(-50%)",
+		width: "100%",
+		height: "100vh",
+		background: "#fff",
+		border: "1px solid #eee",
+		borderRadius: "10px",
+		boxShadow: 24,
+		p: 6,
+		// padding: "4rem 2rem",
+		overflowY: "auto",
+	};
+
+	return (
+		<Modal
+			open={open}
+			onClose={(e) => {
+				setOpen((_) => false);
+			}}
+			aria-labelledby="modal-modal-title"
+			aria-describedby="modal-modal-description"
+		>
+			<Box style={style}>
+				<div>
+					<AiOutlineClose
+						onClick={(e) => {
+							setOpen((_) => false);
+						}}
+						size="1.5rem"
+						style={{ marginLeft: "auto", display: "block", cursor: "pointer" }}
+					/>
+				</div>
+
+                <DocumentViewer file={file} />
+            </Box>
+        </Modal>
+
+    )
+}

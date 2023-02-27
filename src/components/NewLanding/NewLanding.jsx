@@ -6,7 +6,7 @@ import Layout from "../Layout";
 import BootImg from "../../images/bootcamps/allClasses2.webp";
 import HeroImg from "../../images/newlanding.webp";
 import getStarted from "../../images/easysteps.png";
-import boy from "../../images/boy.png";
+import boy from "../../images/landing/interactive.png";
 import { useAuth } from "../../contexts/Auth";
 import "./landing.css";
 import { useLocalStorage } from "../../hooks";
