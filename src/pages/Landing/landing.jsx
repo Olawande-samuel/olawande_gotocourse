@@ -40,8 +40,9 @@ const NewHome = ({ mixpanel }) => {
 		<>
 			<Helmet>
 				<title>Gotocourse</title>
+				<meta property="og:url" content="https://gotocourse.com" />
 				<meta property="og:site_name" content="Gotocourse" />
-				<meta name="description" content="Gotocourse" />
+				<meta name="description" content="Gotocourse is a platform for learning in-demand tech and business skills and enables you to create virtual learning school" />
 			</Helmet>
 			<HomeComponent>
 				<Navbar toggleSidebar={toggleSidebar} />
