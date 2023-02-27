@@ -928,7 +928,6 @@ function questionConverter(questionType){
 
 
 function QuestionBox({question, i, entryId}){
-
     const {consoleFunctions: {gradeQuestion}} = useAuth()
     const [data,setData] = useState({
         questionId: question._id,
@@ -968,6 +967,8 @@ function QuestionBox({question, i, entryId}){
         // }
     }
 
+
+
     return (
 
         <div className="quiz__question_box">
@@ -1006,17 +1007,7 @@ function QuestionBox({question, i, entryId}){
                 ))
                 :
                 question.type === "FILE_UPLOAD" ?
-                <div className='d-flex gap-2 align-items-center'>
-                    
-                    <div className="card w-100">
-                        <div className="card-body">
-                            <p>{question.answer}</p>
-                            <div>
-                                <button className='btn-plain'>Open</button>
-                            </div>
-                        </div>
-                    </div>    
-                </div>
+                <FileQuiz question={question} />
                 :
                 ""
             }
@@ -1024,13 +1015,10 @@ function QuestionBox({question, i, entryId}){
             <div>Answer 2</div> */}
         
             <div className="quiz__question_review">
-                {/* <button className="open_review">Open Review</button>
- */}
-
                 <div className="quiz__question_review--content">
                     <form action="" className="quiz__score_form">
                         {
-                            question.type !== "THEORY" &&
+                            (question.type === "MULTIPLE_CHOICE" || question.type === "CHECKBOX") &&
                             <Box sx={{width: 240}} marginBottom="1rem" >
                                 <FormControl fullWidth >
                                     <InputLabel id="demo-simple-select-label">Choose if answer is right</InputLabel>
@@ -1068,11 +1056,33 @@ function QuestionBox({question, i, entryId}){
 
             </div> 
             </form>
+            
         </div>
     )
 }
 
 
+function FileQuiz({question}){
+    const [open, setOpen] = useState(false)
+    
+    function onOpen(e){
+        e.preventDefault()
+        setOpen(true)
+    }
+    return (
+        <div className='d-flex gap-2 align-items-center'>
+            <div className="card w-100">
+                <div className="card-body">
+                    <p>{question.answer}</p>
+                    <div>
+                        <button className='btn-plain' onClick={onOpen}>Open</button>
+                    </div>
+                </div>
+            </div>    
+            <DocModal open={open} setOpen={setOpen} file={question.answer} />
+        </div>
+    )
+}
 
 function DocModal({open, setOpen, file}){
     const style = {
@@ -1091,6 +1101,10 @@ function DocModal({open, setOpen, file}){
 		overflowY: "auto",
 	};
 
+    const [url,setURL] = useState("")
+     useEffect(()=>{
+        file?.toLowerCase().includes("pdf") ? setURL("https://res.cloudinary.com/gotocourse-us/images/upload/v1664205986/files/"):setURL("https://res.cloudinary.com/gotocourse-us/raw/upload/v1664205986/files/")
+     },[file])
 	return (
 		<Modal
 			open={open}
@@ -1111,7 +1125,7 @@ function DocModal({open, setOpen, file}){
 					/>
 				</div>
 
-                <DocumentViewer file={file} />
+                <DocumentViewer file={`${url}${file}`} />
             </Box>
         </Modal>
 
