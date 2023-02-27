@@ -52,7 +52,7 @@ padding: 2rem 0;
       font-family: 'Montserrat';
       font-style: normal;
       font-weight: 600;
-      font-size: 18px;
+      font-size: 16px;
       line-height: 24px;
     }
 
@@ -67,7 +67,7 @@ padding: 2rem 0;
 }
 
 
-@media (max-width: 912px) {
+@media (max-width: 1024px) {
 
 .container{
   .company{
@@ -108,7 +108,7 @@ const NewCompanies = () => {
       <div className="container">
       
         <div className='company'>
-            <p>Companies our grads work at:</p>
+            <p>Some companies our grads work at:</p>
 
             <div className="companylogo">
             {

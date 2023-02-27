@@ -81,6 +81,14 @@ const Container = styled.section`
 
             }
 
+            h6{
+                font-weight: 700;
+                font-size: 32px;
+                line-height: 30px;
+                color: var(--theme-blue);
+            
+            }
+
             span{
                 /* font-family: 'Montserrat'; */
                 font-style: normal;
@@ -159,6 +167,8 @@ const Overflow = () => {
                         <p>
                         Join live classes on our proprietary <br/> learning platform, followed by career <br/> coaching and interview prep
                         </p>
+
+                        {/* <h6>OUR GOAL</h6> */}
 
                         <span>
                         To be the No 1 global platform where millions of learners connect <br/>

@@ -2100,13 +2100,13 @@ export const Dashboard = ({ mixpanel }) => {
                     <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
                 </div>
 
-             {/* { */}
-                {/* userdata?.trainee &&  */}
+             {
+                userdata?.trainee && 
                 <div className={clsx.students_profile_main}>
                     {/* <UpcomingCourses data={all ? all : []} /> */}
                     <UpcomingCourses data={data?.data ? data?.data : []} search={search} />
                 </div>
-             {/* }  */}
+             }
 
 
 
