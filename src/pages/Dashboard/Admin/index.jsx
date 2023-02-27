@@ -4696,6 +4696,14 @@ export function CreateBootcamp() {
 								value={formstate?.isPublic}
 							/>
 						</div>
+						<Input
+							label="Average Salary"
+							name="averageSalary"
+							type="number"
+							handleChange={changeHandler}
+							value={formstate.averageSalary}
+							noValidate={"true"}
+						/>
 
 						<CareerModal
 							open={showCareerModal}

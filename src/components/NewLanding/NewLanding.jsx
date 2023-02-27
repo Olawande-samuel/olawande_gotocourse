@@ -6,6 +6,7 @@ import Layout from "../Layout";
 import BootImg from "../../images/bootcamps/allClasses2.webp";
 import HeroImg from "../../images/newlanding.webp";
 import getStarted from "../../images/easysteps.png";
+import boy from "../../images/boy.png";
 import { useAuth } from "../../contexts/Auth";
 import "./landing.css";
 import { useLocalStorage } from "../../hooks";
@@ -85,6 +86,7 @@ import Testimonials from "../Testimonials";
 import Endless from "./Endless";
 import HowLearn from "./Learn";
 import Review from "./Review";
+import { NewReady } from "./NewOver";
 
 
 const NewLanding = () => {
@@ -100,15 +102,16 @@ const NewLanding = () => {
   return (
     <>
       <Helmet>
-        <title>Gotocourse</title>
+        <title>Gotocourse | Learn on gotocourse</title>
         <meta property="og:site_name" content="Gotocourse" />
-        <meta name="description" content="Gotocourse" />
+        <meta name="description" content="Learn on gotocourse. Learn in-demand tech skills from experts" />
       </Helmet>
     <Layout background="blue">
       <Hero />
       <NewCompanies />
-      <Ready/>
-      <Overflow/>
+      <NewReady/>
+      {/* <Ready/> */}
+      {/* <Overflow/> */}
       <GreatOpportunities />
       <Category />
       <Up />
@@ -415,8 +418,8 @@ function Hero() {
     },
     {
       id: 4,
-      title: "Your kids can start",
-      title2: "from here.",
+      title: "Anyone can start from here.",
+      title2: "",
       // subtitle: "Whether you are starting newly or upgrading your skills this is the best place to learn. No need of without putting your life on hold. You can study anywhere, everywhere and at any time, Gotocourse is your ideal destination of growing your tech and business skills.",
       social: true,
       acctype: "affiliate",
@@ -425,7 +428,7 @@ function Hero() {
         "Find your path to I.T by learning from real world experts",
         "Build solid foundation that leads to life-time opportunity",
       ],
-      img: interactive,
+      img: boy,
       color: "#F75C4E",
       link: "/sign-up",
       link_btn: "Register today",
@@ -449,7 +452,7 @@ function Hero() {
       <Swiper
         // install Swiper modules
         modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-        loop={false}
+        loop={true}
         speed={1500}
         autoplay={{ delay: 5000 }}
         spaceBetween={0}

@@ -8,7 +8,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
    background: #F3F9FF;
-   padding : 2rem 0;
+   padding : .5rem 0;
 
    .container{
        .headercontent{

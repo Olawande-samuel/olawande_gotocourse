@@ -6,7 +6,7 @@ import green from "../../images/a/green.png";
 
 
 const Container = styled.div`
-padding: 2rem 1rem;
+padding:.5rem;
 display: flex;
 flex-direction: column;
 align-items: center;
