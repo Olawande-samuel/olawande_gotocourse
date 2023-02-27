@@ -675,12 +675,23 @@ function ResultPanel({data}){
         <section>
             <section className="quiz__cards_container">
                  {
-                    results?.map((item, i) => (
-                        <ResultCards key={i} {...item} all={item} />
-                    ))
+                    fetchStudentsQuizzes?.isLoading ?
+                    <div className="spinner-border text-primary">
+                        <div className="visually-hidden">loading...</div>
+                    </div>
+                    :
+                    (
+                        results.length > 0
+                        ?
+                        results?.map((item, i) => (
+                            <ResultCards key={i} {...item} all={item} />
+                        ))
+                        :
+                        <p className="text-center lead">No one has attempted the quiz yet</p>
+                    )
+
                 }
             </section>
-            {/* <p className="text-center lead">No one has attempted the quiz yet</p> */}
         </section>
     )
 }
@@ -727,6 +738,8 @@ function ResultCards({studentId, totalScore,quizId, graded, studentName,  update
             deleteMutation.mutate([userdata.token, quizId, all._id ])
         }
     }
+
+    console.log({graded})
     return (
         <div className="quiz__card">
             <p className="quiz__card_student_name fw-bold">{studentName}</p>
@@ -740,7 +753,7 @@ function ResultCards({studentId, totalScore,quizId, graded, studentName,  update
             </div>
             <div>
                 <span>Graded: </span>
-                <span>{graded}</span>
+                <span dangerouslySetInnerHTML={{__html: graded}} />
             </div>
             {/*<div>*/}
             {/*    <span>Number of tries: </span>*/}
@@ -821,7 +834,39 @@ function AssessQuiz({open, setOpen, data}){
 }
 
 
+
 function ScoreSection({data}){
+    const {consoleFunctions:{calculateFinalGrade}} = useAuth()
+    const {getItem} = useLocalStorage()
+    const userdata = getItem(KEY)
+    const [total, setTotal] = useState(0)
+
+    const mutation = useMutation(([token, id])=>calculateFinalGrade(token, id), {
+        onSuccess: res => {
+            console.log({res})
+            if(res?.success){
+                setTotal(res.data.totalScore)
+                return
+            }
+            toast.error(res.message)
+        },
+        onError: err => {
+            console.error(err)
+            toast.error(err.message)
+        }
+    })
+
+
+
+
+    function submit(e){
+        e.preventDefault();
+        // console.log(data._id)
+
+        mutation.mutate([userdata.token, data._id])
+    }
+
+
     return (
 
         <div className="quiz__score">
@@ -836,14 +881,25 @@ function ScoreSection({data}){
 
             <form className="quiz__score_form" >
                 <div className="mb-2">
-                    <TextField label="Total Score(%)"  fullWidth inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} />
+                    <TextField label="Total Score"  fullWidth inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} disabled={true} value={total} />
                     <small></small>
                 </div>
-                <div className="mb-2">
-                    <TextField id="outlined-basic" fullWidth label="Comment" variant="outlined" />                       
-                </div>
+                {/* <div className="mb-2">
+                    <TextField id="outlined-basic" fullWidth label="Comment" variant="outlined" disabled={true} />                       
+                </div> */}
 
-                <button className="quiz__score_btn">Submit Grading</button>
+                <button className="quiz__score_btn" onClick={submit}>
+                    {
+                        mutation.isLoading ? 
+                        <div className="spinner-border text-white">
+                            <div className="visually-hidden">Loading</div>
+                        </div>
+                        :
+                        <span>
+                            Calculate Total Score
+                        </span>
+                    }
+                </button>
             </form>
 
 
