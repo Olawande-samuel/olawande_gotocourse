@@ -132,10 +132,21 @@ const NewCourse = () => {
 
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                const first = res.data?.length > 0 ? res.data?.filter(item => item.category ==="TRAIN2 WORKABROAD" && item.isActive && item.startDate ==="2023-03-06T00:00:00.000Z" && item.subCategory === "IN_DEMAND") : [];
+                const productMng = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "636e4fbd30615c03fc6fb4ed" && item.subCategory === "IN_DEMAND") : [];
+                const cyber = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63fcd51d4aacf5d78772e89f" && item.subCategory === "IN_DEMAND") : [];
+                const audit = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63717aa2f0eaad8dcf3930a7" && item.subCategory === "IN_DEMAND") : [];
+                const business = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "6371cda6f0eaad8dcf3966e7" && item.subCategory === "IN_DEMAND") : [];
+                const design = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63a5d697cdc2f98c79d3acad" && item.subCategory === "IN_DEMAND") : [];
+                const data = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "636e9a3ef0eaad8dcf3699fc" && item.subCategory === "IN_DEMAND") : [];
+                const risk = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63fcdb564aacf5d787730a0b" && item.subCategory === "IN_DEMAND") : [];
+                const it = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63717978f0eaad8dcf392eeb" && item.subCategory === "IN_DEMAND") : [];
+
+
+                // const first = res.data?.length > 0 ? res.data?.filter(item => item.category ==="TRAIN2 WORKABROAD" && item.isActive && item.startDate ==="2023-03-06T00:00:00.000Z" && item.subCategory === "IN_DEMAND") : [];
                 // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-03-06T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND") : [];
-                const third = res.data?.length > 0 ? res.data?.filter(item => item.category ==="TRAIN2 WORKABROAD"  && item.isActive && item.startDate !=="2023-03-06T00:00:00.000Z" && item.subCategory === "IN_DEMAND").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-                const all = [...first, ...third];
+                // const third = res.data?.length > 0 ? res.data?.filter(item => item.category ==="TRAIN2 WORKABROAD"  && item.isActive && item.startDate !=="2023-03-06T00:00:00.000Z" && item.subCategory === "IN_DEMAND").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+                // const all = [...first, ...third];
+                const all = [...cyber, ...productMng, ...it, ...data, ...business, ...audit, ...design, ...risk];
                 setShorts(all)
             }
         }

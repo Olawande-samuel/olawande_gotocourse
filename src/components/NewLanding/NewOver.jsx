@@ -3,7 +3,7 @@ import styled from "styled-components"
 const Container = styled.section`
    background: linear-gradient(131.29deg, #1000E8 0%, #020063 100%);
    padding: .5rem 0 3rem 0;
-   border: 2px solid red;
+   /* border: 2px solid red; */
    
    
    .container{
@@ -14,7 +14,7 @@ const Container = styled.section`
         padding: 2rem 4rem;
         background: #fff;
         border-radius: 10px;
-        border: 2px solid yellow;
+        /* border: 2px solid yellow; */
 
         h2{
             
@@ -97,7 +97,7 @@ const Container = styled.section`
 const OverflowContainer = styled.section`
     height: 65vh; 
     position: relative;
-    border: 2px solid green;
+    /* border: 2px solid green; */
     padding: 0.5rem 0;
 
     .content{
