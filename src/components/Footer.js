@@ -76,23 +76,28 @@ const rightLink = [
     title: "Admin",
     path: "/admin/login"
   },
+  // {
+  //   id: 7,
+  //   title: "Teachers",
+  //   path: "/become-a-teacher"
+  // },
   {
-    id: 7,
+    id: 8,
     title: "Teachers",
-    path: "/become-a-teacher"
-  },
+    path: "/qualifications"
+},
   {
-    id: 7,
+    id: 9,
     title: "Affiliates",
     path: "/affiliates"
   },
   {
-    id: 8,
+    id: 10,
     title: "Mentors Lounge",
     path: "/lounge"
   },
   {
-    id: 8,
+    id: 11,
     title: "Enterprise",
     path: "/enterprise"
   },
