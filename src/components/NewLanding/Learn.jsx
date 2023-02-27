@@ -65,11 +65,13 @@ const Container = styled.div`
             padding: 1rem ;
             position: relative;
             
-
-            img{
+            .imgs{
+                width: 100%;
                 position: absolute;
                 bottom: 0;
+                text-align: center;
             }
+
             }
 
         .orange{
@@ -80,9 +82,11 @@ const Container = styled.div`
 
 
          
-            img{
+            .imgs{
+                width: 100%;
                 position: absolute;
                 bottom: 0;
+                text-align: center;
             }
     
         }
@@ -140,7 +144,11 @@ const HowLearn = () => {
                             <li>Quiz</li>
                         </ul>
 
+                        <div className="imgs">
+
                         <img src={tech} alt="" />
+                        </div>
+
 
                     </div>
 
@@ -154,7 +162,13 @@ const HowLearn = () => {
                             <li>Learn from real world expert</li>
                         </ul>
 
+
+                        
+                        <div className="imgs">
+
                         <img src={cap} alt="" />
+                        </div>
+
 
                     </div>
                     <div className="blue">
@@ -168,7 +182,12 @@ const HowLearn = () => {
 
                         </ul>
 
+                         
+                        <div className="imgs">
+
                         <img src={skill} alt="" />
+                        </div>
+
 
                     </div>
                 </div>

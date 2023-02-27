@@ -46,7 +46,7 @@ function isValid(data){
 
 
 const OnBoarding = () => {
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(1);
     const {kycFunctions: {addMentorKYC}} = useAuth();
     const {getItem} = useLocalStorage();
     window.onbeforeunload = function() { alert("Your work will be lost."); };
