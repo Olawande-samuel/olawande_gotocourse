@@ -64,6 +64,11 @@ export const AssessmentCard = styled.div`
             padding: .5rem 0;
 
         }
+        p{
+            font-size:14px;
+            color: red;
+   
+        }
 
       
         button {   
@@ -161,9 +166,10 @@ export default function ConsoleClasses() {
                                     </div>
                                     <div className="content">
                                         <h6>{x.bootcampName}</h6>
-                                    {x?.nextPayment && x?.paymentStatus === "incomplete" && 
+                                    {x?.nextPayment && 
+                                    x?.paymentStatus === "incomplete" && 
                                     <p>
-                                        Payment Due Date:{getFullDate(x?.nextPayment)}
+                                        Next payment:{getFullDate(x?.nextPayment)}
                                     </p>}
 
                                         <button>Open Class</button>

@@ -418,8 +418,8 @@ function Hero() {
     },
     {
       id: 4,
-      title: "Anyone can start from here.",
-      title2: "",
+      title: "Anyone can start ",
+      title2: "from here.",
       // subtitle: "Whether you are starting newly or upgrading your skills this is the best place to learn. No need of without putting your life on hold. You can study anywhere, everywhere and at any time, Gotocourse is your ideal destination of growing your tech and business skills.",
       social: true,
       acctype: "affiliate",
