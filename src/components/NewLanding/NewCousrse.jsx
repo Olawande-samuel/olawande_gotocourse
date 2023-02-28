@@ -175,7 +175,7 @@ const NewCourse = () => {
                             <div className="bottom">
 
                                 <p className="salary">
-                                    Average Salary: <span>{item?.averageSalary}</span>
+                                    Average Salary: <span>${item?.averageSalary}</span>
                                 </p>
 
                                 <p>{item.duration}</p>
