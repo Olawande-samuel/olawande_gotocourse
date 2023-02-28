@@ -129,6 +129,21 @@ const ClassroomMainTop = styled.div`
         }
     }
 
+    .banner{
+        text-align: center;
+        vertical-align: middle;
+        background: var(--theme-blue);
+        color: white;
+        padding: .5rem 0;
+        p{
+            margin-bottom: 0;
+        }
+
+        span{
+            color: var(--theme-orange);
+  
+        }
+    }
     .bread{
         display: flex;
         align-items: center;
@@ -1027,20 +1042,27 @@ const Classroom = () => {
         }
     })
 
+    let dueDate = bootcampName[0]?.nextPayment;
     // notify due date
     let paymentDaysLeft = useMemo(() => {
-        let dueDate = bootcampName[0]?.nextPayment
+        console.log({dueDate});
         let today = new Date();
-        let time = dueDate - today
+        let time = new Date(dueDate) - today
+        console.log({time});
         let oneDay = 86400000;
         let daysLeft = 0
         if (time >= oneDay) {
-            daysLeft = Math.floor(time / oneDay) <= 7;
+            if(Math.floor(time / oneDay) <= 7){
+                daysLeft = Math.floor(time / oneDay);
+                return daysLeft
+
+            }
+            daysLeft = Math.floor(time / oneDay);
             return daysLeft
         }
         return daysLeft
 
-    }, [bootcampName])
+    }, [bootcampName, dueDate])
 
     console.log({ paymentDaysLeft });
 
@@ -1396,15 +1418,15 @@ const Classroom = () => {
                             <h5 style={{ margin: 0 }}><Link to={`/student/console/myclasses`}>Classroom</Link></h5>
 
                         </div>
-                        <div className='bread'>
-                            {
-                                paymentDaysLeft && (paymentDaysLeft >= 0 && paymentDaysLeft <= 7) &&
+                        {
+                            (paymentDaysLeft >= 0 && paymentDaysLeft <= 7) &&
 
                                 <div className="banner">
-                                    <p>You have {paymentDaysLeft} left to pay for this course</p>
+                                    <p>You have <span>{paymentDaysLeft}</span> day(s) left to pay for this course</p>
                                 </div>
                             }
-
+                        <div className='bread'>
+                
                             <Breadcrumbs separator={<MdNavigateNext />} aria-label="breadcrumb">
                                 <BreadcrumbLink to="/student">
                                     Dashboard
