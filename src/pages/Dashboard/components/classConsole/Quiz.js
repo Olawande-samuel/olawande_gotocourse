@@ -671,8 +671,6 @@ function ResultPanel({data}){
         onError: (err)=>console.error(err)
     })
 
-
-    console.log({results})
     
     return (
         <section>
@@ -910,14 +908,13 @@ function ScoreSection({data}){
 
 
 function questionConverter(questionType){
-
     switch (questionType) {
         case "THEORY":
             return "Theory"
         case "FILE_UPLOAD":
             return "File Upload"
         case "MULTIPLE_CHOICE":
-            return "Theory"
+            return "Multiple Choice"
         case "CHECKBOX":
             return "Checkbox"
         default:
@@ -941,7 +938,6 @@ function QuestionBox({question, i, entryId}){
 
     const grade = useMutation(([token, id, data])=> gradeQuestion(token, id, data), {
         onSuccess: res => {
-            console.log({res})
             if(res.success){
                 toast.success(res.message)
                 queryClient.invalidateQueries(["fetchStudentsQuizes"])
@@ -991,11 +987,11 @@ function QuestionBox({question, i, entryId}){
                 <ReactQuill theme="snow" value={question.answer} readOnly={true} modules={{toolbar: false}} />
                 :
                 question.type === "MULTIPLE_CHOICE" ?
-                question?.options?.map( item => (
-                    <div className='d-flex gap-2 align-items-center'>
+                question?.options?.map( (item, i) => (
+                    <div className='d-flex gap-2 align-items-center' key={i}>
                         <div className="form-group">
                             <label htmlFor={item.title} className="d-flex align-items-center">
-                                <input type="radio" name={item.tile} id={item.title} value={item.title} disabled={true} checked={item.selected} />
+                                <input type="radio" name={item.title} id={item.title} value={item.title} disabled={true} checked={item.selected} />
                                 {" "}{item.title}
                             </label>
 
