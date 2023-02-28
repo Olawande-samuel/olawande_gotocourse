@@ -175,7 +175,7 @@ const NewCourse = () => {
                             <div className="bottom">
 
                                 <p className="salary">
-                                    Average Salary: <span>${item?.averageSalary}</span>
+                                    Average Salary: {item.averageSalary ?  <span>{Intl.NumberFormat("en-us",{style: "currency", currency:"USD"})?.format(+item?.averageSalary)} per year</span>: "" }
                                 </p>
 
                                 <p>{item.duration}</p>
