@@ -94,7 +94,7 @@ function PopularContainer({ category, tab_number, popular }) {
       <Swiper
         // install Swiper modules
         modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-        loop={false}
+        loop={true}
         speed={1500}
         autoplay={{ delay: 2000 }}
         spaceBetween={0}
@@ -189,7 +189,7 @@ console.log({category})
     <Swiper
       // install Swiper modules
       modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-      loop={false}
+      loop={true}
       speed={1500}
       autoplay={{ delay: 2000 }}
       spaceBetween={0}
@@ -217,7 +217,7 @@ console.log({category})
           spaceBetween: 28,
         },
         1704: {
-          slidesPerView: 4.5,
+          slidesPerView: 4,
           spaceBetween: 28,
         },
       }}
@@ -306,7 +306,7 @@ export function TabsComp(){
             <Swiper
             // install Swiper modules
             modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
-            loop={false}
+            loop={true}
             speed={1500}
             autoplay={{ delay: 2500 }}
             spaceBetween={0}
