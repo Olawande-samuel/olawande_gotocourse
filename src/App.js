@@ -455,10 +455,7 @@ function MyApp({ mixpanel }) {
 							{/* STUDENTS */}
 							{/* <Route path="student" element={<ComingSoon student={true} />}> */}
 							<Route path="student" element={<Out />}>
-								<Route
-									path=""
-									element={<StudentDashboard mixpanel={mixpanel} />}
-								/>
+								<Route path="" element={<StudentDashboard mixpanel={mixpanel} />} />
 								<Route path="profile" element={<StudentProfile />} />
 								<Route path="classes" element={<StudentClasses />} />
 								<Route path="bootcamps" element={<StudentBootcamps />} />
@@ -466,10 +463,7 @@ function MyApp({ mixpanel }) {
 								<Route path="profile/edit" element={<StudentEdit />} />
 								<Route path="courses" element={<StudentCourses />} />
 								<Route path="wishlist" element={<Wishlist />} />
-								<Route
-									path="wishlist-checkout"
-									element={<WishlistCheckOut />}
-								/>
+								<Route path="wishlist-checkout" element={<WishlistCheckOut />} />
 								<Route path="history" element={<StudentHistory />} />
 								<Route path="payment" element={<StudentFees />} />
 
@@ -477,10 +471,7 @@ function MyApp({ mixpanel }) {
 								{/* <Route path="help" element={<StudentHelp />} /> */}
 								<Route path="help" element={<HIWStudent />} />
 								<Route path="referral" element={<StudentReferral />} />
-								<Route
-									path="notifications"
-									element={<StudentNotifications />}
-								/>
+								<Route path="notifications" element={<StudentNotifications />} />
 
 								<Route path="live-class" element={<Out />}>
 									<Route index element={<StudentLive />} />

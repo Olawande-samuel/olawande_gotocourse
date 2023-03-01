@@ -172,14 +172,28 @@ const Dashboard = () => {
     console.log(chartData);
 
 
-    const enrolledStudents = useMemo(()=>{
-        let calculations = 0
-        if(students.length > 0){
-            return students.filter(item => item.enrollmentData?.length > 0)
-        }
-    },[students])
+    // const enrolledStudents = useMemo(()=>{
+    //     let calculations = 0
+    //     if(students.length > 0){
+    //         return students.filter(item => item.enrollmentData?.length > 0)
+    //     }
+    // },[students])
 
-    console.log(enrolledStudents?.map(item => item.enrollmentData.find(item => item.status === "paid")))
+    const enrolledStudents = useMemo(() => {
+		let hasPaid;
+		if (students) {
+			let areAccepted = students?.filter(
+				(item) => item.enrollmentData.length > 0
+			);
+			hasPaid = areAccepted.filter((item) =>
+				item.enrollmentData.find((item) => item.status === "paid")
+			);
+			return hasPaid;
+		}
+		return [];
+	}, [students]);
+
+    // console.log(enrolledStudents?.map(item => item.enrollmentData.find(item => item.status === "paid")))
 
     
     const headerCards = [

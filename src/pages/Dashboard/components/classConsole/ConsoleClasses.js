@@ -8,9 +8,9 @@ import '../classConsole/Content.css'
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useState } from 'react';
 import Loader from '../../../../components/Loader';
-import { getFullDate } from '../../../../constants';
+import { getFullDate, KEY } from '../../../../constants';
 
-const KEY = 'gotocourse-userdata';
+
 
 
 const Grid = styled.div`
