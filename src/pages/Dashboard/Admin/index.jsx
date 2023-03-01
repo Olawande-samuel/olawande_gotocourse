@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { motion } from "framer-motion";
-import { Switch, Modal, Box, Skeleton } from "@mui/material";
+import { Switch, Modal, Box, Skeleton, Autocomplete, TextField } from "@mui/material";
 
 import {
 	AiOutlineDelete,
@@ -58,7 +58,7 @@ import UploadWidget from "../components/classConsole/components/UploadWidget";
 const KEY = "gotocourse-userdata";
 
 // CATEGORY DETAILS COMPONENT
-export function CategoryDetails({}) {
+export function CategoryDetails({ }) {
 	const navigate = useNavigate();
 	const { getItem } = useLocalStorage();
 	let userdata = getItem(KEY);
@@ -871,7 +871,7 @@ export function CreateCourseCategory() {
 	return (
 		<Admin header="Create Category">
 			{loader && <Loader />}
-			
+
 			<div className={clsx["admin_profile"]}>
 				<div className={clsx.admin__student}>
 					<UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
@@ -884,7 +884,7 @@ export function CreateCourseCategory() {
 							handleChange={changeHandler}
 							value={formstate.name.toUpperCase()}
 						/>
-						
+
 						<Editor
 							initialState={formstate.description}
 							title="Description"
@@ -1275,8 +1275,8 @@ export function ApproveStudent() {
 		let dueDate =
 			item?.payments?.filter((item) => item.status !== "paid").length > 0
 				? item?.payments
-						?.filter((item) => item.status !== "paid")[0]
-						?.dueDate.split("T")[0]
+					?.filter((item) => item.status !== "paid")[0]
+					?.dueDate.split("T")[0]
 				: "-";
 		return dueDate;
 	}
@@ -2297,7 +2297,7 @@ export function Mentors() {
 												isAbsolute={false}
 												type={null}
 
-												// accessPledre={teacher.accessPledre}
+											// accessPledre={teacher.accessPledre}
 											/>
 										))}
 							</tbody>
@@ -2833,9 +2833,8 @@ export function Courses() {
 													id={courseId}
 													showDetailsHandler={showDetailsHandler}
 													packages={packages}
-													date={`${startDate ? getDate(startDate) : ""} - ${
-														endDate ? getDate(endDate) : ""
-													}`}
+													date={`${startDate ? getDate(startDate) : ""} - ${endDate ? getDate(endDate) : ""
+														}`}
 													isActive={status === "active" ? true : false}
 												/>
 											)
@@ -2865,7 +2864,7 @@ export function CreateCourse() {
 }
 
 // COURSE DETAILS COMPONENT
-export function CourseDetails({}) {
+export function CourseDetails({ }) {
 	const navigate = useNavigate();
 	const { getItem, updateItem } = useLocalStorage();
 	let userdata = getItem(KEY);
@@ -3194,7 +3193,7 @@ function DeleteModal({ open, close, deleteTutor }) {
 	);
 }
 // BOOTCAMPDETAILS COMPONENT
-export function BootcampDetails({}) {
+export function BootcampDetails({ }) {
 	const navigate = useNavigate();
 	const { getItem } = useLocalStorage();
 	let userdata = getItem(KEY);
@@ -3437,13 +3436,13 @@ export function BootcampDetails({}) {
 			onSuccess: (res) => {
 				if (res.statusCode === 1) {
 					toast.success(res.message);
-          window.alert(res.message);
+					window.alert(res.message);
 				} else {
 					window.alert(res.message);
 					toast.error(res.message);
 				}
 			},
-			onError: (err) => {},
+			onError: (err) => { },
 		}
 	);
 
@@ -3472,6 +3471,13 @@ export function BootcampDetails({}) {
 			{ userId: removedStudent, bootcampId: params.id },
 		]);
 	}
+
+
+	const defaultProps = {
+		options: allStudents,
+		// getOptionLabel: (option) => option.email,
+		getOptionLabel: (option) => `${option.email} ${option.firstName} ${option.lastName}`
+	};
 
 	return (
 		<Admin header="ADMIN">
@@ -3568,7 +3574,21 @@ export function BootcampDetails({}) {
 						<div className={clsx.form_group}>
 							<div className={clsx.form_group__teachers}>
 								<h6>Add Student</h6>
-								<select
+								<Autocomplete
+									disablePortal
+									{...defaultProps}
+									id="combo-box-demo"
+									sx={{ width: 300 }}
+									onChange={(e, newValue) => {
+										console.log({ newValue });
+										// setValue(newValue);
+										setStudentData({ ...studentData, userId: newValue.userId })
+									}}
+									renderInput={(params) => <TextField {...params} label="student email" />}
+								/>
+
+
+								{/* <select
 									name="userId"
 									id="userId"
 									className="form-select"
@@ -3583,7 +3603,7 @@ export function BootcampDetails({}) {
 											value={item.userId}
 										>{`${item.email} - ${item.firstName} ${item.lastName}`}</option>
 									))}
-								</select>
+								</select> */}
 							</div>
 							<div className={clsx.form_group}>
 								<Input
@@ -3734,7 +3754,7 @@ export function Bootcamps() {
 		"price",
 	];
 
-	
+
 	useEffect(() => {
 		if (flag.current) return;
 		(async () => {
@@ -3765,10 +3785,10 @@ export function Bootcamps() {
 		navigate("details/" + _id);
 	}
 
-	function convertDate(start, end){
+	function convertDate(start, end) {
 		let startDate = getDate(start)
 		let endDate = getDate(end)
-		if(startDate?.toString().toLowerCase().includes(search) || endDate?.toString().toLowerCase().includes(search)){
+		if (startDate?.toString().toLowerCase().includes(search) || endDate?.toString().toLowerCase().includes(search)) {
 			return true
 		}
 		return false
@@ -4014,12 +4034,12 @@ export function CreateBootcamp() {
 
 						delete found.instructorName;
 						delete found.packages;
-						if(found.instructors?.length > 0){
+						if (found.instructors?.length > 0) {
 							let instructorsList = found.instructors;
 							let newList = []
 							instructorsList.forEach(instructor => newList.push(instructor.email))
-							setFormstate({...formstate, ...found, instructors: [...newList, found.instructor], type: "FLAT"})
-						}else {
+							setFormstate({ ...formstate, ...found, instructors: [...newList, found.instructor], type: "FLAT" })
+						} else {
 							setFormstate({ ...formstate, ...found, type: "FLAT" });
 						}
 						setBio(found.description);
@@ -4113,10 +4133,10 @@ export function CreateBootcamp() {
 				throw new AdvancedError("All fields are required", 0);
 			const res = location.search
 				? await updateBootcamp(
-						userdata?.token,
-						location.search.split("=").reverse()[0],
-						formData
-				  )
+					userdata?.token,
+					location.search.split("=").reverse()[0],
+					formData
+				)
 				: await addBootcamp(userdata?.token, formData);
 			const { success, message, statusCode } = res;
 
@@ -4282,7 +4302,7 @@ export function CreateBootcamp() {
 			...formstate,
 			instructors: [...formstate?.instructors, newInstructor],
 		});
-		setInstructors([...instructors, newInstructor ])
+		setInstructors([...instructors, newInstructor])
 		setNewInstructor("");
 	}
 
@@ -4486,7 +4506,7 @@ export function CreateBootcamp() {
 								Add Schedule
 							</button>
 						</div>
-						
+
 						<Editor
 							initialState={formstate.description}
 							title="Description"
@@ -4869,9 +4889,9 @@ export function Fees() {
 	}
 
 	function handlePaymentInfoEdit(e, bootcampId, userId, dueDate, amount) {
-    setEditData({nextDueDate: dueDate, bootcampId: bootcampId, userId: userId, amountPaid: amount})
-    setOpen(true)
-  }
+		setEditData({ nextDueDate: dueDate, bootcampId: bootcampId, userId: userId, amountPaid: amount })
+		setOpen(true)
+	}
 
 
 	return (
@@ -4883,13 +4903,13 @@ export function Fees() {
 				<div className={clsx.admin__student}>
 					<h1>All Payments</h1>
 					<div>
-							<input
-								type="text"
-								className="form-control"
-								placeholder="search course"
-								value={search}
-								onChange={(e) => setSearch(e.target.value)}
-							/>
+						<input
+							type="text"
+							className="form-control"
+							placeholder="search course"
+							value={search}
+							onChange={(e) => setSearch(e.target.value)}
+						/>
 					</div>
 					<div className={clsx.admin__student_main}>
 						{!fetchPaymentHistory?.isLoading && (
@@ -4919,39 +4939,39 @@ export function Fees() {
 												},
 												i
 											) => (
-                        <>
-                          <UserInfoCard
-                            key={i}
-                            num={i}
-                            enrolled={studentName}
-                            comp="Category"
-                            name={bootcampName}
-                            status={userId}
-                            coursePrice={
-                              createdAt
-                                ? new Intl.DateTimeFormat("en-US").format(
-                                    new Date(createdAt)
-                                  )
-                                : ""
-                            }
-                            date={courseName}
-                            pack={bootcampPrice ? `$ ${bootcampPrice}` : "-"}
-                            start_date={`$ ${amount}`}
-                            email={status}
-                            students={
-                              dueDate
-                                ? new Intl.DateTimeFormat("en-US").format(
-                                    new Date(dueDate)
-                                  )
-                                : ""
-                            }
-                            deleteUser={(e) => deletePayment(e, paymentId)}
-                            editPayment={true}
-                            editPaymentInfo={(e) =>
-                              handlePaymentInfoEdit(e, courseId, userId, dueDate, amount)
-                            }
-                          />
-                        </>
+												<>
+													<UserInfoCard
+														key={i}
+														num={i}
+														enrolled={studentName}
+														comp="Category"
+														name={bootcampName}
+														status={userId}
+														coursePrice={
+															createdAt
+																? new Intl.DateTimeFormat("en-US").format(
+																	new Date(createdAt)
+																)
+																: ""
+														}
+														date={courseName}
+														pack={bootcampPrice ? `$ ${bootcampPrice}` : "-"}
+														start_date={`$ ${amount}`}
+														email={status}
+														students={
+															dueDate
+																? new Intl.DateTimeFormat("en-US").format(
+																	new Date(dueDate)
+																)
+																: ""
+														}
+														deleteUser={(e) => deletePayment(e, paymentId)}
+														editPayment={true}
+														editPaymentInfo={(e) =>
+															handlePaymentInfoEdit(e, courseId, userId, dueDate, amount)
+														}
+													/>
+												</>
 											)
 										)}
 									</tbody>
@@ -4979,7 +4999,7 @@ export function Fees() {
 						)}
 					</div>
 				</div>
-        <EditPayment open={open} setOpen={setOpen} data={editData} />
+				<EditPayment open={open} setOpen={setOpen} data={editData} />
 
 			</div>
 		</Admin>
@@ -5004,48 +5024,48 @@ function EditPayment({ open, setOpen, data }) {
 	};
 
 	const [formstate, setFormstate] = useState();
-  const {adminFunctions: {updateStudentPayment}} = useAuth()
-  const {getItem} = useLocalStorage()
-  const userdata = getItem(KEY)
+	const { adminFunctions: { updateStudentPayment } } = useAuth()
+	const { getItem } = useLocalStorage()
+	const userdata = getItem(KEY)
 
-	function changeHandler(e){
-    setFormstate({...formstate, [e.target.name]: e.target.value})
-  }
-
-
-  useEffect(()=>{
-    if(data?.bootcampId){
-      let date = data.nextDueDate?.split("T")[0]
-      if(date){
-        setFormstate({...data, nextDueDate: date})
-      }else {
-        setFormstate(data)
-      }
-    }
-  },[data?.bootcampId])
+	function changeHandler(e) {
+		setFormstate({ ...formstate, [e.target.name]: e.target.value })
+	}
 
 
-
-  const mutation = useMutation(([token, data])=>updateStudentPayment(token, data), {
-    onSuccess: res => {
-      if(res.success){
-        toast.success(res.message)
-      }else {
-        toast.error(res.message)
-      }
-    },
-    onError: err => {
-      toast.success(err.message)
-    }
-  })
+	useEffect(() => {
+		if (data?.bootcampId) {
+			let date = data.nextDueDate?.split("T")[0]
+			if (date) {
+				setFormstate({ ...data, nextDueDate: date })
+			} else {
+				setFormstate(data)
+			}
+		}
+	}, [data?.bootcampId])
 
 
 
-  function submit(e){
-    e.preventDefault()
+	const mutation = useMutation(([token, data]) => updateStudentPayment(token, data), {
+		onSuccess: res => {
+			if (res.success) {
+				toast.success(res.message)
+			} else {
+				toast.error(res.message)
+			}
+		},
+		onError: err => {
+			toast.success(err.message)
+		}
+	})
 
-    mutation.mutate([userdata.token, formstate])
-  }
+
+
+	function submit(e) {
+		e.preventDefault()
+
+		mutation.mutate([userdata.token, formstate])
+	}
 	return (
 		<Modal
 			open={open}
@@ -5071,23 +5091,23 @@ function EditPayment({ open, setOpen, data }) {
 						handleChange={changeHandler}
 						value={formstate?.nextDueDate}
 					/>
-          <button
-            className="button d-flex button-lg log_btn w-50 mt-3 justify-content-center"
-            // style={{
-            //   backgroundColor: data?.isVerified && "var(--theme-blue)",
-            // }}
-            type="submit"
-            // onClick={(e) => handleVerification(e, data?.userId)}
-            >
-              {
-                mutation.isLoading ? 
-                <span className="spinner-border text-white"><span className="visually-hidden">Loading...</span></span>
-                :
-                <span>Change</span>
-              }
-              
-          </button>
-        </form>
+					<button
+						className="button d-flex button-lg log_btn w-50 mt-3 justify-content-center"
+						// style={{
+						//   backgroundColor: data?.isVerified && "var(--theme-blue)",
+						// }}
+						type="submit"
+					// onClick={(e) => handleVerification(e, data?.userId)}
+					>
+						{
+							mutation.isLoading ?
+								<span className="spinner-border text-white"><span className="visually-hidden">Loading...</span></span>
+								:
+								<span>Change</span>
+						}
+
+					</button>
+				</form>
 			</Box>
 		</Modal>
 	);
