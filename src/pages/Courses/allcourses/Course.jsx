@@ -67,7 +67,7 @@ const Grid = styled.div`
     grid-auto-rows: 460px;
     overflow: hidden;
     gap: 1.5rem;
-    justify-content:space-around;
+    justify-content:center;
     margin: 1rem 0 ;
     padding: 2rem 0;
     

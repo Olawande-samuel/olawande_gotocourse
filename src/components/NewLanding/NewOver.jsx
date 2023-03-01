@@ -258,6 +258,7 @@ export const NewReady = () => {
 
                         <p>Secure a spot today</p>
 
+                        <input type="text" name="" id="" placeholder="Enter you full name" />
                         <input type="text" name="" id="" placeholder="Enter your email" />
 
                         <button>Apply now</button>
