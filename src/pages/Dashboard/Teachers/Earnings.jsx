@@ -344,7 +344,7 @@ export function EarningCourses() {
 
 
   return (
-    <Admin header={"Earnings> Courses"}>
+    <Admin header={"Earnings"}>
       {getCourseEarnings?.isLoading  && 
         <Loader />
       }
@@ -374,11 +374,16 @@ export function EarningCourses() {
 function EarningsAccordion({course, i}){
   
   const [total, setTotal] = useState(()=>course.totalEarnings)
-  const [isNotFocused, setIsNotFocused] = useState(true)
+  
+  const [formData, setFormData] = useState({
+    instructorEarningDetailArr: [],
+    bootcampTotalEarning: course.totalEarnings || 0
+  })
 
   const {adminTeacherFunctions: {updateCourseEarnings}} = useAuth()
   const {getItem} = useLocalStorage()
   const userdata = getItem(KEY)
+
 
   const updateMutation = useMutation(([token, id, data])=>updateCourseEarnings(token, id, data), {
     onSuccess: res => {
@@ -391,13 +396,14 @@ function EarningsAccordion({course, i}){
     onError: err => toast.error(err.message)
   })
 
-  const updateEarnings = debounce(async ()=>{
-      updateMutation.mutate([userdata.token, course.bootcampId, {}])
-  }, 900)
+  function save(){
+    updateMutation.mutate([userdata.token, course.bootcampId, formData])
+  }
 
   function handleChange(e){
     setTotal(e.target.value)
-    updateEarnings()
+    setFormData({...formData, bootcampTotalEarning: Number(e.target.value)})
+    // updateEarnings()
   }
 
 
@@ -428,11 +434,22 @@ function EarningsAccordion({course, i}){
               <div>Total</div>
 
             </div>
-            {[...Array(2)].map((data, index) => (
-              <EarnInfo key={index} data={data} />
+            {course?.instructors?.map((data, index) => (
+              <EarnInfo key={index} data={data} index={index} formData={formData} setFormData={setFormData} />
             ))}
 
           </div>
+          <button className="button py-1 px-4 rounded" disabled={updateMutation?.isLoading} onClick={save}>
+            {
+              updateMutation?.isLoading ? 
+
+              <div className="spinner-border text-white">
+                <div className="visually-hidden">Loading...</div>
+              </div>
+              :
+              <span>Save</span>
+            }
+          </button>
         </Accordion.Body>
       </Accordion.Item>
     </Accordion>
@@ -440,26 +457,52 @@ function EarningsAccordion({course, i}){
 }
 
 
-const EarnInfo = ({ data }) => {
+const EarnInfo = ({data, index, formData, setFormData}) => {
+
+  useEffect(()=>{
+    let newEarningInfo = {
+      earnings: data.tutorId.earnings,
+      percentageEarning: data.tutorId.percentageEarning,
+      _id: data.tutorId._id
+    }
+    let earningArray = formData.instructorEarningDetailArr
+    earningArray[index] = newEarningInfo
+    setFormData({...formData, instructorEarningDetailArr: earningArray})
+
+  }, [data.tutorId._id])
+
+  function handleChange(e){
+    let newData = formData.instructorEarningDetailArr
+    let newEarningInfo = {
+      earnings:(formData?.bootcampTotalEarning * e.target.value )/ 100,
+      percentageEarning: Number(e.target.value),
+      _id: data.tutorId._id
+    }
+    newData[index] = newEarningInfo
+    setFormData({...formData, instructorEarningDetailArr: newData})
+  }
+
+  console.log({formData})
+
   return (
     <div className={clsx.earninfo}>
 
-      <div>{"mayowa"}</div>
+      <div>{data.tutorId.email}</div>
       <div className={clsx.earnbtn}>
-        <input type="text" placeholder={"30%"} />
+        <input type="text" placeholder={"%"} onChange={handleChange} value={formData.instructorEarningDetailArr[index]?.percentageEarning} />
       </div>
 
       <div className={clsx.earnbtn}>
-        <input type="text" placeholder={"$1700"} />
+        <input type="text" placeholder={"$1700"} disabled value={(formData?.bootcampTotalEarning && formData.instructorEarningDetailArr[index]?.percentageEarning) ? ((formData?.bootcampTotalEarning * formData.instructorEarningDetailArr[index]?.percentageEarning )/ 100 / 2) : ""}   />
       </div>
 
       <div className={clsx.earnbtn}>
-        <input type="text" placeholder={"$1700"} />
+        <input type="text" placeholder={"$1700"} disabled value={(formData?.bootcampTotalEarning && formData.instructorEarningDetailArr[index]?.percentageEarning) ? ((formData?.bootcampTotalEarning * formData.instructorEarningDetailArr[index]?.percentageEarning )/ 100 / 2) : ""}  />
       </div>
 
 
       <div className={clsx.earnbtn}>
-        {"$3400"}
+        {(formData?.bootcampTotalEarning && formData.instructorEarningDetailArr[index]?.percentageEarning) ? (formData?.bootcampTotalEarning * formData.instructorEarningDetailArr[index]?.percentageEarning )/ 100 : ""}
       </div>
     </div>
 

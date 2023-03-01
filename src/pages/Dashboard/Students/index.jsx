@@ -449,30 +449,6 @@ export function MyClasses() {
                     </div> */}
                     <div className={clsx.admin__student_main}>
                         {courseList?.length > 0 ? (
-                            // <table className={clsx.admin__student_table}>
-                            //     <thead>
-                            //         {tableHeaders.map((el, i) => (
-                            //             <th key={i}>{el}</th>
-                            //         ))}
-                            //     </thead>
-                            //     <tbody>
-                            //         {courseList?.map(
-                            //             // {_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}
-                            //             ({ bootcampName, tutorName, startTime, endTime, endDate, startDate, bootcampId, bootcampImg, _id }, i) => (
-                            //                 <tr style={{ padding: "1rem" }}>
-                            //                     <td>{i + 1}</td>
-                            //                     <td>{bootcampName}</td>
-                            //                     <td>{tutorName}</td>
-                            //                     <td>{getDate(startDate)}</td>
-                            //                     <td>{startTime}</td>
-                            //                 </tr>
-                            //             )
-                            //         )}
-                            //         <p>
-                            //         </p>
-                            //     </tbody>
-                            // </table>
-
                             <div className={` ${clsx.dashboard_courses}`}>
                                 <div className={clsx["dashboard_courses--left"]}>
                                     {/* <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
@@ -1612,30 +1588,6 @@ export function Fees() {
         }
 
     }
-
-    // async function fetchPayments(token) {
-    //     setGeneralState({ ...generalState, loading: true })
-    //     try {
-    //         const res = await Promise.all([fetchStudentFees(token), fetchBootcampFees(token)])
-    //         console.log({ res })
-    //         if (res.length > 0) {
-    //             const myPayment = res[0].data.concat(res[1].data)
-
-    //             console.log(myPayment)
-    //             setCourse(myPayment)
-    //         }
-    //         setGeneralState({ ...generalState, loading: false })
-    //     } catch (err) {
-    //         toast.error(err.message);
-    //     }
-    // }
-
-
-    // useEffect(() => {
-    //     if (userdata.token) {
-    //         fetchPayments(userdata.token)
-    //     }
-    // }, [userdata.token])
 
     useEffect(() => {
         if (ref.current) return

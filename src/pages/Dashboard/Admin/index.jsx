@@ -1185,18 +1185,15 @@ export function ApproveStudent() {
 	}
 
 	async function deleteUserHandler(e, email) {
-		console.log(e);
 		try {
 			const v = window.confirm("Are you sure you want to delete " + email);
 			if (!v) return;
 			setGeneralState({ ...generalState, loading: true });
 			const res = await deleteUser(userdata?.token, [email]);
-			console.log(res);
 			const { statusCode, message, success } = res;
 			if (!success) throw new AdvancedError(message, statusCode);
 			else {
 				navigate(-1);
-				console.log("deleted");
 				toast.success(message);
 			}
 		} catch (err) {
@@ -1219,7 +1216,6 @@ export function ApproveStudent() {
 
 			const res = await getAStudentKYCById(id, userdata?.token);
 			const { message, success, statusCode } = res;
-			console.log("student res data", res.data);
 			if (!success) throw new AdvancedError(message, statusCode);
 			else {
 				//do somethings
@@ -1261,7 +1257,6 @@ export function ApproveStudent() {
 		}
 	);
 
-	console.log({ fetchStudentEnrollments });
 
 	function getOutstandingAmount(item) {
 		let outAmt = item?.payments
@@ -1473,9 +1468,6 @@ export function Approve() {
 		commonFunctions: { deleteUser },
 	} = useAuth();
 
-	console.log("mentors data", data);
-	console.log("loggged in userdata", userdata);
-
 	async function getMentorInfo(id) {
 		const userdata = getItem(KEY);
 
@@ -1489,7 +1481,6 @@ export function Approve() {
 
 			const res = await getAMentorKYCById(id, userdata?.token);
 			const { message, success, statusCode } = res;
-			console.log("res data kyc", res.data);
 			if (!success) throw new AdvancedError(message, statusCode);
 			else {
 				//do somethings
@@ -1518,7 +1509,6 @@ export function Approve() {
 		const teacherInfo = getItem("gotocourse-teacherDetails");
 		setData(teacherInfo);
 	}, []);
-	console.log({ data });
 
 	async function deleteUserHandler(e, email) {
 		try {
@@ -1528,7 +1518,6 @@ export function Approve() {
 			);
 			if (!value) return;
 			const res = await deleteUser(userdata?.token, [email]);
-			console.log(res);
 			const { statusCode, message, success } = res;
 			if (!success) throw new AdvancedError(message, statusCode);
 			else {
@@ -1545,8 +1534,6 @@ export function Approve() {
 	async function handleVerification(e, type, id, pledreId) {
 		e.preventDefault();
 		const userdata = getItem(KEY);
-
-		console.log({ pledreId });
 		let item = {
 			userId: id,
 			pledreTeacherId: pledreId ? pledreId : null,
@@ -2965,7 +2952,6 @@ export function CourseDetails({}) {
 	}
 
 	async function toggleCourseStatusHandler(e) {
-		console.log({ formstate });
 		setLoading((_) => true);
 		let pledId;
 		try {
@@ -2977,7 +2963,6 @@ export function CourseDetails({}) {
 				//   short_description: formstate.description,
 				//   price: formstate.price,
 				// });
-				// console.log({ pledRes });
 				// if (pledRes.id) {
 				// pledId = pledRes.id;
 
@@ -3379,7 +3364,6 @@ export function BootcampDetails({}) {
 		delete formdata.instructorEmail;
 
 		let id = formdata.bootcampId ? formdata.bootcampId : formdata._id;
-		console.log(formstate.instructor);
 		try {
 			setLoading(true);
 			const res = await updateBootcamp(userdata?.token, id, formdata);
@@ -3387,13 +3371,11 @@ export function BootcampDetails({}) {
 			if (!success) throw new AdvancedError(message, statusCode);
 			else {
 				// const teacherDetails = await generalState.pledre.getTeacherDetails(formdata.instructor);
-				// console.log("id",formstate.pledreCourseId,)
 				// if(teacherDetails._id){
 				//   const addTeachtoCourse = await generalState.pledre.addTeacherToCourse({
 				//     teacher_id: teacherDetails?._id,
 				//     course_id: formstate.pledreCourseId,
 				//   });
-				//   console.log({addTeachtoCourse})
 				// }
 
 				setFormstate(res.data);
@@ -3437,7 +3419,6 @@ export function BootcampDetails({}) {
 		{
 			enabled: userdata.token !== null,
 			onSuccess: (res) => {
-				console.log({ res });
 				if (res?.data) {
 					setAllEnrolledStudents(res.data);
 					return;
@@ -3470,7 +3451,6 @@ export function BootcampDetails({}) {
 		([token, data]) => removeStudentToClass(token, data),
 		{
 			onSuccess: (res) => {
-				console.log({ res });
 				if (res.statusCode === 1) {
 					toast.success(res.message);
 					setStudent("");
@@ -3492,7 +3472,6 @@ export function BootcampDetails({}) {
 			{ userId: removedStudent, bootcampId: params.id },
 		]);
 	}
-	console.log({ removedStudent });
 
 	return (
 		<Admin header="ADMIN">
@@ -3755,7 +3734,7 @@ export function Bootcamps() {
 		"price",
 	];
 
-	console.log({ bootcamps });
+	
 	useEffect(() => {
 		if (flag.current) return;
 		(async () => {
@@ -3789,9 +3768,6 @@ export function Bootcamps() {
 	function convertDate(start, end){
 		let startDate = getDate(start)
 		let endDate = getDate(end)
-
-		console.log(startDate + "includes search: " + search + " "  + startDate.includes(search))
-		console.log(endDate + "includes search: " + search + " " + startDate.includes(search))
 		if(startDate?.toString().toLowerCase().includes(search) || endDate?.toString().toLowerCase().includes(search)){
 			return true
 		}
@@ -4042,7 +4018,7 @@ export function CreateBootcamp() {
 							let instructorsList = found.instructors;
 							let newList = []
 							instructorsList.forEach(instructor => newList.push(instructor.email))
-							setFormstate({...formstate, ...found, instructors: newList, type: "FLAT"})
+							setFormstate({...formstate, ...found, instructors: [...newList, found.instructor], type: "FLAT"})
 						}else {
 							setFormstate({ ...formstate, ...found, type: "FLAT" });
 						}
@@ -4517,7 +4493,7 @@ export function CreateBootcamp() {
 							setBio={setBio}
 						/>
 
-						<div className={clsx.form_group}>
+						{/* <div className={clsx.form_group}>
 							<label htmlFor={"instructor"}>Main Instructor</label>
 							<select
 								name="instructor"
@@ -4535,7 +4511,7 @@ export function CreateBootcamp() {
 										</option>
 									))}
 							</select>
-						</div>
+						</div> */}
 						<div className={clsx.form_group}>
 							{formstate.instructors?.length > 0 ? (
 								formstate.instructors?.map((item, index) => (
@@ -4879,7 +4855,6 @@ export function Fees() {
 		([token, id]) => deletePaymentHistory(token, id),
 		{
 			onSuccess: (res) => {
-				console.log(res);
 				queryClient.inValidateQueries(["fetch payment history"]);
 			},
 			onError: (err) => console.error(err),
@@ -4887,7 +4862,6 @@ export function Fees() {
 	);
 
 	function deletePayment(e, id) {
-		console.log({ id });
 		e.preventDefault();
 		if (window.confirm("Are you sure you want to delete this payment")) {
 			deletePaymentMutation.mutate([userdata.token, id]);
@@ -4899,7 +4873,6 @@ export function Fees() {
     setOpen(true)
   }
 
-  console.log({editData})
 
 	return (
 		<Admin header={"Fees"}>
@@ -5290,13 +5263,11 @@ export function Earnings() {
 					fetchEarnings(userdata?.token),
 					fetchWithdrawals(userdata?.token),
 				]);
-				console.log({ res });
 				const [earnings, withdrawals] = res;
 				const { success, message, statusCode } = earnings;
 				if (!success) throw new AdvancedError(message, statusCode);
 				else {
 					let { data } = earnings;
-					console.log(data);
 					setEarnings(data);
 				}
 				const {
@@ -5397,7 +5368,6 @@ export function Student() {
 		// "Action",
 	];
 
-	console.log({ studentList });
 	return (
 		<Admin header={"Student"}>
 			{loader && <Loader />}
@@ -5590,7 +5560,6 @@ export function EnrolledStudents() {
 												accessPledre={student.accessPledre}
 												user={true}
 												type={null}
-												// deleteUser={(e) => console.Console.log(e)}
 												handleVerification={(e) => console.log(e)}
 												handlePledreAccess={(e) => console.log(e)}
 												isAbsolute={true}
