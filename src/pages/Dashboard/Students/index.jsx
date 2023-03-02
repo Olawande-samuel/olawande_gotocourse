@@ -2242,7 +2242,7 @@ function UpcomingCourses({ data, search }) {
                             </div>
 
                             <div className={clsx["courseitem"]}>
-                                ${(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
+                                #{(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
 
                             </div>
 
@@ -2456,15 +2456,15 @@ function AvailableCourses({ data, search }) {
     }
     // console.log({ data });
 
-    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
-    const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
-    const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-    const all = [...first, ...second, ...third];
+    const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-03" && item.isActive) : [];
+    // const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+    const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-03" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    const all = [...first, ...third];
 
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
-                <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
+                <h6 style={{ marginBottom: ".5rem" }}>Upcoming Classes</h6>
                 <small className="mb-4 d-block">Select and enroll for a course to get started</small>
 
                 <div className={clsx["courseheader"]}>
