@@ -1102,9 +1102,9 @@ const CourseComponent = () => {
         const all = [...first, ...second, ...third]; 
         setBootcampTrainingInfo(all)
       } else if (res.data && id === "upcoming") {
-        const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
-        const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate.includes("2023-01") && !item.startDate.includes("2023-01-19T00:00:00.000Z") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-        const all = [...first, ...second];
+        // const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
+        const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate?.includes("2023-03") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+        const all = [...second];
         setBootcampTrainingInfo(all)
         return
 

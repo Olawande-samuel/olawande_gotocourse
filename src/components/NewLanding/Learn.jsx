@@ -5,7 +5,7 @@ import cap from "../../images/a/cap.png";
 
 const Container = styled.div`
    background: #fff;
-   padding : 2rem 0;
+   padding : 2rem 0 1rem 0;
 
    .container{
        .headercontent{

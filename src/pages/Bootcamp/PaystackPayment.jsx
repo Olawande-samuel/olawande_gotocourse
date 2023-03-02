@@ -374,7 +374,7 @@ export const BootcampPaystackPayment = () => {
                   <div className="d-flex flex-column">
                     <span className={clsx.pay__tit}>Total</span>
                     <p className={`${clsx.pay__total}`}>
-                      ${price && +price + (price * (5 / 100))}
+                      #{price && +price + (price * (5 / 100))}
                     </p>
                   </div>
 
