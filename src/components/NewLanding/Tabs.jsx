@@ -9,18 +9,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/Auth";
 import {motion} from "framer-motion"
 import placeholder from "../../images/cybersecurity.webp";
-import SwiperCore, {
-  Navigation,
-  Autoplay,
-  Pagination,
-  Scrollbar,
-  A11y,
-} from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
 
-// Import Swiper styles
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Navigation, Autoplay, Pagination, Scrollbar, A11y, EffectCoverflow } from "swiper";
 import "swiper/css";
+import "swiper/css/effect-coverflow";
+
 import { COURSE_CATEGORY_KEY } from '../../constants';
+import { CelebCard } from '../../pages/Celebrity';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,9 +50,10 @@ function a11yProps(index) {
   };
 }
 
-export function Category() {
+export function Category({size=4, midSize=4, gap=10}) {
+  
   return (
-    <section className="newCategories mt-4">
+    <section className="mt-4">
       <div className="container-xxl">
       <header className="newCategories_header_wrapper">
         <h1 className="newCategories_header">A broad selection of courses</h1>
@@ -304,11 +301,10 @@ export function TabsComp(){
                 className="btn-plain new_categories_btn py-2 px-4 mb-4 rounded-0">Explore Categories</motion.button>
             </Link>          
             <Swiper
-            // install Swiper modules
             modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
             loop={true}
             speed={1500}
-            autoplay={{ delay: 2500 }}
+            autoplay={{delay:3500}}
             spaceBetween={0}
             slidesPerView={1}
             // navigation
@@ -331,15 +327,15 @@ export function TabsComp(){
               },
               1024: {
                 slidesPerView: 4,
-                spaceBetween: 28,
+                spaceBetween: 20,
               },
               1704: {
                 slidesPerView: 4.5,
-                spaceBetween: 28,
+                spaceBetween: 20,
               },
             }}
           >
-            {categories.data?.data?.map((item) => (
+            {categories.data?.data?.map((item, i) => (
               <SwiperSlide key={item.categoryId}>
                 <CategoryCard {...item} type="category" all={item} />
               </SwiperSlide>
