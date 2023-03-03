@@ -194,7 +194,7 @@ export const UpCoursesCard = styled.div`
 
 export function Up() {
   return (
-    <section className="newCategories mt-4" id="upcoming">
+    <section className="mt-4" id="upcoming">
       <div className="container-xxl">
         <header className="newCategories_header_wrapper">
           <h1 className="newCategories_header">Upcoming courses</h1>
@@ -248,7 +248,7 @@ export function TabsComp() {
         <Swiper
           // install Swiper modules
           modules={[Navigation, Autoplay]}
-          // loop={true}
+          loop={true}
           speed={2500}
           autoplay={{ delay: 2400 }}
           spaceBetween={0}
