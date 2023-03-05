@@ -548,7 +548,7 @@ const FileComponent = (contentItem) => {
 
         if (val?.split('/')[0] === "video") {
             return "video"
-        } else if ((val?.split('/')[1] === "pdf") || (val?.split('/')[1] === "pptx") || (val?.split('/')[1] === "ppt") || (val?.split('/')[1] === "doc") || (val?.split('/')[1] === "docx") || ((val?.split('/')[1] === "csv") || (val?.split('/')[1] === "clsx"))) {
+        } else if ((val?.split('/')[1] === "pdf") || (val?.split('/')[1] === "pptx") || (val?.split('/')[1] === "ppt") || (val?.split('/')[1] === "doc") || (val?.split('/')[1] === "undefined") || (val?.split('/')[1] === "docx") || (val?.split('/')[1] === "xlsx") || ((val?.split('/')[1] === "csv") || (val?.split('/')[1] === "clsx"))) {
             return "pdf"
         }
         else return "image"
@@ -600,7 +600,8 @@ const FileComponent = (contentItem) => {
     return (
         <div>
             <Paper variant='outlined' className="paper">
-                {!(getExtention(contentItem?.contentItem?.type) === "pdf") &&
+                {
+                // !(getExtention(contentItem?.contentItem?.type) === "pdf") &&
                     <PaperTop>
                         <div>
                             <BodyActions>
@@ -631,7 +632,6 @@ const FileComponent = (contentItem) => {
 
                         getExtention(contentItem?.contentItem?.type) === "pdf" ?
                             <div className="pdf">
-
                                 <DocumentViewer
                                     file={contentItem?.contentItem?.fileUri}
                                     name={contentItem?.contentItem?.fileName?.split(".")[0]?.split("_")?.join(" ")}
@@ -651,8 +651,8 @@ const FileComponent = (contentItem) => {
             <ViewModal
                 open={open}
                 setOpen={setOpen}
-                file={contentItem?.contentItem?.fileName}
-                type={contentItem?.contentItem?.type}
+                file={contentItem?.contentItem?.fileUri}
+                type={contentItem?.contentItem?.type} 
                 title={contentItem?.contentItem?.title}
             />
 
