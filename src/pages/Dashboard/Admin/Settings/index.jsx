@@ -53,26 +53,26 @@ function a11yProps(index) {
 export default function Settings() {
   const [value, setValue] = React.useState(0);
   const title= [
-    {
-      title:"Homepage Hero",
-      hero: true,
-      category:"LpHero"
-    },
-    {
-      title:"Homepage Cohort",
-      hero: false,
-      category:"Cohort"
-    }, 
-    {
-      title:"Homepage Self Paced" ,
-      hero: false,  
-      category:"selfPaced"
-    },
-    {
-      title:"Teachers Hero",
-      hero: true,
-      category:"TpHero"
-    }
+    // {
+    //   title:"Homepage Hero",
+    //   hero: true,
+    //   category:"LpHero"
+    // },
+    // {
+    //   title:"Homepage Cohort",
+    //   hero: false,
+    //   category:"Cohort"
+    // }, 
+    // {
+    //   title:"Homepage Self Paced" ,
+    //   hero: false,  
+    //   category:"selfPaced"
+    // },
+    // {
+    //   title:"Teachers Hero",
+    //   hero: true,
+    //   category:"TpHero"
+    // }
   ]
   const handleChange = (event, newValue) => {
     setValue(newValue);
