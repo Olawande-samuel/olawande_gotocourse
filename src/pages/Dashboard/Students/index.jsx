@@ -2242,7 +2242,7 @@ function UpcomingCourses({ data, search }) {
                             </div>
 
                             <div className={clsx["courseitem"]}>
-                                #{(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
+                            &#8358;{(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
 
                             </div>
 
@@ -2305,8 +2305,7 @@ function AllAvailableCourses({ data, search }) {
 
     }
     // console.log({ data });
-
-    const first = data?.length > 0 ? data?.filter(item => item.startDate?.includes("2023-03") && item.isActive) : [];
+    const first = data?.length > 0 ? data?.filter(item => item.startDate?.includes("2023-03") && item.isActive && item.category !== "TRAIN2 WORKABROAD").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
     // const third = data?.length > 0 ? data?.filter(item => !item.startDate?.includes("2023-03") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
    
     const all = [...first];

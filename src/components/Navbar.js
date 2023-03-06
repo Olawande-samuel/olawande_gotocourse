@@ -89,11 +89,13 @@ const Navbar = ({ background }) => {
 			{mainpage && showBanner && (
 				<div className="d-flex align-items-center justify-content-center p-2 w-100 bg-white">
 					<a
-						href="#upcoming"
+						// href="#upcoming"
+						href="https://gotocourse.events/Free-Tech-course-training"
 						className="mb-0 fw-bold me-4"
 						style={{ fontFamily: "Raleway" }}
+						target="_blank"
 					>
-						Free class Alert!! - Register for some free classes starting from March 3, 2023
+						Free class Alert!! - Classes starts March 15, 2023 and Registraion closes May 10. Click to Apply Now!!!
 					</a>
 					<i>
 						<AiOutlineCloseCircle

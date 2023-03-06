@@ -136,7 +136,7 @@ const NewCourse = () => {
                 const cyber = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63fcd51d4aacf5d78772e89f" && item.subCategory === "IN_DEMAND") : [];
                 const audit = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63717aa2f0eaad8dcf3930a7" && item.subCategory === "IN_DEMAND") : [];
                 const business = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "6371cda6f0eaad8dcf3966e7" && item.subCategory === "IN_DEMAND") : [];
-                const design = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63a5d697cdc2f98c79d3acad" && item.subCategory === "IN_DEMAND") : [];
+                const design = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63f74cdc78429071a01a00bf" && item.subCategory === "IN_DEMAND") : [];
                 const data = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "636e9a3ef0eaad8dcf3699fc" && item.subCategory === "IN_DEMAND") : [];
                 const risk = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63fcdb564aacf5d787730a0b" && item.subCategory === "IN_DEMAND") : [];
                 const it = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63717978f0eaad8dcf392eeb" && item.subCategory === "IN_DEMAND") : [];
