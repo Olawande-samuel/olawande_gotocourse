@@ -1,4 +1,8 @@
+import { useState } from "react";
+import { toast } from "react-toastify";
 import styled from "styled-components"
+import { AdvancedError } from "../../classes";
+import { useAuth } from "../../contexts/Auth";
 
 const Container = styled.section`
    background: linear-gradient(131.29deg, #1000E8 0%, #020063 100%);
@@ -247,8 +251,56 @@ const OverflowContainer = styled.section`
 
 `
 export const NewReady = () => {
+    const [loading, setLoading] = useState(false)
+    const [formData, setFormData] = useState({
+        fullName: "",
+        email: ""
+    })
+    const { studentFunctions: { addMarket, } } = useAuth();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+        try {
+
+            const res= await addMarket(formData)
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            if (statusCode === 1) {
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setLoading(false)
+                setFormData({
+                    fullName: "",
+                    email: ""
+                })
+
+            }
+        } catch (error) {
+            setLoading(false)
+            console.log({ error });
+            toast.error(error, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+
+    }
     return (
         <section>
+            
             <Container>
                 <div className="container">
                     <div className="inputbox">
@@ -257,11 +309,26 @@ export const NewReady = () => {
                         </h2>
 
                         <p>Secure a spot today</p>
+                        <form onSubmit={handleSubmit}>
+                            <input type="text" name="fullName" value={formData.fullName} placeholder="Enter you full name" onChange={(e) => setFormData({ ...formData, [e.target.name]: e.target.value })} />
+                            <input type="text" name="email" value={formData.email} placeholder="Enter your email" onChange={(e) => setFormData({ ...formData, [e.target.name]: e.target.value })} />
 
-                        <input type="text" name="" id="" placeholder="Enter you full name" />
-                        <input type="text" name="" id="" placeholder="Enter your email" />
+                            {
+                                loading ?
+                                    (
+                                        <button className="button button-md log_btn w-100"
+                                            disabled={loading}>
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                        </button>
+                                    )
+                                    :
+                                    <button>Apply now</button>
+                            }
 
-                        <button>Apply now</button>
+                        </form>
+
                     </div>
 
                 </div>

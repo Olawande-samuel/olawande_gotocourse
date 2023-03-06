@@ -81,11 +81,11 @@ const rightLink = [
   //   title: "Teachers",
   //   path: "/become-a-teacher"
   // },
-  {
-    id: 8,
-    title: "Teachers",
-    path: "/qualifications"
-},
+//   {
+//     id: 8,
+//     title: "Teachers",
+//     path: "/qualifications"
+// },
   {
     id: 9,
     title: "Affiliates",
