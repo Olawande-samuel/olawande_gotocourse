@@ -91,13 +91,13 @@ import { NewReady } from "./NewOver";
 
 const NewLanding = () => {
 
-  const { show, boot } = useIntercom(); 
+  const { show, boot } = useIntercom();
 
-  useEffect(()=>{
+  useEffect(() => {
     boot()
     show()
 
-  },[])
+  }, [])
 
   return (
     <>
@@ -106,57 +106,57 @@ const NewLanding = () => {
         <meta property="og:site_name" content="Gotocourse" />
         <meta name="description" content="Learn on gotocourse. Learn in-demand tech skills from experts" />
       </Helmet>
-    <Layout background="blue">
-      <Hero />
-      <NewCompanies />
-      <NewReady/>
-      {/* <Ready/> */}
-      {/* <Overflow/> */}
-      <GreatOpportunities />
-      <Category />
-      <Up />
-      <NewCourse/>
-      <UpskillCourse />
-      <Headstart />
-      <Pathfinder />
-      {/* <ShortCourses /> */}
-      <Endless/>
-      <HowLearn/>
-      <Review/>
-      {/* <Testimonials type="newLanding" /> */}
-      <VideoSection />
-            {/* <Companies /> */}
-       {/* <Stats /> */}
-      {/* <WhatweDo /> */}
-      {/* <Tutorial/> */}
-      {/* <Mission /> */}
-      {/* <Benefits /> */}
-      {/* <IndemandClasses /> */}
-      {/* <ExecutiveClasses /> */}
-      {/* <Mentors /> */}
-      {/* <BetterWay /> */} 
-      {/* <TechPro /> */}
-      {/* <VirtualTraining /> */}
-      {/* <LiveWebinars /> */}
-      {/* <Blog /> */}
-      {/* <Success /> */}
-      {/* <Logos /> */}
-      {/* <TeachingBenefits /> */}
-      {/* <TrackPro /> */}
-      {/* <Faq /> */}
-      {/* <AffiliatePro /> */}
-      {/* <Gif /> */}
-      {/* <Experienced /> */}
-      {/* <Benefits /> */}
-      {/* <Seamless /> */}
-      {/* <Bootcamp/> */}
-      {/* <Becoming /> */}
-       {/* <Learn type={"newLanding"} /> */}
+      <Layout background="blue">
+        <Hero />
+        <NewCompanies />
+        <NewReady />
+        {/* <Ready/> */}
+        {/* <Overflow/> */}
+        <GreatOpportunities />
+        <Category />
+        <Up />
+        <NewCourse />
+        <UpskillCourse />
+        <Headstart />
+        <Pathfinder />
+        {/* <ShortCourses /> */}
+        <Endless />
+        <HowLearn />
+        <Review />
+        {/* <Testimonials type="newLanding" /> */}
+        <VideoSection />
+        {/* <Companies /> */}
+        {/* <Stats /> */}
+        {/* <WhatweDo /> */}
+        {/* <Tutorial/> */}
+        {/* <Mission /> */}
+        {/* <Benefits /> */}
+        {/* <IndemandClasses /> */}
+        {/* <ExecutiveClasses /> */}
+        {/* <Mentors /> */}
+        {/* <BetterWay /> */}
+        {/* <TechPro /> */}
+        {/* <VirtualTraining /> */}
+        {/* <LiveWebinars /> */}
+        {/* <Blog /> */}
+        {/* <Success /> */}
+        {/* <Logos /> */}
+        {/* <TeachingBenefits /> */}
+        {/* <TrackPro /> */}
+        {/* <Faq /> */}
+        {/* <AffiliatePro /> */}
+        {/* <Gif /> */}
+        {/* <Experienced /> */}
+        {/* <Benefits /> */}
+        {/* <Seamless /> */}
+        {/* <Bootcamp/> */}
+        {/* <Becoming /> */}
+        {/* <Learn type={"newLanding"} /> */}
         {/* <Self /> */}
-      {/* <Mentorship />  */}
-      {/* <InPerson /> */}
-      {/* <Overview /> */}
-    </Layout>
+        {/* <Mentorship />  */}
+        {/* <InPerson /> */}
+        {/* <Overview /> */}
+      </Layout>
     </>
   );
 };
@@ -181,19 +181,19 @@ function VideoSection() {
 
       </div>
 
+
+
       <div className="video__right">
         <div className="content">
-          <h5>Learn and grow with our community</h5>
+          <h5> Partner with us.</h5>
 
-          <p>Community is everything! Meet and
-            collaborate with Gotocourse mentors and
-            career advisors who can help you advance
-            your digital skills and career.
-            It's a great way to expand your skill set.</p>
+          <p>Gotocourse in partnership with providing a fantastic learning and teaching experience partners with teachers like you to help students learn new skills</p>
 
-          <button>
-            Join our community
-          </button>
+          <Link to={`/qualifications`}>
+            <button>
+              Apply to be a Teacher
+            </button>
+          </Link>
         </div>
       </div>
       <PopupVideo open={open} setOpen={setOpen} />
@@ -367,7 +367,7 @@ function Hero() {
       title: "Learn the Skill",
       title2: "To get the Job",
       subtitle: `The beginner-friendly online learning programme with `,
-      subtitle2:`the highest completion rate and grad employment`,
+      subtitle2: `the highest completion rate and grad employment`,
       social: true,
       acctype: "student",
       list: [
@@ -524,7 +524,7 @@ function HeroContent({
           <h6 className="newHero_left-title mb-4 mb-lg-5">
             {list && subtitle}
             <span className="d-block">{subtitle2}</span>
-            
+
           </h6>
           {list ? (
             <div className=" new_hero_list d-flex justify-content-start">
