@@ -223,6 +223,8 @@ function MarketingLeads(){
     
   }
 
+  console.log({data});
+
 
   return(
     <div className="row">
@@ -317,7 +319,7 @@ function TableRow({item, index}){
       <td>{new Intl.DateTimeFormat('en-US').format(new Date(item?.createdAt))}</td>
       <td>{item?.fullName ? item.fullName : `${item.firstName} ${item.lastName}` }</td>
       <td>{item?.email}</td>
-      <td>{item?.phone ? item.phone : item?.kyc[0]?.phone}</td>
+      <td>{item?.phone ? item.phone : item?.kyc ? item?.kyc[0]?.phone : ""}</td>
       <td>{item?.program}</td>
       <td><button className="btn btn-outline-danger" onClick={()=>handleDelete()}>Delete</button></td>
   </tr>
