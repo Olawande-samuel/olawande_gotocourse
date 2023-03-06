@@ -87,6 +87,7 @@ import Endless from "./Endless";
 import HowLearn from "./Learn";
 import Review from "./Review";
 import { NewReady } from "./NewOver";
+import { ToastContainer } from "react-toastify";
 
 
 const NewLanding = () => {
@@ -107,6 +108,16 @@ const NewLanding = () => {
         <meta name="description" content="Learn on gotocourse. Learn in-demand tech skills from experts" />
       </Helmet>
       <Layout background="blue">
+        <ToastContainer
+         position="top-right"
+         autoClose={5000}
+         hideProgressBar={false}
+         newestOnTop={false}
+         closeOnClick
+         rtl={false}
+         pauseOnFocusLoss
+         draggable
+         pauseOnHover/>
         <Hero />
         <NewCompanies />
         <NewReady />
