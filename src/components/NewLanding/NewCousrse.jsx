@@ -131,7 +131,7 @@ const NewCourse = () => {
         notifyOnChangeProps: ["category", "isFetching"],
 
         onSuccess: (res) => {
-            if (res.data.length > 0) {
+            if (res.data?.length > 0) {
                 const productMng = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "636e4fbd30615c03fc6fb4ed" && item.subCategory === "IN_DEMAND") : [];
                 const cyber = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63fcd51d4aacf5d78772e89f" && item.subCategory === "IN_DEMAND") : [];
                 const audit = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63717aa2f0eaad8dcf3930a7" && item.subCategory === "IN_DEMAND") : [];
