@@ -17,6 +17,7 @@ import { useLocalStorage } from "../hooks";
 import { ScrollToTop } from "../pages/Courses";
 import LogoutButton from "./LogoutButton";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { useQuery } from "@tanstack/react-query";
 
 const KEY = "gotocourse-userdata";
 
@@ -25,6 +26,8 @@ const Navbar = ({ background }) => {
 	const [show, setShow] = useState(false);
 	const [drop, setDrop] = useState(false);
 	const { getItem } = useLocalStorage();
+	const [banner, setBanner] = useState({})
+
 
 	const value = getItem(KEY);
 	const location = useLocation();
@@ -51,6 +54,20 @@ const Navbar = ({ background }) => {
 			};
 		});
 	}, []);
+
+	const { adminFunctions: { fetchBanner } } = useAuth();
+
+
+	useQuery(["fetch banner"], () => fetchBanner(), { 
+	  onSuccess: ({ data }) => {
+		let newData = data.filter(d => d.metaKey ==="HEADER_PROMOTION");
+		setBanner(JSON.parse(newData[0]?.metaValue))
+  
+	  }
+	})
+
+	console.log({banner});
+
 
 	const celebRoute = location.pathname.split("/")[1] === "lounge";
 	const confirmEmail =
@@ -90,12 +107,12 @@ const Navbar = ({ background }) => {
 				<div className="d-flex align-items-center justify-content-center p-2 w-100 bg-white">
 					<a
 						// href="#upcoming"
-						href="https://gotocourse.events/Free-Tech-course-training"
+						href={banner.link ? `${banner.link}` : "https://gotocourse.events/Free-Tech-course-training"}
 						className="mb-0 fw-bold me-4"
 						style={{ fontFamily: "Raleway" }}
 						target="_blank"
 					>
-						Free class Alert!! - Classes starts March 15, 2023 and Registraion closes May 10. Click to Apply Now!!!
+						{banner.text ? banner.text : "Free class Alert!! - Classes starts March 15, 2023 and Registraion closes May 10. Click to Apply Now!!!"}
 					</a>
 					<i>
 						<AiOutlineCloseCircle
