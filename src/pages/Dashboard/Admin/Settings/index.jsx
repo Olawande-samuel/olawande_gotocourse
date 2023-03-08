@@ -1,21 +1,23 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
 import vector from "../../../../images/vector.png";
-import {Admin} from "../index"
+import { Admin } from "../index"
 import clsx from "../styles.module.css";
 import adminClsx from "../../Teachers/styles.module.css";
 import UploadForm from "../../../../components/UploadForm";
 import Input from "../../../../components/Input";
 
-import {UploadImageIcon} from "../../Teachers/CreateCourse"
+import { UploadImageIcon } from "../../Teachers/CreateCourse"
 import { useLocalStorage } from '../../../../hooks';
 import { useAuth } from '../../../../contexts/Auth';
 import { AdvancedError } from '../../../../classes';
 import { toast } from 'react-toastify';
+import { useQuery } from '@tanstack/react-query';
+import Loader from '../../../../components/Loader';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -30,7 +32,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-         {children}
+          {children}
         </Box>
       )}
     </div>
@@ -52,7 +54,12 @@ function a11yProps(index) {
 
 export default function Settings() {
   const [value, setValue] = React.useState(0);
-  const title= [
+  const title = [
+    {
+      title: "Homepage Banner",
+      hero: false,
+      category: "Hbanner"
+    },
     // {
     //   title:"Homepage Hero",
     //   hero: true,
@@ -83,22 +90,22 @@ export default function Settings() {
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           {/* <h3>Settings</h3> */}
-          <div className="row w-100 mt-4">      
-              <Box sx={{ width: '100%' }}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                  <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="scrollable">
-                      {title.map((item, index)=> (
-                        <Tab label={item.title} {...a11yProps(index)} />
-                        ))}
-                  </Tabs>
-                </Box>
-                {title.map((item, index)=>(
-                  <TabPanel value={value} index={index}>
-                    <HomepageHero showButtons={item.hero} category={item.category} />
-                </TabPanel>
-                ))}
+          <div className="row w-100 mt-4">
+            <Box sx={{ width: '100%' }}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="scrollable">
+                  {title.map((item, index) => (
+                    <Tab label={item.title} {...a11yProps(index)} />
+                  ))}
+                </Tabs>
               </Box>
-            </div>
+              {title.map((item, index) => (
+                <TabPanel value={value} index={index}>
+                  <HomepageHero showButtons={item.hero} category={item.category} />
+                </TabPanel>
+              ))}
+            </Box>
+          </div>
         </div>
       </div>
     </Admin>
@@ -106,104 +113,142 @@ export default function Settings() {
 }
 
 
-function HomepageHero({showButtons, category}){
-  const[formstate, setFormstate] = React.useState({})
+function HomepageHero({ showButtons, category }) {
+  const [formstate, setFormstate] = React.useState({})
   const [openImage, setOpenImage] = useState(false);
-  const {adminFunctions: {AddLPHero, AddTPHero, AddCohortSection, AddSelfpacedSection}} = useAuth()
-  const {getItem} = useLocalStorage()
-  const [loading, setLoading]= useState(false)
+  const { adminFunctions: {fetchBanner,updateBanner, AddLPHero, AddTPHero, AddCohortSection, AddSelfpacedSection, addBanner } } = useAuth()
+  const { getItem } = useLocalStorage()
+  const [loading, setLoading] = useState(false)
+  const [banner, setBanner] = useState({})
   const userdata = getItem("gotocourse-userdata")
-  function changeHandler(e){
-    setFormstate({...formstate, [e.target.name]: e.target.value})
+  function changeHandler(e) {
+    setFormstate({ ...formstate, [e.target.name]: e.target.value })
   }
   function showUploadFormHandler() {
     setOpenImage((_) => true);
   }
 
+  let bannerChange ={
+    metaKey: "HEADER_PROMOTION",
+    metaValue: JSON.stringify({
+      text: formstate.bannerText,
+      link:formstate.bannerLink
+    })
+
+  }
+
+
+	const {loading: bannerLoading} = useQuery(["fetch banner"], () => fetchBanner(), { 
+	  onSuccess: ({ data }) => {
+		let newData = data.filter(d => d.metaKey ==="HEADER_PROMOTION");
+		setBanner(JSON.parse(newData[0]?.metaValue))
   
-  async function onSubmit(e){
+	  }
+	})
+  // updateBanner
+  console.log({banner});
+  console.log((category === "Hbanner" && (banner?.text !== "")));
+
+  async function onSubmit(e) {
     e.preventDefault()
-      try {
-        setLoading(true)
-        const response = category === "LpHero" ? await AddLPHero(formstate, userdata?.token): category === "TpHero" ? await AddTPHero(formstate, userdata?.token): category === "Cohort" ? await AddCohortSection (formstate, userdata?.token): await AddSelfpacedSection(formstate, userdata?.token)
-        const { success, message, statusCode } = response;
-        if (!success || statusCode !== 1)
-          throw new AdvancedError(message, statusCode);
-        const { data } = response;
-        console.log(data)
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true, 
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      } catch (error) {
-        toast.error(error.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      } finally {
-        setLoading(false)
-      }
+    try {
+      setLoading(true)
+      const response = category === "LpHero" ?
+        await AddLPHero(formstate, userdata?.token) : category === "TpHero" ?
+          await AddTPHero(formstate, userdata?.token) : category === "Cohort" ?
+            await AddCohortSection(formstate, userdata?.token)  : (category === "Hbanner" &&(banner?.text !== "")) ?
+            await updateBanner(bannerChange, userdata?.token): category === "Hbanner" ?
+              await addBanner(bannerChange, userdata?.token):
+              await AddSelfpacedSection(formstate, userdata?.token)
+      const { success, message, statusCode } = response;
+      if (!success || statusCode !== 1)
+        throw new AdvancedError(message, statusCode);
+      const { data } = response;
+      console.log(data)
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } catch (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } finally {
+      setLoading(false)
+    }
     // } else if (category === "TpHero"){
   }
-  return(
+  return (
     <div className="row">
+      {
+        bannerLoading ? <Loader/> :
       <div className="col-lg-8">
-        <form  className="form" onSubmit={onSubmit}>
-        <UploadForm isOpen={openImage} setIsOpen={setOpenImage} />
-        <div
-          className={adminClsx.upload__file_box}
-          onClick={showUploadFormHandler}
-        >
-          <img src={vector} alt={"Placeholder"} />
-          <p>Upload Image</p>
-        </div>
-        <Input label="Image file name" name="image" type="text" value={formstate.image} handleChange={changeHandler} />
-        <Input label="Heading" name="heading" type="text" value={formstate.heading} handleChange={changeHandler} />
-        <div className="form-group my-2">
-          <label htmlFor="description" className="form-label generic_label">Description</label>
-          <textarea name="description" id="description" cols="10" rows="5" className="form-control"></textarea>
-        </div>
-        {showButtons &&
-        <div className="form-group my-2">
-          <label htmlFor="description" className="form-label generic_label d-block">Button Color</label>
-          <div className="d-flex flex-wrap">
-            <div>
-              <input type="radio" name="buttonColor" id="orange" value={"#F75C4E"} handleChange={changeHandler} className="editsectionsradio" style={{color:"red"}} />
-              <label htmlFor="orange" className="form-label generic_label ms-1" style={{color:"var(--theme-orange)"}}>Gotocourse Orange</label>
+        <form className="form" onSubmit={onSubmit}>
+          {category !== "Hbanner" && <>
+            <UploadForm isOpen={openImage} setIsOpen={setOpenImage} />
+            <div
+              className={adminClsx.upload__file_box}
+              onClick={showUploadFormHandler}
+            >
+              <img src={vector} alt={"Placeholder"} />
+              <p>Upload Image</p>
             </div>
+            <Input label="Image file name" name="image" type="text" value={formstate.image} handleChange={changeHandler} />
+            <Input label="Heading" name="heading" type="text" value={formstate.heading} handleChange={changeHandler} />
 
-            <div>
-              <input type="radio" name="buttonColor" id="blue"  value={"#0C2191"} handleChange={changeHandler} className="ms-md-5" />
-              <label htmlFor="blue" className="form-label generic_label ms-1" style={{color:"var(--theme-blue)"}}>Gotocourse Blue</label>
+            <div className="form-group my-2">
+              <label htmlFor="description" className="form-label generic_label">Description</label>
+              <textarea name="description" id="description" cols="10" rows="5" className="form-control"></textarea>
             </div>
-          </div>
-        </div>
-        }
-        <button
+          </>}
+          {category === "Hbanner" && <>
+
+          <Input label="BannerText" name="bannerText" type="text" value={formstate.bannerText} handleChange={changeHandler} placeholder="HEADER PROMOTION"/>
+          <Input label="BannerLink" name="bannerLink" type="text" value={formstate.bannerLink} handleChange={changeHandler} placeholder="Add link if any "/>
+</>}
+          {showButtons &&
+            <div className="form-group my-2">
+              <label htmlFor="description" className="form-label generic_label d-block">Button Color</label>
+              <div className="d-flex flex-wrap">
+                <div>
+                  <input type="radio" name="buttonColor" id="orange" value={"#F75C4E"} handleChange={changeHandler} className="editsectionsradio" style={{ color: "red" }} />
+                  <label htmlFor="orange" className="form-label generic_label ms-1" style={{ color: "var(--theme-orange)" }}>Gotocourse Orange</label>
+                </div>
+
+                <div>
+                  <input type="radio" name="buttonColor" id="blue" value={"#0C2191"} handleChange={changeHandler} className="ms-md-5" />
+                  <label htmlFor="blue" className="form-label generic_label ms-1" style={{ color: "var(--theme-blue)" }}>Gotocourse Blue</label>
+                </div>
+              </div>
+            </div>
+          }
+          <button
             className="btn btn-primary my-3"
             style={{ backgroundColor: "var(--theme-blue)" }}
             type="submit"
           >
-            {loading ? 
-            <div className="spinner-border text-light">
-               <span className="visually-hidden">Loading...</span>
-            </div>
-           :
-           "Save"
-          }
+            {loading ?
+              <div className="spinner-border text-light">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              :
+              "Save"
+            }
           </button>
         </form>
       </div>
+      }
     </div>
   )
 }

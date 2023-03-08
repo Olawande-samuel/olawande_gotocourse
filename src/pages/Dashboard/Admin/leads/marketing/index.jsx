@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 
 
-import {Admin} from "../../index"
+import { Admin } from "../../index"
 import clsx from "../../styles.module.css";
 import { useLocalStorage } from '../../../../../hooks';
 import { useAuth } from '../../../../../contexts/Auth';
@@ -13,7 +13,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TextField } from '@mui/material';
 import { useMemo } from 'react';
- 
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -27,7 +27,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-         {children}
+          {children}
         </Box>
       )}
     </div>
@@ -50,40 +50,40 @@ function a11yProps(index) {
 export default function Market() {
   const [value, setValue] = React.useState(0);
 
- 
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
 
-  const {adminFunctions: {fetchLeads, exportLeads, fetchMarketingLeads}} = useAuth()
-  const {getItem} = useLocalStorage()
-  const [loading, setLoading]= useState(false)
+  const { adminFunctions: { fetchLeads, exportLeads, fetchMarketingLeads } } = useAuth()
+  const { getItem } = useLocalStorage()
+  const [loading, setLoading] = useState(false)
   const userdata = getItem("gotocourse-userdata")
   const [data, setData] = useState([])
-  
 
-  const fetchAdLeads = useQuery(["fetchAdLeads", userdata?.token], () =>fetchLeads(userdata.token),
+
+  const fetchAdLeads = useQuery(["fetchAdLeads", userdata?.token], () => fetchLeads(userdata.token),
     {
-      enabled:userdata.token !== null,
-      onSuccess: res=> {
+      enabled: userdata.token !== null,
+      onSuccess: res => {
         console.log(res)
       },
-      onError: err=>{
+      onError: err => {
         console.error(err)
       }
     }
   )
   const fetchMrktLeads = useQuery(["fetchAdLeads", userdata?.token], () => fetchMarketingLeads(userdata.token),
     {
-      enabled:userdata.token !== null,
-      onSuccess: res=> {
-        
-        if(res?.success){
+      enabled: userdata.token !== null,
+      onSuccess: res => {
+
+        if (res?.success) {
           setData(res.data)
         }
       },
-      onError: err=>{
+      onError: err => {
         console.error(err)
       }
     }
@@ -93,7 +93,7 @@ export default function Market() {
     onSuccess: (res) => {
       console.log("csv", res)
     },
-    onError: err=>{
+    onError: err => {
       console.log(err)
     }
   })
@@ -104,7 +104,7 @@ export default function Market() {
   //   exportToCsv.mutate(userdata.token)
   // }
 
-  function downloadCsv(data){
+  function downloadCsv(data) {
     const blob = new Blob([data], { type: "text/csv" })
     const href = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -114,98 +114,98 @@ export default function Market() {
     link.click();
 
     document.body.removeChild(link);
-    URL.revokeObjectURL(href);       
-  } 
-
-
-
-  function exportCsv (e){
-    e.preventDefault()
-  
-    let headers = ['Date, Name, Email, Phone, Program']
-
-    let usersCsv = fetchAdLeads?.data?.data?.reduce((acc, item) => {
-      const {createdAt, fullName, email, phone, program } = item
-      acc.push([createdAt,fullName, email, phone, program].join(','))
-      return acc
-    }, [])
-  
-    let csvData = [...headers, ...usersCsv].join('\n')
-
-    downloadCsv(csvData)
-    
+    URL.revokeObjectURL(href);
   }
 
 
-  
+
+  function exportCsv(e) {
+    e.preventDefault()
+
+    let headers = ['Date, Name, Email, Phone, Program']
+
+    let usersCsv = fetchAdLeads?.data?.data?.reduce((acc, item) => {
+      const { createdAt, fullName, email, phone, program } = item
+      acc.push([createdAt, fullName, email, phone, program].join(','))
+      return acc
+    }, [])
+
+    let csvData = [...headers, ...usersCsv].join('\n')
+
+    downloadCsv(csvData)
+
+  }
+
+
+
 
   return (
     <Admin header="Marketing Leads">
       <div className={clsx["admin_profile"]}>
         <div className={clsx.admin__student}>
           {/* <h3>AdLeads</h3> */}
-          <div className="row w-100 mt-4">      
-              <Box sx={{ width: '100%' }}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <MarketingLeads />
-                </Box>
+          <div className="row w-100 mt-4">
+            <Box sx={{ width: '100%' }}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <MarketingLeads />
               </Box>
-            </div>
+            </Box>
+          </div>
         </div>
       </div>
     </Admin>
   );
 }
 
-function MarketingLeads(){
-  const {adminFunctions: {fetchMarketingLeads}} = useAuth()
-  const {getItem} = useLocalStorage()
-  
+function MarketingLeads() {
+  const { adminFunctions: { fetchMarketingLeads } } = useAuth()
+  const { getItem } = useLocalStorage()
+
   const userdata = getItem("gotocourse-userdata")
 
-  const [data, setData]= useState([]);
+  const [data, setData] = useState([]);
   const [value, setValue] = React.useState(null);
   const [search, setSearch] = React.useState("");
 
   const dateFilter = useMemo(() => {
-    if(value?.$d){
-      return  new Intl.DateTimeFormat('en-US').format(new Date(value?.$d))
+    if (value?.$d) {
+      return new Intl.DateTimeFormat('en-US').format(new Date(value?.$d))
     } return ""
-  } , [value?.$d])
+  }, [value?.$d])
 
 
   const fetchMrktLeads = useQuery(["fetchAdLeads", userdata?.token], () => fetchMarketingLeads(userdata.token),
     {
-      enabled:userdata.token !== null,
-      onSuccess: res=> {
-        
-        if(res?.success){
+      enabled: userdata.token !== null,
+      onSuccess: res => {
+
+        if (res?.success) {
           setData(res.data)
         }
       },
-      onError: err=>{
+      onError: err => {
         console.error(err)
       }
     }
   )
 
-  
-  
-  
+
+
+
   const exportCsv = e => {
     e.preventDefault()
-  
+
     // Headers for each column
     let headers = ['Date, First name, Last name, Email, Phone, ']
-  
+
     // Convert users data to a csv
     let usersCsv = data.reduce((acc, item) => {
-      const {createdAt, firstName, lastName, email, phone  } = item
-      acc.push([createdAt,firstName, lastName, email, phone].join(','))
+      const { createdAt, firstName, lastName, email, phone } = item
+      acc.push([createdAt, firstName, lastName, email, phone].join(','))
       return acc
 
     }, [])
-  
+
     let csvData = [...headers, ...usersCsv].join('\n')
 
 
@@ -218,65 +218,67 @@ function MarketingLeads(){
     link.click();
 
     document.body.removeChild(link);
-    URL.revokeObjectURL(href);         
+    URL.revokeObjectURL(href);
 
-    
+
   }
 
+  console.log({ data });
 
-  return(
+
+  return (
     <div className="row">
       <div className="col-12">
         <button className="btn-plain mb-3" onClick={exportCsv}>Download Leads</button>
-      <div className="mb-4 d-flex">
+        <div className="mb-4 d-flex">
           <div className="">
-              <input type="search" name="search" id="search" onChange={(e)=>setSearch(e.target.value)} value={search} className="p-2 rounded form-control " placeholder='search...'/>
+            <input type="search" name="search" id="search" onChange={(e) => setSearch(e.target.value)} value={search} className="p-2 rounded form-control " placeholder='search...' />
 
           </div>
           <div className="ms-auto">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                      label="Filter by date"
-                      inputFormat="MM/DD/YYYY"
-                      value={value}
-                      onChange={(newValue) => {
-                        setValue(newValue);
-                      }}
-                      renderInput={(params) => <TextField {...params} />}
-                  />
-              </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="Filter by date"
+                inputFormat="MM/DD/YYYY"
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
 
           </div>
-      </div>
+        </div>
         <div className="table-responsive">
-            {
-                fetchMrktLeads?.isLoading ? 
+          {
+            fetchMrktLeads?.isLoading ?
 
-                <div className="spinner-border text-primary">
-                    <div className="visually-hidden">Loading...</div>
-                </div>
-                :
-                <table className="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>S/N</th>
-                            <th>Date</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            {/* <th>Program</th> */}
-                        </tr>
-                    </thead>
+              <div className="spinner-border text-primary">
+                <div className="visually-hidden">Loading...</div>
+              </div>
+              :
+              <table className="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>S/N</th>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    {/* <th>Program</th> */}
+                  </tr>
+                </thead>
 
-                    <tbody>
-                      {
-                          data?.filter(item => (new Intl.DateTimeFormat('en-US').format(new Date(item?.createdAt)).includes(dateFilter))).map((item, index) => (
-                              <TableRow  index={index} item={item}  key={index} />
-                          ))
-                      }
-                    </tbody>
-                </table>
-            }
+                <tbody>
+                  {
+                    data?.filter(item => (new Intl.DateTimeFormat('en-US').format(new Date(item?.createdAt)).includes(dateFilter))).map((item, index) => (
+                      <TableRow index={index} item={item} key={index} />
+                    ))
+                  }
+                </tbody>
+              </table>
+          }
         </div>
       </div>
     </div>
@@ -284,42 +286,61 @@ function MarketingLeads(){
 }
 
 
-function TableRow({item, index}){
+function TableRow({ item, index }) {
 
   const queryClient = useQueryClient()
-  const {adminFunctions: {deleteLead}} = useAuth()
-  const {getItem} = useLocalStorage()
-  const [loading, setLoading]= useState(false)
+  const { adminFunctions: { deleteLead, deleteMarket } } = useAuth()
+  const { getItem } = useLocalStorage()
+  const [loading, setLoading] = useState(false)
   const userdata = getItem("gotocourse-userdata")
 
+  console.log({item});
 
-  const deleteLeads = useMutation(([token, id])=>deleteLead(token, id),
+
+  const deleteLeads = useMutation(([token, id]) => deleteLead(token, id),
     {
-        onSuccess: res=> {
-            queryClient.invalidateQueries(["fetchAdLeads"])
-            toast.success(res.message)
+      onSuccess: res => {
+        queryClient.invalidateQueries(["fetchAdLeads"])
+        toast.success(res.message)
 
-        },
-        onError: err=>{
-            console.error(err)
-        }
+      },
+      onError: err => {
+        console.error(err)
+      }
     })
 
-  function handleDelete(){
-    if(window.confirm("Are you sure you want to delete ?")){
+  const deleteLandingPageLeads = useMutation(([token, id]) => deleteMarket(token, id),
+    {
+      onSuccess: res => {
+        queryClient.invalidateQueries(["fetchAdLeads"])
+        toast.success(res.message)
+
+      },
+      onError: err => {
+        console.error(err)
+      }
+    })
+
+  function handleDelete(value) {
+    value ?
+      deleteLandingPageLeads.mutate([userdata.token, item._id])
+      :
+      // if (window.confirm("Are you sure you want to delete ?")) {
       deleteLeads.mutate([userdata.token, item._id])
-    }
+
+
   }
+
 
   return (
     <tr >
       <td>{index + 1}</td>
       <td>{new Intl.DateTimeFormat('en-US').format(new Date(item?.createdAt))}</td>
-      <td>{item?.fullName ? item.fullName : `${item.firstName} ${item.lastName}` }</td>
+      <td>{item?.fullName ? item.fullName : `${item.firstName} ${item.lastName}`}</td>
       <td>{item?.email}</td>
-      <td>{item?.phone ? item.phone : item?.kyc[0]?.phone}</td>
+      <td>{item?.phone ? item.phone : item?.kyc ? item?.kyc[0]?.phone : ""}</td>
       <td>{item?.program}</td>
-      <td><button className="btn btn-outline-danger" onClick={()=>handleDelete()}>Delete</button></td>
-  </tr>
+      <td><button className="btn btn-outline-danger" onClick={() => handleDelete(item.type === "campaign" ? true : false)}>Delete</button></td>
+    </tr>
   )
 }
