@@ -14,8 +14,7 @@ import { useAuth } from "../../../../contexts/Auth";
 
 const PopModal = ({ show, handleClose, data }) => {
 
-    console.log({data})
-    const navigate = useNavigate()
+    
     return (
         <>
             <Modal show={show} onHide={handleClose} className="classroom__modal">
