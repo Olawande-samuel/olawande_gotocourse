@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import NewBenefit from "../NewBenefit"
-import Footer from "../Footer"
+import AfricaFooter from "../AfricaFooter"
 import MainHero from "../MainHero"
 import Train from "../Train"
 import { TrainCompanies } from "../../NewCompanies"
@@ -24,7 +24,7 @@ const Africa = () => {
             <Comment/>
             <TrainCompanies/>
             <Train/>
-            <Footer />
+            <AfricaFooter />
 
         </Container>
 
