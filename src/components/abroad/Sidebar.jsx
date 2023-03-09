@@ -1,5 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { KEY } from "../../constants";
+import { useLocalStorage } from "../../hooks";
+import { motion } from 'framer-motion'
 
 export const Side = styled.div`
 	position: fixed;
@@ -63,32 +66,137 @@ export const Side = styled.div`
 `;
 
 const SideBar = ({ showSidebar, toggleSidebar }) => {
+	const location = useLocation()
+	const africa = location.pathname.split("/")[1]?.includes("africa")
+	const school = location.pathname.split("/")[1]?.includes("school")
+	const { getItem } = useLocalStorage();
+	let navigate = useNavigate()
+	const value = getItem(KEY);
 	return (
 		<Side showSidebar={showSidebar}>
 			<ul>
-				<li>
-					<Link to={`/create`}>Create</Link>
-				</li>
-				<li>
-					<Link to={`/manage`}>Manage</Link>
-				</li>
-				<li>
-					<Link to={`/learn-on-gotocourse`}>Learn with Gotocourse</Link>
-				</li>
-				<li>
-					<Link to={`/pricing`}>Pricing</Link>
-				</li>
-				<li>
-					<button className="first__btn">
-						<Link to={`/school/login`}>Sign in</Link>{" "}
-					</button>
-				</li>
+				{
+					!africa && <>
+						<li>
+							<Link to={`/create`}>Create</Link>
+						</li>
+						<li>
+							<Link to={`/manage`}>Manage</Link>
+						</li>
+						<li>
+							<Link to={`/learn-on-gotocourse`}>Learn with Gotocourse</Link>
+						</li>
+						<li>
+							<Link to={`/pricing`}>Pricing</Link>
+						</li>
+					</>
+				}
 
-				<li>
-					<button className="second__btn">
-						<Link to={`/school/signup`}>Register for free</Link>
-					</button>
-				</li>
+				{
+					africa && <>
+						<li>
+							<Link to={`/learn-on-gotocourse`}>Learn with Gotocourse</Link>
+						</li>
+						<li>
+							<Link to={`/create`}>Create on Gotocourse</Link>
+						</li>
+						<li>
+							<Link to={`/africa/train-to-work`}>Train to work</Link>
+						</li>
+
+						<li>
+							<Link to={`/africa/women-in-tech`}>Women in tech</Link>
+						</li>
+					</>
+				}
+
+
+				{!value?.token && school && <>
+
+
+					<li>
+						<button className="first__btn">
+							<Link to={`/school/login`}>Sign in</Link>{" "}
+						</button>
+					</li>
+
+					<li>
+						<button className="second__btn">
+							<Link to={`/school/signup`}>Register for free</Link>
+						</button>
+					</li>
+
+				</>
+				}
+				{value?.token && school &&
+					<>
+						<li className="me-3 nav_link">
+							<motion.span
+								style={{
+									cursor: "pointer"
+								}}
+
+								whileHover={{
+									textShadow: "0px 0px 8px rgb(255, 255, 255)",
+								}}
+								transition={{ duration: 0.1 }}
+								onClick={() => {
+									localStorage.clear();
+
+									navigate("/login");
+								}}
+							>
+								Logout
+							</motion.span>
+						</li>
+					</>
+				}
+
+
+				{!value?.token && africa && <>
+
+
+					<li>
+						<button className="first__btn">
+							<Link to={`/login`}>Sign in</Link>{" "}
+						</button>
+					</li>
+
+					<li>
+						<button className="second__btn">
+							<Link to={`/signup`}>Register for free</Link>
+						</button>
+					</li>
+
+				</>
+				}
+				{value?.token && africa &&
+					<>
+						<li className="me-3 nav_link">
+							<motion.span
+								style={{
+									cursor: "pointer",
+									color: "rgba(255, 255, 255)",
+									border: "1px solid #Fff",
+									borderRadius:"10px",
+									padding: ".5rem 1rem"
+								}}
+
+								whileHover={{
+									textShadow: "0px 0px 8px rgb(255, 255, 255)",
+								}}
+								transition={{ duration: 0.1 }}
+								onClick={() => {
+									localStorage.clear();
+
+									navigate("/login");
+								}}
+							>
+								Logout
+							</motion.span>
+						</li>
+					</>
+				}
 			</ul>
 
 			<div className="empty" onClick={toggleSidebar}></div>

@@ -10,6 +10,7 @@ import { KEY } from "../../constants";
 import { FaRegUser } from "react-icons/fa";
 import { useState } from "react";
 import logo from '../../images/abroad/logo.png'
+import SideBar from "./Sidebar";
 
 const Container = styled.div`
 	width: 100%;
@@ -136,11 +137,14 @@ const NavContainer = styled.div`
 	}
 `;
 
-const Navbar = ({ toggleSidebar }) => {
+const Navbar = () => {
 	const { setGeneralState } = useAuth();
 	const { getItem } = useLocalStorage();
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
+
+	const [showBar, setShowBar] = useState(false)
+	const toggleSidebar = () => setShowBar(!showBar)
 
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -199,13 +203,13 @@ const Navbar = ({ toggleSidebar }) => {
 
 					<ul>
 						<div className="firstitems">
-							{/* <li>
-								<Link to={`/signup?trainee`}>Train to Work Abroad</Link>
-							</li> */}
-							{/* <li>
+							<li>
+								<Link to={`/africa/train-to-work`}>Train to Work Abroad</Link>
+							</li>
+							 <li>
 								<Link to={`/women`}>Women for Tech</Link>
-							</li> */}
-							
+							</li>
+							 
 							{/* <div className="dropdown">
 							<button className="dropbtn">Create on Gotocourse</button>
 							<div className="dropdown-content">
@@ -297,6 +301,7 @@ const Navbar = ({ toggleSidebar }) => {
 					</div>
 				</div>
 			</NavContainer>
+			<SideBar showSidebar={showBar} toggleSidebar={toggleSidebar}/>
 		</Container>
 	);
 };

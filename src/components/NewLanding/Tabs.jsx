@@ -68,6 +68,299 @@ export function Category({size=4, midSize=4, gap=10}) {
   ); 
 
 }
+
+export function TrainCategory({size=4, midSize=4, gap=10}) {
+  
+  return (
+    <section className="mt-4">
+      <div className="container-xxl">
+      <header className="newCategories_header_wrapper">
+        <h1 className="newCategories_header text-center">Courses Available</h1>
+        <p className="sub_title text-center" style={{width:"min(100% - 1rem, 1300px)"}}>
+        Access a wide range of in-demand tech and business skills courses taught by industry <br/> experts specially curated for you. 
+        </p>
+      </header>
+      <TrainTabsComp />
+      <WomenTabsComp/>
+      
+      </div>
+    </section>
+  ); 
+
+}
+
+export function TrainTabsComp(){
+  const {
+    // otherFunctions: { fetchCategories, fetchCourses },
+    otherFunctions: { fetchCourses, fetchBootcamps }
+  } = useAuth();
+  
+  const [value, setValue] = useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps());
+
+  const all = data?.data?.length > 0 ? data?.data?.filter(item => item.category === "TRAIN2 WORKABROAD") : [];
+
+  return (
+    <>
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        aria-label="basic tabs example"
+        variant="scrollable"
+
+        TabIndicatorProps={{sx:{backgroundColor: '#F75C4E'}}} 
+        sx={{
+          "& button": {color:'#F75C4E'},
+          "& button.Mui-selected": {color:'#F75C4E !important', fontWeight: 'bold'},
+        }}
+      >
+        <Tab
+          label={"Train to work abroad programme"}
+          className="text-capitalize fw-bolder text-dark"
+          {...a11yProps(0)}
+        >
+
+        </Tab>
+        {/* {categories.data?.data?.map((h, i) => (
+          <Tab
+            key={i + 1}
+            label={h.name}
+            className="text-capitalize fw-bolder text-dark"
+            {...a11yProps(i + 1)}
+          />
+        ))} */}
+      </Tabs>
+
+      <TabPanel
+        value={value}
+        index={0}
+        style={{ height: "100%", width: "100%", paddingBottom: "1rem" }}
+        key={0}
+      >
+          <div className="popular_views dark_border">
+            <Link to={`/categories`} className="d-inline-flex">
+              <motion.button
+                whileHover={{ 
+                  boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                  textShadow:"0px 0px 8px rgb(255, 255, 255)",
+                  backgroundColor: "#eee"
+                }}
+                className="btn-plain new_categories_btn py-2 px-4 mb-4 rounded-0">Explore Courses</motion.button>
+            </Link>          
+            <Swiper
+            modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+            loop={true}
+            speed={1500}
+            autoplay={{delay:3500}}
+            spaceBetween={0}
+            slidesPerView={1}
+            // navigation
+            pagination={{ clickable: true }}
+            scrollbar={{ draggable: true }}
+            breakpoints={{
+              // when window width is >= 320px
+              320: {
+                slidesPerView: 1,
+                spaceBetween: 0,
+              },
+              // when window width is >= 640px
+              575: {
+                slidesPerView: 2,
+                spaceBetween: 5,
+              },
+              700: {
+                slidesPerView: 3,
+                spaceBetween: 5,
+              },
+              1024: {
+                slidesPerView: 4,
+                spaceBetween: 20,
+              },
+              1704: {
+                slidesPerView: 4.5,
+                spaceBetween: 20,
+              },
+            }}
+          >
+            {all?.map((item, i) => (
+              <SwiperSlide key={item.categoryId}>
+                <CategoryCard {...item} type="category" all={item} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+        </div>
+      </TabPanel>
+
+      {/* {categories.data?.data?.map((item, index) => (
+        <TabPanel
+          value={value}
+          index={index + 1}
+          style={{ height: "100%", width: "100%" }}
+          key={index + 1}
+        >
+          <div className="popular_views dark_border">
+            <h1 className="newCategories_header">Expand your opportunities with <span className="text-capitalize">{item.name.toLowerCase()}</span></h1>
+            <Link to={`/categories/${item.name}`} className="d-inline-flex">
+              <motion.button
+                whileHover={{ 
+                  boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                  textShadow:"0px 0px 8px rgb(255, 255, 255)",
+                  backgroundColor: "#eee"
+                }}
+                className="btn-plain py-2 px-4  mb-4 rounded-0">Explore <span className="text-capitalize">{item.name.toLowerCase()}</span></motion.button>
+            </Link>
+            <CoursesContainer courses={courses} category={item} key={index}  />
+          </div>
+        </TabPanel>
+      ))} */}
+      
+    </>
+  )
+}
+
+
+
+
+export function WomenTabsComp(){
+  const {
+    // otherFunctions: { fetchCategories, fetchCourses },
+    otherFunctions: { fetchCourses, fetchBootcamps }
+  } = useAuth();
+  
+  const [value, setValue] = useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps());
+
+  const all = data?.data?.length > 0 ? data?.data?.filter(item => item.category === "TRAIN2 WORKABROAD") : [];
+
+  return (
+    <>
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        aria-label="basic tabs example"
+        variant="scrollable"
+
+        TabIndicatorProps={{sx:{backgroundColor: '#F75C4E'}}} 
+        sx={{
+          "& button": {color:'#F75C4E'},
+          "& button.Mui-selected": {color:'#F75C4E !important', fontWeight: 'bold'},
+        }}
+      >
+        <Tab
+          label={"Women in tech programme"}
+          className="text-capitalize fw-bolder text-dark"
+          {...a11yProps(0)}
+        >
+
+        </Tab>
+        {/* {categories.data?.data?.map((h, i) => (
+          <Tab
+            key={i + 1}
+            label={h.name}
+            className="text-capitalize fw-bolder text-dark"
+            {...a11yProps(i + 1)}
+          />
+        ))} */}
+      </Tabs>
+
+      <TabPanel
+        value={value}
+        index={0}
+        style={{ height: "100%", width: "100%", paddingBottom: "1rem" }}
+        key={0}
+      >
+          <div className="popular_views dark_border">
+            <Link to={`/categories`} className="d-inline-flex">
+              <motion.button
+                whileHover={{ 
+                  boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                  textShadow:"0px 0px 8px rgb(255, 255, 255)",
+                  backgroundColor: "#eee"
+                }}
+                className="btn-plain new_categories_btn py-2 px-4 mb-4 rounded-0">Explore Courses</motion.button>
+            </Link>          
+            <Swiper
+            modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+            loop={true}
+            speed={1500}
+            autoplay={{delay:3500}}
+            spaceBetween={0}
+            slidesPerView={1}
+            // navigation
+            pagination={{ clickable: true }}
+            scrollbar={{ draggable: true }}
+            breakpoints={{
+              // when window width is >= 320px
+              320: {
+                slidesPerView: 1,
+                spaceBetween: 0,
+              },
+              // when window width is >= 640px
+              575: {
+                slidesPerView: 2,
+                spaceBetween: 5,
+              },
+              700: {
+                slidesPerView: 3,
+                spaceBetween: 5,
+              },
+              1024: {
+                slidesPerView: 4,
+                spaceBetween: 20,
+              },
+              1704: {
+                slidesPerView: 4.5,
+                spaceBetween: 20,
+              },
+            }}
+          >
+            {all?.map((item, i) => (
+              <SwiperSlide key={item.categoryId}>
+                <CategoryCard {...item} type="category" all={item} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+        </div>
+      </TabPanel>
+
+      {/* {categories.data?.data?.map((item, index) => (
+        <TabPanel
+          value={value}
+          index={index + 1}
+          style={{ height: "100%", width: "100%" }}
+          key={index + 1}
+        >
+          <div className="popular_views dark_border">
+            <h1 className="newCategories_header">Expand your opportunities with <span className="text-capitalize">{item.name.toLowerCase()}</span></h1>
+            <Link to={`/categories/${item.name}`} className="d-inline-flex">
+              <motion.button
+                whileHover={{ 
+                  boxShadow: "0px 0px 8px rgb(0, 0, 0)", 
+                  textShadow:"0px 0px 8px rgb(255, 255, 255)",
+                  backgroundColor: "#eee"
+                }}
+                className="btn-plain py-2 px-4  mb-4 rounded-0">Explore <span className="text-capitalize">{item.name.toLowerCase()}</span></motion.button>
+            </Link>
+            <CoursesContainer courses={courses} category={item} key={index}  />
+          </div>
+        </TabPanel>
+      ))} */}
+      
+    </>
+  )
+}
+
+
 function PopularContainer({ category, tab_number, popular }) {
   const {
     otherFunctions: { fetchCourses, searchCategories },
