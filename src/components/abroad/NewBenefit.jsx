@@ -56,7 +56,8 @@ padding: 2rem;
                 font-weight: 800;
                 font-size: 18px;
                 line-height: 18px;
-                color: #fff;
+                /* color: #fff; */
+                color: var(--theme-blue);
                 padding: 1rem 0;
             }
 
@@ -78,7 +79,7 @@ padding: 2rem;
             margin: unset;
 
             .content{
-            grid-template-columns: 1fr;
+            grid-template-columns: minmax(200px, 300px)
             }
         }
     }

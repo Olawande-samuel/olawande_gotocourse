@@ -1,15 +1,15 @@
 import styled from "styled-components"
 import greta from "../../images/a/greta.png";
 import woman from "../../images/a/coach.png";
+import green from "../../images/a/green.png";
 const Container = styled.section`
     padding: 5rem 0;
 
 .container{
-    width: 95%;
-    margin: 0 auto;
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
 
 
     .items{
@@ -17,7 +17,7 @@ const Container = styled.section`
         background: #FFFFFF;
         box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
         border-radius: 4px;
-        padding: 2.5rem;
+        padding: 2rem;
 
         .img{
             flex: .3;
@@ -46,7 +46,6 @@ const Container = styled.section`
 @media (max-width: 768px) {
 
         .container{
-            width: 100%;
            grid-template-columns: 1fr;
            .items{
                flex-direction: column;
@@ -93,6 +92,21 @@ const Comment = () => {
                         <div className="commenter">
                             <p>Geeta Vasandani</p>
                             <span>Student Success Factor</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div className="items">
+                    <div className="img">
+                        <img src={green} alt="" />
+                    </div>
+                    <div className="comment">
+                        <p>
+                        “The future belongs to those who learn more skills and combine them in creative ways.”
+                        </p>
+                        <div className="commenter">
+                            <p>Robert Greene</p>
+                            <span>Author & Thought leader </span>
                         </div>
                     </div>
 
