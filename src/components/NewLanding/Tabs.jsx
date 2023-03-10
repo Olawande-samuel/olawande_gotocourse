@@ -112,10 +112,10 @@ export function TrainTabsComp(){
         aria-label="basic tabs example"
         variant="scrollable"
 
-        TabIndicatorProps={{sx:{backgroundColor: '#F75C4E'}}} 
+        TabIndicatorProps={{sx:{backgroundColor: '#000', display:"none"}}} 
         sx={{
-          "& button": {color:'#F75C4E'},
-          "& button.Mui-selected": {color:'#F75C4E !important', fontWeight: 'bold'},
+          "& button": {color:'#000'},
+          "& button.Mui-selected": {color:'#000 !important', fontWeight: 'bold', fontSize:"18px"},
         }}
       >
         <Tab
@@ -249,10 +249,10 @@ export function WomenTabsComp(){
         aria-label="basic tabs example"
         variant="scrollable"
 
-        TabIndicatorProps={{sx:{backgroundColor: '#F75C4E'}}} 
+        TabIndicatorProps={{sx:{backgroundColor: '#000', display:"none"}}} 
         sx={{
-          "& button": {color:'#F75C4E'},
-          "& button.Mui-selected": {color:'#F75C4E !important', fontWeight: 'bold'},
+          "& button": {color:'#000'},
+          "& button.Mui-selected": {color:'#000 !important', fontWeight: 'bold',fontSize:"18px"},
         }}
       >
         <Tab

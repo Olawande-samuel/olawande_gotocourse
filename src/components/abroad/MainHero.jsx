@@ -41,7 +41,7 @@ gap: 5rem;
             font-size: 40px;
             line-height: 54px;
             padding: .3rem 0;
-            color:var(--theme-orange)
+            color:#fff;
          }
          p{
             font-weight: 400;

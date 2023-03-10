@@ -12,7 +12,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../contexts/Auth";
 import { KEY } from "../../constants";
 
-import style from "./pay.module.css";
+import style from "./Pay.module.css";
 import { useLocalStorage } from "../../hooks";
 import { AdvancedError } from "../../classes";
 import Success from "../../images/paymentSuccess.png";

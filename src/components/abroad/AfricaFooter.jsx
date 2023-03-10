@@ -8,7 +8,7 @@ import { useAuth } from "../../contexts/Auth";
 import { BsFacebook, BsInstagram, BsTwitter } from "react-icons/bs";
 import { AiOutlineMail } from "react-icons/ai";
 import { height, padding } from "@mui/system";
-import { TrainLogo } from "../../images/components/svgs";
+import africalogo from '../../images/abroad/africalogo.png'
 
 const hover = {
   hover: {
@@ -131,6 +131,7 @@ const AfricaFooter = () => {
               <Link to="/" onClick={() => window.scrollTo(0, 0)}>
                 <i className="d-none d-lg-block">
                   <Logo color={"#fff"} style={{width: "100px"}}/>
+                  {/* <img src={africalogo} alt="" style={{width: "150px"}}/> */}
                   {/* <Logo color={"var(--theme-blue)"} /> */}
                   {/* <TrainLogo/> */}
                 </i>

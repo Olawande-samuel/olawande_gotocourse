@@ -9,7 +9,8 @@ import { useLocalStorage } from "../../hooks";
 import { KEY } from "../../constants";
 import { FaRegUser } from "react-icons/fa";
 import { useState } from "react";
-import logo from '../../images/abroad/logo.png'
+// import logo from '../../images/abroad/logo.png'
+import africalogo from '../../images/abroad/africalogo.png'
 import SideBar from "./Sidebar";
 
 const Container = styled.div`
@@ -52,8 +53,11 @@ const NavContainer = styled.div`
 		}
 
 		.navbarlogo {
-			/* flex: 0.6; */
+						/* flex: 0.6; */
 			/* border: 2px solid yellow; */
+			img{
+				width:150px;
+			}
 		}
 
 		ul {
@@ -126,6 +130,11 @@ const NavContainer = styled.div`
 
 	@media (min-width: 900px) {
 		.navcontainer {
+			.navbarlogo{
+				/* flex: 0.3; */
+
+			}
+
 			ul {
 				display: flex;
 			}
@@ -197,7 +206,8 @@ const Navbar = () => {
 						<Link to={`/`}>
 						{/* <Logosm color="var(--theme-blue)" /> */}
 						{/* <img src={logo} alt="" width={150} /> */}
-						<TrainLogo color="var(--theme-blue)"/>
+						{/* <TrainLogo color="var(--theme-blue)"/> */}
+						<img src={africalogo} alt="" />
 						</Link>
 					</div>
 
