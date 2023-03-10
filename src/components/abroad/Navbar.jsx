@@ -216,9 +216,9 @@ const Navbar = () => {
 							<li>
 								<Link to={`/africa/train-to-work`}>Train to Work Abroad</Link>
 							</li>
-							 <li>
+							 {/* <li>
 								<Link to={`/women`}>Women for Tech</Link>
-							</li>
+							</li> */}
 							 
 							{/* <div className="dropdown">
 							<button className="dropbtn">Create on Gotocourse</button>

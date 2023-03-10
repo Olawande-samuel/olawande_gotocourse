@@ -81,7 +81,7 @@ export function TrainCategory({ size = 4, midSize = 4, gap = 10 }) {
           </p>
         </header>
         <TrainTabsComp />
-        <WomenTabsComp />
+        {/* <WomenTabsComp /> */}
 
       </div>
     </section>

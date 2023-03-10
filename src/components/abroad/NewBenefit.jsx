@@ -41,7 +41,8 @@ padding: 2rem;
 
 
         .item{
-            background: #041469;
+            /* background: #041469; */
+            background: rgb(240, 242, 255);
             box-shadow: 0px 12px 40px rgba(14, 21, 56, 0.25);
             border-radius: 40px;
             padding: 1rem;

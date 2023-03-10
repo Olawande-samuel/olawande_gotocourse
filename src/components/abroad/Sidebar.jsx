@@ -104,9 +104,9 @@ const SideBar = ({ showSidebar, toggleSidebar }) => {
 							<Link to={`/africa/train-to-work`}>Train to work</Link>
 						</li>
 
-						<li>
+						{/* <li>
 							<Link to={`/africa/women-in-tech`}>Women in tech</Link>
-						</li>
+						</li> */}
 					</>
 				}
 
