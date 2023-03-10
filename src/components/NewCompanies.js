@@ -37,10 +37,18 @@ Tesla, Geico, AWS, Lucid, Zoom,
 ]
 
 const Container = styled.section`
-background: rgba(214, 220, 255, 0.3);
+background:  ${({ background }) => background ? background : ""};;
 padding: 2rem 0;
 
 .container {
+
+  h4{
+    text-align: center;
+    font-size: 30px;
+    font-weight: 800;
+    color: #212529;
+    padding: 2rem 0;
+  }
   .company{
     display: flex;
     align-items: center;
@@ -104,11 +112,36 @@ padding: 2rem 0;
 `
 const NewCompanies = () => {
   return (
-    <Container >
+    <Container background="rgba(214, 220, 255, 0.3)">
       <div className="container">
       
         <div className='company'>
             <p>Some companies our grads work at:</p>
+
+            <div className="companylogo">
+            {
+              compicons.slice(0, 8).map((icon, i)=>(
+                <div className="d-flex justify-content-center align-items-center" style={{width:"100px"}} key={i}>
+                  <img src={icon} alt="" style={{width:"100px", height: i === 10 || i === 23 ? "20px" : "30px", maxWidth:"100%"}} />
+                </div>
+              ))
+            }
+
+            </div>
+        </div>
+      </div>
+    </Container>
+  )
+} 
+
+
+export const TrainCompanies = () => {
+  return (
+    <Container >
+      <div className="container">
+       <h4>Where our alumni work</h4>
+
+        <div className='company'>
 
             <div className="companylogo">
             {

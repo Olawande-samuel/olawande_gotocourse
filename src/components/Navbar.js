@@ -165,7 +165,7 @@ const Navbar = ({ background }) => {
 
 						<li className="nav-item holder">
 							<Link
-								to="/train-to-work"
+								to="/africa"
 								className="link nav-link courses me-4"
 								style={{
 									color:
@@ -174,7 +174,7 @@ const Navbar = ({ background }) => {
 											: "rgba(255, 255, 255)",
 								}}
 							>
-								Train to work abroad
+								Go2Course Africa
 							</Link>
 						</li>
 

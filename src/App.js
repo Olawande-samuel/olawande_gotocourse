@@ -234,6 +234,7 @@ import NewHome from "./pages/Landing/landing";
 import Abroad from "./components/abroad/pages";
 import { EarningApplication, EarningCourses } from "./pages/Dashboard/Teachers/Earnings";
 import { BootcampPaystackPayment } from "./pages/Bootcamp/PaystackPayment";
+import Africa from "./components/abroad/pages/Africa";
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -330,8 +331,13 @@ function MyApp({ mixpanel }) {
 							{/* <Route path="learn-on-gotocourse" element={<Out />}>
                   <Route index element={<Landing />} />
                   </Route> */}
+Women in tech
+							<Route path="africa" element={<Out />}>
+								<Route index element={<Africa />} />
+								<Route path="train-to-work" element={<Abroad />} />
+								<Route path="women-in-tech" element={<Abroad />} />
 
-							<Route path="train-to-work" element={<Abroad />} />
+							</Route>
 
 
 							<Route
@@ -389,7 +395,7 @@ function MyApp({ mixpanel }) {
 										<Route index element={<NewBootcampDetailsComponent />} />
 										{/* <Route path="payment" element={<ComingSoon />} /> */}
 										<Route path="payment" element={<BootcampPayment />} />
-										<Route path="pay" element={<BootcampPaystackPayment/>}/>
+										<Route path="pay" element={<BootcampPaystackPayment />} />
 
 										{/* <Route path="payment" element={<BootcampPaystackPayment />} /> */}
 										<Route
