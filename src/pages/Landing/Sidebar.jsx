@@ -68,9 +68,9 @@ const SideBar = ({ showSidebar, toggleSidebar }) => {
 			<ul>
 				<div className="firstitems d-flex flex-column align-items-center justify-content-center gap-4">
 					{/* <a href="" className="d-inline-flex"> */}
-					<Link to="/create-with-gotocourse">
+					<a href="https://create.gotocourse.com/create-with-gotocourse" target="_blank" rel="noreferrer">
 						<button className="first__btn">Create with Gotocourse</button>
-					</Link>
+					</a>
 					{/* </a> */}
 					<Link to="/learn-on-gotocourse" className="d-inline-flex">
 						<button className="second__btn">Learn on Gotocourse</button>

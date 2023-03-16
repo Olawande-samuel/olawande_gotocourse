@@ -63,11 +63,9 @@ const NewHome = ({ mixpanel }) => {
 						business skills online
 					</p>
 					<div className="d-flex gap-3 mt-4">
-						{/* <a href="" className="d-inline-flex"> */}
-						<Link to="/create-with-gotocourse">
+						<a href="https://create.gotocourse.com/create-with-gotocourse" target="_blank" rel="noreferrer">
 							<button>I'm a school administator</button>
-						</Link>
-						{/* </a> */}
+						</a>
 						<Link to="/learn-on-gotocourse">
 							<button>I'm a Learner</button>
 						</Link>
