@@ -148,7 +148,8 @@ export default function ConsoleClasses() {
                 </div>
 
                 {
-                    data?.data?.filter(item => item.status === "paid")?.length > 0 ?
+                    // data?.data?.filter(item => item.status === "paid")?.length > 0 ?
+                    data?.data?.length > 0 ?
                         <Grid>
                             {/* {data?.data?.filter(item => item.status === "pending" &&
                                 item?.bootcampName
@@ -156,7 +157,7 @@ export default function ConsoleClasses() {
                                     .includes(search?.toLowerCase())
 
                             ).map((x, id) => ( */}
-                            
+
                             {data?.data?.filter(item => item?.bootcampName
                                     .toLowerCase()
                                     .includes(search?.toLowerCase())
