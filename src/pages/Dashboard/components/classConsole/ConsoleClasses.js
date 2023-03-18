@@ -150,11 +150,16 @@ export default function ConsoleClasses() {
                 {
                     data?.data?.filter(item => item.status === "paid")?.length > 0 ?
                         <Grid>
-                            {data?.data?.filter(item => item.status === "paid" &&
+                            {/* {data?.data?.filter(item => item.status === "pending" &&
                                 item?.bootcampName
                                     .toLowerCase()
                                     .includes(search?.toLowerCase())
 
+                            ).map((x, id) => ( */}
+                            
+                            {data?.data?.filter(item => item?.bootcampName
+                                    .toLowerCase()
+                                    .includes(search?.toLowerCase())
                             ).map((x, id) => (
                                 <AssessmentCard key={x.bootcampId} style={{ cursor: "pointer" }} onClick={() => {
                                     navigate(`/student/class-console/class/${x.bootcampId}`, {
