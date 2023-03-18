@@ -28,7 +28,7 @@ import { useSyllabus } from "../../../contexts/Syllabus";
 import { GuardedRoute } from "../../../hoc";
 import { AdvancedError } from "../../../classes";
 import { useLocalStorage } from "../../../hooks";
-import { changeSubCategory, getDate } from "../../../constants";
+import { changeSubCategory, getDate, KEY } from "../../../constants";
 import Input from "../../../components/Input";
 import Loader from "../../../components/Loader";
 import UploadForm from "../../../components/UploadForm";
@@ -55,7 +55,6 @@ import ReactQuill from "react-quill";
 import { Grid } from "../../../components/NewLanding/Headstart";
 import UploadWidget from "../components/classConsole/components/UploadWidget";
 
-const KEY = "gotocourse-userdata";
 
 // CATEGORY DETAILS COMPONENT
 export function CategoryDetails({ }) {
@@ -3505,7 +3504,7 @@ export function BootcampDetails({ }) {
 							style={{ fontSize: "0.8rem" }}
 							onClick={deleteBootcampHandler}
 						>
-							Delete Class
+							Delete Course
 						</button>
 						<button
 							type="button"
@@ -3513,7 +3512,7 @@ export function BootcampDetails({ }) {
 							style={{ fontSize: "0.8rem" }}
 							onClick={editBootcampHandler}
 						>
-							Edit Class
+							Edit Course
 						</button>
 					</div>
 					<form className="form" style={{ width: "80%", margin: "20px 0px" }}>
@@ -3795,12 +3794,12 @@ export function Bootcamps() {
 
 	}
 	return (
-		<Admin header={"Classes"}>
+		<Admin header={"Courses"}>
 			{loading && <Loader />}
 			<div className={clsx["admin_profile"]}>
 				<div className={clsx.admin__student}>
 					<div className="d-flex justify-content-between align-items-center mb-3">
-						<h1 style={{ margin: 0 }}>Classes</h1>{" "}
+						<h1 style={{ margin: 0 }}>Courses</h1>{" "}
 						<button
 							type="button"
 							className="btn btn-primary px-5"
@@ -4038,7 +4037,12 @@ export function CreateBootcamp() {
 							let instructorsList = found.instructors;
 							let newList = []
 							instructorsList.forEach(instructor => newList.push(instructor.email))
-							setFormstate({ ...formstate, ...found, instructors: [...newList, found.instructor], type: "FLAT" })
+							let formerInstructor = found.instuctor
+							if(formerInstructor){
+								setFormstate({ ...formstate, ...found, instructors: [...newList, found.instructor], type: "FLAT" })
+							}else {
+								setFormstate({ ...formstate, ...found, instructors: [...newList], type: "FLAT" })
+							}
 						} else {
 							setFormstate({ ...formstate, ...found, type: "FLAT" });
 						}
@@ -4335,6 +4339,7 @@ export function CreateBootcamp() {
 							type="text"
 							handleChange={changeHandler}
 							value={formstate.bootcampImg}
+							required={true}
 						/>
 						<Input
 							label="Title"
@@ -4342,9 +4347,11 @@ export function CreateBootcamp() {
 							type="text"
 							handleChange={changeHandler}
 							value={formstate.title}
+							required={true}
+
 						/>
 						<div className={clsx.form_group}>
-							<label htmlFor={"package"}>Category</label>
+							<label htmlFor={"package"} className="generic_label required">Category</label>
 							<select
 								rows="5"
 								name="categoryName"
@@ -4362,7 +4369,7 @@ export function CreateBootcamp() {
 							</select>
 						</div>
 						<div className={clsx.form_group}>
-							<label htmlFor={"package"}>Subcategory</label>
+							<label htmlFor={"package"} className="generic_label required">Subcategory</label>
 							<select
 								rows="5"
 								name="subCategory"
@@ -4388,6 +4395,8 @@ export function CreateBootcamp() {
 							type="text"
 							handleChange={changeHandler}
 							value={formstate.duration}
+							required={true}
+
 						/>
 						<Input
 							label="Price"
@@ -4396,6 +4405,8 @@ export function CreateBootcamp() {
 							handleChange={changeHandler}
 							value={formstate.price}
 							noValidate={"true"}
+							required={true}
+
 						/>
 						<div className="d-flex flex-wrap">
 							<div className="col-sm-6 col-md-3 pe-2 ">
@@ -4405,6 +4416,8 @@ export function CreateBootcamp() {
 									type="time"
 									handleChange={changeHandler}
 									value={formstate.startTime}
+									required={true}
+
 								/>
 							</div>
 							<div className="col-sm-6 col-md-3 pe-2  ">
@@ -4414,6 +4427,8 @@ export function CreateBootcamp() {
 									type="time"
 									handleChange={changeHandler}
 									value={formstate.endTime}
+									required={true}
+
 								/>
 							</div>
 							<div className="col-sm-6 col-md-3 pe-2 ">
@@ -4423,6 +4438,8 @@ export function CreateBootcamp() {
 									type="date"
 									value={formstate.startDate}
 									handleChange={changeHandler}
+									required={true}
+
 								/>
 							</div>
 							<div className="col-sm-6 col-md-3 ">
@@ -4432,6 +4449,8 @@ export function CreateBootcamp() {
 									type="date"
 									value={formstate.endDate}
 									handleChange={changeHandler}
+									required={true}
+
 								/>
 							</div>
 						</div>
@@ -4481,6 +4500,8 @@ export function CreateBootcamp() {
 											type="time"
 											handleChange={(e) => handleTime(e, i)}
 											value={timeList[i]?.startTime}
+											required={true}
+
 										/>
 									</div>
 									<div className="col-sm-6 col-md-3 pe-2  ">
@@ -4490,6 +4511,7 @@ export function CreateBootcamp() {
 											type="time"
 											handleChange={(e) => handleTime(e, i)}
 											value={timeList[i]?.endTime}
+											required={true}
 										/>
 									</div>
 								</div>
@@ -4568,6 +4590,7 @@ export function CreateBootcamp() {
 							style={{ backgroundColor: "var(--theme-blue)", fontSize: "14px" }}
 							type="button"
 							onClick={addInstructor}
+							disabled={!newInstructor}
 						>
 							Add Instructor
 						</button>
@@ -4610,6 +4633,8 @@ export function CreateBootcamp() {
 							type="text"
 							handleChange={changeHandler}
 							value={formstate.careerTitle}
+							required={true}
+
 						/>
 						<button
 							type="button"
@@ -4620,7 +4645,7 @@ export function CreateBootcamp() {
 							Add Career Prospect
 						</button>
 						<div className={clsx.form_group}>
-							<label>Career Prospect</label>
+							<label className="generic_label">Career Prospect</label>
 							{formstate.careerList?.length !== 0 ? (
 								formstate.careerList?.map(({ name }, i) => (
 									// <Syllabus key={i} title={name} />
@@ -4652,9 +4677,11 @@ export function CreateBootcamp() {
 							type="text"
 							handleChange={changeHandler}
 							value={formstate.popupTitle}
+							required={true}
+
 						/>
 						<div className={clsx.form_group}>
-							<label>Popup List</label>
+							<label className="form-label generic_label">Popup List</label>
 							{formstate.popupArr?.length !== 0 ? (
 								formstate.popupArr?.map((name, i) => (
 									// <Syllabus key={i} title={name} />
@@ -4691,7 +4718,7 @@ export function CreateBootcamp() {
 						</button>
 
 						<div className={clsx.form_group} style={{ marginTop: 40 }}>
-							<label>Set class public?</label>
+							<label className="form-label generic_label required">Set class public?</label>
 							{formstate?.isPublic ? (
 								<small class="d-block text-muted">
 									Class is currently set to public. This indicates that students

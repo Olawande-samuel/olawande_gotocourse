@@ -18,8 +18,8 @@ import { ScrollToTop } from "../pages/Courses";
 import LogoutButton from "./LogoutButton";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useQuery } from "@tanstack/react-query";
+import { KEY } from "../constants";
 
-const KEY = "gotocourse-userdata";
 
 const Navbar = ({ background }) => {
 	const { setGeneralState } = useAuth();
