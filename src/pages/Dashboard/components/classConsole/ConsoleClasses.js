@@ -148,19 +148,13 @@ export default function ConsoleClasses() {
                 </div>
 
                 {
-                    // data?.data?.filter(item => item.status === "paid")?.length > 0 ?
-                    data?.data?.length > 0 ?
+                    data?.data?.filter(item => item.status === "paid" || item.isPublic)?.length > 0 ?
                         <Grid>
-                            {/* {data?.data?.filter(item => item.status === "pending" &&
+                            {data?.data?.filter(item => (item.status === "paid" || item.isPublic) &&
                                 item?.bootcampName
                                     .toLowerCase()
                                     .includes(search?.toLowerCase())
 
-                            ).map((x, id) => ( */}
-
-                            {data?.data?.filter(item => item?.bootcampName
-                                    .toLowerCase()
-                                    .includes(search?.toLowerCase())
                             ).map((x, id) => (
                                 <AssessmentCard key={x.bootcampId} style={{ cursor: "pointer" }} onClick={() => {
                                     navigate(`/student/class-console/class/${x.bootcampId}`, {
@@ -175,7 +169,7 @@ export default function ConsoleClasses() {
                                     <div className="content">
                                         <h6>{x.bootcampName}</h6>
                                         {x?.nextPayment &&
-                                            x?.paymentStatus === "incomplete" &&
+                                            (x?.paymentStatus === "incomplete" && !x?.isPublic) &&
                                             <p>
                                                 Next payment:{getFullDate(x?.nextPayment)}
                                             </p>}
