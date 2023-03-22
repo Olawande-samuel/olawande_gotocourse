@@ -186,9 +186,10 @@ const Dashboard = () => {
 				(item) => item.enrollmentData.length > 0
 			);
 			hasPaid = areAccepted.filter((item) =>
-				item.enrollmentData.find((item) => item.status === "paid")
+				item.enrollmentData.find((item) => item.status === "paid" || item.isPublic)
 			);
-			return hasPaid;
+			// return hasPaid;
+			return areAccepted;
 		}
 		return [];
 	}, [students]);
