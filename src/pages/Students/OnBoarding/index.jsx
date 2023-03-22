@@ -20,7 +20,6 @@ const OnBoarding = () => {
     const [page, setPage] = useState(0);
     const {getItem,removeItem, updateItem} = useLocalStorage();
 
-    
     let userdata = getItem(VERIFICATION_KEY)
 
     const navigate = useNavigate()
