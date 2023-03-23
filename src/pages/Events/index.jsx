@@ -165,7 +165,7 @@ const Events = () => {
                     <div className="container">
                         <h3>Recorded events</h3>
                         <div className={style.ondemand_events}>
-                            {webinars.length > 0 && webinars.map((event, index) => (
+                            {webinars?.length > 0 && webinars.map((event, index) => (
                                 <Ondemand key={index} id={index} event={event} />
                             ))}
 
