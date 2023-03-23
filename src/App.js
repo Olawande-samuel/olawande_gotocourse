@@ -331,7 +331,7 @@ function MyApp({ mixpanel }) {
 							{/* <Route path="learn-on-gotocourse" element={<Out />}>
                   <Route index element={<Landing />} />
                   </Route> */}
-Women in tech
+							Women in tech
 							<Route path="africa" element={<Out />}>
 								<Route index element={<Africa />} />
 								<Route path="train-to-work" element={<Abroad />} />
@@ -801,9 +801,9 @@ Women in tech
 							<Route path="admin" element={<Out />}>
 								<Route path="login" element={<AdminLogin />} />
 								{/* <Route
-                    path="signup"
-                    element={<AdminSignup />}
-                  /> */}
+                    					path="signup"
+                    					element={<AdminSignup />}
+                  				/> */}
 							</Route>
 						</Route>
 

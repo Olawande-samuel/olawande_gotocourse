@@ -30,7 +30,7 @@ const DetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  jusitfy-content: center;
+  justify-content: center;
 `;
 
 const CategoryTop = styled.div`
