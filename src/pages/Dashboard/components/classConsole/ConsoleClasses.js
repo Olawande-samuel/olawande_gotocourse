@@ -148,9 +148,9 @@ export default function ConsoleClasses() {
                 </div>
 
                 {
-                    data?.data?.filter(item => item.status === "paid" || item.isPublic)?.length > 0 ?
+                    data?.data?.filter(item => item.status === "paid")?.length > 0 ?
                         <Grid>
-                            {data?.data?.filter(item => (item.status === "paid" || item.isPublic) &&
+                            {data?.data?.filter(item => (item.status === "paid") &&
                                 item?.bootcampName
                                     .toLowerCase()
                                     .includes(search?.toLowerCase())
@@ -169,7 +169,7 @@ export default function ConsoleClasses() {
                                     <div className="content">
                                         <h6>{x.bootcampName}</h6>
                                         {x?.nextPayment &&
-                                            (x?.paymentStatus === "incomplete" && !x?.isPublic) &&
+                                            (x?.paymentStatus === "incomplete") &&
                                             <p>
                                                 Next payment:{getFullDate(x?.nextPayment)}
                                             </p>}
