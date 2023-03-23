@@ -137,7 +137,7 @@ const Events = () => {
                         <h3>Upcoming events</h3>
 
                         <div className={style.upcoming_events}>
-                            {webinars?.length > 0 && webinars?.filter(webinar => (new Date(webinar?.date)) > new Date())?.length > 0 ? webinars.filter(webinar => (new Date(webinar?.date)) > new Date())?.map((event, index) => (
+                            {webinars?.length > 0 && webinars?.filter(webinar => (new Date(webinar?.date)) >= new Date())?.length > 0 ? webinars.filter(webinar => (new Date(webinar?.date)) > new Date())?.map((event, index) => (
                                 <Upcoming key={index} id={index} event={event} />
                             )):
                             <>
@@ -155,13 +155,13 @@ const Events = () => {
                         <h3>Past events</h3>
 
                         <div className={style.upcoming_events}>
-                            {webinars?.length > 0 && webinars?.filter(webinar => (new Date(webinar?.date)) <= new Date())?.map((event, index) => (
+                            {webinars?.length > 0 && webinars?.filter(webinar => (new Date(webinar?.date)) < new Date())?.map((event, index) => (
                                 <Upcoming key={index} id={index} event={event} />
                             ))}
                         </div>
                     </div>
                 </div>
-                <div className={style.ondemand}>
+                {/* <div className={style.ondemand}>
                     <div className="container">
                         <h3>Recorded events</h3>
                         <div className={style.ondemand_events}>
@@ -172,7 +172,7 @@ const Events = () => {
 
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </Layout>
     )
