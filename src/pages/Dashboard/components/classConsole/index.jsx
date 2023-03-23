@@ -194,8 +194,8 @@ const iconData = [
 
 
 
-    const studentAssessMent =  pathname.includes("/student/console/myclasses") || pathname.includes("/student/console/assessments") || pathname.includes("/student/console/messages");
-    // console.log({studentAssessMent});
+  const studentAssessMent =  pathname.includes("/student/console/myclasses") || pathname.includes("/student/console/assessments") || pathname.includes("/student/console/messages");
+  // console.log({studentAssessMent});
 
   const studentpath = pathname.split("/")[1] === "student";
   const quizpath =

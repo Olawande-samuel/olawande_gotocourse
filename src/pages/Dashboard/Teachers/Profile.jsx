@@ -10,8 +10,8 @@ import { useAuth } from "../../../contexts/Auth";
 
 import { AdvancedError } from "../../../classes";
 import { useLocalStorage } from "../../../hooks";
+import { KEY } from "../../../constants";
 
-const KEY = "gotocourse-userdata";
 
 
 

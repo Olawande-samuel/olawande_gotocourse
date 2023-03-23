@@ -1835,6 +1835,12 @@ td:not(:first-child) {
   color: rgba(103, 131, 145, 1);
 }
 
+.generic_label.required::after {
+  content:"*";
+  color:red;
+  font-size: 16px;
+}
+
 .eye {
   position: absolute;
   right: 1rem;

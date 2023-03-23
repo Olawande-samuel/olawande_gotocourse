@@ -8,7 +8,7 @@ import {useQuery} from "@tanstack/react-query"
 import Loader from "../../../components/Loader";
 import { Sidebar, Navbar } from "../components";
 import clsx from "./styles.module.css";
-import { colors } from "../../../constants";
+import { colors, KEY } from "../../../constants";
 import { useAuth } from "../../../contexts/Auth";
 import { GuardedRoute } from "../../../hoc";
 import Input from "../../../components/Input";
@@ -25,7 +25,6 @@ import { DashboardTop, Community } from "../Students";
 import { FaChalkboardTeacher } from "react-icons/fa";
 
 
-const KEY = "gotocourse-userdata";
 
 
 export {default as Courses} from "./Courses"

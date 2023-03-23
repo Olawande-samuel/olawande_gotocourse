@@ -23,10 +23,10 @@ import Input from "../../components/Input";
 import Success from "../../images/paymentSuccess.png"
 import Failure from "../../images/Bad Gateway.png"
 import { changeConstants } from "../Dashboard/Teachers/CreateCourse";
+import { KEY } from "../../constants";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
-const KEY = "gotocourse-userdata";
 
 const nav = [
   { name: "All Courses", value: "" },
