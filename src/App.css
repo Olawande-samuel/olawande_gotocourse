@@ -3390,7 +3390,7 @@ td span {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(289px, 100%), 300px));
   gap: 3rem;
-  height: 600px;
+  height: 500px;
   /* border: 5px solid red; */
   overflow: hidden;
 
