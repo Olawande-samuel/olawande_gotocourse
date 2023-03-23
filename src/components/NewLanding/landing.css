@@ -1794,6 +1794,7 @@
   display: grid;
   align-items: center;
   grid-template-columns: repeat(2, 1fr);
+  padding-bottom:3rem;
   /* border: 2px solid red; */
   /* min-height: 74vh; */
 }

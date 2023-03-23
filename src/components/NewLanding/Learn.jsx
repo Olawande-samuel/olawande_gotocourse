@@ -5,7 +5,7 @@ import cap from "../../images/a/cap.png";
 
 const Container = styled.div`
    background: #fff;
-   padding : 2rem 0 1rem 0;
+   padding : 4rem 0 2rem 0;
 
    .container{
        .headercontent{
@@ -30,7 +30,7 @@ const Container = styled.div`
     
         }
 
-        .contentbody{
+        .learncontentbody{
         width: 100%;
         display: grid;
         grid-template-columns: repeat(3, minmax(min(250px, 300px), 300px));
@@ -99,7 +99,7 @@ const Container = styled.div`
 @media screen and (max-width: 1250px) {
 
 .container{
-    .contentbody{
+    .learncontentbody{
         grid-template-columns: repeat(auto-fit, minmax(min(180px, 240px), 240px));
         justify-content: space-evenly;
         gap: 1rem;
@@ -109,7 +109,7 @@ const Container = styled.div`
 }
 @media screen and (max-width:500px){
 .container{
-    .contentbody{
+    .learncontentbody{
         grid-template-columns: min(100%, 280px);
         justify-content:center;
         
@@ -131,7 +131,7 @@ const HowLearn = () => {
                     <h4> How you will learn</h4>
                 </div>
 
-                <div className="contentbody">
+                <div className="learncontentbody">
                     <div className="blue">
                         <h6>Tech <br />
                             Immersion <br />
