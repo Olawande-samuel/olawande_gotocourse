@@ -440,7 +440,7 @@ export function MyClasses() {
     console.log({ courseList });
 
     return (
-        <Students header={"My Classes"}>
+        <Students header={"My Courses"}>
             {loading && <Loader />}
             <div className={clsx["students_profile"]}>
                 <div className={clsx.admin__student}>
@@ -509,7 +509,7 @@ export function MyClasses() {
                                                 <div className={clsx["courseitem"]}>
                                                     <div className={clsx.classes_button}>
                                                         {
-                                                            (item.paymentStatus === "complete" || item.paymentStatus === "paid") ?
+                                                            (item.paymentStatus === "completed" || item.paymentStatus === "paid") ?
 
                                                                 <button className="d-flex align-items-center" style={{ background: "var(--theme-blue)", color: "#fff" }}
                                                                     onClick={(e) => navigate(`/student/class-console/class/${item.bootcampId}`)}

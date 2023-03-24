@@ -151,7 +151,9 @@ export const BootcampPayment = () => {
           const { data } = response;
           console.log({ data });
           toast.success("You have successfully enrolled for this course.")
-          navigate("/student")
+          setTimeout(()=>{
+            navigate("/student")
+          }, 2500)
 
         } catch (error) {
           toast.error(error.message, {

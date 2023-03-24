@@ -1396,7 +1396,7 @@ function ChatAside(){
                 <h6> All Students</h6>
                 <div>
                     {
-                        allStudentList?.filter(student=> student.status === "paid" || student.paymentStatus === "complete").map(student=>(
+                        allStudentList?.filter(student=> student.status === "paid" || student.paymentStatus === "completed").map(student=>(
                             <ChatInfo>
                                 <UserImage aside={true}>
                                     <FaUser size=".7rem" color="#fff" />
