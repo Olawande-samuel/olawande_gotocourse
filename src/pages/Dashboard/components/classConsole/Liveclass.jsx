@@ -1,31 +1,29 @@
 import { useState } from "react";
 import {
-  AiFillClockCircle,
-  AiOutlinePaperClip,
-  AiOutlinePlus,
+  AiFillClockCircle
 } from "react-icons/ai";
-import { BsRecordCircle, BsThreeDotsVertical } from "react-icons/bs";
 import startImg from "../../../../images/liveclass/startlive.png";
 
-import style from "./style.module.css";
-import "./console.css";
-import { FaCalendarAlt } from "react-icons/fa";
-import { MdLocationOn } from "react-icons/md";
 import { Box, Modal, Skeleton, Switch } from "@mui/material";
-import { Navigate, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { useAuth } from "../../../../contexts/Auth";
-import { AdvancedError } from "../../../../classes";
-import { toast, ToastContainer } from "react-toastify";
-import axios from "axios";
-import CONFIG from "../../../../utils/video/appConst";
-import { useLocalStorage } from "../../../../hooks";
-import { KEY } from "../../../../constants";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { IoInfiniteOutline} from "react-icons/io5"
-import { MenuOptionsPopup } from "./components";
-import {FiEdit} from "react-icons/fi"
-import { BiTrash } from "react-icons/bi";
+import axios from "axios";
 import { useEffect } from "react";
+import { BiTrash } from "react-icons/bi";
+import { FaCalendarAlt } from "react-icons/fa";
+import { FiEdit } from "react-icons/fi";
+import { IoInfiniteOutline } from "react-icons/io5";
+import { MdLocationOn } from "react-icons/md";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import { AdvancedError } from "../../../../classes";
+import { KEY } from "../../../../constants";
+import { useAuth } from "../../../../contexts/Auth";
+import { useLocalStorage } from "../../../../hooks";
+import CONFIG from "../../../../utils/video/appConst";
+import { MenuOptionsPopup } from "./components";
+import "./console.css";
+import style from "./style.module.css";
+import CryptoJS from "crypto-js";
 
 export function LiveClassInfo({ type }) {
   
@@ -145,7 +143,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
   const {teacherConsoleFunctions: {deleteLiveSchedule}} = useAuth()
   const userdata = getItem(KEY)
   const queryClient = useQueryClient();
-
+  const random = "FVFCAAUYI6"
   const {classId} = useParams()
 
 
@@ -181,11 +179,20 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
     let today  = new Date().getTime();
     let startingDate = new Date(startDate).getTime();
 
+
+    let id = encryptData(userdata?.id)
+    let token = encryptData(userdata.token)
+
     if(today >= startingDate){
-      window.open(`https://www.meetifix.com/live/${classId}?token=${userdata?.id}&user=${userdata?.token}`, '_blank')
+      window.open(`https://www.meetifix.com/live/${classId}?token=${id}&user=${token}`, '_blank')
     }else {
       window.alert(`Class starts on ${startDate}`)
     }
+  }
+
+  function encryptData(data){
+    const result = CryptoJS.AES.encrypt(JSON.stringify(data), random).toString()
+    return result
   }
 
 
