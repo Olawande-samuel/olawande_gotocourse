@@ -184,15 +184,17 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
     let token = encryptData(userdata.token)
 
     if(today >= startingDate){
-      window.open(`https://www.meetifix.com/live/${classId}?token=${id}&user=${token}`, '_blank')
+      // window.open(`http://localhost:3000/live/${classId}?token=${id}&user=${token}`, '_blank')
+        window.open(`https://www.meetifix.com/live/${classId}?token=${id}&user=${token}`, '_blank')
     }else {
       window.alert(`Class starts on ${startDate}`)
     }
   }
 
   function encryptData(data){
-    const result = CryptoJS.AES.encrypt(JSON.stringify(data), random).toString()
+    const result = CryptoJS.AES.encrypt(JSON.stringify({data}), random).toString()
     return result
+
   }
 
 
