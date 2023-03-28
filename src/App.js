@@ -799,7 +799,7 @@ function MyApp({ mixpanel }) {
 								</Route>
 							</Route>
 							<Route path="admin" element={<Out />}>
-								<Route path="login" element={<AdminLogin />} />
+								{/* <Route path="login" element={<AdminLogin />} /> */}
 								{/* <Route
                     					path="signup"
                     					element={<AdminSignup />}
