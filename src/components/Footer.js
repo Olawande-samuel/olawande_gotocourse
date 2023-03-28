@@ -57,6 +57,11 @@ const rightLink = [
     path: "/about-us"
   },
   {
+    id: 7,
+    title: "Apply to teach",
+    path: "/become-a-teacher"
+  },
+  {
     id: 5,
     title: "Careers",
     path: "/career"

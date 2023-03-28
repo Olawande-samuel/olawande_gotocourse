@@ -466,14 +466,23 @@
 
 /* EARNINGS */
 .earnings_card_wrapper{
-    display: flex;
-    flex-wrap:wrap;
+    display: grid;
+    grid-template-columns: 200px min(300px, 400px);
+    /* flex-wrap:wrap; */
     gap: 1.5rem;
+}
 
+@media screen and (max-width: 767px) {
+    .earnings_card_wrapper{
+        grid-template-columns: repeat(auto-fit, minmax(min(250px, 100px), 300px));
+    }   
 }
-.earnings_card_wrapper > div {
-    flex: 1 1 30%;
+/* .earnings_card_wrapper > div:nth-child(1) {
+    grid-area: 1 / 2 / 2 / 4;
 }
+.earnings_card_wrapper > div:nth-child(2) {
+    grid-area: 1 / 2 / 3 / 5;
+} */
 
 .earntop, .earnbtm{
     display: flex;

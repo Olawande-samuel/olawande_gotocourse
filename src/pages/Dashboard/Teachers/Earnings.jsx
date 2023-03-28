@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import { Admin } from "../Admin";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import {debounce} from "lodash"
+import { useMemo } from "react";
 
 export default function Earnings() {
   const { getItem } = useLocalStorage();
@@ -26,48 +27,46 @@ export default function Earnings() {
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([]);
   let userdata = getItem(KEY);
-  const {
-    generalState: { isMobile },
-    teacherFunctions: { fetchEarnings, withdrawalRequest },
-  } = useAuth();
-  useEffect(() => {
-    if (flag.current) return;
-    (async () => {
-      try {
-        setLoading((_) => true);
-        let res = await fetchEarnings(userdata?.token);
-        const { success, message, statusCode } = res;
-        if (!success) throw new AdvancedError(message, statusCode);
-        else {
-          const { data } = res;
-          toast.success(message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          console.log(data);
-          setRows((_) => data);
-        }
-      } catch (err) {
-        toast.error(err.message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      } finally {
-        setLoading((_) => false);
-      }
-    })();
-    flag.current = true;
-  }, []);
+  const { generalState: { isMobile }, teacherFunctions: { fetchEarnings, withdrawalRequest } } = useAuth();
+
+  // useEffect(() => {
+  //   if (flag.current) return;
+  //   (async () => {
+  //     try {
+  //       setLoading((_) => true);
+  //       let res = await fetchEarnings(userdata?.token);
+  //       const { success, message, statusCode } = res;
+  //       if (!success) throw new AdvancedError(message, statusCode);
+  //       else {
+  //         const { data } = res;
+  //         toast.success(message, {
+  //           position: "top-right",
+  //           autoClose: 4000,
+  //           hideProgressBar: true,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //         });
+  //         console.log(data);
+  //         setRows((_) => data);
+  //       }
+  //     } catch (err) {
+  //       toast.error(err.message, {
+  //         position: "top-right",
+  //         autoClose: 4000,
+  //         hideProgressBar: true,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //       });
+  //     } finally {
+  //       setLoading((_) => false);
+  //     }
+  //   })();
+  //   flag.current = true;
+  // }, []);
 
   async function submitHandler(e, formstate) {
     e.preventDefault();
@@ -138,18 +137,18 @@ export function AllEarnings({ earnings }) {
   const [courseEarnings, setCourseEarnings] = useState(0);
   const [modelEarnings, setModelEarnings] = useState(0);
   const [modelType, setModelType] = useState("")
+  const { generalState: { isMobile }, teacherFunctions: { fetchEarnings, withdrawalRequest } } = useAuth();
+  const { getItem } = useLocalStorage();
+  let userdata = getItem(KEY);
+
   const data = [
-    {
-      title: "Teaching Model",
-      type: "Model",
-      value: modelEarnings,
-    },
     {
       title: "Per Course",
       type: "Courses",
       value: courseEarnings,
     },
   ];
+
   const filterBy = [
     {
       title: "Day",
@@ -183,23 +182,36 @@ export function AllEarnings({ earnings }) {
     },
   ];
 
-  const Models = [
-    { title: "Cohort", type: "COHORT" },
-    { title: "Physical", type: "PHYSICAL" },
-    { title: "Bootcamp", type: "BOOTCAMP" },
-    { title: "Self-paced", type: "SELF_PACED" },
-    { title: "One-on-One", type: "MENTORSHIP" },
-  ];
-  useEffect(() => {
-    if (earnings) {
-      let b = earnings.reduce((a, b) => a + b.amount, 0);
-      setTotal(b);
-      let courseTotal = earnings.filter((item) => item.type === "course").reduce((a, b) => a + b.amount, 0);
-      console.log({ b });
-      console.log({ courseTotal });
-      setCourseEarnings(courseTotal);
+
+  // FETCH EARNINGS
+  const myEarnings = useQuery(["fetch my earnings"], ()=>fetchEarnings(userdata?.token), {
+    enabled: !!userdata.token,
+    onError: err => {
+      console.error(err)
+      toast.error("something went wrong")
     }
-  }, [earnings]);
+  })
+
+  console.log({myEarnings});
+  console.log({user: userdata.token});
+
+  const totalEarnings =  useMemo(() => {
+    let earnings = myEarnings.data?.data?.reduce((a, b) => a + b.amount, 0)
+    return earnings
+  } , [myEarnings?.data?.data])
+
+  console.log({totalEarnings})
+
+  // useEffect(() => {
+  //   if (earnings) {
+  //     let b = earnings.reduce((a, b) => a + b.amount, 0);
+  //     setTotal(b);
+  //     let courseTotal = earnings.filter((item) => item.type === "course").reduce((a, b) => a + b.amount, 0);
+  //     console.log({ b });
+  //     console.log({ courseTotal });
+  //     setCourseEarnings(courseTotal);
+  //   }
+  // }, [earnings]);
 
   // returns total based on selected model
   function getModelTotal(model) {
@@ -218,10 +230,10 @@ export function AllEarnings({ earnings }) {
   function handleModelChange(e) {
     setModelType(e.target.value)
   }
+
   useEffect(() => {
     if (earnings) {
       getModelTotal(modelType)
-
     }
   }, [modelType]);
 
@@ -241,21 +253,18 @@ export function AllEarnings({ earnings }) {
       </div>
       <div className={clsx.earnings_card_wrapper}>
         {data.map(({ title, type, value }, i) => (
-          <EarningsCard title={title} type={type} data={Models} value={value} key={i} handleModelChange={handleModelChange} />
+          <EarningsCard title={title} type={type} value={value} key={i} handleModelChange={handleModelChange} />
         ))}
-        <EarningsCard total={true} value={total} />
+        <EarningsCard total={true} value={totalEarnings ?? 0} />
       </div>
-
-      <div className="pt-3 d-flex flex-column align-items-end gap-3">
+      {/* <div className="pt-3 d-flex flex-column align-items-end gap-3">
         <Link to={`/admin/earnings/courses`}><button className=" button py-1 px-4">Divide earnings</button></Link>
         <Link to={`/admin/earnings/applications`}><button className=" whtbutton py-1 px-4">Earnings applications</button></Link>
-      </div>
+      </div> */}
 
 
       <div className="overflow-auto">
         <MyChart />
-
-
       </div>
     </>
   );
@@ -285,11 +294,11 @@ export function EarningsCard({ title, type, data = [], total, value, handleModel
         <div className="card-body">
           <div>
             {total ? (
-              <h3>TOTAL</h3>
+              <h4>TOTAL</h4>
             ) : (
               <>
                 {
-                  type === "Model" ?
+                  type === "Courses" ?
                     <select name="model" id="model" className="form-select w-75" onChange={handleModelChange}>
                       <option defaultValue>{type}</option>
                       {data.map(item => (
