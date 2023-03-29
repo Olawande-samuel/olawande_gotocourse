@@ -715,7 +715,7 @@ const Requests = ({ submitHandler }) => {
 
 
 export function EarningTeacherApplication() {
-  const { adminTeacherFunctions: { fetchAllWithdrawalRequest } } = useAuth()
+  const { teacherFunctions: { fetchAllWithdrawalRequest } } = useAuth()
   const { getItem } = useLocalStorage()
   const [allTeachersReq, setAllTeachersReq] = useState([])
 
@@ -727,7 +727,7 @@ export function EarningTeacherApplication() {
       onSuccess: res => {
         if (res?.success) {
           console.log("with", res.data);
-          setAllTeachersReq(res.data)
+          setAllTeachersReq(res.data ?? [])
         }
       },
       onError: err => {
@@ -739,7 +739,7 @@ export function EarningTeacherApplication() {
 
 
   return (
-    <Admin header={"Earnings> Applications"}>
+    <Teachers header={"Earnings> Applications"}>
 
       <div className={clsx.admin_profile}>
 
@@ -754,7 +754,7 @@ export function EarningTeacherApplication() {
 
         <div className={clsx.earncontent}>
           {
-            allTeachersReq.map((teacher, i) => {
+            allTeachersReq?.map((teacher, i) => {
               return (
                 <div className={`${clsx.earntopbar} ${clsx.earnbtmbar}`} key={i}>
                   <div>{i + 1}</div>
@@ -773,6 +773,6 @@ export function EarningTeacherApplication() {
 
         </div>
       </div>
-    </Admin>
+    </Teachers>
   )
 }
