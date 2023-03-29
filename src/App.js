@@ -232,7 +232,7 @@ import RedirectPage from "./pages/Bootcamp/Redirect";
 
 import NewHome from "./pages/Landing/landing";
 import Abroad from "./components/abroad/pages";
-import { EarningApplication, EarningCourses } from "./pages/Dashboard/Teachers/Earnings";
+import { EarningApplication, EarningCourses, EarningTeacherApplication } from "./pages/Dashboard/Teachers/Earnings";
 import { BootcampPaystackPayment } from "./pages/Bootcamp/PaystackPayment";
 import Africa from "./components/abroad/pages/Africa";
 
@@ -577,7 +577,10 @@ function MyApp({ mixpanel }) {
 									path="classes/details/:id"
 									element={<TeacherBootcampDetails />}
 								/>
-								<Route path="earnings" element={<Earnings />} />
+								<Route path="earnings" element={<Out />}>
+									<Route index element={<Earnings />} />
+									<Route path="fetch" element={<EarningTeacherApplication />} />
+								</Route>
 								<Route path="profile/edit" element={<TeacherEdit />} />
 								<Route path="courses" element={<TeacherCourses />} />
 								<Route path="courses/create" element={<CreateCourse />} />

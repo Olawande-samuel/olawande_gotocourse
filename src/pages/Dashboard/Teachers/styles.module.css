@@ -323,14 +323,14 @@
     color: var(--textBlue)
 }
 
-.form_group select {
+/* .form_group select {
     outline: none;
     padding: 12px;
     border: 1px solid rgba(208, 204, 204, 0.5);
     border-radius: 5px;
     text-indent: 40px;
     background-color: var(--primary);
-}
+} */
 
 .form_group textarea{
     outline: none;
@@ -444,10 +444,10 @@
     width: min(100% - 0.5rem, 480px );
 }
 
-
+/* 
 .requests form label {
     margin-top: 20px;
-}
+} */
 
 .requests_button {
     margin: 15px 0px;

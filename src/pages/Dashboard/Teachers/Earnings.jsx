@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Modal, Box, Switch } from "@mui/material";
+import { Modal, Box, Switch, Autocomplete, TextField } from "@mui/material";
 import { FiFilter } from "react-icons/fi";
 import { HiOutlineFilter } from "react-icons/hi";
 import Accordion from 'react-bootstrap/Accordion';
@@ -18,7 +18,7 @@ import Loader from "../../../components/Loader";
 import { Link } from "react-router-dom";
 import { Admin } from "../Admin";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import {debounce} from "lodash"
+import { debounce } from "lodash"
 import { useMemo } from "react";
 
 export default function Earnings() {
@@ -26,8 +26,8 @@ export default function Earnings() {
   const flag = useRef(false);
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([]);
-  let userdata = getItem(KEY);
-  const { generalState: { isMobile }, teacherFunctions: { fetchEarnings, withdrawalRequest } } = useAuth();
+  const userdata = getItem(KEY)
+  const { generalState: { isMobile } } = useAuth();
 
   // useEffect(() => {
   //   if (flag.current) return;
@@ -68,51 +68,7 @@ export default function Earnings() {
   //   flag.current = true;
   // }, []);
 
-  async function submitHandler(e, formstate) {
-    e.preventDefault();
-    setLoading((_) => true);
-    try {
-      console.log(formstate);
-      if (
-        formstate.courseName.trim() === "" ||
-        formstate.stage.trim() === "" ||
-        formstate.accountNumber.trim() === "" ||
-        formstate.level.trim() === "" ||
-        formstate.bankName.trim() === ""
-      )
-        throw new AdvancedError("Empty field detected", 1);
-      //at this point it is valid submit
-      console.log({ formstate });
-      const res = await withdrawalRequest(formstate, userdata?.token);
-      const { message, statusCode, success } = res;
-      if (!success) throw new AdvancedError(message, statusCode);
-      else {
-        const { data } = res;
-        toast.success(message, {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        console.log(data);
-      }
-    } catch (err) {
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } finally {
-      setLoading((_) => false);
-    }
-  }
+
 
   return (
     <Teachers
@@ -124,7 +80,10 @@ export default function Earnings() {
       {loading && <Loader />}
       <div className={clsx.teachers_profile}>
         <AllEarnings />
-        <Requests submitHandler={submitHandler} />
+        <Link to={`/teacher/earnings/fetch`}>
+          <button className="button py-1 px-2"> View All Request</button>
+        </Link>
+        <Requests />
       </div>
       {/* <div className={clsx.teachers_profile} style={{marginTop:20}}>
         </div> */}
@@ -133,19 +92,30 @@ export default function Earnings() {
 }
 
 export function AllEarnings({ earnings }) {
-  const [total, setTotal] = useState(0);
-  const [courseEarnings, setCourseEarnings] = useState(0);
+  const [pickedCourse, setPickedCourse] = useState("")
+  const [allCourse, setAllCourse] = useState([])
+  const [courses, setCourses] = useState([]);
   const [modelEarnings, setModelEarnings] = useState(0);
   const [modelType, setModelType] = useState("")
-  const { generalState: { isMobile }, teacherFunctions: { fetchEarnings, withdrawalRequest } } = useAuth();
+  const { generalState: { isMobile }, teacherFunctions: { fetchEarnings, fetchBootcamps } } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
+
+
+  useQuery(["fetch classes"], () => fetchBootcamps(userdata?.token), {
+    notifyOnChangeProps: ["category", "isFetching"],
+
+    onSuccess: (res) => {
+      if (res?.data?.length > 0) {
+        setAllCourse(res?.data)
+      }
+    }
+  })
 
   const data = [
     {
       title: "Per Course",
       type: "Courses",
-      value: courseEarnings,
     },
   ];
 
@@ -183,35 +153,34 @@ export function AllEarnings({ earnings }) {
   ];
 
 
+
   // FETCH EARNINGS
-  const myEarnings = useQuery(["fetch my earnings"], ()=>fetchEarnings(userdata?.token), {
+  const myEarnings = useQuery(["fetch my earnings"], () => fetchEarnings(userdata?.token), {
     enabled: !!userdata.token,
+    onSuccess: data => {
+      if (data) {
+        setCourses(data?.data)
+      }
+
+    },
     onError: err => {
       console.error(err)
       toast.error("something went wrong")
     }
   })
 
-  console.log({myEarnings});
-  console.log({user: userdata.token});
 
-  const totalEarnings =  useMemo(() => {
+  const totalEarnings = useMemo(() => {
     let earnings = myEarnings.data?.data?.reduce((a, b) => a + b.amount, 0)
     return earnings
-  } , [myEarnings?.data?.data])
+  }, [myEarnings?.data?.data])
 
-  console.log({totalEarnings})
 
-  // useEffect(() => {
-  //   if (earnings) {
-  //     let b = earnings.reduce((a, b) => a + b.amount, 0);
-  //     setTotal(b);
-  //     let courseTotal = earnings.filter((item) => item.type === "course").reduce((a, b) => a + b.amount, 0);
-  //     console.log({ b });
-  //     console.log({ courseTotal });
-  //     setCourseEarnings(courseTotal);
-  //   }
-  // }, [earnings]);
+  const pickedEarnings = useMemo(() => {
+    return myEarnings.data?.data?.filter(item => item.itemId === pickedCourse)?.reduce((a, b) => a + b.amount, 0)
+  }, [myEarnings?.data?.data, pickedCourse])
+
+
 
   // returns total based on selected model
   function getModelTotal(model) {
@@ -220,15 +189,11 @@ export function AllEarnings({ earnings }) {
 
   }
 
-  // return total based on selected course/class
-  function getCourseTotal(total, model) {
-    let courseTotal = total
-      .filter((item) => item.type === "course" || item.type === "BOOTCAMP")
-      .reduce((a, b) => a + b.amount, 0);
-  }
+
 
   function handleModelChange(e) {
-    setModelType(e.target.value)
+    setPickedCourse(e.target.value)
+    // setCourseEarnings(e.target.value)
   }
 
   useEffect(() => {
@@ -237,6 +202,8 @@ export function AllEarnings({ earnings }) {
     }
   }, [modelType]);
 
+
+  console.log(myEarnings?.data?.data);
   return (
     <>
       <div
@@ -252,8 +219,15 @@ export function AllEarnings({ earnings }) {
         ))}
       </div>
       <div className={clsx.earnings_card_wrapper}>
-        {data.map(({ title, type, value }, i) => (
-          <EarningsCard title={title} type={type} value={value} key={i} handleModelChange={handleModelChange} />
+        {data.map(({ title, type, }, i) => (
+          <EarningsCard title={title}
+            type={type}
+            value={pickedEarnings ?? 0}
+            key={i}
+            handleModelChange={handleModelChange}
+            courses={courses}
+            courseInfo={allCourse}
+          />
         ))}
         <EarningsCard total={true} value={totalEarnings ?? 0} />
       </div>
@@ -286,7 +260,7 @@ export function FilterButton({ title }) {
   );
 }
 
-export function EarningsCard({ title, type, data = [], total, value, handleModelChange }) {
+export function EarningsCard({ title, type, data = [], total, value, handleModelChange, courses, courseInfo }) {
   return (
     <div className="earnings_card">
       <p className="text">{title}</p>
@@ -301,10 +275,16 @@ export function EarningsCard({ title, type, data = [], total, value, handleModel
                   type === "Courses" ?
                     <select name="model" id="model" className="form-select w-75" onChange={handleModelChange}>
                       <option defaultValue>{type}</option>
-                      {data.map(item => (
-                        <option value={item.type}>{item.title}</option>
+                      {courses?.map(item => {
+                        let findItem = courseInfo.find(course => course.bootcampId === item.itemId)
+                        console.log({ findItem });
+                        return (
+                          <option value={item.itemId}>{findItem?.title}</option>
+                        )
 
-                      ))}
+                      }
+
+                      )}
                     </select>
                     :
                     <select name="model" id="model" className="form-select w-75">
@@ -334,13 +314,13 @@ export function EarningsCard({ title, type, data = [], total, value, handleModel
 }
 
 export function EarningCourses() {
-  const {adminTeacherFunctions: {fetchCourseEarnings}} = useAuth()
-  const {getItem} = useLocalStorage()
+  const { adminTeacherFunctions: { fetchCourseEarnings } } = useAuth()
+  const { getItem } = useLocalStorage()
   const userdata = getItem(KEY)
-  
-  const getCourseEarnings = useQuery(["fetch course earnings"], ()=>fetchCourseEarnings(userdata?.token), {
+
+  const getCourseEarnings = useQuery(["fetch course earnings"], () => fetchCourseEarnings(userdata?.token), {
     onSuccess: res => {
-      if(res?.statusCode !== 1){
+      if (res?.statusCode !== 1) {
         toast.error(res.message)
       }
     },
@@ -349,12 +329,10 @@ export function EarningCourses() {
     }
   })
 
-  console.log({getCourseEarnings})
-
 
   return (
     <Admin header={"Earnings"}>
-      {getCourseEarnings?.isLoading  && 
+      {getCourseEarnings?.isLoading &&
         <Loader />
       }
       <div className={clsx.admin_profile}>
@@ -380,38 +358,38 @@ export function EarningCourses() {
 }
 
 
-function EarningsAccordion({course, i}){
-  
-  const [total, setTotal] = useState(()=>course.totalEarnings)
-  
+function EarningsAccordion({ course, i }) {
+
+  const [total, setTotal] = useState(() => course.totalEarnings)
+
   const [formData, setFormData] = useState({
     instructorEarningDetailArr: [],
     bootcampTotalEarning: course.totalEarnings || 0
   })
 
-  const {adminTeacherFunctions: {updateCourseEarnings}} = useAuth()
-  const {getItem} = useLocalStorage()
+  const { adminTeacherFunctions: { updateCourseEarnings } } = useAuth()
+  const { getItem } = useLocalStorage()
   const userdata = getItem(KEY)
 
 
-  const updateMutation = useMutation(([token, id, data])=>updateCourseEarnings(token, id, data), {
+  const updateMutation = useMutation(([token, id, data]) => updateCourseEarnings(token, id, data), {
     onSuccess: res => {
-      if(res.statusCode === 1){
+      if (res.statusCode === 1) {
         toast.success(res.message)
-        return 
+        return
       }
       toast.error(res.message)
     },
     onError: err => toast.error(err.message)
   })
 
-  function save(){
+  function save() {
     updateMutation.mutate([userdata.token, course.bootcampId, formData])
   }
 
-  function handleChange(e){
+  function handleChange(e) {
     setTotal(e.target.value)
-    setFormData({...formData, bootcampTotalEarning: Number(e.target.value)})
+    setFormData({ ...formData, bootcampTotalEarning: Number(e.target.value) })
     // updateEarnings()
   }
 
@@ -427,7 +405,7 @@ function EarningsAccordion({course, i}){
             <div>{i + 1}</div>
             <div>{course.title}</div>
             <div className={clsx.earnbtn}>
-              <input type="text" placeholder={"Total"} value={total} onChange={handleChange} onFocus={()=>console.log("focused")} />
+              <input type="text" placeholder={"Total"} value={total} onChange={handleChange} onFocus={() => console.log("focused")} />
             </div>
           </div>
 
@@ -450,13 +428,13 @@ function EarningsAccordion({course, i}){
           </div>
           <button className="button py-1 px-4 rounded" disabled={updateMutation?.isLoading} onClick={save}>
             {
-              updateMutation?.isLoading ? 
+              updateMutation?.isLoading ?
 
-              <div className="spinner-border text-white">
-                <div className="visually-hidden">Loading...</div>
-              </div>
-              :
-              <span>Save</span>
+                <div className="spinner-border text-white">
+                  <div className="visually-hidden">Loading...</div>
+                </div>
+                :
+                <span>Save</span>
             }
           </button>
         </Accordion.Body>
@@ -466,9 +444,9 @@ function EarningsAccordion({course, i}){
 }
 
 
-const EarnInfo = ({data, index, formData, setFormData}) => {
+const EarnInfo = ({ data, index, formData, setFormData }) => {
 
-  useEffect(()=>{
+  useEffect(() => {
     let newEarningInfo = {
       earnings: data.tutorId.earnings,
       percentageEarning: data.tutorId.percentageEarning,
@@ -476,22 +454,22 @@ const EarnInfo = ({data, index, formData, setFormData}) => {
     }
     let earningArray = formData.instructorEarningDetailArr
     earningArray[index] = newEarningInfo
-    setFormData({...formData, instructorEarningDetailArr: earningArray})
+    setFormData({ ...formData, instructorEarningDetailArr: earningArray })
 
   }, [data.tutorId._id])
 
-  function handleChange(e){
+  function handleChange(e) {
     let newData = formData.instructorEarningDetailArr
     let newEarningInfo = {
-      earnings:(formData?.bootcampTotalEarning * e.target.value )/ 100,
+      earnings: (formData?.bootcampTotalEarning * e.target.value) / 100,
       percentageEarning: Number(e.target.value),
       _id: data.tutorId._id
     }
     newData[index] = newEarningInfo
-    setFormData({...formData, instructorEarningDetailArr: newData})
+    setFormData({ ...formData, instructorEarningDetailArr: newData })
   }
 
-  console.log({formData})
+  console.log({ formData })
 
   return (
     <div className={clsx.earninfo}>
@@ -502,16 +480,16 @@ const EarnInfo = ({data, index, formData, setFormData}) => {
       </div>
 
       <div className={clsx.earnbtn}>
-        <input type="text" placeholder={"$1700"} disabled value={(formData?.bootcampTotalEarning && formData.instructorEarningDetailArr[index]?.percentageEarning) ? ((formData?.bootcampTotalEarning * formData.instructorEarningDetailArr[index]?.percentageEarning )/ 100 / 2) : ""}   />
+        <input type="text" placeholder={"$1700"} disabled value={(formData?.bootcampTotalEarning && formData.instructorEarningDetailArr[index]?.percentageEarning) ? ((formData?.bootcampTotalEarning * formData.instructorEarningDetailArr[index]?.percentageEarning) / 100 / 2) : ""} />
       </div>
 
       <div className={clsx.earnbtn}>
-        <input type="text" placeholder={"$1700"} disabled value={(formData?.bootcampTotalEarning && formData.instructorEarningDetailArr[index]?.percentageEarning) ? ((formData?.bootcampTotalEarning * formData.instructorEarningDetailArr[index]?.percentageEarning )/ 100 / 2) : ""}  />
+        <input type="text" placeholder={"$1700"} disabled value={(formData?.bootcampTotalEarning && formData.instructorEarningDetailArr[index]?.percentageEarning) ? ((formData?.bootcampTotalEarning * formData.instructorEarningDetailArr[index]?.percentageEarning) / 100 / 2) : ""} />
       </div>
 
 
       <div className={clsx.earnbtn}>
-        {(formData?.bootcampTotalEarning && formData.instructorEarningDetailArr[index]?.percentageEarning) ? (formData?.bootcampTotalEarning * formData.instructorEarningDetailArr[index]?.percentageEarning )/ 100 : ""}
+        {(formData?.bootcampTotalEarning && formData.instructorEarningDetailArr[index]?.percentageEarning) ? (formData?.bootcampTotalEarning * formData.instructorEarningDetailArr[index]?.percentageEarning) / 100 : ""}
       </div>
     </div>
 
@@ -558,13 +536,29 @@ export function EarningApplication() {
 
 const Requests = ({ submitHandler }) => {
   const [formstate, setFormstate] = useState({
-    courseName: "",
-    stage: "",
+    courseId: "",
+    stage: "1st",
     accountNumber: "",
     bankName: "",
-    level: "",
+    amount: "",
   });
   const [loading, setLoading] = useState(false);
+
+
+  const { teacherFunctions: { withdrawalRequest, fetchBootcamps } } = useAuth()
+  const { getItem } = useLocalStorage()
+  const userdata = getItem(KEY)
+  const [allCourse, setAllCourse] = useState([])
+
+  useQuery(["fetch classes"], () => fetchBootcamps(userdata?.token), {
+    notifyOnChangeProps: ["category", "isFetching"],
+
+    onSuccess: (res) => {
+      if (res?.data?.length > 0) {
+        setAllCourse(res?.data)
+      }
+    }
+  })
 
   function changeHandler(e) {
     const { name, value } = e.target;
@@ -576,25 +570,95 @@ const Requests = ({ submitHandler }) => {
     });
   }
 
+
+  async function submitHandler(e, formstate) {
+    e.preventDefault();
+    setLoading((_) => true);
+    console.log({ formstate });
+    try {
+
+      if (
+        formstate.stage.trim() === "" ||
+        formstate.accountNumber.trim() === "" ||
+        formstate.amount.trim() === "" ||
+        formstate.bankName.trim() === ""
+      )
+        throw new AdvancedError("Empty field detected", 1);
+      //at this point it is valid submit
+
+
+
+
+      const res = await withdrawalRequest(formstate, userdata?.token);
+      const { message, statusCode, success } = res;
+      if (!success) throw new AdvancedError(message, statusCode);
+      else {
+        const { data } = res;
+        toast.success(message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (err) {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } finally {
+      setLoading((_) => false);
+    }
+  }
+
+
+  const defaultProps = {
+    options: allCourse,
+    // getOptionLabel: (option) => option.email,
+    getOptionLabel: (option) => `${option.title}`
+  };
+
   return (
     <div className={clsx.requests} style={{ marginTop: 20 }}>
       {loading ? <Loader /> : null}
       <h2>Request for Fund</h2>
       <form className="form" onSubmit={(e) => submitHandler(e, formstate)}>
-       
+
         <div className={clsx.form_group}>
           <label htmlFor="course" className="form-label generic_label">Select Course</label>
-          <select name="course" id="course" className="form-select" >
+          {/* <select name="course" id="course" className="form-select" >
             <option value="">Select Course</option>
-          </select>
+          </select> */}
+          <Autocomplete
+            disablePortal
+            {...defaultProps}
+            id="combo-box-demo"
+            sx={{ width: 300 }}
+            onChange={(e, newValue) => {
+              console.log({ newValue });
+              if (newValue === null) return;
+              // setValue(newValue);
+              setFormstate({ ...formstate, courseId: newValue?.bootcampId })
+            }}
+            renderInput={(params) => <TextField {...params} label="Select Course" />}
+          />
         </div>
 
         <div className={clsx.form_group}>
           <label htmlFor="stage" className="form-label generic_label">Stage of Training</label>
+
           <select name="stage" id="stage" className="form-select" >
-          <option value="">Select Stage</option>
-          <option value="">1st Stage</option>
-          <option value="">2nd Stage </option>
+            <option value="">Select Stage</option>
+            <option value="1st">1st Stage</option>
+            <option value="2nd">2nd Stage </option>
           </select>
         </div>
 
@@ -605,7 +669,7 @@ const Requests = ({ submitHandler }) => {
           handleChange={changeHandler}
           value={formstate.accountNumber}
         />
-       
+
         <Input
           label="Bank Name"
           name="bankName"
@@ -613,7 +677,15 @@ const Requests = ({ submitHandler }) => {
           handleChange={changeHandler}
           value={formstate.bankName}
         />
-        
+
+        <Input
+          label="Amount"
+          name="amount"
+          type="text"
+          handleChange={changeHandler}
+          value={formstate.amount}
+        />
+
         {/* <div className="form-group my-3">
           <label htmlFor="level" className="form-label generic_label">
             Details of Request
@@ -640,3 +712,67 @@ const Requests = ({ submitHandler }) => {
     </div>
   );
 };
+
+
+export function EarningTeacherApplication() {
+  const { adminTeacherFunctions: { fetchAllWithdrawalRequest } } = useAuth()
+  const { getItem } = useLocalStorage()
+  const [allTeachersReq, setAllTeachersReq] = useState([])
+
+  const userdata = getItem(KEY)
+
+  useQuery(["getallTeachersRequest"], () => fetchAllWithdrawalRequest(userdata?.token),
+    {
+      enabled: userdata?.token !== null,
+      onSuccess: res => {
+        if (res?.success) {
+          console.log("with", res.data);
+          setAllTeachersReq(res.data)
+        }
+      },
+      onError: err => {
+        console.error(err)
+      }
+    }
+  )
+
+
+
+  return (
+    <Admin header={"Earnings> Applications"}>
+
+      <div className={clsx.admin_profile}>
+
+        <div className={clsx.earntopbar}>
+          <div>No</div>
+          <div>Name</div>
+          <div>Courses</div>
+          <div>Stage</div>
+          <div>Bank Details</div>
+          <div>Status</div>
+        </div>
+
+        <div className={clsx.earncontent}>
+          {
+            allTeachersReq.map((teacher, i) => {
+              return (
+                <div className={`${clsx.earntopbar} ${clsx.earnbtmbar}`} key={i}>
+                  <div>{i + 1}</div>
+                  {/* <div>{`${findItem.firstName} ${findItem.lastName}`}</div> */}
+                  <div>{teacher.courseName}</div>
+                  <div>{teacher.trainingStage}</div>
+                  <div>{`${teacher.accountDetails?.accountNumber} ${teacher.accountDetails?.bankName}`}</div>
+                  <div>{teacher.status}</div>
+
+                </div>
+              )
+            }
+
+            )
+          }
+
+        </div>
+      </div>
+    </Admin>
+  )
+}
