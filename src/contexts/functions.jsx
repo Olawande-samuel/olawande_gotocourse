@@ -4268,7 +4268,8 @@ export const teacherFunctions = {
     },
     fetchEarnings: async function (token) {
         try {
-            const res = await axios.get(`${baseURL}/user/earnings/fetch`,
+            // const res = await axios.get(`${baseURL}/user/earnings/fetch`,
+            const res = await axios.get(`${baseURL}/teacher/bootcamp-earnings/fetch`,
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`,

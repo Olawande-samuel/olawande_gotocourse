@@ -588,11 +588,27 @@ outline: none;
 .earntopbar > div:nth-of-type(3){
     flex: 2.5;
     padding: 0 .5rem;
+    flex-wrap: wrap;
     /* border: 2px solid yellow; */
 
 }
 
-.earntopbar > div:nth-of-type(4), .earntopbar> div:nth-of-type(5){
+.earntopbar > div:nth-of-type(4), 
+.earntopbar> div:nth-of-type(5)
+
+{
+    flex: 1.5;
+    padding: 0 .5rem;
+    /* border: 2px solid yellow; */
+
+}
+
+
+
+.earntopbar> div:nth-of-type(6),
+.earntopbar> div:nth-of-type(7),
+.earntopbar> div:nth-of-type(8)
+{
     flex: 2;
     padding: 0 .5rem;
     /* border: 2px solid yellow; */

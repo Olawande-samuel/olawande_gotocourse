@@ -81,7 +81,7 @@ export default function Earnings() {
       <div className={clsx.teachers_profile}>
         <AllEarnings />
         <Link to={`/teacher/earnings/fetch`}>
-          <button className="button py-1 px-2"> View All Request</button>
+          <button className="button py-1 px-2"> View All My Requests</button>
         </Link>
         <Requests />
       </div>
@@ -93,7 +93,6 @@ export default function Earnings() {
 
 export function AllEarnings({ earnings }) {
   const [pickedCourse, setPickedCourse] = useState("")
-  const [allCourse, setAllCourse] = useState([])
   const [courses, setCourses] = useState([]);
   const [modelEarnings, setModelEarnings] = useState(0);
   const [modelType, setModelType] = useState("")
@@ -102,15 +101,7 @@ export function AllEarnings({ earnings }) {
   let userdata = getItem(KEY);
 
 
-  useQuery(["fetch classes"], () => fetchBootcamps(userdata?.token), {
-    notifyOnChangeProps: ["category", "isFetching"],
-
-    onSuccess: (res) => {
-      if (res?.data?.length > 0) {
-        setAllCourse(res?.data)
-      }
-    }
-  })
+ 
 
   const data = [
     {
@@ -170,78 +161,97 @@ export function AllEarnings({ earnings }) {
   })
 
 
+  // const totalEarnings = useMemo(() => {
+  //   let earnings = myEarnings.data?.data?.reduce((a, b) => a + b.amount, 0)
+  //   return earnings
+  // }, [myEarnings?.data?.data])
+
+
   const totalEarnings = useMemo(() => {
-    let earnings = myEarnings.data?.data?.reduce((a, b) => a + b.amount, 0)
-    return earnings
-  }, [myEarnings?.data?.data])
+    let totalAmountPaid = 0;
+     myEarnings.data?.data?.forEach((data) => {
+      if (data.earnings && data.earnings.amountPaid !== null) {
+        totalAmountPaid += data.earnings.amountPaid;
+      }
+    });
+  
+    return totalAmountPaid
 
-
-  const pickedEarnings = useMemo(() => {
-    return myEarnings.data?.data?.filter(item => item.itemId === pickedCourse)?.reduce((a, b) => a + b.amount, 0)
-  }, [myEarnings?.data?.data, pickedCourse])
-
-
-
-  // returns total based on selected model
-  function getModelTotal(model) {
-    let modelTotal = earnings.filter((item) => item.teachingModel === model).reduce((a, b) => a + b.amount, 0);
-    setModelEarnings(modelTotal);
-
-  }
+}, [myEarnings?.data?.data])
 
 
 
-  function handleModelChange(e) {
-    setPickedCourse(e.target.value)
-    // setCourseEarnings(e.target.value)
-  }
 
-  useEffect(() => {
-    if (earnings) {
-      getModelTotal(modelType)
+const pickedEarnings = useMemo(() => {
+  const findItem = myEarnings.data?.data?.find(item => item._id === pickedCourse)
+  if(findItem){
+    if(findItem?.earnings){
+      return findItem?.earnings?.amountPaid ?? 0
     }
-  }, [modelType]);
+  }
+  return 0
+}, [myEarnings?.data?.data, pickedCourse])
 
 
-  console.log(myEarnings?.data?.data);
-  return (
-    <>
-      <div
-        className="d-flex align-items-center mt-3 mb-5 flex-wrap"
-        style={{ gap: "1rem" }}
-      >
-        <i>
-          <FiFilter />
-        </i>
-        <span style={{ fontSize: "0.8rem" }}>Filter by: </span>
-        {filterBy.map((date, i) => (
-          <FilterButton key={i} title={date.title} />
-        ))}
-      </div>
-      <div className={clsx.earnings_card_wrapper}>
-        {data.map(({ title, type, }, i) => (
-          <EarningsCard title={title}
-            type={type}
-            value={pickedEarnings ?? 0}
-            key={i}
-            handleModelChange={handleModelChange}
-            courses={courses}
-            courseInfo={allCourse}
-          />
-        ))}
-        <EarningsCard total={true} value={totalEarnings ?? 0} />
-      </div>
-      {/* <div className="pt-3 d-flex flex-column align-items-end gap-3">
+
+// returns total based on selected model
+function getModelTotal(model) {
+  let modelTotal = earnings.filter((item) => item.teachingModel === model).reduce((a, b) => a + b.amount, 0);
+  setModelEarnings(modelTotal);
+
+}
+
+
+
+function handleModelChange(e) {
+  setPickedCourse(e.target.value)
+  // setCourseEarnings(e.target.value)
+}
+
+useEffect(() => {
+  if (earnings) {
+    getModelTotal(modelType)
+  }
+}, [modelType]);
+
+
+return (
+  <>
+    <div
+      className="d-flex align-items-center mt-3 mb-5 flex-wrap"
+      style={{ gap: "1rem" }}
+    >
+      <i>
+        <FiFilter />
+      </i>
+      <span style={{ fontSize: "0.8rem" }}>Filter by: </span>
+      {filterBy.map((date, i) => (
+        <FilterButton key={i} title={date.title} />
+      ))}
+    </div>
+    <div className={clsx.earnings_card_wrapper}>
+      {data.map(({ title, type, }, i) => (
+        <EarningsCard title={title}
+          type={type}
+          value={pickedEarnings ?? 0}
+          key={i}
+          handleModelChange={handleModelChange}
+          courses={courses}
+        />
+      ))}
+      <EarningsCard total={true} value={totalEarnings ?? 0} />
+    </div>
+    {/* <div className="pt-3 d-flex flex-column align-items-end gap-3">
         <Link to={`/admin/earnings/courses`}><button className=" button py-1 px-4">Divide earnings</button></Link>
         <Link to={`/admin/earnings/applications`}><button className=" whtbutton py-1 px-4">Earnings applications</button></Link>
       </div> */}
 
 
-      <div className="overflow-auto">
-        <MyChart />
-      </div>
-    </>
-  );
+    <div className="overflow-auto">
+      <MyChart />
+    </div>
+  </>
+);
 }
 export function FilterButton({ title }) {
   return (
@@ -260,7 +270,7 @@ export function FilterButton({ title }) {
   );
 }
 
-export function EarningsCard({ title, type, data = [], total, value, handleModelChange, courses, courseInfo }) {
+export function EarningsCard({ title, type, total, value, handleModelChange, courses }) {
   return (
     <div className="earnings_card">
       <p className="text">{title}</p>
@@ -276,10 +286,8 @@ export function EarningsCard({ title, type, data = [], total, value, handleModel
                     <select name="model" id="model" className="form-select w-75" onChange={handleModelChange}>
                       <option defaultValue>{type}</option>
                       {courses?.map(item => {
-                        let findItem = courseInfo.find(course => course.bootcampId === item.itemId)
-                        console.log({ findItem });
                         return (
-                          <option value={item.itemId}>{findItem?.title}</option>
+                          <option value={item._id} key={item._id}>{item?.name}</option>
                         )
 
                       }
@@ -469,7 +477,6 @@ const EarnInfo = ({ data, index, formData, setFormData }) => {
     setFormData({ ...formData, instructorEarningDetailArr: newData })
   }
 
-  console.log({ formData })
 
   return (
     <div className={clsx.earninfo}>
@@ -497,42 +504,6 @@ const EarnInfo = ({ data, index, formData, setFormData }) => {
 }
 
 
-export function EarningApplication() {
-  return (
-    <Admin header={"Earnings> Applications"}>
-
-      <div className={clsx.admin_profile}>
-
-        <div className={clsx.earntopbar}>
-          <div>No</div>
-          <div>Name</div>
-          <div>Courses</div>
-          <div>Stage</div>
-          <div>Bank Details</div>
-        </div>
-
-        <div className={clsx.earncontent}>
-          {
-            [...Array(5)].map((_, i) => (
-
-              <div className={`${clsx.earntopbar} ${clsx.earnbtmbar}`} key={i}>
-                <div>{i + 1}</div>
-                <div>Yaya Johnson</div>
-                <div>Cybersecuity - Cohort 1</div>
-                <div>2nd stage</div>
-                <div>UBN - 948574449</div>
-              </div>
-
-
-
-            ))
-          }
-
-        </div>
-      </div>
-    </Admin>
-  )
-}
 
 const Requests = ({ submitHandler }) => {
   const [formstate, setFormstate] = useState({
@@ -574,7 +545,6 @@ const Requests = ({ submitHandler }) => {
   async function submitHandler(e, formstate) {
     e.preventDefault();
     setLoading((_) => true);
-    console.log({ formstate });
     try {
 
       if (
@@ -643,7 +613,6 @@ const Requests = ({ submitHandler }) => {
             id="combo-box-demo"
             sx={{ width: 300 }}
             onChange={(e, newValue) => {
-              console.log({ newValue });
               if (newValue === null) return;
               // setValue(newValue);
               setFormstate({ ...formstate, courseId: newValue?.bootcampId })
@@ -726,7 +695,6 @@ export function EarningTeacherApplication() {
       enabled: userdata?.token !== null,
       onSuccess: res => {
         if (res?.success) {
-          console.log("with", res.data);
           setAllTeachersReq(res.data ?? [])
         }
       },
@@ -748,6 +716,7 @@ export function EarningTeacherApplication() {
           <div>Name</div>
           <div>Courses</div>
           <div>Stage</div>
+          <div>Amount($)</div>
           <div>Bank Details</div>
           <div>Status</div>
         </div>
@@ -758,9 +727,9 @@ export function EarningTeacherApplication() {
               return (
                 <div className={`${clsx.earntopbar} ${clsx.earnbtmbar}`} key={i}>
                   <div>{i + 1}</div>
-                  {/* <div>{`${findItem.firstName} ${findItem.lastName}`}</div> */}
                   <div>{teacher.courseName}</div>
                   <div>{teacher.trainingStage}</div>
+                  <div>{teacher.amount}</div>
                   <div>{`${teacher.accountDetails?.accountNumber} ${teacher.accountDetails?.bankName}`}</div>
                   <div>{teacher.status}</div>
 
