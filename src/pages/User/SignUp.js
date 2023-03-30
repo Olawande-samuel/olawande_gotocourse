@@ -82,6 +82,10 @@ const SignUp = () => {
         throw new AdvancedError("Fields cannot be empty", 0);
       if (retype_password !== others.password)
         throw new AdvancedError("Passwords don't match", 0);
+      if(others.fullname.split(" ")[1] === "" || others.fullname.split(" ")[0] === ""){
+        throw new AdvancedError("Please enter your first and last name separated by a single space", 0)
+      }
+      // console.log(others.fullname.trim())
       // main 
       const response = await register({ ...others }, "user");
       let { success, message, statusCode } = response;
