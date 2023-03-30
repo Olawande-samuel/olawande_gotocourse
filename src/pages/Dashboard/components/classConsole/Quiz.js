@@ -97,7 +97,7 @@ export function Preview() {
 
 
 
-export default function Quiz() {
+export default function Quiz({formData, edit, setEdit, getContentfromQuery, setFormData, resultMainData, setResultMainData}) {
     const { pathname, search } = useLocation();
     const bread = pathname?.split("/");
     const [value, setValue] = useState(0);
@@ -111,38 +111,39 @@ export default function Quiz() {
     const {classId} = useParams()
     let searchData = search.split("=").reverse()[0]
     const contentId = searchParams.get("content")
-    const [resultMainData, setResultMainData] = useState({})
-    const [edit, setEdit] = useState(false)
+    // const [resultMainData, setResultMainData] = useState({})
+    // const [edit, setEdit] = useState(false)
 
     const queryClient = useQueryClient()
 
-    const [formData, setFormData] = useState({
-        classId:"",
-        contentId:"",
-        title: "",
-        endDate: "",
-        endTime: "",
-        note: "",
-        timeLimit: "",
-        maxAttempts: 1,
-        questions: [
-            {
-                type: "",
-                title: "",
-                showAnswer: false,
-                answer:"",
-                grade:"",
-                options: [
-                    {
-                        isAnswer: false,
-                        title: ""
-                    }
-                ]
+    console.log({formData})
+    // const [formData, setFormData] = useState({
+    //     classId:"",
+    //     contentId:"",
+    //     title: "",
+    //     endDate: "",
+    //     endTime: "",
+    //     note: "",
+    //     timeLimit: "",
+    //     maxAttempts: 1,
+    //     questions: [
+    //         {
+    //             type: "",
+    //             title: "",
+    //             showAnswer: false,
+    //             answer:"",
+    //             grade:"",
+    //             options: [
+    //                 {
+    //                     isAnswer: false,
+    //                     title: ""
+    //                 }
+    //             ]
 
-            }
-        ]
+    //         }
+    //     ]
 
-    })
+    // })
 
     
  
@@ -192,48 +193,46 @@ export default function Quiz() {
 
 
 
-    const getContentfromQuery = useQuery([`quiz content ${contentId}`, contentId], () => fetchQuiz(userdata.token, searchData), {
-        enabled: userdata.token !== null,
-        onSuccess: (res)=> {
+    // const getContentfromQuery = useQuery([`quiz content ${contentId}`, contentId], () => fetchQuiz(userdata.token, searchData), {
+    //     enabled: userdata.token !== null,
+    //     onSuccess: (res)=> {
+    //         if(res.data?.length > 0){
+    //             let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
+    //             let deadlineTime = res.data[res.data.length -1].endDate?.split("T")[1]
+    //             setFormData({...res.data[res.data.length -1], endDate: deadline, endTime: deadlineTime.substr(0, 5)})
+    //             setResultMainData({...res.data[res.data.length -1]})
+    //             setEdit(true)
+    //         }else{
+    //             setEdit(false)
+    //             setFormData({
+    //                 classId,
+    //                 contentId:searchData,
+    //                 title: "",
+    //                 endDate: "",
+    //                 endTime: "",
+    //                 note: "",
+    //                 timeLimit: "",
+    //                 maxAttempts: 1,
+    //                 questions: [
+    //                     {
+    //                         type: "",
+    //                         title: "",
+    //                         showAnswer: false,
+    //                         answer:"",
+    //                         options: [
+    //                             {
+    //                                 isAnswer: false,
+    //                                 title: ""
+    //                             }
+    //                         ]
             
-
-            if(res.data?.length > 0){
-                let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
-                let deadlineTime = res.data[res.data.length -1].endDate?.split("T")[1]
-                setFormData({...res.data[res.data.length -1], endDate: deadline, endTime: deadlineTime.substr(0, 5)})
-                setResultMainData({...res.data[res.data.length -1]})
-                setEdit(true)
-            }else{
-                setEdit(false)
-                setFormData({
-                    classId,
-                    contentId:searchData,
-                    title: "",
-                    endDate: "",
-                    endTime: "",
-                    note: "",
-                    timeLimit: "",
-                    maxAttempts: 1,
-                    questions: [
-                        {
-                            type: "",
-                            title: "",
-                            showAnswer: false,
-                            answer:"",
-                            options: [
-                                {
-                                    isAnswer: false,
-                                    title: ""
-                                }
-                            ]
+    //                     }
+    //                 ]
             
-                        }
-                    ]
-            
-                })
-            }
-        }
-    } )
+    //             })
+    //         }
+    //     }
+    // } )
 
     
     
@@ -356,7 +355,7 @@ export default function Quiz() {
                                 // placeholder='Name of Quiz' 
                                 name="title"
                                 id="title"
-                                value={formData.title}
+                                value={formData?.title}
                                 onChange={e => setFormData({ ...formData, [e.target.name]: e.target.value })}
                             />
 
@@ -365,7 +364,7 @@ export default function Quiz() {
                                 // placeholder='Notes' 
                                 name="note"
                                 id="note"
-                                value={formData.note}
+                                value={formData?.note}
                                 onChange={e => setFormData({ ...formData, [e.target.name]: e.target.value })}
                             />
                             <small>Users will see this on the page before they start quiz. Should describe the quiz</small>
@@ -373,11 +372,11 @@ export default function Quiz() {
                             <label htmlFor="date">Quiz deadline</label>
                             <div className="contenquiz__time">
                                 <input type="date" name="endDate"
-                                    value={formData.endDate}
+                                    value={formData?.endDate}
                                     onChange={e => setFormData({ ...formData, [e.target.name]: e.target.value })}
                                 />
                                 <input type="time" placeholder='Time' name="endTime"
-                                    value={formData.endTime}
+                                    value={formData?.endTime}
                                     onChange={e => setFormData({ ...formData, [e.target.name]: e.target.value })}
                                 />
 
@@ -389,14 +388,14 @@ export default function Quiz() {
                             type="number"
                                 name="timeLimit"
                                 id="timeLimit"
-                                value={formData.timeLimit}
+                                value={formData?.timeLimit}
                                 onChange={e => setFormData({ ...formData, [e.target.name]: e.target.value })}
                             />
 
                             <label htmlFor="entries">Number of entries</label>
                             <input type="number" id='entries'
                                 name="maxAttempts"
-                                value={formData.maxAttempts}
+                                value={formData?.maxAttempts}
                                 onChange={e => setFormData({ ...formData, [e.target.name]: e.target.value })}
 
                             />
@@ -531,7 +530,7 @@ export default function Quiz() {
 
 
                                                                         {
-                                                                            formData.questions[id].options.map((x, index) => (
+                                                                            formData?.questions[id].options.map((x, index) => (
                                                                                 <div className='multiplechoice' key={index}>
                                                                                     <div className='multiplechoice__input'>
 
@@ -555,14 +554,14 @@ export default function Quiz() {
                                                                                             }} />
 
                                                                                         {
-                                                                                            formData.questions[id].options.length !== 1 && <RiDeleteBinFill onClick={() => handleRemoveClick(id, index)} />
+                                                                                            formData?.questions[id].options.length !== 1 && <RiDeleteBinFill onClick={() => handleRemoveClick(id, index)} />
 
                                                                                         }
                                                                                     </div>
 
                                                                                     <div className='multiplechoice__addbtn'>
                                                                                         {
-                                                                                            formData.questions[id].options.length - 1 === index &&
+                                                                                            formData?.questions[id].options.length - 1 === index &&
                                                                                             <div className="prevbtn">
                                                                                                 <button onClick={(e) => handleAddOptions(e, id, index)} >Add Option</button>
                                                                                             </div>
@@ -591,7 +590,7 @@ export default function Quiz() {
                                             <div className="d-flex justify-content-between mt-4" style={{gap:" 1rem"}}>
                                                 <div className="footerbtn2">
                                                     {
-                                                        formData.questions.length - 1 === id && <button onClick={(e) => handleAddClick(e)}>
+                                                        formData?.questions.length - 1 === id && <button onClick={(e) => handleAddClick(e)}>
                                                             New Question
                                                         </button>
                                                     }

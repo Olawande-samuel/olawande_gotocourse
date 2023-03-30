@@ -120,7 +120,7 @@ export function LiveClassInfo({ type }) {
   );
 }
 
-export function CurrentLive({ setOpen, roomName, status, startDate, startTime, endDate, endTime, userId, _id }) {
+export function CurrentLive({ setOpen, roomName, status, startDate, startTime, endDate, endTime, userId, createdAt, _id }) {
 
   const contextMenu = [
     {
@@ -202,6 +202,10 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
     setAnchorEl(event.currentTarget);
   };
 
+  console.log("date created ", new Date(createdAt).getTimezoneOffset())
+  console.log("date scheduled ",new Date(startDate).getTimezoneOffset())
+  
+
   return (
     <div className={style.live_card}>
        {userdata?.userType !== "student" &&
@@ -214,6 +218,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
             <FaCalendarAlt />
           </i>
           <span>{new Intl.DateTimeFormat('en-US').format(new Date(startDate))}</span>
+          {/* <span>{new Date(startDate).toLocaleDateString()}</span> */}
         </div>
         <div>
           <i>
@@ -222,6 +227,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
           <span>
             {/* {startTime ? startTime : "Now"} - {endTime ? endTime : <IoInfiniteOutline />} UTC{ new Date().getTimezoneOffset()/10} */}
             {startTime ? startTime : "Now"} - {endTime ? endTime : <IoInfiniteOutline />} CST
+            {/* {startTime ? new Date(startTime).toLocaleTimeString() : "Now"} - {endTime ? new Date(endTime).toLocaleTimeString() : <IoInfiniteOutline />} */}
           </span>
         </div>
         <div>
