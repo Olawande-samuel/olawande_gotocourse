@@ -433,14 +433,15 @@ export default function Quiz() {
                                                             </Select>
 
                                                             <div className="texteditor quiz__editor">  
-                                                             <ReactQuill theme="snow" value={"hello there"} 
-                                                                // onChange={(e)=>{
-                                                                //     if(formData?.questions[id]['title'] !== ""){ 
-                                                                //         const list = {...formData}
-                                                                //         list.questions[id]['title'] = e;
-                                                                //         setFormData(list)    
-                                                                //     }
-                                                                // }} 
+                                                            
+                                                             <ReactQuill theme="snow" value={x?.title ?? ""} 
+                                                                onChange={(e)=>{
+                                                                    if(formData?.questions[id]['title'] !== ""){ 
+                                                                        const list = {...formData}
+                                                                        list.questions[id]['title'] = e;
+                                                                        setFormData(list)    
+                                                                    }
+                                                                }} 
                                                             />
                 
                                                                 
