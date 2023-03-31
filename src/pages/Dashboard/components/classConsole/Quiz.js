@@ -247,9 +247,6 @@ export default function Quiz() {
                 return "/admin";
         }
     }
-
-
-    console.log({formData})
    
 
 
@@ -325,8 +322,14 @@ export default function Quiz() {
 
     }
 
-    
-    
+    function handleQuillChange(e, id){
+        if(formData?.contentId === contentId){
+            let list = {...formData}
+            list.questions[id]['title'] = e;
+            setFormData(list)
+        }
+    }
+
     return (
 
         <div className=''>
@@ -435,13 +438,14 @@ export default function Quiz() {
                                                             <div className="texteditor quiz__editor">  
                                                             
                                                              <ReactQuill theme="snow" value={x?.title ?? ""} 
-                                                                onChange={(e)=>{
-                                                                    if(formData?.questions[id]['title'] !== ""){ 
-                                                                        const list = {...formData}
-                                                                        list.questions[id]['title'] = e;
-                                                                        setFormData(list)    
-                                                                    }
-                                                                }} 
+                                                                onChange={(e)=>handleQuillChange(e, id) }
+                                                                    // (e)=>{
+                                                                    // if(formData?.questions[id]['title'] !== ""){ 
+                                                                    //     const list = {...formData}
+                                                                    //     list.questions[id]['title'] = e;
+                                                                    //     setFormData(list)    
+                                                                    // }
+                                                                // }} 
                                                             />
                 
                                                                 

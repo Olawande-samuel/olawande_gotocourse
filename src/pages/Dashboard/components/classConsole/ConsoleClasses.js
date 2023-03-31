@@ -128,7 +128,7 @@ export default function ConsoleClasses() {
     let userdata = getItem(KEY);
     const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps } } = useAuth();
     const { data, isSuccess, isLoading } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
-    // console.log({ data });
+    
     let navigate = useNavigate()
 
     let today = new Date()
@@ -206,7 +206,7 @@ export function ConsoleMessages() {
     let userdata = getItem(KEY);
     const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps } } = useAuth();
     const { data, isSuccess, isLoading } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
-    // console.log({ data });
+    
     let navigate = useNavigate()
 
     const [search, setSearch] = useState("")

@@ -107,11 +107,10 @@ export default function Classroom() {
         setShow(!show)
     }
 
-    console.log({classId})
+
     // const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=>fetchApplications(userdata.token), {
     const fetchStudents = useQuery(["studentsFetch", userdata.token], ()=> fetchBootcampApplications(userdata.token, classId), {
         onSuccess: (res)=> {
-            console.log({res})
             if(res.statusCode === 1){
                 setStudentList(res.data)
             }
