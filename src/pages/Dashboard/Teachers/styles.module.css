@@ -323,14 +323,14 @@
     color: var(--textBlue)
 }
 
-.form_group select {
+/* .form_group select {
     outline: none;
     padding: 12px;
     border: 1px solid rgba(208, 204, 204, 0.5);
     border-radius: 5px;
     text-indent: 40px;
     background-color: var(--primary);
-}
+} */
 
 .form_group textarea{
     outline: none;
@@ -444,10 +444,10 @@
     width: min(100% - 0.5rem, 480px );
 }
 
-
+/* 
 .requests form label {
     margin-top: 20px;
-}
+} */
 
 .requests_button {
     margin: 15px 0px;
@@ -588,11 +588,27 @@ outline: none;
 .earntopbar > div:nth-of-type(3){
     flex: 2.5;
     padding: 0 .5rem;
+    flex-wrap: wrap;
     /* border: 2px solid yellow; */
 
 }
 
-.earntopbar > div:nth-of-type(4), .earntopbar> div:nth-of-type(5){
+.earntopbar > div:nth-of-type(4), 
+.earntopbar> div:nth-of-type(5)
+
+{
+    flex: 1.5;
+    padding: 0 .5rem;
+    /* border: 2px solid yellow; */
+
+}
+
+
+
+.earntopbar> div:nth-of-type(6),
+.earntopbar> div:nth-of-type(7),
+.earntopbar> div:nth-of-type(8)
+{
     flex: 2;
     padding: 0 .5rem;
     /* border: 2px solid yellow; */
