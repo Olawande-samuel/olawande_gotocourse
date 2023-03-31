@@ -235,6 +235,8 @@ import Abroad from "./components/abroad/pages";
 import { EarningApplication, EarningCourses } from "./pages/Dashboard/Teachers/Earnings";
 import { BootcampPaystackPayment } from "./pages/Bootcamp/PaystackPayment";
 import Africa from "./components/abroad/pages/Africa";
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
 
 const Login = lazy(() => import("./pages/User/Login"));
 const SignUp = lazy(() => import("./pages/User/SignUp"));
@@ -299,6 +301,7 @@ function MyApp({ mixpanel }) {
 	return (
 		<AuthContextProvider>
 			<SyllabusContextProvider>
+				{/* <ReactQueryDevtools initialIsOpen={false} /> */}
 				<Suspense fallback={<Loader />}>
 					<Routes>
 						<Route path="/" element={<Out />}>

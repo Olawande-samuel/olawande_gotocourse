@@ -97,7 +97,7 @@ export function Preview() {
 
 
 
-export default function Quiz({formData, edit, setEdit, getContentfromQuery, setFormData, resultMainData, setResultMainData}) {
+export default function Quiz() {
     const { pathname, search } = useLocation();
     const bread = pathname?.split("/");
     const [value, setValue] = useState(0);
@@ -105,47 +105,44 @@ export default function Quiz({formData, edit, setEdit, getContentfromQuery, setF
 
     const { getItem } = useLocalStorage()
     const userdata = getItem(KEY)
-
+    
     const { consoleFunctions: { fetchQuiz, addQuiz, quizEdit }, } = useAuth();
     let path = pathname.split("/")
     const {classId} = useParams()
     let searchData = search.split("=").reverse()[0]
     const contentId = searchParams.get("content")
-    // const [resultMainData, setResultMainData] = useState({})
-    // const [edit, setEdit] = useState(false)
-
+    const [edit, setEdit] = useState(false)
     const queryClient = useQueryClient()
 
-    console.log({formData})
-    // const [formData, setFormData] = useState({
-    //     classId:"",
-    //     contentId:"",
-    //     title: "",
-    //     endDate: "",
-    //     endTime: "",
-    //     note: "",
-    //     timeLimit: "",
-    //     maxAttempts: 1,
-    //     questions: [
-    //         {
-    //             type: "",
-    //             title: "",
-    //             showAnswer: false,
-    //             answer:"",
-    //             grade:"",
-    //             options: [
-    //                 {
-    //                     isAnswer: false,
-    //                     title: ""
-    //                 }
-    //             ]
+    const [formData, setFormData] = useState({
+        classId:"",
+        contentId:"",
+        title: "",
+        endDate: "",
+        endTime: "",
+        note: "",
+        timeLimit: "",
+        maxAttempts: 1,
+        questions: [
+            {
+                type: "",
+                title: "",
+                showAnswer: false,
+                answer:"",
+                grade:"",
+                options: [
+                    {
+                        isAnswer: false,
+                        title: ""
+                    }
+                ]
 
-    //         }
-    //     ]
+            }
+        ]
 
-    // })
+    })
 
-    
+
  
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -193,46 +190,47 @@ export default function Quiz({formData, edit, setEdit, getContentfromQuery, setF
 
 
 
-    // const getContentfromQuery = useQuery([`quiz content ${contentId}`, contentId], () => fetchQuiz(userdata.token, searchData), {
-    //     enabled: userdata.token !== null,
-    //     onSuccess: (res)=> {
-    //         if(res.data?.length > 0){
-    //             let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
-    //             let deadlineTime = res.data[res.data.length -1].endDate?.split("T")[1]
-    //             setFormData({...res.data[res.data.length -1], endDate: deadline, endTime: deadlineTime.substr(0, 5)})
-    //             setResultMainData({...res.data[res.data.length -1]})
-    //             setEdit(true)
-    //         }else{
-    //             setEdit(false)
-    //             setFormData({
-    //                 classId,
-    //                 contentId:searchData,
-    //                 title: "",
-    //                 endDate: "",
-    //                 endTime: "",
-    //                 note: "",
-    //                 timeLimit: "",
-    //                 maxAttempts: 1,
-    //                 questions: [
-    //                     {
-    //                         type: "",
-    //                         title: "",
-    //                         showAnswer: false,
-    //                         answer:"",
-    //                         options: [
-    //                             {
-    //                                 isAnswer: false,
-    //                                 title: ""
-    //                             }
-    //                         ]
+    const getContentfromQuery = useQuery([contentId], () => fetchQuiz(userdata.token, searchData), {
+        enabled: !!userdata.token,
+        refetchOnWindowFocus: false,
+        onSuccess: (res)=> {
+            if(res.data?.length > 0){
+                let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
+                let deadlineTime = res.data[res.data.length -1].endDate?.split("T")[1]
+                setFormData({...res.data[res.data.length -1], endDate: deadline, endTime: deadlineTime.substr(0, 5)})
+                setEdit(true)
+            }else{
+                setEdit(false)
+                setFormData({
+                    classId,
+                    contentId:searchData,
+                    title: "",
+                    startDate:"",
+                    endDate: "",
+                    endTime: "",
+                    note: "",
+                    timeLimit: "",
+                    maxAttempts: 1,
+                    questions: [
+                        {
+                            type: "",
+                            title: "",
+                            showAnswer: false,
+                            answer:"",
+                            options: [
+                                {
+                                    isAnswer: false,
+                                    title: ""
+                                }
+                            ]
             
-    //                     }
-    //                 ]
+                        }
+                    ]
             
-    //             })
-    //         }
-    //     }
-    // } )
+                })
+            }
+        }
+    } )
 
     
     
@@ -251,6 +249,7 @@ export default function Quiz({formData, edit, setEdit, getContentfromQuery, setF
     }
 
 
+    console.log({formData})
    
 
 
@@ -435,32 +434,17 @@ export default function Quiz({formData, edit, setEdit, getContentfromQuery, setF
 
                                                             <div className="texteditor quiz__editor">  
                                                             
-                                                             <ReactQuill theme="snow" value={x?.title} onChange={(e)=>{
-                                                                 const list = { ...formData }
-                                                                 list.questions[id]['title'] = e;
-                                                                 setFormData(list)
-                                                            }} 
+                                                             <ReactQuill theme="snow" value={x?.title ?? ""} 
+                                                                onChange={(e)=>{
+                                                                    if(formData?.questions[id]['title'] !== ""){ 
+                                                                        const list = {...formData}
+                                                                        list.questions[id]['title'] = e;
+                                                                        setFormData(list)    
+                                                                    }
+                                                                }} 
                                                             />
                 
-                                                                {/* <CKEditor
-                                                                editor={ClassicEditor}
-                                                                data={x?.title}
-                                                                onReady={editor => {
-                                                                    // You can store the "editor" and use when it is needed.
-                                                                }}
-                                                                onChange={(event, editor) => {
-                                                                    const data = editor.getData();
-                                                                    const list = { ...formData }
-                                                                    list.questions[id]['title'] = data;
-                                                                    setFormData(list)
-                                                                    // handleInputChange(event, id)
-
-                                                                }}
-                                                                onBlur={(event, editor) => {
-                                                                }}
-                                                                onFocus={(event, editor) => {
-                                                                }}
-                                                            /> */}
+                                                                
 
                                                                 <div className='textbtn'>
                                                                     <Button
@@ -496,7 +480,6 @@ export default function Quiz({formData, edit, setEdit, getContentfromQuery, setF
                                                                                 checked={x.showAnswer}
                                                                                 name="showAnswer"
                                                                                 defaultValue=""
-                                                                                // onChange={(e) => setValue({ ...value, [e.target.name]: e.target.checked })}
                                                                                 onChange={e => {
                                                                                     const list = { ...formData }
                                                                                     list.questions[id]['showAnswer'] = e.target.checked;
@@ -536,7 +519,6 @@ export default function Quiz({formData, edit, setEdit, getContentfromQuery, setF
 
                                                                                         <input
                                                                                             type="checkbox"
-                                                                                            // value={value.isAnswer}
                                                                                             name="isAnswer"
                                                                                             onChange={e => {
                                                                                                 const list = { ...formData }
@@ -636,7 +618,7 @@ export default function Quiz({formData, edit, setEdit, getContentfromQuery, setF
                 </TabPanel>
 
                 <TabPanel value={value} index={1}>
-                    <ResultPanel data={resultMainData} />
+                    <ResultPanel  contentId={contentId} searchData={searchData}  />
                 </TabPanel>
 
             </Box>
@@ -649,13 +631,29 @@ export default function Quiz({formData, edit, setEdit, getContentfromQuery, setF
 }
 
 
-function ResultPanel({data}){
+function ResultPanel({contentId, searchData}){
 
     const {getItem} = useLocalStorage()
     const userdata = getItem(KEY)
-    const {teacherConsoleFunctions: {newFetchAttemptedQuiz}} = useAuth()
-    const [results, setResults] = useState([])
+    const {consoleFunctions: { fetchQuiz }, teacherConsoleFunctions: { newFetchAttemptedQuiz }} = useAuth()
 
+    const [results, setResults] = useState([])
+    const [data, setData] = useState({})
+
+    const getContentfromQuery = useQuery([contentId], () => fetchQuiz(userdata.token, searchData), {
+        enabled: userdata.token !== null,
+        refetchOnWindowFocus: false,
+        onSuccess: (res)=> {
+
+            if(res.data?.length > 0){
+                let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
+                let deadlineTime = res.data[res.data.length -1].endDate?.split("T")[1]
+                setData({...res.data[res.data.length -1]})
+            }else{
+                setData({})
+            }
+        }
+    } )
 
     
 

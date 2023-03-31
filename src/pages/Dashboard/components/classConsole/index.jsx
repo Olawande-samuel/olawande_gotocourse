@@ -1416,8 +1416,7 @@ export function MainContainer() {
   const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId));
   const [data, setData] = useState({})
   const contentid = searchParams.get("content")
-  const [resultMainData, setResultMainData] = useState({})
-  const [edit, setEdit] = useState(false)
+ 
   
   useEffect(() => {
     if (getDomainContent?.data?.data?.length > 0) {
@@ -1463,65 +1462,12 @@ export function MainContainer() {
 
   })
 
-
-  const getContentfromQuery = useQuery([`quiz content ${contentid}`, contentid], () => fetchQuiz(userdata.token, searchData), {
-    enabled: userdata.token !== null,
-    onSuccess: (res)=> {
-        if(res.data?.length > 0){
-            let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
-            let deadlineTime = res.data[res.data.length -1].endDate?.split("T")[1]
-            setFormData({...res.data[res.data.length -1], endDate: deadline, endTime: deadlineTime.substr(0, 5)})
-            setResultMainData({...res.data[res.data.length -1]})
-            setEdit(true)
-        }else{
-            setEdit(false)
-            setFormData({
-                classId,
-                contentId:searchData,
-                title: "",
-                endDate: "",
-                endTime: "",
-                note: "",
-                timeLimit: "",
-                maxAttempts: 1,
-                questions: [
-                    {
-                        type: "",
-                        title: "",
-                        showAnswer: false,
-                        answer:"",
-                        options: [
-                            {
-                                isAnswer: false,
-                                title: ""
-                            }
-                        ]
-        
-                    }
-                ]
-        
-            })
-        }
-    }
-  } )
-
-
-
-
   switch (data?.type) {
     case "FILE_VIDEO":
       return <File />;
     case "QUIZ":
       return (
-				<Quiz
-					getContentfromQuery={getContentfromQuery}
-					formData={formData}
-					setFormData={setFormData}
-					edit={edit}
-					setEdit={setEdit}
-					resultMainData={resultMainData}
-					setResultMainData={setResultMainData}
-				/>
+				<Quiz />
 			);
     case "NOTE":
       return <Note />;
