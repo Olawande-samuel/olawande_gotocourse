@@ -1,25 +1,21 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { Modal, Box, Switch, Autocomplete, TextField } from "@mui/material";
-import { FiFilter } from "react-icons/fi";
-import { HiOutlineFilter } from "react-icons/hi";
+import { Autocomplete, TextField } from "@mui/material";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Accordion from 'react-bootstrap/Accordion';
-import { Chart as ChartLogo } from "../../../images/components/svgs";
-import clsx from "./styles.module.css";
-import { useAuth } from "../../../contexts/Auth";
-import { Teachers } from "./index";
-import { useLocalStorage } from "../../../hooks";
-import { KEY } from "../../../constants";
+import { FiFilter } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { AdvancedError } from "../../../classes";
 import MyChart from "../../../components/Chart";
 import Input from "../../../components/Input";
-import { AdvancedError } from "../../../classes";
 import Loader from "../../../components/Loader";
-import { Link } from "react-router-dom";
+import { KEY } from "../../../constants";
+import { useAuth } from "../../../contexts/Auth";
+import { useLocalStorage } from "../../../hooks";
+import { Chart as ChartLogo } from "../../../images/components/svgs";
 import { Admin } from "../Admin";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { debounce } from "lodash"
-import { useMemo } from "react";
+import { Teachers } from "./index";
+import clsx from "./styles.module.css";
 
 export default function Earnings() {
   const { getItem } = useLocalStorage();
@@ -96,7 +92,7 @@ export function AllEarnings({ earnings }) {
   const [courses, setCourses] = useState([]);
   const [modelEarnings, setModelEarnings] = useState(0);
   const [modelType, setModelType] = useState("")
-  const { generalState: { isMobile }, teacherFunctions: { fetchEarnings, fetchBootcamps } } = useAuth();
+  const { generalState: { isMobile }, teacherFunctions: { fetchEarnings } } = useAuth();
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
 
