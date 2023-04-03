@@ -89,7 +89,7 @@ import Review from "./Review";
 import { NewReady } from "./NewOver";
 import { ToastContainer } from "react-toastify";
 import { IconButton } from "@mui/material";
-import { IoCloseCircleOutline } from "react-icons/io5";
+import { MdClose } from "react-icons/md";
 
 
 const NewLanding = () => {
@@ -195,11 +195,12 @@ function WomenTech({ open, setOpen }) {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 350,
-    bgcolor: 'background.paper',
+    // bgcolor: 'background.paper',
+    bgcolor: 'transparent',
     border: 'none',
     // boxShadow: 24,
     // p: 4,
-    margin: "5rem 0 0 0",
+    margin: "4.5rem 0 0 0",
 
   };
 
@@ -214,26 +215,31 @@ function WomenTech({ open, setOpen }) {
         display: "flex",
         justifyContent: "center",
         border: "none",
+        backgroundColor: "rgba(0, 0, 0, 0.8)"
       }}
     >
-       {/* <IconButton onClick={() => setOpen(false)}>
-            <IoCloseCircleOutline />
-        </IconButton> */}
+      <>
 
-      <Box sx={style}>
-        <div style={{ width: "100%", height: "350px", }}>
-          <img src={womentech} alt="" style={{ maxWidth: "100%", maxHeight: "100%" }} />
 
-        </div>
-        <a href="https://gotocourse.events/women4-tech-scholarship" target={'_blank'}>
-          <button className="py-1 px-2"
-            style={{ width: "100%", border: "none", outline:"none" }}
-          >
-            Apply Now here!!!
-          </button>
-        </a>
 
-      </Box>
+        <Box sx={style}>
+          <div style={{  textAlign:"right",cursor:"pointer",  width: "100%" , padding:".2rem 0"}} onClick={() => setOpen(false)}>
+            <MdClose style={{ color: " #F75C4E",fontSize:"30px"}} />
+          </div>
+          <div style={{ width: "100%", height: "350px", }}>
+            <img src={womentech} alt="" style={{ maxWidth: "100%", maxHeight: "100%" }} />
+
+          </div>
+          <a href="https://gotocourse.events/women4-tech-scholarship" target={'_blank'}>
+            <button className="py-1 px-2"
+              style={{ width: "100%", border: "none", fontSize: "32px", outline: "none", background: " #F75C4E", color: "#FFF" }}
+            >
+              APPLY HERE NOW!!!
+            </button>
+          </a>
+
+        </Box>
+      </>
     </Modal>
   );
 }
