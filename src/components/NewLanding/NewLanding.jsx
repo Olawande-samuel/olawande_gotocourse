@@ -62,7 +62,7 @@ import afford from "../../images/landing/affordable.png";
 import critical from "../../images/landing/platform.png";
 // import interactive from "../../images/landing/interactive.webp";
 import interactive from "../../images/landing/interactive.png";
-
+import womentech from '../../images/abroad/womentech.jpg'
 import GreatOpportunities from "./GreatOpportunities";
 import ShortCourses from "./ShortCourses";
 import ExecutiveClasses from "./ExecutiveClasses";
@@ -93,6 +93,7 @@ import { ToastContainer } from "react-toastify";
 const NewLanding = () => {
 
   const { show, boot } = useIntercom();
+  const [open, setOpen] = useState(true)
 
   useEffect(() => {
     boot()
@@ -109,18 +110,19 @@ const NewLanding = () => {
       </Helmet>
       <Layout background="blue">
         <ToastContainer
-         position="top-right"
-         autoClose={5000}
-         hideProgressBar={false}
-         newestOnTop={false}
-         closeOnClick
-         rtl={false}
-         pauseOnFocusLoss
-         draggable
-         pauseOnHover/>
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover />
         <Hero />
         <NewCompanies />
         <NewReady />
+        <WomenTech open={open} setOpen={setOpen} />
         {/* <Ready/> */}
         {/* <Overflow/> */}
         <GreatOpportunities />
@@ -172,6 +174,64 @@ const NewLanding = () => {
   );
 };
 export default NewLanding;
+
+function WomenTech({ open, setOpen }) {
+  const modalStyle = {
+    position: "absolute",
+    bottom: "20%",
+    left: "50%",
+    transform: "translate(-50%)",
+    width: "auto",
+    bgcolor: "rgba(0, 0, 0, 0.3)",
+    boxShadow: 24,
+    p: 0,
+  };
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 350,
+    bgcolor: 'background.paper',
+    border: 'none',
+    // boxShadow: 24,
+    // p: 4,
+    margin: "5rem 0 0 0",
+
+  };
+
+
+  return (
+    <Modal
+      open={open}
+      onClose={() => setOpen(false)}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        border: "none",
+      }}
+    >
+
+      <Box sx={style}>
+        <div style={{ width: "100%", height: "350px", }}>
+          <img src={womentech} alt="" style={{ maxWidth: "100%", maxHeight: "100%" }} />
+
+        </div>
+        <a href="https://gotocourse.events/women4-tech-scholarship" target={'_blank'}>
+          <button className="py-1 px-2"
+            style={{ width: "100%", border: "none", outline:"none" }}
+          >
+            Apply Now here!!!
+          </button>
+        </a>
+
+      </Box>
+    </Modal>
+  );
+}
 
 function VideoSection() {
   const [open, setOpen] = useState(false);
