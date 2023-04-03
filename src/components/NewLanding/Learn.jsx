@@ -54,6 +54,7 @@ const Container = styled.div`
                 font-style: normal;
                 font-weight: 400;
                 font-size: 18px;
+                padding: 0.3rem 0;
                 line-height: 20px;
                 color: #131313;
             }
