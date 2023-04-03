@@ -15,7 +15,7 @@ export default function ConsoleAssessments() {
   const { generalState: { isMobile }, studentFunctions: { fetchBootcamps } } = useAuth();
 
   const { data, isLoading, isError, } = useQuery(["fetch my classes"], () => fetchBootcamps(userdata?.token))
-  // console.log({ data });
+
 
 
   return (
@@ -91,9 +91,6 @@ const AssessmentItem = ({ x }) => {
 
   }, [modules])
 
-  // console.log({ reduceModules });
-  // console.log({ reduceContent });
-
   return (
     <>
 
@@ -119,7 +116,7 @@ const Accord = ({ reduceContent, reduceItem }) => {
 
       // let quizDetail = reduceContent?.find(item => item?.contentId === contentId);
       let contentDetail = reduceItem?.find(item => item?.contentId === contentId);
-      // console.log({ contentDetail })
+      
       return (
         <>
           <div className="assessbox">
@@ -178,7 +175,7 @@ const AnswerAssessmentItem = ({ x }) => {
 
   const { isLoading } = useQuery(["fetch domains", x?.bootcampId], () => fetchStudentDomains(userdata.token, x?.bootcampId), {
     onSuccess: (res) => {
-      // console.log(res.data)
+      
       setModules(res.data)
     }
   })

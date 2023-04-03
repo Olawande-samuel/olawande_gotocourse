@@ -41,7 +41,6 @@ export function LiveClassInfo({ type }) {
   const fetchSchedule = useQuery(["fetch live schedule", userdata?.token],()=>fetchLiveSchedule(userdata.token, classId), {
     
     onSuccess: res => {
-      console.log({res})
       if(res.success){
 
         // TODO: check if student / teacher
@@ -53,7 +52,6 @@ export function LiveClassInfo({ type }) {
     },
     onError: err => {
       toast.error("Error fetching schedule")
-      console.log(err)
     }
   })
 
@@ -64,7 +62,6 @@ export function LiveClassInfo({ type }) {
     queryClient.invalidateQueries({ queryKey: ["fetch live schedule"]}) 
   }
 
-  console.log({userdata})
 
   return (
     <div className={style.live_class}>
@@ -162,7 +159,6 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
   })
 
   function handleDelete(){
-    console.log(userdata.token)
     if(window.confirm("Delete this item ?")){
       deleteLive.mutate([userdata.token, _id, {}])
     }
@@ -202,8 +198,6 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
     setAnchorEl(event.currentTarget);
   };
 
-  console.log("date created ", new Date(createdAt).getTimezoneOffset())
-  console.log("date scheduled ",new Date(startDate).getTimezoneOffset())
   
 
   return (

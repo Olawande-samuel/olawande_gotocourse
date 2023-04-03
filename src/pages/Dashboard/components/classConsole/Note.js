@@ -186,7 +186,6 @@ export default function Note() {
                                                 data="<p>Hello from the first editor working with the context!</p>"
                                                 onReady={editor => {
                                                     // You can store the "editor" and use when it is needed.
-                                                    console.log('Editor1 is ready to use!', editor);
                                                 }}
                                             />
 

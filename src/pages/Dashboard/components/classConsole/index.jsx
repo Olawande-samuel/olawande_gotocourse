@@ -98,7 +98,6 @@ export const Console = ({ children }) => {
   const { pathname } = useLocation();
   const [path, setPath]= useState("")
 
-  // console.log(pathname.includes("teacher"))
 
   useEffect(()=>{
     if(pathname.includes("teacher")){
@@ -171,7 +170,6 @@ const iconData = [
     }
   };
 
-  console.log({editModuleData})
 
 
   const handleClose = () => setShow(false);
@@ -195,7 +193,6 @@ const iconData = [
 
 
   const studentAssessMent =  pathname.includes("/student/console/myclasses") || pathname.includes("/student/console/assessments") || pathname.includes("/student/console/messages");
-  // console.log({studentAssessMent});
 
   const studentpath = pathname.split("/")[1] === "student";
   const quizpath =
@@ -348,7 +345,6 @@ function Sidebar({ Toggle, side, toggleModule }) {
 
   const domainUpdate = useMutation(([token, data, id])=>updateDomain(token, data, id), {
     onSuccess: (res)=>{
-      console.log(res)
       if(res.statusCode !== 1){
         toast.error(res.message)
       }
@@ -363,12 +359,10 @@ function Sidebar({ Toggle, side, toggleModule }) {
 
   // useEffect(()=>{
   //   if(getDomains?.data?.data?.length > 0){
-  //     console.log(getDomains.data.data[0])
   //   }
   // }, [getDomains?.data?.data])
 
   function onDragEnd(result){
-    console.log({result})
 
     const {destination, source, draggableId} = result;
 
@@ -380,14 +374,11 @@ function Sidebar({ Toggle, side, toggleModule }) {
       return
     }
     
-    console.log("source ",source.index)
-    console.log("dest ", destination.index)
 
 
     // get domains state
     let newData = domainData
     let movedItem = domainData.find(item => item._id === draggableId)
-    console.log({movedItem})
     
     // Remove item from the array
     newData.splice(source.index, 1)
@@ -400,7 +391,6 @@ function Sidebar({ Toggle, side, toggleModule }) {
     ))
     setDomainData(organisedData);
 
-    console.log({organisedData})
 
 
     // // THIS HAS TO CHANGE. IT'S NOT SUSTAINABLE
@@ -541,7 +531,6 @@ export function Accord ({ name, _id, classId, description, creator,contentName, 
 
   const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId), {
     onSuccess: res => {
-      console.log({res})
       if(res.success){
         setDomainContent(res.data)
       }
@@ -551,7 +540,6 @@ export function Accord ({ name, _id, classId, description, creator,contentName, 
 
   useEffect(() => {
     if (getDomainContent?.data?.data?.length > 0) {
-      console.log(getDomainContent.data.data[0])
     }
   }, [getDomainContent?.data?.data])
 
@@ -602,7 +590,6 @@ export function Accord ({ name, _id, classId, description, creator,contentName, 
   // ADD CONTENT FROM CREATOR SUITE
   const mutation = useMutation(([token, data])=>addFile(token, data), {
     onSuccess: (res)=> {
-        console.log(res)
         setOpen(false)
         queryClient.invalidateQueries("file content")
     },
@@ -626,7 +613,6 @@ function addSuiteContentToClass(id, contentName, originalName){
 
   // CONTENT DND
   function onDragEnd(result){
-    console.log({result})
 
     const {destination, source, draggableId} = result;
 
@@ -638,21 +624,15 @@ function addSuiteContentToClass(id, contentName, originalName){
       return
     }
 
-    // console.log("moved content", draggableId)
-    // console.log(source.index)
-    // console.log(destination.index)
 
     // let newContentData = domainContent
     // let movedItem = domainContent.find(item => item._id === draggableId)
 
-    // console.log({movedItem})
-    // console.log("insert item at index ", destination.index)
 
 
     // newContentData.splice(source.index, 1)
     // newContentData.splice(destination.index, 0, movedItem)
     
-    // console.log({newContentData})    
 
     // let organisedData = []
 
@@ -661,7 +641,6 @@ function addSuiteContentToClass(id, contentName, originalName){
     // ))
     // setDomainContent(organisedData);
 
-    // console.log({organisedData})    
     
   
     // newContentData.forEach((item, i) => {
@@ -813,7 +792,6 @@ function AccordMenu({ id, type, classId, locked, domain, content, openEditConten
 
   const domainUpdate = useMutation(([token, data, id])=>updateDomain(token, data, id), {
     onSuccess: (res)=>{
-      console.log({res})
       queryClient.invalidateQueries("getDomainContent")
       if(res.statusCode !== 1){
         toast.error(res.message)
@@ -843,7 +821,6 @@ function AccordMenu({ id, type, classId, locked, domain, content, openEditConten
   function deleteCnt(e){
       e.preventDefault()
       if(type === "domain"){
-        console.log({id})
         domaindelete.mutate([userdata.token, id])
       } else if(type === "content"){
         contentdelete.mutate([userdata.token, id])
@@ -852,21 +829,18 @@ function AccordMenu({ id, type, classId, locked, domain, content, openEditConten
   
 
   function handleLockToggle(status){
-    console.log({type})
     let wantsTolock = status === "lock"
     if(type === "domain"){
       if(wantsTolock){
         // lock
         let domainData = domain
         domainData.isLocked = true
-        console.log(domainData)
         domainUpdate.mutate([userdata.token, domainData, id])
         return
       }
       // unlock
       let domainData = domain
         domainData.isLocked = false
-        console.log(domainData)
         domainUpdate.mutate([userdata.token, domainData, id])
 
     }else {
@@ -890,7 +864,6 @@ function AccordMenu({ id, type, classId, locked, domain, content, openEditConten
 
   function editContent(){
     // setParams
-    console.log("clicked")
     if(type === "domain"){
       toggleModule("edit", domain)
     }else {
@@ -1366,7 +1339,6 @@ export function ModuleModal({ moduleOpen, moduleClose, editModule }) {
 
 export function PopModalContent({ open, closeSmall, openUpload, setScreenOpen, setVideoOpen }) {
   function handleClick(type) {
-    console.log(type)
     if (type === "file") {
       closeSmall()
       openUpload(true)
@@ -1416,8 +1388,7 @@ export function MainContainer() {
   const getDomainContent = useQuery(["getDomainContent", classId], () => fetchContents(userdata.token, classId));
   const [data, setData] = useState({})
   const contentid = searchParams.get("content")
-  const [resultMainData, setResultMainData] = useState({})
-  const [edit, setEdit] = useState(false)
+ 
   
   useEffect(() => {
     if (getDomainContent?.data?.data?.length > 0) {
@@ -1425,7 +1396,6 @@ export function MainContainer() {
         let content = getDomainContent.data.data.find(item => item._id === contentid);
         setData(content)
       } else {
-        console.log(getDomainContent.data.data[0])
         navigate(`?content=${getDomainContent.data.data[0]._id}`)
         setData(getDomainContent.data.data[0])
       }
@@ -1463,65 +1433,12 @@ export function MainContainer() {
 
   })
 
-
-  const getContentfromQuery = useQuery([`quiz content ${contentid}`, contentid], () => fetchQuiz(userdata.token, searchData), {
-    enabled: userdata.token !== null,
-    onSuccess: (res)=> {
-        if(res.data?.length > 0){
-            let deadline = res.data[res.data.length -1].endDate?.split("T")[0]
-            let deadlineTime = res.data[res.data.length -1].endDate?.split("T")[1]
-            setFormData({...res.data[res.data.length -1], endDate: deadline, endTime: deadlineTime.substr(0, 5)})
-            setResultMainData({...res.data[res.data.length -1]})
-            setEdit(true)
-        }else{
-            setEdit(false)
-            setFormData({
-                classId,
-                contentId:searchData,
-                title: "",
-                endDate: "",
-                endTime: "",
-                note: "",
-                timeLimit: "",
-                maxAttempts: 1,
-                questions: [
-                    {
-                        type: "",
-                        title: "",
-                        showAnswer: false,
-                        answer:"",
-                        options: [
-                            {
-                                isAnswer: false,
-                                title: ""
-                            }
-                        ]
-        
-                    }
-                ]
-        
-            })
-        }
-    }
-  } )
-
-
-
-
   switch (data?.type) {
     case "FILE_VIDEO":
       return <File />;
     case "QUIZ":
       return (
-				<Quiz
-					getContentfromQuery={getContentfromQuery}
-					formData={formData}
-					setFormData={setFormData}
-					edit={edit}
-					setEdit={setEdit}
-					resultMainData={resultMainData}
-					setResultMainData={setResultMainData}
-				/>
+				<Quiz />
 			);
     case "NOTE":
       return <Note />;

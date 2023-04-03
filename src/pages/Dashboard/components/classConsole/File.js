@@ -486,8 +486,6 @@ function FileCard({ title, fileName, contentId, type, _id, fileId, all }) {
 }
 
 export function ViewModal({ open, setOpen, file, creator, type, title }) {
-	console.log({ file });
-	console.log({ type });
 	const style = {
 		position: "absolute",
 		bottom: 0,
