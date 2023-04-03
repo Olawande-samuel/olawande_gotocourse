@@ -88,6 +88,8 @@ import HowLearn from "./Learn";
 import Review from "./Review";
 import { NewReady } from "./NewOver";
 import { ToastContainer } from "react-toastify";
+import { IconButton } from "@mui/material";
+import { IoCloseCircleOutline } from "react-icons/io5";
 
 
 const NewLanding = () => {
@@ -214,6 +216,9 @@ function WomenTech({ open, setOpen }) {
         border: "none",
       }}
     >
+       {/* <IconButton onClick={() => setOpen(false)}>
+            <IoCloseCircleOutline />
+        </IconButton> */}
 
       <Box sx={style}>
         <div style={{ width: "100%", height: "350px", }}>

@@ -51,8 +51,8 @@ a{
     img{
         width: 100%;
         max-height: 100%;
-        // object-fit:cover;
-        // object-position: top;
+         object-fit:cover;
+         object-position: top;
     }
 }
 
