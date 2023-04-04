@@ -194,7 +194,7 @@ function WomenTech({ open, setOpen }) {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 350,
+    width: 'min(100% - 2rem, 500px)',
     // bgcolor: 'background.paper',
     bgcolor: 'transparent',
     border: 'none',
@@ -227,7 +227,7 @@ function WomenTech({ open, setOpen }) {
             <MdClose style={{ color: " #F75C4E",fontSize:"30px"}} />
           </div>
           <div style={{ width: "100%", height: "350px", }}>
-            <img src={womentech} alt="" style={{ maxWidth: "100%", maxHeight: "100%" }} />
+            <img src={womentech} alt="" style={{ maxWidth: "100%", maxHeight: "100%", width: "100%" }} />
 
           </div>
           <a href="https://gotocourse.events/women4-tech-scholarship" target={'_blank'}>
