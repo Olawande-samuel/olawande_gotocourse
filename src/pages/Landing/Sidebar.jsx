@@ -75,6 +75,9 @@ const SideBar = ({ showSidebar, toggleSidebar }) => {
 					<Link to="/learn-on-gotocourse" className="d-inline-flex">
 						<button className="second__btn">Learn on Gotocourse</button>
 					</Link>
+					<Link to="/qualifications">
+						<button className="first__btn">Teach on Gotocourse </button>
+					</Link>
 				</div>
 			</ul>
 

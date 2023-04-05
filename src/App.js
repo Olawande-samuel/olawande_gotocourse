@@ -232,7 +232,7 @@ import RedirectPage from "./pages/Bootcamp/Redirect";
 
 import NewHome from "./pages/Landing/landing";
 import Abroad from "./components/abroad/pages";
-import {  EarningCourses, EarningTeacherApplication } from "./pages/Dashboard/Teachers/Earnings";
+import { EarningCourses, EarningTeacherApplication } from "./pages/Dashboard/Teachers/Earnings";
 import { BootcampPaystackPayment } from "./pages/Bootcamp/PaystackPayment";
 import Africa from "./components/abroad/pages/Africa";
 // import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -332,9 +332,8 @@ function MyApp({ mixpanel }) {
 
 							{/* <Route index element={<Cart />} /> */}
 							{/* <Route path="learn-on-gotocourse" element={<Out />}>
-                  <Route index element={<Landing />} />
-                  </Route> */}
-							Women in tech
+								<Route index element={<Landing />} />
+								</Route> */}
 							<Route path="africa" element={<Out />}>
 								<Route index element={<Africa />} />
 								<Route path="train-to-work" element={<Abroad />} />

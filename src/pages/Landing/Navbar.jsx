@@ -42,13 +42,13 @@ const NavContainer = styled.div`
 		}
 
 		.navbarlogo {
-			flex: 0.6;
+			flex: 0.4;
 			// border: 2px solid yellow;
 		}
 
 		ul {
 			// border: 2px solid green;
-			flex: 0.4;
+			flex: 0.6;
 			list-style-type: none;
 			display: none;
 			align-items: center;
@@ -162,6 +162,9 @@ const Navbar = ({ toggleSidebar }) => {
 							<Link to="/learn-on-gotocourse" className="d-inline-flex">
 								<button>Learn on Gotocourse</button>
 							</Link>
+							<Link to="/qualifications">
+							<button>Teach on Gotocourse </button>
+						</Link>
 						</div>
 					</ul>
 					<div className="hamburger align-items-center">
