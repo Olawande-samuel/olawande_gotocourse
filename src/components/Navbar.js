@@ -113,6 +113,7 @@ const Navbar = ({ background }) => {
 						className="mb-0 fw-bold me-4"
 						style={{ fontFamily: "Raleway" }}
 						target="_blank"
+						rel="noopener noreferrer"
 					>
 						{banner.text ? banner.text : "Free class Alert!! - Classes starts March 15, 2023 and Registraion closes May 10. Click to Apply Now!!!"}
 					</a>

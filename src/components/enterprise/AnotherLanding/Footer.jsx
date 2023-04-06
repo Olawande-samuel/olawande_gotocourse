@@ -141,7 +141,7 @@ display: "flex", alignItems: "center"
                   <Logosm color={"var(--theme-blue)"} />
                 </i>
                 {/* <small className="text-center d-block" style={{ fontSize: '16px', color: !celebRoute ? "var(--theme-blue)" : "#fff" }}>Learn without limits.</small> */}
-                <small className="text-center d-block" style={{ fontSize: '16px', color: "var(--theme-blue)", padding: "1rem 0" }}>All right reserved | c 2022 Gotocourse Inc </small>
+                <small className="text-center d-block" style={{ fontSize: '16px', color: "var(--theme-blue)", padding: "1rem 0" }}>All rights reserved | c 2022 Gotocourse Inc </small>
               </Link>
 
               <div style={{ display: "flex", alignItems: "center", justifyContent:"center", gap: "2rem" , padding: "2rem 0"}}>
