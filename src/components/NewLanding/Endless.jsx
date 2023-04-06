@@ -80,6 +80,13 @@ padding: 2rem;
 flex-direction: column;
 padding: 2rem 0;
 
+
+.left, .right{
+        img{
+            width: 100%
+        }
+}
+
 } 
     
 `
@@ -121,6 +128,15 @@ padding: 2rem 0;
 
 .right{
         text-align: center;
+        img{
+            width: 100%
+        }
+}
+
+.left{
+        img{
+            width: 100%
+        }
 }
 
 } 

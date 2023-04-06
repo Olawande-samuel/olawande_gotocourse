@@ -235,6 +235,7 @@ import Abroad from "./components/abroad/pages";
 import { EarningCourses, EarningTeacherApplication } from "./pages/Dashboard/Teachers/Earnings";
 import { BootcampPaystackPayment } from "./pages/Bootcamp/PaystackPayment";
 import Africa from "./components/abroad/pages/Africa";
+import ConsoleAnswer from "./pages/Dashboard/Students/Classroom/Answer";
 // import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 
@@ -513,6 +514,7 @@ function MyApp({ mixpanel }) {
 										</Route>
 									</Route>
 									<Route path="assessments" element={<ConsoleAssessments />} />
+									<Route path="answers" element={<ConsoleAnswer />} />
 									<Route path="messages" element={<ConsoleMessages />} />
 								</Route>
 								<Route
