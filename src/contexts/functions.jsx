@@ -28,7 +28,7 @@ export const commonFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -62,7 +62,7 @@ export const commonFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -95,7 +95,7 @@ export const commonFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -128,7 +128,7 @@ export const commonFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -162,7 +162,7 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -190,7 +190,7 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -217,7 +217,7 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -244,7 +244,7 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -271,7 +271,7 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -298,7 +298,7 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -325,7 +325,7 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -352,7 +352,7 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -379,7 +379,7 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -406,7 +406,7 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -494,7 +494,7 @@ export const authFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -527,7 +527,7 @@ export const authFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -560,7 +560,7 @@ export const authFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -593,7 +593,7 @@ export const authFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -627,7 +627,7 @@ export const authFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -673,7 +673,7 @@ export const authFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -739,7 +739,7 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -773,7 +773,7 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -807,7 +807,7 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -841,7 +841,7 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -875,7 +875,7 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -909,7 +909,7 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -942,7 +942,7 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -975,7 +975,7 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1008,7 +1008,7 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1048,7 +1048,7 @@ export const adminStudentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1081,7 +1081,7 @@ export const adminStudentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1115,7 +1115,7 @@ export const adminStudentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1149,7 +1149,7 @@ export const adminStudentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1185,7 +1185,7 @@ export const adminFunctions = {
             }
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1215,7 +1215,7 @@ export const adminFunctions = {
             }
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1245,7 +1245,7 @@ export const adminFunctions = {
             }
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1279,7 +1279,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1313,7 +1313,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1346,7 +1346,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1380,7 +1380,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1413,7 +1413,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1446,7 +1446,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1479,7 +1479,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1513,7 +1513,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1546,7 +1546,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1580,7 +1580,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1613,7 +1613,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1646,7 +1646,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1679,7 +1679,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1712,7 +1712,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1745,7 +1745,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1779,7 +1779,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1812,7 +1812,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1845,7 +1845,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1878,7 +1878,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1910,7 +1910,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1944,7 +1944,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -1976,7 +1976,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2010,7 +2010,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2044,7 +2044,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2076,7 +2076,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2110,7 +2110,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2144,7 +2144,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2176,7 +2176,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2210,7 +2210,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2244,7 +2244,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2276,7 +2276,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2310,7 +2310,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2344,7 +2344,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2368,7 +2368,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2402,7 +2402,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2435,7 +2435,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2468,7 +2468,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2517,7 +2517,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2550,7 +2550,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2583,7 +2583,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2616,7 +2616,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2651,7 +2651,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2684,7 +2684,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2717,7 +2717,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2750,7 +2750,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2783,7 +2783,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2817,7 +2817,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2850,7 +2850,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2883,7 +2883,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -2916,7 +2916,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3073,7 +3073,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3109,7 +3109,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3143,7 +3143,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3176,7 +3176,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3209,7 +3209,7 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3275,7 +3275,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3309,7 +3309,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3342,7 +3342,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3375,7 +3375,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3408,7 +3408,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3441,7 +3441,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3477,7 +3477,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3512,7 +3512,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3549,7 +3549,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3585,7 +3585,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3622,7 +3622,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3657,7 +3657,7 @@ export const studentFunctions = {
         } catch (err) {
             console.error(err)
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3691,7 +3691,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3725,7 +3725,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3758,7 +3758,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3791,7 +3791,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3825,7 +3825,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3858,7 +3858,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3891,7 +3891,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3926,7 +3926,7 @@ export const studentFunctions = {
         } catch (err) {
             console.error(err)
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3960,7 +3960,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -3994,7 +3994,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4026,7 +4026,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4061,7 +4061,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4096,7 +4096,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4130,7 +4130,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4165,7 +4165,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4200,7 +4200,7 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4235,7 +4235,7 @@ export const studentFunctions = {
         } catch (err) {
             console.error(err)
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4276,7 +4276,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4311,7 +4311,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4344,7 +4344,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4378,7 +4378,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4412,7 +4412,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4446,7 +4446,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4480,7 +4480,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4513,7 +4513,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4546,7 +4546,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4579,7 +4579,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4613,7 +4613,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4646,7 +4646,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4679,7 +4679,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4713,7 +4713,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4746,7 +4746,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4779,8 +4779,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
-
+                return
             } else {
 
                 return {
@@ -4812,7 +4811,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4845,7 +4844,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
             } else {
 
                 return {
@@ -4883,7 +4882,7 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4918,7 +4917,7 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4952,7 +4951,7 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -4985,7 +4984,7 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5018,7 +5017,7 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5052,7 +5051,7 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5086,7 +5085,7 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5119,7 +5118,7 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5151,7 +5150,7 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5183,7 +5182,7 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5215,7 +5214,7 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5247,7 +5246,7 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5310,7 +5309,7 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5347,7 +5346,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5381,7 +5380,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5415,7 +5414,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5449,7 +5448,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5483,7 +5482,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
                 console.log("something went wrong")
             } else {
@@ -5518,7 +5517,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
                 console.log("something went wrong")
             } else {
@@ -5553,7 +5552,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5587,7 +5586,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5621,7 +5620,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5655,7 +5654,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5689,7 +5688,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5723,7 +5722,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5759,7 +5758,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5793,7 +5792,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5827,7 +5826,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5861,7 +5860,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5895,7 +5894,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5931,7 +5930,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -5966,7 +5965,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6007,7 +6006,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6052,7 +6051,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6094,7 +6093,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6132,7 +6131,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6169,7 +6168,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6206,7 +6205,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6242,7 +6241,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6276,7 +6275,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6310,7 +6309,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6344,7 +6343,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6378,7 +6377,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6413,7 +6412,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6448,7 +6447,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6484,7 +6483,7 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6523,7 +6522,7 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6558,7 +6557,7 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6592,7 +6591,7 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6626,7 +6625,7 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6661,7 +6660,7 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6697,7 +6696,7 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6725,7 +6724,7 @@ export const teacherConsoleFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6752,7 +6751,7 @@ export const teacherConsoleFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6779,7 +6778,7 @@ export const teacherConsoleFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6813,7 +6812,7 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6848,7 +6847,7 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6882,7 +6881,7 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6916,7 +6915,7 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6950,7 +6949,7 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 
@@ -6984,7 +6983,7 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                throw new AdvancedError('something went wrong');
+                return
 
             } else {
 

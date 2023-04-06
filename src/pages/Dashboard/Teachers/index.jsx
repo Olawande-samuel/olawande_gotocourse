@@ -959,7 +959,7 @@ const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUn
   onSuccess: (res)=>{
     
     if(res.data?.statusCode === 2 ){
-      throw new AdvancedError('something went wrong');
+      return
     }
     if(res.data?.statusCode !== 1){
       toast.error(res.data?.message);
