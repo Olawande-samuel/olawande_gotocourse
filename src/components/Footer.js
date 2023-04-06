@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion"
 import { Logo, Logosm } from "../images/components/svgs"
 import { HashLink } from "react-router-hash-link"
+import logo from '../images/landing/LearnG2C.png'
 
 const hover = {
   hover: {
@@ -199,12 +200,16 @@ const Footer = () => {
               <Link to="/" onClick={() => window.scrollTo(0, 0)}>
                 <i className="d-none d-lg-block">
                   {/* <Logo color={!celebRoute ? "var(--theme-blue)" : "#fff"} /> */}
-                  <Logo color={"var(--theme-blue)" } />
+                  {/* <Logo color={"var(--theme-blue)" } /> */}
+                  <img src={logo} alt=""  width={200}/>
+
                 </i>
 
                 <i className="d-lg-none">
                   {/* <Logosm color={!celebRoute ? "var(--theme-blue)" : "#fff"} /> */}
-                  <Logosm color={"var(--theme-blue)"} />
+                  {/* <Logosm color={"var(--theme-blue)"} /> */}
+                  <img src={logo} alt=""  width={200}/>
+
                 </i>
                 {/* <small className="text-center d-block" style={{ fontSize: '16px', color: !celebRoute ? "var(--theme-blue)" : "#fff" }}>Learn without limits.</small> */}
                 <small className="text-center d-block" style={{ fontSize: '16px', color:  "var(--theme-blue)"}}>Learn without limits.</small>

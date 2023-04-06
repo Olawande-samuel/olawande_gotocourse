@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loader from "../../../../components/Loader";
 import { getDate, KEY } from "../../../../constants";
 import { useAuth } from "../../../../contexts/Auth";
@@ -64,7 +64,7 @@ const AssessmentItem = ({ x }) => {
 
 
 
-  const { isLoading } = useQuery(["fetch domains", x?.bootcampId], () => fetchStudentDomains(userdata.token, x?.bootcampId), {
+  const { isLoading } = useQuery(["fetch student domains", x?.bootcampId], () => fetchStudentDomains(userdata.token, x?.bootcampId), {
     onSuccess: (res) => {
       setModules(res.data)
     }
@@ -173,7 +173,7 @@ const AnswerAssessmentItem = ({ x }) => {
     }
   })
 
-  const { isLoading } = useQuery(["fetch domains", x?.bootcampId], () => fetchStudentDomains(userdata.token, x?.bootcampId), {
+  const { isLoading } = useQuery(["fetch student domains", x?.bootcampId], () => fetchStudentDomains(userdata.token, x?.bootcampId), {
     onSuccess: (res) => {
       
       setModules(res.data)
@@ -214,6 +214,7 @@ const AnswerAssessmentItem = ({ x }) => {
 
 
 const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
+  const navigate = useNavigate()
 
   return (
     assessment.length > 0 && assessment?.map((x, i) => {
@@ -223,6 +224,7 @@ const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
       let contentDetail = reduceModules?.find(item => item?.contentId === contentId);
       let quizDetail = reduceContent?.find(item => item?.contentId === contentId);
       // let DomainDetail = modules?.find(item => item?.contentId === contentDetail?.domain);
+      console.log({quizDetail});
 
       return (quizDetail &&
         <div key={i} className="assessmentaccord">
@@ -249,6 +251,10 @@ const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
               <button className="assessbold" data-id={quizId} disabled
               // onClick={() => setShow(!show)}
               >Graded: {x?.graded ? "true" : "false"}</button>
+
+               <button className="assessbold" data-id={quizId}
+              onClick={() => navigate(`/student/console/answers?classId=${quizDetail?.classId}&contentId=${quizDetail?.contentId}`)}
+              >Show Answer</button>
             </div>
           </div>
 

@@ -25,7 +25,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import UploadWidget from '../../components/classConsole/components/UploadWidget';
 
 
-const Container = styled.div`
+export const Container = styled.div`
 position: relative;
 /* border: 2px solid yellow; */
 height: 100vh;
@@ -34,7 +34,7 @@ height: 100vh;
 `
 
 
-const IconContainer = styled.div`
+export const IconContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -52,7 +52,7 @@ const IconContainer = styled.div`
     box-shadow: 0px 203px 81px rgba(0, 0, 0, 0.01), 0px 114px 68px rgba(0, 0, 0, 0.05), 0px 51px 51px rgba(0, 0, 0, 0.09), 0px 13px 28px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
 `
 
-const ClassroomContainer = styled.div`
+export const ClassroomContainer = styled.div`
     width: 100%;
     /* height: calc(100vh - 75px); */
     height:100%;
@@ -69,7 +69,7 @@ const ClassroomContainer = styled.div`
     }
 `;
 
-const BreadcrumbLink = styled(Link)`
+export const BreadcrumbLink = styled(Link)`
     color: ${props => props.$isCurrentPage ? '#0C2191' : '#666363'};
     font-weight: 400;
     font-size: 0.9rem;
@@ -81,7 +81,7 @@ const BreadcrumbLink = styled(Link)`
 `;
 
 
-const ClassroomMain = styled.div`
+export const ClassroomMain = styled.div`
     width: min(100% - 3rem, 950px);
     margin-inline: auto;
     height: 100%;
@@ -97,7 +97,7 @@ const ClassroomMain = styled.div`
 `;
 
 
-const ClassroomMainTop = styled.div`
+export const ClassroomMainTop = styled.div`
     display: flex;
     flex-direction: column;
     /* align-items: center; */
@@ -163,7 +163,7 @@ const ClassroomMainTop = styled.div`
 `;
 
 
-const MenuButton = styled(IconButton)`
+export const MenuButton = styled(IconButton)`
 
     & svg {
         color: var(--theme-blue);
@@ -176,7 +176,7 @@ const MenuButton = styled(IconButton)`
 
 
 
-const ClassroomMainBody = styled.div`
+export const ClassroomMainBody = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -192,7 +192,7 @@ const ClassroomMainBody = styled.div`
 
 `;
 
-const BodyContent = styled.div`
+export const BodyContent = styled.div`
     width: 100%;
     /* margin-top: 30px; */
     display: flex;
@@ -208,7 +208,7 @@ const BodyContent = styled.div`
     }
 `
 
-const BodyInfo = styled.div`
+export const BodyInfo = styled.div`
     width: 100%;
     padding: 20px;
     display: flex;
@@ -223,7 +223,7 @@ const BodyInfo = styled.div`
 `;
 
 
-const PaperTop = styled.div`
+export const PaperTop = styled.div`
     width: 100%;
     border: 1px solid rgba(0, 0, 0, 0.12);
     display: flex;
@@ -253,7 +253,7 @@ const PaperTop = styled.div`
 
 
 
-const BodyActions = styled.div`
+export const BodyActions = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
@@ -281,7 +281,7 @@ const BodyActions = styled.div`
 `;
 
 
-const VideoAction = styled.div`
+export const VideoAction = styled.div`
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -299,7 +299,7 @@ export const QuizAction = styled.div`
 `;
 
 
-const NextButton = styled(CustomButton)`
+export const NextButton = styled(CustomButton)`
     font-size: 0.8rem !important;
 
     & svg {
@@ -309,13 +309,13 @@ const NextButton = styled(CustomButton)`
 `;
 
 
-const PreviousButton = styled(NextButton)`
+export const PreviousButton = styled(NextButton)`
     & svg {
         margin-right: 10px;
     }
 `
 
-const Quiz = styled.div`
+export const Quiz = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
@@ -334,18 +334,18 @@ const Quiz = styled.div`
 `;
 
 
-const Note = styled.div`
+export const Note = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
 `
 
-const QuizImageContainer = styled.div`
+export const QuizImageContainer = styled.div`
     width: 425px;
     height: 425px;
 `;
 
-const QuizImage = styled.img`
+export const QuizImage = styled.img`
     width: 100%;
     height: 100%;
 `;
@@ -359,7 +359,7 @@ export const QuizButton = styled.button`
     border-radius: 5px;
 `;
 
-const MarkButton = styled.button`
+export const MarkButton = styled.button`
 display: ${({ display }) => display ? 'none' : 'block'};
     background-color: #3f50b5 ;
     color: white ;
@@ -373,7 +373,7 @@ display: ${({ display }) => display ? 'none' : 'block'};
 
 
 
-const FileName = styled.div`
+export const FileName = styled.div`
 display: flex;
 align-items: center;
 justify-content: space-between;
@@ -385,7 +385,7 @@ p{
 }
 
 `
-const FileDisplay = styled.div`
+export const FileDisplay = styled.div`
 width: 100%;
 // height: 300px;
 // border: 2px solid red;
@@ -408,7 +408,7 @@ video{
 
 
 `
-const QuizInfo = styled.div`
+export const QuizInfo = styled.div`
 padding: 1rem;
 /* border: 2px solid red; */
 border: 1px solid #004DB6;
@@ -491,7 +491,7 @@ export const UploadContainer = styled.div`
 
 `
 
-const NotecContainer = styled.div`
+export const NotecContainer = styled.div`
 // border: 2px solid red;
 padding: .5rem 1rem; 
 p{
@@ -1035,7 +1035,7 @@ const Classroom = () => {
         }
     })
 
-    const { isLoading } = useQuery(["fetch domains", id], () => fetchStudentDomains(userdata.token, id), {
+    const { isLoading } = useQuery(["fetch student domains", id], () => fetchStudentDomains(userdata.token, id), {
         onSuccess: (res) => {
             // console.log(res.data)
             setModules(res.data)
@@ -1300,7 +1300,7 @@ const Classroom = () => {
             const { data, statusCode } = await markAsCompleted(userdata?.token, contentId, fileId, type)
             if (statusCode === 1) {
                 setLoading(false)
-                queryClient.invalidateQueries(["fetch domains"])
+                queryClient.invalidateQueries(["fetch student domains"])
                 console.log({ data });
 
             }
@@ -1327,7 +1327,7 @@ const Classroom = () => {
             const { data, statusCode } = await markFileAsCompleted(userdata?.token, contentId, ids, type)
             if (statusCode === 1) {
                 setLoading(false)
-                queryClient.invalidateQueries(["fetch domains"])
+                queryClient.invalidateQueries(["fetch student domains"])
                 console.log({ data });
 
             }

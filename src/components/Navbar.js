@@ -19,6 +19,7 @@ import LogoutButton from "./LogoutButton";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useQuery } from "@tanstack/react-query";
 import { KEY } from "../constants";
+import logo from '../images/landing/LearnG2C.png'
 
 
 const Navbar = ({ background }) => {
@@ -76,6 +77,7 @@ const Navbar = ({ background }) => {
 	const categoryRoute = background === "category";
 	const landing = location.pathname.split("/")[1] !== "lounge";
 	const mainpage = location.pathname.split("/")[1] === "learn-on-gotocourse";
+	const teacher = location.pathname.split("/")[1] === "qualifications";
 	function showDrop() {}
 
 	const [showBanner, setShowBanner] = useState(true);
@@ -132,9 +134,12 @@ const Navbar = ({ background }) => {
 					className="logo navbar-brand "
 				>
 					{confirmEmail || landing || categoryRoute || mainpage ? (
-						<Logosm color="var(--theme-blue)" />
+						// <Logosm color="var(--theme-blue)" />
+						<img src={logo} alt="" width={120}/>
 					) : (
-						<Logosm />
+						// <Logosm />
+						<img src={logo} alt=""  width={120}/>
+
 					)}
 					{/* <small className="d-block" style={{fontSize:"14px", color: landing || mainpage ? "var(--theme-blue)" : "#fff"}}>Learn without limits</small> */}
 				</Link>
@@ -163,6 +168,8 @@ const Navbar = ({ background }) => {
 							</Link>
 						</li> */}
 
+						{
+							!teacher &&
 						<li className="nav-item holder">
 							<Link
 								to="/africa"
@@ -177,6 +184,8 @@ const Navbar = ({ background }) => {
 								Go2Course Africa
 							</Link>
 						</li>
+						}
+
 
 
 						{(location.pathname.split("/")[1] === "" || celebRoute) && (
