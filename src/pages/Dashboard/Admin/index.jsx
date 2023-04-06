@@ -5994,7 +5994,7 @@ export const Admin = ({ children, header }) => {
 			},
 			onSuccess: (res) => {
 				if (res.data?.statusCode === 2) {
-					localStorage.clear();
+					throw new AdvancedError('something went wrong');
 				}
 				if (res.data?.statusCode !== 1) {
 					toast.error(res.data?.message);

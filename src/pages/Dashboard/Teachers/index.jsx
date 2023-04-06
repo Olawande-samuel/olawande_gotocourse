@@ -952,14 +952,14 @@ export const Teachers = ({ children, isMobile, userdata, notification, header, l
 
 // fetch messages
 const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUnreadMessages(userData?.token), {
+  enabled: !!userData?.token,
   onError: (err)=> {
     toast.error(err.message)
   },
   onSuccess: (res)=>{
     
     if(res.data?.statusCode === 2 ){
-      localStorage.clear()
-      return
+      throw new AdvancedError('something went wrong');
     }
     if(res.data?.statusCode !== 1){
       toast.error(res.data?.message);

@@ -2748,7 +2748,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
         },
         onSuccess: (res) => {
             if (res.data?.statusCode === 2) {
-                localStorage.clear()
+                throw new AdvancedError('something went wrong');
             }
             if (res.data?.statusCode !== 1) {
                 toast.error(res.data?.message, {
