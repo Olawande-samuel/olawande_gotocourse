@@ -2455,14 +2455,15 @@ function AvailableCourses({ data, search }) {
 
     }
     // console.log({ data });
+    const first = data?.length > 0 ? data?.filter(item => item.bootcampId === "63717aa2f0eaad8dcf3930a7" && item.isActive) : [];
 
-    const first = data?.length > 0 ? data?.filter(item => item.startDate?.includes("2023-03") && item.isActive) : [];
+    const second = data?.length > 0 ? data?.filter(item => item.startDate?.includes("2023-03") && item.isActive) : [];
     const third = data?.length > 0 ? data?.filter(item => !item.startDate?.includes("2023-03") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
 
     // const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-03" && item.isActive) : [];
     // const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
     // const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-03" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-    const all = [...first, ...third];
+    const all = [...first, ...second, ...third];
 
     return (
         <div className={` ${clsx.dashboard_courses}`}>

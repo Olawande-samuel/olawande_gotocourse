@@ -20,6 +20,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useQuery } from "@tanstack/react-query";
 import { KEY } from "../constants";
 import logo from '../images/landing/LearnG2C.png'
+import Teacerlogo from '../images/landing/Teacerlogo.png'
 
 
 const Navbar = ({ background }) => {
@@ -67,7 +68,6 @@ const Navbar = ({ background }) => {
 		}
 	})
 
-	console.log({ banner });
 
 
 	const celebRoute = location.pathname.split("/")[1] === "lounge";
@@ -126,28 +126,47 @@ const Navbar = ({ background }) => {
 					</i>
 				</div>
 			)}
-			<div 
-			className="container navbar-container align-items-center">
+			<div
+				className="container navbar-container align-items-center">
 				<Link
 					to="/"
 					onClick={() => window.scrollTo(0, 0)}
 					className="logo navbar-brand "
 					style={{
-						flex:".25"
+						flex: ".25"
 					}}
 				>
 					{confirmEmail || landing || categoryRoute || mainpage ? (
 						// <Logosm color="var(--theme-blue)" />
-						<img src={logo} alt=""
-						width={140}
-						style={{maxWidth:"100%"}}
+				
+				teacher  ?
+						<img src = {Teacerlogo} alt = ""
+						width = { 140 }
+						style = {{ maxWidth: "100%" }}
 						/>
+
+						:
+
+						<img src={logo} alt=""
+							width={140}
+							style={{ maxWidth: "100%" }}
+						/>
+					
+
 					) : (
 						// <Logosm />
-						<img src={logo} alt=""
-						width={140}
-						style={{maxWidth:"100%"}}
+						teacher  ?
+						
+						<img src = { Teacerlogo } alt = ""
+						width = { 140 }
+						style = {{ maxWidth: "100%" }}
+						/>
 
+						:
+
+						<img src={logo} alt=""
+							width={140}
+							style={{ maxWidth: "100%" }}
 						/>
 
 					)}
@@ -162,7 +181,7 @@ const Navbar = ({ background }) => {
 					id="navbarNav"
 				>
 					<ul className="navbar-nav me-5">
-						
+
 
 						{
 							!teacher &&
@@ -201,7 +220,7 @@ const Navbar = ({ background }) => {
 									</Link>
 									{drop ? <NavList dropRef={dropRef} /> : null}
 								</li>
-								
+
 							</>
 						)}
 
@@ -238,7 +257,7 @@ const Navbar = ({ background }) => {
 							""
 						) : (
 							<>
-							
+
 								<li className="nav-item d-flex align-items-center nav_link d-lg-none">
 									<Link
 										to="/login"
