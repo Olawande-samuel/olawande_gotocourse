@@ -227,11 +227,13 @@ export function TabsComp() {
         // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate.includes("2023-01") && !item.startDate.includes("2023-01-19T00:00:00.000Z") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
 
         const first = res.data?.length > 0 ? res.data?.filter(item => item.bootcampId === "63717aa2f0eaad8dcf3930a7" && item.isActive) : [];
-        const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate?.includes("2023-03") && item.isActive && item.category !== "TRAIN2 WORKABROAD").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+        const second = res.data?.length > 0 ? res.data?.filter(item => item.bootcampId === "6430661e1485c80cb3261471" && item.isActive) : [];
+
+        const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate?.includes("2023-03") && item.isActive && item.category !== "TRAIN2 WORKABROAD").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
 
         // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
         // const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-        const all = [...first, ...second];
+        const all = [...first, ...second, ...third];
 
         // const uppers = res.data.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
         // console.log({ uppers });
