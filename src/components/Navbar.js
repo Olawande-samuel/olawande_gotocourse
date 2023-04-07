@@ -59,15 +59,15 @@ const Navbar = ({ background }) => {
 	const { adminFunctions: { fetchBanner } } = useAuth();
 
 
-	useQuery(["fetch banner"], () => fetchBanner(), { 
-	  onSuccess: ({ data }) => {
-		let newData = data.filter(d => d.metaKey ==="HEADER_PROMOTION");
-		setBanner(JSON.parse(newData[0]?.metaValue))
-  
-	  }
+	useQuery(["fetch banner"], () => fetchBanner(), {
+		onSuccess: ({ data }) => {
+			let newData = data.filter(d => d.metaKey === "HEADER_PROMOTION");
+			setBanner(JSON.parse(newData[0]?.metaValue))
+
+		}
 	})
 
-	console.log({banner});
+	console.log({ banner });
 
 
 	const celebRoute = location.pathname.split("/")[1] === "lounge";
@@ -78,7 +78,7 @@ const Navbar = ({ background }) => {
 	const landing = location.pathname.split("/")[1] !== "lounge";
 	const mainpage = location.pathname.split("/")[1] === "learn-on-gotocourse";
 	const teacher = location.pathname.split("/")[1] === "qualifications";
-	function showDrop() {}
+	function showDrop() { }
 
 	const [showBanner, setShowBanner] = useState(true);
 	const mybanner = localStorage.getItem("gotocourse-banner");
@@ -86,18 +86,17 @@ const Navbar = ({ background }) => {
 		<nav
 			ref={heightRef}
 			section="top"
-			className={`nav navbar navbar-expand-lg flex-column ${
-				landing || mainpage ? "navbar-light" : "navbar-dark"
-			}`}
+			className={`nav navbar navbar-expand-lg flex-column ${landing || mainpage ? "navbar-light" : "navbar-dark"
+				}`}
 			style={{
 				// background: celebRoute ? "#191046" : confirmEmail ? "#E5E5E5" : landing ? "var(--blue-ish)" :  mainpage ? "#fff": "var(--theme-blue)",
 				background: celebRoute
 					? "#191046"
 					: confirmEmail
-					? "#E5E5E5"
-					: landing
-					? "var(--blue-ish)"
-					: "var(--theme-blue)",
+						? "#E5E5E5"
+						: landing
+							? "var(--blue-ish)"
+							: "var(--theme-blue)",
 				color:
 					confirmEmail || landing || categoryRoute
 						? "var(--theme-blue)"
@@ -127,18 +126,29 @@ const Navbar = ({ background }) => {
 					</i>
 				</div>
 			)}
-			<div className="container navbar-container align-items-center">
+			<div 
+			className="container navbar-container align-items-center">
 				<Link
 					to="/"
 					onClick={() => window.scrollTo(0, 0)}
 					className="logo navbar-brand "
+					style={{
+						flex:".25"
+					}}
 				>
 					{confirmEmail || landing || categoryRoute || mainpage ? (
 						// <Logosm color="var(--theme-blue)" />
-						<img src={logo} alt="" width={120}/>
+						<img src={logo} alt=""
+						width={140}
+						style={{maxWidth:"100%"}}
+						/>
 					) : (
 						// <Logosm />
-						<img src={logo} alt=""  width={120}/>
+						<img src={logo} alt=""
+						width={140}
+						style={{maxWidth:"100%"}}
+
+						/>
 
 					)}
 					{/* <small className="d-block" style={{fontSize:"14px", color: landing || mainpage ? "var(--theme-blue)" : "#fff"}}>Learn without limits</small> */}
@@ -147,43 +157,29 @@ const Navbar = ({ background }) => {
 					<span className="navbar-toggler-icon"></span>
 				</button>
 				<div
-					className={`collapse navbar-collapse  justify-content-end  align-items-center mt-3 mt-lg-0 ${
-						show ? "show" : ""
-					}`}
+					className={`collapse navbar-collapse  justify-content-end  align-items-center mt-3 mt-lg-0 ${show ? "show" : ""
+						}`}
 					id="navbarNav"
 				>
 					<ul className="navbar-nav me-5">
-						{/* <li className="nav-item holder">
-							<Link
-								to="/"
-								className="link nav-link courses me-4"
-								style={{
-									color:
-										landing || mainpage
-											? "var(--theme-blue)"
-											: "rgba(255, 255, 255)",
-								}}
-							>
-								Home
-							</Link>
-						</li> */}
+						
 
 						{
 							!teacher &&
-						<li className="nav-item holder">
-							<Link
-								to="/africa"
-								className="link nav-link courses me-4"
-								style={{
-									color:
-										landing || mainpage
-											? "var(--theme-blue)"
-											: "rgba(255, 255, 255)",
-								}}
-							>
-								Go2Course Africa
-							</Link>
-						</li>
+							<li className="nav-item holder">
+								<Link
+									to="/africa"
+									className="link nav-link courses me-4"
+									style={{
+										color:
+											landing || mainpage
+												? "var(--theme-blue)"
+												: "rgba(255, 255, 255)",
+									}}
+								>
+									Go2Course Africa
+								</Link>
+							</li>
 						}
 
 
@@ -205,15 +201,7 @@ const Navbar = ({ background }) => {
 									</Link>
 									{drop ? <NavList dropRef={dropRef} /> : null}
 								</li>
-								{/* <li className="nav-item holder">
-                  <Link className="link nav-link courses me-4" to="/lounge"
-                  style={{
-                    color: landing || mainpage ? "var(--theme-blue)": "rgba(255, 255, 255)"
-                  }}
-                  >
-                    Mentor
-                  </Link>
-                </li> */}
+								
 							</>
 						)}
 
@@ -250,14 +238,7 @@ const Navbar = ({ background }) => {
 							""
 						) : (
 							<>
-								{/* <li className="nav-item d-flex align-items-center nav_link">
-                  <Link to="/become-a-teacher" className="link"
-                   style={{
-                    color:confirmEmail || landing || categoryRoute || mainpage ? "#0C2191" : "rgba(255, 255, 255)"
-                  }}>
-                    Become a Teacher
-                  </Link>
-                </li> */}
+							
 								<li className="nav-item d-flex align-items-center nav_link d-lg-none">
 									<Link
 										to="/login"
@@ -308,13 +289,12 @@ const Navbar = ({ background }) => {
 								</motion.span>
 							</li>
 							<Link
-								to={`${
-									value.userType === "admin"
-										? "/admin"
-										: value.userType === "student"
+								to={`${value.userType === "admin"
+									? "/admin"
+									: value.userType === "student"
 										? "/student"
 										: "/teacher"
-								}`}
+									}`}
 							>
 								<motion.div
 									whileHover={{

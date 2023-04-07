@@ -1350,11 +1350,11 @@ const Classroom = () => {
     // console.log({ contentId });
 
 
-    console.log({ modules });
-    console.log({ reduceContent });
-    console.log({ reduceItem });
-    console.log({ contents });
-    console.log({ totalItem });
+    // console.log({ modules });
+    // console.log({ reduceContent });
+    // console.log({ reduceItem });
+    // console.log({ contents });
+    // console.log({ totalItem });
 
     return (
         <Container>

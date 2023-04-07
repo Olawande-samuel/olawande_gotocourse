@@ -201,14 +201,14 @@ const Footer = () => {
                 <i className="d-none d-lg-block">
                   {/* <Logo color={!celebRoute ? "var(--theme-blue)" : "#fff"} /> */}
                   {/* <Logo color={"var(--theme-blue)" } /> */}
-                  <img src={logo} alt=""  width={200}/>
+                  <img src={logo} alt=""  width={250}/>
 
                 </i>
 
                 <i className="d-lg-none">
                   {/* <Logosm color={!celebRoute ? "var(--theme-blue)" : "#fff"} /> */}
                   {/* <Logosm color={"var(--theme-blue)"} /> */}
-                  <img src={logo} alt=""  width={200}/>
+                  <img src={logo} alt=""  width={250}/>
 
                 </i>
                 {/* <small className="text-center d-block" style={{ fontSize: '16px', color: !celebRoute ? "var(--theme-blue)" : "#fff" }}>Learn without limits.</small> */}
