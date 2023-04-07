@@ -173,6 +173,8 @@ const AnswerAssessmentItem = ({ x }) => {
     }
   })
 
+  console.log({assessment});
+
   const { isLoading } = useQuery(["fetch student domains", x?.bootcampId], () => fetchStudentDomains(userdata.token, x?.bootcampId), {
     onSuccess: (res) => {
       
@@ -224,7 +226,11 @@ const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
       let contentDetail = reduceModules?.find(item => item?.contentId === contentId);
       let quizDetail = reduceContent?.find(item => item?.contentId === contentId);
       // let DomainDetail = modules?.find(item => item?.contentId === contentDetail?.domain);
-      console.log({quizDetail});
+      const score = () =>{
+        return assessment?.find(assess => assess.contentId === x?.contentId)?.questions?.reduce((total, current) => total + current?.grade, 0)
+
+    }
+    console.log(score());
 
       return (quizDetail &&
         <div key={i} className="assessmentaccord">
@@ -244,7 +250,7 @@ const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
 
             <div className="assessright">
               <div>
-              <p className="assesstitle">Total score: {x?.totalScore}</p>
+              <p className="assesstitle">Total score: {x?.totalScore}/{score()}</p>
               <p className="assesstitle">Attempts: {quizDetail?.attempts}</p>
 
               </div>

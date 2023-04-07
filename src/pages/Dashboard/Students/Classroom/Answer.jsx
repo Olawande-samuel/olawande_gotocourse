@@ -12,7 +12,6 @@ import { useLocalStorage } from "../../../../hooks";
 import { KEY } from "../../../../constants";
 import { useAuth } from "../../../../contexts/Auth";
 import { useSearchParams } from "react-router-dom";
-import Note from "../../components/classConsole/Note";
 import Loader from "../../../../components/Loader";
 import styled from "styled-components";
 
@@ -36,32 +35,35 @@ const Contain = styled.div`
 }
 `
 
-const NoteComponent = (contentItem, index) => {
- 
+const BodyContainer = styled.div`
+    background: var(--blue-ish);;
+    padding: 1rem;
+    border-radius: 10px;
+
+`
+
+const NoteComponent = ({ contentItem, index }) => {
     return (
         <NotecContainer>
 
-            <div>
-                Question {index + 1}: <div dangerouslySetInnerHTML={{ __html: contentItem?.contentItem?.title }}></div>
-                My Answer:<div dangerouslySetInnerHTML={{ __html: contentItem?.contentItem?.answer }}></div>
-                <p>Correct Answer: {contentItem?.contentItem?.isCorrect}</p>
-                <p>Score: {contentItem?.contentItem?.score}</p>
+            <BodyContainer>
+                Question {index + 1}: <div dangerouslySetInnerHTML={{ __html: contentItem?.title }}></div>
+                My Answer:<div dangerouslySetInnerHTML={{ __html: contentItem?.answer }}></div>
+                <p>Correct Answer: {contentItem?.isCorrect}</p>
+                <p>Scored: {contentItem?.score}/ {contentItem?.grade}</p>
 
 
-            </div>
+            </BodyContainer>
 
 
         </NotecContainer>
     )
 }
 
-const FileComponent = (contentItem) => {
+const FileComponent = ({ contentItem, index }) => {
     const [open, setOpen] = useState(false)
 
     const getExtention = (val) => {
-        console.log({ val });
-        console.log((val?.split('/')[val?.split('.')?.length - 1] === "docx"));
-
         if ((val?.split('.')[val?.split('.')?.length - 1] === "png") || (val?.split('.')[val?.split('.')?.length - 1] === "jpg") || (val?.split('.')[val?.split('.')?.length - 1] === "jpeg") || (val?.split('.')[val?.split('.')?.length - 1] === "svg")) {
             return "image"
         } else if ((val?.split('.')[val?.split('.')?.length - 1] === "pdf")) {
@@ -116,58 +118,55 @@ const FileComponent = (contentItem) => {
 
     }
 
-    console.log(getExtention(contentItem?.contentItem?.answer));
+    console.log({ contentItem });
     return (
         <div>
             <Paper variant='outlined' className="paper">
-                {
-                    // !(getExtention(contentItem?.contentItem?.type) === "pdf") &&
-                    <PaperTop>
-                        <div>
-                            <BodyActions>
-                                {/* <IconButton>
-                                    {contentItem?.contentItem?.downloadable && <BiCloudDownload onClick={() => downloadContent(contentItem.contentItem.fileName, contentItem.contentItem.title, contentItem.contentItem.type)} />}
-                                </IconButton> */}
-                                <CustomButton onClick={() => setOpen(true)}>Open</CustomButton>
-                            </BodyActions>
-                        </div>
-                    </PaperTop>
+                <BodyContainer>
+                    Question {index + 1}: <div dangerouslySetInnerHTML={{ __html: contentItem?.title }}></div>
+                    <p>Scored: {contentItem?.score}/ {contentItem?.grade}</p>
+                    <p>My Submission :</p>
 
-                }
+                </BodyContainer>
+                <PaperTop>
+                    <div>
+                        <BodyActions>
+                            <CustomButton onClick={() => setOpen(true)}>Open</CustomButton>
+                        </BodyActions>
+                    </div>
+                </PaperTop>
 
-                <FileName>
-                    {(getExtention(contentItem?.contentItem?.answer) !== "pdf" || (getExtention(contentItem?.contentItem?.type) !== "doc")) && <div dangerouslySetInnerHTML={{ __html: contentItem?.contentItem?.answer?.split("-").join(" ").split("_").join(" ") }}></div>}
 
-                </FileName>
+
 
                 <FileDisplay>
-                    {getExtention(contentItem?.contentItem?.answer) === "image" ?
+                    {getExtention(contentItem?.answer) === "image" ?
                         <div className="img">
-                            <img src={`${process.env.REACT_APP_IMAGEURL}${contentItem?.contentItem?.answer}`} alt="" />
+                            <img src={`${process.env.REACT_APP_IMAGEURL}${contentItem?.answer}`} alt="" />
 
                         </div>
                         :
 
-                        getExtention(contentItem?.contentItem?.answer) === "pdf" ?
+                        getExtention(contentItem?.answer) === "pdf" ?
                             <div className="pdf">
                                 <DocumentViewer
-                                    file={`https://res.cloudinary.com/gotocourse-us/image/upload/v1664205986/files/${contentItem?.contentItem?.answer}`}
-                                    name={contentItem?.contentItem?.answer?.split(".")[0]?.split("_")?.join(" ")}
+                                    file={`https://res.cloudinary.com/gotocourse-us/image/upload/v1664205986/files/${contentItem?.answer}`}
+                                    name={contentItem?.answer?.split(".")[0]?.split("_")?.join(" ")}
                                 />
 
                             </div>
                             :
-                            getExtention(contentItem?.contentItem?.answer) === "doc" ?
+                            getExtention(contentItem?.answer) === "doc" ?
                                 <div className="pdf">
                                     <DocumentViewer
-                                        file={`https://res.cloudinary.com/gotocourse-us/raw/upload/v1664205986/files/${contentItem?.contentItem?.answer}`}
-                                        name={contentItem?.contentItem?.answer?.split(".")[0]?.split("_")?.join(" ")}
+                                        file={`https://res.cloudinary.com/gotocourse-us/raw/upload/v1664205986/files/${contentItem?.answer}`}
+                                        name={contentItem?.answer?.split(".")[0]?.split("_")?.join(" ")}
                                     />
 
                                 </div>
                                 :
 
-                                <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem?.contentItem?.answer}`} controls controlsList="nodownload"></video>
+                                <video src={`${process.env.REACT_APP_VIDEOURL}${contentItem?.answer}`} controls controlsList="nodownload"></video>
                     }
 
                 </FileDisplay>
@@ -179,8 +178,8 @@ const FileComponent = (contentItem) => {
                 open={open}
                 setOpen={setOpen}
                 file={`https://res.cloudinary.com/gotocourse-us/raw/upload/v1664205986/files/${contentItem?.contentItem?.answer}`}
-                type={contentItem?.contentItem?.type}
-                title={contentItem?.contentItem?.title}
+                type={contentItem?.type}
+                title={contentItem?.title}
             />
 
         </div>
@@ -189,22 +188,24 @@ const FileComponent = (contentItem) => {
 
 const QuizComponent = ({ contentItem, index }) => {
     return (
-        <Contain>
+        <BodyContainer>
+            <Contain>
 
-            Question {index + 1}: <div dangerouslySetInnerHTML={{ __html: contentItem?.title }}></div>
-            {
-                contentItem?.options.map((opt, i) => (
-                    <div key={i} className={`boxinput `}>
-                            <input type="checkbox" checked={opt?.selected} className={opt?.isAnswer === true ? "green" : opt?.selected && opt?.isAnswer === true ? "green" : opt?.selected && opt?.isAnswer === false ? "red" : ""} /> 
+                Question {index + 1}: <div dangerouslySetInnerHTML={{ __html: contentItem?.title }}></div>
+                {
+                    contentItem?.options.map((opt, i) => (
+                        <div key={i} className={`boxinput `}>
+                            <input type="checkbox" checked={opt?.selected} className={opt?.isAnswer === true ? "green" : opt?.selected && opt?.isAnswer === true ? "green" : opt?.selected && opt?.isAnswer === false ? "red" : ""} />
                             <span className={opt?.isAnswer === true ? "green" : opt?.selected && opt?.isAnswer === true ? "green" : opt?.selected && opt?.isAnswer === false ? "red" : ""}>{opt?.title}</span>
-                    </div>
+                        </div>
 
-                ))
-            }
-            <p>Score: {contentItem?.score}</p>
+                    ))
+                }
+                <p>Score: {contentItem?.score}</p>
 
 
-        </Contain>
+            </Contain>
+        </BodyContainer>
 
 
     )
@@ -232,26 +233,41 @@ const ConsoleAnswer = () => {
     const contentId = searchParams.get("contentId")
 
 
-    useMemo(() => {
+    const gettingResult = useMemo(() => {
         let data = assessment?.find(assess => assess?.classId === classId && assess?.contentId === contentId)
         return setResults(data)
     }, [assessment, classId, contentId])
+
+    const score = useMemo(() => {
+        return results?.questions?.reduce((total, current) => total + current?.grade, 0)
+
+    }, [gettingResult, results])
+
+    console.log({ results });
 
 
     return (
         <>
             {isLoading ? <Loader /> :
+                results?.questions?.length > 0 ?
+                    <div>
+                        <div className="px-4 d-flex justify-content-end">
+                            <button className="button py-2 px-2">scored: {results?.totalScore}/{score}</button>
+                        </div>
+                        {results?.questions?.map((result, index) => {
+                            if (result.type === "THEORY") {
+                                return <NoteComponent contentItem={result} key={index} index={index} />
+                            } else if (result.type === "MULTIPLE_CHOICE") {
+                                return <QuizComponent contentItem={result} key={index} index={index} />
+                            } else {
+                                return <FileComponent contentItem={result} key={index} index={index} />
 
-                results?.questions?.length > 0 ? results?.questions?.map((result, index) => {
-                    if (result.type === "THEORY") {
-                        return <NoteComponent contentItem={result} key={index} i={index} />
-                    } else if (result.type === "MULTIPLE_CHOICE") {
-                        return <QuizComponent contentItem={result} key={index} index={index} />
-                    } else {
-                        return <FileComponent contentItem={result} key={index} i={index} />
+                            }
+                        })
+                        }
 
-                    }
-                })
+                    </div>
+
 
                     :
                     <>
