@@ -520,7 +520,6 @@ ul{
 
 
 const NoteComponent = (contentItem) => {
-    console.log({ contentItem });
 
     return (
         <NotecContainer>
@@ -541,7 +540,6 @@ const NoteComponent = (contentItem) => {
 
 const FileComponent = (contentItem) => {
     const [open, setOpen] = useState(false)
-    console.log(contentItem.contentItem);
 
     const getExtention = (val) => {
         // console.log({ val });
@@ -564,7 +562,6 @@ const FileComponent = (contentItem) => {
                 method: 'GET',
                 responseType: 'blob',
             }).then((response) => {
-                console.log({ response })
                 const href = URL.createObjectURL(response.data);
                 const link = document.createElement('a');
                 link.href = href;
@@ -581,7 +578,6 @@ const FileComponent = (contentItem) => {
                 method: 'GET',
                 responseType: 'blob',
             }).then((response) => {
-                console.log({ response })
                 const href = URL.createObjectURL(response.data);
                 const link = document.createElement('a');
                 link.href = href;
@@ -695,7 +691,6 @@ function WelcomeSection({ pageHandler, contentItem }) {
 }
 
 const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }) => {
-    console.log(contentItem);
     const { consoleFunctions: { attemptQuiz } } = useAuth();
     const [note, setNotes] = useState([])
     const [myAnswers, setMyAnswers] = useState([]);
@@ -703,6 +698,7 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
     const [fileUrl, setFileUrl] = useState("");
     const [uploadlink, setUploadLink] = useState("")
     const [uploads, setUploads] = useState([])
+    let queryClient = useQueryClient();
 
 
 
@@ -762,14 +758,13 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
             allAnswers = uploads
         } else allAnswers = myAnswers
 
-        console.log({ allAnswers });
         try {
             setLoading(true)
             const res = await attemptQuiz(userdata?.token, contentItem?._id, allAnswers);
-            console.log({ res });
             const { message, success, statusCode } = res;
             if (!success) throw new AdvancedError(message, statusCode);
             else if (statusCode === 1) {
+                queryClient.invalidateQueries(["fetch student domains"])
                 toast.success(message, {
                     position: "top-right",
                     autoClose: 4000,
@@ -797,7 +792,6 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
         }
     }
 
-    console.log({ myAnswers });
 
 
     const AddLink = (e, questionId, index) => {
@@ -849,7 +843,6 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
         else return;
     }
 
-    console.log({ uploads });
 
     return (
         <>
@@ -1002,7 +995,6 @@ const Classroom = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [locked, setLocked] = useState(false);
 
-    console.log({ bootcampName });
 
     const [loading, setLoading] = useState(false);
 
@@ -1045,10 +1037,8 @@ const Classroom = () => {
     let dueDate = bootcampName[0]?.nextPayment;
     // notify due date
     let paymentDaysLeft = useMemo(() => {
-        console.log({dueDate});
         let today = new Date();
         let time = new Date(dueDate) - today
-        console.log({time});
         let oneDay = 86400000;
         let daysLeft = 0
         if (time >= oneDay) {
@@ -1064,7 +1054,6 @@ const Classroom = () => {
 
     }, [bootcampName, dueDate])
 
-    console.log({ paymentDaysLeft });
 
 
 
@@ -1127,19 +1116,16 @@ const Classroom = () => {
     const MoveButton = (type) => {
         if (reduceContent?.length > 0 && type === "next") {
             const findIndex = reduceContent?.findIndex(content => content.contentId === contentId);
-            console.log({ findIndex });
 
 
 
             let val = ""
             if (findIndex !== (reduceContent?.length - 1)) {
                 val = findIndex + 1;
-                console.log({ val });
                 setSearchParams({
                     contentId: reduceContent[val]?.contentId
                 })
                 if (!reduceContent[val]?.isLocked) {
-                    console.log("item is logged");
                     setLocked(false)
                     setPickedType(reduceContent[val]?.type)
                     setContents(reduceContent[val]?.items)
@@ -1148,7 +1134,6 @@ const Classroom = () => {
 
                 } else {
                     setContents([])
-                    console.log("item is  not locked");
                     setLocked(true)
                     setPickedType(reduceContent[val]?.type)
                     setBodyTitle(reduceContent[val]?.title)
@@ -1163,7 +1148,6 @@ const Classroom = () => {
                 })
 
                 if (!reduceContent[val]?.isLocked) {
-                    console.log("item is locked");
                     setLocked(false)
                     setContents(reduceContent[val]?.items)
                     setBodyTitle(reduceContent[val]?.title)
@@ -1172,7 +1156,6 @@ const Classroom = () => {
 
                 } else {
                     setContents([])
-                    console.log("item is  not locked");
                     setLocked(true)
                     setBodyTitle(reduceContent[val]?.title)
                     setPickedType(reduceContent[val]?.type)
@@ -1191,7 +1174,6 @@ const Classroom = () => {
                     contentId: reduceContent[val]?.contentId
                 })
                 if (!reduceContent[val]?.isLocked) {
-                    console.log("item is locked");
 
                     setLocked(false)
                     setPickedType(reduceContent[val]?.type)
@@ -1200,7 +1182,6 @@ const Classroom = () => {
                     return;
 
                 } else {
-                    console.log("item is  not locked");
                     setContents([])
                     setLocked(true)
                     setPickedType(reduceContent[val]?.type)
@@ -1293,7 +1274,6 @@ const Classroom = () => {
 
 
     const handleCompleted = async (contentId, fileId, type) => {
-        console.log({ contentId });
         setLoading(true)
         try {
 
@@ -1301,7 +1281,6 @@ const Classroom = () => {
             if (statusCode === 1) {
                 setLoading(false)
                 queryClient.invalidateQueries(["fetch student domains"])
-                console.log({ data });
 
             }
         } catch (error) {
@@ -1328,7 +1307,6 @@ const Classroom = () => {
             if (statusCode === 1) {
                 setLoading(false)
                 queryClient.invalidateQueries(["fetch student domains"])
-                console.log({ data });
 
             }
 

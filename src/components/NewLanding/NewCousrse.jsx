@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components"
 import { gotoclass } from "../../constants";
 import { useAuth } from "../../contexts/Auth";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   background: #F3F9FF;  
@@ -164,7 +165,7 @@ const NewCourse = () => {
 
 
                 <div className="content">
-                    {shorts.slice(0,8).map((item, i) => (
+                    {shorts.slice(0, 8).map((item, i) => (
                         // ({ title, bootcampImg, category, duration, price, packages, bootcampId, description, startDate }) => {
                         <Card key={i}>
 
@@ -175,7 +176,7 @@ const NewCourse = () => {
                             <div className="bottom">
 
                                 <p className="salary">
-                                    Average Salary: {item.averageSalary ?  <span>{Intl.NumberFormat("en-us",{style: "currency", currency:"USD"})?.format(+item?.averageSalary)} per year</span>: "" }
+                                    Average Salary: {item.averageSalary ? <span>{Intl.NumberFormat("en-us", { style: "currency", currency: "USD" })?.format(+item?.averageSalary)} per year</span> : ""}
                                 </p>
 
                                 <p>{item.duration}</p>
@@ -186,6 +187,11 @@ const NewCourse = () => {
                         </Card>
 
                     ))}
+
+                </div>
+
+                <div className="viewmore text-center mt-4">
+                    <Link to={"/category/IN_DEMAND"}>{"View more In-Demand courses >"}</Link>
 
                 </div>
 

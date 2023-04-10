@@ -235,7 +235,7 @@ const Footer = () => {
               </Link>
             </div>
 
-            <div className="second">
+            {/* <div className="second">
               <ul>
                 <li>Categories</li>
                 {categories.data?.data?.map((link, index) => (
@@ -265,7 +265,7 @@ const Footer = () => {
                 ))}
 
               </ul>
-            </div>
+            </div> */}
           </div>
 
           <div className="footer_right">

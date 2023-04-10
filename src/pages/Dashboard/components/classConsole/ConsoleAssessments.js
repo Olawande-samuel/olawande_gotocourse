@@ -173,7 +173,6 @@ const AnswerAssessmentItem = ({ x }) => {
     }
   })
 
-  console.log({assessment});
 
   const { isLoading } = useQuery(["fetch student domains", x?.bootcampId], () => fetchStudentDomains(userdata.token, x?.bootcampId), {
     onSuccess: (res) => {
@@ -230,7 +229,6 @@ const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
         return assessment?.find(assess => assess.contentId === x?.contentId)?.questions?.reduce((total, current) => total + current?.grade, 0)
 
     }
-    console.log(score());
 
       return (quizDetail &&
         <div key={i} className="assessmentaccord">
@@ -259,6 +257,7 @@ const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
               >Graded: {x?.graded ? "true" : "false"}</button>
 
                <button className="assessbold" data-id={quizId}
+               disabled={!x?.graded}
               onClick={() => navigate(`/student/console/answers?classId=${quizDetail?.classId}&contentId=${quizDetail?.contentId}`)}
               >Show Answer</button>
             </div>
