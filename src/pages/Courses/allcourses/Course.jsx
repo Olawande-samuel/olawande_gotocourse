@@ -1092,16 +1092,7 @@ const CourseComponent = () => {
       // console.log({res})
       // console.log(res.data.filter(item => item.subCategory === id && item.isActive))
 
-      if (res.data && id !== "upcoming") {
-        const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === id) : [];
-        const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive && item.subCategory === id) : [];
-        const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === id).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-
-        // const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate.includes("2023-01") && item.isActive && item.subCategory === id) : [];
-        // const second = res.data?.length > 0 ? res.data?.filter(item => !item.startDate.includes("2023-01") && item.isActive && item.subCategory === id) : [];
-        const all = [...first, ...second, ...third]; 
-        setBootcampTrainingInfo(all)
-      }else if(res.data && id === "IN_DEMAND"){
+     if(res.data && id === "IN_DEMAND"){
         let ids = [
           "636e4fbd30615c03fc6fb4ed", 
           "63fcd51d4aacf5d78772e89f", 
@@ -1124,15 +1115,27 @@ const CourseComponent = () => {
 
         const all = [...cyber, ...productMng, ...it, ...data, ...business, ...audit, ...design, ...risk, ...restitem];
         setBootcampTrainingInfo(all)
+        return;
+
       }
       else if (res.data && id === "upcoming") {
         // const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
         const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate?.includes("2023-03") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
         const all = [...second];
         setBootcampTrainingInfo(all)
-        return
+        return;
 
-      } else {
+      } else if (res.data && id !== "upcoming" && id !== "IN_DEMAND") {
+        const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === id) : [];
+        const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive && item.subCategory === id) : [];
+        const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === id).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+
+        // const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate.includes("2023-01") && item.isActive && item.subCategory === id) : [];
+        // const second = res.data?.length > 0 ? res.data?.filter(item => !item.startDate.includes("2023-01") && item.isActive && item.subCategory === id) : [];
+        const all = [...first, ...second, ...third]; 
+        setBootcampTrainingInfo(all)
+        return;
+      }else  {
         setBootcampTrainingInfo([])
 
       }
