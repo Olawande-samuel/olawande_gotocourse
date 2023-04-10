@@ -124,7 +124,7 @@ const NewLanding = () => {
         <Hero />
         <NewCompanies />
         <NewReady />
-        <WomenTech open={open} setOpen={setOpen} />
+        {/* <WomenTech open={open} setOpen={setOpen} /> */}
         {/* <Ready/> */}
         {/* <Overflow/> */}
         <GreatOpportunities />
