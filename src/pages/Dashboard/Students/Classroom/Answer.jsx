@@ -243,7 +243,6 @@ const ConsoleAnswer = () => {
 
     }, [gettingResult, results])
 
-    console.log({ results });
 
 
     return (

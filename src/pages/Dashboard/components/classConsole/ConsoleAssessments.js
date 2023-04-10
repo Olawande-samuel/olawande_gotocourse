@@ -94,6 +94,7 @@ const AssessmentItem = ({ x }) => {
   return (
     <>
 
+{/* {isLoading && <Loader/>} */}
 
       <div className="quizaccordion">
         {reduceContent?.length > 0 && <Accord reduceContent={reduceContent} reduceItem={reduceItem} />}
