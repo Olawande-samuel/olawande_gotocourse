@@ -238,7 +238,7 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate}){
         }
     },[value])
 
-    console.log({value})
+    
 
     return (
         <div className={clsx.question}>
