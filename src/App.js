@@ -236,6 +236,7 @@ import { EarningCourses, EarningTeacherApplication } from "./pages/Dashboard/Tea
 import { BootcampPaystackPayment } from "./pages/Bootcamp/PaystackPayment";
 import Africa from "./components/abroad/pages/Africa";
 import ConsoleAnswer from "./pages/Dashboard/Students/Classroom/Answer";
+import NewTeacherLanding from "./components/teacher";
 // import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 
@@ -363,6 +364,7 @@ function MyApp({ mixpanel }) {
 							<Route path="change-password" element={<ResetPassword />} />
 							{/* <Route path="become-a-teacher" element={<BecomeATeacher />} /> */}
 
+							<Route path="gotocourse-teacher" element={<NewTeacherLanding />} />
 							<Route path="become-a-teacher" element={<TeachersLanding />} />
 							<Route path="student/classroom" element={<StudentClassroom />} />
 							<Route path="coming-soon" element={<ComingSoon />} />

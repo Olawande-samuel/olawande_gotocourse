@@ -1568,10 +1568,10 @@ td:not(:first-child) {
   font-size: 1.5rem;
 }
 
-.footer .box {
+/* .footer .box {
   width: min(100% - 1rem, 700px);
   margin: auto;
-}
+} */
 
 .end {
   min-height: 80px;

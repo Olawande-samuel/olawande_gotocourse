@@ -77,7 +77,7 @@ const Navbar = ({ background }) => {
 	const categoryRoute = background === "category";
 	const landing = location.pathname.split("/")[1] !== "lounge";
 	const mainpage = location.pathname.split("/")[1] === "learn-on-gotocourse";
-	const teacher = location.pathname.split("/")[1] === "qualifications";
+	const teacher = location.pathname.split("/")[1] === "qualifications" || location.pathname.split("/")[1] === "gotocourse-teacher";
 	function showDrop() { }
 
 	const [showBanner, setShowBanner] = useState(true);

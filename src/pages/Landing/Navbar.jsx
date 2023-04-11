@@ -161,7 +161,7 @@ const Navbar = ({ toggleSidebar }) => {
 							<Link to="/learn-on-gotocourse" className="d-inline-flex">
 								<button>Learn on Gotocourse</button>
 							</Link>
-							<Link to="/qualifications">
+							<Link to="/gotocourse-teacher">
 							<button>Teach on Gotocourse </button>
 						</Link>
 						</div>

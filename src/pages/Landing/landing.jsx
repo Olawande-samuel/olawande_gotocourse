@@ -69,7 +69,7 @@ const NewHome = ({ mixpanel }) => {
 						<Link to="/learn-on-gotocourse">
 							<button>I'm a Learner</button>
 						</Link>
-						<Link to="/qualifications">
+						<Link to="/gotocourse-teacher">
 							<button>I'm an Independent Teacher </button>
 						</Link>
 					</div>

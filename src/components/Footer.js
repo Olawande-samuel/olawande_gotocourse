@@ -115,7 +115,7 @@ const Footer = () => {
   // const landing = location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] === "become-a-teacher" || location.pathname.split("/")[1] === "classes";
   const landing = location.pathname.split("/")[1] === ""
   const students = location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] === "students";
-  const teacher = location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] === "become-a-teacher" || location.pathname.split("/")[1] === "qualifications"
+  const teacher = location.pathname.split("/")[1] === "" || location.pathname.split("/")[1] === "become-a-teacher" || location.pathname.split("/")[1] === "qualifications" || location.pathname.split("/")[1] === "gotocourse-teacher"
 
   const scrollWithOffset = (el) => {
     const yCoord = el.getBoundingClientRect().top + window.pageYOffset;
@@ -176,7 +176,7 @@ const Footer = () => {
                 }
                 {landing && <small>OR</small>}
 
-                {teacher && <Link to="/become-a-teacher">
+                {/* {teacher && <Link to="/become-a-teacher">
                   <motion.button type="button"
                     className="btn btn-light px-lg-4 py-lg-3"
                     // style={{ color: celebRoute ? "#fff" : "var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)" }}
@@ -191,6 +191,12 @@ const Footer = () => {
                     Apply to teach
                   </motion.button>
                 </Link>
+                } */}
+
+                {
+                  teacher && <p style={{fontWeight: "700", fontSize:"20px"}}>
+                    Gotocourse is selected by leading organizations to develop in-demand career skills.
+                  </p>
                 }
               </div>
             </div>
