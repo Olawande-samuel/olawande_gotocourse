@@ -49,13 +49,14 @@ const Faq = ({ other = [] }) => {
 
 
 export function FaqComponent({ title, answer, show, styles, index }) {
+  console.log({index});
   return (
     <div className="trainnee">
       <div className={`faq-comp px-2 px-lg-4 ${show}`}>
         {/* <h6 className="fw-bolder" style={{ color: "var(--theme-blue)", fontWeight: "900" }}>{title}</h6>
       <p style={{ color: "var(--theme-blue)", fontSize: "14px", fontWeight: "400" }}>{answer}</p> */}
 
-        <Accordion defaultActiveKey={index} alwaysOpen>
+        <Accordion defaultActiveKey={index === 0 && index} >
           <Accordion.Item eventKey={index}>
             <Accordion.Header className="fw-bolder" style={{ color: "var(--theme-blue)", fontWeight: "900" }}>{title}</Accordion.Header>
             <Accordion.Body style={{ color: "var(--theme-blue)", fontSize: "14px", fontWeight: "400" }}>

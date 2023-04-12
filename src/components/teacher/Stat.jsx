@@ -171,21 +171,21 @@ export default Stat
 const statData = [
     {
         title: "20k+",
-        content: "Teachers",
+        content: "Registered Students",
     },
     {
-        title: "773M",
-        content: "Enrollments",
-    },
-    {
-        // sup: "More than",
-        title: "180+",
-        content: "Countries",
+        title: "98%",
+        content: "Completion & Retention rate",
     },
     {
         // sup: "More than",
-        title: "13,400+",
-        content: "Enterprise customers",
+        title: "89%",
+        content: "Tranined students already have jobs",
     },
+    // {
+    //     // sup: "More than",
+    //     title: "13,400+",
+    //     content: "Enterprise customers",
+    // },
 
 ];
