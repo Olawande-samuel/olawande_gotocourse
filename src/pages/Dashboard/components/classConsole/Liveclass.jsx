@@ -142,7 +142,42 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
   const queryClient = useQueryClient();
   const random = "FVFCAAUYI6"
   const {classId} = useParams()
+  const [startDateTime, setStartDateTime] = useState({
+    startDate:"",
+    startTime:"",
+  })
+  const [endDateTime, setEndDateTime] = useState({
+    endDate:"",
+    endTime:"",
+  })
 
+  const mytimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  console.log({mytimeZone})
+
+  function convertStartDateTime(scheduledDate) {
+    let mytimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    let localDateTime = new Date(scheduledDate).toLocaleString('en-US', { mytimeZone })
+    console.log({localDateTime})
+    let date = localDateTime.split(",")[0]
+    let time = localDateTime.split(",")[1]
+    setStartDateTime({...startDateTime, startDate: date, startTime: time})
+  }
+  
+  function convertEndDateTime(scheduledDate) {
+    let mytimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    let localDateTime = new Date(scheduledDate).toLocaleString('en-US', { mytimeZone })
+    console.log({localDateTime})
+    let date = localDateTime.split(",")[0]
+    let time = localDateTime.split(",")[1]
+    setEndDateTime({...endDateTime, endDate: date, endTime: time})
+  }
+
+  useEffect(() => {
+    if(startDate || endDate){
+      convertStartDateTime(startDate)
+      convertEndDateTime(endDate)
+    }
+  }, [startDate, endDate])
 
   function handleEdit(){
     navigate(`?edit=${_id}`)
@@ -211,7 +246,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
           <i>
             <FaCalendarAlt />
           </i>
-          <span>{new Intl.DateTimeFormat('en-US').format(new Date(startDate))}</span>
+          <span>{startDateTime?.startDate ? startDateTime.startDate : "Today"} - {endDateTime?.endDate ? endDateTime.endDate : "Today"}</span>
           {/* <span>{new Date(startDate).toLocaleDateString()}</span> */}
         </div>
         <div>
@@ -220,7 +255,7 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
           </i>
           <span>
             {/* {startTime ? startTime : "Now"} - {endTime ? endTime : <IoInfiniteOutline />} UTC{ new Date().getTimezoneOffset()/10} */}
-            {startTime ? startTime : "Now"} - {endTime ? endTime : <IoInfiniteOutline />} CST
+            {startDateTime?.startTime ? startDateTime.startTime : "Now"} - {endDateTime?.endTime ? endDateTime.endTime : <IoInfiniteOutline />} local time
             {/* {startTime ? new Date(startTime).toLocaleTimeString() : "Now"} - {endTime ? new Date(endTime).toLocaleTimeString() : <IoInfiniteOutline />} */}
           </span>
         </div>
@@ -246,10 +281,8 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
 
 export function ScheduleClass({ open, setOpen , editDataArray}) {
   const [inputType, setInputType] = useState({
-    startDate: false,
-    endDate: false,
-    endTime: false,
-    startTime: false,
+    startDateTime: false,
+    endDateTime: false,
   });
 
   const [userId, setUserId] = useState("")
@@ -279,6 +312,10 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
     endTime: "",
   });
   const [loading, setLoading]= useState(false)
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState("")
+
+
   const navigate = useNavigate()
   const [searchParams] = useSearchParams();
   const edit = searchParams.get("edit")
@@ -301,6 +338,23 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
   }
 
 
+  function handleStartDate(e){
+    setStartDate(e.target.value)
+    if(e.target.value){
+      const utcTime = new Date(e.target.value).toISOString();
+      setFormstate({...formstate, startDate: utcTime,})
+    }
+  }
+
+  function handleEndDate(e){
+    setEndDate(e.target.value)
+    if(e.target.value){
+      const utcTime = new Date(e.target.value).toISOString();
+      setFormstate({...formstate, endDate: utcTime,})
+    }
+  }
+
+
   // TODO: Add schedule edit endpoint
 
   const editMutation = useMutation(([token, id, data])=>editLiveSchedule(token, id, data), {
@@ -316,53 +370,38 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
-    if ( !formstate.roomName || !formstate.startDate || !formstate.startTime  ) {
+    if ( !formstate.roomName || !formstate.startDate) {
       toast.error("All fields are required");
-
       throw new AdvancedError("All fields are required", 0);
     }
-    
     try {
       setLoading(true)
-
-
       if(edit){
         editMutation.mutate([user.token, formstate._id, formstate ]) 
         return
       }
-
       const res =  await axios.post(`${CONFIG.socketUrl}v1/room/video/init`, {    
         ...formstate,  
           userId: userId,
           classId
       })
-
       res.data.success && toast.success("Schedule created successfully")
-      
       localStorage.setItem("video-room", res.data.data._id)
-      
       queryClient.invalidateQueries("fetch live schedule")
-      
       setGeneralState({
         ...generalState,
         scheduledClasses: [...generalState.scheduledClasses, {...formstate, roomid: res.data.data._id}],
       });
-  
       setFormstate({
         startDate: "",
         endDate: "",
         startTime: "",
         endTime: "",
       });
-
       handleClose();
-      
     } catch (error) {
       console.error(error)
-
       toast.error(error.message)
-
     } finally {
       setLoading(false)
     }
@@ -416,7 +455,7 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
             </label>
 
             <div className="row">
-              <div className="col-sm-6 pe-2 mb-3">
+              {/* <div className="col-sm-6 pe-2 mb-3">
                 <input
                   type={inputType.startDate ? "date" : "text"}
                   className="form-control"
@@ -470,6 +509,34 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
                   placeholder="End Time (CST)"
                   onChange={handleChange}
                   value={formstate?.endTime}
+                />
+              </div> */}
+              <div className="col-sm-6 pe-2 mb-3">
+                <input
+                  type={inputType.startDateTime ? "datetime-local": "text"}
+                  name="startDate"
+                  id="startDate"
+                  className="form-control"
+                  onFocus={() => setInputType({ ...inputType, startDateTime: true })}
+                  onBlur={() => setInputType({ ...inputType, startDateTime: false })}
+                  placeholder="Class starts"
+                  // onChange={handleChange}
+                  onChange={handleStartDate}
+                  value={startDate}
+                />
+              </div>
+              <div className="col-sm-6 ps-2 mb-3">
+                <input
+                  type={inputType?.endDateTime ? "datetime-local" : "text"}
+                  name="endDate"
+                  id="endDate"
+                  className="form-control"
+                  onFocus={() => setInputType({ ...inputType, endDateTime: true })}
+                  onBlur={() => setInputType({ ...inputType, endDateTime: false })}
+                  placeholder="Class ends"
+                  // onChange={handleChange}
+                  onChange={handleEndDate}
+                  value={endDate}
                 />
               </div>
             </div>

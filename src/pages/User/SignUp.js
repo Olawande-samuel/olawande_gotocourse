@@ -275,6 +275,7 @@ const SignUp = () => {
             handleChange={handleChange}
             placeholder="Firstname Lastname"
             required={true}
+            detailMessage="As you would want it to appear on your certificate of completion"
           />
           <Input
             label="Email"

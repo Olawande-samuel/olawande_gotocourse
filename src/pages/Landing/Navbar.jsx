@@ -12,7 +12,7 @@ const Container = styled.div`
 	right: 0;
 	background: #fff;
 	z-index: 1000;
-`;
+`
 
 const NavContainer = styled.div`
 	color: #0c1825;
@@ -128,8 +128,7 @@ const NavContainer = styled.div`
 			}
 		}
 	}
-`;
-
+`
 const Navbar = ({ toggleSidebar }) => {
 	return (
 		<Container>
@@ -185,4 +184,4 @@ const Navbar = ({ toggleSidebar }) => {
 	);
 };
 
-export default Navbar;
+export default Navbar

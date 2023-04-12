@@ -28,7 +28,8 @@ export const commonFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -61,7 +62,8 @@ export const commonFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -93,7 +95,8 @@ export const commonFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -125,7 +128,8 @@ export const commonFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -158,7 +162,8 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -185,7 +190,8 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -211,7 +217,8 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -237,7 +244,8 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -263,7 +271,8 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -289,7 +298,8 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -315,7 +325,8 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -341,7 +352,8 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -367,7 +379,8 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -393,7 +406,8 @@ export const kycFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -480,7 +494,8 @@ export const authFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -512,7 +527,8 @@ export const authFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -544,7 +560,8 @@ export const authFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -576,7 +593,8 @@ export const authFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -609,7 +627,8 @@ export const authFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -654,7 +673,8 @@ export const authFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -719,7 +739,8 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -752,7 +773,8 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -785,7 +807,8 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -818,7 +841,8 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -851,7 +875,8 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -884,7 +909,8 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -916,7 +942,8 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -948,7 +975,8 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -980,7 +1008,8 @@ export const adminTeacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1019,7 +1048,8 @@ export const adminStudentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1051,7 +1081,8 @@ export const adminStudentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1084,7 +1115,8 @@ export const adminStudentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1117,7 +1149,8 @@ export const adminStudentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1152,7 +1185,8 @@ export const adminFunctions = {
             }
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1181,7 +1215,8 @@ export const adminFunctions = {
             }
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1210,7 +1245,8 @@ export const adminFunctions = {
             }
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1243,7 +1279,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1276,7 +1313,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1308,7 +1346,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1341,7 +1380,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1373,7 +1413,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1405,7 +1446,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1437,7 +1479,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1470,7 +1513,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1502,7 +1546,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1535,7 +1580,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1567,7 +1613,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1599,7 +1646,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1631,7 +1679,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1663,7 +1712,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1695,7 +1745,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1728,7 +1779,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1760,7 +1812,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1792,7 +1845,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1824,7 +1878,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1855,7 +1910,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1888,7 +1944,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1919,7 +1976,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1952,7 +2010,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -1985,7 +2044,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2016,7 +2076,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2049,7 +2110,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2082,7 +2144,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2113,7 +2176,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2146,7 +2210,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2179,7 +2244,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2210,7 +2276,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2243,7 +2310,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2276,7 +2344,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2299,7 +2368,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2332,7 +2402,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2364,7 +2435,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2396,7 +2468,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2444,7 +2517,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2476,7 +2550,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2508,7 +2583,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2540,7 +2616,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2574,7 +2651,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2606,7 +2684,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2638,7 +2717,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2670,7 +2750,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2702,7 +2783,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2735,7 +2817,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2767,7 +2850,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2799,7 +2883,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2831,7 +2916,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -2987,7 +3073,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3022,7 +3109,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3055,7 +3143,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3087,7 +3176,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3119,7 +3209,8 @@ export const adminFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3184,7 +3275,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3217,7 +3309,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3249,7 +3342,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3281,7 +3375,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3313,7 +3408,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3345,7 +3441,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3380,7 +3477,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3414,7 +3512,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3450,7 +3549,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3485,7 +3585,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3521,7 +3622,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3555,7 +3657,8 @@ export const studentFunctions = {
         } catch (err) {
             console.error(err)
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3588,7 +3691,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3621,7 +3725,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3653,7 +3758,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3685,7 +3791,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3718,7 +3825,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3750,7 +3858,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3782,7 +3891,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3816,7 +3926,8 @@ export const studentFunctions = {
         } catch (err) {
             console.error(err)
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3849,7 +3960,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3882,7 +3994,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3913,7 +4026,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3947,7 +4061,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -3981,7 +4096,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4014,7 +4130,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4048,7 +4165,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4082,7 +4200,8 @@ export const studentFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4116,7 +4235,8 @@ export const studentFunctions = {
         } catch (err) {
             console.error(err)
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4156,7 +4276,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4190,7 +4311,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4222,7 +4344,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4255,7 +4378,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4288,7 +4412,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4321,7 +4446,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4354,7 +4480,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4386,7 +4513,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4418,7 +4546,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4450,7 +4579,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4483,7 +4613,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4515,7 +4646,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4547,7 +4679,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4580,7 +4713,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4612,7 +4746,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4644,7 +4779,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
             } else {
 
                 return {
@@ -4676,7 +4811,8 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4708,7 +4844,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
             } else {
 
                 return {
@@ -4746,7 +4882,8 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4780,7 +4917,8 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4813,7 +4951,8 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4845,7 +4984,8 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4877,7 +5017,8 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4910,7 +5051,8 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4943,7 +5085,8 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -4975,7 +5118,8 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5006,7 +5150,8 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5037,7 +5182,8 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5068,7 +5214,8 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5099,7 +5246,8 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5161,7 +5309,8 @@ export const otherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5197,7 +5346,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5230,7 +5380,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5263,7 +5414,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5296,7 +5448,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5329,7 +5482,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
                 console.log("something went wrong")
             } else {
 
@@ -5363,7 +5517,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
                 console.log("something went wrong")
             } else {
 
@@ -5397,7 +5552,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5430,7 +5586,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5463,7 +5620,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5496,7 +5654,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5529,7 +5688,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5562,7 +5722,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5597,7 +5758,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5630,7 +5792,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5663,7 +5826,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5696,7 +5860,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5729,7 +5894,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5764,7 +5930,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5798,7 +5965,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5838,7 +6006,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5882,7 +6051,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5923,7 +6093,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5960,7 +6131,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -5996,7 +6168,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6032,7 +6205,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6067,7 +6241,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6100,7 +6275,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6133,7 +6309,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6166,7 +6343,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6199,7 +6377,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6233,7 +6412,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6267,7 +6447,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6302,7 +6483,8 @@ export const consoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6340,7 +6522,8 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6374,7 +6557,8 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6407,7 +6591,8 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6440,7 +6625,8 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6474,7 +6660,8 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6509,7 +6696,8 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6536,7 +6724,8 @@ export const teacherConsoleFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6562,7 +6751,8 @@ export const teacherConsoleFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6588,7 +6778,8 @@ export const teacherConsoleFunctions = {
             return { ...res.data, success: true };
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6621,7 +6812,8 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6655,7 +6847,8 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6688,7 +6881,8 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6721,7 +6915,8 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6754,7 +6949,8 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
@@ -6787,7 +6983,8 @@ export const teacherConsoleFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                localStorage.clear()
+                return
+
             } else {
 
                 return {
