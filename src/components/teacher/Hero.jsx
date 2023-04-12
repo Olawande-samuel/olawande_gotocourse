@@ -12,7 +12,7 @@ const Container = styled.div`
 width: 100%;
 font-family: 'Raleway';
 color: var(--theme-blue);
-margin-top: 5rem;
+margin-top: 6rem;
 background: radial-gradient(50% 50% at 50% 50%, rgba(196, 220, 246, 0.26) 51.56%, rgba(110, 177, 254, 0.37) 100%);
 
 .container{
