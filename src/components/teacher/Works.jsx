@@ -3,10 +3,10 @@ import { Box, Tab, Tabs } from "@mui/material";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import mg1 from  '../../images/mg1.png'
-import mg2 from  '../../images/mg2.png'
-import mg3 from  '../../images/mg3.png'
-import mg4 from  '../../images/mg4.png'
+import mg1 from '../../images/mg1.png'
+import mg2 from '../../images/mg2.png'
+import mg3 from '../../images/mg3.png'
+import mg4 from '../../images/mg4.png'
 
 
 
@@ -114,7 +114,7 @@ function a11yProps(index) {
 
 const ContentComponent = () => {
   const [value, setValue] = useState(0);
- 
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -135,30 +135,31 @@ const ContentComponent = () => {
         </Tabs>
       </div>
       {content.map((item, index) => (
-        <TabPanel value={value} index={index} style={{ height: "100%", width:"100%",  }}>
-            <ItemsContainer>
-                <div className="left">
-                    <img src={item.img} alt="" />
-                </div>
+        <TabPanel value={value} index={index} style={{ height: "100%", width: "100%", }}>
+          <ItemsContainer>
+            <div className="left">
+              <img src={item.img} alt="" />
+            </div>
 
-                <div className="right">
-                    <p>
-                        {item.text1} 
-                        <br/>
-                        <br/>
-                        {item.text2}
-                    </p>
+            <div className="right">
+              <ul>
+                {
+                  item.link.map((list,i) => (
+                    <li key={i}>{list}</li>        
+                  ))
+                }
+              </ul>
 
-                    <div>
-                        <Link to={`/qualifications`}>
-                        <button>{item.btn}</button>
-                        </Link>
-                    </div>
+              <div>
+                <Link to={`/qualifications`}>
+                  <button>{item.btn}</button>
+                </Link>
+              </div>
 
-                </div>
+            </div>
 
-            </ItemsContainer>
-          
+          </ItemsContainer>
+
         </TabPanel>
       ))}
     </div>
@@ -168,92 +169,98 @@ const ContentComponent = () => {
 
 
 const Works = () => {
-    return (
-        <Container>
-            <div className="container">
-                <div className="tophead">
-                    <h4>How It Works</h4>
-                    <p>Check out the features on Gotocourse that makes the teaching of technical skills seamless</p>
-                </div>
-                <ContentComponent/>
+  return (
+    <Container>
+      <div className="container">
+        <div className="tophead">
+          <h4>How It Works</h4>
+          <p>Check out the features on Gotocourse that makes the teaching of technical skills seamless</p>
+        </div>
+        <ContentComponent />
 
-            </div>
+      </div>
 
-        </Container>
-    )
+    </Container>
+  )
 }
 
 
-export default Works 
+export default Works
 
-const tabs=[
-    {
-        id: 1,
-        name:"Plan curriculum"
-    },
-    {
-        id: 2,
-        name:"Prepare training materials" 
-    },
-    {
-        id: 3,
-        name:"Set date for cohort learning" 
-    },
-    {
-        id: 4,
-        name:"Launch cohort learning" 
-    },
+const tabs = [
+  {
+    id: 1,
+    name: "Plan curriculum"
+  },
+  {
+    id: 2,
+    name: "Prepare training materials"
+  },
+  {
+    id: 3,
+    name: "Set date for cohort learning"
+  },
+  {
+    id: 4,
+    name: "Launch cohort learning"
+  },
 
 ]
 
-const content =[
-    {
-        id:1,
-        img:mg1,
-        text1:`
-        GoToCourse is the perfect platform for creating, 
-        managing, and delivering engaging and interactive 
-        curriculum. With a wide range of features and a powerful 
-        user interface, GoToCourse makes it easy to plan 
-        and track your curriculum development and delivery.
-        `,
-        text2:`With GoToCourse, you can be sure that your 
-        curriculum is engaging and up-to-date, helping to 
-        ensure that your students get the most out of their 
-        learning experience.
-        `,
-        btn:"Sign up"
+const content = [
+  {
+    id: 1,
+    img: mg2,
+    link: [
+      "Start by defining your learning objectives and the outcomes you want to achieve.",
+      "Use our platform to create a custom curriculum that meets the needs of your learners and aligns with your teaching goals.",
+      "	Customize your content by adding multimedia elements like videos and images, and set learning objectives to measure progress.",
+      "Track the success of your curriculum with our analytics tools, and continuously improve it based on feedback from your learners."
+
+    ],
+    btn: "Sign up"
 
 
-    },
-    {
-            id:2,
-            img:mg2,
-            text1:`
-            Are you an educator looking to bring your classroom to the next level? Launch cohort learning with GoToCourse, the e-learning platform designed just for you! With GoToCourse, you can easily create and launch your own unique learning experience. From interactive content to engaging activities and assessments, you can create a powerful learning environment that challenges and inspires your students.
-            `,
-            btn:"Sign up"
+  },
+  {
+    id: 2,
+    img: mg1,
+    link: [
+      "Use our intuitive platform to create engaging and interactive training materials.",
+      "	Build interactive presentations, develop hands-on exercises, and incorporate multimedia elements like videos and images",
+      "Customize your materials to align with your curriculum and meet the needs of your learners.",
+      "With our platform, you can easily update your materials and track their effectiveness to continuously improve your training program."
+    ],
+    btn: "Sign up"
 
 
-        },
-        {
-            id:3,
-            img:mg3,
-            text1:`
-            Are you an educator looking to bring your classroom to the next level? Launch cohort learning with GoToCourse, the e-learning platform designed just for you! With GoToCourse, you can easily create and launch your own unique learning experience. From interactive content to engaging activities and assessments, you can create a powerful learning environment that challenges and inspires your students.
-            `,
-           
-            btn:"Sign up"
-    
-    
-        },{
-            id:4,
-            img:mg4,
-            text1:`
-            Are you a teacher looking to create educational materials for your students? Gotocourse is the perfect e-learning platform for you! Our platform allows teachers to easily create and customize training materials for their classes. You can use our intuitive tools to create interactive and engaging materials that can be used both in the classroom and online. With Gotocourse, you can create a unique learning experience for your students that is tailored to their individual interests and needs. Join us today and start creating the materials you need to make your class a success!
-            `,
-            btn:"Sign up"
-    
-    
-        }
+  },
+  {
+    id: 3,
+    img: mg3,
+  link:[
+  
+    "Our scheduling tools make it easy to set dates and manage registrations for your cohort learning sessions.",
+    "Send invitations, track RSVPs, and keep participants informed about upcoming sessions.",
+    "Customize your session schedules to meet the needs of your learners.",
+    "With Gotocourse, you can easily manage your cohort learning program and focus on delivering a great learning experience."
+
+  ],
+    btn: "Sign up"
+
+
+  }, {
+    id: 4,
+    img: mg4,
+   link:[
+
+    "Our platform provides you with the tools you need to launch your cohort learning program with ease.",
+    "Create and manage cohorts and track participants’ progress.",
+    "Communicate with participants, provide feedback, and measure the success of your program with our analytics tools.",
+    "With Gotocourse, you can streamline your cohort learning process and deliver a great learning experience for your learners."
+   ],
+    btn: "Sign up"
+
+
+  }
 ]
