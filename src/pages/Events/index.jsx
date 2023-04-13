@@ -27,7 +27,7 @@ const Events = () => {
     const blogData = useQuery(["fetch blogs"], () => getBlogs(), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                console.log("data", res.data);
+                // console.log("data", res.data);
                 setBlogs(res.data)
 
             }
@@ -55,7 +55,7 @@ const Events = () => {
 
     }
 
-    console.log({webinars});
+   
 
     return (
         <Layout>
@@ -137,9 +137,10 @@ const Events = () => {
                         <h3>Upcoming events</h3>
 
                         <div className={style.upcoming_events}>
-                            {webinars?.length > 0 && webinars?.filter(webinar => (new Date(webinar?.date)) >= new Date())?.length > 0 ? webinars.filter(webinar => (new Date(webinar?.date)) > new Date())?.map((event, index) => (
+                            {webinars?.length > 0 && webinars?.filter(webinar => (new Date(webinar?.date)?.toLocaleDateString() >= new Date()?.toLocaleDateString()))?.length > 0 ? webinars?.filter(webinar => (new Date(webinar?.date)?.toLocaleDateString() >= new Date()?.toLocaleDateString()))?.map((event, index) => (
                                 <Upcoming key={index} id={index} event={event} />
-                            )):
+                            ))
+                            :
                             <>
                             <p>No Upcoming Events</p>
                             </>
@@ -155,7 +156,7 @@ const Events = () => {
                         <h3>Past events</h3>
 
                         <div className={style.upcoming_events}>
-                            {webinars?.length > 0 && webinars?.filter(webinar => (new Date(webinar?.date)) < new Date())?.map((event, index) => (
+                        {webinars?.length > 0 && webinars?.filter(webinar => (new Date(webinar?.date)?.toLocaleDateString() < new Date()?.toLocaleDateString()))?.length > 0 && webinars?.filter(webinar => (new Date(webinar?.date)?.toLocaleDateString() < new Date()?.toLocaleDateString()))?.map((event, index) => (
                                 <Upcoming key={index} id={index} event={event} />
                             ))}
                         </div>
