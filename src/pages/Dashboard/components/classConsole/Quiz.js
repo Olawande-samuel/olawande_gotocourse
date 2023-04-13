@@ -404,6 +404,7 @@ export default function Quiz() {
                             <small>How many times can a student retry quiz?</small>
                             <div className="display">
                                 {
+                                    
                                     formData?.questions?.map((x, id) => (
                                         <div key={id}>
                                             <Accordion key={id} >
