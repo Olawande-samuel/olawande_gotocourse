@@ -407,7 +407,7 @@ export default function Quiz() {
                                     
                                     formData?.questions?.map((x, id) => (
                                         <div key={id}>
-                                            <Accordion key={id} >
+                                            <Accordion key={id}>
                                                 <Accordion.Item eventKey={id} className="accord__body">
                                                     <Accordion.Header className="accord__header"> Question {id + 1}</Accordion.Header>
                                                     <Accordion.Body>
