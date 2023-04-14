@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import mg1 from '../../images/mg1.png'
-import mg2 from '../../images/mg2.png'
+import mg2 from '../../images/mg2.jpg'
 import mg3 from '../../images/mg3.png'
 import mg4 from '../../images/mg4.png'
 
