@@ -63,8 +63,7 @@ const Reasons = () => {
                             Instruct using your own methods
                         </p>
                         <span>
-                            Adopt whatever teaching method is most<br /> fitting for you
-
+                        Design and deliver courses that reflect your unique teaching style and expertise, using our user-friendly course creation tools.
                         </span>
 
                     </div>
@@ -76,9 +75,10 @@ const Reasons = () => {
 
                         </p>
                         <span>
-                            Encourage learners to expand their knowledge by teaching them
-                            what you know and aiding them in exploring their interests,
-                            developing new skills, and progressing their careers.
+                        Create an interactive and supportive learning environment with quizzes, 
+                        assessments, and a live class tool. Plus, stay connected with your students 
+                        through our secure chat and mail system.
+
 
 
                         </span>
@@ -91,9 +91,10 @@ const Reasons = () => {
                             Earn financial and professional satisfaction
                         </p>
                         <span>
-                            Broaden your business connections, develop<br />
-                            your specialised knowledge, and gain income<br />
-                            from every paid enrolment.
+                        Monetize your courses and build your reputation as a 
+                        subject-matter expert. Plus, access our creator suite 
+                        and class management tools to streamline your teaching process and enhance your professional development.
+
 
 
                         </span>
