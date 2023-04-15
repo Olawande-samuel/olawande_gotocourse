@@ -12,8 +12,8 @@ import { ClassTypeComponent } from "./landingComponents";
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(230px, 250px), 270px));
-  grid-auto-rows: 380px;
+  grid-template-columns: repeat(auto-fit, minmax(min(289px, 100%), 300px));
+  /* height: 570px; */
   overflow: hidden;
   gap: 2rem;
   row-gap: 3rem;
@@ -45,14 +45,15 @@ flex-shrink:0;
 
 
 a{
-    height: 35%;
+    height: 65%;
     // border: 2px solid red;
 
     img{
         width: 100%;
         max-height: 100%;
-         object-fit:cover;
-         object-position: top;
+        height: 100%;
+        object-fit:cover;
+        object-position: top;
     }
 }
 
@@ -60,7 +61,7 @@ a{
 
 .bottom{
     // padding: 0.5rem 0;
-    height: 60%;
+    height: 35%;
     display: flex;
     flex-direction:column;
     // border: 2px solid green;

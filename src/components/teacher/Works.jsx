@@ -1,12 +1,12 @@
-import styled from "styled-components"
 import { Box, Tab, Tabs } from "@mui/material";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import mg1 from '../../images/mg1.png'
-import mg2 from '../../images/mg2.jpg'
-import mg3 from '../../images/mg3.png'
-import mg4 from '../../images/mg4.png'
+import styled from "styled-components";
+import mg1 from '../../images/mg1.png';
+import mg2 from '../../images/mg2.jpg';
+import mg3 from '../../images/mg3.png';
+import mg4 from '../../images/mg5.jpg';
 
 
 
@@ -138,7 +138,8 @@ const ContentComponent = () => {
         <TabPanel value={value} index={index} style={{ height: "100%", width: "100%", }}>
           <ItemsContainer>
             <div className="left">
-              <img src={item.img} alt="" />
+              <img src={item.img} alt="" loading="lazy" />
+              {/* <Image image={item.img} height={"300px"} /> */}
             </div>
 
             <div className="right">

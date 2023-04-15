@@ -267,15 +267,17 @@ function VideoSection() {
 
       <div className="video__right">
         <div className="content">
-          <h5> Partner with us.</h5>
+          {/* <h5> Partner with us.</h5> */}
+          <h5> Join our community</h5>
 
-          <p>Gotocourse in partnership with providing a fantastic learning and teaching experience partners with teachers like you to help students learn new skills</p>
+          {/* <p>Gotocourse in partnership with providing a fantastic learning and teaching experience partners with teachers like you to help students learn new skills</p> */}
+          <p>Gotocourse has provided just the right community to help you learn, grow and connect with other professionals all around the world.</p>
 
-          <Link to={`/qualifications`}>
+          <a target="_blank" rel="noopener noreferrer" href="https://t.me/+x8ZaQqhzAqc2MjJh">
             <button>
-              Apply to be a Teacher
+              Join the community
             </button>
-          </Link>
+          </a>
         </div>
       </div>
       <PopupVideo open={open} setOpen={setOpen} />
