@@ -176,7 +176,7 @@ const Footer = () => {
                 }
                 {landing && <small>OR</small>}
 
-                {/* {teacher && <Link to="/become-a-teacher">
+                {/* { <a href="https://gotocourse.com" >
                   <motion.button type="button"
                     className="btn btn-light px-lg-4 py-lg-3"
                     // style={{ color: celebRoute ? "#fff" : "var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)" }}
@@ -188,9 +188,9 @@ const Footer = () => {
                     transition={{ duration: 0.1 }}
 
                   >
-                    Apply to teach
+                    Chat us on WhatsApp
                   </motion.button>
-                </Link>
+                </a>
                 } */}
 
                 {
@@ -198,6 +198,40 @@ const Footer = () => {
                     Gotocourse is selected by leading organizations to develop in-demand career skills.
                   </p>
                 }
+                 {  !teacher && <a href="https://gotocourse.com" >
+                  <motion.button type="button"
+                    className="btn btn-light px-lg-4 py-lg-3"
+                    // style={{ color: celebRoute ? "#fff" : "var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)" }}
+                    style={{ color: "var(--theme-blue)", background: "#fff", borderColor: "var(--theme-blue)" }}
+                    whileHover={{
+                      boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                      textShadow: "0px 0px 8px rgb(255,255,255)",
+                    }}
+                    transition={{ duration: 0.1 }}
+
+                  >
+                    Chat us on WhatsApp
+                  </motion.button>
+                </a>
+                }
+              </div>
+              <div className="d-flex justify-content-center align-items-center">
+                {  teacher && <a href="https://gotocourse.com" >
+                    <motion.button type="button"
+                      className="btn btn-light px-lg-4 py-lg-3"
+                      // style={{ color: celebRoute ? "#fff" : "var(--theme-blue)", background: "#fff", borderColor: celebRoute ? "#fff" : "var(--theme-blue)" }}
+                      style={{ color: "var(--theme-blue)", background: "#fff", borderColor: "var(--theme-blue)" }}
+                      whileHover={{
+                        boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                        textShadow: "0px 0px 8px rgb(255,255,255)",
+                      }}
+                      transition={{ duration: 0.1 }}
+
+                    >
+                      Chat us on WhatsApp
+                    </motion.button>
+                  </a>
+                  }
               </div>
             </div>
         }
