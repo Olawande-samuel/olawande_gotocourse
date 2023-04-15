@@ -145,9 +145,7 @@ function HomepageHero({ showButtons, category }) {
   
 	  }
 	})
-  // updateBanner
-  console.log({banner});
-  console.log((category === "Hbanner" && (banner?.text !== "")));
+  
 
   async function onSubmit(e) {
     e.preventDefault()
