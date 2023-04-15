@@ -139,36 +139,36 @@ const Navbar = ({ background }) => {
 				>
 					{confirmEmail || landing || categoryRoute || mainpage ? (
 						// <Logosm color="var(--theme-blue)" />
-				
-				teacher  ?
-						<img src = {Teacerlogo} alt = ""
-						width = { 140 }
-						style = {{ maxWidth: "100%" }}
-						/>
 
-						:
+						teacher ?
+							<img src={Teacerlogo} alt=""
+								width={140}
+								style={{ maxWidth: "100%" }}
+							/>
 
-						<img src={logo} alt=""
-							width={140}
-							style={{ maxWidth: "100%" }}
-						/>
-					
+							:
+
+							<img src={logo} alt=""
+								width={140}
+								style={{ maxWidth: "100%" }}
+							/>
+
 
 					) : (
 						// <Logosm />
-						teacher  ?
-						
-						<img src = { Teacerlogo } alt = ""
-						width = { 140 }
-						style = {{ maxWidth: "100%" }}
-						/>
+						teacher ?
 
-						:
+							<img src={Teacerlogo} alt=""
+								width={140}
+								style={{ maxWidth: "100%" }}
+							/>
 
-						<img src={logo} alt=""
-							width={140}
-							style={{ maxWidth: "100%" }}
-						/>
+							:
+
+							<img src={logo} alt=""
+								width={140}
+								style={{ maxWidth: "100%" }}
+							/>
 
 					)}
 					{/* <small className="d-block" style={{fontSize:"14px", color: landing || mainpage ? "var(--theme-blue)" : "#fff"}}>Learn without limits</small> */}
@@ -270,17 +270,33 @@ const Navbar = ({ background }) => {
 										Sign In
 									</Link>
 								</li>
-								<li className="nav-item d-flex align-items-center nav_link d-lg-none">
-									<Link
-										to="/signup"
-										className="link"
-										style={{
-											color: landing || mainpage ? "var(--theme-blue)" : "#fff",
-										}}
-									>
-										Register as a Student
-									</Link>
-								</li>
+								{
+									teacher ?
+										<li className="nav-item d-flex align-items-center nav_link d-lg-none">
+											<Link
+												to="/qualifications"
+												className="link"
+												style={{
+													color: landing || mainpage ? "var(--theme-blue)" : "#fff",
+												}}
+											>
+												Register as a Teacher
+											</Link>
+										</li>
+										:
+										<li className="nav-item d-flex align-items-center nav_link d-lg-none">
+											<Link
+												to="/signup"
+												className="link"
+												style={{
+													color: landing || mainpage ? "var(--theme-blue)" : "#fff",
+												}}
+											>
+												Register as a Student
+											</Link>
+										</li>
+								}
+
 							</>
 						)}
 					</ul>
@@ -360,19 +376,37 @@ const Navbar = ({ background }) => {
 								</motion.button>
 							</Link>
 
-							<Link to="/signup">
-								<motion.button
-									type="button"
-									className=" btn-plain d-none d-lg-block newRegister"
-									whileHover={{
-										textShadow: "0px 0px 8px rgb(255, 255, 255)",
-										boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-									}}
-									transition={{ duration: 0.1 }}
-								>
-									<span>Register as a Student</span>
-								</motion.button>
-							</Link>
+							{
+								teacher ?
+									<Link to="/qualifications">
+										<motion.button
+											type="button"
+											className=" btn-plain d-none d-lg-block newRegister"
+											whileHover={{
+												textShadow: "0px 0px 8px rgb(255, 255, 255)",
+												boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+											}}
+											transition={{ duration: 0.1 }}
+										>
+											<span>Register as a Teacher</span>
+										</motion.button>
+									</Link>
+									:
+
+									<Link to="/signup">
+										<motion.button
+											type="button"
+											className=" btn-plain d-none d-lg-block newRegister"
+											whileHover={{
+												textShadow: "0px 0px 8px rgb(255, 255, 255)",
+												boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+											}}
+											transition={{ duration: 0.1 }}
+										>
+											<span>Register as a Student</span>
+										</motion.button>
+									</Link>
+							}
 						</>
 					)}
 				</div>
