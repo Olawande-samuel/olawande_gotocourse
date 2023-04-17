@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import mg1 from '../../images/mg1.png';
+import mg1 from '../../images/mg1.jpg';
 import mg2 from '../../images/mg2.jpg';
-import mg3 from '../../images/mg3.png';
-import mg4 from '../../images/mg5.jpg';
+import mg3 from '../../images/mg3.jpg';
+import mg4 from '../../images/mg4.jpg';
 
 
 
