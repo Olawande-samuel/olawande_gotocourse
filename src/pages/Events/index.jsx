@@ -49,7 +49,6 @@ const Events = () => {
 
     const ReadMore = () => {
         let div = document.querySelector('.articles__container')
-        console.log({ div });
         div.classList.toggle('toggleheight')
 
 

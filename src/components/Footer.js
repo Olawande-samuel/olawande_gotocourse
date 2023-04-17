@@ -98,11 +98,11 @@ const rightLink = [
     title: "Affiliates",
     path: "/affiliates"
   },
-  // {
-  //   id: 10,
-  //   title: "Mentors Lounge",
-  //   path: "/lounge"
-  // },
+  {
+    id: 10,
+    title: "Blog",
+    path: "/events&articles"
+  },
   {
     id: 11,
     title: "Enterprise",
