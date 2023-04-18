@@ -1110,10 +1110,10 @@ const CourseComponent = () => {
         // const design = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63f74cdc78429071a01a00bf" && item.subCategory === "IN_DEMAND") : [];
         const data = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "636e9a3ef0eaad8dcf3699fc" && item.subCategory === "IN_DEMAND") : [];
         const risk = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63fcdb564aacf5d787730a0b" && item.subCategory === "IN_DEMAND") : [];
-        // const it = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63717978f0eaad8dcf392eeb" && item.subCategory === "IN_DEMAND") : [];
+        const it = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63717978f0eaad8dcf392eeb" && item.subCategory === "IN_DEMAND") : [];
         const restitem = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.subCategory === "IN_DEMAND" && !ids.includes(item.bootcampId)).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
 
-        const all = [...cyber, ...productMng, ...data, ...business, ...audit, ...risk, ...restitem];
+        const all = [...cyber, ...productMng, ...it, ...data, ...business, ...audit, ...risk, ...restitem];
         setBootcampTrainingInfo(all)
         return;
 

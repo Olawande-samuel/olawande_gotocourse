@@ -143,11 +143,7 @@ const NewCourse = () => {
                 // const it = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63717978f0eaad8dcf392eeb" && item.subCategory === "IN_DEMAND") : [];
 
 
-                // const first = res.data?.length > 0 ? res.data?.filter(item => item.category ==="TRAIN2 WORKABROAD" && item.isActive && item.startDate ==="2023-03-06T00:00:00.000Z" && item.subCategory === "IN_DEMAND") : [];
-                // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-03-06T00:00:00.000Z" && item.isActive && item.subCategory === "IN_DEMAND") : [];
-                // const third = res.data?.length > 0 ? res.data?.filter(item => item.category ==="TRAIN2 WORKABROAD"  && item.isActive && item.startDate !=="2023-03-06T00:00:00.000Z" && item.subCategory === "IN_DEMAND").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-                // const all = [...first, ...third];
-                const all = [...cyber, ...productMng, ...it, ...data, ...business, ...audit, ...design, ...risk];
+                const all = [...cyber, ...productMng, ...data, ...business, ...audit, ...risk];
                 setShorts(all)
             }
         }

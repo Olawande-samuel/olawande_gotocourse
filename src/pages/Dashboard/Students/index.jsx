@@ -2461,9 +2461,7 @@ function AvailableCourses({ data, search }) {
     const third = data?.length > 0 ? data?.filter(item => item.startDate?.includes("2023-03") && item.bootcampId !== "63f74cdc78429071a01a00bf" && item.bootcampId !== "63717978f0eaad8dcf392eeb" && item.isActive) : [];
     const fourth = data?.length > 0 ? data?.filter(item => !item.startDate?.includes("2023-03") && item.bootcampId !== "63f74cdc78429071a01a00bf" && item.bootcampId !== "63717978f0eaad8dcf392eeb" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
 
-    // const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-03" && item.isActive) : [];
-    // const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
-    // const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-03" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+
     const all = [...first, ...second, ...third, ...fourth];
 
     return (
