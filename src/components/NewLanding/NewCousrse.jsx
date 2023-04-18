@@ -161,7 +161,7 @@ const NewCourse = () => {
 
 
                 <div className="content">
-                    {shorts.slice(0, 8).map((item, i) => (
+                    {shorts.slice(0, 6).map((item, i) => (
                         // ({ title, bootcampImg, category, duration, price, packages, bootcampId, description, startDate }) => {
                         <Card key={i}>
 
