@@ -2458,8 +2458,8 @@ function AvailableCourses({ data, search }) {
     // console.log({ data });
     const first = data?.length > 0 ? data?.filter(item => item.bootcampId === "63f68ab678429071a0195c6d" && item.isActive) : [];
     const second = data?.length > 0 ? data?.filter(item => item.bootcampId === "6430661e1485c80cb3261471" && item.isActive) : [];
-    const third = data?.length > 0 ? data?.filter(item => item.startDate?.includes("2023-03") && item.isActive) : [];
-    const fourth = data?.length > 0 ? data?.filter(item => !item.startDate?.includes("2023-03") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    const third = data?.length > 0 ? data?.filter(item => item.startDate?.includes("2023-03") && item.bootcampId !== "63f74cdc78429071a01a00bf" && item.bootcampId !== "63717978f0eaad8dcf392eeb" && item.isActive) : [];
+    const fourth = data?.length > 0 ? data?.filter(item => !item.startDate?.includes("2023-03") && item.bootcampId !== "63f74cdc78429071a01a00bf" && item.bootcampId !== "63717978f0eaad8dcf392eeb" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
 
     // const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-03" && item.isActive) : [];
     // const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];

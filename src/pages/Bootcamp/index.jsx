@@ -17,7 +17,7 @@ import { motion } from "framer-motion"
 import Layout from "../../components/Layout";
 import clsx from "./styles.module.css";
 import { useLocalStorage } from "../../hooks";
-import { getDate, gotoclass, tConvert } from "../../constants";
+import { getDate, getFullDate, gotoclass, tConvert } from "../../constants";
 import { useNavigate, useParams } from "react-router-dom";
 import BootcampImage from "../../images/bootcamp.webp";
 import Teacher from "../../images/bootcamps/teacher.png";
@@ -820,7 +820,7 @@ export function DetailsHero({ navHeight, title, description, addToWishList, subC
           <h4>{title}</h4>
           {/* <p className="restricted_line" dangerouslySetInnerHTML={{ __html: description }}></p> */}
           {/* <p>{description ? description : "Data science refers to the process of extracting clean information to formulate actionable insights"}</p> */}
-          <p style={{ marginTop: "2rem", fontSize: "1.5rem" }}>Starting Date: <span>{loading ? "" : new Date(startDate).toDateString()}</span></p>
+          <p style={{ marginTop: "2rem", fontSize: "1.5rem" }}>Starting Date: <span>{loading ? "" : getFullDate(startDate)}</span></p>
 
           <div className={clsx.hero_buttons}>
             <motion.button
