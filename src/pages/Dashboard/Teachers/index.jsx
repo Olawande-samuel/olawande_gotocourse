@@ -57,15 +57,13 @@ export function CourseInfo() {
   }
   // get Course info
   useEffect(() => {
-    let mounted = true;
-    if (mounted) {
-      if (ref.current) return;
+    if (ref.current) return;
+    if (userdata?.token) {
       (async () => {
         try {
           setGeneralState({...generalState, loading: true});
           const res = await fetchCourse(id, userdata?.token);
           const { success, message, statusCode } = res;
-
           if (!success || statusCode !== 1)
             throw new AdvancedError(message, statusCode);
           const { data } = res;
@@ -93,12 +91,10 @@ export function CourseInfo() {
           setGeneralState({...generalState, loading: false});
         }
       })();
-
-      ref.current = true;
     }
 
-    return () => (mounted = false);
-  }, [id]);
+    return () => ref.current = true;
+  }, [id, userdata?.token]);
 
  
   return (

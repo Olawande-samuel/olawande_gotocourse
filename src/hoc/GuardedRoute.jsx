@@ -12,10 +12,7 @@ const GuardedRoute = ({ children }) => {
     const route = location.pathname.split("/")[1];
     useEffect(() => {}, []);
 
-    // for create
     let isCreator = value?.userType === "schools";
-
-
     if(isCreator){
         let schoolRoute = location.pathname 
 

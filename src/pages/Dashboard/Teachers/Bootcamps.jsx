@@ -159,28 +159,31 @@ export function ConsoleClass() {
   useEffect(() => {
     if (flag.current) return;
     (async () => {
-      try {
-        const res = await fetchBootcamps(userdata?.token);
-        const { message, success, statusCode } = res;
-        if (!success) throw new AdvancedError(message, statusCode);
-        else if (statusCode === 1) {
-          const { data } = res;
-          if (data.length > 0) {
-            setCourseList(data);
+      if(userdata?.token){
+        try {
+          const res = await fetchBootcamps(userdata?.token);
+          console.log({res})
+          if (res.statusCode !== 1) throw new AdvancedError(res?.message, res?.statusCode);
+          const { message, statusCode } = res;
+          if (statusCode === 1) {
+            const { data } = res;
+            if (data.length > 0) {
+              setCourseList(data);
+            } else {
+              toast.error("No class assigned");
+            }
           } else {
-            toast.error("No class assigned");
+            throw new AdvancedError(message, statusCode);
           }
-        } else {
-          throw new AdvancedError(message, statusCode);
+        } catch (err) {
+          toast.error(err.message);
+        } finally {
+          setLoading((_) => false);
         }
-      } catch (err) {
-        toast.error(err.message);
-      } finally {
-        setLoading((_) => false);
       }
     })();
     flag.current = true;
-  }, []);
+  }, [userdata?.token]);
 
   function getDate(date) {
 
@@ -200,7 +203,7 @@ export function ConsoleClass() {
       <div className={clsx["teachers_profile"]}>
 
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h3 style={{ margin: 0 }}>My Classes</h3>
+          {/* <h3 style={{ margin: 0 }}>My Classes</h3> */}
         </div>
         <div className={clsx.admin__student_main}>
           <div className="assessments__inputcontainer">

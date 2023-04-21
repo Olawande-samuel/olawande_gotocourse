@@ -4681,37 +4681,44 @@ export const teacherFunctions = {
         }
     },
     fetchBootcamps: async function (token) {
-        try {
-            const res = await axios.get(`${baseURL}/teacher/bootcamps/fetch`,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json"
-                    },
-                    validateStatus: status => {
-                        return status >= 200 && status <= 505;
-                    }
-                })
-
-
-            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
-            return {
-                ...res.data,
-                success: true
-            }
-
-        } catch (err) {
-            if (err.statusCode === 2) {
-                return
-
-            } else {
-
+        if(token){
+            try {
+                const res = await axios.get(`${baseURL}/teacher/bootcamps/fetch`,
+                    {
+                        headers: {
+                            "Authorization": `Bearer ${token}`,
+                            "Content-Type": "application/json"
+                        },
+                        validateStatus: status => {
+                            return status >= 200 && status <= 505;
+                        }
+                    })
+    
+    
+                if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
                 return {
-                    success: false,
-                    message: err.message,
-                    statusCode: err.statusCode
+                    ...res.data,
+                    success: true
+                }
+    
+            } catch (err) {
+                if (err.statusCode === 2) {
+                    return {
+                        success: false,
+                        message: 'Session expired. Log in to continue',
+                        statusCode: err.statusCode
+                    }
+    
+                } else {
+                    return {
+                        success: false,
+                        message: err.message,
+                        statusCode: err.statusCode
+                    }
                 }
             }
+        }else {
+            return
         }
     },
     fetchBootcampApplications: async function (token, id) {
@@ -4735,8 +4742,7 @@ export const teacherFunctions = {
 
         } catch (err) {
             if (err.statusCode === 2) {
-                return
-
+                return 
             } else {
 
                 return {
@@ -4889,7 +4895,6 @@ export const otherFunctions = {
             const res = await axios.get(`${baseURL}/mentor/pages/fetch`,
                 {
                     headers: {
-                        // "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json"
                     },
                     validateStatus: status => {
@@ -4924,7 +4929,6 @@ export const otherFunctions = {
             const res = await axios.get(`${baseURL}/mentor/page/${id}`,
                 {
                     headers: {
-                        // "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json"
                     },
                     validateStatus: status => {
@@ -4957,7 +4961,6 @@ export const otherFunctions = {
             const res = await axios.get(`${baseURL}/courses/fetch`,
                 {
                     headers: {
-                        // "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json"
                     },
                     validateStatus: status => {
@@ -4990,7 +4993,6 @@ export const otherFunctions = {
             const res = await axios.get(`${baseURL}/course/${id}`,
                 {
                     headers: {
-                        // "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json"
                     },
                     validateStatus: status => {
@@ -5024,7 +5026,6 @@ export const otherFunctions = {
             const res = await axios.get(`${baseURL}/categories`,
                 {
                     headers: {
-                        // "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json"
                     },
                     validateStatus: status => {
@@ -5058,7 +5059,6 @@ export const otherFunctions = {
             const res = await axios.get(`${baseURL}/category/${data}`,
                 {
                     headers: {
-                        // "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json"
                     },
                     validateStatus: status => {
@@ -5091,7 +5091,6 @@ export const otherFunctions = {
             const res = await axios.get(`${baseURL}/course/category/${name}/fetch`,
                 {
                     headers: {
-                        // "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json"
                     },
                     validateStatus: status => {

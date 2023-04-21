@@ -897,33 +897,35 @@ export const Syllabus = ({
 
     useEffect(() => {
       if(flag.current) return;
-      (async () => {
-        try {
-          const token = userdata?.token;
-          const res = await fetch(token);
-          const { message, success, statusCode } = res;
-          if (!success) throw new AdvancedError(message, statusCode);
-          else {
-            const { data } = res;
-            //do somethings
-            setTeachers(_=>  data);
+      if(userdata?.token){
+        (async () => {
+          try {
+            const token = userdata?.token;
+            const res = await fetch(token);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+              const { data } = res;
+              //do somethings
+              setTeachers(_=>  data);
+            }
+          } catch (err) {
+            toast.error(err.message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }finally {
+            setLoading(_ => false);
           }
-        } catch (err) {
-          toast.error(err.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        }finally {
-          setLoading(_ => false);
-        }
-      })();
+        })();
+      }
       flag.current = true;
-    }, []);
+    }, [userdata?.token]);
   
     return (
       <Modal

@@ -66,7 +66,7 @@ export function Profile() {
 
     useEffect(() => {
         if (ref.current) return
-        if (userdata) {
+        if (userdata.token) {
             const token = userdata.token;
             (async () => {
                 try {
@@ -380,47 +380,49 @@ export function MyClasses() {
 
     useEffect(() => {
         if (flag.current) return;
-        (async () => {
-            try {
-                const res = await fetchBootcamps(userdata?.token);
-                const { message, success, statusCode } = res;
-                if (!success) throw new AdvancedError(message, statusCode);
-                else if (statusCode === 1) {
-                    const { data } = res;
-                    if (data.length > 0) {
-                        setCourseList(data);
+        if(userdata?.token){
+            (async () => {
+                try {
+                    const res = await fetchBootcamps(userdata?.token);
+                    const { message, success, statusCode } = res;
+                    if (!success) throw new AdvancedError(message, statusCode);
+                    else if (statusCode === 1) {
+                        const { data } = res;
+                        if (data.length > 0) {
+                            setCourseList(data);
+                        } else {
+    
+                            toast.error("No bootcamp found", {
+                                position: "top-right",
+                                autoClose: 4000,
+                                hideProgressBar: true,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            });
+                        }
+    
                     } else {
-
-                        toast.error("No bootcamp found", {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
+                        throw new AdvancedError(message, statusCode);
                     }
-
-                } else {
-                    throw new AdvancedError(message, statusCode);
+                } catch (err) {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } finally {
+                    setLoading(_ => false);
                 }
-            } catch (err) {
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            } finally {
-                setLoading(_ => false);
-            }
-        })()
+            })()
+        }
         flag.current = true;
-    }, [])
+    }, [userdata?.token])
 
     function gotoCreateCourseHandler(e) {
         navigate("create");
@@ -568,57 +570,59 @@ export function Bootcamps() {
 
     useEffect(() => {
         if (flag.current) return;
-        (async () => {
-            try {
-                const res = await fetchBootcamps(userdata?.token);
-                const { message, success, statusCode } = res;
-                if (!success) throw new AdvancedError(message, statusCode);
-                else if (statusCode === 1) {
-                    const { data } = res;
-                    if (data.length > 0) {
-
-                        setCourseList(data);
-                        toast.success(message, {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
+        if(userdata?.token){
+            (async () => {
+                try {
+                    const res = await fetchBootcamps(userdata?.token);
+                    const { message, success, statusCode } = res;
+                    if (!success) throw new AdvancedError(message, statusCode);
+                    else if (statusCode === 1) {
+                        const { data } = res;
+                        if (data.length > 0) {
+    
+                            setCourseList(data);
+                            toast.success(message, {
+                                position: "top-right",
+                                autoClose: 4000,
+                                hideProgressBar: true,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            });
+                        } else {
+    
+                            toast.error("No bootcamp found", {
+                                position: "top-right",
+                                autoClose: 4000,
+                                hideProgressBar: true,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            });
+                        }
+    
                     } else {
-
-                        toast.error("No bootcamp found", {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
+                        throw new AdvancedError(message, statusCode);
                     }
-
-                } else {
-                    throw new AdvancedError(message, statusCode);
+                } catch (err) {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } finally {
+                    setLoading(_ => false);
                 }
-            } catch (err) {
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            } finally {
-                setLoading(_ => false);
-            }
-        })()
+            })()
+        }
         flag.current = true;
-    }, [])
+    }, [userdata?.token])
 
     function gotoCreateCourseHandler(e) {
         navigate("create");
@@ -1357,17 +1361,30 @@ export function Courses() {
     const ref = useRef(false)
     useEffect(() => {
         if (ref.current) return
-        (async () => {
-            try {
-                setGeneralState({ ...generalState, loading: true })
-                const res = await fetchCourses(userdata?.token);
-                const { success, message, statusCode } = res;
-                setGeneralState({ ...generalState, loading: false })
-                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
-                else {
-                    const { data } = res;
-                    setCourses(_ => data);
-                    toast.success(message, {
+        if(userdata?.token){
+            (async () => {
+                try {
+                    setGeneralState({ ...generalState, loading: true })
+                    const res = await fetchCourses(userdata?.token);
+                    const { success, message, statusCode } = res;
+                    setGeneralState({ ...generalState, loading: false })
+                    if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+                    else {
+                        const { data } = res;
+                        setCourses(_ => data);
+                        toast.success(message, {
+                            position: "top-right",
+                            autoClose: 4000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+                } catch (err) {
+                    setGeneralState({ ...generalState, loading: false })
+                    toast.error(err.message, {
                         position: "top-right",
                         autoClose: 4000,
                         hideProgressBar: true,
@@ -1377,22 +1394,11 @@ export function Courses() {
                         progress: undefined,
                     });
                 }
-            } catch (err) {
-                setGeneralState({ ...generalState, loading: false })
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            }
-        })()
+            })()
+        }
 
         ref.current = true
-    }, [])
+    }, [userdata?.token])
 
 
     const [rating, setRating] = useState(0) // initial rating value
@@ -1466,7 +1472,7 @@ export function History() {
     const ref = useRef(false)
     useEffect(() => {
         if (ref.current) return
-        if (userdata) {
+        if (userdata?.token) {
             (async () => {
                 setGeneralState({ ...generalState, loading: true })
                 try {
@@ -1502,7 +1508,7 @@ export function History() {
         }
 
         ref.current = true
-    }, [])
+    }, [userdata?.token])
 
 
     const tableHeaders = ["No", "Courses", "Status", "Date", "Course Price", "Amount Paid"]
@@ -1581,7 +1587,7 @@ export function Fees() {
 
     useEffect(() => {
         if (ref.current) return
-        if (userdata) {
+        if (userdata?.token) {
             (async () => {
                 setGeneralState({ ...generalState, loading: true })
                 try {
@@ -1607,7 +1613,7 @@ export function Fees() {
             })()
         }
         ref.current = true
-    }, [])
+    }, [userdata?.token])
 
 
     const tableContents = fees.length > 0 ? fees : []
@@ -1828,34 +1834,37 @@ export function Notification() {
 
     useEffect(() => {
         if (flag.current) return;
-        (async () => {
-            try {
-                setLoader(true)
-                const res = await fetchNotifications(userdata?.token);
-                const { message, success, statusCode } = res;
-                if (!success) throw new AdvancedError(message, statusCode);
-                const { data } = res
-                if (data.length > 0) {
-                    setNotifications(data)
-                    const unread = data.filter((notification) => notification.isRead !== true)
-                    setGeneralState({ ...generalState, notifications: unread.length })
+        if(userdata?.token){
+
+            (async () => {
+                try {
+                    setLoader(true)
+                    const res = await fetchNotifications(userdata?.token);
+                    const { message, success, statusCode } = res;
+                    if (!success) throw new AdvancedError(message, statusCode);
+                    const { data } = res
+                    if (data.length > 0) {
+                        setNotifications(data)
+                        const unread = data.filter((notification) => notification.isRead !== true)
+                        setGeneralState({ ...generalState, notifications: unread.length })
+                    }
+                } catch (err) {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } finally {
+                    setLoader(_ => false);
                 }
-            } catch (err) {
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            } finally {
-                setLoader(_ => false);
-            }
-        })()
+            })()
+        }
         flag.current = true;
-    }, [reload])
+    }, [reload, userdata?.token])
 
     async function markAsRead(e) {
         e.preventDefault();
@@ -2653,7 +2662,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
                 });
             }
         })()
-    }, [])
+    }, [userdata?.token])
 
     const getCarts = useQuery(["carts"], () => fetchWishlist(userData?.token), {
         enabled: userData?.token !== null,

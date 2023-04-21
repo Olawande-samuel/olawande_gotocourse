@@ -112,7 +112,6 @@ export function CategoryDetails({ }) {
 			}
 		})();
 		flag.current = true;
-
 		return () => console.log("Leaving Details page");
 	}, []);
 

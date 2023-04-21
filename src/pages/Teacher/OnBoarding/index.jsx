@@ -312,7 +312,6 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate, backp
 
 
 function Success({}){
-    
     useEffect(()=>{
         localStorage.clear();
     },[])
