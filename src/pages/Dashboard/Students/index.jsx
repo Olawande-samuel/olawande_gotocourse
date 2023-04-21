@@ -430,14 +430,12 @@ export function MyClasses() {
     }
 
     function handleNavigate(category, name, id) {
-        console.log("clicking");
         // localStorage.setItem("gotocourse-courseId", id)
         let courseCategory = category?.split(" ").join("-")
         let courseName = name?.split(" ").join("-")
         navigate(`/categories/${courseCategory}/courses/${courseName}/${id}/payment`)
     }
 
-    console.log({ courseList });
 
     return (
         <Students header={"My Courses"}>
@@ -687,7 +685,6 @@ export function Classes() {
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
     const [search, setSearch] = useState("");
 
-    // console.log(bootcamps?.data?.data);
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Courses">
             {/* <div className={clsx.students_profile}>
@@ -738,11 +735,9 @@ export function Wishlist() {
 
  
 
-    console.log({ wishlists });
 
     const value = useMemo(() => {
         return wishlists?.reduce((total, current) => {
-            console.log({ current });
             return total + current.price
         }, 0)
     }, [wishlists])
@@ -750,7 +745,6 @@ export function Wishlist() {
     // const Available=  bootcamps?.data?.data?.length > 0 && bootcamps?.data?.data?.some(r=> wishlists?.map(wishlist => wishlist.courseId).indexOf(r.bootcampId) >= 0)
     // const Available = bootcamps?.data?.data?.length > 0 && bootcamps?.data?.data?.filter(boot => boot.bootcampId === (wishlists?.map(wishlist => wishlist.courseId)))
 
-    // console.log({Available});
 
   
 
@@ -1098,7 +1092,6 @@ function DeleteModal({ id, open, handleClose }) {
             if (!success) throw new AdvancedError(message, statusCode);
             else {
                 const { data } = res;
-                console.log("reloading");
                 queryClient.invalidateQueries(["carts", "bootcamps"])
                 handleClose()
                 // toast.success(message, {
@@ -1168,7 +1161,6 @@ export function WishlistCheckOut() {
     const checkout = async () => {
         //get all ids
         let ids = wishlists.map(wishlist => wishlist.courseId);
-        console.log({ ids });
         //   payCarts
         try {
             setGeneralState({ ...generalState, loading: true })
@@ -1177,7 +1169,6 @@ export function WishlistCheckOut() {
             if (!success) throw new AdvancedError(message, statusCode);
             else if (statusCode === 1) {
                 const { data } = res;
-                console.log({ data });
                 setPayintent(data.clientSecret)
                 setShowStripeModal(true)
                 toast.success(message, {
@@ -1564,7 +1555,6 @@ export function Fees() {
 
     useQuery(["fetch my enrolledclasses"], () => fetchBootcampFees(userdata?.token), {
         onSuccess: (res) => {
-            console.log({ res });
             if (res?.data?.length > 0) {
                 setCourse((res?.data));
             }
@@ -1601,7 +1591,6 @@ export function Fees() {
                     if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
                     else {
                         const { data } = res;
-                        console.log({ data });
                         setFees(_ => data);
                     }
                 } catch (err) {
@@ -1648,7 +1637,6 @@ export function Fees() {
 
     const handlePay = async (paymentId, type) => {
         setGeneralState({ ...generalState, loading: true })
-        console.log({ type })
         try {
             const res = await payStudentFees(userdata.token, paymentId);
             // const res = type === "course" ? await payStudentFees(userdata.token, paymentId) : await addBootcamp({bootcampId: paymentId}, userdata.token);
@@ -1670,7 +1658,6 @@ export function Fees() {
 
     }
 
-    // console.log({ course });
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Payments">
             <div className={clsx.students_profile}>
@@ -1984,8 +1971,7 @@ export const Dashboard = ({ mixpanel }) => {
     const { data: myenrolledcourses, isSuccess: mycoursesuccess } = useQuery(["fetch my enrolledclasses"], () => fetchMyClasses(userdata?.token))
     // const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
     const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps());
-    // console.log({data})
-    // console.log("wish",wishlistData );
+    
     const topContent = [
         {
             id: 1,
@@ -2029,10 +2015,8 @@ export const Dashboard = ({ mixpanel }) => {
 
     function filterDates(date){
         let isFound
-        console.log({date})
         if(date){
           isFound = (new Intl.DateTimeFormat('en-US').format(new Date(date))?.includes(dateFilter))
-          console.log({isFound})
           return isFound
         }else {
             return false
@@ -2160,7 +2144,6 @@ function UpcomingCourses({ data, search }) {
     // const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
     // const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
     // const all = [...first, ...second, ...third];
-    // console.log({ second });
     const all = data?.length > 0 ? data?.filter(item => item.category === "TRAIN2 WORKABROAD") : [];
 
 
@@ -2304,12 +2287,10 @@ function AllAvailableCourses({ data, search }) {
         }
 
     }
-    // console.log({ data });
     const first = data?.length > 0 ? data?.filter(item => item.startDate?.includes("2023-03") && item.isActive && item.category !== "TRAIN2 WORKABROAD").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
     // const third = data?.length > 0 ? data?.filter(item => !item.startDate?.includes("2023-03") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
    
     const all = [...first];
-    console.log({all});
 
     return (
 
@@ -2455,7 +2436,6 @@ function AvailableCourses({ data, search }) {
 
     }
     
-    // console.log({ data });
     const first = data?.length > 0 ? data?.filter(item => item.bootcampId === "63f68ab678429071a0195c6d" && item.isActive) : [];
     const second = data?.length > 0 ? data?.filter(item => item.bootcampId === "6430661e1485c80cb3261471" && item.isActive) : [];
     const third = data?.length > 0 ? data?.filter(item => item.startDate?.includes("2023-03") && item.bootcampId !== "63f74cdc78429071a01a00bf" && item.bootcampId !== "63717978f0eaad8dcf392eeb" && item.isActive) : [];
@@ -2854,12 +2834,10 @@ export function GotoDashboard() {
                         user_type: route
                     })
 
-                    console.log(response)
                 } catch (err) {
                     console.error(err)
                     toast.error("An error occured")
                 } finally {
-                    console.log("done!!!")
                     setLoading(false)
                 }
             }

@@ -152,12 +152,10 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
   })
 
   const mytimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  console.log({mytimeZone})
 
   function convertStartDateTime(scheduledDate) {
     let mytimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     let localDateTime = new Date(scheduledDate).toLocaleString('en-US', { mytimeZone })
-    console.log({localDateTime})
     let date = localDateTime.split(",")[0]
     let time = localDateTime.split(",")[1]
     setStartDateTime({...startDateTime, startDate: date, startTime: time})
@@ -166,7 +164,6 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
   function convertEndDateTime(scheduledDate) {
     let mytimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     let localDateTime = new Date(scheduledDate).toLocaleString('en-US', { mytimeZone })
-    console.log({localDateTime})
     let date = localDateTime.split(",")[0]
     let time = localDateTime.split(",")[1]
     setEndDateTime({...endDateTime, endDate: date, endTime: time})

@@ -1948,7 +1948,7 @@ export const adminFunctions = {
     },
 
     deleteAUser: async function (token, data) {
-        console.log({ data });
+        // console.log({ data });
         try {
             const res = await axios.post(
                 `${baseURL}/admin/users/delete`,
@@ -2540,7 +2540,7 @@ export const studentFunctions = {
         }
     },
     fetchStudentFees: async function (token) {
-        console.log("studentpaymenttoken", token);
+        // console.log("studentpaymenttoken", token);
         try {
             const res = await axios.get(
                 `${baseURL}/student/courses/enrollments/payment/fetch`,
@@ -2554,7 +2554,7 @@ export const studentFunctions = {
                     },
                 }
             );
-            console.log("result payment", res);
+            // console.log("result payment", res);
 
             if (res.data.statusCode !== 1)
                 throw new AdvancedError(res.data.message, res.data.statusCode);
@@ -2575,7 +2575,7 @@ export const studentFunctions = {
         }
     },
     fetchBootcampFees: async function (token) {
-        console.log("studentpaymenttoken", token);
+        // console.log("studentpaymenttoken", token);
         try {
             const res = await axios.get(
                 `${baseURL}/student/bootcamps/enrollments/payments/fetch`,
@@ -2589,7 +2589,7 @@ export const studentFunctions = {
                     },
                 }
             );
-            console.log("result payment", res);
+            // console.log("result payment", res);
 
             if (res.data.statusCode !== 1)
                 throw new AdvancedError(res.data.message, res.data.statusCode);

@@ -21,12 +21,10 @@ const Editor = ({initialState, setBio, title= "Bio"}) => {
                 data={initialState}
                 onReady={(editor) => {
                   // You can store the "editor" and use when it is needed.
-                  console.log('Editor is ready to use!', editor);
 
                 }}
                 onChange={(event, editor) => {
                   const data = editor.getData();
-                  console.log({ event, editor, data });
 
                   setBio(data);
                   // setFormstate({...formstate, mentorBio: data})

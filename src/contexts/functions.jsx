@@ -2630,7 +2630,6 @@ export const adminFunctions = {
     },
 
     deleteAUser: async function (token, data) {
-        console.log({ data });
         try {
             const res = await axios.post(`${baseURL}/admin/users/delete`, JSON.stringify([data]),
                 {
@@ -3024,7 +3023,6 @@ export const adminFunctions = {
                 }
             )
 
-            console.log(res)
             const blob = new Blob([res], { type: "text/csv" })
             const href = URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -3086,8 +3084,7 @@ export const adminFunctions = {
         }
     },
     removeStudentToClass: async function (token, _data) {
-        console.log("token", token)
-        console.log("data", _data)
+      
         try {
             const res = await axios.post(`${baseURL}/admin/student/class/remove`,
                 JSON.stringify(_data),
@@ -3455,7 +3452,6 @@ export const studentFunctions = {
     },
 
     fetchStudentFees: async function (token) {
-        // console.log("studentpaymenttoken", token);
         try {
             const res = await axios.get(`${baseURL}/student/courses/enrollments/payment/fetch`,
                 {
@@ -3467,7 +3463,6 @@ export const studentFunctions = {
                         return status >= 200 && status <= 505;
                     }
                 })
-            // console.log("result payment", res);
 
             if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -3490,7 +3485,6 @@ export const studentFunctions = {
         }
     },
     fetchBootcampFees: async function (token) {
-        // console.log("studentpaymenttoken", token);
         try {
             const res = await axios.get(`${baseURL}/student/bootcamps/enrollments/payments/fetch`,
                 {
@@ -3502,7 +3496,6 @@ export const studentFunctions = {
                         return status >= 200 && status <= 505;
                     }
                 })
-            // console.log("result payment", res);
 
             if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
             return {
@@ -3526,7 +3519,6 @@ export const studentFunctions = {
     },
 
     payStudentFees: async function (token, paymentId) {
-        // console.log({token});
         try {
             const res = await axios.post(`${baseURL}/student/payment/init`, {
                 paymentId
@@ -3562,7 +3554,6 @@ export const studentFunctions = {
         }
     },
     payCarts: async function (token, paymentIds) {
-        // console.log({token});
         try {
             const res = await axios.post(`${baseURL}/user/bootcamp/add/cart`, {
                 bootcampIdArr: paymentIds
@@ -3599,7 +3590,6 @@ export const studentFunctions = {
     },
 
     clearCarts: async function (token, data) {
-        // console.log({token});
         try {
             const res = await axios.post(`${baseURL}/user/wishlist/clear`, {
                 data: JSON.stringify(data)
@@ -3984,8 +3974,7 @@ export const studentFunctions = {
                         return status >= 200 && status <= 505;
                     }
                 })
-            // Error from backend
-            // console.log(res)
+          
             if (res.data.message !== "Notifications fetched successfully") throw new AdvancedError("Error fetching notifications", res.data.statusCode);
             return {
                 ...res.data,
@@ -5484,7 +5473,6 @@ export const consoleFunctions = {
             if (err.statusCode === 2) {
                 return
 
-                console.log("something went wrong")
             } else {
 
                 return {
@@ -5519,7 +5507,6 @@ export const consoleFunctions = {
             if (err.statusCode === 2) {
                 return
 
-                console.log("something went wrong")
             } else {
 
                 return {
@@ -5978,9 +5965,7 @@ export const consoleFunctions = {
         }
     },
     joinGroup: async function (token, id, data) {
-        // console.log(id);
-        // console.log(token);
-        // console.log({ data });
+      
         try {
             const res = await axios.post(`${baseURL}/classes/group/join/${id}`, JSON.stringify({
                 classId: data.classId,
@@ -6065,7 +6050,6 @@ export const consoleFunctions = {
     },
 
     markFileAsCompleted: async function (token, id, fileIds, type) {
-        // console.log({ token }, { id }, { fileIds });
 
         try {
 

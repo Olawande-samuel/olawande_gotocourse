@@ -607,8 +607,7 @@ const ChatModule = () => {
 
     const getContentfromQuery = useQuery(["all groups"], () => fetchGroups(userdata.token, classId), {
         onSuccess: (res)=> {
-            console.log("successful query")
-            console.log(res)
+     
 
         }
     } )
@@ -673,7 +672,6 @@ function MailTab(){
 
     const mutation = useMutation(([token, id, data])=>messageAllStudents(token, id, data), {
         onSuccess: (res)=>{
-            console.log(res);
             if(res.success){
                 toast.success(res.message);
             }
@@ -699,17 +697,14 @@ function MailTab(){
                     data=""
                     onReady={editor => {
                         // You can store the "editor" and use when it is needed.
-                        console.log('Editor is ready to use!', editor);
                     }}
                     onChange={(event, editor) => {
                         const data = editor.getData();
                         setFormstate(data)
                     }}
                     onBlur={(event, editor) => {
-                        console.log('Blur.', editor);
                     }}
                     onFocus={(event, editor) => {
-                        console.log('Focus.', editor);
                     }}
                 />
             </MailBodyContainer>
@@ -770,12 +765,10 @@ function ActiveChat(){
     const userdata = getItem(KEY)
     const allMessages = useQuery(userdata?.token && ["get unread messages"], () => getUnreadMessages(userdata?.token), {
         onSuccess: (res)=>{
-            console.log({res})
         }
     })
     const {classId} = useParams() 
     const navigate = useNavigate() 
-    console.log({allMessages})
 
     function openChat(e){
         e.preventDefault();
@@ -858,7 +851,9 @@ export function MailDetail(){
     const {userId} = useParams()
 
     const fetchMessages = useQuery(["messageList", userdata.token, chatData?.fromUser], ()=>getMessages(userdata.token, userId), {
-        onSuccess: (res)=>console.log(res),
+        onSuccess: (res)=>{
+
+        },
         onError: (err)=>console.error(err)
     })
 
@@ -866,7 +861,6 @@ export function MailDetail(){
         onSuccess: (res)=>{
             queryClient.invalidateQueries("messageList")
             setBody("")
-            console.log(res)
         },
         onError: (err)=>console.error(err)
     })
@@ -925,8 +919,6 @@ function ChatTab(){
 
     const getContentfromQuery = useQuery(["all groups"], () => fetchGroups(userdata.token, classId), {
         onSuccess: (res)=> {
-            console.log("successful query")
-            console.log({res})
             if(res.data?.length > 0){
                 setGroups(res.data)
             }
@@ -1006,7 +998,6 @@ function Modal({setShow}){
 
     const mutation = useMutation(([token, data])=>addGroup(token, data), {
         onSuccess: (res) => {
-            console.log(res)
             setShow(_ => false)    
             queryClient.invalidateQueries("all groups")
 
@@ -1216,7 +1207,6 @@ export function GroupContent(){
 
     const mutation = useMutation(([usertoken, groupId, data]) => sendMessage(usertoken, groupId, data), {
         onSuccess: (res)=> {
-            console.log(res)
             setMessageList([...messageList, res.data])
             queryClient.invalidateQueries("group message")
         },
@@ -1313,7 +1303,7 @@ function ChatAside(){
     })
 
     const approveMutation = useMutation(([token, id, data])=>approveStudent(token, id, data), {
-        onSuccess: (res)=> {console.log(res)
+        onSuccess: (res)=> {
             queryClient.invalidateQueries("group students")
         },
         onError: (err)=> console.error(err)
@@ -1321,7 +1311,7 @@ function ChatAside(){
 
 
     const addStudentToGroupMutation = useMutation(([token, id, data])=>addToGroup(token, id, data), {
-        onSuccess: (res)=> {console.log(res)
+        onSuccess: (res)=> {
             queryClient.invalidateQueries("group students")
         },
         onError: (err)=> console.error(err)

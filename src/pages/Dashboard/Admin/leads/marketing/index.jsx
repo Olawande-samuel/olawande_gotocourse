@@ -67,7 +67,6 @@ export default function Market() {
     {
       enabled: userdata.token !== null,
       onSuccess: res => {
-        console.log(res)
       },
       onError: err => {
         console.error(err)
@@ -91,7 +90,6 @@ export default function Market() {
 
   const exportToCsv = useMutation(exportLeads, {
     onSuccess: (res) => {
-      console.log("csv", res)
     },
     onError: err => {
       console.log(err)
@@ -223,7 +221,6 @@ function MarketingLeads() {
 
   }
 
-  console.log({ data });
 
 
   return (
@@ -294,7 +291,6 @@ function TableRow({ item, index }) {
   const [loading, setLoading] = useState(false)
   const userdata = getItem("gotocourse-userdata")
 
-  console.log({item});
 
 
   const deleteLeads = useMutation(([token, id]) => deleteLead(token, id),

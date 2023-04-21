@@ -37,7 +37,6 @@ function createBoarding(data){
 }
 function isValid(data){
     for(let d in data){
-        console.log(d);
         if(data[d].trim() === "") return false;
         else continue;
     }
@@ -51,7 +50,6 @@ const OnBoarding = () => {
     const {getItem} = useLocalStorage();
     window.onbeforeunload = function() { alert("Your work will be lost."); };
     let userdata = getItem(VERIFICATION_KEY)
-    console.log(userdata);
     const [loading, setLoading] = useState(false);
     const [formstate, setFormstate] = useState({
         firstName: userdata?.firstName ?? "",
@@ -69,10 +67,7 @@ const OnBoarding = () => {
         qualification: "",
         employmentStatus: ""
     })
-    useEffect(() => {
-        console.log("OnBoarding page is mounted");
-        return () => console.log("Removing OnBoarding page");
-    }, [])
+
     function pageHandler(_){ setPage(old => old += 1);}
     function backpageHandler(_){ setPage(old => old -= 1);}
 
@@ -114,7 +109,6 @@ const OnBoarding = () => {
 
     function changeHandler(e){
         const {name, value} = e.target;
-        console.log({name, value, formstate})
         setFormstate(old => {
             return {
                 ...old,
@@ -200,7 +194,6 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate, backp
                 [name]: el
             }
         })
-        console.log({formstate, e, el});
     }
     const [value, setValue] = useState()
     const [phoneError, setPhoneError] = useState(false)
@@ -229,7 +222,6 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate, backp
 
     useEffect(()=>{
         if(value){
-            console.log(isValidPhoneNumber(value) === true);
             if(isValidPhoneNumber(value) === true){
                 setFormstate({...formstate, phoneNumber: value})
                 setPhoneError(false)
@@ -239,7 +231,6 @@ function Questions({submitHandler, formstate, changeHandler, setFormstate, backp
         }
     },[value])
 
-console.log({formstate})
     return (
         <div className={clsx.question}>
             <div className={clsx.question_container}>

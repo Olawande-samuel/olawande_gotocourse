@@ -908,7 +908,6 @@ export const Teachers = ({ children, isMobile, userdata, notification, header, l
       (async() => {
         try{
           const res = await fetchNotifications(userData?.token);
-          console.log({res})
           if(res){
             const {message, success, statusCode} = res;
             if(!success) throw new AdvancedError(message, statusCode);

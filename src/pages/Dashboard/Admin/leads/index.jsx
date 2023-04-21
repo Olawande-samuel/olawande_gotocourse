@@ -92,7 +92,6 @@ export default function AdLeads() {
     {
       enabled:userdata.token !== null,
       onSuccess: res=> {
-        console.log(res)
       },
       onError: err=>{
         console.error(err)
@@ -103,7 +102,6 @@ export default function AdLeads() {
 
   const exportToCsv = useMutation(exportLeads, {
     onSuccess: (res) => {
-      console.log("csv", res)
     },
     onError: err=>{
       console.log(err)
@@ -221,7 +219,6 @@ function HomepageHero({ name, mrktData}){
   } , [value?.$d])
 
 
-  console.log({mrktData})
 
   const fetchAdLeads = useQuery(["fetchAdLeads", userdata?.token, name], ()=>fetchLeads(userdata.token),
     {

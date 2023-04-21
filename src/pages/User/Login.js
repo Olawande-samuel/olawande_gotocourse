@@ -51,12 +51,10 @@ const Login = () => {
 
     try {
       const response = await login(data, "user");
-      console.log(response)
       const {success, statusCode, message} = response;
       
       if(success){
         const {data: d} = response;
-        console.log({response})
         removeItem(KEY);
         setGeneralState(old => {
           return {
@@ -112,7 +110,6 @@ const Login = () => {
   };
 
   function gotoPledre(e){
-    console.log({pledre})
     e.preventDefault();
     let Data= {
       email: data.email,
@@ -150,7 +147,6 @@ const Login = () => {
   function signInWithGoogle(e){
     e.preventDefault()
     signInWithPopup(authentication, provider).then(res=>{
-        console.log(res)
         if(res.user?.accessToken){
          let token =  {
           accessToken: res.user.accessToken
@@ -169,7 +165,6 @@ const Login = () => {
    function signInWithFacebook(e){
     e.preventDefault()
     signInWithPopup(authentication, facebookProvider).then(res=>{
-      console.log(res)
       if(res.user?.accessToken){
         if(res.user?.accessToken){
           let token =  {

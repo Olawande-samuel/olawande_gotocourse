@@ -44,17 +44,13 @@ export const BootcampPayment = () => {
   });
 
   const params = useParams();
-  console.log({ params })
 
   const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
     onSuccess: res => {
-      console.log({ res })
-      console.log(res.data.find(item => item.bootcampId === params.id))
       if (res.data.length > 0) {
         let info = res.data.find(item => item.bootcampId === params.id)
         setBootcamp(info)
         let infoPrice = info.packages.length > 0 ? info.packages[0].price : info.price
-        console.log({ infoPrice })
         setPrice(infoPrice)
 
         return
@@ -120,7 +116,6 @@ export const BootcampPayment = () => {
             throw new AdvancedError(message, statusCode);
           const { data } = response;
   
-          console.log({ data });
   
           setStripeId(data.clientSecret);
           setShowStripeModal(true);
@@ -149,7 +144,6 @@ export const BootcampPayment = () => {
           if (!success || statusCode !== 1)
             throw new AdvancedError(message, statusCode);
           const { data } = response;
-          console.log({ data });
           toast.success("You have successfully enrolled for this course.")
           setTimeout(()=>{
             navigate("/student")
@@ -407,10 +401,8 @@ export const CheckoutForm = ({ token, setShowStripeModal,cart }) => {
         },
       });
 
-      console.log({ result })
       result && setLoading(false);
 
-      console.log({ result })
 
       if (result.error) {
         toast.error(result.error.message, {
@@ -512,7 +504,6 @@ export const PaymentStatus = ({ success }) => {
 
 
 
-  console.log(id)
   const userdata = getItem(KEY);
 
 

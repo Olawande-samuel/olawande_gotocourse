@@ -11,8 +11,6 @@ function AllCelebs(){
         initialValue: []
     })
 
-    console.log({data})
-    console.log(data?.data?.filter(item=>item.mentorFirstName.toLowerCase().includes(search.toLowerCase())))
 
     return (
         <Lounge>

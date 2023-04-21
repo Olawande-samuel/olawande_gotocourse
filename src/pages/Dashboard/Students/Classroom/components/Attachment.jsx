@@ -106,7 +106,6 @@ const Attachement = ({
     const userdata = getItem(KEY);
     const contentId = searchParams.get("contentId");
 
-    // console.log({contentId}, content.contentId);
 
 
     let icon = (type) => {
@@ -114,7 +113,6 @@ const Attachement = ({
     }
 
     const getStatus = (contentId, items, type, status) => {
-        // console.log({contentId}, {items}, {type});
         if (type === "FILE_VIDEO") {
             let all = items.filter(item => item?.contentId === contentId);
             if(all?.length > 0){
@@ -127,7 +125,6 @@ const Attachement = ({
         if (type === "QUIZ") {
             let all = items.filter(item => item?.contentId === contentId);
             if(all?.length > 0){
-                console.log({all}, {contentId}, (all?.filter(content => content?.attemptedBy?.includes(userdata.id))?.length === all?.length));
                 return (all?.filter(content => content?.attemptedBy?.includes(userdata.id))?.length === all?.length) ? <CompleteIcon $isComplete={true} status={status}/> : <CompleteIcon status={status}/>
 
             }
@@ -147,7 +144,6 @@ const Attachement = ({
     }
 
     const getLockedStatus = (contentId, items, lock, status) => {
-        // console.log({ contentId }, { items }, { lock });
         let findItem = items.find(item => item?.contentId === contentId);
         if (findItem) {
             return lock ? <Locked $isComplete={true} status={status} /> : <Locked status={status} />

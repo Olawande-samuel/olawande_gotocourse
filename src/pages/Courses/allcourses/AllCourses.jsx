@@ -82,14 +82,12 @@ export function TabsComp(){
 
   const categories = useQuery(["categories"], () => fetchCategories(), {
     onSuccess: res => {
-      console.log("categories",res.data)
     },
     onError: err => console.error(err)
 
   });
   const courses = useQuery(["courses"], () => fetchCourses(), {
     onSuccess: res => {
-      console.log("courses",res.data)
     },
     onError: err => console.error(err)
 

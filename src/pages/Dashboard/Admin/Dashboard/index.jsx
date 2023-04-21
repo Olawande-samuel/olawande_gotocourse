@@ -106,10 +106,7 @@ const communities = [
 
 
 const Dashboard = () => {
-    useEffect(() => {
-        console.log("dashboard mounted")
-        return () => console.log("dashbord unmounted")
-    }, [])
+   
     const {getItem} = useLocalStorage();
     const [chartData, setChartData] = useState({
         students: 0,
@@ -127,14 +124,11 @@ const Dashboard = () => {
     useEffect(() => {
         if(flag.current) return;
         (async() => {
-            console.log("calling")
             try{
                 const res = await Promise.all([fetchTeachers(userdata?.token), fetchStudents(userdata?.token), fetchCourses(userdata?.token), fetchCategories(userdata?.token)]);
                 
                 const [teachers, students, courses, categories] = res;
                 const {success, statusCode, message} = teachers;
-                console.log({students})
-                console.log({teachers}) 
                 if(!success) throw new AdvancedError(message, statusCode);
                 else {
                     //no error found
@@ -152,9 +146,7 @@ const Dashboard = () => {
                    
                 }
             }catch(err){
-                console.log(err.statusCode, err.message);
                 if(err.statusCode === 2) err.message = "Session expired. Please login again";
-                console.log(err.statusCode, err.message);
                 toast.error(err.message, {
                     position: "top-right",
                     autoClose: 4000,
@@ -169,7 +161,6 @@ const Dashboard = () => {
         flag.current = true;
     }, [chartData])
 
-    console.log(chartData);
 
 
     // const enrolledStudents = useMemo(()=>{
@@ -194,7 +185,6 @@ const Dashboard = () => {
 		return [];
 	}, [students]);
 
-    // console.log(enrolledStudents?.map(item => item.enrollmentData.find(item => item.status === "paid")))
 
     
     const headerCards = [

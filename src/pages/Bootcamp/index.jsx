@@ -465,7 +465,6 @@ export function NewBootcampDetailsComponent() {
 
   const bootcamps = useQuery(["bootcamps", id], () => fetchBootcamps(), {
     onSuccess: res => {
-      // console.log({res})
       if (res.data) {
         setBootcampTrainingInfo(res.data.find(item => item.bootcampId === id))
 
@@ -575,12 +574,7 @@ export function NewBootcampDetailsComponent() {
     }
   }
 
-  const handleClick = (event) => {
-    // console.log(event.currentTarget);
-  };
 
-  // console.log({ bootcampTrainingInfo });
-  // console.log("all", bootcamps.data?.data);
 
   useEffect(() => {
     getWishList()
@@ -600,7 +594,6 @@ export function NewBootcampDetailsComponent() {
           bootcampTrainingInfo?.subCategory === "PATH_FINDERS" ? "Pathfinders Courses" : "Executive Courses"
 
 
-  console.log({ bootcampTrainingInfo })
   return (
     <Layout>
       <div className={clsx.bootcampTraining}>
@@ -796,8 +789,6 @@ export function NewBootcampDetailsComponent() {
 
 export function DetailsHero({ navHeight, title, description, addToWishList, subCategory, handleBootstrapEnrollment, loading, img, endDate, startDate, wishlistState, removeCourse, userdata, all }) {
 
-  console.log({ all })
-
   const [open, setOpen] = useState(false)
 
 
@@ -901,8 +892,7 @@ export function Upcome({ _id, title, duration, category, subCategory, bootcampId
   const userdata = getItem("gotocourse-userdata");
   const navigate = useNavigate();
 
-  // console.log({all});
-  // console.log({category});
+ 
 
   async function handleBootstrapEnrollment(e) {
     e.preventDefault();
@@ -959,7 +949,6 @@ const modalStyle = {
 };
 
 export function ShareModal({ x, open, setOpen, url }) {
-  console.log({ x })
   const inputRef = useRef()
   function copyText() {
 

@@ -136,7 +136,6 @@ export const CreateGroup = ({open, setOpen})=> {
     })
     const [page, setPage] = useState(0);
     const list = [GroupDetails , AddStudentToGroup]
-    console.log({groupData})
     return (
         <Modal
             open={open}
@@ -171,13 +170,10 @@ const GroupDetails = ({setPage, setGroupData}) => {
     
     const [data, setData]= useState({})
     
-    console.log({data})
 
     const createGroup = useMutation(([token, data])=>createNewGroup(token, data), {
         onSuccess: (res)=> {
-            console.log(res)
             if(res.statusCode === 1){
-                console.log({res})
 
                 setGroupData((prev)=>{
                     return {
@@ -192,12 +188,9 @@ const GroupDetails = ({setPage, setGroupData}) => {
 
     const addToFile = useMutation(([token, data])=> addNewFile(token, data), {
         onSuccess: (res)=> {
-            console.log(res)
             if(res.statusCode === 1){
-                console.log({res})
                 // setUploadData(res.data)
                 setData({...data, groupImage: res.data.fileId})
-                console.log("setting done")
             }
         },
         onError: err => console.error(err)
@@ -206,7 +199,6 @@ const GroupDetails = ({setPage, setGroupData}) => {
     
     useEffect(() => {
         cloudinaryRef.current = window?.cloudinary;
-        console.log(cloudinaryRef?.current);
         widgetRef.current = cloudinaryRef?.current?.createUploadWidget({
             cloudName: process.env.REACT_APP_CLOUD_NAME,
             uploadPreset: "ml_default",
@@ -214,11 +206,8 @@ const GroupDetails = ({setPage, setGroupData}) => {
             sources: ["local"]
         }, function (error, result) {
             if (result.event === "success") {
-                console.log({result});
-                console.log(result?.info);
                 let ext = result?.info?.secure_url.split("/");
                 let extension = ext[ext.length -1]
-                console.log({extension});
                 // setFileUrl(extension)
                 // function onChange(e){
                 //     setData((prev) => {
@@ -298,7 +287,6 @@ const AddStudentToGroup = ({setPage, data, groupData, setGroupData}) => {
 
     const getStudents = useQuery(["fetch student list"], ()=>fetchBootcampApplications(userdata.token, id), {
         onSuccess: res => {
-            console.log({res})
         },
         onError: err => {console.error(err)}
 
@@ -307,7 +295,6 @@ const AddStudentToGroup = ({setPage, data, groupData, setGroupData}) => {
 
     const addStudents = useMutation(([token, id, data]) => addStudentGroup(token, id, data), {
         onSuccess: res => {
-            console.log(res)
         },
         onError: err => {console.error(err)}
     })

@@ -542,7 +542,6 @@ const FileComponent = (contentItem) => {
     const [open, setOpen] = useState(false)
 
     const getExtention = (val) => {
-        // console.log({ val });
 
         if (val?.split('/')[0] === "video") {
             return "video"
@@ -736,10 +735,8 @@ const QuizComponent = ({ contentItem, userdata, attemptedStatus, page, setPage }
     const handleInputChange = (e, questionId, index) => {
         const { value } = e.target;
         let list = [...myAnswers]
-        // console.log({ questionId })
         let thisOption = list.findIndex(item => item.questionId === questionId)
 
-        // console.log("questionId2Option: " + thisOption)
         if (thisOption === -1) {
             list.push({ questionId: questionId, answers: [value] })
         } else {
@@ -1029,7 +1026,6 @@ const Classroom = () => {
 
     const { isLoading } = useQuery(["fetch student domains", id], () => fetchStudentDomains(userdata.token, id), {
         onSuccess: (res) => {
-            // console.log(res.data)
             setModules(res.data)
         }
     })
@@ -1294,7 +1290,6 @@ const Classroom = () => {
 
 
     const handleFileCompleted = async (contentId, contentsId, type) => {
-        // console.log("token", userdata?.token);
         setLoading(true)
 
         let ids = [];
@@ -1315,24 +1310,12 @@ const Classroom = () => {
             console.log({ error });
         }
 
-        // console.log({ ids });
 
 
 
     }
 
 
-
-
-
-    // console.log({ contentId });
-
-
-    // console.log({ modules });
-    // console.log({ reduceContent });
-    // console.log({ reduceItem });
-    // console.log({ contents });
-    // console.log({ totalItem });
 
     return (
         <Container>

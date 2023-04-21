@@ -46,7 +46,6 @@ const SignUp = () => {
     trainee: false
   });
 
-  console.log({ data });
 
   useEffect(() => {
     if (data.fullname !== "") {
@@ -71,7 +70,6 @@ const SignUp = () => {
   // Email and Password
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(data)
 
     setLoading(true);
     try {
@@ -85,7 +83,6 @@ const SignUp = () => {
       if(others.fullname.split(" ")[1] === "" || others.fullname.split(" ")[0] === ""){
         throw new AdvancedError("Please enter your first and last name separated by a single space", 0)
       }
-      // console.log(others.fullname.trim())
       // main 
       const response = await register({ ...others }, "user");
       let { success, message, statusCode } = response;
@@ -119,7 +116,6 @@ const SignUp = () => {
   async function socialSignUp(token, type) {
     try {
       const res = type === "google" ? await googleSignUp(token) : await facebookSignUp(token)
-      console.log(res)
       if (res.statusCode !== 1) throw new AdvancedError(res.message, res.statusCode)
       localStorage.setItem(VERIFICATION_KEY, JSON.stringify(res.data))
       navigate("/user-onboarding")
@@ -131,7 +127,6 @@ const SignUp = () => {
   function signUpWithGoogle(e) {
     e.preventDefault()
     signInWithPopup(authentication, provider).then(res => {
-      console.log(res)
       if (res.user?.accessToken) {
         let token = {
           accessToken: res.user.accessToken,
@@ -149,7 +144,6 @@ const SignUp = () => {
   function signUpWithFacebook(e) {
     e.preventDefault()
     signInWithPopup(authentication, facebookProvider).then(res => {
-      console.log(res)
       if (res.user?.accessToken) {
         if (res.user?.accessToken) {
           let token = {
@@ -171,7 +165,6 @@ const SignUp = () => {
 
 
   function allowOnAccountExistError(error, type, usertype) {
-    console.log("customdata mail", error.customData.email);
     setLoading(true)
     if (type === "google") {
       const credential = FacebookAuthProvider.credentialFromError(error);

@@ -194,7 +194,6 @@ export function ConsoleClass() {
     localStorage.setItem("gotocourse-teacherbootcamp", JSON.stringify(item))
     navigate("details/" + _id);
   }
-  console.log({ courseList })
   return (
     <Teachers header={"My Classes"} >
       {loading && <Loader />}

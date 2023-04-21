@@ -15,10 +15,7 @@ import Input from "../../components/Input";
 
 
 const Contact = () => {
-    useEffect(() => {
-        console.log("Contact page is mounted");
-        return () => console.log("Contact page is unmounted");
-    }, [])
+   
     const [height, setHeight] = useState("");
 
     const infoData = [
@@ -142,7 +139,6 @@ function ContactForm({setFormHeight}){
         e.preventDefault()
         submitForm.mutate(formstate)
     }
-    console.log(formstate)
 
     const inputData = [
         {

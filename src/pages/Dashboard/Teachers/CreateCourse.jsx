@@ -138,7 +138,6 @@ export const Syllabus = ({
     });
     setOpenPreview(true);
   };
-  console.log({formstate})
 
   async function submitHandler(e) {
     e.preventDefault();
@@ -155,7 +154,6 @@ export const Syllabus = ({
           instructors:[...instructorsList, ...currentInstructor],
           categoryName: formstate.category
         }
-        console.log(formdata)
         delete formdata.category
         if ( formdata.name === "" || formdata.categoryName === "" || formdata.description === "" ) throw new AdvancedError("All fields are required", 0);
         
@@ -176,7 +174,6 @@ export const Syllabus = ({
       }
     } else {
     try {
-      console.log({formstate})
       let formdata = {
         ...formstate,
         type:"PACKAGE",

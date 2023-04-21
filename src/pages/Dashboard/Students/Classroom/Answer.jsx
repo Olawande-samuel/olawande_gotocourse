@@ -84,7 +84,6 @@ const FileComponent = ({ contentItem, index }) => {
                 method: 'GET',
                 responseType: 'blob',
             }).then((response) => {
-                console.log({ response })
                 const href = URL.createObjectURL(response.data);
                 const link = document.createElement('a');
                 link.href = href;
@@ -101,7 +100,6 @@ const FileComponent = ({ contentItem, index }) => {
                 method: 'GET',
                 responseType: 'blob',
             }).then((response) => {
-                console.log({ response })
                 const href = URL.createObjectURL(response.data);
                 const link = document.createElement('a');
                 link.href = href;
@@ -118,7 +116,6 @@ const FileComponent = ({ contentItem, index }) => {
 
     }
 
-    console.log({ contentItem });
     return (
         <div>
             <Paper variant='outlined' className="paper">

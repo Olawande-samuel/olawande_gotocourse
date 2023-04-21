@@ -180,7 +180,6 @@ const Events = () => {
 
 
 function Upcoming({ id, event }) {
-    console.log({ event });
     return (
         <div className={style.upcoming_event}>
             <div className={style.upcoming_event_left}>
@@ -266,7 +265,6 @@ export function Event() {
     const webinarData = useQuery(["fetch webinar", id], () => getAWebinar(id), {
         onSuccess: (res) => {
             if (res.data) {
-                console.log("data", res.data);
                 setWebinar(res.data)
 
             }

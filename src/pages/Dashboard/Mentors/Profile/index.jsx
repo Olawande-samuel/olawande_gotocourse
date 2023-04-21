@@ -95,7 +95,6 @@ const Profile = () => {
           }
         }
         get();
-        console.log(userdata, 'line 99');
       }
   
       flag.current = true;

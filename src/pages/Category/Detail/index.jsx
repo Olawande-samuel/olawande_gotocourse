@@ -330,7 +330,6 @@ const Detail = ({ preview }) => {
 
   const queryClass = useQuery(["fetchclasses"], fetchBootcamps, {
     onSuccess: (res)=>{
-      console.log(res)
       setCategoryCourses(res.data?.filter(item => item.category === courseCategory))
     },
     onError: (error)=>{

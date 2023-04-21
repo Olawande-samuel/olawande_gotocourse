@@ -52,17 +52,13 @@ export const BootcampPaystackPayment = () => {
   const userData = getItem(KEY);
 
   const params = useParams();
-  console.log({ params })
 
   const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
     onSuccess: res => {
-      console.log({ res })
-      console.log(res.data.find(item => item.bootcampId === params.id))
       if (res.data.length > 0) {
         let info = res.data.find(item => item.bootcampId === params.id)
         setBootcamp(info)
         let infoPrice = info.packages.length > 0 ? info.packages[0].price : info.price
-        console.log({ infoPrice })
         setPrice(infoPrice)
 
         return
@@ -125,7 +121,6 @@ export const BootcampPaystackPayment = () => {
           if (!success) throw new AdvancedError(message, statusCode);
           else if (statusCode === 1) {
             const { data } = res;
-            console.log({ data });
             if (data) {
               window.open(data?.paystackInfo?.data?.authorization_url)
             }
@@ -155,7 +150,6 @@ export const BootcampPaystackPayment = () => {
           if (!success || statusCode !== 1)
             throw new AdvancedError(message, statusCode);
           const { data } = response;
-          console.log({ data });
           toast.success("You have successfully enrolled for this course.")
           navigate("/student")
 
@@ -206,7 +200,6 @@ export const BootcampPaystackPayment = () => {
   // }
 
 
-  console.log({ resp });
 
 
   const handlePayment = async () => {
@@ -217,7 +210,6 @@ export const BootcampPaystackPayment = () => {
       if (!success) throw new AdvancedError(message, statusCode);
       else if (statusCode === 1) {
         const { data } = res;
-        console.log({ data });
         if (data) {
           window.open(data?.paystackInfo?.data?.authorization_url)
         }
@@ -256,13 +248,13 @@ export const BootcampPaystackPayment = () => {
   // you can call this function anything
   const onSuccess = (reference) => {
     // Implementation for whatever you want to do with reference and after success call.
-    console.log(reference);
+    // console.log(reference);
   };
 
   // you can call this function anything
   const onClose = () => {
     // implementation for  whatever you want to do when the Paystack dialog closed.
-    console.log('closed')
+    // console.log('closed')
   }
 
   return (
@@ -469,10 +461,8 @@ export const CheckoutForm = ({ token, setShowStripeModal, cart }) => {
         },
       });
 
-      console.log({ result })
       result && setLoading(false);
 
-      console.log({ result })
 
       if (result.error) {
         toast.error(result.error.message, {
@@ -574,7 +564,6 @@ export const PaymentStatus = ({ success }) => {
 
 
 
-  console.log(id)
   const userdata = getItem(KEY);
 
 

@@ -461,7 +461,6 @@ function AllUsers() {
 	const allStudentTeacher = useQuery(["get my teachers", userData?.token], () => getMyTeachers(userData?.token, id), {
 	  enabled: userData?.userType === "student",
 	  onSuccess: (res)=>{
-		  console.log(res)
 	    if(res.statusCode === 1){
 	      setTeachers(res.data)
 	    }
@@ -471,7 +470,6 @@ function AllUsers() {
 
 	const allGroups = useQuery(["get all student admins", userData?.token], () => fetchMyGroups(userData?.token), {
 	    onSuccess: (res)=>{
-			console.log({res})
 			if (res.data?.length > 0) {
 				let data = res.data;
 				// let admin = res.data.filter(admin=> admin.firstName === "Admiralty")
@@ -634,7 +632,6 @@ function OpenedChat() {
 	const GroupMessages = useQuery([`get group messages ${chatDetail?.groupId}`], ()=>getGroupMessages(userData.token, chatDetail?.groupId),{
 		enabled: chatDetail?.groupId !== "" || chatDetail?.groupId !== null,
 		onSuccess: (res) => {
-			console.log("fetched group messages")
 			if (res.data?.length > 0) {
 				setMessageList(res.data);
 			} else {

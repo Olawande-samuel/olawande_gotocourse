@@ -3579,7 +3579,6 @@ export function BootcampDetails({ }) {
 									id="combo-box-demo"
 									sx={{ width: 300 }}
 									onChange={(e, newValue) => {
-										console.log({ newValue });
 										// setValue(newValue);
 										setStudentData({ ...studentData, userId: newValue.userId })
 									}}

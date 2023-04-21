@@ -94,7 +94,7 @@ const AssessmentItem = ({ x }) => {
   return (
     <>
 
-{/* {isLoading && <Loader/>} */}
+      {/* {isLoading && <Loader/>} */}
 
       <div className="quizaccordion">
         {reduceContent?.length > 0 && <Accord reduceContent={reduceContent} reduceItem={reduceItem} />}
@@ -117,7 +117,7 @@ const Accord = ({ reduceContent, reduceItem }) => {
 
       // let quizDetail = reduceContent?.find(item => item?.contentId === contentId);
       let contentDetail = reduceItem?.find(item => item?.contentId === contentId);
-      
+
       return (
         <>
           <div className="assessbox">
@@ -177,7 +177,7 @@ const AnswerAssessmentItem = ({ x }) => {
 
   const { isLoading } = useQuery(["fetch student domains", x?.bootcampId], () => fetchStudentDomains(userdata.token, x?.bootcampId), {
     onSuccess: (res) => {
-      
+
       setModules(res.data)
     }
   })
@@ -226,10 +226,11 @@ const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
       let contentDetail = reduceModules?.find(item => item?.contentId === contentId);
       let quizDetail = reduceContent?.find(item => item?.contentId === contentId);
       // let DomainDetail = modules?.find(item => item?.contentId === contentDetail?.domain);
-      const score = () =>{
+
+      const score = () => {
         return assessment?.find(assess => assess.contentId === x?.contentId)?.questions?.reduce((total, current) => total + current?.grade, 0)
 
-    }
+      }
 
       return (quizDetail &&
         <div key={i} className="assessmentaccord">
@@ -249,18 +250,31 @@ const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
 
             <div className="assessright">
               <div>
-              <p className="assesstitle">Total score: {x?.totalScore}/{score()}</p>
-              <p className="assesstitle">Attempts: {quizDetail?.attempts}</p>
+                <p className="assesstitle">Total score: {x?.totalScore}/{score()}</p>
+                <p className="assesstitle">Attempts: {quizDetail?.attempts}</p>
+                <p className="assesstitle">Max-Attempts: {quizDetail?.maxAttempts}</p>
 
               </div>
               <button className="assessbold" data-id={quizId} disabled
               // onClick={() => setShow(!show)}
-              >Graded: {x?.graded ? "true" : "false"}</button>
+              >Graded: {x?.graded ? "true" : "false"}
+              </button>
 
-               <button className="assessbold" data-id={quizId}
-               disabled={!x?.graded}
-              onClick={() => navigate(`/student/console/answers?classId=${quizDetail?.classId}&contentId=${quizDetail?.contentId}`)}
-              >Show Answer</button>
+              <button className="assessbold" data-id={quizId}
+                disabled={!x?.graded}
+                onClick={() => navigate(`/student/console/answers?classId=${quizDetail?.classId}&contentId=${quizDetail?.contentId}`)}
+              >Show Answer
+              </button>
+
+              {(quizDetail?.attempts < quizDetail?.maxAttempts) &&
+                <button className="assessbold" data-id={quizId} 
+                onClick={() => navigate(`/student/class-console/class/${quizDetail?.classId}?contentId=${quizDetail?.contentId}`)}
+                >Try Again
+                </button>
+
+              }
+
+            
             </div>
           </div>
 

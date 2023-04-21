@@ -97,7 +97,6 @@ const ComingSoon = ({student}) =>{
     
     const wishlist = useQuery(["fetch user bootcamp", userdata.token], ()=>fetchWishlist(userdata.token),{
         onSuccess: (res)=>{
-            console.log({res})
             if(res.data?.length > 0){
                 setUserList(res.data?.find(item=>item.courseId === id))
             }
@@ -109,7 +108,6 @@ const ComingSoon = ({student}) =>{
     
     const mutation = useMutation(([id, token])=>addwishlistCourse(id, token), {
         onSuccess: (res)=> {
-            console.log({res})
             if(res.data.success){
                 setListed(true)
             }
@@ -119,7 +117,6 @@ const ComingSoon = ({student}) =>{
     })
     const deleteMutation = useMutation(([token, id])=>deleteFromWishlist(token, id), {
         onSuccess: (res)=> {
-            console.log({res})
             if(res.data.success){
                 setListed(true)
             }

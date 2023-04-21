@@ -508,7 +508,6 @@ export default function CelebProfile() {
     const mentorData = getItem("gotocourse-viewMentor")
     const bread =  location.pathname?.split("/")
     
-    console.log(mentorData)
 
     return (
         <Layout>

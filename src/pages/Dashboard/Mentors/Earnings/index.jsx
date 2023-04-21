@@ -48,7 +48,6 @@ const Earnings = () => {
               draggable: true,
               progress: undefined,
             });
-            console.log(data)
             setRows(_ => data);
           }
         }catch(err){
@@ -72,14 +71,12 @@ const Earnings = () => {
       e.preventDefault();
       setLoading(_ => true);
       try{
-        console.log(formstate);
         if(
           formstate.courseName.trim() === "" || formstate.stage.trim() === "" ||
           formstate.accountNumber.trim() === "" || formstate.level.trim() === ""
           || formstate.bankName.trim() === ""
         ) throw new AdvancedError("Empty field detected", 1);
         //at this point it is valid submit
-        console.log({formstate});
         const res = await withdrawalRequest(formstate, userdata?.token);
         const {message, statusCode, success} = res;
         if(!success) throw new AdvancedError(message, statusCode);
@@ -94,7 +91,6 @@ const Earnings = () => {
             draggable: true,
             progress: undefined,
           });
-          console.log(data)
         }
       }catch(err){
         toast.error(err.message, {

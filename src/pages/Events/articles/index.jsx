@@ -58,7 +58,6 @@ const Articles = () => {
     const blogsData = useQuery(["fetch blogs", id], () => getBlogs(), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                console.log("data", res.data);
                 setBlogs(res.data.filter(d => d._id !== id))
 
             }

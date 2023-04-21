@@ -162,7 +162,6 @@ function HomepageHero({ showButtons, category }) {
       if (!success || statusCode !== 1)
         throw new AdvancedError(message, statusCode);
       const { data } = response;
-      console.log(data)
       toast.success(message, {
         position: "top-right",
         autoClose: 4000,

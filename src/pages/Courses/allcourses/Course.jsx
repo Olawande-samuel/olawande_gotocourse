@@ -429,16 +429,13 @@ const UpComeComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
+  
     setItemOffset(newOffset);
   };
   return (
@@ -506,16 +503,13 @@ const ShortCourseComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
+   
     setItemOffset(newOffset);
   };
 
@@ -586,16 +580,12 @@ const HeadstartComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -664,16 +654,12 @@ const PathComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -747,16 +733,13 @@ const UpskillComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
+  
     setItemOffset(newOffset);
   };
   return (
@@ -824,16 +807,12 @@ const TechComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -898,16 +877,12 @@ const ExecutiveComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -978,16 +953,12 @@ const DemandComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -1065,33 +1036,17 @@ const CourseComponent = () => {
     otherFunctions: { fetchCategories, fetchCourses, fetchBootcamps },
   } = useAuth();
 
-  // const categories = useQuery(["categories"], () => fetchCategories(), {
-  //   onSuccess: res => {
-  //     console.log("categories", res.data)
-  //   },
-  //   onError: err => console.error(err)
-
-  // });
-  // const courses = useQuery(["courses"], () => fetchCourses(), {
-  //   onSuccess: res => {
-  //     console.log("courses", res.data)
-  //   },
-  //   onError: err => console.error(err)
-
-  // });
+ 
 
   const { id } = useParams()
 
-  const change = id.split("_").join(" ")
 
 
 
 
   const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
     onSuccess: res => {
-      // console.log({res})
-      // console.log(res.data.filter(item => item.subCategory === id && item.isActive))
-
+     
      if(res.data && id === "IN_DEMAND"){
         let ids = [
           "63f68ab678429071a0195c6d", 

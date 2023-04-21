@@ -699,7 +699,6 @@ const Detail = () => {
                                     <SwiperSlide key={i}>
                                     <CourseCard 
                                         onClick={e => {
-                                        console.log(name)
                                            navigate(`/categories/${details.category.split(" ").join("-").toLowerCase()}/courses/${name.trim().split(" ").join("-").toLowerCase()}`)
                                             // navigate(`/categories/${details.category.split(" ").join("-").toLowerCase()}/courses/${name.split(" ").join("-")}`)
                                         }}

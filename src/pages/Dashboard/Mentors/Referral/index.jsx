@@ -67,7 +67,6 @@ const Referral = () => {
             navigate("/affiliate");
             setLoading(_ => false);
         }, 0);
-        console.log("Mentor Referral page is mounted");
         return () => console.log("Mentor Referal page is unmounted");
     }, [])
 
