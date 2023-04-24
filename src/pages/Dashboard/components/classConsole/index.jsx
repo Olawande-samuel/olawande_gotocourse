@@ -69,6 +69,7 @@ import Note from "./Note";
 
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
+import AddDomainContent from "./components/addContent";
 
 const popIcon = [
 	{
@@ -692,7 +693,10 @@ export function Accord({
 									<BiCaretRight onClick={() => showDetails(!details)} />
 								)}
 							</i>
-							<span>{name}</span>
+							<span style={{cursor: 'pointer'}} onClick={() => showDetails(!details)}>{name}</span>
+							<AddDomainContent
+								id={_id}
+							/>
 							<AccordMenu
 								type="domain"
 								id={_id}
@@ -944,7 +948,7 @@ function AccordMenu({
 	}
 
 	return (
-		<div style={{ marginLeft: "auto" }}>
+		<div>
 			<i
 				id="basic-button"
 				aria-controls={open ? "basic-menu" : undefined}
