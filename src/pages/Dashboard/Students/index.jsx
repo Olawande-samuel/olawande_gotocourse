@@ -14,7 +14,7 @@ import { Product, Stu1, Stu2, Stu3 } from "../../../images/components/svgs"
 import Loader from "../../../components/Loader"
 import { Sidebar, Searchbar, Navbar } from "../components";
 import clsx from "./styles.module.css";
-import { colors, getDate, gotoclass, gotoclassPayment, getFullDate, calculateWeeksBetween } from "../../../constants";
+import { colors, getDate, gotoclass, gotoclassPayment, getFullDate, calculateWeeksBetween, IMAGEURL } from "../../../constants";
 import avatar from "../../../images/teacher.png"
 import { GuardedRoute } from "../../../hoc";
 import Input from "../../../components/Input";
@@ -39,6 +39,7 @@ import PayModal from "../../../components/PayModal";
 import { LiveClassInfo } from "../components/classConsole/Liveclass";
 import { Link } from "react-router-dom";
 import { BiMoney } from "react-icons/bi";
+import UploadWidget from "../components/classConsole/components/UploadWidget";
 
 
 
@@ -46,61 +47,119 @@ const KEY = 'gotocourse-userdata';
 
 
 export function Profile() {
-    const { generalState: { isMobile, notification, loading }, setGeneralState, studentFunctions: { fetchProfile } } = useAuth();
-
+    const { generalState: { isMobile, notification, loading }, generalState, setGeneralState, studentFunctions: { fetchProfile }, kycFunctions: { getAStudentKYC, addStudentVerificationId } } = useAuth();
+    const [fileUrl, setFileUrl] = useState("")
+    // const [uploadlink, setUploadlink] = useState("")
     const ref = useRef(false)
     const { updateItem, getItem } = useLocalStorage();
     let userdata = getItem(KEY);
     const navigate = useNavigate();
-    useEffect(() => {
-        setTimeout(() => {
-            setGeneralState(old => {
-                return {
-                    ...old,
-                    notification: null
-                }
-            })
-        }, 5000)
-    }, [])
+    const [user, setUser] = useState({})
+	const queryClient = useQueryClient()
+
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         setGeneralState(old => {
+    //             return {
+    //                 ...old,
+    //                 notification: null
+    //             }
+    //         })
+    //     }, 5000)
+    // }, [])
 
 
-    useEffect(() => {
-        if (ref.current) return
-        if (userdata.token) {
-            const token = userdata.token;
-            (async () => {
-                try {
-                    const res = await fetchProfile(token);
-                    const { success, message, statusCode } = res;
-                    if (!success) throw new AdvancedError(message, statusCode);
-                    else {
-                        const { data } = res;
-                        const newValue = {
-                            ...userdata,
-                            ...data
-                        }
-                        userdata = updateItem(KEY, newValue);
-                    }
-                } catch (err) {
-                    toast.error(err.message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+    // useEffect(() => {
+    //     if (ref.current) return
+    //     if (userdata.token) {
+    //         const token = userdata.token;
+    //         (async () => {
+    //             try {
+    //                 const res = await fetchProfile(token);
+    //                 const { success, message, statusCode } = res;
+    //                 if (!success) throw new AdvancedError(message, statusCode);
+    //                 else {
+    //                     const { data } = res;
+    //                     const newValue = {
+    //                         ...userdata,
+    //                         ...data
+    //                     }
+    //                     userdata = updateItem(KEY, newValue);
+    //                 }
+    //             } catch (err) {
+    //                 toast.error(err.message, {
+    //                     position: "top-right",
+    //                     autoClose: 4000,
+    //                     hideProgressBar: true,
+    //                     closeOnClick: true,
+    //                     pauseOnHover: true,
+    //                     draggable: true,
+    //                     progress: undefined,
+    //                 });
+    //             }
+    //         })()
+    //     }
+
+    //     ref.current = true
+    // }, [userdata?.token])
+
+    // function editProfileHandler(e) {
+    //     navigate("/student/profile/edit");
+    // user-onboarding
+    // }
+
+
+    useQuery(["fetch a student kyc", userdata?.token], () => getAStudentKYC(userdata?.token),
+        {
+            enabled: userdata?.token !== null,
+            onSuccess: (res) => {
+                if (res?.success) {
+                    setUser(res.data);
+                    return;
                 }
-            })()
+            },
+            onError: (err) => console.error(err),
         }
+    );
 
-        ref.current = true
-    }, [userdata?.token])
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
 
-    function editProfileHandler(e) {
-        navigate("/student/profile/edit");
+            setGeneralState({ ...generalState, loading: true })
+            const response = await addStudentVerificationId(userdata?.token, fileUrl)
+            const { success, message, statusCode } = response
+            if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+            const { data } = response
+            setGeneralState({ ...generalState, loading: false })
+            queryClient.refetchQueries(["fetch a student kyc"])
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
+        } catch (error) {
+            toast.error(error.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        } finally {
+            setGeneralState({ ...generalState, loading: false })
+
+        }
     }
+
     return (
         <Students isMobile={isMobile} userdata={userdata} notification={notification} header="Profile">
             <div className={clsx.students_profile}>
@@ -108,21 +167,81 @@ export function Profile() {
                     <div className={clsx.students_profile_top_img}>
                         <img src={userdata?.profileImg ? userdata.profileImg : avatar} style={{ borderRadius: 10 }} width="100%" alt="Avatar" />
                     </div>
-                    <button className={clsx.students_profile_top_button} onClick={editProfileHandler}>
+                    {/* <button className={clsx.students_profile_top_button} onClick={editProfileHandler}>
                         <MdEdit />  &nbsp;   <span className="d-none d-md-block">Edit</span>
-                    </button>
+                    </button> */}
                 </div>
                 <div className={clsx.students_profile_main}>
-                    {/* <span className="text-muted">Name:</span> */}
+                    <span className="text-muted">Name:</span>
                     <h1 className={clsx.students__header} style={{ marginTop: 20 }}>{userdata?.firstName} {userdata?.lastName}</h1>
                     <span className="text-muted">Experience:</span>
-                    <p>{userdata?.bio ? userdata?.bio : "I'm a purposeful person"} </p>
+                    <p>{userdata?.bio ? userdata?.bio : user?.question?.experience ? user?.question?.experience : "I'm a purposeful person"} </p>
                     <span className="text-muted">Bio:</span>
                     <p>{userdata?.goals ? userdata?.goals : "I'm here to achieve great things in tech"}</p>
+                    <span className="text-muted">Phone Number</span>
+                    <p>{user?.question?.phoneNumber}</p>
+
+                    <span className="text-muted">Degree</span>
+                    <p>{user?.question?.degree}</p>
+                    <span className="text-muted">Employment</span>
+                    <p>{user?.question?.employment}</p>
+                    <span className="text-muted">Country</span>
+                    <p>{user?.question?.country}</p>
+                    <span className="text-muted">Region</span>
+                    <p>{user?.question?.region}</p>
+
+
+                    {
+                        (user?.verificationId !== "default.png") && (
+                            <>
+
+                                <div className={clsx.title}>
+                                    <p className={clsx.question}>Verification Id Card</p>
+                                    <div style={{
+                                        width: "350px",
+                                        height: "200px"
+
+                                    }}>
+                                        <img src={`${IMAGEURL}${user?.verificationId}`} alt="" style={{
+                                            maxWidth: "100%",
+                                            maxHeight: "100%"
+                                        }} />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    Id Card Approval: {user?.IDVerified ? "true" : "false"}
+
+                                </div>
+                            </>
+                        )
+                    }
+
 
                 </div>
+                {
+                    (user?.verificationId === "default.png") && (
+                        <>
+                            <div>
+                                <label htmlFor="">Upload a valid Id Card</label> <br />
+                                <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+                            </div>
+
+                            <div>
+                                {/* <form > */}
+                                {/* <input className="w-100 form-control"  type="text" value={uploadlink} onChange={(e) => setUploadlink(e.target.value)} /> */}
+                                <button disabled={!fileUrl} onClick={handleSubmit} className="button" style={{ padding: ".5rem 2rem" }}>Save Uploaded Id</button>
+                                {/* </form> */}
+                            </div>
+                        </>
+
+                    )
+                }
+
+
             </div>
-        </Students>
+
+        </Students >
     )
 }
 
@@ -380,7 +499,7 @@ export function MyClasses() {
 
     useEffect(() => {
         if (flag.current) return;
-        if(userdata?.token){
+        if (userdata?.token) {
             (async () => {
                 try {
                     const res = await fetchBootcamps(userdata?.token);
@@ -391,7 +510,7 @@ export function MyClasses() {
                         if (data.length > 0) {
                             setCourseList(data);
                         } else {
-    
+
                             toast.error("No bootcamp found", {
                                 position: "top-right",
                                 autoClose: 4000,
@@ -402,7 +521,7 @@ export function MyClasses() {
                                 progress: undefined,
                             });
                         }
-    
+
                     } else {
                         throw new AdvancedError(message, statusCode);
                     }
@@ -570,7 +689,7 @@ export function Bootcamps() {
 
     useEffect(() => {
         if (flag.current) return;
-        if(userdata?.token){
+        if (userdata?.token) {
             (async () => {
                 try {
                     const res = await fetchBootcamps(userdata?.token);
@@ -579,7 +698,7 @@ export function Bootcamps() {
                     else if (statusCode === 1) {
                         const { data } = res;
                         if (data.length > 0) {
-    
+
                             setCourseList(data);
                             toast.success(message, {
                                 position: "top-right",
@@ -591,7 +710,7 @@ export function Bootcamps() {
                                 progress: undefined,
                             });
                         } else {
-    
+
                             toast.error("No bootcamp found", {
                                 position: "top-right",
                                 autoClose: 4000,
@@ -602,7 +721,7 @@ export function Bootcamps() {
                                 progress: undefined,
                             });
                         }
-    
+
                     } else {
                         throw new AdvancedError(message, statusCode);
                     }
@@ -730,14 +849,14 @@ export function Wishlist() {
         onSuccess: (res) => {
             if (res?.data?.length > 0) {
                 setWishlists(res?.data);
-            }else {
+            } else {
                 setWishlists([])
             }
         }
     });
 
 
- 
+
 
 
     const value = useMemo(() => {
@@ -750,7 +869,7 @@ export function Wishlist() {
     // const Available = bootcamps?.data?.data?.length > 0 && bootcamps?.data?.data?.filter(boot => boot.bootcampId === (wishlists?.map(wishlist => wishlist.courseId)))
 
 
-  
+
 
 
     return (
@@ -773,14 +892,14 @@ export function Wishlist() {
 
                 <div className={clsx.classes}>
                     {(!userdata?.trainee) &&
-                    <div className={clsx.wishlistprice}>
-                        <small>Total:</small>
-                        <p>{`$${value}`}</p>
-                        {/* <p>$11,000</p> */}
-                        <Link to={`/student/wishlist-checkout`}><button disabled={wishlists?.length <= 0 ? true : false}>Checkout</button></Link>
+                        <div className={clsx.wishlistprice}>
+                            <small>Total:</small>
+                            <p>{`$${value}`}</p>
+                            {/* <p>$11,000</p> */}
+                            <Link to={`/student/wishlist-checkout`}><button disabled={wishlists?.length <= 0 ? true : false}>Checkout</button></Link>
 
 
-                    </div>
+                        </div>
 
                     }
                     <p style={{ padding: "1rem 0" }}>My Cart</p>
@@ -1299,12 +1418,12 @@ export function WishlistCheckOut() {
 
                 <div>
                     {showStripeModal && <PayModal
-                        token={payIntent} 
-                        openPaymentModal={showStripeModal} 
-                        handleClose={handleClose} 
+                        token={payIntent}
+                        openPaymentModal={showStripeModal}
+                        handleClose={handleClose}
                         cart={true}
-                        />
-                        }
+                    />
+                    }
 
                 </div>
 
@@ -1361,7 +1480,7 @@ export function Courses() {
     const ref = useRef(false)
     useEffect(() => {
         if (ref.current) return
-        if(userdata?.token){
+        if (userdata?.token) {
             (async () => {
                 try {
                     setGeneralState({ ...generalState, loading: true })
@@ -1834,7 +1953,7 @@ export function Notification() {
 
     useEffect(() => {
         if (flag.current) return;
-        if(userdata?.token){
+        if (userdata?.token) {
 
             (async () => {
                 try {
@@ -1980,7 +2099,7 @@ export const Dashboard = ({ mixpanel }) => {
     const { data: myenrolledcourses, isSuccess: mycoursesuccess } = useQuery(["fetch my enrolledclasses"], () => fetchMyClasses(userdata?.token))
     // const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
     const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps());
-    
+
     const topContent = [
         {
             id: 1,
@@ -2022,12 +2141,12 @@ export const Dashboard = ({ mixpanel }) => {
 
 
 
-    function filterDates(date){
+    function filterDates(date) {
         let isFound
-        if(date){
-          isFound = (new Intl.DateTimeFormat('en-US').format(new Date(date))?.includes(dateFilter))
-          return isFound
-        }else {
+        if (date) {
+            isFound = (new Intl.DateTimeFormat('en-US').format(new Date(date))?.includes(dateFilter))
+            return isFound
+        } else {
             return false
         }
     }
@@ -2045,13 +2164,13 @@ export const Dashboard = ({ mixpanel }) => {
                     <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
                 </div>
 
-             {
-                userdata?.trainee && 
-                <div className={clsx.students_profile_main}>
-                    {/* <UpcomingCourses data={all ? all : []} /> */}
-                    <UpcomingCourses data={data?.data ? data?.data : []} search={search} />
-                </div>
-             }
+                {
+                    userdata?.trainee &&
+                    <div className={clsx.students_profile_main}>
+                        {/* <UpcomingCourses data={all ? all : []} /> */}
+                        <UpcomingCourses data={data?.data ? data?.data : []} search={search} />
+                    </div>
+                }
 
 
 
@@ -2159,9 +2278,9 @@ function UpcomingCourses({ data, search }) {
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
-            if(userdata?.trainee){
+            if (userdata?.trainee) {
                 localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
-                gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee) 
+                gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
                 return;
             }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
@@ -2234,7 +2353,7 @@ function UpcomingCourses({ data, search }) {
                             </div>
 
                             <div className={clsx["courseitem"]}>
-                            &#8358;{(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
+                                &#8358;{(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
 
                             </div>
 
@@ -2284,9 +2403,9 @@ function AllAvailableCourses({ data, search }) {
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
-            if(userdata?.trainee){
+            if (userdata?.trainee) {
                 localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
-                gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee) 
+                gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
                 return;
             }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
@@ -2298,7 +2417,7 @@ function AllAvailableCourses({ data, search }) {
     }
     const first = data?.length > 0 ? data?.filter(item => item.startDate?.includes("2023-03") && item.isActive && item.category !== "TRAIN2 WORKABROAD").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
     // const third = data?.length > 0 ? data?.filter(item => !item.startDate?.includes("2023-03") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
-   
+
     const all = [...first];
 
     return (
@@ -2432,9 +2551,9 @@ function AvailableCourses({ data, search }) {
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
-            if(userdata?.trainee){
+            if (userdata?.trainee) {
                 localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
-                gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee) 
+                gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
                 return;
             }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
@@ -2444,7 +2563,7 @@ function AvailableCourses({ data, search }) {
         }
 
     }
-    
+
     const first = data?.length > 0 ? data?.filter(item => item.bootcampId === "63f68ab678429071a0195c6d" && item.isActive) : [];
     const second = data?.length > 0 ? data?.filter(item => item.bootcampId === "6430661e1485c80cb3261471" && item.isActive) : [];
     const third = data?.length > 0 ? data?.filter(item => item.startDate?.includes("2023-03") && item.bootcampId !== "63f74cdc78429071a01a00bf" && item.bootcampId !== "63717978f0eaad8dcf392eeb" && item.isActive) : [];

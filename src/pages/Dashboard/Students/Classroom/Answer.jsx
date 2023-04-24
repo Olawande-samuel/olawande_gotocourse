@@ -235,12 +235,27 @@ const ConsoleAnswer = () => {
         return setResults(data)
     }, [assessment, classId, contentId])
 
-    const score = useMemo(() => {
-        return results?.questions?.reduce((total, current) => total + current?.grade, 0)
+    // const score = useMemo(() => {
+    //     return results?.questions?.reduce((total, current) => total + current?.grade, 0)
+
+    // }, [gettingResult, results])
+
+    
+    const scoreResult = useMemo(() => {
+        return results?.questions?.reduce((total, current) => {
+            return {
+                grade: total?.grade + current?.grade,
+                score :total?.score + current?.score
+
+            }
+        }, {
+            score: 0,
+            grade:0
+        })
 
     }, [gettingResult, results])
 
-
+   
 
     return (
         <>
@@ -248,7 +263,9 @@ const ConsoleAnswer = () => {
                 results?.questions?.length > 0 ?
                     <div>
                         <div className="px-4 d-flex justify-content-end">
-                            <button className="button py-2 px-2">scored: {results?.totalScore}/{score}</button>
+                        {/* <button className="button py-2 px-2">scored: {results?.totalScore}/{score}</button> */}
+                        <button className="button py-2 px-2">scored: {scoreResult?.score}/{scoreResult?.grade}</button>
+                            
                         </div>
                         {results?.questions?.map((result, index) => {
                             if (result.type === "THEORY") {
