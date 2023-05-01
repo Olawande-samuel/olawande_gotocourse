@@ -261,7 +261,7 @@ const AnswerAccord = ({ assessment, reduceContent, reduceModules }) => {
               </button>
 
               <button className="assessbold" data-id={quizId}
-                disabled={!x?.graded}
+                // disabled={!x?.graded}
                 onClick={() => navigate(`/student/console/answers?classId=${quizDetail?.classId}&contentId=${quizDetail?.contentId}`)}
               >Show Answer
               </button>

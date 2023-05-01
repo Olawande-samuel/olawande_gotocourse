@@ -202,7 +202,7 @@ export const kycFunctions = {
             }
         }
     },
-    getAStudentKYC: async function (_data, token) {
+    getAStudentKYC: async function (token) {
         try {
             const res = await axios.get(`${baseURL}/student/kyc`, {
                 headers: {
@@ -418,6 +418,37 @@ export const kycFunctions = {
             }
         }
     },
+    addStudentVerificationId: async function (token,_data ) {
+        try {
+            const res = await axios.post(`${baseURL}/student/verification-id`,
+                {
+                    verificationId :_data
+                }, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                validateStatus: status => {
+                    return status >= 200 && status <= 505;
+                }
+            })
+            if (res.data.statusCode !== 1) throw new AdvancedError(res.data.message, res.data.statusCode);
+            return { ...res.data, success: true };
+        } catch (err) {
+            if (err.statusCode === 2) {
+                return
+
+            } else {
+
+                return {
+                    success: false,
+                    message: err.message,
+                    statusCode: err.statusCode
+                }
+            }
+        }
+    },
+
 }
 
 export const affiliatesFunctions = {
