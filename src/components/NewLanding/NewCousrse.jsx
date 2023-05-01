@@ -133,6 +133,7 @@ const NewCourse = () => {
 
         onSuccess: (res) => {
             if (res.data?.length > 0) {
+                const dataAnaly = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "636de01bbc7cb9bcc9c9b119" && item.subCategory === "IN_DEMAND") : [];
                 const productMng = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63f68ab678429071a0195c6d" && item.subCategory === "IN_DEMAND") : [];
                 const cyber = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63fcd51d4aacf5d78772e89f" && item.subCategory === "IN_DEMAND") : [];
                 const audit = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63717aa2f0eaad8dcf3930a7" && item.subCategory === "IN_DEMAND") : [];
@@ -143,7 +144,7 @@ const NewCourse = () => {
                 // const it = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63717978f0eaad8dcf392eeb" && item.subCategory === "IN_DEMAND") : [];
 
 
-                const all = [...cyber, ...productMng, ...data, ...business, ...audit, ...risk];
+                const all = [...dataAnaly, ...cyber, ...productMng, ...data, ...business, ...audit, ...risk];
                 setShorts(all)
             }
         }
