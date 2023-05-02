@@ -126,7 +126,7 @@ export const BootcampPaystackPayment = () => {
             }
           }
         } catch (error) {
-          toast.error(error.message, {
+          toast.error(error?.message, {
             position: "top-right",
             autoClose: 4000,
             hideProgressBar: true,
@@ -154,7 +154,7 @@ export const BootcampPaystackPayment = () => {
           navigate("/student")
 
         } catch (error) {
-          toast.error(error.message, {
+          toast.error(error?.message, {
             position: "top-right",
             autoClose: 4000,
             hideProgressBar: true,
@@ -380,7 +380,7 @@ export const BootcampPaystackPayment = () => {
                         <span className="visually-hidden">Loading...</span>
                       </div>
                     ) : (
-                      <span>PayNow</span>
+                      <span>Pay Now</span>
                     )}
                   </button>
 
@@ -464,8 +464,8 @@ export const CheckoutForm = ({ token, setShowStripeModal, cart }) => {
       result && setLoading(false);
 
 
-      if (result.error) {
-        toast.error(result.error.message, {
+      if (result?.error) {
+        toast.error(result?.error?.message, {
           position: "top-right",
           autoClose: 4000,
           hideProgressBar: true,
@@ -477,7 +477,7 @@ export const CheckoutForm = ({ token, setShowStripeModal, cart }) => {
         navigate("/payment/error");
       }
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err?.message);
     } finally {
       setLoading(false);
     }

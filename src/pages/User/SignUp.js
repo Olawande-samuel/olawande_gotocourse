@@ -309,10 +309,10 @@ const SignUp = () => {
             errorMessage="Passwords do not match"
           />
 
-          <label htmlFor="trainee">
+          {/* <label htmlFor="trainee">
             <input type="checkbox" value={data.trainee} onChange={(e) => setData({ ...data, trainee: e.target.checked })} /> Are you Registering for train to work Abroad Program
 
-          </label>
+          </label> */}
           {loading ? (
             <button className="button button-md log_btn w-100 mt-3"
               disabled={loading}
