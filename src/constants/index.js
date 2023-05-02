@@ -94,21 +94,28 @@ export const capitalize = (str) => {
 
 export function gotoclassPayment(title, category, bootcampId, navigate, trainee) {
   // console.log({trainee});
-  if (trainee) {
-    if (title.trim().toLowerCase().includes("/")) {
-      let newTitle = title.trim().split("/").join("-").toLowerCase()
-      navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/pay`)
-    } else {
-      navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${title.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/pay`)
-    }
-  } else {
-    if (title.trim().toLowerCase().includes("/")) {
+  // if (trainee) {
+  //   if (title.trim().toLowerCase().includes("/")) {
+  //     let newTitle = title.trim().split("/").join("-").toLowerCase()
+  //     navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/pay`)
+  //   } else {
+  //     navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${title.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/pay`)
+  //   }
+  // } else {
+  //   if (title.trim().toLowerCase().includes("/")) {
+  //     let newTitle = title.trim().split("/").join("-").toLowerCase()
+  //     navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/payment`)
+  //   } else {
+  //     navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${title.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/payment`)
+  //   }
+  // }
+
+     if (title.trim().toLowerCase().includes("/")) {
       let newTitle = title.trim().split("/").join("-").toLowerCase()
       navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${newTitle.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/payment`)
     } else {
       navigate(`/categories/${category?.trim().split(" ").join("-").toLowerCase()}/courses/${title.trim().split(" ").join("-").toLowerCase()}/${bootcampId.trim()}/payment`)
     }
-  }
 
 
 
