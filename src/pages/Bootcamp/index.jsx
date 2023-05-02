@@ -491,10 +491,10 @@ export function NewBootcampDetailsComponent() {
     // navigate("/coming-soon")
 
     if (userdata?.token) {
-      if (userdata?.trainee) {
-        navigate("pay")
-        return;
-      }
+      // if (userdata?.trainee) {
+      //   navigate("pay")
+      //   return;
+      // }
       navigate("payment")
     } else {
       navigate("/login")

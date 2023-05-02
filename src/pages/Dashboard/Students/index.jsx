@@ -2278,11 +2278,11 @@ function UpcomingCourses({ data, search }) {
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
-            if (userdata?.trainee) {
-                localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
-                gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
-                return;
-            }
+            // if (userdata?.trainee) {
+            //     localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+            //     gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
+            //     return;
+            // }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
             gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
         } else {
@@ -2403,11 +2403,11 @@ function AllAvailableCourses({ data, search }) {
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
-            if (userdata?.trainee) {
-                localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
-                gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
-                return;
-            }
+            // if (userdata?.trainee) {
+            //     localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+            //     gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
+            //     return;
+            // }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
             gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
         } else {
@@ -2551,11 +2551,11 @@ function AvailableCourses({ data, search }) {
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
-            if (userdata?.trainee) {
-                localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
-                gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
-                return;
-            }
+            // if (userdata?.trainee) {
+            //     localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+            //     gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
+            //     return;
+            // }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
             gotoclassPayment(item.title, item.category, item.bootcampId, navigate, true)
         } else {
