@@ -253,27 +253,28 @@ export const BootcampPayment = () => {
                     {paymentData.fullPayment === false ? (
                       <>
                         <div className="">
-                          <small
+                          {/* <small
                             className="text-info"
                             style={{ fontSize: "12px" }}
                           >
                             *Fees must be paid in not more than two Installments.
                             Each installment carries a $100 extra charge
-                          </small>
+                          </small> */}
                           <div className="form-group">
                             <input
                               type="radio"
                               name="initialPayment"
                               id="2"
                               onChange={handleInstallmentChoice}
-                              value={(price + (price * (5 / 100))) / 2 + 100}
+                              // value={(price + (price * (5 / 100))) / 2 + 100}
+                              value={(price + (price * (5 / 100))) / 2}
                             />
                             <label
                               htmlFor="2"
                               className="form-label generic_label ms-2 "
                             >
                               Pay in two installments of{" "}
-                              {(price + (price * (5 / 100))) / 2 + 100} each
+                              {(price + (price * (5 / 100))) / 2 } each
                             </label>
                           </div>
                           {/* <div className="text-center">
