@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.css";
-import { Outlet, Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 
 import "react-quill/dist/quill.snow.css";
 import "./App.css";
@@ -307,7 +307,8 @@ function MyApp({ mixpanel }) {
 				<Suspense fallback={<Loader />}>
 					<Routes>
 						<Route path="/" element={<Out />}>
-							<Route index element={<NewHome mixpanel={mixpanel} />} />
+							{/* <Route index element={<NewHome mixpanel={mixpanel} />} /> */}
+							<Route index element={<Navigate replace to="/login"/>} />
 							<Route
 								path="create-with-gotocourse"
 								element={<AnotherLanding />}

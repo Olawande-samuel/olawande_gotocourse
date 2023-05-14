@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import { useIntercom } from "react-use-intercom";
 import { useAuth } from "../../contexts/Auth";
 import { Center, HomeComponent } from "./landing.style";
@@ -27,13 +27,14 @@ const NewHome = ({ mixpanel }) => {
 	useMemo(
 		() =>
 			mixpanel.track("new landing page visit", { location: location.pathname }),
-		[]
+		[location?.pathname]
 	);
 
 	const { shutdown } = useIntercom();
 
 	useEffect(() => {
 		shutdown();
+		
 	});
 
 	return (
