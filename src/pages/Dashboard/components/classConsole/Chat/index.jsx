@@ -607,8 +607,7 @@ const ChatModule = () => {
 
     const getContentfromQuery = useQuery(["all groups"], () => fetchGroups(userdata.token, classId), {
         onSuccess: (res)=> {
-            console.log("successful query")
-            console.log(res)
+     
 
         }
     } )
@@ -673,7 +672,6 @@ function MailTab(){
 
     const mutation = useMutation(([token, id, data])=>messageAllStudents(token, id, data), {
         onSuccess: (res)=>{
-            console.log(res);
             if(res.success){
                 toast.success(res.message);
             }
@@ -699,17 +697,14 @@ function MailTab(){
                     data=""
                     onReady={editor => {
                         // You can store the "editor" and use when it is needed.
-                        console.log('Editor is ready to use!', editor);
                     }}
                     onChange={(event, editor) => {
                         const data = editor.getData();
                         setFormstate(data)
                     }}
                     onBlur={(event, editor) => {
-                        console.log('Blur.', editor);
                     }}
                     onFocus={(event, editor) => {
-                        console.log('Focus.', editor);
                     }}
                 />
             </MailBodyContainer>
@@ -770,12 +765,10 @@ function ActiveChat(){
     const userdata = getItem(KEY)
     const allMessages = useQuery(userdata?.token && ["get unread messages"], () => getUnreadMessages(userdata?.token), {
         onSuccess: (res)=>{
-            console.log({res})
         }
     })
     const {classId} = useParams() 
     const navigate = useNavigate() 
-    console.log({allMessages})
 
     function openChat(e){
         e.preventDefault();
@@ -858,7 +851,9 @@ export function MailDetail(){
     const {userId} = useParams()
 
     const fetchMessages = useQuery(["messageList", userdata.token, chatData?.fromUser], ()=>getMessages(userdata.token, userId), {
-        onSuccess: (res)=>console.log(res),
+        onSuccess: (res)=>{
+
+        },
         onError: (err)=>console.error(err)
     })
 
@@ -866,7 +861,6 @@ export function MailDetail(){
         onSuccess: (res)=>{
             queryClient.invalidateQueries("messageList")
             setBody("")
-            console.log(res)
         },
         onError: (err)=>console.error(err)
     })
@@ -925,8 +919,6 @@ function ChatTab(){
 
     const getContentfromQuery = useQuery(["all groups"], () => fetchGroups(userdata.token, classId), {
         onSuccess: (res)=> {
-            console.log("successful query")
-            console.log({res})
             if(res.data?.length > 0){
                 setGroups(res.data)
             }
@@ -944,7 +936,7 @@ function ChatTab(){
             <Createbutton onClick={()=> setShow(true)}>Create Group</Createbutton>
             <Groups>
                 {
-                    groups.map(({title, description, participants, showActions, _id}, i) => (
+                    groups?.map(({title, description, participants, showActions, _id, students}, i) => (
                         <Group key={i}>
                             <GroupTop>
                                 <h2>{title}</h2>
@@ -961,7 +953,7 @@ function ChatTab(){
                                 <h3>{title}</h3>
                                 <p className="restricted_line">{description}</p>
                                 <footer>
-                                    <span>{participants} participants</span>
+                                    <span><span>{students}</span> participants</span>
                                     <Link to={`group/${_id}`} className="d-inline-flex">
                                         <button>Open team</button>
                                     </Link>
@@ -1006,7 +998,6 @@ function Modal({setShow}){
 
     const mutation = useMutation(([token, data])=>addGroup(token, data), {
         onSuccess: (res) => {
-            console.log(res)
             setShow(_ => false)    
             queryClient.invalidateQueries("all groups")
 
@@ -1127,6 +1118,76 @@ export const ChatBox = styled.div`
     overflow-y: scroll;
     height: 85%;
 `
+export const ChatInfo = styled.div`
+    display: flex;
+    padding: .8rem;
+    margin-block: .5rem;
+    border: 1px solid #ababab;
+    border-radius: 10px;
+
+`
+
+export const UserImage = styled.div`
+    margin-right: 1rem;
+    border-radius:50%;
+    width: ${(props) => props.aside ? "30px" : "50px"};
+    height: ${(props) => props.aside ? "30px" : "50px"};
+    background-color: var(--theme-blue);
+    display: grid;
+    place-items:center;
+
+    
+`
+export const ChatDetails = styled.div`
+    h6 {
+        color: var(--theme-blue);
+        font-weight: 700;
+        margin-bottom: .3rem;
+    }
+
+    p {
+        margin-bottom: 0;
+    }
+`
+
+export const ChatStudentList = styled.div`
+    
+`
+export const StudentSearch = styled.div`
+    border: 1px solid #ababab;
+    border-radius: 4px;
+    padding: .3rem;
+    display: flex;
+    margin-bottom: 2rem;
+
+    input {
+        border:none;
+        outline: none;
+        margin-right: 1rem;
+    }
+    > div {
+        display: flex;
+        align-items: center;
+        gap: .8rem;
+
+        > div  {
+            width: 1px;
+            height: 100%;
+            background-color: #ababab;
+        }
+    }
+`
+export const StudentsContainer = styled.div``
+const RequestContainer = styled.div``
+export const ActionButton = styled.button`
+    border:none;
+    outline:none;
+    background: transparent;
+    color: red;
+    margin-left: auto;
+    font-size:14px;
+`
+
 export function GroupContent(){
     const {getItem} = useLocalStorage();
     const {groupID} = useParams()
@@ -1146,7 +1207,6 @@ export function GroupContent(){
 
     const mutation = useMutation(([usertoken, groupId, data]) => sendMessage(usertoken, groupId, data), {
         onSuccess: (res)=> {
-            console.log(res)
             setMessageList([...messageList, res.data])
             queryClient.invalidateQueries("group message")
         },
@@ -1196,98 +1256,43 @@ export function GroupContent(){
 }
 
 
-export const ChatInfo = styled.div`
-    display: flex;
-    padding: .8rem;
-    margin-block: .5rem;
-    border: 1px solid #ababab;
-    border-radius: 10px;
 
-`
 
-export const UserImage = styled.div`
-    margin-right: 1rem;
-    border-radius:50%;
-    width: ${(props) => props.aside ? "30px" : "50px"};
-    height: ${(props) => props.aside ? "30px" : "50px"};
-    background-color: var(--theme-blue);
-    display: grid;
-    place-items:center;
-
-    
-`
-export const ChatDetails = styled.div`
-    h6 {
-        color: var(--theme-blue);
-        font-weight: 700;
-        margin-bottom: .3rem;
-    }
-
-    p {
-        margin-bottom: 0;
-    }
-`
-
-function ChatContent({title, user, body, fromUser, isTutor, type}){
+function ChatContent({title, user, body, fromUser, isTutor, type, fullName}){
     return (
         <ChatInfo>
             <UserImage>
                 <FaUser size="1.5rem" color="#fff" />
             </UserImage>
             <ChatDetails>
-                <h6>{isTutor ? "Teacher": user?.fullName}</h6>
+                <h6>{isTutor ? "Teacher": fullName}</h6>
                 <p>{body}</p>
             </ChatDetails>
         </ChatInfo>
     )
 }
 
-export const ChatStudentList = styled.div`
-    
-`
-export const StudentSearch = styled.div`
-    border: 1px solid #ababab;
-    border-radius: 4px;
-    padding: .3rem;
-    display: flex;
-    margin-bottom: 2rem;
 
-    input {
-        border:none;
-        outline: none;
-        margin-right: 1rem;
-    }
-    > div {
-        display: flex;
-        align-items: center;
-        gap: .8rem;
-
-        > div  {
-            width: 1px;
-            height: 100%;
-            background-color: #ababab;
-        }
-    }
-`
-export const StudentsContainer = styled.div``
-const RequestContainer = styled.div``
-export const ActionButton = styled.button`
-    border:none;
-    outline:none;
-    background: transparent;
-    color: red;
-    margin-left: auto;
-    font-size:14px;
-`
 function ChatAside(){
     
     const {getItem}= useLocalStorage();
-    const {teacherConsoleFunctions: {fetchGroupStudents, approveStudent}} = useAuth()
+    const {teacherConsoleFunctions: {fetchGroupStudents, approveStudent, addToGroup}, teacherFunctions:{fetchBootcampApplications}} = useAuth()
     const {groupID}= useParams();
 
     const userdata = getItem(KEY);
     const [studentList, setStudentList] = useState([]);
+    const [allStudentList, setAllStudentList] = useState([]);
     const queryClient = useQueryClient()
+    const { classId } = useParams()
+
+    const fetchAllStudents = useQuery(["all students", userdata?.token], ()=>fetchBootcampApplications( userdata?.token, classId), {
+        onSuccess: (res)=> {
+            if(res.statusCode === 1 ) {
+                setAllStudentList(res.data)
+            }
+        }
+    })
+
 
     const fetchStudents = useQuery(["group students", userdata?.token], ()=>fetchGroupStudents( userdata?.token, groupID), {
         onSuccess: (res)=> {
@@ -1298,7 +1303,15 @@ function ChatAside(){
     })
 
     const approveMutation = useMutation(([token, id, data])=>approveStudent(token, id, data), {
-        onSuccess: (res)=> {console.log(res)
+        onSuccess: (res)=> {
+            queryClient.invalidateQueries("group students")
+        },
+        onError: (err)=> console.error(err)
+    })
+
+
+    const addStudentToGroupMutation = useMutation(([token, id, data])=>addToGroup(token, id, data), {
+        onSuccess: (res)=> {
             queryClient.invalidateQueries("group students")
         },
         onError: (err)=> console.error(err)
@@ -1309,6 +1322,15 @@ function ChatAside(){
         e.preventDefault()
         approveMutation.mutate([userdata.token, id, {data:""}])
     }
+
+
+
+    function AddStudentToGroup(e, id){
+        e.preventDefault()
+        addStudentToGroupMutation.mutate([userdata.token, groupID, {studentId: id}])
+    }
+
+
     return (
         <ChatStudentList>
             <StudentSearch>
@@ -1360,6 +1382,27 @@ function ChatAside(){
                     }
                 </div>
             </RequestContainer>
+            <StudentsContainer>
+                <h6> All Students</h6>
+                <div>
+                    {
+                        allStudentList?.filter(student=> student.status === "paid" || student.paymentStatus === "completed").map(student=>(
+                            <ChatInfo>
+                                <UserImage aside={true}>
+                                    <FaUser size=".7rem" color="#fff" />
+                                </UserImage>
+                                <ChatDetails>
+                                    <h6>{student?.studentName}</h6>
+                                    <small>{student.studentEmail}</small>
+                                </ChatDetails>
+                                <ActionButton onClick={(e)=>AddStudentToGroup(e, student.studentId)}>
+                                    Add
+                                </ActionButton>
+                            </ChatInfo>
+                        ))
+                    } 
+                </div>
+            </StudentsContainer>
         </ChatStudentList>
     )
 }

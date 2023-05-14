@@ -1,165 +1,171 @@
-import {Teachers} from "./index"
+import { Teachers } from "./index"
 
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import {toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 import clsx from "./styles.module.css";
 import { AdvancedError } from "../../../classes";
 import { useLocalStorage } from "../../../hooks";
 import { useAuth } from "../../../contexts/Auth";
-import {CLASSID, KEY} from "../../../constants"
+import { CLASSID, KEY } from "../../../constants"
 import Loader from "../../../components/Loader";
 import { BootcampRow } from "../Admin";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { ShareModal } from "../../Bootcamp";
+import { FaShareSquare } from "react-icons/fa";
+import { AiOutlineSearch } from "react-icons/ai";
 
 
 export default function Bootcamps() {
-    const {
-      teacherFunctions: { fetchBootcamps },
-    } = useAuth();
-    const { getItem } = useLocalStorage();
-    const navigate = useNavigate();
-    const flag = useRef(false);
-    let userdata = getItem(KEY);
-    const [courseList, setCourseList] = useState([]);
-    const [loading, setLoading] = useState(true);
-  
-    const tableHeaders = [
-      "No",
-      "Title",
-      "Details",
-      "Type",
-      "Duration",
-      "Date",
-      "Time",
-      ""
-    ];
-  
-    useEffect(() => {
-      if (flag.current) return;
-      (async () => {
-        try {
-          const res = await fetchBootcamps(userdata?.token);
-          const { message, success, statusCode } = res;
-          if (!success) throw new AdvancedError(message, statusCode);
-          else if (statusCode === 1) {
-            const { data } = res;
-            if (data.length > 0) {
-              setCourseList(data);
-              toast.success(message, {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-            } else {
-              toast.error("No bootcamp assigned", {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-            }
+  const {
+    teacherFunctions: { fetchBootcamps },
+  } = useAuth();
+  const { getItem } = useLocalStorage();
+  const navigate = useNavigate();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [courseList, setCourseList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const tableHeaders = [
+    "No",
+    "Title",
+    "Details",
+    "Type",
+    "Duration",
+    "Date",
+    "Time",
+    ""
+  ];
+
+  useEffect(() => {
+    if (flag.current) return;
+    (async () => {
+      try {
+        const res = await fetchBootcamps(userdata?.token);
+        const { message, success, statusCode } = res;
+        if (!success) throw new AdvancedError(message, statusCode);
+        else if (statusCode === 1) {
+          const { data } = res;
+          if (data.length > 0) {
+            setCourseList(data);
+            toast.success(message, {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
           } else {
-            throw new AdvancedError(message, statusCode);
+            toast.error("No bootcamp assigned", {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
           }
-        } catch (err) {
-          toast.error(err.message, {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        } finally {
-          setLoading((_) => false);
+        } else {
+          throw new AdvancedError(message, statusCode);
         }
-      })();
-      flag.current = true;
-    }, []);
-  
-    function getDate(date){
-    
-      let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      let d = date.split("T")[0];
-      let [y, m, day] = d.split("-");
-      m = months[parseInt(m) - 1];
-      return `${m} ${day}`;
-    }
-    function detailHandler(e, _id, item){
-      localStorage.setItem("gotocourse-teacherbootcamp", JSON.stringify(item))
-      navigate("details/"+_id);
-    }
-    return (
-      <Teachers header={"Classes"} >
-        {loading && <Loader />}
-        <div className={clsx["teachers_profile"]}>
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <h3 style={{ margin: 0 }}>Classes</h3>
-            </div>
-  
-            <div className={clsx.admin__student_main}>
-              <table className={clsx.teachers_table}>
-                <thead>
-                    <tr>
-                        {tableHeaders.map((el, i) => (
-                          <th key={i} className={clsx.user__info}>{el}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                  {courseList.length > 0 &&
-                    courseList.map((item, i) => (
-                      <BootcampRow
-                      key={i}
-                      index={i}
-                      title={item.title}
-                      detail={item.description}
-                      duration={item.duration}
-                      type={item.type}
-                      admin={false}
-                      clickHandler={e => detailHandler(e, item.bootcampId, item)}
-                      time={`${item.startTime} - ${item.endTime} CST`}
-                      date={`${getDate(item.startDate)} - ${getDate(item.endDate)}`}
-                      />
-                    ))}
-                  <p></p>
-                </tbody>
-              </table>
-          </div>
-        </div>
-      </Teachers>
-    );
+      } catch (err) {
+        toast.error(err.message, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } finally {
+        setLoading((_) => false);
+      }
+    })();
+    flag.current = true;
+  }, []);
+
+  function getDate(date) {
+
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let d = date.split("T")[0];
+    let [y, m, day] = d.split("-");
+    m = months[parseInt(m) - 1];
+    return `${m} ${day}`;
   }
+  function detailHandler(e, _id, item) {
+    localStorage.setItem("gotocourse-teacherbootcamp", JSON.stringify(item))
+    navigate("details/" + _id);
+  }
+  return (
+    <Teachers header={"Classes"} >
+      {loading && <Loader />}
+      <div className={clsx["teachers_profile"]}>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h3 style={{ margin: 0 }}>Classes</h3>
+        </div>
+
+        <div className={clsx.admin__student_main}>
+          <table className={clsx.teachers_table}>
+            <thead>
+              <tr>
+                {tableHeaders.map((el, i) => (
+                  <th key={i} className={clsx.user__info}>{el}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {courseList.length > 0 &&
+                courseList.map((item, i) => (
+                  <BootcampRow
+                    key={i}
+                    index={i}
+                    title={item.title}
+                    detail={item.description}
+                    duration={item.duration}
+                    type={item.type}
+                    admin={false}
+                    clickHandler={e => detailHandler(e, item.bootcampId, item)}
+                    time={`${item.startTime} - ${item.endTime} CST`}
+                    date={`${getDate(item.startDate)} - ${getDate(item.endDate)}`}
+                  />
+                ))}
+              <p></p>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </Teachers>
+  );
+}
 export function ConsoleClass() {
-    const {
-      teacherFunctions: { fetchBootcamps },
-    } = useAuth();
-    const { getItem } = useLocalStorage();
-    const navigate = useNavigate();
-    const flag = useRef(false);
-    let userdata = getItem(KEY);
-    const [courseList, setCourseList] = useState([]);
-    const [loading, setLoading] = useState(true);
-  
-    useEffect(() => {
-      if (flag.current) return;
-      (async () => {
+  const {
+    teacherFunctions: { fetchBootcamps },
+  } = useAuth();
+  const { getItem } = useLocalStorage();
+  const navigate = useNavigate();
+  const flag = useRef(false);
+  let userdata = getItem(KEY);
+  const [courseList, setCourseList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("")
+
+  useEffect(() => {
+    if (flag.current) return;
+    (async () => {
+      if(userdata?.token){
         try {
           const res = await fetchBootcamps(userdata?.token);
-          const { message, success, statusCode } = res;
-          if (!success) throw new AdvancedError(message, statusCode);
-          else if (statusCode === 1) {
+          console.log({res})
+          if (res.statusCode !== 1) throw new AdvancedError(res?.message, res?.statusCode);
+          const { message, statusCode } = res;
+          if (statusCode === 1) {
             const { data } = res;
             if (data.length > 0) {
               setCourseList(data);
@@ -174,65 +180,80 @@ export function ConsoleClass() {
         } finally {
           setLoading((_) => false);
         }
-      })();
-      flag.current = true;
-    }, []);
-  
-    function getDate(date){
-    
-      let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      let d = date.split("T")[0];
-      let [y, m, day] = d.split("-");
-      m = months[parseInt(m) - 1];
-      return `${m} ${day}`;
-    }
-    function detailHandler(e, _id, item){
-      localStorage.setItem("gotocourse-teacherbootcamp", JSON.stringify(item))
-      navigate("details/"+_id);
-    }
-    console.log({courseList})
-    return (
-      <Teachers header={"My Classes"} >
-        {loading && <Loader />}
-        <div className={clsx["teachers_profile"]}>
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <h3 style={{ margin: 0 }}>My Classes</h3>
-            </div>
-            <div className={clsx.admin__student_main}>
-                <div className={clsx.class_con_cards}>
-                  {
-                    courseList.length > 0 &&
-                      courseList.map((item, i) => (
-                        <ClassesCard {...item} />
-                    ))
-                  }
-                </div>
+      }
+    })();
+    flag.current = true;
+  }, [userdata?.token]);
+
+  function getDate(date) {
+
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let d = date.split("T")[0];
+    let [y, m, day] = d.split("-");
+    m = months[parseInt(m) - 1];
+    return `${m} ${day}`;
+  }
+  function detailHandler(e, _id, item) {
+    localStorage.setItem("gotocourse-teacherbootcamp", JSON.stringify(item))
+    navigate("details/" + _id);
+  }
+  return (
+    <Teachers header={"My Classes"} >
+      {loading && <Loader />}
+      <div className={clsx["teachers_profile"]}>
+
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          {/* <h3 style={{ margin: 0 }}>My Classes</h3> */}
+        </div>
+        <div className={clsx.admin__student_main}>
+          <div className="assessments__inputcontainer">
+            <input type="text"
+              className='assessments__input'
+              placeholder="Search for a Class"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)} />
+            <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
+          </div>
+
+          <div className={clsx.class_con_cards}>
+            {
+              courseList.length > 0 &&
+              courseList.filter(item =>
+                item?.title
+                  .toLowerCase()
+                  .includes(search?.toLowerCase())
+
+              ).map((item, i) => (
+                <ClassesCard {...item} />
+              ))
+            }
           </div>
         </div>
-      </Teachers>
-    );
-  }
+      </div>
+    </Teachers>
+  );
+}
 
 
-  // export function ClassesCard({bootcampImg, title, description, bootcampId, all}){
-  //   return (  
-  //       <div className={clsx.class_con_card}>
-  //         <img src={bootcampImg} alt="" className={clsx.class_con_img} />
-  //         <h5>{title}</h5>
-  //         <p className="clamp_text_sm" dangerouslySetInnerHTML={{__html:description}}></p>
-  //         <div>
-  //           <Link className="d-inline-flex" to={`class/${bootcampId}`} onClick={()=> localStorage.setItem(CLASSID, bootcampId)}>
-  //             <button className={clsx.class_con_button}>Open Class</button>
-  //           </Link>
-  //         </div>
-  //       </div>
-  //   )
-  // }
+// export function ClassesCard({bootcampImg, title, description, bootcampId, all}){
+//   return (  
+//       <div className={clsx.class_con_card}>
+//         <img src={bootcampImg} alt="" className={clsx.class_con_img} />
+//         <h5>{title}</h5>
+//         <p className="clamp_text_sm" dangerouslySetInnerHTML={{__html:description}}></p>
+//         <div>
+//           <Link className="d-inline-flex" to={`class/${bootcampId}`} onClick={()=> localStorage.setItem(CLASSID, bootcampId)}>
+//             <button className={clsx.class_con_button}>Open Class</button>
+//           </Link>
+//         </div>
+//       </div>
+//   )
+// }
 
 
 
-  
-  const ShortCard = styled.div`
+
+const ShortCard = styled.div`
     /* border: 2.2648px solid rgba(0, 114, 239, 0.5);
     padding: clamp(0.03125rem, -0.2813rem + 1.5625vw, 1.125rem);
     border-radius: 8px; */
@@ -326,33 +347,40 @@ export function ConsoleClass() {
 `
 
 export function ClassesCard({ title, bootcampImg, bootcampId, all }) {
+  const [open, setOpen] = useState(false)
 
-    // Call to Action
-    const navigate = useNavigate();
-    const [data, setData] = useState({});
-    const { getItem } = useLocalStorage();
+  // Call to Action
+  const navigate = useNavigate();
+  const [data, setData] = useState({});
+  const { getItem } = useLocalStorage();
 
-    const userdata = getItem(KEY)
+  const userdata = getItem(KEY)
 
-   
+  const COURSEURL = "https://gotocourse.com/events&articles/articles";
 
 
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
+
+  const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
   return (
-      <ShortCard>
-          <img src={bootcampImg} alt="" />
-          <div className="up_content">
-              <div>
-                  <h5 variant="contained">{title}</h5>
-              </div>
+    <ShortCard>
+      <img src={bootcampImg} alt="" />
+      <div className="up_content">
+        <div>
+          <h5 variant="contained">{title}</h5>
+        </div>
 
-              {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-              <div className="cta">
-                <Link className="d-inline-flex" to={`class/${bootcampId}`} onClick={()=> localStorage.setItem(CLASSID, bootcampId)}>
-                  <button className={clsx.class_con_button}>Open Class</button>
-                </Link>
-              </div>
-          </div>
-      </ShortCard>
+        {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
+        <div className="cta">
+          <Link className="d-inline-flex" to={`class/${bootcampId}`} onClick={() => localStorage.setItem(CLASSID, bootcampId)}>
+            <button className={clsx.class_con_button}>Open Class</button>
+          </Link>
+          <span>
+            <i><FaShareSquare style={{ color: "#0C2191", fontSize: "1rem", cursor: "pointer" }} onClick={() => setOpen(true)} /></i>
+          </span>
+        </div>
+      </div>
+      <ShareModal x={all} open={open} setOpen={setOpen} url={COURSEURL} />
+
+    </ShortCard>
   )
 }

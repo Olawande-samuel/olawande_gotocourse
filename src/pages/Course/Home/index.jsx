@@ -165,7 +165,6 @@ const Course = () => {
         notifyOnChangeProps:["category", "isFetching"]
     })
 
-    console.log({classes})
 
 
 

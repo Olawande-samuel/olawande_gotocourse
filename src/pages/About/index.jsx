@@ -41,13 +41,7 @@ const cardData = [
 
 
 const About = () => {
-    useEffect(() => {
-        console.log("About page is mounted");
-        return () => console.log("About page is unmounted");
-    }, [])
-
-
-
+  
     return (
         <Layout>
             <div className={clsx.about}>

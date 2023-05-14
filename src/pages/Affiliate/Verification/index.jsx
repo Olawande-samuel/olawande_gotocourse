@@ -17,10 +17,7 @@ import { KEY, VERIFICATION_KEY } from "../../../constants";
 
 
 const Verification = () => {
-    useEffect(() => {
-        console.log("Registration page showing...");
-        return () => console.log("Registration page is removing...")
-    }, [])
+  
    
 
    
@@ -56,12 +53,10 @@ export function Form({type}){
             const queryParams = location.search.split("?")[1].split("&") || [];
             function getQueryParam(query, key){
                 let val = query.find(q => q.includes(key))
-                console.log(val);
                 if(!val) return "";
                 else {
                     //at this point a value was found
                     let value = val.split("=")[1];
-                    console.log(value);
                     if(!value) return "";
                     else return value;
                 }
@@ -75,7 +70,6 @@ export function Form({type}){
                     const {message, statusCode, success} = res;
                     if(!success) throw new AdvancedError(message, statusCode);
                     else {
-                        console.log(res);
                         const {data} = res;
                         toast.success(message, {
                             position: "top-right",
@@ -108,7 +102,6 @@ export function Form({type}){
         }
         flag.current = true;
     }, [])
-    console.log(userdata);
     const formSettings = [
         {
             type: "text",
@@ -150,16 +143,14 @@ export function Form({type}){
         try{
             setLoading(_ => true);
             let d = `${formstate.code1}${formstate.code2}${formstate.code3}${formstate.code4}${formstate.code5}${formstate.code6}`;
-            console.log({email: userdata.email, otp: d});
             const res = await verifyEmail({email: userdata.email, otp: d})
             const {statusCode, success, message} = res;
-            console.log({res});
             if(message === 'Account already verified') throw new AdvancedError(`${message}. Please proceed to login`, statusCode);
             // add navigate to login
             if(!success) throw new AdvancedError(message, statusCode);
             else {
                 updateItem(VERIFICATION_KEY, {...userdata, isVerified: true})
-                toast.success(message, {
+                toast.success("Email verified successfully. You will be redirected to your onboarding page shortly", {
                     position: "top-right",
                     autoClose: 4000,
                     hideProgressBar: true,
@@ -174,7 +165,10 @@ export function Form({type}){
                       notification: message,
                     };
                 });
-                navigate(userdata.userType === "affiliate" ? "/affiliate" : userdata.userType === "student" ? "/user-onboarding" : userdata.usertype === "admin" ?  "/admin" : "/teacher/on-boarding");
+
+                setTimeout(() => {
+                    navigate(userdata.userType === "affiliate" ? "/affiliate" : userdata.userType === "student" ? "/user-onboarding" : userdata.usertype === "admin" ?  "/admin" : "/teacher/on-boarding");
+                }, 2500);
             }
             
         }catch(err){
@@ -200,7 +194,6 @@ export function Form({type}){
             if(!success) throw new AdvancedError(message, statusCode);
             else {
                 const {data} = res;
-                console.log(data);
                 toast.success(message, {
                     position: "top-right",
                     autoClose: 4000,
@@ -216,7 +209,6 @@ export function Form({type}){
                       notification: message,
                     };
                 });
-                console.log(data); 
                 if(userdata.userType === 'affiliate'){
                     navigate(`/affiliates/verify`);
                 } else {

@@ -17,20 +17,22 @@ import styled from 'styled-components'
 
 // Import Swiper styles
 import "swiper/css";
-import { changeConstants, getFullDate, gotoclassPayment, KEY } from '../../constants';
+import { changeConstants, getFullDate, gotoclass, gotoclassPayment, KEY } from '../../constants';
 import { AdvancedError } from '../../classes';
 import { upskillAltData } from './UpskillCourse';
 import { useLocalStorage } from '../../hooks';
 import { Box, Popover } from '@mui/material';
+import { AiOutlineCheck } from 'react-icons/ai';
 
-const Grid = styled.div`
+export const NewGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-    grid-auto-rows: 392px;
+    grid-auto-rows: 390px;
     /* overflow: hidden; */
     gap: 1.5rem;
-    justify-content:space-around;
+    justify-content:space-evenly;
     padding: .5rem;
+    // border: 5px solid red;
     
     @media screen and (min-width: 1400px) {
         grid-template-columns: repeat(4, 230px);
@@ -48,61 +50,113 @@ const Grid = styled.div`
     } 
     `
 
-const UpCoursesCard = styled.div`
-    /* border: 2.2648px solid rgba(0, 114, 239, 0.5);
-    padding: clamp(0.03125rem, -0.2813rem + 1.5625vw, 1.125rem);
-    border-radius: 8px; */
-    height: 390px;
+export const UpCoursesCard = styled.div`
     display: flex;
     flex-direction:column;
     box-shadow: -10px 159px 64px rgba(0, 0, 0, 0.01), -6px 90px 54px rgba(0, 0, 0, 0.05), -3px 40px 40px rgba(0, 0, 0, 0.09), -1px 10px 22px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
     
     img {
-        height: 40%;
-        min-height: 40%;
+        height: 150px;
+        max-height: 40%;
         max-width: 100%;
         object-fit:cover;
         object-position: center;
         border: 1.5px solid #FFCE31;
     }
-    small {
+    /* small {
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
-        height: 4.5rem
+        // height: 4.5rem
         
         
-    }
+    } */
 
-    h5 {
-        font-weight: 800;
-        text-transform: capitalize;
-        font-size: 16px;
-        margin-block: .7rem;
-        cursor: pointer;
 
-    }
-     
-    button {
+
+    .up_content {
+      height: 230px;
+      padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content:space-between;
+        /* border: 2px solid red; */
+        /* height: 60%; */
+        /* height: -webkit-fill-available; */
+
+        .title{
+          /* border: 2px solid green; */
+          height: 45%;
+
+            h5 {
+            font-weight: 800;
+            text-transform: capitalize;
+            font-size: 16px;
+            cursor: pointer;
+          }
+
+        }
+
+        .middle{
+          height: 35%;
+          /* border: 2px solid green; */
+
+
+          .checks{
+              p{
+                  font-weight: 500;
+                  font-size: 13.6101px;
+                  line-height: 16px;
+                  margin-bottom: 0;
+              }
+
+              .icon{
+                  color: var(--theme-blue);
+              }
+          }
+
+        }
+
+        .foot {
+        height: 20%;
+        /* border: 2px solid green; */
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        button {
         color:#0072EF;
         font-size:14px;
         border:none;
         outline:none;
         background:#fff;
-    }
-    .up_content {
-        padding-inline: 1.5rem;
-        padding-bottom: 1rem;
-        display: flex;
-        flex-direction: column;
-        justify-content:space-between;
-        height: 60%;
-        /* height: -webkit-fill-available; */
+       
+        }
+        
+        /* .cta {
+        font-size: 14px;
+        border: none;
+        outline: none;
+        background:#fff;
 
+            :hover {
+                color: var(--theme-blue);
+            }
+        }
+        span {
+            font-size:14px;
+            color: var(--theme-orange)
+        } */
+    } 
 
-        .cta {
+     
+ 
+
+    
+        /* .cta {
             display: flex;
             justify-content: space-between;
             gap: 1rem;
@@ -131,41 +185,27 @@ const UpCoursesCard = styled.div`
             width:1px;
             height:100%;
             background: #333;
-    }
+    } */
 
-    .foot {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        
-        .cta {
-        font-size: 14px;
-        border: none;
-        outline: none;
-        background:#fff;
-
-            :hover {
-                color: var(--theme-blue);
-            }
-        }
-        span {
-            font-size:14px;
-            color: var(--theme-orange)
-        }
-    } 
+  }
     
 `
 
 
 export function Up() {
   return (
-    <section className="newCategories mt-4" id="upcoming">
+    <section className="mt-4" id="upcoming">
       <div className="container-xxl">
         <header className="newCategories_header_wrapper">
           <h1 className="newCategories_header">Upcoming courses</h1>
           {/* <p className="sub_title text-start" style={{width:"min(100% - 1rem, 1300px)"}}></p> */}
         </header>
         <TabsComp />
+
+        <div style={{ padding: "2rem 0", textAlign: "center" }}>
+          <Link to={"/category/upcoming"} className="text-center mt-4">{`View  more Upcoming programs  >`}</Link>
+
+        </div>
 
       </div>
     </section>
@@ -182,11 +222,28 @@ export function TabsComp() {
     notifyOnChangeProps: ["category", "isFetching"],
 
     onSuccess: (res) => {
-      if (res.data.length > 0) {
-  
-        const uppers = res.data.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
+      if (res?.data?.length > 0) {
+        // const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
+        // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate.includes("2023-01") && !item.startDate.includes("2023-01-19T00:00:00.000Z") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+        let ids = [
+         "63f74cdc78429071a01a00bf",
+         "63717978f0eaad8dcf392eeb"
+        ]
+        
+        const first = res.data?.length > 0 ? res.data?.filter(item => item.bootcampId === "636de01bbc7cb9bcc9c9b119" && item.isActive) : [];
+        const second = res.data?.length > 0 ? res.data?.filter(item => item.bootcampId === "63f68ab678429071a0195c6d" && item.isActive) : [];
+        const third = res.data?.length > 0 ? res.data?.filter(item => item.bootcampId === "63717aa2f0eaad8dcf3930a7" && item.isActive) : [];
+        const fourth = res.data?.length > 0 ? res.data?.filter(item => item.bootcampId === "6430661e1485c80cb3261471" && item.isActive) : [];
+
+        const fifth = res.data?.length > 0 ? res.data?.filter(item => !ids.includes(item.bootcampId) && item.startDate?.includes("2023-03") && item.isActive  &&  item.category !== "TRAIN2 WORKABROAD").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+
+        // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+        // const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+        const all = [...first, ...second, ...third, ...fourth, ...fifth];
+
+        // const uppers = res.data.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
         // console.log({ uppers });
-        setShorts(uppers)
+        setShorts(all)
       }
     }
   })
@@ -196,14 +253,13 @@ export function TabsComp() {
       <div className="popular_views dark_border">
         <Swiper
           // install Swiper modules
-          modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
+          modules={[Navigation, Autoplay]}
           loop={true}
           speed={2500}
           autoplay={{ delay: 2400 }}
           spaceBetween={0}
           slidesPerView={1}
           // navigation
-          pagination={{ clickable: true }}
           scrollbar={{ draggable: true }}
           breakpoints={{
             // when window width is >= 320px
@@ -230,7 +286,7 @@ export function TabsComp() {
             },
           }}
         >
-          <Grid>
+          <NewGrid>
             {
               shorts?.filter(item => item.isActive).sort(() => 0.5 - Math.random()).map(item => (
                 <SwiperSlide key={item.categoryId}>
@@ -238,7 +294,7 @@ export function TabsComp() {
                 </SwiperSlide>
               ))
             }
-          </Grid>
+          </NewGrid>
         </Swiper>
 
       </div>
@@ -248,12 +304,14 @@ export function TabsComp() {
 }
 
 
-export function Card({ title, bootcampImg, bootcampId, category, description, startDate, duration, price, packages, popupTitle, popupArr, all }) {
+export function Card({ title, bootcampImg, bootcampId, category, subCategory, description, startDate, duration, price, packages, popupTitle, popupArr, all }) {
 
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    getWishList()
+
   };
 
   const handleClose = () => {
@@ -323,9 +381,9 @@ export function Card({ title, bootcampImg, bootcampId, category, description, st
     }
   }
 
-  useEffect(() => {
-    getWishList()
-  }, [setWishlistState])
+  // useEffect(() => {
+  //   getWishList()
+  // }, [setWishlistState])
 
   useEffect(() => {
     const ownListItem = upskillAltData.filter(item => item.ownedBy.trim().toLowerCase() === title.trim().toLowerCase())
@@ -365,34 +423,49 @@ export function Card({ title, bootcampImg, bootcampId, category, description, st
     }
   }
 
+  const getCategory = (cat) => {
+
+    if (cat === "SHORT_COURSES") return "Short Course";
+    else if (cat === "UPSKILL_COURSES") return "Upskill Course";
+    else if (cat === "EXECUTIVE_COURSES") return "Executive Course";
+    else if (cat === "IN_DEMAND") return "In-Demand Course";
+    else if (cat === "TECH_ENTREPRENEURSHIP") return "Tech Enterpreneurship Course";
+    else if (cat === "PATH_FINDERS") return "Pathfinder Course";
+    else if (cat === "HEAD_START") return "Headstart Course";
+    else if (cat === "upcoming") return "Upcoming Course";
+    else return ""
+
+  }
+
   return (
     <UpCoursesCard>
       <img src={bootcampImg} alt="" />
       <div className="up_content">
-        <div>
+        <div className='title'>
           <h5 aria-describedby={id} variant="contained" onClick={handleClick}>{title}</h5>
-          <div className="d-flex justify-content-between">
+
+        </div>
+        <div className="middle">
+          <div className="checks">
+            {/* <p> <AiOutlineCheck className="icon" />{getCategory(subCategory)}</p> */}
+            <p><AiOutlineCheck className="icon" /> <span style={{ color: "var(--theme-orange)" }}>Live with Instructor</span></p>
+          </div>
+          <div className="d-flex justify-content-end">
             <small>{duration}</small>
-            <small>$ {packages.length > 0 ? packages[0].price : price}</small>
+            {/* <small>$ {packages.length > 0 ? packages[0].price : price}</small> */}
           </div>
-          <div className="d-flex justify-content-between" style={{color: "var(--theme-blue"}}>
+
+          <div className="d-flex justify-content-between checks" style={{ color: "var(--theme-blue" }}>
             <p>Start Date:</p>
-            {/* <p>{new Date(startDate).toLocaleDateString()}</p> */}
             <p>{getFullDate(startDate)}</p>
-
           </div>
         </div>
 
-        {/* <small dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(description)}} /> */}
-        <div className="foot d-flex justify-content-center">
-          <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button>
-          {/* <div className="ct_bar"></div>
 
-          <span>{changeConstants(packages[0]?.title)}</span> */}
+        <div className="foot d-flex justify-content-center">
+          {/* <button className="cta" aria-describedby={id} variant="contained" onClick={handleClick}>View More</button> */}
+          <button onClick={() => gotoclass(title, category, bootcampId, navigate)}>View course</button>
         </div>
-        {/* <div>
-                  <button aria-describedby={id} variant="contained" onClick={handleClick}>{"Explore >"}</button>
-              </div> */}
       </div>
       <Popover
         id={id}
@@ -472,6 +545,7 @@ export function Card({ title, bootcampImg, bootcampId, category, description, st
           </div>
         </Box>
       </Popover>
+
     </UpCoursesCard>
   )
 }

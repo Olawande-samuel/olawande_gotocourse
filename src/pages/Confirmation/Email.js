@@ -115,6 +115,8 @@ export default function Email() {
     const {getItem} = useLocalStorage();
     let userdata = getItem(VERIFICATION_KEY);
     const [loading, setLoading] = useState(false);
+
+    
     async function resendOTPHandler(e){
         try{
             setLoading(_ => true);
@@ -123,7 +125,6 @@ export default function Email() {
             if(!success) throw new AdvancedError(message, statusCode);
             else {
                 const {data} = res;
-                console.log(data);
                 toast.success(message, {
                     position: "top-right",
                     autoClose: 4000,
@@ -139,7 +140,6 @@ export default function Email() {
                       notification: message,
                     };
                 });
-                console.log(data); 
                 // if(userdata.userType === 'affiliate'){
                 //     navigate(`/affiliates/verify`);
                 // } else {

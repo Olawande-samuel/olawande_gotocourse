@@ -60,6 +60,92 @@
     overflow-y: scroll;
 }
 
+.wishlist__inputcontaniner{
+    display: flex;
+    align-items: center;
+    background: #E8E8E8;
+    border-radius: 10px;
+    width: 50%;
+    padding: 0 1rem;
+
+
+}
+
+.wishlist__input{
+    padding: .5rem;
+    background: #E8E8E8;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+
+}
+
+.wishlist__select label{
+    font-size: 1.5rem;
+    padding:.5rem 0;
+    color: #081131;
+}
+
+.wishlist__select select{
+    padding: 1rem;
+    background: #F0F0F0;
+    border: 1px solid #000000;
+    outline: none;
+    width:50%;
+
+}
+
+.wishlist__select small{
+font-weight: 800;
+font-size: 14px;
+color: #595959;
+padding: .8rem 0;
+
+}
+
+.wishlistprice{
+    border-radius: 15px;
+    background: var(--theme-blue);
+    color: #fff;
+    width: 35%;
+    padding: 1rem 1.5rem;
+}
+
+.wishlistprice p{
+    font-size: 28px;
+
+}
+
+.wishlistprice button{
+    color: var(--theme-blue);
+    background: var(--white);
+    outline: none;
+    border: none;
+    padding: .5rem 1rem;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
+}
+
+.wishlistcheckoutitems{
+    width: 50%;
+    color: #081131;
+
+}
+
+.wishlistcheckoutitems button{
+    background: var(--theme-blue);
+    color: var(--white);
+    outline: none;
+    border: none;
+    padding: .5rem 1rem;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
+}
+
+
+
 .icon {
     width: 60px;
     height: 60px;
@@ -162,10 +248,12 @@
 
 .dashboard_courses--left {
     flex: 1;
-    background: var(--dashboard-blue);
+    /* background: var(--dashboard-blue);
+     */
+    background: rgba(136, 187, 255, 0.122);
     padding: 1.5rem 1rem;
     border-radius: 10px;
-    overflow: scroll;
+    overflow: auto;
     min-height: 400px;
     max-height: 800px;
 
@@ -189,9 +277,10 @@
 }
 
 .dashboard_courses--left>div button {
-    padding: 0.3rem 1rem;
+    padding: 0.5rem;
     outline: none;
     border: none;
+    border-radius: 4px;
 
 }
 
@@ -206,7 +295,10 @@
 }
 
 .dashboard_courses--left .classes_button button:first-child {
-    background: var(--theme-orange);
+    /* background: var(--theme-orange); */
+    background: #C6D7EE;
+    color: var(--theme-blue);
+
 }
 
 .dashboard_courses--left ul,
@@ -225,13 +317,13 @@
 }
 
 .dashboard_courses--left h6 {
-    color: var(--theme-orange);
+    color: var(--theme-blue);
     margin-bottom: 2rem;
     font-size: 23px;
 }
 
 .dashboard_courses--right {
-    background: var(--dashboard-pink);
+    /* background: var(--dashboard-pink); */
     flex: 1;
     padding: 1.5rem 3rem;
     border-radius: 10px;
@@ -257,7 +349,8 @@
     margin-top: 3rem;
     padding: 1rem clamp(0.5rem, -0.2143rem + 3.5714vw, 3rem);
     min-height: 400px;
-    background: var(--dashboard-pink);
+    background: rgba(136, 187, 255, 0.122);
+    /* background: var(--dashboard-pink); */ 
     overflow: scroll;
 
 }
@@ -275,7 +368,27 @@
 .dashboard_community h6 {
     font-size: 23px;
     margin-bottom: 2rem;
-    color: #C89C00;
+    color: #000;
+}
+.seemore{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem;
+
+}
+
+.seemore a{
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 22px;
+    color: #0C2191;
+}
+
+.courseApplied {
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
 }
 
 .dashboard_community h6 {
@@ -491,7 +604,7 @@
 
 
 .coursebody .coursecontent:nth-child(odd) {
-    background-color: lightblue;
+    /* background-color: lightblue; */
 }
 
 
@@ -510,6 +623,19 @@
         flex-direction: column;
             align-items: center;
 
+    }
+
+    .courseApplied {
+        flex-direction: column;
+
+    }
+    .wishlistprice{
+        width: 100%;
+    }
+
+    .wishlist__select select, .wishlistcheckoutitems{
+        width:100%;
+    
     }
 
     .coursecontent,.coursebody{

@@ -1,31 +1,29 @@
 import { useState } from "react";
 import {
-  AiFillClockCircle,
-  AiOutlinePaperClip,
-  AiOutlinePlus,
+  AiFillClockCircle
 } from "react-icons/ai";
-import { BsRecordCircle, BsThreeDotsVertical } from "react-icons/bs";
 import startImg from "../../../../images/liveclass/startlive.png";
 
-import style from "./style.module.css";
-import "./console.css";
-import { FaCalendarAlt } from "react-icons/fa";
-import { MdLocationOn } from "react-icons/md";
 import { Box, Modal, Skeleton, Switch } from "@mui/material";
-import { Navigate, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { useAuth } from "../../../../contexts/Auth";
-import { AdvancedError } from "../../../../classes";
-import { toast, ToastContainer } from "react-toastify";
-import axios from "axios";
-import CONFIG from "../../../../utils/video/appConst";
-import { useLocalStorage } from "../../../../hooks";
-import { KEY } from "../../../../constants";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { IoInfiniteOutline} from "react-icons/io5"
-import { MenuOptionsPopup } from "./components";
-import {FiEdit} from "react-icons/fi"
-import { BiTrash } from "react-icons/bi";
+import axios from "axios";
 import { useEffect } from "react";
+import { BiTrash } from "react-icons/bi";
+import { FaCalendarAlt } from "react-icons/fa";
+import { FiEdit } from "react-icons/fi";
+import { IoInfiniteOutline } from "react-icons/io5";
+import { MdLocationOn } from "react-icons/md";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import { AdvancedError } from "../../../../classes";
+import { KEY } from "../../../../constants";
+import { useAuth } from "../../../../contexts/Auth";
+import { useLocalStorage } from "../../../../hooks";
+import CONFIG from "../../../../utils/video/appConst";
+import { MenuOptionsPopup } from "./components";
+import "./console.css";
+import style from "./style.module.css";
+import CryptoJS from "crypto-js";
 
 export function LiveClassInfo({ type }) {
   
@@ -44,6 +42,9 @@ export function LiveClassInfo({ type }) {
     
     onSuccess: res => {
       if(res.success){
+
+        // TODO: check if student / teacher
+        
         setSchedule(res.data)
         return
       }
@@ -51,7 +52,6 @@ export function LiveClassInfo({ type }) {
     },
     onError: err => {
       toast.error("Error fetching schedule")
-      console.log(err)
     }
   })
 
@@ -78,14 +78,14 @@ export function LiveClassInfo({ type }) {
       />
       <header>
         <h4>Live class</h4>
-        {type !== "student" && (
+        {userdata?.userType !== "student" && (
           <p>Click on the button below to schedule a live class</p>
         )}
         <p>You can only join an ongoing schedule</p>
       </header>
 
       <div className={style.live_schedule}>
-        {type !== "student" && (
+        {userdata?.userType !== "student" && (
           <button onClick={() => setOpen(true)}>Schedule a live class</button>
         )}
         <button onClick={refresh}>Refresh list</button>
@@ -117,7 +117,7 @@ export function LiveClassInfo({ type }) {
   );
 }
 
-export function CurrentLive({ setOpen, roomName, status, startDate, startTime, endDate, endTime, roomid, _id }) {
+export function CurrentLive({ setOpen, roomName, status, startDate, startTime, endDate, endTime, userId, createdAt, _id }) {
 
   const contextMenu = [
     {
@@ -140,8 +140,41 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
   const {teacherConsoleFunctions: {deleteLiveSchedule}} = useAuth()
   const userdata = getItem(KEY)
   const queryClient = useQueryClient();
+  const random = "FVFCAAUYI6"
+  const {classId} = useParams()
+  const [startDateTime, setStartDateTime] = useState({
+    startDate:"",
+    startTime:"",
+  })
+  const [endDateTime, setEndDateTime] = useState({
+    endDate:"",
+    endTime:"",
+  })
 
+  const mytimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+  function convertStartDateTime(scheduledDate) {
+    let mytimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    let localDateTime = new Date(scheduledDate).toLocaleString('en-US', { mytimeZone })
+    let date = localDateTime.split(",")[0]
+    let time = localDateTime.split(",")[1]
+    setStartDateTime({...startDateTime, startDate: date, startTime: time})
+  }
+  
+  function convertEndDateTime(scheduledDate) {
+    let mytimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    let localDateTime = new Date(scheduledDate).toLocaleString('en-US', { mytimeZone })
+    let date = localDateTime.split(",")[0]
+    let time = localDateTime.split(",")[1]
+    setEndDateTime({...endDateTime, endDate: date, endTime: time})
+  }
+
+  useEffect(() => {
+    if(startDate || endDate){
+      convertStartDateTime(startDate)
+      convertEndDateTime(endDate)
+    }
+  }, [startDate, endDate])
 
   function handleEdit(){
     navigate(`?edit=${_id}`)
@@ -158,7 +191,6 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
   })
 
   function handleDelete(){
-    console.log(userdata.token)
     if(window.confirm("Delete this item ?")){
       deleteLive.mutate([userdata.token, _id, {}])
     }
@@ -170,14 +202,27 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
     e.preventDefault()
 
     updateItem("gotocourse-roomid", _id);  
+    updateItem("gotocourse-room-creator", userId);  
+
     let today  = new Date().getTime();
     let startingDate = new Date(startDate).getTime();
 
+
+    let id = encryptData(userdata?.id)
+    let token = encryptData(userdata.token)
+
     if(today >= startingDate){
-      // navigate("connect")
+      // window.open(`http://localhost:3000/live/${classId}?token=${id}&user=${token}`, '_blank')
+        window.open(`https://www.meetifix.com/live/${classId}?token=${id}&user=${token}`, '_blank')
     }else {
-      
+      window.alert(`Class starts on ${startDate}`)
     }
+  }
+
+  function encryptData(data){
+    const result = CryptoJS.AES.encrypt(JSON.stringify({data}), random).toString()
+    return result
+
   }
 
 
@@ -185,23 +230,30 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
     setAnchorEl(event.currentTarget);
   };
 
+  
+
   return (
     <div className={style.live_card}>
-      <MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} schedule={true} />
+       {userdata?.userType !== "student" &&
+        <MenuOptionsPopup handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl} openAnchor={openAnchor} data={contextMenu} id={_id} schedule={true} />
+       }
       <h6>{roomName}</h6>
       <div className={style.live_card_schedule}>
         <div>
           <i>
             <FaCalendarAlt />
           </i>
-          <span>{startDate}</span>
+          <span>{startDateTime?.startDate ? startDateTime.startDate : "Today"} - {endDateTime?.endDate ? endDateTime.endDate : "Today"}</span>
+          {/* <span>{new Date(startDate).toLocaleDateString()}</span> */}
         </div>
         <div>
           <i>
             <AiFillClockCircle />
           </i>
           <span>
-            {startTime ? startTime : "Now"} - {endTime ? endTime : <IoInfiniteOutline />} UTC{ new Date().getTimezoneOffset()/10}
+            {/* {startTime ? startTime : "Now"} - {endTime ? endTime : <IoInfiniteOutline />} UTC{ new Date().getTimezoneOffset()/10} */}
+            {startDateTime?.startTime ? startDateTime.startTime : "Now"} - {endDateTime?.endTime ? endDateTime.endTime : <IoInfiniteOutline />} local time
+            {/* {startTime ? new Date(startTime).toLocaleTimeString() : "Now"} - {endTime ? new Date(endTime).toLocaleTimeString() : <IoInfiniteOutline />} */}
           </span>
         </div>
         <div>
@@ -226,11 +278,11 @@ export function CurrentLive({ setOpen, roomName, status, startDate, startTime, e
 
 export function ScheduleClass({ open, setOpen , editDataArray}) {
   const [inputType, setInputType] = useState({
-    startDate: false,
-    endDate: false,
-    endTime: false,
-    startTime: false,
+    startDateTime: false,
+    endDateTime: false,
   });
+
+  const [userId, setUserId] = useState("")
 
   const modalStyle = {
     position: "absolute",
@@ -257,14 +309,46 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
     endTime: "",
   });
   const [loading, setLoading]= useState(false)
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState("")
+
+
   const navigate = useNavigate()
   const [searchParams] = useSearchParams();
   const edit = searchParams.get("edit")
 
 
+  useEffect(() => {
+      if (user?.token) {
+        if(user.isAdmin){
+          setUserId(user.id)
+        } else {
+          setUserId(user.userId)
+        }
+      }
+    }, [user.token])
+  
+   
 
   function handleChange(e) {
     setFormstate({ ...formstate, [e.target.name]: e.target.value });
+  }
+
+
+  function handleStartDate(e){
+    setStartDate(e.target.value)
+    if(e.target.value){
+      const utcTime = new Date(e.target.value).toISOString();
+      setFormstate({...formstate, startDate: utcTime,})
+    }
+  }
+
+  function handleEndDate(e){
+    setEndDate(e.target.value)
+    if(e.target.value){
+      const utcTime = new Date(e.target.value).toISOString();
+      setFormstate({...formstate, endDate: utcTime,})
+    }
   }
 
 
@@ -283,53 +367,38 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
-    if ( !formstate.roomName || !formstate.startDate || !formstate.startTime  ) {
+    if ( !formstate.roomName || !formstate.startDate) {
       toast.error("All fields are required");
-
       throw new AdvancedError("All fields are required", 0);
     }
-    
     try {
       setLoading(true)
-
-
       if(edit){
         editMutation.mutate([user.token, formstate._id, formstate ]) 
         return
       }
-
-      const res =  await axios.post(`${CONFIG.socketUrl}/v1/room/video/init`, {    
+      const res =  await axios.post(`${CONFIG.socketUrl}v1/room/video/init`, {    
         ...formstate,  
-          userId: user.userId,
+          userId: userId,
           classId
       })
-
       res.data.success && toast.success("Schedule created successfully")
-      
       localStorage.setItem("video-room", res.data.data._id)
-      
       queryClient.invalidateQueries("fetch live schedule")
-      
       setGeneralState({
         ...generalState,
         scheduledClasses: [...generalState.scheduledClasses, {...formstate, roomid: res.data.data._id}],
       });
-  
       setFormstate({
         startDate: "",
         endDate: "",
         startTime: "",
         endTime: "",
       });
-
       handleClose();
-      
     } catch (error) {
       console.error(error)
-
       toast.error(error.message)
-
     } finally {
       setLoading(false)
     }
@@ -383,7 +452,7 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
             </label>
 
             <div className="row">
-              <div className="col-sm-6 pe-2 mb-3">
+              {/* <div className="col-sm-6 pe-2 mb-3">
                 <input
                   type={inputType.startDate ? "date" : "text"}
                   className="form-control"
@@ -408,7 +477,7 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
                   className="form-control"
                   onFocus={() => setInputType({ ...inputType, startTime: true })}
                   onBlur={() => setInputType({ ...inputType, startTime: false })}
-                  placeholder="Start Time"
+                  placeholder="Start Time (CST)"
                   onChange={handleChange}
                   value={formstate?.startTime}
                 />
@@ -434,9 +503,37 @@ export function ScheduleClass({ open, setOpen , editDataArray}) {
                   className="form-control"
                   onFocus={() => setInputType({ ...inputType, endTime: true })}
                   onBlur={() => setInputType({ ...inputType, endTime: false })}
-                  placeholder="End Time"
+                  placeholder="End Time (CST)"
                   onChange={handleChange}
                   value={formstate?.endTime}
+                />
+              </div> */}
+              <div className="col-sm-6 pe-2 mb-3">
+                <input
+                  type={inputType.startDateTime ? "datetime-local": "text"}
+                  name="startDate"
+                  id="startDate"
+                  className="form-control"
+                  onFocus={() => setInputType({ ...inputType, startDateTime: true })}
+                  onBlur={() => setInputType({ ...inputType, startDateTime: false })}
+                  placeholder="Class starts"
+                  // onChange={handleChange}
+                  onChange={handleStartDate}
+                  value={startDate}
+                />
+              </div>
+              <div className="col-sm-6 ps-2 mb-3">
+                <input
+                  type={inputType?.endDateTime ? "datetime-local" : "text"}
+                  name="endDate"
+                  id="endDate"
+                  className="form-control"
+                  onFocus={() => setInputType({ ...inputType, endDateTime: true })}
+                  onBlur={() => setInputType({ ...inputType, endDateTime: false })}
+                  placeholder="Class ends"
+                  // onChange={handleChange}
+                  onChange={handleEndDate}
+                  value={endDate}
                 />
               </div>
             </div>
@@ -480,22 +577,27 @@ export function Intermission() {
     const student = location.pathname.split("/")[1] === "student";
     const {generalState, setGeneralState} = useAuth()
     const {getItem}= useLocalStorage()
-  
+    const {classId} = useParams()
+    const userdata = getItem(KEY)
   
     const roomid = getItem("gotocourse-roomid")
+    const creator = getItem("gotocourse-room-creator")
+
+
     function joinLiveClass(){
-        navigate(`/video-chat?room=${roomid}`, {
+      
+        navigate(`/class/${classId}/live/stream?room=${roomid}`, {
             state: {
           
                 roomId: roomid,
-                owner: true
+                owner: userdata.userId === creator ? true: false
             }
         })  
         // navigate("/teacher/live-class/live")  
     }
   return (
     <section className={style.intermission}>
-      <nav className={style.intermission_nav}>
+      {/* <nav className={style.intermission_nav}>
         {!student && (
           <button>
             <span>Record</span>
@@ -506,7 +608,7 @@ export function Intermission() {
         )}
 
         <button onClick={() => navigate(-1)}>Class Console</button>
-      </nav>
+      </nav> */}
       <main className={style.intermission_main}>
         <img src={startImg} alt="" />
         <div className="d-flex flex-column">

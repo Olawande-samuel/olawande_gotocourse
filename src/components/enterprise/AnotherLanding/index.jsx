@@ -19,6 +19,8 @@ import SideBar from "./Sidebar"
 // import Teacher from "./Teacher"
 import Tools from "./Tools"
 import User from "./User"
+import Helmet from 'react-helmet'
+
 
 const Container = styled.div`
 
@@ -97,28 +99,35 @@ const AnotherLanding = () => {
         setGeneralState({ ...generalState, showSidebar: !showSidebar });
     };
     return (
-        <Container >
-            <Navbar toggleSidebar={toggleSidebar} />
-            <SideBar showSidebar={showSidebar}  toggleSidebar={toggleSidebar}/>
-            <Hero />
-            <Tools />
-            <User />
-            <Shop/>
-            {/* <Picture/> */}
-            {/* <Payment/> */}
-            {/* <Teacher/> */}
-            {/* <Course/> */}
-            <Join />
-            <Live />
-            {/* <Sell /> */}
-            <List />
-            {/* <Create/> */}
-            {/* <Community/> */}
-            <Review />
-            <JoinEducator />
-            <Footer />
+        <>
+            <Helmet>
+                <title>Gotocourse</title>
+                <meta property="og:site_name" content="Gotocourse" />
+                <meta name="description" content="Gotocourse" />
+            </Helmet>
+            <Container >
+                <Navbar toggleSidebar={toggleSidebar} />
+                <SideBar showSidebar={showSidebar} toggleSidebar={toggleSidebar} />
+                <Hero />
+                <Tools />
+                <User />
+                <Shop />
+                {/* <Picture/> */}
+                {/* <Payment/> */}
+                {/* <Teacher/> */}
+                {/* <Course/> */}
+                <Join />
+                <Live />
+                {/* <Sell /> */}
+                <List />
+                {/* <Create/> */}
+                {/* <Community/> */}
+                <Review />
+                <JoinEducator />
+                <Footer />
 
-        </Container>
+            </Container>
+        </>
 
     )
 }

@@ -15,10 +15,12 @@ import { useLocalStorage } from '../../../hooks';
 import { COURSE_CATEGORY_KEY } from '../../../constants';
 import { AdvancedError } from '../../../classes';
 import styled from 'styled-components'
-import { ExeEducation, InDemand, UpskillCourseCard } from '../../../components/NewLanding/landingComponents';
+import { ExeEducation, Head, InDemand, UpskillCourseCard } from '../../../components/NewLanding/landingComponents';
 import short from '../../../images/short.png'
 import executive from '../../../images/executive.png'
 import demand from '../../../images/demand.png'
+import headstart from '../../../images/Heads.png'
+import pathfinder from '../../../images/Pathfinder.png'
 
 import skill from '../../../images/upskill.webp'
 import tech from '../../../images/tech.png'
@@ -62,10 +64,10 @@ import ReactPaginate from 'react-paginate';
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-    grid-auto-rows: 402px;
+    grid-auto-rows: 460px;
     overflow: hidden;
     gap: 1.5rem;
-    justify-content:space-around;
+    justify-content:center;
     margin: 1rem 0 ;
     padding: 2rem 0;
     
@@ -301,6 +303,8 @@ min-height: 40vh;
 
     .right{
       flex: .3;
+      // border: 2px solid blue;
+
 
        img{
          max-width: 100%;
@@ -413,6 +417,81 @@ function ShortMid() {
   )
 
 }
+
+const UpComeComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
+  const { generalState: { navHeight } } = useAuth()
+
+  // Here we use item offsets; we could also use page offsets
+  // following the API or data you're working with.
+  const [itemOffset, setItemOffset] = useState(0);
+
+  // Simulate fetching items from another resources.
+  // (This could be items from props; or items loaded in a local state
+  // from an API endpoint with useEffect and useState)
+  const endOffset = itemOffset + itemsPerPage;
+  const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
+
+  // Invoke when user click to request another page.
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
+  
+    setItemOffset(newOffset);
+  };
+  return (
+    <div style={{ marginTop: navHeight }}>
+      <div className='container'>
+        <UpskillHero>
+          <div className="left">
+            <h3>
+              <span>Discover Our Exciting Upcoming Courses</span>
+              {/* <span className="d-block">potential by upgrading</span> */}
+              {/* <span className="d-block">your skillsets.</span> */}
+
+            </h3>
+            <p>Choose from a Wide Range of Programs and Workshops for all ages and interests Our courses are for everyone, from complete beginners to professional artists and designers. We have something for everyone!</p>
+          </div>
+          <div className="right">
+            <img src={skill} alt="" />
+          </div>
+        </UpskillHero>
+      </div>
+
+      <ShortMid />
+
+      <div className="container">
+        <Grid>
+          {
+            currentItems?.map(item => (
+              <UpskillCourseCard {...item} key={item.bootcampId} />
+            ))
+          }
+
+        </Grid>
+        <ReactPaginate
+          className="pagination"
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          // previousLabel="< previous"
+          previousLabel="<"
+          // previousLabel="&#8592;"
+          renderOnZeroPageCount={null}
+        />
+
+      </div>
+
+      <Companies />
+      <Question />
+
+
+
+    </div>
+
+  )
+}
 const ShortCourseComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   const { generalState: { navHeight } } = useAuth()
 
@@ -424,16 +503,13 @@ const ShortCourseComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
+   
     setItemOffset(newOffset);
   };
 
@@ -444,10 +520,8 @@ const ShortCourseComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
         <ShortHero>
           <div className="left">
             <h3>
-              Short courses for
-            </h3>
-            <h3>
-              knowledge boost
+              <span>Short courses for</span>
+              <span className="d-block">knowledge boost</span>
             </h3>
             <p>Choose from wide range of short courses  and tech
               Entrepreneurship  across various categories.</p>
@@ -481,7 +555,7 @@ const ShortCourseComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
           previousLabel="<"
           // previousLabel="&#8592;"
           renderOnZeroPageCount={null}
-        /> 
+        />
 
       </div>
 
@@ -506,16 +580,12 @@ const HeadstartComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -525,19 +595,14 @@ const HeadstartComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
         <ExecutiveHero>
           <div className="left">
             <h3>
-              Headstart programs
+              <span>Headstart Courses </span>
+              <span className="d-block">for Kids and  Teens</span>
             </h3>
-            {/* <h3>
-              needed by companies and
-            </h3>
-            <h3>
-              increase your earnings
-            </h3> */}
 
-            <p>Choose from wide range of programs for your kids 9 years and above to get them started in the tech world</p>
+            <p>Accelerate Your Learning and Jumpstart Your Future with Our <br/> Age-Appropriate Programs. These courses are designed <br/> to help kids and teens get a head start on their tech education.</p>
           </div>
           <div className="right">
-            <img src={demand} alt="" />
+            <img src={headstart} alt="" />
           </div>
         </ExecutiveHero>
       </div>
@@ -548,7 +613,7 @@ const HeadstartComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
         <Grid>
           {
             currentItems?.map(item => (
-              <InDemand {...item} key={item.bootcampId} />
+              <Head {...item} key={item.bootcampId} />
             ))
           }
 
@@ -564,7 +629,7 @@ const HeadstartComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
           previousLabel="<"
           // previousLabel="&#8592;"
           renderOnZeroPageCount={null}
-        /> 
+        />
 
       </div>
 
@@ -589,16 +654,12 @@ const PathComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -609,15 +670,16 @@ const PathComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
         <ShortHero>
           <div className="left">
             <h3>
-             Pathfinders Programs
+              <span>Pathfinder Courses </span>
+              <span className="d-block">for Teens and Adults</span>  
             </h3>
             {/* <h3>
               knowledge boost
             </h3> */}
-            <p>Choose from wide range of programs for individuals 15 years above to get them started in the tech world</p>
+            <p>Explore Your Passions and Develop New Skills with Our Dynamic, Engaging Programs. We will take you through some courses to a master-level and develop your path to getting hired.</p>
           </div>
           <div className="right">
-            <img src={short} alt="" />
+            <img src={pathfinder} alt="" />
           </div>
         </ShortHero>
       </div>
@@ -645,7 +707,7 @@ const PathComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
           previousLabel="<"
           // previousLabel="&#8592;"
           renderOnZeroPageCount={null}
-        /> 
+        />
 
       </div>
 
@@ -671,16 +733,13 @@ const UpskillComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
+  
     setItemOffset(newOffset);
   };
   return (
@@ -689,13 +748,10 @@ const UpskillComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
         <UpskillHero>
           <div className="left">
             <h3>
-              Increase your earning
-            </h3>
-            <h3>
-              potential by upgrading
-            </h3>
-            <h3>
-              your skillsets.
+              <span>Increase your earning</span>
+              <span className="d-block">potential by upgrading</span>
+              <span className="d-block">your skillsets.</span>
+              
             </h3>
             <p>Choose from wide range of upskill courses  and tech Entrepreneurship  across various categories.</p>
           </div>
@@ -727,7 +783,7 @@ const UpskillComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
           previousLabel="<"
           // previousLabel="&#8592;"
           renderOnZeroPageCount={null}
-        /> 
+        />
 
       </div>
 
@@ -751,16 +807,12 @@ const TechComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -801,7 +853,7 @@ const TechComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
           previousLabel="<"
           // previousLabel="&#8592;"
           renderOnZeroPageCount={null}
-        /> 
+        />
 
       </div>
 
@@ -825,16 +877,12 @@ const ExecutiveComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -881,7 +929,7 @@ const ExecutiveComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
           previousLabel="<"
           // previousLabel="&#8592;"
           renderOnZeroPageCount={null}
-        /> 
+        />
 
       </div>
 
@@ -905,16 +953,12 @@ const DemandComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
   const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
     setItemOffset(newOffset);
   };
 
@@ -933,7 +977,7 @@ const DemandComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
               increase your earnings
             </h3>
 
-            <p>Choose from wide range of upskill courses  and tech Entrepreneurship  across various categories.</p>
+            <p>Choose from wide range of In-demand courses  and tech Entrepreneurship  across various categories.</p>
           </div>
           <div className="right">
             <img src={demand} alt="" />
@@ -963,7 +1007,7 @@ const DemandComponent = ({ bootcampTrainingInfo, itemsPerPage }) => {
           previousLabel="<"
           // previousLabel="&#8592;"
           renderOnZeroPageCount={null}
-        /> 
+        />
 
       </div>
 
@@ -992,37 +1036,64 @@ const CourseComponent = () => {
     otherFunctions: { fetchCategories, fetchCourses, fetchBootcamps },
   } = useAuth();
 
-  // const categories = useQuery(["categories"], () => fetchCategories(), {
-  //   onSuccess: res => {
-  //     console.log("categories", res.data)
-  //   },
-  //   onError: err => console.error(err)
-
-  // });
-  // const courses = useQuery(["courses"], () => fetchCourses(), {
-  //   onSuccess: res => {
-  //     console.log("courses", res.data)
-  //   },
-  //   onError: err => console.error(err)
-
-  // });
+ 
 
   const { id } = useParams()
 
-  const change = id.split("_").join(" ")
 
 
 
 
   const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
     onSuccess: res => {
-      // console.log({res})
-      // console.log(res.data.filter(item => item.subCategory === id && item.isActive))
-      if (res.data) {
-        setBootcampTrainingInfo(res.data.filter(item => item.subCategory === id && item.isActive))
-        return
+     
+     if(res.data && id === "IN_DEMAND"){
+        let ids = [
+          "63f68ab678429071a0195c6d", 
+          "63fcd51d4aacf5d78772e89f", 
+          "63717aa2f0eaad8dcf3930a7", 
+          "6371cda6f0eaad8dcf3966e7", 
+          // "63f74cdc78429071a01a00bf",
+          "636e9a3ef0eaad8dcf3699fc",
+          "63fcdb564aacf5d787730a0b",
+          // "63717978f0eaad8dcf392eeb"
+        ]
+        const productMng = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63f68ab678429071a0195c6d" && item.subCategory === "IN_DEMAND") : [];
+        const cyber = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63fcd51d4aacf5d78772e89f" && item.subCategory === "IN_DEMAND") : [];
+        const audit = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63717aa2f0eaad8dcf3930a7" && item.subCategory === "IN_DEMAND") : [];
+        const business = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "6371cda6f0eaad8dcf3966e7" && item.subCategory === "IN_DEMAND") : [];
+        // const design = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63f74cdc78429071a01a00bf" && item.subCategory === "IN_DEMAND") : [];
+        const data = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "636e9a3ef0eaad8dcf3699fc" && item.subCategory === "IN_DEMAND") : [];
+        const risk = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63fcdb564aacf5d787730a0b" && item.subCategory === "IN_DEMAND") : [];
+        const it = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.bootcampId === "63717978f0eaad8dcf392eeb" && item.subCategory === "IN_DEMAND") : [];
+        const restitem = res.data?.length > 0 ? res.data?.filter(item => item.isActive && item.subCategory === "IN_DEMAND" && !ids.includes(item.bootcampId)).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+
+        const all = [...cyber, ...productMng, ...it, ...data, ...business, ...audit, ...risk, ...restitem];
+        setBootcampTrainingInfo(all)
+        return;
+
       }
-      setBootcampTrainingInfo([])
+      else if (res.data && id === "upcoming") {
+        // const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
+        const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate?.includes("2023-03") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+        const all = [...second];
+        setBootcampTrainingInfo(all)
+        return;
+
+      } else if (res.data && id !== "upcoming" && id !== "IN_DEMAND") {
+        const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === id) : [];
+        const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive && item.subCategory === id) : [];
+        const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive && item.subCategory === id).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+
+        // const first = res.data?.length > 0 ? res.data?.filter(item => item.startDate.includes("2023-01") && item.isActive && item.subCategory === id) : [];
+        // const second = res.data?.length > 0 ? res.data?.filter(item => !item.startDate.includes("2023-01") && item.isActive && item.subCategory === id) : [];
+        const all = [...first, ...second, ...third]; 
+        setBootcampTrainingInfo(all)
+        return;
+      }else  {
+        setBootcampTrainingInfo([])
+
+      }
 
     },
     onError: err => console.error(err)
@@ -1045,9 +1116,11 @@ const CourseComponent = () => {
           (id === "UPSKILL_COURSES") ? <UpskillComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
             (id === "EXECUTIVE_COURSES") ? <ExecutiveComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
               (id === "IN_DEMAND") ? <DemandComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
-              (id === "TECH_ENTREPRENEURSHIP") ? <TechComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
-              (id === "PATH_FINDERS") ? <PathComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
-              (id === "HEAD_START") ? <HeadstartComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> : ""
+                (id === "TECH_ENTREPRENEURSHIP") ? <TechComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
+                  (id === "PATH_FINDERS") ? <PathComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
+                    (id === "HEAD_START") ? <HeadstartComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
+                      (id === "upcoming") ? <UpComeComponent bootcampTrainingInfo={bootcampTrainingInfo} itemsPerPage={12} /> :
+                        ""
         }
 
 

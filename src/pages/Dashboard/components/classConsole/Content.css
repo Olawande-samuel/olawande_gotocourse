@@ -105,7 +105,7 @@
 
 .contentbutton button:nth-of-type(2) {
     background: #0C2191;
-    color: #fff;
+    color: #fff !important;
 }
 
 .contentbody {
@@ -230,6 +230,20 @@
     color: #0C2191;
 }
 
+.earnaccord__body{
+    margin-bottom: .5rem;
+}
+
+.earnaccord__header button {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 31px;
+    color: #081131;
+    border: none;
+    outline: none;
+
+}
+
 .content__quiz small {
     font-weight: 400;
     font-size: 10px;
@@ -275,6 +289,29 @@
 
 .textbtn{
     margin: .5rem 0;
+
+}
+
+.assessmentaccord {
+    color: #000;
+
+}
+
+
+.assessmentaccord h4 {
+    font-size: 16px;
+     color: #000;
+}
+
+
+
+.assessmentaccord .accord__header button {
+    color: #000;
+    font-size: 16px;
+}
+
+.assessmentaccord .assessbox{
+    color: #000;
 
 }
 
@@ -457,6 +494,94 @@
 }
 
 
+
+/* quiz results cards */
+.quiz__cards_container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-size: 14px;
+    width: min(100% - 1.2rem, 400px);
+}
+.quiz__card_student_name {
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.quiz__card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 1rem;
+}
+.quiz__card_open_btn {
+    color: #fff;
+    background: var(--theme-blue);
+    padding: 8px 14px;
+    border:none;
+    border-radius: 8px;
+    
+}
+
+.quiz__card_del_btn {
+    border: 1px solid var(--theme-orange);
+    color: var(--theme-orange);
+    padding: 8px 14px;
+    border-radius: 8px;
+}
+
+
+
+
+/* Quiz result details */
+
+.quiz__question_box, .quiz__score {
+    width: min(100% - 1.2rem, 800px);
+    margin-inline: auto;
+    background-color: #e7e7e7;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-block: 2rem;
+} 
+
+.quiz__question_review--btn {
+    display: flex;
+    justify-content: center;
+    width: min(100% - 1rem, 800px);
+    background-color: var(--theme-blue);
+    color: #fff;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-inline: auto;
+}
+
+.quiz__score_form {
+    margin-top: 1rem;
+}
+.quiz__score_form button {
+    padding: 8px;
+    margin-bottom: 1rem;
+    background-color: var(--theme-blue);
+    color: #fff;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+}
+
+.open_review {
+    padding: .4rem;
+    color: #fff;
+    background: var(--theme-blue);
+    border: 0;
+    outline-color: transparent;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+
+
+
+
 /* notes */
 
 .note {
@@ -510,13 +635,74 @@
 
 /* student console */
 
-.assessments {
+ .assessments {
     width: 90%;
-    /* border: 2px solid red; */
-    display: flex;
+    /* display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    justify-content: space-between;
+    justify-content: space-between; */
+} 
+
+.assessments__inputcontainer{
+    display: flex;
+    align-items: center;
+    background: #E8E8E8;
+    border-radius: 10px;
+    width: 70%;
+    padding: 0 1rem;
+    margin-bottom: .5rem;
+}
+
+.assessments__input{
+    padding: .7rem;
+    background: #E8E8E8;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+
+}
+
+.quizaccordion{
+    width: 100%;
+}
+.dashboard_empty{
+    background-image: url(../../../../images/empty.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    min-height: 80vh;
+    /* border: 2px solid red; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard_empty p{
+    font-size: 28px;
+    font-family: 'Raleway';
+    color: #0C2191;
+
+}
+
+
+
+.console_empty{
+    background-image: url(../../../../images/empty.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    min-height: 30vh;
+    /* border: 2px solid red; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.console_empty p{
+    font-size: 28px;
+    font-family: 'Raleway';
+    color: #0C2191;
+
 }
 
 .assesstmentbox {
@@ -668,7 +854,7 @@
 
 
 .assessleft {
-    flex: .5;
+    flex: .35;
     display: flex;
     flex-direction: column;
     /* border: 2px solid blue; */
@@ -676,7 +862,7 @@
 }
 
 .assessright {
-    flex: .5;
+    flex: .65;
     /* border: 2px solid yellow; */
     display: flex;
     align-items: center;
@@ -1121,7 +1307,7 @@
     display: grid;
     /* grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px)); */
     grid-template-columns: 1fr;
-    grid-auto-rows: minmax(min(200px, 350px), 350px);
+    /* grid-auto-rows: minmax(min(200px, 350px), 350px); */
     width: 100%;
     padding-top: 2rem;
     flex-wrap: wrap;
@@ -1132,7 +1318,7 @@
 .filecard {
     width: 100%;
     flex-shrink: 0;
-    height: 18rem;
+    height: auto;
     border: 1.9px solid #eee;
     border-radius: 8px;
 
@@ -1144,7 +1330,8 @@
     height: 100%;
 }
 .filetop{
-    height:70%;
+    /* height:70%; */
+    height:auto;
     /* border: 2px solid red; */
 
 }
@@ -1161,7 +1348,8 @@
 
 .filebottom{
     border: 1px solid #eee;
-    height: 30%;
+    height: 7rem;
+    /* height: 30%; */
     padding: 14px 9px;
     /* border: 2px solid blue; */
     position: relative;
@@ -1238,6 +1426,42 @@
 } */
 
 
+/* FILE PDF */
+
+.pdf_container {
+    height: 80vh;
+    overflow-y: auto;
+}
+.pdf_controls {
+    /* border: 1px solid red; */
+    padding: .5rem;
+    position: fixed;
+    top: 0;
+    right: 50%;
+    transform: translateX(50%);
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    box-shadow: 10px 40px 67px 8px rgba(224,224,224,0.75);
+    -webkit-box-shadow: 10px 40px 67px 8px rgba(224,224,224,0.75);
+    -moz-box-shadow: 10px 40px 67px 8px rgba(224,224,224,0.75);
+
+}
+
+.pdf_controls .prev, .pdf_controls .next {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    outline: transparent;
+    background: inherit;
+    padding: .6rem;
+}
+
+.pdf_controls .prev:hover, .pdf_controls .next:hover{
+    background: #676768
+    ;
+}
 
 .video_controls {
     z-index: 2;

@@ -4,11 +4,12 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { useAuth } from '../../contexts/Auth'
 import { ClassTypeComponent, PathCourseCard, UpskillCourseCard } from './landingComponents'
+import { NewGrid } from './UpNext'
 
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(200px, 230px), 230px));
-    grid-auto-rows: 352px;
+    grid-auto-rows: 380px;
     /* overflow: hidden; */
     gap: 1.5rem;
     justify-content:space-around;
@@ -49,13 +50,13 @@ const Pathfinder = () => {
 
   return (
     <ClassTypeComponent {...data}>
-        <Grid>
+        <NewGrid>
             {
-                shorts?.filter(item=>item.isActive).slice(0, 8).map(item=>(
+                shorts?.filter(item=>item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)).slice(0, 4).map(item=>(
                     <PathCourseCard {...item} all={item} key={item.bootcampId}/>
                 ))
             }
-        </Grid>
+        </NewGrid>
     </ClassTypeComponent>
   )
 }
@@ -189,8 +190,8 @@ export const upskillAltData = [
 const data = {
     header: "",
     header2:"Explore IT pathfinders program for 15 years above",
-    subtext:"Sparkup  IT skill development through coaching and mentoring from real world expert",
-    subtext1:"Achieve your goal in a program that runs through 3 weeks to 6 weeks",
+    subtext2:"Sparkup  IT skill development through coaching and mentoring from real world expert",
+    subtext3:"Achieve your goal in a program that runs through 3 weeks to 6 weeks",
     content: [
         {
             title:"Products",

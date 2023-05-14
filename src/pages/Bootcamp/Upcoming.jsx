@@ -41,32 +41,30 @@ const UpComingComponent = () => {
 
     const categories = useQuery(["categories"], () => fetchCategories(), {
         onSuccess: res => {
-            // console.log("categories", res.data)
         },
         onError: err => console.error(err)
 
     });
     const courses = useQuery(["courses"], () => fetchCourses(), {
         onSuccess: res => {
-            // console.log("courses", res.data)
         },
         onError: err => console.error(err)
 
     });
 
-    // console.log({Location});
 
     const id = Location.search && Location.search.split("=")[1]
-    //  console.log({id});
 
 
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps(), {
         onSuccess: res => {
-            // console.log({res})
-            // console.log(res.data.filter(item => item.subCategory === id && item.isActive))
+
             if (res.data) {
-            // console.log(res.data)
-            setBootcampTrainingInfo(res.data.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive))
+            const first  = res.data.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive);
+            const second =  res.data.filter(item =>  item.startDate !== "2023-01-05T00:00:00.000Z" && item.isActive); 
+            const all  = [...first, ...second]
+            // setShorts(exe)
+            setBootcampTrainingInfo(all)
             // setBootcampTrainingInfo(res.data.filter(item => item.subCategory === id && item.isActive))
                 return
             }
@@ -120,16 +118,12 @@ const UpComingComponent = () => {
     // (This could be items from props; or items loaded in a local state
     // from an API endpoint with useEffect and useState)
     const endOffset = itemOffset + itemsPerPage;
-    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
     const currentItems = bootcampTrainingInfo?.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(bootcampTrainingInfo?.length / itemsPerPage);
 
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {
         const newOffset = (event.selected * itemsPerPage) % bootcampTrainingInfo?.length;
-        console.log(
-            `User requested page number ${event.selected}, which is offset ${newOffset}`
-        );
         setItemOffset(newOffset);
     };
 

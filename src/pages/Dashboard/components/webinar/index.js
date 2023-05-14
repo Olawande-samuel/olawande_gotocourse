@@ -12,6 +12,7 @@ import { RiDeleteBinFill } from "react-icons/ri"
 import UploadForm from "../../../../components/UploadForm"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-toastify"
+import UploadWidget from "../classConsole/components/UploadWidget"
 
 const Form = styled.section`
 padding: 1rem;  
@@ -255,6 +256,7 @@ export const AdminWebinar = () => {
     const [previewImage, setPreviewImage] = useState(false);
     const [edit, setEdit] = useState(false)
     const [tag, setTag] = useState("")
+    const [fileUrl, setFileUrl] = useState("")
 
 
     let navigate = useNavigate()
@@ -263,7 +265,6 @@ export const AdminWebinar = () => {
     const [formState, setFormState] = useState(initialState)
     const location = useLocation()
     const id = location.state && location.state.id
-    // console.log({id});
 
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
@@ -281,7 +282,6 @@ export const AdminWebinar = () => {
                 setEdit(false)
                 setFormState(initialState)
                 navigate('/admin/webinar')
-                // console.log({ data });
             } catch (error) {
                 console.error(error)
                 toast.error(error.message, {
@@ -292,7 +292,7 @@ export const AdminWebinar = () => {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
-                  });
+                });
             } finally {
                 setGeneralState({ ...generalState, loading: false })
 
@@ -305,7 +305,6 @@ export const AdminWebinar = () => {
                 const { success, message, statusCode } = response
                 if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
                 const { data } = response
-                // console.log({ data });
                 setFormState(initialState)
                 navigate('/admin/webinar')
             } catch (error) {
@@ -318,7 +317,7 @@ export const AdminWebinar = () => {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
-                  });
+                });
             } finally {
                 setGeneralState({ ...generalState, loading: false })
 
@@ -331,7 +330,7 @@ export const AdminWebinar = () => {
 
 
 
-   
+
 
     const handleRemoveTagClick = (id) => {
         const list = { ...formState }
@@ -343,7 +342,6 @@ export const AdminWebinar = () => {
         const { name, value } = e.target;
         const list = { ...formState }
         list.presenters[index][name] = value;
-        // console.log(list);
         setFormState(list)
     }
 
@@ -386,12 +384,9 @@ export const AdminWebinar = () => {
                     if (!success) throw new AdvancedError(message, statusCode);
                     else if (statusCode === 1) {
                         const { data } = res;
-                        // console.log({data});
                         let found = data.find((d) => d._id === id);
                         if (found) {
                             setEdit(true)
-                            // console.log({found});
-                            // setFormState(found)
                             setFormState({ ...formState, ...found });
                         }
                     } else {
@@ -408,9 +403,10 @@ export const AdminWebinar = () => {
         return () => console.log("Removing");
     }, [id])
 
-    console.log({ formState });
     return (
         <Admin>
+                    <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+
             <Form >
 
                 <form>
@@ -430,16 +426,18 @@ export const AdminWebinar = () => {
                             onChange={(e) => setFormState({ ...formState, [e.target.name]: e.target.value })}></textarea>
                     </label>
 
-                    <Button variant="contained" component="label" style={{ width: "50%", color: "#FFFFFF", background: "#0C2191" }} onClick={showUploadFormHandler}>
+                    {/* <Button variant="contained" component="label" style={{ width: "50%", color: "#FFFFFF", background: "#0C2191" }} onClick={showUploadFormHandler}>
                         <BiCloudDownload style={{ fontSize: "2rem", color: "#FFFFFF" }} /> Upload
-                        {/* <input hidden accept="image/*" multiple type="file"/> */}
-                    </Button>
+                        //  <input hidden accept="image/*" multiple type="file"/> 
+                    </Button> */}
 
-                    <UploadForm
+                    {/* <UploadForm
                         isOpen={open}
                         setIsOpen={setOpen}
                         setPreviewImage={setPreviewImage}
-                    />
+                    /> */}
+
+
                     <label htmlFor="title">Webinar Image Url
                         <input type="text"
                             name="webinarImg"
@@ -515,12 +513,12 @@ export const AdminWebinar = () => {
                     </Button>
                     <Tags>
 
-                    {
-                        formState.tags?.length > 0 && formState.tags?.map((x, i) => (
-                            <p>#{x}  <RiDeleteBinFill style={{cursor: "pointer", color:"red", marginLeft: "2rem"}} onClick={() => handleRemoveTagClick(i)} /></p>
-                        ))
+                        {
+                            formState.tags?.length > 0 && formState.tags?.map((x, i) => (
+                                <p>#{x}  <RiDeleteBinFill style={{ cursor: "pointer", color: "red", marginLeft: "2rem" }} onClick={() => handleRemoveTagClick(i)} /></p>
+                            ))
 
-                    }
+                        }
 
                     </Tags>
 
@@ -550,10 +548,12 @@ export const AdminWebinar = () => {
                                 />
                             </label>
 
-                            <Button variant="contained" component="label" style={{ width: "50%", color: "#FFFFFF", background: "#0C2191" }} onClick={showUploadFormHandler}>
+                            {/* <Button variant="contained" component="label" style={{ width: "50%", color: "#FFFFFF", background: "#0C2191" }} onClick={showUploadFormHandler}>
                                 <BiCloudDownload style={{ fontSize: "2rem", color: "#FFFFFF" }} /> Upload
-                                {/* <input hidden accept="image/*" multiple type="file"/> */}
-                            </Button>
+                            </Button> */}
+
+                            {/* <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} /> */}
+
 
                             <label htmlFor="presenterImg">presenter Image
                                 <input
@@ -660,7 +660,6 @@ export const AdminWebinarDashboard = () => {
     const webinarData = useQuery(["fetch webinar"], () => getWebinar(userdata?.token), {
         onSuccess: (res) => {
             if (res.data.length > 0) {
-                // console.log("data", res.data);
                 setWebinars(res.data)
 
             }
@@ -687,7 +686,6 @@ export const AdminWebinarDashboard = () => {
             const { data } = response
             queryClient.invalidateQueries(["fetch webinar"])
 
-            // console.log({ data });
         } catch (error) {
             console.error(error)
         } finally {

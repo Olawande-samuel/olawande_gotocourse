@@ -19,7 +19,6 @@ const PaginatedClasses = ({itemsPerPage=8, list}) => {
    useEffect(() => {
      // Fetch items from another resources.
      const endOffset = itemOffset + itemsPerPage;
-     console.log(`Loading items from ${itemOffset} to ${endOffset}`);
      setCurrentItems(list.slice(itemOffset, endOffset));
      setPageCount(Math.ceil(list.length / itemsPerPage));
    }, [itemOffset, itemsPerPage, list]);
@@ -27,9 +26,7 @@ const PaginatedClasses = ({itemsPerPage=8, list}) => {
    // Invoke when user click to request another page.
    const handlePageClick = (event) => {
      const newOffset = (event.selected * itemsPerPage) % list.length;
-     console.log(
-       `User requested page number ${event.selected}, which is offset ${newOffset}`
-     );
+   
      setItemOffset(newOffset);
    };
  

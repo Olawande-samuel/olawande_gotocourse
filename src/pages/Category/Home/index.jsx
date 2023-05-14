@@ -249,7 +249,7 @@ const Category = () => {
                             </BreadcrumbLink>
                         </Breadcrumbs>
                         <Search>
-                            <SearchInput type="text" value={search} onChange={e => setSearch(e.target.value) && console.log(search)} placeholder="Search Category" />
+                            <SearchInput type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search Category" />
                             <SearchButton>Search</SearchButton>
                         </Search>
                     </CategoryTop>

@@ -104,8 +104,8 @@ const Hero = () => {
 			<div className="heroleft">
 				<div>
 					<h1>
-						<span>The best platform to</span>
-						<span className="d-block">power online classes</span>
+						<span>All-in-one platform to </span>
+						<span className="d-block">build virtual schools</span>
 					</h1>
 				</div>
 				<ul>

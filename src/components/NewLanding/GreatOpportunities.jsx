@@ -5,6 +5,7 @@ import { GreatImage } from './landingComponents'
 import headstart from "../../images/landing/headstart.png"
 import dem from "../../images/landing/dem.png"
 import short from "../../images/landing/short.png"
+import fine from "../../images/landing/finegirl.png"
 import inD from "../../images/landing/indemand.png"
 import up from "../../images/landing/upskill.png"
 import tech from "../../images/landing/techpreneur.png"
@@ -19,6 +20,7 @@ const GreatWrapper = styled.section`
 
 
         h4 {
+            font-family: 'Raleway';
             font-weight: 700;
         }
         p {
@@ -84,7 +86,7 @@ const data = [
         link:"/category/PATH_FINDERS"
     },
     {
-        img:dem,
+        img:fine,
         title1:"In demand",
         title2:"career courses",
         link:"/category/IN_DEMAND"
@@ -96,13 +98,13 @@ const data = [
         title2:"Courses",
         link:"/category/UPSKILL_COURSES"
     },
-    {
-        img:tech,
-        title1:"Tech",
-        title2:"Entrepreneurship",
-        title3:"Education",
-        link:"/category/TECH_ENTREPRENEURSHIP"
-    },
+    // {
+    //     img:tech,
+    //     title1:"Tech",
+    //     title2:"Entrepreneurship",
+    //     title3:"Education",
+    //     link:"/category/TECH_ENTREPRENEURSHIP"
+    // },
 ]
 
 export default GreatOpportunities

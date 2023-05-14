@@ -224,7 +224,6 @@ const AllCourses = ({teacher, pathname, id})=> {
     if(!success) throw new AdvancedError(message, statusCode);
     else {
       const {data} = res;
-      console.log(data)
       data.length > 0 ? setCourses(data.filter((course) => course.instructorId === id )) : setCourses([])
       toast.success(message, {
         position: "top-right",

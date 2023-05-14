@@ -62,7 +62,6 @@ const Available = () => {
     const { otherFunctions: { fetchBootcamps } } = useAuth();
 
     useEffectOnMount(() => {
-        console.log('Available classes showing');
         (async () => {
             try {
                 const res = await fetchBootcamps();
@@ -73,7 +72,6 @@ const Available = () => {
                     setBootcamps(_ => data.filter(d => d.isActive));
 
                 }
-                console.log(res);
             } catch (err) {
                 console.error(err)
             }
@@ -197,7 +195,6 @@ export function ClassTypeContainer({mainHeading, subHeading, data,  content}){
 }
 
 function ClassCarousel({data}){
-    console.log({data})
     return(
         <div className="classType_swiper">
             <Swiper

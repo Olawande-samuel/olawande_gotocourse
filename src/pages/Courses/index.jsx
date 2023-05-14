@@ -30,6 +30,8 @@ import placeholder from "../../images/cybersecurity.webp";
 import {witnesses} from "../../components/Testimonials";
 import { changeConstants } from "../Dashboard/Teachers/CreateCourse";
 import { DetailsHero } from "../Bootcamp";
+import { KEY } from "../../constants";
+
 export function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -40,7 +42,6 @@ export function ScrollToTop() {
   return null;
 }
 
-const KEY = "gotocourse-userdata";
 export const courseList = [
   {
     id: 1,

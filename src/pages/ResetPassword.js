@@ -49,11 +49,9 @@ const ResetPassword = () => {
         newPassword: data.newPassword
       }
       const response = await changePassword(pass, userdata.token);
-      console.log({ response })
 
       const { success, statusCode, message } = response.data;
-      console.log({ message })
-      console.log({ statusCode })
+   
 
       if (statusCode !== 1) throw new AdvancedError(message, statusCode);
       const { data: d } = response;

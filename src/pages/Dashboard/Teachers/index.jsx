@@ -8,7 +8,7 @@ import {useQuery} from "@tanstack/react-query"
 import Loader from "../../../components/Loader";
 import { Sidebar, Navbar } from "../components";
 import clsx from "./styles.module.css";
-import { colors } from "../../../constants";
+import { colors, KEY } from "../../../constants";
 import { useAuth } from "../../../contexts/Auth";
 import { GuardedRoute } from "../../../hoc";
 import Input from "../../../components/Input";
@@ -25,7 +25,6 @@ import { DashboardTop, Community } from "../Students";
 import { FaChalkboardTeacher } from "react-icons/fa";
 
 
-const KEY = "gotocourse-userdata";
 
 
 export {default as Courses} from "./Courses"
@@ -58,15 +57,13 @@ export function CourseInfo() {
   }
   // get Course info
   useEffect(() => {
-    let mounted = true;
-    if (mounted) {
-      if (ref.current) return;
+    if (ref.current) return;
+    if (userdata?.token) {
       (async () => {
         try {
           setGeneralState({...generalState, loading: true});
           const res = await fetchCourse(id, userdata?.token);
           const { success, message, statusCode } = res;
-
           if (!success || statusCode !== 1)
             throw new AdvancedError(message, statusCode);
           const { data } = res;
@@ -94,12 +91,10 @@ export function CourseInfo() {
           setGeneralState({...generalState, loading: false});
         }
       })();
-
-      ref.current = true;
     }
 
-    return () => (mounted = false);
-  }, [id]);
+    return () => ref.current = true;
+  }, [id, userdata?.token]);
 
  
   return (
@@ -754,13 +749,16 @@ function ClassesCard({ numberOfLessons, title, date, time, isLive, color }) {
 export const Dashboard = ()=>{
 
   const navigate = useNavigate();
-  const { generalState: { isMobile }, teacherFunctions: { fetchApplications, fetchCourses, earnings , fetchBootcamps}, } = useAuth();
+  const { generalState: { isMobile }, teacherFunctions: { fetchApplications, fetchCourses, earnings , fetchBootcamps, fetchMyStudents}, } = useAuth();
 
   const { getItem } = useLocalStorage();
   let userdata = getItem(KEY);
 
   // const {isLoading, isError, isSuccess, data, error} = useQuery(["teacher courses"], () => fetchCourses(userdata.token))
   const {isLoading, isError, isSuccess, data, error} = useQuery(["teacher bootcamp"], () => fetchBootcamps(userdata.token))
+
+  const {data:studentData} = useQuery(["teacher students"], () => fetchMyStudents(userdata.token))
+  
 
   if(data?.statusCode === 0){
     toast.error(data?.message, {
@@ -773,10 +771,6 @@ export const Dashboard = ()=>{
       progress: true,
     });
   }
-
-
-
-  console.log({data})
 
     const topContent =[
       {
@@ -799,9 +793,19 @@ export const Dashboard = ()=>{
       }
   ]
 
+  
   if(data?.data){
     topContent[1].value = data.data.length
   }
+  
+  if(studentData?.data?.length > 0){
+    let myStudents = new Set()
+
+    studentData.data.forEach(student => myStudents.add(student.studentId))
+    topContent[0].value = myStudents.size
+  }
+
+
   return (
     <Teachers isMobile={isMobile} userdata={userdata} header="Dashboard">
     <div className={clsx.teachers_profile}>
@@ -834,7 +838,7 @@ export const Dashboard = ()=>{
               </ul>
           </div>
           {/* <div className={clsx["dashboard_courses--right"]}>
-              <h6>My Courses</h6>
+              <h6>My Classes</h6>
               <ul>
                   {
                       data?.data?.length === 0 || !data?.data ?  
@@ -900,7 +904,6 @@ export const Teachers = ({ children, isMobile, userdata, notification, header, l
       (async() => {
         try{
           const res = await fetchNotifications(userData?.token);
-          console.log({res})
           if(res){
             const {message, success, statusCode} = res;
             if(!success) throw new AdvancedError(message, statusCode);
@@ -944,13 +947,13 @@ export const Teachers = ({ children, isMobile, userdata, notification, header, l
 
 // fetch messages
 const getMessage = useQuery(["fetch admin messages", userData?.token], ()=>getUnreadMessages(userData?.token), {
+  enabled: !!userData?.token,
   onError: (err)=> {
     toast.error(err.message)
   },
   onSuccess: (res)=>{
     
     if(res.data?.statusCode === 2 ){
-      localStorage.clear()
       return
     }
     if(res.data?.statusCode !== 1){

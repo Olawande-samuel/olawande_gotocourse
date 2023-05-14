@@ -10,10 +10,7 @@ import poster from "../../../../images/help_poster.png";
 
 const Help = () => {
     const videoRef = useRef();
-    useEffect(() => {
-        console.log("Teachers Help component mounted");
-        return () => console.log("Teachers Help component has been removed");
-    }, [])
+
 
     function showPlayHandler(e){
         let target = e.currentTarget;

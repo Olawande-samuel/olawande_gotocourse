@@ -21,10 +21,7 @@ const Login = () => {
     const {authFunctions: {login}, setGeneralState} = useAuth();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    useEffect(() => {
-        console.log("Registration page showing...");
-        return () => console.log("Registration page is removing...")
-    }, [])
+   
     const [formstate, setFormstate] = useState({
         email: "",
         password: "",

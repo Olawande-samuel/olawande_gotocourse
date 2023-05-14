@@ -353,10 +353,7 @@ const BookingMentor = () => {
     const {getItem} = useLocalStorage();
     let _mentorData = getItem('gotocourse-viewMentor');
 
-    console.log(_mentorData);
     useEffectOnMount(() => {
-        console.log(date);
-        console.log("Booking Mentor page is mounted");
         setMentorData(old => {
             return {
                 name: `${_mentorData?.mentorFirstName} ${_mentorData?.mentorLastName}`,
@@ -374,7 +371,6 @@ const BookingMentor = () => {
 
     const changeHandler = (e) => {
         const {name, value} = e.target;
-        console.log({name, value});
         setFormstate(old => {
             return {
                 ...old,
@@ -396,11 +392,9 @@ const BookingMentor = () => {
         try{
             e.preventDefault();
             const isValid = () => Object.values(formstate).every(v => v.trim() !== "");
-            console.log(isValid());
             if(!isValid()) throw new AdvancedError("All fields must be entered and valid to book a session", 0);
             else {
                 //it is valid
-                console.log(formstate);
                 setTimeout(() => setPage(old => old+=1));
             }
         }catch(err){
@@ -417,7 +411,6 @@ const BookingMentor = () => {
     }
 
     const changeTimezone = t => {
-        console.log(t);
         setTimezone(_=> t);
     }
 

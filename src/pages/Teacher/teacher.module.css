@@ -88,9 +88,32 @@
 .payment_details_card  {
   /* font-weight: 700; */
   /* border: 2px solid green; */
-  border-radius: 10px;
+  /* border-radius: 10px; */
   color: #000000;
-  /* width: 80%; */
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  box-shadow: -3px 14px 20px 5px rgba(218, 213, 213, 0.25);
+  border-radius: 20px;
+}
+
+
+.cardbodyleft{
+  width: 50%;
+  background: url(../../images/payleft.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: var(--theme-blue);
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.payment_details_card > div:last-child {
+  width: 50%;
+  border-radius: 0;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
 .payment_details_card p {
@@ -168,11 +191,40 @@
 
     grid-template-columns: repeat(2, 1fr);
     /* padding-block: 4.375rem; */
+  }
+
+  .payment_details_card  {
+    width: 80%;
+  }
 }
+@media screen and (max-width:790px){
+
+  .payment_details_card  {
+    width: 90%;
+  }
 }
 @media screen and (max-width:670px){
   .main {
     grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
     /* padding-block: 4.375rem; */
 }
+
+  .payment_details_card{
+    flex-direction: column;
+    width: 100%;
+    margin: unset;
+  }
+
+  .payment_details_card > div:first-child {
+    display: none;
+    align-items: center;
+
+  }
+
+  .payment_details_card > div:last-child {
+    width: 100%;
+    border-radius: 20px;
+    margin-inline: auto;
+    padding: 1rem;
+  }
 }

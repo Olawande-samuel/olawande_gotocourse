@@ -69,7 +69,6 @@ const TeacherSignup = () => {
       let { success, message, statusCode } = response;
       if (!success) throw new AdvancedError(message, statusCode);
       else {
-        console.log({response})
         // const res = await pledre.addTeacherToSchool({
         //   name:`${formstate.firstName} ${formstate.lastName}`,
         //   email: formstate.email,
@@ -111,7 +110,6 @@ const TeacherSignup = () => {
   function signUpWithGoogle(e){
     e.preventDefault()
     signInWithPopup(authentication, provider).then(res=>{
-        console.log(res)
         if(res.user?.accessToken){
          let token =  {
           accessToken: res.user.accessToken,
@@ -129,7 +127,6 @@ const TeacherSignup = () => {
    function signUpWithFacebook(e){
     e.preventDefault()
     signInWithPopup(authentication, facebookProvider).then(res=>{
-      console.log(res)
       if(res.user?.accessToken){
         if(res.user?.accessToken){
           let token =  {
@@ -151,8 +148,7 @@ const TeacherSignup = () => {
 
   function allowOnAccountExistError(error, type, usertype) {
     const email = error.customData.email;
-    console.log("customdata", error.customData);
-    console.log("customdata mail", error.customData.email);
+   
   
     setLoading(true)
     if (type === "google") {

@@ -45,7 +45,7 @@
 }
 .sidebar_items {
   display: flex;
-  margin-top: 50px;
+  margin-top: 30px;
   flex-direction: column;
   height: 82%;
   overflow-y: scroll;
@@ -65,16 +65,53 @@
   /* border: 3px solid orange;  */
 }
 
-.sidebar_item {
+.sidebar_item, .sidebar_item_button, .sidebar_dropDown {
   cursor: pointer;
-  padding: 15px;
+  padding: 5px 2rem;
+  /* padding: 15px; */
   color: var(--white);
   display: flex;
   align-items: center;
+  /* border: 2px solid red; */
+}
+
+.sidebar_item_button_wrapper {
+  padding: 5px;
+  border-radius: 0px 10px 10px 0px;
+  width: 95%;
+  font-size: .9rem;
+}
+.sidebar_item_button {
+  flex-direction:column;
+  background: transparent;
+  color: #fff;
+  border: none;
+  outline:none;
+  align-items:flex-start;
+  justify-content:center;
+}
+
+.sidebar_dropDown  {
+  flex-direction:column;
+  padding-left: 2.5rem;
+}
+.sidebar_dropDown a {
+  color: #fff;
+  text-decoration:none;
+  width: 100%;
+  margin-right: .3rem;
+  padding: 0 !important;
+  font-size: .9rem;
+}
+.sidebar_icon{
+
+  /* border: 2px solid yellow; */
+ 
 }
 
 .sidebar_item_title {
-  font-size: 1.1rem;
+  font-size: .85rem;
+  /* border: 1px solid green; */
 }
 
 /* NAVBAR */

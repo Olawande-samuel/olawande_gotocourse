@@ -1,20 +1,20 @@
 import { useEffect, useState, useMemo, useRef } from "react";
-import { MdEdit, MdPersonAdd } from "react-icons/md"
+import { MdDownloadForOffline, MdEdit, MdPersonAdd } from "react-icons/md"
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { motion } from "framer-motion"
-import { AiOutlineMenu } from "react-icons/ai"
+import { AiFillQuestionCircle, AiOutlineDoubleRight, AiOutlineMenu, AiOutlineSearch } from "react-icons/ai"
 import { FaGraduationCap } from "react-icons/fa"
 import { BsQuestionCircle, BsDownload } from "react-icons/bs"
 import { Rating } from 'react-simple-star-rating'
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import trello from "../../../images/trello.png"
 import { Product, Stu1, Stu2, Stu3 } from "../../../images/components/svgs"
 import Loader from "../../../components/Loader"
 import { Sidebar, Searchbar, Navbar } from "../components";
 import clsx from "./styles.module.css";
-import { colors, getDate, gotoclass, gotoclassPayment } from "../../../constants";
+import { colors, getDate, gotoclass, gotoclassPayment, getFullDate, calculateWeeksBetween, IMAGEURL } from "../../../constants";
 import avatar from "../../../images/teacher.png"
 import { GuardedRoute } from "../../../hoc";
 import Input from "../../../components/Input";
@@ -25,7 +25,11 @@ import { useLocalStorage } from "../../../hooks";
 import { FaRegTrashAlt, FaUserAlt } from "react-icons/fa";
 import { SiGoogleclassroom } from "react-icons/si";
 import { IoMdChatboxes } from "react-icons/io";
-import { Box, FormControl, InputLabel, MenuItem, Modal, Select } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Modal, Select, TextField } from "@mui/material";
+
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import ChatComponent from "../Admin/Chat";
 
@@ -33,6 +37,9 @@ import LogoutButton from "../../../components/LogoutButton";
 import { PaymentModal } from "../../Bootcamp/Payment";
 import PayModal from "../../../components/PayModal";
 import { LiveClassInfo } from "../components/classConsole/Liveclass";
+import { Link } from "react-router-dom";
+import { BiMoney } from "react-icons/bi";
+import UploadWidget from "../components/classConsole/components/UploadWidget";
 
 
 
@@ -40,61 +47,119 @@ const KEY = 'gotocourse-userdata';
 
 
 export function Profile() {
-    const { generalState: { isMobile, notification, loading }, setGeneralState, studentFunctions: { fetchProfile } } = useAuth();
-
+    const { generalState: { isMobile, notification, loading }, generalState, setGeneralState, studentFunctions: { fetchProfile }, kycFunctions: { getAStudentKYC, addStudentVerificationId } } = useAuth();
+    const [fileUrl, setFileUrl] = useState("")
+    // const [uploadlink, setUploadlink] = useState("")
     const ref = useRef(false)
     const { updateItem, getItem } = useLocalStorage();
     let userdata = getItem(KEY);
     const navigate = useNavigate();
-    useEffect(() => {
-        setTimeout(() => {
-            setGeneralState(old => {
-                return {
-                    ...old,
-                    notification: null
-                }
-            })
-        }, 5000)
-    }, [])
+    const [user, setUser] = useState({})
+	const queryClient = useQueryClient()
+
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         setGeneralState(old => {
+    //             return {
+    //                 ...old,
+    //                 notification: null
+    //             }
+    //         })
+    //     }, 5000)
+    // }, [])
 
 
-    useEffect(() => {
-        if (ref.current) return
-        if (userdata) {
-            const token = userdata.token;
-            (async () => {
-                try {
-                    const res = await fetchProfile(token);
-                    const { success, message, statusCode } = res;
-                    if (!success) throw new AdvancedError(message, statusCode);
-                    else {
-                        const { data } = res;
-                        const newValue = {
-                            ...userdata,
-                            ...data
-                        }
-                        userdata = updateItem(KEY, newValue);
-                    }
-                } catch (err) {
-                    toast.error(err.message, {
-                        position: "top-right",
-                        autoClose: 4000,
-                        hideProgressBar: true,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+    // useEffect(() => {
+    //     if (ref.current) return
+    //     if (userdata.token) {
+    //         const token = userdata.token;
+    //         (async () => {
+    //             try {
+    //                 const res = await fetchProfile(token);
+    //                 const { success, message, statusCode } = res;
+    //                 if (!success) throw new AdvancedError(message, statusCode);
+    //                 else {
+    //                     const { data } = res;
+    //                     const newValue = {
+    //                         ...userdata,
+    //                         ...data
+    //                     }
+    //                     userdata = updateItem(KEY, newValue);
+    //                 }
+    //             } catch (err) {
+    //                 toast.error(err.message, {
+    //                     position: "top-right",
+    //                     autoClose: 4000,
+    //                     hideProgressBar: true,
+    //                     closeOnClick: true,
+    //                     pauseOnHover: true,
+    //                     draggable: true,
+    //                     progress: undefined,
+    //                 });
+    //             }
+    //         })()
+    //     }
+
+    //     ref.current = true
+    // }, [userdata?.token])
+
+    // function editProfileHandler(e) {
+    //     navigate("/student/profile/edit");
+    // user-onboarding
+    // }
+
+
+    useQuery(["fetch a student kyc", userdata?.token], () => getAStudentKYC(userdata?.token),
+        {
+            enabled: userdata?.token !== null,
+            onSuccess: (res) => {
+                if (res?.success) {
+                    setUser(res.data);
+                    return;
                 }
-            })()
+            },
+            onError: (err) => console.error(err),
         }
+    );
 
-        ref.current = true
-    }, [userdata?.token])
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
 
-    function editProfileHandler(e) {
-        navigate("/student/profile/edit");
+            setGeneralState({ ...generalState, loading: true })
+            const response = await addStudentVerificationId(userdata?.token, fileUrl)
+            const { success, message, statusCode } = response
+            if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+            const { data } = response
+            setGeneralState({ ...generalState, loading: false })
+            queryClient.refetchQueries(["fetch a student kyc"])
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
+        } catch (error) {
+            toast.error(error.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        } finally {
+            setGeneralState({ ...generalState, loading: false })
+
+        }
     }
+
     return (
         <Students isMobile={isMobile} userdata={userdata} notification={notification} header="Profile">
             <div className={clsx.students_profile}>
@@ -102,21 +167,81 @@ export function Profile() {
                     <div className={clsx.students_profile_top_img}>
                         <img src={userdata?.profileImg ? userdata.profileImg : avatar} style={{ borderRadius: 10 }} width="100%" alt="Avatar" />
                     </div>
-                    <button className={clsx.students_profile_top_button} onClick={editProfileHandler}>
+                    {/* <button className={clsx.students_profile_top_button} onClick={editProfileHandler}>
                         <MdEdit />  &nbsp;   <span className="d-none d-md-block">Edit</span>
-                    </button>
+                    </button> */}
                 </div>
                 <div className={clsx.students_profile_main}>
-                    {/* <span className="text-muted">Name:</span> */}
+                    <span className="text-muted">Name:</span>
                     <h1 className={clsx.students__header} style={{ marginTop: 20 }}>{userdata?.firstName} {userdata?.lastName}</h1>
                     <span className="text-muted">Experience:</span>
-                    <p>{userdata?.bio ? userdata?.bio : "I'm a purposeful person"} </p>
+                    <p>{userdata?.bio ? userdata?.bio : user?.question?.experience ? user?.question?.experience : "I'm a purposeful person"} </p>
                     <span className="text-muted">Bio:</span>
                     <p>{userdata?.goals ? userdata?.goals : "I'm here to achieve great things in tech"}</p>
+                    <span className="text-muted">Phone Number</span>
+                    <p>{user?.question?.phoneNumber}</p>
+
+                    <span className="text-muted">Degree</span>
+                    <p>{user?.question?.degree}</p>
+                    <span className="text-muted">Employment</span>
+                    <p>{user?.question?.employment}</p>
+                    <span className="text-muted">Country</span>
+                    <p>{user?.question?.country}</p>
+                    <span className="text-muted">Region</span>
+                    <p>{user?.question?.region}</p>
+
+
+                    {
+                        (user?.verificationId !== "default.png") && (
+                            <>
+
+                                <div className={clsx.title}>
+                                    <p className={clsx.question}>Verification Id Card</p>
+                                    <div style={{
+                                        width: "350px",
+                                        height: "200px"
+
+                                    }}>
+                                        <img src={`${IMAGEURL}${user?.verificationId}`} alt="" style={{
+                                            maxWidth: "100%",
+                                            maxHeight: "100%"
+                                        }} />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    Id Card Approval: {user?.IDVerified ? "true" : "false"}
+
+                                </div>
+                            </>
+                        )
+                    }
+
 
                 </div>
+                {
+                    (user?.verificationId === "default.png") && (
+                        <>
+                            <div>
+                                <label htmlFor="">Upload a valid Id Card</label> <br />
+                                <UploadWidget fileUrl={fileUrl} setFileUrl={setFileUrl} />
+                            </div>
+
+                            <div>
+                                {/* <form > */}
+                                {/* <input className="w-100 form-control"  type="text" value={uploadlink} onChange={(e) => setUploadlink(e.target.value)} /> */}
+                                <button disabled={!fileUrl} onClick={handleSubmit} className="button" style={{ padding: ".5rem 2rem" }}>Save Uploaded Id</button>
+                                {/* </form> */}
+                            </div>
+                        </>
+
+                    )
+                }
+
+
             </div>
-        </Students>
+
+        </Students >
     )
 }
 
@@ -374,47 +499,49 @@ export function MyClasses() {
 
     useEffect(() => {
         if (flag.current) return;
-        (async () => {
-            try {
-                const res = await fetchBootcamps(userdata?.token);
-                const { message, success, statusCode } = res;
-                if (!success) throw new AdvancedError(message, statusCode);
-                else if (statusCode === 1) {
-                    const { data } = res;
-                    if (data.length > 0) {
-                        setCourseList(data);
+        if (userdata?.token) {
+            (async () => {
+                try {
+                    const res = await fetchBootcamps(userdata?.token);
+                    const { message, success, statusCode } = res;
+                    if (!success) throw new AdvancedError(message, statusCode);
+                    else if (statusCode === 1) {
+                        const { data } = res;
+                        if (data.length > 0) {
+                            setCourseList(data);
+                        } else {
+
+                            toast.error("No bootcamp found", {
+                                position: "top-right",
+                                autoClose: 4000,
+                                hideProgressBar: true,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            });
+                        }
+
                     } else {
-
-                        toast.error("No bootcamp found", {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
+                        throw new AdvancedError(message, statusCode);
                     }
-
-                } else {
-                    throw new AdvancedError(message, statusCode);
+                } catch (err) {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } finally {
+                    setLoading(_ => false);
                 }
-            } catch (err) {
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            } finally {
-                setLoading(_ => false);
-            }
-        })()
+            })()
+        }
         flag.current = true;
-    }, [])
+    }, [userdata?.token])
 
     function gotoCreateCourseHandler(e) {
         navigate("create");
@@ -422,6 +549,14 @@ export function MyClasses() {
     function detailHandler(e, _id) {
         // navigate("/bootcamps/details/"+_id);
     }
+
+    function handleNavigate(category, name, id) {
+        // localStorage.setItem("gotocourse-courseId", id)
+        let courseCategory = category?.split(" ").join("-")
+        let courseName = name?.split(" ").join("-")
+        navigate(`/categories/${courseCategory}/courses/${courseName}/${id}/payment`)
+    }
+
 
     return (
         <Students header={"My Courses"}>
@@ -433,60 +568,20 @@ export function MyClasses() {
                     </div> */}
                     <div className={clsx.admin__student_main}>
                         {courseList?.length > 0 ? (
-                            // <table className={clsx.admin__student_table}>
-                            //     <thead>
-                            //         {tableHeaders.map((el, i) => (
-                            //             <th key={i}>{el}</th>
-                            //         ))}
-                            //     </thead>
-                            //     <tbody>
-                            //         {courseList?.map(
-                            //             // {_id, title, duration, startTime, endTime, startDate,endDate, description, type, isActive, instructorId, bootcampImg, all}
-                            //             ({ bootcampName, tutorName, startTime, endTime, endDate, startDate, bootcampId, bootcampImg, _id }, i) => (
-                            //                 <tr style={{ padding: "1rem" }}>
-                            //                     <td>{i + 1}</td>
-                            //                     <td>{bootcampName}</td>
-                            //                     <td>{tutorName}</td>
-                            //                     <td>{getDate(startDate)}</td>
-                            //                     <td>{startTime}</td>
-                            //                 </tr>
-                            //             )
-                            //         )}
-                            //         <p>
-                            //         </p>
-                            //     </tbody>
-                            // </table>
-
                             <div className={` ${clsx.dashboard_courses}`}>
                                 <div className={clsx["dashboard_courses--left"]}>
-                                    <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
-                                    <small className="mb-4 d-block">Select and enroll for a class to get started</small>
+                                    {/* <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
+                                    <small className="mb-4 d-block">Select and enroll for a class to get started</small> */}
 
                                     <div className={clsx["courseheader"]}>
                                         <div className={clsx["courseitem"]}> No</div>
                                         <div className={clsx["courseitem"]}>Courses</div>
-                                        <div className={clsx["courseitem"]}>Category</div>
-                                        <div className={clsx["courseitem"]}>Subcategory</div>
+                                        {/* <div className={clsx["courseitem"]}>Category</div>
+                                        <div className={clsx["courseitem"]}>Subcategory</div> */}
                                         <div className={clsx["courseitem"]}>Start Date</div>
-                                        <div className={clsx["courseitem"]}>Duration</div>
-                                        <div className={clsx["courseitem"]}>
-                                            {/* <FormControl fullWidth size="small">
-                                                <InputLabel id="demo-simple-select-label">Fee</InputLabel>
-                                                <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    // value={age}
-                                                    label="fee"
-                                                // onChange={handleChange}
-                                                >
-                                                    <MenuItem value={30}>POUNDS</MenuItem>
-                                                    <MenuItem value={10}>USD</MenuItem>
-                                                    <MenuItem value={20}>EURO</MenuItem>
-                                                    <MenuItem value={20}>NAIRA</MenuItem>
-                                                </Select>
-                                            </FormControl> */}
-                                            Fees
-                                        </div>
+                                        {/* <div className={clsx["courseitem"]}>Duration</div> */}
+                                        <div className={clsx["courseitem"]}>Fees</div>
+                                        <div className={clsx["courseitem"]}>Status</div>
                                         <div className={clsx["courseitem"]} />
                                     </div>
 
@@ -506,33 +601,50 @@ export function MyClasses() {
                                                 </div>
 
 
-                                                <div className={clsx["courseitem"]}>
-                                                    <span>{item.startDate && getDate(item.startDate)}</span>
+                                                {/* <div className={clsx["courseitem"]}>
+                                                    <span>{item.category}</span>
                                                 </div>
+
+                                                <div className={clsx["courseitem"]}>
+                                                    <span>{item.subCategory}</span>
+                                                </div> */}
 
                                                 <div className={clsx["courseitem"]}>
                                                     <span>{item.startDate && getDate(item.startDate)}</span>
                                                 </div>
+                                                {/* <div className={clsx["courseitem"]}>
+                                                    <span>{(item.endDate && item.startDate) ? (calculateWeeksBetween(item.endDate, item.startDate)) : ""}</span>
+                                                </div> */}
 
                                                 <div className={clsx["courseitem"]}>
                                                     <span>$ {item.bootcampPrice}</span>
 
                                                 </div>
+                                                <div className={clsx["courseitem"]}>
+                                                    <span>{item.paymentStatus}</span>
+
+                                                </div>
 
                                                 <div className={clsx["courseitem"]}>
                                                     <div className={clsx.classes_button}>
-                                                        <button className="d-flex align-items-center"
-                                                        // onClick={(e) => handleCourseSelect(e, item)}
-                                                        >
-                                                            <i><BsQuestionCircle /></i>
-                                                            <span>Learn more</span>
-                                                        </button>
-                                                        <button className="d-flex align-items-center"
-                                                        // onClick={(e) => handleCourseSelect(e, item)}
-                                                        >
-                                                            <i><BsDownload /></i>
-                                                            <span>Enroll</span>
-                                                        </button>
+                                                        {
+                                                            (item.paymentStatus === "completed" || item.paymentStatus === "paid") ?
+
+                                                                <button className="d-flex align-items-center" style={{ background: "var(--theme-blue)", color: "#fff" }}
+                                                                    onClick={(e) => navigate(`/student/class-console/class/${item.bootcampId}`)}
+                                                                >
+
+                                                                    <span>Go to class</span>
+                                                                </button>
+                                                                :
+                                                                <button className="d-flex align-items-center gap-2"
+                                                                    onClick={(e) => handleNavigate(item.category, item.bootcampName, item.bootcampId)}
+                                                                >
+                                                                    <i><BiMoney /> </i>
+                                                                    <span>Pay</span>
+                                                                </button>
+
+                                                        }
                                                     </div>
                                                 </div>
 
@@ -550,7 +662,7 @@ export function MyClasses() {
 
                             </div>
 
-                        ) : (<p className="lead">You haven't registered for a course</p>)
+                        ) : (<p className="lead text-center">You haven't registered for a course</p>)
                         }
 
                     </div>
@@ -577,57 +689,59 @@ export function Bootcamps() {
 
     useEffect(() => {
         if (flag.current) return;
-        (async () => {
-            try {
-                const res = await fetchBootcamps(userdata?.token);
-                const { message, success, statusCode } = res;
-                if (!success) throw new AdvancedError(message, statusCode);
-                else if (statusCode === 1) {
-                    const { data } = res;
-                    if (data.length > 0) {
+        if (userdata?.token) {
+            (async () => {
+                try {
+                    const res = await fetchBootcamps(userdata?.token);
+                    const { message, success, statusCode } = res;
+                    if (!success) throw new AdvancedError(message, statusCode);
+                    else if (statusCode === 1) {
+                        const { data } = res;
+                        if (data.length > 0) {
 
-                        setCourseList(data);
-                        toast.success(message, {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
+                            setCourseList(data);
+                            toast.success(message, {
+                                position: "top-right",
+                                autoClose: 4000,
+                                hideProgressBar: true,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            });
+                        } else {
+
+                            toast.error("No bootcamp found", {
+                                position: "top-right",
+                                autoClose: 4000,
+                                hideProgressBar: true,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            });
+                        }
+
                     } else {
-
-                        toast.error("No bootcamp found", {
-                            position: "top-right",
-                            autoClose: 4000,
-                            hideProgressBar: true,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
+                        throw new AdvancedError(message, statusCode);
                     }
-
-                } else {
-                    throw new AdvancedError(message, statusCode);
+                } catch (err) {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } finally {
+                    setLoading(_ => false);
                 }
-            } catch (err) {
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            } finally {
-                setLoading(_ => false);
-            }
-        })()
+            })()
+        }
         flag.current = true;
-    }, [])
+    }, [userdata?.token])
 
     function gotoCreateCourseHandler(e) {
         navigate("create");
@@ -692,7 +806,7 @@ export function Classes() {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
     const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
-
+    const [search, setSearch] = useState("");
 
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Courses">
@@ -706,20 +820,517 @@ export function Classes() {
                     }
                 </div>
             </div> */}
+            <div className={clsx.wishlist__inputcontaniner}>
+                <input type="text" className={clsx.wishlist__input}
+                    placeholder="search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)} />
+                <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
+            </div>
 
             <div className={`${clsx.students_profile_main} ${clsx.student_bg}`}>
-                <AvailableCourses data={bootcamps?.data?.data ? bootcamps?.data?.data : []} />
+                <AllAvailableCourses data={bootcamps?.data?.data ? bootcamps?.data?.data : []} search={search} />
             </div>
         </Students>
     )
 }
 export function Wishlist() {
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { fetchWishlist } } = useAuth();
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { fetchWishlist }, otherFunctions: { fetchBootcamps } } = useAuth();
     const [wishlists, setWishlists] = useState([])
+    const bootcamps = useQuery(["bootcamps"], () => fetchBootcamps());
+    const [search, setSearch] = useState("");
+    let navigate = useNavigate();
 
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
 
+    const getCarts = useQuery(["carts"], () => fetchWishlist(userdata?.token), {
+        enabled: userdata?.token !== null,
+        onSuccess: (res) => {
+            if (res?.data?.length > 0) {
+                setWishlists(res?.data);
+            } else {
+                setWishlists([])
+            }
+        }
+    });
+
+
+
+
+
+    const value = useMemo(() => {
+        return wishlists?.reduce((total, current) => {
+            return total + current.price
+        }, 0)
+    }, [wishlists])
+
+    // const Available=  bootcamps?.data?.data?.length > 0 && bootcamps?.data?.data?.some(r=> wishlists?.map(wishlist => wishlist.courseId).indexOf(r.bootcampId) >= 0)
+    // const Available = bootcamps?.data?.data?.length > 0 && bootcamps?.data?.data?.filter(boot => boot.bootcampId === (wishlists?.map(wishlist => wishlist.courseId)))
+
+
+
+
+
+    return (
+        <Students isMobile={isMobile} userdata={userdata} header="Cart">
+            <div className={clsx.students_profile}>
+                <header className="mb-4 d-flex align-center">
+                    <h3 style={{ paddingRight: "2rem", fontWeight: "600" }}>Cart</h3>
+
+                    {/* <div className={clsx.wishlist__inputcontaniner}>
+                        <input type="text" className={clsx.wishlist__input}
+                            placeholder="search"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)} />
+                        <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
+                    </div> */}
+                </header>
+
+
+
+
+                <div className={clsx.classes}>
+                    {(!userdata?.trainee) &&
+                        <div className={clsx.wishlistprice}>
+                            <small>Total:</small>
+                            <p>{`$${value}`}</p>
+                            {/* <p>$11,000</p> */}
+                            <Link to={`/student/wishlist-checkout`}><button disabled={wishlists?.length <= 0 ? true : false}>Checkout</button></Link>
+
+
+                        </div>
+
+                    }
+                    <p style={{ padding: "1rem 0" }}>My Cart</p>
+
+                    <div className={clsx.students_wishlist}>
+                        {wishlists?.length > 0 ? wishlists?.filter(
+                            (course) =>
+                                // course.category
+                                //   .toLowerCase()
+                                //   .includes(search.toLowerCase()) ||
+                                course.courseName
+                                    .toLowerCase()
+                                    .includes(search.toLowerCase())
+                            //   ||
+                            // course.status
+                            //   .toLowerCase()
+                            //   .includes(search.toLowerCase())
+                        )
+                            .map((item, index) => (
+                                <WishCard key={index} {...item}
+                                // refetch={getWishList} 
+                                />
+                            )) :
+                            <p className="text-center mx-auto">Nothing to see here</p>
+                        }
+                    </div>
+
+
+                    <div>
+                        <p style={{ padding: "3rem 0" }}>Available Courses</p>
+
+                        <div className={clsx.students_wishlist}>
+                            {bootcamps?.data?.data?.length > 0 ? bootcamps?.data?.data?.filter(
+                                (course) =>
+                                    // course.category
+                                    //   .toLowerCase()
+                                    //   .includes(search.toLowerCase()) ||
+                                    course?.title
+                                        .toLowerCase()
+                                        .includes(search.toLowerCase())
+                                //   ||
+                                // course.status
+                                //   .toLowerCase()
+                                //   .includes(search.toLowerCase())
+                            ).map((item, index) => {
+                                let info = {
+                                    courseId: item.bootcampId,
+                                    courseName: item.title,
+                                    courseDescription: item.description,
+                                    courseCategory: item.category,
+                                }
+                                return (
+                                    <AvailCard key={index} {...info}
+                                    // refetch={getWishList} 
+                                    />
+
+                                )
+                            }) :
+                                <p className="text-center mx-auto">Nothing to see here</p>
+                            }
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </Students>
+    )
+}
+
+function WishCard({ courseId: id, courseName, courseDescription, courseCategory }) {
+    const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
+
+    const { generalState: { isMobile }, setGeneralState, generalState, studentFunctions: { deleteFromWishlist } } = useAuth()
+    const { getItem } = useLocalStorage();
+    const userdata = getItem(KEY)
+    let queryClient = useQueryClient()
+    const [loading, setLoading] = useState(false)
+
+    function closeModal() {
+        setOpen(false)
+    }
+
+
+
+    function handleNavigate(category, name) {
+        localStorage.setItem("gotocourse-courseId", id)
+        let courseCategory = category.split(" ").join("-")
+        let courseName = name.split(" ").join("-")
+        navigate(`/categories/${courseCategory}/courses/${courseName}/${id}/payment`)
+    }
+
+    async function removeCourse(e) {
+        e.preventDefault();
+        setLoading(true)
+
+        try {
+            setGeneralState({ ...generalState, loading: true })
+            const res = await deleteFromWishlist(userdata?.token, id)
+            const { success, message, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+                const { data } = res;
+                setLoading(false)
+                queryClient.invalidateQueries(["carts"])
+
+            }
+        } catch (err) {
+
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+            setLoading(false)
+
+        }
+    }
+    return (
+        <div className="card wish">
+            <div className="card-body wish-card-body">
+                <div style={{ width: "50px", height: "50px", borderRadius: "50%" }}>
+                    <img src={trello} alt="icon" className="img-fluid" />
+                </div>
+                <h5 className="fw-bold">{courseName}</h5>
+                <p className="restricted_line" dangerouslySetInnerHTML={{ __html: courseDescription }}></p>
+                <div className="d-flex justify-content-between">
+                    {/* <button className="btn btn-outline-primary" onClick={() => handleNavigate(courseCategory, courseName)} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Register today</button> */}
+                    <button className="btn btn-outline-primary" onClick={() => handleNavigate(courseCategory, courseName)} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Pay</button>
+                    {/* <button className="btn btn-outline-primary" onClick={() => setOpen(true)} style={{ border: "1px solid var(--theme-orange)", color: "var(--theme-orange)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
+                        {/* <i><FaRegTrashAlt /></i> 
+                        Remove
+                    </button> */}
+
+                    <button onClick={removeCourse} className="btn btn-outline-primary" style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
+                        {
+                            loading ?
+                                <div className="spinner-border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </div>
+                                :
+                                "Remove"
+
+                        }
+
+                    </button>
+                </div>
+            </div>
+            <DeleteModal open={open} handleClose={closeModal} id={id} />
+        </div>
+    )
+}
+
+
+function AvailCard({ courseId, courseName, courseDescription, courseCategory, }) {
+    const navigate = useNavigate();
+    const { generalState: { isMobile }, setGeneralState, generalState, studentFunctions: { addwishlistCourse, fetchWishlist, deleteFromWishlist } } = useAuth()
+    const { getItem } = useLocalStorage();
+    let [wishlistState, setWishlistState] = useState(false)
+    const [loading, setLoading] = useState(false)
+    let queryClient = useQueryClient()
+    const userdata = getItem(KEY)
+
+
+    useQuery(["carts"], () => fetchWishlist(userdata?.token), {
+        enabled: userdata?.token !== null,
+        onSuccess: (res) => {
+            if (res?.data?.length > 0) {
+                setWishlistState(res?.data?.map(d => d.courseId).includes(courseId));
+            }
+        }
+    });
+
+
+    async function addToWishlist() {
+        setGeneralState({ ...generalState, loading: true })
+        setLoading(true)
+        if (userdata !== null) {
+            try {
+                const response = await addwishlistCourse(courseId, userdata?.token)
+                const { success, message, statusCode } = response
+                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode)
+                const { data } = response
+                setWishlistState(true)
+                queryClient.invalidateQueries(["carts"])
+            } catch (error) {
+                console.error(error)
+                setLoading(false)
+
+            } finally {
+                setGeneralState({ ...generalState, loading: false })
+                setLoading(false)
+
+            }
+
+
+        } else {
+            navigate("/login")
+        }
+    }
+
+
+
+    async function removeCourse(e) {
+        e.preventDefault();
+        setLoading(true)
+
+        try {
+            setGeneralState({ ...generalState, loading: true })
+            const res = await deleteFromWishlist(userdata?.token, courseId)
+            const { success, message, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+                const { data } = res;
+                setWishlistState(false)
+                setLoading(false)
+                queryClient.invalidateQueries(["carts"])
+
+            }
+        } catch (err) {
+
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+            setLoading(false)
+
+        }
+    }
+
+
+    return (
+        <div className="card wish">
+            <div className="card-body wish-card-body">
+                <div style={{ width: "50px", height: "50px", borderRadius: "50%" }}>
+                    <img src={trello} alt="icon" className="img-fluid" />
+                </div>
+                <h5 className="fw-bold">{courseName}</h5>
+                <p className="restricted_line" dangerouslySetInnerHTML={{ __html: courseDescription }}></p>
+                <div className="d-flex justify-content-between">
+
+                    {
+                        (!userdata.token) ? <button onClick={addToWishlist} className="btn btn-outline-primary" style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
+                            {
+                                loading ?
+                                    <div className="spinner-border" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div>
+                                    :
+                                    "Add to Wishlist"
+
+                            }
+
+                        </button> :
+
+                            (userdata.token && wishlistState) ?
+
+                                <button onClick={removeCourse} className="btn btn-outline-primary" style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Remove wishlist"
+
+                                    }
+
+                                </button>
+                                :
+                                <button onClick={addToWishlist} className="btn btn-outline-primary" style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
+                                    {
+                                        loading ?
+                                            <div className="spinner-border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            :
+                                            "Add to Wishlist"
+
+                                    }
+
+                                </button>
+
+                    }
+                </div>
+            </div>
+        </div>
+    )
+}
+
+function DeleteModal({ id, open, handleClose }) {
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { deleteFromWishlist } } = useAuth();
+    let queryClient = useQueryClient()
+
+    const { getItem } = useLocalStorage();
+    let userdata = getItem(KEY);
+    const style = {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        minWidth: 600,
+        background: "#fff",
+        border: "1px solid #eee",
+        borderRadius: "10px",
+        boxShadow: 24,
+        p: 6,
+        padding: "4rem 2rem",
+    };
+
+    async function removeCourse(e) {
+        e.preventDefault();
+        try {
+            setGeneralState({ ...generalState, loading: true });
+            const res = await deleteFromWishlist(userdata?.token, id)
+            const { success, message, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else {
+                const { data } = res;
+                queryClient.invalidateQueries(["carts", "bootcamps"])
+                handleClose()
+                // toast.success(message, {
+                //     position: "top-right",
+                //     autoClose: 4000,
+                //     hideProgressBar: true,
+                //     closeOnClick: true,
+                //     pauseOnHover: true,
+                //     draggable: true,
+                //     progress: undefined,
+                // });
+            }
+        } catch (err) {
+            // toast.error(err.message, {
+            //     position: "top-right",
+            //     autoClose: 4000,
+            //     hideProgressBar: true,
+            //     closeOnClick: true,
+            //     pauseOnHover: true,
+            //     draggable: true,
+            //     progress: undefined,
+            // });
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+        }
+    }
+    return (
+        <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box style={style}>
+                <h4 className="text-center mb-4">Delete From WishList ?</h4>
+                {loading ?
+                    <div className="text-center">
+                        <div className="spinner-border text-primary">
+                            <div className="visually-hidden">Loading</div>
+                        </div>
+                    </div>
+                    :
+                    <div className="d-flex justify-content-around">
+                        <button className="btn btn-outline-primary" onClick={handleClose} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Cancel</button>
+                        <button className="btn btn-outline-primary" onClick={removeCourse} style={{ border: "1px solid var(--theme-orange)", color: "var(--theme-orange)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Yes</button>
+                    </div>
+                }
+            </Box>
+        </Modal>
+
+    )
+}
+
+
+export function WishlistCheckOut() {
+    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { fetchWishlist, payCarts } } = useAuth();
+    const [showStripeModal, setShowStripeModal] = useState(false);
+    const [payIntent, setPayintent] = useState("")
+
+    const { getItem } = useLocalStorage();
+    let userdata = getItem(KEY);
+    const [search, setSearch] = useState("")
+    const [wishlists, setWishlists] = useState([])
+
+    const handleClose = () => setShowStripeModal(false)
+
+    const checkout = async () => {
+        //get all ids
+        let ids = wishlists.map(wishlist => wishlist.courseId);
+        //   payCarts
+        try {
+            setGeneralState({ ...generalState, loading: true })
+            const res = await payCarts(userdata?.token, ids);
+            const { message, success, statusCode } = res;
+            if (!success) throw new AdvancedError(message, statusCode);
+            else if (statusCode === 1) {
+                const { data } = res;
+                setPayintent(data.clientSecret)
+                setShowStripeModal(true)
+                toast.success(message, {
+                    position: "top-right",
+                    autoClose: 4000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+
+            } else {
+                throw new AdvancedError(message, statusCode);
+            }
+
+        } catch (err) {
+            toast.error(err.message, {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
+        } finally {
+            setGeneralState({ ...generalState, loading: false });
+        }
+
+
+
+        //generate payIntent
+        //setPayintent(data.payIntent)
+
+        //pay
+        //send
+    }
     const flag = useRef(false);
     async function getWishList() {
         try {
@@ -775,139 +1386,90 @@ export function Wishlist() {
         getWishList()
         flag.current = true;
     }, [])
+
+
+    const value = useMemo(() => {
+        return wishlists?.reduce((total, current) => {
+            return total + current.price
+        }, 0)
+    }, [wishlists])
+
     return (
-        <Students isMobile={isMobile} userdata={userdata} header="Wishlist">
+        <Students isMobile={isMobile} userdata={userdata} header="Checkout">
             <div className={clsx.students_profile}>
                 <header className="mb-4">
-                    <h3>My wishlist</h3>
+                    <h3 style={{ paddingRight: "2rem", fontWeight: "600", color: "#081131" }}>Billing address</h3>
+
+                    <div className={clsx.wishlist__select}>
+                        <label htmlFor="country">Country</label> <br />
+                        <select >
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            <option>Nigeria</option>
+                        </select>
+                        <br />
+                        <small>
+                            Gotocourse is required by law to collect applicable transaction taxes <br />
+                            for purchases made in certain tax jurisdictions.
+                        </small>
+                    </div>
+
                 </header>
+
+                <div>
+                    {showStripeModal && <PayModal
+                        token={payIntent}
+                        openPaymentModal={showStripeModal}
+                        handleClose={handleClose}
+                        cart={true}
+                    />
+                    }
+
+                </div>
+
+
+
+
                 <div className={clsx.classes}>
-                    <div className={clsx.students_wishlist}>
-                        {wishlists.length > 0 ? wishlists.map((item, index) => (
-                            <WishCard key={index} {...item} refetch={getWishList} />
-                        )) :
-                            <p className="text-center mx-auto">Nothing to see here</p>
+
+                    <div className={clsx.wishlistcheckoutitems}>
+
+                        <p style={{ padding: "1rem 0", fontWeight: "800" }}>Order details</p>
+                        {
+                            wishlists?.map((item, index) => (
+                                <div key={item.courseId} className="w-100 d-flex justify-content-between align-center py-2">
+                                    <div className="wishlistitemname">
+                                        {item.courseName}
+
+                                    </div>
+                                    <div className="wishlistiteprice">
+                                        ${item.price}
+                                    </div>
+                                </div>
+                            ))
                         }
-                    </div>
-                </div>
-            </div>
-        </Students>
-    )
-}
 
-function WishCard({ courseId: id, courseName, courseDescription, courseCategory, refetch }) {
-    const navigate = useNavigate();
-    const [open, setOpen] = useState(false);
+                        <div className="w-100 d-flex align-center justify-content-between py-3" style={{ fontSize: "1.5rem", fontWeight: "600" }}>
+                            <span>Total</span>
+                            <span>${value}</span>
 
-    function closeModal() {
-        setOpen(false)
-        refetch()
-    }
-    function handleNavigate(category, name) {
-        localStorage.setItem("gotocourse-courseId", id)
-        let courseCategory = category.split(" ").join("-")
-        let courseName = name.split(" ").join("-")
-        navigate(`/categories/${courseCategory}/courses/${courseName}`)
-    }
-    return (
-        <div className="card wish">
-            <div className="card-body wish-card-body">
-                <div style={{ width: "50px", height: "50px", borderRadius: "50%" }}>
-                    <img src={trello} alt="icon" className="img-fluid" />
-                </div>
-                <h5 className="fw-bold">{courseName}</h5>
-                <p className="restricted_line" dangerouslySetInnerHTML={{ __html: courseDescription }}></p>
-                <div className="d-flex justify-content-between">
-                    <button className="btn btn-outline-primary" onClick={() => handleNavigate(courseCategory, courseName)} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Register today</button>
-                    <button className="btn btn-outline-primary" onClick={() => setOpen(true)} style={{ border: "1px solid var(--theme-orange)", color: "var(--theme-orange)", fontWeight: "bold", padding: "0.5rem 1rem" }}>
-                        <i><FaRegTrashAlt /></i>
-                    </button>
-                </div>
-            </div>
-            <DeleteModal open={open} handleClose={closeModal} id={id} />
-        </div>
-    )
-}
-
-function DeleteModal({ id, open, handleClose }) {
-    const { generalState: { isMobile, loading }, setGeneralState, generalState, studentFunctions: { deleteFromWishlist } } = useAuth();
-
-    const { getItem } = useLocalStorage();
-    let userdata = getItem(KEY);
-    const style = {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        minWidth: 600,
-        background: "#fff",
-        border: "1px solid #eee",
-        borderRadius: "10px",
-        boxShadow: 24,
-        p: 6,
-        padding: "4rem 2rem",
-    };
-
-    async function removeCourse(e) {
-        e.preventDefault();
-        try {
-            setGeneralState({ ...generalState, loading: true });
-            const res = await deleteFromWishlist(userdata?.token, id)
-            const { success, message, statusCode } = res;
-            if (!success) throw new AdvancedError(message, statusCode);
-            else {
-                const { data } = res;
-                handleClose()
-                toast.success(message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            }
-        } catch (err) {
-            toast.error(err.message, {
-                position: "top-right",
-                autoClose: 4000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        } finally {
-            setGeneralState({ ...generalState, loading: false });
-        }
-    }
-    return (
-        <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-        >
-            <Box style={style}>
-                <h4 className="text-center mb-4">Delete From WishList ?</h4>
-                {loading ?
-                    <div className="text-center">
-                        <div className="spinner-border text-primary">
-                            <div className="visually-hidden">Loading</div>
                         </div>
-                    </div>
-                    :
-                    <div className="d-flex justify-content-around">
-                        <button className="btn btn-outline-primary" onClick={handleClose} style={{ border: "1px solid var(--theme-blue)", color: "var(--theme-blue)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Cancel</button>
-                        <button className="btn btn-outline-primary" onClick={removeCourse} style={{ border: "1px solid var(--theme-orange)", color: "var(--theme-orange)", fontWeight: "bold", padding: "0.5rem 1rem" }}>Yes</button>
-                    </div>
-                }
-            </Box>
-        </Modal>
 
+
+
+                        <button onClick={checkout} disabled={wishlists?.length <= 0 ? true : false}>Checkout</button>
+
+
+                    </div>
+
+
+                </div>
+            </div>
+        </Students >
     )
 }
+
+
 
 export function Courses() {
     const { generalState: { isMobile, loading }, generalState, setGeneralState, studentFunctions: { fetchCourses } } = useAuth();
@@ -918,17 +1480,30 @@ export function Courses() {
     const ref = useRef(false)
     useEffect(() => {
         if (ref.current) return
-        (async () => {
-            try {
-                setGeneralState({ ...generalState, loading: true })
-                const res = await fetchCourses(userdata?.token);
-                const { success, message, statusCode } = res;
-                setGeneralState({ ...generalState, loading: false })
-                if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
-                else {
-                    const { data } = res;
-                    setCourses(_ => data);
-                    toast.success(message, {
+        if (userdata?.token) {
+            (async () => {
+                try {
+                    setGeneralState({ ...generalState, loading: true })
+                    const res = await fetchCourses(userdata?.token);
+                    const { success, message, statusCode } = res;
+                    setGeneralState({ ...generalState, loading: false })
+                    if (!success || statusCode !== 1) throw new AdvancedError(message, statusCode);
+                    else {
+                        const { data } = res;
+                        setCourses(_ => data);
+                        toast.success(message, {
+                            position: "top-right",
+                            autoClose: 4000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+                } catch (err) {
+                    setGeneralState({ ...generalState, loading: false })
+                    toast.error(err.message, {
                         position: "top-right",
                         autoClose: 4000,
                         hideProgressBar: true,
@@ -938,22 +1513,11 @@ export function Courses() {
                         progress: undefined,
                     });
                 }
-            } catch (err) {
-                setGeneralState({ ...generalState, loading: false })
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            }
-        })()
+            })()
+        }
 
         ref.current = true
-    }, [])
+    }, [userdata?.token])
 
 
     const [rating, setRating] = useState(0) // initial rating value
@@ -1027,7 +1591,7 @@ export function History() {
     const ref = useRef(false)
     useEffect(() => {
         if (ref.current) return
-        if (userdata) {
+        if (userdata?.token) {
             (async () => {
                 setGeneralState({ ...generalState, loading: true })
                 try {
@@ -1063,7 +1627,7 @@ export function History() {
         }
 
         ref.current = true
-    }, [])
+    }, [userdata?.token])
 
 
     const tableHeaders = ["No", "Courses", "Status", "Date", "Course Price", "Amount Paid"]
@@ -1114,6 +1678,15 @@ export function Fees() {
 
     const payNumber = ["1st", "2nd", "3rd", "4th"]
 
+    useQuery(["fetch my enrolledclasses"], () => fetchBootcampFees(userdata?.token), {
+        onSuccess: (res) => {
+            if (res?.data?.length > 0) {
+                setCourse((res?.data));
+            }
+        }
+    })
+
+
     const getmyFees = async (data) => {
         setGeneralState({ ...generalState, loading: true })
         try {
@@ -1131,33 +1704,9 @@ export function Fees() {
 
     }
 
-    async function fetchPayments(token) {
-        setGeneralState({ ...generalState, loading: true })
-        try {
-            const res = await Promise.all([fetchStudentFees(token), fetchBootcampFees(token)])
-            console.log({ res })
-            if (res.length > 0) {
-                const myPayment = res[0].data.concat(res[1].data)
-
-                console.log(myPayment)
-                setCourse(myPayment)
-            }
-            setGeneralState({ ...generalState, loading: false })
-        } catch (err) {
-            toast.error(err.message);
-        }
-    }
-
-
-    useEffect(() => {
-        if (userdata.token) {
-            fetchPayments(userdata.token)
-        }
-    }, [userdata.token])
-
     useEffect(() => {
         if (ref.current) return
-        if (userdata) {
+        if (userdata?.token) {
             (async () => {
                 setGeneralState({ ...generalState, loading: true })
                 try {
@@ -1183,31 +1732,21 @@ export function Fees() {
             })()
         }
         ref.current = true
-    }, [])
+    }, [userdata?.token])
 
 
     const tableContents = fees.length > 0 ? fees : []
 
 
     const all = () => {
-        let pending = course.map((c => c.payments.filter(x => x.status === "pending")))
-        let individual_total = pending.map(d => d.reduce((total, item) => total + item.amount, 0))
-        console.log("all_total", individual_total.reduce((total, item) => total + item, 0));
-        setOutstanding(individual_total.reduce((total, item) => total + item, 0))
+        let pending = course.map((c => c?.payments?.filter(x => x.status === "pending")))
+        let individual_total = pending?.map(d => d?.reduce((total, item) => total + item.amount, 0))
+        setOutstanding(individual_total?.reduce((total, item) => total + item, 0))
 
     }
     all()
 
 
-    // const Outstanding = useMemo(() => {
-    //     let pending = course.map((c => c.payments.filter(x => x.status === "pending")))
-    //     let individual_total = pending.map(d=> d.reduce((total, item) => total + item.amount, 0))
-    //     console.log( "all_total", individual_total.reduce((total, item) => total + item, 0) );
-    //     setOutstanding(individual_total.reduce((total, item) => total + item, 0))
-
-    // }, [course]);
-
-    // console.log({outstanding});
 
     const filterpending = (data) => {
         let result = data.filter(c => c.status === "pending").reduce((sum, current) => sum + current.amount, 0)
@@ -1223,7 +1762,6 @@ export function Fees() {
 
     const handlePay = async (paymentId, type) => {
         setGeneralState({ ...generalState, loading: true })
-        console.log({ type })
         try {
             const res = await payStudentFees(userdata.token, paymentId);
             // const res = type === "course" ? await payStudentFees(userdata.token, paymentId) : await addBootcamp({bootcampId: paymentId}, userdata.token);
@@ -1245,7 +1783,6 @@ export function Fees() {
 
     }
 
-    // console.log({ course });
     return (
         <Students isMobile={isMobile} userdata={userdata} header="Payments">
             <div className={clsx.students_profile}>
@@ -1292,24 +1829,43 @@ export function Fees() {
                                             <p>Full Payment</p>
                                             <div className={clsx.payment__fee}>
                                                 <span>Fee</span>
-                                                <span className={clsx.clred}>${d.amount}</span>
+                                                <span className={clsx.clred}>${pay.amount}</span>
                                             </div>
                                             <div className={clsx.payment__fee}>
                                                 <span>Due Date:</span>
                                                 <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
                                             </div>
                                             <div className={clsx.payment__button}>
-                                                <button className={clsx.bggreen} disabled={d.status === "paid"} onClick={() => handlePay(pay._id, pay.type)}>Full Payment</button>
+                                                <button className={pay.status === "paid" ? clsx.bggreen : clsx.bgred} disabled={d.status === "paid"} onClick={() => handlePay(pay._id, pay.type)}>Full Payment</button>
+                                            </div>
+                                        </div>
+
+                                        {/* <div className={clsx.payment__empty}></div> */}
+                                        <div className={clsx.payment__empty}></div>
+                                    </>
+                                ))
+                                    :
+
+                                    <>
+                                        <div className={clsx.payment__card}>
+                                            <p>Full Payment</p>
+                                            <div className={clsx.payment__fee}>
+                                                <span>Fee</span>
+                                                <span className={clsx.clred}>${d.bootcampPrice}</span>
+                                            </div>
+                                            {/* <div className={clsx.payment__fee}>
+                                                <span>Due Date:</span>
+                                                <span>{new Date(pay.dueDate).toLocaleDateString()}</span>
+                                            </div> */}
+                                            <div className={clsx.payment__button}>
+                                                <button className={d.status === "paid" ? clsx.bggreen : clsx.bgred} disabled={d.status === "paid"} onClick={() => handlePay(d.bootcampId, "bootcamp")}>Full Payment</button>
                                             </div>
                                         </div>
 
                                         <div className={clsx.payment__empty}></div>
                                         <div className={clsx.payment__empty}></div>
                                     </>
-                                ))
-                                    :
-                                    <>
-                                    </>
+
                                 }
 
                                 {
@@ -1397,34 +1953,37 @@ export function Notification() {
 
     useEffect(() => {
         if (flag.current) return;
-        (async () => {
-            try {
-                setLoader(true)
-                const res = await fetchNotifications(userdata?.token);
-                const { message, success, statusCode } = res;
-                if (!success) throw new AdvancedError(message, statusCode);
-                const { data } = res
-                if (data.length > 0) {
-                    setNotifications(data)
-                    const unread = data.filter((notification) => notification.isRead !== true)
-                    setGeneralState({ ...generalState, notifications: unread.length })
+        if (userdata?.token) {
+
+            (async () => {
+                try {
+                    setLoader(true)
+                    const res = await fetchNotifications(userdata?.token);
+                    const { message, success, statusCode } = res;
+                    if (!success) throw new AdvancedError(message, statusCode);
+                    const { data } = res
+                    if (data.length > 0) {
+                        setNotifications(data)
+                        const unread = data.filter((notification) => notification.isRead !== true)
+                        setGeneralState({ ...generalState, notifications: unread.length })
+                    }
+                } catch (err) {
+                    toast.error(err.message, {
+                        position: "top-right",
+                        autoClose: 4000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } finally {
+                    setLoader(_ => false);
                 }
-            } catch (err) {
-                toast.error(err.message, {
-                    position: "top-right",
-                    autoClose: 4000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            } finally {
-                setLoader(_ => false);
-            }
-        })()
+            })()
+        }
         flag.current = true;
-    }, [reload])
+    }, [reload, userdata?.token])
 
     async function markAsRead(e) {
         e.preventDefault();
@@ -1518,24 +2077,29 @@ export function Chat() {
     );
 }
 
-export const Dashboard = () => {
+export const Dashboard = ({ mixpanel }) => {
     const { getItem } = useLocalStorage();
     let userdata = getItem(KEY);
     const { generalState: { isMobile }, studentFunctions: { fetchCourses, fetchWishlist, fetchBootcamps: fetchMyClasses }, otherFunctions: { fetchCourses: fetchAllCourses, fetchBootcamps } } = useAuth();
     // const { studentFunctions: { fetchBootcamps },  otherFunctions:{ fetchBootcamps: studentboot} } = useAuth();
+    const [search, setSearch] = useState("");
 
     const navigate = useNavigate();
 
     const [loader, setLoading] = useState(false)
+    // const [value, setValue] = useState(dayjs('2014-08-18T21:11:54'));
+    const [value, setValue] = useState((null));
+
+    const handleChange = (newValue) => {
+        setValue(newValue);
+    };
+
 
     const { data: wishlistData, isSuccess: wishlistIsSuccess } = useQuery(["fetch wishes"], () => fetchWishlist(userdata?.token))
     const { data: myenrolledcourses, isSuccess: mycoursesuccess } = useQuery(["fetch my enrolledclasses"], () => fetchMyClasses(userdata?.token))
     // const { data: allCourses } = useQuery(["fetch all bootcamps"], () => fetchBootcamps())
     const { data, isSuccess } = useQuery(["bootcamps"], () => fetchBootcamps());
 
-    // console.log(data)
-    // console.log("data", myenrolledcourses?.data);
-    // console.log("wish",wishlistData );
     const topContent = [
         {
             id: 1,
@@ -1556,7 +2120,7 @@ export const Dashboard = () => {
             value: "$0"
         }
     ]
-    const tableHeaders = ["No", "Courses", "Course Fee($)", ""]
+    const tableHeaders = ["No", "Courses", "Status", "Date", "Amount Paid"]
 
     if (wishlistIsSuccess) {
         topContent[1].value = wishlistData?.data?.length
@@ -1565,19 +2129,55 @@ export const Dashboard = () => {
         topContent[0].value = myenrolledcourses?.data?.length
     }
 
+    useMemo(() => mixpanel.track("visited student dashboard"), [])
+
+
+
+    const dateFilter = useMemo(() => {
+        if (value?.$d) {
+            return new Intl.DateTimeFormat('en-US').format(new Date(value?.$d))
+        } return ""
+    }, [value?.$d])
+
+
+
+    function filterDates(date) {
+        let isFound
+        if (date) {
+            isFound = (new Intl.DateTimeFormat('en-US').format(new Date(date))?.includes(dateFilter))
+            return isFound
+        } else {
+            return false
+        }
+    }
+
     return (
         <Students isMobile={isMobile} userdata={userdata} header={"Dashboard"} >
             <div className={clsx.students_profile}>
                 <DashboardTop content={topContent} />
 
-                <div className={clsx.students_profile_main}>
-                    <UpcomingCourses data={data?.data ? data?.data : []} />
+                <div className={clsx.wishlist__inputcontaniner}>
+                    <input type="text" className={clsx.wishlist__input}
+                        placeholder="search"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)} />
+                    <AiOutlineSearch style={{ fontSize: "1.5rem", color: "#292D32" }} />
                 </div>
 
+                {
+                    userdata?.trainee &&
+                    <div className={clsx.students_profile_main}>
+                        {/* <UpcomingCourses data={all ? all : []} /> */}
+                        <UpcomingCourses data={data?.data ? data?.data : []} search={search} />
+                    </div>
+                }
 
-                
+
+
                 <div className={clsx.students_profile_main}>
-                    <AvailableCourses data={data?.data ? data?.data : []} />
+                    {/* <AvailableCourses data={all ? all : []} /> */}
+                    <AvailableCourses data={data?.data ? data?.data : []} search={search} />
+
                     <div className={`d-flex flex-wrap ${clsx.dashboard_courses}`}>
                         <div className={clsx["dashboard_courses--right"]}>
                             <h6>Courses on wishlist</h6>
@@ -1596,12 +2196,29 @@ export const Dashboard = () => {
                     </div>
                 </div>
                 <div className={`${clsx.dashboard_course_details}`}>
-                    <div className="d-flex justify-content-between align-items-center">
-                        <h6>Courses paid for</h6>
+                    <div className={clsx.courseApplied}>
+                        <h6>Names of Courses applied for</h6>
+
+                        <div className="coursesdatefilter">
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    // label="Date desktop"
+                                    inputFormat="MM/DD/YYYY"
+                                    value={value}
+                                    onChange={handleChange}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
+
+                        </div>
+
+
+
                     </div>
                     {/* <CourseTable courses={data?.data} type="dashboard" /> */}
                     {
                         myenrolledcourses?.data?.length > 0 ?
+                            // data?.data?.length > 0 ?
                             <div className="table-responsive">
                                 <table className="table table-borderless w-auto">
                                     <thead>
@@ -1612,13 +2229,17 @@ export const Dashboard = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {myenrolledcourses?.data?.filter(data => data.status === "paid").map((item, i) => (
+                                        {/* {myenrolledcourses?.data?.filter(data =>  data?.status === "paid").map((item, i) => ( */}
+                                        {myenrolledcourses?.data?.filter(data => filterDates(data?.startDate) && data?.status === "paid").map((item, i) => (
+
                                             <tr key={i}>
                                                 <td><span>{i + 1}</span></td>
                                                 <td>
                                                     <span>{item.bootcampName}</span>
                                                 </td>
-                                                <td><span>{item.amountPaid}</span></td>
+                                                <td><span>{item.paymentStatus}</span></td>
+                                                <td><span>{new Date(item?.startDate).toLocaleDateString()}</span></td>
+                                                <td><span>${item.amountPaid}</span></td>
                                                 <td>
                                                     {/* <span className="d-block dashboard_table">
                                                         <GotoDashboard loader={loader} setLoading={setLoading} />
@@ -1641,17 +2262,27 @@ export const Dashboard = () => {
 
 }
 
-function UpcomingCourses({ data }) {
+function UpcomingCourses({ data, search }) {
     const navigate = useNavigate()
     // const tableHeader = ["Courses", "Start Date", "Program Fee", ""]
     const { getItem } = useLocalStorage()
     let userdata = getItem(KEY);
 
+    // const first = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-19T00:00:00.000Z" && item.isActive) : [];
+    // const second = data?.length > 0 ? data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+    // const third = data?.length > 0 ? data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    // const all = [...first, ...second, ...third];
+    const all = data?.length > 0 ? data?.filter(item => item.category === "TRAIN2 WORKABROAD") : [];
 
 
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
+            // if (userdata?.trainee) {
+            //     localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+            //     gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
+            //     return;
+            // }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
             gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
         } else {
@@ -1659,12 +2290,145 @@ function UpcomingCourses({ data }) {
         }
 
     }
-    console.log({ data });
     return (
+        <div className={` ${clsx.dashboard_courses}`}>
+            <div className={clsx["dashboard_courses--left"]}>
+                <h6 style={{ marginBottom: ".5rem" }}>Train to Work Abroad Courses</h6>
+                <small className="mb-4 d-block">Select and enroll for a course to get started</small>
+
+                <div className={clsx["courseheader"]}>
+                    <div className={clsx["courseitem"]}> No</div>
+                    <div className={clsx["courseitem"]}>Courses</div>
+                    <div className={clsx["courseitem"]}>Category</div>
+                    <div className={clsx["courseitem"]}>Subcategory</div>
+                    <div className={clsx["courseitem"]}>Start Date</div>
+                    <div className={clsx["courseitem"]}>Durations</div>
+                    <div className={clsx["courseitem"]}>Fees</div>
+                    <div className={clsx["courseitem"]} />
+                </div>
+
+                <div className={clsx["coursebody"]}>
+                    {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
+                    {/* {data?.length > 0 && data.filter(d => d.startDate === "2023-01-05T00:00:00.000Z" && d.isActive).sort(() => 0.5 - Math.random()).map((item, i) => ( */}
+                    {all?.length > 0 && all?.filter((course) =>
+                        course?.category
+                            .toLowerCase()
+                            .includes(search.toLowerCase()) ||
+                        course?.title
+                            .toLowerCase()
+                            .includes(search.toLowerCase())
+                    ).slice(0, 4).sort(() => 0.5 - Math.random()).map((item, i) => (
+
+                        <div className={clsx["coursecontent"]} key={i}>
+                            <div className={clsx["courseitem"]}>
+                                {i + 1}
+
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                {item.title}
+
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+
+                                {item.category?.toLowerCase()}
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                {item.subCategory === "SHORT_COURSES" ? "Short Courses" :
+                                    item.subCategory === "IN_DEMAND" ? "In-Demand Course" :
+                                        item.subCategory === "UPSKILL_COURSES" ? "Upskill Course" :
+                                            item.subCategory === "EXECUTIVE_COURSES" ? "Executive Course" : "Tech Enterpreneurship"}
+
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                {item.startDate && getDate(item.startDate)}
+                            </div>
+
+
+                            <div className={clsx["courseitem"]}>
+                                {item.duration}
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                &#8358;{(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
+
+                            </div>
+
+                            <div className={clsx["courseitem"]}>
+                                <div className={clsx.classes_button}>
+                                    <button className="d-flex align-items-center" onClick={() => gotoclass(item.title, item.category, item.bootcampId, navigate)}>
+                                        <i><AiFillQuestionCircle style={{ fontSize: "1.1rem", color: "var(--theme-blue" }} /></i>
+                                        <span>Learn more</span>
+                                    </button>
+                                    <button className="d-flex align-items-center" onClick={(e) => handleCourseSelect(e, item)}>
+                                        <i><MdDownloadForOffline style={{ fontSize: "1.1rem" }} /></i>
+                                        <span>Enroll</span>
+                                    </button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    ))
+                    }
+
+                </div>
+
+                {all?.length > 0 &&
+                    <div className={clsx.seemore}>
+                        <Link to={`/category/upcoming`}> See more <AiOutlineDoubleRight /></Link>
+                    </div>
+                }
+
+            </div>
+
+
+
+
+        </div>
+    )
+}
+
+
+function AllAvailableCourses({ data, search }) {
+    const navigate = useNavigate()
+    // const tableHeader = ["Courses", "Start Date", "Program Fee", ""]
+    const { getItem } = useLocalStorage()
+    let userdata = getItem(KEY);
+
+
+    function handleCourseSelect(e, item) {
+        e.preventDefault()
+        if (userdata?.token) {
+            // if (userdata?.trainee) {
+            //     localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+            //     gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
+            //     return;
+            // }
+            localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+            gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
+        } else {
+            navigate("/login")
+        }
+
+    }
+    const first = data?.length > 0 ? data?.filter(item => item.startDate?.includes("2023-03") && item.isActive && item.category !== "TRAIN2 WORKABROAD").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+    // const third = data?.length > 0 ? data?.filter(item => !item.startDate?.includes("2023-03") && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+
+    const all = [...first];
+
+    return (
+
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
                 <h6 style={{ marginBottom: ".5rem" }}>Upcoming Courses</h6>
                 <small className="mb-4 d-block">Select and enroll for a course to get started</small>
+
+
+
 
                 <div className={clsx["courseheader"]}>
                     <div className={clsx["courseitem"]}> No</div>
@@ -1697,7 +2461,15 @@ function UpcomingCourses({ data }) {
 
                 <div className={clsx["coursebody"]}>
                     {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
-                    {data?.length > 0 && data.filter(d => d.startDate === "2023-01-05T00:00:00.000Z" && d.isActive).sort(() => 0.5 - Math.random()).map((item, i) => (
+                    {/* {data?.length > 0 && data.filter(d => d.isActive).map((item, i) => ( */}
+                    {all?.length > 0 && all?.filter((course) =>
+                        course?.category
+                            .toLowerCase()
+                            .includes(search?.toLowerCase()) ||
+                        course?.title
+                            .toLowerCase()
+                            .includes(search?.toLowerCase())
+                    ).map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
                             <div className={clsx["courseitem"]}>
@@ -1740,11 +2512,11 @@ function UpcomingCourses({ data }) {
                             <div className={clsx["courseitem"]}>
                                 <div className={clsx.classes_button}>
                                     <button className="d-flex align-items-center" onClick={() => gotoclass(item.title, item.category, item.bootcampId, navigate)}>
-                                        <i><BsQuestionCircle /></i>
+                                        <i><AiFillQuestionCircle style={{ fontSize: "1.1rem", color: "var(--theme-blue" }} /></i>
                                         <span>Learn more</span>
                                     </button>
                                     <button className="d-flex align-items-center" onClick={(e) => handleCourseSelect(e, item)}>
-                                        <i><BsDownload /></i>
+                                        <i><MdDownloadForOffline style={{ fontSize: "1.1rem" }} /></i>
                                         <span>Enroll</span>
                                     </button>
                                 </div>
@@ -1757,6 +2529,7 @@ function UpcomingCourses({ data }) {
 
                 </div>
 
+
             </div>
 
 
@@ -1766,7 +2539,9 @@ function UpcomingCourses({ data }) {
     )
 }
 
-function AvailableCourses({ data }) {
+
+
+function AvailableCourses({ data, search }) {
     const navigate = useNavigate()
     // const tableHeader = ["Courses", "Start Date", "Program Fee", ""]
     const { getItem } = useLocalStorage()
@@ -1776,18 +2551,42 @@ function AvailableCourses({ data }) {
     function handleCourseSelect(e, item) {
         e.preventDefault()
         if (userdata?.token) {
+            // if (userdata?.trainee) {
+            //     localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
+            //     gotoclassPayment(item.title, item.category, item.bootcampId, navigate, userdata?.trainee)
+            //     return;
+            // }
             localStorage.setItem("gotocourse-bootcampdata", JSON.stringify(item))
-            gotoclassPayment(item.title, item.category, item.bootcampId, navigate)
+            gotoclassPayment(item.title, item.category, item.bootcampId, navigate, true)
         } else {
             navigate("/login")
         }
 
     }
-    // console.log({ data });
+
+    let ids = [
+        "63f74cdc78429071a01a00bf",
+        "63717978f0eaad8dcf392eeb"
+       ]
+       
+       const first = data?.length > 0 ? data?.filter(item => item.bootcampId === "636de01bbc7cb9bcc9c9b119" && item.isActive) : [];
+       const second = data?.length > 0 ? data?.filter(item => item.bootcampId === "63f68ab678429071a0195c6d" && item.isActive) : [];
+       const third = data?.length > 0 ? data?.filter(item => item.bootcampId === "63717aa2f0eaad8dcf3930a7" && item.isActive) : [];
+       const fourth = data?.length > 0 ? data?.filter(item => item.bootcampId === "6430661e1485c80cb3261471" && item.isActive) : [];
+
+       const fifth = data?.length > 0 ? data?.filter(item => !ids.includes(item.bootcampId) && item.startDate?.includes("2023-03") && item.isActive  &&  item.category !== "TRAIN2 WORKABROAD").sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+
+       // const second = res.data?.length > 0 ? res.data?.filter(item => item.startDate === "2023-01-05T00:00:00.000Z" && item.isActive) : [];
+       // const third = res.data?.length > 0 ? res.data?.filter(item => item.startDate !== "2023-01-05T00:00:00.000Z" && item.startDate !== "2023-01-19T00:00:00.000Z" && item.isActive).sort((a, b) => new Date(a.startDate) - new Date(b.startDate)) : [];
+       const all = [...first, ...second, ...third, ...fourth, ...fifth];
+
+
+    
+
     return (
         <div className={` ${clsx.dashboard_courses}`}>
             <div className={clsx["dashboard_courses--left"]}>
-                <h6 style={{ marginBottom: ".5rem" }}>Available Courses</h6>
+                <h6 style={{ marginBottom: ".5rem" }}>Upcoming Classes</h6>
                 <small className="mb-4 d-block">Select and enroll for a course to get started</small>
 
                 <div className={clsx["courseheader"]}>
@@ -1821,7 +2620,15 @@ function AvailableCourses({ data }) {
 
                 <div className={clsx["coursebody"]}>
                     {/* {data?.length > 0 && data.sort(() => 0.5 - Math.random()).map((item, i) => ( */}
-                    {data?.length > 0 && data.filter(d => d.isActive).map((item, i) => (
+                    {/* {data?.length > 0 && data.filter(d => d.isActive).map((item, i) => ( */}
+                    {all?.length > 0 && all?.filter((course) =>
+                        course?.category
+                            .toLowerCase()
+                            .includes(search?.toLowerCase()) ||
+                        course?.title
+                            .toLowerCase()
+                            .includes(search?.toLowerCase())
+                    ).slice(0, 4).map((item, i) => (
 
                         <div className={clsx["coursecontent"]} key={i}>
                             <div className={clsx["courseitem"]}>
@@ -1857,18 +2664,18 @@ function AvailableCourses({ data }) {
                             </div>
 
                             <div className={clsx["courseitem"]}>
-                            ${(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
+                                ${(item?.packages?.length === 0 && item.price) ? item.price : (item?.packages?.length > 0) && item.packages[0].price}
 
                             </div>
 
                             <div className={clsx["courseitem"]}>
                                 <div className={clsx.classes_button}>
                                     <button className="d-flex align-items-center" onClick={() => gotoclass(item.title, item.category, item.bootcampId, navigate)}>
-                                        <i><BsQuestionCircle /></i>
+                                        <i><AiFillQuestionCircle style={{ fontSize: "1.1rem", color: "var(--theme-blue" }} /></i>
                                         <span>Learn more</span>
                                     </button>
                                     <button className="d-flex align-items-center" onClick={(e) => handleCourseSelect(e, item)}>
-                                        <i><BsDownload /></i>
+                                        <i><MdDownloadForOffline style={{ fontSize: "1.1rem" }} /></i>
                                         <span>Enroll</span>
                                     </button>
                                 </div>
@@ -1880,6 +2687,12 @@ function AvailableCourses({ data }) {
                     }
 
                 </div>
+
+                {all?.length > 0 &&
+                    <div className={clsx.seemore}>
+                        <Link to={`/student/classes`}> See more <AiOutlineDoubleRight /></Link>
+                    </div>
+                }
 
             </div>
 
@@ -1949,14 +2762,14 @@ export function StudentLive() {
 }
 
 export const Students = ({ children, isMobile, notification, userdata, header, loading }) => {
-    const { generalState: { showSidebar }, generalState, setGeneralState, otherFunctions: { fetchCourses }, adminFunctions: { getUnreadMessages }, studentFunctions: { fetchNotifications, readNotifications } } = useAuth();
+    const { generalState: { showSidebar }, generalState, setGeneralState, otherFunctions: { fetchCourses }, adminFunctions: { getUnreadMessages }, studentFunctions: { fetchNotifications, readNotifications, fetchWishlist } } = useAuth();
     const { getItem } = useLocalStorage()
     const userData = getItem(KEY)
-    const user = getItem("gotocourse-userdata")
+    const location = useLocation()
 
-    const flag = useRef(false);
+
     useEffect(() => {
-        if (flag.current) return;
+        if (!userData?.token) return;
         (async () => {
             try {
                 const res = await fetchNotifications(userData?.token);
@@ -1979,8 +2792,18 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
                 });
             }
         })()
-        flag.current = true;
-    }, [])
+    }, [userdata?.token])
+
+    const getCarts = useQuery(["carts"], () => fetchWishlist(userData?.token), {
+        enabled: userData?.token !== null,
+        onSuccess: (res) => {
+            if (res?.data?.length > 0) {
+                setGeneralState({ ...generalState, carts: res?.data?.length })
+            }
+        }
+    });
+
+
 
     const toggleSidebar = () => {
         setGeneralState({ ...generalState, showSidebar: !showSidebar })
@@ -2029,7 +2852,8 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
     }
 
     // fetch messages
-    const getMessage = useQuery(["fetch student messages", user.token], () => getUnreadMessages(user.token), {
+    const getMessage = useQuery(["fetch student messages", userData?.token], () => getUnreadMessages(userData?.token), {
+        enabled: userData?.token !== null,
         onError: (err) => {
             toast.error(err.message, {
                 position: "top-right",
@@ -2043,7 +2867,7 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
         },
         onSuccess: (res) => {
             if (res.data?.statusCode === 2) {
-                localStorage.clear()
+                return
             }
             if (res.data?.statusCode !== 1) {
                 toast.error(res.data?.message, {
@@ -2072,10 +2896,14 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
         }
     })
 
-    
+
     // for create
 
-    const isCreator = userdata?.userType === "schools"
+    const isCreator = userData?.userType === "schools"
+    const last = location.pathname.split('/').length - 1
+    const wishlist = location.pathname.split('/')[last] === "wishlist"
+    // const wishlistCheckout = location.pathname.split('/')[last] === "wishlist-checkout"
+
     return (
         <GuardedRoute>
             <div className={clsx.students}>
@@ -2093,10 +2921,10 @@ export const Students = ({ children, isMobile, notification, userdata, header, l
 
                 <Sidebar isMobile={isMobile} />
                 <div className={clsx.students_main}>
-                {
-                    !isCreator &&
+                    {
+                        !isCreator && !wishlist &&
                         <Navbar toggleSidebar={toggleSidebar} header={header} content={student} />
-                }
+                    }
 
                     {children}
 
@@ -2145,12 +2973,10 @@ export function GotoDashboard() {
                         user_type: route
                     })
 
-                    console.log(response)
                 } catch (err) {
                     console.error(err)
                     toast.error("An error occured")
                 } finally {
-                    console.log("done!!!")
                     setLoading(false)
                 }
             }

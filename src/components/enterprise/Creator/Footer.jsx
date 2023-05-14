@@ -74,11 +74,11 @@ const rightLink = [
     title: "Contact us",
     path: "/contact-us"
   },
-  {
-    id: 7,
-    title: "Admin",
-    path: "/admin/login"
-  },
+  // {
+  //   id: 7,
+  //   title: "Admin",
+  //   path: "/admin/login"
+  // },
   {
     id: 7,
     title: "Teachers",
@@ -89,11 +89,11 @@ const rightLink = [
     title: "Affiliates",
     path: "/affiliates"
   },
-  {
-    id: 8,
-    title: "Mentors Lounge",
-    path: "/lounge"
-  },
+  // {
+  //   id: 8,
+  //   title: "Mentors Lounge",
+  //   path: "/lounge"
+  // },
   {
     id: 8,
     title: "Enterprise",
